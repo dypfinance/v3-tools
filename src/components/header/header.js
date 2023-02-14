@@ -72,14 +72,14 @@ const Header = ({
                   to powerful dApps.
                   </span>
                 </div>
-                <NavLink to="/">
+                <a href="https://app.dypius.com" >
                   <img src={toolsLogo} className="d-flex d-lg-none" alt="" />
-                </NavLink>
+                </a>
                 <div className="d-flex m-0 justify-content-between gap-3 align-items-center">
-                  <NavLink className="buydyp-btn btn" to="/buydyp">
+                  <a href="https://app.dypius.com/buydyp" className="buydyp-btn btn" >
                     <img src={coin} alt="" />
                     <span className="buy-dyp-text"> Buy DYP </span>
-                  </NavLink>
+                  </a>
                   <div className="d-flex justify-content-between gap-3 align-items-center">
                     {/* <DropdownButton
                 id="dropdown-basic-button2"
