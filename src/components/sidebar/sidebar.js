@@ -100,35 +100,37 @@ const Sidebar = (props) => {
       link: 'https://app.dypius.com/bridge'
     },
     {
-      label: "Explorer",
-      icon: "explorerIcon",
-      children: [
-        {
-          title: 'Pair explorer',
-          link: 'https://app.dypius.com/pair-explorer'
-        },
-        {
-          title: 'Pool explorer',
-          link: 'https://app.dypius.com/pool-explorer'
-        },
-        {
-          title: 'Big Swap',
-          link: 'https://app.dypius.com/big-swap-explorer'
-        },
-        {
-          title: 'Top Tokens',
-          link: 'https://app.dypius.com/top-tokens'
-        },
-        {
-          title: 'Yields',
-          link: 'https://app.dypius.com/farms'
-        },
-        {
-          title: 'Submit Form',
-          link: 'https://app.dypius.com/submit-info'
-        },
+      label: "Yields",
+      icon: "yieldsIcon",
+      link: 'https://app.dypius.com/farms'
+
+      // children: [
+      //   {
+      //     title: 'Pair explorer',
+      //     link: 'https://app.dypius.com/pair-explorer'
+      //   },
+      //   {
+      //     title: 'Pool explorer',
+      //     link: 'https://app.dypius.com/pool-explorer'
+      //   },
+      //   {
+      //     title: 'Big Swap',
+      //     link: 'https://app.dypius.com/big-swap-explorer'
+      //   },
+      //   {
+      //     title: 'Top Tokens',
+      //     link: 'https://app.dypius.com/top-tokens'
+      //   },
+      //   {
+      //     title: 'Yields',
+      //     link: 'https://app.dypius.com/farms'
+      //   },
+      //   {
+      //     title: 'Submit Form',
+      //     link: 'https://app.dypius.com/submit-info'
+      //   },
        
-      ],
+      // ],
     },
     {
       label: "Projects",
