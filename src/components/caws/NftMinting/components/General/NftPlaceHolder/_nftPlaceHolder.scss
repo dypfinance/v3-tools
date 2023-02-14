@@ -1,0 +1,43 @@
+.placeholder-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+
+  .placeholder-content {
+    height: fit-content;
+    padding-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    background: #26264F;
+    box-shadow: 0px 8px 16px rgb(0 0 0 / 16%);
+    border-radius: 8px;
+    opacity: 0.8;
+    gap: 10px;
+    .placeholder-content-img {
+      border-radius: 8px;
+    }
+
+    .placeholder-content-text {
+      color: #F7F7FC;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 18px;
+      text-align: center;
+    }
+
+    .placeholder-button {
+      background: #312F69;
+      border: 1px solid #857DFA;
+      box-sizing: border-box;
+      border-radius: 6px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 12px;
+      line-height: 18px;
+      padding: 5px 18px;
+      color: #857DFA;
+    }
+  }
+}

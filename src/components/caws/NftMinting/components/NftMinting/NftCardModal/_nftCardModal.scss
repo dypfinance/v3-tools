@@ -1,0 +1,387 @@
+.details-modal-content {
+  display: flex;
+
+  padding: 12px;
+  // padding-top: 66px;
+  max-width: 992px;
+
+  flex-direction: column;
+  // @include medium {
+  //   flex-direction: row;
+  //   padding: 0 40px 40px 40px;
+
+    // padding-top: 78px;
+  // }
+
+  .left-col {
+    // @include medium {
+    //   margin-right: 41px;
+    // }
+    .rarity-rank {
+      display: flex;
+      align-items: center;
+      margin-bottom: 18.33px;
+      // justify-content: space-between;
+      width: 100%;
+      img {
+        width: 23px;
+        height: 23px;
+      }
+      h3 {
+        margin: 0;
+        margin-left: 10px;
+        // @include medium {
+        //   margin-left: 17px;
+        // }
+      }
+      .red-text {
+        font-weight: 700;
+        font-size: 20px;
+        line-height: 25px;
+        color: red;
+        // @include medium {
+        //   font-size: 24px;
+        //   line-height: 30px;
+        // }
+      }
+      .gray-text {
+        font-weight: 700;
+        font-size: 20px;
+        line-height: 25px;
+        color: gray;
+        // @include medium {
+        //   font-size: 24px;
+        //   line-height: 30px;
+        // }
+      }
+    }
+    .ownerId-section {
+      width: 100%;
+      padding: 11px 8px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      position: relative;
+      &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 6px;
+        background-color: accent;
+        opacity: 0.1;
+      }
+      p {
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 18px;
+        color: accent;
+        margin: 0;
+        z-index: 2;
+        // @include medium {
+        //   font-size: 16px;
+        //   line-height: 20px;
+        // }
+      }
+
+      span {
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 18px;
+        color: black;
+        margin: 0 13px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        z-index: 2;
+        // @include medium {
+        //   font-size: 16px;
+        //   line-height: 20px;
+        // }
+      }
+      div {
+        display: flex;
+        z-index: 2;
+        p {
+          font-weight: 400;
+          margin-right: 9.6px;
+        }
+      }
+    }
+    .caw-card {
+      padding: 16.5px;
+      border-radius: 8px;
+      background: linear-gradient(209.67deg, #ff4229 1.51%, #e30613 98.12%);
+
+      .nft-img {
+        width: 100%;
+        border-radius: 8px;
+        // @include medium {
+          // max-width: 360px;
+        // }
+      }
+      .id {
+        display: flex;
+        align-items: center;
+        margin-top: 13px;
+        margin-bottom: 23px;
+        h1 {
+          font-weight: 700;
+          font-size: 26px;
+          line-height: 33px;
+          color: white;
+          margin-right: auto;
+          margin-bottom: 0;
+          // @include medium {
+          //   font-size: 26px;
+          //   line-height: 33px;
+          // }
+        }
+        p {
+          font-weight: 500;
+          font-size: 16px;
+          line-height: 20px;
+          opacity: 0.8;
+          margin: 0;
+          color: white;
+          // @include medium {
+          //   font-size: 16px;
+          //   line-height: 20px;
+          // }
+        }
+      }
+      .view-link {
+        display: flex;
+        padding: 7.5px 0;
+        justify-content: center;
+        align-items: center;
+        background-color: white;
+        border-radius: 6px;
+        text-decoration: none;
+        img {
+          margin-right: 9px;
+        }
+        p {
+          font-weight: 600;
+          font-size: 14px;
+          line-height: 18px;
+          margin: 0;
+          color: blue;
+          // @include medium {
+          //   font-size: 14px;
+          //   line-height: 18px;
+          // }
+        }
+      }
+    }
+    .share-link {
+      display: flex;
+      margin-top: 26px;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      margin-bottom: 26px;
+      img {
+        width: 21px;
+        height: 23px;
+        margin-right: 17px;
+        // @include medium {
+        //   width: 24px;
+        //   left: 4px;
+        // }
+      }
+      p {
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 18px;
+        margin: 0;
+        color: red;
+        // @include medium {
+        //   font-size: 16px;
+        //   line-height: 20px;
+        // }
+      }
+    }
+  }
+  .right-col {
+    margin-top: 29px;
+
+    // @include medium {
+    //   margin-top: 42px;
+    // }
+    p {
+      font-size: 18px;
+      line-height: 29px;
+      color: gray;
+      // @include medium {
+      //   font-size: 20px;
+      // }
+    }
+    .rarity-score {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      // @include medium {
+      //   width: 400px;
+      // }
+      h1 {
+        font-weight: 700;
+        font-size: 28px;
+        line-height: 35px;
+        color: gray;
+        margin: 0;
+        // @include medium {
+        //   font-size: 32px;
+        //   line-height: 40px;
+        // }
+      }
+      span {
+        font-weight: 700;
+        font-size: 28px;
+        line-height: 35px;
+        color: red;
+        // @include medium {
+        //   font-size: 32px;
+        //   line-height: 40px;
+        // }
+      }
+    }
+    .progress-bar-wrapper {
+      padding-bottom: 14px;
+      border-bottom: 1px solid gray;
+      width: 100%;
+      margin-bottom: 17px;
+      &:last-child {
+        margin-bottom: 0;
+        border-bottom: none;
+      }
+      .progress {
+        height: 4px;
+        .progress-bar {
+          background-color: red;
+        }
+      }
+      .property-name {
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 15px;
+        color: gray;
+        margin-bottom: 6px;
+      }
+      .property-value {
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 20px;
+        color: black;
+        margin: 0;
+        margin-top: 6px;
+      }
+    }
+  }
+  .stakeNft-Title {
+    color: black;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 30px;
+  }
+  .stakeNft-subtitle {
+    color: #939393;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+  }
+
+  .select-apr {
+    color: black;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 23px;
+  }
+
+  .radioDesc {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 18px;
+    color: black;
+  }
+
+  .activebtn {
+    border-radius: 6px;
+    color: white;
+    width: 190px;
+    padding: 10px 40px;
+    // width: 100%;
+
+    &:hover {
+      color: white;
+    }
+
+    @media screen and (max-width: 500px) {
+      width: 175px;
+    }
+  }
+
+  .passivebtn {
+    border-radius: 6px;
+    color: white;
+    padding: 10px 40px;
+    width: 190px;
+    // width: 100%;
+    &:hover {
+      color: white;
+    }
+    @media screen and (max-width: 500px) {
+      width: 175px;
+    }
+  }
+}
+.dark {
+  .details-modal-content {
+    .left-col {
+      .ownerId-section {
+        &:before {
+          background-color: dark;
+        }
+        color: white;
+        p {
+          color: white;
+        }
+        span {
+          svg {
+            path {
+              fill: white;
+            }
+          }
+        }
+      }
+    }
+    .right-col {
+      .progress-bar-wrapper {
+        .property-name {
+          color: gray;
+        }
+      }
+    }
+  }
+  .close {
+    svg {
+      fill: white;
+      path {
+        fill: white;
+      }
+    }
+  }
+
+  .radioDesc {
+    color: white;
+  }
+}

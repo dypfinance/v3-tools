@@ -1,0 +1,11 @@
+.disabled-btn{
+    color: #C0C9FF !important;
+    background: #14142A !important;
+    border: 1px solid #14142A  !important;
+    border-radius: 10px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 18px;
+    opacity: 1 !important;
+}

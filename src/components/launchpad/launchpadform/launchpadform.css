@@ -1,0 +1,164 @@
+.form-container {
+  background: #312f69;
+  box-shadow: 0px 32px 64px rgba(17, 17, 17, 0.12);
+  border-radius: 12px;
+}
+
+.progress-container {
+  height: 331px;
+}
+
+.progress-table {
+  width: 48%;
+}
+
+.progress-circle {
+  width: 48%;
+}
+
+.form-title {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 21px;
+  letter-spacing: -0.018em;
+  color: #857dfa !important;
+}
+
+.form-sub-title {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 24px;
+  color: #f7f7fc !important;
+}
+
+.upload-container {
+  background: #26264f;
+  border: 1px dashed #565891;
+  border-radius: 8px;
+  height: 110px;
+  width: 110px;
+}
+
+.error-upload-container {
+  border: 1px dashed rgba(248, 132, 91, 1);
+}
+
+.form-grid {
+  grid-template-columns: repeat(2, 1fr);
+  gap: 38px;
+}
+
+.additional-grid {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.funding-grid {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+}
+
+.launchpad-dropdown {
+  font-size: 12px;
+  color: #b3b3b3 !important;
+  background: #312f69 !important;
+  border: 1px solid #8e97cd !important;
+}
+
+.image-tip {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: -0.018em;
+  color: #c0c9ff !important;
+}
+
+.form-divider {
+  background: #565891 !important;
+  border-radius: 50px;
+  height: 1px;
+  width: 100% !important;
+  opacity: 1 !important;
+}
+
+.required-star {
+  color: rgba(248, 132, 91, 1) !important;
+}
+
+.error-text {
+  position: absolute;
+  color: rgba(248, 132, 91, 1) !important;
+  font-size: 12px;
+  left: 0;
+  bottom: -15px;
+}
+
+.error-border {
+  border: 1px solid rgba(248, 132, 91, 1) !important;
+}
+
+.input-icon {
+  position: absolute;
+  top: 7px;
+  left: 7px;
+  width: 20px;
+  height: 20px;
+}
+
+#file-upload {
+  opacity: 0;
+  position: absolute;
+  height: 110px;
+  width: 110px;
+  cursor: pointer;
+}
+
+.clear-fields {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: #857dfa !important;
+}
+
+.launchpad-item {
+  cursor: pointer;
+  background: #26264f !important;
+  color: #8e97cd !important;
+  font-weight: 500 !important;
+  font-size: 10px !important;
+  line-height: 18px !important;
+}
+
+.launchpad-item:hover {
+  background: #1e1c40 !important;
+  color: #f7f7fc !important;
+}
+
+@media screen and (max-width: 786px) {
+  .form-grid {
+    grid-template-columns: auto;
+  }
+
+  .additional-grid {
+    grid-template-columns: auto;
+  }
+  .submit-form-title {
+    width: 100% !important;
+  }
+
+  .funding-grid {
+    grid-template-columns: auto;
+  }
+
+  .progress-container {
+    height: 100% !important;
+  }
+
+  .progress-table {
+    width: 100%;
+  }
+
+  .progress-circle {
+    width: 100%;
+  }
+}

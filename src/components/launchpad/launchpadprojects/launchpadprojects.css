@@ -1,0 +1,226 @@
+/* .projects-container {
+  margin-top: 150px;
+} */
+
+.active-projects-container {
+  background: #312f69;
+  box-shadow: 0px 32px 64px rgba(17, 17, 17, 0.12);
+  border-radius: 12px;
+}
+
+.active-projects-title {
+  font-weight: 500;
+  font-size: 28px;
+  line-height: 36px;
+  color: #f7f7fc !important;
+}
+
+.project-timer-wrapper {
+  background: #2a2859;
+  border: 2px solid #50add3;
+  border-radius: 0px 8px 8px 0px;
+  padding: 3px 10px 3px 30px;
+}
+
+.time-left {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: -0.018em;
+  color: #c0c9ff !important;
+}
+
+.project-timer {
+  font-weight: 300;
+  font-size: 20px;
+  line-height: 30px;
+  letter-spacing: -0.018em;
+  color: #f7f7fc !important;
+}
+
+.timer-icon {
+  position: absolute;
+  left: -25px;
+}
+
+.project-date {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: -0.018em;
+  color: #f7f7f7 !important;
+}
+
+.active-project-info {
+  background: #2b2a59;
+  border-radius: 8px;
+  width: fit-content;
+}
+
+.project-banner {
+  position: absolute;
+  left: -100px;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  z-index: 4;
+}
+
+.comming-soon{
+  position: absolute;
+  z-index: 4;
+  left: 210px;
+  top: 40px;
+}
+
+.launchpad-project-card {
+  background: #312f69;
+  box-shadow: 0px 32px 64px rgba(17, 17, 17, 0.08);
+  border-radius: 12px;
+}
+
+.project-header {
+  background-image: url("../assets/projectHeader.webp");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.ido-goal {
+  font-weight: 300;
+  font-size: 10px;
+  line-height: 10px;
+  color: #f7f7fc !important;
+}
+
+.ido-amount {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 16px;
+  color: #f7f7fc;
+}
+
+
+.ido-start{
+  font-family: 'Poppins';
+font-style: normal;
+font-weight: 500;
+font-size: 12px;
+line-height: 18px;
+color: #4ED5D2 !important;
+text-shadow: 0px 2px 4px #57B6AB;
+}
+.ido-end{
+  font-family: 'Poppins';
+font-style: normal;
+font-weight: 500;
+font-size: 12px;
+line-height: 18px;
+color: #F8845B !important;
+text-shadow: 0px 2px 4px #F0603A;
+}
+
+.green-underline{
+height: 2px;
+width: 29px;
+background: #4ED5D2;
+border-radius: 50px 0px 0px 50px;
+}
+.orange-underline{
+height: 2px;
+width: 22px;
+background: #F8845B;
+border-radius: 50px 0px 0px 50px;
+}
+
+.ido-date{
+  font-weight: 500;
+font-size: 16px;
+line-height: 16px;
+color: #F7F7FC !important;
+}
+
+.arrow-wrapper{
+
+  height: 32px;
+  width: 32px;
+  opacity: 0.6;
+  background: #14142A;
+  border-radius: 8px;
+}
+
+.slick-list {margin: 0 -15px;}
+.slick-slide>div {padding: 0 15px;}
+
+.button__bar {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  vertical-align: middle;
+  margin: auto;
+  padding: 0;
+  border-radius: 40px;
+  width: 70px;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.button__bar li {
+  list-style: none;
+  cursor: pointer;
+  display: inline-block;
+  margin: 0 3px;
+  padding: 0;
+}
+
+.button__bar li button {
+  border: none;
+  background: #B3B9DD;
+  color: transparent;
+  cursor: pointer;
+  display: block;
+  height: 12px;
+  width: 10px;
+  opacity: 0.3;
+  border-radius: 7.5px;
+}
+
+.button__bar li.slick-active button {
+  width: 16px;
+  height: 16px;
+  opacity: 1;
+  background-color:  #B3B9DD;
+  box-shadow: 0 4px 4px 0 rgba(150, 100, 255, 0.24);
+}
+
+.upcoming-project{
+  opacity: 0.7;
+}
+
+@media screen and (max-width: 786px) {
+  .active-project-info{
+    width: 100%;
+  }
+
+  .active-projects-container{
+    margin-top: 100px;
+    padding-top: 100px !important;
+  }
+
+  .project-banner {
+    position: absolute;
+    left: 0;
+    top: -110px;
+    bottom: 0;
+    margin: 0;
+    z-index: 4;
+}
+
+.comming-soon {
+  position: absolute;
+  z-index: 4;
+  left: 250px;
+  top: -100px;
+}
+
+}
+

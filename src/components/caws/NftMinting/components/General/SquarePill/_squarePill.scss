@@ -1,0 +1,26 @@
+.square-pill {
+    display: flex;
+    //width: 58px;
+    padding: 5px;
+    height: 24px;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    color: $accent-red;
+    font-size: 12px;
+    line-height: 15px;
+    border-radius: 6px;
+    position: relative;
+    margin-top: 5px;
+    &::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: $accent-red;
+        opacity: 0.1;
+        border-radius: 6px;
+    }
+}

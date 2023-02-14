@@ -1,0 +1,60 @@
+.chainlink-wrapper {
+  background-color: #312F69;
+  /* background-image: url('./assets/chainlinkbg.png'); */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 12px;
+  padding: 10px;
+  /* border: 1px solid #312F69; */
+  transition: all .25s;
+
+
+  /* width: 188px; */
+}
+.chainlink-wrapper:focus,
+.chainlink-wrapper:hover,
+.chainlink-wrapper:active{
+  /* border: 1px solid rgb(142, 151, 205); */
+  background: #1E1C40;
+
+}
+
+.chainlinktitle a {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 14px;
+  letter-spacing: 0.05em;
+  color: #f7f7fc !important;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+}
+
+.chbottomwrapper {
+  background: linear-gradient(
+    90deg,
+    rgba(21, 19, 41, 0.4) 17.73%,
+    rgba(21, 19, 41, 0.4) 81.69%
+  );
+  border-radius: 6px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.totalpaidtxt {
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 22px;
+  letter-spacing: 0.05em;
+  color: #7770e0;
+}
+
+.tokenname {
+  font-weight: 300;
+  font-size: 10px;
+  line-height: 14px;
+  color: #7770e0;
+}

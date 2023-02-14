@@ -1,0 +1,101 @@
+.main-details-wrapper{
+  background: #312F69;
+box-shadow: 0px 32px 64px rgba(17, 17, 17, 0.12);
+border-radius: 12px;
+}
+
+
+.launch-details-header {
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 30px;
+  color: #f7f7fc !important;
+}
+
+.launch-details-content {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: -0.018em;
+  color: #d6d8e7 !important;
+}
+
+.launch-subheader{
+  font-weight: 500;
+font-size: 18px;
+line-height: 27px;
+color: #857DFA !important;
+
+}
+
+.visit-website{
+  font-weight: 400;
+font-size: 16px;
+line-height: 22px;
+letter-spacing: -0.018em;
+text-decoration: underline;
+color: #4ED5D2;
+}
+
+.visit-website:hover{
+  color: #4ED5D2 !important;
+text-decoration: underline;
+}
+
+.dates-container{
+  background: #2A2859;
+border: 2px solid #565891;
+border-radius: 12px;
+}
+
+.date-title{
+  font-weight: 400;
+font-size: 14px;
+line-height: 21px;
+letter-spacing: -0.018em;
+color: #857DFA !important;
+}
+
+.date-content{
+  font-weight: 400;
+font-size: 24px;
+line-height: 36px;
+letter-spacing: -0.018em;
+color: #F7F7FC !important;
+}
+
+.my-rewards-text{
+  font-weight: 400;
+font-size: 14px;
+line-height: 22px;
+letter-spacing: -0.018em;
+color: #4CD0CD !important;
+}
+
+.tokens-container{
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 24px ;
+}
+
+.token-card{
+  background: #26264F;
+border-radius: 8px;
+}
+
+.details-warning{
+  font-weight: 400;
+font-size: 14px;
+line-height: 22px;
+color: #F7F7FC !important;
+}
+
+.timer-text{
+  font-weight: 400;
+font-size: 32px;
+line-height: 40px;
+text-align: center;
+letter-spacing: -0.018em;
+color: #F7F7FC !important;
+white-space: break-spaces !important;
+}

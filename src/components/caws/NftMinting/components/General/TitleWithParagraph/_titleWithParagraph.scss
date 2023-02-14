@@ -1,0 +1,55 @@
+.common-title-text {
+    h1 {
+        word-wrap: break-word;
+        color: gray;
+        font-weight: 900;
+        font-size: 32px;
+        margin-bottom: 16px;
+        width: 100%;
+
+        // @include medium {
+        //     font-size: 54px;
+        // }
+        small {
+            font-weight: 200;
+        }
+        mark {
+            padding: 0;
+            transition: 0.3s;
+            background-color: transparent;
+            color: red;
+            word-break: break-all;
+        }
+    }
+
+    p {
+        font-size: 16px;
+        line-height: 24px;
+        color: gray;
+        margin: 0;
+        // @include medium {
+        //     font-size: 20px;
+        //     line-height: 32px;
+        // }
+        mark {
+            font-weight: bold;
+            background-color: transparent;
+        }
+    }
+}
+.common-title-main {
+    h1 {
+        font-size: 38px;
+        // @include medium {
+        //     font-size: 64px;
+        // }
+    }
+}
+.center-text {
+    h1 {
+        text-align: center;
+    }
+    p {
+        text-align: center;
+    }
+}

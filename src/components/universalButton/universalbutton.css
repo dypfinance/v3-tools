@@ -1,0 +1,10 @@
+.success-button{
+    color: #FFFFFF !important;
+    background: linear-gradient(90.74deg, #75CAC2 0%, #57B6AB 100%);
+    border: none  !important;
+    border-radius: 10px;
+}
+.fail-button{
+    background: linear-gradient(90.74deg, #F8845B 0%, #F0603A 100%) !important;
+
+}

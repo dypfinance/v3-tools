@@ -1,0 +1,112 @@
+.tier-dyp-amount {
+  position: absolute;
+  top: 320px;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 28px;
+  text-align: center;
+  color: #f7f7fc !important;
+}
+
+.tier-divider {
+  position: absolute;
+  top: 30%;
+  background: #565891 !important;
+  border-radius: 50px;
+  height: 3px;
+  width: 90% !important;
+  opacity: 1 !important;
+  z-index: 0;
+}
+
+.staking-pill {
+  background: #2c2b5a;
+  border-radius: 8px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 21px;
+  color: #f7f7fc !important;
+  width: fit-content;
+}
+
+.launch-pool-card {
+  background: #26264f;
+  border-radius: 8px;
+  border: 2px solid #26264f;
+}
+
+.selected-launch-card {
+  background: #211f45;
+  border: 2px solid #7770df;
+}
+
+.launch-pool-title {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 18px;
+  color: #f7f7fc;
+}
+
+.stake-icon-wrapper {
+  background: #312f69;
+  border-radius: 50%;
+}
+
+.launch-pool-placeholder {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: -0.018em;
+  color: #c0c9ff !important;
+}
+
+.launch-pool-value {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: right;
+  letter-spacing: -0.018em;
+  color: #f7f7fc !important;
+}
+
+.tier-roadmap-number {
+  background: #26264f;
+  border: 2px solid #565891;
+  border-radius: 50%;
+  height: 28px;
+  width: 28px;
+}
+
+.roadmap-number {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 24px;
+  color: #ffffff !important;
+}
+
+.roadmap-line{
+    width: 2px;
+    background: #565891;
+    height: 50px;
+    float: left;
+    margin-left: 12px;
+}
+
+.prev-arrow{
+    transform: rotate(180deg);
+}
+
+.tier-info-wrapper{
+  background: #2B2A59;
+border: 1px solid #565891;
+border-radius: 8px;
+}
+
+.tier-info-text{
+  font-weight: 400;
+font-size: 14px;
+line-height: 21px;
+
+color: #F7F7FC !important;
+
+}

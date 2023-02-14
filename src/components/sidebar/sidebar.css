@@ -1,0 +1,143 @@
+.testbar{
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    background: #2A2859;
+    width: 85px;
+    z-index: 11;
+    transition: all .25s ease-in-out;
+    /* overflow: hidden; */
+    /* background-image: url('../../assets/sidebarBackground.webp'); */
+    background-size: cover;
+    overflow-y: scroll;
+    scrollbar-width: none !important;
+
+}
+
+.testbar::-webkit-scrollbar{
+    width: 0 !important;
+}
+
+
+.mobile-sidebar{
+    position: fixed;
+    bottom: 0;
+    width: 100vw;
+    background: #2A2859;
+    height: 70px;
+    z-index: 5;
+    border-top: 2px solid #565891;
+}
+
+.explorer-modal{
+    background: #2A2859;
+border-radius: 12px;
+position: absolute;
+bottom: -500px;
+transition: all .3s;
+width: 90%;
+z-index: -1;
+}
+
+.explorer-modal-active{
+    bottom: 100px;
+    box-shadow: 0 0 0 1000px rgb(0 0 0 / 50%);
+}
+
+.mobile-modal-item{
+    border-bottom: 2px solid #565891;
+}
+
+.mobile-modal-item:last-child{
+    border-bottom: none !important;
+}
+
+.testbar-open{
+    width: 250px;
+}
+
+.sidebar-item{
+    cursor: pointer;
+    gap: 10px;
+    border-radius: 12px;
+    border: 2px solid transparent;
+    transition:  all .25s;
+}
+
+
+.indicator{
+    transition: all .25s;
+}
+
+.active-indicator{
+    transform: rotate(180deg);
+
+}
+
+.active-width{
+    width: 200px;
+}
+
+
+.sidebar-item:hover{
+    border: 2px solid #565891;
+    background: #1E1C40;
+
+    
+}
+
+
+.active-side-link{
+    background: #1E1C40;
+    border: 2px solid #565891;
+}
+.active-side-link-dropdown{
+    background: #1E1C40;
+    border: 2px solid #565891;
+}
+
+.accordion-child{
+    font-family: 'Poppins', sans-serif;
+    color: #8E97CD !important;
+    border: 1px solid #2A2859;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 15px;
+    cursor: pointer;
+    transition: all .25s;
+}
+
+.accordion-child:hover{
+    background: #1E1C40;
+}
+
+.accordion-child-active{
+    background: #1E1C40;
+    color: #F7F7FC !important;
+/* border: 1px solid rgba(240, 97, 59, 1); */
+/* width: fit-content; */
+
+}
+
+.sideitem-text{
+    color: #C0C9FF !important;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.active-text{
+    color: #F7F7FC !important;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.dypius-button{
+    padding: 7px 15px;
+    background: #14142C;
+border-radius: 8px;
+border: 2px solid rgba(60, 62, 108, 1);
+}

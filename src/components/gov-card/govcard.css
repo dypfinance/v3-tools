@@ -1,0 +1,58 @@
+.govcard-wrapper {
+  padding: 18px;
+  background-color: #312F69;
+  border-radius: 12px;
+  border: 2px solid #312F69;
+  /* background-image: url("./assets/govbg.png"); */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  width: 50%;
+  transition: all .25s;
+  cursor: pointer;
+}
+
+.govcard-wrapper:focus,
+.govcard-wrapper:hover,
+.govcard-wrapper:active{
+  border: 2px solid rgb(142, 151, 205);
+}
+
+.greendiv {
+  width: 4px;
+  height: 45px;
+  position: absolute;
+  border-radius: 0px 100px 100px 0px;
+  left: -1px;
+  background: #8890C4;
+}
+
+.governancecard-title {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 27px;
+  color: #f7f7fc;
+}
+.governancecard-desc {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 21px;
+  color: #D6D8E7;
+  /* width: 80%; */
+}
+
+.govcard-btntext {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+  color: #7770e0;
+}
+
+@media screen and (max-width: 786px) {
+  .govcard-wrapper{
+    width: 100%;
+  }
+}

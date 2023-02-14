@@ -1,0 +1,386 @@
+.calculator-wrapper {
+  background-color: #312f69;
+  box-shadow: 0px 32px 64px rgba(17, 17, 17, 0.08);
+  border-radius: 12px;
+  padding: 20px;
+  border: 2px solid #312f69;
+  /* background-image: url(./assets/calculatorbg.png); */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 49%;
+  transition: all 0.25s;
+}
+
+.calculator-wrapper:focus,
+.calculator-wrapper:hover,
+.calculator-wrapper:active {
+  border: 2px solid rgb(142, 151, 205);
+}
+
+.calculator-purpose{
+  font-style: normal;
+font-weight: 400;
+font-size: 10px;
+line-height: 15px;
+color: #FCFCF7;
+width: 31%;
+}
+
+.earn-calculator {
+  position: fixed;
+  left: 63%;
+  top: 45%;
+  box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.5);
+  width: 35%;
+  pointer-events: auto;
+  z-index: 15;
+}
+
+.calc-title {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 36px;
+  color: #f7f7fc;
+}
+
+#dropdown-basic-button3 {
+  padding-top: revert !important;
+  padding-bottom: revert !important;
+  /* padding-left: 15px !important;
+  padding-right: 15px !important; */
+  width: 100px !important;
+  /* width: auto !important; */
+}
+
+.pills-container {
+  width: 100%;
+  /* display: grid; */
+  /* grid-template-columns: repeat(4, 1fr); */
+  align-items: center;
+  transition: 0.3s;
+  margin-bottom: 21px;
+  margin-top: 21px;
+  /* gap: 20px; */
+  position: relative;
+  justify-content: space-between;
+}
+
+.pill-item {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 21px;
+  color: #8e97cd;
+  padding: 10px 20px;
+  margin-bottom: 0;
+  cursor: pointer;
+  background: rgba(20, 20, 42, 0.2);
+  border-radius: 8px;
+  border: 1px solid #7770e0;
+  position: relative;
+  /* width: 25%; */
+  display: flex;
+  justify-content: center;
+  transition: all 0.25s;
+}
+
+/* .calculator-chains-wrapper{
+  top: 10px;
+} */
+
+
+.pill-item-text{
+  font-weight: 400;
+font-size: 14px;
+line-height: 21px;
+color: #F7F7FC !important;
+}
+
+.pill-item:hover {
+  background: #1e1c40 !important;
+}
+
+.active-color {
+  /* color: $white; */
+  z-index: 2;
+}
+
+/* .active-color::after {
+  content: "●";
+  color: #f8845b;
+  font-size: 28px;
+  position: absolute;
+  bottom: -8px;
+  margin: 0px -38%;
+} */
+
+.separator {
+  background: #565891;
+  height: 1px;
+  width: 100%;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+.inputlabel {
+  font-weight: 400;
+  font-size: 8px;
+  line-height: 16px;
+  letter-spacing: 0.4px;
+  color: #8e97cd;
+  display: flex;
+  background: #312f69 !important;
+  padding: 0 0px 0 5px;
+  top: -11px;
+  left: 8px;
+}
+
+.requiredstar {
+  color: #f8845b;
+  font-weight: 400;
+  font-size: 8px;
+}
+
+.calcinput {
+  background: #312f69 !important;
+  border: 1px solid #8e97cd !important;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: -0.018em;
+  color: #f7f7fc !important;
+  width: 94px;
+  padding: 9px 12px;
+}
+
+.output-txt {
+  font-weight: 500;
+  font-size: 36px;
+  text-align: right;
+  letter-spacing: -0.018em;
+  color: #f7f7fc;
+}
+
+.cryptotext {
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 12px;
+  text-align: right;
+  letter-spacing: -0.018em;
+  color: #d6d8e7;
+}
+
+.time-pill-item {
+  font-weight: 500;
+  font-size: 9px;
+  line-height: 18px;
+  color: #6e7191;
+  display: flex;
+  justify-content: center;
+  width: 20%;
+  border-radius: 6px;
+  padding: 9px;
+  cursor: pointer;
+  margin: 0;
+}
+
+.time-pills-container {
+  justify-content: space-between;
+  gap: 10px;
+  background: #26264f;
+  border: 1px solid #8e97cd;
+  border-radius: 8px;
+  width: 73%;
+  padding: 2px;
+  align-items: center;
+}
+
+.calc-footer {
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 16px;
+  /* text-align: right; */
+  /* letter-spacing: -0.018em; */
+  color: #d6d8e7;
+  width: 60%;
+}
+
+.earnbtn {
+  background: linear-gradient(to left, #7770e0, #3e3aa5, #554fd8, #7770e0);
+  background-size: 300%;
+  background-position: 0 0;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+  color: #ffffff;
+  transition: all ease 0.4s;
+  -webkit-transition: all ease 0.4s;
+}
+
+.earnbtn:hover {
+  color: #fff;
+  background-position: 100% 0 !important;
+  box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.09) !important;
+}
+
+.ethereum-chain-wrapper {
+  background-image: url("./assets/ethBackground.svg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 8px;
+  width: 32%;
+  padding: 2px;
+}
+.bnb-chain-wrapper {
+  background-image: url("./assets/bnbBackground.svg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 8px;
+  width: 32%;
+  padding: 2px;
+}
+.avax-chain-wrapper {
+  background-image: url("./assets/avaxBackground.svg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 8px;
+  width: 32%;
+  padding: 2px;
+}
+
+.usdt-wrapper {
+  background-image: url("./assets/usdtBackground.svg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 8px;
+  width: 32%;
+  padding: 2px;
+}
+
+.usdc-wrapper {
+  background-image: url("./assets/usdcBackground.svg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 8px;
+  width: 32%;
+  padding: 2px;
+}
+
+.chain-content {
+  background: #26264f;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.usd-input{
+  width: 32%;
+}
+.days-input{
+  width: 32%;
+}
+
+.usd-value {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 27px;
+  letter-spacing: -0.018em;
+  color: #f7f7fc !important;
+}
+
+.approx-value {
+  font-weight: 300;
+  font-size: 10px;
+  line-height: 15px;
+  letter-spacing: -0.018em;
+  color: #d6d8e7 !important;
+}
+.chain-name {
+  font-weight: 500;
+  font-size: 12px;
+  white-space: nowrap;
+  line-height: 18px;
+  color: #f7f7fc;
+  min-width: 65px;
+}
+
+.calculator-chart{
+  position: absolute;
+  width: 300px;
+  right: -40px;
+}
+
+@media screen and (max-width: 786px) {
+  .calculator-wrapper{
+    width: 100%;
+  }
+
+  .usd-input{
+    width: 48%;
+  }
+  .days-input{
+    width: 48%;
+  }
+
+  .calculator-chart{
+    position: absolute;
+    width: 185px;
+    right: 0px;
+  }
+}
+@media screen and (max-width: 1200px) {
+  .bnb-chain-wrapper{
+    width: 100%;
+  }
+  .ethereum-chain-wrapper{
+    width: 100%;
+  }
+  .avax-chain-wrapper{
+    width: 100%;
+  }
+  .usdc-wrapper{
+    width: 100%;
+  }
+  .usdt-wrapper{
+    width: 100%;
+  }
+
+  .chain-content {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .values-wrapper{
+    flex-direction: row !important;
+    align-items: center !important;
+  }
+  
+}
+
+@media screen and (max-width: 786px) {
+  .values-wrapper{
+    flex-direction: column !important;
+    align-items: start !important;
+  }
+
+  .calculator-purpose{
+    width: 100%;
+  }
+  .calculator-chains-wrapper{
+    top: 0;
+    margin-top: 2rem!important;
+  }
+  
+  .separator {
+    margin-bottom: 12px;
+  }
+}

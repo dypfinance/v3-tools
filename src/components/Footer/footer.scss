@@ -1,0 +1,115 @@
+.footer-container,
+
+.spacing-audit {
+    box-shadow: 0px 4px 114px rgba(0, 0, 0, 0.15);
+
+  @media only screen and (min-width: 768px) {
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+
+  background-color: var(--white);
+  padding-top: 30px;
+  overflow: hidden;
+
+  h3 {
+    color: #000;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 18px;
+    margin-bottom: 17px;
+    margin-top: 20px;
+  }
+
+  .footer-group {
+    li.footer-item {
+      margin-bottom: 10px;
+      a {
+        color: rgba(0, 0, 0, 0.8);
+        font-weight: 400;
+        font-size: 15px;
+        line-height: 18px;
+      }
+      &.highlited {
+        a {
+          color: #e30613;
+        }
+      }
+    }
+  }
+
+  .social-list {
+    li {
+      width: 50px;
+      height: 50px;
+      margin-bottom: 5px;
+    }
+  }
+
+  .divider {
+    background: rgba(0,0,0, 0.1);
+    height: 1px;
+    margin-left: -20px;
+    margin-right: -20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  .subfooter {
+    height: 70px;
+    align-items: center;
+    @media only screen and (max-width: 576px) {
+      height: 133px;
+    }
+    ul {
+      li {
+        width: 50%;
+        margin-right: 0;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        @media only screen and (min-width: 768px) {
+          margin-right: 50px;
+          width: auto;
+        }
+
+        a {
+          color: #000;
+          font-size: 17px;
+          font-weight: 600;
+          line-height: 18px;
+          margin-bottom: 17px;
+        }
+      }
+    }
+
+    #list-wrapper {
+       @media only screen and (max-width: 576px) {
+        margin-top: 10px;
+      }
+    }
+
+    .copyright {
+      p {
+        color: #8b8b8b;
+        font-size: 11px;
+        font-weight: 400;
+        text-align: left;
+        @media only screen and (min-width: 768px) {
+          text-align: center;
+          margin: auto;
+          display: flex;
+          justify-content: center;
+          margin-left: 35px;
+        }
+
+         @media only screen and (max-width: 576px) {
+          margin-top: 5px;
+        }
+      }
+    }
+  }
+}
+
+.dark .footer-container {
+  background-color: #393a41;
+}

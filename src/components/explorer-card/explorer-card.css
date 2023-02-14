@@ -1,0 +1,98 @@
+.explorercard-wrapper {
+  padding: 20px;
+  background-color: #312F69;
+  border-radius: 12px;
+  border: 2px solid #312F69;
+  background-image: url("./assets/swapBanner.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  min-height: 195px;
+  /* width: 27%; */
+  transition: all .25s;
+  cursor: pointer;
+}
+
+.explorercard-wrapper:focus,
+.explorercard-wrapper:hover,
+.explorercard-wrapper:active{
+  border: 2px solid rgb(142, 151, 205);
+}
+
+.explorer-chart{
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  margin: auto;
+  width: 100%;
+}
+
+.purplediv {
+  width: 4px;
+  height: 40px;
+  position: absolute;
+  border-radius: 0px 100px 100px 0px;
+  left: -1px;
+  background: #554fd8;
+}
+
+.explorercard-title {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 27px;
+  color: #f7f7fc;
+}
+
+.topapr-title {
+  font-weight: 600;
+  font-size: 10px;
+  line-height: 15px;
+  text-align: right;
+  letter-spacing: -0.018em;
+  color: #f7f7fc;
+}
+
+.topapr-amount {
+  font-weight: 600;
+  font-size: 32px;
+  text-align: right;
+  letter-spacing: -0.018em;
+  color: #f7f7fc;
+}
+
+.explorercard-desc {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 17px;
+  color: #D6D8E7;
+  /* width: 43%; */
+}
+
+.explorercard-btntext {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+  color: #4ED5D2;
+}
+
+@media screen and (max-width: 786px) {
+
+  .explorercard-wrapper{
+    background-size: contain !important;
+  }
+  .explorer-chart{
+    position: absolute;
+    right: 0;
+    top: 5px;
+    width: 150px;
+  }
+
+  .explorercard-desc{
+    width: 50% !important;
+  }
+}

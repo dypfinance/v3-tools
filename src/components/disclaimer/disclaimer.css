@@ -1,0 +1,17 @@
+.disclaimer-text{
+    font-weight: 400;
+    font-size: 16px;
+line-height: 24px;
+letter-spacing: 0.0075em;
+
+color: #F7F7FC;
+}
+
+.disclaimer-bold{
+    font-weight: 700;
+    font-size: 16px;
+line-height: 24px;
+letter-spacing: 0.0075em;
+
+color: #F7F7FC;
+}

@@ -1,0 +1,855 @@
+.proposalscard {
+  background: #312f69;
+  box-shadow: 0px 32px 64px rgba(17, 17, 17, 0.12);
+  border-radius: 12px;
+  padding: 10px;
+  position: relative;
+  cursor: pointer;
+}
+
+.purplediv {
+  width: 4px;
+  height: 40px;
+  position: absolute;
+  border-radius: 0px 100px 100px 0px;
+  left: -1px;
+  background: #7770e0;
+}
+
+.myDetails-title {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 28px;
+  color: #f7f7fc;
+}
+
+.mydetails-wrapper {
+  position: relative;
+  background: #312f69;
+  /* box-shadow: 0px 32px 64px rgba(17, 17, 17, 0.08); */
+  border-radius: 12px;
+  padding: 0px 15px;
+}
+
+.colored-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: flex-start;
+}
+
+.purpletext {
+  font-weight: 400 !important;
+  font-size: 10px !important;
+  line-height: 8px !important;
+  letter-spacing: -0.018em !important;
+  color: #c0c9ff !important;
+}
+
+.whitetext {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 16px;
+  letter-spacing: -0.018em;
+  color: #f7f7fc;
+}
+
+.form-group2 {
+  background: #211f45;
+  /* box-shadow: 0px 32px 64px rgba(17, 17, 17, 0.08); */
+  border-radius: 12px;
+  padding: 10px;
+}
+
+.project-banner2 {
+  position: absolute;
+  left: -1px;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  z-index: 4;
+  border-radius: 12px;
+  width: 327px;
+}
+
+.withdrawButton {
+  background-color: #14142a !important;
+  border-radius: 8px;
+  border: none;
+  color: #6e7191 !important;
+  white-space: pre;
+}
+
+.totalvoting {
+  font-weight: 500 !important;
+  font-size: 12px !important;
+  line-height: 12px !important;
+  letter-spacing: -0.018em !important;
+  color: #4ed5d2 !important;
+}
+
+.dypamounttext {
+  font-weight: 500 !important;
+  font-size: 18px !important;
+  line-height: 18px !important;
+  letter-spacing: -0.018em !important;
+  color: #f7f7fc !important;
+}
+
+.filledbtn {
+  background: linear-gradient(to left, #7770e0, #3e3aa5, #554fd8, #7770e0);
+  background-size: 300%;
+  background-position: 0 0;
+  border-radius: 8px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+  color: #fff;
+  border: none;
+  padding: 9px 24px;
+  transition: all ease 0.4s;
+  -webkit-transition: all ease 0.4s;
+}
+
+.filledbtn:hover,
+.filledbtn:focus {
+  color: white !important;
+  background-position: 100% 0 !important;
+  box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.09) !important;
+}
+
+.greendiv {
+  width: 4px;
+  height: 40px;
+  position: absolute;
+  border-radius: 0px 100px 100px 0px;
+  left: 0px;
+  background: #75cac2;
+}
+
+.orangediv {
+  width: 4px;
+  height: 40px;
+  position: absolute;
+  border-radius: 0px 100px 100px 0px;
+  left: 0px;
+  background: #eb5e39;
+}
+
+.vault-container {
+  background: linear-gradient(
+    0deg,
+    rgba(20, 20, 42, 0.6) 0%,
+    rgba(20, 20, 42, 0) 100%
+  );
+  /* opacity: 0.6; */
+  filter: drop-shadow(0px 32px 64px rgba(17, 17, 17, 0.08));
+  border-radius: 8px;
+}
+
+.actionwrapper {
+  background: #503851;
+  border-radius: 6px;
+  width: fit-content;
+  padding: 5px;
+  height: 23px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.actionwrapper2 {
+  background: rgba(42, 75, 92, 0.79);
+  border-radius: 6px;
+  width: fit-content;
+  padding: 5px;
+  height: 23px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.actionwrapper3 {
+  background: #14142a;
+  border-radius: 6px;
+  width: fit-content;
+  padding: 5px;
+  height: 23px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.actionText3 {
+  font-style: normal;
+  font-weight: 400 !important;
+  font-size: 10px !important;
+  line-height: 10px;
+  text-align: center;
+  letter-spacing: -0.018em;
+  color: #f7f7fc !important;
+}
+
+.actionText2 {
+  font-style: normal;
+  font-weight: 400 !important;
+  font-size: 10px !important;
+  line-height: 10px;
+  text-align: center;
+  letter-spacing: -0.018em;
+  color: #70b8e0 !important;
+}
+
+.acordionstate {
+  position: absolute;
+  z-index: 4;
+  right: -26px;
+  top: -26px;
+  scale: 0.6;
+}
+
+.actionText {
+  font-style: normal;
+  font-weight: 400 !important;
+  font-size: 10px !important;
+  line-height: 10px;
+  text-align: center;
+  letter-spacing: -0.018em;
+  color: #f8845b !important;
+}
+
+.duration-txt {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 21px;
+  letter-spacing: -0.018em;
+  color: #f7f7fc;
+}
+
+.expiretxt {
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: 12px !important;
+  line-height: 18px !important;
+  letter-spacing: -0.018em !important;
+  color: #c0c9ff !important;
+}
+
+.card-bottom-wrapper {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+}
+
+.cardlogo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.vault-name {
+  font-weight: 500 !important;
+  font-size: 22px !important;
+  line-height: 26px !important;
+  letter-spacing: -0.018em !important;
+  color: #f7f7fc !important;
+}
+
+.governanceWrapper {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.ethchain {
+  background: linear-gradient(
+    275.63deg,
+    #5b75da 2.68%,
+    rgba(91, 117, 218, 0) 105.72%
+  );
+  border-radius: 6px 0px 0px 6px;
+  position: absolute;
+  right: 25px;
+  height: 24px;
+  padding-left: 12px;
+}
+
+.bnbchain {
+  background: linear-gradient(
+    275.63deg,
+    #f1c623 2.68%,
+    rgba(242, 198, 35, 0) 105.72%
+  );
+  border-radius: 6px 0px 0px 6px;
+  position: absolute;
+  right: 25px;
+  height: 24px;
+  padding-left: 12px;
+}
+
+.avaxchain {
+  background: linear-gradient(
+    275.63deg,
+    #ea4647 2.68%,
+    rgba(235, 71, 72, 0) 105.72%
+  );
+  border-radius: 6px 0px 0px 6px;
+  position: absolute;
+  right: 25px;
+  height: 24px;
+  padding-left: 12px;
+}
+
+.chainlogo2 {
+  position: relative;
+  right: -12px;
+  width: 24px;
+  height: 24px;
+  top: 0px;
+}
+
+.chaintext {
+  font-weight: 400 !important;
+  font-size: 16px !important;
+  line-height: 24px !important;
+  text-align: right !important;
+  letter-spacing: -0.018em !important;
+  color: #f7f7fc !important;
+}
+
+.loadmore-btn {
+  background: #26264f;
+  border-radius: 8px;
+  border: 1px solid #7770e0;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+  color: #7770e0;
+  padding: 9px 25px;
+}
+
+.form-bottomtext {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 21px;
+  color: #d6d8e7;
+}
+
+.ty-title {
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 28px;
+  text-align: center;
+  letter-spacing: -0.018em;
+  color: #f7f7fc;
+}
+
+.ty-subtitle {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 18px;
+  text-align: center;
+  letter-spacing: -0.018em;
+  color: #c0cbf7;
+  padding: 10px 0;
+}
+
+.tyHero {
+  width: 143.97px;
+  height: 217.17px;
+  margin: auto;
+  display: flex;
+
+}
+
+.loadmore-btn:hover,
+.loadmore-btn:focus {
+  background: #7770e0 !important;
+  border-radius: 8px;
+  border: 1px solid #7770e0;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+  color: #fff;
+}
+
+.govtitle {
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 28px;
+  color: #f7f7fc;
+}
+
+.govdesc {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: -0.018em;
+  color: #d6d8e7;
+}
+
+.totalproposals {
+  border-radius: 12px;
+  padding: 25px 10px 25px 10px;
+  background: url(../assets/statsbg.png);
+  background-color: rgba(255, 255, 255, 0.06);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+}
+
+.expiredtxt {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: -0.018em;
+  color: #f8845b;
+  text-shadow: 0px 0px 2px rgba(248, 132, 91, 0.6);
+  display: flex;
+  gap: 5px;
+}
+
+.change-chain-text {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 13px;
+  letter-spacing: -0.018em;
+  color: #c0c9ff;
+}
+
+.addvotestxt {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: -0.018em;
+  text-transform: uppercase;
+  color: #f7f7fc !important;
+}
+
+.proposal-details-wrapper {
+  background: #211f45;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.proposal-details-title {
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: -0.018em;
+  text-transform: uppercase;
+  color: #f7f7fc;
+}
+
+.l-proposal-text {
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: 14px !important;
+  line-height: 24px !important;
+  letter-spacing: -0.018em !important;
+  color: #f7f7fc !important;
+}
+
+.submitnewproposal-title {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -0.018em;
+  color: #f7f7fc;
+}
+
+.emptybtnactive {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  border: none;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 14px;
+  letter-spacing: -0.018em;
+  color: #f7f7fc;
+}
+
+.emptybtnpassive {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  border: none;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 14px;
+  letter-spacing: -0.018em;
+  color: #8e97cd;
+}
+
+.emptycard {
+  height: 150px;
+  border-radius: 12px;
+  background: url("../assets/emptycard.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  box-shadow: 0px 32px 64px rgba(17, 17, 17, 0.08);
+}
+
+.accordion-button::after {
+  filter: none !important;
+  margin: auto;
+  position: absolute;
+  bottom: 0;
+  background-image: url("../assets/detailsbg.svg") !important;
+  width: 94px;
+  height: 25px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.accordion-button:not(.collapsed)::after {
+  background-image: url("../assets/close.svg") !important;
+  width: 94px;
+  height: 25px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  filter: none !important;
+  transform: rotate(0deg) !important;
+}
+
+.accordion-button {
+  background-color: #312f69 !important;
+  box-shadow: 0px 32px 64px rgba(17, 17, 17, 0.12);
+  border-radius: 12px;
+}
+
+.accordion-button:not(.collapsed) {
+  background-color: #14142a !important;
+  border: 2px solid #857dfa;
+  border-radius: 12px 12px 0 0;
+  border-bottom: none;
+}
+
+.accordion-item:first-of-type .accordion-button,
+.accordion-item:last-of-type .accordion-button.collapsed {
+  border-radius: 12px;
+}
+
+.accordion-item:first-of-type .accordion-button:not(.collapsed),
+.accordion-item:last-of-type .accordion-button:not(.collapsed) {
+  border-radius: 12px 12px 0 0;
+}
+
+.accordion-body {
+  background: #14142a !important;
+  border: 2px solid #857dfa !important;
+  border-top: none;
+  padding-top: 54px;
+}
+
+.accordion-body {
+  position: relative;
+  top: -20px;
+}
+
+.accordion-header {
+  position: relative;
+  z-index: 3;
+}
+
+.connectbtn,
+.connectbtn:hover,
+.connectbtn:focus {
+  background: #14142a;
+  border-radius: 8px;
+  border: 1px solid #4ed5d2;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  color: #4ed5d2;
+  width: 145px !important;
+}
+
+.optionbtn-active {
+  background: #1e1c40;
+  border: 1px solid #565891;
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.activeethavax {
+  background: linear-gradient(to bottom, #009fff, #ec2f4b) !important;
+}
+
+.activebscavax {
+  background: linear-gradient(to right, #fff94c, #ec2f4b) !important;
+}
+
+.activeethbnb {
+  background: linear-gradient(to bottom, #004ff9, #fff94c) !important;
+}
+
+.optionbtn-active .optiontext {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 10px;
+  line-height: 18px;
+  color: #f7f7fc;
+  white-space: pre;
+}
+
+.optiontext {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  white-space: pre;
+}
+
+.stakingpool-option {
+  font-weight: 500;
+  font-size: 10px;
+  line-height: 18px;
+  color: #f7f7fc;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.optionbtn-passive{
+  padding: 10px;
+  border: 1px solid transparent;
+}
+
+.bnb-passive{
+  opacity: 0.6;
+}
+
+.bridge-passive{
+  opacity: 0.6;
+}
+
+.optionbtn-passive .optiontext {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 10px;
+  line-height: 18px;
+  color: #8e97cd;
+  cursor: pointer;
+  white-space: pre;
+}
+
+.separator {
+  background: #565891;
+  border-radius: 50px;
+  height: 1px;
+}
+
+.submitproposal-wrapper {
+  position: relative;
+  background: #312f69;
+  box-shadow: 0px 32px 64px rgba(17, 17, 17, 0.08);
+  border-radius: 12px;
+  padding: 15px;
+  display: flex;
+  justify-content: end;
+  gap: 20;
+  width: 83%;
+}
+
+.chaintitle {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  text-align: center;
+  letter-spacing: -0.018em;
+  color: #f7f7fc;
+  white-space: pre;
+}
+
+.totalpoolsnr {
+  font-weight: 400;
+  font-size: 60px;
+  line-height: 64px;
+  text-align: center;
+  letter-spacing: -0.018em;
+  color: #f7f7fc;
+}
+
+.totalproposals-text {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 18px;
+  text-align: center;
+  color: #8e97cd;
+}
+
+.chainlogo {
+  position: absolute;
+  top: -15px;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+.govcard1 {
+  position: relative;
+  padding: 20px 10px;
+  border-radius: 12px;
+  background-color: #26264f;
+  background-image: url(../assets/card1.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.govcard2 {
+  position: relative;
+  padding: 20px 10px;
+  border-radius: 12px;
+  background-color: #26264f;
+  background-image: url(../assets/card2.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  bottom: -40px;
+  position: relative;
+}
+
+.govcard3 {
+  position: relative;
+  padding: 20px 10px;
+  border-radius: 12px;
+  background-color: #26264f;
+  background-image: url(../assets/card3.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  bottom: -20px;
+  position: relative;
+}
+
+.govcard-title {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 27px;
+  letter-spacing: -0.018em;
+  color: #f7f7fc;
+}
+
+.govcard-number {
+  color: #8e97cd;
+  font-size: 80px;
+  font-weight: 600;
+  position: absolute;
+  right: 0;
+  top: -55px;
+}
+
+.govcard-desc {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 21px;
+  color: #d6d8e7;
+}
+
+.cardwrapper {
+  background: url(../assets/cardbg.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: 50px 0px;
+  position: relative;
+}
+
+.footertext {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 20px;
+  letter-spacing: -0.018em;
+  color: #f7f7fc;
+  max-width: 572px;
+}
+
+.initialdesc {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 21px;
+  color: #d6d8e7;
+}
+
+.govhero {
+  border-radius: 12px;
+  width: 239px;
+  height: 134px;
+}
+
+.total-proposals-wrapper{
+  background: #26264F;
+border-radius: 12px;
+background-image: url('../assets/totalVotesBackground.png');
+background-repeat: no-repeat;
+background-size: cover;
+}
+
+.total-gov-votes{
+  font-weight: 400;
+font-size: 14px;
+line-height: 21px;
+color: #D6D8E7 !important;
+}
+
+.total-votes{
+  font-weight: 300;
+font-size: 34px;
+line-height: 66px;
+color: #F7F7FC !important;
+}
+
+@media screen and (max-width: 1399px) {
+  .submitproposal-wrapper {
+    width: 78% !important;
+  }
+}
+
+@media screen and (max-width: 786px) {
+  .govcard2{
+    bottom: 0px;
+  }
+  .govcard3{
+    bottom: 0px;
+  }
+
+  .governanceWrapper{
+    grid-template-columns: auto;
+  }
+  .submitproposal-wrapper {
+    width: 100% !important;
+    padding: 85px 0 15px  0;
+    margin-top: 100px;
+  }
+
+  .project-banner2{
+    left: 0;
+    top: -450px;
+  }
+
+  /* .initialdesc{
+    width: 100%;
+  } */
+}
+

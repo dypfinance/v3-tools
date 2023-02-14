@@ -1,0 +1,17 @@
+.pools-calculator{
+    background: #26264F;
+border: 1px solid #3B3C68;
+/* box-shadow: 0px 32px 64px rgba(17, 17, 17, 0.08); */
+border-radius: 12px;
+position: fixed;
+left: 0;
+top: 0;
+right: 0;
+bottom: 0;
+margin: auto;
+height: fit-content;
+box-shadow: 0 0 0 2000px rgb(0 0 0 / 50%);
+width: 25%;
+pointer-events: auto;
+z-index: 15;
+}

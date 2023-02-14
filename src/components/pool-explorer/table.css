@@ -1,0 +1,88 @@
+.table-title {
+    border-radius: 12px;
+}
+
+div.l-table-wrapper-div {
+    border-radius: 12px;
+    box-shadow: 0px 32px 64px rgba(17, 17, 17, 0.12);
+    padding: 15px;
+}
+
+div.rdt_TableHeadRow {
+    border-radius: 8px;
+    background: #26264F;
+    border-bottom: 0px;
+}
+
+div.rdt_TableRow {
+    padding: 10px 0;
+}
+
+div.rdt_TableRow:hover {
+    background: #565891;
+    border-radius: 8px;
+}
+
+.filter-actions {
+    background: #26264F;
+    border-radius: 4px;
+    padding: 4px;
+}
+
+.icon-bg-white-rounded {
+    border-radius: 50%;
+    background: #fff;
+    padding: 4px;
+}
+
+.type-danger {
+    color: #F36D46 !important;
+}
+
+.type-light {
+    color: #4ED5D2 !important;
+}
+
+.created-on {
+    display: flex;
+    gap: 5px;
+}
+
+.token-link {
+    color: #fff !important;
+}
+
+.token {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+td.green-text {
+    color:#4ED5D2 !important;
+
+}
+
+td.red-text {
+    color:#F36D46 !important;
+
+}
+
+.text-red {
+    color:#F36D46 !important;
+    text-transform: capitalize;
+}
+
+.text-green {
+    color:#4ED5D2 !important;
+    text-transform: capitalize;
+}
+
+.tablepurplediv {
+    width: 4px;
+    height: 50px;
+    position: absolute;
+    border-radius: 0px 100px 100px 0px;
+    left: -1px;
+    background: #7770c0;
+}

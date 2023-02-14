@@ -1,0 +1,19 @@
+.toast-element{
+    position: relative;
+    .red-dot{
+        display: inline-block;
+        position: absolute;
+        top: -10px;
+        left: -10px;
+        width: 25px;
+        height: 25px;
+        background-image: url('../../../../../assets/General/red-dot-notification.svg');
+        background-size: contain;
+    }
+    .text-container{
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 20px;
+        color: $title-dark-00;
+        align-self: center;    }
+}

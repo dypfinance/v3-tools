@@ -1,0 +1,105 @@
+.top-pools-title {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 24px;
+  width: fit-content;
+  letter-spacing: -0.018em;
+  color: rgba(247, 247, 252, 0.8);
+  padding: 0;
+}
+
+.main-dashboard-container{
+  background: #1D1E42;
+  border-radius: 8px;
+}
+
+.regular-news{
+  width: 49%;
+}
+
+.view-more-title {
+  width: fit-content;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+  color: #4ED5D2 !important;
+  cursor: pointer;
+}
+
+.toppool-allwrapper {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.view-more-title:hover,
+.view-more-title:focus {
+  text-decoration: underline;
+}
+
+.header {
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 24px;
+  letter-spacing: -0.018em;
+  color: #f7f7fc;
+  opacity: 0.8;
+}
+
+.faq-grid{
+  display: grid;
+  grid-template-columns: auto;
+  gap: 13px;
+}
+
+@media screen and (max-width: 1399px) {
+  .faq-grid{
+    grid-template-columns: auto auto;
+  }
+
+  .right-side-wrapper{
+    align-items: flex-end;
+  }
+
+  .faq-items-wrapper{
+    width: 49%;
+  }
+
+  .chainlink-wrapper{
+    width: 24%;
+  }
+
+  .launchpad-section-wrapper{
+    width: 24%;
+  }
+}
+@media screen and (max-width: 992px) {
+  .regular-news{
+    width: 100%;
+  }
+}
+
+
+@media screen and (max-width: 786px) {
+  .faq-items-wrapper{
+    width: 100% !important;
+  }
+
+  .chainlink-wrapper{
+    width: 100% !important;
+  }
+
+  .launchpad-section-wrapper{
+    width: 100% !important;
+  }
+
+  .faq-grid{
+    grid-template-columns: auto;
+  }
+ 
+  .toppool-allwrapper{
+    grid-template-columns: auto;
+  }
+  
+}

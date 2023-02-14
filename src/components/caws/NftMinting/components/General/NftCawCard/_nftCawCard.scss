@@ -1,0 +1,291 @@
+.nft-caw-card {
+  margin: 0 10px;
+  // @include medium {
+  //   margin: 0 20px;
+  // }
+  .elevated-container {
+    padding: 10px;
+    padding-bottom: 16px;
+    // @include medium {
+    //   padding: 13px;
+    // }
+    .nft-img {
+      width: 100%;
+      // @include medium {
+      //   width: 100%;
+      // }
+
+      border-radius: 8px;
+      object-fit: cover;
+    }
+    p {
+      margin: 0;
+      margin-top: 9px;
+      margin-bottom: 6px;
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 18px;
+      color: gray;
+      // @include medium {
+      //   font-size: 16px;
+      //   line-height: 20px;
+      //   margin-top: 11px;
+      //   margin-bottom: 0;
+      // }
+    }
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+     
+      .img {
+        cursor: pointer;
+      }
+    }
+  } .nft-id {
+        font-weight: 700;
+        font-size: 18px;
+        line-height: 23px;
+        color: #F7F7FC !important;
+        margin: 0;
+      }
+}
+.checklist-subtitle {
+  font-size: 16px;
+  line-height: 19px;
+  // max-width: 360px;
+  color: #7d7d7d;
+  @media screen and (max-width: 500px) {
+    font-size: 12px;
+  }
+}
+
+.info-text {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px;
+  max-width: 100% !important;
+    width: 100%;
+    margin: auto;
+  gap: 5px;
+  background: #26264F;
+border: 1px solid #565891;
+border-radius: 8px;
+padding: 10px;
+}
+
+.to-stake-title {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 20px;
+  text-align: center;
+  display: flex;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.checkbox-button {
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  width: 100%;
+  color: #ffffff;
+  padding: 5px 20px;
+  border: none;
+  display: flex;
+  outline: none;
+  justify-content: center;
+  gap: 5px;
+}
+
+.sub-container {
+  background: #26264F;
+  margin-bottom: 0 !important;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  padding: 10px;
+  box-shadow: 12px 0px 44px rgb(0 0 0 / 12%);
+}
+
+.earn-checklist-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding: 10px;
+  box-shadow: 12px 0px 44px rgb(0 0 0 / 12%);
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  border-top: 2px solid #f5f5f5;
+
+  #earnedText {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+    color: #999999;
+  }
+
+  #ethPrice {
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 18px;
+    text-align: right;
+    color: #1d91d0;
+    margin-top: 0;
+  }
+
+  #fiatPrice {
+    font-weight: 700;
+    font-size: 10px;
+    line-height: 13px;
+    text-align: right;
+    color: #52a8a4;
+    margin-top: 0;
+  }
+}
+
+.select-all-btn {
+  border: none !important;
+  outline: none !important;
+  background: transparent;
+  display: flex;
+  gap: 5px;
+  align-items: baseline;
+}
+
+.caw-card2 {
+  padding: 16.5px 0;
+  border-radius: 8px;
+  // background: linear-gradient(209.67deg, #ff4229 1.51%, #e30613 98.12%);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  justify-content: center;
+
+  @media screen and (max-width: 500px) {
+    justify-content: center;
+  }
+  .nft-img {
+    width: 100%;
+    border-radius: 8px;
+    // @include medium {
+    //   max-width: 360px;
+    // }
+  }
+  .id {
+    display: flex;
+    align-items: center;
+    margin-top: 13px;
+    margin-bottom: 23px;
+    h1 {
+      font-weight: 700;
+      font-size: 26px;
+      line-height: 33px;
+      color: white;
+      margin-right: auto;
+      margin-bottom: 0;
+      // @include medium {
+      //   font-size: 26px;
+      //   line-height: 33px;
+      // }
+    }
+    p {
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 20px;
+      opacity: 0.8;
+      margin: 0;
+      color: white;
+      // @include medium {
+      //   font-size: 16px;
+      //   line-height: 20px;
+      // }
+    }
+  }
+}
+
+.stakeNft-Title {
+  color: black;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 30px;
+}
+.stakeNft-subtitle {
+  color: #939393;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.select-apr {
+  color: black;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 23px;
+}
+
+.radioDesc {
+  font-style: normal;
+  // font-weight: 600;
+  font-size: 14px;
+  line-height: 18px;
+  color: black;
+}
+
+.aprText {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 23px;
+  color: #e30613;
+}
+
+.sup-notification {
+  color: white;
+  width: 15px;
+  height: 15px;
+  font-size: 11px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  border-radius: 50%;
+  background: #e30613;
+}
+
+.activebtn {
+  border-radius: 6px;
+  color: white;
+  max-width: 48%;
+  padding: 10px 40px;
+  width: 100%;
+  font-size: 13px;
+
+  &:hover {
+    color: white;
+}
+@media screen and (max-width: 500px) {
+  max-width: 90%;
+}
+}
+
+.passivebtn {
+  border-radius: 6px;
+  color: white;
+  padding: 10px 40px;
+  max-width: 48%;
+  width: 100%;
+
+  &:hover {
+    color: white;
+}
+
+@media screen and (max-width: 500px) {
+  max-width: 90%;
+}
+
+}

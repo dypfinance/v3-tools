@@ -1,0 +1,27 @@
+<svg id="speedometer_1_" data-name="speedometer (1)" xmlns="http://www.w3.org/2000/svg" width="21" height="13.505" viewBox="0 0 21 13.505">
+  <g id="Group_126" data-name="Group 126" transform="translate(3.564)">
+    <g id="Group_125" data-name="Group 125">
+      <path id="Path_62" data-name="Path 62" d="M86.882,94l3.5,3.5A5.475,5.475,0,0,1,93.2,96.334V91.38A10.4,10.4,0,0,0,86.882,94Z" transform="translate(-86.882 -91.38)" fill="#e30613"/>
+    </g>
+  </g>
+  <g id="Group_128" data-name="Group 128" transform="translate(0 3.492)">
+    <g id="Group_127" data-name="Group 127">
+      <path id="Path_63" data-name="Path 63" d="M2.694,176.5A10.44,10.44,0,0,0,0,183.44a.615.615,0,0,0,.615.615H4.348a.615.615,0,0,0,.615-.615A5.483,5.483,0,0,1,6.194,180Z" transform="translate(0 -176.502)" fill="#e30613"/>
+    </g>
+  </g>
+  <g id="Group_130" data-name="Group 130" transform="translate(8.04 5.464)">
+    <g id="Group_129" data-name="Group 129">
+      <path id="Path_64" data-name="Path 64" d="M203.215,224.749a.613.613,0,0,0-.737-.055l-5.34,3.405a2.461,2.461,0,1,0,3.554,3.114l2.675-5.742A.616.616,0,0,0,203.215,224.749Z" transform="translate(-196 -224.596)" fill="#e30613"/>
+    </g>
+  </g>
+  <g id="Group_132" data-name="Group 132" transform="translate(15.713 3.492)">
+    <g id="Group_131" data-name="Group 131">
+      <path id="Path_65" data-name="Path 65" d="M385.662,176.5l-1.809,1.808a1.838,1.838,0,0,1,.024,1.559l-.809,1.738a5.366,5.366,0,0,1,.324,1.833.615.615,0,0,0,.615.615h3.732a.614.614,0,0,0,.615-.615A10.437,10.437,0,0,0,385.662,176.5Z" transform="translate(-383.068 -176.502)" fill="#e30613"/>
+    </g>
+  </g>
+  <g id="Group_134" data-name="Group 134" transform="translate(11.116)">
+    <g id="Group_133" data-name="Group 133">
+      <path id="Path_66" data-name="Path 66" d="M271,91.38v4.954a5.5,5.5,0,0,1,1.474.378l1.266-.807a1.754,1.754,0,0,1,1.772-.094L277.322,94A10.4,10.4,0,0,0,271,91.38Z" transform="translate(-271 -91.38)" fill="#e30613"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,163 @@
+.governance-wrapper {
+  background: #1d1e42;
+}
+
+.governance-hero {
+  background-image: url("../../assets/earnAssets/earnHeroBackground.webp");
+  min-height: 150px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 16px;
+}
+
+.submit-proposal-wrapper {
+  background-color: #26264f;
+  border-radius: 16px;
+  border: 1px solid #3b3c68;
+}
+
+.proposal-types {
+  background: #26264f;
+  border: 1px solid #8e97cd;
+  border-radius: 12px;
+  width: 60%;
+  padding: 5px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.proposal-type {
+  color: #6e7191;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.proposal-type-active {
+  color: white;
+  background: linear-gradient(90.74deg, #7770e0 0%, #554fd8 100%);
+}
+
+.balance-wrapper {
+  background-color: #26264f;
+  background-image: url("./assets/balanceBackground.webp");
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 16px;
+  border: 1px solid #3b3c68;
+}
+
+.balance-divider {
+  height: 2px !important;
+  color: #3b3c68;
+  width: 100% !important;
+}
+
+.total-votes-dyp {
+  font-size: 21px;
+  padding: 12px;
+  background: #4e4b98;
+  color: white;
+  border-radius: 12px;
+}
+
+.withdraw-btn {
+  padding: 10px !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+}
+
+.tooltip-wrapper {
+  background: #1a1a36;
+  border: 1px solid #3b3c68;
+  box-shadow: 0px 10px 13px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  position: absolute;
+  right: 20px;
+  top: -80px;
+  opacity: 0;
+  display: none;
+  transition: opacity 0.5s;
+}
+
+.tooltip-wrapper-show {
+  display: block;
+  opacity: 1;
+}
+
+.tooltip-content {
+  color: #7a81b4;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.ether-pools-wrapper {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.ether-pools-card {
+  background: #26264f;
+  box-shadow: 0px 32px 64px rgba(17, 17, 17, 0.08);
+  border-radius: 12px;
+  border: 1px solid #3b3c68;
+}
+
+.disburse-btn {
+  padding: 10px;
+  background: #503851;
+  border-radius: 6px;
+  color: #f8845b;
+  font-size: 13px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+
+.expiry-date {
+  background: linear-gradient(0deg, #14142a 0%, rgba(20, 20, 42, 0) 100%);
+  border-radius: 12px;
+}
+
+.load-more-button{
+font-size: 15px;
+font-weight: 500;
+color: #7770E0;
+border-radius: 12px;
+border: 1px solid #7770E0;
+padding: 10px 40px;
+background: #26264F;
+}
+.load-more-button:focus{
+border: 1px solid #7770E0;
+
+}
+
+.load-more-button:hover{
+color: #fff;
+background: #7770E0;
+}
+
+.pools-dropdown{
+  width: 60%;
+  position: absolute;
+}
+
+.pool-item{
+  cursor: pointer;
+  transition: all .25s;
+  border-radius: 8px;
+}
+
+.pool-item:hover{
+  background: #7770E0;
+}
+
+
+@media screen and (max-width: 1399px) {
+  .submit-proposal-wrapper {
+    width: 78% !important;
+  }
+}

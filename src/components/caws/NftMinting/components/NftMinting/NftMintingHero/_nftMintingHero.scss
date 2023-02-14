@@ -1,0 +1,45 @@
+.nft-minting-hero {
+    background-color: white;
+    .common-title-text {
+        h1 {
+            margin: 0;
+            color: $black-theme;
+        }
+    }
+
+    .bg-image {
+        width: 100%;
+        background-position: top;
+        background-size: contain;
+        height: fit-content;
+        height: 100px;
+        background: url("../../../../../assets/Nft/cats-and-watches-society-before-mobile.png") no-repeat center;
+        // @include large {
+        //     height: 120px;
+        //     background: url("../../../../../assets/Nft/cats-and-watches-society-before.png") no-repeat center;
+        //     background-size: cover;
+        // }
+    }
+    .text-wrapper {
+        margin-top: -14px;
+        padding: 0 17px 32px 17px;
+        // @include large {
+        //     padding: 0 0 32px 80px;
+        // }
+    }
+}
+
+
+.dark {
+    .nft-minting-hero{
+        .bg-image {
+            background: url("../../../../../assets/Nft/cats-and-watches-society-before-mobile-dark.png") no-repeat center;
+            
+            // @include large {
+            //     height: 150px;
+            //     background: url("../../../../../assets/Nft/cats-and-watches-society-before-dark.png") no-repeat center;
+            //     background-size: cover;
+            // }
+        }
+    }
+}

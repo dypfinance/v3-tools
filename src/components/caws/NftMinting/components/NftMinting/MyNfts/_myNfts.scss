@@ -1,0 +1,188 @@
+.my-nfts {
+  margin-top: 50px;
+  // @include medium {
+  //   margin-top: 60px;
+  // }
+  .common-title-text {
+    h1 {
+      color: red;
+    }
+  }
+  .mints-container {
+    &::after {
+      background: white !important;
+    }
+    .cards-grid {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+
+     
+
+      .graphic-container {
+        padding-bottom: 0;
+        max-width: 180px;
+        margin: 0 auto;
+        margin-top: -70px;
+        // @include medium {
+        //   margin-left: 0;
+        //   max-width: 180px;
+        //   margin-top: -20px;
+        //   margin-right: 95px;
+        //   margin-bottom: 40px;
+        // }
+      }
+
+      .nft-caw-card {
+        max-width: 180px;
+        margin-bottom: 40px;
+      }
+    }
+    .slider {
+      .slick-slider {
+        .slick-arrow {
+          z-index: 3;
+          bottom: 18px;
+          top: unset;
+          // @include medium {
+          //   top: 50%;
+          //   bottom: unset;
+          // }
+
+          display: flex !important;
+          align-items: center;
+          justify-content: center;
+          background: linear-gradient(209.67deg, #ff4229 1.51%, #ff9ca3 98.12%);
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          // border: 1px solid lighten($accent-red, 30) ;
+          &::before {
+            content: "";
+          }
+          img {
+            width: 6px;
+            height: 12px;
+          }
+        }
+        .slick-dots {
+          li {
+            button {
+              &::before {
+                background: linear-gradient(180deg, #fa4933 0%, #e30713 100%);
+              }
+            }
+          }
+        }
+      }
+      .nft-caw-card {
+        margin-top: 16px;
+        // @include medium {
+        //   margin-top: 0;
+        // }
+      }
+    }
+  }
+
+  .myCaws-info-text {
+    // display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @media screen and (max-width: 600px) {
+      max-width: 300px;
+    }
+  }
+
+  .mycaws-status-text {
+    background: rgba(245, 245, 245, 0.1);
+    border-radius: 6px;
+    padding: 20px;
+    color: #939393;
+    align-items: center;
+    gap: 5px;
+    display: flex;
+    font-size: 14px;
+  }
+  .graphic-container {
+    max-width: 139px;
+    p {
+      color: black !important;
+      font-size: 28px;
+      line-height: 35px;
+      // @include medium {
+      //   font-size: 32px;
+      //   line-height: 40px;
+      // }
+    }
+    button {
+      background: linear-gradient(51.32deg, #e30613 -12.3%, #fa4a33 50.14%);
+      border-radius: 6px;
+      padding: 7px 22.5px;
+      border: none;
+      font-weight: 600;
+      line-height: 18px;
+      font-size: 14px;
+      color: white;
+      margin: 19px auto 0 auto;
+      border: 1px solid red;
+      display: none;
+
+      // @include medium {
+      //   display: inline-block;
+      // }
+      svg {
+        width: 10px;
+        height: 10px;
+        margin-right: 8.25px;
+        path {
+          fill: red;
+        }
+      }
+    }
+    .open-button {
+      display: flex;
+      align-items: center;
+      background: transparent;
+      border: 1px solid red;
+      color: red;
+    }
+  }
+  .nft-caw-card {
+    .elevated-container {
+      background-color: unset;
+      background: linear-gradient(209.67deg, #ff4229 1.51%, #e30613 98.12%);
+      p {
+        color: white;
+        opacity: 0.6;
+      }
+      .footer {
+        .nft-id {
+          color: white;
+          opacity: 1;
+        }
+        .img {
+          svg {
+            circle {
+              fill: white;
+            }
+            path {
+              fill: red;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.dark {
+  .my-nfts {
+    .mints-container {
+      &::after {
+        background: black !important;
+      }
+    }
+  }
+}

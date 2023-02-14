@@ -1,0 +1,411 @@
+.locker-title {
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 28px;
+  color: #f7f7fc !important;
+}
+
+.locker-desc {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: -0.018em;
+  color: #d6d8e7 !important;
+}
+
+.locker-card {
+  background: #26264f;
+  border-radius: 12px;
+}
+
+.calendar-input{
+  width: 40%;
+}
+
+.liquidity-background {
+  background-image: url("./assets/liquidityBackground.svg");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.security-background {
+  background-image: url("./assets/securityBackground.svg");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.locker-card-title {
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 27px;
+  letter-spacing: -0.018em;
+  color: #f7f7fc;
+}
+
+.locker-card-desc {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 21px;
+  color: #d6d8e7 !important;
+}
+
+.create-lock-inputs{
+  width: 60%;
+}
+
+.liquidity-icon-holder {
+  background: #4d314a;
+  border-radius: 12px;
+  min-width: 40px;
+  height: 40px;
+}
+.security-icon-holder {
+  background: #36346c;
+  border-radius: 12px;
+  min-width: 40px;
+  height: 40px;
+}
+
+.purple-wrapper {
+  background: #312f69;
+  box-shadow: 0px 32px 64px rgba(17, 17, 17, 0.12);
+  border-radius: 12px;
+}
+
+.locker-function-title {
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 30px;
+  color: #f7f7fc;
+}
+
+.create-lock-title {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 24px;
+  letter-spacing: -0.018em;
+  color: #d6d8e7 !important;
+}
+
+.selected-token-wrapper {
+  background: #2b2a59;
+  border-radius: 8px;
+}
+
+.create-lock-token {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: -0.018em;
+  color: #f7f7fc !important;
+}
+
+.locker-balance {
+  font-weight: 500;
+  font-size: 36px;
+  line-height: 40px;
+  letter-spacing: -0.018em;
+  color: #f7f7fc !important;
+}
+
+.create-lock-month {
+  padding: 10px 16px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 21px;
+  text-align: center;
+  border: 1px solid #312f69;
+  color: #8E97CD !important;
+  cursor: pointer;
+  transition: all 0.25s;
+  border-radius: 8px;
+}
+
+.create-lock-month:hover {
+  background: #1e1c40;
+}
+
+.selected-month {
+  background: #1e1c40;
+  border: 1px solid #565891;
+  border-radius: 8px;
+  color: #f7f7fc !important;
+}
+
+.locker-calendar{
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: #312f69;
+  pointer-events: none;
+  cursor: pointer;
+}
+
+.select-percentage{
+  font-weight: 300;
+font-size: 12px;
+line-height: 18px;
+letter-spacing: -0.018em;
+color: #D6D8E7 !important;
+}
+
+.locker-liquidity-wrapper{
+  background: #2B2A59;
+border: 1px solid #565891;
+border-radius: 8px;
+}
+
+.locker-indicator{
+  font-weight: 400;
+font-size: 10px;
+line-height: 15px;
+/* identical to box height */
+
+text-align: right;
+letter-spacing: -0.018em;
+
+color: #857DFA !important; 
+}
+
+.locker-status{
+  background: linear-gradient(92deg, #4ED5D2 1.66%, #1E9895 98.59%);
+border-radius: 4px;
+}
+.inactive-locker-status{
+  background: linear-gradient(92deg, #DEDEDE 1.66%, #8E97CD 98.59%);
+border-radius: 4px;
+}
+.potenial-locker-status{
+  background: linear-gradient(92deg, #F77F5A 1.66%, #672BB2 98.59%);
+border-radius: 4px;
+}
+
+
+
+.locker-status-text{
+  font-weight: 500;
+font-size: 12px;
+line-height: 18px;
+/* identical to box height */
+
+letter-spacing: -0.018em;
+
+color: #FFFFFF !important;
+
+}
+
+.inactive-locker-status-text{
+  font-weight: 500;
+font-size: 12px;
+line-height: 18px;
+letter-spacing: -0.018em;
+ color: #2B2A59 !important;
+
+}
+
+.locker-timer{
+  font-weight: 400;
+font-size: 10px;
+line-height: 24px;
+/* identical to box height, or 240% */
+
+text-align: right;
+letter-spacing: -0.018em;
+
+color: #D6D8E7 !important;
+}
+
+.pair-locker-wrapper{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  row-gap: 50px;
+  column-gap: 24px;
+}
+
+
+.pair-locker-card{
+  background: #312F69;
+outline: 2px solid #565891;
+border-radius: 12px;
+}
+
+.pair-locker-left{
+  /* border-right: 2px solid #565891; */
+  border-radius: 12px;
+}
+
+.pair-locker-right{
+  background: #2A2859;
+  border-left: 2px solid #565891;
+  border-radius: 12px;
+}
+
+.pairlocker-badge{
+  position: absolute;
+  bottom: -15%;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+
+.hide-btn{
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.active-pair-completed{
+  background: linear-gradient(0deg, #2A2859 1.45%, #6C69D5 100%) !important;
+}
+
+.active-pair{
+  background: linear-gradient(0deg, #2A2859 1.45%, #F77F5A 100%) !important;
+}
+
+.inactive-pair{
+  background: linear-gradient(0deg, #2A2859 1.45%, #606580 100%) !important;
+}
+.pair-indicator{
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 21px;
+  letter-spacing: -0.018em;
+  color: #D6D8E7 !important;
+}
+
+.pair-value{
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 21px;
+  color: #F7F7FC;
+}
+
+
+.active-tag{
+  padding: 6px 12px 6px 6px;
+  border-radius: 50px;
+  background: #211F45;
+  width: fit-content;
+}
+
+.active-tag-text{
+  font-weight: 500;
+font-size: 10px;
+line-height: 12px;
+letter-spacing: -0.018em;
+color: #4ED5D2 !important;
+}
+.inactive-tag{
+  padding: 6px 12px 6px 6px;
+  border-radius: 50px;
+  background: #C0C9FF;
+  width: fit-content;
+}
+
+.inactive-tag-text{
+  font-weight: 500;
+font-size: 10px;
+line-height: 12px;
+letter-spacing: -0.018em;
+color: #14142A !important;
+}
+
+.more-info-tag{
+  position: absolute;
+  top: -30px;
+  right: 0;
+}
+
+.total-dyp-locked{
+  font-weight: 400;
+font-size: 14px;
+line-height: 22px;
+letter-spacing: -0.018em;
+color: #4CD0CD !important;
+
+}
+
+.locker-modal-desc{
+  font-weight: 400;
+font-size: 14px;
+line-height: 22px;
+letter-spacing: -0.018em;
+color: #C0CBF7 !important;
+}
+
+.locker-modal-icon{
+  width: 73px !important;
+  height: 76px !important;
+}
+
+.locker-modal-item{
+  background: #26264F;
+border-radius: 8px;
+}
+
+.modal-locker-active-tag{
+  font-weight: 400;
+font-size: 14px;
+line-height: 21px;
+/* identical to box height */
+
+letter-spacing: -0.018em;
+
+color: #857DFA !important;
+
+}
+
+.modal-locker-liquidity{
+  font-weight: 500;
+font-size: 18px;
+line-height: 20px;
+/* identical to box height, or 111% */
+
+letter-spacing: -0.018em;
+
+color: #C0C9FF !important;
+}
+
+.modal-locker-paragraph{
+  font-weight: 400;
+font-size: 16px;
+line-height: 24px;
+letter-spacing: -0.018em;
+color: #F7F7FC !important;
+
+}
+
+.top-locked-locker{
+  position: absolute;
+  top: -13px;
+  left: 30px;
+}
+
+.locker-slider-wrapper{
+  width: 50%;
+}
+
+@media screen and (max-width: 1199px) {
+  .pair-locker-wrapper{
+    grid-template-columns: repeat(2,1fr);
+  }
+}
+
+@media screen and (max-width: 786px) {
+  .pair-locker-wrapper{
+    grid-template-columns: auto;
+  }
+  .locker-status-text{
+    font-size: 9px;
+  }
+  .create-lock-inputs{
+    width: 100%;
+  }
+
+  .calendar-input{
+    width: 100%;
+  }
+  .locker-slider-wrapper{
+    width: 100%;
+  }
+}

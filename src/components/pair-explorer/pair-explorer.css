@@ -1,0 +1,106 @@
+.content-title {
+    border: 0;
+    padding-bottom: 0;
+}
+
+
+.pair-explorer-input::placeholder{
+    color: #F7F7FC;
+}
+
+.favorites-text-title{
+    font-size: 20px;
+    font-weight: 500;
+
+}
+
+.content-title3 {
+    border-bottom: 1px solid #d9d9d94d;
+    padding: 0 0 20px;
+    margin: 0 0 20px;
+    display: grid;
+    gap: 10px;
+}
+
+.progress-container {
+    background: #2B2A59;
+    border-radius: 8px;
+    padding: 8px;
+}
+
+.progress-title p {
+    color: #fff !important;
+}
+
+.progress-title .community {
+    color: #4ED5D2 !important;
+}
+
+.box-inner {
+    background: #2B2A59;
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.score-title {
+    color: #857DFA !important;
+}
+
+.score-title-points {
+    font-weight: 500;
+    font-size: 11px;
+    line-height: 13px;
+    text-align: center;
+}
+
+.firstbox-text {
+    color: #F7F7FC !important;
+    opacity: 1 !important;
+    font-size: 14px !important;
+    font-weight: 400 !important;
+}
+
+.firstbox-title {
+    color: #F7F7FC !important;
+    font-size: 18px !important;
+}
+
+.favRow {
+    background: #2B2A59;
+    border-radius: 8px;
+    padding: 12px;
+}
+
+span.favliq {
+    color: #70B8E0 !important;
+}
+
+.btn-favorite{
+    background: #26264F !important;
+    width: 25px;
+    height: 25px;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    border-radius: 50% !important;
+}
+
+.btn-favorite img {
+    top: 0 !important;
+    padding: 5px;
+}
+
+.btn-share img {
+    top: 0 !important;
+}
+
+.is-favorite {
+    border: 1px solid yellow !important;
+}
+
+.output {
+    background: #312F69 !important;
+}
+
+.prediction-item {
+    border-top: 1px solid #3B3C68 !important;
+}

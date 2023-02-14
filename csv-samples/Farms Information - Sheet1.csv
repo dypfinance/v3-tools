@@ -1,0 +1,33 @@
+link_logo,pool_name,pair_name,link_pair,return_types,tvl_usd,apy_percent
+https://app.dyp.finance/logo192.png,DYP/ETH LP Pool Ethereum,DYP-ETH,https://app.dyp.finance/staking-eth-3,WETH,684417.37,175.02
+https://app.dyp.finance/logo192.png,DYP/ETH LP Pool Ethereum,DYP-ETH,https://app.dyp.finance/staking-eth-30,WETH,994193.56,185.26
+https://app.dyp.finance/logo192.png,DYP/ETH LP Pool Ethereum,DYP-ETH,https://app.dyp.finance/staking-eth-60,WETH,1764366,163.42
+https://app.dyp.finance/logo192.png,DYP/ETH LP Pool Ethereum,DYP-ETH,https://app.dyp.finance/staking-eth-90,WETH,3162589.74,96.79
+https://app.dyp.finance/logo192.png,DYP/WBTC LP Pool Ethereum,DYP-WBTC,https://app.dyp.finance/staking-wbtc-3,WETH,557724.45,283.89
+https://app.dyp.finance/logo192.png,DYP/WBTC LP Pool Ethereum,DYP-WBTC,https://app.dyp.finance/staking-wbtc-30,WETH,786637.52,339.25
+https://app.dyp.finance/logo192.png,DYP/WBTC LP Pool Ethereum,DYP-WBTC,https://app.dyp.finance/staking-wbtc-60,WETH,1588377.6,207.35
+https://app.dyp.finance/logo192.png,DYP/WBTC LP Pool Ethereum,DYP-WBTC,https://app.dyp.finance/staking-wbtc-90,WETH,2167727.37,194.4
+https://app.dyp.finance/logo192.png,DYP/USDC LP Pool Ethereum,DYP-USDC,https://app.dyp.finance/staking-usdc-3,WETH,682537.34,176.88
+https://app.dyp.finance/logo192.png,DYP/USDC LP Pool Ethereum,DYP-USDC,https://app.dyp.finance/staking-usdc-30,WETH,1091775.36,154.52
+https://app.dyp.finance/logo192.png,DYP/USDC LP Pool Ethereum,DYP-USDC,https://app.dyp.finance/staking-usdc-60,WETH,1674819.55,185.82
+https://app.dyp.finance/logo192.png,DYP/USDC LP Pool Ethereum,DYP-USDC,https://app.dyp.finance/staking-usdc-90,WETH,2100095.16,213.44
+https://app.dyp.finance/logo192.png,DYP/USDT LP Pool Ethereum,DYP-USDT,https://app.dyp.finance/staking-usdt-3,WETH,715971.24,159.76
+https://app.dyp.finance/logo192.png,DYP/USDT LP Pool Ethereum,DYP-USDT,https://app.dyp.finance/staking-usdt-30,WETH,1949888.4,61.19
+https://app.dyp.finance/logo192.png,DYP/USDT LP Pool Ethereum,DYP-USDT,https://app.dyp.finance/staking-usdt-60,WETH,1411595.85,270.83
+https://app.dyp.finance/logo192.png,DYP/USDT LP Pool Ethereum,DYP-USDT,https://app.dyp.finance/staking-usdt-90,WETH,2258137.63,177.7
+https://app.dyp.finance/logo192.png,DYP Constant Staking,DYP,https://app.dyp.finance/constant-staking-30,DYP,79998.91,20
+https://app.dyp.finance/logo192.png,DYP Constant Staking,DYP,https://app.dyp.finance/constant-staking-60,DYP,74050.39,25
+https://app.dyp.finance/logo192.png,DYP Constant Staking,DYP,https://app.dyp.finance/constant-staking-90,DYP,123620.04,30
+https://app.dyp.finance/logo192.png,DYP Constant Staking,DYP,https://app.dyp.finance/constant-staking-120,DYP,224798.63,35
+https://app.dyp.finance/logo192.png,DYP/WBNB LP Pool BSC,DYP-WBNB,https://app-bsc.dyp.finance/staking-bnb-3,WBNB WETH DYP,431933.85,148.15
+https://app.dyp.finance/logo192.png,DYP/WBNB LP Pool BSC,DYP-WBNB,https://app-bsc.dyp.finance/staking-bnb-30,WBNB WETH DYP,677852.04,134.12
+https://app.dyp.finance/logo192.png,DYP/WBNB LP Pool BSC,DYP-WBNB,https://app-bsc.dyp.finance/staking-bnb-60,WBNB WETH DYP,1044663.59,171.33
+https://app.dyp.finance/logo192.png,DYP/WBNB LP Pool BSC,DYP-WBNB,https://app-bsc.dyp.finance/staking-bnb-90,WBNB WETH DYP,1357422.82,195.65
+https://app.dyp.finance/logo192.png,DYP/ETH LP Pool BSC,DYP-ETH,https://app-bsc.dyp.finance/staking-eth-3,WBNB WETH DYP,357032.3,240.3
+https://app.dyp.finance/logo192.png,DYP/ETH LP Pool BSC,DYP-ETH,https://app-bsc.dyp.finance/staking-eth-30,WBNB WETH DYP,414531.93,722.92
+https://app.dyp.finance/logo192.png,DYP/ETH LP Pool BSC,DYP-ETH,https://app-bsc.dyp.finance/staking-eth-60,WBNB WETH DYP,1030337.94,180.8
+https://app.dyp.finance/logo192.png,DYP/ETH LP Pool BSC,DYP-ETH,https://app-bsc.dyp.finance/staking-eth-90,WBNB WETH DYP,1358062.45,199.55
+https://app.dyp.finance/logo192.png,DYP/BUSD LP Pool BSC,DYP-BUSD,https://app-bsc.dyp.finance/staking-busd-3,WBNB WETH DYP,437562.98,143.75
+https://app.dyp.finance/logo192.png,DYP/BUSD LP Pool BSC,DYP-BUSD,https://app-bsc.dyp.finance/staking-busd-30,WBNB WETH DYP,793523.83,99.37
+https://app.dyp.finance/logo192.png,DYP/BUSD LP Pool BSC,DYP-BUSD,https://app-bsc.dyp.finance/staking-busd-60,WBNB WETH DYP,1076499.72,155.78
+https://app.dyp.finance/logo192.png,DYP/BUSD LP Pool BSC,DYP-BUSD,https://app-bsc.dyp.finance/staking-busd-90,WBNB WETH DYP,1395607.61,177.27
