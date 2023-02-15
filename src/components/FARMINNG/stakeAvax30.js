@@ -870,8 +870,8 @@ export default function stakeAvax30({
       tvl = new BigNumber(tvl).div(1e18).toString(10);
       tvl = getFormattedNumber(tvl, 6);
 
-      stakingTime = stakingTime * 1e3;
-      cliffTime = cliffTime * 1e3;
+      stakingTime = stakingTime;
+      cliffTime = cliffTime;
 
       let showDeposit = true;
 
@@ -903,6 +903,7 @@ export default function stakeAvax30({
             .humanize(true);
         }
       }
+      // console.log(Number(stakingTime)+ Number(cliffTime))
       let total_stakers = this.state.total_stakers;
       //let tvl_usd = this.state.tvl / 1e18 * this.state.usdPerToken
       let tvl_usd = this.state.tvlUSD / 1e18;
@@ -1832,8 +1833,7 @@ export default function stakeAvax30({
                             ) : (
                               <Countdown
                                 date={
-                                  (Number(stakingTime) + Number(cliffTime)) *
-                                  1000
+                                  (Number(stakingTime) + Number(cliffTime))*1000
                                 }
                                 renderer={renderer}
                                 onComplete={() => {
