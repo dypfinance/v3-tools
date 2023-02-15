@@ -43,7 +43,7 @@ const EarnTopPicks = ({
   customChain,
   handleSwitchNetwork,
   expiredPools,
-  networkId
+  networkId,
 }) => {
   const vault = [
     {
@@ -705,12 +705,28 @@ const EarnTopPicks = ({
   const vaultsymbolArray = ["WETH", "WBTC", "USDC", "USDT", "DAI"];
   const locktimeFarm = ["No Lock", "3 Days", "30 Days", "60 Days", "90 Days"];
 
-
- 
+  useEffect(() => {
+    setActiveCard(null);
+    setActiveCardNFT(null);
+    setActiveCard2(null);
+    setActiveCard3(null);
+    setActiveCard4(null);
+    setActiveCard5(null);
+    setActiveCard6(null);
+    setActiveCard7(null);
+    setActiveCard8(null);
+    setActiveCard9(null);
+    setActiveCard10(null);
+    setActiveCard11(null);
+    setActiveCard12(null);
+    setcardIndex(0);
+    setcardIndexiDyp(0);
+    setcardIndexavax30(0);
+    setcardIndexavaxiDyp(0);
+    setDetails(0);
+  }, [expiredPools]);
 
   useEffect(() => {
-
-
     if (customPool !== null) {
       if (routeOption === "Staking" && chain === "eth") {
         setDetails(0);
@@ -812,7 +828,6 @@ const EarnTopPicks = ({
     }
     setShowDetails(false);
     setListing(listType);
-
   }, [
     topList,
     listType,
@@ -824,8 +839,8 @@ const EarnTopPicks = ({
     routeOption,
   ]);
 
-  useEffect(()=>{
-if (topList === "Vault" && chainId === "1") {
+  useEffect(() => {
+    if (topList === "Vault" && chainId === "1") {
       setTopPools([]);
 
       setTimeout(() => {
@@ -846,35 +861,31 @@ if (topList === "Vault" && chainId === "1") {
         setTopPools(farming);
       }, 500);
     }
-  },[topList, chainId, chain, coinbase])
+  }, [topList, chainId, chain, coinbase]);
 
-
-  useEffect(()=>{
+  useEffect(() => {
     fetchUserPools();
     setActiveCard();
     if (topList === "Staking") {
       setTopPools([]);
-      if ((chain !== "eth" && chain !== "bnb" && chain === "avax" )) {
+      if (chain !== "eth" && chain !== "bnb" && chain === "avax") {
         setTimeout(() => {
           fetchAvaxStaking();
         }, 500);
-      }
-     else if ((chain === "eth" && chain !== "bnb" && chain !== "avax")) {
+      } else if (chain === "eth" && chain !== "bnb" && chain !== "avax") {
         setTimeout(() => {
           fetchEthStaking();
         }, 500);
-      }
-
-     else if ((chain !== "eth" && chain === "bnb" && chain !== "avax" )) {
+      } else if (chain !== "eth" && chain === "bnb" && chain !== "avax") {
         setTimeout(() => {
           fetchBnbStaking();
         }, 500);
       }
-    } 
-  }, [topList, chain, coinbase, networkId, chainId, expiredPools, listType])
+    }
+  }, [topList, chain, coinbase, networkId, chainId, expiredPools, listType]);
 
   // console.log(topList, chain, networkId)
-  
+
   const handleCardIndexStake = (index) => {
     if (topList === "Staking") {
       if (index >= 3) {
@@ -1040,7 +1051,7 @@ if (topList === "Vault" && chainId === "1") {
                   ) : activeCard &&
                     topList === "Staking" &&
                     chain === "eth" &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x50014432772b4123D04181727C6EdEAB34F5F988" ? (
                     <InitConstantStakingiDYP
                       is_wallet_connected={isConnected}
@@ -1099,7 +1110,7 @@ if (topList === "Vault" && chainId === "1") {
                   ) : activeCard &&
                     topList === "Staking" &&
                     chain === "eth" &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0xD4bE7a106ed193BEe39D6389a481ec76027B2660" ? (
                     <InitConstantStakingiDYP
                       is_wallet_connected={isConnected}
@@ -1157,7 +1168,7 @@ if (topList === "Vault" && chainId === "1") {
                     />
                   ) : activeCard &&
                     topList === "Staking" &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" &&
                     chain === "bnb" ? (
                     <StakeBsc
@@ -1227,7 +1238,7 @@ if (topList === "Vault" && chainId === "1") {
                   ) : activeCard &&
                     topList === "Staking" &&
                     chain === "eth" &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" ? (
                     <StakeNewEth
                       staking={window.constant_staking_newi3}
@@ -1285,7 +1296,7 @@ if (topList === "Vault" && chainId === "1") {
                       totalTvl={activePools[cardIndex].tvl_usd}
                     />
                   ) : activeCard &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x4C04E53f9aAa17fc2C914694B4Aae57a9d1bE445" &&
                     topList === "Staking" &&
                     chain === "bnb" ? (
@@ -1353,7 +1364,7 @@ if (topList === "Vault" && chainId === "1") {
                       }
                     />
                   ) : activeCard &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x7e766F7005C7a9e74123b156697B582eeCB8d2D7" &&
                     topList === "Staking" &&
                     chain === "bnb" ? (
@@ -1437,7 +1448,7 @@ if (topList === "Vault" && chainId === "1") {
                   ) : activeCard &&
                     topList === "Staking" &&
                     chain === "avax" &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0xd13bdC0c9a9931cF959739631B1290b6BEE0c018" ? (
                     <StakeAvaxIDyp
                       is_wallet_connected={isConnected}
@@ -1499,7 +1510,7 @@ if (topList === "Vault" && chainId === "1") {
                   ) : activeCard &&
                     topList === "Staking" &&
                     chain === "avax" &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0xaF411BF994dA1435A3150B874395B86376C5f2d5" ? (
                     <StakeAvaxIDyp
                       is_wallet_connected={isConnected}
@@ -1688,7 +1699,7 @@ if (topList === "Vault" && chainId === "1") {
                 </div>
                 {activeCard2 &&
                 topList === "Staking" &&
-                activePools[cardIndex].id ===
+                activePools[cardIndex]?.id ===
                   "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" &&
                 chain === "bnb" ? (
                   <StakeBsc
@@ -1755,7 +1766,7 @@ if (topList === "Vault" && chainId === "1") {
                 ) : activeCard2 &&
                   topList === "Staking" &&
                   chain === "eth" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x50014432772b4123D04181727C6EdEAB34F5F988" ? (
                   <InitConstantStakingiDYP
                     is_wallet_connected={isConnected}
@@ -1811,7 +1822,7 @@ if (topList === "Vault" && chainId === "1") {
                 ) : activeCard2 &&
                   topList === "Staking" &&
                   chain === "eth" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xD4bE7a106ed193BEe39D6389a481ec76027B2660" ? (
                   <InitConstantStakingiDYP
                     is_wallet_connected={isConnected}
@@ -1865,7 +1876,7 @@ if (topList === "Vault" && chainId === "1") {
                     }
                   />
                 ) : activeCard2 &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x4C04E53f9aAa17fc2C914694B4Aae57a9d1bE445" &&
                   topList === "Staking" &&
                   chain === "bnb" ? (
@@ -1930,7 +1941,7 @@ if (topList === "Vault" && chainId === "1") {
                     }
                   />
                 ) : activeCard2 &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x7e766F7005C7a9e74123b156697B582eeCB8d2D7" &&
                   topList === "Staking" &&
                   chain === "bnb" ? (
@@ -2011,7 +2022,7 @@ if (topList === "Vault" && chainId === "1") {
                 ) : activeCard2 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xd13bdC0c9a9931cF959739631B1290b6BEE0c018" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
@@ -2070,7 +2081,7 @@ if (topList === "Vault" && chainId === "1") {
                 ) : activeCard2 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xaF411BF994dA1435A3150B874395B86376C5f2d5" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
@@ -2244,7 +2255,7 @@ if (topList === "Vault" && chainId === "1") {
                 </div>
                 {activeCard3 &&
                 topList === "Staking" &&
-                activePools[cardIndex].id ===
+                activePools[cardIndex]?.id ===
                   "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" &&
                 chain === "bnb" ? (
                   <StakeBsc
@@ -2309,7 +2320,7 @@ if (topList === "Vault" && chainId === "1") {
                     referrer={referrer}
                   />
                 ) : activeCard3 &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x4C04E53f9aAa17fc2C914694B4Aae57a9d1bE445" &&
                   topList === "Staking" &&
                   chain === "bnb" ? (
@@ -2374,7 +2385,7 @@ if (topList === "Vault" && chainId === "1") {
                     }
                   />
                 ) : activeCard3 &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x7e766F7005C7a9e74123b156697B582eeCB8d2D7" &&
                   topList === "Staking" &&
                   chain === "bnb" ? (
@@ -2455,7 +2466,7 @@ if (topList === "Vault" && chainId === "1") {
                 ) : activeCard3 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xd13bdC0c9a9931cF959739631B1290b6BEE0c018" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
@@ -2514,7 +2525,7 @@ if (topList === "Vault" && chainId === "1") {
                 ) : activeCard3 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xaF411BF994dA1435A3150B874395B86376C5f2d5" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
@@ -2661,7 +2672,7 @@ if (topList === "Vault" && chainId === "1") {
                 </div>
                 {activeCard4 &&
                 topList === "Staking" &&
-                activePools[cardIndex].id ===
+                activePools[cardIndex]?.id ===
                   "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" &&
                 chain === "bnb" ? (
                   <StakeBsc
@@ -2828,7 +2839,7 @@ if (topList === "Vault" && chainId === "1") {
                 ) : activeCard4 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xd13bdC0c9a9931cF959739631B1290b6BEE0c018" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
@@ -2887,7 +2898,7 @@ if (topList === "Vault" && chainId === "1") {
                 ) : activeCard4 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xaF411BF994dA1435A3150B874395B86376C5f2d5" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
@@ -3129,7 +3140,7 @@ if (topList === "Vault" && chainId === "1") {
                 ) : activeCard &&
                   topList === "Staking" &&
                   chain === "eth" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x50014432772b4123D04181727C6EdEAB34F5F988" ? (
                   <InitConstantStakingiDYP
                     is_wallet_connected={isConnected}
@@ -3185,7 +3196,7 @@ if (topList === "Vault" && chainId === "1") {
                 ) : activeCard &&
                   topList === "Staking" &&
                   chain === "eth" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xD4bE7a106ed193BEe39D6389a481ec76027B2660" ? (
                   <InitConstantStakingiDYP
                     is_wallet_connected={isConnected}
@@ -3240,7 +3251,7 @@ if (topList === "Vault" && chainId === "1") {
                   />
                 ) : activeCard &&
                   topList === "Staking" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" &&
                   chain === "bnb" ? (
                   <StakeBsc
@@ -3305,7 +3316,7 @@ if (topList === "Vault" && chainId === "1") {
                     referrer={referrer}
                   />
                 ) : activeCard &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x4C04E53f9aAa17fc2C914694B4Aae57a9d1bE445" &&
                   topList === "Staking" &&
                   chain === "bnb" ? (
@@ -3370,7 +3381,7 @@ if (topList === "Vault" && chainId === "1") {
                     }
                   />
                 ) : activeCard &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x7e766F7005C7a9e74123b156697B582eeCB8d2D7" &&
                   topList === "Staking" &&
                   chain === "bnb" ? (
@@ -3451,7 +3462,7 @@ if (topList === "Vault" && chainId === "1") {
                 ) : activeCard &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xd13bdC0c9a9931cF959739631B1290b6BEE0c018" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
@@ -3510,7 +3521,7 @@ if (topList === "Vault" && chainId === "1") {
                 ) : activeCard &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xaF411BF994dA1435A3150B874395B86376C5f2d5" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
@@ -3692,7 +3703,7 @@ if (topList === "Vault" && chainId === "1") {
                 {activeCard2 &&
                 topList === "Staking" &&
                 chain === "eth" &&
-                activePools[cardIndex].id ===
+                activePools[cardIndex]?.id ===
                   "0x50014432772b4123D04181727C6EdEAB34F5F988" ? (
                   <InitConstantStakingiDYP
                     is_wallet_connected={isConnected}
@@ -3748,7 +3759,7 @@ if (topList === "Vault" && chainId === "1") {
                 ) : activeCard2 &&
                   topList === "Staking" &&
                   chain === "eth" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xD4bE7a106ed193BEe39D6389a481ec76027B2660" ? (
                   <InitConstantStakingiDYP
                     is_wallet_connected={isConnected}
@@ -3802,7 +3813,7 @@ if (topList === "Vault" && chainId === "1") {
                     }
                   />
                 ) : activeCard2 &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x4C04E53f9aAa17fc2C914694B4Aae57a9d1bE445" &&
                   topList === "Staking" &&
                   chain === "bnb" ? (
@@ -3867,7 +3878,7 @@ if (topList === "Vault" && chainId === "1") {
                     }
                   />
                 ) : activeCard2 &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x7e766F7005C7a9e74123b156697B582eeCB8d2D7" &&
                   topList === "Staking" &&
                   chain === "bnb" ? (
@@ -3948,7 +3959,7 @@ if (topList === "Vault" && chainId === "1") {
                 ) : activeCard2 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xd13bdC0c9a9931cF959739631B1290b6BEE0c018" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
@@ -4007,7 +4018,7 @@ if (topList === "Vault" && chainId === "1") {
                 ) : activeCard2 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xaF411BF994dA1435A3150B874395B86376C5f2d5" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
@@ -4158,7 +4169,7 @@ if (topList === "Vault" && chainId === "1") {
                 </div>
                 {activeCard3 &&
                 topList === "Staking" &&
-                activePools[cardIndex].id ===
+                activePools[cardIndex]?.id ===
                   "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" &&
                 chain === "bnb" ? (
                   <StakeBsc
@@ -4325,7 +4336,7 @@ if (topList === "Vault" && chainId === "1") {
                 ) : activeCard3 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xd13bdC0c9a9931cF959739631B1290b6BEE0c018" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
@@ -4384,7 +4395,7 @@ if (topList === "Vault" && chainId === "1") {
                 ) : activeCard3 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xaF411BF994dA1435A3150B874395B86376C5f2d5" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
@@ -4535,7 +4546,7 @@ if (topList === "Vault" && chainId === "1") {
                 </div>
                 {activeCard4 &&
                 topList === "Staking" &&
-                activePools[cardIndex].id ===
+                activePools[cardIndex]?.id ===
                   "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" &&
                 chain === "bnb" ? (
                   <StakeBsc
@@ -4702,7 +4713,7 @@ if (topList === "Vault" && chainId === "1") {
                 ) : activeCard4 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xd13bdC0c9a9931cF959739631B1290b6BEE0c018" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
@@ -4761,7 +4772,7 @@ if (topList === "Vault" && chainId === "1") {
                 ) : activeCard4 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xaF411BF994dA1435A3150B874395B86376C5f2d5" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
@@ -4914,7 +4925,7 @@ if (topList === "Vault" && chainId === "1") {
                 </div>
                 {activeCard5 &&
                 topList === "Staking" &&
-                activePools[cardIndex].id ===
+                activePools[cardIndex]?.id ===
                   "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" &&
                 chain === "bnb" ? (
                   <StakeBsc
@@ -5081,7 +5092,7 @@ if (topList === "Vault" && chainId === "1") {
                 ) : activeCard5 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xd13bdC0c9a9931cF959739631B1290b6BEE0c018" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
@@ -5140,7 +5151,7 @@ if (topList === "Vault" && chainId === "1") {
                 ) : activeCard5 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xaF411BF994dA1435A3150B874395B86376C5f2d5" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
@@ -5293,7 +5304,7 @@ if (topList === "Vault" && chainId === "1") {
                 </div>
                 {activeCard6 &&
                 topList === "Staking" &&
-                activePools[cardIndex].id ===
+                activePools[cardIndex]?.id ===
                   "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" &&
                 chain === "bnb" ? (
                   <StakeBsc
@@ -5652,7 +5663,7 @@ if (topList === "Vault" && chainId === "1") {
 
                   {activeCard &&
                   topList === "Staking" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" &&
                   chain === "bnb" ? (
                     <StakeBsc
@@ -5722,7 +5733,7 @@ if (topList === "Vault" && chainId === "1") {
                   ) : activeCard &&
                     topList === "Staking" &&
                     chain === "eth" &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" ? (
                     <StakeNewEth
                       staking={window.constant_staking_newi3}
@@ -5782,7 +5793,7 @@ if (topList === "Vault" && chainId === "1") {
                   ) : activeCard &&
                     topList === "Staking" &&
                     chain === "eth" &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x50014432772b4123D04181727C6EdEAB34F5F988" ? (
                     <InitConstantStakingiDYP
                       is_wallet_connected={isConnected}
@@ -5841,7 +5852,7 @@ if (topList === "Vault" && chainId === "1") {
                   ) : activeCard &&
                     topList === "Staking" &&
                     chain === "eth" &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0xD4bE7a106ed193BEe39D6389a481ec76027B2660" ? (
                     <InitConstantStakingiDYP
                       is_wallet_connected={isConnected}
@@ -5898,7 +5909,7 @@ if (topList === "Vault" && chainId === "1") {
                       }
                     />
                   ) : activeCard &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x4C04E53f9aAa17fc2C914694B4Aae57a9d1bE445" &&
                     topList === "Staking" &&
                     chain === "bnb" ? (
@@ -5966,7 +5977,7 @@ if (topList === "Vault" && chainId === "1") {
                       }
                     />
                   ) : activeCard &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x7e766F7005C7a9e74123b156697B582eeCB8d2D7" &&
                     topList === "Staking" &&
                     chain === "bnb" ? (
@@ -6151,7 +6162,7 @@ if (topList === "Vault" && chainId === "1") {
                   {activeCard2 &&
                   topList === "Staking" &&
                   chain === "eth" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x50014432772b4123D04181727C6EdEAB34F5F988" ? (
                     <InitConstantStakingiDYP
                       is_wallet_connected={isConnected}
@@ -6210,7 +6221,7 @@ if (topList === "Vault" && chainId === "1") {
                   ) : activeCard2 &&
                     topList === "Staking" &&
                     chain === "eth" &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0xD4bE7a106ed193BEe39D6389a481ec76027B2660" ? (
                     <InitConstantStakingiDYP
                       is_wallet_connected={isConnected}
@@ -6267,7 +6278,7 @@ if (topList === "Vault" && chainId === "1") {
                       }
                     />
                   ) : activeCard2 &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x4C04E53f9aAa17fc2C914694B4Aae57a9d1bE445" &&
                     topList === "Staking" &&
                     chain === "bnb" ? (
@@ -6335,7 +6346,7 @@ if (topList === "Vault" && chainId === "1") {
                       }
                     />
                   ) : activeCard2 &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x7e766F7005C7a9e74123b156697B582eeCB8d2D7" &&
                     topList === "Staking" &&
                     chain === "bnb" ? (
@@ -6405,7 +6416,7 @@ if (topList === "Vault" && chainId === "1") {
                   ) : activeCard2 &&
                     topList === "Staking" &&
                     chain === "avax" &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0xd13bdC0c9a9931cF959739631B1290b6BEE0c018" ? (
                     <StakeAvaxIDyp
                       is_wallet_connected={isConnected}
@@ -6467,7 +6478,7 @@ if (topList === "Vault" && chainId === "1") {
                   ) : activeCard2 &&
                     topList === "Staking" &&
                     chain === "avax" &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0xaF411BF994dA1435A3150B874395B86376C5f2d5" ? (
                     <StakeAvaxIDyp
                       is_wallet_connected={isConnected}
@@ -6630,7 +6641,7 @@ if (topList === "Vault" && chainId === "1") {
                   {activeCard3 &&
                   topList === "Staking" &&
                   chain === "eth" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x50014432772b4123D04181727C6EdEAB34F5F988" ? (
                     <InitConstantStakingiDYP
                       is_wallet_connected={isConnected}
@@ -6689,7 +6700,7 @@ if (topList === "Vault" && chainId === "1") {
                   ) : activeCard3 &&
                     topList === "Staking" &&
                     chain === "eth" &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0xD4bE7a106ed193BEe39D6389a481ec76027B2660" ? (
                     <InitConstantStakingiDYP
                       is_wallet_connected={isConnected}
@@ -6746,7 +6757,7 @@ if (topList === "Vault" && chainId === "1") {
                       }
                     />
                   ) : activeCard3 &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x4C04E53f9aAa17fc2C914694B4Aae57a9d1bE445" &&
                     topList === "Staking" &&
                     chain === "bnb" ? (
@@ -6814,7 +6825,7 @@ if (topList === "Vault" && chainId === "1") {
                       }
                     />
                   ) : activeCard3 &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x7e766F7005C7a9e74123b156697B582eeCB8d2D7" &&
                     topList === "Staking" &&
                     chain === "bnb" ? (
@@ -6883,7 +6894,7 @@ if (topList === "Vault" && chainId === "1") {
                     />
                   ) : activeCard3 &&
                     topList === "Staking" &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" &&
                     chain === "bnb" ? (
                     <StakeBsc
@@ -6953,7 +6964,7 @@ if (topList === "Vault" && chainId === "1") {
                   ) : activeCard3 &&
                     topList === "Staking" &&
                     chain === "avax" &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0xd13bdC0c9a9931cF959739631B1290b6BEE0c018" ? (
                     <StakeAvaxIDyp
                       is_wallet_connected={isConnected}
@@ -7015,7 +7026,7 @@ if (topList === "Vault" && chainId === "1") {
                   ) : activeCard3 &&
                     topList === "Staking" &&
                     chain === "avax" &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0xaF411BF994dA1435A3150B874395B86376C5f2d5" ? (
                     <StakeAvaxIDyp
                       is_wallet_connected={isConnected}
@@ -7178,7 +7189,7 @@ if (topList === "Vault" && chainId === "1") {
                   {activeCard4 &&
                   topList === "Staking" &&
                   chain === "eth" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x50014432772b4123D04181727C6EdEAB34F5F988" ? (
                     <InitConstantStakingiDYP
                       is_wallet_connected={isConnected}
@@ -7237,7 +7248,7 @@ if (topList === "Vault" && chainId === "1") {
                   ) : activeCard4 &&
                     topList === "Staking" &&
                     chain === "eth" &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0xD4bE7a106ed193BEe39D6389a481ec76027B2660" ? (
                     <InitConstantStakingiDYP
                       is_wallet_connected={isConnected}
@@ -7295,7 +7306,7 @@ if (topList === "Vault" && chainId === "1") {
                     />
                   ) : activeCard4 &&
                     topList === "Staking" &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" &&
                     chain === "bnb" ? (
                     <StakeBsc
@@ -7363,7 +7374,7 @@ if (topList === "Vault" && chainId === "1") {
                       referrer={referrer}
                     />
                   ) : activeCard4 &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x4C04E53f9aAa17fc2C914694B4Aae57a9d1bE445" &&
                     topList === "Staking" &&
                     chain === "bnb" ? (
@@ -7431,7 +7442,7 @@ if (topList === "Vault" && chainId === "1") {
                       }
                     />
                   ) : activeCard4 &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x7e766F7005C7a9e74123b156697B582eeCB8d2D7" &&
                     topList === "Staking" &&
                     chain === "bnb" ? (
@@ -7515,7 +7526,7 @@ if (topList === "Vault" && chainId === "1") {
                   ) : activeCard4 &&
                     topList === "Staking" &&
                     chain === "avax" &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0xd13bdC0c9a9931cF959739631B1290b6BEE0c018" ? (
                     <StakeAvaxIDyp
                       is_wallet_connected={isConnected}
@@ -7577,7 +7588,7 @@ if (topList === "Vault" && chainId === "1") {
                   ) : activeCard4 &&
                     topList === "Staking" &&
                     chain === "avax" &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0xaF411BF994dA1435A3150B874395B86376C5f2d5" ? (
                     <StakeAvaxIDyp
                       is_wallet_connected={isConnected}
@@ -7739,7 +7750,7 @@ if (topList === "Vault" && chainId === "1") {
                   </div>
                   {activeCard5 &&
                   topList === "Staking" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" &&
                   chain === "bnb" ? (
                     <StakeBsc
@@ -7807,7 +7818,7 @@ if (topList === "Vault" && chainId === "1") {
                       referrer={referrer}
                     />
                   ) : activeCard5 &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x4C04E53f9aAa17fc2C914694B4Aae57a9d1bE445" &&
                     topList === "Staking" &&
                     chain === "bnb" ? (
@@ -7875,7 +7886,7 @@ if (topList === "Vault" && chainId === "1") {
                       }
                     />
                   ) : activeCard5 &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x7e766F7005C7a9e74123b156697B582eeCB8d2D7" &&
                     topList === "Staking" &&
                     chain === "bnb" ? (
@@ -7974,7 +7985,7 @@ if (topList === "Vault" && chainId === "1") {
                   ) : activeCard5 &&
                     topList === "Staking" &&
                     chain === "avax" &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0xd13bdC0c9a9931cF959739631B1290b6BEE0c018" ? (
                     <StakeAvaxIDyp
                       is_wallet_connected={isConnected}
@@ -8036,7 +8047,7 @@ if (topList === "Vault" && chainId === "1") {
                   ) : activeCard5 &&
                     topList === "Staking" &&
                     chain === "avax" &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0xaF411BF994dA1435A3150B874395B86376C5f2d5" ? (
                     <StakeAvaxIDyp
                       is_wallet_connected={isConnected}
@@ -8198,7 +8209,7 @@ if (topList === "Vault" && chainId === "1") {
                   </div>
                   {activeCard6 &&
                   topList === "Staking" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" &&
                   chain === "bnb" ? (
                     <StakeBsc
@@ -8310,7 +8321,7 @@ if (topList === "Vault" && chainId === "1") {
                       fee_u={withdrawFeeiDyp[cardIndex]}
                     />
                   ) : activeCard6 &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x4C04E53f9aAa17fc2C914694B4Aae57a9d1bE445" &&
                     topList === "Staking" &&
                     chain === "bnb" ? (
@@ -8378,7 +8389,7 @@ if (topList === "Vault" && chainId === "1") {
                       }
                     />
                   ) : activeCard6 &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x7e766F7005C7a9e74123b156697B582eeCB8d2D7" &&
                     topList === "Staking" &&
                     chain === "bnb" ? (
@@ -8642,7 +8653,7 @@ if (topList === "Vault" && chainId === "1") {
                   </div>
                   {activeCard7 &&
                   topList === "Staking" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" &&
                   chain === "bnb" ? (
                     <StakeBsc
@@ -9025,7 +9036,7 @@ if (topList === "Vault" && chainId === "1") {
                   </div>
                   {activeCard8 &&
                   topList === "Staking" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" &&
                   chain === "bnb" ? (
                     <StakeBsc
@@ -11019,7 +11030,7 @@ if (topList === "Vault" && chainId === "1") {
                 )
               ) : activeCard &&
                 topList === "Staking" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x8A30Be7B2780b503ff27dBeaCdecC4Fe2587Af5d" &&
                 chain === "eth" ? (
                 <StakeEth
@@ -11078,7 +11089,7 @@ if (topList === "Vault" && chainId === "1") {
                 />
               ) : activeCard &&
                 topList === "Staking" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xa4da28B8e42680916b557459D338aF6e2D8d458f" &&
                 chain === "eth" ? (
                 <StakeEth
@@ -11136,7 +11147,7 @@ if (topList === "Vault" && chainId === "1") {
                   referrer={referrer}
                 />
               ) : activeCard &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x44bEd8ea3296bda44870d0Da98575520De1735d4" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -11169,7 +11180,7 @@ if (topList === "Vault" && chainId === "1") {
                   lp_id={lp_id[cardIndex]}
                 />
               ) : activeCard &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x3fAb09ACAeDDAF579d7a72c24Ef3e9EB1D2975c4" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -11228,7 +11239,7 @@ if (topList === "Vault" && chainId === "1") {
                   }
                 />
               ) : activeCard &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x9eA966B4023049BFF858BB5E698ECfF24EA54c4A" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -11287,7 +11298,7 @@ if (topList === "Vault" && chainId === "1") {
                   }
                 />
               ) : activeCard &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xef9e50A19358CCC8816d9BC2c2355aea596efd06" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -11319,7 +11330,7 @@ if (topList === "Vault" && chainId === "1") {
                   referrer={referrer}
                 />
               ) : activeCard &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xaF411BF994dA1435A3150B874395B86376C5f2d5" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -11351,7 +11362,7 @@ if (topList === "Vault" && chainId === "1") {
                   referrer={referrer}
                 />
               ) : activeCard &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xf13aDbEb27ea9d9469D95e925e56a1CF79c06E90" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -11383,7 +11394,7 @@ if (topList === "Vault" && chainId === "1") {
                   referrer={referrer}
                 />
               ) : activeCard &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xa9efab22cCbfeAbB6dc4583d81421e76342faf8b" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -11415,7 +11426,7 @@ if (topList === "Vault" && chainId === "1") {
                   referrer={referrer}
                 />
               ) : activeCard &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x160fF3c4A6E9Aa8E4271aa71226Cc811BFEf7ED9" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -11478,7 +11489,7 @@ if (topList === "Vault" && chainId === "1") {
                   }
                 />
               ) : activeCard &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x58366902082B90Fca01bE07D929478bD48AcFB19" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -11571,7 +11582,7 @@ if (topList === "Vault" && chainId === "1") {
               ) : activeCard &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x16429e51A64B7f88D4C018fbf66266A693df64b3" ? (
                 <StakeAvaxDai
                   staking={window.constant_stakingdaiavax}
@@ -11610,7 +11621,7 @@ if (topList === "Vault" && chainId === "1") {
               ) : activeCard &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
@@ -11669,7 +11680,7 @@ if (topList === "Vault" && chainId === "1") {
               ) : activeCard &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
@@ -11830,7 +11841,7 @@ if (topList === "Vault" && chainId === "1") {
               )
             ) : activeCard2 &&
               topList === "Staking" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x8A30Be7B2780b503ff27dBeaCdecC4Fe2587Af5d" &&
               chain === "eth" ? (
               <StakeEth
@@ -11888,7 +11899,7 @@ if (topList === "Vault" && chainId === "1") {
               />
             ) : activeCard2 &&
               topList === "Staking" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xa4da28B8e42680916b557459D338aF6e2D8d458f" &&
               chain === "eth" ? (
               <StakeEth
@@ -11945,7 +11956,7 @@ if (topList === "Vault" && chainId === "1") {
                 referrer={referrer}
               />
             ) : activeCard2 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x44bEd8ea3296bda44870d0Da98575520De1735d4" &&
               topList === "Staking" &&
               chain === "eth" ? (
@@ -11977,7 +11988,7 @@ if (topList === "Vault" && chainId === "1") {
                 lp_id={lp_id[cardIndex]}
               />
             ) : activeCard2 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x3fAb09ACAeDDAF579d7a72c24Ef3e9EB1D2975c4" &&
               topList === "Staking" &&
               chain === "eth" ? (
@@ -12035,7 +12046,7 @@ if (topList === "Vault" && chainId === "1") {
                 }
               />
             ) : activeCard2 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x9eA966B4023049BFF858BB5E698ECfF24EA54c4A" &&
               topList === "Staking" &&
               chain === "eth" ? (
@@ -12093,7 +12104,7 @@ if (topList === "Vault" && chainId === "1") {
                 }
               />
             ) : activeCard2 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xef9e50A19358CCC8816d9BC2c2355aea596efd06" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -12124,7 +12135,7 @@ if (topList === "Vault" && chainId === "1") {
                 referrer={referrer}
               />
             ) : activeCard2 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xaF411BF994dA1435A3150B874395B86376C5f2d5" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -12155,7 +12166,7 @@ if (topList === "Vault" && chainId === "1") {
                 referrer={referrer}
               />
             ) : activeCard2 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xf13aDbEb27ea9d9469D95e925e56a1CF79c06E90" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -12186,7 +12197,7 @@ if (topList === "Vault" && chainId === "1") {
                 referrer={referrer}
               />
             ) : activeCard2 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xa9efab22cCbfeAbB6dc4583d81421e76342faf8b" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -12217,7 +12228,7 @@ if (topList === "Vault" && chainId === "1") {
                 referrer={referrer}
               />
             ) : activeCard2 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x160fF3c4A6E9Aa8E4271aa71226Cc811BFEf7ED9" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -12279,7 +12290,7 @@ if (topList === "Vault" && chainId === "1") {
                 }
               />
             ) : activeCard2 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x58366902082B90Fca01bE07D929478bD48AcFB19" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -12371,7 +12382,7 @@ if (topList === "Vault" && chainId === "1") {
             ) : activeCard2 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x16429e51A64B7f88D4C018fbf66266A693df64b3" ? (
               <StakeAvaxDai
                 staking={window.constant_stakingdaiavax}
@@ -12410,7 +12421,7 @@ if (topList === "Vault" && chainId === "1") {
             ) : activeCard2 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
               <StakeAvaxIDyp
                 is_wallet_connected={isConnected}
@@ -12468,7 +12479,7 @@ if (topList === "Vault" && chainId === "1") {
             ) : activeCard2 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
               <StakeAvaxIDyp
                 is_wallet_connected={isConnected}
@@ -12627,7 +12638,7 @@ if (topList === "Vault" && chainId === "1") {
               )
             ) : activeCard3 &&
               topList === "Staking" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x8A30Be7B2780b503ff27dBeaCdecC4Fe2587Af5d" &&
               chain === "eth" ? (
               <StakeEth
@@ -12685,7 +12696,7 @@ if (topList === "Vault" && chainId === "1") {
               />
             ) : activeCard3 &&
               topList === "Staking" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xa4da28B8e42680916b557459D338aF6e2D8d458f" &&
               chain === "eth" ? (
               <StakeEth
@@ -12742,7 +12753,7 @@ if (topList === "Vault" && chainId === "1") {
                 referrer={referrer}
               />
             ) : activeCard3 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x44bEd8ea3296bda44870d0Da98575520De1735d4" &&
               topList === "Staking" &&
               chain === "eth" ? (
@@ -12774,7 +12785,7 @@ if (topList === "Vault" && chainId === "1") {
                 lp_id={lp_id[cardIndex]}
               />
             ) : activeCard3 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x3fAb09ACAeDDAF579d7a72c24Ef3e9EB1D2975c4" &&
               topList === "Staking" &&
               chain === "eth" ? (
@@ -12832,7 +12843,7 @@ if (topList === "Vault" && chainId === "1") {
                 }
               />
             ) : activeCard3 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x9eA966B4023049BFF858BB5E698ECfF24EA54c4A" &&
               topList === "Staking" &&
               chain === "eth" ? (
@@ -12890,7 +12901,7 @@ if (topList === "Vault" && chainId === "1") {
                 }
               />
             ) : activeCard3 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xef9e50A19358CCC8816d9BC2c2355aea596efd06" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -12921,7 +12932,7 @@ if (topList === "Vault" && chainId === "1") {
                 referrer={referrer}
               />
             ) : activeCard3 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xaF411BF994dA1435A3150B874395B86376C5f2d5" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -12952,7 +12963,7 @@ if (topList === "Vault" && chainId === "1") {
                 referrer={referrer}
               />
             ) : activeCard3 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xf13aDbEb27ea9d9469D95e925e56a1CF79c06E90" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -12983,7 +12994,7 @@ if (topList === "Vault" && chainId === "1") {
                 referrer={referrer}
               />
             ) : activeCard3 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xa9efab22cCbfeAbB6dc4583d81421e76342faf8b" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -13014,7 +13025,7 @@ if (topList === "Vault" && chainId === "1") {
                 referrer={referrer}
               />
             ) : activeCard3 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x160fF3c4A6E9Aa8E4271aa71226Cc811BFEf7ED9" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -13076,7 +13087,7 @@ if (topList === "Vault" && chainId === "1") {
                 }
               />
             ) : activeCard3 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x58366902082B90Fca01bE07D929478bD48AcFB19" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -13168,7 +13179,7 @@ if (topList === "Vault" && chainId === "1") {
             ) : activeCard3 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x16429e51A64B7f88D4C018fbf66266A693df64b3" ? (
               <StakeAvaxDai
                 staking={window.constant_stakingdaiavax}
@@ -13207,7 +13218,7 @@ if (topList === "Vault" && chainId === "1") {
             ) : activeCard3 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
               <StakeAvaxIDyp
                 is_wallet_connected={isConnected}
@@ -13265,7 +13276,7 @@ if (topList === "Vault" && chainId === "1") {
             ) : activeCard3 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
               <StakeAvaxIDyp
                 is_wallet_connected={isConnected}
@@ -13787,7 +13798,7 @@ if (topList === "Vault" && chainId === "1") {
             ) : activeCard4 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
               <StakeAvaxIDyp
                 is_wallet_connected={isConnected}
@@ -13845,7 +13856,7 @@ if (topList === "Vault" && chainId === "1") {
             ) : activeCard4 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
               <StakeAvaxIDyp
                 is_wallet_connected={isConnected}
@@ -14018,7 +14029,7 @@ if (topList === "Vault" && chainId === "1") {
               )
             ) : activeCard &&
               topList === "Staking" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x8A30Be7B2780b503ff27dBeaCdecC4Fe2587Af5d" &&
               chain === "eth" ? (
               <StakeEth
@@ -14076,7 +14087,7 @@ if (topList === "Vault" && chainId === "1") {
               />
             ) : activeCard &&
               topList === "Staking" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xa4da28B8e42680916b557459D338aF6e2D8d458f" &&
               chain === "eth" ? (
               <StakeEth
@@ -14133,7 +14144,7 @@ if (topList === "Vault" && chainId === "1") {
                 referrer={referrer}
               />
             ) : activeCard &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x44bEd8ea3296bda44870d0Da98575520De1735d4" &&
               topList === "Staking" &&
               chain === "eth" ? (
@@ -14165,7 +14176,7 @@ if (topList === "Vault" && chainId === "1") {
                 lp_id={lp_id[cardIndex]}
               />
             ) : activeCard &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x3fAb09ACAeDDAF579d7a72c24Ef3e9EB1D2975c4" &&
               topList === "Staking" &&
               chain === "eth" ? (
@@ -14223,7 +14234,7 @@ if (topList === "Vault" && chainId === "1") {
                 }
               />
             ) : activeCard &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x9eA966B4023049BFF858BB5E698ECfF24EA54c4A" &&
               topList === "Staking" &&
               chain === "eth" ? (
@@ -14281,7 +14292,7 @@ if (topList === "Vault" && chainId === "1") {
                 }
               />
             ) : activeCard &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xef9e50A19358CCC8816d9BC2c2355aea596efd06" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -14312,7 +14323,7 @@ if (topList === "Vault" && chainId === "1") {
                 referrer={referrer}
               />
             ) : activeCard &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xaF411BF994dA1435A3150B874395B86376C5f2d5" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -14343,7 +14354,7 @@ if (topList === "Vault" && chainId === "1") {
                 referrer={referrer}
               />
             ) : activeCard &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xf13aDbEb27ea9d9469D95e925e56a1CF79c06E90" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -14374,7 +14385,7 @@ if (topList === "Vault" && chainId === "1") {
                 referrer={referrer}
               />
             ) : activeCard &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xa9efab22cCbfeAbB6dc4583d81421e76342faf8b" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -14405,7 +14416,7 @@ if (topList === "Vault" && chainId === "1") {
                 referrer={referrer}
               />
             ) : activeCard &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x160fF3c4A6E9Aa8E4271aa71226Cc811BFEf7ED9" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -14467,7 +14478,7 @@ if (topList === "Vault" && chainId === "1") {
                 }
               />
             ) : activeCard &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x58366902082B90Fca01bE07D929478bD48AcFB19" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -14559,7 +14570,7 @@ if (topList === "Vault" && chainId === "1") {
             ) : activeCard &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x16429e51A64B7f88D4C018fbf66266A693df64b3" ? (
               <StakeAvaxDai
                 staking={window.constant_stakingdaiavax}
@@ -14598,7 +14609,7 @@ if (topList === "Vault" && chainId === "1") {
             ) : activeCard &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
               <StakeAvaxIDyp
                 is_wallet_connected={isConnected}
@@ -14656,7 +14667,7 @@ if (topList === "Vault" && chainId === "1") {
             ) : activeCard &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
               <StakeAvaxIDyp
                 is_wallet_connected={isConnected}
@@ -14824,7 +14835,7 @@ if (topList === "Vault" && chainId === "1") {
               )
             ) : activeCard2 &&
               topList === "Staking" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x8A30Be7B2780b503ff27dBeaCdecC4Fe2587Af5d" &&
               chain === "eth" ? (
               <StakeEth
@@ -14882,7 +14893,7 @@ if (topList === "Vault" && chainId === "1") {
               />
             ) : activeCard2 &&
               topList === "Staking" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xa4da28B8e42680916b557459D338aF6e2D8d458f" &&
               chain === "eth" ? (
               <StakeEth
@@ -14939,7 +14950,7 @@ if (topList === "Vault" && chainId === "1") {
                 referrer={referrer}
               />
             ) : activeCard2 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x44bEd8ea3296bda44870d0Da98575520De1735d4" &&
               topList === "Staking" &&
               chain === "eth" ? (
@@ -14971,7 +14982,7 @@ if (topList === "Vault" && chainId === "1") {
                 lp_id={lp_id[cardIndex]}
               />
             ) : activeCard2 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x3fAb09ACAeDDAF579d7a72c24Ef3e9EB1D2975c4" &&
               topList === "Staking" &&
               chain === "eth" ? (
@@ -15029,7 +15040,7 @@ if (topList === "Vault" && chainId === "1") {
                 }
               />
             ) : activeCard2 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x9eA966B4023049BFF858BB5E698ECfF24EA54c4A" &&
               topList === "Staking" &&
               chain === "eth" ? (
@@ -15087,7 +15098,7 @@ if (topList === "Vault" && chainId === "1") {
                 }
               />
             ) : activeCard2 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xef9e50A19358CCC8816d9BC2c2355aea596efd06" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -15118,7 +15129,7 @@ if (topList === "Vault" && chainId === "1") {
                 referrer={referrer}
               />
             ) : activeCard2 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xaF411BF994dA1435A3150B874395B86376C5f2d5" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -15149,7 +15160,7 @@ if (topList === "Vault" && chainId === "1") {
                 referrer={referrer}
               />
             ) : activeCard2 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xf13aDbEb27ea9d9469D95e925e56a1CF79c06E90" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -15180,7 +15191,7 @@ if (topList === "Vault" && chainId === "1") {
                 referrer={referrer}
               />
             ) : activeCard2 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xa9efab22cCbfeAbB6dc4583d81421e76342faf8b" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -15211,7 +15222,7 @@ if (topList === "Vault" && chainId === "1") {
                 referrer={referrer}
               />
             ) : activeCard2 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x160fF3c4A6E9Aa8E4271aa71226Cc811BFEf7ED9" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -15273,7 +15284,7 @@ if (topList === "Vault" && chainId === "1") {
                 }
               />
             ) : activeCard2 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x58366902082B90Fca01bE07D929478bD48AcFB19" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -15365,7 +15376,7 @@ if (topList === "Vault" && chainId === "1") {
             ) : activeCard2 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x16429e51A64B7f88D4C018fbf66266A693df64b3" ? (
               <StakeAvaxDai
                 staking={window.constant_stakingdaiavax}
@@ -15404,7 +15415,7 @@ if (topList === "Vault" && chainId === "1") {
             ) : activeCard2 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
               <StakeAvaxIDyp
                 is_wallet_connected={isConnected}
@@ -15462,7 +15473,7 @@ if (topList === "Vault" && chainId === "1") {
             ) : activeCard2 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
               <StakeAvaxIDyp
                 is_wallet_connected={isConnected}
@@ -15626,7 +15637,7 @@ if (topList === "Vault" && chainId === "1") {
               )
             ) : activeCard3 &&
               topList === "Staking" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x8A30Be7B2780b503ff27dBeaCdecC4Fe2587Af5d" &&
               chain === "eth" ? (
               <StakeEth
@@ -15684,7 +15695,7 @@ if (topList === "Vault" && chainId === "1") {
               />
             ) : activeCard3 &&
               topList === "Staking" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xa4da28B8e42680916b557459D338aF6e2D8d458f" &&
               chain === "eth" ? (
               <StakeEth
@@ -15741,7 +15752,7 @@ if (topList === "Vault" && chainId === "1") {
                 referrer={referrer}
               />
             ) : activeCard3 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x44bEd8ea3296bda44870d0Da98575520De1735d4" &&
               topList === "Staking" &&
               chain === "eth" ? (
@@ -15773,7 +15784,7 @@ if (topList === "Vault" && chainId === "1") {
                 lp_id={lp_id[cardIndex]}
               />
             ) : activeCard3 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x3fAb09ACAeDDAF579d7a72c24Ef3e9EB1D2975c4" &&
               topList === "Staking" &&
               chain === "eth" ? (
@@ -15831,7 +15842,7 @@ if (topList === "Vault" && chainId === "1") {
                 }
               />
             ) : activeCard3 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x9eA966B4023049BFF858BB5E698ECfF24EA54c4A" &&
               topList === "Staking" &&
               chain === "eth" ? (
@@ -15889,7 +15900,7 @@ if (topList === "Vault" && chainId === "1") {
                 }
               />
             ) : activeCard3 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xef9e50A19358CCC8816d9BC2c2355aea596efd06" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -15920,7 +15931,7 @@ if (topList === "Vault" && chainId === "1") {
                 referrer={referrer}
               />
             ) : activeCard3 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xaF411BF994dA1435A3150B874395B86376C5f2d5" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -15951,7 +15962,7 @@ if (topList === "Vault" && chainId === "1") {
                 referrer={referrer}
               />
             ) : activeCard3 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xf13aDbEb27ea9d9469D95e925e56a1CF79c06E90" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -15982,7 +15993,7 @@ if (topList === "Vault" && chainId === "1") {
                 referrer={referrer}
               />
             ) : activeCard3 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xa9efab22cCbfeAbB6dc4583d81421e76342faf8b" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -16013,7 +16024,7 @@ if (topList === "Vault" && chainId === "1") {
                 referrer={referrer}
               />
             ) : activeCard3 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x160fF3c4A6E9Aa8E4271aa71226Cc811BFEf7ED9" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -16075,7 +16086,7 @@ if (topList === "Vault" && chainId === "1") {
                 }
               />
             ) : activeCard3 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x58366902082B90Fca01bE07D929478bD48AcFB19" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -16167,7 +16178,7 @@ if (topList === "Vault" && chainId === "1") {
             ) : activeCard3 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x16429e51A64B7f88D4C018fbf66266A693df64b3" ? (
               <StakeAvaxDai
                 staking={window.constant_stakingdaiavax}
@@ -16206,7 +16217,7 @@ if (topList === "Vault" && chainId === "1") {
             ) : activeCard3 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
               <StakeAvaxIDyp
                 is_wallet_connected={isConnected}
@@ -16264,7 +16275,7 @@ if (topList === "Vault" && chainId === "1") {
             ) : activeCard3 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
               <StakeAvaxIDyp
                 is_wallet_connected={isConnected}
@@ -16789,7 +16800,7 @@ if (topList === "Vault" && chainId === "1") {
             ) : activeCard4 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
               <StakeAvaxIDyp
                 is_wallet_connected={isConnected}
@@ -16847,7 +16858,7 @@ if (topList === "Vault" && chainId === "1") {
             ) : activeCard4 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
               <StakeAvaxIDyp
                 is_wallet_connected={isConnected}
@@ -17375,7 +17386,7 @@ if (topList === "Vault" && chainId === "1") {
             ) : activeCard5 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
               <StakeAvaxIDyp
                 is_wallet_connected={isConnected}
@@ -17433,7 +17444,7 @@ if (topList === "Vault" && chainId === "1") {
             ) : activeCard5 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
               <StakeAvaxIDyp
                 is_wallet_connected={isConnected}
@@ -17963,7 +17974,7 @@ if (topList === "Vault" && chainId === "1") {
             ) : activeCard6 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
               <StakeAvaxIDyp
                 is_wallet_connected={isConnected}
@@ -18021,7 +18032,7 @@ if (topList === "Vault" && chainId === "1") {
             ) : activeCard6 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
               <StakeAvaxIDyp
                 is_wallet_connected={isConnected}
@@ -18195,7 +18206,7 @@ if (topList === "Vault" && chainId === "1") {
                 )
               ) : activeCard &&
                 topList === "Staking" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x8A30Be7B2780b503ff27dBeaCdecC4Fe2587Af5d" &&
                 chain === "eth" ? (
                 <StakeEth
@@ -18254,7 +18265,7 @@ if (topList === "Vault" && chainId === "1") {
                 />
               ) : activeCard &&
                 topList === "Staking" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xa4da28B8e42680916b557459D338aF6e2D8d458f" &&
                 chain === "eth" ? (
                 <StakeEth
@@ -18312,7 +18323,7 @@ if (topList === "Vault" && chainId === "1") {
                   referrer={referrer}
                 />
               ) : activeCard &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x44bEd8ea3296bda44870d0Da98575520De1735d4" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -18344,7 +18355,7 @@ if (topList === "Vault" && chainId === "1") {
                   lp_id={lp_id[cardIndex]}
                 />
               ) : activeCard &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x3fAb09ACAeDDAF579d7a72c24Ef3e9EB1D2975c4" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -18403,7 +18414,7 @@ if (topList === "Vault" && chainId === "1") {
                   }
                 />
               ) : activeCard &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x9eA966B4023049BFF858BB5E698ECfF24EA54c4A" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -18462,7 +18473,7 @@ if (topList === "Vault" && chainId === "1") {
                   }
                 />
               ) : activeCard &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xef9e50A19358CCC8816d9BC2c2355aea596efd06" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -18494,7 +18505,7 @@ if (topList === "Vault" && chainId === "1") {
                   referrer={referrer}
                 />
               ) : activeCard &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xaF411BF994dA1435A3150B874395B86376C5f2d5" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -18526,7 +18537,7 @@ if (topList === "Vault" && chainId === "1") {
                   referrer={referrer}
                 />
               ) : activeCard &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xf13aDbEb27ea9d9469D95e925e56a1CF79c06E90" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -18558,7 +18569,7 @@ if (topList === "Vault" && chainId === "1") {
                   referrer={referrer}
                 />
               ) : activeCard &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xa9efab22cCbfeAbB6dc4583d81421e76342faf8b" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -18590,7 +18601,7 @@ if (topList === "Vault" && chainId === "1") {
                   referrer={referrer}
                 />
               ) : activeCard &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x160fF3c4A6E9Aa8E4271aa71226Cc811BFEf7ED9" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -18653,7 +18664,7 @@ if (topList === "Vault" && chainId === "1") {
                   }
                 />
               ) : activeCard &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x58366902082B90Fca01bE07D929478bD48AcFB19" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -18746,7 +18757,7 @@ if (topList === "Vault" && chainId === "1") {
               ) : activeCard &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x16429e51A64B7f88D4C018fbf66266A693df64b3" ? (
                 <StakeAvaxDai
                   staking={window.constant_stakingdaiavax}
@@ -18785,7 +18796,7 @@ if (topList === "Vault" && chainId === "1") {
               ) : activeCard &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
@@ -18844,7 +18855,7 @@ if (topList === "Vault" && chainId === "1") {
               ) : activeCard &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
@@ -19020,7 +19031,7 @@ if (topList === "Vault" && chainId === "1") {
                 )
               ) : activeCard2 &&
                 topList === "Staking" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x8A30Be7B2780b503ff27dBeaCdecC4Fe2587Af5d" &&
                 chain === "eth" ? (
                 <StakeEth
@@ -19079,7 +19090,7 @@ if (topList === "Vault" && chainId === "1") {
                 />
               ) : activeCard2 &&
                 topList === "Staking" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xa4da28B8e42680916b557459D338aF6e2D8d458f" &&
                 chain === "eth" ? (
                 <StakeEth
@@ -19137,7 +19148,7 @@ if (topList === "Vault" && chainId === "1") {
                   referrer={referrer}
                 />
               ) : activeCard2 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x44bEd8ea3296bda44870d0Da98575520De1735d4" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -19169,7 +19180,7 @@ if (topList === "Vault" && chainId === "1") {
                   lp_id={lp_id[cardIndex]}
                 />
               ) : activeCard2 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x3fAb09ACAeDDAF579d7a72c24Ef3e9EB1D2975c4" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -19228,7 +19239,7 @@ if (topList === "Vault" && chainId === "1") {
                   }
                 />
               ) : activeCard2 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x9eA966B4023049BFF858BB5E698ECfF24EA54c4A" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -19287,7 +19298,7 @@ if (topList === "Vault" && chainId === "1") {
                   }
                 />
               ) : activeCard2 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xef9e50A19358CCC8816d9BC2c2355aea596efd06" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -19319,7 +19330,7 @@ if (topList === "Vault" && chainId === "1") {
                   referrer={referrer}
                 />
               ) : activeCard2 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xaF411BF994dA1435A3150B874395B86376C5f2d5" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -19351,7 +19362,7 @@ if (topList === "Vault" && chainId === "1") {
                   referrer={referrer}
                 />
               ) : activeCard2 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xf13aDbEb27ea9d9469D95e925e56a1CF79c06E90" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -19383,7 +19394,7 @@ if (topList === "Vault" && chainId === "1") {
                   referrer={referrer}
                 />
               ) : activeCard2 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xa9efab22cCbfeAbB6dc4583d81421e76342faf8b" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -19415,7 +19426,7 @@ if (topList === "Vault" && chainId === "1") {
                   referrer={referrer}
                 />
               ) : activeCard2 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x160fF3c4A6E9Aa8E4271aa71226Cc811BFEf7ED9" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -19478,7 +19489,7 @@ if (topList === "Vault" && chainId === "1") {
                   }
                 />
               ) : activeCard2 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x58366902082B90Fca01bE07D929478bD48AcFB19" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -19571,7 +19582,7 @@ if (topList === "Vault" && chainId === "1") {
               ) : activeCard2 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x16429e51A64B7f88D4C018fbf66266A693df64b3" ? (
                 <StakeAvaxDai
                   staking={window.constant_stakingdaiavax}
@@ -19610,7 +19621,7 @@ if (topList === "Vault" && chainId === "1") {
               ) : activeCard2 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
@@ -19669,7 +19680,7 @@ if (topList === "Vault" && chainId === "1") {
               ) : activeCard2 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
@@ -19845,7 +19856,7 @@ if (topList === "Vault" && chainId === "1") {
                 )
               ) : activeCard3 &&
                 topList === "Staking" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x8A30Be7B2780b503ff27dBeaCdecC4Fe2587Af5d" &&
                 chain === "eth" ? (
                 <StakeEth
@@ -19904,7 +19915,7 @@ if (topList === "Vault" && chainId === "1") {
                 />
               ) : activeCard3 &&
                 topList === "Staking" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xa4da28B8e42680916b557459D338aF6e2D8d458f" &&
                 chain === "eth" ? (
                 <StakeEth
@@ -19962,7 +19973,7 @@ if (topList === "Vault" && chainId === "1") {
                   referrer={referrer}
                 />
               ) : activeCard3 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x44bEd8ea3296bda44870d0Da98575520De1735d4" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -19994,7 +20005,7 @@ if (topList === "Vault" && chainId === "1") {
                   lp_id={lp_id[cardIndex]}
                 />
               ) : activeCard3 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x3fAb09ACAeDDAF579d7a72c24Ef3e9EB1D2975c4" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -20053,7 +20064,7 @@ if (topList === "Vault" && chainId === "1") {
                   }
                 />
               ) : activeCard3 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x9eA966B4023049BFF858BB5E698ECfF24EA54c4A" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -20112,7 +20123,7 @@ if (topList === "Vault" && chainId === "1") {
                   }
                 />
               ) : activeCard3 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xef9e50A19358CCC8816d9BC2c2355aea596efd06" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -20144,7 +20155,7 @@ if (topList === "Vault" && chainId === "1") {
                   referrer={referrer}
                 />
               ) : activeCard3 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xaF411BF994dA1435A3150B874395B86376C5f2d5" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -20176,7 +20187,7 @@ if (topList === "Vault" && chainId === "1") {
                   referrer={referrer}
                 />
               ) : activeCard3 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xf13aDbEb27ea9d9469D95e925e56a1CF79c06E90" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -20208,7 +20219,7 @@ if (topList === "Vault" && chainId === "1") {
                   referrer={referrer}
                 />
               ) : activeCard3 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xa9efab22cCbfeAbB6dc4583d81421e76342faf8b" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -20240,7 +20251,7 @@ if (topList === "Vault" && chainId === "1") {
                   referrer={referrer}
                 />
               ) : activeCard3 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x160fF3c4A6E9Aa8E4271aa71226Cc811BFEf7ED9" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -20303,7 +20314,7 @@ if (topList === "Vault" && chainId === "1") {
                   }
                 />
               ) : activeCard3 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x58366902082B90Fca01bE07D929478bD48AcFB19" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -20396,7 +20407,7 @@ if (topList === "Vault" && chainId === "1") {
               ) : activeCard3 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x16429e51A64B7f88D4C018fbf66266A693df64b3" ? (
                 <StakeAvaxDai
                   staking={window.constant_stakingdaiavax}
@@ -20435,7 +20446,7 @@ if (topList === "Vault" && chainId === "1") {
               ) : activeCard3 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
@@ -20494,7 +20505,7 @@ if (topList === "Vault" && chainId === "1") {
               ) : activeCard3 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
@@ -20670,7 +20681,7 @@ if (topList === "Vault" && chainId === "1") {
                 )
               ) : activeCard4 &&
                 topList === "Staking" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x8A30Be7B2780b503ff27dBeaCdecC4Fe2587Af5d" &&
                 chain === "eth" ? (
                 <StakeEth
@@ -20729,7 +20740,7 @@ if (topList === "Vault" && chainId === "1") {
                 />
               ) : activeCard4 &&
                 topList === "Staking" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xa4da28B8e42680916b557459D338aF6e2D8d458f" &&
                 chain === "eth" ? (
                 <StakeEth
@@ -20787,7 +20798,7 @@ if (topList === "Vault" && chainId === "1") {
                   referrer={referrer}
                 />
               ) : activeCard4 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x44bEd8ea3296bda44870d0Da98575520De1735d4" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -20819,7 +20830,7 @@ if (topList === "Vault" && chainId === "1") {
                   lp_id={lp_id[cardIndex]}
                 />
               ) : activeCard4 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x3fAb09ACAeDDAF579d7a72c24Ef3e9EB1D2975c4" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -20878,7 +20889,7 @@ if (topList === "Vault" && chainId === "1") {
                   }
                 />
               ) : activeCard4 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x9eA966B4023049BFF858BB5E698ECfF24EA54c4A" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -20937,7 +20948,7 @@ if (topList === "Vault" && chainId === "1") {
                   }
                 />
               ) : activeCard4 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xef9e50A19358CCC8816d9BC2c2355aea596efd06" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -20969,7 +20980,7 @@ if (topList === "Vault" && chainId === "1") {
                   referrer={referrer}
                 />
               ) : activeCard4 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xaF411BF994dA1435A3150B874395B86376C5f2d5" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -21001,7 +21012,7 @@ if (topList === "Vault" && chainId === "1") {
                   referrer={referrer}
                 />
               ) : activeCard4 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xf13aDbEb27ea9d9469D95e925e56a1CF79c06E90" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -21033,7 +21044,7 @@ if (topList === "Vault" && chainId === "1") {
                   referrer={referrer}
                 />
               ) : activeCard4 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xa9efab22cCbfeAbB6dc4583d81421e76342faf8b" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -21065,7 +21076,7 @@ if (topList === "Vault" && chainId === "1") {
                   referrer={referrer}
                 />
               ) : activeCard4 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x160fF3c4A6E9Aa8E4271aa71226Cc811BFEf7ED9" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -21128,7 +21139,7 @@ if (topList === "Vault" && chainId === "1") {
                   }
                 />
               ) : activeCard4 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x58366902082B90Fca01bE07D929478bD48AcFB19" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -21221,7 +21232,7 @@ if (topList === "Vault" && chainId === "1") {
               ) : activeCard4 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x16429e51A64B7f88D4C018fbf66266A693df64b3" ? (
                 <StakeAvaxDai
                   staking={window.constant_stakingdaiavax}
@@ -21260,7 +21271,7 @@ if (topList === "Vault" && chainId === "1") {
               ) : activeCard4 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
@@ -21319,7 +21330,7 @@ if (topList === "Vault" && chainId === "1") {
               ) : activeCard4 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
@@ -21495,7 +21506,7 @@ if (topList === "Vault" && chainId === "1") {
                 )
               ) : activeCard5 &&
                 topList === "Staking" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x8A30Be7B2780b503ff27dBeaCdecC4Fe2587Af5d" &&
                 chain === "eth" ? (
                 <StakeEth
@@ -21554,7 +21565,7 @@ if (topList === "Vault" && chainId === "1") {
                 />
               ) : activeCard5 &&
                 topList === "Staking" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xa4da28B8e42680916b557459D338aF6e2D8d458f" &&
                 chain === "eth" ? (
                 <StakeEth
@@ -21612,7 +21623,7 @@ if (topList === "Vault" && chainId === "1") {
                   referrer={referrer}
                 />
               ) : activeCard5 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x44bEd8ea3296bda44870d0Da98575520De1735d4" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -21644,7 +21655,7 @@ if (topList === "Vault" && chainId === "1") {
                   lp_id={lp_id[cardIndex]}
                 />
               ) : activeCard5 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x3fAb09ACAeDDAF579d7a72c24Ef3e9EB1D2975c4" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -21703,7 +21714,7 @@ if (topList === "Vault" && chainId === "1") {
                   }
                 />
               ) : activeCard5 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x9eA966B4023049BFF858BB5E698ECfF24EA54c4A" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -21762,7 +21773,7 @@ if (topList === "Vault" && chainId === "1") {
                   }
                 />
               ) : activeCard5 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xef9e50A19358CCC8816d9BC2c2355aea596efd06" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -21794,7 +21805,7 @@ if (topList === "Vault" && chainId === "1") {
                   referrer={referrer}
                 />
               ) : activeCard5 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xaF411BF994dA1435A3150B874395B86376C5f2d5" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -21826,7 +21837,7 @@ if (topList === "Vault" && chainId === "1") {
                   referrer={referrer}
                 />
               ) : activeCard5 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xf13aDbEb27ea9d9469D95e925e56a1CF79c06E90" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -21858,7 +21869,7 @@ if (topList === "Vault" && chainId === "1") {
                   referrer={referrer}
                 />
               ) : activeCard5 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xa9efab22cCbfeAbB6dc4583d81421e76342faf8b" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -21890,7 +21901,7 @@ if (topList === "Vault" && chainId === "1") {
                   referrer={referrer}
                 />
               ) : activeCard5 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x160fF3c4A6E9Aa8E4271aa71226Cc811BFEf7ED9" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -21953,7 +21964,7 @@ if (topList === "Vault" && chainId === "1") {
                   }
                 />
               ) : activeCard5 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x58366902082B90Fca01bE07D929478bD48AcFB19" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -22046,7 +22057,7 @@ if (topList === "Vault" && chainId === "1") {
               ) : activeCard5 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x16429e51A64B7f88D4C018fbf66266A693df64b3" ? (
                 <StakeAvaxDai
                   staking={window.constant_stakingdaiavax}
@@ -22085,7 +22096,7 @@ if (topList === "Vault" && chainId === "1") {
               ) : activeCard5 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
@@ -22144,7 +22155,7 @@ if (topList === "Vault" && chainId === "1") {
               ) : activeCard5 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
@@ -22320,7 +22331,7 @@ if (topList === "Vault" && chainId === "1") {
                 )
               ) : activeCard6 &&
                 topList === "Staking" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x8A30Be7B2780b503ff27dBeaCdecC4Fe2587Af5d" &&
                 chain === "eth" ? (
                 <StakeEth
@@ -22379,7 +22390,7 @@ if (topList === "Vault" && chainId === "1") {
                 />
               ) : activeCard6 &&
                 topList === "Staking" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xa4da28B8e42680916b557459D338aF6e2D8d458f" &&
                 chain === "eth" ? (
                 <StakeEth
@@ -22437,7 +22448,7 @@ if (topList === "Vault" && chainId === "1") {
                   referrer={referrer}
                 />
               ) : activeCard6 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x44bEd8ea3296bda44870d0Da98575520De1735d4" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -22469,7 +22480,7 @@ if (topList === "Vault" && chainId === "1") {
                   lp_id={lp_id[cardIndex]}
                 />
               ) : activeCard6 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x3fAb09ACAeDDAF579d7a72c24Ef3e9EB1D2975c4" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -22528,7 +22539,7 @@ if (topList === "Vault" && chainId === "1") {
                   }
                 />
               ) : activeCard6 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x9eA966B4023049BFF858BB5E698ECfF24EA54c4A" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -22587,7 +22598,7 @@ if (topList === "Vault" && chainId === "1") {
                   }
                 />
               ) : activeCard6 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xef9e50A19358CCC8816d9BC2c2355aea596efd06" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -22619,7 +22630,7 @@ if (topList === "Vault" && chainId === "1") {
                   referrer={referrer}
                 />
               ) : activeCard6 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xaF411BF994dA1435A3150B874395B86376C5f2d5" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -22651,7 +22662,7 @@ if (topList === "Vault" && chainId === "1") {
                   referrer={referrer}
                 />
               ) : activeCard6 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xf13aDbEb27ea9d9469D95e925e56a1CF79c06E90" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -22683,7 +22694,7 @@ if (topList === "Vault" && chainId === "1") {
                   referrer={referrer}
                 />
               ) : activeCard6 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xa9efab22cCbfeAbB6dc4583d81421e76342faf8b" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -22715,7 +22726,7 @@ if (topList === "Vault" && chainId === "1") {
                   referrer={referrer}
                 />
               ) : activeCard6 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x160fF3c4A6E9Aa8E4271aa71226Cc811BFEf7ED9" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -22778,7 +22789,7 @@ if (topList === "Vault" && chainId === "1") {
                   }
                 />
               ) : activeCard6 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x58366902082B90Fca01bE07D929478bD48AcFB19" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -22871,7 +22882,7 @@ if (topList === "Vault" && chainId === "1") {
               ) : activeCard6 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x16429e51A64B7f88D4C018fbf66266A693df64b3" ? (
                 <StakeAvaxDai
                   staking={window.constant_stakingdaiavax}
@@ -22910,7 +22921,7 @@ if (topList === "Vault" && chainId === "1") {
               ) : activeCard6 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
@@ -22969,7 +22980,7 @@ if (topList === "Vault" && chainId === "1") {
               ) : activeCard6 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
@@ -23360,7 +23371,7 @@ if (topList === "Vault" && chainId === "1") {
               ) : activeCard7 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
@@ -23419,7 +23430,7 @@ if (topList === "Vault" && chainId === "1") {
               ) : activeCard7 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
@@ -23810,7 +23821,7 @@ if (topList === "Vault" && chainId === "1") {
               ) : activeCard8 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
@@ -23869,7 +23880,7 @@ if (topList === "Vault" && chainId === "1") {
               ) : activeCard8 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
