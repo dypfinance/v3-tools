@@ -203,8 +203,10 @@ const InitConstantStakingiDYP = ({
     // let usd_per_dyps = the_graph_result.price_DYPS ? the_graph_result.price_DYPS : 1
     let usd_per_dyps = 0;
     try {
-      let _bal = reward_token.balanceOf(coinbase);
-
+      let _bal
+      if (chainId === "1") {
+       _bal = reward_token.balanceOf(coinbase);
+      }
       if (staking) {
         let _pDivs = staking.getTotalPendingDivs(coinbase);
 
@@ -244,8 +246,10 @@ const InitConstantStakingiDYP = ({
         ]);
 
         let tvlDyps = new BigNumber(tvlDYPS).times(usd_per_dyps).toFixed(18);
-        let balance_formatted = new BigNumber(token_balance ).div(1e18).toString(10)
-     settoken_balance(balance_formatted) ;
+        let balance_formatted = new BigNumber(token_balance)
+          .div(1e18)
+          .toString(10);
+        settoken_balance(balance_formatted);
 
         let divs_formatted = new BigNumber(pendingDivs).div(1e18).toFixed(6);
         setpendingDivs(divs_formatted);
@@ -572,7 +576,7 @@ const InitConstantStakingiDYP = ({
   }
   if (!isNaN(cliffTime) && !isNaN(stakingTime)) {
     if (
-      (Number(stakingTime) + Number(cliffTime) >= Date.now()/1000) &&
+      Number(stakingTime) + Number(cliffTime) >= Date.now() / 1000 &&
       lockTime !== "No Lock"
     ) {
       canWithdraw = false;
@@ -1275,9 +1279,9 @@ const InitConstantStakingiDYP = ({
                           "No Lock"
                         ) : (
                           <Countdown
-                          date={
-                            (Number(stakingTime) + Number(cliffTime)) * 1000
-                          }
+                            date={
+                              (Number(stakingTime) + Number(cliffTime)) * 1000
+                            }
                             renderer={renderer}
                           />
                         )}
@@ -1390,7 +1394,10 @@ const InitConstantStakingiDYP = ({
         <WalletModal
           show={show}
           handleClose={hideModal}
-          handleConnection={()=>{handleConnection(); setshow(false)}}
+          handleConnection={() => {
+            handleConnection();
+            setshow(false);
+          }}
         />
       )}
 

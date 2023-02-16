@@ -15,7 +15,8 @@ const CawsCard = ({
   renderedPage,
   details,
   listType,
-  tvl
+  tvl,
+  network
   // showDetails,
 }) => {
   const [showDetails, setShowDetails] = useState(false);
@@ -54,10 +55,11 @@ const CawsCard = ({
     <>
       <div
         className={`poolscardwrapper cursor-pointer position-relative ${
-          details && "pools-cardcaws-open"
+          details && "pools-cardcaws-open" 
         }  ${
           renderedPage === "dashboard" && !details ? "pools-cardcaws-hover" : ""
-        }`}
+        } ${network === '0' ? 'blurryCard' : 'poolscardwrapper'}`
+         }
         onClick={() => handleDetails()}
       >
         <img src={topPick} className="cawstoppick" alt="top pick" />

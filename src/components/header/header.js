@@ -21,7 +21,7 @@ import useWindowSize from "../../functions/useWindowSize";
 import toolsLogo from "../../assets/sidebarIcons/toolsLogo.svg";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
-
+import error from '../../assets/error.svg'
 const Header = ({
   toggleMobileSidebar,
   toggleTheme,
@@ -92,14 +92,20 @@ const Header = ({
       setBnbState(false);
       setEthState(true);
     }
-    if (chainId === 43114) {
+    else if (chainId === 43114) {
       setAvaxState(true);
       setBnbState(false);
       setEthState(false);
     }
-    if (chainId === 56) {
+    else if (chainId === 56) {
       setAvaxState(false);
       setBnbState(true);
+      setEthState(false);
+    }
+
+    else {
+      setAvaxState(false);
+      setBnbState(false);
       setEthState(false);
     }
   };
@@ -258,6 +264,7 @@ const Header = ({
     ethereum?.on("chainChanged", handleChainChanged);
   }, [chainId, ethState]);
 
+
   useEffect(() => {
     fetchAvatar();
     fetchUsername();
@@ -318,7 +325,7 @@ const Header = ({
                                     ? eth
                                     : bnbState === true
                                     ? bnb
-                                    : avax
+                                    : avaxState === true ? avax : error
                                 }
                                 height={16}
                                 width={16}
@@ -329,7 +336,7 @@ const Header = ({
                                   ? "Ethereum"
                                   : bnbState === true
                                   ? "BNB Chain"
-                                  : "Avalanche"}
+                                  : avaxState === true ? 'Avalanche' : 'Unsupported Chain'}
                               </span>
 
                               <img src={dropdown} alt="" />
@@ -408,7 +415,7 @@ const Header = ({
                                 ? "ETH"
                                 : chainId === 56
                                 ? "BNB"
-                                : "AVAX"}
+                                : chainId === 43114 ? "AVAX" : ''}
                             </span>
                             <span className="account-address">
                               {windowSize.width > 786
@@ -432,11 +439,12 @@ const Header = ({
                               />
                             }
                           >
-                            <Dropdown.Item
-                              onClick={() => window.location.assign("/account")}
-                            >
+                            <Dropdown.Item>
+                            <NavLink to='/account'>
+                            <span className="d-flex gap-2 align-items-center">
                               <img src={user} alt="" />
-                              My account
+                              My account</span>
+                              </NavLink>
                             </Dropdown.Item>
                             <Dropdown.Item onClick={() => logout()}>
                               <img src={logoutimg} alt="" />

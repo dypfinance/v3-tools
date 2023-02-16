@@ -25,11 +25,24 @@ const Earn = ({
 
  
   const checkNetworkId = () => {
-    if (window.ethereum) {
+    if (window.ethereum && ( window.ethereum.isMetaMask===true || window.ethereum.isTrust === true)) {
       window.ethereum
-        .request({ method: "net_version" })
+        .request({ method: "eth_chainId" })
         .then((data) => {
-          setnetworkId(data);
+          
+          if (data === "0x1") {
+            setnetworkId('1')
+            
+          } else if (data === "0xa86a") {
+            setnetworkId('43114')
+
+          } else if (data === "0x38") {
+            setnetworkId('56')
+
+          } else {
+            setnetworkId('1')
+
+          }
         })
         .catch(console.error);
     } else {
@@ -87,3 +100,4 @@ const Earn = ({
 };
 
 export default Earn;
+

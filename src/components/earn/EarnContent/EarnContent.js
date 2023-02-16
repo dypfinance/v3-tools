@@ -326,7 +326,7 @@ const EarnContent = ({
         setStake("avax");
       }}
     }
-  }, [chainId, option,routeChain, networkId]);
+  }, [ option,routeChain, networkId]);
 
   const setVaultEth = (vault) => {
     if (vault === "Vault") {
@@ -865,3 +865,4 @@ const EarnContent = ({
 };
 
 export default EarnContent;
+
