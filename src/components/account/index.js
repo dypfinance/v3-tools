@@ -315,16 +315,51 @@ export default class Subscription extends React.Component {
   };
 
   getDypBalance = async () => {
-    const logout = localStorage.getItem("logout");
-    if (logout === "false") {
-      if (this.props.networkId === 43114) {
-        this.setState({ dypBalance: localStorage.getItem("balance2") });
-      } else if (this.props.networkId === 1) {
-        this.setState({ dypBalance: localStorage.getItem("balance1") });
-      } else if (this.props.networkId === 56) {
-        this.setState({ dypBalance: localStorage.getItem("balance3") });
-      } else this.setState({ dypBalance: "0.0" });
+    let account = this.props.coinbase
+    const web3eth = new Web3(
+      "https://mainnet.infura.io/v3/94608dc6ddba490697ec4f9b723b586e"
+    );
+    const web3avax = new Web3("https://api.avax.network/ext/bc/C/rpc");
+    const web3bsc = new Web3("https://bsc-dataseed.binance.org/");
+    const tokenAddress = "0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17";
+    const walletAddress = this.props.coinbase;
+    const TokenABI = window.ERC20_ABI;
+    if (account != undefined && walletAddress !== undefined) {
+      const contract1 = new web3eth.eth.Contract(TokenABI, tokenAddress);
+      const contract2 = new web3avax.eth.Contract(TokenABI, tokenAddress);
+      const contract3 = new web3bsc.eth.Contract(TokenABI, tokenAddress);
+
+      const baleth = await contract1.methods
+        .balanceOf(walletAddress)
+        .call()
+        .then((data) => {
+          return web3eth.utils.fromWei(data, "ether");
+        });
+        
+      const balavax = await contract2.methods
+        .balanceOf(walletAddress)
+        .call()
+        .then((data) => {
+          return web3avax.utils.fromWei(data, "ether");
+        });
+        
+      const balbnb = await contract3.methods
+        .balanceOf(walletAddress)
+        .call()
+        .then((data) => {
+          return web3bsc.utils.fromWei(data, "ether");
+        });
+
+        if (this.props.networkId === 43114) {
+          this.setState({ dypBalance: balavax });
+        } else if (this.props.networkId === 1) {
+          this.setState({ dypBalance: baleth });
+        } else if (this.props.networkId === 56) {
+          this.setState({ dypBalance: balbnb });
+        } else this.setState({ dypBalance: "0.0" });
+        
     }
+
   };
 
   componentDidUpdate(prevProps) {
@@ -416,7 +451,7 @@ export default class Subscription extends React.Component {
   };
 
   myNft = async () => {
-    if (this.props.coinbase !== null) {
+    if (this.props.coinbase !== null && this.props.coinbase !== undefined) {
       let myNft = await window.myNftListContract(this.props.coinbase);
 
       let nfts = myNft.map((nft) => window.getNft(nft));
@@ -430,7 +465,7 @@ export default class Subscription extends React.Component {
 
   getStakesIds = async () => {
     const address = this.props.coinbase;
-    if (address !== null) {
+    if (address !== null  && this.props.coinbase !== undefined) {
       let staking_contract = await window.getContractNFT("NFTSTAKING");
       let stakenft = [];
       let myStakes = await staking_contract.methods
@@ -838,7 +873,7 @@ export default class Subscription extends React.Component {
               <div className="d-flex flex-column">
                 <span className="dyp-amount-placeholder">Balance:</span>
                 <h6 className="account-dyp-amount">
-                  {this.state.dypBalance} DYP{" "}
+                  { getFormattedNumber(this.state.dypBalance,6) } DYP{" "}
                 </h6>
               </div>
               <div className="position-relative">

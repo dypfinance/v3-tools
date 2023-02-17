@@ -36,7 +36,7 @@ const Dashboard = ({
   handleSwitchNetwork,
 }) => {
   const [topPools, setTopPools] = useState([]);
-  const [chainId, setChainId] = useState(network);
+
   const [userPools, setuserPools] = useState([]);
   const wbsc_address = "0x2170Ed0880ac9A755fd29B2688956BD959F933F8";
 
@@ -52,84 +52,77 @@ const Dashboard = ({
   };
 
   const fetchBnbStaking = async () => {
-    return await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_bnb`)
-      .then((res) => {
-        const dypdypBnb = res.data.stakingInfoDYPBnb.concat(
-          res.data.stakingInfoiDYPBnb
-        );
+  
+      return await axios
+        .get(`https://api.dyp.finance/api/get_staking_info_bnb`)
+        .then((res) => {
+          const dypdypBnb = res.data.stakingInfoDYPBnb.concat(
+            res.data.stakingInfoiDYPBnb
+          );
 
-        const cleanCards = dypdypBnb.filter((item) => {
-          return item.expired !== "Yes";
+          const cleanCards = dypdypBnb.filter((item) => {
+            return item.expired !== "Yes";
+          });
+
+          const sortedAprs = cleanCards.sort(function (a, b) {
+            return b.tvl_usd - a.tvl_usd;
+          });
+
+          setTopPools(sortedAprs);
+        })
+        .catch((err) => {
+          console.log(err);
         });
-
-        const sortedAprs = cleanCards.sort(function (a, b) {
-          return b.tvl_usd - a.tvl_usd;
-        });
-
-        setTopPools(sortedAprs);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  
   };
 
   const fetchAvaxStaking = async () => {
-    return await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_avax`)
-      .then((res) => {
-        const dypIdypBnb = res.data.stakingInfoDYPAvax.concat(
-          res.data.stakingInfoiDYPAvax
-        );
-        const cleanCards = dypIdypBnb.filter((item) => {
-          return item.expired !== "Yes";
-        });
+    
+      return await axios
+        .get(`https://api.dyp.finance/api/get_staking_info_avax`)
+        .then((res) => {
+          const dypIdypBnb = res.data.stakingInfoDYPAvax.concat(
+            res.data.stakingInfoiDYPAvax
+          );
+          const cleanCards = dypIdypBnb.filter((item) => {
+            return item.expired !== "Yes";
+          });
 
-        const sortedAprs = cleanCards.sort(function (a, b) {
-          return b.tvl_usd - a.tvl_usd;
+          const sortedAprs = cleanCards.sort(function (a, b) {
+            return b.tvl_usd - a.tvl_usd;
+          });
+          setTopPools(sortedAprs);
+        })
+        .catch((err) => {
+          console.log(err);
         });
-        setTopPools(sortedAprs);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+   
   };
 
   const fetchEthStaking = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_eth`)
-      .then((res) => {
-        const dypIdyp = res.data.stakingInfoDYPEth;
+    
+      await axios
+        .get(`https://api.dyp.finance/api/get_staking_info_eth`)
+        .then((res) => {
+          const dypIdyp = res.data.stakingInfoDYPEth;
 
-        const cleanCards = dypIdyp.filter((item) => {
-          return item.expired !== "Yes";
-        });
+          const cleanCards = dypIdyp.filter((item) => {
+            return item.expired !== "Yes";
+          });
 
-        const sortedAprs = cleanCards.sort(function (a, b) {
-          return b.tvl_usd - a.tvl_usd;
-        });
+          const sortedAprs = cleanCards.sort(function (a, b) {
+            return b.tvl_usd - a.tvl_usd;
+          });
 
-        const finalEthCards = res.data.stakingInfoCAWS.concat(
-          sortedAprs.slice(0, 2)
-        );
-        setTopPools(finalEthCards.slice(0, 2));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const checkNetworkId = () => {
-    if (window.ethereum) {
-      window.ethereum
-        .request({ method: "net_version" })
-        .then((data) => {
-          setChainId(parseInt(data));
+          const finalEthCards = res.data.stakingInfoCAWS.concat(
+            sortedAprs.slice(0, 2)
+          );
+          setTopPools(finalEthCards.slice(0, 2));
         })
-        .catch(console.error);
-    } else {
-      setChainId(network);
-    }
+        .catch((err) => {
+          console.log(err);
+        });
+    
   };
 
   const [activeCard, setActiveCard] = useState();
@@ -252,27 +245,32 @@ const Dashboard = ({
   };
 
   const fetchStakingData = () => {
-    if (chainId === 1) {
-      fetchEthStaking();
+    if (network === 1) {
+      setTimeout(() => {
+        fetchEthStaking();
+      }, 500);
+    } else if (network === 56) {
+      setTimeout(() => {
+        fetchBnbStaking();
+      }, 500);
+    } else if (network === 43114) {
+      setTimeout(() => {
+        fetchAvaxStaking();
+      }, 500);
     }
-    else if (chainId === 56) {
-      fetchBnbStaking();
-    }
-   else if (chainId === 43114) {
-      fetchAvaxStaking();
+    else {
+      setTimeout(() => {
+        fetchEthStaking();
+      }, 500);
     }
   };
 
-  
   useEffect(() => {
     fetchStakingData();
-    checkNetworkId();
     setLoading(false);
     fetchPopularNewsData();
     fetchUserPools();
-  }, [network, chainId, coinbase, loading]);
-
-  // console.log(network, chainId)
+  }, [network, coinbase, loading]);
 
   const windowSize = useWindowSize();
 
@@ -308,6 +306,7 @@ const Dashboard = ({
                       return (
                         <TopPoolsCard
                           key={index}
+                          network={network.toString()}
                           isNewPool={item.new_pool === "Yes" ? true : false}
                           isStaked={
                             userPools.length > 0
@@ -357,8 +356,8 @@ const Dashboard = ({
                     </div>
                   )}
                 </div>
-                {activeCard && chainId === 1 ? (
-                  chainId === 1 && cardIndex === 1 ? (
+                {activeCard && network === 1 ? (
+                  network === 1 && cardIndex === 1 ? (
                     <StakeNewEth
                       staking={window.constant_staking_newi3}
                       apr={7.35}
@@ -373,19 +372,19 @@ const Dashboard = ({
                       is_wallet_connected={isConnected}
                       coinbase={coinbase}
                       the_graph_result={the_graph_result}
-                      chainId={chainId.toString()}
+                      chainId={network.toString()}
                       handleConnection={handleConnection}
                       handleSwitchNetwork={handleSwitchNetwork}
                       expired={false}
                       referrer={referrer}
                       totalTvl={topPools[1].tvl_usd}
                     />
-                  ) : activeCard && chainId === 1 && cardIndex === 0 ? (
+                  ) : activeCard && network === 1 && cardIndex === 0 ? (
                     <CawsDetails
                       coinbase={coinbase}
                       isConnected={isConnected}
                       listType={"table"}
-                      chainId={chainId.toString()}
+                      chainId={network.toString()}
                       handleSwitchNetwork={handleSwitchNetwork}
                       handleConnection={handleConnection}
                       expired={false}
@@ -394,7 +393,7 @@ const Dashboard = ({
                   ) : (
                     <></>
                   )
-                ) : activeCard && chainId === 56 && cardIndex === 0 ? (
+                ) : activeCard && network === 56 && cardIndex === 0 ? (
                   <StakeBsc
                     lp_id={LP_IDBNB_Array[cardIndex]}
                     staking={stakearrayStakeBscDyp2[1]}
@@ -425,53 +424,52 @@ const Dashboard = ({
                     expired={false}
                     referrer={referrer}
                   />
-                ) : activeCard && chainId === 56 && cardIndex === 1 ? (
-
+                ) : activeCard && network === 56 && cardIndex === 1 ? (
                   <StakeBscIDyp
-                  is_wallet_connected={isConnected}
-                  coinbase={coinbase}
-                  the_graph_result={the_graph_resultbsc}
-                  chainId={network.toString()}
-                  handleConnection={handleConnection}
-                  handleSwitchNetwork={handleSwitchNetwork}
-                  expired={false}
-                  staking={window.constant_stakingidyp_6}
-                  listType={'table'}
-                  finalApr={
-                    topPools[1]?.apy_performancefee
-                      ? topPools[1]?.apy_performancefee
-                      : 30
-                  }
-                  apr={
-                    topPools[1]?.apy_percent ? topPools[1]?.apy_percent : 30
-                  }
-                  liquidity={wbsc_address}
-                  expiration_time={'15 August 2023'}
-                  other_info={  false  }
-                  fee_s={
-                    topPools[1]?.performancefee
-                      ? topPools[1]?.performancefee
-                      : 0
-                  }
-                  fee_u={0}
-                  lockTime={
-                    parseInt(topPools[1]?.lock_time?.split(" ")[0]) === "No"
-                      ? "No Lock"
-                      : topPools[1]?.lock_time?.split(" ")[0]
-                  }
-                />
-                ) : activeCard && chainId === 43114 && cardIndex === 0 ? (
+                    is_wallet_connected={isConnected}
+                    coinbase={coinbase}
+                    the_graph_result={the_graph_resultbsc}
+                    chainId={network.toString()}
+                    handleConnection={handleConnection}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    expired={false}
+                    staking={window.constant_stakingidyp_6}
+                    listType={"table"}
+                    finalApr={
+                      topPools[1]?.apy_performancefee
+                        ? topPools[1]?.apy_performancefee
+                        : 30
+                    }
+                    apr={
+                      topPools[1]?.apy_percent ? topPools[1]?.apy_percent : 30
+                    }
+                    liquidity={wbsc_address}
+                    expiration_time={"15 August 2023"}
+                    other_info={false}
+                    fee_s={
+                      topPools[1]?.performancefee
+                        ? topPools[1]?.performancefee
+                        : 0
+                    }
+                    fee_u={0}
+                    lockTime={
+                      parseInt(topPools[1]?.lock_time?.split(" ")[0]) === "No"
+                        ? "No Lock"
+                        : topPools[1]?.lock_time?.split(" ")[0]
+                    }
+                  />
+                ) : activeCard && network === 43114 && cardIndex === 0 ? (
                   <StakeAvax
                     is_wallet_connected={isConnected}
                     handleConnection={handleConnection}
                     the_graph_result={the_graph_resultavax}
-                    chainId={chainId.toString()}
+                    chainId={network.toString()}
                     coinbase={coinbase}
                     referrer={referrer}
                     handleSwitchNetwork={handleSwitchNetwork}
                     expired={false}
                   />
-                ) : activeCard && chainId === 43114 && cardIndex === 1 ? (
+                ) : activeCard && network === 43114 && cardIndex === 1 ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
                     coinbase={coinbase}
@@ -517,6 +515,7 @@ const Dashboard = ({
                       return (
                         <TopPoolsCard
                           key={index}
+                          network={network.toString()}
                           chain={network}
                           top_pick={item.top_pick}
                           tokenName={item.pair_name}
@@ -568,8 +567,8 @@ const Dashboard = ({
                     </div>
                   )}
                 </div>
-                {activeCard && chainId === 1 ? (
-                  chainId === 1 && cardIndex === 1 ? (
+                {activeCard && network === 1 ? (
+                  network === 1 && cardIndex === 1 ? (
                     <StakeNewEth
                       staking={window.constant_staking_newi3}
                       apr={7.35}
@@ -584,19 +583,19 @@ const Dashboard = ({
                       is_wallet_connected={isConnected}
                       coinbase={coinbase}
                       the_graph_result={the_graph_result}
-                      chainId={chainId.toString()}
+                      chainId={network.toString()}
                       handleConnection={handleConnection}
                       handleSwitchNetwork={handleSwitchNetwork}
                       expired={false}
                       referrer={referrer}
                       totalTvl={topPools[1].tvl_usd}
                     />
-                  ) : activeCard && chainId === 1 && cardIndex === 0 ? (
+                  ) : activeCard && network === 1 && cardIndex === 0 ? (
                     <CawsDetails
                       coinbase={coinbase}
                       isConnected={isConnected}
                       listType={"table"}
-                      chainId={chainId.toString()}
+                      chainId={network.toString()}
                       handleSwitchNetwork={handleSwitchNetwork}
                       handleConnection={handleConnection}
                       expired={false}
@@ -605,21 +604,20 @@ const Dashboard = ({
                   ) : (
                     <></>
                   )
-                ) : activeCard && chainId === 56 && cardIndex === 0 ? (
+                ) : activeCard && network === 56 && cardIndex === 0 ? (
                   <StakeBsc
-                  lp_id={LP_IDBNB_Array[cardIndex]}
-                  staking={stakearrayStakeBscDyp2[1]}
-                  apr={
-                    topPools[0]?.apy_percent ? topPools[0]?.apy_percent : 30
-                  }
-                  liquidity={wbsc_address}
-                  expiration_time={expirearrayStakeBscDyp2[1]}
-                  finalApr={
-                    topPools[0]?.apy_performancefee
-                      ? topPools[0]?.apy_performancefee
-                      : 30
-                  }
-                  
+                    lp_id={LP_IDBNB_Array[cardIndex]}
+                    staking={stakearrayStakeBscDyp2[1]}
+                    apr={
+                      topPools[0]?.apy_percent ? topPools[0]?.apy_percent : 30
+                    }
+                    liquidity={wbsc_address}
+                    expiration_time={expirearrayStakeBscDyp2[1]}
+                    finalApr={
+                      topPools[0]?.apy_performancefee
+                        ? topPools[0]?.apy_performancefee
+                        : 30
+                    }
                     fee={topPools[0]?.performancefee}
                     lockTime={
                       parseInt(topPools[0]?.lock_time?.split(" ")[0]) === "No"
@@ -637,53 +635,52 @@ const Dashboard = ({
                     expired={false}
                     referrer={referrer}
                   />
-                ) : activeCard && chainId === 56 && cardIndex === 1 ? (
-
+                ) : activeCard && network === 56 && cardIndex === 1 ? (
                   <StakeBscIDyp
-                  is_wallet_connected={isConnected}
-                  coinbase={coinbase}
-                  the_graph_result={the_graph_resultbsc}
-                  chainId={network.toString()}
-                  handleConnection={handleConnection}
-                  handleSwitchNetwork={handleSwitchNetwork}
-                  expired={false}
-                  staking={window.constant_stakingidyp_6}
-                  listType={'table'}
-                  finalApr={
-                    topPools[1]?.apy_performancefee
-                      ? topPools[1]?.apy_performancefee
-                      : 30
-                  }
-                  apr={
-                    topPools[1]?.apy_percent ? topPools[1]?.apy_percent : 30
-                  }
-                  liquidity={wbsc_address}
-                  expiration_time={'15 August 2023'}
-                  other_info={  false  }
-                  fee_s={
-                    topPools[1]?.performancefee
-                      ? topPools[1]?.performancefee
-                      : 0
-                  }
-                  fee_u={0}
-                  lockTime={
-                    parseInt(topPools[1]?.lock_time?.split(" ")[0]) === "No"
-                      ? "No Lock"
-                      : topPools[1]?.lock_time?.split(" ")[0]
-                  }
-                />
-                ) : activeCard && chainId === 43114 && cardIndex === 0 ? (
+                    is_wallet_connected={isConnected}
+                    coinbase={coinbase}
+                    the_graph_result={the_graph_resultbsc}
+                    chainId={network.toString()}
+                    handleConnection={handleConnection}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    expired={false}
+                    staking={window.constant_stakingidyp_6}
+                    listType={"table"}
+                    finalApr={
+                      topPools[1]?.apy_performancefee
+                        ? topPools[1]?.apy_performancefee
+                        : 30
+                    }
+                    apr={
+                      topPools[1]?.apy_percent ? topPools[1]?.apy_percent : 30
+                    }
+                    liquidity={wbsc_address}
+                    expiration_time={"15 August 2023"}
+                    other_info={false}
+                    fee_s={
+                      topPools[1]?.performancefee
+                        ? topPools[1]?.performancefee
+                        : 0
+                    }
+                    fee_u={0}
+                    lockTime={
+                      parseInt(topPools[1]?.lock_time?.split(" ")[0]) === "No"
+                        ? "No Lock"
+                        : topPools[1]?.lock_time?.split(" ")[0]
+                    }
+                  />
+                ) : activeCard && network === 43114 && cardIndex === 0 ? (
                   <StakeAvax
                     is_wallet_connected={isConnected}
                     handleConnection={handleConnection}
                     the_graph_result={the_graph_resultavax}
-                    chainId={chainId.toString()}
+                    chainId={network.toString()}
                     coinbase={coinbase}
                     referrer={referrer}
                     handleSwitchNetwork={handleSwitchNetwork}
                     expired={false}
                   />
-                ) : activeCard && chainId === 43114 && cardIndex === 1 ? (
+                ) : activeCard && network === 43114 && cardIndex === 1 ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
                     coinbase={coinbase}
@@ -725,6 +722,7 @@ const Dashboard = ({
                     topPools.slice(1, 2).map((item, index) => {
                       return (
                         <TopPoolsCard
+                          network={network.toString()}
                           key={index}
                           chain={network}
                           top_pick={item.top_pick}
@@ -777,8 +775,8 @@ const Dashboard = ({
                     </div>
                   )}
                 </div>
-                {activeCard2 && chainId === 1 ? (
-                  chainId === 1 && cardIndex === 1 ? (
+                {activeCard2 && network === 1 ? (
+                  network === 1 && cardIndex === 1 ? (
                     <StakeNewEth
                       staking={window.constant_staking_newi3}
                       apr={7.35}
@@ -793,19 +791,19 @@ const Dashboard = ({
                       is_wallet_connected={isConnected}
                       coinbase={coinbase}
                       the_graph_result={the_graph_result}
-                      chainId={chainId.toString()}
+                      chainId={network.toString()}
                       handleConnection={handleConnection}
                       handleSwitchNetwork={handleSwitchNetwork}
                       expired={false}
                       referrer={referrer}
                       totalTvl={topPools[1].tvl_usd}
                     />
-                  ) : activeCard2 && chainId === 1 && cardIndex === 0 ? (
+                  ) : activeCard2 && network === 1 && cardIndex === 0 ? (
                     <CawsDetails
                       coinbase={coinbase}
                       isConnected={isConnected}
                       listType={"table"}
-                      chainId={chainId.toString()}
+                      chainId={network.toString()}
                       handleSwitchNetwork={handleSwitchNetwork}
                       handleConnection={handleConnection}
                       expired={false}
@@ -814,21 +812,20 @@ const Dashboard = ({
                   ) : (
                     <></>
                   )
-                ) : activeCard2 && chainId === 56 && cardIndex === 0 ? (
+                ) : activeCard2 && network === 56 && cardIndex === 0 ? (
                   <StakeBsc
-                  lp_id={LP_IDBNB_Array[cardIndex]}
-                  staking={stakearrayStakeBscDyp2[1]}
-                  apr={
-                    topPools[0]?.apy_percent ? topPools[0]?.apy_percent : 30
-                  }
-                  liquidity={wbsc_address}
-                  expiration_time={expirearrayStakeBscDyp2[1]}
-                  finalApr={
-                    topPools[0]?.apy_performancefee
-                      ? topPools[0]?.apy_performancefee
-                      : 30
-                  }
-                  
+                    lp_id={LP_IDBNB_Array[cardIndex]}
+                    staking={stakearrayStakeBscDyp2[1]}
+                    apr={
+                      topPools[0]?.apy_percent ? topPools[0]?.apy_percent : 30
+                    }
+                    liquidity={wbsc_address}
+                    expiration_time={expirearrayStakeBscDyp2[1]}
+                    finalApr={
+                      topPools[0]?.apy_performancefee
+                        ? topPools[0]?.apy_performancefee
+                        : 30
+                    }
                     fee={topPools[0]?.performancefee}
                     lockTime={
                       parseInt(topPools[0]?.lock_time?.split(" ")[0]) === "No"
@@ -846,53 +843,52 @@ const Dashboard = ({
                     expired={false}
                     referrer={referrer}
                   />
-                ) : activeCard2 && chainId === 56 && cardIndex === 1 ? (
-
+                ) : activeCard2 && network === 56 && cardIndex === 1 ? (
                   <StakeBscIDyp
-                  is_wallet_connected={isConnected}
-                  coinbase={coinbase}
-                  the_graph_result={the_graph_resultbsc}
-                  chainId={network.toString()}
-                  handleConnection={handleConnection}
-                  handleSwitchNetwork={handleSwitchNetwork}
-                  expired={false}
-                  staking={window.constant_stakingidyp_6}
-                  listType={'table'}
-                  finalApr={
-                    topPools[1]?.apy_performancefee
-                      ? topPools[1]?.apy_performancefee
-                      : 30
-                  }
-                  apr={
-                    topPools[1]?.apy_percent ? topPools[1]?.apy_percent : 30
-                  }
-                  liquidity={wbsc_address}
-                  expiration_time={'15 August 2023'}
-                  other_info={  false  }
-                  fee_s={
-                    topPools[1]?.performancefee
-                      ? topPools[1]?.performancefee
-                      : 0
-                  }
-                  fee_u={0}
-                  lockTime={
-                    parseInt(topPools[1]?.lock_time?.split(" ")[0]) === "No"
-                      ? "No Lock"
-                      : topPools[1]?.lock_time?.split(" ")[0]
-                  }
-                />
-                ) : activeCard2 && chainId === 43114 && cardIndex === 0 ? (
+                    is_wallet_connected={isConnected}
+                    coinbase={coinbase}
+                    the_graph_result={the_graph_resultbsc}
+                    chainId={network.toString()}
+                    handleConnection={handleConnection}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    expired={false}
+                    staking={window.constant_stakingidyp_6}
+                    listType={"table"}
+                    finalApr={
+                      topPools[1]?.apy_performancefee
+                        ? topPools[1]?.apy_performancefee
+                        : 30
+                    }
+                    apr={
+                      topPools[1]?.apy_percent ? topPools[1]?.apy_percent : 30
+                    }
+                    liquidity={wbsc_address}
+                    expiration_time={"15 August 2023"}
+                    other_info={false}
+                    fee_s={
+                      topPools[1]?.performancefee
+                        ? topPools[1]?.performancefee
+                        : 0
+                    }
+                    fee_u={0}
+                    lockTime={
+                      parseInt(topPools[1]?.lock_time?.split(" ")[0]) === "No"
+                        ? "No Lock"
+                        : topPools[1]?.lock_time?.split(" ")[0]
+                    }
+                  />
+                ) : activeCard2 && network === 43114 && cardIndex === 0 ? (
                   <StakeAvax
                     is_wallet_connected={isConnected}
                     handleConnection={handleConnection}
                     the_graph_result={the_graph_resultavax}
-                    chainId={chainId.toString()}
+                    chainId={network.toString()}
                     coinbase={coinbase}
                     referrer={referrer}
                     handleSwitchNetwork={handleSwitchNetwork}
                     expired={false}
                   />
-                ) : activeCard2 && chainId === 43114 && cardIndex === 1 ? (
+                ) : activeCard2 && network === 43114 && cardIndex === 1 ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
                     coinbase={coinbase}
@@ -981,8 +977,9 @@ const Dashboard = ({
           >
             <h6 className="header">FAQs</h6>
             <div className="faq-grid">
-              {faqItems.map((faq) => (
+              {faqItems.map((faq, index) => (
                 <FaqCard
+                key={index}
                   title={faq.title}
                   option={faq.option}
                   pathName={faq.pathName}

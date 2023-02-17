@@ -265,7 +265,10 @@ const StakeEth = ({
       _amountOutMin = _amountOutMin[_amountOutMin.length - 1];
       _amountOutMin = new BigNumber(_amountOutMin).div(1e6).toFixed(18);
 
-      let _bal = reward_token.balanceOf(coinbase);
+      let _bal
+      if (chainId === "1") {
+       _bal = reward_token.balanceOf(coinbase);
+      }
       if (staking) {
         let _pDivs = staking.getTotalPendingDivs(coinbase);
 

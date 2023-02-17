@@ -84,12 +84,12 @@ export default function initBridgeidyp({
       this.refreshBalance();
       this.getChainSymbol();
       this.fetchData();
-      window._refreshBalInterval = setInterval(this.refreshBalance, 4000);
+      // window._refreshBalInterval = setInterval(this.refreshBalance, 4000);
       window._refreshBalInterval = setInterval(this.getChainSymbol, 500);
     }
 
     componentWillUnmount() {
-      clearInterval(window._refreshBalInterval);
+      // clearInterval(window._refreshBalInterval);
     }
 
     fetchData = async () => {
@@ -194,6 +194,7 @@ export default function initBridgeidyp({
           })
           .then(() => {
             this.setState({ depositLoading: false, depositStatus: "success" });
+            this.refreshBalance()
           })
           .catch((e) => {
             this.setState({
@@ -244,6 +245,7 @@ export default function initBridgeidyp({
               withdrawLoading: false,
               withdrawStatus: "success",
             });
+            this.refreshBalance()
           })
           .catch((e) => {
             this.setState({ withdrawLoading: false, withdrawStatus: "fail" });
@@ -272,7 +274,7 @@ export default function initBridgeidyp({
     };
 
     refreshBalance = async () => {
-      if (this.props.isConnected === true) {
+      if (this.props.isConnected === true && this.props.networkId !== 0) {
         let coinbase = this.props.coinbase;
         this.setState({ coinbase });
         try {
@@ -329,6 +331,8 @@ export default function initBridgeidyp({
         let chainId = this.props.networkId;
         if (chainId === 43114) this.setState({ chainText: "AVAX" });
         else if (chainId === 1) this.setState({ chainText: "ETH" });
+        else {this.setState({ chainText: "" });}
+
       } catch (err) {
         this.setState({ chainText: "ETH" });
         // console.log(err);
@@ -356,6 +360,7 @@ export default function initBridgeidyp({
     };
 
     render() {
+      // console.log( this.props.networkId)
       let canWithdraw = false;
       let timeDiff = null;
       if (this.state.withdrawableUnixTimestamp) {

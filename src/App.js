@@ -39,9 +39,6 @@ import ScrollToTop from "./functions/ScrollToTop";
 import LandPopup from "./components/LandPopup/LandPopup";
 import { withRouter } from "react-router-dom";
 
-
-
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -97,22 +94,48 @@ class App extends React.Component {
   };
 
   checkNetworkId = () => {
-    if (!this.props.history.location.pathname.includes("bridge"))
-   { if (window.ethereum) {
-      window.ethereum
-        .request({ method: "net_version" })
-        .then((data) => {
-          this.setState({
-            networkId: data,
-          });
-          this.refreshSubscription().then();
-        })
-        .catch(console.error);
-    } else {
-      this.setState({
-        networkId: "1",
-      });
-    }}
+    if (!this.props.history.location.pathname.includes("bridge")) {
+      if (window.ethereum && ( window.ethereum?.isMetaMask===true || window.ethereum?.isTrust === true)) {
+        window.ethereum
+          .request({ method: "eth_chainId" })
+          .then((data) => {
+            if (data === "0x1") {
+              this.setState({
+                networkId: "1",
+              });
+            } else if (data === "0xa86a") {
+              this.setState({
+                networkId: "43114",
+              });
+            } else if (data === "0x38") {
+              this.setState({
+                networkId: "56",
+              });
+            } else {
+              this.setState({
+                networkId: "0",
+              });
+            }
+
+            this.refreshSubscription().then();
+          })
+          .catch(console.error);
+      } else if (window.ethereum && !window.ethereum?.isMetaMask) {
+        window.ethereum
+          .request({ method: "net_version" })
+          .then((data) => {
+            this.setState({
+              networkId: data,
+            });
+            this.refreshSubscription().then();
+          })
+          .catch(console.error);
+      } else {
+        this.setState({
+          networkId: "1",
+        });
+      }
+    }
   };
 
   handleSwitchNetwork = (chainId) => {
@@ -230,7 +253,6 @@ class App extends React.Component {
     return isConnected;
   };
 
-
   tvl = async () => {
     try {
       let the_graph_result_ETH_V2 = await window.get_the_graph_eth_v2();
@@ -282,6 +304,16 @@ class App extends React.Component {
     }
   };
 
+  handleEthereum() {
+    const { ethereum } = window;
+    if (ethereum && (ethereum.isMetaMask || ethereum.isTrust)) {
+      console.log("Ethereum successfully detected!");
+      this.checkNetworkId();
+      // Access the decentralized web!
+    } else {
+      console.log("Please install MetaMask!");
+    }
+  }
 
   componentDidMount() {
     this.tvl().then();
@@ -289,6 +321,19 @@ class App extends React.Component {
     window.addEventListener("resize", this.updateWindowDimensions);
     this.checkConnection();
     this.checkNetworkId();
+
+    if (window.ethereum) {
+      this.handleEthereum();
+    } else {
+      window.addEventListener("ethereum#initialized", this.handleEthereum, {
+        once: true,
+      });
+
+      // If the event is not dispatched by the end of the timeout,
+      // the user probably doesn't have MetaMask installed.
+      setTimeout(this.handleEthereum, 3000); // 3 seconds
+    }
+
     let toBeAdded = {
       "theme-dark": "theme-dark",
     };
@@ -300,7 +345,7 @@ class App extends React.Component {
   checkConnection = () => {
     const logout = localStorage.getItem("logout");
 
-    if (logout !== "true") {
+    if (logout !== "true" && window.ethereum) {
       window.ethereum
         ?.request({ method: "eth_accounts" })
         .then((data) => {
@@ -319,7 +364,7 @@ class App extends React.Component {
       });
     }
   };
- 
+
   logout = () => {
     localStorage.setItem("logout", "true");
     this.setState({ isConnected: false });
@@ -356,10 +401,8 @@ class App extends React.Component {
   componentDidUpdate(prevProps) {
     if (this.props.location !== prevProps.location) {
       this.checkNetworkId();
-      this.handleSwitchNetwork(this.state.networkId);
     }
   }
-
 
   toggleMinimizeSidebar = () => {
     const f = () => window.dispatchEvent(new Event("resize"));
@@ -373,7 +416,13 @@ class App extends React.Component {
     this.setState({ isOpenInMobile: !this.state.isOpenInMobile });
   };
 
+  handleTrustChain = ()=>{
+    window.location.reload()
+  }
+
   render() {
+
+    
     const { LP_IDs_V2 } = window;
     const { ethereum } = window;
 
@@ -385,12 +434,17 @@ class App extends React.Component {
       LP_IDs_V2.weth[4],
     ];
 
-    if (!this.props.history.location.pathname.includes("bridge")) {
+    if (!this.props.location.pathname.includes("bridge")) {
       ethereum?.on("chainChanged", this.checkNetworkId);
       ethereum?.on("accountsChanged", this.checkConnection);
     }
 
 
+    if (window.ethereum && window.ethereum.isTrust === true) {
+      ethereum?.on("chainChanged", this.handleTrustChain);
+      
+    }
+    
     
     document.addEventListener("touchstart", { passive: true });
     return (
@@ -608,43 +662,36 @@ class App extends React.Component {
                     )}
                   />
                   <Route exact path="/buydyp" render={() => <BuyDyp />} />
-                  {this.state.networkId === "43114" ? (
-                    <Route
-                      exact
-                      path="/governance"
-                      render={() => (
-                        <Governancedev
-                          coinbase={this.state.coinbase}
-                          connected={this.state.isConnected}
-                          handleConnection={this.handleConnection}
-                        />
-                      )}
-                    />
-                  ) : this.state.networkId === "1" ? (
-                    <Route
-                      exact
-                      path="/governance"
-                      render={() => (
-                        <GovernanceEth
-                          coinbase={this.state.coinbase}
-                          connected={this.state.isConnected}
-                          handleConnection={this.handleConnection}
-                        />
-                      )}
-                    />
-                  ) : (
-                    <Route
-                      exact
-                      path="/governance"
-                      render={() => (
+
+                  <Route
+                    exact
+                    path="/governance"
+                    render={() =>
+                      this.state.networkId === "56" ? (
                         <Governancebsc
                           coinbase={this.state.coinbase}
                           connected={this.state.isConnected}
                           handleConnection={this.handleConnection}
+                          networkId={parseInt(this.state.networkId)}
                         />
-                      )}
-                    />
-                  )}
+                      ) : this.state.networkId === "43114" ? (
+                        <Governancedev
+                          coinbase={this.state.coinbase}
+                          connected={this.state.isConnected}
+                          handleConnection={this.handleConnection}
+                          networkId={parseInt(this.state.networkId)}
+                        />
+                      ) : (
+                        <GovernanceEth
+                          coinbase={this.state.coinbase}
+                          connected={this.state.isConnected}
+                          handleConnection={this.handleConnection}
+                          networkId={parseInt(this.state.networkId)}
+                        />
+                      )
+                    }
+                  />
+
                   <Route
                     exact
                     path="/"

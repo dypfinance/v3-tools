@@ -43,7 +43,7 @@ const EarnTopPicks = ({
   customChain,
   handleSwitchNetwork,
   expiredPools,
-  networkId
+  networkId,
 }) => {
   const vault = [
     {
@@ -705,12 +705,7 @@ const EarnTopPicks = ({
   const vaultsymbolArray = ["WETH", "WBTC", "USDC", "USDT", "DAI"];
   const locktimeFarm = ["No Lock", "3 Days", "30 Days", "60 Days", "90 Days"];
 
-
- 
-
   useEffect(() => {
-
-
     if (customPool !== null) {
       if (routeOption === "Staking" && chain === "eth") {
         setDetails(0);
@@ -812,7 +807,6 @@ const EarnTopPicks = ({
     }
     setShowDetails(false);
     setListing(listType);
-
   }, [
     topList,
     listType,
@@ -824,8 +818,8 @@ const EarnTopPicks = ({
     routeOption,
   ]);
 
-  useEffect(()=>{
-if (topList === "Vault" && chainId === "1") {
+  useEffect(() => {
+    if (topList === "Vault" && chainId === "1") {
       setTopPools([]);
 
       setTimeout(() => {
@@ -846,35 +840,29 @@ if (topList === "Vault" && chainId === "1") {
         setTopPools(farming);
       }, 500);
     }
-  },[topList, chainId, chain, coinbase])
+  }, [topList, chainId, chain, coinbase]);
 
-
-  useEffect(()=>{
+  useEffect(() => {
     fetchUserPools();
     setActiveCard();
     if (topList === "Staking") {
       setTopPools([]);
-      if ((chain !== "eth" && chain !== "bnb" && chain === "avax" )) {
+      if (chain !== "eth" && chain !== "bnb" && chain === "avax") {
         setTimeout(() => {
           fetchAvaxStaking();
         }, 500);
-      }
-     else if ((chain === "eth" && chain !== "bnb" && chain !== "avax")) {
+      } else if (chain === "eth" && chain !== "bnb" && chain !== "avax") {
         setTimeout(() => {
           fetchEthStaking();
         }, 500);
-      }
-
-     else if ((chain !== "eth" && chain === "bnb" && chain !== "avax" )) {
+      } else if (chain !== "eth" && chain === "bnb" && chain !== "avax") {
         setTimeout(() => {
           fetchBnbStaking();
         }, 500);
       }
-    } 
-  }, [topList, chain, coinbase, networkId, chainId, expiredPools, listType])
+    }
+  }, [topList, chain, coinbase, networkId, chainId, expiredPools, listType]);
 
-  // console.log(topList, chain, networkId)
-  
   const handleCardIndexStake = (index) => {
     if (topList === "Staking") {
       if (index >= 3) {
@@ -916,6 +904,8 @@ if (topList === "Vault" && chainId === "1") {
                   <div className="top-picks-container">
                     {topList === "Staking" && chain === "eth" && (
                       <CawsCard
+                      network={chainId}
+
                         onShowDetailsClick={() => {
                           setActiveCardNFT(true);
                           setActiveCard(null);
@@ -988,6 +978,7 @@ if (topList === "Vault" && chainId === "1") {
                               : false
                           }
                           expired={false}
+                          network={chainId}
                         />
                       ))}
                   </div>
@@ -1683,6 +1674,7 @@ if (topList === "Vault" && chainId === "1") {
                             : false
                         }
                         expired={false}
+                        network={chainId}
                       />
                     ))}
                 </div>
@@ -2158,6 +2150,7 @@ if (topList === "Vault" && chainId === "1") {
                     )
                     .map((pool, index) => (
                       <TopPoolsCard
+                        network={chainId}
                         display={
                           pool.expired
                             ? pool.expired === "Yes"
@@ -2599,6 +2592,7 @@ if (topList === "Vault" && chainId === "1") {
                     .slice(9, activePools.length)
                     .map((pool, index) => (
                       <TopPoolsCard
+                        network={chainId}
                         display={
                           pool.expired
                             ? pool.expired === "Yes"
@@ -2993,6 +2987,7 @@ if (topList === "Vault" && chainId === "1") {
                     .slice(0, topList === "Staking" && chain === "eth" ? 1 : 2)
                     .map((pool, index) => (
                       <TopPoolsCard
+                        network={chainId}
                         display={
                           pool.expired
                             ? pool.expired === "Yes"
@@ -3598,6 +3593,7 @@ if (topList === "Vault" && chainId === "1") {
                     )
                     .map((pool, index) => (
                       <TopPoolsCard
+                        network={chainId}
                         display={
                           pool.expired
                             ? pool.expired === "Yes"
@@ -4090,6 +4086,7 @@ if (topList === "Vault" && chainId === "1") {
                 >
                   {activePools.slice(4, 6).map((pool, index) => (
                     <TopPoolsCard
+                      network={chainId}
                       display={
                         pool.expired
                           ? pool.expired === "Yes"
@@ -4467,6 +4464,7 @@ if (topList === "Vault" && chainId === "1") {
                 >
                   {activePools.slice(6, 8).map((pool, index) => (
                     <TopPoolsCard
+                      network={chainId}
                       display={
                         pool.expired
                           ? pool.expired === "Yes"
@@ -4846,6 +4844,7 @@ if (topList === "Vault" && chainId === "1") {
                     .slice(8, activePools.length)
                     .map((pool, index) => (
                       <TopPoolsCard
+                        network={chainId}
                         display={
                           pool.expired
                             ? pool.expired === "Yes"
@@ -5225,6 +5224,7 @@ if (topList === "Vault" && chainId === "1") {
                     .slice(10, activePools.length)
                     .map((pool, index) => (
                       <TopPoolsCard
+                        network={chainId}
                         display={
                           pool.expired
                             ? pool.expired === "Yes"
@@ -5577,6 +5577,7 @@ if (topList === "Vault" && chainId === "1") {
                     )}
                     {activePools.slice(0, 1).map((pool, index) => (
                       <TopPoolsCard
+                        network={chainId}
                         display={
                           pool.expired
                             ? pool.expired === "Yes"
@@ -6076,6 +6077,7 @@ if (topList === "Vault" && chainId === "1") {
                   >
                     {activePools.slice(1, 2).map((pool, index) => (
                       <TopPoolsCard
+                        network={chainId}
                         display={
                           pool.expired
                             ? pool.expired === "Yes"
@@ -6555,6 +6557,7 @@ if (topList === "Vault" && chainId === "1") {
                   >
                     {activePools.slice(2, 3).map((pool, index) => (
                       <TopPoolsCard
+                        network={chainId}
                         display={
                           pool.expired
                             ? pool.expired === "Yes"
@@ -7103,6 +7106,7 @@ if (topList === "Vault" && chainId === "1") {
                   >
                     {activePools.slice(3, 4).map((pool, index) => (
                       <TopPoolsCard
+                        network={chainId}
                         display={
                           pool.expired
                             ? pool.expired === "Yes"
@@ -7665,6 +7669,7 @@ if (topList === "Vault" && chainId === "1") {
                   >
                     {activePools.slice(4, 5).map((pool, index) => (
                       <TopPoolsCard
+                        network={chainId}
                         display={
                           pool.expired
                             ? pool.expired === "Yes"
@@ -8124,6 +8129,7 @@ if (topList === "Vault" && chainId === "1") {
                   >
                     {activePools.slice(5, 6).map((pool, index) => (
                       <TopPoolsCard
+                        network={chainId}
                         display={
                           pool.expired
                             ? pool.expired === "Yes"
@@ -8568,6 +8574,7 @@ if (topList === "Vault" && chainId === "1") {
                   >
                     {activePools.slice(6, 7).map((pool, index) => (
                       <TopPoolsCard
+                        network={chainId}
                         display={
                           pool.expired
                             ? pool.expired === "Yes"
@@ -8951,6 +8958,7 @@ if (topList === "Vault" && chainId === "1") {
                   >
                     {activePools.slice(7, 8).map((pool, index) => (
                       <TopPoolsCard
+                        network={chainId}
                         display={
                           pool.expired
                             ? pool.expired === "Yes"
@@ -9334,6 +9342,7 @@ if (topList === "Vault" && chainId === "1") {
                   >
                     {activePools.slice(8, 9).map((pool, index) => (
                       <TopPoolsCard
+                        network={chainId}
                         display={
                           pool.expired
                             ? pool.expired === "Yes"
@@ -9698,6 +9707,7 @@ if (topList === "Vault" && chainId === "1") {
                   >
                     {activePools.slice(9, 10).map((pool, index) => (
                       <TopPoolsCard
+                        network={chainId}
                         display={
                           pool.expired
                             ? pool.expired === "Yes"
@@ -10062,6 +10072,7 @@ if (topList === "Vault" && chainId === "1") {
                   >
                     {activePools.slice(10, 11).map((pool, index) => (
                       <TopPoolsCard
+                        network={chainId}
                         display={
                           pool.expired
                             ? pool.expired === "Yes"
@@ -10427,6 +10438,7 @@ if (topList === "Vault" && chainId === "1") {
                       .slice(11, activePools.length)
                       .map((pool, index) => (
                         <TopPoolsCard
+                          network={chainId}
                           display={
                             pool.expired
                               ? pool.expired === "Yes"
@@ -10934,6 +10946,7 @@ if (topList === "Vault" && chainId === "1") {
               <div className="top-picks-container">
                 {expiredDYPPools.slice(0, 3).map((pool, index) => (
                   <TopPoolsCard
+                    network={chainId}
                     expired={true}
                     key={index}
                     chain={chain}
@@ -11732,6 +11745,7 @@ if (topList === "Vault" && chainId === "1") {
             <div className="top-picks-container" style={{ marginTop: "25px" }}>
               {expiredDYPPools.slice(3, 6).map((pool, index) => (
                 <TopPoolsCard
+                  network={chainId}
                   expired={true}
                   display={
                     pool.expired
@@ -12529,6 +12543,7 @@ if (topList === "Vault" && chainId === "1") {
             <div className="top-picks-container" style={{ marginTop: "25px" }}>
               {expiredDYPPools.slice(6, 9).map((pool, index) => (
                 <TopPoolsCard
+                  network={chainId}
                   expired={true}
                   display={
                     pool.expired
@@ -13331,6 +13346,7 @@ if (topList === "Vault" && chainId === "1") {
                 .slice(9, expiredDYPPools.length)
                 .map((pool, index) => (
                   <TopPoolsCard
+                    network={chainId}
                     expired={true}
                     display={
                       pool.expired
@@ -13909,6 +13925,7 @@ if (topList === "Vault" && chainId === "1") {
             <div className="top-picks-container">
               {expiredDYPPools.slice(0, 2).map((pool, index) => (
                 <TopPoolsCard
+                  network={chainId}
                   expired={true}
                   display={
                     pool.expired
@@ -14717,6 +14734,7 @@ if (topList === "Vault" && chainId === "1") {
             <div className="top-picks-container" style={{ marginTop: "25px" }}>
               {expiredDYPPools.slice(2, 4).map((pool, index) => (
                 <TopPoolsCard
+                  network={chainId}
                   expired={true}
                   display={
                     pool.expired
@@ -15523,6 +15541,7 @@ if (topList === "Vault" && chainId === "1") {
             <div className="top-picks-container" style={{ marginTop: "25px" }}>
               {expiredDYPPools.slice(4, 6).map((pool, index) => (
                 <TopPoolsCard
+                  network={chainId}
                   expired={true}
                   display={
                     pool.expired
@@ -16325,6 +16344,7 @@ if (topList === "Vault" && chainId === "1") {
             <div className="top-picks-container" style={{ marginTop: "25px" }}>
               {expiredDYPPools.slice(9, 12).map((pool, index) => (
                 <TopPoolsCard
+                  network={chainId}
                   expired={true}
                   display={
                     pool.expired
@@ -16911,6 +16931,7 @@ if (topList === "Vault" && chainId === "1") {
             >
               {expiredDYPPools.slice(12, 15).map((pool, index) => (
                 <TopPoolsCard
+                  network={chainId}
                   expired={true}
                   display={
                     pool.expired
@@ -17499,6 +17520,7 @@ if (topList === "Vault" && chainId === "1") {
                 .slice(15, expiredDYPPools.length)
                 .map((pool, index) => (
                   <TopPoolsCard
+                    network={chainId}
                     expired={true}
                     display={
                       pool.expired
@@ -18086,6 +18108,7 @@ if (topList === "Vault" && chainId === "1") {
               <div className="top-picks-container">
                 {expiredDYPPools.slice(0, 1).map((pool, index) => (
                   <TopPoolsCard
+                    network={chainId}
                     expired={true}
                     display={
                       pool.expired
@@ -18911,6 +18934,7 @@ if (topList === "Vault" && chainId === "1") {
               >
                 {expiredDYPPools.slice(1, 2).map((pool, index) => (
                   <TopPoolsCard
+                    network={chainId}
                     expired={true}
                     display={
                       pool.expired
@@ -19736,6 +19760,7 @@ if (topList === "Vault" && chainId === "1") {
               >
                 {expiredDYPPools.slice(2, 3).map((pool, index) => (
                   <TopPoolsCard
+                    network={chainId}
                     expired={true}
                     display={
                       pool.expired
@@ -20561,6 +20586,7 @@ if (topList === "Vault" && chainId === "1") {
               >
                 {expiredDYPPools.slice(3, 4).map((pool, index) => (
                   <TopPoolsCard
+                    network={chainId}
                     expired={true}
                     display={
                       pool.expired
@@ -21386,6 +21412,7 @@ if (topList === "Vault" && chainId === "1") {
               >
                 {expiredDYPPools.slice(4, 5).map((pool, index) => (
                   <TopPoolsCard
+                    network={chainId}
                     expired={true}
                     display={
                       pool.expired
@@ -22211,6 +22238,7 @@ if (topList === "Vault" && chainId === "1") {
               >
                 {expiredDYPPools.slice(5, 6).map((pool, index) => (
                   <TopPoolsCard
+                    network={chainId}
                     expired={true}
                     display={
                       pool.expired
@@ -23036,6 +23064,7 @@ if (topList === "Vault" && chainId === "1") {
               >
                 {expiredDYPPools.slice(6, 7).map((pool, index) => (
                   <TopPoolsCard
+                    network={chainId}
                     expired={true}
                     display={
                       pool.expired
@@ -23486,6 +23515,7 @@ if (topList === "Vault" && chainId === "1") {
               >
                 {expiredDYPPools.slice(7, 8).map((pool, index) => (
                   <TopPoolsCard
+                    network={chainId}
                     expired={true}
                     display={
                       pool.expired
@@ -23936,6 +23966,7 @@ if (topList === "Vault" && chainId === "1") {
               >
                 {expiredDYPPools.slice(8, 9).map((pool, index) => (
                   <TopPoolsCard
+                    network={chainId}
                     expired={true}
                     display={
                       pool.expired
@@ -24330,6 +24361,7 @@ if (topList === "Vault" && chainId === "1") {
               >
                 {expiredDYPPools.slice(9, 10).map((pool, index) => (
                   <TopPoolsCard
+                    network={chainId}
                     expired={true}
                     display={
                       pool.expired
@@ -24724,6 +24756,7 @@ if (topList === "Vault" && chainId === "1") {
               >
                 {expiredDYPPools.slice(10, 11).map((pool, index) => (
                   <TopPoolsCard
+                    network={chainId}
                     expired={true}
                     display={
                       pool.expired
@@ -25120,6 +25153,7 @@ if (topList === "Vault" && chainId === "1") {
                   .slice(11, expiredDYPPools.length)
                   .map((pool, index) => (
                     <TopPoolsCard
+                      network={chainId}
                       display={
                         pool.expired
                           ? pool.expired === "Yes"

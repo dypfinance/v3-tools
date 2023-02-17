@@ -662,7 +662,7 @@ export default class Governance extends React.Component {
   };
 
   refreshProposals = async () => {
-    if (this.state.isLoading && this.state.proposals?.length > 0) return;
+    if (this.state.isLoading && this.state.proposals && this.state.proposals?.length > 0 && this.props.networkId === 56) return;
     this.setState({ isLoading: true });
     try {
       let total_proposals = Number(await governance?.lastIndex());
@@ -698,9 +698,9 @@ export default class Governance extends React.Component {
   };
 
   refreshDYPBalance = async () => {
-    if (this.state.is_wallet_connected === true) {
+    if (this.props.connected === true && this.props.networkId === 56) {
       try {
-        let coinbase = this.state.coinbase;
+        let coinbase = this.props.coinbase;
         await reward_token.balanceOf(coinbase).then((data) => {
           this.setState({
             token_balance: window.web3.utils.fromWei(data, "ether"),
@@ -713,8 +713,8 @@ export default class Governance extends React.Component {
   };
 
   refreshBalance = async () => {
-    if (this.state.is_wallet_connected === true) {
-      let coinbase = this.state.coinbase;
+    if (this.props.connected === true && this.props.networkId === 56) {
+      let coinbase = this.props.coinbase;
 
       try {
         let _totalDeposited = governance.totalDepositedTokens(coinbase);
@@ -742,34 +742,33 @@ export default class Governance extends React.Component {
   };
 
   getProposal = async (_proposalId) => {
-    if (this.state.is_wallet_connected === true) {
+    if (this.props.connected === true && _proposalId && this.props.networkId === 56) {
       let p = await governance.getProposal(_proposalId);
       p.vault = getPoolForProposal(p);
       return p;
     }
   };
   checkConnection = async () => {
-    const logout = localStorage.getItem("logout");
-    if (logout === "false") {
+  
+    if (this.props.connected === true && this.props.networkId === 56) {
       this.setState({ is_wallet_connected: true });
-      let coinbase = await window.getCoinbase();
+      let coinbase = this.props.coinbase;
       this.setState({ coinbase: coinbase });
     }
-    if (logout === "true") {
+    if (this.props.connected === false) {
       this.setState({ is_wallet_connected: false });
     }
   };
   componentDidMount() {
     this.refreshBalance();
     this.refreshDYPBalance();
-    
-    const logout = localStorage.getItem("logout");
+ 
  this.fetchProposals();
-    if (this.state.proposals?.length == 0 && logout === "false") {
+    if (this.state.proposals && this.state.proposals?.length == 0 && this.props.connected === true && this.props.networkId === 56) {
       this.refreshProposals();
     this.getProposal();
    
-    window._refreshBalInterval2 = setInterval(this.getProposal, 3000);
+    // window._refreshBalInterval2 = setInterval(this.getProposal, 3000);
     }
     this.checkConnection();
     this.getProposal();
@@ -783,6 +782,7 @@ export default class Governance extends React.Component {
   componentWillUnmount() {
     clearInterval(window.gRefBalInterval);
     clearInterval(window.gRefDYPBalInterval);
+    // clearInterval(window._refreshBalInterval2);
   }
   async shouldComponentUpdate(nextState) {
     if (nextState.connected !== this.props.connected) {
@@ -859,6 +859,7 @@ export default class Governance extends React.Component {
   };
 
   render() {
+
     let { totalDeposited } = this.state;
     totalDeposited = getFormattedNumber(totalDeposited / 1e18, 6);
     let canWithdrawAll = false;
@@ -1080,7 +1081,7 @@ export default class Governance extends React.Component {
                           My DYP Balance
                         </span>
                         <span className="whitetext">
-                          {this.state.token_balance} DYP
+                        {getFormattedNumber(this.state.token_balance)} DYP
                         </span>
                       </div>
                       <div className="colored-container">
@@ -1222,6 +1223,10 @@ export default class Governance extends React.Component {
                                   ? 0
                                   : this.state.proposalId
                               }
+                              connected={this.props.connected}
+                              coinbase ={this.props.coinbase}
+                              networkId ={this.props.networkId}
+
                             />
                           </div>
                         </div>
@@ -1621,26 +1626,29 @@ class ProposalDetails extends React.Component {
     // this.getProposal()
     this.checkConnection();
     window._refreshBalInterval = setInterval(this.checkConnection, 3000);
-    window._refreshBalInterval2 = setInterval(this.getProposal, 3000);
+    // window._refreshBalInterval2 = setInterval(this.getProposal, 3000);
 
-    window._refreshVoteBalInterval = setInterval(this.refreshBalance, 3000);
+    window._refreshVoteBalInterval = setInterval(this.refreshProposal, 3000);
   }
 
   componentWillUnmount() {
     // this.checkConnection();
     clearInterval(window._refreshVoteBalInterval);
+    // clearInterval(window._refreshBalInterval2);
   }
 
   refreshProposal = () => {
-    this.getProposal(this.props.proposalId)
+    if(this.props.proposalId && this.props.networkId === 56)
+   { this.getProposal(this.props.proposalId)
       .then((proposal) => this.setState({ proposal }))
-      .catch(console.error);
+      .catch(console.error);}
   };
 
   getProposal = async (_proposalId) => {
-    let p = await governance.getProposal(_proposalId);
+    if(_proposalId && this.props.networkId === 56)
+   { let p = await governance.getProposal(_proposalId);
     p.vault = getPoolForProposal(p);
-    return p;
+    return p;}
   };
 
   handleApprove = (e) => {
@@ -1736,24 +1744,26 @@ class ProposalDetails extends React.Component {
   };
 
   checkConnection = async () => {
-    const logout = localStorage.getItem("logout");
-    if (logout === "false") {
+   
+    
+    if (this.props.connected === true && this.props.networkId === 56) {
       this.setState({ is_wallet_connected: true });
-      let coinbase = await window.getCoinbase();
+      let coinbase = this.props.coinbase;
       this.setState({ coinbase: coinbase });
     }
-    if (logout === "true") {
+    if (this.props.connected === false) {
       this.setState({ is_wallet_connected: false });
     }
   };
 
-  refreshBalance = async () => {
-    if (this.state.is_wallet_connected === true) {
-      this.refreshProposal();
-      this.props.refreshBalance();
 
-      let coinbase = this.state.coinbase;
-      try {
+  refreshBalance = async () => {
+    if (this.props.connected === true && this.props.networkId === 56) {
+      this.refreshProposal();
+
+      let coinbase = this.props.coinbase;
+      if(coinbase && this.props.networkId === 56)
+    {  try {
         let _rBal = reward_token.balanceOf(coinbase);
         let _myVotes = governance.votesForProposalByAddress(
           coinbase,
@@ -1807,7 +1817,7 @@ class ProposalDetails extends React.Component {
           this.setState({ option });
       } catch (e) {
         console.error(e);
-      }
+      }}
     }
   };
 
@@ -1830,6 +1840,8 @@ class ProposalDetails extends React.Component {
   handleExecute = () => {
     governance.executeProposal(this.props.proposalId);
   };
+
+  
 
   render() {
     ////
@@ -1963,7 +1975,7 @@ class ProposalDetails extends React.Component {
                         <img src={moreinfo} alt="" />
                       </Tooltip>
                     </div>
-                    <div className="d-flex gap-2 align-items-center justify-content-between mt-2">
+                    <div className="d-flex  flex-column flex-xxl-row flex-lg-row flex-md-row gap-2 align-items-center justify-content-between mt-2">
                       <div className="d-flex align-items-center gap-2">
                         <input
                           value={

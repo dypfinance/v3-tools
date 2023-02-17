@@ -34,7 +34,7 @@ const TopPoolsCard = ({
   tag,
   display,
   expired,
-  // showDetails,
+  network,
 }) => {
   const ethCoins = ["ethereum", "wbtc", "usdc", "usdt"];
   const bscCoins = [
@@ -82,11 +82,13 @@ const TopPoolsCard = ({
     }
   }, [chain]);
 
+  // console.log(network)
+
   return (
     <>
       <div
         className={`${
-          expired === true ? "poolscardwrapperexpired" : "poolscardwrapper"
+          expired === true ? "poolscardwrapperexpired" : network === '0' ? 'blurryCard' :  "poolscardwrapper"
         } cursor-pointer position-relative ${details && "pools-card-open"}  ${
           renderedPage === "dashboard" && !details ? "pools-card-hover" : ""
         }`}
