@@ -2980,6 +2980,8 @@ const EarnTopPicks = ({
                       details={activeCardNFT === true ? true : false}
                       listType={listType}
                       tvl={"$" + getFormattedNumber(cawsCard2.tvl_usd)}
+                      network={chainId}
+
                     />
                   )}
 
@@ -5563,6 +5565,8 @@ const EarnTopPicks = ({
                         details={activeCardNFT === true ? true : false}
                         listType={listType}
                         tvl={"$" + getFormattedNumber(cawsCard2.tvl_usd)}
+                      network={chainId}
+
                       />
                     )}
                     {activeCardNFT && (
