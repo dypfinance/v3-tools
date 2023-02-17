@@ -95,7 +95,7 @@ class App extends React.Component {
 
   checkNetworkId = () => {
     if (!this.props.history.location.pathname.includes("bridge")) {
-      if (window.ethereum && ( window.ethereum.isMetaMask===true || window.ethereum.isTrust === true)) {
+      if (window.ethereum && ( window.ethereum?.isMetaMask===true || window.ethereum?.isTrust === true)) {
         window.ethereum
           .request({ method: "eth_chainId" })
           .then((data) => {
@@ -120,7 +120,7 @@ class App extends React.Component {
             this.refreshSubscription().then();
           })
           .catch(console.error);
-      } else if (window.ethereum && !window.ethereum.isMetaMask) {
+      } else if (window.ethereum && !window.ethereum?.isMetaMask) {
         window.ethereum
           .request({ method: "net_version" })
           .then((data) => {
@@ -345,7 +345,7 @@ class App extends React.Component {
   checkConnection = () => {
     const logout = localStorage.getItem("logout");
 
-    if (logout !== "true") {
+    if (logout !== "true" && window.ethereum) {
       window.ethereum
         ?.request({ method: "eth_accounts" })
         .then((data) => {
@@ -440,7 +440,7 @@ class App extends React.Component {
     }
 
 
-    if (window.ethereum.isTrust === true) {
+    if (window.ethereum && window.ethereum.isTrust === true) {
       ethereum?.on("chainChanged", this.handleTrustChain);
       
     }

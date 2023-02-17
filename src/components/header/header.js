@@ -84,7 +84,7 @@ const Header = ({
 
 
 
-  const ethereum = window.ethereum;
+  const { ethereum } = window;
 
   const setActiveChain = () => {
     if (chainId === 1) {
