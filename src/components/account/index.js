@@ -21,6 +21,7 @@ export default class Subscription extends React.Component {
     super(props);
     this.state = {
       coinbase: "",
+      networkId: 0,
       selectedSubscriptionToken: Object.keys(
         window.config.subscription_tokens
       )[0],
@@ -41,6 +42,7 @@ export default class Subscription extends React.Component {
       showRemovebtn: false,
       subscribe_now: false,
       usdtAddress: "0xdac17f958d2ee523a2206206994597c13d831ec7",
+      usdteAddress: '0xc7198437980c041c805a1edcba50c1ce5db95118',
       triggerText: "See more V",
       myNFTs: [],
       myStakess: [],
@@ -259,20 +261,20 @@ export default class Subscription extends React.Component {
         )[0],
       });
     }
-
-    window
-      .getFavorites()
-      .then((favorites) => {
-        this.setState({ favorites: favorites });
-      })
-      .catch(console.error);
-    if (this.props.networkId !== 1) {
+  else if (this.props.networkId !== 1) {
       this.setState({
         selectedSubscriptionToken: Object.keys(
           window.config.subscription_tokens
         )[0],
       });
     }
+    window
+      .getFavorites()
+      .then((favorites) => {
+        this.setState({ favorites: favorites });
+      })
+      .catch(console.error);
+ 
   }
 
   fetchUsername = async () => {
@@ -324,7 +326,7 @@ export default class Subscription extends React.Component {
     const tokenAddress = "0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17";
     const walletAddress = this.props.coinbase;
     const TokenABI = window.ERC20_ABI;
-    if (account != undefined && walletAddress !== undefined) {
+    if (account !== undefined && walletAddress !== undefined) {
       const contract1 = new web3eth.eth.Contract(TokenABI, tokenAddress);
       const contract2 = new web3avax.eth.Contract(TokenABI, tokenAddress);
       const contract3 = new web3bsc.eth.Contract(TokenABI, tokenAddress);
@@ -367,10 +369,18 @@ export default class Subscription extends React.Component {
     if (this.props.coinbase !== prevProps.coinbase) {
       this.fetchUserPools();
     }
+
+    if (this.props.networkId !== prevProps.networkId) {
+     
+      if(this.props.networkId === 43114) {
+      this.handleSubscriptionTokenChange(this.state.usdteAddress);   
+      }
+      else if(this.props.networkId === 1){
+        this.handleSubscriptionTokenChange(this.state.usdtAddress);}
+    }
   }
 
   componentDidMount() {
-    this.handleSubscriptionTokenChange(this.state.usdtAddress);
     window._refreshBalIntervalDyp = setInterval(this.getDypBalance, 2000);
 
     setTimeout(() => {
@@ -423,20 +433,23 @@ export default class Subscription extends React.Component {
   };
 
   handleSubscriptionTokenChange = async (tokenAddress) => {
+   
+    const token = this.props.networkId === 1 ? this.state.usdtAddress : this.state.usdteAddress
     let tokenDecimals =
       this.props.networkId === 1
-        ? window.config.subscriptioneth_tokens[tokenAddress]?.decimals
-        : window.config.subscription_tokens[tokenAddress]?.decimals;
+        ? window.config.subscriptioneth_tokens[token]?.decimals
+        : window.config.subscription_tokens[token]?.decimals;
     this.setState({
-      selectedSubscriptionToken: tokenAddress,
+      selectedSubscriptionToken: token,
       tokenBalance: "",
       formattedPrice: "",
       price: "",
     });
+    
     let price =
       this.props.networkId === 1
-        ? await window.getEstimatedTokenSubscriptionAmountETH(tokenAddress)
-        : await window.getEstimatedTokenSubscriptionAmount(tokenAddress);
+        ? await window.getEstimatedTokenSubscriptionAmountETH(token)
+        : await window.getEstimatedTokenSubscriptionAmount(token);
     price = new BigNumber(price).times(1.1).toFixed(0);
 
     let formattedPrice = getFormattedNumber(
@@ -444,7 +457,7 @@ export default class Subscription extends React.Component {
       tokenDecimals
     );
     let tokenBalance = await window.getTokenHolderBalance(
-      tokenAddress,
+      token,
       this.props.coinbase
     );
     this.setState({ price, formattedPrice, tokenBalance });
@@ -496,6 +509,7 @@ export default class Subscription extends React.Component {
       address: this.state.selectedSubscriptionToken,
       ABI: window.ERC20_ABI,
     });
+    
     this.setState({ loadspinner: true });
 
     await tokenContract.methods
@@ -754,6 +768,8 @@ export default class Subscription extends React.Component {
     const handleTooltipOpen = () => {
       this.setState({ openTooltip: true });
     };
+
+
 
     return (
       <div>
@@ -1043,6 +1059,7 @@ export default class Subscription extends React.Component {
                               src="/assets/img/usdt.svg"
                               width={28}
                               height={28}
+                              alt=''
                             ></img>
                             <h3 className="subscr-price">75 USDT</h3>
                           </div>
@@ -1091,10 +1108,10 @@ export default class Subscription extends React.Component {
                           }}
                         >
                           <h3 className="subscr-title">Welcome premium user</h3>
-                          <p className="subscr-subtitle">
+                          {/* <p className="subscr-subtitle">
                             *When you unsubscribe the DYP will be unlocked and
                             sent to your wallet
-                          </p>
+                          </p> */}
                           {/* <p className="subscr-note">
                         *When you unsubscribe the DYP will be unlocked and sent to
                         your wallet
