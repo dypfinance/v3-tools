@@ -741,25 +741,26 @@ export default class Subscription extends React.Component {
     };
 
     const freePlanItems = [
-      "Real time DYP Tools",
-      "Pair Explorer",
-      "Big Swap Explorer",
-      "Top Tokens",
+      // "Real time DYP Tools",
+      // "Pair Explorer",
+      // "Big Swap Explorer",
+      // "Top Tokens",
       "Yields",
       "News Section",
       "DYP Locker",
-      "Community Trust Vote",
+      // "Community Trust Vote",
       "dApps access",
     ];
 
     const paidPlanItems = [
       "All free features included",
-      "Manual research info for projects",
-      "Full access to Community Trust Vote",
+      // "Manual research info for projects",
+      // "Full access to Community Trust Vote",
       "Perform any votes on the News section",
       "Early access to new features released in the future",
       "Guaranteed allocation to presales of new projects launched using our Launchpad",
     ];
+
 
     const handleTooltipClose = () => {
       this.setState({ openTooltip: false });
@@ -1045,8 +1046,7 @@ export default class Subscription extends React.Component {
                             Lifetime subscription{" "}
                           </h3>
                           <p className="subscr-subtitle">
-                            The subscription tokens will be used to buy and lock
-                            DYP
+                          The subscription tokens will be used to buy DYP
                           </p>
                           {/* <p className="subscr-note">
                         *When you unsubscribe the DYP will be unlocked and sent to
@@ -1175,7 +1175,7 @@ export default class Subscription extends React.Component {
                     alt="close subscription"
                   />
                 </div>
-                <div className="d-flex mt-4 align-items-end justify-content-between flex-column-reverse flex lg-row w-100">
+                <div className="d-flex mt-4 align-items-end justify-content-between flex-column-reverse flex-lg-row w-100">
                   <div className="d-flex flex-column gap-3 subscribe-input-container">
                     <span className="token-amount-placeholder">
                       Token Amount
@@ -1934,7 +1934,7 @@ export default class Subscription extends React.Component {
         </div>
 
         <TierLevels display={"none"} infoDisplay={"flex"} />
-        <h4 className="d-block mb-5 mt-5" id="my-fav">
+        {/* <h4 className="d-block mb-5 mt-5" id="my-fav">
           My favourite pairs
         </h4>
         <div className="row p-0 m-0 favorites-grid">
@@ -2126,7 +2126,7 @@ export default class Subscription extends React.Component {
               </NavLink>
             );
           })}
-        </div>
+        </div> */}
       </div>
     );
   };
