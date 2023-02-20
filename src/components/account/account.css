@@ -124,6 +124,7 @@ color: #F7F7FC !important;
   background-image: url('./assets/paidPlanBackground.svg');
   background-repeat: no-repeat;
   background-position: center;
+  background-size: 150% 145%;
 }
 
 .inactive-plan{
