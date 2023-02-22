@@ -193,7 +193,7 @@ const LandNftChecklist = ({
                 color: "var(--light-gray-99-nft)",
               }}
             >
-              Land {checklistItemID}
+             {nft.name}
             </p>
             <div className="d-flex" style={{ flexDirection: "column" }}>
               <div className="d-flex w-100 justify-content-between align-baseline">
