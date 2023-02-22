@@ -3000,7 +3000,6 @@ const EarnTopPicks = ({
                         setActiveCardNFT();
                         setActiveCardLandNFT(true);
                         setActiveCard(null);
-
                         setActiveCard2(null);
                         setActiveCard3(null);
                         setActiveCard4(null);
@@ -3016,21 +3015,11 @@ const EarnTopPicks = ({
                       tvl={"$" + getFormattedNumber(cawsCard2.tvl_usd)}
                     />
                   )}
-
-                  {activeCardLandNFT && (
-                    <LandDetails
-                      coinbase={coinbase}
-                      isConnected={isConnected}
-                      listType={listType}
-                      chainId={chainId}
-                      handleSwitchNetwork={handleSwitchNetwork}
-                      handleConnection={handleConnection}
-                    />
-                  )}
                   {topList === "Staking" && chain === "eth" && (
                     <CawsCard
                       onShowDetailsClick={() => {
                         setActiveCardNFT(true);
+                        setActiveCardLandNFT(false);
                         setActiveCard(null);
                         setActiveCard2(null);
                         setActiveCard3(null);
@@ -3095,6 +3084,7 @@ const EarnTopPicks = ({
                           setActiveCard5(null);
                           setActiveCard6(null);
                           setActiveCardNFT(false);
+                        setActiveCardLandNFT(false);
                           handleCardIndexStake(index);
                           handleCardIndexStake30(index);
                           handleCardIndexStakeiDyp(index);
@@ -3120,6 +3110,16 @@ const EarnTopPicks = ({
                       />
                     ))}
                 </div>
+                {activeCardLandNFT && (
+                    <LandDetails
+                      coinbase={coinbase}
+                      isConnected={isConnected}
+                      listType={listType}
+                      chainId={chainId}
+                      handleSwitchNetwork={handleSwitchNetwork}
+                      handleConnection={handleConnection}
+                    />
+                  )}
                 {activeCardNFT && (
                   <CawsDetails
                     coinbase={coinbase}
@@ -5748,11 +5748,21 @@ const EarnTopPicks = ({
                         tvl={"$" + getFormattedNumber(cawsCard2.tvl_usd)}
                       />
                     )}
-
+                    {activeCardLandNFT && (
+                      <LandDetails
+                        coinbase={coinbase}
+                        isConnected={isConnected}
+                        listType={listType}
+                        chainId={chainId}
+                        handleSwitchNetwork={handleSwitchNetwork}
+                        handleConnection={handleConnection}
+                      />
+                    )}
                     {topList === "Staking" && chain === "eth" && (
                       <CawsCard
                         onShowDetailsClick={() => {
                           setActiveCardNFT(true);
+                          setActiveCardLandNFT(false);
                           setActiveCard(null);
                           setActiveCard2(null);
                           setActiveCard3(null);
@@ -5770,18 +5780,7 @@ const EarnTopPicks = ({
                         network={chainId}
                       />
                     )}
-                    {activeCardLandNFT && (
-                      <LandDetails
-                        coinbase={coinbase}
-                        isConnected={isConnected}
-                        listType={listType}
-                        chainId={chainId}
-                        handleSwitchNetwork={handleSwitchNetwork}
-                        handleConnection={handleConnection}
-                      />
-                    )}
-
-                    {activeCardNFT && (
+                       {activeCardNFT && (
                       <CawsDetails
                         coinbase={coinbase}
                         isConnected={isConnected}
@@ -5791,6 +5790,7 @@ const EarnTopPicks = ({
                         handleConnection={handleConnection}
                       />
                     )}
+                    
                     {activePools.slice(0, 1).map((pool, index) => (
                       <TopPoolsCard
                         network={chainId}
@@ -5842,6 +5842,8 @@ const EarnTopPicks = ({
                           setActiveCard11(null);
                           setActiveCard12(null);
                           setActiveCardNFT(false);
+                          setActiveCardLandNFT(false);
+
                           handleCardIndexStake(index);
                           handleCardIndexStake30(index);
                           handleCardIndexStakeiDyp(index);
@@ -5866,7 +5868,6 @@ const EarnTopPicks = ({
                       />
                     ))}
                   </div>
-
                   {activeCard &&
                   topList === "Staking" &&
                   activePools[cardIndex].id ===
