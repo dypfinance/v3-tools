@@ -22,6 +22,8 @@ import StakeBsc from "../FARMINNG/bscConstantStake";
 import StakeNewEth from "../FARMINNG/stakeNewEth";
 import StakeAvaxIDyp from "../FARMINNG/stakeAvaxiDyp";
 import StakeBscIDyp from "../FARMINNG/bscConstantStakeiDyp";
+import LandCard from "../top-pools-card/LandCard";
+import LandDetails from "../FARMINNG/land";
 
 const Dashboard = ({
   isConnected,
@@ -114,10 +116,8 @@ const Dashboard = ({
             return b.tvl_usd - a.tvl_usd;
           });
 
-          const finalEthCards = res.data.stakingInfoCAWS.concat(
-            sortedAprs.slice(0, 2)
-          );
-          setTopPools(finalEthCards.slice(0, 2));
+          const finalEthCards = res.data.stakingInfoCAWS ;
+          setTopPools(finalEthCards.slice(0, 1));
         })
         .catch((err) => {
           console.log(err);
@@ -301,6 +301,25 @@ const Dashboard = ({
             {windowSize.width > 786 ? (
               <div>
                 <div className="row m-0 gap-4 toppool-allwrapper">
+                { network === 1 && (
+                      <LandCard
+                      network={network.toString()}
+                      onShowDetailsClick={() => {
+                        setActiveCard(2);
+                        setcardIndex(2);
+                        setDetails(2);
+                      }}
+                      onHideDetailsClick={() => {
+                        setActiveCard(null);
+                        setDetails();
+                      }}
+                      cardType={"table"}
+                      details={details === 2 ? true : false}
+                      expired={false}
+                        // tvl={"$" + getFormattedNumber(cawsCard2.tvl_usd)}
+                      />
+                    )}
+
                   {topPools.length > 0 && loading === false ? (
                     topPools.slice(0, 2).map((item, index) => {
                       return (
@@ -357,29 +376,16 @@ const Dashboard = ({
                   )}
                 </div>
                 {activeCard && network === 1 ? (
-                  network === 1 && cardIndex === 1 ? (
-                    <StakeNewEth
-                      staking={window.constant_staking_newi3}
-                      apr={7.35}
-                      liquidity={eth_address}
-                      expiration_time={"11 January 2024"}
-                      finalApr={7.35}
-                      fee_s={0}
-                      lockTime={90}
-                      lp_id={lp_id[cardIndex]}
-                      listType={"table"}
-                      other_info={false}
-                      is_wallet_connected={isConnected}
+                activeCard && network === 1 && cardIndex === 2 ? (
+                    <LandDetails
                       coinbase={coinbase}
-                      the_graph_result={the_graph_result}
+                      isConnected={isConnected}
+                      listType={"table"}
                       chainId={network.toString()}
-                      handleConnection={handleConnection}
                       handleSwitchNetwork={handleSwitchNetwork}
-                      expired={false}
-                      referrer={referrer}
-                      totalTvl={topPools[1].tvl_usd}
+                      handleConnection={handleConnection}
                     />
-                  ) : activeCard && network === 1 && cardIndex === 0 ? (
+                  ) : activeCard && network === 1 && cardIndex === 1 ? (
                     <CawsDetails
                       coinbase={coinbase}
                       isConnected={isConnected}
@@ -568,29 +574,16 @@ const Dashboard = ({
                   )}
                 </div>
                 {activeCard && network === 1 ? (
-                  network === 1 && cardIndex === 1 ? (
-                    <StakeNewEth
-                      staking={window.constant_staking_newi3}
-                      apr={7.35}
-                      liquidity={eth_address}
-                      expiration_time={"11 January 2024"}
-                      finalApr={7.35}
-                      fee_s={0}
-                      lockTime={90}
-                      lp_id={lp_id[cardIndex]}
-                      listType={"table"}
-                      other_info={false}
-                      is_wallet_connected={isConnected}
+                  network === 1 && cardIndex === 2 ? (
+                    <LandDetails
                       coinbase={coinbase}
-                      the_graph_result={the_graph_result}
+                      isConnected={isConnected}
+                      listType={"table"}
                       chainId={network.toString()}
-                      handleConnection={handleConnection}
                       handleSwitchNetwork={handleSwitchNetwork}
-                      expired={false}
-                      referrer={referrer}
-                      totalTvl={topPools[1].tvl_usd}
+                      handleConnection={handleConnection}
                     />
-                  ) : activeCard && network === 1 && cardIndex === 0 ? (
+                  ) : activeCard && network === 1 && cardIndex === 1 ? (
                     <CawsDetails
                       coinbase={coinbase}
                       isConnected={isConnected}
@@ -776,29 +769,16 @@ const Dashboard = ({
                   )}
                 </div>
                 {activeCard2 && network === 1 ? (
-                  network === 1 && cardIndex === 1 ? (
-                    <StakeNewEth
-                      staking={window.constant_staking_newi3}
-                      apr={7.35}
-                      liquidity={eth_address}
-                      expiration_time={"11 January 2024"}
-                      finalApr={7.35}
-                      fee_s={0}
-                      lockTime={90}
-                      lp_id={lp_id[cardIndex]}
-                      listType={"table"}
-                      other_info={false}
-                      is_wallet_connected={isConnected}
-                      coinbase={coinbase}
-                      the_graph_result={the_graph_result}
-                      chainId={network.toString()}
-                      handleConnection={handleConnection}
-                      handleSwitchNetwork={handleSwitchNetwork}
-                      expired={false}
-                      referrer={referrer}
-                      totalTvl={topPools[1].tvl_usd}
-                    />
-                  ) : activeCard2 && network === 1 && cardIndex === 0 ? (
+                  network === 1 && cardIndex === 2 ? (
+                    <LandDetails
+                    coinbase={coinbase}
+                    isConnected={isConnected}
+                    listType={"table"}
+                    chainId={network.toString()}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    handleConnection={handleConnection}
+                  />
+                  ) : activeCard2 && network === 1 && cardIndex === 1 ? (
                     <CawsDetails
                       coinbase={coinbase}
                       isConnected={isConnected}

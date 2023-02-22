@@ -57,7 +57,7 @@ const LandCard = ({
                 src={landNftIcon}
                 alt=""
                 className="tokenlogo"
-                style={{ height: 32, width: 32 }}
+                style={{ height: 36, width: 36 }}
               />{" "}
               Genesis Land NFT
             </h6>
