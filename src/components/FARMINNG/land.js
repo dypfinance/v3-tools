@@ -370,7 +370,7 @@ const LandDetails = ({
                   placement="top"
                   title={
                     <div className="tooltip-text">
-                      {"Deposit your CAWS NFTs to the staking smart contract."}
+                      {"Deposit your Genesis Land NFTs to the staking smart contract."}
                     </div>
                   }
                 >
@@ -443,7 +443,7 @@ const LandDetails = ({
                     title={
                       <div className="tooltip-text">
                         {
-                          "Rewards earned by your CAWS NFTs deposit to the staking smart contract are displayed in real-time."
+                          "Rewards earned by your Genesis Land NFTs deposit to the staking smart contract are displayed in real-time."
                         }
                       </div>
                     }
