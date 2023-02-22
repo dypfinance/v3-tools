@@ -15,7 +15,7 @@ const NftPlaceHolder = ({onMintClick}) => {
         <p className="placeholder-content-text">
          You can view all your NFTs to manage them
         </p>
-        <button className="placeholder-button" onClick={onMintClick}>Mint more NFTs</button>
+        <a href="https://www.worldofdypians.com/land" target="_blank" className="placeholder-button" onClick={onMintClick}>Mint more NFTs</a>
       </div>
       
      
