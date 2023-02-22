@@ -59,7 +59,7 @@ const LandCard = ({
                 className="tokenlogo"
                 style={{ height: 36, width: 36 }}
               />{" "}
-              Genesis Land NFT
+              Genesis Land
             </h6>
 
             <div className="d-flex align-items-baseline gap-1">
