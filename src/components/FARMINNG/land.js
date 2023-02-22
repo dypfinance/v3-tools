@@ -432,8 +432,8 @@ const LandDetails = ({
                     className="mybalance-text"
                     style={{ textTransform: "capitalize" }}
                   >
-                    NFTs Staked:{""}
-                    <b>{isConnected === false ? 0 : mystakes.length} Genesis Nfts</b>
+                    Staked:{""}
+                    <b>{isConnected === false ? 0 : mystakes.length}</b>
                   </h6>
                 </h6>
                 <h6 className="withdraw-littletxt d-flex align-items-center gap-2">
