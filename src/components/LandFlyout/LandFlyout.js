@@ -25,14 +25,17 @@ const LandFlyout = () => {
           <span style={{color: '#09d7b7', marginLeft: '5px'}}>Live</span>
           </h6>
           <video
-            src={planetgif}
             preload="auto"
-            autoPlay={true}
-            loop={true}
-            muted="muted"
-            playsInline={true}
+            autoPlay
+            loop
+            muted
+            playsInline
             style={{ width: "100%", height: "100%" }}
-          />
+          >
+            <source 
+            src={planetgif}
+             />
+          </video>
           <div className="d-flex align-items-center gap-2">
             <h6 className="fly-action mb-0">Mint now</h6>
             <img src={goto} alt="go to" />
