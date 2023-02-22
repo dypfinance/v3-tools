@@ -1943,8 +1943,8 @@ window.config = {
   nftstaking_address50: "0xEe425BbbEC5e9Bf4a59a1c19eFff522AD8b7A47A",
 
     /* MINT LANDNFT */
-    landnft_address: "0xf41cf5f9743f4d415709f38fb6299d5111082cf4",
-    landnftstake_address: "0x5c5b1da92bf8e70fe105c95386c043e60b9954ae",
+    landnft_address: "0xcd60d912655281908ee557ce1add61e983385a03",
+    landnftstake_address: "0x6821710b0d6e9e10acfd8433ad023f874ed782f1",
 
   //buyback bsc
   buyback_stakingbsc1_1_address: "0x94b1a7b57c441890b7a0f64291b39ad6f7e14804",
@@ -2891,9 +2891,9 @@ window.nft = new NFT();
         : ABI,
 
       key === "LANDNFTSTAKE"
-        ? "0xf41cf5f9743f4d415709f38fb6299d5111082cf4"
+        ? "0xcd60d912655281908ee557ce1add61e983385a03"
         : key === "LANDNFTSTAKING"
-        ? "0x5c5b1da92bf8e70fe105c95386c043e60b9954ae"
+        ? "0x6821710b0d6e9e10acfd8433ad023f874ed782f1"
         : address,
       {
         from: await getCoinbase(),
