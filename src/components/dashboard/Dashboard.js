@@ -101,6 +101,9 @@ const Dashboard = ({
    
   };
 
+
+  const [landCard, setLandCard] = useState({})
+
   const fetchEthStaking = async () => {
     
       await axios
@@ -118,6 +121,9 @@ const Dashboard = ({
 
           const finalEthCards = res.data.stakingInfoCAWS ;
           setTopPools(finalEthCards.slice(0, 1));
+
+          setLandCard(res.data.stakingInfoLAND[0])
+
         })
         .catch((err) => {
           console.log(err);
@@ -272,6 +278,8 @@ const Dashboard = ({
     fetchUserPools();
   }, [network, coinbase, loading]);
 
+
+
   const windowSize = useWindowSize();
 
   return (
@@ -317,6 +325,8 @@ const Dashboard = ({
                       details={details === 1 ? true : false}
                       expired={false}
                         // tvl={"$" + getFormattedNumber(cawsCard2.tvl_usd)}
+                        tvl={"$" + getFormattedNumber(landCard.tvl_usd)}
+                        apr={landCard.apy_percent}
                       />
                     )}
 
@@ -384,6 +394,8 @@ const Dashboard = ({
                       chainId={network.toString()}
                       handleSwitchNetwork={handleSwitchNetwork}
                       handleConnection={handleConnection}
+                      apr={landCard.apy_percent}
+                        totalNftsLocked={landCard.total_nfts_locked}
                     />
                   ) : activeCard && network === 1 && cardIndex === 0 ? (
                     <CawsDetails
@@ -532,6 +544,8 @@ const Dashboard = ({
                       details={details === 1 ? true : false}
                       expired={false}
                         // tvl={"$" + getFormattedNumber(cawsCard2.tvl_usd)}
+                        tvl={"$" + getFormattedNumber(landCard.tvl_usd)}
+                        apr={landCard.apy_percent}
                       />
                     )}
                     {activeCard && network === 1 && cardIndex === 1 && (
@@ -542,6 +556,8 @@ const Dashboard = ({
                       chainId={network.toString()}
                       handleSwitchNetwork={handleSwitchNetwork}
                       handleConnection={handleConnection}
+                      apr={landCard.apy_percent}
+                        totalNftsLocked={landCard.total_nfts_locked}
                     />
                   )}
                   {topPools.length > 0 && loading === false ? (
@@ -795,6 +811,8 @@ const Dashboard = ({
                     chainId={network.toString()}
                     handleSwitchNetwork={handleSwitchNetwork}
                     handleConnection={handleConnection}
+                    apr={landCard.apy_percent}
+                        totalNftsLocked={landCard.total_nfts_locked}
                   />
                   ) : activeCard2 && network === 1 && cardIndex === 0 ? (
                     <CawsDetails

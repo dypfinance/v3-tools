@@ -106,6 +106,7 @@ const EarnTopPicks = ({
   const [listing, setListing] = useState(listType);
   const [cawsCard, setCawsCard] = useState([]);
   const [cawsCard2, setCawsCard2] = useState([]);
+  const [landCard, setLandCard] = useState({})
   const [userPools, setuserPools] = useState([]);
 
   const [tvlTotal, setTvlTotal] = useState();
@@ -151,6 +152,7 @@ const EarnTopPicks = ({
         setTopPools(dypIdyp);
         setCawsCard(res.data.stakingInfoCAWS);
         setCawsCard2(res.data.stakingInfoCAWS[0]);
+        setLandCard(res.data.stakingInfoLAND[0])
       })
       .catch((err) => {
         console.log(err);
@@ -917,7 +919,8 @@ const EarnTopPicks = ({
                         cardType={topList}
                         details={activeCardLandNFT === true ? true : false}
                         listType={listType}
-                        tvl={"$" + getFormattedNumber(cawsCard2.tvl_usd)}
+                        tvl={"$" + getFormattedNumber(landCard.tvl_usd)}
+                        apr={landCard.apy_percent}
                       />
                     )}
                   
@@ -1011,6 +1014,8 @@ const EarnTopPicks = ({
                         chainId={chainId}
                         handleSwitchNetwork={handleSwitchNetwork}
                         handleConnection={handleConnection}
+                        apr={landCard.apy_percent}
+                        totalNftsLocked={landCard.total_nfts_locked}
                       />
                     )}
                   {activeCardNFT && (
@@ -3015,7 +3020,8 @@ const EarnTopPicks = ({
                       cardType={topList}
                       details={activeCardLandNFT === true ? true : false}
                       listType={listType}
-                      tvl={"$" + getFormattedNumber(cawsCard2.tvl_usd)}
+                      tvl={"$" + getFormattedNumber(landCard.tvl_usd)}
+                      apr={landCard.apy_percent}
                     />
                   )}
                   {topList === "Staking" && chain === "eth" && (
@@ -3121,6 +3127,8 @@ const EarnTopPicks = ({
                       chainId={chainId}
                       handleSwitchNetwork={handleSwitchNetwork}
                       handleConnection={handleConnection}
+                      apr={landCard.apy_percent}
+                        totalNftsLocked={landCard.total_nfts_locked}
                     />
                   )}
                 {activeCardNFT && (
@@ -5752,7 +5760,8 @@ const EarnTopPicks = ({
                         cardType={topList}
                         details={activeCardLandNFT === true ? true : false}
                         listType={listType}
-                        tvl={"$" + getFormattedNumber(cawsCard2.tvl_usd)}
+                        tvl={"$" + getFormattedNumber(landCard.tvl_usd)}
+                        apr={landCard.apy_percent}
                       />
                     )}
                     {activeCardLandNFT && (
@@ -5763,6 +5772,8 @@ const EarnTopPicks = ({
                         chainId={chainId}
                         handleSwitchNetwork={handleSwitchNetwork}
                         handleConnection={handleConnection}
+                        apr={landCard.apy_percent}
+                        totalNftsLocked={landCard.total_nfts_locked}
                       />
                     )}
                     {topList === "Staking" && chain === "eth" && (
