@@ -29,6 +29,8 @@ const LandDetails = ({
   chainId,
   handleConnection,
   renderedPage,
+  apr,
+  totalNftsLocked
 }) => {
   const [myNFTs, setMyNFTs] = useState([]);
   const [amountToStake, setamountToStake] = useState("");
@@ -262,7 +264,7 @@ const LandDetails = ({
               <div className="d-flex align-items-center justify-content-between gap-2">
                 <h6 className="earnrewards-text">APR:</h6>
                 <h6 className="earnrewards-token d-flex align-items-center gap-1">
-                  25%
+                  {apr}%
                   <Tooltip
                     placement="top"
                     title={
@@ -298,7 +300,7 @@ const LandDetails = ({
               <div className="d-flex align-items-center justify-content-between gap-2">
                 <h6 className="earnrewards-text">Total NFTs staked</h6>
                 <h6 className="earnrewards-token d-flex align-items-center gap-1">
-                  {totalStakes}/1000
+                  {totalNftsLocked}/1000
                 </h6>
               </div>
             </div>
@@ -363,7 +365,7 @@ const LandDetails = ({
 
                   <h6 className="mybalance-text">
                     Avaliable NFTs:{" "}
-                    <b>{isConnected === false ? 0 : myNFTs.length} Genesis Nfts</b>
+                    <b>{isConnected === false ? 0 : myNFTs.length} Genesis NFTs</b>
                   </h6>
                 </div>
                 <Tooltip

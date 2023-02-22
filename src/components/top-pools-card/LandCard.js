@@ -16,6 +16,7 @@ const LandCard = ({
   details,
   listType,
   tvl,
+  apr,
   network
   // showDetails,
 }) => {
@@ -63,7 +64,7 @@ const LandCard = ({
             </h6>
 
             <div className="d-flex align-items-baseline gap-1">
-              <h6 className="apr-amount">25%</h6>
+              <h6 className="apr-amount">{apr}%</h6>
               <h6 className="apr-title">APR</h6>
             </div>
           </div>
@@ -71,7 +72,7 @@ const LandCard = ({
             {cardType !== "Vault" && (
               <div className="d-flex flex-column">
                 <h6 className="tvl-text">Total Value Locked</h6>
-                <h6 className="tvl-amount">{'2500'}</h6>
+                <h6 className="tvl-amount">{tvl}</h6>
               </div>
             )}
             <div
