@@ -305,16 +305,16 @@ const Dashboard = ({
                       <LandCard
                       network={network.toString()}
                       onShowDetailsClick={() => {
-                        setActiveCard(2);
-                        setcardIndex(2);
-                        setDetails(2);
+                        setActiveCard(1);
+                        setcardIndex(1);
+                        setDetails(1);
                       }}
                       onHideDetailsClick={() => {
                         setActiveCard(null);
                         setDetails();
                       }}
                       cardType={"table"}
-                      details={details === 2 ? true : false}
+                      details={details === 1 ? true : false}
                       expired={false}
                         // tvl={"$" + getFormattedNumber(cawsCard2.tvl_usd)}
                       />
@@ -376,7 +376,7 @@ const Dashboard = ({
                   )}
                 </div>
                 {activeCard && network === 1 ? (
-                activeCard && network === 1 && cardIndex === 2 ? (
+                activeCard && network === 1 && cardIndex === 1 ? (
                     <LandDetails
                       coinbase={coinbase}
                       isConnected={isConnected}
@@ -385,7 +385,7 @@ const Dashboard = ({
                       handleSwitchNetwork={handleSwitchNetwork}
                       handleConnection={handleConnection}
                     />
-                  ) : activeCard && network === 1 && cardIndex === 1 ? (
+                  ) : activeCard && network === 1 && cardIndex === 0 ? (
                     <CawsDetails
                       coinbase={coinbase}
                       isConnected={isConnected}
@@ -516,6 +516,34 @@ const Dashboard = ({
             ) : (
               <div className="d-flex flex-column gap-4">
                 <div className="row m-0 gap-4 toppool-allwrapper">
+                { network === 1 && (
+                      <LandCard
+                      network={network.toString()}
+                      onShowDetailsClick={() => {
+                        setActiveCard(1);
+                        setcardIndex(1);
+                        setDetails(1);
+                      }}
+                      onHideDetailsClick={() => {
+                        setActiveCard(null);
+                        setDetails();
+                      }}
+                      cardType={"table"}
+                      details={details === 1 ? true : false}
+                      expired={false}
+                        // tvl={"$" + getFormattedNumber(cawsCard2.tvl_usd)}
+                      />
+                    )}
+                    {activeCard && network === 1 && cardIndex === 1 && (
+                    <LandDetails
+                      coinbase={coinbase}
+                      isConnected={isConnected}
+                      listType={"table"}
+                      chainId={network.toString()}
+                      handleSwitchNetwork={handleSwitchNetwork}
+                      handleConnection={handleConnection}
+                    />
+                  )}
                   {topPools.length > 0 && loading === false ? (
                     topPools.slice(0, 1).map((item, index) => {
                       return (
@@ -573,17 +601,7 @@ const Dashboard = ({
                     </div>
                   )}
                 </div>
-                {activeCard && network === 1 ? (
-                  network === 1 && cardIndex === 2 ? (
-                    <LandDetails
-                      coinbase={coinbase}
-                      isConnected={isConnected}
-                      listType={"table"}
-                      chainId={network.toString()}
-                      handleSwitchNetwork={handleSwitchNetwork}
-                      handleConnection={handleConnection}
-                    />
-                  ) : activeCard && network === 1 && cardIndex === 1 ? (
+                {activeCard && network === 1 && cardIndex === 0 && (
                     <CawsDetails
                       coinbase={coinbase}
                       isConnected={isConnected}
@@ -594,10 +612,9 @@ const Dashboard = ({
                       expired={false}
                       renderedPage={"dashboard"}
                     />
-                  ) : (
-                    <></>
-                  )
-                ) : activeCard && network === 56 && cardIndex === 0 ? (
+                  )}
+                {
+                 activeCard && network === 56 && cardIndex === 0 ? (
                   <StakeBsc
                     lp_id={LP_IDBNB_Array[cardIndex]}
                     staking={stakearrayStakeBscDyp2[1]}
@@ -711,6 +728,7 @@ const Dashboard = ({
                   <></>
                 )}
                 <div className="row m-0 gap-4 toppool-allwrapper">
+               
                   {topPools.length > 0 && loading === false ? (
                     topPools.slice(1, 2).map((item, index) => {
                       return (
@@ -778,7 +796,7 @@ const Dashboard = ({
                     handleSwitchNetwork={handleSwitchNetwork}
                     handleConnection={handleConnection}
                   />
-                  ) : activeCard2 && network === 1 && cardIndex === 1 ? (
+                  ) : activeCard2 && network === 1 && cardIndex === 0 ? (
                     <CawsDetails
                       coinbase={coinbase}
                       isConnected={isConnected}

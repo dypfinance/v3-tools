@@ -921,6 +921,16 @@ const EarnTopPicks = ({
                         tvl={"$" + getFormattedNumber(cawsCard2.tvl_usd)}
                       />
                     )}
+{activeCardLandNFT && (
+                    <LandDetails
+                      coinbase={coinbase}
+                      isConnected={isConnected}
+                      listType={listType}
+                      chainId={chainId}
+                      handleSwitchNetwork={handleSwitchNetwork}
+                      handleConnection={handleConnection}
+                    />
+                  )}
                     {topList === "Staking" && chain === "eth" && (
                       <CawsCard
                       network={chainId}
@@ -1014,16 +1024,6 @@ const EarnTopPicks = ({
                     />
                   )}
 
-{activeCardLandNFT && (
-                    <LandDetails
-                      coinbase={coinbase}
-                      isConnected={isConnected}
-                      listType={listType}
-                      chainId={chainId}
-                      handleSwitchNetwork={handleSwitchNetwork}
-                      handleConnection={handleConnection}
-                    />
-                  )}
 
                   {activeCard && topList === "Farming" ? (
                     chain === "eth" ? (
@@ -3019,6 +3019,16 @@ const EarnTopPicks = ({
                       />
                     )}
 
+{activeCardLandNFT && (
+                    <LandDetails
+                      coinbase={coinbase}
+                      isConnected={isConnected}
+                      listType={listType}
+                      chainId={chainId}
+                      handleSwitchNetwork={handleSwitchNetwork}
+                      handleConnection={handleConnection}
+                    />
+                  )}
                   {topList === "Staking" && chain === "eth" && (
                     <CawsCard
                       onShowDetailsClick={() => {
@@ -3124,16 +3134,6 @@ const EarnTopPicks = ({
                   />
                 )}
 
-{activeCardLandNFT && (
-                    <LandDetails
-                      coinbase={coinbase}
-                      isConnected={isConnected}
-                      listType={listType}
-                      chainId={chainId}
-                      handleSwitchNetwork={handleSwitchNetwork}
-                      handleConnection={handleConnection}
-                    />
-                  )}
                   
 
                 {activeCard &&
