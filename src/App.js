@@ -23,7 +23,7 @@ import navRadius from "./assets/navRadius.svg";
 import Governancedev from "./components/governance/dev/governance-new-avax";
 import Governancebsc from "./components/governance/dev/governance-new-bsc";
 import GovernanceEth from "./components/governance/dev/governance-new";
-
+import LandFlyout from './components/LandFlyout/LandFlyout'
 import Launchpad from "./components/launchpad/Launchpad";
 import LaunchpadForm from "./components/launchpad/launchpadform/LaunchpadForm";
 import LaunchpadDetails from "./components/launchpad/launchpaddetails/LaunchpadDetails";
@@ -452,7 +452,7 @@ class App extends React.Component {
         className={`page_wrapper ${this.state.isMinimized ? "minimize" : ""}`}
       >
         {/* <img src={navRadius} className="nav-radius" alt="" /> */}
-        {/* <LandPopup /> */}
+        <LandFlyout />
         <Route component={GoogleAnalyticsReporter} />
 
         <div className="body_overlay"></div>
