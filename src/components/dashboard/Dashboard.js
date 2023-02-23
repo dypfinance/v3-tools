@@ -22,6 +22,8 @@ import StakeBsc from "../FARMINNG/bscConstantStake";
 import StakeNewEth from "../FARMINNG/stakeNewEth";
 import StakeAvaxIDyp from "../FARMINNG/stakeAvaxiDyp";
 import StakeBscIDyp from "../FARMINNG/bscConstantStakeiDyp";
+import LandCard from "../top-pools-card/LandCard";
+import LandDetails from "../FARMINNG/land";
 
 const Dashboard = ({
   isConnected,
@@ -99,6 +101,9 @@ const Dashboard = ({
    
   };
 
+
+  const [landCard, setLandCard] = useState({})
+
   const fetchEthStaking = async () => {
     
       await axios
@@ -114,10 +119,11 @@ const Dashboard = ({
             return b.tvl_usd - a.tvl_usd;
           });
 
-          const finalEthCards = res.data.stakingInfoCAWS.concat(
-            sortedAprs.slice(0, 2)
-          );
-          setTopPools(finalEthCards.slice(0, 2));
+          const finalEthCards = res.data.stakingInfoCAWS ;
+          setTopPools(finalEthCards.slice(0, 1));
+
+          setLandCard(res.data.stakingInfoLAND[0])
+
         })
         .catch((err) => {
           console.log(err);
@@ -272,6 +278,8 @@ const Dashboard = ({
     fetchUserPools();
   }, [network, coinbase, loading]);
 
+
+
   const windowSize = useWindowSize();
 
   return (
@@ -301,6 +309,27 @@ const Dashboard = ({
             {windowSize.width > 786 ? (
               <div>
                 <div className="row m-0 gap-4 toppool-allwrapper">
+                { network === 1 && (
+                      <LandCard
+                      network={network.toString()}
+                      onShowDetailsClick={() => {
+                        setActiveCard(1);
+                        setcardIndex(1);
+                        setDetails(1);
+                      }}
+                      onHideDetailsClick={() => {
+                        setActiveCard(null);
+                        setDetails();
+                      }}
+                      cardType={"table"}
+                      details={details === 1 ? true : false}
+                      expired={false}
+                        // tvl={"$" + getFormattedNumber(cawsCard2.tvl_usd)}
+                        tvl={"$" + getFormattedNumber(landCard.tvl_usd)}
+                        apr={landCard.apy_percent}
+                      />
+                    )}
+
                   {topPools.length > 0 && loading === false ? (
                     topPools.slice(0, 2).map((item, index) => {
                       return (
@@ -357,27 +386,16 @@ const Dashboard = ({
                   )}
                 </div>
                 {activeCard && network === 1 ? (
-                  network === 1 && cardIndex === 1 ? (
-                    <StakeNewEth
-                      staking={window.constant_staking_newi3}
-                      apr={7.35}
-                      liquidity={eth_address}
-                      expiration_time={"11 January 2024"}
-                      finalApr={7.35}
-                      fee_s={0}
-                      lockTime={90}
-                      lp_id={lp_id[cardIndex]}
-                      listType={"table"}
-                      other_info={false}
-                      is_wallet_connected={isConnected}
+                activeCard && network === 1 && cardIndex === 1 ? (
+                    <LandDetails
                       coinbase={coinbase}
-                      the_graph_result={the_graph_result}
+                      isConnected={isConnected}
+                      listType={"table"}
                       chainId={network.toString()}
-                      handleConnection={handleConnection}
                       handleSwitchNetwork={handleSwitchNetwork}
-                      expired={false}
-                      referrer={referrer}
-                      totalTvl={topPools[1].tvl_usd}
+                      handleConnection={handleConnection}
+                      apr={landCard.apy_percent}
+                        totalNftsLocked={landCard.total_nfts_locked}
                     />
                   ) : activeCard && network === 1 && cardIndex === 0 ? (
                     <CawsDetails
@@ -510,6 +528,38 @@ const Dashboard = ({
             ) : (
               <div className="d-flex flex-column gap-4">
                 <div className="row m-0 gap-4 toppool-allwrapper">
+                { network === 1 && (
+                      <LandCard
+                      network={network.toString()}
+                      onShowDetailsClick={() => {
+                        setActiveCard(1);
+                        setcardIndex(1);
+                        setDetails(1);
+                      }}
+                      onHideDetailsClick={() => {
+                        setActiveCard(null);
+                        setDetails();
+                      }}
+                      cardType={"table"}
+                      details={details === 1 ? true : false}
+                      expired={false}
+                        // tvl={"$" + getFormattedNumber(cawsCard2.tvl_usd)}
+                        tvl={"$" + getFormattedNumber(landCard.tvl_usd)}
+                        apr={landCard.apy_percent}
+                      />
+                    )}
+                    {activeCard && network === 1 && cardIndex === 1 && (
+                    <LandDetails
+                      coinbase={coinbase}
+                      isConnected={isConnected}
+                      listType={"table"}
+                      chainId={network.toString()}
+                      handleSwitchNetwork={handleSwitchNetwork}
+                      handleConnection={handleConnection}
+                      apr={landCard.apy_percent}
+                        totalNftsLocked={landCard.total_nfts_locked}
+                    />
+                  )}
                   {topPools.length > 0 && loading === false ? (
                     topPools.slice(0, 1).map((item, index) => {
                       return (
@@ -567,30 +617,7 @@ const Dashboard = ({
                     </div>
                   )}
                 </div>
-                {activeCard && network === 1 ? (
-                  network === 1 && cardIndex === 1 ? (
-                    <StakeNewEth
-                      staking={window.constant_staking_newi3}
-                      apr={7.35}
-                      liquidity={eth_address}
-                      expiration_time={"11 January 2024"}
-                      finalApr={7.35}
-                      fee_s={0}
-                      lockTime={90}
-                      lp_id={lp_id[cardIndex]}
-                      listType={"table"}
-                      other_info={false}
-                      is_wallet_connected={isConnected}
-                      coinbase={coinbase}
-                      the_graph_result={the_graph_result}
-                      chainId={network.toString()}
-                      handleConnection={handleConnection}
-                      handleSwitchNetwork={handleSwitchNetwork}
-                      expired={false}
-                      referrer={referrer}
-                      totalTvl={topPools[1].tvl_usd}
-                    />
-                  ) : activeCard && network === 1 && cardIndex === 0 ? (
+                {activeCard && network === 1 && cardIndex === 0 && (
                     <CawsDetails
                       coinbase={coinbase}
                       isConnected={isConnected}
@@ -601,10 +628,9 @@ const Dashboard = ({
                       expired={false}
                       renderedPage={"dashboard"}
                     />
-                  ) : (
-                    <></>
-                  )
-                ) : activeCard && network === 56 && cardIndex === 0 ? (
+                  )}
+                {
+                 activeCard && network === 56 && cardIndex === 0 ? (
                   <StakeBsc
                     lp_id={LP_IDBNB_Array[cardIndex]}
                     staking={stakearrayStakeBscDyp2[1]}
@@ -718,6 +744,7 @@ const Dashboard = ({
                   <></>
                 )}
                 <div className="row m-0 gap-4 toppool-allwrapper">
+               
                   {topPools.length > 0 && loading === false ? (
                     topPools.slice(1, 2).map((item, index) => {
                       return (
@@ -776,28 +803,17 @@ const Dashboard = ({
                   )}
                 </div>
                 {activeCard2 && network === 1 ? (
-                  network === 1 && cardIndex === 1 ? (
-                    <StakeNewEth
-                      staking={window.constant_staking_newi3}
-                      apr={7.35}
-                      liquidity={eth_address}
-                      expiration_time={"11 January 2024"}
-                      finalApr={7.35}
-                      fee_s={0}
-                      lockTime={90}
-                      lp_id={lp_id[cardIndex]}
-                      listType={"table"}
-                      other_info={false}
-                      is_wallet_connected={isConnected}
-                      coinbase={coinbase}
-                      the_graph_result={the_graph_result}
-                      chainId={network.toString()}
-                      handleConnection={handleConnection}
-                      handleSwitchNetwork={handleSwitchNetwork}
-                      expired={false}
-                      referrer={referrer}
-                      totalTvl={topPools[1].tvl_usd}
-                    />
+                  network === 1 && cardIndex === 2 ? (
+                    <LandDetails
+                    coinbase={coinbase}
+                    isConnected={isConnected}
+                    listType={"table"}
+                    chainId={network.toString()}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    handleConnection={handleConnection}
+                    apr={landCard.apy_percent}
+                        totalNftsLocked={landCard.total_nfts_locked}
+                  />
                   ) : activeCard2 && network === 1 && cardIndex === 0 ? (
                     <CawsDetails
                       coinbase={coinbase}

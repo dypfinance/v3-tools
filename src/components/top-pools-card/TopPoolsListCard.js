@@ -25,6 +25,8 @@ import StakeEthDai from "../FARMINNG/constant-staking-dai-front";
 import StakeEth from "../FARMINNG/constant-staking-new-front";
 import Vault from "../FARMINNG/vault-new";
 import StakeNewEth from "../FARMINNG/stakeNewEth";
+import LandCard from "./LandCard";
+import LandDetails from "../FARMINNG/land";
 
 const TopPoolsListCard = ({
   tokenLogo,
@@ -80,7 +82,7 @@ const TopPoolsListCard = ({
     "xava",
     "link",
   ];
-  const [activeCardNFT, setActiveCardNFT] = useState(false);
+
   const [showDetails, setShowDetails] = useState(false);
   const [coins, setCoins] = useState(ethCoins);
   const [cardIndexiDyp, setcardIndexiDyp] = useState();

@@ -24,6 +24,8 @@ import StakeEthDai from "../../FARMINNG/constant-staking-dai-front";
 import StakeEth from "../../FARMINNG/constant-staking-new-front";
 import Vault from "../../FARMINNG/vault-new";
 import StakeNewEth from "../../FARMINNG/stakeNewEth";
+import LandCard from "../../top-pools-card/LandCard";
+import LandDetails from "../../FARMINNG/land";
 
 const EarnTopPicks = ({
   topList,
@@ -104,6 +106,7 @@ const EarnTopPicks = ({
   const [listing, setListing] = useState(listType);
   const [cawsCard, setCawsCard] = useState([]);
   const [cawsCard2, setCawsCard2] = useState([]);
+  const [landCard, setLandCard] = useState({})
   const [userPools, setuserPools] = useState([]);
 
   const [tvlTotal, setTvlTotal] = useState();
@@ -149,6 +152,7 @@ const EarnTopPicks = ({
         setTopPools(dypIdyp);
         setCawsCard(res.data.stakingInfoCAWS);
         setCawsCard2(res.data.stakingInfoCAWS[0]);
+        setLandCard(res.data.stakingInfoLAND[0])
       })
       .catch((err) => {
         console.log(err);
@@ -338,6 +342,7 @@ const EarnTopPicks = ({
   const [unfilteredPools, setUnfilteredPools] = useState([]);
   const [activeCard, setActiveCard] = useState();
   const [activeCardNFT, setActiveCardNFT] = useState();
+  const [activeCardLandNFT, setActiveCardLandNFT] = useState();
   const [activeCard2, setActiveCard2] = useState();
   const [activeCard3, setActiveCard3] = useState();
   const [activeCard4, setActiveCard4] = useState();
@@ -552,13 +557,6 @@ const EarnTopPicks = ({
   });
 
   const expirearrayStakeBscExpired = ["17 November 2022", "17 November 2022"];
-
-  const stakearrayStakeBscDyp2 = [
-    window.constant_stakingbsc_new10,
-    window.constant_stakingbsc_new11,
-  ];
-
-  const expirearrayStakeBscDyp2 = ["14 July 2023", "5 August 2023"];
 
   const stakearrayStakeBscExpired = [
     window.constant_stakingbsc_new13,
@@ -903,11 +901,35 @@ const EarnTopPicks = ({
                 <>
                   <div className="top-picks-container">
                     {topList === "Staking" && chain === "eth" && (
+                      <LandCard
+                        network={chainId}
+                        onShowDetailsClick={() => {
+                          setActiveCardNFT();
+                          setActiveCardLandNFT(true);
+                          setActiveCard(null);
+                          setActiveCard2(null);
+                          setActiveCard3(null);
+                          setActiveCard4(null);
+                          setDetails();
+                        }}
+                        onHideDetailsClick={() => {
+                          setActiveCardLandNFT(false);
+                          setDetails();
+                        }}
+                        cardType={topList}
+                        details={activeCardLandNFT === true ? true : false}
+                        listType={listType}
+                        tvl={"$" + getFormattedNumber(landCard.tvl_usd)}
+                        apr={landCard.apy_percent}
+                      />
+                    )}
+                  
+                    {topList === "Staking" && chain === "eth" && (
                       <CawsCard
-                      network={chainId}
-
+                        network={chainId}
                         onShowDetailsClick={() => {
                           setActiveCardNFT(true);
+                          setActiveCardLandNFT(false);
                           setActiveCard(null);
                           setActiveCard2(null);
                           setActiveCard3(null);
@@ -928,7 +950,7 @@ const EarnTopPicks = ({
                     {activePools
                       .slice(
                         0,
-                        topList === "Staking" && chain === "eth" ? 2 : 3
+                        topList === "Staking" && chain === "eth" ? 1 : 3
                       )
                       .map((pool, index) => (
                         <TopPoolsCard
@@ -956,6 +978,7 @@ const EarnTopPicks = ({
                             setActiveCard3(null);
                             setActiveCard4(null);
                             setActiveCardNFT(false);
+                          setActiveCardLandNFT(false);
                             handleCardIndexStake(index);
                             handleCardIndexStake30(index);
                             handleCardIndexStakeiDyp(index);
@@ -982,6 +1005,19 @@ const EarnTopPicks = ({
                         />
                       ))}
                   </div>
+
+                  {activeCardLandNFT && (
+                      <LandDetails
+                        coinbase={coinbase}
+                        isConnected={isConnected}
+                        listType={listType}
+                        chainId={chainId}
+                        handleSwitchNetwork={handleSwitchNetwork}
+                        handleConnection={handleConnection}
+                        apr={landCard.apy_percent}
+                        totalNftsLocked={landCard.total_nfts_locked}
+                      />
+                    )}
                   {activeCardNFT && (
                     <CawsDetails
                       coinbase={coinbase}
@@ -1577,8 +1613,8 @@ const EarnTopPicks = ({
                 >
                   {activePools
                     .slice(
-                      topList === "Staking" && chain === "eth" ? 2 : 3,
-                      topList === "Staking" && chain === "eth" ? 5 : 6
+                      topList === "Staking" && chain === "eth" ? 1 : 3,
+                      topList === "Staking" && chain === "eth" ? 4 : 6
                     )
                     .map((pool, index) => (
                       <TopPoolsCard
@@ -1634,21 +1670,22 @@ const EarnTopPicks = ({
                           );
                           setActiveCard3(null);
                           setActiveCardNFT(false);
+                          setActiveCardLandNFT(false)
                           handleCardIndexStake(
                             index +
-                              (topList === "Staking" && chain === "eth" ? 2 : 3)
+                              (topList === "Staking" && chain === "eth" ? 1 : 3)
                           );
                           handleCardIndexStake30(
                             index +
-                              (topList === "Staking" && chain === "eth" ? 2 : 3)
+                              (topList === "Staking" && chain === "eth" ? 1 : 3)
                           );
                           handleCardIndexStakeiDyp(
                             index +
-                              (topList === "Staking" && chain === "eth" ? 2 : 3)
+                              (topList === "Staking" && chain === "eth" ? 1 : 3)
                           );
                           setDetails(
                             index +
-                              (topList === "Staking" && chain === "eth" ? 2 : 3)
+                              (topList === "Staking" && chain === "eth" ? 1 : 3)
                           );
                         }}
                         onHideDetailsClick={() => {
@@ -1659,7 +1696,7 @@ const EarnTopPicks = ({
                         details={
                           details ===
                           index +
-                            (topList === "Staking" && chain === "eth" ? 2 : 3)
+                            (topList === "Staking" && chain === "eth" ? 1 : 3)
                             ? true
                             : false
                         }
@@ -2145,8 +2182,8 @@ const EarnTopPicks = ({
                 >
                   {activePools
                     .slice(
-                      topList === "Staking" && chain === "eth" ? 5 : 6,
-                      topList === "Staking" && chain === "eth" ? 8 : 9
+                      topList === "Staking" && chain === "eth" ? 4 : 6,
+                      topList === "Staking" && chain === "eth" ? 7 : 9
                     )
                     .map((pool, index) => (
                       <TopPoolsCard
@@ -2192,21 +2229,22 @@ const EarnTopPicks = ({
                             ]
                           );
                           setActiveCardNFT(false);
+                          setActiveCardLandNFT(false)
                           handleCardIndexStake(
                             index +
-                              (topList === "Staking" && chain === "eth" ? 5 : 6)
+                              (topList === "Staking" && chain === "eth" ? 4 : 6)
                           );
                           handleCardIndexStake30(
                             index +
-                              (topList === "Staking" && chain === "eth" ? 5 : 6)
+                              (topList === "Staking" && chain === "eth" ? 4 : 6)
                           );
                           handleCardIndexStakeiDyp(
                             index +
-                              (topList === "Staking" && chain === "eth" ? 5 : 6)
+                              (topList === "Staking" && chain === "eth" ? 4 : 6)
                           );
                           setDetails(
                             index +
-                              (topList === "Staking" && chain === "eth" ? 5 : 6)
+                              (topList === "Staking" && chain === "eth" ? 4 : 6)
                           );
                         }}
                         onHideDetailsClick={() => {
@@ -2217,7 +2255,7 @@ const EarnTopPicks = ({
                         details={
                           details ===
                           index +
-                            (topList === "Staking" && chain === "eth" ? 5 : 6)
+                            (topList === "Staking" && chain === "eth" ? 4 : 6)
                             ? true
                             : false
                         }
@@ -2628,6 +2666,7 @@ const EarnTopPicks = ({
                           setActiveCard3(null);
                           setActiveCard4(topPools[index + 9]);
                           setActiveCardNFT(false);
+                          setActiveCardLandNFT(false)
                           handleCardIndexStake(index + 9);
                           handleCardIndexStake30(index + 9);
                           handleCardIndexStakeiDyp(index + 9);
@@ -2963,9 +3002,33 @@ const EarnTopPicks = ({
               <div className="px-0">
                 <div className="top-picks-container">
                   {topList === "Staking" && chain === "eth" && (
+                    <LandCard
+                      network={chainId}
+                      onShowDetailsClick={() => {
+                        setActiveCardNFT();
+                        setActiveCardLandNFT(true);
+                        setActiveCard(null);
+                        setActiveCard2(null);
+                        setActiveCard3(null);
+                        setActiveCard4(null);
+                        setDetails();
+                      }}
+                      onHideDetailsClick={() => {
+                        setActiveCardLandNFT(false);
+                        setDetails();
+                      }}
+                      cardType={topList}
+                      details={activeCardLandNFT === true ? true : false}
+                      listType={listType}
+                      tvl={"$" + getFormattedNumber(landCard.tvl_usd)}
+                      apr={landCard.apy_percent}
+                    />
+                  )}
+                  {topList === "Staking" && chain === "eth" && (
                     <CawsCard
                       onShowDetailsClick={() => {
                         setActiveCardNFT(true);
+                        setActiveCardLandNFT(false);
                         setActiveCard(null);
                         setActiveCard2(null);
                         setActiveCard3(null);
@@ -2981,12 +3044,11 @@ const EarnTopPicks = ({
                       listType={listType}
                       tvl={"$" + getFormattedNumber(cawsCard2.tvl_usd)}
                       network={chainId}
-
                     />
                   )}
 
                   {activePools
-                    .slice(0, topList === "Staking" && chain === "eth" ? 1 : 2)
+                    .slice(0, topList === "Staking" && chain === "eth" ? 0 : 2)
                     .map((pool, index) => (
                       <TopPoolsCard
                         network={chainId}
@@ -3031,6 +3093,7 @@ const EarnTopPicks = ({
                           setActiveCard5(null);
                           setActiveCard6(null);
                           setActiveCardNFT(false);
+                        setActiveCardLandNFT(false);
                           handleCardIndexStake(index);
                           handleCardIndexStake30(index);
                           handleCardIndexStakeiDyp(index);
@@ -3056,6 +3119,18 @@ const EarnTopPicks = ({
                       />
                     ))}
                 </div>
+                {activeCardLandNFT && (
+                    <LandDetails
+                      coinbase={coinbase}
+                      isConnected={isConnected}
+                      listType={listType}
+                      chainId={chainId}
+                      handleSwitchNetwork={handleSwitchNetwork}
+                      handleConnection={handleConnection}
+                      apr={landCard.apy_percent}
+                        totalNftsLocked={landCard.total_nfts_locked}
+                    />
+                  )}
                 {activeCardNFT && (
                   <CawsDetails
                     coinbase={coinbase}
@@ -3122,6 +3197,63 @@ const EarnTopPicks = ({
                     expired={false}
                     referrer={referrer}
                     totalTvl={activePools[cardIndex].tvl_usd}
+                  />
+                ) : activeCard &&
+                  topList === "Staking" &&
+                  chain === "eth" &&
+                  activePools[cardIndex].id ===
+                    "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" ? (
+                  <StakeNewEth
+                    staking={window.constant_staking_newi3}
+                    apr={
+                      expiredPools === false
+                        ? activePools[cardIndex]?.apy_percent
+                        : expiredDYPPools[cardIndex]?.apy_percent
+                    }
+                    liquidity={eth_address}
+                    expiration_time={"11 January 2024"}
+                    finalApr={
+                      expiredPools === false
+                        ? activePools[cardIndex]?.apy_performancefee
+                        : expiredDYPPools[cardIndex]?.apy_performancefee
+                    }
+                    fee_s={0}
+                    lockTime={
+                      cardIndex !== undefined
+                        ? expiredPools === false
+                          ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
+                            "No"
+                            ? "No Lock"
+                            : activePools[cardIndex]?.lock_time?.split(" ")[0]
+                          : expiredDYPPools[cardIndex]?.lock_time?.split(
+                              " "
+                            )[0] === "No"
+                          ? "No Lock"
+                          : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
+                        : "No Lock"
+                    }
+                    lp_id={LP_IDBNB_Array[cardIndex]}
+                    listType={listType}
+                    other_info={
+                      cardIndex !== undefined
+                        ? expiredPools === false
+                          ? activePools[cardIndex]?.expired === "Yes"
+                            ? true
+                            : false
+                          : expiredDYPPools[cardIndex]?.expired === "Yes"
+                          ? true
+                          : false
+                        : false
+                    }
+                    totalTvl={activePools[cardIndex].tvl_usd}
+                    is_wallet_connected={isConnected}
+                    coinbase={coinbase}
+                    the_graph_result={the_graph_result}
+                    chainId={chainId}
+                    handleConnection={handleConnection}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    expired={false}
+                    referrer={referrer}
                   />
                 ) : activeCard &&
                   topList === "Staking" &&
@@ -3590,8 +3722,8 @@ const EarnTopPicks = ({
                 >
                   {activePools
                     .slice(
-                      topList === "Staking" && chain === "eth" ? 1 : 2,
-                      topList === "Staking" && chain === "eth" ? 3 : 4
+                      topList === "Staking" && chain === "eth" ? 0 : 2,
+                      topList === "Staking" && chain === "eth" ? 2 : 4
                     )
                     .map((pool, index) => (
                       <TopPoolsCard
@@ -3645,21 +3777,22 @@ const EarnTopPicks = ({
                           setActiveCard5(null);
                           setActiveCard6(null);
                           setActiveCardNFT(false);
+                          setActiveCardLandNFT(false)
                           handleCardIndexStake(
                             index +
-                              (topList === "Staking" && chain === "eth" ? 1 : 2)
+                              (topList === "Staking" && chain === "eth" ? 0 : 2)
                           );
                           handleCardIndexStake30(
                             index +
-                              (topList === "Staking" && chain === "eth" ? 1 : 2)
+                              (topList === "Staking" && chain === "eth" ? 0 : 2)
                           );
                           handleCardIndexStakeiDyp(
                             index +
-                              (topList === "Staking" && chain === "eth" ? 1 : 2)
+                              (topList === "Staking" && chain === "eth" ? 0 : 2)
                           );
                           setDetails(
                             index +
-                              (topList === "Staking" && chain === "eth" ? 1 : 2)
+                              (topList === "Staking" && chain === "eth" ? 0 : 2)
                           );
                         }}
                         onHideDetailsClick={() => {
@@ -3670,7 +3803,7 @@ const EarnTopPicks = ({
                         details={
                           details ===
                           index +
-                            (topList === "Staking" && chain === "eth" ? 1 : 2)
+                            (topList === "Staking" && chain === "eth" ? 0 : 2)
                             ? true
                             : false
                         }
@@ -3742,6 +3875,63 @@ const EarnTopPicks = ({
                           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
                         : "No Lock"
                     }
+                  />
+                ) : activeCard2 &&
+                  topList === "Staking" &&
+                  chain === "eth" &&
+                  activePools[cardIndex].id ===
+                    "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" ? (
+                  <StakeNewEth
+                    staking={window.constant_staking_newi3}
+                    apr={
+                      expiredPools === false
+                        ? activePools[cardIndex]?.apy_percent
+                        : expiredDYPPools[cardIndex]?.apy_percent
+                    }
+                    liquidity={eth_address}
+                    expiration_time={"11 January 2024"}
+                    finalApr={
+                      expiredPools === false
+                        ? activePools[cardIndex]?.apy_performancefee
+                        : expiredDYPPools[cardIndex]?.apy_performancefee
+                    }
+                    fee_s={0}
+                    lockTime={
+                      cardIndex !== undefined
+                        ? expiredPools === false
+                          ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
+                            "No"
+                            ? "No Lock"
+                            : activePools[cardIndex]?.lock_time?.split(" ")[0]
+                          : expiredDYPPools[cardIndex]?.lock_time?.split(
+                              " "
+                            )[0] === "No"
+                          ? "No Lock"
+                          : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
+                        : "No Lock"
+                    }
+                    lp_id={LP_IDBNB_Array[cardIndex]}
+                    listType={listType}
+                    other_info={
+                      cardIndex !== undefined
+                        ? expiredPools === false
+                          ? activePools[cardIndex]?.expired === "Yes"
+                            ? true
+                            : false
+                          : expiredDYPPools[cardIndex]?.expired === "Yes"
+                          ? true
+                          : false
+                        : false
+                    }
+                    totalTvl={activePools[cardIndex].tvl_usd}
+                    is_wallet_connected={isConnected}
+                    coinbase={coinbase}
+                    the_graph_result={the_graph_result}
+                    chainId={chainId}
+                    handleConnection={handleConnection}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    expired={false}
+                    referrer={referrer}
                   />
                 ) : activeCard2 &&
                   topList === "Staking" &&
@@ -4086,7 +4276,7 @@ const EarnTopPicks = ({
                   className="top-picks-container"
                   style={{ marginTop: "25px" }}
                 >
-                  {activePools.slice(4, 6).map((pool, index) => (
+                  {activePools.slice(2, 4).map((pool, index) => (
                     <TopPoolsCard
                       network={chainId}
                       display={
@@ -4126,15 +4316,16 @@ const EarnTopPicks = ({
                       onShowDetailsClick={() => {
                         setActiveCard(null);
                         setActiveCard2(null);
-                        setActiveCard3(topPools[index + 4]);
+                        setActiveCard3(topPools[index + 2]);
                         setActiveCard4(null);
                         setActiveCard5(null);
                         setActiveCard6(null);
                         setActiveCardNFT(false);
-                        handleCardIndexStake(index + 4);
-                        handleCardIndexStake30(index + 4);
-                        handleCardIndexStakeiDyp(index + 4);
-                        setDetails(index + 4);
+                        setActiveCardLandNFT(false)
+                        handleCardIndexStake(index + 2);
+                        handleCardIndexStake30(index + 2);
+                        handleCardIndexStakeiDyp(index + 2);
+                        setDetails(index + 2);
                       }}
                       onHideDetailsClick={() => {
                         setActiveCard3(null);
@@ -4464,7 +4655,7 @@ const EarnTopPicks = ({
                   className="top-picks-container"
                   style={{ marginTop: "25px" }}
                 >
-                  {activePools.slice(6, 8).map((pool, index) => (
+                  {activePools.slice(4, 6).map((pool, index) => (
                     <TopPoolsCard
                       network={chainId}
                       display={
@@ -4505,14 +4696,15 @@ const EarnTopPicks = ({
                         setActiveCard(null);
                         setActiveCard2(null);
                         setActiveCard3(null);
-                        setActiveCard4(topPools[index + 6]);
+                        setActiveCard4(topPools[index + 4]);
                         setActiveCard5(null);
                         setActiveCard6(null);
                         setActiveCardNFT(false);
-                        handleCardIndexStake(index + 6);
-                        handleCardIndexStake30(index + 6);
-                        handleCardIndexStakeiDyp(index + 6);
-                        setDetails(index + 6);
+                        setActiveCardLandNFT(false)
+                        handleCardIndexStake(index + 4);
+                        handleCardIndexStake30(index + 4);
+                        handleCardIndexStakeiDyp(index + 4);
+                        setDetails(index + 4);
                       }}
                       onHideDetailsClick={() => {
                         setActiveCard4(null);
@@ -4843,7 +5035,7 @@ const EarnTopPicks = ({
                   style={{ marginTop: activePools.length > 8 && "25px" }}
                 >
                   {activePools
-                    .slice(8, activePools.length)
+                    .slice(6, activePools.length)
                     .map((pool, index) => (
                       <TopPoolsCard
                         network={chainId}
@@ -4886,20 +5078,21 @@ const EarnTopPicks = ({
                           setActiveCard2(null);
                           setActiveCard3(null);
                           setActiveCard4(null);
-                          setActiveCard5(topPools[index + 8]);
+                          setActiveCard5(topPools[index + 6]);
                           setActiveCard6(null);
                           setActiveCardNFT(false);
-                          handleCardIndexStake(index + 8);
-                          handleCardIndexStake30(index + 8);
-                          handleCardIndexStakeiDyp(index + 8);
-                          setDetails(index + 8);
+                          setActiveCardLandNFT(false)
+                          handleCardIndexStake(index + 6);
+                          handleCardIndexStake30(index + 6);
+                          handleCardIndexStakeiDyp(index + 6);
+                          setDetails(index + 6);
                         }}
                         onHideDetailsClick={() => {
                           setActiveCard5(null);
                           setDetails();
                         }}
                         cardType={topList}
-                        details={details === index + 8 ? true : false}
+                        details={details === index + 6 ? true : false}
                         isNewPool={pool.new_pool === "Yes" ? true : false}
                         isStaked={
                           userPools.length > 0
@@ -5269,6 +5462,7 @@ const EarnTopPicks = ({
                           setActiveCard5(null);
                           setActiveCard6(topPools[index + 10]);
                           setActiveCardNFT(false);
+                          setActiveCardLandNFT(false)
                           handleCardIndexStake(index + 10);
                           handleCardIndexStake30(index + 10);
                           handleCardIndexStakeiDyp(index + 10);
@@ -5548,9 +5742,45 @@ const EarnTopPicks = ({
                 <>
                   <div className="top-picks-container">
                     {topList === "Staking" && chain === "eth" && (
+                      <LandCard
+                        network={chainId}
+                        onShowDetailsClick={() => {
+                          setActiveCardNFT();
+                          setActiveCardLandNFT(true);
+                          setActiveCard(null);
+                          setActiveCard2(null);
+                          setActiveCard3(null);
+                          setActiveCard4(null);
+                          setDetails();
+                        }}
+                        onHideDetailsClick={() => {
+                          setActiveCardLandNFT(false);
+                          setDetails();
+                        }}
+                        cardType={topList}
+                        details={activeCardLandNFT === true ? true : false}
+                        listType={listType}
+                        tvl={"$" + getFormattedNumber(landCard.tvl_usd)}
+                        apr={landCard.apy_percent}
+                      />
+                    )}
+                    {activeCardLandNFT && (
+                      <LandDetails
+                        coinbase={coinbase}
+                        isConnected={isConnected}
+                        listType={listType}
+                        chainId={chainId}
+                        handleSwitchNetwork={handleSwitchNetwork}
+                        handleConnection={handleConnection}
+                        apr={landCard.apy_percent}
+                        totalNftsLocked={landCard.total_nfts_locked}
+                      />
+                    )}
+                    {topList === "Staking" && chain === "eth" && (
                       <CawsCard
                         onShowDetailsClick={() => {
                           setActiveCardNFT(true);
+                          setActiveCardLandNFT(false);
                           setActiveCard(null);
                           setActiveCard2(null);
                           setActiveCard3(null);
@@ -5565,11 +5795,10 @@ const EarnTopPicks = ({
                         details={activeCardNFT === true ? true : false}
                         listType={listType}
                         tvl={"$" + getFormattedNumber(cawsCard2.tvl_usd)}
-                      network={chainId}
-
+                        network={chainId}
                       />
                     )}
-                    {activeCardNFT && (
+                       {activeCardNFT && (
                       <CawsDetails
                         coinbase={coinbase}
                         isConnected={isConnected}
@@ -5579,6 +5808,7 @@ const EarnTopPicks = ({
                         handleConnection={handleConnection}
                       />
                     )}
+                    
                     {activePools.slice(0, 1).map((pool, index) => (
                       <TopPoolsCard
                         network={chainId}
@@ -5630,6 +5860,7 @@ const EarnTopPicks = ({
                           setActiveCard11(null);
                           setActiveCard12(null);
                           setActiveCardNFT(false);
+                          setActiveCardLandNFT(false);
                           handleCardIndexStake(index);
                           handleCardIndexStake30(index);
                           handleCardIndexStakeiDyp(index);
@@ -5654,7 +5885,6 @@ const EarnTopPicks = ({
                       />
                     ))}
                   </div>
-
                   {activeCard &&
                   topList === "Staking" &&
                   activePools[cardIndex].id ===
@@ -6130,6 +6360,7 @@ const EarnTopPicks = ({
                           setActiveCard11(null);
                           setActiveCard12(null);
                           setActiveCardNFT(false);
+                          setActiveCardLandNFT(false)
                           handleCardIndexStake(index + 1);
                           handleCardIndexStake30(index + 1);
                           handleCardIndexStakeiDyp(index + 1);
@@ -6154,6 +6385,17 @@ const EarnTopPicks = ({
                       />
                     ))}
                   </div>
+                  {activeCardNFT && (
+                    <CawsDetails
+                      coinbase={coinbase}
+                      isConnected={isConnected}
+                      listType={listType}
+                      chainId={chainId}
+                      handleSwitchNetwork={handleSwitchNetwork}
+                      handleConnection={handleConnection}
+                    />
+                  )}
+
                   {activeCard2 &&
                   topList === "Staking" &&
                   chain === "eth" &&
@@ -6610,6 +6852,7 @@ const EarnTopPicks = ({
                           setActiveCard11(null);
                           setActiveCard12(null);
                           setActiveCardNFT(false);
+                          setActiveCardLandNFT(false)
                           handleCardIndexStake(index + 2);
                           handleCardIndexStake30(index + 2);
                           handleCardIndexStakeiDyp(index + 2);
@@ -7159,6 +7402,7 @@ const EarnTopPicks = ({
                           setActiveCard11(null);
                           setActiveCard12(null);
                           setActiveCardNFT(false);
+                          setActiveCardLandNFT(false)
                           handleCardIndexStake(index + 3);
                           handleCardIndexStake30(index + 3);
                           handleCardIndexStakeiDyp(index + 3);
@@ -7722,6 +7966,7 @@ const EarnTopPicks = ({
                           setActiveCard11(null);
                           setActiveCard12(null);
                           setActiveCardNFT(false);
+                          setActiveCardLandNFT(false)
                           handleCardIndexStake(index + 4);
                           handleCardIndexStake30(index + 4);
                           handleCardIndexStakeiDyp(index + 4);
@@ -8182,6 +8427,7 @@ const EarnTopPicks = ({
                           setActiveCard11(null);
                           setActiveCard12(null);
                           setActiveCardNFT(false);
+                          setActiveCardLandNFT(false)
                           handleCardIndexStake(index + 5);
                           handleCardIndexStake30(index + 5);
                           handleCardIndexStakeiDyp(index + 5);
@@ -8627,6 +8873,7 @@ const EarnTopPicks = ({
                           setActiveCard11(null);
                           setActiveCard12(null);
                           setActiveCardNFT(false);
+                          setActiveCardLandNFT(false)
                           handleCardIndexStake(index + 6);
                           handleCardIndexStake30(index + 6);
                           handleCardIndexStakeiDyp(index + 6);
@@ -9011,6 +9258,7 @@ const EarnTopPicks = ({
                           setActiveCard11(null);
                           setActiveCard12(null);
                           setActiveCardNFT(false);
+                          setActiveCardLandNFT(false)
                           handleCardIndexStake(index + 7);
                           handleCardIndexStake30(index + 7);
                           handleCardIndexStakeiDyp(index + 7);
@@ -9395,6 +9643,7 @@ const EarnTopPicks = ({
                           setActiveCard11(null);
                           setActiveCard12(null);
                           setActiveCardNFT(false);
+                          setActiveCardLandNFT(false)
                           handleCardIndexStake(index + 8);
                           handleCardIndexStake30(index + 8);
                           handleCardIndexStakeiDyp(index + 8);
@@ -9760,6 +10009,7 @@ const EarnTopPicks = ({
                           setActiveCard11(null);
                           setActiveCard12(null);
                           setActiveCardNFT(false);
+                          setActiveCardLandNFT(false)
                           handleCardIndexStake(index + 9);
                           handleCardIndexStake30(index + 9);
                           handleCardIndexStakeiDyp(index + 9);
@@ -10125,6 +10375,7 @@ const EarnTopPicks = ({
                           setActiveCard11(topPools[index + 10]);
                           setActiveCard12(null);
                           setActiveCardNFT(false);
+                          setActiveCardLandNFT(false)
                           handleCardIndexStake(index + 10);
                           handleCardIndexStake30(index + 10);
                           handleCardIndexStakeiDyp(index + 10);
@@ -10491,6 +10742,7 @@ const EarnTopPicks = ({
                             setActiveCard11(null);
                             setActiveCard12(topPools[index + 11]);
                             setActiveCardNFT(false);
+                          setActiveCardLandNFT(false)
                             handleCardIndexStake(index + 11);
                             handleCardIndexStake30(index + 11);
                             handleCardIndexStakeiDyp(index + 11);
@@ -10841,6 +11093,7 @@ const EarnTopPicks = ({
                     listType={listType}
                     onShowDetailsClick={() => {
                       setActiveCardNFT(true);
+                      setActiveCardLandNFT(false)
                       setActiveCard(null);
                       setActiveCard2(null);
                       setActiveCard3(null);
@@ -10974,6 +11227,7 @@ const EarnTopPicks = ({
                       setActiveCard3(null);
                       setActiveCard4(null);
                       setActiveCardNFT(false);
+                      setActiveCardLandNFT(false)
                       handleCardIndexStake(index);
                       handleCardIndexStake30(index);
                       // handleCardIndexStakeiDyp(index);
@@ -11787,6 +12041,7 @@ const EarnTopPicks = ({
                     setActiveCard2(topPools[index + 3]);
                     setActiveCard3(null);
                     setActiveCardNFT(false);
+                    setActiveCardLandNFT(false)
                     handleCardIndexStake(index + 3);
                     handleCardIndexStake30(index + 3);
                     handleCardIndexStakeiDyp(index + 3);
@@ -12585,6 +12840,7 @@ const EarnTopPicks = ({
                     setActiveCard2(null);
                     setActiveCard3(topPools[index + 6]);
                     setActiveCardNFT(false);
+                    setActiveCardLandNFT(false)
                     handleCardIndexStake(index + 6);
                     handleCardIndexStake30(index + 6);
                     handleCardIndexStakeiDyp(index + 6);
@@ -13387,6 +13643,7 @@ const EarnTopPicks = ({
                       setActiveCard3(null);
                       setActiveCard4(topPools[index + 9]);
                       setActiveCardNFT(false);
+                      setActiveCardLandNFT(false);
                       handleCardIndexStake(index + 9);
                       handleCardIndexStake30(index + 9);
                       handleCardIndexStakeiDyp(index + 9);
@@ -13972,6 +14229,7 @@ const EarnTopPicks = ({
                     setActiveCard5(null);
                     setActiveCard6(null);
                     setActiveCardNFT(false);
+                    setActiveCardLandNFT(false)
                     handleCardIndexStake(index);
                     handleCardIndexStake30(index);
                     handleCardIndexStakeiDyp(index);
@@ -14781,6 +15039,7 @@ const EarnTopPicks = ({
                     setActiveCard5(null);
                     setActiveCard6(null);
                     setActiveCardNFT(false);
+                    setActiveCardLandNFT(false)
                     handleCardIndexStake(index + 2);
                     handleCardIndexStake30(index + 2);
                     handleCardIndexStakeiDyp(index + 2);
@@ -15588,6 +15847,7 @@ const EarnTopPicks = ({
                     setActiveCard5(null);
                     setActiveCard6(null);
                     setActiveCardNFT(false);
+                    setActiveCardLandNFT(false)
                     handleCardIndexStake(index + 4);
                     handleCardIndexStake30(index + 4);
                     handleCardIndexStakeiDyp(index + 4);
@@ -16391,6 +16651,7 @@ const EarnTopPicks = ({
                     setActiveCard5(null);
                     setActiveCard6(null);
                     setActiveCardNFT(false);
+                    setActiveCardLandNFT(false)
                     handleCardIndexStake(index + 9);
                     handleCardIndexStake30(index + 9);
                     handleCardIndexStakeiDyp(index + 9);
@@ -16978,6 +17239,7 @@ const EarnTopPicks = ({
                     setActiveCard5(topPools[index + 12]);
                     setActiveCard6(null);
                     setActiveCardNFT(false);
+                    setActiveCardLandNFT(false)
                     handleCardIndexStake(index + 12);
                     handleCardIndexStake30(index + 12);
                     handleCardIndexStakeiDyp(index + 12);
@@ -17567,6 +17829,7 @@ const EarnTopPicks = ({
                       setActiveCard5(null);
                       setActiveCard6(topPools[index + 15]);
                       setActiveCardNFT(false);
+                      setActiveCardLandNFT(false)
                       handleCardIndexStake(index + 15);
                       handleCardIndexStake30(index + 15);
                       handleCardIndexStakeiDyp(index + 15);
@@ -18161,6 +18424,7 @@ const EarnTopPicks = ({
                       setActiveCard11(null);
                       setActiveCard12(null);
                       setActiveCardNFT(false);
+                      setActiveCardLandNFT(false)
                       handleCardIndexStake(index);
                       handleCardIndexStake30(index);
                       handleCardIndexStakeiDyp(index);
@@ -18987,6 +19251,7 @@ const EarnTopPicks = ({
                       setActiveCard11(null);
                       setActiveCard12(null);
                       setActiveCardNFT(false);
+                      setActiveCardLandNFT(false)
                       handleCardIndexStake(index + 1);
                       handleCardIndexStake30(index + 1);
                       handleCardIndexStakeiDyp(index + 1);
@@ -19813,6 +20078,7 @@ const EarnTopPicks = ({
                       setActiveCard11(null);
                       setActiveCard12(null);
                       setActiveCardNFT(false);
+                      setActiveCardLandNFT(false)
                       handleCardIndexStake(index + 2);
                       handleCardIndexStake30(index + 2);
                       handleCardIndexStakeiDyp(index + 2);
@@ -20639,6 +20905,7 @@ const EarnTopPicks = ({
                       setActiveCard11(null);
                       setActiveCard12(null);
                       setActiveCardNFT(false);
+                      setActiveCardLandNFT(false)
                       handleCardIndexStake(index + 3);
                       handleCardIndexStake30(index + 3);
                       handleCardIndexStakeiDyp(index + 3);
@@ -21465,6 +21732,7 @@ const EarnTopPicks = ({
                       setActiveCard11(null);
                       setActiveCard12(null);
                       setActiveCardNFT(false);
+                      setActiveCardLandNFT(false)
                       handleCardIndexStake(index + 4);
                       handleCardIndexStake30(index + 4);
                       handleCardIndexStakeiDyp(index + 4);
@@ -22291,6 +22559,7 @@ const EarnTopPicks = ({
                       setActiveCard11(null);
                       setActiveCard12(null);
                       setActiveCardNFT(false);
+                      setActiveCardLandNFT(false)
                       handleCardIndexStake(index + 5);
                       handleCardIndexStake30(index + 5);
                       handleCardIndexStakeiDyp(index + 5);
@@ -23117,6 +23386,7 @@ const EarnTopPicks = ({
                       setActiveCard11(null);
                       setActiveCard12(null);
                       setActiveCardNFT(false);
+                      setActiveCardLandNFT(false)
                       handleCardIndexStake(index + 6);
                       handleCardIndexStake30(index + 6);
                       handleCardIndexStakeiDyp(index + 6);
@@ -23568,6 +23838,7 @@ const EarnTopPicks = ({
                       setActiveCard11(null);
                       setActiveCard12(null);
                       setActiveCardNFT(false);
+                      setActiveCardLandNFT(false)
                       handleCardIndexStake(index + 7);
                       handleCardIndexStake30(index + 7);
                       handleCardIndexStakeiDyp(index + 7);
@@ -24019,6 +24290,7 @@ const EarnTopPicks = ({
                       setActiveCard11(null);
                       setActiveCard12(null);
                       setActiveCardNFT(false);
+                      setActiveCardLandNFT(false)
                       handleCardIndexStake(index + 8);
                       handleCardIndexStake30(index + 8);
                       handleCardIndexStakeiDyp(index + 8);
@@ -24414,6 +24686,7 @@ const EarnTopPicks = ({
                       setActiveCard11(null);
                       setActiveCard12(null);
                       setActiveCardNFT(false);
+                      setActiveCardLandNFT(false)
                       handleCardIndexStake(index + 9);
                       handleCardIndexStake30(index + 9);
                       handleCardIndexStakeiDyp(index + 9);
@@ -24809,6 +25082,7 @@ const EarnTopPicks = ({
                       setActiveCard11(topPools[index + 10]);
                       setActiveCard12(null);
                       setActiveCardNFT(false);
+                      setActiveCardLandNFT(false)
                       handleCardIndexStake(index + 10);
                       handleCardIndexStake30(index + 10);
                       handleCardIndexStakeiDyp(index + 10);
@@ -25206,6 +25480,7 @@ const EarnTopPicks = ({
                         setActiveCard11(null);
                         setActiveCard12(topPools[index + 11]);
                         setActiveCardNFT(false);
+                        setActiveCardLandNFT(false)
                         handleCardIndexStake(index + 11);
                         handleCardIndexStake30(index + 11);
                         handleCardIndexStakeiDyp(index + 11);
