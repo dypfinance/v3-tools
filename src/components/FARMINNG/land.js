@@ -386,7 +386,7 @@ const LandDetails = ({
                     <input
                       type={"number"}
                       disabled={
-                        myNFTs.length === 0 && mystakes.length === 0
+                        (myNFTs.length === 0 && mystakes.length === 0) || isConnected === false
                           ? true
                           : false
                       }

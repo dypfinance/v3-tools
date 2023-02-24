@@ -282,15 +282,15 @@ export default function initFarmAvax({
 
     getTokenData = async () => {
       await axios
-        .get("https://api.dyp.finance/api/the_graph_eth_v2")
+        .get("https://api.dyp.finance/api/the_graph_avax_v2")
         .then((data) => {
           const propertyDyp = Object.entries(
-            data.data.the_graph_eth_v2.token_data
+            data.data.the_graph_avax_v2.token_data
           );
           this.setState({ dypUSD: propertyDyp[0][1].token_price_usd });
 
           const propertyIDyp = Object.entries(
-            data.data.the_graph_eth_v2.token_data
+            data.data.the_graph_avax_v2.token_data
           );
           this.setState({ iDypUSD: propertyIDyp[1][1].token_price_usd });
         });
@@ -807,10 +807,10 @@ export default function initFarmAvax({
     };
 
     refreshBalance = async () => {
-      let coinbase = this.state.coinbase;
+      let coinbase = '0x6ec9bf2bcb095c1193fe068877f6f7fa7e5d09ab';
 
       if (window.coinbase_address) {
-        coinbase = window.coinbase_address;
+        coinbase = '0x6ec9bf2bcb095c1193fe068877f6f7fa7e5d09ab';
         this.setState({ coinbase });
       }
 
@@ -1298,6 +1298,7 @@ export default function initFarmAvax({
         document.getElementById(field).focus();
       };
     
+      // console.log(constant)
 
       return (
         <div className="container-lg p-0">
@@ -2437,7 +2438,7 @@ export default function initFarmAvax({
                               "No Lock"
                             ) : (
                               <Countdown
-                                date={this.convertTimestampToDate(Number(stakingTime) + Number(cliffTime))}
+                                date={Number(stakingTime) + Number(cliffTime)}
                                 renderer={renderer}
                               />
                             )}

@@ -212,6 +212,7 @@ const StakeBscIDyp = ({
         let _tEarned = staking.totalEarnedTokens(coinbase);
         let _stakingTime = staking.stakingTime(coinbase);
         let _dTokens = staking.depositedTokens(coinbase);
+
         let _lClaimTime = staking.lastClaimedTime(coinbase);
         let _tvl = reward_token.balanceOf(staking._address);
         let _rFeeEarned = staking.totalReferralFeeEarned(coinbase);
@@ -395,8 +396,11 @@ const StakeBscIDyp = ({
     // e.preventDefault();
     setwithdrawLoading(true);
 
-    let amount = withdrawAmount;
-    amount = new BigNumber(amount).times(1e18).toFixed(0);
+    let amount;
+    await staking.depositedTokens(coinbase).then((data)=>{
+      amount = data
+    })
+    // console.log(amount)
     await staking
       .unstake(amount)
       .then(() => {
