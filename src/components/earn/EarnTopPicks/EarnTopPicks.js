@@ -796,11 +796,11 @@ const EarnTopPicks = ({
 
     setCustomPool(null);
 
-    if (chain === "eth") {
+    if (networkId === "1" && expiredPools === true && topList === 'Farming') {
       fetchEthFarming();
-    } else if (chain === "bnb") {
+    } else if (networkId === "56" && expiredPools === true && topList === 'Farming') {
       fetchBscFarming();
-    } else if (chain === "avax") {
+    } else if (networkId === "43114" && expiredPools === true && topList === 'Farming') {
       fetchAvaxFarming();
     }
     setShowDetails(false);
@@ -808,12 +808,11 @@ const EarnTopPicks = ({
   }, [
     topList,
     listType,
-    chain,
+    networkId,
     expiredPools,
-    coinbase,
-    chainId,
     customChain,
     routeOption,
+    chain
   ]);
 
   useEffect(() => {
@@ -832,12 +831,7 @@ const EarnTopPicks = ({
         setActivePools([]);
         setExpiredPools([]);
       }, 500);
-    } else if (topList === "Farming") {
-      setTopPools([]);
-      setTimeout(() => {
-        setTopPools(farming);
-      }, 500);
-    }
+    }  
   }, [topList, chainId, chain, coinbase]);
 
   useEffect(() => {
@@ -860,7 +854,8 @@ const EarnTopPicks = ({
       }
     }
   }, [topList, chain, coinbase, networkId, chainId, expiredPools, listType]);
-
+  
+  
   const handleCardIndexStake = (index) => {
     if (topList === "Staking") {
       if (index >= 3) {

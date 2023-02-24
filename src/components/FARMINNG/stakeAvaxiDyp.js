@@ -393,8 +393,11 @@ const StakeAvaxIDyp = ({
     // e.preventDefault();
     setwithdrawLoading(true);
 
-    let amount = withdrawAmount;
-    amount = new BigNumber(amount).times(1e18).toFixed(0);
+    let amount;
+    await staking.depositedTokens(coinbase).then((data)=>{
+      amount = data
+    })
+    
     await staking
       .unstake(amount)
       .then(() => {

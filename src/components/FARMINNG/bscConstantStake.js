@@ -315,7 +315,7 @@ const StakeBsc = ({
 
         let depositedTokens_formatted = new BigNumber(depositedTokens)
           .div(1e18)
-          .toFixed(2);
+          .toFixed(6);
 
         setdepositedTokens(depositedTokens_formatted);
 
@@ -432,12 +432,16 @@ const StakeBsc = ({
       });
   };
 
-  const handleWithdraw = (e) => {
+  const handleWithdraw = async (e) => {
     //   e.preventDefault();
     setwithdrawLoading(true);
-    let amount = withdrawAmount;
-    amount = new BigNumber(amount).times(1e18).toFixed(0);
-    staking
+    let amount;
+    await staking.depositedTokens(coinbase).then((data)=>{
+      amount = data
+    })
+    // console.log(amount)
+
+    await staking
       .unstake(amount)
       .then(() => {
         setwithdrawStatus("success");
@@ -617,8 +621,6 @@ const StakeBsc = ({
     }
   }
 
-  // console.log(Number(stakingTime) + Number(cliffTime) , Date.now()/1000)
-  
   let tvl_usd = tvl * tokendata;
 
   let tvlDYPS = tvlDyps / 1e18;
