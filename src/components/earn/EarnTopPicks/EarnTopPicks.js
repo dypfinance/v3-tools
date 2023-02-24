@@ -4276,7 +4276,7 @@ const EarnTopPicks = ({
                   className="top-picks-container"
                   style={{ marginTop: "25px" }}
                 >
-                  {activePools.slice(2, 4).map((pool, index) => (
+                  {activePools.slice(3, 4).map((pool, index) => (
                     <TopPoolsCard
                       network={chainId}
                       display={
