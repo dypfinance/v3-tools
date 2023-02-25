@@ -257,7 +257,7 @@ const NftStakingCawChecklist = ({
                       <p id="earnedText" color="#C0C9FF">Earned</p>
                       <h6 className="rewardstxtCaws d-flex align-items-center gap-2 mb-2" style={{fontSize: 16}}>
                         <img src={require("./weth.svg").default} alt="" style={{height: 20, width: 20}}/>{" "}
-                       {getFormattedNumber(EthRewards, 2)} ETH 
+                       {getFormattedNumber(EthRewards, 2)} WETH 
                       </h6>
 
                       {/* <div>

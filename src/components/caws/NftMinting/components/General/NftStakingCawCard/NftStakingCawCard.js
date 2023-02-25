@@ -113,7 +113,7 @@ const NftStakingCawCard = ({
       <div className="earnwrapper" style={{ margin: "auto" }}>
         <p style={{ color: "#999999", fontSize: 12 }}>Pending</p>
         <div>
-          <p id="ethPrice">{getFormattedNumber(EthRewards, 2)}ETH</p>
+          <p id="ethPrice">{getFormattedNumber(EthRewards, 2)} WETH</p>
           <p id="fiatPrice">{formattedNum(ethToUSD, true)}</p>
         </div>
         {/* <img src={EthLogo} alt="" style={{ width: 24, height: 24 }} /> */}
