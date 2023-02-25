@@ -221,7 +221,7 @@ const MyStakes = ({
                       <p>Pending</p>
                       <div>
                         <p id="ethPrice">
-                          {getFormattedNumber(ETHrewards, 2)}ETH
+                          {getFormattedNumber(ETHrewards, 2)} WETH
                         </p>
                         <p id="fiatPrice">{formattedNum(ethToUSD, true)}</p>
                       </div>

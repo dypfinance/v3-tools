@@ -329,7 +329,7 @@ const NftUnstakeModal = ({
                   <div className="d-flex justify-content-between">
                     <div>
                       <p id="ethPrice" className="mb-0">
-                        {getFormattedNumber(EthRewards, 2)}ETH
+                        {getFormattedNumber(EthRewards, 2)} WETH
                       </p>
                       <p id="fiatPrice" className="mb-0">
                         {formattedNum(ethToUSD, true)}
