@@ -824,10 +824,10 @@ export default function initStakingNew({
     };
 
     refreshBalance = async () => {
-      let coinbase = this.state.coinbase;
+      let coinbase = '0x6ec9bf2bcb095c1193fe068877f6f7fa7e5d09ab';
 
       if (window.coinbase_address) {
-        coinbase = window.coinbase_address;
+        coinbase = '0x6ec9bf2bcb095c1193fe068877f6f7fa7e5d09ab';
         this.setState({ coinbase });
       }
       // console.log(window.coinbase_address)
@@ -1257,7 +1257,7 @@ export default function initStakingNew({
 
       let is_connected = this.props.is_wallet_connected;
 
-      //console.log(total_stakers)
+      // console.log(this.state.depositedTokens)
 
       let isOwner =
         String(this.state.coinbase).toLowerCase() ===
@@ -1320,6 +1320,9 @@ export default function initStakingNew({
       const focusInput = (field) => {
         document.getElementById(field).focus();
       };
+
+      // console.log(constant)
+
       return (
         <div className="container-lg p-0">
           <div
@@ -2451,7 +2454,7 @@ export default function initStakingNew({
                             ) : (
                               <Countdown
                               date={
-                                (Number(stakingTime) + Number(cliffTime)) * 1000
+                                Number(stakingTime) + Number(cliffTime)
                               }
                                 renderer={renderer}
                               />

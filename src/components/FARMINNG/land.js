@@ -386,7 +386,7 @@ const LandDetails = ({
                     <input
                       type={"number"}
                       disabled={
-                        myNFTs.length === 0 && mystakes.length === 0
+                        (myNFTs.length === 0 && mystakes.length === 0) || isConnected === false
                           ? true
                           : false
                       }
@@ -458,7 +458,7 @@ const LandDetails = ({
                 <div className="d-flex align-items-center justify-content-between gap-2"></div>
                 <div className="form-row d-flex gap-2 align-items-end justify-content-between">
                   <h6 className="rewardstxtCaws d-flex align-items-center gap-2">
-                    <img src={weth} alt="" /> {getFormattedNumber(EthRewards, 6) } ETH ($
+                    <img src={weth} alt="" /> {getFormattedNumber(EthRewards, 6) } WETH ($
                     {getFormattedNumber(ethToUSD, 6)})
                   </h6>
                   <button

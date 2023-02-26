@@ -196,6 +196,10 @@ export default function initBscFarming({
         depositTooltip: false,
         rewardsTooltip: false,
         withdrawTooltip: false,
+        iDypUSD: 0,
+        dypUSD: 0,
+
+
       };
 
       this.showModal = this.showModal.bind(this);
@@ -265,6 +269,8 @@ export default function initBscFarming({
       }
 
       this.getPriceDYP();
+      this.getTokenData();
+
       // this.refreshBalance();
       window._refreshBalInterval = setInterval(this.refreshBalance, 3000);
     }
@@ -272,6 +278,24 @@ export default function initBscFarming({
     componentWillUnmount() {
       clearInterval(window._refreshBalInterval);
     }
+
+    getTokenData = async () => {
+      await axios
+        .get("https://api.dyp.finance/api/the_graph_bsc_v2")
+        .then((data) => {
+          const propertyDyp = Object.entries(
+            data.data.the_graph_bsc_v2.token_data
+          );
+          this.setState({ dypUSD: propertyDyp[0][1].token_price_usd });
+
+          const propertyIDyp = Object.entries(
+            data.data.the_graph_bsc_v2.token_data
+          );
+          this.setState({ iDypUSD: propertyIDyp[1][1].token_price_usd });
+        });
+    };
+
+
 
     getPriceDYP = async () => {
       let usdPerToken = await window.getPrice("defi-yield-protocol");
@@ -1095,6 +1119,7 @@ export default function initBscFarming({
       tvl = new BigNumber(this.state.tvlUSD * LP_AMPLIFY_FACTOR)
         .div(1e18)
         .toString(10);
+        
       tvl = getFormattedNumber(tvl, 2);
 
       stakingTime = stakingTime * 1e3;
@@ -1900,7 +1925,7 @@ export default function initBscFarming({
                         className={`btn filledbtn ${
                           this.state.claimStatus === "claimed" ||
                           this.state.selectedPool === "" ||
-                          this.state.selectedPool === "wavax2" ||
+                          this.state.selectedPool === "wbnb2" ||
                           this.state.selectedPool === "dyp2"
                             ? "disabled-btn"
                             : this.state.claimStatus === "failed"
@@ -1911,7 +1936,7 @@ export default function initBscFarming({
                         } d-flex justify-content-center align-items-center`}
                         style={{ height: "fit-content" }}
                         onClick={() => {
-                          this.state.selectedPool === "wavax"
+                          this.state.selectedPool === "wbnb"
                             ? this.handleClaimDivs()
                             : this.handleClaimDyp();
                         }}
@@ -2093,7 +2118,7 @@ export default function initBscFarming({
                       </span>
                       <h6 className="stats-card-content">{tvl} iDYP/WBNB</h6>
                       <span className="stats-usd-value">
-                        ${getFormattedNumber(tvl * this.state.iDypUSD)}
+                        {/* ${getFormattedNumber(tvl * this.state.iDypUSD)} */}
                       </span>
                     </div>
                     <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
@@ -2102,10 +2127,10 @@ export default function initBscFarming({
                         {reward_token_balance} DYP
                       </h6>
                       <span className="stats-usd-value">
-                        $
+                        {/* $
                         {getFormattedNumber(
                           reward_token_balance * this.state.dypUSD
-                        )}
+                        )} */}
                       </span>
                     </div>
                     <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
@@ -2347,7 +2372,7 @@ export default function initBscFarming({
                               "No Lock"
                             ) : (
                               <Countdown
-                                date={this.convertTimestampToDate(Number(stakingTime) + Number(cliffTime))}
+                                date={Number(stakingTime) + Number(cliffTime)}
                                 renderer={renderer}
                               />
                             )}
@@ -2397,7 +2422,7 @@ export default function initBscFarming({
                                     className="withsubtitle"
                                     style={{ padding: "5px 0 0 15px" }}
                                   >
-                                    Value
+                                    Withdraw Token
                                   </h6>
 
                                   <input
@@ -2479,30 +2504,7 @@ export default function initBscFarming({
                                 className="d-flex w-100 align-items-center justify-content-center claimreward-header"
                                 // style={{ padding: "10px 0 0 10px" }}
                               >
-                                {/* <img
-                                src={
-                                  require(`./assets/${this.state.selectedRewardTokenLogo1.toLowerCase()}.svg`)
-                                    .default
-                                }
-                                alt=""
-                                style={{ width: 14, height: 14 }}
-                              />
-                              <select
-                                disabled={!is_connected}
-                                value={this.state.selectedClaimToken}
-                                onChange={(e) => {
-                                  this.handleClaimToken(e.target.value);
-                                  this.setState({
-                                    selectedRewardTokenLogo1:
-                                      e.target.value === "1" ? "usdt" : "weth",
-                                  });
-                                }}
-                                className=" inputfarming"
-                                style={{ border: "none" }}
-                              >
-                                <option value="0"> WETH </option>
-                                <option value="1"> USDT </option>
-                              </select> */}
+                                 
                                 <div class="dropdown">
                                   <button
                                     class="btn reward-dropdown inputfarming d-flex align-items-center justify-content-center gap-1"
@@ -2534,7 +2536,7 @@ export default function initBscFarming({
                                       onClick={() => {
                                         this.handleClaimToken("1");
                                         this.setState({
-                                          selectedRewardTokenLogo1: "wbnb2",
+                                          selectedRewardTokenLogo1: "wbnb",
                                         });
                                       }}
                                     >

@@ -158,12 +158,8 @@ class App extends React.Component {
     // }.bind(this))
 
     let coinbase = this.state.coinbase;
-    // let subscribedPlatformTokenAmount;
     let subscribedPlatformTokenAmountETH;
     let subscribedPlatformTokenAmountAvax;
-
-    // subscribedPlatformTokenAmountETH =
-    //   await window.subscriptionPlatformTokenAmount(coinbase);
 
     const web3eth = new Web3(
       "https://mainnet.infura.io/v3/94608dc6ddba490697ec4f9b723b586e"
@@ -183,27 +179,25 @@ class App extends React.Component {
     if (coinbase) {
       subscribedPlatformTokenAmountETH = await ethcontract.methods
         .subscriptionPlatformTokenAmount(coinbase)
-        .call()
-        .then();
+        .call();
 
       subscribedPlatformTokenAmountAvax = await avaxcontract.methods
         .subscriptionPlatformTokenAmount(coinbase)
-        .call()
-        .then();
-
+        .call();
+        
       if (
-        subscribedPlatformTokenAmountAvax === 0 &&
-        subscribedPlatformTokenAmountETH === 0
+        subscribedPlatformTokenAmountAvax === '0' &&
+        subscribedPlatformTokenAmountETH === '0'
       ) {
         this.setState({ subscribedPlatformTokenAmount: "0", isPremium: false });
       }
-      if (subscribedPlatformTokenAmountAvax > 0) {
+      if (subscribedPlatformTokenAmountAvax !== '0') {
         this.setState({
           subscribedPlatformTokenAmount: subscribedPlatformTokenAmountAvax,
           isPremium: true,
         });
       }
-      if (subscribedPlatformTokenAmountETH > 0) {
+      if (subscribedPlatformTokenAmountETH !== '0') {
         this.setState({
           subscribedPlatformTokenAmount: subscribedPlatformTokenAmountETH,
           isPremium: true,
@@ -321,6 +315,7 @@ class App extends React.Component {
     window.addEventListener("resize", this.updateWindowDimensions);
     this.checkConnection();
     this.checkNetworkId();
+    this.refreshSubscription()
 
     if (window.ethereum) {
       this.handleEthereum();
