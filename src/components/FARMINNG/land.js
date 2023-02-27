@@ -306,7 +306,7 @@ const LandDetails = ({
             </div>
             <div className="d-flex align-items-center justify-content-between gap-3">
               <a
-                href="https://www.worldofdypians.com/land"
+                href="https://opensea.io/collection/worldofdypians"
                 target="_blank"
                 rel="noreferrer"
               >
