@@ -334,7 +334,7 @@ class App extends React.Component {
     };
     let { theme } = this.state;
     document.body.classList.add(toBeAdded[theme]);
-    this.subscriptionInterval = setInterval(this.refreshSubscription, 5e3);
+    // this.subscriptionInterval = setInterval(this.refreshSubscription, 6e4);
   }
 
   checkConnection = () => {
@@ -366,7 +366,7 @@ class App extends React.Component {
     this.checkConnection();
   };
   componentWillUnmount() {
-    clearInterval(this.subscriptionInterval);
+    // clearInterval(this.subscriptionInterval);
     window.removeEventListener("resize", this.updateWindowDimensions);
   }
 

@@ -224,28 +224,23 @@ const EarnTopPicks = ({
       .get("https://api.dyp.finance/api/the_graph_eth_v2")
       .then((res) => {
         let temparray = Object.entries(res.data.the_graph_eth_v2.lp_data);
-        // let farming = [];
+        let farming2 = [];
+
         temparray.map((item) => {
-          farming.push(item[1]);
+          farming2.push(item[1]);
         });
 
-        const expiredFarmingEth = farming.filter((item) => {
+        const expiredFarmingEth = farming2.filter((item) => {
           return item.expired !== "No";
         });
-        const activeFarmingEth = farming.filter((item) => {
-          return item.expired !== "Yes";
-        });
 
-        const sortedActive = activeFarmingEth.sort(function (a, b) {
-          return b.tvl_usd - a.tvl_usd;
-        });
         const sortedExpired = expiredFarmingEth.sort(function (a, b) {
           return b.tvl_usd - a.tvl_usd;
         });
+        setTopPools(sortedExpired);
 
-        setActivePools(sortedActive);
         setExpiredPools(sortedExpired);
-        setFarming(farming);
+        // setFarming(farming);
       })
       .catch((err) => console.error(err));
   };
@@ -254,25 +249,20 @@ const EarnTopPicks = ({
       .get("https://api.dyp.finance/api/the_graph_bsc_v2")
       .then((res) => {
         let temparray = Object.entries(res.data.the_graph_bsc_v2.lp_data);
-        // let farming = [];
+        let farming2 = [];
         temparray.map((item) => {
-          farming.push(item[1]);
+          farming2.push(item[1]);
         });
-        const expiredFarmingBsc = farming.filter((item) => {
+        const expiredFarmingBsc = farming2.filter((item) => {
           return item.expired !== "No";
         });
-        const activeFarmingBsc = farming.filter((item) => {
-          return item.expired !== "Yes";
-        });
-
-        const sortedActive = activeFarmingBsc.sort(function (a, b) {
-          return b.tvl_usd - a.tvl_usd;
-        });
+        
+        
         const sortedExpired = expiredFarmingBsc.sort(function (a, b) {
           return b.tvl_usd - a.tvl_usd;
         });
+        setTopPools(sortedExpired);
 
-        setActivePools(sortedActive);
         setExpiredPools(sortedExpired);
       })
       .catch((err) => console.error(err));
@@ -282,64 +272,27 @@ const EarnTopPicks = ({
       .get("https://api.dyp.finance/api/the_graph_avax_v2")
       .then((res) => {
         let temparray = Object.entries(res.data.the_graph_avax_v2.lp_data);
-        // let farming = [];
+        let farming2 = [];
         temparray.map((item) => {
-          farming.push(item[1]);
+          farming2.push(item[1]);
         });
-        const expiredFarmingAvax = farming.filter((item) => {
+        const expiredFarmingAvax = farming2.filter((item) => {
           return item.expired !== "No";
         });
-        const activeFarmingAvax = farming.filter((item) => {
-          return item.expired !== "Yes";
-        });
-
-        const sortedActive = activeFarmingAvax.sort(function (a, b) {
-          return b.tvl_usd - a.tvl_usd;
-        });
+   
         const sortedExpired = expiredFarmingAvax.sort(function (a, b) {
           return b.tvl_usd - a.tvl_usd;
         });
+        setTopPools(sortedExpired);
 
-        setActivePools(sortedActive);
         setExpiredPools(sortedExpired);
       })
       .catch((err) => console.error(err));
   };
 
-  const fetchEthBuyback = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_buyback_info_eth`)
-      .then((res) => {
-        setTopPools(res.data.BuybackETHInfo);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  const fetchBnbBuyback = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_buyback_info_bnb`)
-      .then((res) => {
-        setTopPools(res.data.BuybackBNBInfo);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  const fetchAvaxBuyback = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_buyback_info_avax`)
-      .then((res) => {
-        setTopPools(res.data.BuybackAVAXInfo);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+
   const [customPool, setCustomPool] = useState(pool);
 
-  const [filteredPools, setFilteredPools] = useState([]);
-  const [unfilteredPools, setUnfilteredPools] = useState([]);
   const [activeCard, setActiveCard] = useState();
   const [activeCardNFT, setActiveCardNFT] = useState();
   const [activeCardLandNFT, setActiveCardLandNFT] = useState();
@@ -796,11 +749,11 @@ const EarnTopPicks = ({
 
     setCustomPool(null);
 
-    if (networkId === "1" && expiredPools === true && topList === 'Farming') {
+    if (networkId === "1" && topList === 'Farming') {
       fetchEthFarming();
-    } else if (networkId === "56" && expiredPools === true && topList === 'Farming') {
+    } else if (networkId === "56" && topList === 'Farming') {
       fetchBscFarming();
-    } else if (networkId === "43114" && expiredPools === true && topList === 'Farming') {
+    } else if (networkId === "43114" && topList === 'Farming') {
       fetchAvaxFarming();
     }
     setShowDetails(false);
