@@ -336,7 +336,7 @@ export default function initStakingNew({
     getPriceDYP = async () => {
       let usdPerToken = await window.getPrice("defi-yield-protocol");
       this.setState({ usdPerToken });
-      console.log(usdPerToken);
+      // console.log(usdPerToken);
     };
 
     handleDeposit = (e) => {
