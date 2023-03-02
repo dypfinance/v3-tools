@@ -23,6 +23,31 @@
   grid-template-columns: repeat(4, 1fr);
 }
 
+.cawscontaier-open {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+@media only screen and (max-width: 600px) {
+  .cawscontaier, .cawscontaier-open {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+
+}
+
+@media only screen and (max-width: 756px) {
+  .cawscontaier, .cawscontaier-open {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .cawscontaier {
+    position: relative;
+    left: auto;
+    top: auto;
+  }
+}
+
 .account-username{
   font-weight: 600;
 font-size: 24px;

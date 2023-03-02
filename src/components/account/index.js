@@ -13,6 +13,7 @@ import openNameChange from "./assets/openNameChange.svg";
 import { ClickAwayListener, Tooltip } from "@material-ui/core";
 import { shortAddress } from "../../functions/shortAddress";
 import TopPoolsCard from "../top-pools-card/TopPoolsCard";
+import useWindowSize from "../../functions/useWindowSize";
 
 const { BigNumber } = window;
 
@@ -42,8 +43,9 @@ export default class Subscription extends React.Component {
       showRemovebtn: false,
       subscribe_now: false,
       usdtAddress: "0xdac17f958d2ee523a2206206994597c13d831ec7",
-      usdteAddress: '0xc7198437980c041c805a1edcba50c1ce5db95118',
+      usdteAddress: "0xc7198437980c041c805a1edcba50c1ce5db95118",
       triggerText: "See more V",
+      isApproved: false,
       myNFTs: [],
       myStakess: [],
       viewall: false,
@@ -260,8 +262,7 @@ export default class Subscription extends React.Component {
           window.config.subscriptioneth_tokens
         )[0],
       });
-    }
-  else if (this.props.networkId !== 1) {
+    } else if (this.props.networkId !== 1) {
       this.setState({
         selectedSubscriptionToken: Object.keys(
           window.config.subscription_tokens
@@ -274,7 +275,6 @@ export default class Subscription extends React.Component {
         this.setState({ favorites: favorites });
       })
       .catch(console.error);
- 
   }
 
   fetchUsername = async () => {
@@ -317,7 +317,7 @@ export default class Subscription extends React.Component {
   };
 
   getDypBalance = async () => {
-    let account = this.props.coinbase
+    let account = this.props.coinbase;
     const web3eth = new Web3(
       "https://mainnet.infura.io/v3/94608dc6ddba490697ec4f9b723b586e"
     );
@@ -337,14 +337,14 @@ export default class Subscription extends React.Component {
         .then((data) => {
           return web3eth.utils.fromWei(data, "ether");
         });
-        
+
       const balavax = await contract2.methods
         .balanceOf(walletAddress)
         .call()
         .then((data) => {
           return web3avax.utils.fromWei(data, "ether");
         });
-        
+
       const balbnb = await contract3.methods
         .balanceOf(walletAddress)
         .call()
@@ -352,38 +352,21 @@ export default class Subscription extends React.Component {
           return web3bsc.utils.fromWei(data, "ether");
         });
 
-        if (this.props.networkId === 43114) {
-          this.setState({ dypBalance: balavax });
-        } else if (this.props.networkId === 1) {
-          this.setState({ dypBalance: baleth });
-        } else if (this.props.networkId === 56) {
-          this.setState({ dypBalance: balbnb });
-        } else this.setState({ dypBalance: "0.0" });
-        
+      if (this.props.networkId === 43114) {
+        this.setState({ dypBalance: balavax });
+      } else if (this.props.networkId === 1) {
+        this.setState({ dypBalance: baleth });
+      } else if (this.props.networkId === 56) {
+        this.setState({ dypBalance: balbnb });
+      } else this.setState({ dypBalance: "0.0" });
     }
-
   };
 
   componentDidUpdate(prevProps) {
     // Typical usage (don't forget to compare props):
     if (this.props.coinbase !== prevProps.coinbase) {
       this.fetchUserPools();
-    }
-
-    if (this.props.networkId !== prevProps.networkId) {
-     
-      if(this.props.networkId === 43114) {
-      this.handleSubscriptionTokenChange(this.state.usdteAddress);   
-      }
-      else if(this.props.networkId === 1){
-        this.handleSubscriptionTokenChange(this.state.usdtAddress);}
-    }
-  }
-
-  componentDidMount() {
-    window._refreshBalIntervalDyp = setInterval(this.getDypBalance, 2000);
-
-    setTimeout(() => {
+      this.getDypBalance();
       this.fetchAvatar();
       this.fetchUsername();
       this.fetchUserPools();
@@ -393,14 +376,29 @@ export default class Subscription extends React.Component {
       this.fetchBscFarming();
       this.fetchEthFarming();
       this.fetchEthStaking();
-    }, 300);
-    if (this.props.networkId === 1) {
-      this.fetchfavData();
-      this.myNft().then();
-      this.myStakes().then();
-      // window._refreshBalInterval = setInterval(this.myNft, 1000);
-      // window._refreshBalInterval2 = setInterval(this.myStakes, 1000);
+
+      if (this.props.networkId === 1) {
+        this.myNft().then();
+        this.myStakes().then();
+      }
     }
+
+    if (this.props.networkId !== prevProps.networkId) {
+      this.getDypBalance();
+
+      if (this.props.networkId === 43114) {
+        this.handleSubscriptionTokenChange(this.state.usdteAddress);
+      } else if (this.props.networkId === 1) {
+        this.handleSubscriptionTokenChange(this.state.usdtAddress);
+        this.myNft().then();
+        this.myStakes().then();
+      }
+    }
+  }
+
+  componentDidMount() {
+    // window._refreshBalIntervalDyp = setInterval(this.getDypBalance, 2000);
+    this.getDypBalance();
 
     this.setState({ coinbase: this.props.coinbase });
 
@@ -419,7 +417,7 @@ export default class Subscription extends React.Component {
       clearInterval(window._refreshBalInterval);
       clearInterval(window._refreshBalInterval2);
     }
-    clearInterval(window._refreshBalIntervalDyp);
+    // clearInterval(window._refreshBalIntervalDyp);
 
     window.removeOneTimeWalletConnectionListener(this.onComponentMount);
   }
@@ -433,8 +431,10 @@ export default class Subscription extends React.Component {
   };
 
   handleSubscriptionTokenChange = async (tokenAddress) => {
-   
-    const token = this.props.networkId === 1 ? this.state.usdtAddress : this.state.usdteAddress
+    const token =
+      this.props.networkId === 1
+        ? this.state.usdtAddress
+        : this.state.usdteAddress;
     let tokenDecimals =
       this.props.networkId === 1
         ? window.config.subscriptioneth_tokens[token]?.decimals
@@ -445,7 +445,7 @@ export default class Subscription extends React.Component {
       formattedPrice: "",
       price: "",
     });
-    
+
     let price =
       this.props.networkId === 1
         ? await window.getEstimatedTokenSubscriptionAmountETH(token)
@@ -478,7 +478,7 @@ export default class Subscription extends React.Component {
 
   getStakesIds = async () => {
     const address = this.props.coinbase;
-    if (address !== null  && this.props.coinbase !== undefined) {
+    if (address !== null && this.props.coinbase !== undefined) {
       let staking_contract = await window.getContractNFT("NFTSTAKING");
       let stakenft = [];
       let myStakes = await staking_contract.methods
@@ -509,7 +509,7 @@ export default class Subscription extends React.Component {
       address: this.state.selectedSubscriptionToken,
       ABI: window.ERC20_ABI,
     });
-    
+
     this.setState({ loadspinner: true });
 
     await tokenContract.methods
@@ -523,7 +523,9 @@ export default class Subscription extends React.Component {
       .then(() => {
         this.setState({ lockActive: true });
         this.setState({ loadspinner: false });
-        this.handleSubscribe();
+        this.setState({ isApproved: true });
+
+        // this.handleSubscribe();
       })
       .catch((e) => {
         this.setState({ status: "An error occurred. Please try again" });
@@ -554,9 +556,11 @@ export default class Subscription extends React.Component {
         if (result != 0) {
           this.setState({ lockActive: true });
           this.setState({ loadspinner: false });
+          this.setState({ isApproved: true });
         } else if (result == 0) {
           this.setState({ lockActive: false });
           this.setState({ loadspinner: false });
+          this.setState({ isApproved: false });
         }
       } else {
         const result = await subscribeTokencontract.methods
@@ -567,9 +571,11 @@ export default class Subscription extends React.Component {
         if (result != 0) {
           this.setState({ lockActive: true });
           this.setState({ loadspinner: false });
+          this.setState({ isApproved: true });
         } else if (result == 0) {
           this.setState({ lockActive: false });
           this.setState({ loadspinner: false });
+          this.setState({ isApproved: false });
         }
       }
     }
@@ -761,7 +767,6 @@ export default class Subscription extends React.Component {
       "Guaranteed allocation to presales of new projects launched using our Launchpad",
     ];
 
-
     const handleTooltipClose = () => {
       this.setState({ openTooltip: false });
     };
@@ -769,8 +774,6 @@ export default class Subscription extends React.Component {
     const handleTooltipOpen = () => {
       this.setState({ openTooltip: true });
     };
-
-
 
     return (
       <div>
@@ -890,7 +893,7 @@ export default class Subscription extends React.Component {
               <div className="d-flex flex-column">
                 <span className="dyp-amount-placeholder">Balance:</span>
                 <h6 className="account-dyp-amount">
-                  { getFormattedNumber(this.state.dypBalance,6) } DYP{" "}
+                  {getFormattedNumber(this.state.dypBalance, 6)} DYP{" "}
                 </h6>
               </div>
               <div className="position-relative">
@@ -1046,7 +1049,7 @@ export default class Subscription extends React.Component {
                             Lifetime subscription{" "}
                           </h3>
                           <p className="subscr-subtitle">
-                          The subscription tokens will be used to buy DYP
+                            The subscription tokens will be used to buy DYP
                           </p>
                           {/* <p className="subscr-note">
                         *When you unsubscribe the DYP will be unlocked and sent to
@@ -1059,7 +1062,7 @@ export default class Subscription extends React.Component {
                               src="/assets/img/usdt.svg"
                               width={28}
                               height={28}
-                              alt=''
+                              alt=""
                             ></img>
                             <h3 className="subscr-price">75 USDT</h3>
                           </div>
@@ -1239,9 +1242,25 @@ export default class Subscription extends React.Component {
                   </div>
                   <button
                     className="btn success-button px-4"
-                    onClick={(e) => this.handleApprove(e)}
+                    onClick={(e) =>
+                      this.state.isApproved === false
+                        ? this.handleApprove(e)
+                        : this.handleSubscribe()
+                    }
                   >
-                    Subscribe
+                    {this.state.isApproved === true &&
+                    this.state.loadspinner === false ? (
+                      "Subscribe"
+                    ) : this.state.isApproved === false &&
+                      this.state.loadspinner === false ? (
+                      "Approve"
+                    ) : (
+                      <div
+                        className="spinner-border "
+                        role="status"
+                        style={{ height: "1.5rem", width: "1.5rem" }}
+                      ></div>
+                    )}
                   </button>
                 </div>
               </div>
@@ -1893,22 +1912,44 @@ export default class Subscription extends React.Component {
             </div>
           </>
         )}
-        <div className="mycawsCollection position-relative mb-5" style={{marginTop: mycaws.length === 0 ? '6rem' : ''}}>
-          <div className="d-flex gap-2 justify-content-between align-items-center">
-            <div className="col-2">
+        <div
+          className="mycawsCollection position-relative mb-5"
+          style={{ marginTop: mycaws.length === 0 ? "6rem" : "" }}
+        >
+          <div className="d-flex flex-column flex-xxl-row flex-lg-row flex-md-row gap-2 justify-content-between align-items-center">
+            <div className="col-xxl-2 col-lg-2 col-12 col-md-2">
               <h6 className="mycawscollection-title">My Caws Collection</h6>
             </div>
-            <div className="cawscontaier">
+            <div
+              className={
+                this.state.viewall === false
+                  ? "cawscontaier"
+                  : "cawscontaier-open"
+              }
+            >
               {mycaws.length > 0 &&
                 this.props.coinbase !== null &&
                 mycaws
-                  .slice(0, this.state.viewall === false ? 4 : mycaws.length)
+                  .slice(
+                    0,
+                    this.state.viewall === false && window.innerWidth > 756
+                      ? 4
+                      : this.state.viewall === false &&
+                        window.innerWidth <= 756 &&
+                        window.innerWidth > 500
+                      ? 2
+                      : this.state.viewall === false && window.innerWidth <= 500
+                      ? 1
+                      : mycaws.length
+                  )
                   .map((item, id) => {
                     return (
                       <NftCawCard
                         key={id}
                         nft={item}
-                        action={() => {}}
+                        action={() => {
+                          window.location.assign("/earn");
+                        }}
                         modalId="#newNftStake"
                         coinbase={this.props.coinbase}
                       />
@@ -1919,16 +1960,13 @@ export default class Subscription extends React.Component {
               className="outline-btn"
               style={{
                 height: "fit-content",
-                display:
-                  this.state.viewall === false && mycaws.length > 4
-                    ? "block"
-                    : "none",
+                display: mycaws.length > 4 ? "block" : "none",
               }}
               onClick={() => {
-                this.setState({ viewall: true });
+                this.setState({ viewall: !this.state.viewall });
               }}
             >
-              View all
+              {this.state.viewall === false ? " View all" : "View less"}
             </button>
           </div>
         </div>
