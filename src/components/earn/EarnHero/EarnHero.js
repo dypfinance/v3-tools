@@ -36,7 +36,7 @@ const EarnHero = () => {
       <div className="col-12 col-lg-5 px-0 px-lg-2 d-flex flex-column justify-content-center gap-3">
         <h3 className="text-white" style={{whiteSpace: 'pre'}}>Dypius Earn</h3>
         <p className="text-white ">
-        Make the most of your assets with Dypius Earn products. Dypius offers four ways to productively use your assets. Participate in Staking, Farming, Vault and Buyback. Start earning today!
+        Make the most of your assets with Dypius Earn products. Dypius offers three ways to productively use your assets. Participate in Staking, Farming and Vault. Start earning today!
         </p>
       </div>
       <div className="col-12 col-lg-7 px-0 px-lg-2 d-flex gap-3 gap-lg-4 flex-column flex-lg-row">
