@@ -45,6 +45,7 @@ export default class Subscription extends React.Component {
       usdtAddress: "0xdac17f958d2ee523a2206206994597c13d831ec7",
       usdteAddress: "0xc7198437980c041c805a1edcba50c1ce5db95118",
       triggerText: "See more V",
+      isApproved: false,
       myNFTs: [],
       myStakess: [],
       viewall: false,
@@ -522,7 +523,9 @@ export default class Subscription extends React.Component {
       .then(() => {
         this.setState({ lockActive: true });
         this.setState({ loadspinner: false });
-        this.handleSubscribe();
+        this.setState({ isApproved: true });
+
+        // this.handleSubscribe();
       })
       .catch((e) => {
         this.setState({ status: "An error occurred. Please try again" });
@@ -553,9 +556,11 @@ export default class Subscription extends React.Component {
         if (result != 0) {
           this.setState({ lockActive: true });
           this.setState({ loadspinner: false });
+          this.setState({ isApproved: true });
         } else if (result == 0) {
           this.setState({ lockActive: false });
           this.setState({ loadspinner: false });
+          this.setState({ isApproved: false });
         }
       } else {
         const result = await subscribeTokencontract.methods
@@ -566,9 +571,11 @@ export default class Subscription extends React.Component {
         if (result != 0) {
           this.setState({ lockActive: true });
           this.setState({ loadspinner: false });
+          this.setState({ isApproved: true });
         } else if (result == 0) {
           this.setState({ lockActive: false });
           this.setState({ loadspinner: false });
+          this.setState({ isApproved: false });
         }
       }
     }
@@ -1235,9 +1242,25 @@ export default class Subscription extends React.Component {
                   </div>
                   <button
                     className="btn success-button px-4"
-                    onClick={(e) => this.handleApprove(e)}
+                    onClick={(e) =>
+                      this.state.isApproved === false
+                        ? this.handleApprove(e)
+                        : this.handleSubscribe()
+                    }
                   >
-                    Subscribe
+                    {this.state.isApproved === true &&
+                    this.state.loadspinner === false ? (
+                      "Subscribe"
+                    ) : this.state.isApproved === false &&
+                      this.state.loadspinner === false ? (
+                      "Approve"
+                    ) : (
+                      <div
+                        className="spinner-border "
+                        role="status"
+                        style={{ height: "1.5rem", width: "1.5rem" }}
+                      ></div>
+                    )}
                   </button>
                 </div>
               </div>
@@ -1911,7 +1934,9 @@ export default class Subscription extends React.Component {
                     0,
                     this.state.viewall === false && window.innerWidth > 756
                       ? 4
-                      : this.state.viewall === false && window.innerWidth <= 756 && window.innerWidth > 500
+                      : this.state.viewall === false &&
+                        window.innerWidth <= 756 &&
+                        window.innerWidth > 500
                       ? 2
                       : this.state.viewall === false && window.innerWidth <= 500
                       ? 1
@@ -1922,7 +1947,9 @@ export default class Subscription extends React.Component {
                       <NftCawCard
                         key={id}
                         nft={item}
-                        action={() => {window.location.assign('/earn')}}
+                        action={() => {
+                          window.location.assign("/earn");
+                        }}
                         modalId="#newNftStake"
                         coinbase={this.props.coinbase}
                       />
