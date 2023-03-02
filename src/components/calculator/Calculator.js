@@ -205,9 +205,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
         setStakeApyAVAX(30);
         setStakeApyBNB(30);
         // setStakeApy(30);
-      } else if (activeMethod === "Buyback") {
-        getTotalTvlBuyBack().then();
-      } else {
+      }  else if (activeMethod === "Vault"){
         const vaultWeth = window.vault_weth;
         const vaultusdc = window.vault_usdc;
         const vaultusdt = window.vault_usdt;
@@ -235,55 +233,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
   }, [activeMethod, apyData]);
 
   useEffect(() => {
-    if (activeMethod === "Farming") {
-      setCalculateApproxUSD(
-        (
-          ((parseInt(usdToDeposit) * parseFloat(farmApy)) / 100 / 365) *
-          parseInt(days)
-        ).toFixed(2)
-      );
-      setCalculateApproxWeth(
-        getFormattedNumber(
-          parseFloat(
-            ((parseInt(usdToDeposit) * parseFloat(farmApy)) / 100 / 365) *
-              parseInt(days)
-          ) / wethPrice,
-          4
-        )
-      );
-
-      setCalculateApproxUSDBNB(
-        (
-          ((parseInt(usdToDeposit) * parseFloat(farmApyBNB)) / 100 / 365) *
-          parseInt(days)
-        ).toFixed(2)
-      );
-      setCalculateApproxWbnb(
-        getFormattedNumber(
-          parseFloat(
-            ((parseInt(usdToDeposit) * parseFloat(farmApyBNB)) / 100 / 365) *
-              parseInt(days)
-          ) / wbnbPrice,
-          4
-        )
-      );
-
-      setCalculateApproxUSDAVAX(
-        (
-          ((parseInt(usdToDeposit) * parseFloat(farmApyAVAX)) / 100 / 365) *
-          parseInt(days)
-        ).toFixed(2)
-      );
-      setCalculateApproxWavax(
-        getFormattedNumber(
-          parseFloat(
-            ((parseInt(usdToDeposit) * parseFloat(farmApyAVAX)) / 100 / 365) *
-              parseInt(days)
-          ) / wavaxPrice,
-          4
-        )
-      );
-    } else if (activeMethod === "Staking") {
+      if (activeMethod === "Staking") {
       setCalculateApproxUSD(
         (
           ((parseInt(usdToDeposit) * parseFloat(stakeApy)) / 100 / 365) *
@@ -332,58 +282,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
           4
         )
       );
-    } else if (activeMethod === "Buyback") {
-      setCalculateApproxUSD(
-        (
-          ((parseInt(usdToDeposit) * parseFloat(buybackApy)) / 100 / 365) *
-          parseInt(days)
-        ).toFixed(2)
-      );
-      setCalculateApproxCrypto(
-        getFormattedNumber(
-          parseFloat(
-            ((parseInt(usdToDeposit) * parseFloat(buybackApy)) / 100 / 365) *
-              parseInt(days)
-          ) / wethPrice,
-          4
-        )
-      );
-
-      setCalculateApproxUSDBNB(
-        (
-          ((parseInt(usdToDeposit) * parseFloat(buybackApyBNB)) / 100 / 365) *
-          parseInt(days)
-        ).toFixed(2)
-      );
-      setCalculateApproxWbnb(
-        getFormattedNumber(
-          parseFloat(
-            ((parseInt(usdToDeposit) * parseFloat(buybackApyBNB)) / 100 / 365) *
-              parseInt(days)
-          ) / wbnbPrice,
-          4
-        )
-      );
-
-      setCalculateApproxUSDAVAX(
-        (
-          ((parseInt(usdToDeposit) * parseFloat(buybackApyAVAX)) / 100 / 365) *
-          parseInt(days)
-        ).toFixed(2)
-      );
-
-      setCalculateApproxWavax(
-        getFormattedNumber(
-          parseFloat(
-            ((parseInt(usdToDeposit) * parseFloat(buybackApyAVAX)) /
-              100 /
-              365) *
-              parseInt(days)
-          ) / wavaxPrice,
-          4
-        )
-      );
-    } else {
+    }   else if (activeMethod === "Vault"){
       setCalculateApproxUSD(
         (
           ((parseInt(usdToDeposit) * parseFloat(vaultApy)) / 100 / 365) *
@@ -437,17 +336,11 @@ const Calculator = ({ earnClass, onClose, ref }) => {
     
   }, [
     activeMethod,
-    farmApy,
-    farmApyAVAX,
-    farmApyBNB,
     stakeApy,
-    buybackApy,
     vaultApy,
     usdToDeposit,
     days,
-    wethPrice,
-    wavaxPrice,
-    wbnbPrice,
+    vaultUSDC, vaultUSDT
   ]);
 
   const handleSubmit = (e) => {
