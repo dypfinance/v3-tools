@@ -600,6 +600,7 @@ const CawsStaking = ({
 
       {showModal === true && (
         <WalletModal
+        coin98={true}
           show={showModal}
           handleClose={() => {
             setShowModal(false);

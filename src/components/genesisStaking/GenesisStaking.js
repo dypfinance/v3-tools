@@ -76,6 +76,7 @@ const GenesisStaking = ({
   const [stakeTooltip, setStakeTooltip] = useState(false);
   const [rewardsTooltip, setRewardsTooltip] = useState(false);
   const [unstakeTooltip, setUnstakeTooltip] = useState(false);
+
   const windowSize = useWindowSize();
 
   const fetchEthStaking = async () => {
@@ -623,6 +624,7 @@ const GenesisStaking = ({
       )}
       {showModal === true && (
         <WalletModal
+          coin98={true}
           show={showModal}
           handleClose={() => {
             setShowModal(false);
