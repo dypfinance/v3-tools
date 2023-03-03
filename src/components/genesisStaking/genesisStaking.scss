@@ -1,0 +1,195 @@
+.mobile-title {
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 24px;
+  letter-spacing: -0.018em;
+  color: #f7f7fc;
+}
+
+.mobile-desc {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px;
+  color: #c0c9ff !important;
+  width: 50%;
+  @media screen and (max-width: 786px) {
+    width: 100%;
+  }
+}
+
+.read-more-btn {
+  width: fit-content;
+  border-bottom: 1px solid #4fd8d5;
+  border-left: 1px solid #4fd8d5;
+  border-right: 1px solid #4fd8d5;
+  border-radius: 8px;
+
+  .more-benefits {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    color: #4fd8d5;
+  }
+}
+.read-less-btn {
+  width: fit-content;
+  border-bottom: 1px solid #c0c9ff;
+  border-left: 1px solid #c0c9ff;
+  border-right: 1px solid #c0c9ff;
+  border-radius: 8px;
+
+  .less-benefits {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    color: #c0c9ff;
+  }
+}
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 20px;
+  @media screen and (max-width: 786px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .benefit-title {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    text-align: center;
+    color: #ffffff !important;
+  }
+}
+
+.genesis-staking-container {
+  background: #14142a;
+  border: 2px solid #09fad2;
+  box-shadow: 0px 32px 64px rgba(17, 17, 17, 0.12);
+  border-radius: 12px;
+  background-image: url("./assets/greenBlot.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: top;
+  width: 35%;
+
+  @media screen and (max-width: 786px) {
+    width: 100%;
+  }
+
+  .genesis-title {
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 26px;
+    letter-spacing: -0.018em;
+    color: #f7f7fc !important;
+  }
+
+  .info-header {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    letter-spacing: -0.018em;
+    color: #c0c9ff !important;
+  }
+  .info-value {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 27px;
+    letter-spacing: -0.018em;
+    color: #f7f7fc !important;
+  }
+
+  .total-nfts {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    letter-spacing: -0.018em;
+    color: #c0c9ff !important;
+  }
+
+  .nfts-number {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: -0.018em;
+    color: #f7f7fc !important;
+  }
+
+  .connect-wallet-btn {
+    background: #14142a;
+    border: 1px solid #4ed5d2;
+    border-radius: 8px;
+
+    .connect-span {
+      font-weight: 500;
+      font-size: 12px;
+      line-height: 16px;
+      color: #4ed5d2;
+    }
+  }
+
+  .stake-wrapper {
+    background: #312f69;
+    border-radius: 8px;
+
+    .stake {
+      font-weight: 600;
+      font-size: 12px;
+      line-height: 18px;
+      letter-spacing: -0.018em;
+      text-transform: uppercase;
+      color: #f7f7fc !important;
+    }
+
+    .available-nfts {
+      font-style: normal;
+      font-weight: 400;
+      font-size: 10px;
+      line-height: 18px;
+      letter-spacing: -0.018em;
+      color: #4cd0cd !important;
+    }
+  }
+
+  .eth-tag {
+    position: absolute;
+    right: -6px;
+    top: -6px;
+    width: 70px;
+    height: 70px;
+  }
+
+  .eth-value {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 22px;
+    letter-spacing: -0.018em;
+    color: #f7f7fc !important;
+  }
+  .usd-value {
+    font-weight: 500;
+    font-size: 10px;
+    line-height: 15px;
+    letter-spacing: -0.018em;
+    color: #f7f7fc !important;
+  }
+
+  .weth {
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 18px;
+    letter-spacing: -0.018em;
+    color: #c0c9ff;
+    position: relative;
+    top: 3px;
+  }
+}
+
+.earn-link{
+    font-weight: 400;
+font-size: 14px;
+line-height: 15px;
+text-decoration-line: underline;
+color: #51DFDC !important;
+}

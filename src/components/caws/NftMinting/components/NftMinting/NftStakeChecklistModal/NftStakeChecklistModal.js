@@ -618,7 +618,7 @@ const NftStakeCheckListModal = ({
             </h5>
 
             <div
-              className="d-flex justify-content-between"
+              className="d-flex flex-column flex-lg-row justify-content-between"
               style={{ gap: 5, margin: "auto" }}
             >
               <form className="d-flex flex-column" style={{ gap: 5 }}>
@@ -636,7 +636,7 @@ const NftStakeCheckListModal = ({
                 </span>
               </form>
               <div
-                className="d-flex justify-content-between align-items-center"
+                className="d-flex justify-content-start  justify-content-lg-between align-items-center"
                 style={{ gap: 5 }}
               >
                 <span
@@ -672,7 +672,7 @@ const NftStakeCheckListModal = ({
             </div>
 
             <div
-              className="mt-4 row justify-content-between gap-3"
+              className="mt-4 row justify-content-center justify-content-lg-between gap-3"
               style={{
                 gap: 20,
                 display: showStaked === false ? "" : "none",

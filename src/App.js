@@ -39,6 +39,7 @@ import ScrollToTop from "./functions/ScrollToTop";
 import LandPopup from "./components/LandPopup/LandPopup";
 import { withRouter } from "react-router-dom";
 import GenesisStaking from "./components/genesisStaking/GenesisStaking";
+import CawsStaking from "./components/genesisStaking/CawsStaking";
 
 class App extends React.Component {
   constructor(props) {
@@ -455,7 +456,7 @@ class App extends React.Component {
         <Route component={GoogleAnalyticsReporter} />
 
         <div className="body_overlay"></div>
-        {this.props?.location?.pathname === "/genesis" && window.innerWidth < 786 ? null : (
+        {this.props?.location?.pathname === "/genesis" && window.innerWidth < 786 || this.props?.location?.pathname === "/caws-staking" && window.innerWidth < 786 ? null : (
           <Header
             coinbase={this.state.coinbase}
             theme={this.state.theme}
@@ -770,7 +771,24 @@ class App extends React.Component {
                   <Route
                     exact
                     path="/genesis"
-                    render={(props) => <GenesisStaking />}
+                    render={(props) => <GenesisStaking
+                    coinbase={this.state.coinbase}
+                    isConnected={this.state.isConnected}
+                    chainId={this.state.networkId}
+                    handleConnection={this.handleConnection}
+                    handleSwitchNetwork={this.handleSwitchNetwork}
+                      />}
+                  />
+                  <Route
+                    exact
+                    path="/caws-staking"
+                    render={(props) => <CawsStaking
+                      coinbase={this.state.coinbase}
+                      isConnected={this.state.isConnected}
+                      chainId={this.state.networkId}
+                      handleConnection={this.handleConnection}
+                      handleSwitchNetwork={this.handleSwitchNetwork}
+                      />}
                   />
 
                   <Route component={RedirectPathToHomeOnly} />
@@ -781,11 +799,11 @@ class App extends React.Component {
             </div>
             <div className="col-1"></div>
           </div>
-          {this.props?.location?.pathname === "/genesis" ? null : (
+          {this.props?.location?.pathname === "/genesis" || this.props?.location?.pathname === "/caws-staking" ? null : (
             <MobileMenu />
           )}
         </div>
-        {this.props?.location?.pathname === "/genesis" &&  window.innerWidth < 786 ? null : (
+        {this.props?.location?.pathname === "/genesis" && window.innerWidth < 786 || this.props?.location?.pathname === "/caws-staking" && window.innerWidth < 786  ? null : (
           <Footer></Footer>
         )}
       </div>

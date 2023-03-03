@@ -166,7 +166,9 @@ padding: 10px;
   justify-content: center;
 
   @media screen and (max-width: 500px) {
-    justify-content: center;
+    place-items: center;
+  grid-template-columns: repeat(1, 1fr);
+
   }
   .nft-img {
     width: 100%;
