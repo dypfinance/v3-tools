@@ -267,7 +267,7 @@ const GenesisStaking = ({
   }, []);
 
   return (
-    <div className="container-lg px-0 d-flex flex-column gap-3" style={{minHeight: '65vh'}}>
+    <div className="container-lg px-0 d-flex flex-column justify-content-center align-items-center gap-3" style={{minHeight: '65vh'}}>
       <div className="d-flex justify-content-between gap-2 flex-column flex-lg-row ">
       <div className="row gap-2">
         <h6 className="mobile-title">Genesis Land NFTs</h6>
@@ -331,6 +331,7 @@ const GenesisStaking = ({
           </div>
         )}
       </div>
+      <div className="row align-items-center justify-content-center w-100">
       <div className="genesis-staking-container position-relative p-2">
         <img src={ethereumTag} alt="" className="eth-tag" />
         <div className="purplediv" style={{ background: "#09FAD2" }}></div>
@@ -421,7 +422,7 @@ const GenesisStaking = ({
               </ClickAwayListener>
             </div>
             <div className="d-flex align-items-center justify-content-between mt-2">
-              <div className="position-relative">
+              {/* <div className="position-relative" style={{width: '50%'}}>
                 <input
                   type={"number"}
                   disabled={
@@ -455,7 +456,12 @@ const GenesisStaking = ({
                 >
                   Max
                 </button>
-              </div>
+              </div> */}
+              <button className="btn filledbtn" onClick={() => {
+                 setshowChecklistModal(true);
+                 setOpenStakeChecklist(true);
+                 setHide("staked")
+              }}>Select NFTs</button>
               <button
                 className={`btn ${
                   amountToStake !== "" && myNFTs.length > 0
@@ -577,6 +583,7 @@ const GenesisStaking = ({
             </div>
           </div>
         </div>
+      </div>
       </div>
       <div className="row d-flex d-lg-none align-items-center justify-content-center w-100">
         <NavLink
