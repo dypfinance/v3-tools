@@ -438,6 +438,7 @@ class App extends React.Component {
     if (!this.props.location.pathname.includes("bridge")) {
       ethereum?.on("chainChanged", this.checkNetworkId);
       ethereum?.on("accountsChanged", this.checkConnection);
+      ethereum?.on("connect", this.checkConnection);
     }
 
     if (window.ethereum && window.ethereum.isTrust === true) {
