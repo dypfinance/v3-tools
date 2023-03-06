@@ -330,7 +330,7 @@ const CawsStaking = ({
           <div className="d-flex align-items-center justify-content-between mt-2">
             <div className="d-flex flex-column">
               <span className="total-nfts">Total NFT staked:</span>
-              <span className="nfts-number">{totalStakes}/1000</span>
+              <span className="nfts-number">{totalStakes}/10000</span>
             </div>
             {coinbase === null ||
             coinbase === undefined ||
