@@ -4,9 +4,9 @@
   background: #26264F;
 box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.16);
 border-radius: 8px;
-  // @include medium {
-    // margin: 17px;
-  // }
+@media screen and (max-width: 500px) {
+  margin: auto;
+}
   .elevated-stake-container {
     background: white;
     // box-shadow: 12px 16px 44px rgba(0, 0, 0, 0.12);
