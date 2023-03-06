@@ -154,11 +154,11 @@ export default class Farms extends React.Component {
     const columns = [
       {
         name: "Pool",
-        selector: "pair_name",
+        selector: row => row.pair_name,
         sortable: true,
         minWidth: '200px',
         cell: (row) => (
-          <div class="token">
+          <div className="token">
             {/* <img src="/assets/img/icon.svg" alt="" /> */}
             <img src={row.link_logo} height={40} width={40} alt="" />
             <a
@@ -176,24 +176,24 @@ export default class Farms extends React.Component {
       },
       {
         name: "Project",
-        selector: "pool_name",
+        selector: row => row.pool_name,
         sortable: true,
       },
       {
         name: "TVL",
-        selector: "tvl_usd",
+        selector: row => row.tvl_usd,
         sortable: true,
         cell: (row) => <div> ${getFormattedNumber(row.tvl_usd)} </div>,
       },
       {
         name: "APY",
-        selector: "apy_percent",
+        selector: row => row.apy_percent,
         sortable: true,
         cell: (row) => <div> {getFormattedNumber(row.apy_percent)}% </div>,
       },
       {
         name: "Confidence",
-        selector: "confidence",
+        selector: row => row.confidence,
         sortable: false,
       },
     ];

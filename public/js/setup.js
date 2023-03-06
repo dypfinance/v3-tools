@@ -27612,29 +27612,29 @@ async function getMaxFee() {
 }
 
 // function to connect metamask
-async function connectWallet() {
-  function onConnect() {
-    if (!isConnectedOneTime) {
-      window.isConnectedOneTime = true;
-      window.oneTimeConnectionEvents.forEach((fn) => fn());
-    }
-  }
-  if (window.ethereum) {
+async function connectWallet(provider, walletType) {
+  //walletConnect
+  if (walletType) {
+    await provider.enable();
+    window.web3 = new Web3(provider);
+    let coinbase_address = await window.web3.eth.getAccounts();
+    window.coinbase_address = coinbase_address.pop();
+
+    window.IS_CONNECTED = true;
+    return true;
+  } else if (window.ethereum) {
+    //Web3 Providers
     window.web3 = new Web3(window.ethereum);
     try {
-      await window.ethereum?.enable();
+      await window.ethereum.enable();
       console.log("Connected!");
-      if (window.ethereum.isCoin98) {
-        window.WALLET_TYPE = "coin98";
-      }
-      if (window.ethereum.isMetaMask) {
-        window.WALLET_TYPE = "metamask";
-      }
-      let coinbase_address = await window.ethereum?.request({
+      window.IS_CONNECTED = true;
+      if (window.ethereum.isCoin98) window.WALLET_TYPE = "coin98";
+      if (window.ethereum.isMetaMask) window.WALLET_TYPE = "metamask";
+      let coinbase_address = await window.ethereum.request({
         method: "eth_accounts",
       });
       window.coinbase_address = coinbase_address.pop();
-      onConnect();
       return true;
     } catch (e) {
       console.error(e);
@@ -27643,7 +27643,7 @@ async function connectWallet() {
   } else if (window.web3) {
     window.web3 = new Web3(window.web3.currentProvider);
     console.log("connected to old web3");
-    onConnect();
+    window.IS_CONNECTED = true;
     return true;
   } else {
     throw new Error("No web3 detected!");
@@ -27659,13 +27659,28 @@ window.param = param;
 
 window.cached_contracts = Object.create(null);
 
-function getCoinbase() {
+async function getCoinbase() {
   if (window.WALLET_TYPE == "coin98") {
     return window.coinbase_address.toLowerCase();
   } else {
-    return window.web3.eth?.getCoinbase();
+    const coinbase =  await window.ethereum.request({
+      method: "eth_requestAccounts",
+    })
+
+    window.coinbase_address = coinbase.pop()
+    return window.coinbase_address.toLowerCase();
   }
 }
+
+
+// function getCoinbase() {
+//   if (window.WALLET_TYPE == "coin98") {
+//     return window.coinbase_address.toLowerCase();
+//   } else {
+//     return window.web3.eth?.getCoinbase();
+//   }
+// }
+
 
 async function getContract({ key, address = null, ABI = null }) {
   ABI = ABI || window[key + "_ABI"];

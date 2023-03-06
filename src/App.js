@@ -212,7 +212,7 @@ class App extends React.Component {
 
     try {
       localStorage.setItem("logout", "false");
-      isConnected = await window.connectWallet();
+      isConnected = await window.connectWallet(undefined, false);
       if (isConnected) {
         if (referrer) {
           referrer = String(referrer).trim().toLowerCase();
