@@ -257,6 +257,7 @@ const LandNftStakeCheckListModal = ({
     }
   }, [hideItem, showStaked, showToStake]);
 
+
   const onEmptyState = () => {};
 
   const handleUnstake = async (value) => {
@@ -674,12 +675,13 @@ const LandNftStakeCheckListModal = ({
             >
               <button
                 className="btn activebtn"
+                disabled={selectNftIds.length > 0 ? false : true}
                 onClick={() => {
                   handleApprove();
                 }}
                 style={{
                   background:
-                    active && nftItem.length > 0
+                    active && nftItem.length > 0 
                       ? "linear-gradient(90.74deg, #7770E0 0%, #554FD8 100%)"
                       : "#14142A",
                   pointerEvents: active && nftItem.length > 0 ? "auto" : "none",
