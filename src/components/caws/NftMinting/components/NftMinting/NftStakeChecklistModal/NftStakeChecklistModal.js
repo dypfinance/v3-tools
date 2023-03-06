@@ -31,6 +31,7 @@ const NftStakeCheckListModal = ({
   onNftCheckListClick,
   coinbase,
   isConnected,
+  getApprovedNfts,
   hideItem
 }) => {
   const style = {
@@ -528,6 +529,7 @@ const NftStakeCheckListModal = ({
                                 1
                               );
                           setSelectedNftIds(selectNftIds);
+                          getApprovedNfts(selectNftIds)
                           console.log(selectNftIds);
                           setVal(value);
                         }}

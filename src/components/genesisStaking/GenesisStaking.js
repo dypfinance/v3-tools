@@ -76,6 +76,7 @@ const GenesisStaking = ({
   const [stakeTooltip, setStakeTooltip] = useState(false);
   const [rewardsTooltip, setRewardsTooltip] = useState(false);
   const [unstakeTooltip, setUnstakeTooltip] = useState(false);
+  const [approvedNfts, setApprovedNfts] = useState([])
 
   const windowSize = useWindowSize();
 
@@ -242,6 +243,15 @@ const GenesisStaking = ({
         settotalStakes(data);
       });
   };
+
+
+
+
+  const getApprovedNfts = (data) => {
+    setApprovedNfts(data)
+    return data;
+  }
+
 
   useEffect(() => {
     totalStakedNft().then();
@@ -457,11 +467,17 @@ const GenesisStaking = ({
                   Max
                 </button>
               </div> */}
+              <div className="d-flex align-items-end gap-2">
               <button className="btn filledbtn" onClick={() => {
                  setshowChecklistModal(true);
                  setOpenStakeChecklist(true);
+                 setApprovedNfts([])
                  setHide("staked")
               }}>Select NFTs</button>
+              <div className="available-nfts">
+                  Selected NFTs: <b>{isConnected === false ? 0 : approvedNfts.length}</b>
+                </div>
+              </div>
               <button
                 className={`btn ${
                   amountToStake !== "" && myNFTs.length > 0
@@ -597,11 +613,12 @@ const GenesisStaking = ({
       </div>
       {showChecklistModal === true && (
         <LandNftStakeCheckListModal
+        getApprovedNfts={getApprovedNfts}
           onClose={() => {
             setshowChecklistModal(false);
-            setamountToStake("");
+            // setamountToStake("");
           }}
-          // nftItem={showStaked ? mystakes : showToStake ? myNFTs : showStaked}
+          approvedNfts={approvedNfts}
           nftItem={
             hide === "" || hide === "tostake" || hide === "mystakes2"
               ? mystakes

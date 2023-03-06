@@ -46,6 +46,7 @@ const CawsStaking = ({
   const [stakeTooltip, setStakeTooltip] = useState(false);
   const [rewardsTooltip, setRewardsTooltip] = useState(false);
   const [unstakeTooltip, setUnstakeTooltip] = useState(false);
+  const [approvedNfts, setApprovedNfts] = useState([]);
 
   const [hide, setHide] = useState("");
   const windowSize = useWindowSize();
@@ -253,6 +254,11 @@ const CawsStaking = ({
       });
   };
 
+  const getApprovedNfts = (data) => {
+    setApprovedNfts(data);
+    return data;
+  };
+
   useEffect(() => {
     fetchEthStaking();
     totalStakedNft().then();
@@ -275,7 +281,10 @@ const CawsStaking = ({
   }, [isConnected, EthRewards]);
 
   return (
-    <div className="container-lg px-0 d-flex flex-column justify-content-center align-items-center gap-3" style={{minHeight: '65vh'}}>
+    <div
+      className="container-lg px-0 d-flex flex-column justify-content-center align-items-center gap-3"
+      style={{ minHeight: "65vh" }}
+    >
       <div className="d-flex justify-content-between gap-2 flex-column flex-lg-row">
         <div className="row gap-2">
           <h6 className="mobile-title">CAWS NFTs</h6>
@@ -299,93 +308,95 @@ const CawsStaking = ({
       </div>
 
       <div className="row w-100 justify-content-center align-items-center">
-      <div className="genesis-staking-container position-relative p-2">
-        <img src={ethereumTag} alt="" className="eth-tag" />
-        <div className="purplediv" style={{ background: "#09FAD2" }}></div>
-        <div className="d-flex align-items-center gap-2 mt-1">
-          <img src={cawsIcon} width={28} height={28} alt="" />
-          <h6 className="genesis-title">Stake CAWS</h6>
-        </div>
-        <div className="d-flex align-items-center justify-content-between mt-2">
-          <div className="d-flex flex-column">
-            <span className="info-header">Total Value Locked</span>
-            <span className="info-value">
-              ${getFormattedNumber(cawsCard.tvl_usd)}
-            </span>
+        <div className="genesis-staking-container position-relative p-2">
+          <img src={ethereumTag} alt="" className="eth-tag" />
+          <div className="purplediv" style={{ background: "#09FAD2" }}></div>
+          <div className="d-flex align-items-center gap-2 mt-1">
+            <img src={cawsIcon} width={28} height={28} alt="" />
+            <h6 className="genesis-title">Stake CAWS</h6>
           </div>
-          <div className="d-flex flex-column">
-            <span className="info-header">30 day lock time</span>
-            <span className="info-value">{cawsCard.apy_percent}% APR</span>
-          </div>
-        </div>
-        <div className="d-flex align-items-center justify-content-between mt-2">
-          <div className="d-flex flex-column">
-            <span className="total-nfts">Total NFT staked:</span>
-            <span className="nfts-number">{totalStakes}/1000</span>
-          </div>
-          {coinbase === null ||
-          coinbase === undefined ||
-          isConnected === false ? (
-            <button
-              className="connectbtn btn"
-              onClick={() => {
-                setShowModal(true);
-              }}
-            >
-              <img src={connectIcon} alt="" /> Connect wallet
-            </button>
-          ) : chainId === "1" ? (
-            <div className="addressbtn btn">
-              <Address a={coinbase} chainId={1} />
+          <div className="d-flex align-items-center justify-content-between mt-2">
+            <div className="d-flex flex-column">
+              <span className="info-header">Total Value Locked</span>
+              <span className="info-value">
+                ${getFormattedNumber(cawsCard.tvl_usd)}
+              </span>
             </div>
-          ) : (
-            <button
-              className="connectbtn btn"
-              onClick={() => {
-                handleEthPool();
-              }}
-            >
-              Change Network
-            </button>
-          )}
-        </div>
-        <div className="d-flex flex-column gap-2 mt-2">
-          <div
-            className={`stake-wrapper p-2 ${chainId !== "1" && "blurrypool"}`}
-          >
-            <div className="d-flex align-items-center justify-content-between">
-              <div className="d-flex align-items-end gap-2">
-                <span className="stake">Stake</span>
-                <div className="available-nfts">
-                  Available NFT's:{" "}
-                  <b>{isConnected === false ? 0 : myNFTs.length} CAWS</b>
-                </div>
+            <div className="d-flex flex-column">
+              <span className="info-header">30 day lock time</span>
+              <span className="info-value">{cawsCard.apy_percent}% APR</span>
+            </div>
+          </div>
+          <div className="d-flex align-items-center justify-content-between mt-2">
+            <div className="d-flex flex-column">
+              <span className="total-nfts">Total NFT staked:</span>
+              <span className="nfts-number">{totalStakes}/1000</span>
+            </div>
+            {coinbase === null ||
+            coinbase === undefined ||
+            isConnected === false ? (
+              <button
+                className="connectbtn btn"
+                onClick={() => {
+                  setShowModal(true);
+                }}
+              >
+                <img src={connectIcon} alt="" /> Connect wallet
+              </button>
+            ) : chainId === "1" ? (
+              <div className="addressbtn btn">
+                <Address a={coinbase} chainId={1} />
               </div>
+            ) : (
+              <button
+                className="connectbtn btn"
+                onClick={() => {
+                  handleEthPool();
+                }}
+              >
+                Change Network
+              </button>
+            )}
+          </div>
+          <div className="d-flex flex-column gap-2 mt-2">
+            <div
+              className={`stake-wrapper p-2 ${chainId !== "1" && "blurrypool"}`}
+            >
+              <div className="d-flex align-items-center justify-content-between">
+                <div className="d-flex align-items-end gap-2">
+                  <span className="stake">Stake</span>
+                  <div className="available-nfts">
+                    Available NFT's:{" "}
+                    <b>{isConnected === false ? 0 : myNFTs.length} CAWS</b>
+                  </div>
+                </div>
 
-              <ClickAwayListener onClickAway={() => setStakeTooltip(false)}>
-                <Tooltip
-                  open={stakeTooltip}
-                  disableFocusListener
-                  disableHoverListener
-                  disableTouchListener
-                  placement="top"
-                  title={
-                    <div className="tooltip-text">
-                      {"Deposit your CAWS NFTs to the staking smart contract."}
-                    </div>
-                  }
-                >
-                  <img
-                    src={tooltip}
-                    onClick={() => setStakeTooltip(true)}
-                    alt=""
-                  />
-                </Tooltip>
-              </ClickAwayListener>
-            </div>
-            <div className="d-flex align-items-center justify-content-between mt-2">
-              <div className="position-relative">
-                {/* <div className="position-relative" style={{width: '50%'}}>
+                <ClickAwayListener onClickAway={() => setStakeTooltip(false)}>
+                  <Tooltip
+                    open={stakeTooltip}
+                    disableFocusListener
+                    disableHoverListener
+                    disableTouchListener
+                    placement="top"
+                    title={
+                      <div className="tooltip-text">
+                        {
+                          "Deposit your CAWS NFTs to the staking smart contract."
+                        }
+                      </div>
+                    }
+                  >
+                    <img
+                      src={tooltip}
+                      onClick={() => setStakeTooltip(true)}
+                      alt=""
+                    />
+                  </Tooltip>
+                </ClickAwayListener>
+              </div>
+              <div className="d-flex align-items-center justify-content-between mt-2">
+                <div className="position-relative">
+                  {/* <div className="position-relative" style={{width: '50%'}}>
                   <input
                     type={"number"}
                     disabled={
@@ -421,133 +432,144 @@ const CawsStaking = ({
                   </button>
                 </div> */}
 
-<button className="btn filledbtn" onClick={() => {
-                 setshowChecklistModal(true);
-                 setOpenStakeChecklist(true);
-                 setHide("staked")
-              }}>Select NFTs</button>
-               
-              </div>
-              <button
-                className={`btn ${
-                  amountToStake !== "" && myNFTs.length > 0
-                    ? "filledbtn"
-                    : "disabled-btn"
-                } d-flex justify-content-center align-items-center gap-2`}
-                disabled={
-                  amountToStake !== "" && myNFTs.length > 0 ? false : true
-                }
-                onClick={() => {}}
-              >
-                {showApprove === false ? "Deposit" : "Approve"}
-              </button>
-            </div>
-          </div>
-          <div
-            className={`stake-wrapper p-2 ${chainId !== "1" && "blurrypool"}`}
-          >
-            <div className="d-flex align-items-center justify-content-between">
-              <div className="d-flex align-items-end gap-2">
-                <span className="stake">Rewards</span>
-                <div className="available-nfts">
-                  Staked: <b>{isConnected === false ? 0 : mystakes.length}</b>
-                </div>
-              </div>
-
-              <ClickAwayListener onClickAway={() => setRewardsTooltip(false)}>
-                <Tooltip
-                  open={rewardsTooltip}
-                  disableFocusListener
-                  disableHoverListener
-                  disableTouchListener
-                  placement="top"
-                  title={
-                    <div className="tooltip-text">
-                      {
-                        "Rewards earned by your CAWS NFTs deposit to the staking smart contract are displayed in real-time."
-                      }
+                  <div className="d-flex align-items-end gap-2">
+                    <button
+                      className="btn filledbtn"
+                      onClick={() => {
+                        setshowChecklistModal(true);
+                        setOpenStakeChecklist(true);
+                        setApprovedNfts([]);
+                        setHide("staked");
+                      }}
+                    >
+                      Select NFTs
+                    </button>
+                    <div className="available-nfts">
+                      Selected NFTs:{" "}
+                      <b>{isConnected === false ? 0 : approvedNfts.length}</b>
                     </div>
-                  }
-                >
-                  <img
-                    src={tooltip}
-                    onClick={() => setRewardsTooltip(true)}
-                    alt=""
-                  />
-                </Tooltip>
-              </ClickAwayListener>
-            </div>
-            <div className="d-flex align-items-center justify-content-between mt-2">
-              <div className="d-flex align-items-start gap-1">
-                <img src={ethIcon} alt="" />
-                <div className="d-flex flex-column">
-                  <span className="eth-value">
-                    {getFormattedNumber(EthRewards, 6)}
-                  </span>
-                  <span className="usd-value">
-                    ${getFormattedNumber(ethToUSD, 6)}
-                  </span>
+                  </div>
                 </div>
-                <span className="weth">WETH</span>
-              </div>
-              <button
-                className={`btn ${
-                  EthRewards === 0 ? "disabled-btn" : "filledbtn"
-                } d-flex justify-content-center align-items-center`}
-                style={{ height: "fit-content" }}
-                onClick={claimRewards}
-                disabled={EthRewards === 0 ? true : false}
-              >
-                <>Claim</>
-              </button>
-            </div>
-          </div>
-          <div
-            className={`stake-wrapper p-2 ${chainId !== "1" && "blurrypool"}`}
-          >
-            <div className="d-flex align-items-center justify-content-between">
-              <div className="d-flex align-items-end gap-2">
-                <span className="stake">Unstake</span>
-              </div>
-
-              <ClickAwayListener onClickAway={() => setUnstakeTooltip(false)}>
-                <Tooltip
-                  open={unstakeTooltip}
-                  disableFocusListener
-                  disableHoverListener
-                  disableTouchListener
-                  placement="top"
-                  title={
-                    <div className="tooltip-text">
-                      {
-                        "Withdraw your deposited NFTs from the staking smart contract."
-                      }
-                    </div>
+                <button
+                  className={`btn ${
+                    amountToStake !== "" && myNFTs.length > 0
+                      ? "filledbtn"
+                      : "disabled-btn"
+                  } d-flex justify-content-center align-items-center gap-2`}
+                  disabled={
+                    amountToStake !== "" && myNFTs.length > 0 ? false : true
                   }
+                  onClick={() => {}}
                 >
-                  <img
-                    src={tooltip}
-                    onClick={() => setUnstakeTooltip(true)}
-                    alt=""
-                  />
-                </Tooltip>
-              </ClickAwayListener>
+                  {showApprove === false ? "Deposit" : "Approve"}
+                </button>
+              </div>
             </div>
-            <div className="d-flex align-items-center justify-content-center mt-2">
-              <button
-                className="btn outline-btn"
-                onClick={() => {
-                  setshowChecklistModal(true);
-                  setOpenStakeChecklist(true);
-                  setHide("");
-                }}
-              >
-                Withdraw
-              </button>
+            <div
+              className={`stake-wrapper p-2 ${chainId !== "1" && "blurrypool"}`}
+            >
+              <div className="d-flex align-items-center justify-content-between">
+                <div className="d-flex align-items-end gap-2">
+                  <span className="stake">Rewards</span>
+                  <div className="available-nfts">
+                    Staked: <b>{isConnected === false ? 0 : mystakes.length}</b>
+                  </div>
+                </div>
+
+                <ClickAwayListener onClickAway={() => setRewardsTooltip(false)}>
+                  <Tooltip
+                    open={rewardsTooltip}
+                    disableFocusListener
+                    disableHoverListener
+                    disableTouchListener
+                    placement="top"
+                    title={
+                      <div className="tooltip-text">
+                        {
+                          "Rewards earned by your CAWS NFTs deposit to the staking smart contract are displayed in real-time."
+                        }
+                      </div>
+                    }
+                  >
+                    <img
+                      src={tooltip}
+                      onClick={() => setRewardsTooltip(true)}
+                      alt=""
+                    />
+                  </Tooltip>
+                </ClickAwayListener>
+              </div>
+              <div className="d-flex align-items-center justify-content-between mt-2">
+                <div className="d-flex align-items-start gap-1">
+                  <img src={ethIcon} alt="" />
+                  <div className="d-flex flex-column">
+                    <span className="eth-value">
+                      {getFormattedNumber(EthRewards, 6)}
+                    </span>
+                    <span className="usd-value">
+                      ${getFormattedNumber(ethToUSD, 6)}
+                    </span>
+                  </div>
+                  <span className="weth">WETH</span>
+                </div>
+                <button
+                  className={`btn ${
+                    EthRewards === 0 ? "disabled-btn" : "filledbtn"
+                  } d-flex justify-content-center align-items-center`}
+                  style={{ height: "fit-content" }}
+                  onClick={claimRewards}
+                  disabled={EthRewards === 0 ? true : false}
+                >
+                  <>Claim</>
+                </button>
+              </div>
+            </div>
+            <div
+              className={`stake-wrapper p-2 ${chainId !== "1" && "blurrypool"}`}
+            >
+              <div className="d-flex align-items-center justify-content-between">
+                <div className="d-flex align-items-end gap-2">
+                  <span className="stake">Unstake</span>
+                </div>
+
+                <ClickAwayListener onClickAway={() => setUnstakeTooltip(false)}>
+                  <Tooltip
+                    open={unstakeTooltip}
+                    disableFocusListener
+                    disableHoverListener
+                    disableTouchListener
+                    placement="top"
+                    title={
+                      <div className="tooltip-text">
+                        {
+                          "Withdraw your deposited NFTs from the staking smart contract."
+                        }
+                      </div>
+                    }
+                  >
+                    <img
+                      src={tooltip}
+                      onClick={() => setUnstakeTooltip(true)}
+                      alt=""
+                    />
+                  </Tooltip>
+                </ClickAwayListener>
+              </div>
+              <div className="d-flex align-items-center justify-content-center mt-2">
+                <button
+                  className="btn outline-btn"
+                  onClick={() => {
+                    setshowChecklistModal(true);
+                    setOpenStakeChecklist(true);
+                    setHide("");
+                  }}
+                >
+                  Withdraw
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
       </div>
       <div className="row d-flex d-lg-none align-items-center justify-content-center w-100">
         <NavLink
@@ -561,6 +583,7 @@ const CawsStaking = ({
       </div>
       {showChecklistModal === true && (
         <NftStakeCheckListModal
+          getApprovedNfts={getApprovedNfts}
           onClose={() => {
             setshowChecklistModal(false);
             setamountToStake("");
@@ -596,7 +619,7 @@ const CawsStaking = ({
 
       {showModal === true && (
         <WalletModal
-        coin98={true}
+          coin98={true}
           show={showModal}
           handleClose={() => {
             setShowModal(false);
