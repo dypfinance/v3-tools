@@ -85,8 +85,6 @@ class App extends React.Component {
     this.setState({ show: false });
   };
 
-
-
   onSelectChain = (chainText) => {
     if (chainText === "eth") {
       this.setState({ explorerNetworkId: 1 });
@@ -101,8 +99,9 @@ class App extends React.Component {
     if (!this.props.history.location.pathname.includes("bridge")) {
       if (
         window.ethereum &&
-        (window.ethereum?.isMetaMask === true ||
-          window.ethereum?.isTrust === true)
+        (window.ethereum.isMetaMask === true ||
+          window.ethereum.isCoin98 === true ||
+          window.ethereum.isTrust === true)
       ) {
         window.ethereum
           .request({ method: "eth_chainId" })
@@ -119,9 +118,13 @@ class App extends React.Component {
               this.setState({
                 networkId: "56",
               });
-            } else {
+            } else if (data !== "undefined") {
               this.setState({
                 networkId: "0",
+              });
+            } else {
+              this.setState({
+                networkId: "1",
               });
             }
 
@@ -321,7 +324,9 @@ class App extends React.Component {
     this.tvl().then();
     this.updateWindowDimensions();
     window.addEventListener("resize", this.updateWindowDimensions);
-    this.checkConnection();
+    // if (window.ethereum && window.ethereum.selectedAddress !== null) {
+      this.checkConnection();
+    // }
     this.checkNetworkId();
     this.refreshSubscription();
 
@@ -345,12 +350,11 @@ class App extends React.Component {
     // this.subscriptionInterval = setInterval(this.refreshSubscription, 6e4);
   }
 
-  checkConnection = () => {
+  checkConnection = async () => {
     const logout = localStorage.getItem("logout");
-
     if (logout !== "true" && window.ethereum) {
-      window.ethereum
-        ?.request({ method: "eth_accounts" })
+      await window.ethereum
+        ?.request({ method: "eth_requestAccounts" })
         .then((data) => {
           this.setState({
             isConnected: data.length === 0 ? false : true,
@@ -359,6 +363,8 @@ class App extends React.Component {
           if (data.length === 0) {
             localStorage.setItem("logout", "true");
           }
+        //   if(window.ethereum && window.ethereum.isCoin98)
+        //  { window.location.reload()}
         })
         .catch(console.error);
     } else {
@@ -401,7 +407,7 @@ class App extends React.Component {
     // this.setState({ network: network });
   };
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     if (this.props.location !== prevProps.location) {
       this.checkNetworkId();
     }
@@ -438,7 +444,6 @@ class App extends React.Component {
     if (!this.props.location.pathname.includes("bridge")) {
       ethereum?.on("chainChanged", this.checkNetworkId);
       ethereum?.on("accountsChanged", this.checkConnection);
-      ethereum?.on("connect", this.checkConnection);
     }
 
     if (window.ethereum && window.ethereum.isTrust === true) {
@@ -446,8 +451,7 @@ class App extends React.Component {
     }
 
     document.addEventListener("touchstart", { passive: true });
-
-
+    
     return (
       <div
         className={`page_wrapper ${this.state.isMinimized ? "minimize" : ""}`}
@@ -457,7 +461,10 @@ class App extends React.Component {
         <Route component={GoogleAnalyticsReporter} />
 
         <div className="body_overlay"></div>
-        {this.props?.location?.pathname === "/genesis" && window.innerWidth < 786 || this.props?.location?.pathname === "/caws-staking" && window.innerWidth < 786 ? null : (
+        {(this.props?.location?.pathname === "/genesis" &&
+          window.innerWidth < 786) ||
+        (this.props?.location?.pathname === "/caws-staking" &&
+          window.innerWidth < 786) ? null : (
           <Header
             coinbase={this.state.coinbase}
             theme={this.state.theme}
@@ -772,24 +779,28 @@ class App extends React.Component {
                   <Route
                     exact
                     path="/genesis"
-                    render={(props) => <GenesisStaking
-                    coinbase={this.state.coinbase}
-                    isConnected={this.state.isConnected}
-                    chainId={this.state.networkId}
-                    handleConnection={this.handleConnection}
-                    handleSwitchNetwork={this.handleSwitchNetwork}
-                      />}
+                    render={(props) => (
+                      <GenesisStaking
+                        coinbase={this.state.coinbase}
+                        isConnected={this.state.isConnected}
+                        chainId={this.state.networkId}
+                        handleConnection={this.handleConnection}
+                        handleSwitchNetwork={this.handleSwitchNetwork}
+                      />
+                    )}
                   />
                   <Route
                     exact
                     path="/caws-staking"
-                    render={(props) => <CawsStaking
-                      coinbase={this.state.coinbase}
-                      isConnected={this.state.isConnected}
-                      chainId={this.state.networkId}
-                      handleConnection={this.handleConnection}
-                      handleSwitchNetwork={this.handleSwitchNetwork}
-                      />}
+                    render={(props) => (
+                      <CawsStaking
+                        coinbase={this.state.coinbase}
+                        isConnected={this.state.isConnected}
+                        chainId={this.state.networkId}
+                        handleConnection={this.handleConnection}
+                        handleSwitchNetwork={this.handleSwitchNetwork}
+                      />
+                    )}
                   />
 
                   <Route component={RedirectPathToHomeOnly} />
@@ -800,11 +811,15 @@ class App extends React.Component {
             </div>
             <div className="col-1"></div>
           </div>
-          {this.props?.location?.pathname === "/genesis" || this.props?.location?.pathname === "/caws-staking" ? null : (
+          {this.props?.location?.pathname === "/genesis" ||
+          this.props?.location?.pathname === "/caws-staking" ? null : (
             <MobileMenu />
           )}
         </div>
-        {this.props?.location?.pathname === "/genesis" && window.innerWidth < 786 || this.props?.location?.pathname === "/caws-staking" && window.innerWidth < 786  ? null : (
+        {(this.props?.location?.pathname === "/genesis" &&
+          window.innerWidth < 786) ||
+        (this.props?.location?.pathname === "/caws-staking" &&
+          window.innerWidth < 786) ? null : (
           <Footer></Footer>
         )}
       </div>

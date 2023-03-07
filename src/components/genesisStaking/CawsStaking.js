@@ -265,14 +265,14 @@ const CawsStaking = ({
   }, []);
 
   useEffect(() => {
-    if (isConnected) {
+    if (isConnected && coinbase) {
       myNft().then();
       myStakes().then();
       checkApproval().then();
       handleClaimAll();
       calculateCountdown().then();
     }
-  }, [isConnected]);
+  }, [isConnected, coinbase]);
 
   useEffect(() => {
     if (isConnected) {

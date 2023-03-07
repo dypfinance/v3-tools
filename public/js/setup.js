@@ -27630,12 +27630,13 @@ async function connectWallet(provider, walletType) {
       console.log("Connected!");
       window.IS_CONNECTED = true;
       if (window.ethereum.isCoin98) window.WALLET_TYPE = "coin98";
-      if (window.ethereum.isMetaMask) window.WALLET_TYPE = "metamask";
+      if (window.ethereum.isMetaMask && !window.ethereum.isCoin98) window.WALLET_TYPE = "metamask";
       let coinbase_address = await window.ethereum.request({
-        method: "eth_accounts",
+        method: "eth_requestAccounts",
       });
-      window.coinbase_address = coinbase_address.pop();
-      return true;
+      if(coinbase_address.length > 0)
+      {window.coinbase_address = coinbase_address.pop();
+      return true;}
     } catch (e) {
       console.error(e);
       throw new Error("User denied wallet connection!");
@@ -27662,21 +27663,23 @@ window.cached_contracts = Object.create(null);
 async function getCoinbase() {
   if (window.WALLET_TYPE == "coin98") {
     return window.coinbase_address.toLowerCase();
-  } else {
+  } else if (window.WALLET_TYPE != "coin98"){
     const coinbase =  await window.ethereum.request({
       method: "eth_requestAccounts",
     })
-
-    window.coinbase_address = coinbase.pop()
-    return window.coinbase_address.toLowerCase();
+    if(coinbase && coinbase.length > 0)
+    {window.coinbase_address = coinbase.pop()
+    return window.coinbase_address.toLowerCase();}
   }
 }
 
 
 // function getCoinbase() {
 //   if (window.WALLET_TYPE == "coin98") {
+//     console.log('yes')
 //     return window.coinbase_address.toLowerCase();
 //   } else {
+//     console.log('no')
 //     return window.web3.eth?.getCoinbase();
 //   }
 // }
