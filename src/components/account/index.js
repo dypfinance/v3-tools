@@ -385,20 +385,32 @@ export default class Subscription extends React.Component {
         .balanceOf(walletAddress)
         .call()
         .then((data) => {
-          this.setState({ethBalance: data});
+          let depositedTokens = new BigNumber(data)
+          .div(1e18)
+          .toFixed(2);
+
+          this.setState({ethBalance: depositedTokens});
         });
       await contract2.methods
         .balanceOf(walletAddress)
         .call()
         .then((data) => {
-          this.setState({avaxBalance: data});
+          let depositedTokens = new BigNumber(data)
+          .div(1e18)
+          .toFixed(2);
+
+          this.setState({avaxBalance: depositedTokens});
         });
 
       await contract3.methods
         .balanceOf(walletAddress)
         .call()
         .then((data) => {
-          this.setState({bnbBalance: data});
+          let depositedTokens = new BigNumber(data)
+          .div(1e18)
+          .toFixed(2);
+
+          this.setState({bnbBalance: depositedTokens});
           
         });
     }
@@ -1046,7 +1058,7 @@ export default class Subscription extends React.Component {
                 <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-5">
                   <img src={require(`./assets/wethIcon.svg`).default} width={20} height={20} alt="" />
                       <div className="d-flex align-items-center gap-1">
-                        <span className="balance-amount mb-0">{this.state.ethBalance} DYP</span>
+                        <span className="balance-amount mb-0">{ getFormattedNumber(this.state.ethBalance) } DYP</span>
                         <img src={require(`./assets/dypIcon.svg`).default} width={20} height={20} alt="" />
                       </div>
                 </div>
