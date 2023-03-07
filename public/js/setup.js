@@ -27596,15 +27596,24 @@ window.param = param;
 window.cached_contracts = Object.create(null);
 
 async function getCoinbase() {
-  if (window.ethereum && window.ethereum.isCoin98 && window.ethereum.isMetaMask) {
+  if (
+    window.ethereum &&
+    window.ethereum.isCoin98 &&
+    window.ethereum.isMetaMask
+  ) {
     return window.coinbase_address.toLowerCase();
-  } else if (window.ethereum && !window.ethereum.isCoin98 && window.ethereum.isMetaMask){
-    const coinbase =  await window.ethereum.request({
+  } else if (
+    window.ethereum &&
+    !window.ethereum.isCoin98 &&
+    window.ethereum.isMetaMask
+  ) {
+    const coinbase = await window.ethereum.request({
       method: "eth_requestAccounts",
-    })
-    if(coinbase && coinbase.length > 0)
-    {window.coinbase_address = coinbase.pop()
-    return window.coinbase_address.toLowerCase();}
+    });
+    if (coinbase && coinbase.length > 0) {
+      window.coinbase_address = coinbase.pop();
+      return window.coinbase_address.toLowerCase();
+    }
   }
 }
 

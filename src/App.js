@@ -363,8 +363,6 @@ class App extends React.Component {
           if (data.length === 0) {
             localStorage.setItem("logout", "true");
           }
-        //   if(window.ethereum && window.ethereum.isCoin98)
-        //  { window.location.reload()}
         })
         .catch(console.error);
     } else {
