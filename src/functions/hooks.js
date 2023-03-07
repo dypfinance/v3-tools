@@ -44,7 +44,7 @@ const [currencyAmount, setCurrencyAmount] = useState("");
 
 useEffect(() => {
   injected.isAuthorized().then((isAuthorized) => {
-    if (isAuthorized) {
+    if (isAuthorized && window.ethereum && !window.ethereum.isCoin98 && window.ethereum.isMetaMask) {
       activate(injected, undefined, true)
         .then(async () => {
           const ethBalance = await onSignIn({ account, chainId });
@@ -63,7 +63,7 @@ useEffect(() => {
 
 // if the connection worked, wait until we get confirmation of that to flip the flag
 useEffect(() => {
-  if (!tried && active) {
+  if (!tried && active && window.ethereum && !window.ethereum.isCoin98 && window.ethereum.isMetaMask) {
     setTried(true);
   }
 }, [tried, active]);
@@ -82,7 +82,7 @@ export function useInactiveListener(suppress = false) {
         ethereum?.removeAllListeners(['networkChanged'])
 
 
-        if (ethereum && ethereum.on && !active && !error && !suppress) {
+        if (ethereum && ethereum.on && !active && !error && !suppress && window.ethereum && !window.ethereum.isCoin98 && window.ethereum.isMetaMask) {
             const handleChainChanged = () => {
                 activate(injected, undefined, true)
                     .catch((error) => {

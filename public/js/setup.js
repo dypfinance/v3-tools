@@ -27566,8 +27566,8 @@ async function connectWallet(provider, walletType) {
       await window.ethereum.enable();
       console.log("Connected!");
       window.IS_CONNECTED = true;
-      if (window.ethereum.isCoin98) window.WALLET_TYPE = "coin98";
-      if (window.ethereum.isMetaMask) window.WALLET_TYPE = "metamask";
+      if (window.ethereum.isCoin98 && window.ethereum.isMetaMask) window.WALLET_TYPE = "coin98";
+      if (window.ethereum.isMetaMask && !window.ethereum.isCoin98) window.WALLET_TYPE = "metamask";
       let coinbase_address = await window.ethereum.request({
         method: "eth_accounts",
       });
