@@ -324,9 +324,9 @@ class App extends React.Component {
     this.tvl().then();
     this.updateWindowDimensions();
     window.addEventListener("resize", this.updateWindowDimensions);
-    if (window.ethereum && window.ethereum.selectedAddress !== null) {
-      this.checkConnection();
-    }
+    // if (window.ethereum && window.ethereum.selectedAddress !== null) {
+    //   this.checkConnection();
+    // }
     this.checkNetworkId();
     this.refreshSubscription();
 
@@ -443,7 +443,7 @@ class App extends React.Component {
 
     if (!this.props.location.pathname.includes("bridge")) {
       ethereum?.on("chainChanged", this.checkNetworkId);
-      ethereum?.on("accountsChanged", this.checkConnection);
+      // ethereum?.on("accountsChanged", this.checkConnection);
     }
 
     if (window.ethereum && window.ethereum.isTrust === true) {

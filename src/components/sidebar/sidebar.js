@@ -41,8 +41,8 @@ const Sidebar = (props) => {
   const [avatar, setAvatar] = useState("/assets/img/person.svg");
 
   const { active, account } = useWeb3React();
-  const triedEager = useEagerConnect();
-  useInactiveListener(!triedEager);
+  // const triedEager = useEagerConnect();
+  // useInactiveListener(!triedEager);
 
   const fetchAvatar = async () => {
     const response = await fetch(
