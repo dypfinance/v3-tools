@@ -15,7 +15,9 @@ let accounts;
 
 const onSignIn = async ({ account, chainId }) => {
   if (!account || !chainId) return;
-  if (window.ethereum) {
+  if (window.ethereum && window.ethereum &&
+    !window.ethereum.isCoin98 &&
+    window.ethereum.isMetaMask) {
     try {
       accounts = await window.ethereum?.request({
         method: "eth_requestAccounts",
