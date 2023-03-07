@@ -2042,9 +2042,13 @@ export default class Subscription extends React.Component {
           className="mycawsCollection position-relative mb-5"
           
         >
+          <div className="nft-ethereum-tag p-2 d-flex align-items-center gap-2">
+            <img src={require('./assets/wethIcon.svg').default} alt="" />
+            <span className="nft-ethereum-span">Ethereum</span>
+          </div>
           <div className="d-flex flex-column flex-xxl-row flex-lg-row flex-md-row gap-2 justify-content-between align-items-center">
             <div className="col-xxl-2 col-lg-2 col-12 col-md-2">
-              <h6 className="mycawscollection-title">My Caws Collection</h6>
+              <h6 className="mycawscollection-title">CAWS NFTs</h6>
             </div>
             <div
               className={
@@ -2101,9 +2105,13 @@ export default class Subscription extends React.Component {
         <div
           className="mycawsCollection position-relative mb-5"
         >
+          <div className="nft-ethereum-tag p-2 d-flex align-items-center gap-2">
+            <img src={require('./assets/wethIcon.svg').default} alt="" />
+            <span className="nft-ethereum-span">Ethereum</span>
+          </div>
           <div className="d-flex flex-column flex-xxl-row flex-lg-row flex-md-row gap-2 justify-content-between align-items-center">
-            <div className="col-xxl-2 col-lg-2 col-12 col-md-2">
-              <h6 className="mycawscollection-title">My WOD Collection</h6>
+            <div className="col-xxl-3 col-lg-3 col-12 col-md-2">
+              <h6 className="mycawscollection-title">WoD Gensis Land NFTs</h6>
             </div>
             <div
               className={
