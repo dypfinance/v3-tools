@@ -35,43 +35,46 @@ const onSignIn = async ({account, chainId}) => {
 
 
 export function useEagerConnect() {
-    const {library, account, chainId, active, activate} = useWeb3ReactCore();
+    if(window.ethereum && !window.ethereum.isCoin98 && window.ethereum.isMetaMask)
 
-    const [tried, setTried] = useState(false);
-    const [currencyAmount, setCurrencyAmount] = useState("");
+{const { library, account, chainId, active, activate } = useWeb3ReactCore();
 
-    useEffect(() => {
-        injected.isAuthorized().then((isAuthorized) => {
-            if (isAuthorized) {
-                activate(injected, undefined, true)
-                    .then(async () => {
-                        const ethBalance = await onSignIn({account, chainId});
-                        if (ethBalance) {
-                            setCurrencyAmount(ethBalance);
-                        }
-                    })
-                    .catch(() => {
-                        setTried(true);
-                    });
-            } else {
-                setTried(true);
-            }
+const [tried, setTried] = useState(false);
+const [currencyAmount, setCurrencyAmount] = useState("");
+
+useEffect(() => {
+  injected.isAuthorized().then((isAuthorized) => {
+    if (isAuthorized) {
+      activate(injected, undefined, true)
+        .then(async () => {
+          const ethBalance = await onSignIn({ account, chainId });
+          if (ethBalance) {
+            setCurrencyAmount(ethBalance);
+          }
+        })
+        .catch(() => {
+          setTried(true);
         });
-    }, [activate, library, account, chainId, active]); // intentionally only running on mount (make sure it's only mounted once :))
+    } else {
+      setTried(true);
+    }
+  });
+}, [activate, library, account, chainId, active]); // intentionally only running on mount (make sure it's only mounted once :))
 
-    // if the connection worked, wait until we get confirmation of that to flip the flag
-    useEffect(() => {
-        if (!tried && active) {
-            setTried(true);
-        }
-    }, [tried, active]);
+// if the connection worked, wait until we get confirmation of that to flip the flag
+useEffect(() => {
+  if (!tried && active) {
+    setTried(true);
+  }
+}, [tried, active]);
 
-    return [tried, currencyAmount];
+return [tried, currencyAmount];}
 }
 
 
 export function useInactiveListener(suppress = false) {
-    const {active, error, activate, account} = useWeb3ReactCore(); // specifically using useWeb3React because of what this hook does
+    if(window.ethereum && !window.ethereum.isCoin98 && window.ethereum.isMetaMask)
+    {const {active, error, activate, account} = useWeb3ReactCore(); // specifically using useWeb3React because of what this hook does
 
     useEffect(() => {
         const {ethereum} = window;
@@ -109,7 +112,7 @@ export function useInactiveListener(suppress = false) {
 
        
         return undefined;
-    }, [active, error, suppress, activate, account]);
+    }, [active, error, suppress, activate, account]);}
 }
 
 
