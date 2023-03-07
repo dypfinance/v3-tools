@@ -16,7 +16,7 @@ let accounts;
 const onSignIn = async ({ account, chainId }) => {
   if (!account || !chainId) return;
   if (window.ethereum && window.ethereum &&
-    !window.ethereum.isCoin98 &&
+    !window.coin98 &&
     window.ethereum.isMetaMask) {
     try {
       accounts = await window.ethereum?.request({
@@ -43,7 +43,7 @@ export function useEagerConnect() {
   useEffect(() => {
     if (
       window.ethereum &&
-      !window.ethereum.isCoin98 &&
+      !window.coin98 &&
       window.ethereum.isMetaMask
     ) {
       injected.isAuthorized().then((isAuthorized) => {
@@ -69,7 +69,7 @@ export function useEagerConnect() {
   useEffect(() => {
     if (
       window.ethereum &&
-      !window.ethereum.isCoin98 &&
+      !window.coin98 &&
       window.ethereum.isMetaMask
     ) {
       if (!tried && active) {
@@ -91,7 +91,7 @@ export function useInactiveListener(suppress = false) {
 
     if (
       window.ethereum &&
-      !window.ethereum.isCoin98 &&
+      !window.coin98 &&
       window.ethereum.isMetaMask
     ) {
       if (ethereum && ethereum.on && !active && !error && !suppress) {

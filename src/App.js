@@ -100,7 +100,7 @@ class App extends React.Component {
       if (
         window.ethereum &&
         (window.ethereum.isMetaMask === true ||
-          window.ethereum.isCoin98 === true ||
+          window.coin98 === true ||
           window.ethereum.isTrust === true)
       ) {
         window.ethereum
@@ -324,13 +324,13 @@ class App extends React.Component {
     this.tvl().then();
     this.updateWindowDimensions();
     window.addEventListener("resize", this.updateWindowDimensions);
-    if (window.ethereum && !window.ethereum.isCoin98 && window.ethereum.isMetaMask) {
+    if (window.ethereum && !window.coin98 && window.ethereum.isMetaMask) {
       this.checkConnection();
     }
     this.checkNetworkId();
     this.refreshSubscription();
 
-    if (window.ethereum && !window.ethereum.isCoin98) {
+    if (window.ethereum && !window.coin98) {
       this.handleEthereum();
     } else {
       window.addEventListener("ethereum#initialized", this.handleEthereum, {
