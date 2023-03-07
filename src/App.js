@@ -38,6 +38,7 @@ import Disclaimer from "./components/disclaimer/Disclaimer";
 import ScrollToTop from "./functions/ScrollToTop";
 import LandPopup from "./components/LandPopup/LandPopup";
 import { withRouter } from "react-router-dom";
+import Plans from "./components/account/Plans";
 
 class App extends React.Component {
   constructor(props) {
@@ -726,6 +727,20 @@ class App extends React.Component {
                     path="/account"
                     render={() => (
                       <Account
+                        appState={this.state}
+                        theme={this.state.theme}
+                        networkId={parseInt(this.state.networkId)}
+                        handleSwitchNetwork={this.handleSwitchNetwork}
+                        coinbase={this.state.coinbase}
+                        isConnected={this.state.isConnected}
+                      />
+                    )}
+                  />
+                  <Route
+                    exact
+                    path="/plans"
+                    render={() => (
+                      <Plans
                         appState={this.state}
                         theme={this.state.theme}
                         networkId={parseInt(this.state.networkId)}

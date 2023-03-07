@@ -12,6 +12,7 @@ import DropdownButton from "react-bootstrap/DropdownButton";
 import { shortAddress } from "../../functions/shortAddress";
 import ellipse from "./assets/ellipse.svg";
 import user from "./assets/user.svg";
+import plans from "./assets/plans.svg";
 import logoutimg from "./assets/logout.svg";
 import walletIcon from "./assets/walletIcon.svg";
 import WalletModal from "../WalletModal";
@@ -444,6 +445,13 @@ const Header = ({
                             <span className="d-flex gap-2 align-items-center">
                               <img src={user} alt="" />
                               My account</span>
+                              </NavLink>
+                            </Dropdown.Item>
+                            <Dropdown.Item>
+                            <NavLink to='/plans'>
+                            <span className="d-flex gap-2 align-items-center">
+                              <img src={plans} alt="" />
+                              Plans</span>
                               </NavLink>
                             </Dropdown.Item>
                             <Dropdown.Item onClick={() => logout()}>

@@ -3356,8 +3356,10 @@ padding: 12px;
 }
 
 .avatarimg {
-  height: 56px;
-  width: 56px;
+  min-height: 56px;
+  min-width: 56px;
+  max-height: 56px;
+  max-width: 56px;
   border-radius: 50%;
 }
 

@@ -14,7 +14,7 @@ import { ClickAwayListener, Tooltip } from "@material-ui/core";
 import { shortAddress } from "../../functions/shortAddress";
 import TopPoolsCard from "../top-pools-card/TopPoolsCard";
 import useWindowSize from "../../functions/useWindowSize";
-import gotoWod from './assets/gotoWod.svg'
+import launchpadIndicator from "../launchpad/assets/launchpadIndicator.svg";
 
 const { BigNumber } = window;
 
@@ -43,14 +43,13 @@ export default class Subscription extends React.Component {
       showSavebtn: false,
       showRemovebtn: false,
       subscribe_now: false,
-      usdtAddress: "0xdac17f958d2ee523a2206206994597c13d831ec7",
-      usdteAddress: "0xc7198437980c041c805a1edcba50c1ce5db95118",
+      wethAddress: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      wavaxAddress: "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7",
+      wbnbAddress: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
       triggerText: "See more V",
       isApproved: false,
       myNFTs: [],
       myStakess: [],
-      myLandNFTs: [],
-      landStakes: [],
       viewall: false,
       username: "",
       userNameInput: "",
@@ -64,9 +63,8 @@ export default class Subscription extends React.Component {
       ethFarm: [],
       bscFarm: [],
       avaxFarm: [],
-      ethBalance: "0.0",
-      bnbBalance: "0.0",
-      avaxBalance: "0.0",
+      dropdownTitle: "",
+      dropdownIcon: "",
     };
   }
 
@@ -268,10 +266,17 @@ export default class Subscription extends React.Component {
           window.config.subscriptioneth_tokens
         )[0],
       });
-    } else if (this.props.networkId !== 1) {
+    } else if (this.props.networkId === 43114) {
       this.setState({
         selectedSubscriptionToken: Object.keys(
           window.config.subscription_tokens
+        )[0],
+      });
+    }
+     else if (this.props.networkId === 56) {
+      this.setState({
+        selectedSubscriptionToken: Object.keys(
+          window.config.subscriptionbnb_tokens
         )[0],
       });
     }
@@ -368,46 +373,6 @@ export default class Subscription extends React.Component {
     }
   };
 
-
-  getAllBalance = async () => {
-  
-    const tokenAddress = "0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17";
-    const walletAddress = this.props.coinbase;
-    const TokenABI = window.ERC20_ABI;
-    
-    if (this.props.coinbase != undefined) {
-      const contract1 = new window.infuraWeb3.eth.Contract(TokenABI, tokenAddress);
-      const contract2 = new window.avaxWeb3.eth.Contract(TokenABI, tokenAddress);
-      const contract3 = new window.bscWeb3.eth.Contract(TokenABI, tokenAddress);
-
-     
-      await contract1.methods
-        .balanceOf(walletAddress)
-        .call()
-        .then((data) => {
-          this.setState({ethBalance: data});
-        });
-      await contract2.methods
-        .balanceOf(walletAddress)
-        .call()
-        .then((data) => {
-          this.setState({avaxBalance: data});
-        });
-
-      await contract3.methods
-        .balanceOf(walletAddress)
-        .call()
-        .then((data) => {
-          this.setState({bnbBalance: data});
-          
-        });
-    }
-  };
-
-
-
-
-
   componentDidUpdate(prevProps) {
     // Typical usage (don't forget to compare props):
     if (this.props.coinbase !== prevProps.coinbase) {
@@ -422,12 +387,10 @@ export default class Subscription extends React.Component {
       this.fetchBscFarming();
       this.fetchEthFarming();
       this.fetchEthStaking();
-      this.getAllBalance();
+
       if (this.props.networkId === 1) {
         this.myNft().then();
         this.myStakes().then();
-        this.myLandNft().then();
-        this.myLandStakes().then();
       }
     }
 
@@ -435,19 +398,22 @@ export default class Subscription extends React.Component {
       this.getDypBalance();
 
       if (this.props.networkId === 43114) {
-        this.handleSubscriptionTokenChange(this.state.usdteAddress);
+        this.handleSubscriptionTokenChange(this.state.wavaxAddress);
       } else if (this.props.networkId === 1) {
-        this.handleSubscriptionTokenChange(this.state.usdtAddress);
+        this.handleSubscriptionTokenChange(this.state.wethAddress);
         this.myNft().then();
         this.myStakes().then();
-        this.myLandNft().then();
-        this.myLandStakes().then();
+      }
+       else if (this.props.networkId === 56) {
+        this.handleSubscriptionTokenChange(this.state.wbnbAddress);
+    
       }
     }
   }
 
   componentDidMount() {
     // window._refreshBalIntervalDyp = setInterval(this.getDypBalance, 2000);
+
     this.getDypBalance();
 
     this.setState({ coinbase: this.props.coinbase });
@@ -481,14 +447,14 @@ export default class Subscription extends React.Component {
   };
 
   handleSubscriptionTokenChange = async (tokenAddress) => {
-    const token =
-      this.props.networkId === 1
-        ? this.state.usdtAddress
-        : this.state.usdteAddress;
+    const token = tokenAddress;
+    // this.props.networkId === 1
+    //   ? this.state.wethAddress
+    //   : this.state.wavaxAddress;
     let tokenDecimals =
       this.props.networkId === 1
         ? window.config.subscriptioneth_tokens[token]?.decimals
-        : window.config.subscription_tokens[token]?.decimals;
+        : this.props.networkId === 56 ? window.config.subscriptionbnb_tokens[token]?.decimals : window.config.subscription_tokens[token]?.decimals
     this.setState({
       selectedSubscriptionToken: token,
       tokenBalance: "",
@@ -499,7 +465,7 @@ export default class Subscription extends React.Component {
     let price =
       this.props.networkId === 1
         ? await window.getEstimatedTokenSubscriptionAmountETH(token)
-        : await window.getEstimatedTokenSubscriptionAmount(token);
+        : this.props.networkId === 56 ? await window.getEstimatedTokenSubscriptionAmountBNB(token) : await window.getEstimatedTokenSubscriptionAmount(token);
     price = new BigNumber(price).times(1.1).toFixed(0);
 
     let formattedPrice = getFormattedNumber(
@@ -525,39 +491,11 @@ export default class Subscription extends React.Component {
       this.setState({ myNFTs: nfts });
     }
   };
-  myLandNft = async () => {
-    if (this.props.coinbase !== null && this.props.coinbase !== undefined) {
-      let myNft = await window.myNftLandListContract(this.props.coinbase);
-
-      let nfts = myNft.map((nft) => window.getLandNft(nft));
-
-      nfts = await Promise.all(nfts);
-      nfts.reverse();
-      this.setState({ myLandNFTs: nfts });
-    }
-  };
 
   getStakesIds = async () => {
     const address = this.props.coinbase;
     if (address !== null && this.props.coinbase !== undefined) {
       let staking_contract = await window.getContractNFT("NFTSTAKING");
-      let stakenft = [];
-      let myStakes = await staking_contract.methods
-        .depositsOf(address)
-        .call()
-        .then((result) => {
-          for (let i = 0; i < result.length; i++)
-            stakenft.push(parseInt(result[i]));
-          return stakenft;
-        });
-
-      return myStakes;
-    }
-  };
-  getLandStakesIds = async () => {
-    const address = this.props.coinbase;
-    if (address !== null && this.props.coinbase !== undefined) {
-      let staking_contract = await window.getContractLandNFT("LANDNFTSTAKING");
       let stakenft = [];
       let myStakes = await staking_contract.methods
         .depositsOf(address)
@@ -578,13 +516,6 @@ export default class Subscription extends React.Component {
     stakes = await Promise.all(stakes);
     stakes.reverse();
     this.setState({ myStakess: stakes });
-  };
-  myLandStakes = async () => {
-    let myStakes = await this.getLandStakesIds();
-    let stakes = myStakes.map((stake) => window.getLandNft(stake));
-    stakes = await Promise.all(stakes);
-    stakes.reverse();
-    this.setState({ landStakes: stakes });
   };
 
   handleApprove = async (e) => {
@@ -670,7 +601,7 @@ export default class Subscription extends React.Component {
     e.preventDefault();
     console.log("handleSubscribe()");
     let subscriptionContract = await window.getContract({
-      key: this.props.networkId === 1 ? "SUBSCRIPTIONETH" : "SUBSCRIPTION",
+      key: this.props.networkId === 1 ? "SUBSCRIPTIONETH" : this.props.networkId === 56 ? "SUBSCRIPTIONBNB" : "SUBSCRIPTION",
     });
 
     this.setState({ loadspinnerSub: true });
@@ -690,7 +621,7 @@ export default class Subscription extends React.Component {
   handleUnsubscribe = async (e) => {
     e.preventDefault();
     let subscriptionContract = await window.getContract({
-      key: this.props.networkId === 1 ? "SUBSCRIPTIONETH" : "SUBSCRIPTION",
+      key: this.props.networkId === 1 ? "SUBSCRIPTIONETH" : this.props.networkId === 56 ? "SUBSCRIPTIONBNB" : "SUBSCRIPTION",
     });
     await subscriptionContract.methods
       .unsubscribe()
@@ -703,8 +634,6 @@ export default class Subscription extends React.Component {
         // this.setState({ loadspinner: false });
       });
   };
-
-  
 
   onImageChange = (event) => {
     const fileTypes = [
@@ -823,13 +752,13 @@ export default class Subscription extends React.Component {
         ? window.config.subscriptioneth_tokens[
             this.state.selectedSubscriptionToken
           ]?.decimals
-        : window.config.subscription_tokens[
-            this.state.selectedSubscriptionToken
-          ]?.decimals;
+        : this.props.networkId === 56 ?  window.config.subscriptionbnb_tokens[
+          this.state.selectedSubscriptionToken
+        ]?.decimals :  window.config.subscription_tokens[
+          this.state.selectedSubscriptionToken
+        ]?.decimals;
     // this.handleCheckIfAlreadyApproved()
     let mycaws = [...this.state.myNFTs, ...this.state.myStakess];
-    let lands = [...this.state.myLandNFTs, ...this.state.landStakes]
-    console.log(window.ethereum);
 
     const focusInput = (input) => {
       document.getElementById(input).focus();
@@ -864,220 +793,12 @@ export default class Subscription extends React.Component {
       this.setState({ openTooltip: true });
     };
 
+
+    
+
     return (
-      <div>
-        <div className="d-flex align-items-start align-items-lg-0 justify-content-between flex-column flex-lg-row gap-4 gap-lg-0">
-          <div
-            className={`d-flex flex-column ${
-              this.state.showInput ? "gap-5 gap-lg-2" : "gap-2"
-            }`}
-          >
-            <div
-              className={`d-flex align-items-center w-100 justify-content-between justify-content-lg-start gap-3`}
-              // style={{ height: 38 }}
-            >
-               <div className="position-relative">
-                <div className="avatar-border"></div>
-                <img
-                  src={require("./assets/changeImage.svg").default}
-                  alt=""
-                  className="add-image"
-                />
-                <img
-                  src={this.state.image}
-                  alt="your image"
-                  className="avatarimg"
-                />
-                <input
-                  type="file"
-                  id="group_image"
-                  onChange={this.onImageChange}
-                />
-                {/* {this.state.showSavebtn === true ? (
-                <div
-                  className="savebtn"
-                  type=""
-                  onClick={this.handleSubmission}
-                >
-                  {this.state.loadspinnerSave === true ? (
-                    <div
-                      className="spinner-border "
-                      role="status"
-                      style={{ height: "1.5rem", width: "1.5rem" }}
-                    ></div>
-                  ) : (
-                    "Save"
-                  )}
-                </div>
-              ) : (
-                <></>
-              )}
-              {this.state.showRemovebtn === true ||
-              this.state.image !== Placeholder ? (
-                <div className="removebtn" type="" onClick={this.deleteAvatar}>
-                  {this.state.loadspinnerRemove === true ? (
-                    <div
-                      className="spinner-border "
-                      role="status"
-                      style={{ height: "1.5rem", width: "1.5rem" }}
-                    ></div>
-                  ) : (
-                    "Remove"
-                  )}
-                </div>
-              ) : (
-                <></>
-              )} */}
-              </div>
-             <div className="d-flex flex-column gap-2">
-             <div className="d-flex flex-column flex-lg-row align-items-start align-items-lg-center gap-2 gap-lg-3">
-             <h6 className="account-username">
-                {this.state.username ? this.state.username : "Dypian" }
-              </h6>
-              {this.state.showInput ? (
-                <div className="d-flex align-items-center gap-2">
-                  <div className="input-container px-0" style={{width: '190px'}}>
-                    <input
-                      type="text"
-                      min={1}
-                      max={365}
-                      id="username"
-                      name="username"
-                      placeholder=" "
-                      className="text-input"
-                      style={{ width: "100%" }}
-                      value={this.state.userNameInput}
-                      onChange={(e) =>
-                        this.setState({ userNameInput: e.target.value })
-                      }
-                    />
-                    <label
-                      htmlFor="username"
-                      className="label"
-                      onClick={() => focusInput("username")}
-                    >
-                      Enter a new name
-                    </label>
-                    <img
-                      src={require(`./assets/clearFieldIcon.svg`).default}
-                      className="clear-icon cursor-pointer"
-                      alt="clear field"
-                      onClick={() => this.setState({ showInput: false })}
-                    />
-                  </div>
-                  <button
-                    className="btn outline-btn py-2"
-                    onClick={() => this.postUsername(this.state.userNameInput)}
-                  >
-                    Submit
-                  </button>
-                </div>
-              ) : (
-                <img
-                  src={openNameChange}
-                  className="cursor-pointer"
-                  alt=""
-                  onClick={() => this.setState({ showInput: true })}
-                  style={{ zIndex: 2 }}
-                />
-              )}
-             </div>
-             <div className="d-flex align-items-center gap-2">
-                  <span className="account-wallet-address">
-                    {shortAddress(this.props.coinbase)}
-                  </span>
-                  <ClickAwayListener onClickAway={handleTooltipClose}>
-                    <Tooltip
-                      PopperProps={{
-                        disablePortal: true,
-                      }}
-                      onClose={handleTooltipClose}
-                      open={this.state.openTooltip}
-                      disableFocusListener
-                      disableHoverListener
-                      disableTouchListener
-                      placement="top"
-                      title={
-                        <div className="tooltip-text">
-                          {"Wallet address copied!"}
-                        </div>
-                      }
-                    >
-                      <img
-                        src={require("./assets/clipboardIcon.svg").default}
-                        className="cursor-pointer"
-                        alt="clipboard"
-                        onClick={() => {
-                          navigator.clipboard.writeText(this.props.coinbase);
-                          handleTooltipOpen();
-                        }}
-                      />
-                    </Tooltip>
-                  </ClickAwayListener>
-                </div>
-             </div>
-            </div>
-          
-          </div>
-          <div
-            className={
-              this.props.coinbase
-                ? "mb-3 d-flex w-100 justify-content-between justify-content-lg-end"
-                : "d-none"
-            }
-          >
-            <div className="d-flex flex-column align-items-start align-items-lg-end w-100 justify-content-between justify-content-lg-end gap-1">
-              <span className=" my-plan-tag">My plan</span>
-              <NavLink to="/plans" className="plan-tag py-2 px-4 d-flex align-items-center gap-2">
-                <img src={require('./assets/plans.svg').default} alt="" />
-                <span className="plan-tag-title">{this.props.appState.isPremium ? 'Dypians' : 'Free'}</span>
-              </NavLink>
-             
-            </div>
-          </div>
-        </div>
-        <div className="row mt-4 gap-3 gap-lg-0">
-          <div className="col-12 col-lg-6">
-            <div className="dyp-balances-wrapper d-flex flex-column gap-4 p-3">
-              <h6 className="balances-title">
-                Multi-chain DYP Balance
-              </h6>
-              <div className="d-flex flex-column flex-lg-row gap-3 gap-lg-0 align-items-center justify-content-between">
-                <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-5">
-                  <img src={require(`./assets/wethIcon.svg`).default} width={20} height={20} alt="" />
-                      <div className="d-flex align-items-center gap-1">
-                        <span className="balance-amount mb-0">{this.state.ethBalance} DYP</span>
-                        <img src={require(`./assets/dypIcon.svg`).default} width={20} height={20} alt="" />
-                      </div>
-                </div>
-                <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-5">
-                  <img src={require(`./assets/wbnbIcon.svg`).default} width={20} height={20} alt="" />
-                      <div className="d-flex align-items-center gap-1">
-                        <span className="balance-amount mb-0">{this.state.bnbBalance} DYP</span>
-                        <img src={require(`./assets/dypIcon.svg`).default} width={20} height={20} alt="" />
-                      </div>
-                </div>
-                <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-5">
-                  <img src={require(`./assets/wavaxIcon.svg`).default} alt="" />
-                      <div className="d-flex align-items-center gap-1">
-                        <span className="balance-amount mb-0">{this.state.avaxBalance} DYP</span>
-                        <img src={require(`./assets/dypIcon.svg`).default} width={20} height={20} alt="" />
-                      </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-12 col-lg-6">
-            <a href="https://www.worldofdypians.com/" target={"_blank"} className="wod-wrapper d-flex flex-column align-items-end gap-3 p-3">
-               <h6 className="wod-title">Experience unique gameplay</h6>
-               <div className="d-flex align-items-center gap-1">
-                <span className="explore-wod">Explore more</span>
-                <img src={gotoWod} alt="" />
-               </div>
-            </a>
-          </div>
-        </div>
-        {/* <div className="row mt-5 gap-4 gap-lg-0">
+      <div style={{ minHeight: "65vh" }}>
+        <div className="row mt-5 gap-4 gap-lg-0">
           <div className="col-12 col-lg-6 position-relative d-flex justify-content-center">
             <div
               className="purplediv"
@@ -1113,7 +834,7 @@ export default class Subscription extends React.Component {
                 </div>
               </div>
               <div className="col-12 col-lg-6 free-plan-image"></div>
-              <div className="col-12">
+              <div className="col-12 d-flex flex-column justify-content-end">
                 <hr className="form-divider my-4" style={{ height: "2px" }} />
                 <div className="d-flex flex-column">
                   <span className="inactive-plan">Active</span>
@@ -1176,17 +897,15 @@ export default class Subscription extends React.Component {
                           <p className="subscr-subtitle">
                             The subscription tokens will be used to buy DYP
                           </p>
-                        
+                          {/* <p className="subscr-note">
+                        *When you unsubscribe the DYP will be unlocked and sent to
+                        your wallet
+                      </p> */}
                         </div>
                         <div>
                           <div className="d-flex gap-2 flex-column flex-lg-row">
-                            <img
-                              src="/assets/img/usdt.svg"
-                              width={28}
-                              height={28}
-                              alt=""
-                            ></img>
-                            <h3 className="subscr-price">75 USDT</h3>
+                          
+                            <h3 className="subscr-price">75 USD</h3>
                           </div>
                           <p className="subscr-note">*Exclusive offer</p>
                         </div>
@@ -1211,10 +930,32 @@ export default class Subscription extends React.Component {
                           this.setState({
                             subscribe_now: !this.state.subscribe_now,
                           });
-                          this.handleSubscriptionTokenChange(
-                            this.state.usdtAddress
-                          );
+                          this.props.networkId === 1
+                            ? this.handleSubscriptionTokenChange(
+                                this.state.wethAddress
+                              )
+                            : this.props.networkId === 56
+                            ? this.handleSubscriptionTokenChange(
+                                this.state.wbnbAddress
+                              )
+                            : this.handleSubscriptionTokenChange(
+                                this.state.wavaxAddress
+                              );
                           this.handleCheckIfAlreadyApproved();
+                          this.props.networkId === 1
+                            ? this.setState({
+                                dropdownIcon: "weth",
+                                dropdownTitle: "WETH",
+                              })
+                            : this.props.networkId === 56
+                            ? this.setState({
+                                dropdownIcon: "wbnb",
+                                dropdownTitle: "WBNB",
+                              })
+                            : this.setState({
+                                dropdownIcon: "wavax",
+                                dropdownTitle: "WAVAX",
+                              });
                         }}
                       >
                         Subscribe now
@@ -1233,22 +974,22 @@ export default class Subscription extends React.Component {
                           }}
                         >
                           <h3 className="subscr-title">Welcome premium user</h3>
-                          <p className="subscr-subtitle">
+                          {/* <p className="subscr-subtitle">
                             *When you unsubscribe the DYP will be unlocked and
                             sent to your wallet
-                          </p>
-                          <p className="subscr-note">
+                          </p> */}
+                          {/* <p className="subscr-note">
                         *When you unsubscribe the DYP will be unlocked and sent to
                         your wallet
-                      </p>
+                      </p> */}
                         </div>
-                        <div>
+                        {/* <div>
                       <div className="d-flex gap-2">
                         <img src="/assets/img/usdt.svg"></img>
                         <h3 className="subscr-price">75 USDT</h3>
                       </div>
                       <p className="subscr-note">*Exclusive offer</p>
-                    </div>
+                    </div> */}
                       </div>
                     </div>
                     <div className="d-flex justify-content-between align-items-center mt-3">
@@ -1262,50 +1003,47 @@ export default class Subscription extends React.Component {
                       >
                         Active <br></br> Premium plan
                       </div>
-                      <div
+                      {/* <div
                         className="btn outline-btn px-5"
                         type=""
                         onClick={this.handleUnsubscribe}
                       >
                         Unsubscribe
-                      </div>
+                      </div> */}
                     </div>
                   </>
                 )}
               </div>
             </div>
           </div>
-        </div> 
+        </div>
         {this.state.subscribe_now === true ? (
-          <div className="row mt-4 justify-content-end">
-            <div className="col-12 col-lg-6">
-              <div className="subscribe-container p-3 position-relative">
-                <div
-                  className="purplediv"
-                  style={{ background: "#8E97CD" }}
-                ></div>
-                <div className="d-flex justify-content-between align-items-center">
-                  <div className="d-flex align-items-center gap-2">
-                    <img src={coinStackIcon} alt="coin stack" />
-                    <h6 className="free-plan-title">
-                      DYP Tools Premium Subscription
-                    </h6>
-                  </div>
-                  <img
-                    src={require(`./assets/clearFieldIcon.svg`).default}
-                    height={28}
-                    width={28}
-                    className="cursor-pointer"
-                    onClick={() => this.setState({ subscribe_now: false })}
-                    alt="close subscription"
-                  />
+          <div className="subscribe-wrapper row mt-4 justify-content-end" id="subscribe" >
+            <div className="subscribe-container p-3 position-relative">
+              <div
+                className="purplediv"
+                style={{ background: "#8E97CD" }}
+              ></div>
+              <div className="d-flex justify-content-between align-items-center">
+                <div className="d-flex align-items-center gap-2">
+                  <img src={coinStackIcon} alt="coin stack" />
+                  <h6 className="free-plan-title">Dypian Plan Subscription</h6>
                 </div>
-                <div className="d-flex mt-4 align-items-end justify-content-between flex-column-reverse flex-lg-row w-100">
-                  <div className="d-flex flex-column gap-3 subscribe-input-container">
-                    <span className="token-amount-placeholder">
-                      Token Amount
-                    </span>
-                    <div
+                <img
+                  src={require(`./assets/clearFieldIcon.svg`).default}
+                  height={28}
+                  width={28}
+                  className="cursor-pointer"
+                  onClick={() => this.setState({ subscribe_now: false })}
+                  alt="close subscription"
+                />
+              </div>
+              <div className="d-flex mt-4 align-items-end justify-content-between flex-column-reverse flex-lg-row w-100">
+                <div className="d-flex flex-column gap-3 subscribe-input-container">
+                  <span className="token-amount-placeholder">
+                    Select Subscription Token
+                  </span>
+                  {/* <div
                       className="input-container px-0"
                       style={{ width: "100%" }}
                     >
@@ -1328,69 +1066,212 @@ export default class Subscription extends React.Component {
                       >
                         Subscription Token Amount
                       </label>
-                    </div>
-                  </div>
-                  <div className="d-flex flex-column align-items-end justify-content-lg-end">
-                    <span className="token-balance-placeholder">
-                      USDT Balance
-                    </span>
-                    <h6 className="account-token-amount">
-                      {" "}
-                      {getFormattedNumber(
-                        this.state.tokenBalance / 10 ** tokenDecimals,
-                        6
-                      )}
-                    </h6>
-                  </div>
-                </div>
-                <hr className="form-divider my-4" />
-                <div className="d-flex justify-content-between align-items-center">
-                  <div
-                    className="subscription-token-wrapper  p-2 d-flex align-items-center justify-content-between "
-                    style={{ width: "40%" }}
-                  >
-                    <span className="token-amount-placeholder">
-                      Subscription token:
-                    </span>
-                    <div className="d-flex align-items-center gap-2">
-                      <img
-                        src="/assets/img/usdt.svg"
-                        height={24}
-                        width={24}
-                        alt="usdt"
-                      />
-                      <span className="usdt-text">USDT</span>
-                    </div>
-                  </div>
-                  <button
-                    className="btn success-button px-4"
-                    onClick={(e) =>
-                      this.state.isApproved === false
-                        ? this.handleApprove(e)
-                        : this.handleSubscribe()
-                    }
-                  >
-                    {this.state.isApproved === true &&
-                    this.state.loadspinner === false ? (
-                      "Subscribe"
-                    ) : this.state.isApproved === false &&
-                      this.state.loadspinner === false ? (
-                      "Approve"
-                    ) : (
+                    </div> */}
+                  <div class="dropdown position relative">
+                    <button
+                      class={`btn launchpad-dropdown d-flex justify-content-between align-items-center dropdown-toggle w-100`}
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
                       <div
-                        className="spinner-border "
-                        role="status"
-                        style={{ height: "1.5rem", width: "1.5rem" }}
-                      ></div>
-                    )}
-                  </button>
+                        className="d-flex align-items-center gap-2"
+                        style={{ color: "#fff" }}
+                      >
+                        <img
+                          src={
+                            require(`./assets/${this.state.dropdownIcon.toLowerCase()}Icon.svg`)
+                              .default
+                          }
+                          alt=""
+                        />
+                        {this.state.dropdownTitle}
+                      </div>
+                      <img src={launchpadIndicator} alt="" />
+                    </button>
+                    <ul class="dropdown-menu w-100">
+                      {/* <li className="dropdown-item launchpad-item d-flex align-items-center gap-2"
+                      onClick={() => {
+                        this.setState({dropdownTitle: 'WETH', dropdownIcon: 'wethIcon.svg'})
+                      }}
+                      >
+                        <img
+                          src={require(`./assets/wethIcon.svg`).default}
+                          alt=""
+                        />
+                        WETH
+                      </li>
+                      <li className="dropdown-item launchpad-item d-flex align-items-center gap-2"
+                      onClick={() => {
+                        this.setState({dropdownTitle: 'USDT', dropdownIcon: 'usdtIcon.svg'})
+                      }}
+                      >
+                        <img
+                          src={require(`./assets/usdtIcon.svg`).default}
+                          alt=""
+                        />
+                        USDT
+                      </li>
+                      <li className="dropdown-item launchpad-item d-flex align-items-center gap-2"
+                      onClick={() => {
+                        this.setState({dropdownTitle: 'USDC', dropdownIcon: 'usdcIcon.svg'})
+                      }}
+                      >
+                        <img
+                          src={require(`./assets/usdcIcon.svg`).default}
+                          alt=""
+                        />
+                        USDC
+                      </li> */}
+                      {Object.keys(
+                        this.props.networkId === 1
+                          ? window.config.subscriptioneth_tokens
+                          : this.props.networkId === 56
+                          ? window.config.subscriptionbnb_tokens
+                          : window.config.subscription_tokens
+                      ).map((t, i) => (
+                        // <span className="radio-wrapper" key={t}>
+                        //   <input
+                        //     type="radio"
+                        //     value={t}
+                        //     name={"tokensymbol"}
+                        //     checked={
+                        //       t == this.state.selectedSubscriptionToken
+                        //     }
+                        //     disabled={!this.props.appState.isConnected}
+                        //     onChange={
+                        //       (e) => {
+                        //         this.handleSubscriptionTokenChange(
+                        //           e.target.value
+                        //         );
+                        //         this.handleCheckIfAlreadyApproved();
+                        //       console.log(e.target.value);
+
+                        //       }
+
+                        //     }
+                        //   />
+                        //   {this.props.networkId === 1
+                        //     ? window.config.subscriptioneth_tokens[t]?.symbol
+                        //     : window.config.subscription_tokens[t]?.symbol}
+                        // </span>
+                        <li
+                          className="dropdown-item launchpad-item d-flex align-items-center gap-2"
+                          onClick={() => {
+                            this.setState({
+                              dropdownTitle:
+                                this.props.networkId === 1
+                                  ? window.config.subscriptioneth_tokens[t]
+                                      ?.symbol
+                                  : this.props.networkId === 56
+                                  ? window.config.subscriptionbnb_tokens[t]
+                                      ?.symbol
+                                  : window.config.subscription_tokens[t]
+                                      ?.symbol,
+                              dropdownIcon:
+                                this.props.networkId === 1
+                                  ? window.config.subscriptioneth_tokens[t]
+                                      ?.symbol
+                                  : this.props.networkId === 56
+                                  ? window.config.subscriptionbnb_tokens[t]
+                                      ?.symbol
+                                  : window.config.subscription_tokens[t]
+                                      ?.symbol,
+                            });
+                            console.log(t);
+                            this.handleSubscriptionTokenChange(t);
+                            this.handleCheckIfAlreadyApproved();
+                          }}
+                        >
+                          <img
+                            src={
+                              this.props.networkId === 1
+                                ? require(`./assets/${window.config.subscriptioneth_tokens[
+                                    t
+                                  ]?.symbol.toLowerCase()}Icon.svg`).default
+                                : this.props.networkId === 56
+                                ? require(`./assets/${window.config.subscriptionbnb_tokens[
+                                    t
+                                  ]?.symbol.toLowerCase()}Icon.svg`).default
+                                : require(`./assets/${window.config.subscription_tokens[
+                                    t
+                                  ]?.symbol.toLowerCase()}Icon.svg`).default
+                            }
+                            alt=""
+                          />
+                          {this.props.networkId === 1
+                            ? window.config.subscriptioneth_tokens[t]?.symbol
+                            : this.props.networkId === 56 ? window.config.subscriptionbnb_tokens[t]?.symbol : window.config.subscription_tokens[t]?.symbol
+                            }
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
+                <div className="d-flex flex-column align-items-end justify-content-lg-end">
+                  <span className="token-balance-placeholder">
+                    Token Balance
+                  </span>
+                  <h6 className="account-token-amount">
+                    {" "}
+                    {getFormattedNumber(
+                      this.state.tokenBalance / 10 ** tokenDecimals,
+                      6
+                    )}
+                  </h6>
+                </div>
+              </div>
+              <div
+                className="subscription-token-wrapper  p-2 d-flex align-items-center justify-content-between  mt-3"
+                style={{ width: "100%" }}
+              >
+                <span className="token-amount-placeholder">
+                  Subscription price:
+                </span>
+                <div className="d-flex align-items-center gap-2">
+                  <span className="usdt-text">{this.state.formattedPrice.slice(0,9)}</span>
+
+                  <img
+                    src={
+                      require(`./assets/${this.state.dropdownIcon.toLowerCase()}Icon.svg`)
+                        .default
+                    }
+                    height={24}
+                    width={24}
+                    alt="usdt"
+                  />
+                </div>
+              </div>
+              <hr className="form-divider my-4" />
+              <div className="d-flex justify-content-end align-items-center">
+                <button
+                  className="btn success-button px-4"
+                  onClick={(e) =>
+                    this.state.isApproved === false
+                      ? this.handleApprove(e)
+                      : this.handleSubscribe()
+                  }
+                >
+                  {this.state.isApproved === true &&
+                  this.state.loadspinner === false ? (
+                    "Subscribe"
+                  ) : this.state.isApproved === false &&
+                    this.state.loadspinner === false ? (
+                    "Approve"
+                  ) : (
+                    <div
+                      className="spinner-border "
+                      role="status"
+                      style={{ height: "1.5rem", width: "1.5rem" }}
+                    ></div>
+                  )}
+                </button>
               </div>
             </div>
           </div>
         ) : (
           <></>
-        )} */}
+        )}
         {/* <form onSubmit={this.handleSubscribe}>     
           <div>
             {!this.props.appState.isPremium ? (
@@ -1726,439 +1607,6 @@ export default class Subscription extends React.Component {
           )}
         </form> */}
 
-        {this.state.userPools && this.state.userPools.length > 0 && (
-          <>
-            <h4 className="d-block mb-5 mt-5" id="my-fav">
-              My Earnings
-            </h4>
-            <div
-              style={{
-                gap: "50px 0px",
-                display: "grid",
-                gridTemplateColumns: "repeat(1, 1fr)",
-              }}
-            >
-              <div
-                className="row p-0 m-0 poolrows"
-                style={{
-                  gap: "50px 0px",
-                }}
-              >
-                {this.state.ethStake &&
-                  this.state.ethStake
-                    .slice(0, this.state.ethStake.length)
-                    .map((pool, index) => (
-                      <NavLink
-                        to="/earn"
-                        style={{
-                          display:
-                            this.state.userPools.length > 0
-                              ? this.state.userPools.find(
-                                  (obj) => obj.contract_address == pool.id
-                                )
-                                ? "block"
-                                : "none"
-                              : "none",
-                          position: "relative",
-                        }}
-                      >
-                        <div
-                          style={{
-                            display:
-                              this.state.userPools.length > 0
-                                ? this.state.userPools.find(
-                                    (obj) => obj.contract_address == pool.id
-                                  )
-                                  ? "block"
-                                  : "none"
-                                : "none",
-                            position: "relative",
-                          }}
-                        >
-                          <div
-                            className="d-flex justify-content-center align-items-center"
-                            style={{
-                              position: "absolute",
-                              top: "-23px",
-                              left: "33%",
-                              width: "106px",
-                              height: "34px",
-                              transform: "translateX(-50%)",
-                              borderRadius: "50px",
-                              background:
-                                "linear-gradient(93.99deg, #4ED5CD 0%, #524FD8 100%)",
-                              gap: "5px",
-                              zIndex: 1,
-                            }}
-                          >
-                            <img src="/assets/img/ethereum.svg"></img>
-                            <div style={{ color: "#F7F7FC" }}>Ethereum</div>
-                          </div>
-                          <TopPoolsCard
-                            key={index}
-                            chain={this.props.networkId}
-                            top_pick={pool.top_pick}
-                            tokenName={pool.pair_name}
-                            apr={pool.apy_percent + "%"}
-                            tvl={"$" + getFormattedNumber(pool.tvl_usd)}
-                            lockTime={
-                              pool.lock_time ? pool.lock_time : "No Lock"
-                            }
-                            tokenLogo={
-                              pool.icon
-                                ? pool.icon
-                                : pool.pair_name === "DYP"
-                                ? "dyplogo.svg"
-                                : "idypius.svg"
-                            }
-                            onShowDetailsClick={() => {}}
-                            onHideDetailsClick={() => {}}
-                            cardType={"table"}
-                            details={false}
-                            isNewPool={pool.new_pool === "Yes" ? true : false}
-                            isStaked={
-                              this.state.userPools.length > 0
-                                ? this.state.userPools.find(
-                                    (obj) => obj.contract_address == pool.id
-                                  )
-                                  ? true
-                                  : false
-                                : false
-                            }
-                            isAccount={true}
-                            expired={pool.expired === "Yes" ? true : false}
-                          />
-                        </div>
-                      </NavLink>
-                    ))}
-              </div>
-              <div
-                className="row p-0 m-0 poolrows"
-                style={{
-                  gap: "50px 0px",
-                }}
-              >
-                {this.state.bnbStake &&
-                  this.state.bnbStake
-                    .slice(0, this.state.bnbStake.length)
-                    .map((pool, index) => (
-                      <NavLink
-                        to="/earn"
-                        style={{
-                          display:
-                            this.state.userPools.length > 0
-                              ? this.state.userPools.find(
-                                  (obj) => obj.contract_address == pool.id
-                                )
-                                ? "block"
-                                : "none"
-                              : "none",
-                          position: "relative",
-                        }}
-                      >
-                        <div
-                          style={{
-                            display:
-                              this.state.userPools.length > 0
-                                ? this.state.userPools.find(
-                                    (obj) => obj.contract_address == pool.id
-                                  )
-                                  ? "block"
-                                  : "none"
-                                : "none",
-                            position: "relative",
-                          }}
-                        >
-                          <div
-                            className="d-flex justify-content-center align-items-center"
-                            style={{
-                              position: "absolute",
-                              top: "-23px",
-                              left: "33%",
-                              width: "115px",
-                              height: "34px",
-                              transform: "translateX(-50%)",
-                              borderRadius: "50px",
-                              background:
-                                "linear-gradient(93.99deg, #DAAA0A 0%, #EDB90B 100%)",
-                              gap: "5px",
-                              zIndex: 1,
-                            }}
-                          >
-                            <img
-                              src={require("../../assets/bnblogo.svg").default}
-                              alt=""
-                              style={{ height: 20, width: 20 }}
-                            ></img>
-                            <div style={{ color: "#F7F7FC" }}>BNB Chain</div>
-                          </div>
-
-                          <TopPoolsCard
-                            key={index}
-                            chain={this.props.networkId}
-                            top_pick={pool.top_pick}
-                            tokenName={pool.pair_name}
-                            apr={pool.apy_percent + "%"}
-                            tvl={"$" + getFormattedNumber(pool.tvl_usd)}
-                            lockTime={
-                              pool.lock_time ? pool.lock_time : "No Lock"
-                            }
-                            tokenLogo={
-                              pool.icon
-                                ? pool.icon
-                                : pool.pair_name === "DYP"
-                                ? "dyplogo.svg"
-                                : "idypius.svg"
-                            }
-                            onShowDetailsClick={() => {}}
-                            onHideDetailsClick={() => {}}
-                            cardType={"table"}
-                            details={false}
-                            isNewPool={pool.new_pool === "Yes" ? true : false}
-                            isStaked={
-                              this.state.userPools.length > 0
-                                ? this.state.userPools.find(
-                                    (obj) => obj.contract_address == pool.id
-                                  )
-                                  ? true
-                                  : false
-                                : false
-                            }
-                            isAccount={true}
-                            expired={pool.expired === "Yes" ? true : false}
-                          />
-                        </div>
-                      </NavLink>
-                    ))}
-              </div>
-
-              <div
-                className="row p-0 m-0 poolrows"
-                style={{
-                  gap: "50px 0px",
-                }}
-              >
-                {this.state.avaxStake &&
-                  this.state.avaxStake
-                    .slice(0, this.state.avaxStake.length)
-                    .map((pool, index) => (
-                      <NavLink
-                        to="/earn"
-                        style={{
-                          display:
-                            this.state.userPools.length > 0
-                              ? this.state.userPools.find(
-                                  (obj) => obj.contract_address == pool.id
-                                )
-                                ? "block"
-                                : "none"
-                              : "none",
-                          position: "relative",
-                        }}
-                      >
-                        <div
-                          style={{
-                            display:
-                              this.state.userPools.length > 0
-                                ? this.state.userPools.find(
-                                    (obj) => obj.contract_address == pool.id
-                                  )
-                                  ? "block"
-                                  : "none"
-                                : "none",
-                            position: "relative",
-                          }}
-                        >
-                          <div
-                            className="d-flex justify-content-center align-items-center"
-                            style={{
-                              position: "absolute",
-                              top: "-23px",
-                              left: "33%",
-                              width: "115px",
-                              height: "34px",
-                              transform: "translateX(-50%)",
-                              borderRadius: "50px",
-                              background:
-                                "linear-gradient(93.99deg, #DF2C2D 0%, #F86465 100%)",
-                              gap: "5px",
-                              zIndex: 1,
-                            }}
-                          >
-                            <img
-                              src={require("../../assets/wavax.svg").default}
-                              alt=""
-                              style={{ height: 20, width: 20 }}
-                            ></img>
-                            <div style={{ color: "#F7F7FC" }}>Avalanche</div>
-                          </div>
-
-                          <TopPoolsCard
-                            key={index}
-                            chain={this.props.networkId}
-                            top_pick={pool.top_pick}
-                            tokenName={pool.pair_name}
-                            apr={pool.apy_percent + "%"}
-                            tvl={"$" + getFormattedNumber(pool.tvl_usd)}
-                            lockTime={
-                              pool.lock_time ? pool.lock_time : "No Lock"
-                            }
-                            tokenLogo={
-                              pool.icon
-                                ? pool.icon
-                                : pool.pair_name === "DYP"
-                                ? "dyplogo.svg"
-                                : "idypius.svg"
-                            }
-                            onShowDetailsClick={() => {}}
-                            onHideDetailsClick={() => {}}
-                            cardType={"table"}
-                            details={false}
-                            isNewPool={pool.new_pool === "Yes" ? true : false}
-                            isStaked={
-                              this.state.userPools.length > 0
-                                ? this.state.userPools.find(
-                                    (obj) => obj.contract_address == pool.id
-                                  )
-                                  ? true
-                                  : false
-                                : false
-                            }
-                            isAccount={true}
-                            expired={pool.expired === "Yes" ? true : false}
-                          />
-                        </div>
-                      </NavLink>
-                    ))}
-              </div>
-            </div>
-          </>
-        )}
-      <div className="row"
-      // style={{ marginTop: mycaws.length === 0 || lands.length === 0 ? "6rem" : "" }}
-      >
-        <div className="col-12 col-lg-6">
-        <div
-          className="mycawsCollection position-relative mb-5"
-          
-        >
-          <div className="d-flex flex-column flex-xxl-row flex-lg-row flex-md-row gap-2 justify-content-between align-items-center">
-            <div className="col-xxl-2 col-lg-2 col-12 col-md-2">
-              <h6 className="mycawscollection-title">My Caws Collection</h6>
-            </div>
-            <div
-              className={
-                this.state.viewall === false
-                  ? "cawscontaier"
-                  : "cawscontaier-open"
-              }
-            >
-              {mycaws.length > 0 &&
-                this.props.coinbase !== null &&
-                mycaws
-                  .slice(
-                    0,
-                    this.state.viewall === false && window.innerWidth > 756
-                      ? 2
-                      : this.state.viewall === false &&
-                        window.innerWidth <= 756 &&
-                        window.innerWidth > 500
-                      ? 1
-                      : this.state.viewall === false && window.innerWidth <= 500
-                      ? 1
-                      : mycaws.length
-                  )
-                  .map((item, id) => {
-                    return (
-                      <NftCawCard
-                        key={id}
-                        nft={item}
-                        action={() => {
-                          window.location.assign("/earn");
-                        }}
-                        modalId="#newNftStake"
-                        coinbase={this.props.coinbase}
-                      />
-                    );
-                  })}
-            </div>
-            <button
-              className="outline-btn"
-              style={{
-                height: "fit-content",
-                display: mycaws.length > 4 ? "block" : "none",
-              }}
-              onClick={() => {
-                this.setState({ viewall: !this.state.viewall });
-              }}
-            >
-              {this.state.viewall === false ? " View all" : "View less"}
-            </button>
-          </div>
-        </div>
-        </div>
-        <div className="col-12 col-lg-6">
-        <div
-          className="mycawsCollection position-relative mb-5"
-        >
-          <div className="d-flex flex-column flex-xxl-row flex-lg-row flex-md-row gap-2 justify-content-between align-items-center">
-            <div className="col-xxl-2 col-lg-2 col-12 col-md-2">
-              <h6 className="mycawscollection-title">My WOD Collection</h6>
-            </div>
-            <div
-              className={
-                this.state.viewall === false
-                  ? "cawscontaier"
-                  : "cawscontaier-open"
-              }
-            >
-              {lands.length > 0 &&
-                this.props.coinbase !== null &&
-                lands
-                  .slice(
-                    0,
-                    this.state.viewall === false && window.innerWidth > 756
-                      ? 2
-                      : this.state.viewall === false &&
-                        window.innerWidth <= 756 &&
-                        window.innerWidth > 500
-                      ? 1
-                      : this.state.viewall === false && window.innerWidth <= 500
-                      ? 1
-                      : lands.length
-                  )
-                  .map((item, id) => {
-                    return (
-                      <NftCawCard
-                        key={id}
-                        nft={item}
-                        action={() => {
-                          window.location.assign("/earn");
-                        }}
-                        modalId="#newNftStake"
-                        coinbase={this.props.coinbase}
-                      />
-                    );
-                  })}
-            </div>
-            <button
-              className="outline-btn"
-              style={{
-                height: "fit-content",
-                display: lands.length > 4 ? "block" : "none",
-              }}
-              onClick={() => {
-                this.setState({ viewall: !this.state.viewall });
-              }}
-            >
-              {this.state.viewall === false ? " View all" : "View less"}
-            </button>
-          </div>
-        </div>
-        </div>
-      </div>
-
-        <TierLevels display={"none"} infoDisplay={"flex"} />
         {/* <h4 className="d-block mb-5 mt-5" id="my-fav">
           My favourite pairs
         </h4>
