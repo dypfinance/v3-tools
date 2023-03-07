@@ -330,7 +330,7 @@ class App extends React.Component {
     this.checkNetworkId();
     this.refreshSubscription();
 
-    if (window.ethereum) {
+    if (window.ethereum && !window.ethereum.isCoin98) {
       this.handleEthereum();
     } else {
       window.addEventListener("ethereum#initialized", this.handleEthereum, {
