@@ -41,8 +41,14 @@ const Sidebar = (props) => {
   const [avatar, setAvatar] = useState("/assets/img/person.svg");
 
   const { active, account } = useWeb3React();
-  const triedEager = useEagerConnect();
-  useInactiveListener(!triedEager);
+  if (
+    window.ethereum &&
+    !window.ethereum.isCoin98 &&
+    window.ethereum.isMetaMask
+  ) {
+    const triedEager = useEagerConnect();
+    useInactiveListener(!triedEager);
+  }
 
   const fetchAvatar = async () => {
     const response = await fetch(
@@ -122,14 +128,14 @@ const Sidebar = (props) => {
     {
       label: "Yields",
       icon: "yieldsIcon",
-      link: '/farms',
+      link: "/farms",
       // children: [
       //   {
       //     title: "Pair explorer",
       //     link: "/pair-explorer",
       //   },
       //   {
-      //     title: "Pool explorer", 
+      //     title: "Pool explorer",
       //     link: "/pool-explorer",
       //   },
       //   {
