@@ -27595,18 +27595,18 @@ window.param = param;
 
 window.cached_contracts = Object.create(null);
 
-// async function getCoinbase() {
-//   if (window.WALLET_TYPE == "coin98") {
-//     return window.coinbase_address.toLowerCase();
-//   } else if (window.WALLET_TYPE != "coin98"){
-//     const coinbase =  await window.ethereum.request({
-//       method: "eth_requestAccounts",
-//     })
-//     if(coinbase && coinbase.length > 0)
-//     {window.coinbase_address = coinbase.pop()
-//     return window.coinbase_address.toLowerCase();}
-//   }
-// }
+async function getCoinbase() {
+  if (window.ethereum && window.ethereum.isCoin98 && window.ethereum.isMetaMask) {
+    return window.coinbase_address.toLowerCase();
+  } else if (window.ethereum && !window.ethereum.isCoin98 && window.ethereum.isMetaMask){
+    const coinbase =  await window.ethereum.request({
+      method: "eth_requestAccounts",
+    })
+    if(coinbase && coinbase.length > 0)
+    {window.coinbase_address = coinbase.pop()
+    return window.coinbase_address.toLowerCase();}
+  }
+}
 
 // function getCoinbase() {
 //   if (
@@ -27624,15 +27624,15 @@ window.cached_contracts = Object.create(null);
 //   }
 // }
 
-function getCoinbase() {
-  // if ( window.WALLET_TYPE == 'coin98' ) {
-  // 	return window.coinbase_address.toLowerCase()
-  // }
-  // else{
-  // 	return window.web3.eth.getCoinbase()
-  // }
-  return window.coinbase_address;
-}
+// function getCoinbase() {
+//   if ( window.WALLET_TYPE == 'coin98' ) {
+//   	return window.coinbase_address.toLowerCase()
+//   }
+//   else{
+//   	return window.web3.eth.getCoinbase()
+//   }
+//   return window.coinbase_address;
+// }
 
 async function getContract({ key, address = null, ABI = null }) {
   ABI = ABI || window[key + "_ABI"];
