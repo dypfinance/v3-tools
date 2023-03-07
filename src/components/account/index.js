@@ -1022,7 +1022,7 @@ export default class Subscription extends React.Component {
           <div
             className={
               this.props.coinbase
-                ? "mb-3 d-flex w-100 justify-content-between justify-content-lg-end"
+                ? "mb-3 d-flex justify-content-between justify-content-lg-end"
                 : "d-none"
             }
           >
