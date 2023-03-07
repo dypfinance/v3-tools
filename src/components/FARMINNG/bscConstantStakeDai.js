@@ -1289,7 +1289,7 @@ const StakeBscDai = ({
               </h6>
 
               <button
-                disabled={depositedTokens !== '' ? false : true}
+                disabled={false}
                 className={"outline-btn btn"}
                 onClick={() => {
                   setshowWithdrawModal(true);
