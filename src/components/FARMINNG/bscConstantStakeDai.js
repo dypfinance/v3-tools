@@ -443,6 +443,7 @@ const StakeBscDai = ({
     await staking.depositedTokens(coinbase).then((data)=>{
       amount = data
     })
+
     let deadline = Math.floor(
       Date.now() / 1e3 + window.config.tx_max_wait_seconds
     );

@@ -415,7 +415,6 @@ class TOKENAVAX {
   }
 }
 
-
 class TOKENBSC {
   constructor(key = "TOKENBSC") {
     this.key = key;
@@ -424,7 +423,7 @@ class TOKENBSC {
   }
 
   async transfer(to, amount) {
-    let contract = await getContract({key: this.key});
+    let contract = await getContract({ key: this.key });
 
     let gas = window.config.default_gas_amount;
     try {
@@ -439,20 +438,18 @@ class TOKENBSC {
     } catch (e) {
       console.warn(e);
     }
-    return await contract.methods
-      .transfer(to, amount)
-      .send({
-        gas,
-        from: await getCoinbase(),
-        gasPrice: window.config.default_gasprice_gwei * 1e9,
-      });
+    return await contract.methods.transfer(to, amount).send({
+      gas,
+      from: await getCoinbase(),
+      gasPrice: window.config.default_gasprice_gwei * 1e9,
+    });
   }
   async totalSupply() {
-    let contract = await getContract({key: this.key});
+    let contract = await getContract({ key: this.key });
     return await contract.methods.totalSupply().call();
   }
   async approve(spender, amount) {
-    let contract = await getContract({key: this.key});
+    let contract = await getContract({ key: this.key });
     let gas = window.config.default_gas_amount;
     try {
       let estimatedGas = await contract.methods["approve"](
@@ -466,16 +463,14 @@ class TOKENBSC {
     } catch (e) {
       console.warn(e);
     }
-    return await contract.methods
-      .approve(spender, amount)
-      .send({
-        gas,
-        from: await getCoinbase(),
-        gasPrice: window.config.default_gasprice_gwei * 1e9,
-      });
+    return await contract.methods.approve(spender, amount).send({
+      gas,
+      from: await getCoinbase(),
+      gasPrice: window.config.default_gasprice_gwei * 1e9,
+    });
   }
   async balanceOf(address) {
-    let contract = await getContract({key: this.key});
+    let contract = await getContract({ key: this.key });
     return await contract.methods.balanceOf(address).call();
   }
 }
@@ -519,7 +514,7 @@ class CONSTANT_STAKING_NEW {
           let contract = await getContract({ key: this.ticker });
           let value = 0;
           let gas = window.config.default_gas_amount;
-          console.log('methodname',contract.methods)
+          console.log("methodname", contract.methods);
           return await contract.methods[fn_name](...args).send({
             value,
             gas,
@@ -1481,7 +1476,6 @@ window.config = {
   wethavax_address: "0xf20d962a6c8f70c731bd838a3a388d7d48fa6e15",
   wethbsc_address: "0x2170ed0880ac9a755fd29b2688956bd959f933f8",
 
-
   // WBNB !! weth_address: '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c', // LOWERCASE!
 
   infura_endpoint:
@@ -1569,7 +1563,7 @@ window.config = {
   weth_address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
   etherscan_baseURL: "https://etherscan.io",
   snowtrace_baseURL: "https://snowtrace.io",
-  bscscan_baseURL: 'https://bscscan.com/',
+  bscscan_baseURL: "https://bscscan.com/",
 
   max_proposals_per_call: 4,
   // default_gasprice_gwei: 60,
@@ -1600,8 +1594,7 @@ window.config = {
   constant_stakingnew_new2_address:
     "0x8A30Be7B2780b503ff27dBeaCdecC4Fe2587Af5d",
 
-    constant_staking_newi3_address:
-    "0xeb7dd6B50dB34f7ff14898D0Be57A99A9F158C4D",
+  constant_staking_newi3_address: "0xeb7dd6B50dB34f7ff14898D0Be57A99A9F158C4D",
 
   //Buyback new
   buyback_staking1_1_address: "0xdCBB5B2148f0cf1Abd7757Ba04A5821fEaD80587",
@@ -1641,7 +1634,6 @@ window.config = {
   constant_stakingdaieth_address: "0x44bEd8ea3296bda44870d0Da98575520De1735d4",
 
   constant_stakingdaibsc_address: "0xa9efab22cCbfeAbB6dc4583d81421e76342faf8b",
-
 
   farming_new_1_address: "0xa68BBe793ad52d0E62bBf34A67F02235bA69E737",
   farming_newavax_1_address: "0x035d65babF595758D7A439D5870BAdc44218D028",
@@ -1694,7 +1686,6 @@ window.config = {
   reward_token_dai_address: "0x6B175474E89094C44Da98b954EedeAC495271d0F",
   reward_token_daiavax_address: "0xd586E7F844cEa2F87f50152665BCbc2C279D8d70",
   reward_token_daibsc_address: "0x1af3f329e8be154074d8769d1ffa4ee058b1dbc3",
-
 
   token_wbtc_address: "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
   token_usdt_address: "0xdAC17F958D2ee523a2206206994597C13D831ec7",
@@ -1757,14 +1748,11 @@ window.config = {
   constant_stakingidypavax_6_address:
     "0xd13bdc0c9a9931cf959739631b1290b6bee0c018",
 
-
-      //Constant Staking iDYP bsc
+  //Constant Staking iDYP bsc
   constant_stakingidyp_1_address: "0x58366902082b90fca01be07d929478bd48acfb19",
   constant_stakingidyp_2_address: "0x160ff3c4a6e9aa8e4271aa71226cc811bfef7ed9",
   constant_stakingidyp_5_address: "0x7e766f7005c7a9e74123b156697b582eecb8d2d7",
   constant_stakingidyp_6_address: "0x4c04e53f9aaa17fc2c914694b4aae57a9d1be445",
-
-
 
   submission_form_link: "https://forms.gle/SFX1DyUh8TcNeysz6",
 
@@ -1873,7 +1861,6 @@ window.config = {
   new_governanceavax_address: "0x4d3deb73df067d6466facad196b22411422909ab",
   new_governancebsc_address: "0x2cf8b55a6a492c2f8e750ad1fa4e4a858044deea",
 
-
   //bridge eth-avax
 
   token_dyp_eth_address: "0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17",
@@ -1890,15 +1877,13 @@ window.config = {
   bridge_bsceth_address: "0x81A0d2f173590A23636DB6a475BC7E32aAae946C",
   bridge_bscbsc_address: "0x229eD0B61bEA41710A79A3634E06B1A619a0EBCb",
 
+  //bridge bsc-avax
 
-    //bridge bsc-avax
+  token_dyp_bscavax_address: "0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17",
+  token_dyp_bscavaxbsc_address: "0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17",
 
-    token_dyp_bscavax_address: "0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17",
-    token_dyp_bscavaxbsc_address: "0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17",
-  
-    bridge_bscavax_address: "0x4D960CDC46E8728eEb26af8105c277Ee5c3CC252",
-    bridge_bscavaxbsc_address: "0xF237EA816b52572c4118c9D275b5807369E38d9F",
-
+  bridge_bscavax_address: "0x4D960CDC46E8728eEb26af8105c277Ee5c3CC252",
+  bridge_bscavaxbsc_address: "0xF237EA816b52572c4118c9D275b5807369E38d9F",
 
   //bridge eth-avax idyp
   token_idyp_eth_address: "0xBD100d061E120b2c67A24453CF6368E63f1Be056",
@@ -1915,7 +1900,7 @@ window.config = {
   bridge_idypbsceth_address: "0x70C89Bd30d8543a594f83C57ed92240a1B4925Fe",
   bridge_idypbscbsc_address: "0x66f8449b73C42Bb0820a8132348bfE2820Cfd6B8",
 
-  chain_ids: { 
+  chain_ids: {
     ETH: 1, // 4 = rinkeby, 1 = main, 42 = kovan, 43114 = AVAX
     AVAX: 43114, // 43114 = AVAX
     BSC: 56, // 97 = testnet, 56 = main
@@ -1926,8 +1911,7 @@ window.config = {
 
   SIGNATURE_API_URLAVAX: "https://bridge-avax.dyp.finance",
   SIGNATURE_API_URLBSC: "https://bridge-api.dyp.finance",
-  SIGNATURE_API_URLNEW: 'https://bridge-bsc.dyp.finance',
-
+  SIGNATURE_API_URLNEW: "https://bridge-bsc.dyp.finance",
 
   SIGNATURE_API_URLAVAXiDYP: "https://ibridge-avax.dyp.finance",
   SIGNATURE_API_URLBSCiDYP: "https://ibridge-api.dyp.finance",
@@ -1942,9 +1926,9 @@ window.config = {
   nftstaking_address: "0xEe425BbbEC5e9Bf4a59a1c19eFff522AD8b7A47A",
   nftstaking_address50: "0xEe425BbbEC5e9Bf4a59a1c19eFff522AD8b7A47A",
 
-    /* MINT LANDNFT */
-    landnft_address: "0xcd60d912655281908ee557ce1add61e983385a03",
-    landnftstake_address: "0x6821710b0d6e9e10acfd8433ad023f874ed782f1",
+  /* MINT LANDNFT */
+  landnft_address: "0xcd60d912655281908ee557ce1add61e983385a03",
+  landnftstake_address: "0x6821710b0d6e9e10acfd8433ad023f874ed782f1",
 
   //buyback bsc
   buyback_stakingbsc1_1_address: "0x94b1a7b57c441890b7a0f64291b39ad6f7e14804",
@@ -1978,21 +1962,17 @@ window.config = {
   constant_stakingnewbsc_new9_address:
     "0xbd574278febad04b7a0694c37def4f2ecfa9354a",
 
+  //staking bsc
 
+  constant_stakingbsc_new10_address:
+    "0xef9e50A19358CCC8816d9BC2c2355aea596efd06",
+  constant_stakingbsc_new11_address:
+    "0xfc4493e85fd5424456f22135db6864dd4e4ed662",
 
-
-    //staking bsc
-
-    constant_stakingbsc_new10_address: "0xef9e50A19358CCC8816d9BC2c2355aea596efd06",
-    constant_stakingbsc_new11_address: "0xfc4493e85fd5424456f22135db6864dd4e4ed662",
-
-    constant_stakingbsc_new12_address: "0xf13aDbEb27ea9d9469D95e925e56a1CF79c06E90",
-    constant_stakingbsc_new13_address: "0xaF411BF994dA1435A3150B874395B86376C5f2d5",
-
-
-
-
-
+  constant_stakingbsc_new12_address:
+    "0xf13aDbEb27ea9d9469D95e925e56a1CF79c06E90",
+  constant_stakingbsc_new13_address:
+    "0xaF411BF994dA1435A3150B874395B86376C5f2d5",
 };
 
 window.infuraWeb3 = new Web3(window.config.infura_endpoint);
@@ -2097,8 +2077,6 @@ window.CONSTANT_STAKINGNEWBSC_NEW7_ABI = window.CONSTANT_STAKINGBSC_NEW_ABI;
 window.CONSTANT_STAKINGNEWBSC_NEW8_ABI = window.CONSTANT_STAKINGBSC_NEW_ABI;
 window.CONSTANT_STAKINGNEWBSC_NEW9_ABI = window.CONSTANT_STAKINGBSC_NEW_ABI;
 
-
-
 //staking bsc
 
 window.constant_stakingbsc_new10 = new CONSTANT_STAKINGBSC_NEW(
@@ -2115,12 +2093,10 @@ window.constant_stakingbsc_new13 = new CONSTANT_STAKINGBSC_NEW(
   "CONSTANT_STAKINGBSC_NEW13"
 );
 
-
 window.CONSTANT_STAKINGBSC_NEW10_ABI = window.CONSTANT_STAKING_OLD_ABI;
 window.CONSTANT_STAKINGBSC_NEW11_ABI = window.CONSTANT_STAKING_OLD_ABI;
 window.CONSTANT_STAKINGBSC_NEW12_ABI = window.CONSTANT_STAKINGBSC_NEW_ABI;
 window.CONSTANT_STAKINGBSC_NEW13_ABI = window.CONSTANT_STAKINGBSC_NEW_ABI;
-
 
 window.CONSTANT_STAKINGOLD_130 = window.CONSTANT_STAKING_OLD_ABI;
 window.CONSTANT_STAKINGOLD_140 = window.CONSTANT_STAKING_OLD_ABI;
@@ -2207,16 +2183,11 @@ window.constant_stakingdaiavax = new CONSTANT_STAKING_NEWAVAX(
 window.CONSTANT_STAKINGDAIAVAX_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGDAIETH_ABI = window.CONSTANT_STAKINGDAI_ABI;
 
-
-
-
-
 window.constant_stakingdaibsc = new CONSTANT_STAKINGBSC_NEW(
   "CONSTANT_STAKINGDAIBSC"
 );
 
 window.CONSTANT_STAKINGDAIBSC_ABI = window.CONSTANT_STAKING_DAI_ABI;
-
 
 /* Constant Staking iDYP */
 window.constant_stakingidyp_1 = new CONSTANT_STAKINGBSC_NEW(
@@ -2236,9 +2207,6 @@ window.CONSTANT_STAKINGIDYP_1_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYP_2_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYP_5_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYP_6_ABI = window.CONSTANT_STAKING_IDYP_ABI;
-
-
-
 
 window.constant_staking_new1 = new CONSTANT_STAKING_NEW(
   "CONSTANT_STAKINGNEW_NEW1"
@@ -2268,7 +2236,6 @@ window.CONSTANT_STAKINGNEW_NEW1_ABI = window.CONSTANT_STAKINGNEW_ABI;
 window.CONSTANT_STAKINGNEW_NEW2_ABI = window.CONSTANT_STAKINGNEW_ABI;
 window.CONSTANT_STAKINGNEW_NEW3_ABI = window.CONSTANT_STAKINGNEW_ABI;
 window.CONSTANT_STAKING_NEWI3 = window.CONSTANT_STAKING_OLD_ABI;
-
 
 window.CONSTANT_STAKINGNEW_NEWAVAX1_ABI = window.CONSTANT_STAKINGNEW_ABI;
 window.CONSTANT_STAKINGNEW_NEWAVAX2_ABI = window.CONSTANT_STAKINGNEW_ABI;
@@ -2399,13 +2366,13 @@ window.constant_staking_idypavax_6 = new CONSTANT_STAKING_NEWAVAX(
   "CONSTANT_STAKINGIDYPAVAX_6"
 );
 
-const checkapproveStakePool=async(useraddr, tokenaddr, stakingaddr)=> {
+const checkapproveStakePool = async (useraddr, tokenaddr, stakingaddr) => {
   let token_contract = await getTokenContract(tokenaddr);
 
   return await token_contract.methods.allowance(useraddr, stakingaddr).call();
-}
+};
 
-window.checkapproveStakePool = checkapproveStakePool
+window.checkapproveStakePool = checkapproveStakePool;
 
 //governance eth
 
@@ -2613,9 +2580,6 @@ class NEW_GOVERNANCEAVAX {
 
 window.new_governanceavax = new NEW_GOVERNANCEAVAX();
 
-
-
-
 class NEW_GOVERNANCEBSC {
   constructor(ticker = "NEW_GOVERNANCEBSC", token = "REWARD_TOKEN") {
     this.ticker = ticker;
@@ -2716,7 +2680,6 @@ class NEW_GOVERNANCEBSC {
 }
 
 window.new_governancebsc = new NEW_GOVERNANCEBSC();
-
 
 window.CONSTANT_STAKINGIDYPAVAX_1_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYPAVAX_2_ABI = window.CONSTANT_STAKING_IDYP_ABI;
@@ -2871,14 +2834,11 @@ class NFT {
 
 window.nft = new NFT();
 
-
-
-
 /**
  *
  * @param {"TOKEN" | "LANDNFTSTAKE" } key
  */
- async function getContractLandNFT(key) {
+async function getContractLandNFT(key) {
   let ABI = window[key + "_ABI"];
   let address = window.config[key.toLowerCase() + "_address"];
   if (!window.cached_contracts[key]) {
@@ -2934,13 +2894,12 @@ class LANDNFT {
   async mintNFT(amount, cawsArray) {
     const nft_contract = await getContractLandNFT("LANDNFTSTAKE");
     let countDiscount = cawsArray.length;
-    
+
     let newPrice = 0;
     let landnft = await nft_contract.methods.landPrice().call();
     const landPriceDiscount = await nft_contract.methods
       .LandPriceDiscount()
       .call();
-
 
     if (countDiscount != 0) {
       newPrice =
@@ -3002,9 +2961,6 @@ class LANDNFT {
 
 window.landnft = new LANDNFT();
 
-
-
-
 window.token_dyps = new TOKEN("REWARD_TOKEN_DYPS");
 
 window.token_dyp_eth = new TOKEN("TOKEN_DYP_ETH");
@@ -3028,7 +2984,6 @@ window.bridge_bscbsc = new BRIDGE(
   window.config.bridge_bscbsc_address,
   window.config.token_dyp_bscbsc_address
 );
-
 
 //bridge bsc-avax
 window.bridge_bscavaxbsc = new BRIDGE(
@@ -3134,7 +3089,6 @@ async function getNft(id) {
   );
 }
 
-
 async function getLandNft(id) {
   return await window.$.get(
     `https://mint.worldofdypians.com/metadata/${id}`
@@ -3142,9 +3096,6 @@ async function getLandNft(id) {
     return result;
   });
 }
-
-
-
 
 async function myNftLandListContract(address) {
   let nft_contract = await getContractLandNFT("LANDNFTSTAKE");
@@ -3160,7 +3111,6 @@ async function myNftLandListContract(address) {
 
   return nftList;
 }
-
 
 async function myNftListContract(address) {
   let nft_contract = await getContractNFT("NFT");
@@ -3273,11 +3223,6 @@ window.tokenCG = {
 
 //window.UNISWAP_PAIR_ABI = [{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"spender","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"sender","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount0","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount1","type":"uint256"},{"indexed":true,"internalType":"address","name":"to","type":"address"}],"name":"Burn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"sender","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount0","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount1","type":"uint256"}],"name":"Mint","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"sender","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount0In","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount1In","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount0Out","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount1Out","type":"uint256"},{"indexed":true,"internalType":"address","name":"to","type":"address"}],"name":"Swap","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint112","name":"reserve0","type":"uint112"},{"indexed":false,"internalType":"uint112","name":"reserve1","type":"uint112"}],"name":"Sync","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"constant":true,"inputs":[],"name":"DOMAIN_SEPARATOR","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"MINIMUM_LIQUIDITY","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"PERMIT_TYPEHASH","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"address","name":"","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"to","type":"address"}],"name":"burn","outputs":[{"internalType":"uint256","name":"amount0","type":"uint256"},{"internalType":"uint256","name":"amount1","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"factory","outputs":[{"internalType":"address","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getReserves","outputs":[{"internalType":"uint112","name":"_reserve0","type":"uint112"},{"internalType":"uint112","name":"_reserve1","type":"uint112"},{"internalType":"uint32","name":"_blockTimestampLast","type":"uint32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"_token0","type":"address"},{"internalType":"address","name":"_token1","type":"address"}],"name":"initialize","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"kLast","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"to","type":"address"}],"name":"mint","outputs":[{"internalType":"uint256","name":"liquidity","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"nonces","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"},{"internalType":"uint256","name":"deadline","type":"uint256"},{"internalType":"uint8","name":"v","type":"uint8"},{"internalType":"bytes32","name":"r","type":"bytes32"},{"internalType":"bytes32","name":"s","type":"bytes32"}],"name":"permit","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"price0CumulativeLast","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"price1CumulativeLast","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"to","type":"address"}],"name":"skim","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"uint256","name":"amount0Out","type":"uint256"},{"internalType":"uint256","name":"amount1Out","type":"uint256"},{"internalType":"address","name":"to","type":"address"},{"internalType":"bytes","name":"data","type":"bytes"}],"name":"swap","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"sync","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"token0","outputs":[{"internalType":"address","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"token1","outputs":[{"internalType":"address","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"transfer","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"transferFrom","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"}]
 //window.LOCKER_ABI = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"id","type":"uint256"},{"indexed":true,"internalType":"address","name":"token","type":"address"},{"indexed":true,"internalType":"address","name":"recipient","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"unlockTimestamp","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"platformTokensLocked","type":"uint256"},{"indexed":false,"internalType":"bool","name":"claimed","type":"bool"}],"name":"Locked","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"id","type":"uint256"},{"indexed":true,"internalType":"address","name":"token","type":"address"},{"indexed":true,"internalType":"address","name":"recipient","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"unlockTimestamp","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"platformTokensLocked","type":"uint256"},{"indexed":false,"internalType":"bool","name":"claimed","type":"bool"}],"name":"Unlocked","type":"event"},{"inputs":[],"name":"MAX_LOCK_DURATION","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MINIMUM_BASETOKEN_PERCENT_ETH_X_100","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"ONE_HUNDRED_X_100","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"PLATFORM_TOKEN","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"SLIPPAGE_TOLERANCE_X_100","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"baseToken","type":"address"}],"name":"addBaseToken","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"claimEther","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"}],"name":"claimExtraTokens","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"lockId","type":"uint256"}],"name":"claimUnlocked","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"pair","type":"address"},{"internalType":"address","name":"baseToken","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"uint256","name":"unlockTimestamp","type":"uint256"}],"name":"createLock","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"uint256","name":"startIndex","type":"uint256"},{"internalType":"uint256","name":"endIndex","type":"uint256"}],"name":"getActiveLockIds","outputs":[{"internalType":"uint256[]","name":"result","type":"uint256[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"recipient","type":"address"},{"internalType":"uint256","name":"startIndex","type":"uint256"},{"internalType":"uint256","name":"endIndex","type":"uint256"}],"name":"getActiveLockIdsByRecipient","outputs":[{"internalType":"uint256[]","name":"result","type":"uint256[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"startIndex","type":"uint256"},{"internalType":"uint256","name":"endIndex","type":"uint256"}],"name":"getActiveLockIdsByToken","outputs":[{"internalType":"uint256[]","name":"result","type":"uint256[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getActiveLockIdsLength","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"recipient","type":"address"}],"name":"getActiveLockIdsLengthByRecipient","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"}],"name":"getActiveLockIdsLengthByToken","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"startIndex","type":"uint256"},{"internalType":"uint256","name":"endIndex","type":"uint256"}],"name":"getBaseTokens","outputs":[{"internalType":"address[]","name":"result","type":"address[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getBaseTokensLength","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"startIndex","type":"uint256"},{"internalType":"uint256","name":"endIndex","type":"uint256"}],"name":"getInactiveLockIds","outputs":[{"internalType":"uint256[]","name":"result","type":"uint256[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"recipient","type":"address"},{"internalType":"uint256","name":"startIndex","type":"uint256"},{"internalType":"uint256","name":"endIndex","type":"uint256"}],"name":"getInactiveLockIdsByRecipient","outputs":[{"internalType":"uint256[]","name":"result","type":"uint256[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"startIndex","type":"uint256"},{"internalType":"uint256","name":"endIndex","type":"uint256"}],"name":"getInactiveLockIdsByToken","outputs":[{"internalType":"uint256[]","name":"result","type":"uint256[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getInactiveLockIdsLength","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"recipient","type":"address"}],"name":"getInactiveLockIdsLengthByRecipient","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"}],"name":"getInactiveLockIdsLengthByToken","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"id","type":"uint256"}],"name":"getLockById","outputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"unlockTimestamp","type":"uint256"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"address","name":"recipient","type":"address"},{"internalType":"bool","name":"claimed","type":"bool"},{"internalType":"uint256","name":"platformTokensLocked","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"startIndex","type":"uint256"},{"internalType":"uint256","name":"endIndex","type":"uint256"}],"name":"getLockedTokens","outputs":[{"internalType":"address[]","name":"tokens","type":"address[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getLockedTokensLength","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256[]","name":"ids","type":"uint256[]"}],"name":"getLocksByIds","outputs":[{"internalType":"uint256[]","name":"_ids","type":"uint256[]"},{"internalType":"address[]","name":"tokens","type":"address[]"},{"internalType":"uint256[]","name":"unlockTimestamps","type":"uint256[]"},{"internalType":"uint256[]","name":"amounts","type":"uint256[]"},{"internalType":"address[]","name":"recipients","type":"address[]"},{"internalType":"bool[]","name":"claimeds","type":"bool[]"},{"internalType":"uint256[]","name":"platformTokensLockeds","type":"uint256[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"pair","type":"address"},{"internalType":"address","name":"baseToken","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"getMinLockCreationFeeInWei","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address[]","name":"tokens","type":"address[]"}],"name":"getTokensBalances","outputs":[{"internalType":"uint256[]","name":"balances","type":"uint256[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"locks","outputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"unlockTimestamp","type":"uint256"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"address","name":"recipient","type":"address"},{"internalType":"bool","name":"claimed","type":"bool"},{"internalType":"uint256","name":"platformTokensLocked","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"locksLength","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"baseToken","type":"address"}],"name":"removeBaseToken","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"tokenBalances","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"uniswapRouterV2","outputs":[{"internalType":"contract IUniswapV2Router02","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"stateMutability":"payable","type":"receive"}]
-
-
-
-
-
 
 window.CONSTANT_STAKINGDAI_ABI = [
   {
@@ -4028,7 +3973,6 @@ window.CONSTANT_STAKINGDAI_ABI = [
     type: "function",
   },
 ];
-
 
 window.BUYBACK_STAKING1_1_ABI = [
   {
@@ -6011,8 +5955,6 @@ window.NFT_ABI = [
   },
 ];
 
-
-
 window.LANDMINTING_ABI = [
   {
     inputs: [
@@ -6743,8 +6685,6 @@ window.LANDSTAKING_ABI = [
     type: "function",
   },
 ];
-
-
 
 window.BRIDGE_ABI = [
   {
@@ -8938,8 +8878,6 @@ window.NEW_GOVERNANCEAVAX_ABI = [
   },
 ];
 
-
-
 window.NEW_GOVERNANCEBSC_ABI = [
   {
     inputs: [
@@ -9864,7 +9802,6 @@ window.NEW_GOVERNANCEBSC_ABI = [
     type: "function",
   },
 ];
-
 
 window.ERC20_ABI = [
   { inputs: [], stateMutability: "nonpayable", type: "constructor" },
@@ -27629,10 +27566,10 @@ async function connectWallet(provider, walletType) {
       await window.ethereum.enable();
       console.log("Connected!");
       window.IS_CONNECTED = true;
-      if (window.ethereum.isCoin98) window.WALLET_TYPE = "coin98";
-      if (window.ethereum.isMetaMask) window.WALLET_TYPE = "metamask";
+      if (window.coin98) window.WALLET_TYPE = "coin98";
+      if (window.ethereum.isMetaMask && !window.coin98) window.WALLET_TYPE = "metamask";
       let coinbase_address = await window.ethereum.request({
-        method: "eth_accounts",
+        method: "eth_requestAccounts",
       });
       window.coinbase_address = coinbase_address.pop();
       return true;
@@ -27649,7 +27586,6 @@ async function connectWallet(provider, walletType) {
     throw new Error("No web3 detected!");
   }
 }
-
 function param(name) {
   var f = new RegExp("\\b" + name + "=([^&]+)").exec(document.location.search);
   if (f) return decodeURIComponent(f[1].replace(/\+/g, " "));
@@ -27660,27 +27596,51 @@ window.param = param;
 window.cached_contracts = Object.create(null);
 
 async function getCoinbase() {
-  if (window.WALLET_TYPE == "coin98") {
+  if (
+    window.ethereum &&
+    window.coin98
+  ) {
     return window.coinbase_address.toLowerCase();
-  } else {
-    const coinbase =  await window.ethereum.request({
+  } else if (
+    window.ethereum &&
+    !window.coin98 &&
+    window.ethereum.isMetaMask
+  ) {
+    const coinbase = await window.ethereum.request({
       method: "eth_requestAccounts",
-    })
-
-    window.coinbase_address = coinbase.pop()
-    return window.coinbase_address.toLowerCase();
+    });
+    if (coinbase && coinbase.length > 0) {
+      window.coinbase_address = coinbase.pop();
+      return window.coinbase_address.toLowerCase();
+    }
   }
 }
 
-
 // function getCoinbase() {
-//   if (window.WALLET_TYPE == "coin98") {
+//   if (
+//     window.WALLET_TYPE == "coin98" ||
+//     (window.ethereum && window.ethereum.isCoin98 && window.ethereum.isMetaMask)
+//   ) {
+//     console.log("yes");
 //     return window.coinbase_address.toLowerCase();
-//   } else {
+//   } else if (
+//     window.WALLET_TYPE == "coin98" ||
+//     (window.ethereum && !window.ethereum.isCoin98 && window.ethereum.isMetaMask)
+//   ) {
+//     console.log("no");
 //     return window.web3.eth?.getCoinbase();
 //   }
 // }
 
+// function getCoinbase() {
+//   if ( window.WALLET_TYPE == 'coin98' ) {
+//   	return window.coinbase_address.toLowerCase()
+//   }
+//   else{
+//   	return window.web3.eth.getCoinbase()
+//   }
+//   return window.coinbase_address;
+// }
 
 async function getContract({ key, address = null, ABI = null }) {
   ABI = ABI || window[key + "_ABI"];
@@ -27915,10 +27875,8 @@ const LP_IDs_V2BNB = {
   ],
 };
 
-
 window.LP_IDs_V2Avax = LP_IDs_V2Avax;
 window.LP_IDs_V2BNB = LP_IDs_V2BNB;
-
 
 const LP_ID_LIST_V2Avax = Object.keys(LP_IDs_V2Avax)
   .map((key) => LP_IDs_V2Avax[key])
@@ -27929,7 +27887,6 @@ const LP_ID_LIST_V2BNB = Object.keys(LP_IDs_V2BNB)
   .map((key) => LP_IDs_V2BNB[key])
   .flat();
 window.LP_ID_LIST_V2BNB = LP_ID_LIST_V2BNB;
-
 
 window.LP_ID_LIST_V2 = LP_ID_LIST_V2;
 
@@ -28040,15 +27997,11 @@ Object.keys(window.config)
       k.startsWith("farming_newbsc_4") ||
       k.startsWith("farming_newbsc_5") ||
       k.startsWith("constant_stakingnew_new1") ||
-
       k.startsWith("constant_stakingidyp_6") ||
       k.startsWith("constant_stakingidyp_5") ||
       k.startsWith("constant_stakingidyp_2") ||
       k.startsWith("constant_stakingidyp_1") ||
-
-
       k.startsWith("constant_stakingnew_new2") ||
-
       k.startsWith("constant_stakingidypavax_3") ||
       k.startsWith("constant_stakingidypavax_4") ||
       k.startsWith("constant_stakingnew_newavax1") ||
@@ -28063,18 +28016,13 @@ Object.keys(window.config)
       k.startsWith("constant_stakingbsc_new11") ||
       k.startsWith("constant_stakingbsc_new12") ||
       k.startsWith("constant_stakingbsc_new13") ||
-
       k.startsWith("constant_stakingnew_newavax2") ||
       k.startsWith("constant_stakingdaiavax") ||
       k.startsWith("constant_stakingdaieth") ||
-
       k.startsWith("constant_stakingdaibsc") ||
-
       k.startsWith("reward_token_daiavax") ||
       k.startsWith("reward_token_daieth") ||
-
       k.startsWith("reward_token_daibsc") ||
-
       k.startsWith("constant_staking_") ||
       k.startsWith("constant_stakingnew_") ||
       k.startsWith("buyback_staking1_1_") ||
@@ -28110,7 +28058,8 @@ Object.keys(window.config)
       k.startsWith("new_governance") ||
       k.startsWith("new_governanceavax") ||
       k.startsWith("new_governancebsc") ||
-      k.startsWith("constant_stakingold_130") || k.startsWith("constant_stakingold_140") ||
+      k.startsWith("constant_stakingold_130") ||
+      k.startsWith("constant_stakingold_140") ||
       k.startsWith("buyback_stakingbsc1_1") ||
       k.startsWith("buyback_stakingbsc1_2") ||
       k.startsWith("constant_staking_newi3") ||
@@ -28137,13 +28086,10 @@ Object.keys(window.config)
       ? window.TOKEN_ABI
       : k.startsWith("token_dyp_bsc")
       ? window.TOKEN_ABI
-
       : k.startsWith("token_dyp_bscavaxbsc")
       ? window.TOKEN_ABI
-
       : k.startsWith("token_dyp_bscavax")
       ? window.TOKEN_ABI
-
       : k.startsWith("token_idyp_bsc")
       ? window.TOKEN_ABI
       : k.startsWith("token_dyp_bscbsc")
@@ -28214,7 +28160,6 @@ Object.keys(window.config)
       ? window.CONSTANT_STAKING_IDYP_ABI
       : k.startsWith("constant_stakingnew_new1")
       ? window.CONSTANT_STAKINGNEW_ABI
-
       : k.startsWith("constant_stakingidyp_6")
       ? window.CONSTANT_STAKING_IDYP_ABI
       : k.startsWith("constant_stakingidyp_5")
@@ -28223,7 +28168,6 @@ Object.keys(window.config)
       ? window.CONSTANT_STAKING_IDYP_ABI
       : k.startsWith("constant_stakingidyp_1")
       ? window.CONSTANT_STAKING_IDYP_ABI
-
       : k.startsWith("constant_stakingnew_new2")
       ? window.CONSTANT_STAKINGNEW_ABI
       : k.startsWith("constant_stakingidypavax_4")
@@ -28801,7 +28745,11 @@ async function getPancakeswapRouterContract(
 async function getUniswapRouterContract(
   address = window.config.uniswap_router_address
 ) {
-  return new window.infuraWeb3.eth.Contract(window.UNISWAP_ROUTER_ABI, address, { from: await getCoinbase() });
+  return new window.infuraWeb3.eth.Contract(
+    window.UNISWAP_ROUTER_ABI,
+    address,
+    { from: await getCoinbase() }
+  );
 }
 
 async function getPriceiDYP() {

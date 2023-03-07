@@ -23,7 +23,7 @@ import navRadius from "./assets/navRadius.svg";
 import Governancedev from "./components/governance/dev/governance-new-avax";
 import Governancebsc from "./components/governance/dev/governance-new-bsc";
 import GovernanceEth from "./components/governance/dev/governance-new";
-import LandFlyout from './components/LandFlyout/LandFlyout'
+import LandFlyout from "./components/LandFlyout/LandFlyout";
 import Launchpad from "./components/launchpad/Launchpad";
 import LaunchpadForm from "./components/launchpad/launchpadform/LaunchpadForm";
 import LaunchpadDetails from "./components/launchpad/launchpaddetails/LaunchpadDetails";
@@ -38,6 +38,8 @@ import Disclaimer from "./components/disclaimer/Disclaimer";
 import ScrollToTop from "./functions/ScrollToTop";
 import LandPopup from "./components/LandPopup/LandPopup";
 import { withRouter } from "react-router-dom";
+import GenesisStaking from "./components/genesisStaking/GenesisStaking";
+import CawsStaking from "./components/genesisStaking/CawsStaking";
 
 class App extends React.Component {
   constructor(props) {
@@ -95,7 +97,12 @@ class App extends React.Component {
 
   checkNetworkId = () => {
     if (!this.props.history.location.pathname.includes("bridge")) {
-      if (window.ethereum && ( window.ethereum?.isMetaMask===true || window.ethereum?.isTrust === true)) {
+      if (
+        window.ethereum &&
+        (window.ethereum.isMetaMask === true ||
+          window.coin98 === true ||
+          window.ethereum.isTrust === true)
+      ) {
         window.ethereum
           .request({ method: "eth_chainId" })
           .then((data) => {
@@ -111,9 +118,13 @@ class App extends React.Component {
               this.setState({
                 networkId: "56",
               });
-            } else {
+            } else if (data !== "undefined") {
               this.setState({
                 networkId: "0",
+              });
+            } else {
+              this.setState({
+                networkId: "1",
               });
             }
 
@@ -184,20 +195,20 @@ class App extends React.Component {
       subscribedPlatformTokenAmountAvax = await avaxcontract.methods
         .subscriptionPlatformTokenAmount(coinbase)
         .call();
-        
+
       if (
-        subscribedPlatformTokenAmountAvax === '0' &&
-        subscribedPlatformTokenAmountETH === '0'
+        subscribedPlatformTokenAmountAvax === "0" &&
+        subscribedPlatformTokenAmountETH === "0"
       ) {
         this.setState({ subscribedPlatformTokenAmount: "0", isPremium: false });
       }
-      if (subscribedPlatformTokenAmountAvax !== '0') {
+      if (subscribedPlatformTokenAmountAvax !== "0") {
         this.setState({
           subscribedPlatformTokenAmount: subscribedPlatformTokenAmountAvax,
           isPremium: true,
         });
       }
-      if (subscribedPlatformTokenAmountETH !== '0') {
+      if (subscribedPlatformTokenAmountETH !== "0") {
         this.setState({
           subscribedPlatformTokenAmount: subscribedPlatformTokenAmountETH,
           isPremium: true,
@@ -313,20 +324,19 @@ class App extends React.Component {
     this.tvl().then();
     this.updateWindowDimensions();
     window.addEventListener("resize", this.updateWindowDimensions);
-    this.checkConnection();
+    if (window.ethereum && !window.coin98 && window.ethereum.isMetaMask) {
+      this.checkConnection();
+    }
     this.checkNetworkId();
-    this.refreshSubscription()
+    this.refreshSubscription();
 
-    if (window.ethereum) {
+    if (window.ethereum && !window.coin98) {
+      console.log('yes')
       this.handleEthereum();
     } else {
-      window.addEventListener("ethereum#initialized", this.handleEthereum, {
-        once: true,
-      });
-
+      console.log('no')
       // If the event is not dispatched by the end of the timeout,
       // the user probably doesn't have MetaMask installed.
-      setTimeout(this.handleEthereum, 3000); // 3 seconds
     }
 
     let toBeAdded = {
@@ -337,12 +347,11 @@ class App extends React.Component {
     // this.subscriptionInterval = setInterval(this.refreshSubscription, 6e4);
   }
 
-  checkConnection = () => {
+ checkConnection = async () => {
     const logout = localStorage.getItem("logout");
-
-    if (logout !== "true" && window.ethereum) {
-      window.ethereum
-        ?.request({ method: "eth_accounts" })
+    if (logout !== "true" && window.ethereum && !window.ethereum.isCoin98) {
+      await window.ethereum
+        ?.request({ method: "eth_requestAccounts" })
         .then((data) => {
           this.setState({
             isConnected: data.length === 0 ? false : true,
@@ -393,7 +402,7 @@ class App extends React.Component {
     // this.setState({ network: network });
   };
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     if (this.props.location !== prevProps.location) {
       this.checkNetworkId();
     }
@@ -411,13 +420,11 @@ class App extends React.Component {
     this.setState({ isOpenInMobile: !this.state.isOpenInMobile });
   };
 
-  handleTrustChain = ()=>{
-    window.location.reload()
-  }
+  handleTrustChain = () => {
+    window.location.reload();
+  };
 
   render() {
-
-    
     const { LP_IDs_V2 } = window;
     const { ethereum } = window;
 
@@ -434,14 +441,12 @@ class App extends React.Component {
       ethereum?.on("accountsChanged", this.checkConnection);
     }
 
-
     if (window.ethereum && window.ethereum.isTrust === true) {
       ethereum?.on("chainChanged", this.handleTrustChain);
-      
     }
-    
-    
+
     document.addEventListener("touchstart", { passive: true });
+
     return (
       <div
         className={`page_wrapper ${this.state.isMinimized ? "minimize" : ""}`}
@@ -451,20 +456,25 @@ class App extends React.Component {
         <Route component={GoogleAnalyticsReporter} />
 
         <div className="body_overlay"></div>
-        <Header
-          coinbase={this.state.coinbase}
-          theme={this.state.theme}
-          toggleMobileSidebar={this.toggleMobileSidebar}
-          isOpenInMobile={this.state.isOpenInMobile}
-          chainId={parseInt(this.state.networkId)}
-          logout={this.logout}
-          handleSwitchNetwork={this.handleSwitchNetwork}
-          handleConnection={this.handleConnection}
-          showModal={this.showModal}
-          hideModal={this.hideModal}
-          show={this.state.show}
-          isConnected={this.state.isConnected}
-        />
+        {(this.props?.location?.pathname === "/genesis" &&
+          window.innerWidth < 786) ||
+        (this.props?.location?.pathname === "/caws-staking" &&
+          window.innerWidth < 786) ? null : (
+          <Header
+            coinbase={this.state.coinbase}
+            theme={this.state.theme}
+            toggleMobileSidebar={this.toggleMobileSidebar}
+            isOpenInMobile={this.state.isOpenInMobile}
+            chainId={parseInt(this.state.networkId)}
+            logout={this.logout}
+            handleSwitchNetwork={this.handleSwitchNetwork}
+            handleConnection={this.handleConnection}
+            showModal={this.showModal}
+            hideModal={this.hideModal}
+            show={this.state.show}
+            isConnected={this.state.isConnected}
+          />
+        )}
         <div className="content-wrapper container-fluid d-flex justify-content-center justify-content-lg-start">
           <div className="row w-100">
             <div className="col-1">
@@ -761,6 +771,32 @@ class App extends React.Component {
                       />
                     )}
                   />
+                  <Route
+                    exact
+                    path="/genesis"
+                    render={(props) => (
+                      <GenesisStaking
+                        coinbase={this.state.coinbase}
+                        isConnected={this.state.isConnected}
+                        chainId={this.state.networkId}
+                        handleConnection={this.handleConnection}
+                        handleSwitchNetwork={this.handleSwitchNetwork}
+                      />
+                    )}
+                  />
+                  <Route
+                    exact
+                    path="/caws-staking"
+                    render={(props) => (
+                      <CawsStaking
+                        coinbase={this.state.coinbase}
+                        isConnected={this.state.isConnected}
+                        chainId={this.state.networkId}
+                        handleConnection={this.handleConnection}
+                        handleSwitchNetwork={this.handleSwitchNetwork}
+                      />
+                    )}
+                  />
 
                   <Route component={RedirectPathToHomeOnly} />
                 </Switch>
@@ -770,9 +806,17 @@ class App extends React.Component {
             </div>
             <div className="col-1"></div>
           </div>
-          <MobileMenu />
+          {this.props?.location?.pathname === "/genesis" ||
+          this.props?.location?.pathname === "/caws-staking" ? null : (
+            <MobileMenu />
+          )}
         </div>
-        <Footer></Footer>
+        {(this.props?.location?.pathname === "/genesis" &&
+          window.innerWidth < 786) ||
+        (this.props?.location?.pathname === "/caws-staking" &&
+          window.innerWidth < 786) ? null : (
+          <Footer></Footer>
+        )}
       </div>
     );
   }
