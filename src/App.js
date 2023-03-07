@@ -331,15 +331,12 @@ class App extends React.Component {
     this.refreshSubscription();
 
     if (window.ethereum && !window.coin98) {
+      console.log('yes')
       this.handleEthereum();
     } else {
-      window.addEventListener("ethereum#initialized", this.handleEthereum, {
-        once: true,
-      });
-
+      console.log('no')
       // If the event is not dispatched by the end of the timeout,
       // the user probably doesn't have MetaMask installed.
-      setTimeout(this.handleEthereum, 3000); // 3 seconds
     }
 
     let toBeAdded = {
