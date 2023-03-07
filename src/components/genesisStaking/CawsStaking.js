@@ -47,6 +47,7 @@ const CawsStaking = ({
   const [rewardsTooltip, setRewardsTooltip] = useState(false);
   const [unstakeTooltip, setUnstakeTooltip] = useState(false);
   const [approvedNfts, setApprovedNfts] = useState([]);
+  const [newStakes, setnewStakes] = useState(0);
 
   const [hide, setHide] = useState("");
   const windowSize = useWindowSize();
@@ -211,6 +212,11 @@ const CawsStaking = ({
     }
   };
 
+
+  const refreshStakes = () => {
+    setnewStakes(newStakes + 1);
+  };
+
   const handleUnstakeAll = async () => {
     let myStakes = await getStakesIds();
     let stake_contract = await window.getContractNFT("NFTSTAKING");
@@ -220,7 +226,7 @@ const CawsStaking = ({
       .withdraw(myStakes)
       .send()
       .then(() => {
-        // setunstakeAllStatus("Successfully unstaked all!");
+        refreshStakes();
       })
       .catch((err) => {
         window.alertify.error(err?.message);
@@ -277,7 +283,7 @@ const CawsStaking = ({
       myNft().then();
       myStakes().then();
     }
-  }, [isConnected, coinbase, mystakes.length]);
+  }, [isConnected, coinbase, mystakes.length, newStakes]);
 
   useEffect(() => {
     if (isConnected) {
@@ -303,6 +309,7 @@ const CawsStaking = ({
             href="https://opensea.io/collection/catsandwatchessocietycaws"
             target={"_blank"}
             className="col-6"
+            rel='noreferrer'
           >
             <img src={cawsOpensea} alt="" />
           </a>
@@ -604,6 +611,7 @@ const CawsStaking = ({
             setshowToStake(false);
             setHide("mystakes2");
           }}
+          onDepositComplete={refreshStakes}
           onshowToStake={() => {
             setshowStaked(false);
             setshowToStake(true);

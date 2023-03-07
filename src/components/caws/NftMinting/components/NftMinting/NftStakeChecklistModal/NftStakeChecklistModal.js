@@ -32,7 +32,8 @@ const NftStakeCheckListModal = ({
   coinbase,
   isConnected,
   getApprovedNfts,
-  hideItem
+  hideItem,
+  onDepositComplete
 }) => {
   const style = {
     position: "absolute",
@@ -185,6 +186,7 @@ const NftStakeCheckListModal = ({
         setSelectedNftIds([]);
         setColor("#57AEAA");
         handleClearStatus();
+        onDepositComplete()
       })
       .catch((err) => {
         setloadingdeposit(false);

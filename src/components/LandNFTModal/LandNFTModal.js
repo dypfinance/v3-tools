@@ -26,7 +26,9 @@ const LandNftStakeCheckListModal = ({
   isConnected,
   getApprovedNfts,
   hideItem,
-  approvedNfts
+  approvedNfts,
+  onDepositComplete
+
 }) => {
   const style = {
     position: "absolute",
@@ -176,6 +178,7 @@ const LandNftStakeCheckListModal = ({
         setSelectedNftIds([]);
         setColor("#57AEAA");
         handleClearStatus();
+        onDepositComplete()
       })
       .catch((err) => {
         setloadingdeposit(false);

@@ -77,6 +77,7 @@ const GenesisStaking = ({
   const [rewardsTooltip, setRewardsTooltip] = useState(false);
   const [unstakeTooltip, setUnstakeTooltip] = useState(false);
   const [approvedNfts, setApprovedNfts] = useState([]);
+  const [newStakes, setnewStakes] = useState(0);
 
   const windowSize = useWindowSize();
 
@@ -201,6 +202,10 @@ const GenesisStaking = ({
     setethToUSD(Number(ethprice) * Number(EthRewards));
   };
 
+  const refreshStakes = () => {
+    setnewStakes(newStakes + 1);
+  };
+
   const handleUnstakeAll = async () => {
     let myStakes = await getStakesIds();
     let stake_contract = await window.getContractLandNFT("LANDNFTSTAKING");
@@ -210,7 +215,7 @@ const GenesisStaking = ({
       .withdraw(myStakes)
       .send()
       .then(() => {
-        // setunstakeAllStatus("Successfully unstaked all!");
+        refreshStakes()
       })
       .catch((err) => {
         window.alertify.error(err?.message);
@@ -249,18 +254,26 @@ const GenesisStaking = ({
     return data;
   };
 
+
   useEffect(() => {
     totalStakedNft().then();
   }, []);
 
   useEffect(() => {
     if (isConnected && coinbase) {
-      myNft().then();
-      myStakes().then();
       checkApproval().then();
       handleClaimAll();
     }
   }, [isConnected, coinbase]);
+
+
+  useEffect(() => {
+    if (coinbase) {
+      myNft().then();
+      myStakes().then();
+    }
+  }, [isConnected, coinbase, newStakes]);
+
 
   useEffect(() => {
     if (isConnected && coinbase) {
@@ -650,6 +663,7 @@ const GenesisStaking = ({
               ? mystakes
               : myNFTs
           }
+          onDepositComplete={refreshStakes}
           onshowStaked={() => {
             setshowStaked(true);
             setshowToStake(false);
