@@ -41,14 +41,10 @@ const Sidebar = (props) => {
   const [avatar, setAvatar] = useState("/assets/img/person.svg");
 
   const { active, account } = useWeb3React();
-  if (
-    window.ethereum &&
-    !window.ethereum.isCoin98 &&
-    window.ethereum.isMetaMask
-  ) {
+
     const triedEager = useEagerConnect();
     useInactiveListener(!triedEager);
-  }
+
 
   const fetchAvatar = async () => {
     const response = await fetch(

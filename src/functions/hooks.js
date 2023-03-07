@@ -35,9 +35,7 @@ const onSignIn = async ({account, chainId}) => {
 
 
 export function useEagerConnect() {
-    if(window.ethereum && !window.ethereum.isCoin98 && window.ethereum.isMetaMask)
-
-{const { library, account, chainId, active, activate } = useWeb3ReactCore();
+const { library, account, chainId, active, activate } = useWeb3ReactCore();
 
 const [tried, setTried] = useState(false);
 const [currencyAmount, setCurrencyAmount] = useState("");
@@ -68,13 +66,12 @@ useEffect(() => {
   }
 }, [tried, active]);
 
-return [tried, currencyAmount];}
+return [tried, currencyAmount];
 }
 
 
 export function useInactiveListener(suppress = false) {
-    if(window.ethereum && !window.ethereum.isCoin98 && window.ethereum.isMetaMask)
-    {const {active, error, activate, account} = useWeb3ReactCore(); // specifically using useWeb3React because of what this hook does
+  const {active, error, activate, account} = useWeb3ReactCore(); // specifically using useWeb3React because of what this hook does
 
     useEffect(() => {
         const {ethereum} = window;
@@ -112,7 +109,7 @@ export function useInactiveListener(suppress = false) {
 
        
         return undefined;
-    }, [active, error, suppress, activate, account]);}
+    }, [active, error, suppress, activate, account]);
 }
 
 
