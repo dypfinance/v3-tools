@@ -352,7 +352,7 @@ class App extends React.Component {
 
  checkConnection = async () => {
     const logout = localStorage.getItem("logout");
-    if (logout !== "true" && window.ethereum) {
+    if (logout !== "true" && window.ethereum && !window.ethereum.isCoin98) {
       await window.ethereum
         ?.request({ method: "eth_requestAccounts" })
         .then((data) => {
