@@ -266,13 +266,18 @@ const CawsStaking = ({
 
   useEffect(() => {
     if (isConnected && coinbase) {
-      myNft().then();
-      myStakes().then();
       checkApproval().then();
       handleClaimAll();
       calculateCountdown().then();
     }
   }, [isConnected, coinbase]);
+
+  useEffect(() => {
+    if (coinbase) {
+      myNft().then();
+      myStakes().then();
+    }
+  }, [isConnected, coinbase, mystakes.length]);
 
   useEffect(() => {
     if (isConnected) {
@@ -329,8 +334,8 @@ const CawsStaking = ({
           </div>
           <div className="d-flex align-items-center justify-content-between mt-2">
             <div className="d-flex flex-column">
-              <span className="total-nfts">Total NFT staked:</span>
-              <span className="nfts-number">{totalStakes}/10000</span>
+              <span className="total-nfts">Total NFTs staked:</span>
+              <span className="nfts-number">{totalStakes}/10,000</span>
             </div>
             {coinbase === null ||
             coinbase === undefined ||
@@ -366,7 +371,7 @@ const CawsStaking = ({
                 <div className="d-flex align-items-end gap-2">
                   <span className="stake">Stake</span>
                   <div className="available-nfts">
-                    Available NFT's:{" "}
+                    Available NFTs:{" "}
                     <b>{isConnected === false ? 0 : myNFTs.length} CAWS</b>
                   </div>
                 </div>
@@ -507,7 +512,7 @@ const CawsStaking = ({
                       {getFormattedNumber(EthRewards, 6)}
                     </span>
                     <span className="usd-value">
-                      ${getFormattedNumber(ethToUSD, 6)}
+                      {getFormattedNumber(ethToUSD, 6)}
                     </span>
                   </div>
                   <span className="weth">WETH</span>

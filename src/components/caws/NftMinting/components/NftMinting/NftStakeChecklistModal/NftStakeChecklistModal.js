@@ -787,7 +787,7 @@ const NftStakeCheckListModal = ({
                           icon={"i"}
                           padding={"5px 0px 0px 0px"}
                         /> */}
-                      All total earned
+                      Total earned
                     </p>
                     <div className="d-flex justify-content-between">
                       <h6 className="rewardstxtCaws d-flex align-items-center gap-2">

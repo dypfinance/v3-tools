@@ -263,6 +263,22 @@ const GenesisStaking = ({
   }, [isConnected, coinbase]);
 
   useEffect(() => {
+    if (isConnected && coinbase) {
+      checkApproval().then();
+      handleClaimAll();
+    }
+  }, [isConnected, coinbase]);
+  
+
+  useEffect(() => {
+    if (coinbase) {
+      myNft().then();
+      myStakes().then();
+    }
+  }, [isConnected, coinbase, mystakes.length]);
+
+
+  useEffect(() => {
     if (isConnected) {
       setUSDPrice().then();
     }
@@ -367,9 +383,9 @@ const GenesisStaking = ({
           </div>
           <div className="d-flex align-items-center justify-content-between mt-2">
             <div className="d-flex flex-column">
-              <span className="total-nfts">Total NFT staked:</span>
+              <span className="total-nfts">Total NFTs staked:</span>
               <span className="nfts-number">
-                {landCard.total_nfts_locked}/1000
+                {landCard.total_nfts_locked}/1,000
               </span>
             </div>
             {coinbase === null ||
@@ -406,9 +422,9 @@ const GenesisStaking = ({
                 <div className="d-flex align-items-end gap-2">
                   <span className="stake">Stake</span>
                   <div className="available-nfts">
-                    Available NFT's{" "}
+                    Available NFTs{" "}
                     <b>
-                      {isConnected === false ? 0 : myNFTs.length} Genesis NFT's
+                      {isConnected === false ? 0 : myNFTs.length} Genesis NFTs
                     </b>
                   </div>
                 </div>
@@ -545,7 +561,7 @@ const GenesisStaking = ({
                       {getFormattedNumber(EthRewards, 6)}
                     </span>
                     <span className="usd-value">
-                      ${getFormattedNumber(ethToUSD, 6)}
+                      {getFormattedNumber(ethToUSD, 6)}
                     </span>
                   </div>
                   <span className="weth">WETH</span>
