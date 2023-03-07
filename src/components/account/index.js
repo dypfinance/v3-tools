@@ -1038,11 +1038,11 @@ export default class Subscription extends React.Component {
                 : "d-none"
             }
           >
-            <div className="d-flex flex-column align-items-start align-items-lg-end w-100 justify-content-between justify-content-lg-end gap-1">
+            <div className="d-flex flex-column align-items-start align-items-lg-start w-100 justify-content-between justify-content-lg-end gap-1">
               <span className=" my-plan-tag">My plan</span>
               <NavLink to="/plans" className="plan-tag py-2 px-4 d-flex align-items-center gap-2">
-                <img src={require('./assets/plans.svg').default} alt="" />
-                <span className="plan-tag-title">{this.props.appState.isPremium ? 'Dypians' : 'Free'}</span>
+                <img src={require('./assets/plans.svg').default} alt="" style={{width: 24, height: 24}}/>
+                <span className="plan-tag-title">{this.props.appState.isPremium ? 'Dypian' : 'Free'}</span>
               </NavLink>
              
             </div>
@@ -2058,7 +2058,7 @@ export default class Subscription extends React.Component {
             <img src={require('./assets/wethIcon.svg').default} alt="" />
             <span className="nft-ethereum-span">Ethereum</span>
           </div>
-          <div className="d-flex flex-column flex-xxl-row flex-lg-row flex-md-row gap-2 justify-content-between align-items-center">
+          <div className="d-flex flex-column gap-2 justify-content-between align-items-start">
             <div className="col-xxl-2 col-lg-2 col-12 col-md-2">
               <h6 className="mycawscollection-title">CAWS NFTs</h6>
             </div>
@@ -2121,7 +2121,7 @@ export default class Subscription extends React.Component {
             <img src={require('./assets/wethIcon.svg').default} alt="" />
             <span className="nft-ethereum-span">Ethereum</span>
           </div>
-          <div className="d-flex flex-column flex-xxl-row flex-lg-row flex-md-row gap-2 justify-content-between align-items-center">
+          <div className="d-flex flex-column gap-2 justify-content-between align-items-start">
             <div className="col-xxl-3 col-lg-3 col-12 col-md-2">
               <h6 className="mycawscollection-title">WoD Gensis Land NFTs</h6>
             </div>

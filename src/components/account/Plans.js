@@ -801,15 +801,15 @@ export default class Subscription extends React.Component {
         <div className="row mt-5 gap-4 gap-lg-0">
           <div className="col-12 col-lg-6 position-relative d-flex justify-content-center">
             <div
-              className="purplediv"
+              className={`purplediv`}
               style={{
                 top: "15px",
                 zIndex: 1,
                 left: "12px",
-                background: "#8E97CD",
+                background:  this.props.appState.isPremium ===false ? '#50AF95' : "#8E97CD",
               }}
             ></div>
-            <div className="row free-plan-container p-3 position-relative w-100">
+            <div className={`row free-plan-container p-3 position-relative w-100 ${this.props.appState.isPremium === false && 'green-border'}`}>
               <div className="d-flex align-items-center gap-2">
                 <img
                   src={require("./assets/freePlanIcon.svg").default}
@@ -838,7 +838,7 @@ export default class Subscription extends React.Component {
                 <hr className="form-divider my-4" style={{ height: "2px" }} />
                 <div className="d-flex flex-column">
                   <span className="inactive-plan">Active</span>
-                  <span className="inactive-plan">Free plan bundle</span>
+                  <span className="inactive-plan">Free plan</span>
                 </div>
               </div>
             </div>
@@ -850,10 +850,10 @@ export default class Subscription extends React.Component {
                 top: "15px",
                 zIndex: 1,
                 left: "12px",
-                background: "#8E97CD",
+                background:  this.props.appState.isPremium ===true ? '#50AF95' : "#8E97CD",
               }}
             ></div>
-            <div className="row free-plan-container p-3 position-relative w-100">
+            <div className={`row free-plan-container p-3 position-relative w-100 ${this.props.appState.isPremium === true && 'green-border'}`}>
               <div className="d-flex align-items-center gap-2">
                 <img
                   src={require("./assets/paidPlanIcon.svg").default}
@@ -920,7 +920,7 @@ export default class Subscription extends React.Component {
                           lineHeight: "20px",
                         }}
                       >
-                        Subscribe <br></br> to the Premium plan
+                        Subscribe <br></br> to the Dypian plan
                       </div>
                       <div
                         className="btn filledbtn px-3 px-lg-5"
@@ -1001,7 +1001,7 @@ export default class Subscription extends React.Component {
                           lineHeight: "20px",
                         }}
                       >
-                        Active <br></br> Premium plan
+                        Active <br></br> Dypian plan
                       </div>
                       {/* <div
                         className="btn outline-btn px-5"
