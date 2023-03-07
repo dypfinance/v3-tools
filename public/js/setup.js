@@ -27626,11 +27626,15 @@ async function connectWallet(provider, walletType) {
     //Web3 Providers
     window.web3 = new Web3(window.ethereum);
     try {
+     
+      if (window.ethereum.isCoin98 && window.ethereum.isMetaMask) {window.WALLET_TYPE = "coin98";
+       await window.ethereum.enable();
+      console.log("Connected!");
+      window.IS_CONNECTED = true;};
+      if (window.ethereum.isMetaMask && !window.ethereum.isCoin98){ window.WALLET_TYPE = "metamask";
       await window.ethereum.enable();
       console.log("Connected!");
-      window.IS_CONNECTED = true;
-      if (window.ethereum.isCoin98) window.WALLET_TYPE = "coin98";
-      if (window.ethereum.isMetaMask && !window.ethereum.isCoin98) window.WALLET_TYPE = "metamask";
+      window.IS_CONNECTED = true;};
       let coinbase_address = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
@@ -27660,29 +27664,29 @@ window.param = param;
 
 window.cached_contracts = Object.create(null);
 
-async function getCoinbase() {
-  if (window.WALLET_TYPE == "coin98") {
-    return window.coinbase_address.toLowerCase();
-  } else if (window.WALLET_TYPE != "coin98"){
-    const coinbase =  await window.ethereum.request({
-      method: "eth_requestAccounts",
-    })
-    if(coinbase && coinbase.length > 0)
-    {window.coinbase_address = coinbase.pop()
-    return window.coinbase_address.toLowerCase();}
-  }
-}
-
-
-// function getCoinbase() {
+// async function getCoinbase() {
 //   if (window.WALLET_TYPE == "coin98") {
-//     console.log('yes')
 //     return window.coinbase_address.toLowerCase();
-//   } else {
-//     console.log('no')
-//     return window.web3.eth?.getCoinbase();
+//   } else if (window.WALLET_TYPE != "coin98"){
+//     const coinbase =  await window.ethereum.request({
+//       method: "eth_requestAccounts",
+//     })
+//     if(coinbase && coinbase.length > 0)
+//     {window.coinbase_address = coinbase.pop()
+//     return window.coinbase_address.toLowerCase();}
 //   }
 // }
+
+
+function getCoinbase() {
+  if (window.WALLET_TYPE == "coin98") {
+    console.log('yes')
+    return window.coinbase_address.toLowerCase();
+  } else {
+    console.log('no')
+    return window.web3.eth?.getCoinbase();
+  }
+}
 
 
 async function getContract({ key, address = null, ABI = null }) {

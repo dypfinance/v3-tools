@@ -324,9 +324,9 @@ class App extends React.Component {
     this.tvl().then();
     this.updateWindowDimensions();
     window.addEventListener("resize", this.updateWindowDimensions);
-    // if (window.ethereum && window.ethereum.selectedAddress !== null) {
+    if (window.ethereum && window.ethereum.selectedAddress !== null) {
       this.checkConnection();
-    // }
+    }
     this.checkNetworkId();
     this.refreshSubscription();
 
@@ -350,7 +350,7 @@ class App extends React.Component {
     // this.subscriptionInterval = setInterval(this.refreshSubscription, 6e4);
   }
 
-  checkConnection = async () => {
+ checkConnection = async () => {
     const logout = localStorage.getItem("logout");
     if (logout !== "true" && window.ethereum) {
       await window.ethereum
@@ -451,7 +451,7 @@ class App extends React.Component {
     }
 
     document.addEventListener("touchstart", { passive: true });
-    
+
     return (
       <div
         className={`page_wrapper ${this.state.isMinimized ? "minimize" : ""}`}
