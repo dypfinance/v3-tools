@@ -144,8 +144,6 @@ class App extends React.Component {
   };
 
   refreshSubscription = async () => {
-    if (!this.state.isConnected) return;
-
     let coinbase = this.state.coinbase;
     let subscribedPlatformTokenAmountETH;
     let subscribedPlatformTokenAmountAvax;
@@ -327,10 +325,11 @@ class App extends React.Component {
     window.addEventListener("resize", this.updateWindowDimensions);
     this.checkConnection();
     this.checkNetworkId();
-    this.refreshSubscription()
+   
 
     if (window.ethereum) {
       this.handleEthereum();
+      this.refreshSubscription()
     } else {
       window.addEventListener("ethereum#initialized", this.handleEthereum, {
         once: true,
@@ -406,9 +405,13 @@ class App extends React.Component {
     // this.setState({ network: network });
   };
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     if (this.props.location !== prevProps.location) {
       this.checkNetworkId();
+      this.refreshSubscription()
+    }
+
+    if (this.state.coinbase !== prevState.coinbase) {
       this.refreshSubscription()
     }
   }
@@ -760,6 +763,7 @@ class App extends React.Component {
                         networkId={parseInt(this.state.networkId)}
                         handleSwitchNetwork={this.handleSwitchNetwork}
                         coinbase={this.state.coinbase}
+                        isPremium={this.state.isPremium}
                         isConnected={this.state.isConnected}
                         onSubscribe={this.refreshSubscription}
                       />

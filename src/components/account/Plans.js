@@ -327,16 +327,13 @@ export default class Subscription extends React.Component {
   };
 
   getDypBalance = async () => {
-    let account = this.props.coinbase;
-    const web3eth = new Web3(
-      "https://mainnet.infura.io/v3/94608dc6ddba490697ec4f9b723b586e"
-    );
-    const web3avax = new Web3("https://api.avax.network/ext/bc/C/rpc");
-    const web3bsc = new Web3("https://bsc-dataseed.binance.org/");
+    const web3eth = window.infuraWeb3;
+    const web3avax = window.avaxWeb3;
+    const web3bsc = window.bscWeb3;
     const tokenAddress = "0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17";
     const walletAddress = this.props.coinbase;
     const TokenABI = window.ERC20_ABI;
-    if (account !== undefined && walletAddress !== undefined) {
+    if ( walletAddress !== null && walletAddress !== undefined) {
       const contract1 = new web3eth.eth.Contract(TokenABI, tokenAddress);
       const contract2 = new web3avax.eth.Contract(TokenABI, tokenAddress);
       const contract3 = new web3bsc.eth.Contract(TokenABI, tokenAddress);
@@ -854,14 +851,14 @@ export default class Subscription extends React.Component {
                 zIndex: 1,
                 left: "12px",
                 background:
-                  this.props.appState.isPremium === false
+                  this.props.isPremium === false
                     ? "#50AF95"
                     : "#8E97CD",
               }}
             ></div>
             <div
               className={`row free-plan-container p-3 position-relative w-100 ${
-                this.props.appState.isPremium === false && "green-border"
+                this.props.isPremium === false && "green-border"
               }`}
             >
               <div className="d-flex align-items-center gap-2">
@@ -905,14 +902,14 @@ export default class Subscription extends React.Component {
                 zIndex: 1,
                 left: "12px",
                 background:
-                  this.props.appState.isPremium === true
+                  this.props.isPremium === true
                     ? "#50AF95"
                     : "#8E97CD",
               }}
             ></div>
             <div
               className={`row free-plan-container p-3 position-relative w-100 ${
-                this.props.appState.isPremium === true && "green-border"
+                this.props.isPremium === true && "green-border"
               }`}
             >
               <div className="d-flex align-items-center gap-2">
@@ -941,7 +938,7 @@ export default class Subscription extends React.Component {
 
               <div className="col-12 col-lg-6 paid-plan-image"></div>
               <div className="col-12">
-                {!this.props.appState.isPremium ? (
+                {!this.props.isPremium ? (
                   <>
                     <div className="premiumbanner">
                       <div className="d-flex align-items-center justify-content-between">
@@ -1346,7 +1343,7 @@ export default class Subscription extends React.Component {
         )}
         {/* <form onSubmit={this.handleSubscribe}>     
           <div>
-            {!this.props.appState.isPremium ? (
+            {!this.props.isPremium ? (
               <table className="w-100">
                 <tr
                   className="tablerow"
@@ -1479,7 +1476,7 @@ export default class Subscription extends React.Component {
 
            
           </div>
-          {!this.props.appState.isPremium ? (   
+          {!this.props.isPremium ? (   
             this.state.subscribe_now === true ? (
               <>
                 <div className="mt-4 ml-0">
