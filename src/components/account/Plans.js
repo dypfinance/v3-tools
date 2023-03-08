@@ -638,6 +638,7 @@ export default class Subscription extends React.Component {
     });
 
     this.setState({ loadspinnerSub: true });
+
   
 
     let price =
@@ -646,12 +647,13 @@ export default class Subscription extends React.Component {
       : this.props.networkId === 56
       ? await window.getEstimatedTokenSubscriptionAmountBNB(this.state.selectedSubscriptionToken)
       : await window.getEstimatedTokenSubscriptionAmount(this.state.selectedSubscriptionToken);
-      
+
     await subscriptionContract.methods
       .subscribe(this.state.selectedSubscriptionToken, price)
       .send({ from: await window.getCoinbase() })
       .then(() => {
         this.setState({ loadspinnerSub: false });
+        this.props.onSubscribe()
       })
       .catch((e) => {
         this.setState({ status: "An error occurred. Please try again" });

@@ -746,6 +746,7 @@ class App extends React.Component {
                         handleSwitchNetwork={this.handleSwitchNetwork}
                         coinbase={this.state.coinbase}
                         isConnected={this.state.isConnected}
+                        
                       />
                     )}
                   />
@@ -760,6 +761,7 @@ class App extends React.Component {
                         handleSwitchNetwork={this.handleSwitchNetwork}
                         coinbase={this.state.coinbase}
                         isConnected={this.state.isConnected}
+                        onSubscribe={this.refreshSubscription}
                       />
                     )}
                   />
