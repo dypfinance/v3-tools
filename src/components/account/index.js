@@ -375,7 +375,7 @@ export default class Subscription extends React.Component {
     const walletAddress = this.props.coinbase;
     const TokenABI = window.ERC20_ABI;
     
-    if (this.props.coinbase != undefined) {
+    if (this.props.coinbase && this.props.coinbase != undefined) {
       const contract1 = new window.infuraWeb3.eth.Contract(TokenABI, tokenAddress);
       const contract2 = new window.avaxWeb3.eth.Contract(TokenABI, tokenAddress);
       const contract3 = new window.bscWeb3.eth.Contract(TokenABI, tokenAddress);
@@ -424,7 +424,7 @@ export default class Subscription extends React.Component {
     // Typical usage (don't forget to compare props):
     if (this.props.coinbase !== prevProps.coinbase) {
       this.fetchUserPools();
-      this.getDypBalance();
+      // this.getDypBalance();
       this.fetchAvatar();
       this.fetchUsername();
       this.fetchUserPools();
@@ -444,7 +444,7 @@ export default class Subscription extends React.Component {
     }
 
     if (this.props.networkId !== prevProps.networkId) {
-      this.getDypBalance();
+      // this.getDypBalance();
 
       if (this.props.networkId === 43114) {
         this.handleSubscriptionTokenChange(this.state.usdteAddress);
@@ -460,19 +460,13 @@ export default class Subscription extends React.Component {
 
   componentDidMount() {
     // window._refreshBalIntervalDyp = setInterval(this.getDypBalance, 2000);
-    this.getDypBalance();
-
+       this.getAllBalance();
+       
     this.setState({ coinbase: this.props.coinbase });
 
     this.handleCheckIfAlreadyApproved();
     window.scrollTo(0, 0);
     // this.checkConnection();
-
-    if (window.isConnectedOneTime) {
-      this.onComponentMount();
-    } else {
-      window.addOneTimeWalletConnectionListener(this.onComponentMount);
-    }
   }
   componentWillUnmount() {
     if (this.props.networkId === 1) {
@@ -484,13 +478,6 @@ export default class Subscription extends React.Component {
     window.removeOneTimeWalletConnectionListener(this.onComponentMount);
   }
 
-  onComponentMount = async () => {
-    this.handleSubscriptionTokenChange(this.state.selectedSubscriptionToken);
-    // this.checkNetworkId();
-
-    // this.fetchAvatar().then();
-    // this.checkConnection();
-  };
 
   handleSubscriptionTokenChange = async (tokenAddress) => {
     const token =
