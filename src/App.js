@@ -96,12 +96,12 @@ class App extends React.Component {
   };
 
   checkNetworkId = () => {
-    if (!this.props.history.location.pathname.includes("bridge")) {
+    if (!this.props.history.location.pathname.includes("bridge") && this.state.coinbase) {
       if (
         window.ethereum &&
         (window.ethereum.isMetaMask === true ||
           window.coin98 === true ||
-          window.ethereum.isTrust === true)
+          window.ethereum.isTrust === true || window.ethereum.isCoinbaseWallet === true)
       ) {
         window.ethereum
           .request({ method: "eth_chainId" })
@@ -131,16 +131,33 @@ class App extends React.Component {
             this.refreshSubscription().then();
           })
           .catch(console.error);
-      } else if (window.ethereum && !window.ethereum?.isMetaMask) {
-        window.ethereum
-          .request({ method: "net_version" })
-          .then((data) => {
-            this.setState({
-              networkId: data,
-            });
+      } else if (window.ethereum && window.ethereum.overrideIsMetaMask === true && !window.ethereum.isCoinbaseWallet) {
+        const chainId = window.ethereum.selectedProvider.chainId
+        
+            if (chainId === "0x1") {
+              this.setState({
+                networkId: "1",
+              });
+            } else if (chainId === "0xa86a") {
+              this.setState({
+                networkId: "43114",
+              });
+            } else if (chainId === "0x38") {
+              this.setState({
+                networkId: "56",
+              });
+            } else if (chainId !== "undefined") {
+              this.setState({
+                networkId: "0",
+              });
+            } else {
+              this.setState({
+                networkId: "1",
+              });
+            }
+
             this.refreshSubscription().then();
-          })
-          .catch(console.error);
+          
       } else {
         this.setState({
           networkId: "1",
@@ -349,7 +366,7 @@ class App extends React.Component {
 
  checkConnection = async () => {
     const logout = localStorage.getItem("logout");
-    if (logout !== "true" && window.ethereum && !window.ethereum.isCoin98) {
+    if (logout !== "true" && window.ethereum && (!window.ethereum.isCoinbaseWallet || !window.ethereum.overrideIsMetaMask)) {
       await window.ethereum
         ?.request({ method: "eth_requestAccounts" })
         .then((data) => {

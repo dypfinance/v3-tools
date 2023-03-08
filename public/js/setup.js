@@ -27568,6 +27568,8 @@ async function connectWallet(provider, walletType) {
       window.IS_CONNECTED = true;
       if (window.coin98) window.WALLET_TYPE = "coin98";
       if (window.ethereum.isMetaMask && !window.coin98) window.WALLET_TYPE = "metamask";
+      if (window.ethereum.isCoinbaseWallet && !window.coin98) window.WALLET_TYPE = "coinbase";
+
       let coinbase_address = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
@@ -27598,13 +27600,15 @@ window.cached_contracts = Object.create(null);
 async function getCoinbase() {
   if (
     window.ethereum &&
-    window.coin98
+    (window.coin98 || window.ethereum.isCoinbaseWallet)
   ) {
     return window.coinbase_address.toLowerCase();
   } else if (
-    window.ethereum &&
+    (window.ethereum &&
     !window.coin98 &&
-    window.ethereum.isMetaMask
+    window.ethereum.isMetaMask && !window.ethereum.overrideIsMetaMask)
+    &&
+    !window.ethereum.isCoinbaseWallet
   ) {
     const coinbase = await window.ethereum.request({
       method: "eth_requestAccounts",
