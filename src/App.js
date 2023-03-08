@@ -311,7 +311,7 @@ class App extends React.Component {
 
   handleEthereum() {
     const { ethereum } = window;
-    if (ethereum && (ethereum.isMetaMask || ethereum.isTrust)) {
+    if (ethereum && ethereum.isMetaMask) {
       console.log("Ethereum successfully detected!");
       this.checkNetworkId();
       // Access the decentralized web!
