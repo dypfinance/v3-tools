@@ -272,8 +272,7 @@ export default class Subscription extends React.Component {
           window.config.subscription_tokens
         )[0],
       });
-    }
-     else if (this.props.networkId === 56) {
+    } else if (this.props.networkId === 56) {
       this.setState({
         selectedSubscriptionToken: Object.keys(
           window.config.subscriptionbnb_tokens
@@ -403,10 +402,8 @@ export default class Subscription extends React.Component {
         this.handleSubscriptionTokenChange(this.state.wethAddress);
         this.myNft().then();
         this.myStakes().then();
-      }
-       else if (this.props.networkId === 56) {
+      } else if (this.props.networkId === 56) {
         this.handleSubscriptionTokenChange(this.state.wbnbAddress);
-    
       }
     }
   }
@@ -417,8 +414,6 @@ export default class Subscription extends React.Component {
     this.getDypBalance();
 
     this.setState({ coinbase: this.props.coinbase });
-
-    this.handleCheckIfAlreadyApproved();
     window.scrollTo(0, 0);
     // this.checkConnection();
 
@@ -454,7 +449,9 @@ export default class Subscription extends React.Component {
     let tokenDecimals =
       this.props.networkId === 1
         ? window.config.subscriptioneth_tokens[token]?.decimals
-        : this.props.networkId === 56 ? window.config.subscriptionbnb_tokens[token]?.decimals : window.config.subscription_tokens[token]?.decimals
+        : this.props.networkId === 56
+        ? window.config.subscriptionbnb_tokens[token]?.decimals
+        : window.config.subscription_tokens[token]?.decimals;
     this.setState({
       selectedSubscriptionToken: token,
       tokenBalance: "",
@@ -465,7 +462,9 @@ export default class Subscription extends React.Component {
     let price =
       this.props.networkId === 1
         ? await window.getEstimatedTokenSubscriptionAmountETH(token)
-        : this.props.networkId === 56 ? await window.getEstimatedTokenSubscriptionAmountBNB(token) : await window.getEstimatedTokenSubscriptionAmount(token);
+        : this.props.networkId === 56
+        ? await window.getEstimatedTokenSubscriptionAmountBNB(token)
+        : await window.getEstimatedTokenSubscriptionAmount(token);
     price = new BigNumber(price).times(1.1).toFixed(0);
 
     let formattedPrice = getFormattedNumber(
@@ -519,7 +518,7 @@ export default class Subscription extends React.Component {
   };
 
   handleApprove = async (e) => {
-    e.preventDefault();
+    // e.preventDefault();
 
     let tokenContract = await window.getContract({
       address: this.state.selectedSubscriptionToken,
@@ -532,7 +531,9 @@ export default class Subscription extends React.Component {
       .approve(
         this.props.networkId === 1
           ? window.config.subscriptioneth_address
-          : window.config.subscriptioneth_address,
+          : this.props.networkId === 56
+          ? window.config.subscriptionbnb_address
+          : window.config.subscription_address,
         this.state.price
       )
       .send()
@@ -549,15 +550,28 @@ export default class Subscription extends React.Component {
       });
   };
 
-  handleCheckIfAlreadyApproved = async () => {
-    const web3eth = new Web3(
-      "https://mainnet.infura.io/v3/94608dc6ddba490697ec4f9b723b586e"
-    );
+  handleCheckIfAlreadyApproved = async (token) => {
+
+    const web3eth = new Web3(window.config.infura_endpoint);
+    const bscWeb3 = new Web3(window.config.bsc_endpoint);
+    const avaxWeb3 = new Web3(window.config.avax_endpoint);
 
     const ethsubscribeAddress = window.config.subscriptioneth_address;
     const avaxsubscribeAddress = window.config.subscription_address;
-    const subscribeToken = this.state.selectedSubscriptionToken;
+    const bnbsubscribeAddress = window.config.subscriptionbnb_address;
+
+    const subscribeToken = token;
     const subscribeTokencontract = new web3eth.eth.Contract(
+      window.ERC20_ABI,
+      subscribeToken
+    );
+
+    const subscribeTokencontractbnb = new bscWeb3.eth.Contract(
+      window.ERC20_ABI,
+      subscribeToken
+    );
+
+    const subscribeTokencontractavax = new avaxWeb3.eth.Contract(
       window.ERC20_ABI,
       subscribeToken
     );
@@ -578,8 +592,23 @@ export default class Subscription extends React.Component {
           this.setState({ loadspinner: false });
           this.setState({ isApproved: false });
         }
+      }
+      if (this.props.networkId === 56) {
+        const result = await subscribeTokencontractbnb.methods
+          .allowance(this.props.coinbase, bnbsubscribeAddress)
+          .call()
+          .then();
+        if (result != 0) {
+          this.setState({ lockActive: true });
+          this.setState({ loadspinner: false });
+          this.setState({ isApproved: true });
+        } else if (result == 0) {
+          this.setState({ lockActive: false });
+          this.setState({ loadspinner: false });
+          this.setState({ isApproved: false });
+        }
       } else {
-        const result = await subscribeTokencontract.methods
+        const result = await subscribeTokencontractavax.methods
           .allowance(this.props.coinbase, avaxsubscribeAddress)
           .call()
           .then();
@@ -598,16 +627,28 @@ export default class Subscription extends React.Component {
   };
 
   handleSubscribe = async (e) => {
-    e.preventDefault();
-    console.log("handleSubscribe()");
+    // e.preventDefault();
     let subscriptionContract = await window.getContract({
-      key: this.props.networkId === 1 ? "SUBSCRIPTIONETH" : this.props.networkId === 56 ? "SUBSCRIPTIONBNB" : "SUBSCRIPTION",
+      key:
+        this.props.networkId === 1
+          ? "SUBSCRIPTIONETH"
+          : this.props.networkId === 56
+          ? "SUBSCRIPTIONBNB"
+          : "SUBSCRIPTION",
     });
 
     this.setState({ loadspinnerSub: true });
+  
 
+    let price =
+    this.props.networkId === 1
+      ? await window.getEstimatedTokenSubscriptionAmountETH(this.state.selectedSubscriptionToken)
+      : this.props.networkId === 56
+      ? await window.getEstimatedTokenSubscriptionAmountBNB(this.state.selectedSubscriptionToken)
+      : await window.getEstimatedTokenSubscriptionAmount(this.state.selectedSubscriptionToken);
+      
     await subscriptionContract.methods
-      .subscribe(this.state.selectedSubscriptionToken, this.state.price)
+      .subscribe(this.state.selectedSubscriptionToken, price)
       .send({ from: await window.getCoinbase() })
       .then(() => {
         this.setState({ loadspinnerSub: false });
@@ -621,7 +662,12 @@ export default class Subscription extends React.Component {
   handleUnsubscribe = async (e) => {
     e.preventDefault();
     let subscriptionContract = await window.getContract({
-      key: this.props.networkId === 1 ? "SUBSCRIPTIONETH" : this.props.networkId === 56 ? "SUBSCRIPTIONBNB" : "SUBSCRIPTION",
+      key:
+        this.props.networkId === 1
+          ? "SUBSCRIPTIONETH"
+          : this.props.networkId === 56
+          ? "SUBSCRIPTIONBNB"
+          : "SUBSCRIPTION",
     });
     await subscriptionContract.methods
       .unsubscribe()
@@ -752,11 +798,13 @@ export default class Subscription extends React.Component {
         ? window.config.subscriptioneth_tokens[
             this.state.selectedSubscriptionToken
           ]?.decimals
-        : this.props.networkId === 56 ?  window.config.subscriptionbnb_tokens[
-          this.state.selectedSubscriptionToken
-        ]?.decimals :  window.config.subscription_tokens[
-          this.state.selectedSubscriptionToken
-        ]?.decimals;
+        : this.props.networkId === 56
+        ? window.config.subscriptionbnb_tokens[
+            this.state.selectedSubscriptionToken
+          ]?.decimals
+        : window.config.subscription_tokens[
+            this.state.selectedSubscriptionToken
+          ]?.decimals;
     // this.handleCheckIfAlreadyApproved()
     let mycaws = [...this.state.myNFTs, ...this.state.myStakess];
 
@@ -793,9 +841,6 @@ export default class Subscription extends React.Component {
       this.setState({ openTooltip: true });
     };
 
-
-    
-
     return (
       <div style={{ minHeight: "65vh" }}>
         <div className="row mt-5 gap-4 gap-lg-0">
@@ -806,10 +851,17 @@ export default class Subscription extends React.Component {
                 top: "15px",
                 zIndex: 1,
                 left: "12px",
-                background:  this.props.appState.isPremium ===false ? '#50AF95' : "#8E97CD",
+                background:
+                  this.props.appState.isPremium === false
+                    ? "#50AF95"
+                    : "#8E97CD",
               }}
             ></div>
-            <div className={`row free-plan-container p-3 position-relative w-100 ${this.props.appState.isPremium === false && 'green-border'}`}>
+            <div
+              className={`row free-plan-container p-3 position-relative w-100 ${
+                this.props.appState.isPremium === false && "green-border"
+              }`}
+            >
               <div className="d-flex align-items-center gap-2">
                 <img
                   src={require("./assets/freePlanIcon.svg").default}
@@ -850,10 +902,17 @@ export default class Subscription extends React.Component {
                 top: "15px",
                 zIndex: 1,
                 left: "12px",
-                background:  this.props.appState.isPremium ===true ? '#50AF95' : "#8E97CD",
+                background:
+                  this.props.appState.isPremium === true
+                    ? "#50AF95"
+                    : "#8E97CD",
               }}
             ></div>
-            <div className={`row free-plan-container p-3 position-relative w-100 ${this.props.appState.isPremium === true && 'green-border'}`}>
+            <div
+              className={`row free-plan-container p-3 position-relative w-100 ${
+                this.props.appState.isPremium === true && "green-border"
+              }`}
+            >
               <div className="d-flex align-items-center gap-2">
                 <img
                   src={require("./assets/paidPlanIcon.svg").default}
@@ -904,7 +963,6 @@ export default class Subscription extends React.Component {
                         </div>
                         <div>
                           <div className="d-flex gap-2 flex-column flex-lg-row">
-                          
                             <h3 className="subscr-price">75 USD</h3>
                           </div>
                           <p className="subscr-note">*Exclusive offer</p>
@@ -941,7 +999,13 @@ export default class Subscription extends React.Component {
                             : this.handleSubscriptionTokenChange(
                                 this.state.wavaxAddress
                               );
-                          this.handleCheckIfAlreadyApproved();
+                          this.handleCheckIfAlreadyApproved(
+                            this.props.networkId === 1
+                              ? this.state.wethAddress
+                              : this.props.networkId === 56
+                              ? this.state.wbnbAddress
+                              : this.state.wavaxAddress
+                          );
                           this.props.networkId === 1
                             ? this.setState({
                                 dropdownIcon: "weth",
@@ -1018,7 +1082,10 @@ export default class Subscription extends React.Component {
           </div>
         </div>
         {this.state.subscribe_now === true ? (
-          <div className="subscribe-wrapper row mt-4 justify-content-end" id="subscribe" >
+          <div
+            className="subscribe-wrapper row mt-4 justify-content-end"
+            id="subscribe"
+          >
             <div className="subscribe-container p-3 position-relative">
               <div
                 className="purplediv"
@@ -1178,9 +1245,9 @@ export default class Subscription extends React.Component {
                                   : window.config.subscription_tokens[t]
                                       ?.symbol,
                             });
-                            console.log(t);
+                            // console.log(t);
                             this.handleSubscriptionTokenChange(t);
-                            this.handleCheckIfAlreadyApproved();
+                            this.handleCheckIfAlreadyApproved(t);
                           }}
                         >
                           <img
@@ -1201,8 +1268,9 @@ export default class Subscription extends React.Component {
                           />
                           {this.props.networkId === 1
                             ? window.config.subscriptioneth_tokens[t]?.symbol
-                            : this.props.networkId === 56 ? window.config.subscriptionbnb_tokens[t]?.symbol : window.config.subscription_tokens[t]?.symbol
-                            }
+                            : this.props.networkId === 56
+                            ? window.config.subscriptionbnb_tokens[t]?.symbol
+                            : window.config.subscription_tokens[t]?.symbol}
                         </li>
                       ))}
                     </ul>
@@ -1229,7 +1297,9 @@ export default class Subscription extends React.Component {
                   Subscription price:
                 </span>
                 <div className="d-flex align-items-center gap-2">
-                  <span className="usdt-text">{this.state.formattedPrice.slice(0,9)}</span>
+                  <span className="usdt-text">
+                    {this.state.formattedPrice.slice(0, 9)}
+                  </span>
 
                   <img
                     src={

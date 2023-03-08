@@ -841,7 +841,6 @@ export default class Subscription extends React.Component {
     // this.handleCheckIfAlreadyApproved()
     let mycaws = [...this.state.myNFTs, ...this.state.myStakess];
     let lands = [...this.state.myLandNFTs, ...this.state.landStakes]
-    console.log(window.ethereum);
 
     const focusInput = (input) => {
       document.getElementById(input).focus();

@@ -205,9 +205,10 @@ const Header = ({
 
       if (balance) {
         const infuraWeb3 = new Web3(window.config.infura_endpoint);
+        
+      
         const bscWeb3 = new Web3(window.config.bsc_endpoint);
         const avaxWeb3 = new Web3(window.config.avax_endpoint);
-
         if (chainId === 1) {
           const stringBalance = infuraWeb3.utils.hexToNumberString(balance);
           const amount = infuraWeb3.utils.fromWei(stringBalance, "ether");
@@ -441,14 +442,14 @@ const Header = ({
                             }
                           >
                             <Dropdown.Item>
-                            <NavLink to='/account'>
+                            <NavLink to='/account' className={'d-flex w-100'}>
                             <span className="d-flex gap-2 align-items-center">
                               <img src={user} alt="" />
                               My account</span>
                               </NavLink>
                             </Dropdown.Item>
                             <Dropdown.Item>
-                            <NavLink to='/plans'>
+                            <NavLink to='/plans' className={'d-flex w-100'}>
                             <span className="d-flex gap-2 align-items-center">
                               <img src={plans} alt="" />
                               Plans</span>
