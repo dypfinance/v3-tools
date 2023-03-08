@@ -311,7 +311,7 @@ class App extends React.Component {
 
   handleEthereum() {
     const { ethereum } = window;
-    if (ethereum && ethereum.isMetaMask) {
+    if (ethereum &&( ethereum.isMetaMask)) {
       console.log("Ethereum successfully detected!");
       this.checkNetworkId();
       // Access the decentralized web!
@@ -324,7 +324,7 @@ class App extends React.Component {
     this.tvl().then();
     this.updateWindowDimensions();
     window.addEventListener("resize", this.updateWindowDimensions);
-    if (window.ethereum && !window.coin98 && window.ethereum.isMetaMask) {
+    if (window.ethereum && !window.coin98 && (window.ethereum.isMetaMask || window.ethereum.isTrust)) {
       this.checkConnection();
     }
     this.checkNetworkId();
@@ -349,7 +349,7 @@ class App extends React.Component {
 
  checkConnection = async () => {
     const logout = localStorage.getItem("logout");
-    if (logout !== "true" && window.ethereum && !window.ethereum.isCoin98) {
+    if (logout !== "true" && window.ethereum &&( !window.ethereum.isCoin98 || window.ethereum.isTrust)) {
       await window.ethereum
         ?.request({ method: "eth_requestAccounts" })
         .then((data) => {
@@ -441,9 +441,9 @@ class App extends React.Component {
       ethereum?.on("accountsChanged", this.checkConnection);
     }
 
-    if (window.ethereum && window.ethereum.isTrust === true) {
-      ethereum?.on("chainChanged", this.handleTrustChain);
-    }
+    // if (window.ethereum && window.ethereum.isTrust === true) {
+    //   ethereum?.on("chainChanged", this.handleTrustChain);
+    // }
 
     document.addEventListener("touchstart", { passive: true });
 

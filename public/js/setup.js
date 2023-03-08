@@ -27604,7 +27604,7 @@ async function getCoinbase() {
   } else if (
     window.ethereum &&
     !window.coin98 &&
-    window.ethereum.isMetaMask
+    (window.ethereum.isMetaMask || window.ethereum.isTrust)
   ) {
     const coinbase = await window.ethereum.request({
       method: "eth_requestAccounts",
