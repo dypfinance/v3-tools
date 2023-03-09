@@ -96,7 +96,7 @@ class App extends React.Component {
   };
 
   checkNetworkId = () => {
-    if (!this.props.history.location.pathname.includes("bridge") && this.state.coinbase) {
+    if (!this.props.history.location.pathname.includes("bridge")) {
       if (
         window.ethereum &&
         (window.ethereum.isMetaMask === true ||
@@ -328,7 +328,7 @@ class App extends React.Component {
 
   handleEthereum() {
     const { ethereum } = window;
-    if (ethereum &&( ethereum.isMetaMask)) {
+    if (ethereum && ethereum.isMetaMask) {
       console.log("Ethereum successfully detected!");
       this.checkNetworkId();
       // Access the decentralized web!
