@@ -15,9 +15,12 @@ let accounts;
 
 const onSignIn = async ({ account, chainId }) => {
   if (!account || !chainId) return;
-  if (window.ethereum && window.ethereum &&
+  if (
+    window.ethereum &&
     !window.coin98 &&
-   ( window.ethereum.isMetaMask && ( !window.ethereum.isCoinbaseWallet || !window.ethereum.overrideIsMetaMask))) {
+    (window.ethereum.isMetaMask || window.ethereum.isTrust) &&
+    (!window.ethereum.isCoinbaseWallet || !window.ethereum.overrideIsMetaMask)
+  ) {
     try {
       accounts = await window.ethereum?.request({
         method: "eth_requestAccounts",
@@ -44,7 +47,8 @@ export function useEagerConnect() {
     if (
       window.ethereum &&
       !window.coin98 &&
-      ( window.ethereum.isMetaMask &&  (!window.ethereum.isCoinbaseWallet || !window.ethereum.overrideIsMetaMask))
+      (window.ethereum.isMetaMask || window.ethereum.isTrust) &&
+      (!window.ethereum.isCoinbaseWallet || !window.ethereum.overrideIsMetaMask)
     ) {
       injected.isAuthorized().then((isAuthorized) => {
         if (isAuthorized) {
@@ -70,7 +74,8 @@ export function useEagerConnect() {
     if (
       window.ethereum &&
       !window.coin98 &&
-      ( window.ethereum.isMetaMask &&  (!window.ethereum.isCoinbaseWallet || !window.ethereum.overrideIsMetaMask))
+      (window.ethereum.isMetaMask || window.ethereum.isTrust) &&
+      (!window.ethereum.isCoinbaseWallet || !window.ethereum.overrideIsMetaMask)
     ) {
       if (!tried && active) {
         setTried(true);
@@ -92,7 +97,8 @@ export function useInactiveListener(suppress = false) {
     if (
       window.ethereum &&
       !window.coin98 &&
-      ( window.ethereum.isMetaMask &&  (!window.ethereum.isCoinbaseWallet || !window.ethereum.overrideIsMetaMask))
+      (window.ethereum.isMetaMask || window.ethereum.isTrust) &&
+      (!window.ethereum.isCoinbaseWallet || !window.ethereum.overrideIsMetaMask)
     ) {
       if (ethereum && ethereum.on && !active && !error && !suppress) {
         const handleChainChanged = () => {
