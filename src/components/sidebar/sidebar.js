@@ -352,7 +352,7 @@ const Sidebar = (props) => {
           </div>
         </div>
       </div>
-      {activeSidebar && (
+      {activeSidebar && props.isPremium === false && (
         <NavLink
           to={"/plans"}
           className="d-flex align-items-center justify-content-center"
