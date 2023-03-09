@@ -836,7 +836,7 @@ const EarnTopPicks = ({
     } else setcardIndex(index);
   };
 
-  console.log(landCard);
+
 
   return topPools.length > 0 && expiredPools === false ? (
     <div className={`row w-100 justify-content-center gap-4`}>
