@@ -12,6 +12,7 @@ import DropdownButton from "react-bootstrap/DropdownButton";
 import { shortAddress } from "../../functions/shortAddress";
 import ellipse from "./assets/ellipse.svg";
 import user from "./assets/user.svg";
+import plans from "./assets/plans.svg";
 import logoutimg from "./assets/logout.svg";
 import walletIcon from "./assets/walletIcon.svg";
 import WalletModal from "../WalletModal";
@@ -35,6 +36,7 @@ const Header = ({
   hideModal,
   handleConnection,
   isConnected,
+  appState
 }) => {
   const [gasPrice, setGasprice] = useState();
   const [ethPrice, setEthprice] = useState();
@@ -204,9 +206,10 @@ const Header = ({
 
       if (balance) {
         const infuraWeb3 = new Web3(window.config.infura_endpoint);
+        
+      
         const bscWeb3 = new Web3(window.config.bsc_endpoint);
         const avaxWeb3 = new Web3(window.config.avax_endpoint);
-
         if (chainId === 1) {
           const stringBalance = infuraWeb3.utils.hexToNumberString(balance);
           const amount = infuraWeb3.utils.fromWei(stringBalance, "ether");
@@ -270,6 +273,8 @@ const Header = ({
     fetchUsername();
   }, [coinbase, checklogout]);
 
+  console.log(appState.isPremium, 'hellothere');
+
   return (
     <>
       <header className="header-wrap" style={{ zIndex: 5 }}>
@@ -308,7 +313,7 @@ const Header = ({
                 <div className="d-flex m-0 justify-content-between gap-3 align-items-center">
                   <NavLink className="buydyp-btn btn" to="/buydyp">
                     <img src={coin} alt="" />
-                    <span className="buy-dyp-text">Buy DYP</span>
+                    <span className="buy-dyp-text d-none d-lg-flex">Buy DYP</span>
                   </NavLink>
                   <div className="d-flex justify-content-between gap-3 align-items-center">
                     {routeData.pathname &&
@@ -440,7 +445,7 @@ const Header = ({
                             }
                           >
                             <Dropdown.Item>
-                            <NavLink to='/account'>
+                            <NavLink to={appState.isPremium ? '/account' : '/plans'} className={'d-flex w-100'}>
                             <span className="d-flex gap-2 align-items-center">
                               <img src={user} alt="" />
                               My account</span>
@@ -476,6 +481,14 @@ const Header = ({
                             </div>
                           }
                         ></DropdownButton>
+                      )}
+                      {isConnected === false &&
+                      (coinbase !== undefined || coinbase !== null) &&
+                      routeData.pathname !== "/swap" && (
+                        <NavLink to='/plans' className="account-user-wrapper d-flex align-items-center gap-1">
+                          <img src={require(`./assets/user2.svg`).default} alt="" />
+                          <span className="account-user d-none d-lg-flex">Account</span>
+                        </NavLink>
                       )}
                   </div>
                 </div>

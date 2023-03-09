@@ -23,6 +23,7 @@ import sidebarDypius from "../../assets/sidebarDypius.svg";
 import "./sidebar.css";
 import navRadius from "../../assets/navRadius.svg";
 import useWindowSize from "../../functions/useWindowSize";
+import sidebarPremium from "./assets/sidebarPremium.png";
 
 const activateLasers = () => {
   window.$.alert("Coming Soon!");
@@ -351,6 +352,14 @@ const Sidebar = (props) => {
           </div>
         </div>
       </div>
+      {activeSidebar && (
+        <NavLink
+          to={"/plans"}
+          className="d-flex align-items-center justify-content-center"
+        >
+          <img src={sidebarPremium} alt="" style={{ width: "80%" }} />
+        </NavLink>
+      )}
     </div>
     // <div
     //   onClick={props.toggleMobileSidebar}

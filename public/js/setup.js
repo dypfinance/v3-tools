@@ -1698,8 +1698,9 @@ window.config = {
   vault_usdc_address: "0x251B9ee6cEd97565A821C5608014a107ddc9C98F",
   vault_dai_address: "0x54F30bFfeb925F47225e148f0bAe17a452d6b8c0",
 
-  subscription_address: "0xba4b2bab726f645677681ddc74b29543d10b28af",
+  subscription_address: "0x5078a4912f6e0d74dcf99482ac5910df123e9b4b",
   subscriptioneth_address: "0x943023d8e0f591C08a0E2B922452a7Dc37173C9b",
+  subscriptionbnb_address: "0x0ec59a2d18e1e83ab393b3ac9d7d6d28cbff0d35",
   ZERO_ADDRESS: "0x0000000000000000000000000000000000000000",
   MAX_LOCKS_TO_LOAD_PER_CALL: 10,
   pangolin_router_address: "0xE54Ca86531e17Ef3616d22Ca28b0D458b6C89106",
@@ -1779,21 +1780,21 @@ window.config = {
       symbol: "WAVAX",
       decimals: 18,
     },
-    "0x60781c2586d68229fde47564546784ab3faca982": {
-      symbol: "PNG",
-      decimals: 18,
-    },
-    "0x49d5c2bdffac6ce2bfdb6640f4f80f226bc10bab": {
-      symbol: "WETH.e",
-      decimals: 18,
-    },
-    "0xc7198437980c041c805a1edcba50c1ce5db95118": {
-      symbol: "USDT.e",
+    // "0x60781c2586d68229fde47564546784ab3faca982": {
+    //   symbol: "PNG",
+    //   decimals: 18,
+    // },
+    // "0x49d5c2bdffac6ce2bfdb6640f4f80f226bc10bab": {
+    //   symbol: "WETH.e",
+    //   decimals: 18,
+    // },
+    "0x9702230A8Ea53601f5cD2dc00fDBc13d4dF4A8c7": {
+      symbol: "USDT",
       decimals: 6,
     },
-    "0xd586e7f844cea2f87f50152665bcbc2c279d8d70": {
-      symbol: "DAI.e",
-      decimals: 18,
+    "0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E": {
+      symbol: "USDC",
+      decimals: 6,
     },
   },
 
@@ -1804,11 +1805,11 @@ window.config = {
       symbol: "WETH",
       decimals: 18,
     },
-    "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599": {
-      symbol: "WBTC",
-      decimals: 8,
-    },
-    "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48": {
+    // "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599": {
+    //   symbol: "WBTC",
+    //   decimals: 8,
+    // },
+    "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48": {
       symbol: "USDC",
       decimals: 6,
     },
@@ -1816,10 +1817,32 @@ window.config = {
       symbol: "USDT",
       decimals: 6,
     },
-    "0x6b175474e89094c44da98b954eedeac495271d0f": {
-      symbol: "DAI",
+    // "0x6b175474e89094c44da98b954eedeac495271d0f": {
+    //   symbol: "DAI",
+    //   decimals: 18,
+    // },
+  },
+  subscriptionbnb_tokens: {
+    "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c": {
+      symbol: "WBNB",
       decimals: 18,
     },
+    // "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599": {
+    //   symbol: "WBTC",
+    //   decimals: 8,
+    // },
+    "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56": {
+      symbol: "BUSD",
+      decimals: 18,
+    },
+    "0x55d398326f99059fF775485246999027B3197955": {
+      symbol: "USDT",
+      decimals: 18,
+    },
+    // "0x6b175474e89094c44da98b954eedeac495271d0f": {
+    //   symbol: "DAI",
+    //   decimals: 18,
+    // },
   },
 
   automated_trust_scores: {
@@ -12138,238 +12161,245 @@ window.LOCKERETH_ABI = [
 ];
 
 window.SUBSCRIPTION_ABI = [
-  { type: "constructor", stateMutability: "nonpayable", inputs: [] },
+  { inputs: [], stateMutability: "nonpayable", type: "constructor" },
   {
-    type: "event",
-    name: "OwnershipTransferred",
+    anonymous: false,
     inputs: [
       {
-        type: "address",
+        indexed: true,
+        internalType: "address",
         name: "previousOwner",
-        internalType: "address",
-        indexed: true,
+        type: "address",
       },
       {
-        type: "address",
+        indexed: true,
+        internalType: "address",
         name: "newOwner",
-        internalType: "address",
-        indexed: true,
+        type: "address",
       },
     ],
-    anonymous: false,
+    name: "OwnershipTransferred",
+    type: "event",
   },
   {
-    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "platformTokenAmount",
+        type: "uint256",
+      },
+    ],
     name: "Subscribe",
-    inputs: [
-      {
-        type: "address",
-        name: "account",
-        internalType: "address",
-        indexed: true,
-      },
-      {
-        type: "uint256",
-        name: "platformTokenAmount",
-        internalType: "uint256",
-        indexed: false,
-      },
-    ],
-    anonymous: false,
+    type: "event",
   },
   {
-    type: "event",
-    name: "SubscriptionFeeSet",
+    anonymous: false,
     inputs: [
       {
-        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
         name: "amountDai",
-        internalType: "uint256",
-        indexed: false,
+        type: "uint256",
       },
     ],
-    anonymous: false,
+    name: "SubscriptionFeeSet",
+    type: "event",
   },
   {
-    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "tokenAddress",
+        type: "address",
+      },
+    ],
     name: "SupportedTokenAdded",
-    inputs: [
-      {
-        type: "address",
-        name: "tokenAddress",
-        internalType: "address",
-        indexed: false,
-      },
-    ],
-    anonymous: false,
+    type: "event",
   },
   {
-    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "tokenAddress",
+        type: "address",
+      },
+    ],
     name: "SupportedTokenRemoved",
-    inputs: [
-      {
-        type: "address",
-        name: "tokenAddress",
-        internalType: "address",
-        indexed: false,
-      },
-    ],
-    anonymous: false,
-  },
-  {
     type: "event",
-    name: "Unsubscribe",
-    inputs: [
-      {
-        type: "address",
-        name: "account",
-        internalType: "address",
-        indexed: true,
-      },
-      {
-        type: "uint256",
-        name: "platformTokenAmount",
-        internalType: "uint256",
-        indexed: false,
-      },
-    ],
+  },
+  {
     anonymous: false,
-  },
-  {
-    type: "function",
-    stateMutability: "view",
-    outputs: [{ type: "uint256", name: "", internalType: "uint256" }],
-    name: "ONE_HUNDRED_X_100",
-    inputs: [],
-  },
-  {
-    type: "function",
-    stateMutability: "view",
-    outputs: [{ type: "uint256", name: "", internalType: "uint256" }],
-    name: "SLIPPAGE_TOLERANCE_X_100",
-    inputs: [],
-  },
-  {
-    type: "function",
-    stateMutability: "view",
-    outputs: [{ type: "address", name: "", internalType: "address" }],
-    name: "TRUSTED_DAI_ADDRESS",
-    inputs: [],
-  },
-  {
-    type: "function",
-    stateMutability: "view",
-    outputs: [{ type: "address", name: "", internalType: "address" }],
-    name: "TRUSTED_PLATFORM_TOKEN_ADDRESS",
-    inputs: [],
-  },
-  {
-    type: "function",
-    stateMutability: "nonpayable",
-    outputs: [],
-    name: "addSupportedToken",
-    inputs: [
-      { type: "address", name: "tokenAddress", internalType: "address" },
-    ],
-  },
-  {
-    type: "function",
-    stateMutability: "view",
-    outputs: [{ type: "uint256", name: "", internalType: "uint256" }],
-    name: "getEstimatedTokenSubscriptionAmount",
-    inputs: [
-      { type: "address", name: "tokenAddress", internalType: "address" },
-    ],
-  },
-  {
-    type: "function",
-    stateMutability: "view",
-    outputs: [{ type: "bool", name: "", internalType: "bool" }],
-    name: "isTokenSupported",
-    inputs: [{ type: "address", name: "", internalType: "address" }],
-  },
-  {
-    type: "function",
-    stateMutability: "view",
-    outputs: [{ type: "address", name: "", internalType: "address" }],
-    name: "owner",
-    inputs: [],
-  },
-  {
-    type: "function",
-    stateMutability: "nonpayable",
-    outputs: [],
-    name: "removeSupportedToken",
-    inputs: [
-      { type: "address", name: "tokenAddress", internalType: "address" },
-    ],
-  },
-  {
-    type: "function",
-    stateMutability: "nonpayable",
-    outputs: [],
-    name: "renounceOwnership",
-    inputs: [],
-  },
-  {
-    type: "function",
-    stateMutability: "nonpayable",
-    outputs: [],
-    name: "setSubscriptionFee",
     inputs: [
       {
-        type: "uint256",
-        name: "newSubscriptionFeeInDai",
-        internalType: "uint256",
+        indexed: false,
+        internalType: "address",
+        name: "accountAddress",
+        type: "address",
       },
     ],
+    name: "UnsubscribeAddress",
+    type: "event",
   },
   {
+    inputs: [],
+    name: "ONE_HUNDRED_X_100",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
     type: "function",
-    stateMutability: "nonpayable",
-    outputs: [],
-    name: "subscribe",
+  },
+  {
+    inputs: [],
+    name: "SLIPPAGE_TOLERANCE_X_100",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "TRUSTED_DAI_ADDRESS",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "TRUSTED_PLATFORM_TOKEN_ADDRESS",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
-      { type: "address", name: "tokenAddress", internalType: "address" },
-      { type: "uint256", name: "amount", internalType: "uint256" },
+      { internalType: "address", name: "tokenAddress", type: "address" },
     ],
+    name: "addSupportedToken",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
-    type: "function",
+    inputs: [
+      { internalType: "address", name: "tokenAddress", type: "address" },
+    ],
+    name: "getEstimatedTokenSubscriptionAmount",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
     stateMutability: "view",
-    outputs: [{ type: "uint256", name: "", internalType: "uint256" }],
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "isTokenSupported",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "owner",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "tokenAddress", type: "address" },
+    ],
+    name: "removeSupportedToken",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "newSubscriptionFeeInDai",
+        type: "uint256",
+      },
+    ],
+    name: "setSubscriptionFee",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "tokenAddress", type: "address" },
+      { internalType: "uint256", name: "amount", type: "uint256" },
+    ],
+    name: "subscribe",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "subscriptionFeeInDai",
-    inputs: [],
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
   },
   {
-    type: "function",
-    stateMutability: "view",
-    outputs: [{ type: "uint256", name: "", internalType: "uint256" }],
+    inputs: [{ internalType: "address", name: "", type: "address" }],
     name: "subscriptionPlatformTokenAmount",
-    inputs: [{ type: "address", name: "", internalType: "address" }],
-  },
-  {
-    type: "function",
-    stateMutability: "nonpayable",
-    outputs: [],
-    name: "transferOwnership",
-    inputs: [{ type: "address", name: "newOwner", internalType: "address" }],
-  },
-  {
-    type: "function",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
     stateMutability: "view",
-    outputs: [
-      { type: "address", name: "", internalType: "contract IUniswapV2Router" },
-    ],
-    name: "uniswapRouterV2",
-    inputs: [],
+    type: "function",
   },
   {
-    type: "function",
-    stateMutability: "nonpayable",
+    inputs: [
+      { internalType: "address", name: "token", type: "address" },
+      { internalType: "address", name: "recipient", type: "address" },
+      { internalType: "uint256", name: "amount", type: "uint256" },
+    ],
+    name: "transferAnyERC20Token",
     outputs: [],
-    name: "unsubscribe",
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
     inputs: [],
+    name: "uniswapRouterV2",
+    outputs: [
+      { internalType: "contract IUniswapV2Router", name: "", type: "address" },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "accountAddress", type: "address" },
+    ],
+    name: "unsubscribeAddress",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
   },
 ];
 
@@ -12603,6 +12633,249 @@ window.SUBSCRIPTIONETH_ABI = [
   {
     inputs: [],
     name: "unsubscribe",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+];
+
+window.SUBSCRIPTIONBNB_ABI = [
+  { inputs: [], stateMutability: "nonpayable", type: "constructor" },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "previousOwner",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "OwnershipTransferred",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "platformTokenAmount",
+        type: "uint256",
+      },
+    ],
+    name: "Subscribe",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amountDai",
+        type: "uint256",
+      },
+    ],
+    name: "SubscriptionFeeSet",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "tokenAddress",
+        type: "address",
+      },
+    ],
+    name: "SupportedTokenAdded",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "tokenAddress",
+        type: "address",
+      },
+    ],
+    name: "SupportedTokenRemoved",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "accountAddress",
+        type: "address",
+      },
+    ],
+    name: "UnsubscribeAddress",
+    type: "event",
+  },
+  {
+    inputs: [],
+    name: "ONE_HUNDRED_X_100",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "SLIPPAGE_TOLERANCE_X_100",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "TRUSTED_DAI_ADDRESS",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "TRUSTED_PLATFORM_TOKEN_ADDRESS",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "tokenAddress", type: "address" },
+    ],
+    name: "addSupportedToken",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "tokenAddress", type: "address" },
+    ],
+    name: "getEstimatedTokenSubscriptionAmount",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "isTokenSupported",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "owner",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "tokenAddress", type: "address" },
+    ],
+    name: "removeSupportedToken",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "newSubscriptionFeeInDai",
+        type: "uint256",
+      },
+    ],
+    name: "setSubscriptionFee",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "tokenAddress", type: "address" },
+      { internalType: "uint256", name: "amount", type: "uint256" },
+    ],
+    name: "subscribe",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "subscriptionFeeInDai",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "subscriptionPlatformTokenAmount",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "token", type: "address" },
+      { internalType: "address", name: "recipient", type: "address" },
+      { internalType: "uint256", name: "amount", type: "uint256" },
+    ],
+    name: "transferAnyERC20Token",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "uniswapRouterV2",
+    outputs: [
+      { internalType: "contract IUniswapV2Router", name: "", type: "address" },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "accountAddress", type: "address" },
+    ],
+    name: "unsubscribeAddress",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -28687,6 +28960,13 @@ async function getEstimatedTokenSubscriptionAmount(tokenAddress) {
 
 async function getEstimatedTokenSubscriptionAmountETH(tokenAddress) {
   let subscriptionContract = await getContract({ key: "SUBSCRIPTIONETH" });
+  return await subscriptionContract.methods
+    .getEstimatedTokenSubscriptionAmount(tokenAddress)
+    .call();
+}
+
+async function getEstimatedTokenSubscriptionAmountBNB(tokenAddress) {
+  let subscriptionContract = await getContract({ key: "SUBSCRIPTIONBNB" });
   return await subscriptionContract.methods
     .getEstimatedTokenSubscriptionAmount(tokenAddress)
     .call();
