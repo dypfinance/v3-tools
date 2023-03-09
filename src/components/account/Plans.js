@@ -1258,6 +1258,7 @@ export default class Subscription extends React.Component {
                         //     : window.config.subscription_tokens[t]?.symbol}
                         // </span>
                         <li
+                        key={i}
                           className="dropdown-item launchpad-item d-flex align-items-center gap-2"
                           onClick={() => {
                             this.setState({

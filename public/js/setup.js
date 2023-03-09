@@ -27841,8 +27841,10 @@ async function connectWallet(provider, walletType) {
       console.log("Connected!");
       window.IS_CONNECTED = true;
       if (window.coin98) window.WALLET_TYPE = "coin98";
-      if (window.ethereum.isMetaMask && !window.coin98) window.WALLET_TYPE = "metamask";
-      if (window.ethereum.isCoinbaseWallet && !window.coin98) window.WALLET_TYPE = "coinbase";
+      else if (window.ethereum.isMetaMask === true && !window.coin98) window.WALLET_TYPE = "metamask";
+      else if (window.ethereum.isCoinbaseWallet) window.WALLET_TYPE = "coinbase";
+      else if (window.ethereum.isTrust === true && window.ethereum.isMetaMask === false) window.WALLET_TYPE = "trustwallet";
+
 
       let coinbase_address = await window.ethereum.request({
         method: "eth_requestAccounts",
@@ -27879,7 +27881,7 @@ async function getCoinbase() {
   ) {
     return window.coinbase_address.toLowerCase();
   } else if (
-    (window.ethereum && !window.coin98 && (window.ethereum.isMetaMask|| window.ethereum.isTrust ) && !window.ethereum.overrideIsMetaMask
+    (window.ethereum && !window.coin98 && (window.ethereum.isMetaMask=== true || window.ethereum.isTrust === true  ) && !window.ethereum.overrideIsMetaMask
     && !window.ethereum.isCoinbaseWallet)
   ) {
     const coinbase = await window.ethereum.request({
