@@ -784,7 +784,7 @@ class App extends React.Component {
                       />
                     )}
                   />
-                  <Route
+                  {/* <Route
                     exact
                     path="/caws-staking"
                     render={(props) => (
@@ -796,7 +796,7 @@ class App extends React.Component {
                         handleSwitchNetwork={this.handleSwitchNetwork}
                       />
                     )}
-                  />
+                  /> */}
 
                   <Route component={RedirectPathToHomeOnly} />
                 </Switch>
