@@ -129,6 +129,12 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       justify-content: center;
+
+      @media screen and (max-width: 500px) {
+       place-items: center;
+      grid-template-columns: repeat(1, 1fr);
+      }
+      
       .nft-img {
         width: 100%;
         border-radius: 8px;

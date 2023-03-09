@@ -11003,6 +11003,47 @@ const EarnTopPicks = ({
             )
           ) : (
             <div className="list-pools-container px-0">
+              {landCard && topList === "Staking" && chain === "eth" && (
+                <TopPoolsListCard
+                  expired={false}
+                  chain={chain}
+                  top_pick={landCard.top_pick}
+                  totalNftsLocked={landCard.total_nfts_locked}
+                  tokenName={
+                    "Genesis"
+                  }
+                  apr={landCard.apy_percent + "%"}
+                  tvl={"$" + getFormattedNumber(landCard.tvl_usd)}
+                  lockTime={
+                    landCard.lockTime
+                      ? landCard.lockTime
+                      : landCard.lock_time
+                      ? landCard.lock_time
+                      : locktimeFarm[0]
+                  }
+                  cardType={topList}
+                  tokenLogo={
+                    "lanft-poolicon.png"
+                  }
+                  listType={listType}
+                  onShowDetailsClick={() => {
+                    setShowDetails(!showDetails);
+                    setActiveCardLandNFT(true);
+                  }}
+                  onHideDetailsClick={() => {
+                    setActiveCardLandNFT(false);
+                    
+                  }}
+                  showDetails={activeCardLandNFT}
+                  topList={topList}
+                  coinbase={coinbase}
+                  cardIndex={0}
+                  chainId={chainId}
+                  handleConnection={handleConnection}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                />
+              )}
+
               {cawsCard &&
                 topList === "Staking" &&
                 chain === "eth" &&
@@ -11055,7 +11096,7 @@ const EarnTopPicks = ({
                     showDetails={activeCardNFT}
                     topList={topList}
                     coinbase={coinbase}
-                    cardIndex={index}
+                    cardIndex={index + 1}
                     chainId={chainId}
                     handleConnection={handleConnection}
                     handleSwitchNetwork={handleSwitchNetwork}
