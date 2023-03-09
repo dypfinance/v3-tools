@@ -763,7 +763,7 @@ export default class Subscription extends React.Component {
     let coinbase = this.props.coinbase;
     this.setState({ loadspinnerSave: true });
     if (!coinbase) {
-      await window.connectWallet();
+      await window.connectWallet(undefined, false)
     }
     let signature;
 
