@@ -40,6 +40,7 @@ import LandPopup from "./components/LandPopup/LandPopup";
 import { withRouter } from "react-router-dom";
 import GenesisStaking from "./components/genesisStaking/GenesisStaking";
 import CawsStaking from "./components/genesisStaking/CawsStaking";
+import Plans from './components/account/Plans'
 
 class App extends React.Component {
   constructor(props) {
