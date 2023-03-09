@@ -6,9 +6,8 @@ import PropTypes from "prop-types";
 import LandNftCheckList from "../caws/NftMinting/components/General/NftStakingCawChecklist/LandNftChecklist";
 import { formattedNum } from "../../functions/formatUSD";
 import getFormattedNumber from "../../functions/get-formatted-number";
-import LandNFTPlaceHolder from './LandNFTPlaceHolder'
-import '../caws/NftMinting/components/NftMinting/NftStakeChecklistModal/_nftStakeChecklistModal.scss'
-
+import LandNFTPlaceHolder from "./LandNFTPlaceHolder";
+import "../caws/NftMinting/components/NftMinting/NftStakeChecklistModal/_nftStakeChecklistModal.scss";
 
 const LandNftStakeCheckListModal = ({
   nftItem,
@@ -25,7 +24,11 @@ const LandNftStakeCheckListModal = ({
   onNftCheckListClick,
   coinbase,
   isConnected,
-  hideItem
+  getApprovedNfts,
+  hideItem,
+  approvedNfts,
+  onDepositComplete
+
 }) => {
   const style = {
     position: "absolute",
@@ -92,24 +95,22 @@ const LandNftStakeCheckListModal = ({
     const address = coinbase;
     const stake25 = await window.config.landnftstake_address;
     if (address) {
-     
-        const result = await window.landnft
-          .checkapproveStake(address, stake25)
-          .then((data) => {
-            return data;
-          });
+      const result = await window.landnft
+        .checkapproveStake(address, stake25)
+        .then((data) => {
+          return data;
+        });
 
-        if (result === true && nftItem.length !== 0) {
-          setshowApprove(false);
-          setStatus("");
-          setColor("#939393");
-        } else if (result === true && nftItem.length == 0) {
-          setStatus("");
-        } else if (result === false) {
-          setStatus(" *Please approve before deposit");
-          setshowApprove(true);
-        }
-      
+      if (result === true && nftItem.length !== 0) {
+        setshowApprove(false);
+        setStatus("");
+        setColor("#939393");
+      } else if (result === true && nftItem.length == 0) {
+        setStatus("");
+      } else if (result === false) {
+        setStatus(" *Please approve before deposit");
+        setshowApprove(true);
+      }
     }
   };
 
@@ -122,7 +123,6 @@ const LandNftStakeCheckListModal = ({
     }
     setCheckUnstakeBtn(false);
   };
-
 
   const handleSelectAllToUnstake = () => {
     setCheckUnstakeBtn(!checkUnstakebtn);
@@ -155,7 +155,6 @@ const LandNftStakeCheckListModal = ({
       });
   };
 
-
   const handleDeposit = async (value) => {
     let stake_contract = await window.getContractLandNFT("LANDNFTSTAKING");
     setloadingdeposit(true);
@@ -179,6 +178,7 @@ const LandNftStakeCheckListModal = ({
         setSelectedNftIds([]);
         setColor("#57AEAA");
         handleClearStatus();
+        onDepositComplete()
       })
       .catch((err) => {
         setloadingdeposit(false);
@@ -253,13 +253,11 @@ const LandNftStakeCheckListModal = ({
     } else setSelectedNftIds([]);
   }, [showClaim, apr, showToStake]);
 
-
   useEffect(() => {
-    if (hideItem === 'staked') {
-      setshowToStake(true)
-      setshowStaked(false)
-
-    } 
+    if (hideItem === "staked") {
+      setshowToStake(true);
+      setshowStaked(false);
+    }
   }, [hideItem, showStaked, showToStake]);
 
 
@@ -332,9 +330,9 @@ const LandNftStakeCheckListModal = ({
       visible={open}
       setIsVisible={() => {
         onClose();
-        setCheckUnstakeBtn(false);
-        setCheckBtn(false);
-        setSelectedNftIds([]);
+        // setCheckUnstakeBtn(false);
+        // setCheckBtn(false);
+        // setSelectedNftIds([]);
       }}
       modalId="stakechecklist"
       width="fit-content"
@@ -381,7 +379,7 @@ const LandNftStakeCheckListModal = ({
           >
             <div
               className={showToStake ? "optionbtn-active" : "optionbtn-passive"}
-              style={{ display: hideItem === 'tostake' ? 'none' : 'block' }}
+              style={{ display: hideItem === "tostake" ? "none" : "block" }}
             >
               <h5
                 className="optiontext"
@@ -392,15 +390,14 @@ const LandNftStakeCheckListModal = ({
                   //Make selectedNfts empty []
                   setSelectedNftIds([]);
                 }}
-                style={{ fontSize: 14}}
+                style={{ fontSize: 14 }}
               >
                 To Stake
               </h5>
             </div>
             <div
               className={showStaked ? "optionbtn-active" : "optionbtn-passive"}
-              style={{ display: hideItem === 'staked' ? 'none' : 'block' }}
-
+              style={{ display: hideItem === "staked" ? "none" : "block" }}
             >
               <h5
                 className="optiontext"
@@ -411,7 +408,7 @@ const LandNftStakeCheckListModal = ({
                   //Make selectedNfts empty []
                   setSelectedNftIds([]);
                 }}
-                style={{ fontSize: 14}}
+                style={{ fontSize: 14 }}
               >
                 Staked
                 {/* {showStaked && (
@@ -490,7 +487,9 @@ const LandNftStakeCheckListModal = ({
             ) : nftItem.length <= 4 ? (
               <>
                 {nftItem.map((item, id) => {
-                  let nftId = parseInt(item.name?.slice(1, nftItem.name?.length))
+                  let nftId = parseInt(
+                    item.name?.slice(1, nftItem.name?.length)
+                  );
 
                   if (showToStake) {
                     // selectNftIds.push(nftId);
@@ -511,7 +510,7 @@ const LandNftStakeCheckListModal = ({
                         countDownLeft={countDownLeft}
                         checked={
                           (showToStake === true && checkbtn === true) ||
-                          (showStaked === true && checkUnstakebtn === true)
+                          (showStaked === true && checkUnstakebtn === true) 
                         }
                         checklistItemID={nftId}
                         onChange={(value) => {
@@ -522,7 +521,7 @@ const LandNftStakeCheckListModal = ({
                                 1
                               );
                           setSelectedNftIds(selectNftIds);
-                          console.log(selectNftIds);
+                          getApprovedNfts(selectNftIds);
                           setVal(value);
                         }}
                         coinbase={coinbase}
@@ -552,7 +551,7 @@ const LandNftStakeCheckListModal = ({
               </>
             ) : (
               nftItem.map((item, id) => {
-                let nftId = parseInt(item.name?.slice(1, nftItem.name?.length))
+                let nftId = parseInt(item.name?.slice(1, nftItem.name?.length));
                 if (showToStake) {
                   // selectNftIds.push(nftId);
                   nftIds.push(nftId);
@@ -594,14 +593,19 @@ const LandNftStakeCheckListModal = ({
         </div>
       </div>{" "}
       <div style={{ display: "block" }} className="bottom-static-wrapper">
-        
         <p className="d-flex info-text align-items-start gap-3">
-          <img src={require("../caws/NftMinting/components/NftMinting/NftStakeChecklistModal/more-info.svg").default} alt="" />
+          <img
+            src={
+              require("../caws/NftMinting/components/NftMinting/NftStakeChecklistModal/more-info.svg")
+                .default
+            }
+            alt=""
+          />
           {!showStaked
             ? "Please select which NFTs to Stake."
             : "Please select your NFTs to Claim or to Unstake"}
         </p>
- 
+
         <div className="mt-2">
           <div style={{ display: showStaked === false ? "block" : "none" }}>
             <h5
@@ -612,7 +616,7 @@ const LandNftStakeCheckListModal = ({
             </h5>
 
             <div
-              className="d-flex justify-content-between"
+              className="d-flex justify-content-between flex-column flex-xxl-row flex-lg-row flex-md-row flex-sm-row"
               style={{ gap: 5, margin: "auto" }}
             >
               <form className="d-flex flex-column" style={{ gap: 5 }}>
@@ -630,7 +634,7 @@ const LandNftStakeCheckListModal = ({
                 </span>
               </form>
               <div
-                className="d-flex justify-content-between align-items-center"
+                className="d-flex justify-content-xxl-between justify-content-lg-between justify-content-md-between  justify-content-sm-between align-items-center"
                 style={{ gap: 5 }}
               >
                 <span
@@ -666,7 +670,7 @@ const LandNftStakeCheckListModal = ({
             </div>
 
             <div
-              className="mt-4 row justify-content-between gap-3"
+              className="mt-4 row justify-content-xxl-between justify-content-lg-between justify-content-md-between justify-content-sm-between justify-content-center gap-3"
               style={{
                 gap: 20,
                 display: showStaked === false ? "" : "none",
@@ -674,12 +678,13 @@ const LandNftStakeCheckListModal = ({
             >
               <button
                 className="btn activebtn"
+                disabled={selectNftIds.length > 0 ? false : true}
                 onClick={() => {
                   handleApprove();
                 }}
                 style={{
                   background:
-                    active && nftItem.length > 0
+                    active && nftItem.length > 0 
                       ? "linear-gradient(90.74deg, #7770E0 0%, #554FD8 100%)"
                       : "#14142A",
                   pointerEvents: active && nftItem.length > 0 ? "auto" : "none",
@@ -760,7 +765,7 @@ const LandNftStakeCheckListModal = ({
                   }}
                 >
                   <div
-                  className="d-flex align-items-start justify-content-between mb-3 w-100"
+                    className="d-flex align-items-start justify-content-between mb-3 w-100"
                     style={{
                       gap: 10,
                     }}
@@ -779,12 +784,19 @@ const LandNftStakeCheckListModal = ({
                           icon={"i"}
                           padding={"5px 0px 0px 0px"}
                         /> */}
-                      All total earned
+                      Total earned
                     </p>
                     <div className="d-flex justify-content-between">
                       <h6 className="rewardstxtCaws d-flex align-items-center gap-2">
-                        <img src={require("../caws/NftMinting/components/NftMinting/NftStakeChecklistModal/weth.svg").default} alt="" />{" "}
-                        {getFormattedNumber(ETHrewards, 6)} WETH (${formattedNum(ethToUSD, true)})
+                        <img
+                          src={
+                            require("../caws/NftMinting/components/NftMinting/NftStakeChecklistModal/weth.svg")
+                              .default
+                          }
+                          alt=""
+                        />{" "}
+                        {getFormattedNumber(ETHrewards, 6)} WETH ($
+                        {formattedNum(ethToUSD, true)})
                       </h6>
                       {/* <img
                           src={EthLogo}
@@ -848,7 +860,6 @@ const LandNftStakeCheckListModal = ({
                       gap: 10,
                     }}
                   >
-                    
                     <div style={{ display: "flex", flexDirection: "column" }}>
                       <div
                         className="d-flex justify-content-end"
@@ -879,12 +890,18 @@ const LandNftStakeCheckListModal = ({
                         </span>
 
                         <img
-                          src={require("../caws/NftMinting/components/NftMinting/NftStakeChecklistModal/catlogo.svg").default}
+                          src={
+                            require("../caws/NftMinting/components/NftMinting/NftStakeChecklistModal/catlogo.svg")
+                              .default
+                          }
                           alt=""
                           style={{ width: 24, height: 24 }}
                         />
                       </div>
-                      <span style={{ fontSize: 10, color: "#C0C9FF" }} className="mt-1">
+                      <span
+                        style={{ fontSize: 10, color: "#C0C9FF" }}
+                        className="mt-1"
+                      >
                         Maximum of 50 NFTs selectable
                       </span>
                     </div>

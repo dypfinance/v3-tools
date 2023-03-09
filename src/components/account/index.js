@@ -326,7 +326,6 @@ export default class Subscription extends React.Component {
   };
 
   getDypBalance = async () => {
-    let account = this.props.coinbase;
     const web3eth = new Web3(
       "https://mainnet.infura.io/v3/94608dc6ddba490697ec4f9b723b586e"
     );
@@ -335,7 +334,7 @@ export default class Subscription extends React.Component {
     const tokenAddress = "0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17";
     const walletAddress = this.props.coinbase;
     const TokenABI = window.ERC20_ABI;
-    if (account !== undefined && walletAddress !== undefined) {
+    if (walletAddress && walletAddress !== undefined) {
       const contract1 = new web3eth.eth.Contract(TokenABI, tokenAddress);
       const contract2 = new web3avax.eth.Contract(TokenABI, tokenAddress);
       const contract3 = new web3bsc.eth.Contract(TokenABI, tokenAddress);
@@ -476,7 +475,7 @@ export default class Subscription extends React.Component {
        
     this.setState({ coinbase: this.props.coinbase });
 
-    this.handleCheckIfAlreadyApproved();
+    // this.handleCheckIfAlreadyApproved();
     window.scrollTo(0, 0);
     // this.checkConnection();
   }
@@ -550,7 +549,7 @@ export default class Subscription extends React.Component {
 
   getStakesIds = async () => {
     const address = this.props.coinbase;
-    if (address !== null && this.props.coinbase !== undefined) {
+    if (address !== null && address !== undefined) {
       let staking_contract = await window.getContractNFT("NFTSTAKING");
       let stakenft = [];
       let myStakes = await staking_contract.methods

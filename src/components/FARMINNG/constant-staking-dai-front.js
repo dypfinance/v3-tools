@@ -427,8 +427,10 @@ const StakeEthDai = ({
     //   e.preventDefault();
     setwithdrawLoading(true);
 
-    let amount = withdrawAmount;
-    amount = new BigNumber(amount).times(1e18).toFixed(0);
+    let amount;
+    await staking.depositedTokens(coinbase).then((data)=>{
+      amount = data
+    })
 
     let deadline = Math.floor(
       Date.now() / 1e3 + window.config.tx_max_wait_seconds
@@ -1281,7 +1283,7 @@ const StakeEthDai = ({
               </h6>
 
               <button
-                disabled={Number(depositedTokens) > 0 ? false : true}
+                disabled={false}
                 className={"outline-btn btn"}
                 onClick={() => {
                   setshowWithdrawModal(true);
