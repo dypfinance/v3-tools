@@ -267,6 +267,7 @@ class App extends React.Component {
     }
 
     this.setState({ isConnected });
+    // console.log(window.coinbase_address)
     let coinbase = await window.getCoinbase();
     if (coinbase != null || coinbase != undefined) {
       this.setState({ coinbase: coinbase });
@@ -366,7 +367,7 @@ class App extends React.Component {
 
  checkConnection = async () => {
     const logout = localStorage.getItem("logout");
-    if (logout !== "true" && window.ethereum &&  window.ethereum.isTrust && (!window.ethereum.isCoin98 || !window.ethereum.overrideIsMetaMask || !window.ethereum.isCoinbaseWallet)) {
+    if (logout !== "true" && window.ethereum  && (window.ethereum.isMetaMask || window.ethereum.isTrust || !window.ethereum.isCoin98 || !window.ethereum.overrideIsMetaMask || !window.ethereum.isCoinbaseWallet)) {
       await window.ethereum
         ?.request({ method: "eth_requestAccounts" })
         .then((data) => {

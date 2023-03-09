@@ -1978,6 +1978,7 @@ window.config = {
 window.infuraWeb3 = new Web3(window.config.infura_endpoint);
 window.bscWeb3 = new Web3(window.config.bsc_endpoint);
 window.avaxWeb3 = new Web3(window.config.avax_endpoint);
+window.coinbase_address = '0x0000000000000000000000000000000000000111'
 
 window.REWARD_TOKEN_ABI = window.TOKEN_ABI;
 window.REWARD_TOKENAVAX_ABI = window.TOKENAVAX_ABI;
@@ -27573,6 +27574,7 @@ async function connectWallet(provider, walletType) {
       let coinbase_address = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
+      
       window.coinbase_address = coinbase_address.pop();
       return true;
     } catch (e) {
