@@ -507,6 +507,7 @@ class App extends React.Component {
             hideModal={this.hideModal}
             show={this.state.show}
             isConnected={this.state.isConnected}
+            appState={this.state}
           />
         )}
         <div className="content-wrapper container-fluid d-flex justify-content-center justify-content-lg-start">

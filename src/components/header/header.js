@@ -273,7 +273,6 @@ const Header = ({
     fetchUsername();
   }, [coinbase, checklogout]);
 
-  console.log(appState.isPremium, 'hellothere');
 
   return (
     <>
