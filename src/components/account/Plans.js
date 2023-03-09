@@ -15,6 +15,12 @@ import { shortAddress } from "../../functions/shortAddress";
 import TopPoolsCard from "../top-pools-card/TopPoolsCard";
 import useWindowSize from "../../functions/useWindowSize";
 import launchpadIndicator from "../launchpad/assets/launchpadIndicator.svg";
+import greenCheck from './assets/greenCheck.svg'
+import premiumDypTag from './assets/premiumDypTag.png'
+import premiumDypBanner from './assets/premiumDypBanner.png'
+import KeyFeaturesCard from "../launchpad/launchpadhero/KeyFeaturesCard";
+
+
 
 const { BigNumber } = window;
 
@@ -832,17 +838,38 @@ export default class Subscription extends React.Component {
       "Guaranteed allocation to presales of new projects launched using our Launchpad",
     ];
 
-    const handleTooltipClose = () => {
-      this.setState({ openTooltip: false });
-    };
+   
 
-    const handleTooltipOpen = () => {
-      this.setState({ openTooltip: true });
-    };
+  const benefits = [
+    'DYP Tools administrative dashboard',
+    'Exclusive access to World of Dypians metaverse platform',
+    'Priority allocation to presales of new projects through Dypius Launchpad',
+    'Voting capabilities in the News section',
+    'Early access to upcoming features and updates'
+  ]
+
+  const keyFeatures = [
+    {
+      icon: 'users',
+      content: 'Participate in community discussions and make an impact.'
+    },
+    {
+      icon: 'coins',
+      content: 'Be among the first to find new projects before they hit the market.'
+    },
+    {
+      icon: 'eye',
+      content: `Get a sneak peek at what's coming next and plan ahead.`
+    },
+    {
+      icon: 'globe',
+      content: 'Access unique content and experiences only available in the World of Dypians.'
+    },
+  ]
 
     return (
       <div style={{ minHeight: "65vh" }}>
-        <div className="row mt-5 gap-4 gap-lg-0">
+        {/* <div className="row mt-5 gap-4 gap-lg-0">
           <div className="col-12 col-lg-6 position-relative d-flex justify-content-center">
             <div
               className={`purplediv`}
@@ -955,10 +982,6 @@ export default class Subscription extends React.Component {
                           <p className="subscr-subtitle">
                             The subscription tokens will be used to buy DYP
                           </p>
-                          {/* <p className="subscr-note">
-                        *When you unsubscribe the DYP will be unlocked and sent to
-                        your wallet
-                      </p> */}
                         </div>
                         <div>
                           <div className="d-flex gap-2 flex-column flex-lg-row">
@@ -1037,22 +1060,8 @@ export default class Subscription extends React.Component {
                           }}
                         >
                           <h3 className="subscr-title">Welcome premium user</h3>
-                          {/* <p className="subscr-subtitle">
-                            *When you unsubscribe the DYP will be unlocked and
-                            sent to your wallet
-                          </p> */}
-                          {/* <p className="subscr-note">
-                        *When you unsubscribe the DYP will be unlocked and sent to
-                        your wallet
-                      </p> */}
                         </div>
-                        {/* <div>
-                      <div className="d-flex gap-2">
-                        <img src="/assets/img/usdt.svg"></img>
-                        <h3 className="subscr-price">75 USDT</h3>
-                      </div>
-                      <p className="subscr-note">*Exclusive offer</p>
-                    </div> */}
+                      
                       </div>
                     </div>
                     <div className="d-flex justify-content-between align-items-center mt-3">
@@ -1066,20 +1075,108 @@ export default class Subscription extends React.Component {
                       >
                         Active <br></br> Dypian plan
                       </div>
-                      {/* <div
-                        className="btn outline-btn px-5"
-                        type=""
-                        onClick={this.handleUnsubscribe}
-                      >
-                        Unsubscribe
-                      </div> */}
                     </div>
                   </>
                 )}
               </div>
             </div>
           </div>
+        </div> */}
+        <div className="row mt-5">
+          <div className="d-flex flex-column">
+          <h6 className="plans-page-title">
+          Upgrade to Premium Membership and Unlock Exclusive Benefits Today!
+          </h6>
+          <p className="plans-page-desc mt-4">
+          The premium membership is designed to enhance your experience and provide you with outstanding value.
+          </p>
+          </div>
+          <div className="d-flex flex-column flex-lg-row align-items-center align-items-lg-end justify-content-center justify-content-lg-between all-plans-wrapper mt-4">
+            <div className="plans-benefits d-flex align-items-center p-3">
+              <ul className="d-flex flex-column gap-3">
+                {benefits.map((item, index) => (
+                  <li key={index} className="d-flex align-items-center gap-2">
+                    <img src={greenCheck} className="green-check" alt="checkmark" />
+                    <span className="plans-benefit-title mb-0">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="premium-subscribe-wrapper p-3">
+              <div className="premium-gradient d-flex align-items-center justify-content-between p-3">
+                <div className="d-flex flex-column">
+                  <span className="premium-span">
+                    Premium
+                  </span>
+                  <h6 className="premium-price">
+                    75 USD
+                  </h6>
+                </div>
+                <img src={premiumDypTag} alt="premium dyp" />
+              </div>
+               <div className="d-flex flex-column" style={{position: 'relative', top: '-25px'}}>
+               <span className="lifetime-subscription">Lifetime subscription</span>
+                <span className="lifetime-desc">The subscription tokens will be used to buy and lock DYP</span>
+               </div>
+                <div className="d-flex justify-content-end mt-0 mt-lg-3">
+                <div
+                        className="btn filledbtn px-3 px-lg-5"
+                        style={{ whiteSpace: "pre" }}
+                        type=""
+                        onClick={() => {
+                          this.setState({
+                            subscribe_now: !this.state.subscribe_now,
+                          });
+                          this.props.networkId === 1
+                            ? this.handleSubscriptionTokenChange(
+                                this.state.wethAddress
+                              )
+                            : this.props.networkId === 56
+                            ? this.handleSubscriptionTokenChange(
+                                this.state.wbnbAddress
+                              )
+                            : this.handleSubscriptionTokenChange(
+                                this.state.wavaxAddress
+                              );
+                          this.handleCheckIfAlreadyApproved(
+                            this.props.networkId === 1
+                              ? this.state.wethAddress
+                              : this.props.networkId === 56
+                              ? this.state.wbnbAddress
+                              : this.state.wavaxAddress
+                          );
+                          this.props.networkId === 1
+                            ? this.setState({
+                                dropdownIcon: "weth",
+                                dropdownTitle: "WETH",
+                              })
+                            : this.props.networkId === 56
+                            ? this.setState({
+                                dropdownIcon: "wbnb",
+                                dropdownTitle: "WBNB",
+                              })
+                            : this.setState({
+                                dropdownIcon: "wavax",
+                                dropdownTitle: "WAVAX",
+                              });
+                        }}
+                      >
+                        Subscribe now
+                      </div>
+                </div>
+            </div>
+            <div className="premium-dyp-wrapper">
+              <img src={premiumDypBanner} className="premium-dyp-banner" alt="" />
+            </div>
+            {/* <img src={premiumDyp} alt="premium dyp banner" className="premium-dyp-banner" /> */}
+          </div>
+          <div className="features-wrapper w-100 d-flex align-items-center justify-content-between my-5 flex-column flex-lg-row gap-3 gap-lg-0">
+     {keyFeatures.map((item) => (
+      <KeyFeaturesCard icon={item.icon} content={item.content} /> 
+     ))}
+    </div>
         </div>
+        
         {this.state.subscribe_now === true ? (
           <div
             className="subscribe-wrapper row mt-4 justify-content-end"

@@ -62,7 +62,7 @@
 
 .plan-tag {
   background: #312f69;
-  border: 1px solid #857dfa;
+  border: 1px solid #f5c96c;
   border-radius: 8px;
   cursor: pointer;
 }
@@ -73,6 +73,110 @@
   line-height: 20px;
   text-align: center;
   color: #f7f7fc;
+}
+
+.plans-page-title {
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 28px;
+  color: #f7f7fc;
+  width: 40%;
+}
+
+.plans-page-desc {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: #c0c9ff !important;
+  width: 40%;
+}
+
+.plans-benefits {
+  background: #312f69;
+  border: 2px solid #8e97cd;
+  box-shadow: 0px 32px 64px rgba(17, 17, 17, 0.12);
+  border-radius: 12px;
+  width: 30%;
+  height: 250px;
+}
+
+.green-check {
+  position: relative;
+  bottom: 4px;
+}
+
+.plans-benefit-title {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 18px;
+  color: #f7f7fc;
+}
+
+.premium-subscribe-wrapper {
+  background: #312f69;
+  box-shadow: 0px 32px 64px rgba(17, 17, 17, 0.12);
+  border-radius: 12px;
+  height: 250px;
+}
+
+
+
+.premium-dyp-wrapper {
+  position: relative;
+  width: 30%;
+  height: 200px;
+  background: radial-gradient(
+    80.22% 120.33% at 47.12% -10.1%,
+    #8969d7 0%,
+    #482193 100%
+  );
+  border-radius: 12px;
+}
+
+
+.premium-dyp-banner {
+ position: absolute;
+ left: 15px;
+ right: 0;
+ bottom: 50px;
+ margin: auto;
+}
+
+.premium-gradient {
+  background: linear-gradient(81.57deg, #c42c71 6.19%, #5833a4 87.15%);
+  box-shadow: 0px 32px 64px rgba(17, 17, 17, 0.12);
+  border-radius: 12px;
+  position: relative;
+  top: -50px;
+}
+.premium-span {
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 14px;
+  color: #ffffff;
+}
+
+.premium-price {
+  font-weight: 500;
+  font-size: 28px;
+  line-height: 32px;
+  color: #f7f7fc;
+}
+
+.lifetime-subscription {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: -0.018em;
+  color: #ffffff;
+}
+
+.lifetime-desc {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 24px;
+  letter-spacing: -0.018em;
+  color: #ffffff;
 }
 
 .dyp-balances-wrapper {
@@ -236,7 +340,7 @@
 }
 
 .green-border {
-  border: 2px solid #50AF95;
+  border: 2px solid #50af95;
 }
 
 .green-div {
@@ -366,5 +470,25 @@
 
   .favorites-grid {
     grid-template-columns: auto;
+  }
+
+  .plans-page-title,
+  .plans-page-desc,
+  .plans-benefits,
+  .premium-subscribe-wrapper,
+  .premium-dyp-wrapper{
+    width: 100% !important;
+  }
+
+  .all-plans-wrapper{
+    gap: 80px !important;
+  }
+
+  .premium-dyp-wrapper{
+    margin-top: 6rem !important;
+  }
+
+  .premium-dyp-banner{
+    width: 90%;
   }
 }

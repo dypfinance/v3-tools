@@ -469,6 +469,7 @@ class App extends React.Component {
 
         <div className="body_overlay"></div>
         <Header
+          appState={this.state}
           coinbase={this.state.coinbase}
           theme={this.state.theme}
           toggleMobileSidebar={this.toggleMobileSidebar}

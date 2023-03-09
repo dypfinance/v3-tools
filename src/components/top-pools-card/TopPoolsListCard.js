@@ -59,6 +59,7 @@ const TopPoolsListCard = ({
   expiredPools,
   activePools,
   totalTvl,
+  totalNftsLocked
 }) => {
   const ethCoins = ["ethereum", "wbtc", "usdc", "usdt"];
   const bscCoins = [
@@ -877,7 +878,7 @@ const TopPoolsListCard = ({
                     />
                   ) : showDetails &&
                   topList === "Staking" &&
-                  cardIndex === 0 &&
+                  cardIndex === 1 &&
                   chain === "eth" ? (
                     <CawsDetails
                       coinbase={coinbase}
@@ -888,8 +889,23 @@ const TopPoolsListCard = ({
                       handleConnection={handleConnection}
                       myStakes={mystakes}
                     />) :
+                    showDetails &&
+                  topList === "Staking" &&
+                  cardIndex === 0 &&
+                  chain === "eth" ? (
+                    <LandDetails
+                      coinbase={coinbase}
+                      isConnected={isConnected}
+                      apr={apr.slice(0, apr.length - 1)}
+                      totalNftsLocked={totalNftsLocked}
+                      listType={listType}
+                      chainId={chainId}
+                      handleSwitchNetwork={handleSwitchNetwork}
+                      handleConnection={handleConnection}
+                      myStakes={mystakes}
+                    />)
                   
-                  
+                  :
                   
                   (
                     <></>

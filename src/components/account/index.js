@@ -15,6 +15,7 @@ import { shortAddress } from "../../functions/shortAddress";
 import TopPoolsCard from "../top-pools-card/TopPoolsCard";
 import useWindowSize from "../../functions/useWindowSize";
 import gotoWod from './assets/gotoWod.svg'
+import { useHistory } from "react-router-dom";
 
 const { BigNumber } = window;
 
@@ -69,6 +70,8 @@ export default class Subscription extends React.Component {
       avaxBalance: "0.0",
     };
   }
+
+
 
   fetchUserPools = async () => {
     if (this.props.coinbase && this.props.coinbase.includes("0x")) {
@@ -422,6 +425,11 @@ export default class Subscription extends React.Component {
 
   componentDidUpdate(prevProps) {
     // Typical usage (don't forget to compare props):
+
+    if(!this.props.appState.isPremium){
+      window.location.href = 'https://app.dypius.com/'
+    }
+
     if (this.props.coinbase !== prevProps.coinbase) {
       this.fetchUserPools();
       // this.getDypBalance();
@@ -459,6 +467,10 @@ export default class Subscription extends React.Component {
   }
 
   componentDidMount() {
+
+    if(!this.props.appState.isPremium){
+      window.location.href = 'https://app.dypius.com/'
+    }
     // window._refreshBalIntervalDyp = setInterval(this.getDypBalance, 2000);
        this.getAllBalance();
        
@@ -863,6 +875,7 @@ export default class Subscription extends React.Component {
     };
 
     return (
+      this.props.appState.isPremium ? 
       <div>
         <div className="d-flex align-items-start align-items-lg-0 justify-content-between flex-column flex-lg-row gap-4 gap-lg-0">
           <div
@@ -1027,8 +1040,8 @@ export default class Subscription extends React.Component {
             <div className="d-flex flex-column align-items-start align-items-lg-start w-100 justify-content-between justify-content-lg-end gap-1">
               <span className=" my-plan-tag">My plan</span>
               <NavLink to="/plans" className="plan-tag py-2 px-4 d-flex align-items-center gap-2">
-                <img src={require('./assets/plans.svg').default} alt="" style={{width: 24, height: 24}}/>
-                <span className="plan-tag-title">{this.props.appState.isPremium ? 'Dypian' : 'Free'}</span>
+                <img src={require('./assets/premiumDypIcon.svg').default} alt="" style={{width: 28, height: 28}}/>
+                <span className="plan-tag-title">{this.props.appState.isPremium ? 'Premium' : 'Free'}</span>
               </NavLink>
              
             </div>
@@ -2359,6 +2372,8 @@ export default class Subscription extends React.Component {
           })}
         </div> */}
       </div>
+      :
+      <></>
     );
   };
 
