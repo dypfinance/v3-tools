@@ -472,7 +472,17 @@ export default class Subscription extends React.Component {
     }
     // window._refreshBalIntervalDyp = setInterval(this.getDypBalance, 2000);
        this.getAllBalance();
-       
+       this.fetchUserPools();
+       // this.getDypBalance();
+       this.fetchAvatar();
+       this.fetchUsername();
+       this.fetchUserPools();
+       this.fetchAvaxFarming();
+       this.fetchAvaxStaking();
+       this.fetchBnbStaking();
+       this.fetchBscFarming();
+       this.fetchEthFarming();
+       this.fetchEthStaking();
     this.setState({ coinbase: this.props.coinbase });
 
     // this.handleCheckIfAlreadyApproved();
