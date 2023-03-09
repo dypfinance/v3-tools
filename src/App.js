@@ -324,7 +324,7 @@ class App extends React.Component {
     this.tvl().then();
     this.updateWindowDimensions();
     window.addEventListener("resize", this.updateWindowDimensions);
-    if (window.ethereum && !window.coin98 && (window.ethereum.isMetaMask || window.ethereum.isTrust)) {
+    if (window.ethereum && !window.coin98 && (window.ethereum.isMetaMask || window.ethereum.isTrust) ) {
       this.checkConnection();
     }
     this.checkNetworkId();
