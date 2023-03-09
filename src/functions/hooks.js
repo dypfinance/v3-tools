@@ -15,9 +15,12 @@ let accounts;
 
 const onSignIn = async ({ account, chainId }) => {
   if (!account || !chainId) return;
-  if (window.ethereum &&
+  if (
+    window.ethereum &&
     !window.coin98 &&
-   ( window.ethereum.isMetaMask || window.ethereum.isTrust)) {
+    (window.ethereum.isMetaMask || window.ethereum.isTrust) &&
+    (!window.ethereum.isCoinbaseWallet || !window.ethereum.overrideIsMetaMask)
+  ) {
     try {
       accounts = await window.ethereum?.request({
         method: "eth_requestAccounts",
@@ -41,9 +44,12 @@ export function useEagerConnect() {
   const [currencyAmount, setCurrencyAmount] = useState("");
 
   useEffect(() => {
-    if (window.ethereum &&
+    if (
+      window.ethereum &&
       !window.coin98 &&
-     ( window.ethereum.isMetaMask || window.ethereum.isTrust)){
+      (window.ethereum.isMetaMask || window.ethereum.isTrust) &&
+      (!window.ethereum.isCoinbaseWallet || !window.ethereum.overrideIsMetaMask)
+    ) {
       injected.isAuthorized().then((isAuthorized) => {
         if (isAuthorized) {
           activate(injected, undefined, true)
@@ -65,9 +71,12 @@ export function useEagerConnect() {
 
   // if the connection worked, wait until we get confirmation of that to flip the flag
   useEffect(() => {
-    if (window.ethereum &&
+    if (
+      window.ethereum &&
       !window.coin98 &&
-     ( window.ethereum.isMetaMask || window.ethereum.isTrust)) {
+      (window.ethereum.isMetaMask || window.ethereum.isTrust) &&
+      (!window.ethereum.isCoinbaseWallet || !window.ethereum.overrideIsMetaMask)
+    ) {
       if (!tried && active) {
         setTried(true);
       }
@@ -85,9 +94,12 @@ export function useInactiveListener(suppress = false) {
 
     ethereum?.removeAllListeners(["networkChanged"]);
 
-    if (window.ethereum &&
+    if (
+      window.ethereum &&
       !window.coin98 &&
-     ( window.ethereum.isMetaMask || window.ethereum.isTrust)) {
+      (window.ethereum.isMetaMask || window.ethereum.isTrust) &&
+      (!window.ethereum.isCoinbaseWallet || !window.ethereum.overrideIsMetaMask)
+    ) {
       if (ethereum && ethereum.on && !active && !error && !suppress) {
         const handleChainChanged = () => {
           activate(injected, undefined, true).catch((error) => {
