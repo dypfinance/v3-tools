@@ -376,6 +376,7 @@ class App extends React.Component {
   }
 
  checkConnection = async () => {
+  this.refreshSubscription()
     const logout = localStorage.getItem("logout");
     if (logout !== "true" && window.ethereum  && (window.ethereum.isMetaMask === true || window.ethereum.isTrust === true || !window.ethereum.isCoin98 || !window.ethereum.overrideIsMetaMask || !window.ethereum.isCoinbaseWallet)) {
       await window.ethereum
@@ -388,7 +389,6 @@ class App extends React.Component {
           if (data.length === 0) {
             localStorage.setItem("logout", "true");
           }
-    this.refreshSubscription()
         })
         .catch(console.error);
     } else {
@@ -777,7 +777,9 @@ class App extends React.Component {
                         handleSwitchNetwork={this.handleSwitchNetwork}
                         coinbase={this.state.coinbase}
                         isConnected={this.state.isConnected}
-                        
+                        isPremium={this.state.isPremium}
+                        onSubscribe={this.refreshSubscription}
+
                       />
                     )}
                   />

@@ -415,7 +415,7 @@ export default class Subscription extends React.Component {
   componentDidUpdate(prevProps) {
     // Typical usage (don't forget to compare props):
 
-    if (this.props.appState.isPremium === false) {
+    if (this.props.isPremium === false) {
       window.location.href = "https://betatools.dyp.finance/plans";
     }
 
@@ -432,11 +432,11 @@ export default class Subscription extends React.Component {
       this.fetchEthFarming();
       this.fetchEthStaking();
       this.getAllBalance();
-
-      this.myNft().then();
-      this.myStakes().then();
-      this.myLandNft().then();
-      this.myLandStakes().then();
+      this.props.onSubscribe()
+      // this.myNft().then();
+      // this.myStakes().then();
+      // this.myLandNft().then();
+      // this.myLandStakes().then();
     }
 
     if (this.props.networkId !== prevProps.networkId) {
@@ -448,20 +448,16 @@ export default class Subscription extends React.Component {
         this.handleSubscriptionTokenChange(this.state.usdtAddress);
       }
     }
-    this.myNft().then();
-    this.myStakes().then();
-    this.myLandNft().then();
-    this.myLandStakes().then();
   }
 
   componentDidMount() {
-    if (this.props.appState.isPremium === false) {
+    if (this.props.isPremium === false) {
       window.location.href = "https://betatools.dyp.finance/plans";
     }
     // window._refreshBalIntervalDyp = setInterval(this.getDypBalance, 2000);
     this.getAllBalance();
     this.fetchUserPools();
-    // this.getDypBalance();
+    this.props.onSubscribe()
     this.fetchAvatar();
     this.fetchUsername();
     this.fetchUserPools();
@@ -472,8 +468,7 @@ export default class Subscription extends React.Component {
     this.fetchEthFarming();
     this.fetchEthStaking();
     this.setState({ coinbase: this.props.coinbase });
-    if (this.props.networkId === 1) {
-    }
+
     this.myNft().then();
     this.myStakes().then();
     this.myLandNft().then();
@@ -779,7 +774,7 @@ export default class Subscription extends React.Component {
 
   handleSubscribe = async (e) => {
     e.preventDefault();
-    console.log("handleSubscribe()");
+    
     let subscriptionContract = await window.getContract({
       key: this.props.networkId === 1 ? "SUBSCRIPTIONETH" : "SUBSCRIPTION",
     });
@@ -972,7 +967,10 @@ export default class Subscription extends React.Component {
       this.setState({ openTooltip: true });
     };
 
-    return this.props.appState.isPremium ? (
+    
+
+
+    return this.props.isPremium ? (
       <div>
         <div className="d-flex align-items-start align-items-lg-0 justify-content-between flex-column flex-lg-row gap-4 gap-lg-0">
           <div
@@ -1147,7 +1145,7 @@ export default class Subscription extends React.Component {
                   style={{ width: 28, height: 28 }}
                 />
                 <span className="plan-tag-title">
-                  {this.props.appState.isPremium ? "Premium" : "Free"}
+                  {this.props.isPremium ? "Premium" : "Free"}
                 </span>
               </div>
             </div>
