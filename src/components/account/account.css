@@ -64,7 +64,7 @@
   background: #312f69;
   border: 1px solid #f5c96c;
   border-radius: 8px;
-  cursor: pointer;
+  /* cursor: pointer; */
 }
 
 .plan-tag-title {
