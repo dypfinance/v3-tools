@@ -1354,8 +1354,32 @@ export default class Subscription extends React.Component {
                   )}
                 </h6>
               </div>
-              <hr className="form-divider my-4" />
-              <div className="d-flex flex-column gap-2 justify-content-end align-items-center">
+            </div>
+            <div
+                className="subscription-token-wrapper  p-2 d-flex align-items-center justify-content-between  mt-3"
+                style={{ width: "100%" }}
+              >
+                <span className="token-amount-placeholder">
+                  Subscription price:
+                </span>
+                <div className="d-flex align-items-center gap-2">
+                  <span className="usdt-text">
+                    {this.state.formattedPrice.slice(0, 9)}
+                  </span>
+
+                  <img
+                    src={
+                      require(`./assets/${this.state.dropdownIcon.toLowerCase()}Icon.svg`)
+                        .default
+                    }
+                    height={24}
+                    width={24}
+                    alt="usdt"
+                  />
+                </div>
+              </div>
+            <hr className="form-divider my-4" />
+            <div className="d-flex flex-column gap-2 justify-content-end align-items-center">
                 <button
                   className={"btn success-btn px-4 align-self-end"}
                   disabled={this.state.approveStatus === "fail" ? true : false}
@@ -1392,32 +1416,6 @@ export default class Subscription extends React.Component {
                 </button>
                 <span style={{ color: "#E30613" }}>{this.state.status}</span>
               </div>
-            </div>
-            <hr className="form-divider my-4" />
-            <div className="d-flex justify-content-end align-items-center">
-              <button
-                className="btn success-button px-4"
-                onClick={(e) =>
-                  this.state.isApproved === false
-                    ? this.handleApprove(e)
-                    : this.handleSubscribe()
-                }
-              >
-                {this.state.isApproved === true &&
-                this.state.loadspinner === false ? (
-                  "Subscribe"
-                ) : this.state.isApproved === false &&
-                  this.state.loadspinner === false ? (
-                  "Approve"
-                ) : (
-                  <div
-                    className="spinner-border "
-                    role="status"
-                    style={{ height: "1.5rem", width: "1.5rem" }}
-                  ></div>
-                )}
-              </button>
-            </div>
           </div>
         </div>
       ) : (
