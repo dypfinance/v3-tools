@@ -416,7 +416,7 @@ export default class Subscription extends React.Component {
     // Typical usage (don't forget to compare props):
 
     if (this.props.isPremium === false) {
-      window.location.href = "https://betatools.dyp.finance/plans";
+      window.location.href = "https://app.dypius.com/plans";
     }
 
     if (this.props.coinbase !== prevProps.coinbase) {
@@ -433,15 +433,13 @@ export default class Subscription extends React.Component {
       this.fetchEthStaking();
       this.getAllBalance();
       this.props.onSubscribe()
-      // this.myNft().then();
-      // this.myStakes().then();
-      // this.myLandNft().then();
-      // this.myLandStakes().then();
+      this.myNft().then();
+      this.myStakes().then();
+      this.myLandNft().then();
+      this.myLandStakes().then();
     }
 
     if (this.props.networkId !== prevProps.networkId) {
-      // this.getDypBalance();
-
       if (this.props.networkId === 43114) {
         this.handleSubscriptionTokenChange(this.state.usdteAddress);
       } else if (this.props.networkId === 1) {
@@ -452,7 +450,7 @@ export default class Subscription extends React.Component {
 
   componentDidMount() {
     if (this.props.isPremium === false) {
-      window.location.href = "https://betatools.dyp.finance/plans";
+      window.location.href = "https://app.dypius.com/plans";
     }
     // window._refreshBalIntervalDyp = setInterval(this.getDypBalance, 2000);
     this.getAllBalance();
@@ -680,17 +678,19 @@ export default class Subscription extends React.Component {
 
   myStakes = async () => {
     let myStakes = await this.getStakesIds();
-    let stakes = myStakes.map((stake) => window.getNft(stake));
+    if(myStakes && myStakes.length > 0)
+   { let stakes = myStakes.map((stake) => window.getNft(stake));
     stakes = await Promise.all(stakes);
     stakes.reverse();
-    this.setState({ myStakess: stakes });
+    this.setState({ myStakess: stakes });}
   };
   myLandStakes = async () => {
     let myStakes = await this.getLandStakesIds();
-    let stakes = myStakes.map((stake) => window.getLandNft(stake));
+    if(myStakes && myStakes.length > 0)
+   { let stakes = myStakes.map((stake) => window.getLandNft(stake));
     stakes = await Promise.all(stakes);
     stakes.reverse();
-    this.setState({ landStakes: stakes });
+    this.setState({ landStakes: stakes });}
   };
 
   handleApprove = async (e) => {
@@ -1155,8 +1155,8 @@ export default class Subscription extends React.Component {
           <div className="col-12 col-lg-6">
             <div className="dyp-balances-wrapper d-flex flex-column gap-4 p-3">
               <h6 className="balances-title">Multichain DYP Balance</h6>
-              <div className="d-flex flex-column flex-lg-row gap-3 gap-lg-0 align-items-center justify-content-between">
-                <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-5">
+              <div className="d-flex flex-column flex-lg-row gap-3 align-items-center justify-content-between">
+                <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-3 gap-xxl-3 gap-lg-1">
                   <img
                     src={require(`./assets/wethIcon.svg`).default}
                     width={20}
@@ -1175,7 +1175,7 @@ export default class Subscription extends React.Component {
                     />
                   </div>
                 </div>
-                <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-5">
+                <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2  gap-3 gap-xxl-3 gap-lg-1">
                   <img
                     src={require(`./assets/wbnbIcon.svg`).default}
                     width={20}
@@ -1194,7 +1194,7 @@ export default class Subscription extends React.Component {
                     />
                   </div>
                 </div>
-                <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-5">
+                <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-3 gap-xxl-3 gap-lg-1">
                   <img src={require(`./assets/wavaxIcon.svg`).default} alt="" />
                   <div className="d-flex align-items-center gap-1">
                     <span className="balance-amount mb-0">
@@ -1979,14 +1979,7 @@ export default class Subscription extends React.Component {
                         </div>
                       </NavLink>
                     ))}
-              </div>
-              <div
-                className="row p-0 m-0 poolrows"
-                style={{
-                  gap: "50px 0px",
-                }}
-              >
-                {this.state.bnbStake &&
+                    {this.state.bnbStake &&
                   this.state.bnbStake
                     .slice(0, this.state.bnbStake.length)
                     .map((pool, index) => (
@@ -2078,15 +2071,7 @@ export default class Subscription extends React.Component {
                         </div>
                       </NavLink>
                     ))}
-              </div>
-
-              <div
-                className="row p-0 m-0 poolrows"
-                style={{
-                  gap: "50px 0px",
-                }}
-              >
-                {this.state.avaxStake &&
+                    {this.state.avaxStake &&
                   this.state.avaxStake
                     .slice(0, this.state.avaxStake.length)
                     .map((pool, index) => (
@@ -2179,6 +2164,7 @@ export default class Subscription extends React.Component {
                       </NavLink>
                     ))}
               </div>
+            
             </div>
           </>
         )}
