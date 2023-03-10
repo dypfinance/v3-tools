@@ -220,7 +220,7 @@ class App extends React.Component {
         subscribedPlatformTokenAmountETH === '0' &&
         subscribedPlatformTokenAmountBNB === '0'
       ) {
-        this.setState({ subscribedPlatformTokenAmount: "0", isPremium: true });
+        this.setState({ subscribedPlatformTokenAmount: "0", isPremium: false });
       }
       if (subscribedPlatformTokenAmountAvax !== "0") {
         this.setState({
