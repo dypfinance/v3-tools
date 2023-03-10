@@ -1156,7 +1156,7 @@ export default class Subscription extends React.Component {
             <div className="dyp-balances-wrapper d-flex flex-column gap-4 p-3">
               <h6 className="balances-title">Multichain DYP Balance</h6>
               <div className="d-flex flex-column flex-lg-row gap-3 align-items-center justify-content-between">
-                <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-5 gap-xxl-5 gap-lg-1">
+                <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-3 gap-xxl-3 gap-lg-1">
                   <img
                     src={require(`./assets/wethIcon.svg`).default}
                     width={20}
@@ -1175,7 +1175,7 @@ export default class Subscription extends React.Component {
                     />
                   </div>
                 </div>
-                <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-5 gap-xxl-5 gap-lg-1">
+                <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2  gap-3 gap-xxl-3 gap-lg-1">
                   <img
                     src={require(`./assets/wbnbIcon.svg`).default}
                     width={20}
@@ -1194,7 +1194,7 @@ export default class Subscription extends React.Component {
                     />
                   </div>
                 </div>
-                <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-5 gap-xxl-5 gap-lg-1">
+                <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-3 gap-xxl-3 gap-lg-1">
                   <img src={require(`./assets/wavaxIcon.svg`).default} alt="" />
                   <div className="d-flex align-items-center gap-1">
                     <span className="balance-amount mb-0">
