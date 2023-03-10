@@ -450,7 +450,7 @@ export default class Subscription extends React.Component {
 
   componentDidMount() {
     if (this.props.isPremium === false) {
-      window.location.href = "https://betatools.dyp.finance/plans";
+      window.location.href = "https://app.dypius.com/plans";
     }
     // window._refreshBalIntervalDyp = setInterval(this.getDypBalance, 2000);
     this.getAllBalance();
