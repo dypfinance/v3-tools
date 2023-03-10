@@ -344,7 +344,7 @@ export default class Subscription extends React.Component {
 
   componentDidUpdate(prevProps) {
 
-    if(this.props.appState.isPremium){
+    if(this.props.isPremium){
       window.location.href = 'https://betatools.dyp.finance/account'
     }
 
@@ -607,7 +607,7 @@ export default class Subscription extends React.Component {
       .then(() => {
         this.setState({ loadspinnerSub: false, approveStatus: "success" });
         this.props.onSubscribe()
-        window.location.href = 'https://betatools.dyp.finance/account'
+        window.location.href = 'hhttps://betatools.dyp.finance/account'
 
       })
       .catch((e) => {
