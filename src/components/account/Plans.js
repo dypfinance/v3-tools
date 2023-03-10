@@ -1048,7 +1048,7 @@ export default class Subscription extends React.Component {
                     Premium
                   </span>
                   <h6 className="premium-price">
-                    75 USD
+                  $75
                   </h6>
                 </div>
                 <img src={premiumDypTag} alt="premium dyp" />
@@ -1106,6 +1106,7 @@ export default class Subscription extends React.Component {
             </div>
             <div className="premium-dyp-wrapper">
               <img src={premiumDypBanner} className="premium-dyp-banner" alt="" />
+              <span className="premium-dyp-title">Premium Badge</span>
             </div>
             {/* <img src={premiumDyp} alt="premium dyp banner" className="premium-dyp-banner" /> */}
           </div>
