@@ -789,21 +789,26 @@ export default class Subscription extends React.Component {
 
   const keyFeatures = [
     {
-      icon: 'users',
-      content: 'Participate in community discussions and make an impact.'
+      icon: 'chart',
+      content: 'Easy access to a range of tools and features, all in one convenient location.'
+    },
+    {
+      icon: 'globe',
+      content: 'Access unique content and experiences only available in the World of Dypians.'
     },
     {
       icon: 'coins',
       content: 'Be among the first to find new projects before they hit the market.'
     },
     {
+      icon: 'notes',
+      content: `Vote instantly for your preferred news articles in real-time.`
+    },
+    {
       icon: 'eye',
       content: `Get a sneak peek at what's coming next and plan ahead.`
     },
-    {
-      icon: 'globe',
-      content: 'Access unique content and experiences only available in the World of Dypians.'
-    },
+  
   ]
 
     return (
@@ -1055,7 +1060,7 @@ export default class Subscription extends React.Component {
               </div>
                <div className="d-flex flex-column" style={{position: 'relative', top: '-25px'}}>
                <span className="lifetime-subscription">Lifetime subscription</span>
-                <span className="lifetime-desc">The subscription tokens will be used to buy and lock DYP</span>
+                <span className="lifetime-desc">The subscription tokens will be used to buy DYP</span>
                </div>
                 <div className="d-flex justify-content-end mt-0 mt-lg-3">
                 <div
@@ -1112,7 +1117,7 @@ export default class Subscription extends React.Component {
           </div>
           <div className="features-wrapper w-100 d-flex align-items-center justify-content-between my-5 flex-column flex-lg-row gap-3 gap-lg-0">
      {keyFeatures.map((item) => (
-      <KeyFeaturesCard icon={item.icon} content={item.content} /> 
+      <KeyFeaturesCard icon={item.icon} plansClass={'plans-feature'} content={item.content} /> 
      ))}
     </div>
         </div>
