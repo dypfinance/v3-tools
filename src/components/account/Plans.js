@@ -15,12 +15,10 @@ import { shortAddress } from "../../functions/shortAddress";
 import TopPoolsCard from "../top-pools-card/TopPoolsCard";
 import useWindowSize from "../../functions/useWindowSize";
 import launchpadIndicator from "../launchpad/assets/launchpadIndicator.svg";
-import greenCheck from './assets/greenCheck.svg'
-import premiumDypTag from './assets/premiumDypTag.png'
-import premiumDypBanner from './assets/premiumDypBanner.png'
+import greenCheck from "./assets/greenCheck.svg";
+import premiumDypTag from "./assets/premiumDypTag.png";
+import premiumDypBanner from "./assets/premiumDypBanner.png";
 import KeyFeaturesCard from "../launchpad/launchpadhero/KeyFeaturesCard";
-
-
 
 const { BigNumber } = window;
 
@@ -54,6 +52,8 @@ export default class Subscription extends React.Component {
       wbnbAddress: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
       triggerText: "See more V",
       isApproved: false,
+      approveStatus: "initial",
+
       myNFTs: [],
       myStakess: [],
       viewall: false,
@@ -283,19 +283,19 @@ export default class Subscription extends React.Component {
       username: userInput,
     };
     if (this.props.coinbase && this.props.coinbase.includes("0x")) {
-    await axios
-      .post(
-        `https://api-image.dyp.finance/api/v1/username/${this.props.coinbase}`,
-        usernameData
-      )
-      .then((res) => {
-        this.setState({ username: res.data?.username });
-        this.fetchUsername();
-        this.setState({ userNameInput: "", showInput: false });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      await axios
+        .post(
+          `https://api-image.dyp.finance/api/v1/username/${this.props.coinbase}`,
+          usernameData
+        )
+        .then((res) => {
+          this.setState({ username: res.data?.username });
+          this.fetchUsername();
+          this.setState({ userNameInput: "", showInput: false });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   };
 
@@ -306,7 +306,7 @@ export default class Subscription extends React.Component {
     const tokenAddress = "0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17";
     const walletAddress = this.props.coinbase;
     const TokenABI = window.ERC20_ABI;
-    if ( walletAddress !== null && walletAddress !== undefined) {
+    if (walletAddress !== null && walletAddress !== undefined) {
       const contract1 = new web3eth.eth.Contract(TokenABI, tokenAddress);
       const contract2 = new web3avax.eth.Contract(TokenABI, tokenAddress);
       const contract3 = new web3bsc.eth.Contract(TokenABI, tokenAddress);
@@ -364,6 +364,7 @@ export default class Subscription extends React.Component {
     }
 
     if (this.props.networkId !== prevProps.networkId) {
+      this.setState({subscribe_now: false})
       this.getDypBalance();
 
       if (this.props.networkId === 43114) {
@@ -379,15 +380,11 @@ export default class Subscription extends React.Component {
   }
 
   componentDidMount() {
-
     this.getDypBalance();
 
     this.setState({ coinbase: this.props.coinbase });
     window.scrollTo(0, 0);
-
-
   }
-
 
   handleSubscriptionTokenChange = async (tokenAddress) => {
     const token = tokenAddress;
@@ -485,16 +482,22 @@ export default class Subscription extends React.Component {
       .then(() => {
         this.setState({ lockActive: true });
         this.setState({ loadspinner: false });
-        this.setState({ isApproved: true });
+        this.setState({ isApproved: true, approveStatus: "deposit" });
       })
       .catch((e) => {
-        this.setState({ status: "An error occurred. Please try again" });
-        this.setState({ loadspinner: false });
+        this.setState({ status: e?.message });
+        this.setState({ loadspinner: false, approveStatus: "fail" });
+        setTimeout(() => {
+          this.setState({
+            status: "",
+            loadspinner: false,
+            approveStatus: "initial",
+          });
+        }, 8000);
       });
   };
 
   handleCheckIfAlreadyApproved = async (token) => {
-
     const web3eth = new Web3(window.config.infura_endpoint);
     const bscWeb3 = new Web3(window.config.bsc_endpoint);
     const avaxWeb3 = new Web3(window.config.avax_endpoint);
@@ -582,25 +585,31 @@ export default class Subscription extends React.Component {
 
     this.setState({ loadspinnerSub: true });
 
-  
-
     // let price =
     // this.props.networkId === 1
     //   ? await window.getEstimatedTokenSubscriptionAmountETH(this.state.selectedSubscriptionToken)
     //   : this.props.networkId === 56
     //   ? await window.getEstimatedTokenSubscriptionAmountBNB(this.state.selectedSubscriptionToken)
     //   : await window.getEstimatedTokenSubscriptionAmount(this.state.selectedSubscriptionToken);
-
+// console.log(this.state.price, this.state.selectedSubscriptionToken)
     await subscriptionContract.methods
       .subscribe(this.state.selectedSubscriptionToken, this.state.price)
       .send({ from: await window.getCoinbase() })
       .then(() => {
-        this.setState({ loadspinnerSub: false });
-        this.props.onSubscribe()
+        this.setState({ loadspinnerSub: false, approveStatus: "success" });
+        this.props.onSubscribe();
       })
       .catch((e) => {
-        this.setState({ status: "An error occurred. Please try again" });
-        this.setState({ loadspinnerSub: false });
+        this.setState({ status: e?.message });
+        this.setState({ loadspinner: false, approveStatus: "fail", loadspinnerSub: false });
+        setTimeout(() => {
+          this.setState({
+            status: "",
+            loadspinner: false,
+            loadspinnerSub: false,
+            approveStatus: "initial",
+          });
+        }, 8000);
       });
   };
 
@@ -777,34 +786,34 @@ export default class Subscription extends React.Component {
       "Guaranteed allocation to presales of new projects launched using our Launchpad",
     ];
 
-   
+    const benefits = [
+      "DYP Tools administrative dashboard",
+      "Exclusive access to World of Dypians metaverse platform",
+      "Priority allocation to presales of new projects through Dypius Launchpad",
+      "Voting capabilities in the News section",
+      "Early access to upcoming features and updates",
+    ];
 
-  const benefits = [
-    'DYP Tools administrative dashboard',
-    'Exclusive access to World of Dypians metaverse platform',
-    'Priority allocation to presales of new projects through Dypius Launchpad',
-    'Voting capabilities in the News section',
-    'Early access to upcoming features and updates'
-  ]
-
-  const keyFeatures = [
-    {
-      icon: 'users',
-      content: 'Participate in community discussions and make an impact.'
-    },
-    {
-      icon: 'coins',
-      content: 'Be among the first to find new projects before they hit the market.'
-    },
-    {
-      icon: 'eye',
-      content: `Get a sneak peek at what's coming next and plan ahead.`
-    },
-    {
-      icon: 'globe',
-      content: 'Access unique content and experiences only available in the World of Dypians.'
-    },
-  ]
+    const keyFeatures = [
+      {
+        icon: "users",
+        content: "Participate in community discussions and make an impact.",
+      },
+      {
+        icon: "coins",
+        content:
+          "Be among the first to find new projects before they hit the market.",
+      },
+      {
+        icon: "eye",
+        content: `Get a sneak peek at what's coming next and plan ahead.`,
+      },
+      {
+        icon: "globe",
+        content:
+          "Access unique content and experiences only available in the World of Dypians.",
+      },
+    ];
 
     return (
       <div style={{ minHeight: "65vh" }}>
@@ -1023,19 +1032,24 @@ export default class Subscription extends React.Component {
         </div> */}
         <div className="row mt-5">
           <div className="d-flex flex-column">
-          <h6 className="plans-page-title">
-          Upgrade to Premium Membership and Unlock Exclusive Benefits Today!
-          </h6>
-          <p className="plans-page-desc mt-4">
-          The premium membership is designed to enhance your experience and provide you with outstanding value.
-          </p>
+            <h6 className="plans-page-title">
+              Upgrade to Premium Membership and Unlock Exclusive Benefits Today!
+            </h6>
+            <p className="plans-page-desc mt-4">
+              The premium membership is designed to enhance your experience and
+              provide you with outstanding value.
+            </p>
           </div>
           <div className="d-flex flex-column flex-lg-row align-items-center align-items-lg-end justify-content-center justify-content-lg-between all-plans-wrapper mt-4">
             <div className="plans-benefits d-flex align-items-center p-3">
               <ul className="d-flex flex-column gap-3">
                 {benefits.map((item, index) => (
                   <li key={index} className="d-flex align-items-center gap-2">
-                    <img src={greenCheck} className="green-check" alt="checkmark" />
+                    <img
+                      src={greenCheck}
+                      className="green-check"
+                      alt="checkmark"
+                    />
                     <span className="plans-benefit-title mb-0">{item}</span>
                   </li>
                 ))}
@@ -1044,79 +1058,86 @@ export default class Subscription extends React.Component {
             <div className="premium-subscribe-wrapper p-3">
               <div className="premium-gradient d-flex align-items-center justify-content-between p-3">
                 <div className="d-flex flex-column">
-                  <span className="premium-span">
-                    Premium
-                  </span>
-                  <h6 className="premium-price">
-                  $75
-                  </h6>
+                  <span className="premium-span">Premium</span>
+                  <h6 className="premium-price">$75</h6>
                 </div>
                 <img src={premiumDypTag} alt="premium dyp" />
               </div>
-               <div className="d-flex flex-column" style={{position: 'relative', top: '-25px'}}>
-               <span className="lifetime-subscription">Lifetime subscription</span>
-                <span className="lifetime-desc">The subscription tokens will be used to buy and lock DYP</span>
-               </div>
-                <div className="d-flex justify-content-end mt-0 mt-lg-3">
+              <div
+                className="d-flex flex-column"
+                style={{ position: "relative", top: "-25px" }}
+              >
+                <span className="lifetime-subscription">
+                  Lifetime subscription
+                </span>
+                <span className="lifetime-desc">
+                  The subscription tokens will be used to buy and lock DYP
+                </span>
+              </div>
+              <div className="d-flex justify-content-end mt-0 mt-lg-3">
                 <div
-                        className="btn filledbtn px-3 px-lg-5"
-                        style={{ whiteSpace: "pre" }}
-                        type=""
-                        onClick={() => {
-                          this.setState({
-                            subscribe_now: !this.state.subscribe_now,
-                          });
-                          this.props.networkId === 1
-                            ? this.handleSubscriptionTokenChange(
-                                this.state.wethAddress
-                              )
-                            : this.props.networkId === 56
-                            ? this.handleSubscriptionTokenChange(
-                                this.state.wbnbAddress
-                              )
-                            : this.handleSubscriptionTokenChange(
-                                this.state.wavaxAddress
-                              );
-                          this.handleCheckIfAlreadyApproved(
-                            this.props.networkId === 1
-                              ? this.state.wethAddress
-                              : this.props.networkId === 56
-                              ? this.state.wbnbAddress
-                              : this.state.wavaxAddress
-                          );
-                          this.props.networkId === 1
-                            ? this.setState({
-                                dropdownIcon: "weth",
-                                dropdownTitle: "WETH",
-                              })
-                            : this.props.networkId === 56
-                            ? this.setState({
-                                dropdownIcon: "wbnb",
-                                dropdownTitle: "WBNB",
-                              })
-                            : this.setState({
-                                dropdownIcon: "wavax",
-                                dropdownTitle: "WAVAX",
-                              });
-                        }}
-                      >
-                        Subscribe now
-                      </div>
+                  className="btn filledbtn px-3 px-lg-5"
+                  style={{ whiteSpace: "pre" }}
+                  type=""
+                  onClick={() => {
+                    this.setState({
+                      subscribe_now: !this.state.subscribe_now,
+                    });
+                    this.props.networkId === 1
+                      ? this.handleSubscriptionTokenChange(
+                          this.state.wethAddress
+                        )
+                      : this.props.networkId === 56
+                      ? this.handleSubscriptionTokenChange(
+                          this.state.wbnbAddress
+                        )
+                      : this.handleSubscriptionTokenChange(
+                          this.state.wavaxAddress
+                        );
+                    this.handleCheckIfAlreadyApproved(
+                      this.props.networkId === 1
+                        ? this.state.wethAddress
+                        : this.props.networkId === 56
+                        ? this.state.wbnbAddress
+                        : this.state.wavaxAddress
+                    );
+                    this.props.networkId === 1
+                      ? this.setState({
+                          dropdownIcon: "weth",
+                          dropdownTitle: "WETH",
+                        })
+                      : this.props.networkId === 56
+                      ? this.setState({
+                          dropdownIcon: "wbnb",
+                          dropdownTitle: "WBNB",
+                        })
+                      : this.setState({
+                          dropdownIcon: "wavax",
+                          dropdownTitle: "WAVAX",
+                        });
+                  }}
+                >
+                  Subscribe now
                 </div>
+              </div>
             </div>
             <div className="premium-dyp-wrapper">
-              <img src={premiumDypBanner} className="premium-dyp-banner" alt="" />
+              <img
+                src={premiumDypBanner}
+                className="premium-dyp-banner"
+                alt=""
+              />
               <span className="premium-dyp-title">Premium Badge</span>
             </div>
             {/* <img src={premiumDyp} alt="premium dyp banner" className="premium-dyp-banner" /> */}
           </div>
           <div className="features-wrapper w-100 d-flex align-items-center justify-content-between my-5 flex-column flex-lg-row gap-3 gap-lg-0">
-     {keyFeatures.map((item) => (
-      <KeyFeaturesCard icon={item.icon} content={item.content} /> 
-     ))}
-    </div>
+            {keyFeatures.map((item) => (
+              <KeyFeaturesCard icon={item.icon} content={item.content} />
+            ))}
+          </div>
         </div>
-        
+
         {this.state.subscribe_now === true ? (
           <div
             className="subscribe-wrapper row mt-4 justify-content-end"
@@ -1259,7 +1280,7 @@ export default class Subscription extends React.Component {
                         //     : window.config.subscription_tokens[t]?.symbol}
                         // </span>
                         <li
-                        key={i}
+                          key={i}
                           className="dropdown-item launchpad-item d-flex align-items-center gap-2"
                           onClick={() => {
                             this.setState({
@@ -1350,9 +1371,16 @@ export default class Subscription extends React.Component {
                 </div>
               </div>
               <hr className="form-divider my-4" />
-              <div className="d-flex justify-content-end align-items-center">
+              <div className="d-flex flex-column gap-2 justify-content-end align-items-center">
                 <button
-                  className="btn success-button px-4"
+                  className={"btn success-btn px-4 align-self-end"}
+                  disabled={this.state.approveStatus === "fail" ? true : false}
+                  style={{
+                    background:
+                      this.state.approveStatus === "fail"
+                        ? "linear-gradient(90.74deg, #f8845b 0%, #f0603a 100%)"
+                        : "linear-gradient(90.74deg, #75CAC2 0%, #57B6AB 100%)",
+                  }}
                   onClick={(e) =>
                     this.state.isApproved === false
                       ? this.handleApprove(e)
@@ -1360,11 +1388,16 @@ export default class Subscription extends React.Component {
                   }
                 >
                   {this.state.isApproved === true &&
-                  this.state.loadspinner === false ? (
+                  this.state.loadspinner === false && this.state.loadspinnerSub === false &&
+                  (this.state.approveStatus === "deposit" || this.state.approveStatus === "initial") ? (
                     "Subscribe"
                   ) : this.state.isApproved === false &&
-                    this.state.loadspinner === false ? (
+                    this.state.loadspinner === false &&
+                    this.state.approveStatus === "initial" && this.state.loadspinnerSub === false ? (
                     "Approve"
+                  ) : this.state.loadspinner === false &&
+                    this.state.approveStatus === "fail" && this.state.loadspinnerSub === false ? (
+                    "Failed"
                   ) : (
                     <div
                       className="spinner-border "
@@ -1373,6 +1406,7 @@ export default class Subscription extends React.Component {
                     ></div>
                   )}
                 </button>
+                <span style={{ color: "#E30613" }}>{this.state.status}</span>
               </div>
             </div>
           </div>
