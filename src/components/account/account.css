@@ -119,16 +119,13 @@
   height: 250px;
 }
 
-
 .success-btn {
   color: #ffffff !important;
   background: linear-gradient(90.74deg, #75cac2 0%, #57b6ab 100%);
   border: none !important;
   border-radius: 8px;
   opacity: 1 !important;
-  
 }
-
 
 .premium-dyp-wrapper {
   position: relative;
@@ -146,8 +143,9 @@
 }
 
 .premium-dyp-banner {
+  width: 90%;
   position: absolute;
-  left: 15px;
+  left: 0px;
   right: 0;
   bottom: 50px;
   margin: auto;
@@ -507,7 +505,7 @@
   }
 
   .premium-dyp-wrapper {
-    margin-top: 6rem !important;
+    margin-top: 4rem !important;
   }
 
   .premium-dyp-banner {
