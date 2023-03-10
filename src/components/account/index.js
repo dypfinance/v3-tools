@@ -484,7 +484,12 @@ export default class Subscription extends React.Component {
        this.fetchEthFarming();
        this.fetchEthStaking();
     this.setState({ coinbase: this.props.coinbase });
-
+    if (this.props.networkId === 1) {
+      this.myNft().then();
+      this.myStakes().then();
+      this.myLandNft().then();
+      this.myLandStakes().then();
+    }
     // this.handleCheckIfAlreadyApproved();
     window.scrollTo(0, 0);
     // this.checkConnection();
@@ -763,7 +768,7 @@ export default class Subscription extends React.Component {
     let coinbase = this.props.coinbase;
     this.setState({ loadspinnerSave: true });
     if (!coinbase) {
-      await window.connectWallet();
+      await window.connectWallet(undefined, false)
     }
     let signature;
 

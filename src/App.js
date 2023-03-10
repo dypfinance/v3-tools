@@ -352,7 +352,7 @@ class App extends React.Component {
     this.tvl().then();
     this.updateWindowDimensions();
     window.addEventListener("resize", this.updateWindowDimensions);
-    if (window.ethereum && !window.coin98 && (window.ethereum.isMetaMask || window.ethereum.isTrust) ) {
+    if (window.ethereum && !window.coin98 && (window.ethereum.isMetaMask === true || window.ethereum.isTrust === true) ) {
       this.checkConnection();
     }
     this.checkNetworkId();
@@ -377,7 +377,7 @@ class App extends React.Component {
 
  checkConnection = async () => {
     const logout = localStorage.getItem("logout");
-    if (logout !== "true" && window.ethereum  && (window.ethereum.isMetaMask || window.ethereum.isTrust || !window.ethereum.isCoin98 || !window.ethereum.overrideIsMetaMask || !window.ethereum.isCoinbaseWallet)) {
+    if (logout !== "true" && window.ethereum  && (window.ethereum.isMetaMask === true || window.ethereum.isTrust === true || !window.ethereum.isCoin98 || !window.ethereum.overrideIsMetaMask || !window.ethereum.isCoinbaseWallet)) {
       await window.ethereum
         ?.request({ method: "eth_requestAccounts" })
         .then((data) => {

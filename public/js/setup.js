@@ -1699,7 +1699,7 @@ window.config = {
   vault_dai_address: "0x54F30bFfeb925F47225e148f0bAe17a452d6b8c0",
 
   subscription_address: "0x5078a4912f6e0d74dcf99482ac5910df123e9b4b",
-  subscriptioneth_address: "0x943023d8e0f591C08a0E2B922452a7Dc37173C9b",
+  subscriptioneth_address: "0x6cc47d895aa6da6012c2b6bfd2f6af3ebbf1d2e4",
   subscriptionbnb_address: "0x0ec59a2d18e1e83ab393b3ac9d7d6d28cbff0d35",
   ZERO_ADDRESS: "0x0000000000000000000000000000000000000000",
   MAX_LOCKS_TO_LOAD_PER_CALL: 10,
@@ -2001,7 +2001,7 @@ window.config = {
 window.infuraWeb3 = new Web3(window.config.infura_endpoint);
 window.bscWeb3 = new Web3(window.config.bsc_endpoint);
 window.avaxWeb3 = new Web3(window.config.avax_endpoint);
-window.coinbase_address = '0x0000000000000000000000000000000000000111'
+window.coinbase_address = "0x0000000000000000000000000000000000000111";
 
 window.REWARD_TOKEN_ABI = window.TOKEN_ABI;
 window.REWARD_TOKENAVAX_ABI = window.TOKENAVAX_ABI;
@@ -27841,13 +27841,20 @@ async function connectWallet(provider, walletType) {
       console.log("Connected!");
       window.IS_CONNECTED = true;
       if (window.coin98) window.WALLET_TYPE = "coin98";
-      if (window.ethereum.isMetaMask && !window.coin98) window.WALLET_TYPE = "metamask";
-      if (window.ethereum.isCoinbaseWallet && !window.coin98) window.WALLET_TYPE = "coinbase";
+      else if (window.ethereum.isMetaMask === true && !window.coin98)
+        window.WALLET_TYPE = "metamask";
+      else if (window.ethereum.isCoinbaseWallet)
+        window.WALLET_TYPE = "coinbase";
+      else if (
+        window.ethereum.isTrust === true &&
+        window.ethereum.isMetaMask === false
+      )
+        window.WALLET_TYPE = "trustwallet";
 
       let coinbase_address = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
-      
+
       window.coinbase_address = coinbase_address.pop();
       return true;
     } catch (e) {
@@ -27873,14 +27880,14 @@ window.param = param;
 window.cached_contracts = Object.create(null);
 
 async function getCoinbase() {
-  if (
-    window.ethereum &&
-    (window.coin98 || window.ethereum.isCoinbaseWallet)
-  ) {
+  if (window.ethereum && (window.coin98 || window.ethereum.isCoinbaseWallet)) {
     return window.coinbase_address.toLowerCase();
   } else if (
-    (window.ethereum && !window.coin98 && (window.ethereum.isMetaMask|| window.ethereum.isTrust ) && !window.ethereum.overrideIsMetaMask
-    && !window.ethereum.isCoinbaseWallet)
+    window.ethereum &&
+    !window.coin98 &&
+    (window.ethereum.isMetaMask === true || window.ethereum.isTrust === true) &&
+    !window.ethereum.overrideIsMetaMask &&
+    !window.ethereum.isCoinbaseWallet
   ) {
     const coinbase = await window.ethereum.request({
       method: "eth_requestAccounts",

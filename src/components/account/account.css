@@ -119,8 +119,6 @@
   height: 250px;
 }
 
-
-
 .premium-dyp-wrapper {
   position: relative;
   width: 30%;
@@ -131,15 +129,17 @@
     #482193 100%
   );
   border-radius: 12px;
+  display: flex;
+  justify-content: end;
+  flex-direction: column;
 }
 
-
 .premium-dyp-banner {
- position: absolute;
- left: 15px;
- right: 0;
- bottom: 50px;
- margin: auto;
+  position: absolute;
+  left: 15px;
+  right: 0;
+  bottom: 50px;
+  margin: auto;
 }
 
 .premium-gradient {
@@ -266,6 +266,17 @@
   line-height: 28px;
   color: #f7f7fc !important;
   white-space: pre;
+}
+
+.premium-dyp-title {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 28px;
+  text-align: center;
+  color: #f7f7fc;
+  color: #f7f7fc !important;
+  margin-bottom: 10px;
 }
 
 .address-span {
@@ -476,19 +487,19 @@
   .plans-page-desc,
   .plans-benefits,
   .premium-subscribe-wrapper,
-  .premium-dyp-wrapper{
+  .premium-dyp-wrapper {
     width: 100% !important;
   }
 
-  .all-plans-wrapper{
+  .all-plans-wrapper {
     gap: 80px !important;
   }
 
-  .premium-dyp-wrapper{
+  .premium-dyp-wrapper {
     margin-top: 6rem !important;
   }
 
-  .premium-dyp-banner{
+  .premium-dyp-banner {
     width: 90%;
   }
 }

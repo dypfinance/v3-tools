@@ -259,42 +259,8 @@ export default class Subscription extends React.Component {
       .catch((err) => console.error(err));
   };
 
-  fetchfavData() {
-    window
-      .getFavoritesETH()
-      .then((favorites) => {
-        this.setState({ favoritesETH: favorites });
-      })
-      .catch(console.error);
-    if (this.props.networkId === 1) {
-      this.setState({
-        selectedSubscriptionToken: Object.keys(
-          window.config.subscriptioneth_tokens
-        )[0],
-      });
-    } else if (this.props.networkId === 43114) {
-      this.setState({
-        selectedSubscriptionToken: Object.keys(
-          window.config.subscription_tokens
-        )[0],
-      });
-    } else if (this.props.networkId === 56) {
-      this.setState({
-        selectedSubscriptionToken: Object.keys(
-          window.config.subscriptionbnb_tokens
-        )[0],
-      });
-    }
-    window
-      .getFavorites()
-      .then((favorites) => {
-        this.setState({ favorites: favorites });
-      })
-      .catch(console.error);
-  }
-
   fetchUsername = async () => {
-    if (this.props.coinbase) {
+    if (this.props.coinbase && this.props.coinbase.includes("0x")) {
       await axios
         .get(
           `https://api-image.dyp.finance/api/v1/username/${this.props.coinbase}`
@@ -316,7 +282,7 @@ export default class Subscription extends React.Component {
     const usernameData = {
       username: userInput,
     };
-
+    if (this.props.coinbase && this.props.coinbase.includes("0x")) {
     await axios
       .post(
         `https://api-image.dyp.finance/api/v1/username/${this.props.coinbase}`,
@@ -330,6 +296,7 @@ export default class Subscription extends React.Component {
       .catch((err) => {
         console.log(err);
       });
+    }
   };
 
   getDypBalance = async () => {
@@ -412,43 +379,18 @@ export default class Subscription extends React.Component {
   }
 
   componentDidMount() {
-    // window._refreshBalIntervalDyp = setInterval(this.getDypBalance, 2000);
 
     this.getDypBalance();
 
     this.setState({ coinbase: this.props.coinbase });
     window.scrollTo(0, 0);
-    // this.checkConnection();
 
-    if (window.isConnectedOneTime) {
-      this.onComponentMount();
-    } else {
-      window.addOneTimeWalletConnectionListener(this.onComponentMount);
-    }
-  }
-  componentWillUnmount() {
-    if (this.props.networkId === 1) {
-      clearInterval(window._refreshBalInterval);
-      clearInterval(window._refreshBalInterval2);
-    }
-    // clearInterval(window._refreshBalIntervalDyp);
 
-    window.removeOneTimeWalletConnectionListener(this.onComponentMount);
   }
 
-  onComponentMount = async () => {
-    this.handleSubscriptionTokenChange(this.state.selectedSubscriptionToken);
-    // this.checkNetworkId();
-
-    // this.fetchAvatar().then();
-    // this.checkConnection();
-  };
 
   handleSubscriptionTokenChange = async (tokenAddress) => {
     const token = tokenAddress;
-    // this.props.networkId === 1
-    //   ? this.state.wethAddress
-    //   : this.state.wavaxAddress;
     let tokenDecimals =
       this.props.networkId === 1
         ? window.config.subscriptioneth_tokens[token]?.decimals
@@ -544,8 +486,6 @@ export default class Subscription extends React.Component {
         this.setState({ lockActive: true });
         this.setState({ loadspinner: false });
         this.setState({ isApproved: true });
-
-        // this.handleSubscribe();
       })
       .catch((e) => {
         this.setState({ status: "An error occurred. Please try again" });
@@ -579,7 +519,7 @@ export default class Subscription extends React.Component {
       subscribeToken
     );
 
-    if (this.props.coinbase) {
+    if (this.props.coinbase && this.props.coinbase.includes("0x")) {
       if (this.props.networkId === 1) {
         const result = await subscribeTokencontract.methods
           .allowance(this.props.coinbase, ethsubscribeAddress)
@@ -644,15 +584,15 @@ export default class Subscription extends React.Component {
 
   
 
-    let price =
-    this.props.networkId === 1
-      ? await window.getEstimatedTokenSubscriptionAmountETH(this.state.selectedSubscriptionToken)
-      : this.props.networkId === 56
-      ? await window.getEstimatedTokenSubscriptionAmountBNB(this.state.selectedSubscriptionToken)
-      : await window.getEstimatedTokenSubscriptionAmount(this.state.selectedSubscriptionToken);
+    // let price =
+    // this.props.networkId === 1
+    //   ? await window.getEstimatedTokenSubscriptionAmountETH(this.state.selectedSubscriptionToken)
+    //   : this.props.networkId === 56
+    //   ? await window.getEstimatedTokenSubscriptionAmountBNB(this.state.selectedSubscriptionToken)
+    //   : await window.getEstimatedTokenSubscriptionAmount(this.state.selectedSubscriptionToken);
 
     await subscriptionContract.methods
-      .subscribe(this.state.selectedSubscriptionToken, price)
+      .subscribe(this.state.selectedSubscriptionToken, this.state.price)
       .send({ from: await window.getCoinbase() })
       .then(() => {
         this.setState({ loadspinnerSub: false });
@@ -720,10 +660,9 @@ export default class Subscription extends React.Component {
   handleSubmission = async () => {
     const formData = new FormData();
     formData.append("image", this.state.selectedFile);
-    let coinbase = this.props.coinbase;
     this.setState({ loadspinnerSave: true });
-    if (!coinbase) {
-      await window.connectWallet();
+    if (this.props.coinbase && this.props.coinbase.includes("0x")) {
+      await window.connectWallet(undefined, false);
     }
     let signature;
 
@@ -1109,7 +1048,7 @@ export default class Subscription extends React.Component {
                     Premium
                   </span>
                   <h6 className="premium-price">
-                    75 USD
+                  $75
                   </h6>
                 </div>
                 <img src={premiumDypTag} alt="premium dyp" />
@@ -1167,6 +1106,7 @@ export default class Subscription extends React.Component {
             </div>
             <div className="premium-dyp-wrapper">
               <img src={premiumDypBanner} className="premium-dyp-banner" alt="" />
+              <span className="premium-dyp-title">Premium Badge</span>
             </div>
             {/* <img src={premiumDyp} alt="premium dyp banner" className="premium-dyp-banner" /> */}
           </div>
@@ -1319,6 +1259,7 @@ export default class Subscription extends React.Component {
                         //     : window.config.subscription_tokens[t]?.symbol}
                         // </span>
                         <li
+                        key={i}
                           className="dropdown-item launchpad-item d-flex align-items-center gap-2"
                           onClick={() => {
                             this.setState({
