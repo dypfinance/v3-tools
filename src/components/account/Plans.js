@@ -15,12 +15,10 @@ import { shortAddress } from "../../functions/shortAddress";
 import TopPoolsCard from "../top-pools-card/TopPoolsCard";
 import useWindowSize from "../../functions/useWindowSize";
 import launchpadIndicator from "../launchpad/assets/launchpadIndicator.svg";
-import greenCheck from './assets/greenCheck.svg'
-import premiumDypTag from './assets/premiumDypTag.png'
-import premiumDypBanner from './assets/premiumDypBanner.png'
+import greenCheck from "./assets/greenCheck.svg";
+import premiumDypTag from "./assets/premiumDypTag.png";
+import premiumDypBanner from "./assets/premiumDypBanner.png";
 import KeyFeaturesCard from "../launchpad/launchpadhero/KeyFeaturesCard";
-
-
 
 const { BigNumber } = window;
 
@@ -54,6 +52,8 @@ export default class Subscription extends React.Component {
       wbnbAddress: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
       triggerText: "See more V",
       isApproved: false,
+      approveStatus: "initial",
+
       myNFTs: [],
       myStakess: [],
       viewall: false,
@@ -283,19 +283,19 @@ export default class Subscription extends React.Component {
       username: userInput,
     };
     if (this.props.coinbase && this.props.coinbase.includes("0x")) {
-    await axios
-      .post(
-        `https://api-image.dyp.finance/api/v1/username/${this.props.coinbase}`,
-        usernameData
-      )
-      .then((res) => {
-        this.setState({ username: res.data?.username });
-        this.fetchUsername();
-        this.setState({ userNameInput: "", showInput: false });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      await axios
+        .post(
+          `https://api-image.dyp.finance/api/v1/username/${this.props.coinbase}`,
+          usernameData
+        )
+        .then((res) => {
+          this.setState({ username: res.data?.username });
+          this.fetchUsername();
+          this.setState({ userNameInput: "", showInput: false });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   };
 
@@ -306,7 +306,7 @@ export default class Subscription extends React.Component {
     const tokenAddress = "0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17";
     const walletAddress = this.props.coinbase;
     const TokenABI = window.ERC20_ABI;
-    if ( walletAddress !== null && walletAddress !== undefined) {
+    if (walletAddress !== null && walletAddress !== undefined) {
       const contract1 = new web3eth.eth.Contract(TokenABI, tokenAddress);
       const contract2 = new web3avax.eth.Contract(TokenABI, tokenAddress);
       const contract3 = new web3bsc.eth.Contract(TokenABI, tokenAddress);
@@ -370,6 +370,7 @@ export default class Subscription extends React.Component {
     }
 
     if (this.props.networkId !== prevProps.networkId) {
+      this.setState({subscribe_now: false})
       this.getDypBalance();
 
       if (this.props.networkId === 43114) {
@@ -385,19 +386,14 @@ export default class Subscription extends React.Component {
   }
 
   componentDidMount() {
-
-    if(this.props.appState.isPremium){
+    if(this.props.isPremium){
       window.location.href = 'https://betatools.dyp.finance/account'
     }
-
     this.getDypBalance();
 
     this.setState({ coinbase: this.props.coinbase });
     window.scrollTo(0, 0);
-
-
   }
-
 
   handleSubscriptionTokenChange = async (tokenAddress) => {
     const token = tokenAddress;
@@ -495,16 +491,22 @@ export default class Subscription extends React.Component {
       .then(() => {
         this.setState({ lockActive: true });
         this.setState({ loadspinner: false });
-        this.setState({ isApproved: true });
+        this.setState({ isApproved: true, approveStatus: "deposit" });
       })
       .catch((e) => {
-        this.setState({ status: "An error occurred. Please try again" });
-        this.setState({ loadspinner: false });
+        this.setState({ status: e?.message });
+        this.setState({ loadspinner: false, approveStatus: "fail" });
+        setTimeout(() => {
+          this.setState({
+            status: "",
+            loadspinner: false,
+            approveStatus: "initial",
+          });
+        }, 8000);
       });
   };
 
   handleCheckIfAlreadyApproved = async (token) => {
-
     const web3eth = new Web3(window.config.infura_endpoint);
     const bscWeb3 = new Web3(window.config.bsc_endpoint);
     const avaxWeb3 = new Web3(window.config.avax_endpoint);
@@ -592,26 +594,33 @@ export default class Subscription extends React.Component {
 
     this.setState({ loadspinnerSub: true });
 
-  
-
     // let price =
     // this.props.networkId === 1
     //   ? await window.getEstimatedTokenSubscriptionAmountETH(this.state.selectedSubscriptionToken)
     //   : this.props.networkId === 56
     //   ? await window.getEstimatedTokenSubscriptionAmountBNB(this.state.selectedSubscriptionToken)
     //   : await window.getEstimatedTokenSubscriptionAmount(this.state.selectedSubscriptionToken);
-
+// console.log(this.state.price, this.state.selectedSubscriptionToken)
     await subscriptionContract.methods
       .subscribe(this.state.selectedSubscriptionToken, this.state.price)
       .send({ from: await window.getCoinbase() })
       .then(() => {
-        this.setState({ loadspinnerSub: false });
+        this.setState({ loadspinnerSub: false, approveStatus: "success" });
         this.props.onSubscribe()
         window.location.href = 'https://betatools.dyp.finance/account'
+
       })
       .catch((e) => {
-        this.setState({ status: "An error occurred. Please try again" });
-        this.setState({ loadspinnerSub: false });
+        this.setState({ status: e?.message });
+        this.setState({ loadspinner: false, approveStatus: "fail", loadspinnerSub: false });
+        setTimeout(() => {
+          this.setState({
+            status: "",
+            loadspinner: false,
+            loadspinnerSub: false,
+            approveStatus: "initial",
+          });
+        }, 8000);
       });
   };
 
@@ -1345,28 +1354,43 @@ export default class Subscription extends React.Component {
                   )}
                 </h6>
               </div>
-            </div>
-            <div
-              className="subscription-token-wrapper  p-2 d-flex align-items-center justify-content-between  mt-3"
-              style={{ width: "100%" }}
-            >
-              <span className="token-amount-placeholder">
-                Subscription price:
-              </span>
-              <div className="d-flex align-items-center gap-2">
-                <span className="usdt-text">
-                  {this.state.formattedPrice.slice(0, 9)}
-                </span>
-
-                <img
-                  src={
-                    require(`./assets/${this.state.dropdownIcon.toLowerCase()}Icon.svg`)
-                      .default
+              <hr className="form-divider my-4" />
+              <div className="d-flex flex-column gap-2 justify-content-end align-items-center">
+                <button
+                  className={"btn success-btn px-4 align-self-end"}
+                  disabled={this.state.approveStatus === "fail" ? true : false}
+                  style={{
+                    background:
+                      this.state.approveStatus === "fail"
+                        ? "linear-gradient(90.74deg, #f8845b 0%, #f0603a 100%)"
+                        : "linear-gradient(90.74deg, #75CAC2 0%, #57B6AB 100%)",
+                  }}
+                  onClick={(e) =>
+                    this.state.isApproved === false
+                      ? this.handleApprove(e)
+                      : this.handleSubscribe()
                   }
-                  height={24}
-                  width={24}
-                  alt="usdt"
-                />
+                >
+                  {this.state.isApproved === true &&
+                  this.state.loadspinner === false && this.state.loadspinnerSub === false &&
+                  (this.state.approveStatus === "deposit" || this.state.approveStatus === "initial") ? (
+                    "Subscribe"
+                  ) : this.state.isApproved === false &&
+                    this.state.loadspinner === false &&
+                    this.state.approveStatus === "initial" && this.state.loadspinnerSub === false ? (
+                    "Approve"
+                  ) : this.state.loadspinner === false &&
+                    this.state.approveStatus === "fail" && this.state.loadspinnerSub === false ? (
+                    "Failed"
+                  ) : (
+                    <div
+                      className="spinner-border "
+                      role="status"
+                      style={{ height: "1.5rem", width: "1.5rem" }}
+                    ></div>
+                  )}
+                </button>
+                <span style={{ color: "#E30613" }}>{this.state.status}</span>
               </div>
             </div>
             <hr className="form-divider my-4" />

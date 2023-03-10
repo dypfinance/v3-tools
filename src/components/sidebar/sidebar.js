@@ -189,7 +189,7 @@ const Sidebar = (props) => {
       style={{ padding: "2.5rem 0" }}
       className={`testbar ${
         activeSidebar ? "testbar-open" : null
-      } d-none d-lg-flex flex-column justify-content-between align-items-start`}
+      } d-none d-lg-flex flex-column gap-3 justify-content-between align-items-start`}
     >
       <img
         src={navRadius}

@@ -1052,11 +1052,11 @@ export default class Subscription extends React.Component {
             }
           >
             <div className="d-flex flex-column align-items-start align-items-lg-start w-100 justify-content-between justify-content-lg-end gap-1">
-              <span className=" my-plan-tag">My plan</span>
-              <NavLink to="/plans" className="plan-tag py-2 px-4 d-flex align-items-center gap-2">
+              {/* <span className=" my-plan-tag">My plan</span> */}
+              <div className="plan-tag py-2 px-4 d-flex align-items-center gap-2">
                 <img src={require('./assets/premiumDypIcon.svg').default} alt="" style={{width: 28, height: 28}}/>
                 <span className="plan-tag-title">{this.props.appState.isPremium ? 'Premium' : 'Free'}</span>
-              </NavLink>
+              </div>
              
             </div>
           </div>
@@ -1065,7 +1065,7 @@ export default class Subscription extends React.Component {
           <div className="col-12 col-lg-6">
             <div className="dyp-balances-wrapper d-flex flex-column gap-4 p-3">
               <h6 className="balances-title">
-                Multi-chain DYP Balance
+                Multichain DYP Balance
               </h6>
               <div className="d-flex flex-column flex-lg-row gap-3 gap-lg-0 align-items-center justify-content-between">
                 <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-5">
@@ -2135,8 +2135,8 @@ export default class Subscription extends React.Component {
             <span className="nft-ethereum-span">Ethereum</span>
           </div>
           <div className="d-flex flex-column gap-2 justify-content-between align-items-start">
-            <div className="col-xxl-3 col-lg-3 col-12 col-md-2">
-              <h6 className="mycawscollection-title">WoD Gensis Land NFTs</h6>
+            <div className="col-xxl-2 col-lg-2 col-12 col-md-2">
+              <h6 className="mycawscollection-title">WoD NFTs</h6>
             </div>
             <div
               className={
@@ -2178,7 +2178,7 @@ export default class Subscription extends React.Component {
               className="outline-btn"
               style={{
                 height: "fit-content",
-                display: lands.length > 4 ? "block" : "none",
+                display: lands.length > 2 ? "block" : "none",
               }}
               onClick={() => {
                 this.setState({ viewall: !this.state.viewall });

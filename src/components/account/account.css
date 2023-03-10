@@ -64,7 +64,7 @@
   background: #312f69;
   border: 1px solid #f5c96c;
   border-radius: 8px;
-  cursor: pointer;
+  /* cursor: pointer; */
 }
 
 .plan-tag-title {
@@ -118,6 +118,17 @@
   border-radius: 12px;
   height: 250px;
 }
+
+
+.success-btn {
+  color: #ffffff !important;
+  background: linear-gradient(90.74deg, #75cac2 0%, #57b6ab 100%);
+  border: none !important;
+  border-radius: 8px;
+  opacity: 1 !important;
+  
+}
+
 
 .premium-dyp-wrapper {
   position: relative;
