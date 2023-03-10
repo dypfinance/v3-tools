@@ -8,6 +8,20 @@
   color: #d6d8e7 !important;
 }
 
+
+.account-user-wrapper{
+  background: #3A377A;
+border-radius: 8px;
+padding: 7px;
+}
+
+.account-user{
+  font-weight: 500;
+font-size: 12px;
+line-height: 18px;
+color: #C0C9FF !important;
+}
+
 .buydyp-btn {
   border-radius: 8px;
   width: fit-content;

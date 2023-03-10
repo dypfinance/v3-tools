@@ -18,7 +18,7 @@ const onSignIn = async ({ account, chainId }) => {
   if (
     window.ethereum &&
     !window.coin98 &&
-    (window.ethereum.isMetaMask || window.ethereum.isTrust) &&
+    (window.ethereum.isMetaMask === true || window.ethereum.isTrust === true) &&
     (!window.ethereum.isCoinbaseWallet || !window.ethereum.overrideIsMetaMask)
   ) {
     try {
@@ -47,7 +47,7 @@ export function useEagerConnect() {
     if (
       window.ethereum &&
       !window.coin98 &&
-      (window.ethereum.isMetaMask || window.ethereum.isTrust) &&
+      (window.ethereum.isMetaMask === true || window.ethereum.isTrust === true) &&
       (!window.ethereum.isCoinbaseWallet || !window.ethereum.overrideIsMetaMask)
     ) {
       injected.isAuthorized().then((isAuthorized) => {
@@ -74,7 +74,7 @@ export function useEagerConnect() {
     if (
       window.ethereum &&
       !window.coin98 &&
-      (window.ethereum.isMetaMask || window.ethereum.isTrust) &&
+      (window.ethereum.isMetaMask === true || window.ethereum.isTrust === true) &&
       (!window.ethereum.isCoinbaseWallet || !window.ethereum.overrideIsMetaMask)
     ) {
       if (!tried && active) {
@@ -97,7 +97,7 @@ export function useInactiveListener(suppress = false) {
     if (
       window.ethereum &&
       !window.coin98 &&
-      (window.ethereum.isMetaMask || window.ethereum.isTrust) &&
+      (window.ethereum.isMetaMask === true || window.ethereum.isTrust === true) &&
       (!window.ethereum.isCoinbaseWallet || !window.ethereum.overrideIsMetaMask)
     ) {
       if (ethereum && ethereum.on && !active && !error && !suppress) {

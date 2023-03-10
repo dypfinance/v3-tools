@@ -356,8 +356,11 @@ const StakeBscDai = ({
     if (coinbase !== coinbase2 && coinbase !== null && coinbase !== undefined) {
       setcoinbase(coinbase);
     }
-    getPriceDYP();
   }, [coinbase, coinbase2]);
+
+  useEffect(() => {
+    getPriceDYP();
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {

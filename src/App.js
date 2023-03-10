@@ -40,6 +40,7 @@ import LandPopup from "./components/LandPopup/LandPopup";
 import { withRouter } from "react-router-dom";
 import GenesisStaking from "./components/genesisStaking/GenesisStaking";
 import CawsStaking from "./components/genesisStaking/CawsStaking";
+import Plans from './components/account/Plans'
 
 class App extends React.Component {
   constructor(props) {
@@ -65,7 +66,7 @@ class App extends React.Component {
       windowWidth: 0,
       windowHeight: 0,
       subscribedPlatformTokenAmount: "...",
-      isPremium: false,
+      isPremium: null,
       hotPairs: [],
       networkId: 1,
       explorerNetworkId: 1,
@@ -171,38 +172,35 @@ class App extends React.Component {
   };
 
   refreshSubscription = async () => {
-    if (!this.state.isConnected) return;
-
-    // // detect Network account change
-    // window.ethereum?.on('chainChanged', function(networkId){
-    //   console.log('networkChanged',networkId);
-    //   const chainId = async() => await window.web3.eth.getChainId();
-    //   if (chainId == '1') {
-    //     this.setState({isNetwork: 'ethereum'})
-    //   }
-    //   else{
-    //     this.setState({isNetwork: 'binance'})
-    //   }
-    // }.bind(this))
-
     let coinbase = this.state.coinbase;
     let subscribedPlatformTokenAmountETH;
     let subscribedPlatformTokenAmountAvax;
+    let subscribedPlatformTokenAmountBNB;
 
-    const web3eth = new Web3(
-      "https://mainnet.infura.io/v3/94608dc6ddba490697ec4f9b723b586e"
-    );
-    const web3avax = new Web3("https://api.avax.network/ext/bc/C/rpc");
+    const web3eth = window.infuraWeb3;
+    const web3avax = window.avaxWeb3;
+    const web3bnb = window.bscWeb3;
+
     const AvaxABI = window.SUBSCRIPTION_ABI;
     const EthABI = window.SUBSCRIPTIONETH_ABI;
+    const BnbABI = window.SUBSCRIPTIONBNB_ABI;
+
     const ethsubscribeAddress = window.config.subscriptioneth_address;
     const avaxsubscribeAddress = window.config.subscription_address;
+    const bnbsubscribeAddress = window.config.subscriptionbnb_address;
+
 
     const ethcontract = new web3eth.eth.Contract(EthABI, ethsubscribeAddress);
     const avaxcontract = new web3avax.eth.Contract(
       AvaxABI,
       avaxsubscribeAddress
     );
+
+    const bnbcontract = new web3bnb.eth.Contract(
+      BnbABI,
+      bnbsubscribeAddress
+    );
+
 
     if (coinbase) {
       subscribedPlatformTokenAmountETH = await ethcontract.methods
@@ -213,9 +211,14 @@ class App extends React.Component {
         .subscriptionPlatformTokenAmount(coinbase)
         .call();
 
+        subscribedPlatformTokenAmountBNB = await bnbcontract.methods
+        .subscriptionPlatformTokenAmount(coinbase)
+        .call();
+        
       if (
-        subscribedPlatformTokenAmountAvax === "0" &&
-        subscribedPlatformTokenAmountETH === "0"
+        subscribedPlatformTokenAmountAvax === '0' &&
+        subscribedPlatformTokenAmountETH === '0' &&
+        subscribedPlatformTokenAmountBNB === '0'
       ) {
         this.setState({ subscribedPlatformTokenAmount: "0", isPremium: false });
       }
@@ -225,9 +228,16 @@ class App extends React.Component {
           isPremium: true,
         });
       }
-      if (subscribedPlatformTokenAmountETH !== "0") {
+     else if (subscribedPlatformTokenAmountETH !== '0') {
         this.setState({
           subscribedPlatformTokenAmount: subscribedPlatformTokenAmountETH,
+          isPremium: true,
+        });
+      }
+
+     else if (subscribedPlatformTokenAmountBNB !== '0') {
+        this.setState({
+          subscribedPlatformTokenAmount: subscribedPlatformTokenAmountBNB,
           isPremium: true,
         });
       }
@@ -342,15 +352,15 @@ class App extends React.Component {
     this.tvl().then();
     this.updateWindowDimensions();
     window.addEventListener("resize", this.updateWindowDimensions);
-    if (window.ethereum && !window.coin98 && (window.ethereum.isMetaMask || window.ethereum.isTrust) ) {
+    if (window.ethereum && !window.coin98 && (window.ethereum.isMetaMask === true || window.ethereum.isTrust === true) ) {
       this.checkConnection();
     }
     this.checkNetworkId();
-    this.refreshSubscription();
 
     if (window.ethereum && !window.coin98) {
       console.log('yes')
       this.handleEthereum();
+      this.refreshSubscription()
     } else {
       console.log('no')
       // If the event is not dispatched by the end of the timeout,
@@ -366,8 +376,9 @@ class App extends React.Component {
   }
 
  checkConnection = async () => {
+  this.refreshSubscription()
     const logout = localStorage.getItem("logout");
-    if (logout !== "true" && window.ethereum  && (window.ethereum.isMetaMask || window.ethereum.isTrust || !window.ethereum.isCoin98 || !window.ethereum.overrideIsMetaMask || !window.ethereum.isCoinbaseWallet)) {
+    if (logout !== "true" && window.ethereum  && (window.ethereum.isMetaMask === true || window.ethereum.isTrust === true || !window.ethereum.isCoin98 || !window.ethereum.overrideIsMetaMask || !window.ethereum.isCoinbaseWallet)) {
       await window.ethereum
         ?.request({ method: "eth_requestAccounts" })
         .then((data) => {
@@ -423,6 +434,11 @@ class App extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     if (this.props.location !== prevProps.location) {
       this.checkNetworkId();
+      this.refreshSubscription()
+    }
+
+    if (this.state.coinbase !== prevState.coinbase) {
+      this.refreshSubscription()
     }
   }
 
@@ -491,6 +507,7 @@ class App extends React.Component {
             hideModal={this.hideModal}
             show={this.state.show}
             isConnected={this.state.isConnected}
+            appState={this.state}
           />
         )}
         <div className="content-wrapper container-fluid d-flex justify-content-center justify-content-lg-start">
@@ -760,6 +777,25 @@ class App extends React.Component {
                         handleSwitchNetwork={this.handleSwitchNetwork}
                         coinbase={this.state.coinbase}
                         isConnected={this.state.isConnected}
+                        isPremium={this.state.isPremium}
+                        onSubscribe={this.refreshSubscription}
+
+                      />
+                    )}
+                  />
+                  <Route
+                    exact
+                    path="/plans"
+                    render={() => (
+                      <Plans
+                        appState={this.state}
+                        theme={this.state.theme}
+                        networkId={parseInt(this.state.networkId)}
+                        handleSwitchNetwork={this.handleSwitchNetwork}
+                        coinbase={this.state.coinbase}
+                        isPremium={this.state.isPremium}
+                        isConnected={this.state.isConnected}
+                        onSubscribe={this.refreshSubscription}
                       />
                     )}
                   />

@@ -14,6 +14,8 @@ import { ClickAwayListener, Tooltip } from "@material-ui/core";
 import { shortAddress } from "../../functions/shortAddress";
 import TopPoolsCard from "../top-pools-card/TopPoolsCard";
 import useWindowSize from "../../functions/useWindowSize";
+import gotoWod from "./assets/gotoWod.svg";
+import { useHistory } from "react-router-dom";
 
 const { BigNumber } = window;
 
@@ -48,6 +50,8 @@ export default class Subscription extends React.Component {
       isApproved: false,
       myNFTs: [],
       myStakess: [],
+      myLandNFTs: [],
+      landStakes: [],
       viewall: false,
       username: "",
       userNameInput: "",
@@ -61,6 +65,9 @@ export default class Subscription extends React.Component {
       ethFarm: [],
       bscFarm: [],
       avaxFarm: [],
+      ethBalance: "0.0",
+      bnbBalance: "0.0",
+      avaxBalance: "0.0",
     };
   }
 
@@ -361,11 +368,60 @@ export default class Subscription extends React.Component {
     }
   };
 
+  getAllBalance = async () => {
+    const tokenAddress = "0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17";
+    const walletAddress = this.props.coinbase;
+    const TokenABI = window.ERC20_ABI;
+
+    if (this.props.coinbase && this.props.coinbase != undefined) {
+      const contract1 = new window.infuraWeb3.eth.Contract(
+        TokenABI,
+        tokenAddress
+      );
+      const contract2 = new window.avaxWeb3.eth.Contract(
+        TokenABI,
+        tokenAddress
+      );
+      const contract3 = new window.bscWeb3.eth.Contract(TokenABI, tokenAddress);
+
+      await contract1.methods
+        .balanceOf(walletAddress)
+        .call()
+        .then((data) => {
+          let depositedTokens = new BigNumber(data).div(1e18).toFixed(2);
+
+          this.setState({ ethBalance: depositedTokens });
+        });
+      await contract2.methods
+        .balanceOf(walletAddress)
+        .call()
+        .then((data) => {
+          let depositedTokens = new BigNumber(data).div(1e18).toFixed(2);
+
+          this.setState({ avaxBalance: depositedTokens });
+        });
+
+      await contract3.methods
+        .balanceOf(walletAddress)
+        .call()
+        .then((data) => {
+          let depositedTokens = new BigNumber(data).div(1e18).toFixed(2);
+
+          this.setState({ bnbBalance: depositedTokens });
+        });
+    }
+  };
+
   componentDidUpdate(prevProps) {
     // Typical usage (don't forget to compare props):
+
+    if (this.props.isPremium === false) {
+      window.location.href = "https://app.dypius.com/plans";
+    }
+
     if (this.props.coinbase !== prevProps.coinbase) {
       this.fetchUserPools();
-      this.getDypBalance();
+      // this.getDypBalance();
       this.fetchAvatar();
       this.fetchUsername();
       this.fetchUserPools();
@@ -375,41 +431,49 @@ export default class Subscription extends React.Component {
       this.fetchBscFarming();
       this.fetchEthFarming();
       this.fetchEthStaking();
-
-      if (this.props.networkId === 1) {
-        this.myNft().then();
-        this.myStakes().then();
-      }
+      this.getAllBalance();
+      this.props.onSubscribe()
+      this.myNft().then();
+      this.myStakes().then();
+      this.myLandNft().then();
+      this.myLandStakes().then();
     }
 
     if (this.props.networkId !== prevProps.networkId) {
-      this.getDypBalance();
-
       if (this.props.networkId === 43114) {
         this.handleSubscriptionTokenChange(this.state.usdteAddress);
       } else if (this.props.networkId === 1) {
         this.handleSubscriptionTokenChange(this.state.usdtAddress);
-        this.myNft().then();
-        this.myStakes().then();
       }
     }
   }
 
   componentDidMount() {
+    if (this.props.isPremium === false) {
+      window.location.href = "https://app.dypius.com/plans";
+    }
     // window._refreshBalIntervalDyp = setInterval(this.getDypBalance, 2000);
-    this.getDypBalance();
-
+    this.getAllBalance();
+    this.fetchUserPools();
+    this.props.onSubscribe()
+    this.fetchAvatar();
+    this.fetchUsername();
+    this.fetchUserPools();
+    this.fetchAvaxFarming();
+    this.fetchAvaxStaking();
+    this.fetchBnbStaking();
+    this.fetchBscFarming();
+    this.fetchEthFarming();
+    this.fetchEthStaking();
     this.setState({ coinbase: this.props.coinbase });
 
+    this.myNft().then();
+    this.myStakes().then();
+    this.myLandNft().then();
+    this.myLandStakes().then();
     // this.handleCheckIfAlreadyApproved();
     window.scrollTo(0, 0);
     // this.checkConnection();
-
-    if (window.isConnectedOneTime) {
-      this.onComponentMount();
-    } else {
-      window.addOneTimeWalletConnectionListener(this.onComponentMount);
-    }
   }
   componentWillUnmount() {
     if (this.props.networkId === 1) {
@@ -420,14 +484,6 @@ export default class Subscription extends React.Component {
 
     window.removeOneTimeWalletConnectionListener(this.onComponentMount);
   }
-
-  onComponentMount = async () => {
-    this.handleSubscriptionTokenChange(this.state.selectedSubscriptionToken);
-    // this.checkNetworkId();
-
-    // this.fetchAvatar().then();
-    // this.checkConnection();
-  };
 
   handleSubscriptionTokenChange = async (tokenAddress) => {
     const token =
@@ -462,23 +518,150 @@ export default class Subscription extends React.Component {
     this.setState({ price, formattedPrice, tokenBalance });
   };
 
+  // myNft = async () => {
+  //   if (this.props.coinbase !== null && this.props.coinbase !== undefined) {
+  //     let myNft = await window.myNftListContract(this.props.coinbase);
+
+  //     let nfts = myNft.map((nft) => window.getNft(nft));
+
+  //     nfts = await Promise.all(nfts);
+
+  //     nfts.reverse();
+  //     this.setState({ myNFTs: nfts });
+  //   }
+  // };
+  // myLandNft = async () => {
+  //   if (this.props.coinbase !== null && this.props.coinbase !== undefined) {
+  //     let myNft = await window.myNftLandListContract(this.props.coinbase);
+
+  //     let nfts = myNft.map((nft) => window.getLandNft(nft));
+
+  //     nfts = await Promise.all(nfts);
+  //     nfts.reverse();
+  //     this.setState({ myLandNFTs: nfts });
+  //   }
+  // };
+
   myNft = async () => {
     if (this.props.coinbase !== null && this.props.coinbase !== undefined) {
-      let myNft = await window.myNftListContract(this.props.coinbase);
+      const infura_web3 = window.infuraWeb3;
+      let nfts_contract = new infura_web3.eth.Contract(
+        window.NFT_ABI,
+        window.config.nft_address
+      );
 
-      let nfts = myNft.map((nft) => window.getNft(nft));
+      let getBalanceOf = await nfts_contract.methods
+        .balanceOf(this.props.coinbase)
+        .call();
+
+      let nftList = [];
+
+      for (let i = 0; i < getBalanceOf; i++)
+        nftList.push(
+          await nfts_contract.methods
+            .tokenOfOwnerByIndex(this.props.coinbase, i)
+            .call()
+        );
+
+      let nfts = nftList.map((nft) => window.getNft(nft));
 
       nfts = await Promise.all(nfts);
-
       nfts.reverse();
       this.setState({ myNFTs: nfts });
     }
   };
+  myLandNft = async () => {
+    if (this.props.coinbase !== null && this.props.coinbase !== undefined) {
+      const infura_web3 = window.infuraWeb3;
+      let nfts_contract = new infura_web3.eth.Contract(
+        window.LANDMINTING_ABI,
+        window.config.landnft_address
+      );
 
+      let getBalanceOf = await nfts_contract.methods
+        .balanceOf(this.props.coinbase)
+        .call();
+
+      let nftList = [];
+
+      for (let i = 0; i < getBalanceOf; i++)
+        nftList.push(
+          await nfts_contract.methods
+            .tokenOfOwnerByIndex(this.props.coinbase, i)
+            .call()
+        );
+
+      let nfts = nftList.map((nft) => window.getLandNft(nft));
+
+      nfts = await Promise.all(nfts);
+      nfts.reverse();
+      this.setState({ myLandNFTs: nfts });
+    }
+  };
+
+  // getStakesIds = async () => {
+  //   const address = this.props.coinbase;
+  //   if (address !== null && address !== undefined) {
+  //     let staking_contract = await window.getContractNFT("NFTSTAKING");
+  //     let stakenft = [];
+  //     let myStakes = await staking_contract.methods
+  //       .depositsOf(address)
+  //       .call()
+  //       .then((result) => {
+  //         for (let i = 0; i < result.length; i++)
+  //           stakenft.push(parseInt(result[i]));
+  //         return stakenft;
+  //       });
+
+  //     return myStakes;
+  //   }
+  // };
+  // getLandStakesIds = async () => {
+  //   const address = this.props.coinbase;
+  //   if (address !== null && this.props.coinbase !== undefined) {
+  //     let staking_contract = await window.getContractLandNFT("LANDNFTSTAKING");
+  //     let stakenft = [];
+  //     let myStakes = await staking_contract.methods
+  //       .depositsOf(address)
+  //       .call()
+  //       .then((result) => {
+  //         for (let i = 0; i < result.length; i++)
+  //           stakenft.push(parseInt(result[i]));
+  //         return stakenft;
+  //       });
+
+  //     return myStakes;
+  //   }
+  // };
   getStakesIds = async () => {
     const address = this.props.coinbase;
     if (address !== null && address !== undefined) {
-      let staking_contract = await window.getContractNFT("NFTSTAKING");
+      const infura_web3 = window.infuraWeb3;
+      let staking_contract = new infura_web3.eth.Contract(
+        window.NFTSTAKING_ABI,
+        window.config.nftstaking_address
+      );
+      let stakenft = [];
+      let myStakes = await staking_contract.methods
+        .depositsOf(address)
+        .call()
+        .then((result) => {
+          for (let i = 0; i < result.length; i++)
+            stakenft.push(parseInt(result[i]));
+          return stakenft;
+        });
+
+      return myStakes;
+    }
+  };
+  getLandStakesIds = async () => {
+    const address = this.props.coinbase;
+    if (address !== null && this.props.coinbase !== undefined) {
+      const infura_web3 = window.infuraWeb3;
+      let staking_contract = new infura_web3.eth.Contract(
+        window.LANDSTAKING_ABI,
+        window.config.landnftstake_address
+      );
       let stakenft = [];
       let myStakes = await staking_contract.methods
         .depositsOf(address)
@@ -495,10 +678,19 @@ export default class Subscription extends React.Component {
 
   myStakes = async () => {
     let myStakes = await this.getStakesIds();
-    let stakes = myStakes.map((stake) => window.getNft(stake));
+    if(myStakes && myStakes.length > 0)
+   { let stakes = myStakes.map((stake) => window.getNft(stake));
     stakes = await Promise.all(stakes);
     stakes.reverse();
-    this.setState({ myStakess: stakes });
+    this.setState({ myStakess: stakes });}
+  };
+  myLandStakes = async () => {
+    let myStakes = await this.getLandStakesIds();
+    if(myStakes && myStakes.length > 0)
+   { let stakes = myStakes.map((stake) => window.getLandNft(stake));
+    stakes = await Promise.all(stakes);
+    stakes.reverse();
+    this.setState({ landStakes: stakes });}
   };
 
   handleApprove = async (e) => {
@@ -582,7 +774,7 @@ export default class Subscription extends React.Component {
 
   handleSubscribe = async (e) => {
     e.preventDefault();
-    console.log("handleSubscribe()");
+    
     let subscriptionContract = await window.getContract({
       key: this.props.networkId === 1 ? "SUBSCRIPTIONETH" : "SUBSCRIPTION",
     });
@@ -655,7 +847,7 @@ export default class Subscription extends React.Component {
     let coinbase = this.props.coinbase;
     this.setState({ loadspinnerSave: true });
     if (!coinbase) {
-      await window.connectWallet();
+      await window.connectWallet(undefined, false);
     }
     let signature;
 
@@ -740,6 +932,7 @@ export default class Subscription extends React.Component {
           ]?.decimals;
     // this.handleCheckIfAlreadyApproved()
     let mycaws = [...this.state.myNFTs, ...this.state.myStakess];
+    let lands = [...this.state.myLandNFTs, ...this.state.landStakes];
 
     const focusInput = (input) => {
       document.getElementById(input).focus();
@@ -774,7 +967,10 @@ export default class Subscription extends React.Component {
       this.setState({ openTooltip: true });
     };
 
-    return (
+    
+
+
+    return this.props.isPremium ? (
       <div>
         <div className="d-flex align-items-start align-items-lg-0 justify-content-between flex-column flex-lg-row gap-4 gap-lg-0">
           <div
@@ -783,118 +979,9 @@ export default class Subscription extends React.Component {
             }`}
           >
             <div
-              className={`d-flex  gap-3 ${
-                this.state.showInput
-                  ? "align-items-start flex-column"
-                  : "align-items-center flex-row"
-              }`}
+              className={`d-flex align-items-center w-100 justify-content-between justify-content-lg-start gap-3`}
               // style={{ height: 38 }}
             >
-              <h6 className="account-username">
-                Username: {this.state.username}
-              </h6>
-              {this.state.showInput ? (
-                <div className="d-flex align-items-center gap-2">
-                  <div className="input-container px-0">
-                    <input
-                      type="text"
-                      min={1}
-                      max={365}
-                      id="username"
-                      name="username"
-                      placeholder=" "
-                      className="text-input"
-                      style={{ width: "100%" }}
-                      value={this.state.userNameInput}
-                      onChange={(e) =>
-                        this.setState({ userNameInput: e.target.value })
-                      }
-                    />
-                    <label
-                      htmlFor="username"
-                      className="label"
-                      onClick={() => focusInput("username")}
-                    >
-                      Enter a new name
-                    </label>
-                    <img
-                      src={require(`./assets/clearFieldIcon.svg`).default}
-                      className="clear-icon cursor-pointer"
-                      alt="clear field"
-                      onClick={() => this.setState({ showInput: false })}
-                    />
-                  </div>
-                  <button
-                    className="btn outline-btn py-2"
-                    onClick={() => this.postUsername(this.state.userNameInput)}
-                  >
-                    Submit
-                  </button>
-                </div>
-              ) : (
-                <img
-                  src={openNameChange}
-                  className="cursor-pointer"
-                  alt=""
-                  onClick={() => this.setState({ showInput: true })}
-                  style={{ zIndex: 5 }}
-                />
-              )}
-            </div>
-            <div className="d-flex align-items-center gap-2">
-              <img src={require(`./assets/metamask.png`).default} alt="" />
-              <div className="d-flex flex-column gap-1">
-                <span className="address-span">Wallet address:</span>
-                <div className="d-flex align-items-center gap-2">
-                  <span className="account-wallet-address">
-                    {shortAddress(this.props.coinbase)}
-                  </span>
-                  <ClickAwayListener onClickAway={handleTooltipClose}>
-                    <Tooltip
-                      PopperProps={{
-                        disablePortal: true,
-                      }}
-                      onClose={handleTooltipClose}
-                      open={this.state.openTooltip}
-                      disableFocusListener
-                      disableHoverListener
-                      disableTouchListener
-                      placement="top"
-                      title={
-                        <div className="tooltip-text">
-                          {"Wallet address copied!"}
-                        </div>
-                      }
-                    >
-                      <img
-                        src={require("./assets/clipboardIcon.svg").default}
-                        className="cursor-pointer"
-                        alt="clipboard"
-                        onClick={() => {
-                          navigator.clipboard.writeText(this.props.coinbase);
-                          handleTooltipOpen();
-                        }}
-                      />
-                    </Tooltip>
-                  </ClickAwayListener>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            className={
-              this.props.coinbase
-                ? "mb-3 d-flex w-100 justify-content-between justify-content-lg-end"
-                : "d-none"
-            }
-          >
-            <div className="d-flex align-items-center w-100 justify-content-between justify-content-lg-end gap-2">
-              <div className="d-flex flex-column">
-                <span className="dyp-amount-placeholder">Balance:</span>
-                <h6 className="account-dyp-amount">
-                  {getFormattedNumber(this.state.dypBalance, 6)} DYP{" "}
-                </h6>
-              </div>
               <div className="position-relative">
                 <div className="avatar-border"></div>
                 <img
@@ -948,10 +1035,197 @@ export default class Subscription extends React.Component {
                 <></>
               )} */}
               </div>
+              <div className="d-flex flex-column gap-2">
+                <div className="d-flex flex-column flex-lg-row align-items-start align-items-lg-center gap-2 gap-lg-3">
+                  <h6 className="account-username">
+                    {this.state.username ? this.state.username : "Dypian"}
+                  </h6>
+                  {this.state.showInput ? (
+                    <div className="d-flex align-items-center gap-2">
+                      <div
+                        className="input-container px-0"
+                        style={{ width: "190px" }}
+                      >
+                        <input
+                          type="text"
+                          min={1}
+                          max={365}
+                          id="username"
+                          name="username"
+                          placeholder=" "
+                          className="text-input"
+                          style={{ width: "100%" }}
+                          value={this.state.userNameInput}
+                          onChange={(e) =>
+                            this.setState({ userNameInput: e.target.value })
+                          }
+                        />
+                        <label
+                          htmlFor="username"
+                          className="label"
+                          onClick={() => focusInput("username")}
+                        >
+                          Enter a new name
+                        </label>
+                        <img
+                          src={require(`./assets/clearFieldIcon.svg`).default}
+                          className="clear-icon cursor-pointer"
+                          alt="clear field"
+                          onClick={() => this.setState({ showInput: false })}
+                        />
+                      </div>
+                      <button
+                        className="btn outline-btn py-2"
+                        onClick={() =>
+                          this.postUsername(this.state.userNameInput)
+                        }
+                      >
+                        Submit
+                      </button>
+                    </div>
+                  ) : (
+                    <img
+                      src={openNameChange}
+                      className="cursor-pointer"
+                      alt=""
+                      onClick={() => this.setState({ showInput: true })}
+                      style={{ zIndex: 2 }}
+                    />
+                  )}
+                </div>
+                <div className="d-flex align-items-center gap-2">
+                  <span className="account-wallet-address">
+                    {shortAddress(this.props.coinbase)}
+                  </span>
+                  <ClickAwayListener onClickAway={handleTooltipClose}>
+                    <Tooltip
+                      PopperProps={{
+                        disablePortal: true,
+                      }}
+                      onClose={handleTooltipClose}
+                      open={this.state.openTooltip}
+                      disableFocusListener
+                      disableHoverListener
+                      disableTouchListener
+                      placement="top"
+                      title={
+                        <div className="tooltip-text">
+                          {"Wallet address copied!"}
+                        </div>
+                      }
+                    >
+                      <img
+                        src={require("./assets/clipboardIcon.svg").default}
+                        className="cursor-pointer"
+                        alt="clipboard"
+                        onClick={() => {
+                          navigator.clipboard.writeText(this.props.coinbase);
+                          handleTooltipOpen();
+                        }}
+                      />
+                    </Tooltip>
+                  </ClickAwayListener>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className={
+              this.props.coinbase
+                ? "mb-3 d-flex justify-content-between justify-content-lg-end"
+                : "d-none"
+            }
+          >
+            <div className="d-flex flex-column align-items-start align-items-lg-start w-100 justify-content-between justify-content-lg-end gap-1">
+              {/* <span className=" my-plan-tag">My plan</span> */}
+              <div className="plan-tag py-2 px-4 d-flex align-items-center gap-2">
+                <img
+                  src={require("./assets/premiumDypIcon.svg").default}
+                  alt=""
+                  style={{ width: 28, height: 28 }}
+                />
+                <span className="plan-tag-title">
+                  {this.props.isPremium ? "Premium" : "Free"}
+                </span>
+              </div>
             </div>
           </div>
         </div>
-        <div className="row mt-5 gap-4 gap-lg-0">
+        <div className="row mt-4 gap-3 gap-lg-0">
+          <div className="col-12 col-lg-6">
+            <div className="dyp-balances-wrapper d-flex flex-column gap-4 p-3">
+              <h6 className="balances-title">Multichain DYP Balance</h6>
+              <div className="d-flex flex-column flex-lg-row gap-3 align-items-center justify-content-between">
+                <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-3 gap-xxl-3 gap-lg-1">
+                  <img
+                    src={require(`./assets/wethIcon.svg`).default}
+                    width={20}
+                    height={20}
+                    alt=""
+                  />
+                  <div className="d-flex align-items-center gap-1">
+                    <span className="balance-amount mb-0">
+                      {getFormattedNumber(this.state.ethBalance)} DYP
+                    </span>
+                    <img
+                      src={require(`./assets/dypIcon.svg`).default}
+                      width={20}
+                      height={20}
+                      alt=""
+                    />
+                  </div>
+                </div>
+                <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2  gap-3 gap-xxl-3 gap-lg-1">
+                  <img
+                    src={require(`./assets/wbnbIcon.svg`).default}
+                    width={20}
+                    height={20}
+                    alt=""
+                  />
+                  <div className="d-flex align-items-center gap-1">
+                    <span className="balance-amount mb-0">
+                      {getFormattedNumber(this.state.bnbBalance)} DYP
+                    </span>
+                    <img
+                      src={require(`./assets/dypIcon.svg`).default}
+                      width={20}
+                      height={20}
+                      alt=""
+                    />
+                  </div>
+                </div>
+                <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-3 gap-xxl-3 gap-lg-1">
+                  <img src={require(`./assets/wavaxIcon.svg`).default} alt="" />
+                  <div className="d-flex align-items-center gap-1">
+                    <span className="balance-amount mb-0">
+                      {getFormattedNumber(this.state.avaxBalance)} DYP
+                    </span>
+                    <img
+                      src={require(`./assets/dypIcon.svg`).default}
+                      width={20}
+                      height={20}
+                      alt=""
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-12 col-lg-6">
+            <a
+              href="https://www.worldofdypians.com/"
+              target={"_blank"}
+              className="wod-wrapper d-flex flex-column align-items-end gap-3 p-3"
+            >
+              <h6 className="wod-title">Experience unique gameplay</h6>
+              <div className="d-flex align-items-center gap-1">
+                <span className="explore-wod">Explore more</span>
+                <img src={gotoWod} alt="" />
+              </div>
+            </a>
+          </div>
+        </div>
+        {/* <div className="row mt-5 gap-4 gap-lg-0">
           <div className="col-12 col-lg-6 position-relative d-flex justify-content-center">
             <div
               className="purplediv"
@@ -1050,10 +1324,7 @@ export default class Subscription extends React.Component {
                           <p className="subscr-subtitle">
                             The subscription tokens will be used to buy DYP
                           </p>
-                          {/* <p className="subscr-note">
-                        *When you unsubscribe the DYP will be unlocked and sent to
-                        your wallet
-                      </p> */}
+                        
                         </div>
                         <div>
                           <div className="d-flex gap-2 flex-column flex-lg-row">
@@ -1110,22 +1381,22 @@ export default class Subscription extends React.Component {
                           }}
                         >
                           <h3 className="subscr-title">Welcome premium user</h3>
-                          {/* <p className="subscr-subtitle">
+                          <p className="subscr-subtitle">
                             *When you unsubscribe the DYP will be unlocked and
                             sent to your wallet
-                          </p> */}
-                          {/* <p className="subscr-note">
+                          </p>
+                          <p className="subscr-note">
                         *When you unsubscribe the DYP will be unlocked and sent to
                         your wallet
-                      </p> */}
+                      </p>
                         </div>
-                        {/* <div>
+                        <div>
                       <div className="d-flex gap-2">
                         <img src="/assets/img/usdt.svg"></img>
                         <h3 className="subscr-price">75 USDT</h3>
                       </div>
                       <p className="subscr-note">*Exclusive offer</p>
-                    </div> */}
+                    </div>
                       </div>
                     </div>
                     <div className="d-flex justify-content-between align-items-center mt-3">
@@ -1139,20 +1410,20 @@ export default class Subscription extends React.Component {
                       >
                         Active <br></br> Premium plan
                       </div>
-                      {/* <div
+                      <div
                         className="btn outline-btn px-5"
                         type=""
                         onClick={this.handleUnsubscribe}
                       >
                         Unsubscribe
-                      </div> */}
+                      </div>
                     </div>
                   </>
                 )}
               </div>
             </div>
           </div>
-        </div>
+        </div> 
         {this.state.subscribe_now === true ? (
           <div className="row mt-4 justify-content-end">
             <div className="col-12 col-lg-6">
@@ -1267,7 +1538,7 @@ export default class Subscription extends React.Component {
           </div>
         ) : (
           <></>
-        )}
+        )} */}
         {/* <form onSubmit={this.handleSubscribe}>     
           <div>
             {!this.props.appState.isPremium ? (
@@ -1708,14 +1979,7 @@ export default class Subscription extends React.Component {
                         </div>
                       </NavLink>
                     ))}
-              </div>
-              <div
-                className="row p-0 m-0 poolrows"
-                style={{
-                  gap: "50px 0px",
-                }}
-              >
-                {this.state.bnbStake &&
+                    {this.state.bnbStake &&
                   this.state.bnbStake
                     .slice(0, this.state.bnbStake.length)
                     .map((pool, index) => (
@@ -1807,15 +2071,7 @@ export default class Subscription extends React.Component {
                         </div>
                       </NavLink>
                     ))}
-              </div>
-
-              <div
-                className="row p-0 m-0 poolrows"
-                style={{
-                  gap: "50px 0px",
-                }}
-              >
-                {this.state.avaxStake &&
+                    {this.state.avaxStake &&
                   this.state.avaxStake
                     .slice(0, this.state.avaxStake.length)
                     .map((pool, index) => (
@@ -1908,65 +2164,137 @@ export default class Subscription extends React.Component {
                       </NavLink>
                     ))}
               </div>
+            
             </div>
           </>
         )}
         <div
-          className="mycawsCollection position-relative mb-5"
-          style={{ marginTop: mycaws.length === 0 ? "6rem" : "" }}
+          className="row"
+          // style={{ marginTop: mycaws.length === 0 || lands.length === 0 ? "6rem" : "" }}
         >
-          <div className="d-flex flex-column flex-xxl-row flex-lg-row flex-md-row gap-2 justify-content-between align-items-center">
-            <div className="col-xxl-2 col-lg-2 col-12 col-md-2">
-              <h6 className="mycawscollection-title">My Caws Collection</h6>
+          <div className="col-12 col-lg-6">
+            <div className="mycawsCollection position-relative mb-5">
+              <div className="nft-ethereum-tag p-2 d-flex align-items-center gap-2">
+                <img src={require("./assets/wethIcon.svg").default} alt="" />
+                <span className="nft-ethereum-span">Ethereum</span>
+              </div>
+              <div className="d-flex flex-column gap-2 justify-content-between align-items-start">
+                <div className="col-xxl-2 col-lg-2 col-12 col-md-2">
+                  <h6 className="mycawscollection-title">CAWS NFTs</h6>
+                </div>
+                <div
+                  className={
+                    this.state.viewall === false
+                      ? "cawscontaier"
+                      : "cawscontaier-open"
+                  }
+                >
+                  {mycaws.length > 0 &&
+                    this.props.coinbase !== null &&
+                    mycaws
+                      .slice(
+                        0,
+                        this.state.viewall === false && window.innerWidth > 756
+                          ? 2
+                          : this.state.viewall === false &&
+                            window.innerWidth <= 756 &&
+                            window.innerWidth > 500
+                          ? 1
+                          : this.state.viewall === false &&
+                            window.innerWidth <= 500
+                          ? 1
+                          : mycaws.length
+                      )
+                      .map((item, id) => {
+                        return (
+                          <NftCawCard
+                            key={id}
+                            nft={item}
+                            action={() => {
+                              window.location.assign("/earn");
+                            }}
+                            modalId="#newNftStake"
+                            coinbase={this.props.coinbase}
+                          />
+                        );
+                      })}
+                </div>
+                <button
+                  className="outline-btn"
+                  style={{
+                    height: "fit-content",
+                    display: mycaws.length > 4 ? "block" : "none",
+                  }}
+                  onClick={() => {
+                    this.setState({ viewall: !this.state.viewall });
+                  }}
+                >
+                  {this.state.viewall === false ? " View all" : "View less"}
+                </button>
+              </div>
             </div>
-            <div
-              className={
-                this.state.viewall === false
-                  ? "cawscontaier"
-                  : "cawscontaier-open"
-              }
-            >
-              {mycaws.length > 0 &&
-                this.props.coinbase !== null &&
-                mycaws
-                  .slice(
-                    0,
-                    this.state.viewall === false && window.innerWidth > 756
-                      ? 4
-                      : this.state.viewall === false &&
-                        window.innerWidth <= 756 &&
-                        window.innerWidth > 500
-                      ? 2
-                      : this.state.viewall === false && window.innerWidth <= 500
-                      ? 1
-                      : mycaws.length
-                  )
-                  .map((item, id) => {
-                    return (
-                      <NftCawCard
-                        key={id}
-                        nft={item}
-                        action={() => {
-                          window.location.assign("/earn");
-                        }}
-                        modalId="#newNftStake"
-                        coinbase={this.props.coinbase}
-                      />
-                    );
-                  })}
+          </div>
+          <div className="col-12 col-lg-6">
+            <div className="mycawsCollection position-relative mb-5">
+              <div className="nft-ethereum-tag p-2 d-flex align-items-center gap-2">
+                <img src={require("./assets/wethIcon.svg").default} alt="" />
+                <span className="nft-ethereum-span">Ethereum</span>
+              </div>
+              <div className="d-flex flex-column gap-2 justify-content-between align-items-start">
+                <div className="col-xxl-2 col-lg-2 col-12 col-md-2">
+                  <h6 className="mycawscollection-title">WoD NFTs</h6>
+                </div>
+                <div
+                  className={
+                    this.state.viewall === false
+                      ? "cawscontaier"
+                      : "cawscontaier-open"
+                  }
+                >
+                  {lands.length > 0 &&
+                    this.props.coinbase !== null &&
+                    lands
+                      .slice(
+                        0,
+                        this.state.viewall === false && window.innerWidth > 756
+                          ? 2
+                          : this.state.viewall === false &&
+                            window.innerWidth <= 756 &&
+                            window.innerWidth > 500
+                          ? 1
+                          : this.state.viewall === false &&
+                            window.innerWidth <= 500
+                          ? 1
+                          : lands.length
+                      )
+                      .map((item, id) => {
+                        return (
+                          <NftCawCard
+                            key={id}
+                            nft={item}
+                            action={() => {
+                              window.location.assign("/earn");
+                            }}
+                            modalId="#newNftStake"
+                            coinbase={this.props.coinbase}
+                          />
+                        );
+                      })}
+                </div>
+                <button
+                  className="outline-btn"
+                  style={{
+                    height: "fit-content",
+                    display: lands.length > 2 ? "block" : "none",
+                  }}
+                  onClick={() => {
+                    this.setState({ viewall: !this.state.viewall });
+                  }}
+                >
+                  {this.state.viewall === false ? " View all" : "View less"}
+                </button>
+              </div>
             </div>
-            <button
-              className="outline-btn"
-              style={{
-                height: "fit-content",
-                display: mycaws.length > 4 ? "block" : "none",
-              }}
-              onClick={() => {
-                this.setState({ viewall: !this.state.viewall });
-              }}
-            >
-              {this.state.viewall === false ? " View all" : "View less"}
-            </button>
           </div>
         </div>
 
@@ -2164,6 +2492,15 @@ export default class Subscription extends React.Component {
             );
           })}
         </div> */}
+      </div>
+    ) : (
+      <div
+        className="d-flex align-items-center justify-content-center"
+        style={{ minHeight: "65vh" }}
+      >
+        <div class="spinner-border text-info" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
       </div>
     );
   };

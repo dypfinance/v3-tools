@@ -31,6 +31,10 @@
   
 }
 
+.plans-feature{
+  width: 18% !important;
+}
+
 .current-tier-wrapper {
   background: rgba(38, 38, 79, 1);
   border: 2px solid #4ED5D2;
@@ -106,6 +110,7 @@
   border-radius: 12px;
   flex: 0 0 auto;
   width: 20%;
+  height: 100%;
 }
 
 
@@ -138,6 +143,34 @@
   background-repeat: no-repeat;
 }
 
+
+
+.plans-feature:first-child{
+  background-image: url('../assets/plansFeature1.svg') !important;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.plans-feature:nth-child(2){
+  background-image: url('../assets/plansFeature2.svg') !important;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.plans-feature:nth-child(3){
+  background-image: url('../assets/plansFeature3.svg') !important;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.plans-feature:nth-child(4){
+  background-image: url('../assets/plansFeature4.svg') !important;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.plans-feature:nth-child(5){
+  background-image: url('../assets/plansFeature5.svg') !important;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
 .key-icon-container {
   width: 48px;
   height: 48px;
@@ -155,6 +188,11 @@
   
 }
 @media screen and (max-width: 786px) {
+
+  .plans-feature{
+    width: 100% !important;
+  }
+
   .current-tier-wrapper{
     width: 60%;
   }
@@ -173,5 +211,7 @@
   }
   .key-features-card{
     width: 100%;
+    height: auto !important;
   }
+
 }
