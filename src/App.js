@@ -66,7 +66,7 @@ class App extends React.Component {
       windowWidth: 0,
       windowHeight: 0,
       subscribedPlatformTokenAmount: "...",
-      isPremium: false,
+      isPremium: null,
       hotPairs: [],
       networkId: 1,
       explorerNetworkId: 1,
@@ -220,7 +220,7 @@ class App extends React.Component {
         subscribedPlatformTokenAmountETH === '0' &&
         subscribedPlatformTokenAmountBNB === '0'
       ) {
-        this.setState({ subscribedPlatformTokenAmount: "0", isPremium: false });
+        this.setState({ subscribedPlatformTokenAmount: "0", isPremium: true });
       }
       if (subscribedPlatformTokenAmountAvax !== "0") {
         this.setState({
