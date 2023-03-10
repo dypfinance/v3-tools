@@ -526,11 +526,11 @@ export default class Subscription extends React.Component {
           .call()
           .then();
 
-        if (result !== 0) {
+        if (result != 0) {
           this.setState({ lockActive: true });
           this.setState({ loadspinner: false });
           this.setState({ isApproved: true });
-        } else if (result === 0) {
+        } else if (result == 0) {
           this.setState({ lockActive: false });
           this.setState({ loadspinner: false });
           this.setState({ isApproved: false });
@@ -541,11 +541,11 @@ export default class Subscription extends React.Component {
           .allowance(this.props.coinbase, bnbsubscribeAddress)
           .call()
           .then();
-        if (result !== 0) {
+        if (result != 0) {
           this.setState({ lockActive: true });
           this.setState({ loadspinner: false });
           this.setState({ isApproved: true });
-        } else if (result === 0) {
+        } else if (result == 0) {
           this.setState({ lockActive: false });
           this.setState({ loadspinner: false });
           this.setState({ isApproved: false });
@@ -556,11 +556,11 @@ export default class Subscription extends React.Component {
           .call()
           .then();
 
-        if (result !== 0) {
+        if (result != 0) {
           this.setState({ lockActive: true });
           this.setState({ loadspinner: false });
           this.setState({ isApproved: true });
-        } else if (result === 0) {
+        } else if (result == 0) {
           this.setState({ lockActive: false });
           this.setState({ loadspinner: false });
           this.setState({ isApproved: false });
