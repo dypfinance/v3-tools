@@ -198,7 +198,6 @@ const LandNftStakeCheckListModal = ({
   }, [ETHrewards]);
 
 
-  console.log(selectNftIds)
 
 
   useEffect(() => {
