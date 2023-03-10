@@ -433,15 +433,13 @@ export default class Subscription extends React.Component {
       this.fetchEthStaking();
       this.getAllBalance();
       this.props.onSubscribe()
-      // this.myNft().then();
-      // this.myStakes().then();
-      // this.myLandNft().then();
-      // this.myLandStakes().then();
+      this.myNft().then();
+      this.myStakes().then();
+      this.myLandNft().then();
+      this.myLandStakes().then();
     }
 
     if (this.props.networkId !== prevProps.networkId) {
-      // this.getDypBalance();
-
       if (this.props.networkId === 43114) {
         this.handleSubscriptionTokenChange(this.state.usdteAddress);
       } else if (this.props.networkId === 1) {
@@ -680,17 +678,19 @@ export default class Subscription extends React.Component {
 
   myStakes = async () => {
     let myStakes = await this.getStakesIds();
-    let stakes = myStakes.map((stake) => window.getNft(stake));
+    if(myStakes && myStakes.length > 0)
+   { let stakes = myStakes.map((stake) => window.getNft(stake));
     stakes = await Promise.all(stakes);
     stakes.reverse();
-    this.setState({ myStakess: stakes });
+    this.setState({ myStakess: stakes });}
   };
   myLandStakes = async () => {
     let myStakes = await this.getLandStakesIds();
-    let stakes = myStakes.map((stake) => window.getLandNft(stake));
+    if(myStakes && myStakes.length > 0)
+   { let stakes = myStakes.map((stake) => window.getLandNft(stake));
     stakes = await Promise.all(stakes);
     stakes.reverse();
-    this.setState({ landStakes: stakes });
+    this.setState({ landStakes: stakes });}
   };
 
   handleApprove = async (e) => {
