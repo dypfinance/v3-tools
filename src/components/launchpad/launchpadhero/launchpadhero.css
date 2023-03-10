@@ -143,6 +143,34 @@
   background-repeat: no-repeat;
 }
 
+
+
+.plans-feature:first-child{
+  background-image: url('../assets/plansFeature1.svg') !important;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.plans-feature:nth-child(2){
+  background-image: url('../assets/plansFeature2.svg') !important;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.plans-feature:nth-child(3){
+  background-image: url('../assets/plansFeature3.svg') !important;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.plans-feature:nth-child(4){
+  background-image: url('../assets/plansFeature4.svg') !important;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.plans-feature:nth-child(5){
+  background-image: url('../assets/plansFeature5.svg') !important;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
 .key-icon-container {
   width: 48px;
   height: 48px;

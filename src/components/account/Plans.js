@@ -17,7 +17,7 @@ import useWindowSize from "../../functions/useWindowSize";
 import launchpadIndicator from "../launchpad/assets/launchpadIndicator.svg";
 import greenCheck from "./assets/greenCheck.svg";
 import premiumDypTag from "./assets/premiumDypTag.png";
-import premiumDypBanner from "./assets/premiumDypBanner.png";
+import premiumDypBanner from "./assets/premiumDypBanner2.png";
 import KeyFeaturesCard from "../launchpad/launchpadhero/KeyFeaturesCard";
 
 const { BigNumber } = window;
@@ -814,7 +814,7 @@ export default class Subscription extends React.Component {
     },
     {
       icon: 'globe',
-      content: 'Access unique content and experiences only available in the World of Dypians.'
+      content: 'Access unique content and experiences only available in the WoD.'
     },
     {
       icon: 'coins',
@@ -1135,7 +1135,6 @@ export default class Subscription extends React.Component {
           </div>
           <div className="premium-dyp-wrapper">
             <img src={premiumDypBanner} className="premium-dyp-banner" alt="" />
-            <span className="premium-dyp-title">Premium Badge</span>
           </div>
           {/* <img src={premiumDyp} alt="premium dyp banner" className="premium-dyp-banner" /> */}
         </div>
