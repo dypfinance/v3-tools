@@ -31,6 +31,10 @@
   
 }
 
+.plans-feature{
+  width: 18% !important;
+}
+
 .current-tier-wrapper {
   background: rgba(38, 38, 79, 1);
   border: 2px solid #4ED5D2;
@@ -156,6 +160,11 @@
   
 }
 @media screen and (max-width: 786px) {
+
+  .plans-feature{
+    width: 100% !important;
+  }
+
   .current-tier-wrapper{
     width: 60%;
   }
@@ -176,4 +185,5 @@
     width: 100%;
     height: auto !important;
   }
+
 }

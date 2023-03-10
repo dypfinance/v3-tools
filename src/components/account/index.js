@@ -426,7 +426,7 @@ export default class Subscription extends React.Component {
     // Typical usage (don't forget to compare props):
 
     if(!this.props.appState.isPremium){
-      window.location.href = 'https://app.dypius.com/'
+      window.location.href = 'https://betatools.dyp.finance/'
     }
 
     if (this.props.coinbase !== prevProps.coinbase) {
@@ -468,7 +468,7 @@ export default class Subscription extends React.Component {
   componentDidMount() {
 
     if(!this.props.appState.isPremium){
-      window.location.href = 'https://app.dypius.com/'
+      window.location.href = 'https://betatools.dyp.finance/'
     }
     // window._refreshBalIntervalDyp = setInterval(this.getDypBalance, 2000);
        this.getAllBalance();

@@ -343,6 +343,12 @@ export default class Subscription extends React.Component {
   };
 
   componentDidUpdate(prevProps) {
+
+    if(this.props.appState.isPremium){
+      window.location.href = 'https://betatools.dyp.finance/account'
+    }
+
+
     // Typical usage (don't forget to compare props):
     if (this.props.coinbase !== prevProps.coinbase) {
       this.fetchUserPools();
@@ -380,6 +386,9 @@ export default class Subscription extends React.Component {
   }
 
   componentDidMount() {
+    if(this.props.isPremium){
+      window.location.href = 'https://betatools.dyp.finance/account'
+    }
     this.getDypBalance();
 
     this.setState({ coinbase: this.props.coinbase });
@@ -597,7 +606,9 @@ export default class Subscription extends React.Component {
       .send({ from: await window.getCoinbase() })
       .then(() => {
         this.setState({ loadspinnerSub: false, approveStatus: "success" });
-        this.props.onSubscribe();
+        this.props.onSubscribe()
+        window.location.href = 'https://betatools.dyp.finance/account'
+
       })
       .catch((e) => {
         this.setState({ status: e?.message });
@@ -786,589 +797,562 @@ export default class Subscription extends React.Component {
       "Guaranteed allocation to presales of new projects launched using our Launchpad",
     ];
 
-    const benefits = [
-      "DYP Tools administrative dashboard",
-      "Exclusive access to World of Dypians metaverse platform",
-      "Priority allocation to presales of new projects through Dypius Launchpad",
-      "Voting capabilities in the News section",
-      "Early access to upcoming features and updates",
-    ];
+   
 
-    const keyFeatures = [
-      {
-        icon: "users",
-        content: "Participate in community discussions and make an impact.",
-      },
-      {
-        icon: "coins",
-        content:
-          "Be among the first to find new projects before they hit the market.",
-      },
-      {
-        icon: "eye",
-        content: `Get a sneak peek at what's coming next and plan ahead.`,
-      },
-      {
-        icon: "globe",
-        content:
-          "Access unique content and experiences only available in the World of Dypians.",
-      },
-    ];
+  const benefits = [
+    'DYP Tools administrative dashboard',
+    'Exclusive access to World of Dypians metaverse platform',
+    'Priority allocation to presales of new projects through Dypius Launchpad',
+    'Voting capabilities in the News section',
+    'Early access to upcoming features and updates'
+  ]
+
+  const keyFeatures = [
+    {
+      icon: 'chart',
+      content: 'Easy access to a range of tools and features, all in one convenient location.'
+    },
+    {
+      icon: 'globe',
+      content: 'Access unique content and experiences only available in the World of Dypians.'
+    },
+    {
+      icon: 'coins',
+      content: 'Be among the first to find new projects before they hit the market.'
+    },
+    {
+      icon: 'notes',
+      content: `Vote instantly for your preferred news articles in real-time.`
+    },
+    {
+      icon: 'eye',
+      content: `Get a sneak peek at what's coming next and plan ahead.`
+    },
+  
+  ]
 
     return (
+      this.props.appState.isPremium ? 
+      <>
+      </>
+      :
       <div style={{ minHeight: "65vh" }}>
-        {/* <div className="row mt-5 gap-4 gap-lg-0">
-          <div className="col-12 col-lg-6 position-relative d-flex justify-content-center">
-            <div
-              className={`purplediv`}
-              style={{
-                top: "15px",
-                zIndex: 1,
-                left: "12px",
-                background:
-                  this.props.isPremium === false
-                    ? "#50AF95"
-                    : "#8E97CD",
-              }}
-            ></div>
-            <div
-              className={`row free-plan-container p-3 position-relative w-100 ${
-                this.props.isPremium === false && "green-border"
-              }`}
-            >
-              <div className="d-flex align-items-center gap-2">
-                <img
-                  src={require("./assets/freePlanIcon.svg").default}
-                  alt=""
-                />
-                <h6 className="free-plan-title">Free plan</h6>
-              </div>
-              <div className="col-12 col-lg-6">
-                <div className="d-flex flex-column gap-1 mt-3">
-                  {freePlanItems.map((item, index) => (
-                    <div
-                      key={index}
-                      className="free-plan-item d-flex align-items-center justify-content-between p-2"
-                    >
-                      <span className="free-plain-item-text">{item}</span>
-                      <img
-                        src={require("./assets/freeCheck.svg").default}
-                        alt=""
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="col-12 col-lg-6 free-plan-image"></div>
-              <div className="col-12 d-flex flex-column justify-content-end">
-                <hr className="form-divider my-4" style={{ height: "2px" }} />
-                <div className="d-flex flex-column">
-                  <span className="inactive-plan">Active</span>
-                  <span className="inactive-plan">Free plan</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-12 col-lg-6 position-relative d-flex justify-content-center">
-            <div
-              className="purplediv"
-              style={{
-                top: "15px",
-                zIndex: 1,
-                left: "12px",
-                background:
-                  this.props.isPremium === true
-                    ? "#50AF95"
-                    : "#8E97CD",
-              }}
-            ></div>
-            <div
-              className={`row free-plan-container p-3 position-relative w-100 ${
-                this.props.isPremium === true && "green-border"
-              }`}
-            >
-              <div className="d-flex align-items-center gap-2">
-                <img
-                  src={require("./assets/paidPlanIcon.svg").default}
-                  alt=""
-                />
-                <h6 className="free-plan-title">Dypian plan</h6>
-              </div>
-              <div className="col-12 col-lg-6">
-                <div className="d-flex flex-column gap-1 mt-3">
-                  {paidPlanItems.map((item, index) => (
-                    <div
-                      key={index}
-                      className="free-plan-item d-flex align-items-center justify-content-between p-2"
-                    >
-                      <span className="free-plain-item-text">{item}</span>
-                      <img
-                        src={require("./assets/freeCheck.svg").default}
-                        alt=""
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="col-12 col-lg-6 paid-plan-image"></div>
-              <div className="col-12">
-                {!this.props.isPremium ? (
-                  <>
-                    <div className="premiumbanner">
-                      <div className="d-flex align-items-center justify-content-between">
-                        <div
-                          style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: 5,
-                          }}
-                        >
-                          <h3 className="subscr-title">
-                            Lifetime subscription{" "}
-                          </h3>
-                          <p className="subscr-subtitle">
-                            The subscription tokens will be used to buy DYP
-                          </p>
-                        </div>
-                        <div>
-                          <div className="d-flex gap-2 flex-column flex-lg-row">
-                            <h3 className="subscr-price">75 USD</h3>
-                          </div>
-                          <p className="subscr-note">*Exclusive offer</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="d-flex justify-content-between align-items-center mt-3">
-                      <div
-                        style={{
-                          color: "#F7F7FC",
-                          fontSize: "14px",
-                          fontWeight: "500",
-                          lineHeight: "20px",
-                        }}
-                      >
-                        Subscribe <br></br> to the Dypian plan
-                      </div>
-                      <div
-                        className="btn filledbtn px-3 px-lg-5"
-                        style={{ whiteSpace: "pre" }}
-                        type=""
-                        onClick={() => {
-                          this.setState({
-                            subscribe_now: !this.state.subscribe_now,
-                          });
-                          this.props.networkId === 1
-                            ? this.handleSubscriptionTokenChange(
-                                this.state.wethAddress
-                              )
-                            : this.props.networkId === 56
-                            ? this.handleSubscriptionTokenChange(
-                                this.state.wbnbAddress
-                              )
-                            : this.handleSubscriptionTokenChange(
-                                this.state.wavaxAddress
-                              );
-                          this.handleCheckIfAlreadyApproved(
-                            this.props.networkId === 1
-                              ? this.state.wethAddress
-                              : this.props.networkId === 56
-                              ? this.state.wbnbAddress
-                              : this.state.wavaxAddress
-                          );
-                          this.props.networkId === 1
-                            ? this.setState({
-                                dropdownIcon: "weth",
-                                dropdownTitle: "WETH",
-                              })
-                            : this.props.networkId === 56
-                            ? this.setState({
-                                dropdownIcon: "wbnb",
-                                dropdownTitle: "WBNB",
-                              })
-                            : this.setState({
-                                dropdownIcon: "wavax",
-                                dropdownTitle: "WAVAX",
-                              });
-                        }}
-                      >
-                        Subscribe now
-                      </div>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className="premiumbanner">
-                      <div className="d-flex align-items-center justify-content-between">
-                        <div
-                          style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: 5,
-                          }}
-                        >
-                          <h3 className="subscr-title">Welcome premium user</h3>
-                        </div>
-                      
-                      </div>
-                    </div>
-                    <div className="d-flex justify-content-between align-items-center mt-3">
-                      <div
-                        style={{
-                          color: "#4FAD93",
-                          fontSize: "14px",
-                          fontWeight: "500",
-                          lineHeight: "20px",
-                        }}
-                      >
-                        Active <br></br> Dypian plan
-                      </div>
-                    </div>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
-        </div> */}
-        <div className="row mt-5">
-          <div className="d-flex flex-column">
-            <h6 className="plans-page-title">
-              Upgrade to Premium Membership and Unlock Exclusive Benefits Today!
-            </h6>
-            <p className="plans-page-desc mt-4">
-              The premium membership is designed to enhance your experience and
-              provide you with outstanding value.
-            </p>
-          </div>
-          <div className="d-flex flex-column flex-lg-row align-items-center align-items-lg-end justify-content-center justify-content-lg-between all-plans-wrapper mt-4">
-            <div className="plans-benefits d-flex align-items-center p-3">
-              <ul className="d-flex flex-column gap-3">
-                {benefits.map((item, index) => (
-                  <li key={index} className="d-flex align-items-center gap-2">
-                    <img
-                      src={greenCheck}
-                      className="green-check"
-                      alt="checkmark"
-                    />
-                    <span className="plans-benefit-title mb-0">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="premium-subscribe-wrapper p-3">
-              <div className="premium-gradient d-flex align-items-center justify-content-between p-3">
-                <div className="d-flex flex-column">
-                  <span className="premium-span">Premium</span>
-                  <h6 className="premium-price">$75</h6>
-                </div>
-                <img src={premiumDypTag} alt="premium dyp" />
-              </div>
-              <div
-                className="d-flex flex-column"
-                style={{ position: "relative", top: "-25px" }}
-              >
-                <span className="lifetime-subscription">
-                  Lifetime subscription
-                </span>
-                <span className="lifetime-desc">
-                  The subscription tokens will be used to buy and lock DYP
-                </span>
-              </div>
-              <div className="d-flex justify-content-end mt-0 mt-lg-3">
-                <div
-                  className="btn filledbtn px-3 px-lg-5"
-                  style={{ whiteSpace: "pre" }}
-                  type=""
-                  onClick={() => {
-                    this.setState({
-                      subscribe_now: !this.state.subscribe_now,
-                    });
-                    this.props.networkId === 1
-                      ? this.handleSubscriptionTokenChange(
-                          this.state.wethAddress
-                        )
-                      : this.props.networkId === 56
-                      ? this.handleSubscriptionTokenChange(
-                          this.state.wbnbAddress
-                        )
-                      : this.handleSubscriptionTokenChange(
-                          this.state.wavaxAddress
-                        );
-                    this.handleCheckIfAlreadyApproved(
-                      this.props.networkId === 1
-                        ? this.state.wethAddress
-                        : this.props.networkId === 56
-                        ? this.state.wbnbAddress
-                        : this.state.wavaxAddress
-                    );
-                    this.props.networkId === 1
-                      ? this.setState({
-                          dropdownIcon: "weth",
-                          dropdownTitle: "WETH",
-                        })
-                      : this.props.networkId === 56
-                      ? this.setState({
-                          dropdownIcon: "wbnb",
-                          dropdownTitle: "WBNB",
-                        })
-                      : this.setState({
-                          dropdownIcon: "wavax",
-                          dropdownTitle: "WAVAX",
-                        });
-                  }}
-                >
-                  Subscribe now
-                </div>
-              </div>
-            </div>
-            <div className="premium-dyp-wrapper">
+      {/* <div className="row mt-5 gap-4 gap-lg-0">
+        <div className="col-12 col-lg-6 position-relative d-flex justify-content-center">
+          <div
+            className={`purplediv`}
+            style={{
+              top: "15px",
+              zIndex: 1,
+              left: "12px",
+              background:
+                this.props.isPremium === false
+                  ? "#50AF95"
+                  : "#8E97CD",
+            }}
+          ></div>
+          <div
+            className={`row free-plan-container p-3 position-relative w-100 ${
+              this.props.isPremium === false && "green-border"
+            }`}
+          >
+            <div className="d-flex align-items-center gap-2">
               <img
-                src={premiumDypBanner}
-                className="premium-dyp-banner"
+                src={require("./assets/freePlanIcon.svg").default}
                 alt=""
               />
-              <span className="premium-dyp-title">Premium Badge</span>
+              <h6 className="free-plan-title">Free plan</h6>
             </div>
-            {/* <img src={premiumDyp} alt="premium dyp banner" className="premium-dyp-banner" /> */}
-          </div>
-          <div className="features-wrapper w-100 d-flex align-items-center justify-content-between my-5 flex-column flex-lg-row gap-3 gap-lg-0">
-            {keyFeatures.map((item) => (
-              <KeyFeaturesCard icon={item.icon} content={item.content} />
-            ))}
+            <div className="col-12 col-lg-6">
+              <div className="d-flex flex-column gap-1 mt-3">
+                {freePlanItems.map((item, index) => (
+                  <div
+                    key={index}
+                    className="free-plan-item d-flex align-items-center justify-content-between p-2"
+                  >
+                    <span className="free-plain-item-text">{item}</span>
+                    <img
+                      src={require("./assets/freeCheck.svg").default}
+                      alt=""
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="col-12 col-lg-6 free-plan-image"></div>
+            <div className="col-12 d-flex flex-column justify-content-end">
+              <hr className="form-divider my-4" style={{ height: "2px" }} />
+              <div className="d-flex flex-column">
+                <span className="inactive-plan">Active</span>
+                <span className="inactive-plan">Free plan</span>
+              </div>
+            </div>
           </div>
         </div>
-
-        {this.state.subscribe_now === true ? (
+        <div className="col-12 col-lg-6 position-relative d-flex justify-content-center">
           <div
-            className="subscribe-wrapper row mt-4 justify-content-end"
-            id="subscribe"
+            className="purplediv"
+            style={{
+              top: "15px",
+              zIndex: 1,
+              left: "12px",
+              background:
+                this.props.isPremium === true
+                  ? "#50AF95"
+                  : "#8E97CD",
+            }}
+          ></div>
+          <div
+            className={`row free-plan-container p-3 position-relative w-100 ${
+              this.props.isPremium === true && "green-border"
+            }`}
           >
-            <div className="subscribe-container p-3 position-relative">
-              <div
-                className="purplediv"
-                style={{ background: "#8E97CD" }}
-              ></div>
-              <div className="d-flex justify-content-between align-items-center">
-                <div className="d-flex align-items-center gap-2">
-                  <img src={coinStackIcon} alt="coin stack" />
-                  <h6 className="free-plan-title">Dypian Plan Subscription</h6>
-                </div>
-                <img
-                  src={require(`./assets/clearFieldIcon.svg`).default}
-                  height={28}
-                  width={28}
-                  className="cursor-pointer"
-                  onClick={() => this.setState({ subscribe_now: false })}
-                  alt="close subscription"
-                />
+            <div className="d-flex align-items-center gap-2">
+              <img
+                src={require("./assets/paidPlanIcon.svg").default}
+                alt=""
+              />
+              <h6 className="free-plan-title">Dypian plan</h6>
+            </div>
+            <div className="col-12 col-lg-6">
+              <div className="d-flex flex-column gap-1 mt-3">
+                {paidPlanItems.map((item, index) => (
+                  <div
+                    key={index}
+                    className="free-plan-item d-flex align-items-center justify-content-between p-2"
+                  >
+                    <span className="free-plain-item-text">{item}</span>
+                    <img
+                      src={require("./assets/freeCheck.svg").default}
+                      alt=""
+                    />
+                  </div>
+                ))}
               </div>
-              <div className="d-flex mt-4 align-items-end justify-content-between flex-column-reverse flex-lg-row w-100">
-                <div className="d-flex flex-column gap-3 subscribe-input-container">
-                  <span className="token-amount-placeholder">
-                    Select Subscription Token
-                  </span>
-                  {/* <div
-                      className="input-container px-0"
-                      style={{ width: "100%" }}
-                    >
-                      <input
-                        type="number"
-                        disabled
-                        min={1}
-                        max={365}
-                        id="token_amount"
-                        name="token_amount"
-                        placeholder=" "
-                        className="text-input"
-                        value={this.state.formattedPrice}
-                        style={{ width: "100%" }}
-                      />
-                      <label
-                        htmlFor="token_amount"
-                        className="label"
-                        onClick={() => focusInput("token_amount")}
-                      >
-                        Subscription Token Amount
-                      </label>
-                    </div> */}
-                  <div class="dropdown position relative">
-                    <button
-                      class={`btn launchpad-dropdown d-flex justify-content-between align-items-center dropdown-toggle w-100`}
-                      type="button"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                    >
+            </div>
+
+            <div className="col-12 col-lg-6 paid-plan-image"></div>
+            <div className="col-12">
+              {!this.props.isPremium ? (
+                <>
+                  <div className="premiumbanner">
+                    <div className="d-flex align-items-center justify-content-between">
                       <div
-                        className="d-flex align-items-center gap-2"
-                        style={{ color: "#fff" }}
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 5,
+                        }}
+                      >
+                        <h3 className="subscr-title">
+                          Lifetime subscription{" "}
+                        </h3>
+                        <p className="subscr-subtitle">
+                          The subscription tokens will be used to buy DYP
+                        </p>
+                      </div>
+                      <div>
+                        <div className="d-flex gap-2 flex-column flex-lg-row">
+                          <h3 className="subscr-price">75 USD</h3>
+                        </div>
+                        <p className="subscr-note">*Exclusive offer</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="d-flex justify-content-between align-items-center mt-3">
+                    <div
+                      style={{
+                        color: "#F7F7FC",
+                        fontSize: "14px",
+                        fontWeight: "500",
+                        lineHeight: "20px",
+                      }}
+                    >
+                      Subscribe <br></br> to the Dypian plan
+                    </div>
+                    <div
+                      className="btn filledbtn px-3 px-lg-5"
+                      style={{ whiteSpace: "pre" }}
+                      type=""
+                      onClick={() => {
+                        this.setState({
+                          subscribe_now: !this.state.subscribe_now,
+                        });
+                        this.props.networkId === 1
+                          ? this.handleSubscriptionTokenChange(
+                              this.state.wethAddress
+                            )
+                          : this.props.networkId === 56
+                          ? this.handleSubscriptionTokenChange(
+                              this.state.wbnbAddress
+                            )
+                          : this.handleSubscriptionTokenChange(
+                              this.state.wavaxAddress
+                            );
+                        this.handleCheckIfAlreadyApproved(
+                          this.props.networkId === 1
+                            ? this.state.wethAddress
+                            : this.props.networkId === 56
+                            ? this.state.wbnbAddress
+                            : this.state.wavaxAddress
+                        );
+                        this.props.networkId === 1
+                          ? this.setState({
+                              dropdownIcon: "weth",
+                              dropdownTitle: "WETH",
+                            })
+                          : this.props.networkId === 56
+                          ? this.setState({
+                              dropdownIcon: "wbnb",
+                              dropdownTitle: "WBNB",
+                            })
+                          : this.setState({
+                              dropdownIcon: "wavax",
+                              dropdownTitle: "WAVAX",
+                            });
+                      }}
+                    >
+                      Subscribe now
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="premiumbanner">
+                    <div className="d-flex align-items-center justify-content-between">
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 5,
+                        }}
+                      >
+                        <h3 className="subscr-title">Welcome premium user</h3>
+                      </div>
+                    
+                    </div>
+                  </div>
+                  <div className="d-flex justify-content-between align-items-center mt-3">
+                    <div
+                      style={{
+                        color: "#4FAD93",
+                        fontSize: "14px",
+                        fontWeight: "500",
+                        lineHeight: "20px",
+                      }}
+                    >
+                      Active <br></br> Dypian plan
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      </div> */}
+      <div className="row mt-5">
+        <div className="d-flex flex-column">
+        <h6 className="plans-page-title">
+        Upgrade to Premium Membership and Unlock Exclusive Benefits Today!
+        </h6>
+        <p className="plans-page-desc mt-4">
+        The premium membership is designed to enhance your experience and provide you with outstanding value.
+        </p>
+        </div>
+        <div className="d-flex flex-column flex-lg-row align-items-center align-items-lg-end justify-content-center justify-content-lg-between all-plans-wrapper mt-4">
+          <div className="plans-benefits d-flex align-items-center p-3">
+            <ul className="d-flex flex-column gap-3">
+              {benefits.map((item, index) => (
+                <li key={index} className="d-flex align-items-center gap-2">
+                  <img src={greenCheck} className="green-check" alt="checkmark" />
+                  <span className="plans-benefit-title mb-0">{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="premium-subscribe-wrapper p-3">
+            <div className="premium-gradient d-flex align-items-center justify-content-between p-3">
+              <div className="d-flex flex-column">
+                <span className="premium-span">
+                  Premium
+                </span>
+                <h6 className="premium-price">
+                $75
+                </h6>
+              </div>
+              <img src={premiumDypTag} alt="premium dyp" />
+            </div>
+             <div className="d-flex flex-column" style={{position: 'relative', top: '-25px'}}>
+             <span className="lifetime-subscription">Lifetime subscription</span>
+              <span className="lifetime-desc">The subscription tokens will be used to buy DYP</span>
+             </div>
+              <div className="d-flex justify-content-end mt-0 mt-lg-3">
+              <div
+                      className="btn filledbtn px-3 px-lg-5"
+                      style={{ whiteSpace: "pre" }}
+                      type=""
+                      onClick={() => {
+                        this.setState({
+                          subscribe_now: !this.state.subscribe_now,
+                        });
+                        this.props.networkId === 1
+                          ? this.handleSubscriptionTokenChange(
+                              this.state.wethAddress
+                            )
+                          : this.props.networkId === 56
+                          ? this.handleSubscriptionTokenChange(
+                              this.state.wbnbAddress
+                            )
+                          : this.handleSubscriptionTokenChange(
+                              this.state.wavaxAddress
+                            );
+                        this.handleCheckIfAlreadyApproved(
+                          this.props.networkId === 1
+                            ? this.state.wethAddress
+                            : this.props.networkId === 56
+                            ? this.state.wbnbAddress
+                            : this.state.wavaxAddress
+                        );
+                        this.props.networkId === 1
+                          ? this.setState({
+                              dropdownIcon: "weth",
+                              dropdownTitle: "WETH",
+                            })
+                          : this.props.networkId === 56
+                          ? this.setState({
+                              dropdownIcon: "wbnb",
+                              dropdownTitle: "WBNB",
+                            })
+                          : this.setState({
+                              dropdownIcon: "wavax",
+                              dropdownTitle: "WAVAX",
+                            });
+                      }}
+                    >
+                      Subscribe now
+                    </div>
+              </div>
+          </div>
+          <div className="premium-dyp-wrapper">
+            <img src={premiumDypBanner} className="premium-dyp-banner" alt="" />
+            <span className="premium-dyp-title">Premium Badge</span>
+          </div>
+          {/* <img src={premiumDyp} alt="premium dyp banner" className="premium-dyp-banner" /> */}
+        </div>
+        <div className="features-wrapper w-100 d-flex align-items-center justify-content-between my-5 flex-column flex-lg-row gap-3 gap-lg-0">
+   {keyFeatures.map((item) => (
+    <KeyFeaturesCard icon={item.icon} plansClass={'plans-feature'} content={item.content} /> 
+   ))}
+  </div>
+      </div>
+      
+      {this.state.subscribe_now === true ? (
+        <div
+          className="subscribe-wrapper row mt-4 justify-content-end"
+          id="subscribe"
+        >
+          <div className="subscribe-container p-3 position-relative">
+            <div
+              className="purplediv"
+              style={{ background: "#8E97CD" }}
+            ></div>
+            <div className="d-flex justify-content-between align-items-center">
+              <div className="d-flex align-items-center gap-2">
+                <img src={coinStackIcon} alt="coin stack" />
+                <h6 className="free-plan-title">Dypian Plan Subscription</h6>
+              </div>
+              <img
+                src={require(`./assets/clearFieldIcon.svg`).default}
+                height={28}
+                width={28}
+                className="cursor-pointer"
+                onClick={() => this.setState({ subscribe_now: false })}
+                alt="close subscription"
+              />
+            </div>
+            <div className="d-flex mt-4 align-items-end justify-content-between flex-column-reverse flex-lg-row w-100">
+              <div className="d-flex flex-column gap-3 subscribe-input-container">
+                <span className="token-amount-placeholder">
+                  Select Subscription Token
+                </span>
+                {/* <div
+                    className="input-container px-0"
+                    style={{ width: "100%" }}
+                  >
+                    <input
+                      type="number"
+                      disabled
+                      min={1}
+                      max={365}
+                      id="token_amount"
+                      name="token_amount"
+                      placeholder=" "
+                      className="text-input"
+                      value={this.state.formattedPrice}
+                      style={{ width: "100%" }}
+                    />
+                    <label
+                      htmlFor="token_amount"
+                      className="label"
+                      onClick={() => focusInput("token_amount")}
+                    >
+                      Subscription Token Amount
+                    </label>
+                  </div> */}
+                <div class="dropdown position relative">
+                  <button
+                    class={`btn launchpad-dropdown d-flex justify-content-between align-items-center dropdown-toggle w-100`}
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    <div
+                      className="d-flex align-items-center gap-2"
+                      style={{ color: "#fff" }}
+                    >
+                      <img
+                        src={
+                          require(`./assets/${this.state.dropdownIcon.toLowerCase()}Icon.svg`)
+                            .default
+                        }
+                        alt=""
+                      />
+                      {this.state.dropdownTitle}
+                    </div>
+                    <img src={launchpadIndicator} alt="" />
+                  </button>
+                  <ul class="dropdown-menu w-100">
+                    {/* <li className="dropdown-item launchpad-item d-flex align-items-center gap-2"
+                    onClick={() => {
+                      this.setState({dropdownTitle: 'WETH', dropdownIcon: 'wethIcon.svg'})
+                    }}
+                    >
+                      <img
+                        src={require(`./assets/wethIcon.svg`).default}
+                        alt=""
+                      />
+                      WETH
+                    </li>
+                    <li className="dropdown-item launchpad-item d-flex align-items-center gap-2"
+                    onClick={() => {
+                      this.setState({dropdownTitle: 'USDT', dropdownIcon: 'usdtIcon.svg'})
+                    }}
+                    >
+                      <img
+                        src={require(`./assets/usdtIcon.svg`).default}
+                        alt=""
+                      />
+                      USDT
+                    </li>
+                    <li className="dropdown-item launchpad-item d-flex align-items-center gap-2"
+                    onClick={() => {
+                      this.setState({dropdownTitle: 'USDC', dropdownIcon: 'usdcIcon.svg'})
+                    }}
+                    >
+                      <img
+                        src={require(`./assets/usdcIcon.svg`).default}
+                        alt=""
+                      />
+                      USDC
+                    </li> */}
+                    {Object.keys(
+                      this.props.networkId === 1
+                        ? window.config.subscriptioneth_tokens
+                        : this.props.networkId === 56
+                        ? window.config.subscriptionbnb_tokens
+                        : window.config.subscription_tokens
+                    ).map((t, i) => (
+                      // <span className="radio-wrapper" key={t}>
+                      //   <input
+                      //     type="radio"
+                      //     value={t}
+                      //     name={"tokensymbol"}
+                      //     checked={
+                      //       t == this.state.selectedSubscriptionToken
+                      //     }
+                      //     disabled={!this.props.appState.isConnected}
+                      //     onChange={
+                      //       (e) => {
+                      //         this.handleSubscriptionTokenChange(
+                      //           e.target.value
+                      //         );
+                      //         this.handleCheckIfAlreadyApproved();
+                      //       console.log(e.target.value);
+
+                      //       }
+
+                      //     }
+                      //   />
+                      //   {this.props.networkId === 1
+                      //     ? window.config.subscriptioneth_tokens[t]?.symbol
+                      //     : window.config.subscription_tokens[t]?.symbol}
+                      // </span>
+                      <li
+                      key={i}
+                        className="dropdown-item launchpad-item d-flex align-items-center gap-2"
+                        onClick={() => {
+                          this.setState({
+                            dropdownTitle:
+                              this.props.networkId === 1
+                                ? window.config.subscriptioneth_tokens[t]
+                                    ?.symbol
+                                : this.props.networkId === 56
+                                ? window.config.subscriptionbnb_tokens[t]
+                                    ?.symbol
+                                : window.config.subscription_tokens[t]
+                                    ?.symbol,
+                            dropdownIcon:
+                              this.props.networkId === 1
+                                ? window.config.subscriptioneth_tokens[t]
+                                    ?.symbol
+                                : this.props.networkId === 56
+                                ? window.config.subscriptionbnb_tokens[t]
+                                    ?.symbol
+                                : window.config.subscription_tokens[t]
+                                    ?.symbol,
+                          });
+                          // console.log(t);
+                          this.handleSubscriptionTokenChange(t);
+                          this.handleCheckIfAlreadyApproved(t);
+                        }}
                       >
                         <img
                           src={
-                            require(`./assets/${this.state.dropdownIcon.toLowerCase()}Icon.svg`)
-                              .default
+                            this.props.networkId === 1
+                              ? require(`./assets/${window.config.subscriptioneth_tokens[
+                                  t
+                                ]?.symbol.toLowerCase()}Icon.svg`).default
+                              : this.props.networkId === 56
+                              ? require(`./assets/${window.config.subscriptionbnb_tokens[
+                                  t
+                                ]?.symbol.toLowerCase()}Icon.svg`).default
+                              : require(`./assets/${window.config.subscription_tokens[
+                                  t
+                                ]?.symbol.toLowerCase()}Icon.svg`).default
                           }
                           alt=""
                         />
-                        {this.state.dropdownTitle}
-                      </div>
-                      <img src={launchpadIndicator} alt="" />
-                    </button>
-                    <ul class="dropdown-menu w-100">
-                      {/* <li className="dropdown-item launchpad-item d-flex align-items-center gap-2"
-                      onClick={() => {
-                        this.setState({dropdownTitle: 'WETH', dropdownIcon: 'wethIcon.svg'})
-                      }}
-                      >
-                        <img
-                          src={require(`./assets/wethIcon.svg`).default}
-                          alt=""
-                        />
-                        WETH
-                      </li>
-                      <li className="dropdown-item launchpad-item d-flex align-items-center gap-2"
-                      onClick={() => {
-                        this.setState({dropdownTitle: 'USDT', dropdownIcon: 'usdtIcon.svg'})
-                      }}
-                      >
-                        <img
-                          src={require(`./assets/usdtIcon.svg`).default}
-                          alt=""
-                        />
-                        USDT
-                      </li>
-                      <li className="dropdown-item launchpad-item d-flex align-items-center gap-2"
-                      onClick={() => {
-                        this.setState({dropdownTitle: 'USDC', dropdownIcon: 'usdcIcon.svg'})
-                      }}
-                      >
-                        <img
-                          src={require(`./assets/usdcIcon.svg`).default}
-                          alt=""
-                        />
-                        USDC
-                      </li> */}
-                      {Object.keys(
-                        this.props.networkId === 1
-                          ? window.config.subscriptioneth_tokens
+                        {this.props.networkId === 1
+                          ? window.config.subscriptioneth_tokens[t]?.symbol
                           : this.props.networkId === 56
-                          ? window.config.subscriptionbnb_tokens
-                          : window.config.subscription_tokens
-                      ).map((t, i) => (
-                        // <span className="radio-wrapper" key={t}>
-                        //   <input
-                        //     type="radio"
-                        //     value={t}
-                        //     name={"tokensymbol"}
-                        //     checked={
-                        //       t == this.state.selectedSubscriptionToken
-                        //     }
-                        //     disabled={!this.props.appState.isConnected}
-                        //     onChange={
-                        //       (e) => {
-                        //         this.handleSubscriptionTokenChange(
-                        //           e.target.value
-                        //         );
-                        //         this.handleCheckIfAlreadyApproved();
-                        //       console.log(e.target.value);
-
-                        //       }
-
-                        //     }
-                        //   />
-                        //   {this.props.networkId === 1
-                        //     ? window.config.subscriptioneth_tokens[t]?.symbol
-                        //     : window.config.subscription_tokens[t]?.symbol}
-                        // </span>
-                        <li
-                          key={i}
-                          className="dropdown-item launchpad-item d-flex align-items-center gap-2"
-                          onClick={() => {
-                            this.setState({
-                              dropdownTitle:
-                                this.props.networkId === 1
-                                  ? window.config.subscriptioneth_tokens[t]
-                                      ?.symbol
-                                  : this.props.networkId === 56
-                                  ? window.config.subscriptionbnb_tokens[t]
-                                      ?.symbol
-                                  : window.config.subscription_tokens[t]
-                                      ?.symbol,
-                              dropdownIcon:
-                                this.props.networkId === 1
-                                  ? window.config.subscriptioneth_tokens[t]
-                                      ?.symbol
-                                  : this.props.networkId === 56
-                                  ? window.config.subscriptionbnb_tokens[t]
-                                      ?.symbol
-                                  : window.config.subscription_tokens[t]
-                                      ?.symbol,
-                            });
-                            // console.log(t);
-                            this.handleSubscriptionTokenChange(t);
-                            this.handleCheckIfAlreadyApproved(t);
-                          }}
-                        >
-                          <img
-                            src={
-                              this.props.networkId === 1
-                                ? require(`./assets/${window.config.subscriptioneth_tokens[
-                                    t
-                                  ]?.symbol.toLowerCase()}Icon.svg`).default
-                                : this.props.networkId === 56
-                                ? require(`./assets/${window.config.subscriptionbnb_tokens[
-                                    t
-                                  ]?.symbol.toLowerCase()}Icon.svg`).default
-                                : require(`./assets/${window.config.subscription_tokens[
-                                    t
-                                  ]?.symbol.toLowerCase()}Icon.svg`).default
-                            }
-                            alt=""
-                          />
-                          {this.props.networkId === 1
-                            ? window.config.subscriptioneth_tokens[t]?.symbol
-                            : this.props.networkId === 56
-                            ? window.config.subscriptionbnb_tokens[t]?.symbol
-                            : window.config.subscription_tokens[t]?.symbol}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-                <div className="d-flex flex-column align-items-end justify-content-lg-end">
-                  <span className="token-balance-placeholder">
-                    Token Balance
-                  </span>
-                  <h6 className="account-token-amount">
-                    {" "}
-                    {getFormattedNumber(
-                      this.state.tokenBalance / 10 ** tokenDecimals,
-                      6
-                    )}
-                  </h6>
+                          ? window.config.subscriptionbnb_tokens[t]?.symbol
+                          : window.config.subscription_tokens[t]?.symbol}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
-              <div
-                className="subscription-token-wrapper  p-2 d-flex align-items-center justify-content-between  mt-3"
-                style={{ width: "100%" }}
-              >
-                <span className="token-amount-placeholder">
-                  Subscription price:
+              <div className="d-flex flex-column align-items-end justify-content-lg-end">
+                <span className="token-balance-placeholder">
+                  Token Balance
                 </span>
-                <div className="d-flex align-items-center gap-2">
-                  <span className="usdt-text">
-                    {this.state.formattedPrice.slice(0, 9)}
-                  </span>
-
-                  <img
-                    src={
-                      require(`./assets/${this.state.dropdownIcon.toLowerCase()}Icon.svg`)
-                        .default
-                    }
-                    height={24}
-                    width={24}
-                    alt="usdt"
-                  />
-                </div>
+                <h6 className="account-token-amount">
+                  {" "}
+                  {getFormattedNumber(
+                    this.state.tokenBalance / 10 ** tokenDecimals,
+                    6
+                  )}
+                </h6>
               </div>
               <hr className="form-divider my-4" />
               <div className="d-flex flex-column gap-2 justify-content-end align-items-center">
@@ -1409,13 +1393,82 @@ export default class Subscription extends React.Component {
                 <span style={{ color: "#E30613" }}>{this.state.status}</span>
               </div>
             </div>
+            <hr className="form-divider my-4" />
+            <div className="d-flex justify-content-end align-items-center">
+              <button
+                className="btn success-button px-4"
+                onClick={(e) =>
+                  this.state.isApproved === false
+                    ? this.handleApprove(e)
+                    : this.handleSubscribe()
+                }
+              >
+                {this.state.isApproved === true &&
+                this.state.loadspinner === false ? (
+                  "Subscribe"
+                ) : this.state.isApproved === false &&
+                  this.state.loadspinner === false ? (
+                  "Approve"
+                ) : (
+                  <div
+                    className="spinner-border "
+                    role="status"
+                    style={{ height: "1.5rem", width: "1.5rem" }}
+                  ></div>
+                )}
+              </button>
+            </div>
           </div>
-        ) : (
-          <></>
-        )}
-        {/* <form onSubmit={this.handleSubscribe}>     
-          <div>
-            {!this.props.isPremium ? (
+        </div>
+      ) : (
+        <></>
+      )}
+      {/* <form onSubmit={this.handleSubscribe}>     
+        <div>
+          {!this.props.isPremium ? (
+            <table className="w-100">
+              <tr
+                className="tablerow"
+                style={{ position: "relative", top: "-10px" }}
+              >
+                <th className="tableheader"></th>
+                <th className="tableheader freetext">
+                  <img
+                    src={this.props.theme === "theme-dark" ? FreeWhite : Free}
+                    alt=""
+                  />{" "}
+                  Free
+                </th>
+                <th className="tableheader premiumtext">
+                  <img src={Premium} alt="" /> Premium
+                </th>
+              </tr>
+              {benefits.length > 0 &&
+                benefits.map((item, key) => {
+                  return (
+                    <>
+                      <tr key={key} className="tablerow">
+                        <td className="tabledata">{item.title}</td>
+                        <td className="tabledata">
+                          <img
+                            src={item.free === "yes" ? Check : Cross}
+                            alt=""
+                            className="itemdataimg"
+                          />{" "}
+                        </td>
+                        <td className="tabledata">
+                          <img
+                            src={item.premium === "yes" ? Check : Cross}
+                            alt=""
+                          />
+                        </td>
+                      </tr>
+                    </>
+                  );
+                })}
+            </table>
+          ) : (
+            <>
               <table className="w-100">
                 <tr
                   className="tablerow"
@@ -1424,7 +1477,9 @@ export default class Subscription extends React.Component {
                   <th className="tableheader"></th>
                   <th className="tableheader freetext">
                     <img
-                      src={this.props.theme === "theme-dark" ? FreeWhite : Free}
+                      src={
+                        this.props.theme === "theme-dark" ? FreeWhite : Free
+                      }
                       alt=""
                     />{" "}
                     Free
@@ -1434,16 +1489,17 @@ export default class Subscription extends React.Component {
                   </th>
                 </tr>
                 {benefits.length > 0 &&
-                  benefits.map((item, key) => {
+                  benefits.slice(0, 1).map((item, key) => {
                     return (
                       <>
                         <tr key={key} className="tablerow">
-                          <td className="tabledata">{item.title}</td>
+                          <td className="tabledata" style={{ width: "79%" }}>
+                            {item.title}
+                          </td>
                           <td className="tabledata">
                             <img
                               src={item.free === "yes" ? Check : Cross}
                               alt=""
-                              className="itemdataimg"
                             />{" "}
                           </td>
                           <td className="tabledata">
@@ -1457,40 +1513,33 @@ export default class Subscription extends React.Component {
                     );
                   })}
               </table>
-            ) : (
-              <>
+
+              <Collapsible
+                trigger={this.state.triggerText}
+                onClose={() => {
+                  this.setState({ triggerText: "See more V" });
+                }}
+                onOpen={() => {
+                  this.setState({ triggerText: "See less Ʌ" });
+                }}
+              >
                 <table className="w-100">
-                  <tr
-                    className="tablerow"
-                    style={{ position: "relative", top: "-10px" }}
-                  >
-                    <th className="tableheader"></th>
-                    <th className="tableheader freetext">
-                      <img
-                        src={
-                          this.props.theme === "theme-dark" ? FreeWhite : Free
-                        }
-                        alt=""
-                      />{" "}
-                      Free
-                    </th>
-                    <th className="tableheader premiumtext">
-                      <img src={Premium} alt="" /> Premium
-                    </th>
-                  </tr>
                   {benefits.length > 0 &&
-                    benefits.slice(0, 1).map((item, key) => {
+                    benefits.slice(1, benefits.length).map((item, key) => {
                       return (
                         <>
                           <tr key={key} className="tablerow">
-                            <td className="tabledata" style={{ width: "79%" }}>
+                            <td
+                              className="tabledata"
+                              style={{ width: "77%" }}
+                            >
                               {item.title}
                             </td>
                             <td className="tabledata">
                               <img
                                 src={item.free === "yes" ? Check : Cross}
                                 alt=""
-                              />{" "}
+                              />
                             </td>
                             <td className="tabledata">
                               <img
@@ -1503,445 +1552,406 @@ export default class Subscription extends React.Component {
                       );
                     })}
                 </table>
+              </Collapsible>
+            </>
+          )}
 
-                <Collapsible
-                  trigger={this.state.triggerText}
-                  onClose={() => {
-                    this.setState({ triggerText: "See more V" });
-                  }}
-                  onOpen={() => {
-                    this.setState({ triggerText: "See less Ʌ" });
-                  }}
-                >
-                  <table className="w-100">
-                    {benefits.length > 0 &&
-                      benefits.slice(1, benefits.length).map((item, key) => {
-                        return (
-                          <>
-                            <tr key={key} className="tablerow">
-                              <td
-                                className="tabledata"
-                                style={{ width: "77%" }}
-                              >
-                                {item.title}
-                              </td>
-                              <td className="tabledata">
-                                <img
-                                  src={item.free === "yes" ? Check : Cross}
-                                  alt=""
-                                />
-                              </td>
-                              <td className="tabledata">
-                                <img
-                                  src={item.premium === "yes" ? Check : Cross}
-                                  alt=""
-                                />
-                              </td>
-                            </tr>
-                          </>
-                        );
-                      })}
-                  </table>
-                </Collapsible>
-              </>
-            )}
-
-           
-          </div>
-          {!this.props.isPremium ? (   
-            this.state.subscribe_now === true ? (
-              <>
-                <div className="mt-4 ml-0">
-                  <div className="row m-0" style={{ gap: 100 }}>
-                    <div
-                      className="form-group"
-                      style={{ maxWidth: 490, width: "100%" }}
-                    >
-                      <p>Select Subscription Token</p>
-                      <div className="row m-0" style={{ gap: 10 }}>
-                        {Object.keys(
-                          this.props.networkId === 1
-                            ? window.config.subscriptioneth_tokens
-                            : window.config.subscription_tokens
-                        ).map((t, i) => (
-                          <span className="radio-wrapper" key={t}>
-                            <input
-                              type="radio"
-                              value={t}
-                              name={"tokensymbol"}
-                              checked={
-                                t == this.state.selectedSubscriptionToken
-                              }
-                              disabled={!this.props.appState.isConnected}
-                              onChange={
-                                (e) => {
-                                  this.handleSubscriptionTokenChange(
-                                    e.target.value
-                                  );
-                                  this.handleCheckIfAlreadyApproved();
-                                console.log(e.target.value);
-
-                                }
-
-                              }
-                            />
-                            {this.props.networkId === 1
-                              ? window.config.subscriptioneth_tokens[t]?.symbol
-                              : window.config.subscription_tokens[t]?.symbol}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="form-group">
-                      <div>
-                        <p>Token Amount</p>
-                        <span className="subscription-subtitle">
-                          Subcription token amount
-                        </span>
-                        <div
-                          className="align-items-center row m-0"
-                          style={{ gap: 40 }}
-                        >
-                          <input
-                            style={{ width: "266px", height: 42 }}
-                            disabled
-                            onChange={(e) => {
-                              let amount = new window.BigNumber(e.target.value);
-                              amount = amount.times(1e18).toFixed(0);
-                              this.setState({ amount });
-                            }}
-                            value={this.state.formattedPrice}
-                            type="number"
-                            placeholder="Subscription Token Amount"
-                            className="form-control"
-                          />
-                          <div className="d-flex flex-column">
-                            <span className="balance-placeholder">
-                              Balance:
-                            </span>
-                            <span className="balance-text">
-                              {getFormattedNumber(
-                                this.state.tokenBalance / 10 ** tokenDecimals,
-                                6
-                              )}
-                            </span>
-                          </div>
-                        </div>
-                        <br />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="row m-0" style={{ gap: 30 }}>
-                    <button
-                      disabled={!this.props.appState.isConnected}
-                      onClick={this.handleApprove}
-                      className="btn v1"
-                      style={{
-                        background:
-                          this.state.lockActive === false
-                            ? "linear-gradient(51.32deg, #E30613 -12.3%, #FA4A33 50.14%)"
-                            : "#C4C4C4",
-                        width: 230,
-                        pointerEvents:
-                          this.state.lockActive === false ? "auto" : "none",
-                      }}
-                      type="button"
-                    >
-                      {this.state.loadspinner === true ? (
-                        <>
-                          <div
-                            className="spinner-border "
-                            role="status"
-                            style={{ height: "1.5rem", width: "1.5rem" }}
-                          ></div>
-                        </>
-                      ) : (
-                        "APPROVE"
-                      )}
-                    </button>
-                    <button
-                      disabled={!this.props.appState.isConnected}
-                      className="btn v1 ml-0"
-                      type="submit"
-                      style={{
-                        background:
-                          this.state.lockActive === false
-                            ? "#C4C4C4"
-                            : "linear-gradient(51.32deg, #E30613 -12.3%, #FA4A33 50.14%)",
-                        width: 230,
-                        pointerEvents:
-                          this.state.lockActive === false ? "none" : "auto",
-                      }}
-                    >
-                      {this.state.loadspinnerSub === true ? (
-                        <>
-                          <div
-                            className="spinner-border "
-                            role="status"
-                            style={{ height: "1.5rem", width: "1.5rem" }}
-                          ></div>
-                        </>
-                      ) : (
-                        "SUBSCRIBE"
-                      )}
-                    </button>
-                  </div>
-                  {this.state.status !== "" && (
-                    <div className="status-wrapper">
-                      <p style={{ color: "#E30613" }}>
-                        <img src={Error} alt="" /> {this.state.status}
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </>
-            ) : (
-              <></>
-            )
-          ) : (
+         
+        </div>
+        {!this.props.isPremium ? (   
+          this.state.subscribe_now === true ? (
             <>
-              <div>
-              <p>
-                <i className="fas fa-check-circle"></i> Premium Member 
-              </p>
-              <p>
-                DYP Locked in Subscription:{" "}
-                {getFormattedNumber(
-                  this.props.appState.subscribedPlatformTokenAmount / 1e18,
-                  6
-                )}{" "}
-                DYP
-              </p>
-              
-            </div>
-              <div className="premiumbanner2">
-                <div className="row m-0 justify-content-between">
+              <div className="mt-4 ml-0">
+                <div className="row m-0" style={{ gap: 100 }}>
                   <div
+                    className="form-group"
+                    style={{ maxWidth: 490, width: "100%" }}
+                  >
+                    <p>Select Subscription Token</p>
+                    <div className="row m-0" style={{ gap: 10 }}>
+                      {Object.keys(
+                        this.props.networkId === 1
+                          ? window.config.subscriptioneth_tokens
+                          : window.config.subscription_tokens
+                      ).map((t, i) => (
+                        <span className="radio-wrapper" key={t}>
+                          <input
+                            type="radio"
+                            value={t}
+                            name={"tokensymbol"}
+                            checked={
+                              t == this.state.selectedSubscriptionToken
+                            }
+                            disabled={!this.props.appState.isConnected}
+                            onChange={
+                              (e) => {
+                                this.handleSubscriptionTokenChange(
+                                  e.target.value
+                                );
+                                this.handleCheckIfAlreadyApproved();
+                              console.log(e.target.value);
+
+                              }
+
+                            }
+                          />
+                          {this.props.networkId === 1
+                            ? window.config.subscriptioneth_tokens[t]?.symbol
+                            : window.config.subscription_tokens[t]?.symbol}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <div>
+                      <p>Token Amount</p>
+                      <span className="subscription-subtitle">
+                        Subcription token amount
+                      </span>
+                      <div
+                        className="align-items-center row m-0"
+                        style={{ gap: 40 }}
+                      >
+                        <input
+                          style={{ width: "266px", height: 42 }}
+                          disabled
+                          onChange={(e) => {
+                            let amount = new window.BigNumber(e.target.value);
+                            amount = amount.times(1e18).toFixed(0);
+                            this.setState({ amount });
+                          }}
+                          value={this.state.formattedPrice}
+                          type="number"
+                          placeholder="Subscription Token Amount"
+                          className="form-control"
+                        />
+                        <div className="d-flex flex-column">
+                          <span className="balance-placeholder">
+                            Balance:
+                          </span>
+                          <span className="balance-text">
+                            {getFormattedNumber(
+                              this.state.tokenBalance / 10 ** tokenDecimals,
+                              6
+                            )}
+                          </span>
+                        </div>
+                      </div>
+                      <br />
+                    </div>
+                  </div>
+                </div>
+                <div className="row m-0" style={{ gap: 30 }}>
+                  <button
+                    disabled={!this.props.appState.isConnected}
+                    onClick={this.handleApprove}
+                    className="btn v1"
                     style={{
-                      maxWidth: 335,
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: 10,
+                      background:
+                        this.state.lockActive === false
+                          ? "linear-gradient(51.32deg, #E30613 -12.3%, #FA4A33 50.14%)"
+                          : "#C4C4C4",
+                      width: 230,
+                      pointerEvents:
+                        this.state.lockActive === false ? "auto" : "none",
+                    }}
+                    type="button"
+                  >
+                    {this.state.loadspinner === true ? (
+                      <>
+                        <div
+                          className="spinner-border "
+                          role="status"
+                          style={{ height: "1.5rem", width: "1.5rem" }}
+                        ></div>
+                      </>
+                    ) : (
+                      "APPROVE"
+                    )}
+                  </button>
+                  <button
+                    disabled={!this.props.appState.isConnected}
+                    className="btn v1 ml-0"
+                    type="submit"
+                    style={{
+                      background:
+                        this.state.lockActive === false
+                          ? "#C4C4C4"
+                          : "linear-gradient(51.32deg, #E30613 -12.3%, #FA4A33 50.14%)",
+                      width: 230,
+                      pointerEvents:
+                        this.state.lockActive === false ? "none" : "auto",
                     }}
                   >
-                    <h3 className="subscr-title">Welcome Premium User</h3>
-                    <p className="subscr-subtitle">
-                      When you unsubscribe the DYP will be unlocked and sent to
-                      your wallet
+                    {this.state.loadspinnerSub === true ? (
+                      <>
+                        <div
+                          className="spinner-border "
+                          role="status"
+                          style={{ height: "1.5rem", width: "1.5rem" }}
+                        ></div>
+                      </>
+                    ) : (
+                      "SUBSCRIBE"
+                    )}
+                  </button>
+                </div>
+                {this.state.status !== "" && (
+                  <div className="status-wrapper">
+                    <p style={{ color: "#E30613" }}>
+                      <img src={Error} alt="" /> {this.state.status}
                     </p>
                   </div>
-                  <div>
-                    <button
-                      disabled={!this.props.appState.isConnected}
-                      onClick={this.handleUnsubscribe}
-                      className="savebtn w-auto mt-2 v1"
-                      type="button"
-                      style={{ padding: "10px 20px" }}
-                    >
-                      Unsubscribe
-                    </button>
+                )}
+              </div>
+            </>
+          ) : (
+            <></>
+          )
+        ) : (
+          <>
+            <div>
+            <p>
+              <i className="fas fa-check-circle"></i> Premium Member 
+            </p>
+            <p>
+              DYP Locked in Subscription:{" "}
+              {getFormattedNumber(
+                this.props.appState.subscribedPlatformTokenAmount / 1e18,
+                6
+              )}{" "}
+              DYP
+            </p>
+            
+          </div>
+            <div className="premiumbanner2">
+              <div className="row m-0 justify-content-between">
+                <div
+                  style={{
+                    maxWidth: 335,
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 10,
+                  }}
+                >
+                  <h3 className="subscr-title">Welcome Premium User</h3>
+                  <p className="subscr-subtitle">
+                    When you unsubscribe the DYP will be unlocked and sent to
+                    your wallet
+                  </p>
+                </div>
+                <div>
+                  <button
+                    disabled={!this.props.appState.isConnected}
+                    onClick={this.handleUnsubscribe}
+                    className="savebtn w-auto mt-2 v1"
+                    type="button"
+                    style={{ padding: "10px 20px" }}
+                  >
+                    Unsubscribe
+                  </button>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+      </form> */}
+
+      {/* <h4 className="d-block mb-5 mt-5" id="my-fav">
+        My favourite pairs
+      </h4>
+      <div className="row p-0 m-0 favorites-grid">
+        {this.state.favorites.map((lock, index) => {
+          return (
+            <NavLink
+              key={index}
+              className="p-0"
+              to={`/pair-explorer/${lock.id}`}
+            >
+              <div style={{ position: "relative" }}>
+                <div
+                  className="d-flex avax"
+                  style={{
+                    border: "2px solid #565891",
+                    borderRadius: "12px",
+                  }}
+                >
+                  <div
+                    className="d-flex justify-content-center align-items-center"
+                    style={{
+                      position: "absolute",
+                      top: "-17px",
+                      left: "50%",
+                      width: "115px",
+                      height: "34px",
+                      transform: "translateX(-50%)",
+                      borderRadius: "50px",
+                      background:
+                        "linear-gradient(93.99deg, #DF2C2D 0%, #F86465 100%)",
+                      gap: "5px",
+                    }}
+                  >
+                    <img
+                      src={require("../../assets/wavax.svg").default}
+                      alt=""
+                      style={{ height: 20, width: 20 }}
+                    ></img>
+                    <div style={{ color: "#F7F7FC" }}>Avalanche</div>
+                  </div>
+
+                  <div className="pair-locks-wrapper">
+                    <div className="row-wrapper">
+                      <span className="left-info-text">ID</span>
+                      <span className="right-info-text">{index + 1}</span>
+                    </div>
+                    <div className="row-wrapper">
+                      <span className="left-info-text">Pair Address</span>
+                      <span className="right-info-text">
+                        ...{lock.id.slice(35)}
+                      </span>
+                    </div>
+                    <div className="row-wrapper">
+                      <span className="left-info-text">Tokens</span>
+                      <span className="right-info-text">
+                        {lock.token0.symbol}/{lock.token1.symbol}
+                      </span>
+                    </div>
+                    <div className="row-wrapper">
+                      <span className="left-info-text">Total liquidity</span>
+                      <span className="right-info-text">
+                        {getFormattedNumber(lock.reserveUSD, 2)}
+                      </span>
+                    </div>
+                    <div className="row-wrapper">
+                      <span className="left-info-text">
+                        Pooled {lock.token0.symbol}
+                      </span>
+                      <span className="right-info-text">
+                        {getFormattedNumber(lock.reserve0, 2)}
+                      </span>
+                    </div>
+                    <div className="row-wrapper">
+                      <span className="left-info-text">
+                        Pooled {lock.token1.symbol}
+                      </span>
+                      <span className="right-info-text">
+                        {getFormattedNumber(lock.reserve1, 2)}
+                      </span>
+                    </div>
+                    <div className="row-wrapper">
+                      <span className="left-info-text">LP Holders</span>
+                      <span className="right-info-text">
+                        {lock.liquidityProviderCount}
+                      </span>
+                    </div>
+                    <div className="row-wrapper">
+                      <span className="left-info-text">
+                        Pair transactions:
+                      </span>
+                      <span className="right-info-text">{lock.txCount}</span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </>
-          )}
-        </form> */}
-
-        {/* <h4 className="d-block mb-5 mt-5" id="my-fav">
-          My favourite pairs
-        </h4>
-        <div className="row p-0 m-0 favorites-grid">
-          {this.state.favorites.map((lock, index) => {
-            return (
-              <NavLink
-                key={index}
-                className="p-0"
-                to={`/pair-explorer/${lock.id}`}
-              >
-                <div style={{ position: "relative" }}>
+            </NavLink>
+          );
+        })}
+        {this.state.favoritesETH.map((lock, index) => {
+          return (
+            <NavLink
+              key={index}
+              className="p-0"
+              to={`/pair-explorer/${lock.id}`}
+              onClick={() => {
+                this.props.handleSwitchNetwork(1);
+              }}
+            >
+              <div style={{ position: "relative" }}>
+                <div
+                  className="d-flex"
+                  style={{
+                    border: "2px solid #565891",
+                    borderRadius: "12px",
+                  }}
+                >
                   <div
-                    className="d-flex avax"
+                    className="d-flex justify-content-center align-items-center"
                     style={{
-                      border: "2px solid #565891",
-                      borderRadius: "12px",
+                      position: "absolute",
+                      top: "-17px",
+                      left: "50%",
+                      width: "106px",
+                      height: "34px",
+                      transform: "translateX(-50%)",
+                      borderRadius: "50px",
+                      background:
+                        "linear-gradient(93.99deg, #4ED5CD 0%, #524FD8 100%)",
+                      gap: "5px",
                     }}
                   >
-                    <div
-                      className="d-flex justify-content-center align-items-center"
-                      style={{
-                        position: "absolute",
-                        top: "-17px",
-                        left: "50%",
-                        width: "115px",
-                        height: "34px",
-                        transform: "translateX(-50%)",
-                        borderRadius: "50px",
-                        background:
-                          "linear-gradient(93.99deg, #DF2C2D 0%, #F86465 100%)",
-                        gap: "5px",
-                      }}
-                    >
-                      <img
-                        src={require("../../assets/wavax.svg").default}
-                        alt=""
-                        style={{ height: 20, width: 20 }}
-                      ></img>
-                      <div style={{ color: "#F7F7FC" }}>Avalanche</div>
+                    <img src="/assets/img/ethereum.svg"></img>
+                    <div style={{ color: "#F7F7FC" }}>Ethereum</div>
+                  </div>
+                  <div className="pair-locks-wrapper">
+                    <div className="row-wrapper">
+                      <span className="left-info-text">ID</span>
+                      <span className="right-info-text">{index + 1}</span>
                     </div>
-
-                    <div className="pair-locks-wrapper">
-                      <div className="row-wrapper">
-                        <span className="left-info-text">ID</span>
-                        <span className="right-info-text">{index + 1}</span>
-                      </div>
-                      <div className="row-wrapper">
-                        <span className="left-info-text">Pair Address</span>
-                        <span className="right-info-text">
-                          ...{lock.id.slice(35)}
-                        </span>
-                      </div>
-                      <div className="row-wrapper">
-                        <span className="left-info-text">Tokens</span>
-                        <span className="right-info-text">
-                          {lock.token0.symbol}/{lock.token1.symbol}
-                        </span>
-                      </div>
-                      <div className="row-wrapper">
-                        <span className="left-info-text">Total liquidity</span>
-                        <span className="right-info-text">
-                          {getFormattedNumber(lock.reserveUSD, 2)}
-                        </span>
-                      </div>
-                      <div className="row-wrapper">
-                        <span className="left-info-text">
-                          Pooled {lock.token0.symbol}
-                        </span>
-                        <span className="right-info-text">
-                          {getFormattedNumber(lock.reserve0, 2)}
-                        </span>
-                      </div>
-                      <div className="row-wrapper">
-                        <span className="left-info-text">
-                          Pooled {lock.token1.symbol}
-                        </span>
-                        <span className="right-info-text">
-                          {getFormattedNumber(lock.reserve1, 2)}
-                        </span>
-                      </div>
-                      <div className="row-wrapper">
-                        <span className="left-info-text">LP Holders</span>
-                        <span className="right-info-text">
-                          {lock.liquidityProviderCount}
-                        </span>
-                      </div>
-                      <div className="row-wrapper">
-                        <span className="left-info-text">
-                          Pair transactions:
-                        </span>
-                        <span className="right-info-text">{lock.txCount}</span>
-                      </div>
+                    <div className="row-wrapper">
+                      <span className="left-info-text">Pair Address</span>
+                      <span className="right-info-text">
+                        ...{lock.id.slice(35)}
+                      </span>
+                    </div>
+                    <div className="row-wrapper">
+                      <span className="left-info-text">Tokens</span>
+                      <span className="right-info-text">
+                        {lock.token0.symbol}/{lock.token1.symbol}
+                      </span>
+                    </div>
+                    <div className="row-wrapper">
+                      <span className="left-info-text">Total liquidity</span>
+                      <span className="right-info-text">
+                        {getFormattedNumber(lock.reserveUSD, 2)}
+                      </span>
+                    </div>
+                    <div className="row-wrapper">
+                      <span className="left-info-text">
+                        Pooled {lock.token0.symbol}
+                      </span>
+                      <span className="right-info-text">
+                        {getFormattedNumber(lock.reserve0, 2)}
+                      </span>
+                    </div>
+                    <div className="row-wrapper">
+                      <span className="left-info-text">
+                        Pooled {lock.token1.symbol}
+                      </span>
+                      <span className="right-info-text">
+                        {getFormattedNumber(lock.reserve1, 2)}
+                      </span>
+                    </div>
+                    <div className="row-wrapper">
+                      <span className="left-info-text">LP Holders</span>
+                      <span className="right-info-text">
+                        {lock.liquidityProviderCount}
+                      </span>
+                    </div>
+                    <div className="row-wrapper">
+                      <span className="left-info-text">
+                        Pair transactions:
+                      </span>
+                      <span className="right-info-text">{lock.txCount}</span>
                     </div>
                   </div>
                 </div>
-              </NavLink>
-            );
-          })}
-          {this.state.favoritesETH.map((lock, index) => {
-            return (
-              <NavLink
-                key={index}
-                className="p-0"
-                to={`/pair-explorer/${lock.id}`}
-                onClick={() => {
-                  this.props.handleSwitchNetwork(1);
-                }}
-              >
-                <div style={{ position: "relative" }}>
-                  <div
-                    className="d-flex"
-                    style={{
-                      border: "2px solid #565891",
-                      borderRadius: "12px",
-                    }}
-                  >
-                    <div
-                      className="d-flex justify-content-center align-items-center"
-                      style={{
-                        position: "absolute",
-                        top: "-17px",
-                        left: "50%",
-                        width: "106px",
-                        height: "34px",
-                        transform: "translateX(-50%)",
-                        borderRadius: "50px",
-                        background:
-                          "linear-gradient(93.99deg, #4ED5CD 0%, #524FD8 100%)",
-                        gap: "5px",
-                      }}
-                    >
-                      <img src="/assets/img/ethereum.svg"></img>
-                      <div style={{ color: "#F7F7FC" }}>Ethereum</div>
-                    </div>
-                    <div className="pair-locks-wrapper">
-                      <div className="row-wrapper">
-                        <span className="left-info-text">ID</span>
-                        <span className="right-info-text">{index + 1}</span>
-                      </div>
-                      <div className="row-wrapper">
-                        <span className="left-info-text">Pair Address</span>
-                        <span className="right-info-text">
-                          ...{lock.id.slice(35)}
-                        </span>
-                      </div>
-                      <div className="row-wrapper">
-                        <span className="left-info-text">Tokens</span>
-                        <span className="right-info-text">
-                          {lock.token0.symbol}/{lock.token1.symbol}
-                        </span>
-                      </div>
-                      <div className="row-wrapper">
-                        <span className="left-info-text">Total liquidity</span>
-                        <span className="right-info-text">
-                          {getFormattedNumber(lock.reserveUSD, 2)}
-                        </span>
-                      </div>
-                      <div className="row-wrapper">
-                        <span className="left-info-text">
-                          Pooled {lock.token0.symbol}
-                        </span>
-                        <span className="right-info-text">
-                          {getFormattedNumber(lock.reserve0, 2)}
-                        </span>
-                      </div>
-                      <div className="row-wrapper">
-                        <span className="left-info-text">
-                          Pooled {lock.token1.symbol}
-                        </span>
-                        <span className="right-info-text">
-                          {getFormattedNumber(lock.reserve1, 2)}
-                        </span>
-                      </div>
-                      <div className="row-wrapper">
-                        <span className="left-info-text">LP Holders</span>
-                        <span className="right-info-text">
-                          {lock.liquidityProviderCount}
-                        </span>
-                      </div>
-                      <div className="row-wrapper">
-                        <span className="left-info-text">
-                          Pair transactions:
-                        </span>
-                        <span className="right-info-text">{lock.txCount}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </NavLink>
-            );
-          })}
-        </div> */}
-      </div>
+              </div>
+            </NavLink>
+          );
+        })}
+      </div> */}
+    </div>
     );
   };
 
