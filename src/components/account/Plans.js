@@ -584,15 +584,15 @@ export default class Subscription extends React.Component {
 
   
 
-    let price =
-    this.props.networkId === 1
-      ? await window.getEstimatedTokenSubscriptionAmountETH(this.state.selectedSubscriptionToken)
-      : this.props.networkId === 56
-      ? await window.getEstimatedTokenSubscriptionAmountBNB(this.state.selectedSubscriptionToken)
-      : await window.getEstimatedTokenSubscriptionAmount(this.state.selectedSubscriptionToken);
+    // let price =
+    // this.props.networkId === 1
+    //   ? await window.getEstimatedTokenSubscriptionAmountETH(this.state.selectedSubscriptionToken)
+    //   : this.props.networkId === 56
+    //   ? await window.getEstimatedTokenSubscriptionAmountBNB(this.state.selectedSubscriptionToken)
+    //   : await window.getEstimatedTokenSubscriptionAmount(this.state.selectedSubscriptionToken);
 
     await subscriptionContract.methods
-      .subscribe(this.state.selectedSubscriptionToken, price)
+      .subscribe(this.state.selectedSubscriptionToken, this.state.price)
       .send({ from: await window.getCoinbase() })
       .then(() => {
         this.setState({ loadspinnerSub: false });
