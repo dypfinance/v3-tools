@@ -416,7 +416,7 @@ export default class Subscription extends React.Component {
     // Typical usage (don't forget to compare props):
 
     if (this.props.isPremium === false) {
-      window.location.href = "https://betatools.dyp.finance/plans";
+      window.location.href = "https://app.dypius.com/plans";
     }
 
     if (this.props.coinbase !== prevProps.coinbase) {

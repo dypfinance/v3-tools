@@ -197,6 +197,10 @@ const LandNftStakeCheckListModal = ({
     setUSDPrice().then();
   }, [ETHrewards]);
 
+
+  console.log(selectNftIds)
+
+
   useEffect(() => {
     if (
       selectNftIds.length > 50 &&
@@ -751,7 +755,7 @@ const LandNftStakeCheckListModal = ({
         >
           <div>
             <div
-              className="mt-4 d-flex align-items-center justify-content-between"
+              className="mt-4 d-flex flex-column flex-xxl-row flex-lg-row flex-md-row align-items-center justify-content-between"
               style={{ gap: 20 }}
             >
               <div className="row m-0 claimAll-wrapper">
@@ -855,7 +859,7 @@ const LandNftStakeCheckListModal = ({
                   <div
                     className="d-flex"
                     style={{
-                      justifyContent: "space-between",
+                      justifyContent: "end",
                       alignItems: "center",
                       gap: 10,
                     }}
@@ -874,7 +878,7 @@ const LandNftStakeCheckListModal = ({
                             color: "#4CD0CD",
                           }}
                         >
-                          {countDownLeft < 0 ? selectNftIds.length : 0}
+                         {selectNftIds.length}
                           /50
                         </span>
                         <span
@@ -927,13 +931,11 @@ const LandNftStakeCheckListModal = ({
                     background:
                       active &&
                       selectNftIds.length !== 0 &&
-                      countDownLeft < 0 &&
                       selectNftIds.length < 51
                         ? "linear-gradient(90.74deg, #7770E0 0%, #554FD8 100%)"
                         : nftItem.length !== 0 &&
                           selectNftIds.length !== 0 &&
-                          selectNftIds.length < 51 &&
-                          countDownLeft < 0
+                          selectNftIds.length < 51
                         ? "linear-gradient(90.74deg, #7770E0 0%, #554FD8 100%)"
                         : "#14142A",
                     pointerEvents:
@@ -944,7 +946,7 @@ const LandNftStakeCheckListModal = ({
                           selectNftIds.length === 0
                         ? "auto"
                         : "none",
-                    width: "50%",
+                    width: "100%", maxWidth: '100%',
                     borderRadius: "8px",
                     color: ETHrewards !== 0 ? "#FFFFFF" : "#C0C9FF",
                     margin: "auto",

@@ -25,7 +25,7 @@ const NftCawCard = ({ modalId, action, nft, coinbase }) => {
           />
           <p>CAWS</p>
           <div className="d-flex w-100 justify-content-between align-items-center">
-            <p className="nft-id">{String(nft.name).includes('CAWS') ? String(nft.name).replace("CAWS ", "") : nft.name.slice(1, nft.name.length)}</p>
+            <p className="nft-id">{String(nft.name).includes('CAWS') ? String(nft.name).replace("CAWS ", "") : nft.name}</p>
             {/* <div className="img">
               <SvgEyeIcon />
             </div> */}

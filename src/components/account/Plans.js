@@ -345,7 +345,7 @@ export default class Subscription extends React.Component {
   componentDidUpdate(prevProps) {
 
     if(this.props.isPremium){
-      window.location.href = 'https://betatools.dyp.finance/account'
+      window.location.href = 'https://app.dypius.com/account'
     }
 
 
@@ -387,7 +387,7 @@ export default class Subscription extends React.Component {
 
   componentDidMount() {
     if(this.props.isPremium){
-      window.location.href = 'https://betatools.dyp.finance/account'
+      window.location.href = 'https://app.dypius.com/account'
     }
     this.getDypBalance();
 
@@ -607,7 +607,7 @@ export default class Subscription extends React.Component {
       .then(() => {
         this.setState({ loadspinnerSub: false, approveStatus: "success" });
         this.props.onSubscribe()
-        window.location.href = 'hhttps://betatools.dyp.finance/account'
+        window.location.href = 'https://app.dypius.com/account'
 
       })
       .catch((e) => {
