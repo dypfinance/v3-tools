@@ -28,12 +28,12 @@ const NftStakeCheckListModal = ({
   link,
   countDownLeft,
   ETHrewards,
-  onNftCheckListClick,
+  // onNftCheckListClick,
   coinbase,
   isConnected,
   getApprovedNfts,
   hideItem,
-  onDepositComplete
+  onDepositComplete,
 }) => {
   const style = {
     position: "absolute",
@@ -122,10 +122,16 @@ const NftStakeCheckListModal = ({
     }
   };
 
+  // console.log(nftItem)
+
   const handleSelectAll = () => {
     setCheckBtn(!checkbtn);
     if (checkbtn === false) {
-      setSelectedNftIds(nftIds);
+      if (nftIds.length > 50) {
+        setSelectedNftIds(nftIds.slice(0, 50));
+      } else if (nftIds.length <= 50) {
+        setSelectedNftIds(nftIds);
+      }
     } else if (checkbtn === true) {
       setSelectedNftIds([]);
     }
@@ -135,7 +141,11 @@ const NftStakeCheckListModal = ({
   const handleSelectAllToUnstake = () => {
     setCheckUnstakeBtn(!checkUnstakebtn);
     if (checkUnstakebtn === false) {
-      setSelectedNftIds(nftIds);
+      if (nftIds.length > 50) {
+        setSelectedNftIds(nftIds.slice(0, 50));
+      } else if (nftIds.length <= 50) {
+        setSelectedNftIds(nftIds);
+      }
     } else if (checkUnstakebtn === true) {
       setSelectedNftIds([]);
     }
@@ -186,7 +196,7 @@ const NftStakeCheckListModal = ({
         setSelectedNftIds([]);
         setColor("#57AEAA");
         handleClearStatus();
-        onDepositComplete()
+        onDepositComplete();
       })
       .catch((err) => {
         setloadingdeposit(false);
@@ -261,15 +271,12 @@ const NftStakeCheckListModal = ({
     } else setSelectedNftIds([]);
   }, [showClaim, apr, showToStake]);
 
-
   useEffect(() => {
-    if (hideItem === 'staked') {
-      setshowToStake(true)
-      setshowStaked(false)
-
-    } 
+    if (hideItem === "staked") {
+      setshowToStake(true);
+      setshowStaked(false);
+    }
   }, [hideItem, showStaked, showToStake]);
-
 
   const onEmptyState = () => {};
 
@@ -390,7 +397,7 @@ const NftStakeCheckListModal = ({
           >
             <div
               className={showToStake ? "optionbtn-active" : "optionbtn-passive"}
-              style={{ display: hideItem === 'tostake' ? 'none' : 'block' }}
+              style={{ display: hideItem === "tostake" ? "none" : "block" }}
             >
               <h5
                 className="optiontext"
@@ -401,15 +408,14 @@ const NftStakeCheckListModal = ({
                   //Make selectedNfts empty []
                   setSelectedNftIds([]);
                 }}
-                style={{ fontSize: 14}}
+                style={{ fontSize: 14 }}
               >
                 To Stake
               </h5>
             </div>
             <div
               className={showStaked ? "optionbtn-active" : "optionbtn-passive"}
-              style={{ display: hideItem === 'staked' ? 'none' : 'block' }}
-
+              style={{ display: hideItem === "staked" ? "none" : "block" }}
             >
               <h5
                 className="optiontext"
@@ -420,7 +426,7 @@ const NftStakeCheckListModal = ({
                   //Make selectedNfts empty []
                   setSelectedNftIds([]);
                 }}
-                style={{ fontSize: 14}}
+                style={{ fontSize: 14 }}
               >
                 Staked
                 {/* {showStaked && (
@@ -531,7 +537,7 @@ const NftStakeCheckListModal = ({
                                 1
                               );
                           setSelectedNftIds(selectNftIds);
-                          getApprovedNfts(selectNftIds)
+                          getApprovedNfts(selectNftIds);
                           console.log(selectNftIds);
                           setVal(value);
                         }}
@@ -591,6 +597,8 @@ const NftStakeCheckListModal = ({
                           ? selectNftIds.push(value)
                           : selectNftIds.splice(selectNftIds.indexOf(value), 1);
                         setSelectedNftIds(selectNftIds);
+                        getApprovedNfts(selectNftIds);
+                        console.log(selectNftIds);
                         setVal(value);
                       }}
                       coinbase={coinbase}
@@ -604,14 +612,13 @@ const NftStakeCheckListModal = ({
         </div>
       </div>{" "}
       <div style={{ display: "block" }} className="bottom-static-wrapper">
-        
         <p className="d-flex info-text align-items-start gap-3">
           <img src={require("./more-info.svg").default} alt="" />
           {!showStaked
             ? "Please select which NFTs to Stake."
             : "Please select your NFTs to Claim or to Unstake"}
         </p>
- 
+
         <div className="mt-2">
           <div style={{ display: showStaked === false ? "block" : "none" }}>
             <h5
@@ -770,7 +777,7 @@ const NftStakeCheckListModal = ({
                   }}
                 >
                   <div
-                  className="d-flex align-items-start justify-content-between mb-3 w-100"
+                    className="d-flex align-items-start justify-content-between mb-3 w-100"
                     style={{
                       gap: 10,
                     }}
@@ -794,7 +801,8 @@ const NftStakeCheckListModal = ({
                     <div className="d-flex justify-content-between">
                       <h6 className="rewardstxtCaws d-flex align-items-center gap-2">
                         <img src={require("./weth.svg").default} alt="" />{" "}
-                        {getFormattedNumber(ETHrewards, 6)} WETH (${formattedNum(ethToUSD, true)})
+                        {getFormattedNumber(ETHrewards, 6)} WETH ($
+                        {formattedNum(ethToUSD, true)})
                       </h6>
                       {/* <img
                           src={EthLogo}
@@ -860,8 +868,7 @@ const NftStakeCheckListModal = ({
                   >
                     <div
                       className="d-flex justify-content-between align-items-baseline flex-column"
-                      style={{
-                      }}
+                      style={{}}
                     >
                       <div
                         className="d-flex align-items-baseline"
@@ -918,7 +925,10 @@ const NftStakeCheckListModal = ({
                           style={{ width: 24, height: 24 }}
                         />
                       </div>
-                      <span style={{ fontSize: 10, color: "#C0C9FF" }} className="mt-1">
+                      <span
+                        style={{ fontSize: 10, color: "#C0C9FF" }}
+                        className="mt-1"
+                      >
                         Maximum of 50 NFTs selectable
                       </span>
                     </div>
@@ -998,7 +1008,7 @@ NftStakeCheckListModal.propTypes = {
   onClaimAll: PropTypes.func,
   onUnstake: PropTypes.func,
   ETHrewards: PropTypes.number,
-  onNftCheckListClick: PropTypes.func,
+  getApprovedNfts: PropTypes.func,
   isConnected: PropTypes.bool,
   coinbase: PropTypes.string,
 };

@@ -15,7 +15,7 @@ const NftStakingCawChecklist = ({
   checklistItemID,
   onChange,
   countDownLeft,
-  onNftCheckListClick,
+  // onNftCheckListClick,
   coinbase,
   isConnected,
 }) => {
@@ -183,9 +183,9 @@ const NftStakingCawChecklist = ({
               src={nft.image.replace("images", "thumbs")}
               className="nft-img"
               alt=""
-              onClick={() => {
-                onNftCheckListClick(nft);
-              }}
+              // onClick={() => {
+              //   onNftCheckListClick(nft);
+              // }}
               // style={{ cursor: "pointer" }}
             />
             <p
@@ -257,7 +257,7 @@ const NftStakingCawChecklist = ({
                       <p id="earnedText" color="#C0C9FF">Earned</p>
                       <h6 className="rewardstxtCaws d-flex align-items-center gap-2 mb-2" style={{fontSize: 16}}>
                         <img src={require("./weth.svg").default} alt="" style={{height: 20, width: 20}}/>{" "}
-                       {getFormattedNumber(EthRewards, 2)} WETH 
+                       {getFormattedNumber(EthRewards, 6)} WETH 
                       </h6>
 
                       {/* <div>
@@ -355,7 +355,7 @@ NftStakingCawChecklist.propTypes = {
   checked: PropTypes.bool,
   checklistItemID: PropTypes.number,
   onChange: PropTypes.func,
-  onNftCheckListClick: PropTypes.func,
+  // onNftCheckListClick: PropTypes.func,
   countDownLeft: PropTypes.any,
   coinbase: PropTypes.string,
   isConnected: PropTypes.bool,

@@ -46,6 +46,7 @@ const CawsDetails = ({
   const [showModal, setShowModal] = useState(false);
   const [countDownLeft, setCountDownLeft] = useState(59000);
   const [totalStakes, settotalStakes] = useState(0);
+  const [approvedNfts, setApprovedNfts] = useState([]);
 
   const [hide, setHide] = useState("");
   const windowSize = useWindowSize();
@@ -255,6 +256,11 @@ const CawsDetails = ({
       calculateCountdown().then();
     }
   }, [isConnected]);
+
+  const getApprovedNfts = (data) => {
+    setApprovedNfts(data);
+    return data;
+  };
 
 
   useEffect(() => {
@@ -546,6 +552,8 @@ const CawsDetails = ({
             setshowChecklistModal(false);
             setamountToStake("");
           }}
+          getApprovedNfts={getApprovedNfts}
+
           // nftItem={showStaked ? mystakes : showToStake ? myNFTs : showStaked}
           nftItem={(hide === "" || hide === "tostake" || hide === "mystakes2") ? mystakes : myNFTs}
           onshowStaked={() => {
