@@ -15,7 +15,7 @@ const NftStakingCawChecklist = ({
   checklistItemID,
   onChange,
   countDownLeft,
-  // onNftCheckListClick,
+  checked2,
   coinbase,
   isConnected,
 }) => {
@@ -132,11 +132,21 @@ const NftStakingCawChecklist = ({
 
   const handleCawClick = () => {
     if (isStake === false) {
-      setCheckBtn(!checkbtn);
-      onChange(checklistItemID);
+      if (checked2 === true) {
+        setCheckBtn(!checkbtn);
+        onChange(checklistItemID);
+      } else if (checked2 === false) {
+        setCheckBtn(!checkbtn);
+        onChange(checklistItemID);
+      }
     } else if (isStake === true) {
-      setUnstakeBtn(!Unstakebtn);
-      onChange(checklistItemID);
+      if (checked2 === true) {
+        setUnstakeBtn(!Unstakebtn);
+        onChange(checklistItemID);
+      } else if (checked2 === false) {
+        setUnstakeBtn(!Unstakebtn);
+        onChange(checklistItemID);
+      }
     }
   };
   return (
@@ -149,21 +159,19 @@ const NftStakingCawChecklist = ({
           handleCawClick(checklistItemID);
         }}
         style={{
-          width: 195 ,
-              border: isStake
-                ? checked === true
-                  ? Unstakebtn === true
-                    ? "2px solid #4ED5D2"
-                    : "none"
-                  : Unstakebtn === true
-                  ? "2px solid #4ED5D2"
-                  : "none"
-                : checked === true && checkbtn === true
+          width: 195,
+          border: isStake
+            ? checked === true
+              ? Unstakebtn === true
                 ? "2px solid #4ED5D2"
-                : checked === false && checkbtn === true
-                ? "2px solid #4ED5D2"
-                : "none",
-            }}
+                : "none"
+              : Unstakebtn === true
+              ? "2px solid #4ED5D2"
+              : "none"
+            : checked === false && checkbtn === true && checked2 === true
+            ? "2px solid #4ED5D2"
+            : "none",
+        }}
       >
         <div
           className="elevated-stake-container"
@@ -174,11 +182,7 @@ const NftStakingCawChecklist = ({
             gap: 5,
           }}
         >
-          <div
-            
-            className="sub-container p-0"
-            style={{boxShadow: 'none'}}
-          >
+          <div className="sub-container p-0" style={{ boxShadow: "none" }}>
             <img
               src={nft.image.replace("images", "thumbs")}
               className="nft-img"
@@ -211,7 +215,7 @@ const NftStakingCawChecklist = ({
                       type="checkbox"
                       id={checklistItemID}
                       name="AddtoUnstake"
-                      checked={Unstakebtn}
+                      checked={Unstakebtn && checked2 === true}
                       onClick={() => {
                         setUnstakeBtn(!Unstakebtn);
                         // onChange(checklistItemID);
@@ -228,11 +232,9 @@ const NftStakingCawChecklist = ({
                       type="checkbox"
                       id={checklistItemID}
                       name="checkbtn"
-                      checked={checkbtn && isStake === false}
+                      checked={checkbtn && isStake === false && checked2 === true}
                       onChange={(e) => {
                         setCheckBtn(!checkbtn);
-                        // onChange(checklistItemID);
-                        //console.log(e.target.id);
                       }}
                     />
                   </>
@@ -251,13 +253,22 @@ const NftStakingCawChecklist = ({
                       style={{
                         display: "flex",
                         justifyContent: "space-between",
-                        flexDirection: 'column'
+                        flexDirection: "column",
                       }}
                     >
-                      <p id="earnedText" color="#C0C9FF">Earned</p>
-                      <h6 className="rewardstxtCaws d-flex align-items-center gap-2 mb-2" style={{fontSize: 16}}>
-                        <img src={require("./weth.svg").default} alt="" style={{height: 20, width: 20}}/>{" "}
-                       {getFormattedNumber(EthRewards, 6)} WETH 
+                      <p id="earnedText" color="#C0C9FF">
+                        Earned
+                      </p>
+                      <h6
+                        className="rewardstxtCaws d-flex align-items-center gap-2 mb-2"
+                        style={{ fontSize: 16 }}
+                      >
+                        <img
+                          src={require("./weth.svg").default}
+                          alt=""
+                          style={{ height: 20, width: 20 }}
+                        />{" "}
+                        {getFormattedNumber(EthRewards, 6)} WETH
                       </h6>
 
                       {/* <div>
@@ -284,7 +295,9 @@ const NftStakingCawChecklist = ({
                       borderColor: EthRewards == 0 ? "#14142A" : "#857DFA",
                       color: EthRewards == 0 ? "#C0C9FF" : "#857DFA",
                       background: EthRewards == 0 ? "#14142A" : "#312F69",
-                      padding: 5, borderRadius: 8, width: '100%'
+                      padding: 5,
+                      borderRadius: 8,
+                      width: "100%",
                     }}
                   >
                     Claim reward

@@ -520,9 +520,10 @@ const LandNftStakeCheckListModal = ({
                         isStake={showStaked}
                         countDownLeft={countDownLeft}
                         checked={
-                          (showToStake === true && checkbtn === true) ||
-                          (showStaked === true && checkUnstakebtn === true) 
-                        }
+                          (  (showToStake === true && checkbtn === true) ||
+                            (showStaked === true && checkUnstakebtn === true)) && (selectNftIds.length <=50)
+                          }
+                          checked2 = {selectNftIds.length <=50 ? true : false}
                         checklistItemID={nftId}
                         onChange={(value) => {
                           selectNftIds.indexOf(value) === -1
@@ -582,9 +583,10 @@ const LandNftStakeCheckListModal = ({
                       isStake={showStaked}
                       countDownLeft={countDownLeft}
                       checked={
-                        (showToStake === true && checkbtn === true) ||
-                        (showStaked === true && checkUnstakebtn === true)
-                      }
+                        (  (showToStake === true && checkbtn === true) ||
+                          (showStaked === true && checkUnstakebtn === true)) && (selectNftIds.length <=50)
+                        }
+                        checked2 = {selectNftIds.length <=50 ? true : false}
                       checklistItemID={nftId}
                       onChange={(value) => {
                         selectNftIds.indexOf(value) === -1

@@ -15,7 +15,7 @@ const LandNftChecklist = ({
   checklistItemID,
   onChange,
   countDownLeft,
-  
+  checked2,
   coinbase,
   isConnected,
 }) => {
@@ -132,11 +132,21 @@ const LandNftChecklist = ({
 
   const handleCawClick = () => {
     if (isStake === false) {
-      setCheckBtn(!checkbtn);
-      onChange(checklistItemID);
+      if (checked2 === true) {
+        setCheckBtn(!checkbtn);
+        onChange(checklistItemID);
+      } else if (checked2 === false) {
+        setCheckBtn(!checkbtn);
+        onChange(checklistItemID);
+      }
     } else if (isStake === true) {
-      setUnstakeBtn(!Unstakebtn);
-      onChange(checklistItemID);
+      if (checked2 === true) {
+        setUnstakeBtn(!Unstakebtn);
+        onChange(checklistItemID);
+      } else if (checked2 === false) {
+        setUnstakeBtn(!Unstakebtn);
+        onChange(checklistItemID);
+      }
     }
   };
   return (
@@ -149,21 +159,20 @@ const LandNftChecklist = ({
           handleCawClick(checklistItemID);
         }}
         style={{
-          width: 195 ,
-              border: isStake
-                ? checked === true
-                  ? Unstakebtn === true
-                    ? "2px solid #4ED5D2"
-                    : "none"
-                  : Unstakebtn === true
-                  ? "2px solid #4ED5D2"
-                  : "none"
-                : checked === true && checkbtn === true
+          width: 195,
+          border: isStake
+            ? checked === true
+              ? Unstakebtn === true
                 ? "2px solid #4ED5D2"
-                : checked === false && checkbtn === true
-                ? "2px solid #4ED5D2"
-                : "none",
-            }}
+                : "none"
+              : Unstakebtn === true
+              ? "2px solid #4ED5D2"
+              : "none"
+            : checked === false && checkbtn === true && checked2 === true
+            ? "2px solid #4ED5D2"
+            : "none",
+        }}
+
       >
         <div
           className="elevated-stake-container"
@@ -211,7 +220,7 @@ const LandNftChecklist = ({
                       type="checkbox"
                       id={checklistItemID}
                       name="AddtoUnstake"
-                      checked={Unstakebtn}
+                      checked={Unstakebtn && checked2 === true}
                       onClick={() => {
                         setUnstakeBtn(!Unstakebtn);
                         // onChange(checklistItemID);
@@ -228,7 +237,7 @@ const LandNftChecklist = ({
                       type="checkbox"
                       id={checklistItemID}
                       name="checkbtn"
-                      checked={checkbtn && isStake === false}
+                      checked={checkbtn && isStake === false && checked2 === true}
                       onChange={(e) => {
                         setCheckBtn(!checkbtn);
                         // onChange(checklistItemID);
