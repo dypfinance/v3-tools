@@ -27855,7 +27855,7 @@ async function connectWallet(provider, walletType) {
         window.WALLET_TYPE = "trustwallet";
 
       let coinbase_address = await window.ethereum.request({
-        method: "eth_requestAccounts",
+        method: "eth_accounts",
       });
 
       window.coinbase_address = coinbase_address.pop();
@@ -27893,7 +27893,7 @@ async function getCoinbase() {
     !window.ethereum.isCoinbaseWallet
   ) {
     const coinbase = await window.ethereum.request({
-      method: "eth_requestAccounts",
+      method: "eth_accounts",
     });
 
     if (coinbase && coinbase.length > 0) {
