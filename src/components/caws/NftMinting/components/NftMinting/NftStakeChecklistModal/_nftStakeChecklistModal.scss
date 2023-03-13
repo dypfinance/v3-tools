@@ -369,9 +369,16 @@ input[type="radio"]:checked {
   accent-color: #4ed5d2;
 }
 
+.MuiTimeline-root {
+  flex-grow: inherit !important;
+}
+
 input[type="checkbox"]:checked {
   accent-color: #4ed5d2;
 }
+
+
+
 .dark {
   .details-modal-content {
     .left-col {

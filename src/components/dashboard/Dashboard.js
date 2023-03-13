@@ -24,6 +24,8 @@ import StakeAvaxIDyp from "../FARMINNG/stakeAvaxiDyp";
 import StakeBscIDyp from "../FARMINNG/bscConstantStakeiDyp";
 import LandCard from "../top-pools-card/LandCard";
 import LandDetails from "../FARMINNG/land";
+import CawsWodDetails from "../FARMINNG/cawsWod";
+import CawsWodCard from "../top-pools-card/CawsWodCard";
 
 const Dashboard = ({
   isConnected,
@@ -330,7 +332,28 @@ const Dashboard = ({
                       />
                     )}
 
-                  {topPools.length > 0 && loading === false ? (
+{ network === 1 && (
+                      <CawsWodCard
+                      network={network.toString()}
+                      onShowDetailsClick={() => {
+                        setActiveCard(2);
+                        setcardIndex(2);
+                        setDetails(2);
+                      }}
+                      onHideDetailsClick={() => {
+                        setActiveCard(null);
+                        setDetails();
+                      }}
+                      cardType={"table"}
+                      details={details === 2 ? true : false}
+                      expired={false}
+                        // tvl={"$" + getFormattedNumber(cawsCard2.tvl_usd)}
+                        // tvl={"$" + getFormattedNumber(landCard.tvl_usd)}
+                        // apr={landCard.apy_percent}
+                      />
+                    )}
+
+                  {/* {topPools.length > 0 && loading === false ? (
                     topPools.slice(0, 2).map((item, index) => {
                       return (
                         <TopPoolsCard
@@ -383,7 +406,7 @@ const Dashboard = ({
                     >
                       <FadeLoader color="#7770DF" />
                     </div>
-                  )}
+                  )} */}
                 </div>
                 {activeCard && network === 1 ? (
                 activeCard && network === 1 && cardIndex === 1 ? (
@@ -408,9 +431,18 @@ const Dashboard = ({
                       expired={false}
                       renderedPage={"dashboard"}
                     />
-                  ) : (
-                    <></>
-                  )
+                  ) :  activeCard && network === 1 && cardIndex === 2 ? (
+                    <CawsWodDetails
+                      coinbase={coinbase}
+                      isConnected={isConnected}
+                      listType={"table"}
+                      chainId={network.toString()}
+                      handleSwitchNetwork={handleSwitchNetwork}
+                      handleConnection={handleConnection}
+                      expired={false}
+                      renderedPage={"dashboard"}
+                    />
+                  ) : <></>
                 ) : activeCard && network === 56 && cardIndex === 0 ? (
                   <StakeBsc
                     lp_id={LP_IDBNB_Array[cardIndex]}
