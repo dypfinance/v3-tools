@@ -443,6 +443,11 @@ class App extends React.Component {
     if (this.state.coinbase !== prevState.coinbase) {
       this.refreshSubscription()
     }
+
+    if (this.state.isConnected !== prevState.isConnected) {
+      this.checkNetworkId()
+      this.checkConnection()
+    }
   }
 
   toggleMinimizeSidebar = () => {
