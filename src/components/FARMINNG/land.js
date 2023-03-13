@@ -48,6 +48,7 @@ const LandDetails = ({
   const [showModal, setShowModal] = useState(false);
   const [countDownLeft, setCountDownLeft] = useState(59000);
   const [totalStakes, settotalStakes] = useState(0);
+  const [approvedNfts, setApprovedNfts] = useState([]);
 
   const [hide, setHide] = useState("");
   const windowSize = useWindowSize();
@@ -197,6 +198,13 @@ const LandDetails = ({
         console.log(e);
       });
   };
+
+  const getApprovedNfts = (data) => {
+    setApprovedNfts(data);
+    return data;
+  };
+
+
 
   const totalStakedNft = async () => {
     let staking_contract = await new window.infuraWeb3.eth.Contract(
@@ -516,7 +524,7 @@ const LandDetails = ({
             setshowChecklistModal(false);
             setamountToStake("");
           }}
-          // nftItem={showStaked ? mystakes : showToStake ? myNFTs : showStaked}
+          getApprovedNfts={getApprovedNfts}
           nftItem={(hide === "" || hide === "tostake" || hide === "mystakes2") ? mystakes : myNFTs}
           onshowStaked={() => {
             setshowStaked(true);

@@ -117,7 +117,11 @@ const LandNftStakeCheckListModal = ({
   const handleSelectAll = () => {
     setCheckBtn(!checkbtn);
     if (checkbtn === false) {
-      setSelectedNftIds(nftIds);
+      if (nftIds.length > 50) {
+        setSelectedNftIds(nftIds.slice(0, 50));
+      } else if (nftIds.length <= 50) {
+        setSelectedNftIds(nftIds);
+      }
     } else if (checkbtn === true) {
       setSelectedNftIds([]);
     }
@@ -127,7 +131,11 @@ const LandNftStakeCheckListModal = ({
   const handleSelectAllToUnstake = () => {
     setCheckUnstakeBtn(!checkUnstakebtn);
     if (checkUnstakebtn === false) {
-      setSelectedNftIds(nftIds);
+      if (nftIds.length > 50) {
+        setSelectedNftIds(nftIds.slice(0, 50));
+      } else if (nftIds.length <= 50) {
+        setSelectedNftIds(nftIds);
+      }
     } else if (checkUnstakebtn === true) {
       setSelectedNftIds([]);
     }
@@ -512,9 +520,10 @@ const LandNftStakeCheckListModal = ({
                         isStake={showStaked}
                         countDownLeft={countDownLeft}
                         checked={
-                          (showToStake === true && checkbtn === true) ||
-                          (showStaked === true && checkUnstakebtn === true) 
-                        }
+                          (  (showToStake === true && checkbtn === true) ||
+                            (showStaked === true && checkUnstakebtn === true)) && (selectNftIds.length <=50)
+                          }
+                          checked2 = {selectNftIds.length <=50 ? true : false}
                         checklistItemID={nftId}
                         onChange={(value) => {
                           selectNftIds.indexOf(value) === -1
@@ -574,15 +583,20 @@ const LandNftStakeCheckListModal = ({
                       isStake={showStaked}
                       countDownLeft={countDownLeft}
                       checked={
-                        (showToStake === true && checkbtn === true) ||
-                        (showStaked === true && checkUnstakebtn === true)
-                      }
+                        (  (showToStake === true && checkbtn === true) ||
+                          (showStaked === true && checkUnstakebtn === true)) && (selectNftIds.length <=50)
+                        }
+                        checked2 = {selectNftIds.length <=50 ? true : false}
                       checklistItemID={nftId}
                       onChange={(value) => {
                         selectNftIds.indexOf(value) === -1
                           ? selectNftIds.push(value)
-                          : selectNftIds.splice(selectNftIds.indexOf(value), 1);
+                          : selectNftIds.splice(
+                              selectNftIds.indexOf(value),
+                              1
+                            );
                         setSelectedNftIds(selectNftIds);
+                        getApprovedNfts(selectNftIds);
                         setVal(value);
                       }}
                       coinbase={coinbase}

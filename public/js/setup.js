@@ -551,9 +551,11 @@ class CONSTANT_STAKING_NEW {
 }
 
 class CONSTANT_STAKING_OLD {
+   
   constructor(ticker = "CONSTANT_STAKINGOLD_30", token = "REWARD_TOKEN") {
     this.ticker = ticker;
     this.token = token;
+    
     let address = window.config[ticker.toLowerCase() + "_address"];
     this._address = address;
     [
@@ -582,11 +584,12 @@ class CONSTANT_STAKING_OLD {
     });
 
     ["stake", "unstake", "claim", "reInvest"].forEach((fn_name) => {
+
       this[fn_name] = async function (...args) {
         let contract = await getContract({ key: this.ticker });
         let value = 0;
         // console.log(value)
-        console.log(contract);
+        // console.log(contract);
 
         let { latestGasPrice, maxPriorityFeePerGas } = await getMaxFee();
         console.log({ latestGasPrice, maxPriorityFeePerGas });
@@ -27852,7 +27855,7 @@ async function connectWallet(provider, walletType) {
         window.WALLET_TYPE = "trustwallet";
 
       let coinbase_address = await window.ethereum.request({
-        method: "eth_requestAccounts",
+        method: "eth_accounts",
       });
 
       window.coinbase_address = coinbase_address.pop();
@@ -27890,7 +27893,7 @@ async function getCoinbase() {
     !window.ethereum.isCoinbaseWallet
   ) {
     const coinbase = await window.ethereum.request({
-      method: "eth_requestAccounts",
+      method: "eth_accounts",
     });
 
     if (coinbase && coinbase.length > 0) {
@@ -27929,14 +27932,14 @@ async function getCoinbase() {
 async function getContract({ key, address = null, ABI = null }) {
   ABI = ABI || window[key + "_ABI"];
   address = address || window.config[key.toLowerCase() + "_address"];
-  if (!window.cached_contracts[key + "-" + address.toLowerCase()]) {
+  if (!window.cached_contracts[key]) {
     window.web3 = new Web3(window.ethereum);
-    window.cached_contracts[key + "-" + address?.toLowerCase()] =
+    window.cached_contracts[key] =
       new window.web3.eth.Contract(ABI, address, {
         from: await getCoinbase(),
       });
   }
-  return window.cached_contracts[key + "-" + address.toLowerCase()];
+  return window.cached_contracts[key];
 }
 
 function wait(ms) {

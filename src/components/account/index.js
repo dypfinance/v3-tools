@@ -1184,7 +1184,7 @@ export default class Subscription extends React.Component {
                   />
                   <div className="d-flex align-items-center gap-1">
                     <span className="balance-amount mb-0">
-                      {this.state.bnbBalance} DYP
+                      {getFormattedNumber(this.state.bnbBalance)} DYP
                     </span>
                     <img
                       src={require(`./assets/dypIcon.svg`).default}
@@ -1198,7 +1198,7 @@ export default class Subscription extends React.Component {
                   <img src={require(`./assets/wavaxIcon.svg`).default} alt="" />
                   <div className="d-flex align-items-center gap-1">
                     <span className="balance-amount mb-0">
-                      {this.state.avaxBalance} DYP
+                      {getFormattedNumber(this.state.avaxBalance)} DYP
                     </span>
                     <img
                       src={require(`./assets/dypIcon.svg`).default}

@@ -15,7 +15,7 @@ const LandNftChecklist = ({
   checklistItemID,
   onChange,
   countDownLeft,
-  onNftCheckListClick,
+  checked2,
   coinbase,
   isConnected,
 }) => {
@@ -132,11 +132,21 @@ const LandNftChecklist = ({
 
   const handleCawClick = () => {
     if (isStake === false) {
-      setCheckBtn(!checkbtn);
-      onChange(checklistItemID);
+      if (checked2 === true) {
+        setCheckBtn(!checkbtn);
+        onChange(checklistItemID);
+      } else if (checked2 === false) {
+        setCheckBtn(!checkbtn);
+        onChange(checklistItemID);
+      }
     } else if (isStake === true) {
-      setUnstakeBtn(!Unstakebtn);
-      onChange(checklistItemID);
+      if (checked2 === true) {
+        setUnstakeBtn(!Unstakebtn);
+        onChange(checklistItemID);
+      } else if (checked2 === false) {
+        setUnstakeBtn(!Unstakebtn);
+        onChange(checklistItemID);
+      }
     }
   };
   return (
@@ -149,21 +159,20 @@ const LandNftChecklist = ({
           handleCawClick(checklistItemID);
         }}
         style={{
-          width: 195 ,
-              border: isStake
-                ? checked === true
-                  ? Unstakebtn === true
-                    ? "2px solid #4ED5D2"
-                    : "none"
-                  : Unstakebtn === true
-                  ? "2px solid #4ED5D2"
-                  : "none"
-                : checked === true && checkbtn === true
+          width: 195,
+          border: isStake
+            ? checked === true
+              ? Unstakebtn === true
                 ? "2px solid #4ED5D2"
-                : checked === false && checkbtn === true
-                ? "2px solid #4ED5D2"
-                : "none",
-            }}
+                : "none"
+              : Unstakebtn === true
+              ? "2px solid #4ED5D2"
+              : "none"
+            : checked === false && checkbtn === true && checked2 === true
+            ? "2px solid #4ED5D2"
+            : "none",
+        }}
+
       >
         <div
           className="elevated-stake-container"
@@ -183,9 +192,9 @@ const LandNftChecklist = ({
               src={nft.image.replace("images", "thumbs")}
               className="nft-img"
               alt=""
-              onClick={() => {
-                onNftCheckListClick(nft);
-              }}
+              // onClick={() => {
+              //   onNftCheckListClick(nft);
+              // }}
               // style={{ cursor: "pointer" }}
             />
             <p
@@ -211,7 +220,7 @@ const LandNftChecklist = ({
                       type="checkbox"
                       id={checklistItemID}
                       name="AddtoUnstake"
-                      checked={Unstakebtn}
+                      checked={Unstakebtn && checked2 === true}
                       onClick={() => {
                         setUnstakeBtn(!Unstakebtn);
                         // onChange(checklistItemID);
@@ -228,7 +237,7 @@ const LandNftChecklist = ({
                       type="checkbox"
                       id={checklistItemID}
                       name="checkbtn"
-                      checked={checkbtn && isStake === false}
+                      checked={checkbtn && isStake === false && checked2 === true}
                       onChange={(e) => {
                         setCheckBtn(!checkbtn);
                         // onChange(checklistItemID);
@@ -257,7 +266,7 @@ const LandNftChecklist = ({
                       <p id="earnedText" color="#C0C9FF">Earned</p>
                       <h6 className="rewardstxtCaws d-flex align-items-center gap-2 mb-2" style={{fontSize: 16}}>
                         <img src={require("./weth.svg").default} alt="" style={{height: 20, width: 20}}/>{" "}
-                       {getFormattedNumber(EthRewards, 2)} WETH 
+                       {getFormattedNumber(EthRewards, 6)} WETH 
                       </h6>
 
                       {/* <div>
@@ -355,7 +364,7 @@ LandNftChecklist.propTypes = {
   checked: PropTypes.bool,
   checklistItemID: PropTypes.number,
   onChange: PropTypes.func,
-  onNftCheckListClick: PropTypes.func,
+  // onNftCheckListClick: PropTypes.func,
   countDownLeft: PropTypes.any,
   coinbase: PropTypes.string,
   isConnected: PropTypes.bool,
