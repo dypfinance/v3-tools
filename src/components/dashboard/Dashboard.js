@@ -215,22 +215,24 @@ const Dashboard = ({
     return result;
   };
 
-
+const fetchStakeData = async()=>{
+  if (network === 1) {
+    // setTimeout(() => {
+    await fetchEthStaking();
+    // }, 1000);
+  } else if (network === 56) {
+    // setTimeout(() => {
+   await fetchBnbStaking();
+    // }, 1000);
+  } else if (network === 43114) {
+    // setTimeout(() => {
+    await fetchAvaxStaking();
+    // }, 1000);
+  }
+}
 
   useEffect(() => {
-    if (network === 1) {
-      setTimeout(() => {
-      fetchEthStaking();
-      }, 1000);
-    } else if (network === 56) {
-      setTimeout(() => {
-      fetchBnbStaking();
-      }, 1000);
-    } else if (network === 43114) {
-      setTimeout(() => {
-      fetchAvaxStaking();
-      }, 1000);
-    }
+    fetchStakeData().then()
     setLoading(false);
     fetchPopularNewsData();
     fetchUserPools();

@@ -456,7 +456,13 @@ settvlUSD(tvlUSD)
         setclaimStatus("success");
         setclaimLoading(false);
         setpendingDivs(getFormattedNumber(0, 6));
+
+        setTimeout(() => {
+          setclaimStatus("initial");
+        }, 2000);
+
       })
+      
       .catch((e) => {
         setclaimStatus("failed");
         setclaimLoading(false);
@@ -625,11 +631,13 @@ settvlUSD(tvlUSD)
  
   //let tvl_usd = this.state.tvl / 1e18 * this.state.usdPerToken
   let tvl_usd =  tvlUSD / 1e18;
+  const first = getFormattedNumber(tvl,6).replace(',','')
+  const finalTvlUsd = Number(first) * usdPerToken
 
-  let tvlDYPS2 = tvlDyps / 1e18;
-  tvl_usd = tvl_usd + tvlDYPS2;
+  // let tvlDYPS2 = tvlDyps / 1e18;
+  // tvl_usd = tvl_usd + tvlDYPS2;
   
-  tvl_usd = getFormattedNumber(tvl_usd, 2); 
+  // tvl_usd = getFormattedNumber(tvl_usd, 2); 
 
   const checkApproval = async (amount) => {
     const result = await window
@@ -663,8 +671,15 @@ settvlUSD(tvlUSD)
       });
   };
 
+  const getPriceDYP = async () => {
+    let usdPerToken = await window.getPrice("defi-yield-protocol");
+    setusdPerToken(usdPerToken)
+  };
+
+
   useEffect(() => {
-      getUsdPerDyp();
+      getUsdPerDyp()
+      getPriceDYP();
   }, [coinbase, popup, show]);
 
   return (
@@ -1167,7 +1182,7 @@ settvlUSD(tvlUSD)
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">TVL USD</span>
-                    <h6 className="stats-card-content">${tvl_usd} USD</h6>
+                    <h6 className="stats-card-content">${getFormattedNumber(finalTvlUsd,4) } USD</h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">

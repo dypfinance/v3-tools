@@ -422,6 +422,12 @@ const StakeBsc = ({
       .then(() => {
         setdepositLoading(false);
         setdepositStatus("success");
+
+        setTimeout(() => {
+          setdepositLoading(false);
+          setdepositStatus("initial");
+        }, 5000);
+
       })
       .catch((e) => {
         setdepositLoading(false);
@@ -480,6 +486,8 @@ const StakeBsc = ({
         setTimeout(() => {
           setclaimStatus("initial");
           seterrorMsg2("");
+        setclaimLoading(false);
+
         }, 2000);
       });
   };
@@ -671,6 +679,7 @@ console.log(amount,result_formatted)
     getUsdPerDyp();
   }, []);
 
+  // console.log(Number(depositedTokens))
 
   return (
     <div className="container-lg p-0">
@@ -1135,7 +1144,7 @@ console.log(amount,result_formatted)
                       style={{ height: "fit-content" }}
                       onClick={handleClaimDivs}
                     >
-                      {claimLoading ? (
+                      {claimLoading === true && claimStatus === "initial" ? (
                         <div
                           class="spinner-border spinner-border-sm text-light"
                           role="status"
@@ -1594,7 +1603,7 @@ console.log(amount,result_formatted)
                         handleWithdraw();
                       }}
                     >
-                      {withdrawLoading ? (
+                      {withdrawLoading === true ? (
                         <div
                           class="spinner-border spinner-border-sm text-light"
                           role="status"
