@@ -671,7 +671,6 @@ console.log(amount,result_formatted)
     getUsdPerDyp();
   }, []);
 
-  // console.log('test')
 
   return (
     <div className="container-lg p-0">
