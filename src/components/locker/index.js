@@ -134,7 +134,7 @@ export default class Locker extends React.Component {
     if (logout !== "true") {
       if (window.ethereum && !window.ethereum.isCoin98) {
         window.ethereum
-          .request({ method: "eth_requestAccounts" })
+          .request({ method: "eth_accounts" })
           .then((data) => {
             this.setState({
               coinbase: data.length === 0 ? undefined : data[0],

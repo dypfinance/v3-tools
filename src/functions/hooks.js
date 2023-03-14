@@ -23,7 +23,7 @@ const onSignIn = async ({ account, chainId }) => {
   ) {
     try {
       accounts = await window.ethereum?.request({
-        method: "eth_requestAccounts",
+        method: "eth_accounts",
       });
     } catch (err) {
       console.log(err);
@@ -177,6 +177,9 @@ export const handleSwitchNetworkhook = async (chainID) => {
       method: "wallet_switchEthereumChain",
       params: [{ chainId: chainID }],
     });
+    if(window.ethereum && window.ethereum.isTrust === true) {
+      window.location.reload()
+    }
   } catch (switchError) {
     // This error code indicates that the chain has not been added to MetaMask.
     console.log(switchError, "switch");
@@ -193,6 +196,9 @@ export const handleSwitchNetworkhook = async (chainID) => {
               ? [BNBPARAMS]
               : "",
         });
+        if(window.ethereum && window.ethereum.isTrust === true) {
+          window.location.reload()
+        }
       } catch (addError) {
         console.log(addError);
       }
