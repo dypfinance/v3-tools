@@ -22,6 +22,7 @@ import StakeBsc from "../FARMINNG/bscConstantStake";
 import LandCard from "../top-pools-card/LandCard";
 import LandDetails from "../FARMINNG/land";
 import StakeAvax from '../FARMINNG/stakeAvax'
+import StakeNewEth from "../FARMINNG/stakeNewEth";
 
 const Dashboard = ({
   isConnected,
@@ -109,7 +110,7 @@ const Dashboard = ({
           return b.tvl_usd - a.tvl_usd;
         });
 
-        const finalEthCards = res.data.stakingInfoCAWS;
+        const finalEthCards = sortedAprs;
         setTopPools(finalEthCards.slice(0, 1));
 
         setLandCard(res.data.stakingInfoLAND[0]);
@@ -356,15 +357,38 @@ const fetchStakeData = async()=>{
                       totalNftsLocked={landCard.total_nfts_locked}
                     />
                   ) : activeCard && network === 1 && cardIndex === 0 ? (
-                    <CawsDetails
-                      coinbase={coinbase}
-                      isConnected={isConnected}
+                    <StakeNewEth
+                      staking={window.constant_staking_newi3}
+                      apr={
+                        topPools[cardIndex]?.apy_percent
+                          ? topPools[cardIndex]?.apy_percent
+                          : 30
+                      }
+                      liquidity={eth_address}
+                      expiration_time={"11 January 2024"}
+                      finalApr={
+                        topPools[cardIndex]?.apy_performancefee
+                          ? topPools[cardIndex]?.apy_performancefee
+                          : 30
+                      }
+                      fee_s={0}
+                      lockTime={
+                        topPools[cardIndex]?.lock_time === "No lock"
+                          ? "No Lock"
+                          : topPools[cardIndex]?.lock_time?.split(" ")[0]
+                      }
+                      lp_id={LP_IDBNB_Array[cardIndex]}
                       listType={"table"}
+                      other_info={ false
+                      }
+                      is_wallet_connected={isConnected}
+                      coinbase={coinbase}
+                      the_graph_result={the_graph_result}
                       chainId={network.toString()}
-                      handleSwitchNetwork={handleSwitchNetwork}
                       handleConnection={handleConnection}
+                      handleSwitchNetwork={handleSwitchNetwork}
                       expired={false}
-                      renderedPage={"dashboard"}
+                      referrer={referrer}
                     />
                   ) : (
                     <></>
@@ -602,16 +626,39 @@ const fetchStakeData = async()=>{
                   )}
                 </div>
                 {activeCard && network === 1 && cardIndex === 0 && (
-                  <CawsDetails
-                    coinbase={coinbase}
-                    isConnected={isConnected}
-                    listType={"table"}
-                    chainId={network.toString()}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    handleConnection={handleConnection}
-                    expired={false}
-                    renderedPage={"dashboard"}
-                  />
+                  <StakeNewEth
+                  staking={window.constant_staking_newi3}
+                  apr={
+                    topPools[cardIndex]?.apy_percent
+                      ? topPools[cardIndex]?.apy_percent
+                      : 30
+                  }
+                  liquidity={eth_address}
+                  expiration_time={"11 January 2024"}
+                  finalApr={
+                    topPools[cardIndex]?.apy_performancefee
+                      ? topPools[cardIndex]?.apy_performancefee
+                      : 30
+                  }
+                  fee_s={0}
+                  lockTime={
+                    topPools[cardIndex]?.lock_time === "No lock"
+                      ? "No Lock"
+                      : topPools[cardIndex]?.lock_time?.split(" ")[0]
+                  }
+                  lp_id={LP_IDBNB_Array[cardIndex]}
+                  listType={"table"}
+                  other_info={ false
+                  }
+                  is_wallet_connected={isConnected}
+                  coinbase={coinbase}
+                  the_graph_result={the_graph_result}
+                  chainId={network.toString()}
+                  handleConnection={handleConnection}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  expired={false}
+                  referrer={referrer}
+                />
                 )}
                 {activeCard &&
                 network === 56 &&
@@ -823,15 +870,38 @@ const fetchStakeData = async()=>{
                       totalNftsLocked={landCard.total_nfts_locked}
                     />
                   ) : activeCard2 && network === 1 && cardIndex === 0 ? (
-                    <CawsDetails
-                      coinbase={coinbase}
-                      isConnected={isConnected}
+                    <StakeNewEth
+                      staking={window.constant_staking_newi3}
+                      apr={
+                        topPools[cardIndex]?.apy_percent
+                          ? topPools[cardIndex]?.apy_percent
+                          : 30
+                      }
+                      liquidity={eth_address}
+                      expiration_time={"11 January 2024"}
+                      finalApr={
+                        topPools[cardIndex]?.apy_performancefee
+                          ? topPools[cardIndex]?.apy_performancefee
+                          : 30
+                      }
+                      fee_s={0}
+                      lockTime={
+                        topPools[cardIndex]?.lock_time === "No lock"
+                          ? "No Lock"
+                          : topPools[cardIndex]?.lock_time?.split(" ")[0]
+                      }
+                      lp_id={LP_IDBNB_Array[cardIndex]}
                       listType={"table"}
+                      other_info={ false
+                      }
+                      is_wallet_connected={isConnected}
+                      coinbase={coinbase}
+                      the_graph_result={the_graph_result}
                       chainId={network.toString()}
-                      handleSwitchNetwork={handleSwitchNetwork}
                       handleConnection={handleConnection}
+                      handleSwitchNetwork={handleSwitchNetwork}
                       expired={false}
-                      renderedPage={"dashboard"}
+                      referrer={referrer}
                     />
                   ) : (
                     <></>
