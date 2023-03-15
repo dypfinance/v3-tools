@@ -613,15 +613,15 @@ const EarnTopPicks = ({
   const fetchStakingData = async ()=>{
     if (topList === "Staking") {
       setTopPools([]);
-      if ((chain !== "eth" && chain !== "bnb" && chain === "avax") || chainId === '43114') {
+      if (chain !== "eth" && chain !== "bnb" && chain === "avax") {
         // setTimeout(() => {
          await fetchAvaxStaking();
         // }, 500);
-      } else if ((chain === "eth" && chain !== "bnb" && chain !== "avax" ) || chainId === '1') {
+      } else if (chain === "eth" && chain !== "bnb" && chain !== "avax" ) {
         // setTimeout(() => {
           await fetchEthStaking();
         // }, 500);
-      } else if ((chain !== "eth" && chain === "bnb" && chain !== "avax" )|| chainId === '56') {
+      } else if (chain !== "eth" && chain === "bnb" && chain !== "avax" ) {
         // setTimeout(() => {
           await fetchBnbStaking();
         // }, 500);

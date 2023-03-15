@@ -313,20 +313,20 @@ const EarnContent = ({
     }
   }, [option, stake,chainId]);
 
-  // console.log(stake)
 
   useEffect(() => {
     if (option === "Farming" || option === "Buyback" || option === "Staking") {
-      if(routeChain === '')
-     { if (networkId === "1") {
+    if (networkId === "1") {
         setStake("eth");
       } else if (networkId === "56") {
         setStake("bnb");
       } else if (networkId === "43114") {
         setStake("avax");
-      }}
+      }
     }
   }, [ option,routeChain, networkId]);
+
+ 
 
   const setVaultEth = (vault) => {
     if (vault === "Vault") {
