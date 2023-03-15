@@ -874,7 +874,7 @@ export default function stakeAvax30({
       cliffTime = cliffTime;
 
       let showDeposit = true;
-
+      
       if (!isNaN(disburseDuration) && !isNaN(contractDeployTime)) {
         let lastDay = parseInt(disburseDuration) + parseInt(contractDeployTime);
         let lockTimeExpire = parseInt(Date.now()) + parseInt(cliffTime);
