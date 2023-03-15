@@ -110,7 +110,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
 
 
   const getEthApy = async()=>{
-    await axios.get('https://api2.dyp.finance/api/get_staking_info_eth').then((data) => {
+    await axios.get('https://api.dyp.finance/api/get_staking_info_eth').then((data) => {
       // console.log(data.data.highestAPY_ETH[0].highest_apy)
       setStakeApy(data.data.highestAPY_ETH[0].highest_apy);
     });

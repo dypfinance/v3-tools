@@ -129,7 +129,7 @@ const EarnTopPicks = ({
 
   const fetchEthStaking = async () => {
     await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_eth`)
+      .get(`https://api.dyp.finance/api/get_staking_info_eth`)
       .then((res) => {
         const dypIdyp = res.data.stakingInfoDYPEth.concat(
           res.data.stakingInfoiDYPEth
@@ -161,7 +161,7 @@ const EarnTopPicks = ({
   };
   const fetchBnbStaking = async () => {
     await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_bnb`)
+      .get(`https://api.dyp.finance/api/get_staking_info_bnb`)
       .then((res) => {
         const dypIdypBnb = res.data.stakingInfoDYPBnb.concat(
           res.data.stakingInfoiDYPBnb
@@ -190,7 +190,7 @@ const EarnTopPicks = ({
   };
   const fetchAvaxStaking = async () => {
     await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_avax`)
+      .get(`https://api.dyp.finance/api/get_staking_info_avax`)
       .then((res) => {
         const dypIdypAvax = res.data.stakingInfoDYPAvax.concat(
           res.data.stakingInfoiDYPAvax
@@ -610,6 +610,24 @@ const EarnTopPicks = ({
   const vaultsymbolArray = ["WETH", "WBTC", "USDC", "USDT", "DAI"];
   const locktimeFarm = ["No Lock", "3 Days", "30 Days", "60 Days", "90 Days"];
 
+  const fetchStakingData = async ()=>{
+    if (topList === "Staking") {
+      setTopPools([]);
+      if (chain !== "eth" && chain !== "bnb" && chain === "avax") {
+        // setTimeout(() => {
+         await fetchAvaxStaking();
+        // }, 500);
+      } else if (chain === "eth" && chain !== "bnb" && chain !== "avax" ) {
+        // setTimeout(() => {
+          await fetchEthStaking();
+        // }, 500);
+      } else if (chain !== "eth" && chain === "bnb" && chain !== "avax" ) {
+        // setTimeout(() => {
+          await fetchBnbStaking();
+        // }, 500);
+      }
+    }
+  }
   useEffect(() => {
     if (customPool !== null) {
       if (routeOption === "Staking" && chain === "eth") {
@@ -741,25 +759,12 @@ const EarnTopPicks = ({
     }
   }, [topList, chainId, chain, coinbase]);
 
+
+
   useEffect(() => {
     fetchUserPools();
     setActiveCard();
-    if (topList === "Staking") {
-      setTopPools([]);
-      if ((chain !== "eth" && chain !== "bnb" && chain === "avax") || chainId === '43114') {
-        setTimeout(() => {
-          fetchAvaxStaking();
-        }, 500);
-      } else if ((chain === "eth" && chain !== "bnb" && chain !== "avax" ) || chainId === '1') {
-        setTimeout(() => {
-          fetchEthStaking();
-        }, 500);
-      } else if ((chain !== "eth" && chain === "bnb" && chain !== "avax" )|| chainId === '56') {
-        setTimeout(() => {
-          fetchBnbStaking();
-        }, 500);
-      }
-    }
+    fetchStakingData().then()
   }, [topList, chain, coinbase, networkId, chainId, expiredPools, listType]);
 
   const handleCardIndexStake = (index) => {
