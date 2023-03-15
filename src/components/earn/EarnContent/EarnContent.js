@@ -147,7 +147,7 @@ const EarnContent = ({
 
   const fetchEthApr = async () => {
     await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_eth`)
+      .get(`https://api.dyp.finance/api/get_staking_info_eth`)
       .then((res) => {
         setEthApr(res.data.highestAPY_ETH[0].highest_apy);
       })
@@ -157,7 +157,7 @@ const EarnContent = ({
   };
   const fetchBnbApr = async () => {
     await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_bnb`)
+      .get(`https://api.dyp.finance/api/get_staking_info_bnb`)
       .then((res) => {
         setBnbApr(res.data.highestAPY_BNB[0].highest_apy);
       })
@@ -167,7 +167,7 @@ const EarnContent = ({
   };
   const fetchAvaxApr = async () => {
     await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_avax`)
+      .get(`https://api.dyp.finance/api/get_staking_info_avax`)
       .then((res) => {
         setavaxApr(res.data.highestAPY_AVAX[0].highest_apy);
       })
@@ -217,7 +217,7 @@ const EarnContent = ({
 
   const fetchEthStaking = async () => {
     await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_eth`)
+      .get(`https://api.dyp.finance/api/get_staking_info_eth`)
       .then((res) => {
         setTvl(res.data.totalTVL_ETH);
       })
@@ -227,7 +227,7 @@ const EarnContent = ({
   };
   const fetchBnbStaking = async () => {
     await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_bnb`)
+      .get(`https://api.dyp.finance/api/get_staking_info_bnb`)
       .then((res) => {
         setTvl(res.data.totalTVL_BNB);
       })
@@ -237,7 +237,7 @@ const EarnContent = ({
   };
   const fetchAvaxStaking = async () => {
     await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_avax`)
+      .get(`https://api.dyp.finance/api/get_staking_info_avax`)
       .then((res) => {
         setTvl(res.data.totalTVL_AVAX);
       })

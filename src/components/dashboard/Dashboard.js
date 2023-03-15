@@ -55,7 +55,7 @@ const Dashboard = ({
 
   const fetchBnbStaking = async () => {
     return await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_bnb`)
+      .get(`https://api.dyp.finance/api/get_staking_info_bnb`)
       .then((res) => {
         const dypdypBnb = res.data.stakingInfoDYPBnb;
 
@@ -76,7 +76,7 @@ const Dashboard = ({
 
   const fetchAvaxStaking = async () => {
     return await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_avax`)
+      .get(`https://api.dyp.finance/api/get_staking_info_avax`)
       .then((res) => {
         const dypIdypBnb = res.data.stakingInfoDYPAvax;
 
@@ -98,7 +98,7 @@ const Dashboard = ({
 
   const fetchEthStaking = async () => {
     await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_eth`)
+      .get(`https://api.dyp.finance/api/get_staking_info_eth`)
       .then((res) => {
         const dypIdyp = res.data.stakingInfoDYPEth;
 

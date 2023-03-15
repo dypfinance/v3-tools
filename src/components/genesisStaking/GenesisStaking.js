@@ -83,7 +83,7 @@ const GenesisStaking = ({
 
   const fetchEthStaking = async () => {
     await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_eth`)
+      .get(`https://api.dyp.finance/api/get_staking_info_eth`)
       .then((res) => {
         setLandCard(res.data.stakingInfoLAND[0]);
       })
