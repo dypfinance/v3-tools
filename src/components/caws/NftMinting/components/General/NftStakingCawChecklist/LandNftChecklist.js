@@ -39,7 +39,7 @@ const LandNftChecklist = ({
 
   const calculateReward = async (currentId) => {
     const address = coinbase;
-
+    
     let calculateRewards;
     let staking_contract = await window.getContractLandNFT('LANDNFTSTAKING');
     if (address !== null && currentId) {
