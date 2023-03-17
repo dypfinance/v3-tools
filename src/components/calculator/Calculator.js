@@ -202,8 +202,8 @@ const Calculator = ({ earnClass, onClose, ref }) => {
         setFarmApyAVAX(apyData.highestAPY_AVAX_V2);
         setFarmApy(apyData.highestAPY_ETH_V2);
       } else if (activeMethod === "Staking") {
-        setStakeApyAVAX(30);
-        setStakeApyBNB(30);
+        setStakeApyAVAX(50);
+        setStakeApyBNB(50);
         // setStakeApy(30);
       }  else if (activeMethod === "Vault"){
         const vaultWeth = window.vault_weth;
@@ -337,6 +337,8 @@ const Calculator = ({ earnClass, onClose, ref }) => {
   }, [
     activeMethod,
     stakeApy,
+    stakeApyAVAX,
+    stakeApyBNB,
     vaultApy,
     usdToDeposit,
     days,
