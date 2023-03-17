@@ -39,6 +39,7 @@ const Dashboard = ({
   handleSwitchNetwork,
 }) => {
   const [topPools, setTopPools] = useState([]);
+  const [cawsLandCard, setCawsLandCard] = useState([])
 
   const [userPools, setuserPools] = useState([]);
   const wbsc_address = "0x2170Ed0880ac9A755fd29B2688956BD959F933F8";
@@ -99,7 +100,7 @@ const Dashboard = ({
 
   const fetchEthStaking = async () => {
     await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_eth`)
+      .get(`https://api2.dyp.finance/api/get_staking_info_eth`)
       .then((res) => {
         const dypIdyp = res.data.stakingInfoDYPEth;
 
@@ -115,6 +116,10 @@ const Dashboard = ({
         setTopPools(finalEthCards.slice(0, 1));
 
         setLandCard(res.data.stakingInfoLAND[0]);
+
+        const land = res.data.stakinginfoCAWSLAND
+        setCawsLandCard(land[0]);
+     
       })
       .catch((err) => {
         console.log(err);
@@ -240,7 +245,7 @@ const Dashboard = ({
   }, [network, coinbase, loading]);
 
   const windowSize = useWindowSize();
-
+  
   return (
     <div className="container-lg dashboardwrapper px-0">
       <div className="d-flex m-0 flex-column flex-xxl-row justify-content-between gap-4">
@@ -304,9 +309,7 @@ const Dashboard = ({
                       cardType={"table"}
                       details={details === 2 ? true : false}
                       expired={false}
-                      // tvl={"$" + getFormattedNumber(cawsCard2.tvl_usd)}
-                      // tvl={"$" + getFormattedNumber(landCard.tvl_usd)}
-                      // apr={landCard.apy_percent}
+                      tvl={"$" + getFormattedNumber(cawsLandCard.tvl_usd)}
                     />
                   )}
 
@@ -568,24 +571,13 @@ const Dashboard = ({
                       cardType={"table"}
                       details={details === 2 ? true : false}
                       expired={false}
-                      // tvl={"$" + getFormattedNumber(cawsCard2.tvl_usd)}
+                      tvl={"$" + getFormattedNumber(cawsLandCard.tvl_usd)}
                       // tvl={"$" + getFormattedNumber(landCard.tvl_usd)}
                       // apr={landCard.apy_percent}
                     />
                   )}
-                                  {
-                  //  activeCard && network === 1 && cardIndex === 0 ? (
-                  //     <CawsDetails
-                  //       coinbase={coinbase}
-                  //       isConnected={isConnected}
-                  //       listType={"table"}
-                  //       chainId={network.toString()}
-                  //       handleSwitchNetwork={handleSwitchNetwork}
-                  //       handleConnection={handleConnection}
-                  //       expired={false}
-                  //       renderedPage={"dashboard"}
-                  //     />
-                  //   ) :
+                  {
+         
                   activeCard && network === 1 && cardIndex === 2 ? (
                     <CawsWodDetails
                       coinbase={coinbase}

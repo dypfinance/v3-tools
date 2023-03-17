@@ -1415,13 +1415,13 @@ const NftCawsWodChecklistModal = ({
                   onClick={() => {
                     checkUnstakebtn === true &&
                     selectNftIds.length === nftItem.length
-                      ? handleClaim()
+                      ? onClaimAll()
                       : checkUnstakebtn === true && selectNftIds.length === 0
                       ? onEmptyState()
                       : selectNftIds.length !== 0 &&
                         selectNftIds.length < nftItem.length
                       ? handleClaim(selectNftIds)
-                      : handleClaim();
+                      : onClaimAll();
                     // setCheckUnstakeBtn(false);
                   }}
                   style={{

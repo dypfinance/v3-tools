@@ -134,6 +134,7 @@ const EarnTopPicks = ({
     await axios
       .get(`https://api2.dyp.finance/api/get_staking_info_eth`)
       .then((res) => {
+        
         const dypIdyp = res.data.stakingInfoDYPEth.concat(
           res.data.stakingInfoiDYPEth
         );
@@ -157,8 +158,9 @@ const EarnTopPicks = ({
         setCawsCard(res.data.stakingInfoCAWS);
         setCawsCard2(res.data.stakingInfoCAWS[0]);
         setLandCard(res.data.stakingInfoLAND[0]);
-        setCawsLandCard(res.data.stakingInfoCAWSLAND[0]);
-console.log(res.data.stakingInfoCAWSLAND[0], "hellooooo");
+        const land = res.data.stakinginfoCAWSLAND
+        setCawsLandCard(land[0]);
+     
 
         
       })
@@ -166,6 +168,7 @@ console.log(res.data.stakingInfoCAWSLAND[0], "hellooooo");
         console.log(err);
       });
   };
+
   const fetchBnbStaking = async () => {
     await axios
       .get(`https://api.dyp.finance/api/get_staking_info_bnb`)
@@ -804,7 +807,6 @@ console.log(res.data.stakingInfoCAWSLAND[0], "hellooooo");
       } else setcardIndex(index);
     } else setcardIndex(index);
   };
-
 
 
 

@@ -76,7 +76,7 @@ const CawsWodCard = ({
             {cardType !== "Vault" && (
               <div className="d-flex flex-column">
                 <h6 className="tvl-text">Total Value Locked</h6>
-                <h6 className="tvl-amount">$48,382.30</h6>
+                <h6 className="tvl-amount">{tvl}</h6>
               </div>
             )}
             <div
