@@ -691,8 +691,7 @@ const NftCawsWodChecklistModal = ({
                 </Timeline>
                 <div
                   className={
-                    getApprovedLandNfts(selectNftLandIds).length > 0 &&
-                    showCawsApprove === false
+                    getApprovedLandNfts(selectNftLandIds).length > 0 
                       ? "optionbtn-active order-2 order-lg-3"
                       : "optionbtn-passive order-2 order-lg-3"
                   }
@@ -704,9 +703,7 @@ const NftCawsWodChecklistModal = ({
                   style={{
                     display: hideItem === "tostake" ? "none" : "block",
                     pointerEvents:
-                      (getApprovedLandNfts(selectNftLandIds).length === 0 ||
-                        showCawsApprove === true ||
-                        nftItem.length === 0) &&
+                      (getApprovedLandNfts(selectNftLandIds).length === 0 || nftItem.length === 0) &&
                       screenName === "land"
                         ? "none"
                         : "auto",
@@ -1206,7 +1203,7 @@ const NftCawsWodChecklistModal = ({
                 />
 
                 <span className="radioDesc" style={{ color: "#F7F7FC" }}>
-                  Stake your NFT to earn rewards (90 days lock time)
+                  Stake your NFT to earn rewards (no lock time)
                 </span>
               </form>
               <div
@@ -1256,52 +1253,20 @@ const NftCawsWodChecklistModal = ({
               className="mt-4 row mx-0 justify-content-xxl-between justify-content-lg-between justify-content-md-between justify-content-sm-between justify-content-center gap-3"
               style={{
                 gap: 20,
-                display: showStaked === false ? "" : "none",
+                display: showStaked === false && screenName === 'caws' && (getApprovedLandNfts(selectNftLandIds).length > 0 && getApprovedNfts(selectNftIds).length > 0)? "" : "none",
               }}
             >
+              {showCawsApprove === true && showLandApprove === true &&
               <button
                 className="btn activebtn"
                 onClick={() => {
-                  screenName === "caws" ? handleApprove() : handleApproveWod();
+                   handleApprove() 
                 }}
                 style={{
-                  background:
-                    (screenName === "caws" && showCawsApprove === false) ||
-                    nftItem.length === 0
-                      ? "#14142A"
-                      : screenName === "caws" &&
-                        showCawsApprove === true &&
-                        nftItem.length > 0
-                      ? "linear-gradient(90.74deg, #7770E0 0%, #554FD8 100%)"
-                      : (screenName === "land" && showLandApprove === false) ||
-                        nftItem.length === 0
-                      ? "#14142A"
-                      : "linear-gradient(90.74deg, #7770E0 0%, #554FD8 100%)",
-
-                  pointerEvents:
-                    (screenName === "caws" && showCawsApprove === false) ||
-                    nftItem.length === 0
-                      ? "none"
-                      : screenName === "caws" &&
-                        showCawsApprove === true &&
-                        nftItem.length > 0
-                      ? "auto"
-                      : (screenName === "land" && showLandApprove === false) ||
-                        nftItem.length === 0
-                      ? "none"
-                      : "auto",
-                  display:
-                    (screenName === "caws" && showCawsApprove === false) ||
-                    nftItem.length === 0
-                      ? "none"
-                      : screenName === "caws" &&
-                        showCawsApprove === true &&
-                        nftItem.length > 0
-                      ? "block"
-                      : (screenName === "land" && showLandApprove === false) ||
-                        nftItem.length === 0
-                      ? "none"
-                      : "block",
+                  background: 
+                        "linear-gradient(90.74deg, #7770E0 0%, #554FD8 100%)",
+                     
+                 
                 }}
               >
                 {loading ? (
@@ -1309,9 +1274,28 @@ const NftCawsWodChecklistModal = ({
                     <div className="spinner-border " role="status"></div>
                   </>
                 ) : (
-                  "Approve"
+                  'Approve CAWS' 
                 )}
-              </button>
+              </button>}
+              {showCawsApprove === false && showLandApprove === true &&
+              <button
+                className="btn activebtn"
+                onClick={() => {
+                    handleApproveWod();
+                }}
+                style={{
+                  background: "linear-gradient(90.74deg, #7770E0 0%, #554FD8 100%)",
+
+                }}
+              >
+                {loading ? (
+                  <>
+                    <div className="spinner-border " role="status"></div>
+                  </>
+                ) : (
+                   'Approve WoD'
+                )}
+              </button> }
               <button
                 className={`btn ${
                   showCawsApprove === false &&
@@ -1336,12 +1320,12 @@ const NftCawsWodChecklistModal = ({
                 }}
                 onClick={() =>
                   (checkbtn === true &&
-                    (selectNftIds.length === 0 ||
-                      selectNftLandIds.length === 0)) ||
+                    (getApprovedNfts(selectNftIds).length === 0 ||
+                       getApprovedLandNfts(selectNftLandIds).length === 0)) ||
                   (checkbtn === false &&
-                    (selectNftIds.length === 0 ||
-                      selectNftLandIds.length === 0)) ||
-                  selectNftIds.length > 50
+                    (getApprovedNfts(selectNftIds).length === 0 ||
+                       getApprovedLandNfts(selectNftLandIds).length === 0)) ||
+                  getApprovedNfts(selectNftIds).length > 50
                     ? onEmptyState()
                     : handleDeposit()
                 }
