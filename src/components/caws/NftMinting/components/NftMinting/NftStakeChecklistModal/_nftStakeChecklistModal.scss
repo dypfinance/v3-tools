@@ -497,10 +497,16 @@ input[type="checkbox"]:checked {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   justify-content: center;
+  height: 312px;
+  overflow: scroll;
 
   @media screen and (max-width: 500px) {
    place-items: center;
   grid-template-columns: repeat(1, 1fr);
+  height: auto;
+  overflow: auto;
+  gap: 15px;
+
   }
   
   .nft-img {
