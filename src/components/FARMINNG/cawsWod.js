@@ -640,7 +640,7 @@ const CawsWodDetails = ({
                 onClick={() => {
                   setshowChecklistModal(true);
                   setOpenStakeChecklist(true);
-                  setHide("");
+                  setHide("tostake");
                 }}
               >
                 Withdraw

@@ -301,7 +301,6 @@ const NftCawsWodChecklistModal = ({
         setSelectedNftIds([]);
         handleClearStatus();
         onDepositComplete();
-
       });
   };
 
@@ -382,23 +381,22 @@ const NftCawsWodChecklistModal = ({
   const handleUnstake = async (value) => {
     setStatus("*Processing unstake");
     setColor("#57AEAA");
-    setloadingWithdraw(true)
+    setloadingWithdraw(true);
     await window.wod_caws
       .withdrawWodCaws(
         getApprovedNfts(selectNftIds),
         getApprovedLandNfts(selectNftLandIds)
       )
       .then(() => {
-    setloadingWithdraw(false)
+        setloadingWithdraw(false);
         setStatus("*Unstaked successfully");
         setColor("#57AEAA");
         handleClearStatus();
         setSelectedNftIds([]);
         onDepositComplete();
-
       })
       .catch((err) => {
-    setloadingWithdraw(false)
+        setloadingWithdraw(false);
         window.alertify.error(err?.message);
         setStatus("An error occurred, please try again");
         setColor("#F13227");
@@ -408,13 +406,12 @@ const NftCawsWodChecklistModal = ({
   };
 
   const handleClaim = async (itemId) => {
-    
     setloadingClaim(true);
     setActive(false);
     setStatus("*Claiming rewards...");
     setColor("#57AEAA");
     await window.wod_caws
-    .claimRewardsWodCaws(getApprovedNfts(selectNftIds))
+      .claimRewardsWodCaws(getApprovedNfts(selectNftIds))
       .then(() => {
         setloadingClaim(false);
         setStatus("*Claimed successfully");
@@ -425,13 +422,27 @@ const NftCawsWodChecklistModal = ({
       .catch((err) => {
         window.alertify.error(err?.message);
         setloadingClaim(false);
-    setColor("#F13227");
+        setColor("#F13227");
         setStatus("An error occurred, please try again");
         setSelectedNftIds([]);
       });
   };
 
   const devicewidth = window.innerWidth;
+
+
+  useEffect(()=>{
+    if(getApprovedLandNfts(selectNftLandIds).length > 0 && getApprovedNfts(selectNftIds).length > 0) {
+      if(getApprovedLandNfts(selectNftLandIds).length !== getApprovedNfts(selectNftIds).length)
+      {
+        setStatus('You must select the same nft amount!')
+      }
+      else if(getApprovedLandNfts(selectNftLandIds).length === getApprovedNfts(selectNftIds).length)
+      {
+        setStatus('')
+      }
+    }
+  },[getApprovedLandNfts(selectNftLandIds).length])
 
   return (
     <Modal
@@ -1136,7 +1147,12 @@ const NftCawsWodChecklistModal = ({
                     alignItems: "center",
                   }}
                 >
-                  {selectNftIds.length  + ' ' + 'CAWS' + ' & ' + selectNftLandIds.length + "WoD"}
+                  {selectNftIds.length +
+                    " " +
+                    "CAWS" +
+                    " & " +
+                    selectNftLandIds.length +
+                    "WoD"}
                   /50
                 </span>
                 <span
@@ -1427,7 +1443,12 @@ const NftCawsWodChecklistModal = ({
                           }}
                         >
                           {countDownLeft < 0
-                            ? selectNftIds.length  + ' ' + 'CAWS' + ' & ' + selectNftLandIds.length + "WoD"
+                            ? selectNftIds.length +
+                              " " +
+                              "CAWS" +
+                              " & " +
+                              selectNftLandIds.length +
+                              "WoD"
                             : 0}
                           /50
                         </span>
