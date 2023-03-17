@@ -433,7 +433,7 @@ const NftCawsWodChecklistModal = ({
       }}
       modalId="stakechecklist"
       width="fit-content"
-      maxHeight="inherit"
+      maxHeight="90%"
     >
       <div className="left-col">
         <div className="d-flex align-items-center justify-content-between width-100">
@@ -506,9 +506,9 @@ const NftCawsWodChecklistModal = ({
               </h5>
             </div>
           </div>
-          <div className="d-flex gap-4 justify-content-between align-items-baseline">
+          <div className="d-flex gap-4 justify-content-between align-items-baseline" style={{flexWrap: 'wrap'}}>
             {showToStake === true ? (
-              <div className="justify-content-start">
+              <div className="justify-content-start ">
                 <button
                   onClick={() => {
                     handleSelectAll();
@@ -565,7 +565,7 @@ const NftCawsWodChecklistModal = ({
                       padding: 0,
                     },
                   }}
-                  className="col-7"
+                  className="col-12 col-lg-7 order-3 order-lg-2"
                 >
                   <TimelineItem>
                     <TimelineSeparator>
@@ -612,8 +612,8 @@ const NftCawsWodChecklistModal = ({
                   className={
                     getApprovedNfts(selectNftIds).length > 0 &&
                     showCawsApprove === false
-                      ? "optionbtn-active"
-                      : "optionbtn-passive"
+                      ? "optionbtn-active order-2 order-lg-3"
+                      : "optionbtn-passive order-2 order-lg-3"
                   }
                   onClick={() => {
                     screenName === "caws"
