@@ -94,6 +94,7 @@ const NftCawsWodChecklistModal = ({
   let nftLandIds = [];
 
   const handleClearStatus = () => {
+    onDepositComplete();
     const interval = setInterval(async () => {
       setStatus("");
     }, 8000);
@@ -304,6 +305,7 @@ const NftCawsWodChecklistModal = ({
         onDepositComplete();
         setColor("#57AEAA");
         handleClearStatus();
+        onShowBackScreen();
       })
       .catch((err) => {
         console.log(err);
@@ -314,6 +316,8 @@ const NftCawsWodChecklistModal = ({
         setSelectedNftLandIds([]);
         handleClearStatus();
         onDepositComplete();
+        onShowBackScreen();
+
       });
   };
 

@@ -119,6 +119,7 @@ const CawsWodDetails = ({
       stakes.reverse();
       setMystakes(stakes);
     }
+    else setMystakes([])
   };
 
   const myLandNft = async () => {
@@ -140,9 +141,10 @@ const CawsWodDetails = ({
     const allLandStakes = await window.wod_caws
       .depositsOfWod(address)
       .then((result) => {
-        for (let i = 0; i < result.length; i++)
+        if(result > 0)
+      {  for (let i = 0; i < result.length; i++)
           stakenft.push(parseInt(result[i]));
-        return stakenft;
+        return stakenft;}
       });
 
     return allLandStakes;
@@ -156,6 +158,7 @@ const CawsWodDetails = ({
       stakes.reverse();
       setMyLandstakes(stakes);
     }
+    else setMyLandstakes([])
   };
 
   const setUSDPrice = async () => {
@@ -256,9 +259,11 @@ const CawsWodDetails = ({
       });
   };
 
-
+console.log(myLandstakes)
   useEffect(() => {
     if (coinbase) {
+      getStakesIds();
+      getLandStakesIds();
       myNft().then();
       myStakes().then();
       myLandNft().then();
@@ -606,7 +611,7 @@ const CawsWodDetails = ({
           countDownLeft={countDownLeft}
           open={openStakeChecklist ? true : false}
           hideItem={hide}
-          onDepositComplete={refreshStakes}
+          onDepositComplete={()=>refreshStakes()}
         />
       )}
 
