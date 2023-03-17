@@ -455,7 +455,7 @@ const NftCawsWodChecklistModal = ({
         getApprovedLandNfts(selectNftLandIds).length !==
         getApprovedNfts(selectNftIds).length
       ) {
-        setStatus("You must select the same nft amount!");
+        setStatus("You must select the same amount of NFTs!");
         setColor("#F13227");
 
       } else if (
