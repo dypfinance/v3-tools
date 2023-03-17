@@ -50,7 +50,7 @@ const CawsWodDetails = ({
   const [showUnstakeModal, setShowUnstakeModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [countDownLeft, setCountDownLeft] = useState(59000);
-  const [totalStakes, settotalStakes] = useState(0);
+  
   const [approvedNfts, setApprovedNfts] = useState([]);
   const [loadingdeposit, setloadingdeposit] = useState(false);
   const [newStakes, setnewStakes] = useState(0);
@@ -211,82 +211,7 @@ const CawsWodDetails = ({
     setnewStakes(newStakes + 1);
   };
 
-  const handleClearStatus = () => {
-    const interval = setInterval(async () => {
-      setStatus("");
-    }, 8000);
-    return () => clearInterval(interval);
-  };
 
-  const handleApprove = async () => {
-    const stakeApr50 = await window.config.nftstaking_address50;
-
-    setloading(true);
-    setStatus("*Waiting for approval");
-    await window.nft
-      .approveStake(stakeApr50)
-      .then(() => {
-        setActive(false);
-        setloading(false);
-        setColor("#52A8A4");
-        setStatus("*Caws approved successfully");
-      })
-      .catch((err) => {
-        setloading(false);
-        setColor("#F13227");
-        setStatus("*An error occurred. Please try again");
-        handleClearStatus();
-      });
-  };
-
-  const handleApproveWod = async () => {
-    const land_nft = await window.config.landnftstake_address;
-
-    setloading(true);
-    setStatus("*Waiting for approval");
-    await window.landnft
-      .approveStake(land_nft)
-      .then(() => {
-        setActive(false);
-        setloading(false);
-        setColor("#52A8A4");
-        setStatus("*WoD approved successfully");
-      })
-      .catch((err) => {
-        setloading(false);
-        setColor("#F13227");
-        setStatus("*An error occurred. Please try again");
-        handleClearStatus();
-      });
-  };
-
-  const handleDeposit = async () => {
-    let stake_contract = await window.getContractNFT("NFTSTAKING");
-    setloadingdeposit(true);
-    setStatus("*Processing deposit");
-    setColor("#F13227");
-
-    await stake_contract.methods
-      .deposit(approvedNfts)
-      .send()
-      .then(() => {
-        setloadingdeposit(false);
-        setshowClaim(true);
-        setActive(true);
-        setStatus("*Sucessfully deposited");
-        setApprovedNfts([]);
-        setColor("#57AEAA");
-        handleClearStatus();
-        refreshStakes();
-      })
-      .catch((err) => {
-        setloadingdeposit(false);
-        setColor("#F13227");
-        setStatus("*An error occurred. Please try again");
-        setApprovedNfts([]);
-        handleClearStatus();
-      });
-  };
 
   const calculateCountdown = async () => {
     const address = coinbase;
@@ -311,6 +236,7 @@ const CawsWodDetails = ({
     await window.wod_caws
       .withdrawWodCaws()
       .then(() => {
+        refreshStakes()
         // setunstakeAllStatus("Successfully unstaked all!");
       })
       .catch((err) => {
@@ -330,24 +256,6 @@ const CawsWodDetails = ({
       });
   };
 
-  const totalStakedNft = async () => {
-    let staking_contract = await new window.infuraWeb3.eth.Contract(
-      window.NFT_ABI,
-      window.config.nft_address,
-      { from: undefined }
-    );
-
-    await staking_contract.methods
-      .balanceOf(window.config.nftstaking_address)
-      .call()
-      .then((data) => {
-        settotalStakes(data);
-      });
-  };
-
-  useEffect(() => {
-    totalStakedNft().then();
-  }, []);
 
   useEffect(() => {
     if (coinbase) {

@@ -64,9 +64,8 @@ const NftCawsWodChecklistModal = ({
   const [showToStake, setshowToStake] = useState(false);
   const [showStaked, setshowStaked] = useState(false);
   const [checkbtn, setCheckBtn] = useState(false);
-  const [selfCheckbtn, setselfCheckbtnBtn] = useState('');
+  const [selfCheckbtn, setselfCheckbtnBtn] = useState("");
   const [selfCheckbtnLand, setselfCheckbtnBtnLand] = useState(false);
-
 
   const [checkLandbtn, setCheckLandBtn] = useState(false);
 
@@ -215,13 +214,11 @@ const NftCawsWodChecklistModal = ({
   const handleSelectAll = () => {
     setCheckBtn(!checkbtn);
     if (checkbtn === false) {
-       if (nftIds.length > 50) {
+      if (nftIds.length > 50) {
         setSelectedNftIds(nftIds.slice(0, 50));
-      }
-      else if (nftIds.length <= 50) {
+      } else if (nftIds.length <= 50) {
         setSelectedNftIds(nftIds);
       }
-     
     } else if (checkbtn === true) {
       setSelectedNftIds([]);
     }
@@ -231,11 +228,9 @@ const NftCawsWodChecklistModal = ({
   const handleSelectAllLand = () => {
     setCheckLandBtn(!checkLandbtn);
     if (checkLandbtn === false) {
-       if (nftLandIds.length > 50) {
+      if (nftLandIds.length > 50) {
         setSelectedNftLandIds(nftLandIds.slice(0, 50));
-      }
-
-      else if (nftLandIds.length <= 50) {
+      } else if (nftLandIds.length <= 50) {
         setSelectedNftLandIds(nftLandIds);
       }
     } else if (checkLandbtn === true) {
@@ -244,7 +239,7 @@ const NftCawsWodChecklistModal = ({
     }
 
     setCheckUnstakeBtn(false);
-  }
+  };
 
   const handleSelectAllToUnstake = () => {
     let cawsIdArray = [];
@@ -305,9 +300,10 @@ const NftCawsWodChecklistModal = ({
         setActive(true);
         setStatus("*Sucessfully deposited");
         setSelectedNftIds([]);
+        setSelectedNftLandIds([]);
+        onDepositComplete();
         setColor("#57AEAA");
         handleClearStatus();
-        onDepositComplete();
       })
       .catch((err) => {
         console.log(err);
@@ -315,6 +311,7 @@ const NftCawsWodChecklistModal = ({
         setColor("#F13227");
         setStatus("*An error occurred. Please try again");
         setSelectedNftIds([]);
+        setSelectedNftLandIds([]);
         handleClearStatus();
         onDepositComplete();
       });
@@ -350,6 +347,7 @@ const NftCawsWodChecklistModal = ({
         setCheckBtn(false);
         setCheckUnstakeBtn(false);
         setSelectedNftIds([]);
+        setSelectedNftLandIds([]);
         return () => clearInterval(interval);
       }, 500);
     } else if (
@@ -373,6 +371,7 @@ const NftCawsWodChecklistModal = ({
         setCheckBtn(false);
         setCheckUnstakeBtn(false);
         setSelectedNftIds([]);
+        setSelectedNftLandIds([]);
         return () => clearInterval(interval);
       }, 500);
     }
@@ -382,7 +381,10 @@ const NftCawsWodChecklistModal = ({
     if (showToStake === true) {
       checkApproval().then();
       checkApprovalLand().then();
-    } else setSelectedNftIds([]);
+    } else {
+      setSelectedNftIds([]);
+      setSelectedNftLandIds([]);
+    }
   }, [showClaim, showToStake, coinbase, screenName, nftItem.length]);
 
   useEffect(() => {
@@ -404,12 +406,13 @@ const NftCawsWodChecklistModal = ({
         getApprovedLandNfts(selectNftLandIds)
       )
       .then(() => {
+        onDepositComplete();
         setloadingWithdraw(false);
         setStatus("*Unstaked successfully");
         setColor("#57AEAA");
         handleClearStatus();
         setSelectedNftIds([]);
-        onDepositComplete();
+        setSelectedNftLandIds([]);
       })
       .catch((err) => {
         setloadingWithdraw(false);
@@ -417,6 +420,8 @@ const NftCawsWodChecklistModal = ({
         setStatus("An error occurred, please try again");
         setColor("#F13227");
         setSelectedNftIds([]);
+        setSelectedNftLandIds([]);
+
         handleClearStatus();
       });
   };
@@ -434,6 +439,7 @@ const NftCawsWodChecklistModal = ({
         handleClearStatus();
         setColor("#57AEAA");
         setSelectedNftIds([]);
+        setSelectedNftLandIds([]);
       })
       .catch((err) => {
         window.alertify.error(err?.message);
@@ -441,6 +447,7 @@ const NftCawsWodChecklistModal = ({
         setColor("#F13227");
         setStatus("An error occurred, please try again");
         setSelectedNftIds([]);
+        setSelectedNftLandIds([]);
       });
   };
 
@@ -457,7 +464,6 @@ const NftCawsWodChecklistModal = ({
       ) {
         setStatus("You must select the same amount of NFTs!");
         setColor("#F13227");
-
       } else if (
         getApprovedLandNfts(selectNftLandIds).length ===
         getApprovedNfts(selectNftIds).length
@@ -466,7 +472,6 @@ const NftCawsWodChecklistModal = ({
       }
     }
   }, [getApprovedLandNfts(selectNftLandIds).length]);
-  
 
   return (
     <Modal
@@ -696,8 +701,9 @@ const NftCawsWodChecklistModal = ({
                     display: hideItem === "tostake" ? "none" : "block",
                     pointerEvents:
                       (getApprovedNfts(selectNftIds).length === 0 ||
-                      showCawsApprove === true ||
-                      nftItem.length === 0) && screenName === "caws"
+                        showCawsApprove === true ||
+                        nftItem.length === 0) &&
+                      screenName === "caws"
                         ? "none"
                         : "auto",
                   }}
@@ -752,7 +758,10 @@ const NftCawsWodChecklistModal = ({
                         isStake={showStaked}
                         countDownLeft={countDownLeft}
                         checked={
-                          ((showToStake === true && checkbtn === true) || getApprovedNfts(selectNftIds).includes(item.name?.slice(6, nftItem.name?.length)) ||
+                          ((showToStake === true && checkbtn === true) ||
+                            getApprovedNfts(selectNftIds).includes(
+                              item.name?.slice(6, nftItem.name?.length)
+                            ) ||
                             (showStaked === true &&
                               checkUnstakebtn === true)) &&
                           getApprovedNfts(selectNftIds).length <= 50
@@ -770,7 +779,7 @@ const NftCawsWodChecklistModal = ({
                                 selectNftIds.indexOf(value),
                                 1
                               );
-                              
+
                           setSelectedNftIds(selectNftIds);
                           getApprovedNfts(selectNftIds);
                           console.log(selectNftIds);
@@ -817,40 +826,39 @@ const NftCawsWodChecklistModal = ({
                 }
                 return (
                   <>
-                      <NftStakingCawChecklist
-                        key={id}
-                        nft={item}
-                        modalId="#newNftchecklist"
-                        isStake={showStaked}
-                        countDownLeft={countDownLeft}
-                        checked={
-                          ((showToStake === true && checkbtn === true) || getApprovedNfts(selectNftIds).includes(item.name?.slice(6, nftItem.name?.length)) ||
-                            (showStaked === true &&
-                              checkUnstakebtn === true)) &&
-                          getApprovedNfts(selectNftIds).length <= 50
-                        }
-                        checked2={
-                          getApprovedNfts(selectNftIds).length <= 50
-                            ? true
-                            : false
-                        }
-                        checklistItemID={nftId}
-                        onChange={(value) => {
-                          selectNftIds.indexOf(value) === -1
-                            ? selectNftIds.push(value)
-                            : selectNftIds.splice(
-                                selectNftIds.indexOf(value),
-                                1
-                              );
-                              
-                          setSelectedNftIds(selectNftIds);
-                          getApprovedNfts(selectNftIds);
-                          console.log(selectNftIds);
-                          setVal(value);
-                        }}
-                        coinbase={coinbase}
-                        isConnected={isConnected}
-                      />
+                    <NftStakingCawChecklist
+                      key={id}
+                      nft={item}
+                      modalId="#newNftchecklist"
+                      isStake={showStaked}
+                      countDownLeft={countDownLeft}
+                      checked={
+                        ((showToStake === true && checkbtn === true) ||
+                          getApprovedNfts(selectNftIds).includes(
+                            item.name?.slice(6, nftItem.name?.length)
+                          ) ||
+                          (showStaked === true && checkUnstakebtn === true)) &&
+                        getApprovedNfts(selectNftIds).length <= 50
+                      }
+                      checked2={
+                        getApprovedNfts(selectNftIds).length <= 50
+                          ? true
+                          : false
+                      }
+                      checklistItemID={nftId}
+                      onChange={(value) => {
+                        selectNftIds.indexOf(value) === -1
+                          ? selectNftIds.push(value)
+                          : selectNftIds.splice(selectNftIds.indexOf(value), 1);
+
+                        setSelectedNftIds(selectNftIds);
+                        getApprovedNfts(selectNftIds);
+                        console.log(selectNftIds);
+                        setVal(value);
+                      }}
+                      coinbase={coinbase}
+                      isConnected={isConnected}
+                    />
                   </>
                 );
               })
@@ -901,7 +909,10 @@ const NftCawsWodChecklistModal = ({
                         isStake={showStaked}
                         countDownLeft={countDownLeft}
                         checked={
-                          ((showToStake === true && checkLandbtn === true) || getApprovedLandNfts(selectNftLandIds).includes(item.name?.slice(1, landItems.name?.length)) ||
+                          ((showToStake === true && checkLandbtn === true) ||
+                            getApprovedLandNfts(selectNftLandIds).includes(
+                              item.name?.slice(1, landItems.name?.length)
+                            ) ||
                             (showStaked === true &&
                               checkUnstakebtn === true)) &&
                           selectNftLandIds.length <= 50
@@ -915,7 +926,7 @@ const NftCawsWodChecklistModal = ({
                                 selectNftLandIds.indexOf(value),
                                 1
                               );
-                              
+
                           setSelectedNftLandIds(selectNftLandIds);
                           getApprovedLandNfts(selectNftLandIds);
                           console.log(selectNftLandIds);
@@ -962,36 +973,38 @@ const NftCawsWodChecklistModal = ({
                 }
                 return (
                   <>
-                  <LandNftChecklist
-                        key={id}
-                        nft={item}
-                        modalId="#newNftchecklist"
-                        isStake={showStaked}
-                        countDownLeft={countDownLeft}
-                        checked={
-                          ((showToStake === true && checkLandbtn === true) || getApprovedLandNfts(selectNftLandIds).includes(item.name?.slice(1, landItems.name?.length)) ||
-                            (showStaked === true &&
-                              checkUnstakebtn === true)) &&
-                          selectNftLandIds.length <= 50
-                        }
-                        checked2={selectNftLandIds.length <= 50 ? true : false}
-                        checklistItemID={nftLandId}
-                        onChange={(value) => {
-                          selectNftLandIds.indexOf(value) === -1
-                            ? selectNftLandIds.push(value)
-                            : selectNftLandIds.splice(
-                                selectNftLandIds.indexOf(value),
-                                1
-                              );
-                              
-                          setSelectedNftLandIds(selectNftLandIds);
-                          getApprovedLandNfts(selectNftLandIds);
-                          console.log(selectNftLandIds);
-                          setVal(value);
-                        }}
-                        coinbase={coinbase}
-                        isConnected={isConnected}
-                      />
+                    <LandNftChecklist
+                      key={id}
+                      nft={item}
+                      modalId="#newNftchecklist"
+                      isStake={showStaked}
+                      countDownLeft={countDownLeft}
+                      checked={
+                        ((showToStake === true && checkLandbtn === true) ||
+                          getApprovedLandNfts(selectNftLandIds).includes(
+                            item.name?.slice(1, landItems.name?.length)
+                          ) ||
+                          (showStaked === true && checkUnstakebtn === true)) &&
+                        selectNftLandIds.length <= 50
+                      }
+                      checked2={selectNftLandIds.length <= 50 ? true : false}
+                      checklistItemID={nftLandId}
+                      onChange={(value) => {
+                        selectNftLandIds.indexOf(value) === -1
+                          ? selectNftLandIds.push(value)
+                          : selectNftLandIds.splice(
+                              selectNftLandIds.indexOf(value),
+                              1
+                            );
+
+                        setSelectedNftLandIds(selectNftLandIds);
+                        getApprovedLandNfts(selectNftLandIds);
+                        console.log(selectNftLandIds);
+                        setVal(value);
+                      }}
+                      coinbase={coinbase}
+                      isConnected={isConnected}
+                    />
                   </>
                 );
               })
