@@ -536,7 +536,7 @@ const CawsWodDetails = ({
               </div>
               <div className="d-flex flex-column gap-2 justify-content-between">
                 <div className="d-flex align-items-center justify-content-between gap-2">
-                  <div className="d-flex align-items-end gap-2">
+                 
                     <button
                       className="btn filledbtn"
                       onClick={() => {
@@ -551,27 +551,7 @@ const CawsWodDetails = ({
                     <div className="available-nfts">
                       Selected NFTs:{" "}
                       <b>{isConnected === false ? 0 : approvedNfts.length}</b>
-                    </div>
-                  </div>
-                  <button
-                    className={`btn ${
-                      (amountToStake !== "" && myNFTs.length > 0) ||
-                      approvedNfts.length > 0
-                        ? "filledbtn"
-                        : "disabled-btn"
-                    } d-flex justify-content-center align-items-center gap-2`}
-                    disabled={
-                      (amountToStake !== "" && myNFTs.length > 0) ||
-                      approvedNfts.length > 0
-                        ? false
-                        : true
-                    }
-                    onClick={() => {
-                      // showApprove === false ? handleDeposit() : handleApprove();
-                    }}
-                  >
-                    {showApprove === false ? "Deposit" : "Approve"}
-                  </button>
+                    </div> 
                 </div>
                 {/* {this.state.errorMsg && (
                   <h6 className="errormsg">{this.state.errorMsg}</h6>

@@ -159,7 +159,7 @@ const NftCawsWodChecklistModal = ({
     }
   };
 
-  // console.log(nftItem)
+  
 
   const handleApprove = async () => {
     const stakeApr50 = await window.config.wod_caws_address;
@@ -204,33 +204,29 @@ const NftCawsWodChecklistModal = ({
         handleClearStatus();
       });
   };
-  
+
   const handleSelectAll = () => {
-    
-      setCheckBtn(!checkbtn);
-      if (checkbtn === false) {
-        if (nftIds.length > 50) {
-          setSelectedNftIds(nftIds.slice(0, 50));
-        }
-        if (nftLandIds.length > 50) {
-          setSelectedNftLandIds(nftLandIds.slice(0, 50));
-        }
-         
-         if (nftIds.length <= 50) {
-          setSelectedNftIds(nftIds);
-        }
-        
-         if (nftLandIds.length <= 50) {
-          setSelectedNftLandIds(nftLandIds);
-        }
-
-      } else if (checkbtn === true) {
-        setSelectedNftIds([]);
-        setSelectedNftLandIds([]);
-
+    setCheckBtn(!checkbtn);
+    if (checkbtn === false) {
+      if (nftIds.length > 50) {
+        setSelectedNftIds(nftIds.slice(0, 50));
       }
-      setCheckUnstakeBtn(false);
-    
+      if (nftLandIds.length > 50) {
+        setSelectedNftLandIds(nftLandIds.slice(0, 50));
+      }
+
+      if (nftIds.length <= 50) {
+        setSelectedNftIds(nftIds);
+      }
+
+      if (nftLandIds.length <= 50) {
+        setSelectedNftLandIds(nftLandIds);
+      }
+    } else if (checkbtn === true) {
+      setSelectedNftIds([]);
+      setSelectedNftLandIds([]);
+    }
+    setCheckUnstakeBtn(false);
   };
 
   // console.log(getApprovedLandNfts(selectNftLandIds), getApprovedNfts(selectNftIds))
@@ -358,7 +354,7 @@ const NftCawsWodChecklistModal = ({
       checkApproval().then();
       checkApprovalLand().then();
     } else setSelectedNftIds([]);
-  }, [showClaim, showToStake, coinbase, screenName]);
+  }, [showClaim, showToStake, coinbase, screenName, nftItem.length]);
 
   useEffect(() => {
     if (hideItem === "staked") {
@@ -423,8 +419,6 @@ const NftCawsWodChecklistModal = ({
         setSelectedNftIds([]);
       });
   };
-
-  
 
   const devicewidth = window.innerWidth;
 
@@ -621,21 +615,22 @@ const NftCawsWodChecklistModal = ({
                       ? "optionbtn-active"
                       : "optionbtn-passive"
                   }
-
                   onClick={() => {
-                      screenName === "caws"
-                        ? onShowNextScreen()
-                        : onShowBackScreen();
-
-                    }}
-
-                  style={{ display: hideItem === "tostake" ? "none" : "block" }}
+                    screenName === "caws"
+                      ? onShowNextScreen()
+                      : onShowBackScreen();
+                  }}
+                  style={{
+                    display: hideItem === "tostake" ? "none" : "block",
+                    pointerEvents:
+                      getApprovedNfts(selectNftIds).length === 0 ||
+                      showCawsApprove === true ||
+                      nftItem.length === 0
+                        ? "none"
+                        : "auto",
+                  }}
                 >
-                  <h5
-                    className="optiontext"
-
-                    style={{ fontSize: 14 }}
-                  >
+                  <h5 className="optiontext" style={{ fontSize: 14 }}>
                     {screenName === "caws" ? "Next" : "Back"}
                   </h5>
                 </div>
@@ -1167,29 +1162,40 @@ const NftCawsWodChecklistModal = ({
                 }}
                 style={{
                   background:
-                    screenName === "caws" && showCawsApprove === false
+                    (screenName === "caws" && showCawsApprove === false) ||
+                    nftItem.length === 0
                       ? "#14142A"
-                      : screenName === "caws" && showCawsApprove === true
+                      : screenName === "caws" &&
+                        showCawsApprove === true &&
+                        nftItem.length > 0
                       ? "linear-gradient(90.74deg, #7770E0 0%, #554FD8 100%)"
-                      : screenName === "land" && showLandApprove === false
+                      : (screenName === "land" && showLandApprove === false) ||
+                        nftItem.length === 0
                       ? "#14142A"
                       : "linear-gradient(90.74deg, #7770E0 0%, #554FD8 100%)",
 
                   pointerEvents:
-                    screenName === "caws" && showCawsApprove === false
+                    (screenName === "caws" && showCawsApprove === false) ||
+                    nftItem.length === 0
                       ? "none"
-                      : screenName === "caws" && showCawsApprove === true
+                      : screenName === "caws" &&
+                        showCawsApprove === true &&
+                        nftItem.length > 0
                       ? "auto"
-                      : screenName === "land" && showLandApprove === false
+                      : (screenName === "land" && showLandApprove === false) ||
+                        nftItem.length === 0
                       ? "none"
                       : "auto",
-
-                  display:
-                    screenName === "caws" && showCawsApprove === false
+                      display:
+                      (screenName === "caws" && showCawsApprove === false) ||
+                      nftItem.length === 0
                       ? "none"
-                      : screenName === "caws" && showCawsApprove === true
+                      :  screenName === "caws" &&
+                      showCawsApprove === true &&
+                      nftItem.length > 0
                       ? "block"
-                      : screenName === "land" && showLandApprove === false
+                      : (screenName === "land" && showLandApprove === false) ||
+                      nftItem.length === 0
                       ? "none"
                       : "block",
                 }}
@@ -1207,13 +1213,22 @@ const NftCawsWodChecklistModal = ({
                   showCawsApprove === false &&
                   showLandApprove === false &&
                   getApprovedNfts(selectNftIds).length > 0 &&
-                  getApprovedLandNfts(selectNftLandIds).length > 0 && getApprovedNfts(selectNftIds).length === getApprovedLandNfts(selectNftLandIds).length &&
+                  getApprovedLandNfts(selectNftLandIds).length > 0 &&
+                  getApprovedNfts(selectNftIds).length ===
+                    getApprovedLandNfts(selectNftLandIds).length &&
                   getApprovedNfts(selectNftIds).length < 51 &&
-                  getApprovedLandNfts(selectNftLandIds).length < 51?
-                  "purplebtn" : 'passivebtn'
+                  getApprovedLandNfts(selectNftLandIds).length < 51
+                    ? "purplebtn"
+                    : "passivebtn"
                 }`}
                 style={{
-                  pointerEvents: showCawsApprove === false && showLandApprove === false  &&  getApprovedNfts(selectNftIds).length === getApprovedLandNfts(selectNftLandIds).length ?'auto' : 'none'
+                  pointerEvents:
+                    showCawsApprove === false &&
+                    showLandApprove === false &&
+                    getApprovedNfts(selectNftIds).length ===
+                      getApprovedLandNfts(selectNftLandIds).length
+                      ? "auto"
+                      : "none",
                 }}
                 onClick={() =>
                   (checkbtn === true &&
