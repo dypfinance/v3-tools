@@ -170,6 +170,8 @@ const NftStakingCawChecklist = ({
               : "none"
             : checked === false && checkbtn === true && checked2 === true
             ? "2px solid #4ED5D2"
+            : checked === true && checkbtn === true && checked2 === true
+            ? "2px solid #4ED5D2"
             : "none",
         }}
       >

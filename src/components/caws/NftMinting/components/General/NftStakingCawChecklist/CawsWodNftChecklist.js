@@ -2,18 +2,19 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Web3 from "web3";
 import PropTypes from "prop-types";
-// import SvgEyeIcon from "../NftCawCard/SvgEyeIcon";
-// import EthLogo from "../../../../../assets/General/eth-create-nft.png";
-import { formattedNum } from "../../../../../../functions/formatUSD";
 import getFormattedNumber from "../../../../../../functions/get-formatted-number";
 
-const LandNftChecklist = ({
+const CawsWodNftChecklist = ({
   modalId,
   nft,
+  landNft,
   isStake,
   checked,
   checklistItemID,
+  landlistItemID,
   onChange,
+  onChangeLand,
+
   countDownLeft,
   checked2,
   coinbase,
@@ -40,25 +41,17 @@ const LandNftChecklist = ({
   const calculateReward = async (currentId) => {
     const address = coinbase;
     
-    let calculateRewards;
-    let staking_contract = await window.getContractLandNFT('LANDNFTSTAKING');
-    if (address !== null && currentId) {
-      calculateRewards = await staking_contract.methods
-        .calculateReward(address, parseInt(currentId))
-        .call()
-        .then((data) => {
-          return data;
-        })
-        .catch((err) => {
-          // window.alertify.error(err?.message);
-        });
-      const infuraWeb3 = new Web3(window.config.infura_endpoint);
-
-      let a = infuraWeb3.utils.fromWei(calculateRewards, "ether");
+    let reward = await window.wod_caws.calculateRewardWodCaws(address, currentId).then((data) => {
+        return data;
+      })
+      .catch((err) => {
+        // window.alertify.error(err?.message);
+      });
+      let finalReward = reward/1e18
       const ethprice = await convertEthToUsd();
-      setethToUSD(Number(ethprice) * Number(a));
-      setEthRewards(Number(a));
-    }
+      setethToUSD(Number(ethprice) * Number(finalReward));
+      setEthRewards(Number(finalReward));
+    
   };
 
   const handleClaim = async (itemId) => {
@@ -131,24 +124,19 @@ const LandNftChecklist = ({
   };
 
   const handleCawClick = () => {
-    if (isStake === false) {
-      if (checked2 === true) {
-        setCheckBtn(!checkbtn);
-        onChange(checklistItemID);
-      } else if (checked2 === false) {
-        setCheckBtn(!checkbtn);
-        onChange(checklistItemID);
-      }
-    } else if (isStake === true) {
+  if (isStake === true) {
       if (checked2 === true) {
         setUnstakeBtn(!Unstakebtn);
         onChange(checklistItemID);
+        onChangeLand(landlistItemID)
       } else if (checked2 === false) {
         setUnstakeBtn(!Unstakebtn);
         onChange(checklistItemID);
+        onChangeLand(landlistItemID)
       }
-    }
+  }
   };
+  
   return (
     <>
       <div
@@ -159,7 +147,7 @@ const LandNftChecklist = ({
           handleCawClick(checklistItemID);
         }}
         style={{
-          width: 195,
+          width: 270,
           border: isStake
             ? checked === true
               ? Unstakebtn === true
@@ -169,8 +157,6 @@ const LandNftChecklist = ({
               ? "2px solid #4ED5D2"
               : "none"
             : checked === false && checkbtn === true && checked2 === true
-            ? "2px solid #4ED5D2"
-            : checked === true && checkbtn === true && checked2 === true
             ? "2px solid #4ED5D2"
             : "none",
         }}
@@ -190,21 +176,23 @@ const LandNftChecklist = ({
             className="sub-container p-0"
             style={{boxShadow: 'none'}}
           >
+              <div className="d-flex align-items-center">
             <img
               src={nft.image.replace("images", "thumbs")}
-              className="nft-img"
+              className="nft-coins"
               alt=""
-              // onClick={() => {
-              //   onNftCheckListClick(nft);
-              // }}
-              // style={{ cursor: "pointer" }}
             />
+            <img
+              src={landNft.image.replace("images", "thumbs")}
+              className="nft-coins"
+              alt=""
+            /></div>
             <p
               style={{
                 color: "var(--light-gray-99-nft)",
               }}
             >
-             {nft.name}
+             {nft.name} x WoD {landNft.name}
             </p>
             <div className="d-flex" style={{ flexDirection: "column" }}>
               <div className="d-flex w-100 justify-content-between align-baseline">
@@ -214,7 +202,7 @@ const LandNftChecklist = ({
                     color: "var(--black-nft)",
                   }}
                 >
-                  {nft.name}
+                  {nft.name} x WoD {landNft.name}
                 </p>
                 {isStake ? (
                   <>
@@ -225,12 +213,8 @@ const LandNftChecklist = ({
                       checked={Unstakebtn && checked2 === true}
                       onClick={() => {
                         setUnstakeBtn(!Unstakebtn);
-                        // onChange(checklistItemID);
                       }}
-                      // style={{
-                      //   pointerEvents:
-                      //     checkPassiveBtn === true ? "auto" : "none",
-                      // }}
+                     
                     />
                   </>
                 ) : (
@@ -242,17 +226,12 @@ const LandNftChecklist = ({
                       checked={checkbtn && isStake === false && checked2 === true}
                       onChange={(e) => {
                         setCheckBtn(!checkbtn);
-                        // onChange(checklistItemID);
-                        //console.log(e.target.id);
                       }}
                     />
                   </>
                 )}
               </div>
-              {/* <div className="img">
-              <SvgEyeIcon />
-            </div> */}
-              {isStake && (
+              
                 <>
                   <div
                     className="earn-checklist-container d-block mb-0 p-0 w-100"
@@ -301,10 +280,8 @@ const LandNftChecklist = ({
                     Claim reward
                   </button>
                 </>
-              )}
             </div>
           </div>
-          {isStake ? (
             <>
               <button
                 className="checkbox-button"
@@ -332,44 +309,24 @@ const LandNftChecklist = ({
                 )}
               </button>
             </>
-          ) : (
-            <>
-              {/* <button
-                className="checkbox-button"
-                // onClick={() => {
-                //   setCheckBtn(!checkbtn);
-                //   onChange(checklistItemID);
-                // }}
-                style={{
-                  background:
-                    (!checked && !checkbtn) || (checked && !checkbtn)
-                      ? "linear-gradient(51.32deg, #e30613 -12.3%, #fa4a33 50.14%)"
-                      : "#C4C4C4",
-                }}
-              >
-                
-                {(!checked && !checkbtn) || (checked && !checkbtn && !isStake)
-                  ? "Add to Stake"
-                  : "Remove Stake"}
-              </button> */}
-            </>
-          )}
         </div>
       </div>
     </>
   );
 };
-LandNftChecklist.propTypes = {
+CawsWodNftChecklist.propTypes = {
   modalId: PropTypes.string,
   nft: PropTypes.object,
+  landNft: PropTypes.object,
   isStake: PropTypes.bool,
   checked: PropTypes.bool,
   checklistItemID: PropTypes.number,
+  landlistItemID: PropTypes.number,
   onChange: PropTypes.func,
-  // onNftCheckListClick: PropTypes.func,
+  onChangeLand: PropTypes.func,
   countDownLeft: PropTypes.any,
   coinbase: PropTypes.string,
   isConnected: PropTypes.bool,
 };
 
-export default LandNftChecklist;
+export default CawsWodNftChecklist;

@@ -164,47 +164,36 @@ const CawsWodDetails = ({
 
 
 
-  const handleClaimAll = async () => {
-    const address = coinbase;
+  const calculateAllRewards = async () => {
     let myStakes = await getStakesIds();
-    let calculateRewards = [];
     let result = 0;
-    let staking_contract = await window.getContractNFT("NFTSTAKING");
-    if (address !== null) {
+    
+    if (coinbase !== null) {
       if (myStakes.length > 0) {
-        calculateRewards = await staking_contract.methods
-          .calculateRewards(address, myStakes)
-          .call()
-          .then((data) => {
-            return data;
-          });
+      let rewards = await window.wod_caws.calculateRewardsWodCaws(coinbase, myStakes).then((data) => {
+        return data;
+      })
+      .catch((err) => {
+        console.log(err)
+      });
+      let finalReward = 0
+      for (let i = 0; i < rewards.length; i++) {
+        finalReward = rewards[i]/1e18
+        result = result + Number(finalReward);
       }
     }
-    let a = 0;
-    const infuraWeb3 = new Web3(window.config.infura_endpoint);
-    for (let i = 0; i < calculateRewards.length; i++) {
-      a = infuraWeb3.utils.fromWei(calculateRewards[i], "ether");
-
-      result = result + Number(a);
+     
     }
-
     setEthRewards(result);
   };
 
   const claimRewards = async () => {
     let myStakes = await getStakesIds();
-    let staking_contract = await window.getContractNFT("NFTSTAKING");
     // setclaimAllStatus("Claiming all rewards, please wait...");
-    await staking_contract.methods
-      .claimRewards(myStakes)
-      .send()
-      .then(() => {
+    await window.wod_caws.claimRewardsWodCaws(myStakes).then(() => {
         setEthRewards(0);
-        // setclaimAllStatus("Claimed All Rewards!");
       })
       .catch((err) => {
-        // window.alertify.error(err?.message);
-        // setclaimAllStatus("An error occurred, please try again");
       });
   };
 
@@ -322,14 +311,9 @@ const CawsWodDetails = ({
   };
  
   const handleUnstakeAll = async () => {
-    let myStakes = await getStakesIds();
-    let stake_contract = await window.getContractNFT("NFTSTAKING");
     // setunstakeAllStatus("Unstaking all please wait...");
-
-    await stake_contract.methods
-      .withdraw(myStakes)
-      .send()
-      .then(() => {
+    await window.wod_caws
+    .withdrawTokensWodCaws().then(() => {
         // setunstakeAllStatus("Successfully unstaked all!");
       })
       .catch((err) => {
@@ -376,10 +360,10 @@ const CawsWodDetails = ({
       myLandNft().then();
       myLandStakes().then();
       checkApproval().then();
-      handleClaimAll();
+      calculateAllRewards();
       calculateCountdown().then();
     }
-  }, [isConnected, coinbase, screenName]);
+  }, [isConnected, coinbase, screenName,newStakes]);
 
   const getApprovedNfts = (data) => {
     setApprovedNfts(data);
@@ -696,6 +680,8 @@ const CawsWodDetails = ({
               : screenName === 'caws' ? myNFTs : myLandNFTs
           }
           landItems={myLandNFTs}
+          cawsStakes={mystakes}
+          landStakes={myLandstakes}
           onShowNextScreen={() => { setScreenName('land') }}
           onShowBackScreen={() => { setScreenName('caws') }}
           onshowStaked={() => {
@@ -719,6 +705,7 @@ const CawsWodDetails = ({
           countDownLeft={countDownLeft}
           open={openStakeChecklist ? true : false}
           hideItem={hide}
+          onDepositComplete={refreshStakes}
         />
       )}
 
