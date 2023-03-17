@@ -64,6 +64,8 @@ const NftCawsWodChecklistModal = ({
   const [showToStake, setshowToStake] = useState(false);
   const [showStaked, setshowStaked] = useState(false);
   const [checkbtn, setCheckBtn] = useState(false);
+  const [checkLandbtn, setCheckLandBtn] = useState(false);
+
   const [checkUnstakebtn, setCheckUnstakeBtn] = useState(false);
 
   const [status, setStatus] = useState("");
@@ -209,26 +211,36 @@ const NftCawsWodChecklistModal = ({
   const handleSelectAll = () => {
     setCheckBtn(!checkbtn);
     if (checkbtn === false) {
-      if (nftIds.length > 50) {
+       if (nftIds.length > 50) {
         setSelectedNftIds(nftIds.slice(0, 50));
       }
-      if (nftLandIds.length > 50) {
-        setSelectedNftLandIds(nftLandIds.slice(0, 50));
-      }
-
-      if (nftIds.length <= 50) {
+      else if (nftIds.length <= 50) {
         setSelectedNftIds(nftIds);
       }
-
-      if (nftLandIds.length <= 50) {
-        setSelectedNftLandIds(nftLandIds);
-      }
+     
     } else if (checkbtn === true) {
       setSelectedNftIds([]);
-      setSelectedNftLandIds([]);
     }
     setCheckUnstakeBtn(false);
   };
+
+  const handleSelectAllLand = () => {
+    setCheckLandBtn(!checkLandbtn);
+    if (checkLandbtn === false) {
+       if (nftLandIds.length > 50) {
+        setSelectedNftLandIds(nftLandIds.slice(0, 50));
+      }
+
+      else if (nftLandIds.length <= 50) {
+        setSelectedNftLandIds(nftLandIds);
+      }
+    } else if (checkLandbtn === true) {
+      setSelectedNftIds([]);
+      setSelectedNftLandIds([]);
+    }
+
+    setCheckUnstakeBtn(false);
+  }
 
   const handleSelectAllToUnstake = () => {
     let cawsIdArray = [];
@@ -430,19 +442,26 @@ const NftCawsWodChecklistModal = ({
 
   const devicewidth = window.innerWidth;
 
+  useEffect(() => {
+    if (
+      getApprovedLandNfts(selectNftLandIds).length > 0 &&
+      getApprovedNfts(selectNftIds).length > 0
+    ) {
+      if (
+        getApprovedLandNfts(selectNftLandIds).length !==
+        getApprovedNfts(selectNftIds).length
+      ) {
+        setStatus("You must select the same nft amount!");
+        setColor("#F13227");
 
-  useEffect(()=>{
-    if(getApprovedLandNfts(selectNftLandIds).length > 0 && getApprovedNfts(selectNftIds).length > 0) {
-      if(getApprovedLandNfts(selectNftLandIds).length !== getApprovedNfts(selectNftIds).length)
-      {
-        setStatus('You must select the same nft amount!')
-      }
-      else if(getApprovedLandNfts(selectNftLandIds).length === getApprovedNfts(selectNftIds).length)
-      {
-        setStatus('')
+      } else if (
+        getApprovedLandNfts(selectNftLandIds).length ===
+        getApprovedNfts(selectNftIds).length
+      ) {
+        setStatus("");
       }
     }
-  },[getApprovedLandNfts(selectNftLandIds).length])
+  }, [getApprovedLandNfts(selectNftLandIds).length]);
 
   return (
     <Modal
@@ -534,27 +553,51 @@ const NftCawsWodChecklistModal = ({
           >
             {showToStake === true ? (
               <div className="justify-content-start ">
-                <button
-                  onClick={() => {
-                    handleSelectAll();
-                  }}
-                  className="select-all-btn"
-                  style={{
-                    display: "flex",
-                    pointerEvents: nftItem.length !== 0 ? "auto" : "none",
-                    opacity: nftItem.length !== 0 ? "1" : "0.4",
-                    color: checkbtn === true ? "#4ED5D2" : "#8E97CD",
-                  }}
-                >
-                  <input
-                    type="checkbox"
-                    id="add-to-stake"
-                    name="checkbtn"
-                    checked={checkbtn}
-                    onChange={() => {}}
-                  />
-                  {checkbtn ? "Unselect All" : "Select All"}
-                </button>
+                {screenName === "caws" ? (
+                  <button
+                    onClick={() => {
+                      handleSelectAll();
+                    }}
+                    className="select-all-btn"
+                    style={{
+                      display: "flex",
+                      pointerEvents: nftItem.length !== 0 ? "auto" : "none",
+                      opacity: nftItem.length !== 0 ? "1" : "0.4",
+                      color: checkbtn === true ? "#4ED5D2" : "#8E97CD",
+                    }}
+                  >
+                    <input
+                      type="checkbox"
+                      id="add-to-stake"
+                      name="checkbtn"
+                      checked={checkbtn}
+                      onChange={() => {}}
+                    />
+                    {checkbtn ? "Unselect All" : "Select All"}
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {
+                      handleSelectAllLand();
+                    }}
+                    className="select-all-btn"
+                    style={{
+                      display: "flex",
+                      pointerEvents: nftItem.length !== 0 ? "auto" : "none",
+                      opacity: nftItem.length !== 0 ? "1" : "0.4",
+                      color: checkLandbtn === true ? "#4ED5D2" : "#8E97CD",
+                    }}
+                  >
+                    <input
+                      type="checkbox"
+                      id="add-to-stake"
+                      name="checkbtn"
+                      checked={checkLandbtn}
+                      onChange={() => {}}
+                    />
+                    {checkLandbtn ? "Unselect All" : "Select All"}
+                  </button>
+                )}
               </div>
             ) : (
               <div className="d-flex justify-content-start">
@@ -844,7 +887,7 @@ const NftCawsWodChecklistModal = ({
                         isStake={showStaked}
                         countDownLeft={countDownLeft}
                         checked={
-                          ((showToStake === true && checkbtn === true) ||
+                          ((showToStake === true && checkLandbtn === true) ||
                             (showStaked === true &&
                               checkUnstakebtn === true)) &&
                           selectNftLandIds.length <= 50
@@ -912,8 +955,9 @@ const NftCawsWodChecklistModal = ({
                       isStake={showStaked}
                       countDownLeft={countDownLeft}
                       checked={
-                        ((showToStake === true && checkbtn === true) ||
-                          (showStaked === true && checkUnstakebtn === true)) &&
+                        ((showToStake === true && checkLandbtn === true) ||
+                          (showStaked === true &&
+                            checkUnstakebtn === true)) &&
                         selectNftLandIds.length <= 50
                       }
                       checked2={selectNftLandIds.length <= 50 ? true : false}

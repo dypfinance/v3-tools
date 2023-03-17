@@ -123,6 +123,7 @@ const CawsWodDetails = ({
 
   const myLandNft = async () => {
     let myNft = await window.myNftLandListContract(coinbase);
+
     if (myNft && myNft.length > 0) {
       let nfts = myNft.map((nft) => window.getLandNft(nft));
       nfts = await Promise.all(nfts);
