@@ -59,7 +59,6 @@ const CawsWodDetails = ({
   const [hide, setHide] = useState("");
   const [screenName, setScreenName] = useState("caws");
 
-
   const windowSize = useWindowSize();
 
   const checkApproval = async () => {
@@ -100,11 +99,13 @@ const CawsWodDetails = ({
   const getStakesIds = async () => {
     const address = coinbase;
     let stakenft = [];
-    const allCawsStakes = await window.wod_caws.depositsOf(address).then((result) => {
-      for (let i = 0; i < result.length; i++)
-        stakenft.push(parseInt(result[i]));
-      return stakenft;
-    });
+    const allCawsStakes = await window.wod_caws
+      .depositsOf(address)
+      .then((result) => {
+        for (let i = 0; i < result.length; i++)
+          stakenft.push(parseInt(result[i]));
+        return stakenft;
+      });
 
     return allCawsStakes;
   };
@@ -127,7 +128,7 @@ const CawsWodDetails = ({
       nfts = await Promise.all(nfts);
 
       nfts.reverse();
-         
+
       setMyLandNFTs(nfts);
     }
   };
@@ -135,11 +136,13 @@ const CawsWodDetails = ({
   const getLandStakesIds = async () => {
     const address = coinbase;
     let stakenft = [];
-    const allLandStakes = await window.wod_caws.depositsOfWod(address).then((result) => {
-      for (let i = 0; i < result.length; i++)
-        stakenft.push(parseInt(result[i]));
-      return stakenft;
-    });
+    const allLandStakes = await window.wod_caws
+      .depositsOfWod(address)
+      .then((result) => {
+        for (let i = 0; i < result.length; i++)
+          stakenft.push(parseInt(result[i]));
+        return stakenft;
+      });
 
     return allLandStakes;
   };
@@ -154,35 +157,31 @@ const CawsWodDetails = ({
     }
   };
 
-
   const setUSDPrice = async () => {
     const ethprice = await convertEthToUsd();
     setethToUSD(Number(ethprice) * Number(EthRewards));
   };
 
-
-
-
-
   const calculateAllRewards = async () => {
     let myStakes = await getStakesIds();
     let result = 0;
-    
+
     if (coinbase !== null) {
       if (myStakes.length > 0) {
-      let rewards = await window.wod_caws.calculateRewardsWodCaws(coinbase, myStakes).then((data) => {
-        return data;
-      })
-      .catch((err) => {
-        console.log(err)
-      });
-      let finalReward = 0
-      for (let i = 0; i < rewards.length; i++) {
-        finalReward = rewards[i]/1e18
-        result = result + Number(finalReward);
+        let rewards = await window.wod_caws
+          .calculateRewardsWodCaws(coinbase, myStakes)
+          .then((data) => {
+            return data;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        let finalReward = 0;
+        for (let i = 0; i < rewards.length; i++) {
+          finalReward = rewards[i] / 1e18;
+          result = result + Number(finalReward);
+        }
       }
-    }
-     
     }
     setEthRewards(result);
   };
@@ -190,11 +189,12 @@ const CawsWodDetails = ({
   const claimRewards = async () => {
     let myStakes = await getStakesIds();
     // setclaimAllStatus("Claiming all rewards, please wait...");
-    await window.wod_caws.claimRewardsWodCaws(myStakes).then(() => {
+    await window.wod_caws
+      .claimRewardsWodCaws(myStakes)
+      .then(() => {
         setEthRewards(0);
       })
-      .catch((err) => {
-      });
+      .catch((err) => {});
   };
 
   const convertEthToUsd = async () => {
@@ -206,7 +206,6 @@ const CawsWodDetails = ({
     return res;
   };
 
-
   const refreshStakes = () => {
     setnewStakes(newStakes + 1);
   };
@@ -217,8 +216,6 @@ const CawsWodDetails = ({
     }, 8000);
     return () => clearInterval(interval);
   };
-
-
 
   const handleApprove = async () => {
     const stakeApr50 = await window.config.nftstaking_address50;
@@ -242,7 +239,7 @@ const CawsWodDetails = ({
   };
 
   const handleApproveWod = async () => {
-    const land_nft = await window.config.landnftstake_address;;
+    const land_nft = await window.config.landnftstake_address;
 
     setloading(true);
     setStatus("*Waiting for approval");
@@ -290,7 +287,6 @@ const CawsWodDetails = ({
       });
   };
 
-  
   const calculateCountdown = async () => {
     const address = coinbase;
     let finalDay = await window.wod_caws
@@ -305,15 +301,15 @@ const CawsWodDetails = ({
         return data;
       });
 
-      finalDay = parseInt(finalDay) + parseInt(lockup_time);
-      setCountDownLeft(parseInt(finalDay * 1000) - Date.now());
-   
+    finalDay = parseInt(finalDay) + parseInt(lockup_time);
+    setCountDownLeft(parseInt(finalDay * 1000) - Date.now());
   };
- 
+
   const handleUnstakeAll = async () => {
     // setunstakeAllStatus("Unstaking all please wait...");
     await window.wod_caws
-    .withdrawTokensWodCaws().then(() => {
+      .withdrawTokensWodCaws()
+      .then(() => {
         // setunstakeAllStatus("Successfully unstaked all!");
       })
       .catch((err) => {
@@ -348,7 +344,6 @@ const CawsWodDetails = ({
       });
   };
 
-
   useEffect(() => {
     totalStakedNft().then();
   }, []);
@@ -363,7 +358,7 @@ const CawsWodDetails = ({
       calculateAllRewards();
       calculateCountdown().then();
     }
-  }, [isConnected, coinbase, screenName,newStakes]);
+  }, [isConnected, coinbase, screenName, newStakes]);
 
   const getApprovedNfts = (data) => {
     setApprovedNfts(data);
@@ -485,8 +480,8 @@ const CawsWodDetails = ({
                 <h6 className="start-title">Start Staking</h6>
 
                 {coinbase === null ||
-                  coinbase === undefined ||
-                  isConnected === false ? (
+                coinbase === undefined ||
+                isConnected === false ? (
                   <button
                     className="connectbtn btn"
                     onClick={() => {
@@ -512,7 +507,9 @@ const CawsWodDetails = ({
               </div>
             </div>
             <div
-              className={`otherside-border col-12 col-md-6 col-lg-4 ${chainId !== "1" && "blurrypool"}`}
+              className={`otherside-border col-12 col-md-6 col-lg-4 ${
+                chainId !== "1" && "blurrypool"
+              }`}
             >
               <div className="d-flex justify-content-between align-items-center gap-2">
                 <div className="d-flex align-items-center gap-3">
@@ -539,7 +536,6 @@ const CawsWodDetails = ({
               </div>
               <div className="d-flex flex-column gap-2 justify-content-between">
                 <div className="d-flex align-items-center justify-content-between gap-2">
-
                   <div className="d-flex align-items-end gap-2">
                     <button
                       className="btn filledbtn"
@@ -558,14 +554,21 @@ const CawsWodDetails = ({
                     </div>
                   </div>
                   <button
-                    className={`btn ${(amountToStake !== "" && myNFTs.length > 0) || approvedNfts.length > 0
+                    className={`btn ${
+                      (amountToStake !== "" && myNFTs.length > 0) ||
+                      approvedNfts.length > 0
                         ? "filledbtn"
                         : "disabled-btn"
-                      } d-flex justify-content-center align-items-center gap-2`}
+                    } d-flex justify-content-center align-items-center gap-2`}
                     disabled={
-                      (amountToStake !== "" && myNFTs.length > 0) || approvedNfts.length > 0 ? false : true
+                      (amountToStake !== "" && myNFTs.length > 0) ||
+                      approvedNfts.length > 0
+                        ? false
+                        : true
                     }
-                    onClick={() => { showApprove === false ? handleDeposit() : handleApprove() }}
+                    onClick={() => {
+                      // showApprove === false ? handleDeposit() : handleApprove();
+                    }}
                   >
                     {showApprove === false ? "Deposit" : "Approve"}
                   </button>
@@ -618,8 +621,9 @@ const CawsWodDetails = ({
                     {getFormattedNumber(ethToUSD, 6)})
                   </h6>
                   <button
-                    className={`btn ${EthRewards === 0 ? "disabled-btn" : "filledbtn"
-                      } d-flex justify-content-center align-items-center`}
+                    className={`btn ${
+                      EthRewards === 0 ? "disabled-btn" : "filledbtn"
+                    } d-flex justify-content-center align-items-center`}
                     style={{ height: "fit-content" }}
                     onClick={claimRewards}
                     disabled={EthRewards === 0 ? true : false}
@@ -631,8 +635,9 @@ const CawsWodDetails = ({
             </div>
 
             <div
-              className={`otherside-border col-12 col-md-6 col-lg-2 ${chainId !== "1" && "blurrypool"
-                }`}
+              className={`otherside-border col-12 col-md-6 col-lg-2 ${
+                chainId !== "1" && "blurrypool"
+              }`}
             >
               <h6 className="deposit-txt d-flex align-items-center gap-2 justify-content-between">
                 Unstake
@@ -672,18 +677,25 @@ const CawsWodDetails = ({
           }}
           getApprovedNfts={getApprovedNfts}
           getApprovedLandNfts={getApprovedNfts}
-
           // nftItem={showStaked ? mystakes : showToStake ? myNFTs : showStaked}
           nftItem={
             hide === "" || hide === "tostake" || hide === "mystakes2"
-              ? screenName === 'caws' ? mystakes : myLandstakes
-              : screenName === 'caws' ? myNFTs : myLandNFTs
+              ? screenName === "caws"
+                ? mystakes
+                : myLandstakes
+              : screenName === "caws"
+              ? myNFTs
+              : myLandNFTs
           }
           landItems={myLandNFTs}
           cawsStakes={mystakes}
           landStakes={myLandstakes}
-          onShowNextScreen={() => { setScreenName('land') }}
-          onShowBackScreen={() => { setScreenName('caws') }}
+          onShowNextScreen={() => {
+            setScreenName("land");
+          }}
+          onShowBackScreen={() => {
+            setScreenName("caws");
+          }}
           onshowStaked={() => {
             setshowStaked(true);
             setshowToStake(false);
