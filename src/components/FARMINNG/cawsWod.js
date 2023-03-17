@@ -57,7 +57,7 @@ const CawsWodDetails = ({
   const [loading, setloading] = useState(false);
   const [showClaim, setshowClaim] = useState(false);
   const [hide, setHide] = useState("");
-  const [screenName, setScreenName] = useState("caws");
+  const [screenName, setScreenName] = useState("land");
 
   const windowSize = useWindowSize();
 
@@ -334,7 +334,7 @@ const CawsWodDetails = ({
               <div className="d-flex align-items-center justify-content-between gap-2">
                 <h6 className="earnrewards-text">Lock time:</h6>
                 <h6 className="earnrewards-token d-flex align-items-center gap-1">
-                  90 days
+                  No Lock
                   <Tooltip
                     placement="top"
                     title={
@@ -585,10 +585,10 @@ const CawsWodDetails = ({
           cawsStakes={mystakes}
           landStakes={myLandstakes}
           onShowNextScreen={() => {
-            setScreenName("land");
+            setScreenName("caws");
           }}
           onShowBackScreen={() => {
-            setScreenName("caws");
+            setScreenName("land");
           }}
           onshowStaked={() => {
             setshowStaked(true);

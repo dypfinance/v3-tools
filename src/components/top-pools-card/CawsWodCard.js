@@ -86,7 +86,7 @@ const CawsWodCard = ({
             >
               <h6 className="tvl-text">Lock Time</h6>
 
-              <h6 className="locktime-amount">90 days</h6>
+              <h6 className="locktime-amount">No Lock</h6>
             </div>
           </div>
           <div

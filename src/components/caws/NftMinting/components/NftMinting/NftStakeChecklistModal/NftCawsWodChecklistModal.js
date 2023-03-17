@@ -475,7 +475,7 @@ const NftCawsWodChecklistModal = ({
         setStatus("");
       }
     }
-  }, [getApprovedLandNfts(selectNftLandIds).length]);
+  }, [getApprovedNfts(selectNftIds).length,getApprovedLandNfts(selectNftLandIds).length ]);
 
   return (
     <Modal
@@ -653,14 +653,14 @@ const NftCawsWodChecklistModal = ({
                     <TimelineSeparator>
                       <TimelineDot
                         className={
-                          getApprovedNfts(selectNftIds).length > 0
+                          getApprovedLandNfts(selectNftLandIds).length > 0
                             ? "greendot"
                             : "passivedot"
                         }
                       />
                       <TimelineConnector
                         className={
-                          getApprovedNfts(selectNftIds).length > 0
+                          getApprovedLandNfts(selectNftLandIds).length > 0
                             ? "greenline"
                             : "passiveline"
                         }
@@ -668,7 +668,7 @@ const NftCawsWodChecklistModal = ({
                     </TimelineSeparator>
                     <TimelineContent>
                       <h6 className="content-text">
-                        Select the CAWS NFTs for pairing, then click “next”
+                        Select the WoD Land NFTs for pairing, then click “next”.
                       </h6>
                     </TimelineContent>
                   </TimelineItem>
@@ -676,7 +676,7 @@ const NftCawsWodChecklistModal = ({
                     <TimelineSeparator>
                       <TimelineDot
                         className={
-                          getApprovedLandNfts(selectNftLandIds).length > 0
+                          getApprovedNfts(selectNftIds).length > 0
                             ? "greendot"
                             : "passivedot"
                         }
@@ -684,36 +684,36 @@ const NftCawsWodChecklistModal = ({
                     </TimelineSeparator>
                     <TimelineContent>
                       <h6 className="content-text">
-                        Select WOD Land NFTs for pairing
+                        Select CAWS NFTs for pairing.
                       </h6>
                     </TimelineContent>
                   </TimelineItem>
                 </Timeline>
                 <div
                   className={
-                    getApprovedNfts(selectNftIds).length > 0 &&
+                    getApprovedLandNfts(selectNftLandIds).length > 0 &&
                     showCawsApprove === false
                       ? "optionbtn-active order-2 order-lg-3"
                       : "optionbtn-passive order-2 order-lg-3"
                   }
                   onClick={() => {
-                    screenName === "caws"
+                    screenName === "land"
                       ? onShowNextScreen()
                       : onShowBackScreen();
                   }}
                   style={{
                     display: hideItem === "tostake" ? "none" : "block",
                     pointerEvents:
-                      (getApprovedNfts(selectNftIds).length === 0 ||
+                      (getApprovedLandNfts(selectNftLandIds).length === 0 ||
                         showCawsApprove === true ||
                         nftItem.length === 0) &&
-                      screenName === "caws"
+                      screenName === "land"
                         ? "none"
                         : "auto",
                   }}
                 >
                   <h5 className="optiontext" style={{ fontSize: 14 }}>
-                    {screenName === "caws" ? "Next" : "Back"}
+                    {screenName === "land" ? "Next" : "Back"}
                   </h5>
                 </div>
               </>
@@ -1223,12 +1223,9 @@ const NftCawsWodChecklistModal = ({
                     alignItems: "center",
                   }}
                 >
-                  {selectNftIds.length +
-                    " " +
-                    "CAWS" +
-                    " & " +
-                    selectNftLandIds.length +
-                    "WoD"}
+                  {selectNftLandIds.length +
+                              "WoD" +  " " +" & " + selectNftIds.length + "CAWS" 
+                            }
                   /50
                 </span>
                 <span
@@ -1518,14 +1515,9 @@ const NftCawsWodChecklistModal = ({
                             color: "#4CD0CD",
                           }}
                         >
-                          {countDownLeft < 0
-                            ? selectNftIds.length +
-                              " " +
-                              "CAWS" +
-                              " & " +
-                              selectNftLandIds.length +
-                              "WoD"
-                            : 0}
+                          {selectNftLandIds.length +
+                              "WoD" +  " " +" & " + selectNftIds.length + "CAWS" 
+                            }
                           /50
                         </span>
                         <span
