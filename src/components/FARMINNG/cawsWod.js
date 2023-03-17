@@ -577,7 +577,7 @@ const CawsWodDetails = ({
                   </h6>
                 </h6>
                 <h6 className="withdraw-littletxt d-flex align-items-center gap-2">
-                  Rewards are displayed in real-time
+                  
                   <Tooltip
                     placement="top"
                     title={
