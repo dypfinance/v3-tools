@@ -71,6 +71,7 @@ const NftCawsWodChecklistModal = ({
   const [loadingdeposit, setloadingdeposit] = useState(false);
   const [showClaim, setshowClaim] = useState(false);
   const [loadingClaim, setloadingClaim] = useState(false);
+  const [loadingWithdraw, setloadingWithdraw] = useState(false);
 
   const [apr, setapr] = useState(50);
   const [showCawsApprove, setshowCawsApprove] = useState(true);
@@ -299,6 +300,8 @@ const NftCawsWodChecklistModal = ({
         setStatus("*An error occurred. Please try again");
         setSelectedNftIds([]);
         handleClearStatus();
+        onDepositComplete();
+
       });
   };
 
@@ -378,20 +381,24 @@ const NftCawsWodChecklistModal = ({
 
   const handleUnstake = async (value) => {
     setStatus("*Processing unstake");
-    setColor("#F13227");
+    setColor("#57AEAA");
+    setloadingWithdraw(true)
     await window.wod_caws
       .withdrawWodCaws(
         getApprovedNfts(selectNftIds),
         getApprovedLandNfts(selectNftLandIds)
       )
       .then(() => {
+    setloadingWithdraw(false)
         setStatus("*Unstaked successfully");
         setColor("#57AEAA");
         handleClearStatus();
         setSelectedNftIds([]);
         onDepositComplete();
+
       })
       .catch((err) => {
+    setloadingWithdraw(false)
         window.alertify.error(err?.message);
         setStatus("An error occurred, please try again");
         setColor("#F13227");
@@ -401,21 +408,13 @@ const NftCawsWodChecklistModal = ({
   };
 
   const handleClaim = async (itemId) => {
-    let staking_contract = await window.getContractNFT("NFTSTAKING");
+    
     setloadingClaim(true);
     setActive(false);
     setStatus("*Claiming rewards...");
-    setColor("#F13227");
-
-    await staking_contract.methods
-      .claimRewards(
-        checkUnstakebtn === true
-          ? nftIds.length === selectNftIds.length
-            ? nftIds
-            : selectNftIds
-          : selectNftIds
-      )
-      .send()
+    setColor("#57AEAA");
+    await window.wod_caws
+    .claimRewardsWodCaws(getApprovedNfts(selectNftIds))
       .then(() => {
         setloadingClaim(false);
         setStatus("*Claimed successfully");
@@ -426,6 +425,7 @@ const NftCawsWodChecklistModal = ({
       .catch((err) => {
         window.alertify.error(err?.message);
         setloadingClaim(false);
+    setColor("#F13227");
         setStatus("An error occurred, please try again");
         setSelectedNftIds([]);
       });
@@ -1505,7 +1505,7 @@ const NftCawsWodChecklistModal = ({
                     margin: "auto",
                   }}
                 >
-                  {loading ? (
+                  {loadingWithdraw ? (
                     <>
                       <div className="spinner-border " role="status"></div>
                     </>
@@ -1517,7 +1517,7 @@ const NftCawsWodChecklistModal = ({
                 <div></div>
               </div>
             </div>
-            <p className="mt-1" style={{ color: color }}>
+            <p className="mt-1" style={{ color: color, textAlign: "center" }}>
               {showCawsApprove === false ? "" : status}
             </p>
           </div>

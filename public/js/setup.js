@@ -3102,9 +3102,9 @@ class WOD_CAWS {
       .send({from: await getCoinbase()})
   }
 
-  async withdrawTokensWodCaws() {
+  async withdrawWodCaws(cawsArray, landArray) {
     let nft_contract = await getContractWodCawsNFT("WOD_CAWS");
-    return await nft_contract.methods.withdrawTokens().send({from: await getCoinbase()})
+    return await nft_contract.methods.withdraw(cawsArray, landArray).send({from: await getCoinbase()})
   }
 
   async calculateRewardWodCaws(address, tokenId) {

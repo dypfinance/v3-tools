@@ -308,7 +308,7 @@ const CawsWodDetails = ({
   const handleUnstakeAll = async () => {
     // setunstakeAllStatus("Unstaking all please wait...");
     await window.wod_caws
-      .withdrawTokensWodCaws()
+      .withdrawWodCaws()
       .then(() => {
         // setunstakeAllStatus("Successfully unstaked all!");
       })
