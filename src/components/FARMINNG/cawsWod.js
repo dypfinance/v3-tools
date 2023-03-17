@@ -259,7 +259,7 @@ const CawsWodDetails = ({
       });
   };
 
-console.log(myLandstakes)
+  
   useEffect(() => {
     if (coinbase) {
       getStakesIds();
