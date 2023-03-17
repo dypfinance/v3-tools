@@ -159,7 +159,7 @@ const NftCawsWodChecklistModal = ({
     }
   };
 
-  
+  // console.log(getApprovedLandNfts(selectNftLandIds), getApprovedNfts(selectNftIds))
 
   const handleApprove = async () => {
     const stakeApr50 = await window.config.wod_caws_address;
@@ -229,41 +229,52 @@ const NftCawsWodChecklistModal = ({
     setCheckUnstakeBtn(false);
   };
 
-  // console.log(getApprovedLandNfts(selectNftLandIds), getApprovedNfts(selectNftIds))
-
   const handleSelectAllToUnstake = () => {
-    if (screenName === "caws") {
-      setCheckUnstakeBtn(!checkUnstakebtn);
-      if (checkUnstakebtn === false) {
-        if (nftIds.length > 50) {
-          setSelectedNftIds(nftIds.slice(0, 50));
-        } else if (nftIds.length <= 50) {
-          setSelectedNftIds(nftIds);
-        }
-      } else if (checkUnstakebtn === true) {
-        setSelectedNftIds([]);
+    let cawsIdArray = [];
+    let landIdArray = [];
+
+    if (cawsStakes && cawsStakes.length > 0) {
+      for (let i = 0; i < cawsStakes.length; i++) {
+        let cawsId = cawsStakes[i].name?.slice(6, cawsStakes[i].name.length);
+        cawsIdArray.push(cawsId);
+
+        let WodId = landStakes[i].name?.slice(1, landStakes[i].name.length);
+        landIdArray.push(WodId);
       }
-      setCheckBtn(false);
-    } else if (screenName === "land") {
-      setCheckUnstakeBtn(!checkUnstakebtn);
-      if (checkUnstakebtn === false) {
-        if (nftLandIds.length > 50) {
-          setSelectedNftLandIds(nftLandIds.slice(0, 50));
-        } else if (nftLandIds.length <= 50) {
-          setSelectedNftLandIds(nftLandIds);
-        }
-      } else if (checkUnstakebtn === true) {
-        setSelectedNftLandIds([]);
+   
+
+    setCheckUnstakeBtn(!checkUnstakebtn);
+    if (checkUnstakebtn === false) {
+      if (cawsIdArray.length > 50) {
+        setSelectedNftIds(cawsIdArray.slice(0, 50));
+        getApprovedNfts(cawsIdArray.slice(0, 50));
       }
-      setCheckBtn(false);
+      if (landStakes.length > 50) {
+        setSelectedNftLandIds(landIdArray.slice(0, 50));
+        getApprovedLandNfts(landStakes.slice(0, 50));
+      }
+
+      if (cawsStakes.length <= 50) {
+        setSelectedNftIds(cawsIdArray);
+        getApprovedNfts(cawsIdArray);
+      }
+
+      if (landStakes.length <= 50) {
+        setSelectedNftLandIds(landIdArray);
+        getApprovedLandNfts(landStakes);
+      }
+    } else if (checkUnstakebtn === true) {
+      setSelectedNftIds([]);
+      setSelectedNftLandIds([]);
     }
+    setCheckBtn(false); }
   };
 
   const handleDeposit = async (value) => {
     // let stake_contract = await window.getContractNFT("NFTSTAKING");
     setloadingdeposit(true);
     setStatus("*Processing deposit");
-    setColor("#F13227");
+    setColor("#57AEAA");
     //to do
     // console.log(getApprovedNfts(selectNftIds), getApprovedLandNfts(selectNftLandIds))
     await window.wod_caws
@@ -586,8 +597,7 @@ const NftCawsWodChecklistModal = ({
                     </TimelineSeparator>
                     <TimelineContent>
                       <h6 className="content-text">
-                        First you need to select a CAWS NFT, approve them if
-                        needed, then click “next”
+                      Select the CAWS NFTs for pairing, then click “next”
                       </h6>
                     </TimelineContent>
                   </TimelineItem>
@@ -603,7 +613,7 @@ const NftCawsWodChecklistModal = ({
                     </TimelineSeparator>
                     <TimelineContent>
                       <h6 className="content-text">
-                        Select WOD NFT land to continue to stake both NFTs
+                      Select WOD Land NFTs for pairing
                       </h6>
                     </TimelineContent>
                   </TimelineItem>
@@ -1081,7 +1091,7 @@ const NftCawsWodChecklistModal = ({
         <p className="d-flex info-text align-items-start gap-3">
           <img src={require("./more-info.svg").default} alt="" />
           {!showStaked
-            ? "Please select which NFTs to Stake."
+            ? "Please choose the NFTs that you wish to stake. Once you have made your selection, you will be required to approve the process before depositing the NFTs.            "
             : "Please select your NFTs to Claim or to Unstake"}
         </p>
 
@@ -1186,16 +1196,16 @@ const NftCawsWodChecklistModal = ({
                         nftItem.length === 0
                       ? "none"
                       : "auto",
-                      display:
-                      (screenName === "caws" && showCawsApprove === false) ||
-                      nftItem.length === 0
+                  display:
+                    (screenName === "caws" && showCawsApprove === false) ||
+                    nftItem.length === 0
                       ? "none"
-                      :  screenName === "caws" &&
-                      showCawsApprove === true &&
-                      nftItem.length > 0
+                      : screenName === "caws" &&
+                        showCawsApprove === true &&
+                        nftItem.length > 0
                       ? "block"
                       : (screenName === "land" && showLandApprove === false) ||
-                      nftItem.length === 0
+                        nftItem.length === 0
                       ? "none"
                       : "block",
                 }}
