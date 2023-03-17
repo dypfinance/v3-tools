@@ -1260,7 +1260,7 @@ const NftCawsWodChecklistModal = ({
               <button
                 className="btn activebtn"
                 onClick={() => {
-                   handleApprove() 
+                  handleApproveWod() 
                 }}
                 style={{
                   background: 
@@ -1274,14 +1274,14 @@ const NftCawsWodChecklistModal = ({
                     <div className="spinner-border " role="status"></div>
                   </>
                 ) : (
-                  'Approve CAWS' 
+                  'Approve WoD' 
                 )}
               </button>}
-              {showCawsApprove === false && showLandApprove === true &&
+              {showCawsApprove === true && showLandApprove === false &&
               <button
                 className="btn activebtn"
                 onClick={() => {
-                    handleApproveWod();
+                    handleApprove();
                 }}
                 style={{
                   background: "linear-gradient(90.74deg, #7770E0 0%, #554FD8 100%)",
@@ -1293,7 +1293,7 @@ const NftCawsWodChecklistModal = ({
                     <div className="spinner-border " role="status"></div>
                   </>
                 ) : (
-                   'Approve WoD'
+                   'Approve CAWS'
                 )}
               </button> }
               <button
