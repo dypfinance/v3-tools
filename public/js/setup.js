@@ -551,11 +551,10 @@ class CONSTANT_STAKING_NEW {
 }
 
 class CONSTANT_STAKING_OLD {
-   
   constructor(ticker = "CONSTANT_STAKINGOLD_30", token = "REWARD_TOKEN") {
     this.ticker = ticker;
     this.token = token;
-    
+
     let address = window.config[ticker.toLowerCase() + "_address"];
     this._address = address;
     [
@@ -584,7 +583,6 @@ class CONSTANT_STAKING_OLD {
     });
 
     ["stake", "unstake", "claim", "reInvest"].forEach((fn_name) => {
-
       this[fn_name] = async function (...args) {
         let contract = await getContract({ key: this.ticker });
         let value = 0;
@@ -1959,6 +1957,9 @@ window.config = {
   landnft_address: "0xcd60d912655281908ee557ce1add61e983385a03",
   landnftstake_address: "0x6821710b0d6e9e10acfd8433ad023f874ed782f1",
 
+  /* WOD CAWS NFT */
+  wod_caws_address: "0xd324a03bf17eee8d34a8843d094a76ff8f561e38",
+
   //buyback bsc
   buyback_stakingbsc1_1_address: "0x94b1a7b57c441890b7a0f64291b39ad6f7e14804",
   buyback_stakingbsc1_2_address: "0x4ef782e66244a0cf002016aa1db3019448c670ae",
@@ -3002,6 +3003,170 @@ class LANDNFT {
     return time;
   }
 }
+
+/**
+ *
+ * @param {"TOKEN" | "WOD_CAWS" } key
+ */
+async function getContractWodCawsNFT(key) {
+  let ABI = window[key + "_ABI"];
+  let address = window.config[key.toLowerCase() + "_address"];
+  if (!window.cached_contracts[key]) {
+    window.web3 = new Web3(window.ethereum);
+    window.cached_contracts[key] = new window.web3.eth.Contract(
+      window.WOD_CAWS_ABI,
+      address,
+      {
+        from: await getCoinbase(),
+      }
+    );
+  }
+
+  return window.cached_contracts[key];
+}
+
+class WOD_CAWS {
+  constructor(key = "WOD_CAWS") {
+    this.key = key;
+    [
+      "LOCKUP_TIME",
+      "WoDcontractaddress",
+      "calculateReward",
+      "calculateRewards",
+      "depositsOf",
+      "depositsOfWoD",
+      "erc20Address",
+      "expiration",
+      "onERC721Received",
+      "owner",
+      "paused",
+      "rate",
+      "stakingDestinationAddress",
+      "stakingTime",
+    ].forEach((fn_name) => {
+      this[fn_name] = async function (...args) {
+        let contract = await getContractWodCawsNFT(this.key);
+        return await contract.methods[fn_name](...args).call();
+      };
+    });
+
+    ["deposit"].forEach((fn_name) => {
+      this[fn_name] = async function (...args) {
+        let contract = await getContractWodCawsNFT(this.key);
+        return await contract.methods[fn_name](...args).send({
+          from: await getCoinbase(),
+        });
+      };
+    });
+
+    ["claimRewards"].forEach((fn_name) => {
+      this[fn_name] = async function (...args) {
+        let contract = await getContractWodCawsNFT(this.key);
+        return await contract.methods[fn_name](...args).send({
+          from: await getCoinbase(),
+        });
+      };
+    });
+
+    ["withdraw"].forEach((fn_name) => {
+      this[fn_name] = async function (...args) {
+        let contract = await getContractWodCawsNFT(this.key);
+        return await contract.methods[fn_name](...args).send({
+          from: await getCoinbase(),
+        });
+      };
+    });
+
+    ["withdrawTokens"].forEach((fn_name) => {
+      this[fn_name] = async function (...args) {
+        let contract = await getContractWodCawsNFT(this.key);
+        return await contract.methods[fn_name](...args).send({
+          from: await getCoinbase(),
+        });
+      };
+    });
+  }
+
+  async depositWodCaws(cawsArray, landArray) {
+    const nft_contract = await getContractWodCawsNFT("WOD_CAWS");
+    let second = await nft_contract.methods.deposit(cawsArray,landArray).send({
+      from: await getCoinbase()
+    })
+    .catch((e)=>{
+      console.log(e)
+    })
+  }
+
+  async claimRewardsWodCaws(cawsArray) {
+    let nft_contract = await getContractWodCawsNFT("WOD_CAWS");
+    return await nft_contract.methods
+      .claimRewards(cawsArray)
+      .send({from: await getCoinbase()}).catch((e)=>{
+        console.log(e)
+      })
+  }
+
+  async withdrawWodCaws(cawsArray, landArray) {
+    let nft_contract = await getContractWodCawsNFT("WOD_CAWS");
+    return await nft_contract.methods.withdraw(cawsArray, landArray).send({from: await getCoinbase()}).catch((e)=>{
+      console.log(e)
+    })
+  }
+
+  async withdrawTokensWodCaws() {
+    let nft_contract = await getContractWodCawsNFT("WOD_CAWS");
+    return await nft_contract.methods.withdrawTokens().send({from: await getCoinbase()}).catch((e)=>{
+      console.log(e)
+    });
+  }
+
+  async calculateRewardWodCaws(address, tokenId) {
+    let nft_contract = await getContractWodCawsNFT("WOD_CAWS");
+    return await nft_contract.methods.calculateReward(address, tokenId).call().catch((e)=>{
+      console.log(e)
+    });
+  }
+
+  async calculateRewardsWodCaws(address, tokenArray) {
+    let nft_contract = await getContractWodCawsNFT("WOD_CAWS");
+    return await nft_contract.methods.calculateRewards(address, tokenArray).call().catch((e)=>{
+      console.log(e)
+    });
+  }
+
+  async depositsOfCaws(address) {
+    let nft_contract = await getContractWodCawsNFT("WOD_CAWS");
+    return await nft_contract.methods.depositsOf(address).call().catch((e)=>{
+      console.log(e)
+    });
+  }
+
+  async depositsOfWod(address) {
+    let nft_contract = await getContractWodCawsNFT("WOD_CAWS");
+    return await nft_contract.methods.depositsOfWoD(address).call().catch((e)=>{
+      console.log(e)
+    });
+  }
+
+  async checkLockupTimeWodCaws() {
+    let nft_contract = await getContractWodCawsNFT("WOD_CAWS");
+    const time = await nft_contract.methods.LOCKUP_TIME().call().catch((e)=>{
+      console.log(e)
+    });
+    return time;
+  }
+
+  async checkStakingTimeWodCaws(address) {
+    let nft_contract = await getContractWodCawsNFT("WOD_CAWS");
+    const stakingTime = await nft_contract.methods.stakingTime(address).call().catch((e)=>{
+      console.log(e)
+    });
+    return stakingTime;
+  }
+}
+
+window.wod_caws = new WOD_CAWS();
+
 
 window.landnft = new LANDNFT();
 
@@ -6715,6 +6880,324 @@ window.LANDSTAKING_ABI = [
   {
     inputs: [
       { internalType: "uint256[]", name: "tokenIds", type: "uint256[]" },
+    ],
+    name: "withdraw",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "withdrawTokens",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+];
+
+window.WOD_CAWS_ABI = [
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_stakingDestinationAddress",
+        type: "address",
+      },
+      { internalType: "address", name: "_WoDcontractaddress", type: "address" },
+      { internalType: "uint256", name: "_rate", type: "uint256" },
+      { internalType: "uint256", name: "_expiration", type: "uint256" },
+      { internalType: "address", name: "_erc20Address", type: "address" },
+    ],
+    stateMutability: "nonpayable",
+    type: "constructor",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "newExpiration",
+        type: "uint256",
+      },
+    ],
+    name: "ExpirationChanged",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "newLockTime",
+        type: "uint256",
+      },
+    ],
+    name: "LockTimeChanged",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "previousOwner",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "OwnershipTransferred",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "Paused",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "newRate",
+        type: "uint256",
+      },
+    ],
+    name: "RateChanged",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "Unpaused",
+    type: "event",
+  },
+  {
+    inputs: [],
+    name: "LOCKUP_TIME",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "WoDcontractaddress",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "uint256", name: "", type: "uint256" },
+    ],
+    name: "_depositBlocks",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "account", type: "address" },
+      { internalType: "uint256", name: "tokenId", type: "uint256" },
+    ],
+    name: "calculateReward",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "account", type: "address" },
+      { internalType: "uint256[]", name: "tokenIds", type: "uint256[]" },
+    ],
+    name: "calculateRewards",
+    outputs: [
+      { internalType: "uint256[]", name: "rewards", type: "uint256[]" },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256[]", name: "tokenIds", type: "uint256[]" },
+    ],
+    name: "claimRewards",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256[]", name: "tokenIds", type: "uint256[]" },
+      { internalType: "uint256[]", name: "tokenIdsWoD", type: "uint256[]" },
+    ],
+    name: "deposit",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "account", type: "address" }],
+    name: "depositsOf",
+    outputs: [{ internalType: "uint256[]", name: "", type: "uint256[]" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "account", type: "address" }],
+    name: "depositsOfWoD",
+    outputs: [{ internalType: "uint256[]", name: "", type: "uint256[]" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256[]", name: "tokenIds", type: "uint256[]" },
+      { internalType: "uint256[]", name: "tokenIdsWoD", type: "uint256[]" },
+    ],
+    name: "emergencyWithdraw",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "erc20Address",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "expiration",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "uint256", name: "", type: "uint256" },
+      { internalType: "bytes", name: "", type: "bytes" },
+    ],
+    name: "onERC721Received",
+    outputs: [{ internalType: "bytes4", name: "", type: "bytes4" }],
+    stateMutability: "pure",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "owner",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "pause",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "paused",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "rate",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "_expiration", type: "uint256" }],
+    name: "setExpiration",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "_lockTime", type: "uint256" }],
+    name: "setLockTime",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "_rate", type: "uint256" }],
+    name: "setRate",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "stakingDestinationAddress",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "stakingTime",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "unpause",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256[]", name: "tokenIds", type: "uint256[]" },
+      { internalType: "uint256[]", name: "tokenIdsWoD", type: "uint256[]" },
     ],
     name: "withdraw",
     outputs: [],
@@ -27951,10 +28434,9 @@ async function getContract({ key, address = null, ABI = null }) {
   address = address || window.config[key.toLowerCase() + "_address"];
   if (!window.cached_contracts[key]) {
     window.web3 = new Web3(window.ethereum);
-    window.cached_contracts[key] =
-      new window.web3.eth.Contract(ABI, address, {
-        from: await getCoinbase(),
-      });
+    window.cached_contracts[key] = new window.web3.eth.Contract(ABI, address, {
+      from: await getCoinbase(),
+    });
   }
   return window.cached_contracts[key];
 }

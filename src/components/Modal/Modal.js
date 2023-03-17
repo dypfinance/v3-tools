@@ -5,7 +5,7 @@ import statsIcon from "./statsIcon.svg";
 import calculatorIcon from "../calculator/assets/calculator.svg";
 
 
-const Modal = ({ visible, modalId, setIsVisible, children, title, width }) => {
+const Modal = ({ visible, modalId, setIsVisible, children, title, width, maxHeight }) => {
   let className = "modal fade ";
   let style = {};
   if (visible === true) {
@@ -30,7 +30,7 @@ const Modal = ({ visible, modalId, setIsVisible, children, title, width }) => {
       <div className="modal-dialog tymodal">
         <div
           className="modal-content"
-          style={{ width: title === "withdraw" ? "fit-content" : width }}
+          style={{ width: title === "withdraw" ? "fit-content" : width, maxHeight: maxHeight }}
         >
           <div className="modal-header justify-content-between align-items-center">
             <div className="d-flex align-items-center gap-2">

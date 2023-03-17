@@ -202,6 +202,7 @@ const StakeBsc = ({
     setpopup(false);
   };
 
+
   const refreshBalance = async () => {
     let coinbase = coinbase2;
 

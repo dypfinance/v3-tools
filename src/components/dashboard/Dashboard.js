@@ -23,6 +23,8 @@ import LandCard from "../top-pools-card/LandCard";
 import LandDetails from "../FARMINNG/land";
 import StakeAvax from '../FARMINNG/stakeAvax'
 import StakeNewEth from "../FARMINNG/stakeNewEth";
+import CawsWodDetails from "../FARMINNG/cawsWod";
+import CawsWodCard from "../top-pools-card/CawsWodCard";
 
 const Dashboard = ({
   isConnected,
@@ -111,7 +113,7 @@ const Dashboard = ({
         });
 
         const finalEthCards = sortedAprs;
-        setTopPools(finalEthCards.slice(0, 1));
+        // setTopPools(finalEthCards.slice(0, 1));
 
         setLandCard(res.data.stakingInfoLAND[0]);
       })
@@ -221,16 +223,20 @@ const fetchStakeData = async()=>{
     // setTimeout(() => {
     await fetchEthStaking();
     // }, 1000);
-  } else if (network === 56) {
+  } 
+  else if (network === 56) {
     // setTimeout(() => {
    await fetchBnbStaking();
     // }, 1000);
-  } else if (network === 43114) {
+  } 
+   if (network === 43114) {
     // setTimeout(() => {
     await fetchAvaxStaking();
     // }, 1000);
   }
 }
+
+
 
   useEffect(() => {
     fetchStakeData().then()
@@ -289,7 +295,28 @@ const fetchStakeData = async()=>{
                     />
                   )}
 
-                  {topPools.length > 0 && loading === false ? (
+{ network === 1 && (
+                      <CawsWodCard
+                      network={network.toString()}
+                      onShowDetailsClick={() => {
+                        setActiveCard(2);
+                        setcardIndex(2);
+                        setDetails(2);
+                      }}
+                      onHideDetailsClick={() => {
+                        setActiveCard(null);
+                        setDetails();
+                      }}
+                      cardType={"table"}
+                      details={details === 2 ? true : false}
+                      expired={false}
+                        // tvl={"$" + getFormattedNumber(cawsCard2.tvl_usd)}
+                        // tvl={"$" + getFormattedNumber(landCard.tvl_usd)}
+                        // apr={landCard.apy_percent}
+                      />
+                    )}
+
+                  {topPools.length >= 0 && loading === false ? (
                     topPools.slice(0, 2).map((item, index) => {
                       return (
                         <TopPoolsCard
@@ -429,45 +456,18 @@ const fetchStakeData = async()=>{
                     expired={false}
                     referrer={referrer}
                   />
-                ) : activeCard &&
-                  network === 56 &&
-                  topPools[cardIndex]?.id ===
-                    "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" ? (
-                  <StakeBsc
-                    lp_id={LP_IDBNB_Array[cardIndex]}
-                    staking={stakearrayStakeBscDyp2[1]}
-                    apr={
-                      topPools[cardIndex]?.apy_percent
-                        ? topPools[cardIndex]?.apy_percent
-                        : 30
-                    }
-                    liquidity={wbsc_address}
-                    expiration_time={expirearrayStakeBscDyp2[1]}
-                    finalApr={
-                      topPools[cardIndex]?.apy_performancefee
-                        ? topPools[cardIndex]?.apy_performancefee
-                        : 30
-                    }
-                    fee={topPools[0]?.performancefee}
-                    lockTime={
-                      parseInt(
-                        topPools[cardIndex]?.lock_time?.split(" ")[0]
-                      ) === "No"
-                        ? "No Lock"
-                        : topPools[cardIndex]?.lock_time?.split(" ")[0]
-                    }
-                    listType={"table"}
-                    other_info={false}
-                    is_wallet_connected={isConnected}
-                    coinbase={coinbase}
-                    the_graph_result={the_graph_resultbsc}
-                    chainId={network.toString()}
-                    handleConnection={handleConnection}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
-                    referrer={referrer}
-                  />
-                ) : activeCard &&
+                )  :  activeCard && network === 1 && cardIndex === 2 ? (
+                    <CawsWodDetails
+                      coinbase={coinbase}
+                      isConnected={isConnected}
+                      listType={"table"}
+                      chainId={network.toString()}
+                      handleSwitchNetwork={handleSwitchNetwork}
+                      handleConnection={handleConnection}
+                      expired={false}
+                      renderedPage={"dashboard"}
+                    />
+                  ) : activeCard &&
                   network === 43114 &&
                   topPools[cardIndex].id ===
                     "0xb1875eeBbcF4456188968f439896053809698a8B" ? (
@@ -568,7 +568,27 @@ const fetchStakeData = async()=>{
                       totalNftsLocked={landCard.total_nfts_locked}
                     />
                   )}
-                  {topPools.length > 0 && loading === false ? (
+                  { network === 1 && (
+                      <CawsWodCard
+                      network={network.toString()}
+                      onShowDetailsClick={() => {
+                        setActiveCard(2);
+                        setcardIndex(2);
+                        setDetails(2);
+                      }}
+                      onHideDetailsClick={() => {
+                        setActiveCard(null);
+                        setDetails();
+                      }}
+                      cardType={"table"}
+                      details={details === 2 ? true : false}
+                      expired={false}
+                        // tvl={"$" + getFormattedNumber(cawsCard2.tvl_usd)}
+                        // tvl={"$" + getFormattedNumber(landCard.tvl_usd)}
+                        // apr={landCard.apy_percent}
+                      />
+                    )}
+                  {topPools.length >= 0 && loading === false ? (
                     topPools.slice(0, 1).map((item, index) => {
                       return (
                         <TopPoolsCard
@@ -660,6 +680,29 @@ const fetchStakeData = async()=>{
                   referrer={referrer}
                 />
                 )}
+                 {activeCard && network === 1 && cardIndex === 0 ? (
+                    <CawsDetails
+                      coinbase={coinbase}
+                      isConnected={isConnected}
+                      listType={"table"}
+                      chainId={network.toString()}
+                      handleSwitchNetwork={handleSwitchNetwork}
+                      handleConnection={handleConnection}
+                      expired={false}
+                      renderedPage={"dashboard"}
+                    />
+                  ) :  activeCard && network === 1 && cardIndex === 2 ? (
+                    <CawsWodDetails
+                      coinbase={coinbase}
+                      isConnected={isConnected}
+                      listType={"table"}
+                      chainId={network.toString()}
+                      handleSwitchNetwork={handleSwitchNetwork}
+                      handleConnection={handleConnection}
+                      expired={false}
+                      renderedPage={"dashboard"}
+                    />
+                  ) : <></>}
                 {activeCard &&
                 network === 56 &&
                 topPools[cardIndex]?.id ===
@@ -800,7 +843,8 @@ const fetchStakeData = async()=>{
                   <></>
                 )}
                 <div className="row m-0 gap-4 toppool-allwrapper">
-                  {topPools.length > 0 && loading === false ? (
+               
+                  {topPools.length >= 0 && loading === false ? (
                     topPools.slice(1, 2).map((item, index) => {
                       return (
                         <TopPoolsCard
@@ -902,6 +946,17 @@ const fetchStakeData = async()=>{
                       handleSwitchNetwork={handleSwitchNetwork}
                       expired={false}
                       referrer={referrer}
+                    />
+                  ) :  activeCard2 && network === 1 && cardIndex === 2 ? (
+                    <CawsWodDetails
+                      coinbase={coinbase}
+                      isConnected={isConnected}
+                      listType={"table"}
+                      chainId={network.toString()}
+                      handleSwitchNetwork={handleSwitchNetwork}
+                      handleConnection={handleConnection}
+                      expired={false}
+                      renderedPage={"dashboard"}
                     />
                   ) : (
                     <></>
