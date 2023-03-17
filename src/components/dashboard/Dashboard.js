@@ -417,7 +417,18 @@ const fetchStakeData = async()=>{
                       expired={false}
                       referrer={referrer}
                     />
-                  ) : (
+                  )  :  activeCard && network === 1 && cardIndex === 2 ? (
+                    <CawsWodDetails
+                      coinbase={coinbase}
+                      isConnected={isConnected}
+                      listType={"table"}
+                      chainId={network.toString()}
+                      handleSwitchNetwork={handleSwitchNetwork}
+                      handleConnection={handleConnection}
+                      expired={false}
+                      renderedPage={"dashboard"}
+                    />
+                  ): (
                     <></>
                   )
                 ) : activeCard &&
@@ -456,18 +467,7 @@ const fetchStakeData = async()=>{
                     expired={false}
                     referrer={referrer}
                   />
-                )  :  activeCard && network === 1 && cardIndex === 2 ? (
-                    <CawsWodDetails
-                      coinbase={coinbase}
-                      isConnected={isConnected}
-                      listType={"table"}
-                      chainId={network.toString()}
-                      handleSwitchNetwork={handleSwitchNetwork}
-                      handleConnection={handleConnection}
-                      expired={false}
-                      renderedPage={"dashboard"}
-                    />
-                  ) : activeCard &&
+                )  : activeCard &&
                   network === 43114 &&
                   topPools[cardIndex].id ===
                     "0xb1875eeBbcF4456188968f439896053809698a8B" ? (
