@@ -28,6 +28,7 @@ const CawsWodNftChecklist = ({
 
   const [ethToUSD, setethToUSD] = useState(0);
   const [loading, setloading] = useState(false);
+  const [loadingClaim, setloadingClaim] = useState(false);
 
   const convertEthToUsd = async () => {
     const res = axios
@@ -40,41 +41,40 @@ const CawsWodNftChecklist = ({
 
   const calculateReward = async (currentId) => {
     const address = coinbase;
-    
-    let reward = await window.wod_caws.calculateRewardWodCaws(address, currentId).then((data) => {
+
+    let reward = await window.wod_caws
+      .calculateRewardWodCaws(address, currentId)
+      .then((data) => {
         return data;
       })
       .catch((err) => {
         // window.alertify.error(err?.message);
       });
-      let finalReward = reward/1e18
-      const ethprice = await convertEthToUsd();
-      setethToUSD(Number(ethprice) * Number(finalReward));
-      setEthRewards(Number(finalReward));
-    
+    let finalReward = reward / 1e18;
+    const ethprice = await convertEthToUsd();
+    setethToUSD(Number(ethprice) * Number(finalReward));
+    setEthRewards(Number(finalReward));
   };
 
   const handleClaim = async (itemId) => {
-    let staking_contract = await window.getContractLandNFT('LANDNFTSTAKING');
-
-    await staking_contract.methods
-      .claimRewards([itemId])
-      .send()
+    setloadingClaim(true);
+    await window.wod_caws
+      .claimRewardsWodCaws([itemId])
       .then(() => {
-        // setethToUSD(0);
+        setloadingClaim(false);
         setEthRewards(0);
       })
       .catch((err) => {
         window.alertify.error(err?.message);
+        setloadingClaim(false);
       });
   };
 
-  const handleUnstake = async (itemId) => {
-    let stake_contract = await window.getContractLandNFT('LANDNFTSTAKING');
+  const handleUnstake = async (itemId, landId) => {
     setloading(true);
 
-    await stake_contract.methods
-      .withdraw([itemId])
+    await window.wod_caws
+      .withdrawWodCaws([itemId], [landId])
       .send()
       .then(() => {
         setcheckPassiveBtn(false);
@@ -108,7 +108,7 @@ const CawsWodNftChecklist = ({
 
   const getStakesIds = async () => {
     const address = coinbase;
-    let staking_contract = await window.getContractLandNFT('LANDNFTSTAKING');
+    let staking_contract = await window.getContractLandNFT("LANDNFTSTAKING");
     let stakenft = [];
     if (address !== null) {
       let myStakes = await staking_contract.methods
@@ -124,19 +124,19 @@ const CawsWodNftChecklist = ({
   };
 
   const handleCawClick = () => {
-  if (isStake === true) {
+    if (isStake === true) {
       if (checked2 === true) {
         setUnstakeBtn(!Unstakebtn);
         onChange(checklistItemID);
-        onChangeLand(landlistItemID)
+        onChangeLand(landlistItemID);
       } else if (checked2 === false) {
         setUnstakeBtn(!Unstakebtn);
         onChange(checklistItemID);
-        onChangeLand(landlistItemID)
+        onChangeLand(landlistItemID);
       }
-  }
+    }
   };
-  
+
   return (
     <>
       <div
@@ -160,7 +160,6 @@ const CawsWodNftChecklist = ({
             ? "2px solid #4ED5D2"
             : "none",
         }}
-
       >
         <div
           className="elevated-stake-container"
@@ -171,28 +170,25 @@ const CawsWodNftChecklist = ({
             gap: 5,
           }}
         >
-          <div
-            
-            className="sub-container p-0"
-            style={{boxShadow: 'none'}}
-          >
-              <div className="d-flex align-items-center">
-            <img
-              src={nft.image.replace("images", "thumbs")}
-              className="nft-coins"
-              alt=""
-            />
-            <img
-              src={landNft.image.replace("images", "thumbs")}
-              className="nft-coins"
-              alt=""
-            /></div>
+          <div className="sub-container p-0" style={{ boxShadow: "none" }}>
+            <div className="d-flex align-items-center">
+              <img
+                src={nft.image.replace("images", "thumbs")}
+                className="nft-coins"
+                alt=""
+              />
+              <img
+                src={landNft.image.replace("images", "thumbs")}
+                className="nft-coins"
+                alt=""
+              />
+            </div>
             <p
               style={{
                 color: "var(--light-gray-99-nft)",
               }}
             >
-             {nft.name} x WoD {landNft.name}
+              {/* {nft.name} x WoD {landNft.name} */}
             </p>
             <div className="d-flex" style={{ flexDirection: "column" }}>
               <div className="d-flex w-100 justify-content-between align-baseline">
@@ -214,7 +210,6 @@ const CawsWodNftChecklist = ({
                       onClick={() => {
                         setUnstakeBtn(!Unstakebtn);
                       }}
-                     
                     />
                   </>
                 ) : (
@@ -223,7 +218,9 @@ const CawsWodNftChecklist = ({
                       type="checkbox"
                       id={checklistItemID}
                       name="checkbtn"
-                      checked={checkbtn && isStake === false && checked2 === true}
+                      checked={
+                        checkbtn && isStake === false && checked2 === true
+                      }
                       onChange={(e) => {
                         setCheckBtn(!checkbtn);
                       }}
@@ -231,84 +228,105 @@ const CawsWodNftChecklist = ({
                   </>
                 )}
               </div>
-              
-                <>
-                  <div
-                    className="earn-checklist-container d-block mb-0 p-0 w-100"
-                    style={{ boxShadow: "none", borderTop: "none" }}
-                  >
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        flexDirection: 'column'
-                      }}
-                    >
-                      <p id="earnedText" color="#C0C9FF">Earned</p>
-                      <h6 className="rewardstxtCaws d-flex align-items-center gap-2 mb-2" style={{fontSize: 16}}>
-                        <img src={require("./weth.svg").default} alt="" style={{height: 20, width: 20}}/>{" "}
-                       {getFormattedNumber(EthRewards, 6)} WETH 
-                      </h6>
 
-                      {/* <div>
+              <>
+                <div
+                  className="earn-checklist-container d-block mb-0 p-0 w-100"
+                  style={{ boxShadow: "none", borderTop: "none" }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <p id="earnedText" color="#C0C9FF">
+                      Earned
+                    </p>
+                    <h6
+                      className="rewardstxtCaws d-flex align-items-center gap-2 mb-2"
+                      style={{ fontSize: 16 }}
+                    >
+                      <img
+                        src={require("./weth.svg").default}
+                        alt=""
+                        style={{ height: 20, width: 20 }}
+                      />{" "}
+                      {getFormattedNumber(EthRewards, 6)} WETH
+                    </h6>
+
+                    {/* <div>
                         <p id="ethPrice">
                           {getFormattedNumber(EthRewards, 2)}ETH
                         </p>
                         <p id="fiatPrice">{formattedNum(ethToUSD, true)}</p>
                       </div> */}
-                      {/* <img
+                    {/* <img
                         src={EthLogo}
                         alt=""
                         style={{ width: 24, height: 24 }}
                       /> */}
-                    </div>{" "}
-                  </div>
-                  <button
-                    className="claim-rewards-btn-countdown mb-1"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleClaim(checklistItemID);
-                    }}
-                    style={{
-                      pointerEvents: EthRewards == 0 ? "none" : "auto",
-                      borderColor: EthRewards == 0 ? "#14142A" : "#857DFA",
-                      color: EthRewards == 0 ? "#C0C9FF" : "#857DFA",
-                      background: EthRewards == 0 ? "#14142A" : "#312F69",
-                      padding: 5, borderRadius: 8, width: '100%'
-                    }}
-                  >
-                    Claim reward
-                  </button>
-                </>
+                  </div>{" "}
+                </div>
+                <button
+                  className="claim-rewards-btn-countdown mb-1"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleClaim(checklistItemID);
+                  }}
+                  style={{
+                    pointerEvents: EthRewards == 0 ? "none" : "auto",
+                    borderColor: EthRewards == 0 ? "#14142A" : "#857DFA",
+                    color: EthRewards == 0 ? "#C0C9FF" : "#857DFA",
+                    background: EthRewards == 0 ? "#14142A" : "#312F69",
+                    padding: 5,
+                    borderRadius: 8,
+                    width: "100%",
+                  }}
+                >
+                  {loadingClaim ? (
+                    <>
+                      <div
+                        className="spinner-border "
+                        role="status"
+                        style={{ height: "1.5rem", width: "1.5rem" }}
+                      ></div>
+                    </>
+                  ) : (
+                    "Claim reward"
+                  )}
+                </button>
+              </>
             </div>
           </div>
-            <>
-              <button
-                className="checkbox-button"
-                onClick={() => {
-                  handleUnstake(checklistItemID);
-                }}
-                style={{
-                  background:
-                    checkPassiveBtn === true
-                      ? "linear-gradient(90.74deg, #7770E0 0%, #554FD8 100%)"
-                      : "#14142A",
-                  pointerEvents: checkPassiveBtn === true ? "auto" : "none",
-                }}
-              >
-                {loading ? (
-                  <>
-                    <div
-                      className="spinner-border "
-                      role="status"
-                      style={{ height: "1.5rem", width: "1.5rem" }}
-                    ></div>
-                  </>
-                ) : (
-                  "Unstake"
-                )}
-              </button>
-            </>
+          <>
+            <button
+              className="checkbox-button"
+              onClick={() => {
+                handleUnstake(checklistItemID, landlistItemID);
+              }}
+              style={{
+                background:
+                  checkPassiveBtn === true
+                    ? "linear-gradient(90.74deg, #7770E0 0%, #554FD8 100%)"
+                    : "#14142A",
+                pointerEvents: checkPassiveBtn === true ? "auto" : "none",
+              }}
+            >
+              {loading ? (
+                <>
+                  <div
+                    className="spinner-border "
+                    role="status"
+                    style={{ height: "1.5rem", width: "1.5rem" }}
+                  ></div>
+                </>
+              ) : (
+                "Unstake"
+              )}
+            </button>
+          </>
         </div>
       </div>
     </>
