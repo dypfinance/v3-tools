@@ -52,6 +52,7 @@ const Header = ({
   const [avatar, setAvatar] = useState("../../assets/img/person.svg");
   const routeData = useLocation();
 
+
   const { ethereum } = window;
 
   const setActiveChain = () => {

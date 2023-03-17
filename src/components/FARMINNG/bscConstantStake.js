@@ -415,6 +415,12 @@ const StakeBsc = ({
       .then(() => {
         setdepositLoading(false);
         setdepositStatus("success");
+
+        setTimeout(() => {
+          setdepositLoading(false);
+          setdepositStatus("initial");
+        }, 5000);
+
       })
       .catch((e) => {
         setdepositLoading(false);
@@ -473,6 +479,8 @@ const StakeBsc = ({
         setTimeout(() => {
           setclaimStatus("initial");
           seterrorMsg2("");
+        setclaimLoading(false);
+
         }, 2000);
       });
   };
@@ -664,7 +672,7 @@ console.log(amount,result_formatted)
     getUsdPerDyp();
   }, []);
 
-  // console.log('test')
+  // console.log(Number(depositedTokens))
 
   return (
     <div className="container-lg p-0">
@@ -906,7 +914,7 @@ console.log(amount,result_formatted)
                     placement="top"
                     title={
                       <div className="tooltip-text">
-                        {
+                        { lockTime === 'No Lock' ? 'The initial pool size is capped at 5M DYP. Additional opportunities to stake DYP are planned to be introduced over time.' :
                           "Deposit your assets to the staking smart contract. For lock time pools, the lock time resets if you add more deposits after making one previously."
                         }
                       </div>
@@ -1129,7 +1137,7 @@ console.log(amount,result_formatted)
                       style={{ height: "fit-content" }}
                       onClick={handleClaimDivs}
                     >
-                      {claimLoading ? (
+                      {claimLoading === true && claimStatus === "initial" ? (
                         <div
                           class="spinner-border spinner-border-sm text-light"
                           role="status"
@@ -1588,7 +1596,7 @@ console.log(amount,result_formatted)
                         handleWithdraw();
                       }}
                     >
-                      {withdrawLoading ? (
+                      {withdrawLoading === true ? (
                         <div
                           class="spinner-border spinner-border-sm text-light"
                           role="status"

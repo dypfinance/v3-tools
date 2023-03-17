@@ -20,60 +20,9 @@ const Earn = ({
   const html = document.querySelector("html");
 
   const routeData = useLocation();
-  const [networkId, setnetworkId] = useState();
 
-  const checkNetworkId = () => {
-    if (
-      window.ethereum &&
-      coinbase &&
-      (window.ethereum.isMetaMask === true ||
-        window.coin98 === true ||
-        window.ethereum.isTrust === true ||
-        window.ethereum.isCoinbaseWallet === true)
-    ) {
-      window.ethereum
-        .request({ method: "eth_chainId" })
-        .then((data) => {
-          if (data === "0x1") {
-            setnetworkId("1");
-          } else if (data === "0xa86a") {
-            setnetworkId("43114");
-          } else if (data === "0x38") {
-            setnetworkId("56");
-          } else if (data !== "undefined") {
-            setnetworkId("0");
-          } else {
-            setnetworkId("1");
-          }
-        })
-        .catch(console.error);
-    } else if (
-      window.ethereum &&
-      coinbase &&
-      window.ethereum.overrideIsMetaMask === true &&
-      !window.ethereum.isCoinbaseWallet
-    ) {
-      const chainId = window.ethereum.selectedProvider.chainId;
 
-      if (chainId === "0x1") {
-        setnetworkId("1");
-      } else if (chainId === "0xa86a") {
-        setnetworkId("43114");
-      } else if (chainId === "0x38") {
-        setnetworkId("56");
-      } else if (chainId !== "undefined") {
-        setnetworkId("0");
-      } else {
-        setnetworkId("1");
-      }
-    } else {
-      setnetworkId("1");
-    }
-  };
 
-  useEffect(() => {
-    checkNetworkId();
-  }, [network]);
 
   useEffect(() => {
     if (showCalculator === true) {
@@ -98,7 +47,7 @@ const Earn = ({
         lp_id={lp_id}
         isConnected={isConnected}
         chainId={network}
-        networkId={networkId}
+        networkId={network}
         handleConnection={handleConnection}
         the_graph_resultavax={the_graph_resultavax}
         the_graph_resultbsc={the_graph_resultbsc}
