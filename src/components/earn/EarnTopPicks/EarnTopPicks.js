@@ -8500,6 +8500,75 @@ const EarnTopPicks = ({
                       referrer={referrer}
                     />
                   ) : activeCard2 &&
+                  topList === "Staking" &&
+                  activePools[cardIndex].id ===
+                    "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" &&
+                  chain === "bnb" ? (
+                  <StakeBsc
+                    lp_id={LP_IDBNB_Array[cardIndex]}
+                    staking={window.constant_stakingbsc_new11}
+                    apr={
+                      expiredPools === false
+                        ? activePools[cardIndex]?.apy_percent
+                        : expiredDYPPools[cardIndex]?.apy_percent
+                    }
+                    liquidity={wbsc_address}
+                    expiration_time={"5 August 2023"}
+                    finalApr={
+                      expiredPools === false
+                        ? activePools[cardIndex]?.apy_performancefee
+                        : expiredDYPPools[cardIndex]?.apy_performancefee
+                    }
+                    fee={
+                      expiredPools === false
+                        ? activePools[cardIndex]?.performancefee
+                        : expiredDYPPools[cardIndex]?.performancefee
+                    }
+                    lockTime={
+                      cardIndex !== undefined
+                        ? expiredPools === false
+                          ? activePools[cardIndex]?.lock_time?.split(
+                              " "
+                            )[0] === "No"
+                            ? "No Lock"
+                            : parseInt(
+                                activePools[cardIndex]?.lock_time?.split(
+                                  " "
+                                )[0]
+                              )
+                          : expiredDYPPools[cardIndex]?.lock_time?.split(
+                              " "
+                            )[0] === "No"
+                          ? "No Lock"
+                          : parseInt(
+                              expiredDYPPools[cardIndex]?.lock_time?.split(
+                                " "
+                              )[0]
+                            )
+                        : "No Lock"
+                    }
+                    listType={listType}
+                    other_info={
+                      cardIndex !== undefined
+                        ? expiredPools === false
+                          ? activePools[cardIndex]?.expired === "Yes"
+                            ? true
+                            : false
+                          : expiredDYPPools[cardIndex]?.expired === "Yes"
+                          ? true
+                          : false
+                        : false
+                    }
+                    is_wallet_connected={isConnected}
+                    coinbase={coinbase}
+                    the_graph_result={the_graph_resultbsc}
+                    chainId={chainId}
+                    handleConnection={handleConnection}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    expired={false}
+                    referrer={referrer}
+                  />
+                ) : activeCard2 &&
                     activePools[cardIndex].id ===
                       "0x7e766F7005C7a9e74123b156697B582eeCB8d2D7" &&
                     topList === "Staking" &&
