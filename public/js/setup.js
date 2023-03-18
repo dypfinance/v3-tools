@@ -2981,9 +2981,8 @@ class LANDNFT {
 
   async approveStake(addr) {
     let nft_contract = await getContractLandNFT("LANDNFTSTAKE");
-    let staking_addr = addr;
     return await nft_contract.methods
-      .setApprovalForAll(staking_addr, true)
+      .setApprovalForAll(addr, true)
       .send();
   }
 

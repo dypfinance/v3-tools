@@ -52,6 +52,8 @@ const CawsWodDetails = ({
   const [countDownLeft, setCountDownLeft] = useState(59000);
   
   const [approvedNfts, setApprovedNfts] = useState([]);
+  const [approvedLandNfts, setApprovedLandNfts] = useState([]);
+
   const [loadingdeposit, setloadingdeposit] = useState(false);
   const [newStakes, setnewStakes] = useState(0);
   const [loading, setloading] = useState(false);
@@ -276,6 +278,11 @@ const CawsWodDetails = ({
 
   const getApprovedNfts = (data) => {
     setApprovedNfts(data);
+    return data;
+  };
+
+  const getApprovedLandNfts = (data) => {
+    setApprovedLandNfts(data);
     return data;
   };
 
@@ -570,7 +577,7 @@ const CawsWodDetails = ({
             setamountToStake("");
           }}
           getApprovedNfts={getApprovedNfts}
-          getApprovedLandNfts={getApprovedNfts}
+          getApprovedLandNfts={getApprovedLandNfts}
           // nftItem={showStaked ? mystakes : showToStake ? myNFTs : showStaked}
           nftItem={
             hide === "" || hide === "tostake" || hide === "mystakes2"

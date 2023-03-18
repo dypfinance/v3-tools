@@ -94,9 +94,11 @@ const NftCawsWodChecklistModal = ({
   let nftLandIds = [];
 
   const handleClearStatus = () => {
-    onDepositComplete();
     const interval = setInterval(async () => {
       setStatus("");
+      setloadingWithdraw(false);
+      setloadingdeposit(false);
+      setloadingClaim(false)
     }, 8000);
     return () => clearInterval(interval);
   };
@@ -121,7 +123,7 @@ const NftCawsWodChecklistModal = ({
     const address = coinbase;
 
     const stakeApr50 = await window.config.wod_caws_address;
-    if (address !== null) {
+    if (address !== null && address !== undefined) {
       if (apr == 50) {
         const result = await window.nft
           .checkapproveStake(address, stakeApr50)
@@ -146,7 +148,7 @@ const NftCawsWodChecklistModal = ({
   const checkApprovalLand = async () => {
     const address = coinbase;
     const stake25 = await window.config.wod_caws_address;
-    if (address) {
+    if (address!==null && address !== undefined) {
       const result = await window.landnft
         .checkapproveStake(address, stake25)
         .then((data) => {
@@ -157,7 +159,7 @@ const NftCawsWodChecklistModal = ({
         setshowLandApprove(false);
         setStatus("");
         setColor("#939393");
-      } else if (result === true && nftItem.length == 0) {
+      } else if (result === true && nftItem.length === 0) {
         setStatus("");
       } else if (result === false) {
         setStatus("*Please approve before deposit");
@@ -176,13 +178,14 @@ const NftCawsWodChecklistModal = ({
     await window.nft
       .approveStake(stakeApr50)
       .then(() => {
-        checkApproval();
         setActive(false);
         setloading(false);
         setColor("#52A8A4");
         setStatus("*Caws approved successfully");
+        checkApproval();
       })
       .catch((err) => {
+        window.alertify.error(err?.message)
         setloading(false);
         setColor("#F13227");
         setStatus("*An error occurred. Please try again");
@@ -191,22 +194,23 @@ const NftCawsWodChecklistModal = ({
   };
 
   const handleApproveWod = async () => {
-    const land_nft = await window.config.wod_caws_address;
+    const caws_land_nft = await window.config.wod_caws_address;
 
     setloading(true);
     setStatus("*Waiting for approval");
     await window.landnft
-      .approveStake(land_nft)
+      .approveStake(caws_land_nft)
       .then(() => {
-        checkApprovalLand();
         setActive(false);
         setloading(false);
         setColor("#52A8A4");
         setStatus("*WoD approved successfully");
+        checkApprovalLand();
       })
       .catch((err) => {
         setloading(false);
         setColor("#F13227");
+        window.alertify.error(err?.message)
         setStatus("*An error occurred. Please try again");
         handleClearStatus();
       });
@@ -309,6 +313,7 @@ const NftCawsWodChecklistModal = ({
       })
       .catch((err) => {
         console.log(err);
+        window.alertify.error(err?.message)
         setloadingdeposit(false);
         setColor("#F13227");
         setStatus("*An error occurred. Please try again");
@@ -425,7 +430,6 @@ const NftCawsWodChecklistModal = ({
         setColor("#F13227");
         setSelectedNftIds([]);
         setSelectedNftLandIds([]);
-
         handleClearStatus();
       });
   };
@@ -468,14 +472,16 @@ const NftCawsWodChecklistModal = ({
       ) {
         setStatus("You must select the same amount of NFTs!");
         setColor("#F13227");
-      } else if (
+      } 
+       if (
         getApprovedLandNfts(selectNftLandIds).length ===
         getApprovedNfts(selectNftIds).length
       ) {
         setStatus("");
       }
     }
-  }, [getApprovedNfts(selectNftIds).length,getApprovedLandNfts(selectNftLandIds).length ]);
+  }, [getApprovedNfts(selectNftIds).length,getApprovedLandNfts(selectNftLandIds).length, selectNftLandIds.length, selectNftIds.length]);
+
 
   return (
     <Modal
@@ -1210,6 +1216,32 @@ const NftCawsWodChecklistModal = ({
                 className="d-flex justify-content-xxl-between justify-content-lg-between justify-content-md-between  justify-content-sm-between align-items-center"
                 style={{ gap: 5 }}
               >
+                 <span
+                  id="ethPrice"
+                  className="mb-0"
+                  style={{
+                    display: "flex",
+                    color: "#4CD0CD",
+                    fontWeight: 700,
+                    alignItems: "center",
+                  }}
+                >
+                {getApprovedLandNfts(selectNftLandIds).length}
+               
+                </span>
+                <span
+                  id="ethPrice"
+                  className="mb-0"
+                  style={{
+                    display: "flex",
+                    color: "#4CD0CD",
+                    fontWeight: 600,
+                    alignItems: "center",
+                  }}
+                >
+                 WoD &
+               
+                </span>
                 <span
                   id="ethPrice"
                   className="mb-0"
@@ -1220,9 +1252,21 @@ const NftCawsWodChecklistModal = ({
                     alignItems: "center",
                   }}
                 >
-                  {selectNftLandIds.length +
-                              "WoD" +  " " +" & " + selectNftIds.length + "CAWS" 
-                            }
+                
+                {getApprovedNfts(selectNftIds).length} 
+                </span>
+                <span
+                  id="ethPrice"
+                  className="mb-0"
+                  style={{
+                    display: "flex",
+                    color: "#4CD0CD",
+                    fontWeight: 600,
+                    alignItems: "center",
+                  }}
+                >
+                
+                  CAWS
                   /50
                 </span>
                 <span
@@ -1490,31 +1534,69 @@ const NftCawsWodChecklistModal = ({
                         className="d-flex justify-content-end"
                         style={{ gap: 5 }}
                       >
-                        <span
-                          id="ethPrice"
-                          className="mb-0"
-                          style={{
-                            alignItems: "end",
-                            display: "flex",
-                            color: "#4CD0CD",
-                          }}
-                        >
-                          {selectNftLandIds.length +
-                              "WoD" +  " " +" & " + selectNftIds.length + "CAWS" 
-                            }
-                          /50
-                        </span>
-                        <span
-                          style={{
-                            color: "#4CD0CD",
-                            fontWeight: 700,
-                            lineHeight: "18px",
-                            display: "flex",
-                            alignItems: "end",
-                          }}
-                        >
-                          selected
-                        </span>
+                      <span
+                  id="ethPrice"
+                  className="mb-0"
+                  style={{
+                    display: "flex",
+                    color: "#4CD0CD",
+                    fontWeight: 700,
+                    alignItems: "center",
+                  }}
+                >
+                {getApprovedLandNfts(selectNftLandIds).length}
+               
+                </span>
+                <span
+                  id="ethPrice"
+                  className="mb-0"
+                  style={{
+                    display: "flex",
+                    color: "#4CD0CD",
+                    fontWeight: 600,
+                    alignItems: "center",
+                  }}
+                >
+                 WoD &
+               
+                </span>
+                <span
+                  id="ethPrice"
+                  className="mb-0"
+                  style={{
+                    display: "flex",
+                    color: "#4CD0CD",
+                    fontWeight: 700,
+                    alignItems: "center",
+                  }}
+                >
+                
+                {getApprovedNfts(selectNftIds).length} 
+                </span>
+                <span
+                  id="ethPrice"
+                  className="mb-0"
+                  style={{
+                    display: "flex",
+                    color: "#4CD0CD",
+                    fontWeight: 600,
+                    alignItems: "center",
+                  }}
+                >
+                
+                  CAWS
+                  /50
+                </span>
+                <span
+                  style={{
+                    color: "#4CD0CD",
+                    fontWeight: 700,
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  selected
+                </span>
 
                         <img
                           src={require("./catlogo.svg").default}
