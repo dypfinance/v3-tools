@@ -50,15 +50,16 @@ const CawsWodDetails = ({
   const [showUnstakeModal, setShowUnstakeModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [countDownLeft, setCountDownLeft] = useState(59000);
-  const [totalStakes, settotalStakes] = useState(0);
+  
   const [approvedNfts, setApprovedNfts] = useState([]);
+  const [approvedLandNfts, setApprovedLandNfts] = useState([]);
+
   const [loadingdeposit, setloadingdeposit] = useState(false);
   const [newStakes, setnewStakes] = useState(0);
   const [loading, setloading] = useState(false);
   const [showClaim, setshowClaim] = useState(false);
   const [hide, setHide] = useState("");
-  const [screenName, setScreenName] = useState("caws");
-
+  const [screenName, setScreenName] = useState("land");
 
   const windowSize = useWindowSize();
 
@@ -100,11 +101,13 @@ const CawsWodDetails = ({
   const getStakesIds = async () => {
     const address = coinbase;
     let stakenft = [];
-    const allCawsStakes = await window.wod_caws.depositsOf(address).then((result) => {
-      for (let i = 0; i < result.length; i++)
-        stakenft.push(parseInt(result[i]));
-      return stakenft;
-    });
+    const allCawsStakes = await window.wod_caws
+      .depositsOf(address)
+      .then((result) => {
+        for (let i = 0; i < result.length; i++)
+          stakenft.push(parseInt(result[i]));
+        return stakenft;
+      });
 
     return allCawsStakes;
   };
@@ -118,16 +121,18 @@ const CawsWodDetails = ({
       stakes.reverse();
       setMystakes(stakes);
     }
+    else setMystakes([])
   };
 
   const myLandNft = async () => {
     let myNft = await window.myNftLandListContract(coinbase);
+
     if (myNft && myNft.length > 0) {
       let nfts = myNft.map((nft) => window.getLandNft(nft));
       nfts = await Promise.all(nfts);
 
       nfts.reverse();
-         
+
       setMyLandNFTs(nfts);
     }
   };
@@ -135,11 +140,14 @@ const CawsWodDetails = ({
   const getLandStakesIds = async () => {
     const address = coinbase;
     let stakenft = [];
-    const allLandStakes = await window.wod_caws.depositsOfWod(address).then((result) => {
-      for (let i = 0; i < result.length; i++)
-        stakenft.push(parseInt(result[i]));
-      return stakenft;
-    });
+    const allLandStakes = await window.wod_caws
+      .depositsOfWod(address)
+      .then((result) => {
+        if(result > 0)
+      {  for (let i = 0; i < result.length; i++)
+          stakenft.push(parseInt(result[i]));
+        return stakenft;}
+      });
 
     return allLandStakes;
   };
@@ -152,37 +160,34 @@ const CawsWodDetails = ({
       stakes.reverse();
       setMyLandstakes(stakes);
     }
+    else setMyLandstakes([])
   };
-
 
   const setUSDPrice = async () => {
     const ethprice = await convertEthToUsd();
     setethToUSD(Number(ethprice) * Number(EthRewards));
   };
 
-
-
-
-
   const calculateAllRewards = async () => {
     let myStakes = await getStakesIds();
     let result = 0;
-    
+
     if (coinbase !== null) {
       if (myStakes.length > 0) {
-      let rewards = await window.wod_caws.calculateRewardsWodCaws(coinbase, myStakes).then((data) => {
-        return data;
-      })
-      .catch((err) => {
-        console.log(err)
-      });
-      let finalReward = 0
-      for (let i = 0; i < rewards.length; i++) {
-        finalReward = rewards[i]/1e18
-        result = result + Number(finalReward);
+        let rewards = await window.wod_caws
+          .calculateRewardsWodCaws(coinbase, myStakes)
+          .then((data) => {
+            return data;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        let finalReward = 0;
+        for (let i = 0; i < rewards.length; i++) {
+          finalReward = rewards[i] / 1e18;
+          result = result + Number(finalReward);
+        }
       }
-    }
-     
     }
     setEthRewards(result);
   };
@@ -190,11 +195,12 @@ const CawsWodDetails = ({
   const claimRewards = async () => {
     let myStakes = await getStakesIds();
     // setclaimAllStatus("Claiming all rewards, please wait...");
-    await window.wod_caws.claimRewardsWodCaws(myStakes).then(() => {
+    await window.wod_caws
+      .claimRewardsWodCaws(myStakes)
+      .then(() => {
         setEthRewards(0);
       })
-      .catch((err) => {
-      });
+      .catch((err) => {});
   };
 
   const convertEthToUsd = async () => {
@@ -206,91 +212,12 @@ const CawsWodDetails = ({
     return res;
   };
 
-
   const refreshStakes = () => {
     setnewStakes(newStakes + 1);
   };
 
-  const handleClearStatus = () => {
-    const interval = setInterval(async () => {
-      setStatus("");
-    }, 8000);
-    return () => clearInterval(interval);
-  };
 
 
-
-  const handleApprove = async () => {
-    const stakeApr50 = await window.config.nftstaking_address50;
-
-    setloading(true);
-    setStatus("*Waiting for approval");
-    await window.nft
-      .approveStake(stakeApr50)
-      .then(() => {
-        setActive(false);
-        setloading(false);
-        setColor("#52A8A4");
-        setStatus("*Caws approved successfully");
-      })
-      .catch((err) => {
-        setloading(false);
-        setColor("#F13227");
-        setStatus("*An error occurred. Please try again");
-        handleClearStatus();
-      });
-  };
-
-  const handleApproveWod = async () => {
-    const land_nft = await window.config.landnftstake_address;;
-
-    setloading(true);
-    setStatus("*Waiting for approval");
-    await window.landnft
-      .approveStake(land_nft)
-      .then(() => {
-        setActive(false);
-        setloading(false);
-        setColor("#52A8A4");
-        setStatus("*WoD approved successfully");
-      })
-      .catch((err) => {
-        setloading(false);
-        setColor("#F13227");
-        setStatus("*An error occurred. Please try again");
-        handleClearStatus();
-      });
-  };
-
-  const handleDeposit = async () => {
-    let stake_contract = await window.getContractNFT("NFTSTAKING");
-    setloadingdeposit(true);
-    setStatus("*Processing deposit");
-    setColor("#F13227");
-
-    await stake_contract.methods
-      .deposit(approvedNfts)
-      .send()
-      .then(() => {
-        setloadingdeposit(false);
-        setshowClaim(true);
-        setActive(true);
-        setStatus("*Sucessfully deposited");
-        setApprovedNfts([]);
-        setColor("#57AEAA");
-        handleClearStatus();
-        refreshStakes();
-      })
-      .catch((err) => {
-        setloadingdeposit(false);
-        setColor("#F13227");
-        setStatus("*An error occurred. Please try again");
-        setApprovedNfts([]);
-        handleClearStatus();
-      });
-  };
-
-  
   const calculateCountdown = async () => {
     const address = coinbase;
     let finalDay = await window.wod_caws
@@ -305,15 +232,16 @@ const CawsWodDetails = ({
         return data;
       });
 
-      finalDay = parseInt(finalDay) + parseInt(lockup_time);
-      setCountDownLeft(parseInt(finalDay * 1000) - Date.now());
-   
+    finalDay = parseInt(finalDay) + parseInt(lockup_time);
+    setCountDownLeft(parseInt(finalDay * 1000) - Date.now());
   };
- 
+
   const handleUnstakeAll = async () => {
     // setunstakeAllStatus("Unstaking all please wait...");
     await window.wod_caws
-    .withdrawTokensWodCaws().then(() => {
+      .withdrawWodCaws()
+      .then(() => {
+        refreshStakes()
         // setunstakeAllStatus("Successfully unstaked all!");
       })
       .catch((err) => {
@@ -333,28 +261,11 @@ const CawsWodDetails = ({
       });
   };
 
-  const totalStakedNft = async () => {
-    let staking_contract = await new window.infuraWeb3.eth.Contract(
-      window.NFT_ABI,
-      window.config.nft_address,
-      { from: undefined }
-    );
-
-    await staking_contract.methods
-      .balanceOf(window.config.nftstaking_address)
-      .call()
-      .then((data) => {
-        settotalStakes(data);
-      });
-  };
-
-
-  useEffect(() => {
-    totalStakedNft().then();
-  }, []);
-
+  
   useEffect(() => {
     if (coinbase) {
+      getStakesIds();
+      getLandStakesIds();
       myNft().then();
       myStakes().then();
       myLandNft().then();
@@ -363,10 +274,15 @@ const CawsWodDetails = ({
       calculateAllRewards();
       calculateCountdown().then();
     }
-  }, [isConnected, coinbase, screenName,newStakes]);
+  }, [isConnected, coinbase, screenName, newStakes]);
 
   const getApprovedNfts = (data) => {
     setApprovedNfts(data);
+    return data;
+  };
+
+  const getApprovedLandNfts = (data) => {
+    setApprovedLandNfts(data);
     return data;
   };
 
@@ -425,7 +341,7 @@ const CawsWodDetails = ({
               <div className="d-flex align-items-center justify-content-between gap-2">
                 <h6 className="earnrewards-text">Lock time:</h6>
                 <h6 className="earnrewards-token d-flex align-items-center gap-1">
-                  90 days
+                  No Lock
                   <Tooltip
                     placement="top"
                     title={
@@ -485,8 +401,8 @@ const CawsWodDetails = ({
                 <h6 className="start-title">Start Staking</h6>
 
                 {coinbase === null ||
-                  coinbase === undefined ||
-                  isConnected === false ? (
+                coinbase === undefined ||
+                isConnected === false ? (
                   <button
                     className="connectbtn btn"
                     onClick={() => {
@@ -512,7 +428,9 @@ const CawsWodDetails = ({
               </div>
             </div>
             <div
-              className={`otherside-border col-12 col-md-6 col-lg-4 ${chainId !== "1" && "blurrypool"}`}
+              className={`otherside-border col-12 col-md-6 col-lg-4 ${
+                chainId !== "1" && "blurrypool"
+              }`}
             >
               <div className="d-flex justify-content-between align-items-center gap-2">
                 <div className="d-flex align-items-center gap-3">
@@ -539,8 +457,7 @@ const CawsWodDetails = ({
               </div>
               <div className="d-flex flex-column gap-2 justify-content-between">
                 <div className="d-flex align-items-center justify-content-between gap-2">
-
-                  <div className="d-flex align-items-end gap-2">
+                 
                     <button
                       className="btn filledbtn"
                       onClick={() => {
@@ -555,20 +472,7 @@ const CawsWodDetails = ({
                     <div className="available-nfts">
                       Selected NFTs:{" "}
                       <b>{isConnected === false ? 0 : approvedNfts.length}</b>
-                    </div>
-                  </div>
-                  <button
-                    className={`btn ${(amountToStake !== "" && myNFTs.length > 0) || approvedNfts.length > 0
-                        ? "filledbtn"
-                        : "disabled-btn"
-                      } d-flex justify-content-center align-items-center gap-2`}
-                    disabled={
-                      (amountToStake !== "" && myNFTs.length > 0) || approvedNfts.length > 0 ? false : true
-                    }
-                    onClick={() => { showApprove === false ? handleDeposit() : handleApprove() }}
-                  >
-                    {showApprove === false ? "Deposit" : "Approve"}
-                  </button>
+                    </div> 
                 </div>
                 {/* {this.state.errorMsg && (
                   <h6 className="errormsg">{this.state.errorMsg}</h6>
@@ -594,7 +498,7 @@ const CawsWodDetails = ({
                   </h6>
                 </h6>
                 <h6 className="withdraw-littletxt d-flex align-items-center gap-2">
-                  Rewards are displayed in real-time
+                  
                   <Tooltip
                     placement="top"
                     title={
@@ -618,8 +522,9 @@ const CawsWodDetails = ({
                     {getFormattedNumber(ethToUSD, 6)})
                   </h6>
                   <button
-                    className={`btn ${EthRewards === 0 ? "disabled-btn" : "filledbtn"
-                      } d-flex justify-content-center align-items-center`}
+                    className={`btn ${
+                      EthRewards === 0 ? "disabled-btn" : "filledbtn"
+                    } d-flex justify-content-center align-items-center`}
                     style={{ height: "fit-content" }}
                     onClick={claimRewards}
                     disabled={EthRewards === 0 ? true : false}
@@ -631,8 +536,9 @@ const CawsWodDetails = ({
             </div>
 
             <div
-              className={`otherside-border col-12 col-md-6 col-lg-2 ${chainId !== "1" && "blurrypool"
-                }`}
+              className={`otherside-border col-12 col-md-6 col-lg-2 ${
+                chainId !== "1" && "blurrypool"
+              }`}
             >
               <h6 className="deposit-txt d-flex align-items-center gap-2 justify-content-between">
                 Unstake
@@ -655,7 +561,7 @@ const CawsWodDetails = ({
                 onClick={() => {
                   setshowChecklistModal(true);
                   setOpenStakeChecklist(true);
-                  setHide("");
+                  setHide("tostake");
                 }}
               >
                 Withdraw
@@ -671,19 +577,26 @@ const CawsWodDetails = ({
             setamountToStake("");
           }}
           getApprovedNfts={getApprovedNfts}
-          getApprovedLandNfts={getApprovedNfts}
-
+          getApprovedLandNfts={getApprovedLandNfts}
           // nftItem={showStaked ? mystakes : showToStake ? myNFTs : showStaked}
           nftItem={
             hide === "" || hide === "tostake" || hide === "mystakes2"
-              ? screenName === 'caws' ? mystakes : myLandstakes
-              : screenName === 'caws' ? myNFTs : myLandNFTs
+              ? screenName === "caws"
+                ? mystakes
+                : myLandstakes
+              : screenName === "caws"
+              ? myNFTs
+              : myLandNFTs
           }
           landItems={myLandNFTs}
           cawsStakes={mystakes}
           landStakes={myLandstakes}
-          onShowNextScreen={() => { setScreenName('land') }}
-          onShowBackScreen={() => { setScreenName('caws') }}
+          onShowNextScreen={() => {
+            setScreenName("caws");
+          }}
+          onShowBackScreen={() => {
+            setScreenName("land");
+          }}
           onshowStaked={() => {
             setshowStaked(true);
             setshowToStake(false);
@@ -705,7 +618,7 @@ const CawsWodDetails = ({
           countDownLeft={countDownLeft}
           open={openStakeChecklist ? true : false}
           hideItem={hide}
-          onDepositComplete={refreshStakes}
+          onDepositComplete={()=>refreshStakes()}
         />
       )}
 

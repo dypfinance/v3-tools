@@ -2981,9 +2981,8 @@ class LANDNFT {
 
   async approveStake(addr) {
     let nft_contract = await getContractLandNFT("LANDNFTSTAKE");
-    let staking_addr = addr;
     return await nft_contract.methods
-      .setApprovalForAll(staking_addr, true)
+      .setApprovalForAll(addr, true)
       .send();
   }
 
@@ -3092,75 +3091,52 @@ class WOD_CAWS {
     let second = await nft_contract.methods.deposit(cawsArray,landArray).send({
       from: await getCoinbase()
     })
-    .catch((e)=>{
-      console.log(e)
-    })
+   
   }
 
   async claimRewardsWodCaws(cawsArray) {
     let nft_contract = await getContractWodCawsNFT("WOD_CAWS");
     return await nft_contract.methods
       .claimRewards(cawsArray)
-      .send({from: await getCoinbase()}).catch((e)=>{
-        console.log(e)
-      })
+      .send({from: await getCoinbase()})
   }
 
   async withdrawWodCaws(cawsArray, landArray) {
     let nft_contract = await getContractWodCawsNFT("WOD_CAWS");
-    return await nft_contract.methods.withdraw(cawsArray, landArray).send({from: await getCoinbase()}).catch((e)=>{
-      console.log(e)
-    })
-  }
-
-  async withdrawTokensWodCaws() {
-    let nft_contract = await getContractWodCawsNFT("WOD_CAWS");
-    return await nft_contract.methods.withdrawTokens().send({from: await getCoinbase()}).catch((e)=>{
-      console.log(e)
-    });
+    return await nft_contract.methods.withdraw(cawsArray, landArray).send({from: await getCoinbase()})
   }
 
   async calculateRewardWodCaws(address, tokenId) {
     let nft_contract = await getContractWodCawsNFT("WOD_CAWS");
-    return await nft_contract.methods.calculateReward(address, tokenId).call().catch((e)=>{
-      console.log(e)
-    });
+    return await nft_contract.methods.calculateReward(address, tokenId).call()
   }
 
   async calculateRewardsWodCaws(address, tokenArray) {
     let nft_contract = await getContractWodCawsNFT("WOD_CAWS");
-    return await nft_contract.methods.calculateRewards(address, tokenArray).call().catch((e)=>{
-      console.log(e)
-    });
+    return await nft_contract.methods.calculateRewards(address, tokenArray).call()
   }
 
   async depositsOfCaws(address) {
     let nft_contract = await getContractWodCawsNFT("WOD_CAWS");
-    return await nft_contract.methods.depositsOf(address).call().catch((e)=>{
-      console.log(e)
-    });
+    return await nft_contract.methods.depositsOf(address).call()
   }
 
   async depositsOfWod(address) {
     let nft_contract = await getContractWodCawsNFT("WOD_CAWS");
-    return await nft_contract.methods.depositsOfWoD(address).call().catch((e)=>{
-      console.log(e)
-    });
+    return await nft_contract.methods.depositsOfWoD(address).call()
   }
 
   async checkLockupTimeWodCaws() {
     let nft_contract = await getContractWodCawsNFT("WOD_CAWS");
-    const time = await nft_contract.methods.LOCKUP_TIME().call().catch((e)=>{
-      console.log(e)
-    });
+    const time = await nft_contract.methods.LOCKUP_TIME().call();
+
     return time;
   }
 
   async checkStakingTimeWodCaws(address) {
     let nft_contract = await getContractWodCawsNFT("WOD_CAWS");
-    const stakingTime = await nft_contract.methods.stakingTime(address).call().catch((e)=>{
-      console.log(e)
-    });
+    const stakingTime = await nft_contract.methods.stakingTime(address).call()
+    
     return stakingTime;
   }
 }
