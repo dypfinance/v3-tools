@@ -3743,8 +3743,8 @@ const EarnTopPicks = ({
                       cardType={topList}
                       details={activeCardCawsLand === true ? true : false}
                       listType={listType}
-                      tvl={"$" + getFormattedNumber(landCard.tvl_usd)}
-                      apr={landCard.apy_percent}
+                      tvl={"$" + getFormattedNumber(cawsLandCard.tvl_usd)}
+                        apr={cawsLandCard.apy_percent}
                     />
                   )}
                   {topList === "Staking" && chain === "eth" && (
@@ -7692,8 +7692,8 @@ const EarnTopPicks = ({
                         cardType={topList}
                         details={activeCardCawsLand === true ? true : false}
                         listType={listType}
-                        tvl={"$" + getFormattedNumber(landCard.tvl_usd)}
-                        apr={landCard.apy_percent}
+                        tvl={"$" + getFormattedNumber(cawsLandCard.tvl_usd)}
+                        apr={cawsLandCard.apy_percent}
                       />
                     )}
                     {activeCardCawsLand && (
