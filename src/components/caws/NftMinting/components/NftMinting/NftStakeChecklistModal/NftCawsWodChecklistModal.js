@@ -138,7 +138,7 @@ const NftCawsWodChecklistModal = ({
         } else if (result === true && nftItem.length == 0) {
           setStatus("");
         } else if (result === false) {
-          setStatus(" *Please approve before deposit");
+          setStatus("");
           setshowCawsApprove(true);
         }
       }
@@ -674,7 +674,7 @@ const NftCawsWodChecklistModal = ({
                     </TimelineSeparator>
                     <TimelineContent>
                       <h6 className="content-text">
-                        Select the WoD Land NFTs for pairing, then click “next”.
+                        Select the WoD Land NFTs for pairing, then click “Next”.
                       </h6>
                     </TimelineContent>
                   </TimelineItem>
@@ -690,7 +690,7 @@ const NftCawsWodChecklistModal = ({
                     </TimelineSeparator>
                     <TimelineContent>
                       <h6 className="content-text">
-                        Select CAWS NFTs for pairing.
+                      Select CAWS NFTs for pairing, approve WoD Land & CAWS NFTs, then click 'Deposit'
                       </h6>
                     </TimelineContent>
                   </TimelineItem>
@@ -1209,7 +1209,7 @@ const NftCawsWodChecklistModal = ({
                 />
 
                 <span className="radioDesc" style={{ color: "#F7F7FC" }}>
-                  Stake your NFT to earn rewards (no lock time)
+                Stake your NFT to earn ETH rewards (no lock time)
                 </span>
               </form>
               <div
