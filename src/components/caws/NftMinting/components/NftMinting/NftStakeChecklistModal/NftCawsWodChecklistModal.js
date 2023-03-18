@@ -162,7 +162,7 @@ const NftCawsWodChecklistModal = ({
       } else if (result === true && nftItem.length === 0) {
         setStatus("");
       } else if (result === false) {
-        setStatus("*Please approve before deposit");
+        setStatus("");
         setshowLandApprove(true);
       }
     }
