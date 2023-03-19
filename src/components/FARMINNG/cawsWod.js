@@ -104,9 +104,10 @@ const CawsWodDetails = ({
     const allCawsStakes = await window.wod_caws
       .depositsOf(address)
       .then((result) => {
-        for (let i = 0; i < result.length; i++)
+        if(result.length > 0)
+      {  for (let i = 0; i < result.length; i++)
           stakenft.push(parseInt(result[i]));
-        return stakenft;
+        return stakenft;}
       });
 
     return allCawsStakes;
@@ -143,7 +144,8 @@ const CawsWodDetails = ({
     const allLandStakes = await window.wod_caws
       .depositsOfWod(address)
       .then((result) => {
-        if(result > 0)
+        
+        if(result.length > 0)
       {  for (let i = 0; i < result.length; i++)
           stakenft.push(parseInt(result[i]));
         return stakenft;}

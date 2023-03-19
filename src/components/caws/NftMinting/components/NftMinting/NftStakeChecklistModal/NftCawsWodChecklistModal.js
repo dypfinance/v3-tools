@@ -77,6 +77,7 @@ const NftCawsWodChecklistModal = ({
   const [showClaim, setshowClaim] = useState(false);
   const [loadingClaim, setloadingClaim] = useState(false);
   const [loadingWithdraw, setloadingWithdraw] = useState(false);
+  const [checknft, setchecknft] = useState(false);
 
   const [apr, setapr] = useState(50);
   const [showCawsApprove, setshowCawsApprove] = useState(true);
@@ -480,7 +481,7 @@ const NftCawsWodChecklistModal = ({
         setStatus("");
       }
     }
-  }, [getApprovedNfts(selectNftIds).length,getApprovedLandNfts(selectNftLandIds).length, selectNftLandIds.length, selectNftIds.length]);
+  }, [getApprovedNfts(selectNftIds).length,getApprovedLandNfts(selectNftLandIds).length, selectNftLandIds.length, selectNftIds.length, checknft]);
 
 
   return (
@@ -786,7 +787,7 @@ const NftCawsWodChecklistModal = ({
                                 selectNftIds.indexOf(value),
                                 1
                               );
-
+                              setchecknft(!checknft)
                           setSelectedNftIds(selectNftIds);
                           getApprovedNfts(selectNftIds);
                           console.log(selectNftIds);
@@ -857,7 +858,7 @@ const NftCawsWodChecklistModal = ({
                         selectNftIds.indexOf(value) === -1
                           ? selectNftIds.push(value)
                           : selectNftIds.splice(selectNftIds.indexOf(value), 1);
-
+                          setchecknft(!checknft)
                         setSelectedNftIds(selectNftIds);
                         getApprovedNfts(selectNftIds);
                         console.log(selectNftIds);
@@ -933,6 +934,7 @@ const NftCawsWodChecklistModal = ({
                                 selectNftLandIds.indexOf(value),
                                 1
                               );
+                              setchecknft(!checknft)
 
                           setSelectedNftLandIds(selectNftLandIds);
                           getApprovedLandNfts(selectNftLandIds);
@@ -1003,6 +1005,7 @@ const NftCawsWodChecklistModal = ({
                               selectNftLandIds.indexOf(value),
                               1
                             );
+                            setchecknft(!checknft)
 
                         setSelectedNftLandIds(selectNftLandIds);
                         getApprovedLandNfts(selectNftLandIds);
@@ -1036,10 +1039,9 @@ const NftCawsWodChecklistModal = ({
               <>
                 {cawsStakes.map((item, id) => {
                   let cawsId = item.name?.slice(6, item.name.length);
-
-                  let WodId = landStakes[id].name?.slice(
+                  let WodId = landStakes[id]?.name?.slice(
                     1,
-                    landStakes[id].name.length
+                    landStakes[id]?.name?.length
                   );
 
                   if (showStaked) {
@@ -1069,6 +1071,8 @@ const NftCawsWodChecklistModal = ({
                                 selectNftIds.indexOf(value),
                                 1
                               );
+                              setchecknft(!checknft)
+
 
                           setSelectedNftIds(selectNftIds);
                           getApprovedNfts(selectNftIds);
@@ -1117,9 +1121,9 @@ const NftCawsWodChecklistModal = ({
               cawsStakes.map((item, id) => {
                 let cawsId = item.name?.slice(6, item.name.length);
 
-                let WodId = landStakes[id].name?.slice(
+                let WodId = landStakes[id]?.name?.slice(
                   1,
-                  landStakes[id].name.length
+                  landStakes[id]?.name.length
                 );
 
                 if (showStaked) {
@@ -1226,7 +1230,7 @@ const NftCawsWodChecklistModal = ({
                     alignItems: "center",
                   }}
                 >
-                {getApprovedLandNfts(selectNftLandIds).length}
+               {getApprovedLandNfts(selectNftLandIds).length}
                
                 </span>
                 <span
@@ -1522,12 +1526,7 @@ const NftCawsWodChecklistModal = ({
                             borderColor={"#999999"}
                             padding={"5px 1px 0px 0px"}
                           /> */}
-                        <p className="claim-timer-subtitle m-0">Cooldown</p>
                       </div>
-                      <CountDownTimerUnstake
-                        date={Date.now() + countDownLeft}
-                        onComplete={() => {}}
-                      />
                     </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                       <div
@@ -1544,7 +1543,7 @@ const NftCawsWodChecklistModal = ({
                     alignItems: "center",
                   }}
                 >
-                {getApprovedLandNfts(selectNftLandIds).length}
+                {selectNftLandIds.length}
                
                 </span>
                 <span
