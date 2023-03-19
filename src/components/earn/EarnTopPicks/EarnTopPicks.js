@@ -503,7 +503,7 @@ const EarnTopPicks = ({
   ];
 
   const StakeAvax30 = stakeAvax30({
-    staking: stakingarrayStakeAvax30[cardIndex - 1],
+    staking: stakingarrayStakeAvax30[cardIndex === 3 ? 1 : 0],
     apr: expiredDYPPools[cardIndex]?.apy_percent,
     liquidity: avax_address,
     expiration_time: "6 December 2022",
@@ -5443,7 +5443,7 @@ const EarnTopPicks = ({
                         setDetails();
                       }}
                       cardType={topList}
-                      details={details === index + 3 ? true : false}
+                      details={details === index + 1 ? true : false}
                       isNewPool={pool.new_pool === "Yes" ? true : false}
                       isStaked={
                         userPools.length > 0
@@ -15565,7 +15565,7 @@ const EarnTopPicks = ({
               ) : activeCard &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                (cardIndex === 1 || cardIndex === 2) ? (
+                (cardIndex === 1 || cardIndex === 3) ? (
                 <StakeAvax30
                   is_wallet_connected={isConnected}
                   handleConnection={handleConnection}
@@ -16415,7 +16415,7 @@ const EarnTopPicks = ({
             ) : activeCard2 &&
               topList === "Staking" &&
               chain === "avax" &&
-              (cardIndex === 1 || cardIndex === 2) ? (
+              (cardIndex === 1 || cardIndex === 3) ? (
               <StakeAvax30
                 is_wallet_connected={isConnected}
                 handleConnection={handleConnection}
@@ -18705,7 +18705,7 @@ const EarnTopPicks = ({
             ) : activeCard &&
               topList === "Staking" &&
               chain === "avax" &&
-              (cardIndex === 1 || cardIndex === 2) ? (
+              (cardIndex === 1 || cardIndex === 3) ? (
               <StakeAvax30
                 is_wallet_connected={isConnected}
                 handleConnection={handleConnection}
@@ -19561,7 +19561,7 @@ const EarnTopPicks = ({
             ) : activeCard2 &&
               topList === "Staking" &&
               chain === "avax" &&
-              (cardIndex === 1 || cardIndex === 2) ? (
+              (cardIndex === 1 || cardIndex === 3) ? (
               <StakeAvax30
                 is_wallet_connected={isConnected}
                 handleConnection={handleConnection}
@@ -23192,7 +23192,7 @@ const EarnTopPicks = ({
               ) : activeCard &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                (cardIndex === 1 || cardIndex === 2) ? (
+                (cardIndex === 1 || cardIndex === 3) ? (
                 <StakeAvax30
                   is_wallet_connected={isConnected}
                   handleConnection={handleConnection}
@@ -24067,7 +24067,7 @@ const EarnTopPicks = ({
               ) : activeCard2 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                (cardIndex === 1 || cardIndex === 2) ? (
+                (cardIndex === 1 || cardIndex === 3) ? (
                 <StakeAvax30
                   is_wallet_connected={isConnected}
                   handleConnection={handleConnection}
@@ -24942,7 +24942,7 @@ const EarnTopPicks = ({
               ) : activeCard3 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                (cardIndex === 1 || cardIndex === 2) ? (
+                (cardIndex === 1 || cardIndex === 3) ? (
                 <StakeAvax30
                   is_wallet_connected={isConnected}
                   handleConnection={handleConnection}
@@ -25817,7 +25817,7 @@ const EarnTopPicks = ({
               ) : activeCard4 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                (cardIndex === 1 || cardIndex === 2) ? (
+                (cardIndex === 1 || cardIndex === 3) ? (
                 <StakeAvax30
                   is_wallet_connected={isConnected}
                   handleConnection={handleConnection}
@@ -26692,7 +26692,7 @@ const EarnTopPicks = ({
               ) : activeCard5 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                (cardIndex === 1 || cardIndex === 2) ? (
+                (cardIndex === 1 || cardIndex === 3) ? (
                 <StakeAvax30
                   is_wallet_connected={isConnected}
                   handleConnection={handleConnection}
@@ -27567,7 +27567,7 @@ const EarnTopPicks = ({
               ) : activeCard6 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                (cardIndex === 1 || cardIndex === 2) ? (
+                (cardIndex === 1 || cardIndex === 3) ? (
                 <StakeAvax30
                   is_wallet_connected={isConnected}
                   handleConnection={handleConnection}

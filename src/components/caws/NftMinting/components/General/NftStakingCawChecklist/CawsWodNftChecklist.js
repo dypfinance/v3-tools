@@ -178,7 +178,7 @@ const CawsWodNftChecklist = ({
                 alt=""
               />
               <img
-                src={landNft.image.replace("images", "thumbs")}
+                src={landNft?.image?.replace("images", "thumbs")}
                 className="nft-coins"
                 alt=""
               />
@@ -198,7 +198,7 @@ const CawsWodNftChecklist = ({
                     color: "var(--black-nft)",
                   }}
                 >
-                  {nft.name} x WoD {landNft.name}
+                  {nft?.name} x WoD {landNft?.name}
                 </p>
                 {isStake ? (
                   <>
