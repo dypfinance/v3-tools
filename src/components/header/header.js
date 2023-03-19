@@ -52,39 +52,6 @@ const Header = ({
   const [avatar, setAvatar] = useState("../../assets/img/person.svg");
   const routeData = useLocation();
 
-  const fetchData = async () => {
-    if (chainId === 1) {
-      await fetch(
-        "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd"
-      )
-        .then((res) => res.json())
-        .then((data) => setEthprice(data.ethereum.usd))
-        .catch(console.error);
-
-      await fetch(
-        "https://ethgasstation.info/api/ethgasAPI.json?api-key=free_key"
-      )
-        .then((res) => res.json())
-        .then((data) => setGasprice(data.average / 10))
-        .catch(console.error);
-    }
-
-    if (chainId === 43114) {
-      await fetch(
-        "https://api.coingecko.com/api/v3/simple/price?ids=avalanche-2&vs_currencies=usd"
-      )
-        .then((res) => res.json())
-        .then((data) => setEthprice(data["avalanche-2"]["usd"]))
-        .catch(console.error);
-
-      await fetch("https://api.dyp.finance/api/bridged_on_avalanche")
-        .then((res) => res.json())
-        .then((data) => setGasprice(data))
-        .catch(console.error);
-    }
-  };
-
-
 
   const { ethereum } = window;
 

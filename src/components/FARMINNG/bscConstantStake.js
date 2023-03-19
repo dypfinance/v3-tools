@@ -202,10 +202,7 @@ const StakeBsc = ({
     setpopup(false);
   };
 
-  const getPriceDYP = async () => {
-    let usdPerToken = await window.getPrice("defi-yield-protocol");
-    setusdPerToken(usdPerToken);
-  };
+
   const refreshBalance = async () => {
     let coinbase = coinbase2;
 
@@ -358,10 +355,6 @@ const StakeBsc = ({
       setcoinbase(coinbase);
     }
   }, [coinbase, coinbase2]);
-
-  useEffect(() => {
-    getPriceDYP();
-  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {

@@ -157,7 +157,6 @@ const StakeBsc2 = ({
   const [approxDeposit, setapproxDeposit] = useState(100);
   const [approxDays, setapproxDays] = useState(365);
   const [showCalculator, setshowCalculator] = useState(false);
-  const [usdPerToken, setusdPerToken] = useState("");
   const [errorMsg, seterrorMsg] = useState("");
   const [errorMsg2, seterrorMsg2] = useState("");
   const [errorMsg3, seterrorMsg3] = useState("");
@@ -200,10 +199,7 @@ const StakeBsc2 = ({
     setpopup(false);
   };
 
-  const getPriceDYP = async () => {
-    let usdPerToken = await window.getPrice("defi-yield-protocol");
-    setusdPerToken(usdPerToken);
-  };
+
 
   const getTotalTvl = async () => {
     if (the_graph_result) {
@@ -408,10 +404,6 @@ const StakeBsc2 = ({
       setcoinbase(coinbase);
     }
   }, [coinbase, coinbase2]);
-
-  useEffect(() => {
-    getPriceDYP();
-  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
