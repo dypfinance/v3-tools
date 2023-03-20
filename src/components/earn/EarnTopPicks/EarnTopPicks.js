@@ -27,6 +27,8 @@ import StakeNewEth from "../../FARMINNG/stakeNewEth";
 import LandCard from "../../top-pools-card/LandCard";
 import LandDetails from "../../FARMINNG/land";
 import StakeAvax from "../../FARMINNG/stakeAvax";
+import CawsWodCard from "../../top-pools-card/CawsWodCard";
+import CawsWodDetails from "../../FARMINNG/cawsWod";
 
 const EarnTopPicks = ({
   topList,
@@ -109,6 +111,7 @@ const EarnTopPicks = ({
   const [cawsCard2, setCawsCard2] = useState([]);
   const [landCard, setLandCard] = useState({});
   const [userPools, setuserPools] = useState([]);
+  const [cawsLandCard, setCawsLandCard] = useState([])
 
   const [tvlTotal, setTvlTotal] = useState();
 
@@ -131,6 +134,7 @@ const EarnTopPicks = ({
     await axios
       .get(`https://api.dyp.finance/api/get_staking_info_eth`)
       .then((res) => {
+        
         const dypIdyp = res.data.stakingInfoDYPEth.concat(
           res.data.stakingInfoiDYPEth
         );
@@ -154,11 +158,17 @@ const EarnTopPicks = ({
         setCawsCard(res.data.stakingInfoCAWS);
         setCawsCard2(res.data.stakingInfoCAWS[0]);
         setLandCard(res.data.stakingInfoLAND[0]);
+        const land = res.data.stakinginfoCAWSLAND
+        setCawsLandCard(land[0]);
+     
+
+        
       })
       .catch((err) => {
         console.log(err);
       });
   };
+
   const fetchBnbStaking = async () => {
     await axios
       .get(`https://api.dyp.finance/api/get_staking_info_bnb`)
@@ -295,6 +305,7 @@ const EarnTopPicks = ({
   const [activeCard, setActiveCard] = useState();
   const [activeCardNFT, setActiveCardNFT] = useState();
   const [activeCardLandNFT, setActiveCardLandNFT] = useState();
+  const [activeCardCawsLand, setActiveCardCawsLand] = useState()
   const [activeCard2, setActiveCard2] = useState();
   const [activeCard3, setActiveCard3] = useState();
   const [activeCard4, setActiveCard4] = useState();
@@ -492,7 +503,7 @@ const EarnTopPicks = ({
   ];
 
   const StakeAvax30 = stakeAvax30({
-    staking: stakingarrayStakeAvax30[cardIndex - 1],
+    staking: stakingarrayStakeAvax30[cardIndex === 3 ? 1 : 0],
     apr: expiredDYPPools[cardIndex]?.apy_percent,
     liquidity: avax_address,
     expiration_time: "6 December 2022",
@@ -797,6 +808,8 @@ const EarnTopPicks = ({
     } else setcardIndex(index);
   };
 
+
+
   return topPools.length > 0 && expiredPools === false ? (
     <div className={`row w-100 justify-content-center gap-4`}>
       {expiredPools === false ? (
@@ -806,6 +819,31 @@ const EarnTopPicks = ({
               <div className="px-0">
                 <>
                   <div className="top-picks-container">
+                    {topList === "Staking" && chain === "eth" && (
+                      <CawsWodCard
+                        network={chainId}
+                        onShowDetailsClick={() => {
+                          setActiveCardCawsLand(true)
+                          setActiveCardNFT(null);
+                          setActiveCardLandNFT(null);
+                          setActiveCard(null);
+                          setActiveCard2(null);
+                          setActiveCard3(null);
+                          setActiveCard4(null);
+                          setDetails();
+                        }}
+                        onHideDetailsClick={() => {
+                          setActiveCardCawsLand(false)
+                      
+                          setDetails();
+                        }}
+                        cardType={topList}
+                        details={activeCardCawsLand === true ? true : false}
+                        listType={listType}
+                        tvl={"$" + getFormattedNumber(cawsLandCard.tvl_usd)}
+                        apr={cawsLandCard.apy_percent}
+                      />
+                    )}
                     {topList === "Staking" && chain === "eth" && (
                       <LandCard
                         network={chainId}
@@ -856,7 +894,7 @@ const EarnTopPicks = ({
                     {activePools
                       .slice(
                         0,
-                        topList === "Staking" && chain === "eth" ? 1 : 3
+                        topList === "Staking" && chain === "eth" ? 0 : 3
                       )
                       .map((pool, index) => (
                         <TopPoolsCard
@@ -911,7 +949,17 @@ const EarnTopPicks = ({
                         />
                       ))}
                   </div>
-
+                  {activeCardCawsLand && (
+                     <CawsWodDetails
+                     coinbase={coinbase}
+                     isConnected={isConnected}
+                     listType={listType}
+                     chainId={chainId}
+                     handleSwitchNetwork={handleSwitchNetwork}
+                     handleConnection={handleConnection}
+                     expired={false}
+                   />
+                  )}
                   {activeCardLandNFT && (
                     <LandDetails
                       coinbase={coinbase}
@@ -1698,7 +1746,7 @@ const EarnTopPicks = ({
                 >
                   {activePools
                     .slice(
-                      topList === "Staking" && chain === "eth" ? 1 : 3,
+                      topList === "Staking" && chain === "eth" ? 0 : 3,
                       topList === "Staking" && chain === "eth" ? 4 : 6
                     )
                     .map((pool, index) => (
@@ -1758,19 +1806,19 @@ const EarnTopPicks = ({
                           setActiveCardLandNFT(false);
                           handleCardIndexStake(
                             index +
-                              (topList === "Staking" && chain === "eth" ? 1 : 3)
+                              (topList === "Staking" && chain === "eth" ? 0 : 3)
                           );
                           handleCardIndexStake30(
                             index +
-                              (topList === "Staking" && chain === "eth" ? 1 : 3)
+                              (topList === "Staking" && chain === "eth" ? 0 : 3)
                           );
                           handleCardIndexStakeiDyp(
                             index +
-                              (topList === "Staking" && chain === "eth" ? 1 : 3)
+                              (topList === "Staking" && chain === "eth" ? 0 : 3)
                           );
                           setDetails(
                             index +
-                              (topList === "Staking" && chain === "eth" ? 1 : 3)
+                              (topList === "Staking" && chain === "eth" ? 0 : 3)
                           );
                         }}
                         onHideDetailsClick={() => {
@@ -1781,7 +1829,7 @@ const EarnTopPicks = ({
                         details={
                           details ===
                           index +
-                            (topList === "Staking" && chain === "eth" ? 1 : 3)
+                            (topList === "Staking" && chain === "eth" ? 0 : 3)
                             ? true
                             : false
                         }
@@ -1867,6 +1915,66 @@ const EarnTopPicks = ({
                     referrer={referrer}
                   />
                 ) : activeCard2 &&
+                topList === "Staking" &&
+                chain === "eth" &&
+                activePools[cardIndex].id ===
+                  "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" ? (
+                <StakeNewEth
+                  staking={window.constant_staking_newi3}
+                  apr={
+                    expiredPools === false
+                      ? activePools[cardIndex]?.apy_percent
+                      : expiredDYPPools[cardIndex]?.apy_percent
+                  }
+                  liquidity={eth_address}
+                  expiration_time={"11 January 2024"}
+                  finalApr={
+                    expiredPools === false
+                      ? activePools[cardIndex]?.apy_performancefee
+                      : expiredDYPPools[cardIndex]?.apy_performancefee
+                  }
+                  fee_s={0}
+                  lockTime={
+                    cardIndex !== undefined
+                      ? expiredPools === false
+                        ? activePools[cardIndex]?.lock_time?.split(
+                            " "
+                          )[0] === "No"
+                          ? "No Lock"
+                          : activePools[cardIndex]?.lock_time?.split(" ")[0]
+                        : expiredDYPPools[cardIndex]?.lock_time?.split(
+                            " "
+                          )[0] === "No"
+                        ? "No Lock"
+                        : expiredDYPPools[cardIndex]?.lock_time?.split(
+                            " "
+                          )[0]
+                      : "No Lock"
+                  }
+                  lp_id={LP_IDBNB_Array[cardIndex]}
+                  listType={listType}
+                  other_info={
+                    cardIndex !== undefined
+                      ? expiredPools === false
+                        ? activePools[cardIndex]?.expired === "Yes"
+                          ? true
+                          : false
+                        : expiredDYPPools[cardIndex]?.expired === "Yes"
+                        ? true
+                        : false
+                      : false
+                  }
+                  is_wallet_connected={isConnected}
+                  coinbase={coinbase}
+                  the_graph_result={the_graph_result}
+                  chainId={chainId}
+                  handleConnection={handleConnection}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  expired={false}
+                  referrer={referrer}
+                  totalTvl={activePools[cardIndex].tvl_usd}
+                />
+              ) : activeCard2 &&
                   topList === "Staking" &&
                   activePools[cardIndex].id ===
                     "0x7c82513b69c1b42c23760cfc34234558119a3399" &&
@@ -3615,6 +3723,31 @@ const EarnTopPicks = ({
               <div className="px-0">
                 <div className="top-picks-container">
                   {topList === "Staking" && chain === "eth" && (
+                    <CawsWodCard
+                      network={chainId}
+                      onShowDetailsClick={() => {
+                        setActiveCardCawsLand(true)
+                        setActiveCardNFT(null);
+                        setActiveCardLandNFT(null);
+                        setActiveCard(null);
+                        setActiveCard2(null);
+                        setActiveCard3(null);
+                        setActiveCard4(null);
+                        setDetails();
+                      }}
+                      onHideDetailsClick={() => {
+                        setActiveCardCawsLand(false)
+                        
+                        setDetails();
+                      }}
+                      cardType={topList}
+                      details={activeCardCawsLand === true ? true : false}
+                      listType={listType}
+                      tvl={"$" + getFormattedNumber(cawsLandCard.tvl_usd)}
+                        apr={cawsLandCard.apy_percent}
+                    />
+                  )}
+                  {topList === "Staking" && chain === "eth" && (
                     <LandCard
                       network={chainId}
                       onShowDetailsClick={() => {
@@ -3637,29 +3770,6 @@ const EarnTopPicks = ({
                       apr={landCard.apy_percent}
                     />
                   )}
-                  {topList === "Staking" && chain === "eth" && (
-                    <CawsCard
-                      onShowDetailsClick={() => {
-                        setActiveCardNFT(true);
-                        setActiveCardLandNFT(false);
-                        setActiveCard(null);
-                        setActiveCard2(null);
-                        setActiveCard3(null);
-                        setActiveCard4(null);
-                        setDetails();
-                      }}
-                      onHideDetailsClick={() => {
-                        setActiveCardNFT(false);
-                        setDetails();
-                      }}
-                      cardType={topList}
-                      details={activeCardNFT === true ? true : false}
-                      listType={listType}
-                      tvl={"$" + getFormattedNumber(cawsCard2.tvl_usd)}
-                      network={chainId}
-                    />
-                  )}
-
                   {activePools
                     .slice(0, topList === "Staking" && chain === "eth" ? 0 : 2)
                     .map((pool, index) => (
@@ -3732,6 +3842,18 @@ const EarnTopPicks = ({
                       />
                     ))}
                 </div>
+                {activeCardCawsLand &&
+                 <CawsWodDetails
+                 coinbase={coinbase}
+                 isConnected={isConnected}
+                 listType={listType}
+                 chainId={chainId}
+                 handleSwitchNetwork={handleSwitchNetwork}
+                 handleConnection={handleConnection}
+                 expired={false}
+               />
+                }
+
                 {activeCardLandNFT && (
                   <LandDetails
                     coinbase={coinbase}
@@ -3744,16 +3866,7 @@ const EarnTopPicks = ({
                     totalNftsLocked={landCard.total_nfts_locked}
                   />
                 )}
-                {activeCardNFT && (
-                  <CawsDetails
-                    coinbase={coinbase}
-                    isConnected={isConnected}
-                    listType={listType}
-                    chainId={chainId}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    handleConnection={handleConnection}
-                  />
-                )}
+             
 
                 {activeCard &&
                 topList === "Staking" &&
@@ -4509,10 +4622,32 @@ const EarnTopPicks = ({
                   className="top-picks-container"
                   style={{ marginTop: "25px" }}
                 >
+                      {topList === "Staking" && chain === "eth" && (
+                    <CawsCard
+                      onShowDetailsClick={() => {
+                        setActiveCardNFT(true);
+                        setActiveCardLandNFT(false);
+                        setActiveCard(null);
+                        setActiveCard2(null);
+                        setActiveCard3(null);
+                        setActiveCard4(null);
+                        setDetails();
+                      }}
+                      onHideDetailsClick={() => {
+                        setActiveCardNFT(false);
+                        setDetails();
+                      }}
+                      cardType={topList}
+                      details={activeCardNFT === true ? true : false}
+                      listType={listType}
+                      tvl={"$" + getFormattedNumber(cawsCard2.tvl_usd)}
+                      network={chainId}
+                    />
+                  )}
                   {activePools
                     .slice(
                       topList === "Staking" && chain === "eth" ? 0 : 2,
-                      topList === "Staking" && chain === "eth" ? 2 : 4
+                      topList === "Staking" && chain === "eth" ? 1 : 4
                     )
                     .map((pool, index) => (
                       <TopPoolsCard
@@ -4609,6 +4744,17 @@ const EarnTopPicks = ({
                       />
                     ))}
                 </div>
+                {activeCardNFT && (
+                  <CawsDetails
+                    coinbase={coinbase}
+                    isConnected={isConnected}
+                    listType={listType}
+                    chainId={chainId}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    handleConnection={handleConnection}
+                  />
+                )}
+
                 {activeCard2 &&
                 topList === "Staking" &&
                 chain === "eth" &&
@@ -5241,7 +5387,7 @@ const EarnTopPicks = ({
                   className="top-picks-container"
                   style={{ marginTop: "25px" }}
                 >
-                  {activePools.slice(3, 4).map((pool, index) => (
+                  {topList === "Staking" && chain === "eth" && activePools.slice(1, 3).map((pool, index) => (
                     <TopPoolsCard
                       network={chainId}
                       display={
@@ -5281,23 +5427,23 @@ const EarnTopPicks = ({
                       onShowDetailsClick={() => {
                         setActiveCard(null);
                         setActiveCard2(null);
-                        setActiveCard3(topPools[index + 2]);
+                        setActiveCard3(true);
                         setActiveCard4(null);
                         setActiveCard5(null);
                         setActiveCard6(null);
                         setActiveCardNFT(false);
                         setActiveCardLandNFT(false);
-                        handleCardIndexStake(index + 2);
-                        handleCardIndexStake30(index + 2);
-                        handleCardIndexStakeiDyp(index + 2);
-                        setDetails(index + 2);
+                        handleCardIndexStake(index + 1);
+                        handleCardIndexStake30(index + 1);
+                        handleCardIndexStakeiDyp(index + 1);
+                        setDetails(index + 1);
                       }}
                       onHideDetailsClick={() => {
                         setActiveCard3(null);
                         setDetails();
                       }}
                       cardType={topList}
-                      details={details === index + 4 ? true : false}
+                      details={details === index + 1 ? true : false}
                       isNewPool={pool.new_pool === "Yes" ? true : false}
                       isStaked={
                         userPools.length > 0
@@ -5378,6 +5524,121 @@ const EarnTopPicks = ({
                     referrer={referrer}
                   />
                 ) : activeCard3 &&
+                topList === "Staking" &&
+                chain === "eth" &&
+                activePools[cardIndex].id ===
+                  "0x50014432772b4123D04181727C6EdEAB34F5F988" ? (
+                <InitConstantStakingiDYP
+                  is_wallet_connected={isConnected}
+                  coinbase={coinbase}
+                  the_graph_result={the_graph_result}
+                  lp_id={lp_id[cardIndex]}
+                  chainId={chainId}
+                  handleConnection={handleConnection}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  expired={false}
+                  staking={window.constant_staking_idyp_3}
+                  listType={listType}
+                  finalApr={activePools[cardIndex]?.apy_performancefee}
+                  apr={
+                    expiredPools === false
+                      ? activePools[cardIndex]?.apy_percent
+                      : expiredDYPPools[cardIndex]?.apy_percent
+                  }
+                  liquidity={eth_address}
+                  expiration_time={"15 August 2023"}
+                  other_info={
+                    cardIndex !== undefined
+                      ? expiredPools === false
+                        ? activePools[cardIndex]?.expired === "Yes"
+                          ? true
+                          : false
+                        : expiredDYPPools[cardIndex]?.expired === "Yes"
+                        ? true
+                        : false
+                      : false
+                  }
+                  fee_s={
+                    expiredPools === false
+                      ? activePools[cardIndex]?.performancefee
+                      : expiredDYPPools[cardIndex]?.performancefee
+                  }
+                  fee_u={withdrawFeeiDyp[cardIndex]}
+                  lockTime={
+                    cardIndex !== undefined
+                      ? expiredPools === false
+                        ? activePools[cardIndex]?.lock_time?.split(
+                            " "
+                          )[0] === "No"
+                          ? "No Lock"
+                          : activePools[cardIndex]?.lock_time?.split(" ")[0]
+                        : expiredDYPPools[cardIndex]?.lock_time?.split(
+                            " "
+                          )[0] === "No"
+                        ? "No Lock"
+                        : expiredDYPPools[cardIndex]?.lock_time?.split(
+                            " "
+                          )[0]
+                      : "No Lock"
+                  }
+                />
+              ) : activeCard3 &&
+                topList === "Staking" &&
+                chain === "eth" &&
+                activePools[cardIndex].id ===
+                  "0xD4bE7a106ed193BEe39D6389a481ec76027B2660" ? (
+                <InitConstantStakingiDYP
+                  is_wallet_connected={isConnected}
+                  coinbase={coinbase}
+                  the_graph_result={the_graph_result}
+                  lp_id={lp_id[cardIndex]}
+                  chainId={chainId}
+                  handleConnection={handleConnection}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  expired={false}
+                  staking={window.constant_staking_idyp_4}
+                  listType={listType}
+                  finalApr={activePools[cardIndex]?.apy_performancefee}
+                  apr={
+                    expiredPools === false
+                      ? activePools[cardIndex]?.apy_percent
+                      : expiredDYPPools[cardIndex]?.apy_percent
+                  }
+                  liquidity={eth_address}
+                  expiration_time={"15 August 2023"}
+                  other_info={
+                    cardIndex !== undefined
+                      ? expiredPools === false
+                        ? activePools[cardIndex]?.expired === "Yes"
+                          ? true
+                          : false
+                        : expiredDYPPools[cardIndex]?.expired === "Yes"
+                        ? true
+                        : false
+                      : false
+                  }
+                  fee_s={
+                    expiredPools === false
+                      ? activePools[cardIndex]?.performancefee
+                      : expiredDYPPools[cardIndex]?.performancefee
+                  }
+                  fee_u={withdrawFeeiDyp[cardIndex]}
+                  lockTime={
+                    cardIndex !== undefined
+                      ? expiredPools === false
+                        ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
+                          "No"
+                          ? "No Lock"
+                          : activePools[cardIndex]?.lock_time?.split(" ")[0]
+                        : expiredDYPPools[cardIndex]?.lock_time?.split(
+                            " "
+                          )[0] === "No"
+                        ? "No Lock"
+                        : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
+                      : "No Lock"
+                  }
+                />
+              ) : activeCard3 &&
                   topList === "Staking" &&
                   activePools[cardIndex].id ===
                     "0x7c82513b69c1b42c23760cfc34234558119a3399" &&
@@ -7411,6 +7672,42 @@ const EarnTopPicks = ({
                 <>
                   <div className="top-picks-container">
                     {topList === "Staking" && chain === "eth" && (
+                      <CawsWodCard
+                        network={chainId}
+                        onShowDetailsClick={() => {
+                          setActiveCardCawsLand(true);
+                          setActiveCardNFT(null);
+                          setActiveCardLandNFT(null);
+                          setActiveCard(null);
+                          setActiveCard2(null);
+                          setActiveCard3(null);
+                          setActiveCard4(null);
+                          setDetails();
+                        }}
+                        onHideDetailsClick={() => {
+                          setActiveCardCawsLand(false);
+                          
+                          setDetails();
+                        }}
+                        cardType={topList}
+                        details={activeCardCawsLand === true ? true : false}
+                        listType={listType}
+                        tvl={"$" + getFormattedNumber(cawsLandCard.tvl_usd)}
+                        apr={cawsLandCard.apy_percent}
+                      />
+                    )}
+                    {activeCardCawsLand && (
+                      <CawsWodDetails
+                        coinbase={coinbase}
+                        isConnected={isConnected}
+                        listType={listType}
+                        chainId={chainId}
+                        handleSwitchNetwork={handleSwitchNetwork}
+                        handleConnection={handleConnection}
+                     
+                      />
+                    )}
+                    {topList === "Staking" && chain === "eth" && (
                       <LandCard
                         network={chainId}
                         onShowDetailsClick={() => {
@@ -8500,6 +8797,75 @@ const EarnTopPicks = ({
                       referrer={referrer}
                     />
                   ) : activeCard2 &&
+                  topList === "Staking" &&
+                  activePools[cardIndex].id ===
+                    "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" &&
+                  chain === "bnb" ? (
+                  <StakeBsc
+                    lp_id={LP_IDBNB_Array[cardIndex]}
+                    staking={window.constant_stakingbsc_new11}
+                    apr={
+                      expiredPools === false
+                        ? activePools[cardIndex]?.apy_percent
+                        : expiredDYPPools[cardIndex]?.apy_percent
+                    }
+                    liquidity={wbsc_address}
+                    expiration_time={"5 August 2023"}
+                    finalApr={
+                      expiredPools === false
+                        ? activePools[cardIndex]?.apy_performancefee
+                        : expiredDYPPools[cardIndex]?.apy_performancefee
+                    }
+                    fee={
+                      expiredPools === false
+                        ? activePools[cardIndex]?.performancefee
+                        : expiredDYPPools[cardIndex]?.performancefee
+                    }
+                    lockTime={
+                      cardIndex !== undefined
+                        ? expiredPools === false
+                          ? activePools[cardIndex]?.lock_time?.split(
+                              " "
+                            )[0] === "No"
+                            ? "No Lock"
+                            : parseInt(
+                                activePools[cardIndex]?.lock_time?.split(
+                                  " "
+                                )[0]
+                              )
+                          : expiredDYPPools[cardIndex]?.lock_time?.split(
+                              " "
+                            )[0] === "No"
+                          ? "No Lock"
+                          : parseInt(
+                              expiredDYPPools[cardIndex]?.lock_time?.split(
+                                " "
+                              )[0]
+                            )
+                        : "No Lock"
+                    }
+                    listType={listType}
+                    other_info={
+                      cardIndex !== undefined
+                        ? expiredPools === false
+                          ? activePools[cardIndex]?.expired === "Yes"
+                            ? true
+                            : false
+                          : expiredDYPPools[cardIndex]?.expired === "Yes"
+                          ? true
+                          : false
+                        : false
+                    }
+                    is_wallet_connected={isConnected}
+                    coinbase={coinbase}
+                    the_graph_result={the_graph_resultbsc}
+                    chainId={chainId}
+                    handleConnection={handleConnection}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    expired={false}
+                    referrer={referrer}
+                  />
+                ) : activeCard2 &&
                     activePools[cardIndex].id ===
                       "0x7e766F7005C7a9e74123b156697B582eeCB8d2D7" &&
                     topList === "Staking" &&
@@ -14369,6 +14735,41 @@ const EarnTopPicks = ({
             )
           ) : (
             <div className="list-pools-container px-0">
+              {cawsLandCard && topList === "Staking" && chain === "eth" && (
+                <TopPoolsListCard
+                  expired={false}
+                  chain={chain}
+                  top_pick={cawsLandCard.top_pick}
+                  totalNftsLocked={cawsLandCard.total_nfts_locked}
+                  tokenName={"CAWS + WoD"}
+                  apr={cawsLandCard.apy_percent + "%"}
+                  tvl={"$" + getFormattedNumber(cawsLandCard.tvl_usd)}
+                  lockTime={
+                    cawsLandCard.lockTime
+                      ? cawsLandCard.lockTime
+                      : cawsLandCard.lock_time
+                      ? cawsLandCard.lock_time
+                      : locktimeFarm[0]
+                  }
+                  cardType={topList}
+                  tokenLogo={"landcaws"}
+                  listType={listType}
+                  onShowDetailsClick={() => {
+                    setShowDetails(!showDetails);
+                    setActiveCardLandNFT(true);
+                  }}
+                  onHideDetailsClick={() => {
+                    setActiveCardLandNFT(false);
+                  }}
+                  showDetails={activeCardCawsLand}
+                  topList={topList}
+                  coinbase={coinbase}
+                  cardIndex={0}
+                  chainId={chainId}
+                  handleConnection={handleConnection}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                />
+              )}
               {landCard && topList === "Staking" && chain === "eth" && (
                 <TopPoolsListCard
                   expired={false}
@@ -14398,7 +14799,7 @@ const EarnTopPicks = ({
                   showDetails={activeCardLandNFT}
                   topList={topList}
                   coinbase={coinbase}
-                  cardIndex={0}
+                  cardIndex={1}
                   chainId={chainId}
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
@@ -14456,7 +14857,7 @@ const EarnTopPicks = ({
                     showDetails={activeCardNFT}
                     topList={topList}
                     coinbase={coinbase}
-                    cardIndex={index + 1}
+                    cardIndex={index + 2}
                     chainId={chainId}
                     handleConnection={handleConnection}
                     handleSwitchNetwork={handleSwitchNetwork}
@@ -15164,7 +15565,7 @@ const EarnTopPicks = ({
               ) : activeCard &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                (cardIndex === 1 || cardIndex === 2) ? (
+                (cardIndex === 1 || cardIndex === 3) ? (
                 <StakeAvax30
                   is_wallet_connected={isConnected}
                   handleConnection={handleConnection}
@@ -16014,7 +16415,7 @@ const EarnTopPicks = ({
             ) : activeCard2 &&
               topList === "Staking" &&
               chain === "avax" &&
-              (cardIndex === 1 || cardIndex === 2) ? (
+              (cardIndex === 1 || cardIndex === 3) ? (
               <StakeAvax30
                 is_wallet_connected={isConnected}
                 handleConnection={handleConnection}
@@ -18304,7 +18705,7 @@ const EarnTopPicks = ({
             ) : activeCard &&
               topList === "Staking" &&
               chain === "avax" &&
-              (cardIndex === 1 || cardIndex === 2) ? (
+              (cardIndex === 1 || cardIndex === 3) ? (
               <StakeAvax30
                 is_wallet_connected={isConnected}
                 handleConnection={handleConnection}
@@ -19160,7 +19561,7 @@ const EarnTopPicks = ({
             ) : activeCard2 &&
               topList === "Staking" &&
               chain === "avax" &&
-              (cardIndex === 1 || cardIndex === 2) ? (
+              (cardIndex === 1 || cardIndex === 3) ? (
               <StakeAvax30
                 is_wallet_connected={isConnected}
                 handleConnection={handleConnection}
@@ -22791,7 +23192,7 @@ const EarnTopPicks = ({
               ) : activeCard &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                (cardIndex === 1 || cardIndex === 2) ? (
+                (cardIndex === 1 || cardIndex === 3) ? (
                 <StakeAvax30
                   is_wallet_connected={isConnected}
                   handleConnection={handleConnection}
@@ -23666,7 +24067,7 @@ const EarnTopPicks = ({
               ) : activeCard2 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                (cardIndex === 1 || cardIndex === 2) ? (
+                (cardIndex === 1 || cardIndex === 3) ? (
                 <StakeAvax30
                   is_wallet_connected={isConnected}
                   handleConnection={handleConnection}
@@ -24541,7 +24942,7 @@ const EarnTopPicks = ({
               ) : activeCard3 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                (cardIndex === 1 || cardIndex === 2) ? (
+                (cardIndex === 1 || cardIndex === 3) ? (
                 <StakeAvax30
                   is_wallet_connected={isConnected}
                   handleConnection={handleConnection}
@@ -25416,7 +25817,7 @@ const EarnTopPicks = ({
               ) : activeCard4 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                (cardIndex === 1 || cardIndex === 2) ? (
+                (cardIndex === 1 || cardIndex === 3) ? (
                 <StakeAvax30
                   is_wallet_connected={isConnected}
                   handleConnection={handleConnection}
@@ -26291,7 +26692,7 @@ const EarnTopPicks = ({
               ) : activeCard5 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                (cardIndex === 1 || cardIndex === 2) ? (
+                (cardIndex === 1 || cardIndex === 3) ? (
                 <StakeAvax30
                   is_wallet_connected={isConnected}
                   handleConnection={handleConnection}
@@ -27166,7 +27567,7 @@ const EarnTopPicks = ({
               ) : activeCard6 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                (cardIndex === 1 || cardIndex === 2) ? (
+                (cardIndex === 1 || cardIndex === 3) ? (
                 <StakeAvax30
                   is_wallet_connected={isConnected}
                   handleConnection={handleConnection}

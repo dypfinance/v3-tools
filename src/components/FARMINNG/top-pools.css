@@ -15,7 +15,14 @@
   background-size: cover;
   border: 2px solid #7770df;
 }
-
+.available-nfts {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 18px;
+  letter-spacing: -0.018em;
+  color: #4cd0cd !important;
+}
 
 .pools-cardcaws-open {
   background-image: url("./assets/caws-bg.svg") !important;
