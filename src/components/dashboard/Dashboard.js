@@ -239,7 +239,9 @@ const Dashboard = ({
 
   useEffect(() => {
     fetchStakeData().then();
+    setTimeout(() => {
     setLoading(false);
+    }, 2500);
     fetchPopularNewsData();
     fetchUserPools();
   }, [network, coinbase, loading]);
