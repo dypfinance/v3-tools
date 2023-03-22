@@ -239,7 +239,9 @@ const Dashboard = ({
 
   useEffect(() => {
     fetchStakeData().then();
+    setTimeout(() => {
     setLoading(false);
+    }, 2500);
     fetchPopularNewsData();
     fetchUserPools();
   }, [network, coinbase, loading]);
@@ -456,6 +458,42 @@ const Dashboard = ({
                     referrer={referrer}
                   />
                 ) : activeCard &&
+                network === 56 &&
+                topPools[cardIndex]?.id ===
+                  "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" ? (
+                <StakeBsc
+                  lp_id={LP_IDBNB_Array[cardIndex]}
+                  staking={window.constant_stakingbsc_new111}
+                  apr={
+                    topPools[cardIndex]?.apy_percent
+                      ? topPools[cardIndex]?.apy_percent
+                      : 30
+                  }
+                  liquidity={wbsc_address}
+                  expiration_time={"14 March 2024"}
+                  finalApr={
+                    topPools[cardIndex]?.apy_performancefee
+                      ? topPools[cardIndex]?.apy_performancefee
+                      : 30
+                  }
+                  fee={topPools[cardIndex]?.performancefee}
+                  lockTime={
+                    topPools[cardIndex]?.lock_time === "No lock"
+                      ? "No Lock"
+                      : topPools[cardIndex]?.lock_time?.split(" ")[0]
+                  }
+                  listType={"table"}
+                  other_info={false}
+                  is_wallet_connected={isConnected}
+                  coinbase={coinbase}
+                  the_graph_result={the_graph_resultbsc}
+                  chainId={network.toString()}
+                  handleConnection={handleConnection}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  expired={false}
+                  referrer={referrer}
+                />
+              ) : activeCard &&
                   network === 43114 &&
                   topPools[cardIndex].id ===
                     "0xb1875eeBbcF4456188968f439896053809698a8B" ? (
