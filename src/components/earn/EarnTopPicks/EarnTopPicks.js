@@ -833,7 +833,7 @@ const EarnTopPicks = ({
                           setDetails();
                         }}
                         onHideDetailsClick={() => {
-                          setActiveCardCawsLand(false)
+                          setActiveCardCawsLand(null)
                       
                           setDetails();
                         }}
@@ -854,6 +854,8 @@ const EarnTopPicks = ({
                           setActiveCard2(null);
                           setActiveCard3(null);
                           setActiveCard4(null);
+                          setActiveCardCawsLand(null)
+
                           setDetails();
                         }}
                         onHideDetailsClick={() => {
@@ -878,6 +880,8 @@ const EarnTopPicks = ({
                           setActiveCard2(null);
                           setActiveCard3(null);
                           setActiveCard4(null);
+                          setActiveCardCawsLand(null)
+                          
                           setDetails();
                         }}
                         onHideDetailsClick={() => {
@@ -921,6 +925,7 @@ const EarnTopPicks = ({
                             setActiveCard2(null);
                             setActiveCard3(null);
                             setActiveCard4(null);
+                          setActiveCardCawsLand(null)
                             setActiveCardNFT(false);
                             setActiveCardLandNFT(false);
                             handleCardIndexStake(index);
@@ -3736,7 +3741,7 @@ const EarnTopPicks = ({
                         setDetails();
                       }}
                       onHideDetailsClick={() => {
-                        setActiveCardCawsLand(false)
+                        setActiveCardCawsLand(null)
                         
                         setDetails();
                       }}
@@ -3757,6 +3762,7 @@ const EarnTopPicks = ({
                         setActiveCard2(null);
                         setActiveCard3(null);
                         setActiveCard4(null);
+                        setActiveCardCawsLand(null)
                         setDetails();
                       }}
                       onHideDetailsClick={() => {
@@ -3815,6 +3821,8 @@ const EarnTopPicks = ({
                           setActiveCard4(null);
                           setActiveCard5(null);
                           setActiveCard6(null);
+                        setActiveCardCawsLand(null)
+
                           setActiveCardNFT(false);
                           setActiveCardLandNFT(false);
                           handleCardIndexStake(index);
@@ -4631,6 +4639,7 @@ const EarnTopPicks = ({
                         setActiveCard2(null);
                         setActiveCard3(null);
                         setActiveCard4(null);
+                        setActiveCardCawsLand(null)
                         setDetails();
                       }}
                       onHideDetailsClick={() => {
@@ -7685,7 +7694,7 @@ const EarnTopPicks = ({
                           setDetails();
                         }}
                         onHideDetailsClick={() => {
-                          setActiveCardCawsLand(false);
+                          setActiveCardCawsLand(null);
                           
                           setDetails();
                         }}
@@ -7717,6 +7726,7 @@ const EarnTopPicks = ({
                           setActiveCard2(null);
                           setActiveCard3(null);
                           setActiveCard4(null);
+                        setActiveCardCawsLand(null)
                           setDetails();
                         }}
                         onHideDetailsClick={() => {
@@ -7751,6 +7761,8 @@ const EarnTopPicks = ({
                           setActiveCard2(null);
                           setActiveCard3(null);
                           setActiveCard4(null);
+                        setActiveCardCawsLand(null)
+
                           setDetails();
                         }}
                         onHideDetailsClick={() => {
@@ -7827,6 +7839,8 @@ const EarnTopPicks = ({
                           setActiveCard12(null);
                           setActiveCardNFT(false);
                           setActiveCardLandNFT(false);
+                        setActiveCardCawsLand(null)
+
                           handleCardIndexStake(index);
                           handleCardIndexStake30(index);
                           handleCardIndexStakeiDyp(index);
