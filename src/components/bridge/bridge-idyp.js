@@ -84,12 +84,12 @@ export default function initBridgeidyp({
       this.refreshBalance();
       this.getChainSymbol();
       this.fetchData();
-      // window._refreshBalInterval = setInterval(this.refreshBalance, 4000);
+      window._refreshBalInterval = setInterval(this.refreshBalance, 4000);
       window._refreshBalInterval = setInterval(this.getChainSymbol, 500);
     }
 
     componentWillUnmount() {
-      // clearInterval(window._refreshBalInterval);
+      clearInterval(window._refreshBalInterval);
     }
 
     fetchData = async () => {
@@ -107,6 +107,7 @@ export default function initBridgeidyp({
         bridgeETH.tokenAddress,
         2
       );
+
       avaxPool = avaxPool / 1e18;
       let bnbPool = await window.getTokenHolderBalanceAll(
         bridgeBSC._address,
@@ -121,9 +122,10 @@ export default function initBridgeidyp({
       // e.preventDefault();
       let amount = this.state.depositAmount;
       this.setState({ depositLoading: true });
-
+      
       if (this.state.chainText === "ETH") {
-        if (amount > this.state.avaxPool) {
+        if(this.props.destinationChain === 'avax') {
+           if (amount > this.state.avaxPool || amount > this.state.bnbPool) {
           window.$.alert(
             "💡 Not enough balance on the bridge, check back later!"
           );
@@ -131,6 +133,18 @@ export default function initBridgeidyp({
 
           return;
         }
+        }
+        else if(this.props.destinationChain === 'bnb') {
+          if ( amount > this.state.bnbPool) {
+         window.$.alert(
+           "💡 Not enough balance on the bridge, check back later!"
+         );
+         this.setState({ depositLoading: false });
+
+         return;
+       }
+       }
+       
       } else {
         if (amount > this.state.ethPool) {
           window.$.alert(
@@ -141,8 +155,8 @@ export default function initBridgeidyp({
       }
 
       amount = new BigNumber(amount).times(10 ** TOKEN_DECIMALS).toFixed(0);
-      let bridge = this.state.network == "ETH" ? bridgeETH : bridgeBSC;
-      (this.state.network == "ETH" ? tokenETH : tokenBSC)
+      let bridge = this.state.network === "ETH" ? bridgeETH : bridgeBSC;
+      (this.state.network === "ETH" ? tokenETH : tokenBSC)
         .approve(bridge._address, amount)
         .then(() => {
           this.setState({ depositLoading: false, depositStatus: "deposit" });
