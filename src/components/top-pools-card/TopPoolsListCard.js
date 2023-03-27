@@ -635,6 +635,7 @@ const TopPoolsListCard = ({
             />
           ) : showDetails &&
             activePools &&
+            activePools[cardIndex] &&
             topList === "Staking" &&
             chain === "eth" &&
             activePools[cardIndex - 1].id ===
@@ -734,9 +735,10 @@ const TopPoolsListCard = ({
             />
           ) : showDetails &&
             activePools &&
+            activePools[cardIndex] &&
             topList === "Staking" &&
             chain === "avax" &&
-            activePools[cardIndex].id ===
+            activePools[cardIndex - 1].id ===
               "0x6eb643813f0b4351b993f98bdeaef6e0f79573e9" ? (
             <StakeAvax
               is_wallet_connected={isConnected}
@@ -748,20 +750,21 @@ const TopPoolsListCard = ({
               expired={false}
               staking={window.constant_staking_new12}
               listType={listType}
-              finalApr={activePools[cardIndex - 1]?.apy_performancefee}
               apr={activePools[cardIndex - 1]?.apy_percent}
               liquidity={avax_address}
               expiration_time={"14 March 2024"}
               other_info={false}
               fee_s={activePools[cardIndex - 1]?.performancefee}
+              finalApr={activePools[cardIndex - 1]?.apy_performancefee}
               fee_u={0}
               lockTime={"No Lock"}
             />
           ) : showDetails &&
             activePools &&
+            activePools[cardIndex] &&
             topList === "Staking" &&
             chain === "avax" &&
-            activePools[cardIndex].id ===
+            activePools[cardIndex - 1].id ===
               "0xb1875eeBbcF4456188968f439896053809698a8B" ? (
             <StakeAvax
               is_wallet_connected={isConnected}
@@ -784,6 +787,7 @@ const TopPoolsListCard = ({
             />
           ) : showDetails &&
             activePools &&
+            activePools[cardIndex] &&
             topList === "Staking" &&
             chain === "avax" &&
             activePools[cardIndex - 1].id ===
@@ -802,9 +806,7 @@ const TopPoolsListCard = ({
               apr={activePools[cardIndex - 1]?.apy_percent}
               liquidity={avax_address}
               expiration_time={"15 August 2023"}
-              other_info={
-                activePools[cardIndex - 1]?.expired === "Yes" ? true : false
-              }
+              other_info={false}
               fee_s={activePools[cardIndex - 1]?.performancefee}
               fee_u={feeUarrayStakeAvaxiDyp[cardIndexavaxiDyp - 3]}
               lockTime={
@@ -937,22 +939,22 @@ const TopPoolsListCard = ({
               />
             )
           ) : showDetails &&
-          topList === "Staking" &&
-          cardIndex === 0 &&
-          chain === "eth" ? (
-          <CawsDetails
-            coinbase={coinbase}
-            isConnected={isConnected}
-            listType={listType}
-            chainId={chainId}
-            handleSwitchNetwork={handleSwitchNetwork}
-            handleConnection={handleConnection}
-            expired={expired}
-            myStakes={mystakes}
-          />
-        ) : showDetails &&
             topList === "Staking" &&
-            expiredPools &&
+            cardIndex === 0 &&
+            chain === "eth" ? (
+            <CawsDetails
+              coinbase={coinbase}
+              isConnected={isConnected}
+              listType={listType}
+              chainId={chainId}
+              handleSwitchNetwork={handleSwitchNetwork}
+              handleConnection={handleConnection}
+              expired={expired}
+              myStakes={mystakes}
+            />
+          ) : showDetails &&
+            topList === "Staking" &&
+            expiredPools && expiredPools[cardIndex] &&
             expiredPools[cardIndex - 1].id ===
               "0x8A30Be7B2780b503ff27dBeaCdecC4Fe2587Af5d" &&
             chain === "eth" ? (
@@ -983,7 +985,7 @@ const TopPoolsListCard = ({
             />
           ) : showDetails &&
             topList === "Staking" &&
-            expiredPools &&
+            expiredPools && expiredPools[cardIndex] &&
             expiredPools[cardIndex - 1].id ===
               "0xa4da28B8e42680916b557459D338aF6e2D8d458f" &&
             chain === "eth" ? (
@@ -1043,7 +1045,7 @@ const TopPoolsListCard = ({
               lp_id={lp_id[cardIndex]}
             />
           ) : showDetails &&
-            expiredPools &&
+            expiredPools && expiredPools[cardIndex] &&
             expiredPools[cardIndex - 1].id ===
               "0x3fAb09ACAeDDAF579d7a72c24Ef3e9EB1D2975c4" &&
             topList === "Staking" &&
@@ -1077,7 +1079,7 @@ const TopPoolsListCard = ({
             expiredPools &&
             expiredPools[cardIndex - 1].id ===
               "0x9eA966B4023049BFF858BB5E698ECfF24EA54c4A" &&
-            topList === "Staking" &&
+            topList === "Staking" && expiredPools[cardIndex] &&
             chain === "eth" ? (
             <InitConstantStakingiDYP
               is_wallet_connected={isConnected}
@@ -1108,7 +1110,7 @@ const TopPoolsListCard = ({
             expiredPools &&
             expiredPools[cardIndex - 1].id ===
               "0xef9e50A19358CCC8816d9BC2c2355aea596efd06" &&
-            topList === "Staking" &&
+            topList === "Staking" && expiredPools[cardIndex] &&
             chain === "bnb" ? (
             <StakeBsc
               staking={window.constant_stakingbsc_new10}
@@ -1140,7 +1142,7 @@ const TopPoolsListCard = ({
             expiredPools &&
             expiredPools[cardIndex - 1].id ===
               "0xaF411BF994dA1435A3150B874395B86376C5f2d5" &&
-            topList === "Staking" &&
+            topList === "Staking" && expiredPools[cardIndex] &&
             chain === "bnb" ? (
             <StakeBsc2
               staking={window.constant_stakingbsc_new13}
@@ -1169,7 +1171,7 @@ const TopPoolsListCard = ({
               referrer={referrer}
             />
           ) : showDetails &&
-            expiredPools &&
+            expiredPools && expiredPools[cardIndex] &&
             expiredPools[cardIndex - 1].id ===
               "0xf13aDbEb27ea9d9469D95e925e56a1CF79c06E90" &&
             topList === "Staking" &&
@@ -1201,7 +1203,7 @@ const TopPoolsListCard = ({
               referrer={referrer}
             />
           ) : showDetails &&
-            expiredPools &&
+            expiredPools && expiredPools[cardIndex] &&
             expiredPools[cardIndex - 1].id ===
               "0xa9efab22cCbfeAbB6dc4583d81421e76342faf8b" &&
             topList === "Staking" &&
@@ -1299,7 +1301,7 @@ const TopPoolsListCard = ({
               }
             />
           ) : showDetails &&
-            expiredPools &&
+            expiredPools && expiredPools[cardIndex] &&
             topList === "Staking" &&
             chain === "avax" &&
             (cardIndex === 2 || cardIndex === 3) ? (
@@ -1316,8 +1318,8 @@ const TopPoolsListCard = ({
           ) : showDetails &&
             expiredPools &&
             topList === "Staking" &&
-            chain === "avax" &&
-            expiredPools[cardIndex].id ===
+            chain === "avax" && expiredPools[cardIndex] &&
+            expiredPools[cardIndex-1].id ===
               "0xF035ec2562fbc4963e8c1c63f5c473D9696c59E3" ? (
             <StakeAvax
               is_wallet_connected={isConnected}
@@ -1372,7 +1374,7 @@ const TopPoolsListCard = ({
             />
           ) : showDetails &&
             expiredPools &&
-            topList === "Staking" &&
+            topList === "Staking" && expiredPools[cardIndex] &&
             chain === "avax" &&
             expiredPools[cardIndex - 1].id ===
               "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
@@ -1403,7 +1405,7 @@ const TopPoolsListCard = ({
             />
           ) : showDetails &&
             expiredPools &&
-            topList === "Staking" &&
+            topList === "Staking" && expiredPools[cardIndex] &&
             chain === "avax" &&
             expiredPools[cardIndex - 1].id ===
               "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
