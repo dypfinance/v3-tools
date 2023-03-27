@@ -867,19 +867,6 @@ const TopPoolsListCard = ({
             />
           ) : showDetails &&
             topList === "Staking" &&
-            cardIndex === 2 &&
-            chain === "eth" ? (
-            <CawsDetails
-              coinbase={coinbase}
-              isConnected={isConnected}
-              listType={listType}
-              chainId={chainId}
-              handleSwitchNetwork={handleSwitchNetwork}
-              handleConnection={handleConnection}
-              myStakes={mystakes}
-            />
-          ) : showDetails &&
-            topList === "Staking" &&
             cardIndex === 1 &&
             chain === "eth" ? (
             <LandDetails
@@ -950,6 +937,20 @@ const TopPoolsListCard = ({
               />
             )
           ) : showDetails &&
+          topList === "Staking" &&
+          cardIndex === 0 &&
+          chain === "eth" ? (
+          <CawsDetails
+            coinbase={coinbase}
+            isConnected={isConnected}
+            listType={listType}
+            chainId={chainId}
+            handleSwitchNetwork={handleSwitchNetwork}
+            handleConnection={handleConnection}
+            expired={expired}
+            myStakes={mystakes}
+          />
+        ) : showDetails &&
             topList === "Staking" &&
             expiredPools &&
             expiredPools[cardIndex - 1].id ===
