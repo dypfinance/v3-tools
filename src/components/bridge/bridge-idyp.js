@@ -95,7 +95,9 @@ export default function initBridgeidyp({
     fetchData = async () => {
       //Get DYP Balance Ethereum Pool
       let ethPool = await window.getTokenHolderBalanceAll(
-        bridgeETH._address,
+        this.props.sourceChain === "avax" || this.props.sourceChain === "bnb"
+          ? bridgeBSC._address
+          : bridgeETH._address,
         bridgeETH.tokenAddress,
         1
       );
@@ -103,14 +105,18 @@ export default function initBridgeidyp({
 
       //Get DYP Balance BNB Chain Pool
       let avaxPool = await window.getTokenHolderBalanceAll(
-        bridgeBSC._address,
+        this.props.sourceChain === "eth"
+          ? bridgeBSC._address
+          : bridgeETH._address,
         bridgeETH.tokenAddress,
         2
       );
 
       avaxPool = avaxPool / 1e18;
       let bnbPool = await window.getTokenHolderBalanceAll(
-        bridgeBSC._address,
+        this.props.sourceChain === "bnb"
+          ? bridgeETH._address
+          : bridgeBSC._address,
         bridgeETH.tokenAddress,
         3
       );
@@ -122,41 +128,54 @@ export default function initBridgeidyp({
       // e.preventDefault();
       let amount = this.state.depositAmount;
       this.setState({ depositLoading: true });
-      
-      if (this.state.chainText === "ETH") {
-        if(this.props.destinationChain === 'avax') {
-           if (amount > this.state.avaxPool || amount > this.state.bnbPool) {
-          window.$.alert(
-            "💡 Not enough balance on the bridge, check back later!"
-          );
-          this.setState({ depositLoading: false });
 
-          return;
-        }
-        }
-        else if(this.props.destinationChain === 'bnb') {
-          if ( amount > this.state.bnbPool) {
-         window.$.alert(
-           "💡 Not enough balance on the bridge, check back later!"
-         );
-         this.setState({ depositLoading: false });
+      if (this.props.sourceChain === "eth") {
+        if (this.props.destinationChain === "avax") {
+          if (amount > this.state.avaxPool) {
+            window.$.alert(
+              "💡 Not enough balance on the bridge, check back later!"
+            );
+            this.setState({ depositLoading: false });
 
-         return;
-       }
-       }
-       
-      } else {
-        if (amount > this.state.ethPool) {
-          window.$.alert(
-            "💡 Not enough balance on the bridge, check back later!"
-          );
-          return;
+            return;
+          }
+        } else if (this.props.destinationChain === "bnb") {
+          if (amount > this.state.bnbPool) {
+            window.$.alert(
+              "💡 Not enough balance on the bridge, check back later!"
+            );
+            this.setState({ depositLoading: false });
+
+            return;
+          }
+        }
+      } else if (this.props.sourceChain === "avax") {
+        if (this.props.destinationChain === "eth") {
+          if (amount > this.state.avaxPool || amount > this.state.ethPool) {
+            window.$.alert(
+              "💡 Not enough balance on the bridge, check back later!"
+            );
+            this.setState({ depositLoading: false });
+
+            return;
+          }
+        }
+      } else if (this.props.sourceChain === "bnb") {
+        if (this.props.destinationChain === "eth") {
+          if (amount > this.state.bnbPool || amount > this.state.ethPool) {
+            window.$.alert(
+              "💡 Not enough balance on the bridge, check back later!"
+            );
+            this.setState({ depositLoading: false });
+
+            return;
+          }
         }
       }
-
+      
       amount = new BigNumber(amount).times(10 ** TOKEN_DECIMALS).toFixed(0);
-      let bridge = this.state.network === "ETH" ? bridgeETH : bridgeBSC;
-      (this.state.network === "ETH" ? tokenETH : tokenBSC)
+      let bridge = bridgeETH;
+      tokenETH
         .approve(bridge._address, amount)
         .then(() => {
           this.setState({ depositLoading: false, depositStatus: "deposit" });
@@ -178,26 +197,54 @@ export default function initBridgeidyp({
       let amount = this.state.depositAmount;
       this.setState({ depositLoading: true });
 
-      if (this.state.chainText === "ETH") {
-        if (amount > this.state.avaxPool) {
-          window.$.alert(
-            "💡 Not enough balance on the bridge, check back later!"
-          );
-          this.setState({ depositLoading: false });
-          return;
+      if (this.props.sourceChain === "eth") {
+        if (this.props.destinationChain === "avax") {
+          if (amount > this.state.avaxPool) {
+            window.$.alert(
+              "💡 Not enough balance on the bridge, check back later!"
+            );
+            this.setState({ depositLoading: false });
+
+            return;
+          }
+        } else if (this.props.destinationChain === "bnb") {
+          if (amount > this.state.bnbPool) {
+            window.$.alert(
+              "💡 Not enough balance on the bridge, check back later!"
+            );
+            this.setState({ depositLoading: false });
+
+            return;
+          }
         }
-      } else {
-        if (amount > this.state.ethPool) {
-          window.$.alert(
-            "💡 Not enough balance on the bridge, check back later!"
-          );
-          return;
+      } else if (this.props.sourceChain === "avax") {
+        if (this.props.destinationChain === "eth") {
+          if (amount > this.state.avaxPool || amount > this.state.ethPool) {
+            window.$.alert(
+              "💡 Not enough balance on the bridge, check back later!"
+            );
+            this.setState({ depositLoading: false });
+
+            return;
+          }
+        }
+      } else if (this.props.sourceChain === "bnb") {
+        if (this.props.destinationChain === "eth") {
+          if (amount > this.state.bnbPool || amount > this.state.ethPool) {
+            window.$.alert(
+              "💡 Not enough balance on the bridge, check back later!"
+            );
+            this.setState({ depositLoading: false });
+
+            return;
+          }
         }
       }
 
       amount = new BigNumber(amount).times(10 ** TOKEN_DECIMALS).toFixed(0);
-      let bridge = this.state.network === "ETH" ? bridgeETH : bridgeBSC;
+      let bridge = bridgeETH;
       let chainId = this.props.networkId;
+      
 
       if (chainId !== undefined) {
         let contract = await window.getBridgeContract(bridge._address);
@@ -208,7 +255,7 @@ export default function initBridgeidyp({
           })
           .then(() => {
             this.setState({ depositLoading: false, depositStatus: "success" });
-            this.refreshBalance()
+            this.refreshBalance();
           })
           .catch((e) => {
             this.setState({
@@ -229,7 +276,6 @@ export default function initBridgeidyp({
 
     handleWithdraw = async (e) => {
       this.setState({ withdrawLoading: true });
-
       let amount = this.state.withdrawAmount;
       amount = new BigNumber(amount).times(10 ** TOKEN_DECIMALS).toFixed(0);
       try {
@@ -252,18 +298,20 @@ export default function initBridgeidyp({
         console.log({ url });
         let args = await window.jQuery.get(url);
         console.log({ args });
-        (this.props.sourceChain == "eth" ? bridgeBSC : bridgeETH)
+
+        bridgeBSC
           .withdraw(args)
           .then(() => {
             this.setState({
               withdrawLoading: false,
               withdrawStatus: "success",
             });
-            this.refreshBalance()
+            this.refreshBalance();
           })
           .catch((e) => {
             this.setState({ withdrawLoading: false, withdrawStatus: "fail" });
             this.setState({ errorMsg2: e?.message });
+            console.log(e);
             setTimeout(() => {
               this.setState({
                 withdrawStatus: "initial",
@@ -273,6 +321,16 @@ export default function initBridgeidyp({
             }, 8000);
           });
       } catch (e) {
+        this.setState({ withdrawLoading: false, withdrawStatus: "fail" });
+        this.setState({ errorMsg2: e?.message });
+        console.log(e);
+        setTimeout(() => {
+          this.setState({
+            withdrawStatus: "initial",
+            withdrawAmount: "",
+            errorMsg2: "",
+          });
+        }, 8000);
         window.alertify.error("Something went wrong!");
         console.error(e);
       }
@@ -345,8 +403,9 @@ export default function initBridgeidyp({
         let chainId = this.props.networkId;
         if (chainId === 43114) this.setState({ chainText: "AVAX" });
         else if (chainId === 1) this.setState({ chainText: "ETH" });
-        else {this.setState({ chainText: "" });}
-
+        else {
+          this.setState({ chainText: "" });
+        }
       } catch (err) {
         this.setState({ chainText: "ETH" });
         // console.log(err);
@@ -384,7 +443,7 @@ export default function initBridgeidyp({
         );
         canWithdraw = timeDiff === 0;
       }
-
+      
       return (
         <div className="d-flex gap-4 justify-content-between">
           <div className="token-staking col-12 col-lg-6 col-xxl-5">
@@ -843,11 +902,6 @@ export default function initBridgeidyp({
                               <button
                                 style={{ width: "fit-content" }}
                                 disabled={
-                                  // canWithdraw === false ||
-                                  // this.state.withdrawLoading === true ||
-                                  // this.state.withdrawStatus === "success"
-                                  //   ? true
-                                  //   : false
                                   this.state.txHash !== "" ? false : true
                                 }
                                 className={`btn filledbtn ${
@@ -866,7 +920,7 @@ export default function initBridgeidyp({
                                   this.handleWithdraw();
                                 }}
                               >
-                                {this.state.withdrawLoading ? (
+                                {this.state.withdrawLoading === true ? (
                                   <div
                                     class="spinner-border spinner-border-sm text-light"
                                     role="status"
