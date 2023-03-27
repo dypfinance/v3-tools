@@ -29,6 +29,7 @@ const CawsDetails = ({
   chainId,
   handleConnection,
   renderedPage,
+  expired
 }) => {
   const [myNFTs, setMyNFTs] = useState([]);
   const [amountToStake, setamountToStake] = useState("");
@@ -393,7 +394,7 @@ const CawsDetails = ({
             <div
               className={`otherside-border col-12 col-md-6 ${
                 renderedPage === "dashboard" ? "col-lg-3" : "col-lg-4"
-              } ${chainId !== "1" && "blurrypool"}`}
+              } ${chainId !== "1" && "blurrypool"} ${expired === true && "blurrypool"}`}
             >
               <div className="d-flex justify-content-between align-items-center gap-2">
                 <div className="d-flex align-items-center gap-3">
