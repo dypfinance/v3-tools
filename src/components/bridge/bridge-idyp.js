@@ -916,9 +916,7 @@ export default function initBridgeidyp({
                                     ? "fail-button"
                                     : null
                                 } d-flex justify-content-center align-items-center gap-2`}
-                                onClick={() => {
-                                  this.handleWithdraw();
-                                }}
+                                onClick={this.handleWithdraw}
                               >
                                 {this.state.withdrawLoading === true ? (
                                   <div
