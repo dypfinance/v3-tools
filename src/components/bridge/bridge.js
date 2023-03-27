@@ -90,12 +90,12 @@ export default function initBridge({
       this.refreshBalance();
       this.getChainSymbol();
       this.fetchData();
-      // window._refreshBalInterval = setInterval(this.refreshBalance, 4000);
+      window._refreshBalInterval = setInterval(this.refreshBalance, 4000);
       window._refreshBalInterval = setInterval(this.getChainSymbol, 500);
     }
 
     componentWillUnmount() {
-      // clearInterval(window._refreshBalInterval);
+      clearInterval(window._refreshBalInterval);
     }
     fetchData = async () => {
       //Get DYP Balance BNB Chain Pool
