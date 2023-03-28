@@ -812,7 +812,7 @@ const LandNftStakeCheckListModal = ({
                           }
                           alt=""
                         />{" "}
-                        {getFormattedNumber(ETHrewards, 6)} WETH ($
+                        {getFormattedNumber(ETHrewards, 6)} WETH (
                         {formattedNum(ethToUSD, true)})
                       </h6>
                       {/* <img
