@@ -203,9 +203,9 @@ const InitConstantStakingiDYP = ({
     // let usd_per_dyps = the_graph_result.price_DYPS ? the_graph_result.price_DYPS : 1
     let usd_per_dyps = 0;
     try {
-      let _bal
+      let _bal;
       if (chainId === "1") {
-       _bal = reward_token.balanceOf(coinbase);
+        _bal = reward_token.balanceOf(coinbase);
       }
       if (staking) {
         let _pDivs = staking.getTotalPendingDivs(coinbase);
@@ -263,7 +263,7 @@ const InitConstantStakingiDYP = ({
 
         let depositedTokens_formatted = new BigNumber(depositedTokens)
           .div(1e18)
-          .toFixed(6);
+          .toString(10);
 
         setdepositedTokens(depositedTokens_formatted);
 
@@ -398,11 +398,8 @@ const InitConstantStakingiDYP = ({
     // e.preventDefault();
     setwithdrawLoading(true);
 
-    let amount;
-    await staking.depositedTokens(coinbase).then((data)=>{
-      amount = data
-    })
-    
+    let amount = new BigNumber(withdrawAmount).times(1e18).toFixed(0);
+
     await staking
       .unstake(amount)
       .then(() => {
@@ -450,9 +447,17 @@ const InitConstantStakingiDYP = ({
     setdepositAmount(depositAmount);
   };
 
-  const handleSetMaxWithdraw = () => {
-    const withdraw = depositedTokens;
-    setwithdrawAmount(withdraw);
+  const handleSetMaxWithdraw = async (e) => {
+    // e.preventDefault();
+    let amount;
+    await staking.depositedTokens(coinbase).then((data) => {
+      amount = data;
+    });
+
+    let depositedTokens_formatted = new BigNumber(amount)
+      .div(1e18)
+      .toString(10);
+    setwithdrawAmount(depositedTokens_formatted);
   };
 
   const getAPY = () => {
@@ -1111,7 +1116,7 @@ const InitConstantStakingiDYP = ({
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">My iDYP Deposit</span>
                     <h6 className="stats-card-content">
-                      {depositedTokens} iDYP
+                      {getFormattedNumber(depositedTokens, 6)} iDYP
                     </h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
@@ -1296,7 +1301,7 @@ const InitConstantStakingiDYP = ({
                     <div className="d-flex flex-column gap-1">
                       <h6 className="withsubtitle">Balance</h6>
                       <h6 className="withtitle">
-                        {depositedTokens} {token_symbol}
+                        {getFormattedNumber(depositedTokens, 6)} {token_symbol}
                       </h6>
                     </div>
                   </div>

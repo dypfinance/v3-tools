@@ -303,9 +303,9 @@ const StakeEthDai = ({
 
         setstakingTime(stakingTime);
 
-        let depositedTokens_formatted = new BigNumber(depositedTokens).div(1e18).toString(10);
+        let depositedTokens_formatted = new BigNumber(depositedTokens).div(1e18).toString(10)
 
-        setdepositedTokens(getFormattedNumber(depositedTokens_formatted,6));
+        setdepositedTokens(depositedTokens_formatted);
 
         setlastClaimedTime(lastClaimedTime);
 
@@ -430,10 +430,7 @@ const StakeEthDai = ({
     //   e.preventDefault();
     setwithdrawLoading(true);
 
-    let amount;
-    await staking.depositedTokens(coinbase).then((data)=>{
-      amount = data
-    })
+    let amount = new BigNumber(withdrawAmount).times(1e18).toFixed(0)
 
     let deadline = Math.floor(
       Date.now() / 1e3 + window.config.tx_max_wait_seconds
@@ -469,9 +466,16 @@ const StakeEthDai = ({
 
     setdepositAmount(depositAmountFormatted);
   };
-  const handleSetMaxWithdraw = () => {
-    const withdrawAmountFormatted = depositedTokens;
-    setwithdrawAmount(withdrawAmountFormatted);
+
+  const handleSetMaxWithdraw = async (e) => {
+    // e.preventDefault();
+    let amount;
+    await staking.depositedTokens(coinbase).then((data)=>{
+      amount = data
+    })
+
+    let depositedTokens_formatted = new BigNumber(amount).div(1e18).toString(10)
+    setwithdrawAmount(depositedTokens_formatted);
   };
 
   const getAPY = () => {
@@ -1386,7 +1390,7 @@ const StakeEthDai = ({
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">My DYP Deposit</span>
                     <h6 className="stats-card-content">
-                      {depositedTokens} DYP
+                    {getFormattedNumber(depositedTokens,6)} DYP
                     </h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
@@ -1594,7 +1598,7 @@ const StakeEthDai = ({
                     <div className="d-flex flex-column gap-1">
                       <h6 className="withsubtitle">Balance</h6>
                       <h6 className="withtitle">
-                        {depositedTokens} {token_symbol}
+                      {getFormattedNumber(depositedTokens,6)} {token_symbol}
                       </h6>
                     </div>
                   </div>
