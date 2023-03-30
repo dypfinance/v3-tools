@@ -765,7 +765,7 @@ const NftStakeCheckListModal = ({
         >
           <div>
             <div
-              className="mt-4 d-flex align-items-center justify-content-between"
+              className="mt-4 d-flex flex-column flex-xxl-row flex-lg-row flex-md-row align-items-center justify-content-between"
               style={{ gap: 20 }}
             >
               <div className="row m-0 claimAll-wrapper">
@@ -803,7 +803,7 @@ const NftStakeCheckListModal = ({
                     <div className="d-flex justify-content-between">
                       <h6 className="rewardstxtCaws d-flex align-items-center gap-2">
                         <img src={require("./weth.svg").default} alt="" />{" "}
-                        {getFormattedNumber(ETHrewards, 6)} WETH ($
+                        {getFormattedNumber(ETHrewards, 6)} WETH (
                         {formattedNum(ethToUSD, true)})
                       </h6>
                       {/* <img
