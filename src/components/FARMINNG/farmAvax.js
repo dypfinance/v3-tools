@@ -75,6 +75,7 @@ export default function initFarmAvax({
   // token, staking
 
   const LP_AMPLIFY_FACTOR = rebase_factor || window.config.lp_amplify_factor;
+
   const TOKEN_DECIMALS = window.config.token_decimals;
 
   function download(filename, text) {
@@ -151,6 +152,7 @@ export default function initFarmAvax({
         iDypUSD: 0,
         dypUSD: 0,
         usdPerToken: 0,
+        dypPerAvaxPrice: 0,
         tokensToBeSwapped: "",
         tokensToBeDisbursedOrBurnt: "",
 
@@ -264,7 +266,7 @@ export default function initFarmAvax({
     };
 
     componentDidMount() {
-      // this.refreshBalance();
+      this.refreshBalance();
 
       if (this.props.coinbase !== this.state.coinbase) {
         this.setState({ coinbase: this.props.coinbase });
@@ -292,6 +294,10 @@ export default function initFarmAvax({
           const propertyIDyp = Object.entries(
             data.data.the_graph_avax_v2.token_data
           );
+
+          const dypPerAvax = data.data.the_graph_avax_v2.price_DYPS
+          this.setState({dypPerAvaxPrice: dypPerAvax})
+          
           this.setState({ iDypUSD: propertyIDyp[1][1].token_price_usd });
         });
     };
@@ -807,10 +813,11 @@ export default function initFarmAvax({
     };
 
     refreshBalance = async () => {
-      let coinbase = '0x6ec9bf2bcb095c1193fe068877f6f7fa7e5d09ab';
+      let coinbase = this.state.coinbase;
+
 
       if (window.coinbase_address) {
-        coinbase = '0x6ec9bf2bcb095c1193fe068877f6f7fa7e5d09ab';
+        coinbase = window.coinbase_address;
         this.setState({ coinbase });
       }
 
@@ -2496,7 +2503,7 @@ export default function initFarmAvax({
                                     value={
                                       Number(this.state.withdrawAmount) > 0
                                         ? `${this.state.withdrawAmount *
-                                        LP_AMPLIFY_FACTOR
+                                        this.state.dypPerAvaxPrice
                                         } ${this.state.selectedRewardTokenLogo1.toUpperCase()}`
                                         : `${this.state.withdrawAmount} ${this.state.selectedRewardTokenLogo1.toUpperCase()}`
                                     }
@@ -2504,7 +2511,7 @@ export default function initFarmAvax({
                                       this.setState({
                                         withdrawAmount:
                                           Number(e.target.value) > 0
-                                            ? e.target.value / LP_AMPLIFY_FACTOR
+                                            ? e.target.value / this.state.dypPerAvaxPrice
                                             : e.target.value,
                                       })
                                     }
@@ -2512,7 +2519,7 @@ export default function initFarmAvax({
                                     placeholder="0"
                                     type="text"
                                     style={{
-                                      width: "150px",
+                                      width: "165px",
                                       padding: "0px 15px 0px 15px",
                                       height: 35,
                                       fontSize: 20,
@@ -2546,7 +2553,7 @@ export default function initFarmAvax({
                                       value={
                                         Number(this.state.withdrawAmount) > 0
                                           ? `${this.state.withdrawAmount *
-                                          LP_AMPLIFY_FACTOR
+                                            this.state.dypPerAvaxPrice
                                           } ${this.state.selectedRewardTokenLogo1.toUpperCase()}`
                                           : `${this.state.withdrawAmount} ${this.state.selectedRewardTokenLogo1.toUpperCase()}`
                                       }
@@ -2555,7 +2562,7 @@ export default function initFarmAvax({
                                           withdrawAmount:
                                             Number(e.target.value) > 0
                                               ? e.target.value /
-                                              LP_AMPLIFY_FACTOR
+                                              this.state.dypPerAvaxPrice
                                               : e.target.value,
                                         })
                                       }
@@ -2563,7 +2570,7 @@ export default function initFarmAvax({
                                       placeholder="0"
                                       type="text"
                                       style={{
-                                        width: "150px",
+                                        width: "165px",
                                         padding: "0px 15px 0px 15px",
                                         height: 35,
                                         fontSize: 20,

@@ -76,6 +76,7 @@ export default function initBscFarming({
   // token, staking
 
   const LP_AMPLIFY_FACTOR = rebase_factor || window.config.lp_amplify_factor;
+
   const TOKEN_DECIMALS = window.config.token_decimals;
 
   function download(filename, text) {
@@ -198,6 +199,7 @@ export default function initBscFarming({
         withdrawTooltip: false,
         iDypUSD: 0,
         dypUSD: 0,
+        dypPerBnbPrice: 0,
 
 
       };
@@ -291,6 +293,11 @@ export default function initBscFarming({
           const propertyIDyp = Object.entries(
             data.data.the_graph_bsc_v2.token_data
           );
+
+          const dypPerBnb = data.data.the_graph_bsc_v2.price_DYPS
+          this.setState({dypPerBnbPrice: dypPerBnb})
+          
+
           this.setState({ iDypUSD: propertyIDyp[1][1].token_price_usd });
         });
     };
@@ -1240,6 +1247,7 @@ export default function initBscFarming({
       const focusInput = (field) => {
         document.getElementById(field).focus();
       };
+
 
       return (
         <div className="container-lg p-0">
@@ -2431,7 +2439,7 @@ export default function initBscFarming({
                                       Number(this.state.withdrawAmount) > 0
                                         ? `${
                                             this.state.withdrawAmount *
-                                            LP_AMPLIFY_FACTOR
+                                            this.state.dypPerBnbPrice
                                           } ${this.state.selectedRewardTokenLogo1.toUpperCase()}`
                                         : `${
                                             this.state.withdrawAmount
@@ -2441,7 +2449,7 @@ export default function initBscFarming({
                                       this.setState({
                                         withdrawAmount:
                                           Number(e.target.value) > 0
-                                            ? e.target.value / LP_AMPLIFY_FACTOR
+                                            ? e.target.value / this.state.dypPerBnbPrice
                                             : e.target.value,
                                       })
                                     }
@@ -2473,7 +2481,7 @@ export default function initBscFarming({
                                       Number(this.state.withdrawAmount) > 0
                                         ? `${
                                             this.state.withdrawAmount *
-                                            LP_AMPLIFY_FACTOR
+                                           this.state.dypPerBnbPrice
                                           } ${this.state.selectedRewardTokenLogo1.toUpperCase()}`
                                         : `${
                                             this.state.withdrawAmount
@@ -2483,7 +2491,7 @@ export default function initBscFarming({
                                       this.setState({
                                         withdrawAmount:
                                           Number(e.target.value) > 0
-                                            ? e.target.value / LP_AMPLIFY_FACTOR
+                                            ? e.target.value / this.state.dypPerBnbPrice
                                             : e.target.value,
                                       })
                                     }
