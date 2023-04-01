@@ -2503,15 +2503,15 @@ export default function initFarmAvax({
                                     value={
                                       Number(this.state.withdrawAmount) > 0
                                         ? `${this.state.withdrawAmount *
-                                        this.state.dypPerAvaxPrice
-                                        } ${this.state.selectedRewardTokenLogo1.toUpperCase()}`
-                                        : `${this.state.withdrawAmount} ${this.state.selectedRewardTokenLogo1.toUpperCase()}`
+                                          LP_AMPLIFY_FACTOR
+                                        } LP`
+                                        : `${this.state.withdrawAmount} LP`
                                     }
                                     onChange={(e) =>
                                       this.setState({
                                         withdrawAmount:
                                           Number(e.target.value) > 0
-                                            ? e.target.value / this.state.dypPerAvaxPrice
+                                            ? e.target.value / LP_AMPLIFY_FACTOR
                                             : e.target.value,
                                       })
                                     }
@@ -2553,16 +2553,16 @@ export default function initFarmAvax({
                                       value={
                                         Number(this.state.withdrawAmount) > 0
                                           ? `${this.state.withdrawAmount *
-                                            this.state.dypPerAvaxPrice
-                                          } ${this.state.selectedRewardTokenLogo1.toUpperCase()}`
-                                          : `${this.state.withdrawAmount} ${this.state.selectedRewardTokenLogo1.toUpperCase()}`
+                                            LP_AMPLIFY_FACTOR
+                                          } LP`
+                                          : `${this.state.withdrawAmount} LP`
                                       }
                                       onChange={(e) =>
                                         this.setState({
                                           withdrawAmount:
                                             Number(e.target.value) > 0
                                               ? e.target.value /
-                                              this.state.dypPerAvaxPrice
+                                              LP_AMPLIFY_FACTOR
                                               : e.target.value,
                                         })
                                       }
@@ -2713,7 +2713,7 @@ export default function initFarmAvax({
                                     className="withsubtitle"
                                     style={{ padding: "0px 15px 0px 15px" }}
                                   >
-                                    LP Balance
+                                    DYP Balance
                                   </h6>
 
                                   <input

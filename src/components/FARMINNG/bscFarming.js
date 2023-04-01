@@ -2439,17 +2439,17 @@ export default function initBscFarming({
                                       Number(this.state.withdrawAmount) > 0
                                         ? `${
                                             this.state.withdrawAmount *
-                                            this.state.dypPerBnbPrice
-                                          } ${this.state.selectedRewardTokenLogo1.toUpperCase()}`
+                                            LP_AMPLIFY_FACTOR
+                                          } LP`
                                         : `${
                                             this.state.withdrawAmount
-                                          } ${this.state.selectedRewardTokenLogo1.toUpperCase()}`
+                                          } LP`
                                     }
                                     onChange={(e) =>
                                       this.setState({
                                         withdrawAmount:
                                           Number(e.target.value) > 0
-                                            ? e.target.value / this.state.dypPerBnbPrice
+                                            ? e.target.value / LP_AMPLIFY_FACTOR
                                             : e.target.value,
                                       })
                                     }
@@ -2481,17 +2481,17 @@ export default function initBscFarming({
                                       Number(this.state.withdrawAmount) > 0
                                         ? `${
                                             this.state.withdrawAmount *
-                                           this.state.dypPerBnbPrice
-                                          } ${this.state.selectedRewardTokenLogo1.toUpperCase()}`
+                                            LP_AMPLIFY_FACTOR
+                                          } LP`
                                         : `${
                                             this.state.withdrawAmount
-                                          } ${this.state.selectedRewardTokenLogo1.toUpperCase()}`
+                                          } LP`
                                     }
                                     onChange={(e) =>
                                       this.setState({
                                         withdrawAmount:
                                           Number(e.target.value) > 0
-                                            ? e.target.value / this.state.dypPerBnbPrice
+                                            ? e.target.value / LP_AMPLIFY_FACTOR
                                             : e.target.value,
                                       })
                                     }
@@ -2627,8 +2627,8 @@ export default function initBscFarming({
                                         ? `${
                                             this.state.withdrawAmount *
                                             LP_AMPLIFY_FACTOR
-                                          } LP`
-                                        : `${this.state.withdrawAmount} LP`
+                                          } DYP`
+                                        : `${this.state.withdrawAmount} DYP`
                                     }
                                     onChange={(e) =>
                                       this.setState({
@@ -2657,7 +2657,7 @@ export default function initBscFarming({
                                     className="withsubtitle"
                                     style={{ padding: "5px 0 0 15px" }}
                                   >
-                                    LP balance
+                                    DYP balance
                                   </h6>
 
                                   <input
@@ -2667,8 +2667,8 @@ export default function initBscFarming({
                                         ? `${
                                             this.state.withdrawAmount *
                                             LP_AMPLIFY_FACTOR
-                                          } LP`
-                                        : `${this.state.withdrawAmount} LP`
+                                          } DYP`
+                                        : `${this.state.withdrawAmount} DYP`
                                     }
                                     onChange={(e) =>
                                       this.setState({
