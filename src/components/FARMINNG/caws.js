@@ -20,6 +20,7 @@ import weth from "./assets/weth.svg";
 import NftStakeCheckListModal from "../caws/NftMinting/components/NftMinting/NftStakeChecklistModal/NftStakeChecklistModal";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
 import useWindowSize from "../../functions/useWindowSize";
+import OutsideClickHandler from "react-outside-click-handler";
 
 const CawsDetails = ({
   coinbase,
@@ -48,6 +49,7 @@ const CawsDetails = ({
   const [countDownLeft, setCountDownLeft] = useState(59000);
   const [totalStakes, settotalStakes] = useState(0);
   const [approvedNfts, setApprovedNfts] = useState([]);
+  const [cawspopup, setCawspopup] = useState(false);
 
   const [hide, setHide] = useState("");
   const windowSize = useWindowSize();
@@ -244,6 +246,11 @@ const CawsDetails = ({
       });
   };
 
+  const showCawsPopup = () => {
+    setCawspopup(true);
+  };
+
+
   useEffect(() => {
     totalStakedNft().then();
   }, []);
@@ -341,17 +348,55 @@ const CawsDetails = ({
                 </h6>
               </div>
             </div>
-            <div className="d-flex align-items-center justify-content-between gap-3">
-              <a
-                href="https://opensea.io/collection/catsandwatchessocietycaws"
-                target="_blank"
-                rel="noreferrer"
+            <div className="d-flex align-items-center justify-content-between gap-3 position-relative">
+              <div
+                className="d-flex align-items-center justify-content-between gap-3 cursor-pointer"
+                onClick={showCawsPopup}
               >
-                <h6 className="bottomitems">
-                  <img src={arrowup} alt="" />
-                  Get CAWS
-                </h6>
-              </a>
+                <h6 className="bottomitems">Get CAWS</h6>
+              </div>
+              {cawspopup === true && (
+                <OutsideClickHandler
+                  onOutsideClick={() => {
+                    setCawspopup(false);
+                  }}
+                >
+                  <div
+                    className="tooltip d-flex justify-content-center"
+                    style={{ opacity: 1, width: 100 }}
+                  >
+                    <div className="d-flex flex-column gap-2 align-items-center">
+                      <a
+                        href="https://nft.coinbase.com/collection/catsandwatches"
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={() => {
+                          setCawspopup(false);
+                        }}
+                      >
+                        <h6 className="bottomitems">
+                          <img src={arrowup} alt="" />
+                          Coinbase
+                        </h6>
+                      </a>
+
+                      <a
+                        href="https://opensea.io/collection/catsandwatchessocietycaws"
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={() => {
+                          setCawspopup(false);
+                        }}
+                      >
+                        <h6 className="bottomitems">
+                          <img src={arrowup} alt="" />
+                          OpenSea
+                        </h6>
+                      </a>
+                    </div>
+                  </div>
+                </OutsideClickHandler>
+              )}
             </div>
           </div>
         </div>
