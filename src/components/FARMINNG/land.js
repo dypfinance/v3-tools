@@ -13,6 +13,7 @@ import arrowup from "./assets/arrow-up.svg";
 import moreinfo from "./assets/more-info.svg";
 import wallet from "./assets/wallet.svg";
 import Tooltip from "@material-ui/core/Tooltip";
+import OutsideClickHandler from "react-outside-click-handler";
 
 import { shortAddress } from "../../functions/shortAddress";
 import xMark from "../calculator/assets/xMark.svg";
@@ -49,6 +50,7 @@ const LandDetails = ({
   const [countDownLeft, setCountDownLeft] = useState(59000);
   const [totalStakes, settotalStakes] = useState(0);
   const [approvedNfts, setApprovedNfts] = useState([]);
+  const [landpopup, setLandpopup] = useState(false);
 
   const [hide, setHide] = useState("");
   const windowSize = useWindowSize();
@@ -221,6 +223,10 @@ const LandDetails = ({
       });
   };
 
+  const showLandPopup = () => {
+    setLandpopup(true);
+  };
+
   useEffect(() => {
     totalStakedNft().then();
   }, []);
@@ -312,17 +318,58 @@ const LandDetails = ({
                 </h6>
               </div>
             </div>
-            <div className="d-flex align-items-center justify-content-between gap-3">
-              <a
-                href="https://opensea.io/collection/worldofdypians"
-                target="_blank"
-                rel="noreferrer"
+            <div className="d-flex align-items-center justify-content-between gap-3 position-relative">
+            
+              <div
+                className="d-flex align-items-center justify-content-between gap-3 cursor pointer"
+                onClick={showLandPopup}
               >
-                <h6 className="bottomitems">
-                  <img src={arrowup} alt="" />
-                  Get Land NFT
-                </h6>
-              </a>
+                <h6 className="bottomitems"> Get Land NFT</h6>
+              </div>
+              {landpopup === true && (
+                <div className='position-absolute'>
+                <OutsideClickHandler
+                  onOutsideClick={() => {
+                    setLandpopup(false);
+                  }}
+                >
+                  <div
+                    className="tooltip d-flex justify-content-center"
+                    style={{ opacity: 1, width: 100 }}
+                  >
+                    <div className="d-flex flex-column gap-2 align-items-center">
+                      <a
+                        href="https://nft.coinbase.com/collection/worldofdypians"
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={() => {
+                          setLandpopup(false);
+                        }}
+                      >
+                        <h6 className="bottomitems">
+                          <img src={arrowup} alt="" />
+                          Coinbase
+                        </h6>
+                      </a>
+
+                      <a
+                        href="https://opensea.io/collection/worldofdypians"
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={() => {
+                          setLandpopup(false);
+                        }}
+                      >
+                        <h6 className="bottomitems">
+                          <img src={arrowup} alt="" />
+                          OpenSea
+                        </h6>
+                      </a>
+                    </div>
+                  </div>
+                </OutsideClickHandler>
+                </div>
+              )}
             </div>
           </div>
         </div>

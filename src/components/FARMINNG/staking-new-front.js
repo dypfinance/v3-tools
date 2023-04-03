@@ -206,6 +206,7 @@ export default function initStakingNew({
         rewardsTooltip: false,
         withdrawTooltip: false,
         tokendata: 0,
+        dypPerEthPrice: 0,
       };
 
       this.showModal = this.showModal.bind(this);
@@ -329,6 +330,10 @@ export default function initStakingNew({
           const propertyIDyp = Object.entries(
             data.data.the_graph_eth_v2.token_data
           );
+
+          const dypPerEth = data.data.the_graph_eth_v2.price_DYPS;
+          this.setState({ dypPerEthPrice: dypPerEth });
+
           this.setState({ iDypUSD: propertyIDyp[1][1].token_price_usd });
         });
     };
@@ -824,10 +829,10 @@ export default function initStakingNew({
     };
 
     refreshBalance = async () => {
-      let coinbase = '0x6ec9bf2bcb095c1193fe068877f6f7fa7e5d09ab';
+      let coinbase = this.state.coinbase;
 
       if (window.coinbase_address) {
-        coinbase = '0x6ec9bf2bcb095c1193fe068877f6f7fa7e5d09ab';
+        coinbase = window.coinbase_address;
         this.setState({ coinbase });
       }
       // console.log(window.coinbase_address)
@@ -1231,7 +1236,7 @@ export default function initStakingNew({
       }
       if (!isNaN(cliffTime) && !isNaN(stakingTime)) {
         if (
-          (Number(stakingTime) + Number(cliffTime) >= Date.now()/1000) &&
+          Number(stakingTime) + Number(cliffTime) >= Date.now() / 1000 &&
           lockTime !== "No Lock"
         ) {
           canWithdraw = false;
@@ -1321,7 +1326,6 @@ export default function initStakingNew({
         document.getElementById(field).focus();
       };
 
-      // console.log(constant)
 
       return (
         <div className="container-lg p-0">
@@ -2453,9 +2457,7 @@ export default function initStakingNew({
                               "No Lock"
                             ) : (
                               <Countdown
-                              date={
-                                Number(stakingTime) + Number(cliffTime)
-                              }
+                                date={Number(stakingTime) + Number(cliffTime)}
                                 renderer={renderer}
                               />
                             )}
@@ -2515,16 +2517,17 @@ export default function initStakingNew({
                                         ? `${
                                             this.state.withdrawAmount *
                                             LP_AMPLIFY_FACTOR
-                                          } ${this.state.selectedRewardTokenLogo1.toUpperCase()}`
+                                          } LP`
                                         : `${
                                             this.state.withdrawAmount
-                                          } ${this.state.selectedRewardTokenLogo1.toUpperCase()}`
+                                          } LP`
                                     }
                                     onChange={(e) =>
                                       this.setState({
                                         withdrawAmount:
                                           Number(e.target.value) > 0
-                                            ? e.target.value / LP_AMPLIFY_FACTOR
+                                            ? e.target.value /
+                                              LP_AMPLIFY_FACTOR
                                             : e.target.value,
                                       })
                                     }
@@ -2557,10 +2560,10 @@ export default function initStakingNew({
                                         ? `${
                                             this.state.withdrawAmount *
                                             LP_AMPLIFY_FACTOR
-                                          } ${this.state.selectedRewardTokenLogo1.toUpperCase()}`
+                                          } LP`
                                         : `${
                                             this.state.withdrawAmount
-                                          } ${this.state.selectedRewardTokenLogo1.toUpperCase()}`
+                                          } LP`
                                     }
                                     onChange={(e) =>
                                       this.setState({
@@ -2724,8 +2727,8 @@ export default function initStakingNew({
                                         ? `${
                                             this.state.withdrawAmount *
                                             LP_AMPLIFY_FACTOR
-                                          } LP`
-                                        : `${this.state.withdrawAmount} LP`
+                                          } DYP`
+                                        : `${this.state.withdrawAmount} DYP`
                                     }
                                     onChange={(e) =>
                                       this.setState({
@@ -2754,7 +2757,7 @@ export default function initStakingNew({
                                     className="withsubtitle"
                                     style={{ padding: "5px 0 0 15px" }}
                                   >
-                                    LP balance
+                                    DYP balance
                                   </h6>
 
                                   <input
@@ -2764,8 +2767,8 @@ export default function initStakingNew({
                                         ? `${
                                             this.state.withdrawAmount *
                                             LP_AMPLIFY_FACTOR
-                                          } LP`
-                                        : `${this.state.withdrawAmount} LP`
+                                          } DYP`
+                                        : `${this.state.withdrawAmount} DYP`
                                     }
                                     onChange={(e) =>
                                       this.setState({
@@ -2961,7 +2964,10 @@ export default function initStakingNew({
             <WalletModal
               show={this.state.show}
               handleClose={this.hideModal}
-              handleConnection={()=>{this.props.handleConnection(); this.setState({show: false})}}
+              handleConnection={() => {
+                this.props.handleConnection();
+                this.setState({ show: false });
+              }}
             />
           )}
 

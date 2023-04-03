@@ -20,6 +20,7 @@ import weth from "./assets/weth.svg";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
 import useWindowSize from "../../functions/useWindowSize";
 import NftCawsWodChecklistModal from "../caws/NftMinting/components/NftMinting/NftStakeChecklistModal/NftCawsWodChecklistModal";
+import OutsideClickHandler from "react-outside-click-handler";
 
 const CawsWodDetails = ({
   coinbase,
@@ -50,7 +51,7 @@ const CawsWodDetails = ({
   const [showUnstakeModal, setShowUnstakeModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [countDownLeft, setCountDownLeft] = useState(59000);
-  
+
   const [approvedNfts, setApprovedNfts] = useState([]);
   const [approvedLandNfts, setApprovedLandNfts] = useState([]);
 
@@ -60,6 +61,8 @@ const CawsWodDetails = ({
   const [showClaim, setshowClaim] = useState(false);
   const [hide, setHide] = useState("");
   const [screenName, setScreenName] = useState("land");
+  const [cawspopup, setCawspopup] = useState(false);
+  const [landpopup, setLandpopup] = useState(false);
 
   const windowSize = useWindowSize();
 
@@ -104,10 +107,11 @@ const CawsWodDetails = ({
     const allCawsStakes = await window.wod_caws
       .depositsOf(address)
       .then((result) => {
-        if(result.length > 0)
-      {  for (let i = 0; i < result.length; i++)
-          stakenft.push(parseInt(result[i]));
-        return stakenft;}
+        if (result.length > 0) {
+          for (let i = 0; i < result.length; i++)
+            stakenft.push(parseInt(result[i]));
+          return stakenft;
+        }
       });
 
     return allCawsStakes;
@@ -121,8 +125,7 @@ const CawsWodDetails = ({
       stakes = await Promise.all(stakes);
       stakes.reverse();
       setMystakes(stakes);
-    }
-    else setMystakes([])
+    } else setMystakes([]);
   };
 
   const myLandNft = async () => {
@@ -144,11 +147,11 @@ const CawsWodDetails = ({
     const allLandStakes = await window.wod_caws
       .depositsOfWod(address)
       .then((result) => {
-        
-        if(result.length > 0)
-      {  for (let i = 0; i < result.length; i++)
-          stakenft.push(parseInt(result[i]));
-        return stakenft;}
+        if (result.length > 0) {
+          for (let i = 0; i < result.length; i++)
+            stakenft.push(parseInt(result[i]));
+          return stakenft;
+        }
       });
 
     return allLandStakes;
@@ -161,8 +164,7 @@ const CawsWodDetails = ({
       stakes = await Promise.all(stakes);
       stakes.reverse();
       setMyLandstakes(stakes);
-    }
-    else setMyLandstakes([])
+    } else setMyLandstakes([]);
   };
 
   const setUSDPrice = async () => {
@@ -218,8 +220,6 @@ const CawsWodDetails = ({
     setnewStakes(newStakes + 1);
   };
 
-
-
   const calculateCountdown = async () => {
     const address = coinbase;
     let finalDay = await window.wod_caws
@@ -243,7 +243,7 @@ const CawsWodDetails = ({
     await window.wod_caws
       .withdrawWodCaws()
       .then(() => {
-        refreshStakes()
+        refreshStakes();
         // setunstakeAllStatus("Successfully unstaked all!");
       })
       .catch((err) => {
@@ -263,7 +263,6 @@ const CawsWodDetails = ({
       });
   };
 
-  
   useEffect(() => {
     if (coinbase) {
       getStakesIds();
@@ -286,6 +285,14 @@ const CawsWodDetails = ({
   const getApprovedLandNfts = (data) => {
     setApprovedLandNfts(data);
     return data;
+  };
+
+  const showCawsPopup = () => {
+    setCawspopup(true);
+  };
+
+  const showLandPopup = () => {
+    setLandpopup(true);
   };
 
   useEffect(() => {
@@ -365,31 +372,108 @@ const CawsWodDetails = ({
                 </h6>
               </div> */}
             </div>
-            <div className="d-flex align-items-center justify-content-between gap-3">
-              <div className="d-flex align-items-center justify-content-between gap-3">
-                <a
-                  href="https://opensea.io/collection/catsandwatchessocietycaws"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <h6 className="bottomitems">
-                    <img src={arrowup} alt="" />
-                    Get CAWS
-                  </h6>
-                </a>
+            <div className="d-flex align-items-center justify-content-between gap-3 position-relative">
+              <div
+                className="d-flex align-items-center justify-content-between gap-3 cursor-pointer"
+                onClick={showCawsPopup}
+              >
+                <h6 className="bottomitems">Get CAWS</h6>
               </div>
-              <div className="d-flex align-items-center justify-content-between gap-3">
-                <a
-                  href="https://opensea.io/collection/worldofdypians"
-                  target="_blank"
-                  rel="noreferrer"
+              {cawspopup === true && (
+                <div className='position-absolute'>
+                <OutsideClickHandler
+                  onOutsideClick={() => {
+                    setCawspopup(false);
+                  }}
+                 
                 >
-                  <h6 className="bottomitems">
-                    <img src={arrowup} alt="" />
-                    Get WOD
-                  </h6>
-                </a>
+                  <div
+                    className="tooltip d-flex justify-content-center"
+                    style={{ opacity: 1, width: 100 }}
+                  >
+                    <div className="d-flex flex-column gap-2 align-items-center">
+                      <a
+                        href="https://nft.coinbase.com/collection/catsandwatches"
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={() => {
+                          setCawspopup(false);
+                        }}
+                      >
+                        <h6 className="bottomitems">
+                          <img src={arrowup} alt="" />
+                          Coinbase
+                        </h6>
+                      </a>
+
+                      <a
+                        href="https://opensea.io/collection/catsandwatchessocietycaws"
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={() => {
+                          setCawspopup(false);
+                        }}
+                      >
+                        <h6 className="bottomitems">
+                          <img src={arrowup} alt="" />
+                          OpenSea
+                        </h6>
+                      </a>
+                    </div>
+                  </div>
+                </OutsideClickHandler>
+                </div>
+              )}
+              <div
+                className="d-flex align-items-center justify-content-between gap-3 cursor pointer"
+                onClick={showLandPopup}
+              >
+                <h6 className="bottomitems">Get WOD</h6>
               </div>
+              {landpopup === true && (
+                <div className='position-absolute'>
+                <OutsideClickHandler
+                  onOutsideClick={() => {
+                    setLandpopup(false);
+                  }}
+                >
+                  <div
+                    className="tooltip d-flex justify-content-center"
+                    style={{ opacity: 1, width: 100, left: 90 }}
+                  >
+                    <div className="d-flex flex-column gap-2 align-items-center">
+                      <a
+                        href="https://nft.coinbase.com/collection/worldofdypians"
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={() => {
+                          setLandpopup(false);
+                        }}
+                      >
+                        <h6 className="bottomitems">
+                          <img src={arrowup} alt="" />
+                          Coinbase
+                        </h6>
+                      </a>
+
+                      <a
+                        href="https://opensea.io/collection/worldofdypians"
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={() => {
+                          setLandpopup(false);
+                        }}
+                      >
+                        <h6 className="bottomitems">
+                          <img src={arrowup} alt="" />
+                          OpenSea
+                        </h6>
+                      </a>
+                    </div>
+                  </div>
+                </OutsideClickHandler>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -459,22 +543,21 @@ const CawsWodDetails = ({
               </div>
               <div className="d-flex flex-column gap-2 justify-content-between">
                 <div className="d-flex align-items-center justify-content-between gap-2">
-                 
-                    <button
-                      className="btn filledbtn"
-                      onClick={() => {
-                        setshowChecklistModal(true);
-                        setOpenStakeChecklist(true);
-                        setApprovedNfts([]);
-                        setHide("staked");
-                      }}
-                    >
-                      Select NFTs
-                    </button>
-                    <div className="available-nfts">
-                      Selected NFTs:{" "}
-                      <b>{isConnected === false ? 0 : approvedNfts.length}</b>
-                    </div> 
+                  <button
+                    className="btn filledbtn"
+                    onClick={() => {
+                      setshowChecklistModal(true);
+                      setOpenStakeChecklist(true);
+                      setApprovedNfts([]);
+                      setHide("staked");
+                    }}
+                  >
+                    Select NFTs
+                  </button>
+                  <div className="available-nfts">
+                    Selected NFTs:{" "}
+                    <b>{isConnected === false ? 0 : approvedNfts.length}</b>
+                  </div>
                 </div>
                 {/* {this.state.errorMsg && (
                   <h6 className="errormsg">{this.state.errorMsg}</h6>
@@ -500,7 +583,6 @@ const CawsWodDetails = ({
                   </h6>
                 </h6>
                 <h6 className="withdraw-littletxt d-flex align-items-center gap-2">
-                  
                   <Tooltip
                     placement="top"
                     title={
@@ -620,7 +702,7 @@ const CawsWodDetails = ({
           countDownLeft={countDownLeft}
           open={openStakeChecklist ? true : false}
           hideItem={hide}
-          onDepositComplete={()=>refreshStakes()}
+          onDepositComplete={() => refreshStakes()}
         />
       )}
 
