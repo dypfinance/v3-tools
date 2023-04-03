@@ -261,9 +261,7 @@ const StakeBscIDyp = ({
 
         setstakingTime(stakingTime);
 
-        let depositedTokens_formatted = new BigNumber(depositedTokens)
-          .div(1e18)
-          .toFixed(6);
+        let depositedTokens_formatted = new BigNumber(depositedTokens).div(1e18).toString(10)
 
         setdepositedTokens(depositedTokens_formatted);
 
@@ -395,11 +393,7 @@ const StakeBscIDyp = ({
   const handleWithdraw = async (e) => {
     // e.preventDefault();
     setwithdrawLoading(true);
-
-    let amount;
-    await staking.depositedTokens(coinbase).then((data)=>{
-      amount = data
-    })
+    let amount = new BigNumber(withdrawAmount).times(1e18).toFixed(0)
     // console.log(amount)
     await staking
       .unstake(amount)
@@ -449,9 +443,15 @@ const StakeBscIDyp = ({
     setdepositAmount(depositAmount);
   };
 
-  const handleSetMaxWithdraw = () => {
-    const withdraw = depositedTokens;
-    setwithdrawAmount(withdraw);
+  const handleSetMaxWithdraw = async (e) => {
+    // e.preventDefault();
+    let amount;
+    await staking.depositedTokens(coinbase).then((data)=>{
+      amount = data
+    })
+
+    let depositedTokens_formatted = new BigNumber(amount).div(1e18).toString(10)
+    setwithdrawAmount(depositedTokens_formatted);
   };
 
   const getAPY = () => {
@@ -1106,7 +1106,7 @@ const StakeBscIDyp = ({
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">My iDYP Deposit</span>
                     <h6 className="stats-card-content">
-                      {depositedTokens} iDYP
+                    {getFormattedNumber(depositedTokens,6)} iDYP
                     </h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
@@ -1295,7 +1295,7 @@ const StakeBscIDyp = ({
                     <div className="d-flex flex-column gap-1">
                       <h6 className="withsubtitle">Balance</h6>
                       <h6 className="withtitle">
-                        {depositedTokens} {token_symbol}
+                      {getFormattedNumber(depositedTokens,6)} {token_symbol}
                       </h6>
                     </div>
                   </div>
