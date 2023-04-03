@@ -380,10 +380,12 @@ const CawsWodDetails = ({
                 <h6 className="bottomitems">Get CAWS</h6>
               </div>
               {cawspopup === true && (
+                <div className='position-absolute'>
                 <OutsideClickHandler
                   onOutsideClick={() => {
                     setCawspopup(false);
                   }}
+                 
                 >
                   <div
                     className="tooltip d-flex justify-content-center"
@@ -420,6 +422,7 @@ const CawsWodDetails = ({
                     </div>
                   </div>
                 </OutsideClickHandler>
+                </div>
               )}
               <div
                 className="d-flex align-items-center justify-content-between gap-3 cursor pointer"
@@ -428,6 +431,7 @@ const CawsWodDetails = ({
                 <h6 className="bottomitems">Get WOD</h6>
               </div>
               {landpopup === true && (
+                <div className='position-absolute'>
                 <OutsideClickHandler
                   onOutsideClick={() => {
                     setLandpopup(false);
@@ -468,6 +472,7 @@ const CawsWodDetails = ({
                     </div>
                   </div>
                 </OutsideClickHandler>
+                </div>
               )}
             </div>
           </div>

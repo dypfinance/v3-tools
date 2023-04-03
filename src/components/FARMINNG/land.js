@@ -327,6 +327,7 @@ const LandDetails = ({
                 <h6 className="bottomitems"> Get Land NFT</h6>
               </div>
               {landpopup === true && (
+                <div className='position-absolute'>
                 <OutsideClickHandler
                   onOutsideClick={() => {
                     setLandpopup(false);
@@ -367,6 +368,7 @@ const LandDetails = ({
                     </div>
                   </div>
                 </OutsideClickHandler>
+                </div>
               )}
             </div>
           </div>
