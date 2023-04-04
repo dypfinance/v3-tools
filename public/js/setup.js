@@ -55,11 +55,11 @@ const VAULT_ADDRESSES_LIST = LP_ID_LIST.map((id) => id.split("-")[1]);
 window.LP_ID_LIST = LP_ID_LIST;
 
 function getTokenContract(address) {
-  return getContract({ address, ABI: window.TOKEN_ABI });
+  return getContract({ key:null, address, ABI: window.TOKEN_ABI });
 }
 
 function getVaultContract(address) {
-  return getContract({ address, ABI: window.VAULT_ABI });
+  return getContract({ key: null, address, ABI: window.VAULT_ABI });
 }
 
 function getPrices(coingecko_ids = "ethereum", vs_currencies = "usd") {
@@ -1345,7 +1345,7 @@ class VAULT_NEW {
   ) => {
     let ethBalance = await window.infuraWeb3.eth.getBalance(this._address);
     let underlyingBalance1 = await this.totalDepositedTokens();
-
+    
     let underlyingBalance2 = await (
       await getTokenContract(this.tokenAddress)
     ).methods
@@ -1472,7 +1472,6 @@ window.config = {
 
   farmweth_address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2", //farm weth
 
-  token_weth_address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2", //vault weth
 
   wethavax_address: "0xf20d962a6c8f70c731bd838a3a388d7d48fa6e15",
   wethbsc_address: "0x2170ed0880ac9a755fd29b2688956bd959f933f8",
@@ -1688,6 +1687,7 @@ window.config = {
   reward_token_daiavax_address: "0xd586E7F844cEa2F87f50152665BCbc2C279D8d70",
   reward_token_daibsc_address: "0x1af3f329e8be154074d8769d1ffa4ee058b1dbc3",
 
+  token_weth_address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2", //vault weth
   token_wbtc_address: "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
   token_usdt_address: "0xdAC17F958D2ee523a2206206994597C13D831ec7",
   token_usdc_address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
