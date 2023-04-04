@@ -356,6 +356,7 @@ const CawsDetails = ({
                 <h6 className="bottomitems">Get CAWS</h6>
               </div>
               {cawspopup === true && (
+                <div className='position-absolute'>
                 <OutsideClickHandler
                   onOutsideClick={() => {
                     setCawspopup(false);
@@ -396,6 +397,7 @@ const CawsDetails = ({
                     </div>
                   </div>
                 </OutsideClickHandler>
+                </div>
               )}
             </div>
           </div>
