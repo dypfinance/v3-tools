@@ -210,21 +210,42 @@ const Calculator = ({ earnClass, onClose, ref }) => {
         const vaultWeth = window.vault_weth;
         const vaultusdc = window.vault_usdc;
         const vaultusdt = window.vault_usdt;
+        const infura_web3 = window.infuraWeb3;
+        let token_contr_weth = new infura_web3.eth.Contract(
+          window.TOKEN_ABI,
+          vaultWeth.tokenAddress
+        );
+
+        let token_contr_usdc = new infura_web3.eth.Contract(
+          window.TOKEN_ABI,
+          vaultusdc.tokenAddress
+        );
+
+        let token_contr_usdt = new infura_web3.eth.Contract(
+          window.TOKEN_ABI,
+          vaultusdt.tokenAddress
+        );
+  
+        let token_contridyp = new infura_web3.eth.Contract(
+          window.TOKEN_ABI,
+          window.config.reward_token_idyp_address
+        );
 
         vaultWeth
-          .getTvlUsdAndApyPercent(18)
+          .getTvlUsdAndApyPercent(18, 18,token_contr_weth, token_contridyp)
           .then((apy_percent) => {
+            console.log(apy_percent)
             setVaultApy(apy_percent.apy_percent);
           })
           .catch(console.error);
 
         vaultusdc
-          .getTvlUsdAndApyPercent(6)
+          .getTvlUsdAndApyPercent(18, 18,token_contr_usdc, token_contridyp)
           .then((apy_percent) => setVaultUSDC(apy_percent.apy_percent))
           .catch(console.error);
 
         vaultusdt
-          .getTvlUsdAndApyPercent(6)
+          .getTvlUsdAndApyPercent(18, 18,token_contr_usdt, token_contridyp)
           .then((apy_percent) => {
             setVaultUSDT(apy_percent.apy_percent);
           })

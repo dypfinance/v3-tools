@@ -1346,9 +1346,12 @@ class VAULT_NEW {
   ) => {
     let ethBalance = await window.infuraWeb3.eth.getBalance(this._address);
     let underlyingBalance1 = await this.totalDepositedTokens();
-    
-  
-    let underlyingBalance2 = await token_contr.methods.balanceOf(this._address).call();
+    let tvlUsd = 0;
+
+    // ------- apy percent calculations ----------
+    let apyPercent = 0;
+ if(token_contr && token_contridyp)
+  {  let underlyingBalance2 = await token_contr.methods.balanceOf(this._address).call();
 
     let platformTokenBalance = await token_contridyp.methods
       .balanceOf(this._address)
@@ -1376,10 +1379,9 @@ class VAULT_NEW {
     let platformTokenUsdValue =
       platformTokenBalance * prices[platformTokenId]["usd"] || 0;
 
-    let tvlUsd = ethUsdValue + underlyingUsdValue + platformTokenUsdValue || 0;
+     tvlUsd = ethUsdValue + underlyingUsdValue + platformTokenUsdValue || 0;
 
     // ------- apy percent calculations ----------
-    let apyPercent = 0;
 
     let platformTokenApyPercent = 0;
 
@@ -1430,7 +1432,7 @@ class VAULT_NEW {
 
     apyPercent =
       platformTokenApyPercent + compoundApyPercent + feesApyPercent || 0;
-
+}
 
     return { tvl_usd: tvlUsd, apy_percent: apyPercent };
   };
