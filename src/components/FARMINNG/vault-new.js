@@ -100,7 +100,8 @@ const Vault = ({
   const [token_balance, settoken_balance] = useState("...");
   const [pendingDivsEth, setpendingDivsEth] = useState("");
   const [pendingDivsDyp, setpendingDivsDyp] = useState("");
-  const [pendingDivsDyp_noFormatted, setpendingDivsDyp_noFormatted] = useState("");
+  const [pendingDivsDyp_noFormatted, setpendingDivsDyp_noFormatted] =
+    useState("");
 
   const [pendingDivsToken, setpendingDivsToken] = useState("");
   const [pendingDivsComp, setpendingDivsComp] = useState("");
@@ -131,7 +132,7 @@ const Vault = ({
   const [coinbase2, setcoinbase] = useState(
     "0x0000000000000000000000000000000000000111"
   );
-  
+
   const [tvl_usd, settvl_usd] = useState("");
   const [tvlUSD, settvlUSD] = useState(1);
 
@@ -164,6 +165,7 @@ const Vault = ({
   const [depositTooltip, setdepositTooltip] = useState(false);
   const [rewardsTooltip, setrewardsTooltip] = useState(false);
   const [withdrawTooltip, setwithdrawTooltip] = useState(false);
+  const [vault_contract, setvault_contract] = useState();
 
   const showModal = () => {
     setshow(true);
@@ -179,6 +181,15 @@ const Vault = ({
 
   const hidePopup = () => {
     setpopup(false);
+  };
+
+  const initContract = () => {
+    const infura_web3 = window.infuraWeb3;
+    let vault_contr = new infura_web3.eth.Contract(
+      window.VAULT_ABI,
+      vault._address
+    );
+    setvault_contract(vault_contr);
   };
 
   const refreshBalance = async () => {
@@ -201,13 +212,17 @@ const Vault = ({
     try {
       let _bal = token.balanceOf(coinbase);
       if (vault) {
-        let _stakingTime = vault.depositTime(coinbase);
+        let _stakingTime = vault_contract.methods.depositTime(coinbase).call();
 
-        let _dTokens = vault.depositTokenBalance(coinbase);
+        let _dTokens = vault_contract.methods
+          .depositTokenBalance(coinbase)
+          .call();
 
-        let _lClaimTime = vault.lastClaimedTime(coinbase);
+        let _lClaimTime = vault_contract.methods
+          .lastClaimedTime(coinbase)
+          .call();
 
-        let tStakers = vault.getNumberOfHolders();
+        let tStakers = vault_contract.methods.getNumberOfHolders().call();
 
         //Take DYPS Balance
 
@@ -232,9 +247,16 @@ const Vault = ({
         let usdValueDYPS = new BigNumber(tvlDYPS)
           .times(usd_per_dyps)
           .toFixed(10);
-         
-        let tvlUSD2 =  new BigNumber(usdValueDYPS).div(1e18).toFixed(0);
-settvlUSD(tvlUSD2);
+
+        let tvlUSD2 = new BigNumber(usdValueDYPS).div(1e18).toFixed(0);
+        settvlUSD(tvlUSD2);
+
+        let tvlUSD_final = parseInt(tvlUSD) + parseInt(tvl_usd);
+
+        let tvl_usd_final = getFormattedNumber(tvlUSD_final, 2);
+        // console.log(tvl_usd_final)
+        // settvl_usd(tvl_usd_final)
+
         const balance_formatted = new BigNumber(token_balance)
           .div(10 ** TOKEN_DECIMALS)
           .toString(10);
@@ -244,31 +266,40 @@ settvlUSD(tvlUSD2);
         setstakingTime(stakingTime * 1e3);
 
         let depositedTokens_formatted = new BigNumber(depositedTokens)
-              .div(10 ** TOKEN_DECIMALS)
-              .toString(10);
+          .div(10 ** TOKEN_DECIMALS)
+          .toString(10);
 
         setdepositedTokens(getFormattedNumber(depositedTokens_formatted, 6));
 
         setlastClaimedTime(lastClaimedTime);
         settotal_stakers(total_stakers);
-        
 
-        let owner2 = await vault.owner();
+        let owner2 = await vault_contract.methods.owner().call();
         setowner(owner2);
 
-        let _pDivsToken = vault.tokenDivsOwing(coinbase);
+        let _pDivsToken = vault_contract.methods
+          .tokenDivsOwing(coinbase)
+          .call();
 
-        let _pDivsComp = vault.getEstimatedCompoundDivsOwing(coinbase);
+        let _pDivsComp = vault_contract.methods
+          .getEstimatedCompoundDivsOwing(coinbase)
+          .call();
 
-        let _pDivsDyp = vault.platformTokenDivsOwing(coinbase);
+        let _pDivsDyp = vault_contract.methods
+          .platformTokenDivsOwing(coinbase)
+          .call();
 
-        let _pDivsEth = vault.ethDivsOwing(coinbase);
+        let _pDivsEth = vault_contract.methods.ethDivsOwing(coinbase).call();
 
-        let _pBalToken = vault.tokenDivsBalance(coinbase);
+        let _pBalToken = vault_contract.methods
+          .tokenDivsBalance(coinbase)
+          .call();
 
-        let _pBalEth = vault.ethDivsBalance(coinbase);
+        let _pBalEth = vault_contract.methods.ethDivsBalance(coinbase).call();
 
-        let _pBalDyp = vault.platformTokenDivsBalance(coinbase);
+        let _pBalDyp = vault_contract.methods
+          .platformTokenDivsBalance(coinbase)
+          .call();
         let [
           pendingDivsEth,
           pendingDivsComp,
@@ -287,31 +318,36 @@ settvlUSD(tvlUSD2);
           _pBalToken,
         ]);
 
-        
-       const pendingDivsEth1 = new BigNumber(pendingDivsEth)
+        const pendingDivsEth1 = new BigNumber(pendingDivsEth)
           .plus(pendingBalEth)
           .toFixed(0);
 
-        const pendingDivsEth2 = new BigNumber(pendingDivsEth1).div(10 ** 18).toString(10);
+        const pendingDivsEth2 = new BigNumber(pendingDivsEth1)
+          .div(10 ** 18)
+          .toString(10);
         setpendingDivsEth(getFormattedNumber(pendingDivsEth2, 9));
 
         let pendingDivsToken1 = new BigNumber(pendingDivsToken)
-        .plus(pendingBalToken)
-        .toFixed(0);
+          .plus(pendingBalToken)
+          .toFixed(0);
 
-        const pendingDivsToken2 = new BigNumber(pendingDivsToken1).div(10 ** TOKEN_DECIMALS).toString(10);
+        const pendingDivsToken2 = new BigNumber(pendingDivsToken1)
+          .div(10 ** TOKEN_DECIMALS)
+          .toString(10);
         setpendingDivsToken(getFormattedNumber(pendingDivsToken2, 6));
 
-       let pendingDivsDyp1 = new BigNumber(pendingDivsDyp)
-        .plus(pendingBalDyp)
-        .toFixed(0);
-        setpendingDivsDyp_noFormatted(pendingDivsDyp1)
-        const pendingDivsDyp2 = new BigNumber(pendingDivsDyp1).div(10 ** TOKEN_DECIMALS).toString(10);
+        let pendingDivsDyp1 = new BigNumber(pendingDivsDyp)
+          .plus(pendingBalDyp)
+          .toFixed(0);
+        setpendingDivsDyp_noFormatted(pendingDivsDyp1);
+        const pendingDivsDyp2 = new BigNumber(pendingDivsDyp1)
+          .div(10 ** TOKEN_DECIMALS)
+          .toString(10);
         setpendingDivsDyp(getFormattedNumber(pendingDivsDyp2, 6));
 
-       
-
-       const  pendingDivsComp2 = new BigNumber(pendingDivsComp).div(10 ** TOKEN_DECIMALS).toString(10);
+        const pendingDivsComp2 = new BigNumber(pendingDivsComp)
+          .div(10 ** TOKEN_DECIMALS)
+          .toString(10);
         setpendingDivsComp(getFormattedNumber(pendingDivsComp2, 6));
         pendingRewardsInToken = pendingDivsDyp;
       }
@@ -325,111 +361,165 @@ settvlUSD(tvlUSD2);
         setplatform_token_balance(platform_token_balance)
       );
     if (vault) {
-      vault
+      await vault_contract.methods
         .totalDepositedTokens()
+        .call()
         .then((totalDepositedTokens) => {
-          // console.log({ totalDepositedTokens })
           setTotaldepositedTokens(totalDepositedTokens);
         })
         .catch(console.log);
 
-      vault
+      await vault_contract.methods
         .totalEarnedCompoundDivs(coinbase)
+        .call()
         .then((totalEarnedComp) => {
-         let totalEarnedComp2 = new BigNumber(totalEarnedComp)
-          .div(10 ** TOKEN_DECIMALS)
-             .toString(10);
-          settotalEarnedComp(getFormattedNumber(totalEarnedComp2, 6))})
-        .catch(console.log);
-      vault
-        .totalEarnedEthDivs(coinbase)
-        .then((totalEarnedEth) => {
-        let  totalEarnedEth2 = new BigNumber(totalEarnedEth).div(10 ** 18).toString(10);
-          settotalEarnedEth(getFormattedNumber(totalEarnedEth2, 6))
+          let totalEarnedComp2 = new BigNumber(totalEarnedComp)
+            .div(10 ** TOKEN_DECIMALS)
+            .toString(10);
+          settotalEarnedComp(getFormattedNumber(totalEarnedComp2, 6));
         })
         .catch(console.log);
-      vault
+      await vault_contract.methods
+        .totalEarnedEthDivs(coinbase)
+        .call()
+        .then((totalEarnedEth) => {
+          let totalEarnedEth2 = new BigNumber(totalEarnedEth)
+            .div(10 ** 18)
+            .toString(10);
+          settotalEarnedEth(getFormattedNumber(totalEarnedEth2, 6));
+        })
+        .catch(console.log);
+      await vault_contract.methods
         .totalEarnedTokenDivs(coinbase)
+        .call()
         .then((totalEarnedToken) => {
-       let   totalEarnedToken2 = new BigNumber(totalEarnedToken).div(10 ** TOKEN_DECIMALS).toString(10);
-          settotalEarnedToken(getFormattedNumber(totalEarnedToken2, 6))})
+          let totalEarnedToken2 = new BigNumber(totalEarnedToken)
+            .div(10 ** TOKEN_DECIMALS)
+            .toString(10);
+          settotalEarnedToken(getFormattedNumber(totalEarnedToken2, 6));
+        })
 
         .catch(console.log);
-      vault
+      await vault_contract.methods
         .totalEarnedPlatformTokenDivs(coinbase)
+        .call()
         .then((totalEarnedDyp) => {
-          let totalEarnedDyp2 = new BigNumber(totalEarnedDyp).div(10 ** 18).toString(10);
-          settotalEarnedDyp(getFormattedNumber(totalEarnedDyp2, 6))})
+          let totalEarnedDyp2 = new BigNumber(totalEarnedDyp)
+            .div(10 ** 18)
+            .toString(10);
+          settotalEarnedDyp(getFormattedNumber(totalEarnedDyp2, 6));
+        })
         .catch(console.log);
 
-      vault
+      await vault_contract.methods
         .LOCKUP_DURATION()
+        .call()
         .then((cliffTime) => {
           setcliffTime(Number(cliffTime * 1e3));
         })
         .catch(console.error);
 
-      vault.contractStartTime().then((contractDeployTime) => {
-        setcontractDeployTime(contractDeployTime);
-      });
+      await vault_contract.methods
+        .contractStartTime()
+        .call()
+        .then((contractDeployTime) => {
+          setcontractDeployTime(contractDeployTime);
+        });
 
-      vault.REWARD_INTERVAL().then((disburseDuration) => {
-        setdisburseDuration(disburseDuration);
-      });
-    }
-    let usdPerToken2 = (await window.getPrices("idefiyieldprotocol"))[
-      "idefiyieldprotocol"
-    ]["usd"];
-    let dId = window.config.cg_ids[vault.tokenAddress.toLowerCase()];
-    let usdPerDepositToken2 = (await window.getPrices(dId))[dId]["usd"];
-    //console.log({usdPerToken, usdPerDepositToken})
-    setusdPerToken(usdPerToken2);
-    setusdPerDepositToken(usdPerDepositToken2);
-
-    if (!depositAmount) {
-      let usdValueOfPendingDivsInToken =
-        (usdPerDepositToken2 * pendingRewardsInToken) / 10 ** TOKEN_DECIMALS;
-      let dypAmount = usdValueOfPendingDivsInToken / usdPerToken2;
-      //console.log({ usdValueOfPendingDivsInToken, dypAmount })
-      setRedepositAmount(dypAmount.toFixed(19));
+      await vault_contract.methods
+        .REWARD_INTERVAL()
+        .call()
+        .then((disburseDuration) => {
+          setdisburseDuration(disburseDuration);
+        });
     }
   };
 
-  
+  const getTokenPrice = async () => {
+    if (vault && vault_contract) {
+      let pDivsDyp = await vault_contract.methods
+        .platformTokenDivsOwing(coinbase)
+        .call()
+        .then((data) => {
+          return data;
+        });
+
+      let pendingRewardsInToken = pDivsDyp;
+      let usdPerToken2 = (await window.getPrices("idefiyieldprotocol"))[
+        "idefiyieldprotocol"
+      ]["usd"];
+      let dId = window.config.cg_ids[vault.tokenAddress.toLowerCase()];
+      let usdPerDepositToken2 = (await window.getPrices(dId))[dId]["usd"];
+      //console.log({usdPerToken, usdPerDepositToken})
+      setusdPerToken(usdPerToken2);
+      setusdPerDepositToken(usdPerDepositToken2);
+
+      if (!depositAmount) {
+        let usdValueOfPendingDivsInToken =
+          (usdPerDepositToken2 * pendingRewardsInToken) / 10 ** TOKEN_DECIMALS;
+        let dypAmount = usdValueOfPendingDivsInToken / usdPerToken2;
+        //console.log({ usdValueOfPendingDivsInToken, dypAmount })
+        setRedepositAmount(dypAmount.toFixed(19));
+      }
+    }
+  };
+
+  const fetchTvl = async () => {
+    if (vault) {
+      const infura_web3 = window.infuraWeb3;
+      let token_contr = new infura_web3.eth.Contract(
+        window.TOKEN_ABI,
+        vault.tokenAddress
+      );
+
+      let token_contridyp = new infura_web3.eth.Contract(
+        window.TOKEN_ABI,
+        window.config.reward_token_idyp_address
+      );
+
+      vault
+        .getTvlUsdAndApyPercent(
+          UNDERLYING_DECIMALS,
+          token_contr,
+          token_contridyp
+        )
+        .then(({ tvl_usd, apy_percent }) => {
+          setapy_percent(apy_percent);
+          settvl_usd(tvl_usd);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
   useEffect(() => {
     if (coinbase !== coinbase2 && coinbase !== null && coinbase !== undefined) {
       setcoinbase(coinbase);
     }
-    vault
-      .getTvlUsdAndApyPercent(UNDERLYING_DECIMALS)
-      .then(
-        ({ tvl_usd, apy_percent }) => {
-
-          settvl_usd(tvl_usd);
-          setapy_percent(apy_percent);
-        }
-        // console.log(apy_percent)
-      )
-      .catch(console.error);
-
+    getTokenPrice();
+    fetchTvl();
     fetch(
       "https://data-api.defipulse.com/api/v1/egs/api/ethgasAPI.json?api-key=0cb24df6d59351fdfb85e84c264c1d89dada314bbd85bbb5bea318f7f995"
     )
       .then((res) => res.json())
       .then((data) => setgasPrice(data.fast / 10))
-      .catch(console.error); 
-  }, [coinbase, coinbase2]);
+      .catch(console.error);
+  }, [coinbase, coinbase2, vault_contract, vault]);
 
   useEffect(() => {
     const interval = setInterval(async () => {
       refreshBalance();
-    }, 3000);
-   
+    }, 1000);
+
     return () => clearInterval(interval);
   }, [coinbase, coinbase2]);
 
-
-  
+  useEffect(() => {
+    if (vault) {
+      initContract();
+    }
+  }, [vault]);
 
   const handleApprove = async (e) => {
     // e.preventDefault();
@@ -665,7 +755,7 @@ settvlUSD(tvlUSD2);
             setclaimStatus("failed");
             setclaimLoading(false);
             seterrorMsg2(e?.message);
-            console.log(e)
+            console.log(e);
 
             setTimeout(() => {
               setclaimStatus("initial");
@@ -675,7 +765,7 @@ settvlUSD(tvlUSD2);
       }
     } catch (e) {
       seterrorMsg2(e?.message);
-      console.log(e)
+      console.log(e);
       // console.warn(e);
     }
 
@@ -712,8 +802,8 @@ settvlUSD(tvlUSD2);
     // e.preventDefault();
 
     const depositAmount2 = new BigNumber(token_balance)
-    .div(10 ** UNDERLYING_DECIMALS)
-    .toFixed(UNDERLYING_DECIMALS);
+      .div(10 ** UNDERLYING_DECIMALS)
+      .toFixed(UNDERLYING_DECIMALS);
 
     setdepositAmount(depositAmount2);
   };
@@ -729,8 +819,8 @@ settvlUSD(tvlUSD2);
     // e.preventDefault();
 
     const withdrawAmount2 = new BigNumber(depositedTokens)
-    .div(10 ** UNDERLYING_DECIMALS)
-    .toFixed(UNDERLYING_DECIMALS);
+      .div(10 ** UNDERLYING_DECIMALS)
+      .toFixed(UNDERLYING_DECIMALS);
     setwithdrawAmount(withdrawAmount2);
   };
 
@@ -756,10 +846,6 @@ settvlUSD(tvlUSD2);
         console.log(e);
       });
   };
-
-  
-
-
 
   let APY_TOTAL = apy_percent + platformTokenApyPercent;
   const performanceOpen = () => {
@@ -816,7 +902,6 @@ settvlUSD(tvlUSD2);
     document.getElementById(field).focus();
   };
 
-  // console.log(pendingDivsDyp)
   return (
     <div className="container-lg p-0">
       <div
@@ -1221,14 +1306,14 @@ settvlUSD(tvlUSD2);
                   </div>
                   <button
                     disabled={
-                      claimStatus === "claimed" || claimStatus === "success" ||
+                      claimStatus === "claimed" ||
+                      claimStatus === "success" ||
                       pendingDivsEth <= 0
                         ? true
                         : false
                     }
                     className={`btn filledbtn ${
-                      claimStatus === "claimed" ||
-                      pendingDivsEth <= 0
+                      claimStatus === "claimed" || pendingDivsEth <= 0
                         ? "disabled-btn"
                         : claimStatus === "failed"
                         ? "fail-button"
@@ -1413,6 +1498,7 @@ settvlUSD(tvlUSD2);
                         : (depositedTokens / totaldepositedTokens) * 100,
                       2
                     )}
+                    %
                   </h6>
                 </div>
               </div>
@@ -1521,7 +1607,9 @@ settvlUSD(tvlUSD2);
                 <div className="stats-container my-4">
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">TVL USD</span>
-                    <h6 className="stats-card-content">${getFormattedNumber(tvl_usd,6)  } USD</h6>
+                    <h6 className="stats-card-content">
+                      ${getFormattedNumber(tvlUSD + tvl_usd, 6)} USD
+                    </h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">
@@ -1677,7 +1765,7 @@ settvlUSD(tvlUSD2);
                         <>Withdraw</>
                       )}
                     </button>
-                    
+
                     {/* <button
                   className="btn filledbtn w-100"
                   onClick={(e) => {
@@ -1740,7 +1828,10 @@ settvlUSD(tvlUSD2);
         <WalletModal
           show={show}
           handleClose={hideModal}
-          handleConnection={()=>{handleConnection(); setshow(false)}}
+          handleConnection={() => {
+            handleConnection();
+            setshow(false);
+          }}
         />
       )}
       {showCalculator && (
