@@ -436,37 +436,53 @@ const Vault = ({
   };
 
   const getTokenPrice = async () => {
-    let pDivsDyp = await vault_contract.methods
-      .platformTokenDivsOwing(coinbase)
-      .call()
-      .then((data) => {
-        return data;
-      });
+    if (vault && vault_contract) {
+      let pDivsDyp = await vault_contract.methods
+        .platformTokenDivsOwing(coinbase)
+        .call()
+        .then((data) => {
+          return data;
+        });
 
-    let pendingRewardsInToken = pDivsDyp;
-    let usdPerToken2 = (await window.getPrices("idefiyieldprotocol"))[
-      "idefiyieldprotocol"
-    ]["usd"];
-    let dId = window.config.cg_ids[vault.tokenAddress.toLowerCase()];
-    let usdPerDepositToken2 = (await window.getPrices(dId))[dId]["usd"];
-    //console.log({usdPerToken, usdPerDepositToken})
-    setusdPerToken(usdPerToken2);
-    setusdPerDepositToken(usdPerDepositToken2);
+      let pendingRewardsInToken = pDivsDyp;
+      let usdPerToken2 = (await window.getPrices("idefiyieldprotocol"))[
+        "idefiyieldprotocol"
+      ]["usd"];
+      let dId = window.config.cg_ids[vault.tokenAddress.toLowerCase()];
+      let usdPerDepositToken2 = (await window.getPrices(dId))[dId]["usd"];
+      //console.log({usdPerToken, usdPerDepositToken})
+      setusdPerToken(usdPerToken2);
+      setusdPerDepositToken(usdPerDepositToken2);
 
-    if (!depositAmount) {
-      let usdValueOfPendingDivsInToken =
-        (usdPerDepositToken2 * pendingRewardsInToken) / 10 ** TOKEN_DECIMALS;
-      let dypAmount = usdValueOfPendingDivsInToken / usdPerToken2;
-      //console.log({ usdValueOfPendingDivsInToken, dypAmount })
-      setRedepositAmount(dypAmount.toFixed(19));
+      if (!depositAmount) {
+        let usdValueOfPendingDivsInToken =
+          (usdPerDepositToken2 * pendingRewardsInToken) / 10 ** TOKEN_DECIMALS;
+        let dypAmount = usdValueOfPendingDivsInToken / usdPerToken2;
+        //console.log({ usdValueOfPendingDivsInToken, dypAmount })
+        setRedepositAmount(dypAmount.toFixed(19));
+      }
     }
   };
 
   const fetchTvl = async () => {
     if (vault) {
+      const infura_web3 = window.infuraWeb3;
+      let token_contr = new infura_web3.eth.Contract(
+        window.TOKEN_ABI,
+        vault.tokenAddress
+      );
+
+      let token_contridyp = new infura_web3.eth.Contract(
+        window.TOKEN_ABI,
+        window.config.reward_token_idyp_address
+      );
+
       vault
-        .getTvlUsdAndApyPercent(UNDERLYING_DECIMALS)
-        .call()
+        .getTvlUsdAndApyPercent(
+          UNDERLYING_DECIMALS,
+          token_contr,
+          token_contridyp
+        )
         .then(({ tvl_usd, apy_percent }) => {
           setapy_percent(apy_percent);
           settvl_usd(tvl_usd);
@@ -489,7 +505,7 @@ const Vault = ({
       .then((res) => res.json())
       .then((data) => setgasPrice(data.fast / 10))
       .catch(console.error);
-  }, [coinbase, coinbase2]);
+  }, [coinbase, coinbase2, vault_contract, vault]);
 
   useEffect(() => {
     const interval = setInterval(async () => {
@@ -1592,7 +1608,7 @@ const Vault = ({
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">TVL USD</span>
                     <h6 className="stats-card-content">
-                      ${getFormattedNumber(tvl_usd, 6)} USD
+                      ${getFormattedNumber(tvlUSD + tvl_usd, 6)} USD
                     </h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">

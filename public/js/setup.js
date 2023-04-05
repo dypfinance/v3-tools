@@ -1341,20 +1341,16 @@ class VAULT_NEW {
 
   getTvlUsdAndApyPercent = async (
     UNDERLYING_DECIMALS = 18,
-    PLATFORM_TOKEN_DECIMALS = 18
+    PLATFORM_TOKEN_DECIMALS = 18,
+    token_contr, token_contridyp
   ) => {
     let ethBalance = await window.infuraWeb3.eth.getBalance(this._address);
     let underlyingBalance1 = await this.totalDepositedTokens();
     
-    let underlyingBalance2 = await (
-      await getTokenContract(this.tokenAddress)
-    ).methods
-      .balanceOf(this._address)
-      .call();
+  
+    let underlyingBalance2 = await token_contr.methods.balanceOf(this._address).call();
 
-    let platformTokenBalance = await (
-      await getTokenContract(window.config.reward_token_idyp_address)
-    ).methods
+    let platformTokenBalance = await token_contridyp.methods
       .balanceOf(this._address)
       .call();
 
@@ -1431,22 +1427,10 @@ class VAULT_NEW {
         (Number(compResult.cToken[0]?.supply_rate?.value) || 0) * 100;
     }
 
-    //console.log({compResult, compoundApyPercent})
 
     apyPercent =
       platformTokenApyPercent + compoundApyPercent + feesApyPercent || 0;
 
-    // console.log({
-    // 	tvlUsd,ethUsdValue,underlyingUsdValue,platformTokenUsdValue,
-    // 	underlyingBalance, ethBalance, platformTokenBalance,
-    //
-    // 	feesApyPercent, platformTokenApyPercent, compoundApyPercent, apyPercent
-    // })
-
-    // console.log({
-    // 	usdValueDisbursed, usdValueDisbursedPerDay, usdValueDisbursedPerYear,
-    // 	usdValueOfDepositedTokens
-    // })
 
     return { tvl_usd: tvlUsd, apy_percent: apyPercent };
   };
