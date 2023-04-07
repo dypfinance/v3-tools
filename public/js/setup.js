@@ -28347,13 +28347,10 @@ async function getCoinbase() {
     return window.coinbase_address.toLowerCase();
   } else 
   
-  // if (
-  //   window.ethereum &&
-  //   !window.coin98 &&
-  //   (window.ethereum.isMetaMask === true || window.trustwallet) &&
-  //   !window.ethereum.overrideIsMetaMask &&
-  //   !window.ethereum.isCoinbaseWallet
-  // ) 
+  if (
+    window.ethereum &&
+    !window.coin98
+  ) 
   
   {
     const coinbase = await window.ethereum.request({
