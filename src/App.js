@@ -40,7 +40,7 @@ import LandPopup from "./components/LandPopup/LandPopup";
 import { withRouter } from "react-router-dom";
 import GenesisStaking from "./components/genesisStaking/GenesisStaking";
 import CawsStaking from "./components/genesisStaking/CawsStaking";
-import Plans from './components/account/Plans'
+import Plans from "./components/account/Plans";
 
 class App extends React.Component {
   constructor(props) {
@@ -102,7 +102,8 @@ class App extends React.Component {
         window.ethereum &&
         (window.ethereum.isMetaMask === true ||
           window.coin98 === true ||
-          window.ethereum.isTrust === true || window.ethereum.isCoinbaseWallet === true)
+          window.ethereum.isTrust === true ||
+          window.ethereum.isCoinbaseWallet === true)
       ) {
         window.ethereum
           .request({ method: "eth_chainId" })
@@ -132,33 +133,36 @@ class App extends React.Component {
             this.refreshSubscription().then();
           })
           .catch(console.error);
-      } else if (window.ethereum && window.ethereum.overrideIsMetaMask === true && !window.ethereum.isCoinbaseWallet) {
-        const chainId = window.ethereum.selectedProvider.chainId
-        
-            if (chainId === "0x1") {
-              this.setState({
-                networkId: "1",
-              });
-            } else if (chainId === "0xa86a") {
-              this.setState({
-                networkId: "43114",
-              });
-            } else if (chainId === "0x38") {
-              this.setState({
-                networkId: "56",
-              });
-            } else if (chainId !== "undefined") {
-              this.setState({
-                networkId: "0",
-              });
-            } else {
-              this.setState({
-                networkId: "1",
-              });
-            }
+      } else if (
+        window.ethereum &&
+        window.ethereum.overrideIsMetaMask === true &&
+        !window.ethereum.isCoinbaseWallet
+      ) {
+        const chainId = window.ethereum.selectedProvider.chainId;
 
-            this.refreshSubscription().then();
-          
+        if (chainId === "0x1") {
+          this.setState({
+            networkId: "1",
+          });
+        } else if (chainId === "0xa86a") {
+          this.setState({
+            networkId: "43114",
+          });
+        } else if (chainId === "0x38") {
+          this.setState({
+            networkId: "56",
+          });
+        } else if (chainId !== "undefined") {
+          this.setState({
+            networkId: "0",
+          });
+        } else {
+          this.setState({
+            networkId: "1",
+          });
+        }
+
+        this.refreshSubscription().then();
       } else {
         this.setState({
           networkId: "1",
@@ -189,18 +193,13 @@ class App extends React.Component {
     const avaxsubscribeAddress = window.config.subscription_address;
     const bnbsubscribeAddress = window.config.subscriptionbnb_address;
 
-
     const ethcontract = new web3eth.eth.Contract(EthABI, ethsubscribeAddress);
     const avaxcontract = new web3avax.eth.Contract(
       AvaxABI,
       avaxsubscribeAddress
     );
 
-    const bnbcontract = new web3bnb.eth.Contract(
-      BnbABI,
-      bnbsubscribeAddress
-    );
-
+    const bnbcontract = new web3bnb.eth.Contract(BnbABI, bnbsubscribeAddress);
 
     if (coinbase) {
       subscribedPlatformTokenAmountETH = await ethcontract.methods
@@ -211,14 +210,14 @@ class App extends React.Component {
         .subscriptionPlatformTokenAmount(coinbase)
         .call();
 
-        subscribedPlatformTokenAmountBNB = await bnbcontract.methods
+      subscribedPlatformTokenAmountBNB = await bnbcontract.methods
         .subscriptionPlatformTokenAmount(coinbase)
         .call();
-        
+
       if (
-        subscribedPlatformTokenAmountAvax === '0' &&
-        subscribedPlatformTokenAmountETH === '0' &&
-        subscribedPlatformTokenAmountBNB === '0'
+        subscribedPlatformTokenAmountAvax === "0" &&
+        subscribedPlatformTokenAmountETH === "0" &&
+        subscribedPlatformTokenAmountBNB === "0"
       ) {
         this.setState({ subscribedPlatformTokenAmount: "0", isPremium: false });
       }
@@ -227,15 +226,12 @@ class App extends React.Component {
           subscribedPlatformTokenAmount: subscribedPlatformTokenAmountAvax,
           isPremium: true,
         });
-      }
-     else if (subscribedPlatformTokenAmountETH !== '0') {
+      } else if (subscribedPlatformTokenAmountETH !== "0") {
         this.setState({
           subscribedPlatformTokenAmount: subscribedPlatformTokenAmountETH,
           isPremium: true,
         });
-      }
-
-     else if (subscribedPlatformTokenAmountBNB !== '0') {
+      } else if (subscribedPlatformTokenAmountBNB !== "0") {
         this.setState({
           subscribedPlatformTokenAmount: subscribedPlatformTokenAmountBNB,
           isPremium: true,
@@ -288,60 +284,65 @@ class App extends React.Component {
 
   tvl = async () => {
     try {
-      let the_graph_result_ETH_V2 = await window.get_the_graph_eth_v2();
-
-      let the_graph_result_AVAX_V2 = await window.get_the_graph_avax_v2();
-
-      let the_graph_result_BSC_V2 = await window.get_the_graph_bsc_v2();
-
-      this.setState({
-        the_graph_result_ETH_V2: JSON.parse(
-          JSON.stringify(the_graph_result_ETH_V2)
-        ),
-      });
-      this.setState({
-        the_graph_result_AVAX_V2: JSON.parse(
-          JSON.stringify(the_graph_result_AVAX_V2)
-        ),
-      });
-
-      this.setState({
-        the_graph_result_BSC_V2: JSON.parse(
-          JSON.stringify(the_graph_result_BSC_V2)
-        ),
-      });
+      if (this.state.networkId === "1") {
+        let the_graph_result_ETH_V2 = await window.get_the_graph_eth_v2();
+        this.setState({
+          the_graph_result_ETH_V2: JSON.parse(
+            JSON.stringify(the_graph_result_ETH_V2)
+          ),
+        });
+      } else if (this.state.networkId === "56") {
+        let the_graph_result_BSC_V2 = await window.get_the_graph_bsc_v2();
+        this.setState({
+          the_graph_result_BSC_V2: JSON.parse(
+            JSON.stringify(the_graph_result_BSC_V2)
+          ),
+        });
+      } else if (this.state.networkId === "43114") {
+        let the_graph_result_AVAX_V2 = await window.get_the_graph_avax_v2();
+        this.setState({
+          the_graph_result_AVAX_V2: JSON.parse(
+            JSON.stringify(the_graph_result_AVAX_V2)
+          ),
+        });
+      }
     } catch (e) {
       // window.alertify.error("Cannot fetch TVL");
       console.error("TVL ETH V2 error: " + e);
     }
 
     try {
-      let the_graph_result = await window.refresh_the_graph_result();
-      let the_graph_resultavax = await window.refresh_the_graph_resultavax();
-      let the_graph_resultbsc = await window.refresh_the_graph_resultavax();
+      if (this.state.networkId === "1") {
+        let the_graph_result = await window.refresh_the_graph_result();
+        this.setState({
+          the_graph_result: JSON.parse(JSON.stringify(the_graph_result)),
+        });
+      } else if (this.state.networkId === "56") {
+        let the_graph_resultbsc = await window.refresh_the_graph_resultavax();
+        this.setState({
+          the_graph_resultbsc: JSON.parse(JSON.stringify(the_graph_resultbsc)),
+        });
+      } else if (this.state.networkId === "43114") {
+        let the_graph_resultavax = await window.refresh_the_graph_resultavax();
 
-      this.setState({
-        the_graph_result: JSON.parse(JSON.stringify(the_graph_result)),
-      });
-
-      this.setState({
-        the_graph_resultavax: JSON.parse(JSON.stringify(the_graph_resultavax)),
-      });
-
-      this.setState({
-        the_graph_resultbsc: JSON.parse(JSON.stringify(the_graph_resultbsc)),
-      });
+        this.setState({
+          the_graph_resultavax: JSON.parse(
+            JSON.stringify(the_graph_resultavax)
+          ),
+        });
+      }
     } catch (e) {
       // window.alertify.error("Cannot fetch TVL");
       console.error("Cannot fetch TVL: " + e);
     }
   };
 
-  handleEthereum() {
+  async handleEthereum() {
     const { ethereum } = window;
     if (ethereum && (ethereum.isMetaMask === true || window.ethereum.isTrust === true)) {
       console.log("Ethereum successfully detected!");
       this.checkNetworkId();
+      await window.getCoinbase()
       // Access the decentralized web!
     } else {
       console.log("Please install MetaMask!");
@@ -352,17 +353,21 @@ class App extends React.Component {
     this.tvl().then();
     this.updateWindowDimensions();
     window.addEventListener("resize", this.updateWindowDimensions);
-    if (window.ethereum && !window.coin98 && (window.ethereum.isMetaMask === true || window.ethereum.isTrust === true) ) {
+    if (
+      window.ethereum &&
+      !window.coin98 &&
+      (window.ethereum.isMetaMask === true || window.ethereum.isTrust === true)
+    ) {
       this.checkConnection();
     }
     this.checkNetworkId();
 
     if (window.ethereum && !window.coin98) {
-      console.log('yes')
+      console.log("yes");
       this.handleEthereum();
-      this.refreshSubscription()
+      this.refreshSubscription();
     } else {
-      console.log('no')
+      console.log("no");
       // If the event is not dispatched by the end of the timeout,
       // the user probably doesn't have MetaMask installed.
     }
@@ -375,12 +380,21 @@ class App extends React.Component {
     // this.subscriptionInterval = setInterval(this.refreshSubscription, 6e4);
   }
 
- checkConnection = async () => {
-  this.refreshSubscription()
+  checkConnection = async () => {
+    this.refreshSubscription();
     const logout = localStorage.getItem("logout");
-    if (logout !== "true" && window.ethereum  && (window.ethereum.isMetaMask === true || window.ethereum.isTrust === true || !window.ethereum.isCoin98 || !window.ethereum.overrideIsMetaMask || !window.ethereum.isCoinbaseWallet)) {
+
+    if (
+      logout !== "true" &&
+      window.ethereum &&
+      (window.ethereum.isMetaMask === true ||
+        window.ethereum.isTrust === true ||
+        !window.ethereum.isCoin98 ||
+        !window.ethereum.overrideIsMetaMask ||
+        !window.ethereum.isCoinbaseWallet)
+    ) {
       await window.ethereum
-        ?.request({ method: "eth_accounts" })
+        .request({ method: "eth_accounts" })
         .then((data) => {
           this.setState({
             isConnected: data.length === 0 ? false : true,
@@ -434,19 +448,21 @@ class App extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     if (this.props.location !== prevProps.location) {
       this.checkNetworkId();
-      this.refreshSubscription()
+      this.refreshSubscription();
     }
     if (this.state.networkId !== prevState.networkId) {
       this.checkNetworkId();
     }
 
     if (this.state.coinbase !== prevState.coinbase) {
-      this.refreshSubscription()
+      this.refreshSubscription();
+      this.checkNetworkId();
+      this.checkConnection();
     }
 
     if (this.state.isConnected !== prevState.isConnected) {
-      this.checkNetworkId()
-      this.checkConnection()
+      this.checkNetworkId();
+      this.checkConnection();
     }
   }
 
@@ -460,10 +476,6 @@ class App extends React.Component {
 
   toggleMobileSidebar = () => {
     this.setState({ isOpenInMobile: !this.state.isOpenInMobile });
-  };
-
-  handleTrustChain = () => {
-    window.location.reload();
   };
 
   render() {
@@ -483,9 +495,7 @@ class App extends React.Component {
       ethereum?.on("accountsChanged", this.checkConnection);
     }
 
-
     document.addEventListener("touchstart", { passive: true });
-
     return (
       <div
         className={`page_wrapper ${this.state.isMinimized ? "minimize" : ""}`}
@@ -784,7 +794,6 @@ class App extends React.Component {
                         isConnected={this.state.isConnected}
                         isPremium={this.state.isPremium}
                         onSubscribe={this.refreshSubscription}
-
                       />
                     )}
                   />

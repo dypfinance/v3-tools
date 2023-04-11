@@ -1342,7 +1342,8 @@ class VAULT_NEW {
   getTvlUsdAndApyPercent = async (
     UNDERLYING_DECIMALS = 18,
     PLATFORM_TOKEN_DECIMALS = 18,
-    token_contr, token_contridyp
+    token_contr,
+    token_contridyp
   ) => {
     let ethBalance = await window.infuraWeb3.eth.getBalance(this._address);
     let underlyingBalance1 = await this.totalDepositedTokens();
@@ -1350,89 +1351,91 @@ class VAULT_NEW {
 
     // ------- apy percent calculations ----------
     let apyPercent = 0;
- if(token_contr && token_contridyp)
-  {  let underlyingBalance2 = await token_contr.methods.balanceOf(this._address).call();
+    if (token_contr && token_contridyp) {
+      let underlyingBalance2 = await token_contr.methods
+        .balanceOf(this._address)
+        .call();
 
-    let platformTokenBalance = await token_contridyp.methods
-      .balanceOf(this._address)
-      .call();
+      let platformTokenBalance = await token_contridyp.methods
+        .balanceOf(this._address)
+        .call();
 
-    ethBalance = ethBalance / 1e18;
-    underlyingBalance1 = underlyingBalance1 / 10 ** UNDERLYING_DECIMALS;
-    underlyingBalance2 = underlyingBalance2 / 10 ** UNDERLYING_DECIMALS;
-    let underlyingBalance = underlyingBalance1 + underlyingBalance2;
-    platformTokenBalance = platformTokenBalance / 10 ** PLATFORM_TOKEN_DECIMALS;
+      ethBalance = ethBalance / 1e18;
+      underlyingBalance1 = underlyingBalance1 / 10 ** UNDERLYING_DECIMALS;
+      underlyingBalance2 = underlyingBalance2 / 10 ** UNDERLYING_DECIMALS;
+      let underlyingBalance = underlyingBalance1 + underlyingBalance2;
+      platformTokenBalance =
+        platformTokenBalance / 10 ** PLATFORM_TOKEN_DECIMALS;
 
-    let underlyingId = window.config.cg_ids[this.tokenAddress.toLowerCase()];
+      let underlyingId = window.config.cg_ids[this.tokenAddress.toLowerCase()];
 
-    let platformTokenId =
-      window.config.cg_ids[
-        window.config.reward_token_idyp_address.toLowerCase()
-      ];
+      let platformTokenId =
+        window.config.cg_ids[
+          window.config.reward_token_idyp_address.toLowerCase()
+        ];
 
-    let priceIds = `ethereum,${underlyingId},${platformTokenId}`;
+      let priceIds = `ethereum,${underlyingId},${platformTokenId}`;
 
-    let prices = await getPrices(priceIds);
-    let ethUsdValue = ethBalance * prices["ethereum"]["usd"] || 0;
-    let underlyingUsdValue =
-      underlyingBalance * prices[underlyingId]["usd"] || 0;
-    let platformTokenUsdValue =
-      platformTokenBalance * prices[platformTokenId]["usd"] || 0;
+      let prices = await getPrices(priceIds);
+      let ethUsdValue = ethBalance * prices["ethereum"]["usd"] || 0;
+      let underlyingUsdValue =
+        underlyingBalance * prices[underlyingId]["usd"] || 0;
+      let platformTokenUsdValue =
+        platformTokenBalance * prices[platformTokenId]["usd"] || 0;
 
-     tvlUsd = ethUsdValue + underlyingUsdValue + platformTokenUsdValue || 0;
+      tvlUsd = ethUsdValue + underlyingUsdValue + platformTokenUsdValue || 0;
 
-    // ------- apy percent calculations ----------
+      // ------- apy percent calculations ----------
 
-    let platformTokenApyPercent = 0;
+      let platformTokenApyPercent = 0;
 
-    let contractStartTime = await this.contractStartTime();
-    let now = Math.floor(Date.now() / 1e3);
-    let daysSinceDeployment = Math.floor(
-      Math.max(1, (now - contractStartTime) / 60 / 60 / 24 || 1)
-    );
-    let totalEthDisbursed = await this.totalEthDisbursed();
-    let totalTokensDisbursed = await this.totalTokensDisbursed();
+      let contractStartTime = await this.contractStartTime();
+      let now = Math.floor(Date.now() / 1e3);
+      let daysSinceDeployment = Math.floor(
+        Math.max(1, (now - contractStartTime) / 60 / 60 / 24 || 1)
+      );
+      let totalEthDisbursed = await this.totalEthDisbursed();
+      let totalTokensDisbursed = await this.totalTokensDisbursed();
 
-    totalEthDisbursed = totalEthDisbursed / 1e18;
-    totalTokensDisbursed = totalTokensDisbursed / 10 ** UNDERLYING_DECIMALS;
+      totalEthDisbursed = totalEthDisbursed / 1e18;
+      totalTokensDisbursed = totalTokensDisbursed / 10 ** UNDERLYING_DECIMALS;
 
-    let usdValueOfEthDisbursed =
-      totalEthDisbursed * prices["ethereum"]["usd"] || 0;
-    let usdValueOfTokenDisbursed =
-      totalTokensDisbursed * prices[underlyingId]["usd"] || 0;
-    let usdValueDisbursed =
-      usdValueOfEthDisbursed + usdValueOfTokenDisbursed || 0;
-    let usdValueDisbursedPerDay = usdValueDisbursed / daysSinceDeployment;
+      let usdValueOfEthDisbursed =
+        totalEthDisbursed * prices["ethereum"]["usd"] || 0;
+      let usdValueOfTokenDisbursed =
+        totalTokensDisbursed * prices[underlyingId]["usd"] || 0;
+      let usdValueDisbursed =
+        usdValueOfEthDisbursed + usdValueOfTokenDisbursed || 0;
+      let usdValueDisbursedPerDay = usdValueDisbursed / daysSinceDeployment;
 
-    let usdValueDisbursedPerYear = usdValueDisbursedPerDay * 365;
+      let usdValueDisbursedPerYear = usdValueDisbursedPerDay * 365;
 
-    let usdValueOfDepositedTokens =
-      underlyingBalance1 * prices[underlyingId]["usd"] || 1;
+      let usdValueOfDepositedTokens =
+        underlyingBalance1 * prices[underlyingId]["usd"] || 1;
 
-    let feesApyPercent =
-      (usdValueDisbursedPerYear / usdValueOfDepositedTokens) * 100;
+      let feesApyPercent =
+        (usdValueDisbursedPerYear / usdValueOfDepositedTokens) * 100;
 
-    let compoundApyPercent = 0;
+      let compoundApyPercent = 0;
 
-    let ctokenAddr = await this.TRUSTED_CTOKEN_ADDRESS();
+      let ctokenAddr = await this.TRUSTED_CTOKEN_ADDRESS();
 
-    let compResult = await window.jQuery.ajax({
-      url: `https://api.compound.finance/api/v2/ctoken?addresses=${ctokenAddr}&network=${window.config.compound_network}`,
-      method: "GET",
-      headers: {
-        "compound-api-key": window.config.compound_api_key,
-      },
-    });
+      let compResult = await window.jQuery.ajax({
+        url: `https://api.compound.finance/api/v2/ctoken?addresses=${ctokenAddr}&network=${window.config.compound_network}`,
+        method: "GET",
+        headers: {
+          "compound-api-key": window.config.compound_api_key,
+        },
+      });
 
-    if (!compResult.error) {
-      compoundApyPercent =
-        (Number(compResult.cToken[0]?.supply_rate?.value) || 0) * 100;
+      if (!compResult.error) {
+        compoundApyPercent =
+          (Number(compResult.cToken[0]?.supply_rate?.value) || 0) * 100;
+      }
+
+      apyPercent =
+        platformTokenApyPercent + compoundApyPercent + feesApyPercent || 0;
     }
-
-
-    apyPercent =
-      platformTokenApyPercent + compoundApyPercent + feesApyPercent || 0;
-}
 
     return { tvl_usd: tvlUsd, apy_percent: apyPercent };
   };
@@ -1457,7 +1460,6 @@ window.config = {
   default_gas_amount: 1200000,
 
   farmweth_address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2", //farm weth
-
 
   wethavax_address: "0xf20d962a6c8f70c731bd838a3a388d7d48fa6e15",
   wethbsc_address: "0x2170ed0880ac9a755fd29b2688956bd959f933f8",
@@ -1721,7 +1723,7 @@ window.config = {
   constant_stakingidypavax_4_address:
     "0xb1875eeBbcF4456188968f439896053809698a8B",
 
-    constant_stakingidypavax_40_address:
+  constant_stakingidypavax_40_address:
     "0x6eb643813f0b4351b993f98bdeaef6e0f79573e9",
 
   constant_stakingnew_newavax1_address:
@@ -1984,7 +1986,7 @@ window.config = {
     "0xef9e50A19358CCC8816d9BC2c2355aea596efd06",
   constant_stakingbsc_new11_address:
     "0xfc4493e85fd5424456f22135db6864dd4e4ed662",
-    constant_stakingbsc_new111_address:
+  constant_stakingbsc_new111_address:
     "0x7c82513b69c1b42c23760cfc34234558119a3399",
 
   constant_stakingbsc_new12_address:
@@ -2261,7 +2263,6 @@ window.constant_staking_new12 = new CONSTANT_STAKING_NEWAVAX(
 window.CONSTANT_STAKINGIDYPAVAX_3_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYPAVAX_4_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYPAVAX_40_ABI = window.CONSTANT_STAKING_IDYP_ABI;
-
 
 window.CONSTANT_STAKINGNEW_NEW1_ABI = window.CONSTANT_STAKINGNEW_ABI;
 window.CONSTANT_STAKINGNEW_NEW2_ABI = window.CONSTANT_STAKINGNEW_ABI;
@@ -2967,9 +2968,7 @@ class LANDNFT {
 
   async approveStake(addr) {
     let nft_contract = await getContractLandNFT("LANDNFTSTAKE");
-    return await nft_contract.methods
-      .setApprovalForAll(addr, true)
-      .send();
+    return await nft_contract.methods.setApprovalForAll(addr, true).send();
   }
 
   async checkapproveStake(useraddr, addr) {
@@ -3074,42 +3073,45 @@ class WOD_CAWS {
 
   async depositWodCaws(cawsArray, landArray) {
     const nft_contract = await getContractWodCawsNFT("WOD_CAWS");
-    let second = await nft_contract.methods.deposit(cawsArray,landArray).send({
-      from: await getCoinbase()
-    })
-   
+    let second = await nft_contract.methods.deposit(cawsArray, landArray).send({
+      from: await getCoinbase(),
+    });
   }
 
   async claimRewardsWodCaws(cawsArray) {
     let nft_contract = await getContractWodCawsNFT("WOD_CAWS");
     return await nft_contract.methods
       .claimRewards(cawsArray)
-      .send({from: await getCoinbase()})
+      .send({ from: await getCoinbase() });
   }
 
   async withdrawWodCaws(cawsArray, landArray) {
     let nft_contract = await getContractWodCawsNFT("WOD_CAWS");
-    return await nft_contract.methods.withdraw(cawsArray, landArray).send({from: await getCoinbase()})
+    return await nft_contract.methods
+      .withdraw(cawsArray, landArray)
+      .send({ from: await getCoinbase() });
   }
 
   async calculateRewardWodCaws(address, tokenId) {
     let nft_contract = await getContractWodCawsNFT("WOD_CAWS");
-    return await nft_contract.methods.calculateReward(address, tokenId).call()
+    return await nft_contract.methods.calculateReward(address, tokenId).call();
   }
 
   async calculateRewardsWodCaws(address, tokenArray) {
     let nft_contract = await getContractWodCawsNFT("WOD_CAWS");
-    return await nft_contract.methods.calculateRewards(address, tokenArray).call()
+    return await nft_contract.methods
+      .calculateRewards(address, tokenArray)
+      .call();
   }
 
   async depositsOfCaws(address) {
     let nft_contract = await getContractWodCawsNFT("WOD_CAWS");
-    return await nft_contract.methods.depositsOf(address).call()
+    return await nft_contract.methods.depositsOf(address).call();
   }
 
   async depositsOfWod(address) {
     let nft_contract = await getContractWodCawsNFT("WOD_CAWS");
-    return await nft_contract.methods.depositsOfWoD(address).call()
+    return await nft_contract.methods.depositsOfWoD(address).call();
   }
 
   async checkLockupTimeWodCaws() {
@@ -3121,14 +3123,13 @@ class WOD_CAWS {
 
   async checkStakingTimeWodCaws(address) {
     let nft_contract = await getContractWodCawsNFT("WOD_CAWS");
-    const stakingTime = await nft_contract.methods.stakingTime(address).call()
-    
+    const stakingTime = await nft_contract.methods.stakingTime(address).call();
+
     return stakingTime;
   }
 }
 
 window.wod_caws = new WOD_CAWS();
-
 
 window.landnft = new LANDNFT();
 
@@ -28310,17 +28311,14 @@ async function connectWallet(provider, walletType) {
         window.WALLET_TYPE = "metamask";
       else if (window.ethereum.isCoinbaseWallet)
         window.WALLET_TYPE = "coinbase";
-      else if (
-        window.ethereum.isTrust === true &&
-        window.ethereum.isMetaMask === false
-      )
-        window.WALLET_TYPE = "trustwallet";
+      else if (window.trustwallet) window.WALLET_TYPE = "trustwallet";
 
       let coinbase_address = await window.ethereum.request({
         method: "eth_accounts",
       });
 
       window.coinbase_address = coinbase_address.pop();
+      console.log(window.coinbase_address)
       return true;
     } catch (e) {
       console.error(e);
@@ -28347,13 +28345,14 @@ window.cached_contracts = Object.create(null);
 async function getCoinbase() {
   if (window.ethereum && (window.coin98 || window.ethereum.isCoinbaseWallet)) {
     return window.coinbase_address.toLowerCase();
-  } else if (
+  } else 
+  
+  if (
     window.ethereum &&
-    !window.coin98 &&
-    (window.ethereum.isMetaMask === true || window.ethereum.isTrust === true) &&
-    !window.ethereum.overrideIsMetaMask &&
-    !window.ethereum.isCoinbaseWallet
-  ) {
+    !window.coin98
+  ) 
+  
+  {
     const coinbase = await window.ethereum.request({
       method: "eth_accounts",
     });
@@ -28753,7 +28752,6 @@ Object.keys(window.config)
       k.startsWith("constant_stakingidypavax_3") ||
       k.startsWith("constant_stakingidypavax_4") ||
       k.startsWith("constant_stakingidypavax_40") ||
-
       k.startsWith("constant_stakingnew_newavax1") ||
       k.startsWith("constant_stakingnewbsc_new3") ||
       k.startsWith("constant_stakingnewbsc_new4") ||
