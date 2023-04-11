@@ -9757,7 +9757,69 @@ const EarnTopPicks = ({
                           : "No Lock"
                       }
                     />
-                  ) : activeCard3 && topList === "Vault" ? (
+                  ): activeCard3 &&
+                  topList === "Staking" &&
+                  chain === "avax" &&
+                 activePools[cardIndex].id ===
+                    "0xb1875eeBbcF4456188968f439896053809698a8B"  ? (
+                      <StakeAvax
+                      is_wallet_connected={isConnected}
+                      coinbase={coinbase}
+                      the_graph_result={the_graph_resultavax}
+                      chainId={chainId}
+                      handleConnection={handleConnection}
+                      handleSwitchNetwork={handleSwitchNetwork}
+                      expired={false}
+                      staking={window.constant_staking_new11}
+                      listType={listType}
+                      finalApr={
+                        expiredPools === false
+                          ? activePools[cardIndex]?.apy_performancefee
+                          : expiredDYPPools[cardIndex]?.apy_performancefee
+                      }
+                      apr={
+                        expiredPools === false
+                          ? activePools[cardIndex]?.apy_percent
+                          : expiredDYPPools[cardIndex]?.apy_percent
+                      }
+                      liquidity={avax_address}
+                      expiration_time={"15 August 2023"}
+                      other_info={
+                        cardIndex !== undefined
+                          ? expiredPools === false
+                            ? activePools[cardIndex]?.expired === "Yes"
+                              ? true
+                              : false
+                            : expiredDYPPools[cardIndex]?.expired === "Yes"
+                            ? true
+                            : false
+                          : false
+                      }
+                      fee_s={
+                        expiredPools === false
+                          ? activePools[cardIndex]?.performancefee
+                          : expiredDYPPools[cardIndex]?.performancefee
+                      }
+                      fee_u={feeUarrayStakeAvaxiDyp[cardIndexavaxiDyp - 3]}
+                      lockTime={
+                        cardIndex !== undefined
+                          ? expiredPools === false
+                            ? activePools[cardIndex]?.lock_time?.split(
+                                " "
+                              )[0] === "No"
+                              ? "No Lock"
+                              : activePools[cardIndex]?.lock_time?.split(" ")[0]
+                            : expiredDYPPools[cardIndex]?.lock_time?.split(
+                                " "
+                              )[0] === "No"
+                            ? "No Lock"
+                            : expiredDYPPools[cardIndex]?.lock_time?.split(
+                                " "
+                              )[0]
+                          : "No Lock"
+                      }
+                    />
+                ) : activeCard3 && topList === "Vault" ? (
                     <Vault
                       vault={vaultArray[cardIndex]}
                       token={tokenvaultArray[cardIndex]}

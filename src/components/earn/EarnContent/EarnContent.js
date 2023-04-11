@@ -319,7 +319,7 @@ const EarnContent = ({
       window.ethereum &&
       (window.ethereum.isMetaMask === true ||
         window.coin98 === true ||
-        window.ethereum.isTrust === true || window.ethereum.isCoinbaseWallet === true)
+        window.trustwallet || window.ethereum.isCoinbaseWallet === true)
     ) {
       window.ethereum
         .request({ method: "eth_chainId" })
@@ -363,7 +363,7 @@ const EarnContent = ({
     if (option === "Farming" || option === "Buyback" || option === "Staking") {
       checkNetworkId()
     }
-  }, [option, routeChain, networkId]);
+  }, [option, routeChain, networkId, chainId]);
 
 
 

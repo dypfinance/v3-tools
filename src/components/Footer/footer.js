@@ -26,31 +26,31 @@ const Footer = () => {
       <span className="mobile-footer-title d-flex d-lg-none mb-3">Community</span>
         <ul>
           <li>
-            <a target={"_blank"} href="https://twitter.com/dypfinance">
+            <a target={"_blank"} href="https://twitter.com/dypius">
               <img src="/assets/img/Social/twitter.svg" alt="Twitter"
               height={24} width={24}></img>
             </a>
           </li>
           <li>
-            <a target={"_blank"} href="https://t.me/dypfinance">
+            <a target={"_blank"} href="https://t.me/dypius">
               <img src="/assets/img/Social/telegram.svg" alt="Telegram"
               height={24} width={24}></img>
             </a>
           </li>
           <li>
-            <a target={"_blank"} href="https://discord.com/invite/dypcaws">
+            <a target={"_blank"} href="https://discord.gg/worldofdypians">
               <img src="/assets/img/Social/discord.svg" alt="Discord"
               height={24} width={24}></img>
             </a>
           </li>
           <li>
-            <a target={"_blank"} href="https://www.instagram.com/dyp.finance/">
+            <a target={"_blank"} href="https://www.instagram.com/dyp.eth">
               <img src="/assets/img/Social/instagram.svg" style={{height: 23, width: 23}} alt="Instagram"
               height={24} width={24}></img>
             </a>
           </li>
           <li>
-            <a target={"_blank"} href="https://dypfinance.medium.com/">
+            <a target={"_blank"} href="https://medium.com/@dypius">
               <img src="/assets/img/Social/medium.svg" alt="Medium"
               height={24} width={24}></img>
             </a>
@@ -58,7 +58,7 @@ const Footer = () => {
           <li>
             <a
               target={"_blank"}
-              href="https://www.youtube.com/c/DeFiYieldProtocol/featured"
+              href="https://www.youtube.com/@Dypius"
             >
               <img src="/assets/img/Social/youtube.svg" alt="Youtube"
               height={24} width={24}></img>
@@ -67,7 +67,7 @@ const Footer = () => {
           <li>
             <a
               target={"_blank"}
-              href="https://www.linkedin.com/company/defi-yield-protocol"
+              href="https://www.linkedin.com/company/dypius-ecosystem"
             >
               <img src="/assets/img/Social/linkedin.svg" alt="Linkedin"
               height={24} width={24}></img>
