@@ -314,12 +314,12 @@ const EarnContent = ({
   }, [option, stake, chainId]);
 
   const checkNetworkId = () => {
-
     if (
       window.ethereum &&
       (window.ethereum.isMetaMask === true ||
         window.coin98 === true ||
-        window.trustwallet || window.ethereum.isCoinbaseWallet === true)
+        window.trustwallet ||
+        window.ethereum.isCoinbaseWallet === true)
     ) {
       window.ethereum
         .request({ method: "eth_chainId" })
@@ -335,11 +335,14 @@ const EarnContent = ({
           } else {
             setStake("eth");
           }
-
         })
         .catch(console.error);
-    } else if (window.ethereum && window.ethereum.overrideIsMetaMask === true && !window.ethereum.isCoinbaseWallet) {
-      const chainId = window.ethereum.selectedProvider.chainId
+    } else if (
+      window.ethereum &&
+      window.ethereum.overrideIsMetaMask === true &&
+      !window.ethereum.isCoinbaseWallet
+    ) {
+      const chainId = window.ethereum.selectedProvider.chainId;
 
       if (chainId === "0x1") {
         setStake("eth");
@@ -352,20 +355,16 @@ const EarnContent = ({
       } else {
         setStake("eth");
       }
-
     } else {
       setStake("eth");
     }
-
   };
 
   useEffect(() => {
-    if (option === "Farming" || option === "Buyback" || option === "Staking") {
-      checkNetworkId()
+    if (option === "Farming" || option === "Vault" || option === "Staking") {
+      checkNetworkId();
     }
   }, [option, routeChain, networkId, chainId]);
-
-
 
   const setVaultEth = (vault) => {
     if (vault === "Vault") {
@@ -384,8 +383,9 @@ const EarnContent = ({
           >
             <div className="col-2 d-flex justify-content-start align-items-center gap-3">
               <div
-                className={`list-style ${listStyle === "table" && "list-style-active"
-                  }`}
+                className={`list-style ${
+                  listStyle === "table" && "list-style-active"
+                }`}
                 onClick={() => setListStyle("table")}
               >
                 <img
@@ -394,8 +394,9 @@ const EarnContent = ({
                 />
               </div>
               <div
-                className={`list-style ${listStyle === "list" && "list-style-active"
-                  }`}
+                className={`list-style ${
+                  listStyle === "list" && "list-style-active"
+                }`}
                 onClick={() => setListStyle("list")}
               >
                 <img
@@ -407,8 +408,9 @@ const EarnContent = ({
             <div className="col-8 row d-flex gap-0 gap-xl-3 justify-content-center p-2">
               {options.map((item, index) => (
                 <div
-                  className={`earn-option col-3 col-xl-2 d-flex align-items-center justify-content-center ${option === item.title ? "earn-option-active" : null
-                    }`}
+                  className={`earn-option col-3 col-xl-2 d-flex align-items-center justify-content-center ${
+                    option === item.title ? "earn-option-active" : null
+                  }`}
                   key={index}
                   onClick={() => {
                     setOption(item.title);
@@ -454,8 +456,9 @@ const EarnContent = ({
           >
             <div className="col-6 d-flex px-0 px-lg-2 justify-content-start align-items-center gap-3">
               <div
-                className={`list-style ${listStyle === "table" && "list-style-active"
-                  }`}
+                className={`list-style ${
+                  listStyle === "table" && "list-style-active"
+                }`}
                 onClick={() => setListStyle("table")}
               >
                 <img
@@ -464,8 +467,9 @@ const EarnContent = ({
                 />
               </div>
               <div
-                className={`list-style ${listStyle === "list" && "list-style-active"
-                  }`}
+                className={`list-style ${
+                  listStyle === "list" && "list-style-active"
+                }`}
                 onClick={() => setListStyle("list")}
               >
                 <img
@@ -489,8 +493,9 @@ const EarnContent = ({
             <div className="col-12 row d-flex gap-0 gap-xl-3 justify-content-center px-0 px-lg-22 mt-3">
               {options.map((item, index) => (
                 <div
-                  className={`earn-option col col-lg-3 col-xl-2 d-flex align-items-center justify-content-center ${option === item.title ? "earn-option-active" : null
-                    }`}
+                  className={`earn-option col col-lg-3 col-xl-2 d-flex align-items-center justify-content-center ${
+                    option === item.title ? "earn-option-active" : null
+                  }`}
                   key={index}
                   onClick={() => {
                     setOption(item.title);
@@ -523,13 +528,10 @@ const EarnContent = ({
           </div>
         )}
 
-        {option !== "Farming" && (
+        {option !== "Farming" && option!== 'Vault' && (
           <>
             <div
-              className={`row align-items-center gap-5 gap-lg-0 justify-content-between px-0 ${option === "Vault" && expiredPools === true
-                  ? "d-none"
-                  : "d-flex"
-                }`}
+              className={`row align-items-center gap-5 gap-lg-0 justify-content-between px-0 `}
               style={{ minHeight: "55px" }}
             >
               <div className="col-12 col-lg-4 col-xl-3 px-0">
@@ -549,8 +551,9 @@ const EarnContent = ({
                 {option !== "Vault" ? (
                   <>
                     <div
-                      className={`stake-item position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${stake === "eth" ? "eth-item-active" : null
-                        }`}
+                      className={`stake-item position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
+                        stake === "eth" ? "eth-item-active" : null
+                      }`}
                       onClick={() => {
                         setStake("eth");
                         // fetchEthTvl();
@@ -580,8 +583,9 @@ const EarnContent = ({
                       </div>
                     </div>
                     <div
-                      className={`stake-item position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${stake === "bnb" ? "bsc-item-active" : null
-                        }`}
+                      className={`stake-item position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
+                        stake === "bnb" ? "bsc-item-active" : null
+                      }`}
                       onClick={() => {
                         setStake("bnb");
                         // fetchBscTvl();
@@ -624,8 +628,9 @@ const EarnContent = ({
                       </div>
                     </div>
                     <div
-                      className={`stake-item position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${stake === "avax" ? "avax-item-active" : null
-                        }`}
+                      className={`stake-item position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
+                        stake === "avax" ? "avax-item-active" : null
+                      }`}
                       onClick={() => {
                         setStake("avax");
                         // fetchAvaxTvl();
@@ -668,15 +673,12 @@ const EarnContent = ({
                       </div>
                     </div>
                   </>
-                ) : option === "Vault" && chainId !== "1" ? (
-                  <h4 className="text-white">
-                    Vault pools are available only on Ethereum Chain
-                  </h4>
                 ) : (
                   <>
                     <div
-                      className={`stake-item d-none position-relative d-flex align-items-center gap-2 ${stake === "eth" ? "eth-item-active" : null
-                        }`}
+                      className={`stake-item d-none position-relative d-flex align-items-center gap-2 ${
+                        stake === "eth" ? "eth-item-active" : null
+                      }`}
                       onClick={() => {
                         setStake("eth");
                         fetchEthTvl();
@@ -705,15 +707,15 @@ const EarnContent = ({
                       </div>
                     </div>
                     <div
-                      className={`stake-item d-none position-relative d-flex align-items-center gap-2 ${stake === "bnb" ? "bsc-item-active" : null
-                        }`}
+                      className={`stake-item d-none position-relative d-flex align-items-center gap-2 ${
+                        stake === "bnb" ? "bsc-item-active" : null
+                      }`}
                       onClick={() => {
                         setStake("bnb");
                         // fetchBscTvl();
                       }}
                       style={{ opacity: "0.5" }}
                     >
-
                       <img
                         src={stake === "bnb" ? bnbStakeActive : bnbStake}
                         alt=""
@@ -737,8 +739,9 @@ const EarnContent = ({
                       </div>
                     </div>
                     <div
-                      className={`stake-item d-none position-relative d-flex align-items-center gap-2 ${stake === "avax" ? "avax-item-active" : null
-                        }`}
+                      className={`stake-item d-none position-relative d-flex align-items-center gap-2 ${
+                        stake === "avax" ? "avax-item-active" : null
+                      }`}
                       onClick={() => {
                         setStake("avax");
                         // fetchAvaxTvl();
@@ -786,7 +789,7 @@ const EarnContent = ({
           </>
         )}
       </div>
-      {option !== "Farming" && expiredPools === false ? (
+      {option !== "Farming" && option !== "Vault" && expiredPools === false ? (
         <EarnTopPicks
           topList={option}
           listType={listStyle}
@@ -819,7 +822,7 @@ const EarnContent = ({
           <h6 className="no-farms">No farming pools available</h6>
           <span className="farm-soon">New pools coming soon...</span>
         </div>
-      ) : option === "Vault" && expiredPools === true ? (
+      ) : option === "Vault" && expiredPools === false ? (
         <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
           <img
             src={
@@ -828,22 +831,10 @@ const EarnContent = ({
             style={{ width: "150px", height: "150px" }}
             alt=""
           />
-          <h6 className="no-farms">There are no expired Vault pools</h6>
-          {/* <span className="farm-soon">New pools coming soon...</span> */}
+            <h6 className="no-farms">No Vault pools available</h6>
+          <span className="farm-soon">New pools coming soon...</span>
         </div>
-      ) : option === "Vault" && chainId !== "1" && expiredPools === false ? (
-        <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
-          <img
-            src={
-              require("../../../assets/earnAssets/disabledVault.svg").default
-            }
-            style={{ width: "150px", height: "150px" }}
-            alt=""
-          />
-          <h6 className="no-farms">There are no Vault pools in this chain</h6>
-          {/* <span className="farm-soon">New pools coming soon...</span> */}
-        </div>
-      ) : expiredPools === true ? (
+      ) : (
         <EarnTopPicks
           topList={option}
           listType={listStyle}
@@ -864,26 +855,6 @@ const EarnContent = ({
           handleSwitchNetwork={handleSwitchNetwork}
           expiredPools={expiredPools}
         />
-      ) : (
-        <EarnTopPicks
-          topList={option}
-          listType={listStyle}
-          chain={stake}
-          coinbase={coinbase}
-          the_graph_result={the_graph_result}
-          lp_id={lp_id}
-          isConnected={isConnected}
-          chainId={chainId}
-          handleConnection={handleConnection}
-          the_graph_resultavax={the_graph_resultavax}
-          the_graph_resultbsc={the_graph_resultbsc}
-          referrer={referrer}
-          pool={pool}
-          routeOption={routeOption}
-          customChain={customChain}
-          handleSwitchNetwork={handleSwitchNetwork}
-          expiredPools={expiredPools}
-        />
       )}
       <EarnFaq faqTypes={option} faqIndex={faqIndex} />
     </>
@@ -891,4 +862,3 @@ const EarnContent = ({
 };
 
 export default EarnContent;
-

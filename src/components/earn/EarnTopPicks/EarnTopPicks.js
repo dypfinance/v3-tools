@@ -628,7 +628,7 @@ const EarnTopPicks = ({
         // setTimeout(() => {
          await fetchAvaxStaking();
         // }, 500);
-      } else if (chain === "eth" && chain !== "bnb" && chain !== "avax" ) {
+      } else if (chain === "eth" && chain !== "bnb" && chain !== "avax" && topList === "Staking" ) {
         // setTimeout(() => {
           await fetchEthStaking();
         // }, 500);
@@ -667,48 +667,8 @@ const EarnTopPicks = ({
         handleCardIndexStake30(2);
         handleCardIndexStakeiDyp(2);
       }
-      if (routeOption === "BuyBack" && chain === "eth") {
-        setDetails(1);
-        setActiveCard(topPools[1]);
-        handleCardIndexStake(1);
-        handleCardIndexStake30(1);
-        handleCardIndexStakeiDyp(1);
-      }
-      if (routeOption === "BuyBack" && chain === "bnb") {
-        setDetails(0);
-        setActiveCard(topPools[0]);
-        handleCardIndexStake(0);
-        handleCardIndexStake30(0);
-        handleCardIndexStakeiDyp(0);
-      }
-      if (routeOption === "BuyBack" && chain === "avax") {
-        setDetails(0);
-        setActiveCard(topPools[0]);
-        handleCardIndexStake(0);
-        handleCardIndexStake30(0);
-        handleCardIndexStakeiDyp(0);
-      }
-      if (routeOption === "Vault" && customChain === "eth") {
-        setDetails(0);
-        setActiveCard(topPools[0]);
-        handleCardIndexStake(0);
-        handleCardIndexStake30(0);
-        handleCardIndexStakeiDyp(0);
-      }
-      if (routeOption === "Vault" && customChain === "bnb") {
-        setDetails(2);
-        setActiveCard(topPools[2]);
-        handleCardIndexStake(2);
-        handleCardIndexStake30(2);
-        handleCardIndexStakeiDyp(2);
-      }
-      if (routeOption === "Vault" && customChain === "avax") {
-        setDetails(3);
-        setActiveCard2(topPools[3]);
-        handleCardIndexStake(3);
-        handleCardIndexStake30(3);
-        handleCardIndexStakeiDyp(3);
-      }
+
+    
       if (routeOption === "Farming" && chain === "eth") {
         setDetails(4);
         setActiveCard2(topPools[4]);
@@ -757,30 +717,22 @@ const EarnTopPicks = ({
   ]);
 
   useEffect(() => {
-    if (topList === "Vault" && chainId === "1") {
-      setTopPools([]);
-
-      setTimeout(() => {
+    if (topList === "Vault" && chainId === "1" && expiredPools === true) {
+      // setTopPools([]);
+      // setTimeout(() => {
         setTopPools(vault);
-        setActivePools(vault);
-        setExpiredPools([]);
-      }, 500);
-    } else if (topList === "Vault" && chainId !== "1") {
-      setTopPools([]);
-      setTimeout(() => {
-        setTopPools([]);
+        setExpiredPools(vault);
         setActivePools([]);
-        setExpiredPools([]);
-      }, 500);
+      // }, 500);
     }
-  }, [topList, chainId, chain, coinbase]);
+  }, [topList, chainId, chain, coinbase, expiredPools]);
 
 
 
   useEffect(() => {
     fetchUserPools();
     setActiveCard();
-    fetchStakingData().then()
+    fetchStakingData()
   }, [topList, chain, coinbase, networkId, chainId, expiredPools, listType]);
 
   const handleCardIndexStake = (index) => {
@@ -814,7 +766,7 @@ const EarnTopPicks = ({
   };
 
 
-
+  
   return topPools.length > 0 && expiredPools === false ? (
     <div className={`row w-100 justify-content-center gap-4`}>
       {expiredPools === false ? (
@@ -1728,25 +1680,7 @@ const EarnTopPicks = ({
                           : "No Lock"
                       }
                     />
-                  ) : activeCard && topList === "Vault" && chain === "eth" ? (
-                    <Vault
-                      vault={vaultArray[cardIndex]}
-                      token={tokenvaultArray[cardIndex]}
-                      platformTokenApyPercent={vaultplatformArray[cardIndex]}
-                      UNDERLYING_DECIMALS={vaultdecimalsArray[cardIndex]}
-                      UNDERLYING_SYMBOL={vaultsymbolArray[cardIndex]}
-                      expiration_time={"04 March 2023"}
-                      coinbase={coinbase}
-                      lockTime={"No Lock"}
-                      handleConnection={handleConnection}
-                      chainId={chainId}
-                      listType={listType}
-                      handleSwitchNetwork={handleSwitchNetwork}
-                      expired={false}
-                      isConnected={isConnected}
-                      the_graph_result={the_graph_result}
-                    />
-                  ) : (
+                  )  : (
                     <></>
                   )}
                 </>
@@ -2534,24 +2468,6 @@ const EarnTopPicks = ({
                         : "No Lock"
                     }
                   />
-                ) : activeCard2 && topList === "Vault" && chain === "eth" ? (
-                  <Vault
-                    vault={vaultArray[cardIndex]}
-                    token={tokenvaultArray[cardIndex]}
-                    platformTokenApyPercent={vaultplatformArray[cardIndex]}
-                    UNDERLYING_DECIMALS={vaultdecimalsArray[cardIndex]}
-                    UNDERLYING_SYMBOL={vaultsymbolArray[cardIndex]}
-                    expiration_time={"04 March 2023"}
-                    coinbase={coinbase}
-                    lockTime={"No Lock"}
-                    handleConnection={handleConnection}
-                    chainId={chainId}
-                    listType={listType}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
-                    isConnected={isConnected}
-                    the_graph_result={the_graph_result}
-                  />
                 ) : (
                   <></>
                 )}
@@ -3156,24 +3072,6 @@ const EarnTopPicks = ({
                         : "No Lock"
                     }
                   />
-                ) : activeCard3 && topList === "Vault" && chain === "eth" ? (
-                  <Vault
-                    vault={vaultArray[cardIndex]}
-                    token={tokenvaultArray[cardIndex]}
-                    platformTokenApyPercent={vaultplatformArray[cardIndex]}
-                    UNDERLYING_DECIMALS={vaultdecimalsArray[cardIndex]}
-                    UNDERLYING_SYMBOL={vaultsymbolArray[cardIndex]}
-                    expiration_time={"04 March 2023"}
-                    coinbase={coinbase}
-                    lockTime={"No Lock"}
-                    handleConnection={handleConnection}
-                    chainId={chainId}
-                    listType={listType}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
-                    isConnected={isConnected}
-                    the_graph_result={the_graph_result}
-                  />
                 ) : (
                   <></>
                 )}
@@ -3706,24 +3604,6 @@ const EarnTopPicks = ({
                           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
                         : "No Lock"
                     }
-                  />
-                ) : activeCard4 && topList === "Vault" ? (
-                  <Vault
-                    vault={vaultArray[cardIndex]}
-                    token={tokenvaultArray[cardIndex]}
-                    platformTokenApyPercent={vaultplatformArray[cardIndex]}
-                    UNDERLYING_DECIMALS={vaultdecimalsArray[cardIndex]}
-                    UNDERLYING_SYMBOL={vaultsymbolArray[cardIndex]}
-                    expiration_time={"04 March 2023"}
-                    coinbase={coinbase}
-                    lockTime={"No Lock"}
-                    handleConnection={handleConnection}
-                    chainId={chainId}
-                    listType={listType}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
-                    isConnected={isConnected}
-                    the_graph_result={the_graph_result}
                   />
                 ) : (
                   <></>
@@ -4610,24 +4490,6 @@ const EarnTopPicks = ({
                         : "No Lock"
                     }
                   />
-                ) : activeCard && topList === "Vault" ? (
-                  <Vault
-                    vault={vaultArray[cardIndex]}
-                    token={tokenvaultArray[cardIndex]}
-                    platformTokenApyPercent={vaultplatformArray[cardIndex]}
-                    UNDERLYING_DECIMALS={vaultdecimalsArray[cardIndex]}
-                    UNDERLYING_SYMBOL={vaultsymbolArray[cardIndex]}
-                    expiration_time={"04 March 2023"}
-                    coinbase={coinbase}
-                    lockTime={"No Lock"}
-                    handleConnection={handleConnection}
-                    chainId={chainId}
-                    listType={listType}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
-                    isConnected={isConnected}
-                    the_graph_result={the_graph_result}
-                  />
                 ) : (
                   <></>
                 )}
@@ -5376,24 +5238,6 @@ const EarnTopPicks = ({
                         : "No Lock"
                     }
                   />
-                ) : activeCard2 && topList === "Vault" ? (
-                  <Vault
-                    vault={vaultArray[cardIndex]}
-                    token={tokenvaultArray[cardIndex]}
-                    platformTokenApyPercent={vaultplatformArray[cardIndex]}
-                    UNDERLYING_DECIMALS={vaultdecimalsArray[cardIndex]}
-                    UNDERLYING_SYMBOL={vaultsymbolArray[cardIndex]}
-                    expiration_time={"04 March 2023"}
-                    coinbase={coinbase}
-                    lockTime={"No Lock"}
-                    handleConnection={handleConnection}
-                    chainId={chainId}
-                    listType={listType}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
-                    isConnected={isConnected}
-                    the_graph_result={the_graph_result}
-                  />
                 ) : (
                   <></>
                 )}
@@ -6046,24 +5890,6 @@ const EarnTopPicks = ({
                         : "No Lock"
                     }
                   />
-                ) : activeCard3 && topList === "Vault" ? (
-                  <Vault
-                    vault={vaultArray[cardIndex]}
-                    token={tokenvaultArray[cardIndex]}
-                    platformTokenApyPercent={vaultplatformArray[cardIndex]}
-                    UNDERLYING_DECIMALS={vaultdecimalsArray[cardIndex]}
-                    UNDERLYING_SYMBOL={vaultsymbolArray[cardIndex]}
-                    expiration_time={"04 March 2023"}
-                    coinbase={coinbase}
-                    lockTime={"No Lock"}
-                    handleConnection={handleConnection}
-                    chainId={chainId}
-                    listType={listType}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
-                    isConnected={isConnected}
-                    the_graph_result={the_graph_result}
-                  />
                 ) : (
                   <></>
                 )}
@@ -6600,24 +6426,6 @@ const EarnTopPicks = ({
                           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
                         : "No Lock"
                     }
-                  />
-                ) : activeCard4 && topList === "Vault" ? (
-                  <Vault
-                    vault={vaultArray[cardIndex]}
-                    token={tokenvaultArray[cardIndex]}
-                    platformTokenApyPercent={vaultplatformArray[cardIndex]}
-                    UNDERLYING_DECIMALS={vaultdecimalsArray[cardIndex]}
-                    UNDERLYING_SYMBOL={vaultsymbolArray[cardIndex]}
-                    expiration_time={"04 March 2023"}
-                    coinbase={coinbase}
-                    lockTime={"No Lock"}
-                    handleConnection={handleConnection}
-                    chainId={chainId}
-                    listType={listType}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
-                    isConnected={isConnected}
-                    the_graph_result={the_graph_result}
                   />
                 ) : (
                   <></>
@@ -7158,24 +6966,6 @@ const EarnTopPicks = ({
                         : "No Lock"
                     }
                   />
-                ) : activeCard5 && topList === "Vault" ? (
-                  <Vault
-                    vault={vaultArray[cardIndex]}
-                    token={tokenvaultArray[cardIndex]}
-                    platformTokenApyPercent={vaultplatformArray[cardIndex]}
-                    UNDERLYING_DECIMALS={vaultdecimalsArray[cardIndex]}
-                    UNDERLYING_SYMBOL={vaultsymbolArray[cardIndex]}
-                    expiration_time={"04 March 2023"}
-                    coinbase={coinbase}
-                    lockTime={"No Lock"}
-                    handleConnection={handleConnection}
-                    chainId={chainId}
-                    listType={listType}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
-                    isConnected={isConnected}
-                    the_graph_result={the_graph_result}
-                  />
                 ) : (
                   <></>
                 )}
@@ -7658,24 +7448,6 @@ const EarnTopPicks = ({
                           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
                         : "No Lock"
                     }
-                  />
-                ) : activeCard6 && topList === "Vault" ? (
-                  <Vault
-                    vault={vaultArray[cardIndex]}
-                    token={tokenvaultArray[cardIndex]}
-                    platformTokenApyPercent={vaultplatformArray[cardIndex]}
-                    UNDERLYING_DECIMALS={vaultdecimalsArray[cardIndex]}
-                    UNDERLYING_SYMBOL={vaultsymbolArray[cardIndex]}
-                    expiration_time={"04 March 2023"}
-                    coinbase={coinbase}
-                    lockTime={"No Lock"}
-                    handleConnection={handleConnection}
-                    chainId={chainId}
-                    listType={listType}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
-                    isConnected={isConnected}
-                    the_graph_result={the_graph_result}
                   />
                 ) : (
                   <></>
@@ -8446,25 +8218,7 @@ const EarnTopPicks = ({
                           : "No Lock"
                       }
                     />
-                )  : activeCard && topList === "Vault" ? (
-                    <Vault
-                      vault={vaultArray[cardIndex]}
-                      token={tokenvaultArray[cardIndex]}
-                      platformTokenApyPercent={vaultplatformArray[cardIndex]}
-                      UNDERLYING_DECIMALS={vaultdecimalsArray[cardIndex]}
-                      UNDERLYING_SYMBOL={vaultsymbolArray[cardIndex]}
-                      expiration_time={"04 March 2023"}
-                      coinbase={coinbase}
-                      lockTime={"No Lock"}
-                      handleConnection={handleConnection}
-                      chainId={chainId}
-                      listType={listType}
-                      handleSwitchNetwork={handleSwitchNetwork}
-                      expired={false}
-                      isConnected={isConnected}
-                      the_graph_result={the_graph_result}
-                    />
-                  ) : (
+                )  : (
                     <></>
                   )}
                 </>
@@ -9138,24 +8892,6 @@ const EarnTopPicks = ({
                           : "No Lock"
                       }
                     />
-                  ) : activeCard2 && topList === "Vault" ? (
-                    <Vault
-                      vault={vaultArray[cardIndex]}
-                      token={tokenvaultArray[cardIndex]}
-                      platformTokenApyPercent={vaultplatformArray[cardIndex]}
-                      UNDERLYING_DECIMALS={vaultdecimalsArray[cardIndex]}
-                      UNDERLYING_SYMBOL={vaultsymbolArray[cardIndex]}
-                      expiration_time={"04 March 2023"}
-                      coinbase={coinbase}
-                      lockTime={"No Lock"}
-                      handleConnection={handleConnection}
-                      chainId={chainId}
-                      listType={listType}
-                      handleSwitchNetwork={handleSwitchNetwork}
-                      expired={false}
-                      isConnected={isConnected}
-                      the_graph_result={the_graph_result}
-                    />
                   ) : (
                     <></>
                   )}
@@ -9819,25 +9555,7 @@ const EarnTopPicks = ({
                           : "No Lock"
                       }
                     />
-                ) : activeCard3 && topList === "Vault" ? (
-                    <Vault
-                      vault={vaultArray[cardIndex]}
-                      token={tokenvaultArray[cardIndex]}
-                      platformTokenApyPercent={vaultplatformArray[cardIndex]}
-                      UNDERLYING_DECIMALS={vaultdecimalsArray[cardIndex]}
-                      UNDERLYING_SYMBOL={vaultsymbolArray[cardIndex]}
-                      expiration_time={"04 March 2023"}
-                      coinbase={coinbase}
-                      lockTime={"No Lock"}
-                      handleConnection={handleConnection}
-                      chainId={chainId}
-                      listType={listType}
-                      handleSwitchNetwork={handleSwitchNetwork}
-                      expired={false}
-                      isConnected={isConnected}
-                      the_graph_result={the_graph_result}
-                    />
-                  ) : (
+                )  : (
                     <></>
                   )}
                 </>
@@ -10493,25 +10211,7 @@ const EarnTopPicks = ({
                           : "No Lock"
                       }
                     />
-                  ) : activeCard4 && topList === "Vault" ? (
-                    <Vault
-                      vault={vaultArray[cardIndex]}
-                      token={tokenvaultArray[cardIndex]}
-                      platformTokenApyPercent={vaultplatformArray[cardIndex]}
-                      UNDERLYING_DECIMALS={vaultdecimalsArray[cardIndex]}
-                      UNDERLYING_SYMBOL={vaultsymbolArray[cardIndex]}
-                      expiration_time={"04 March 2023"}
-                      coinbase={coinbase}
-                      lockTime={"No Lock"}
-                      handleConnection={handleConnection}
-                      chainId={chainId}
-                      listType={listType}
-                      handleSwitchNetwork={handleSwitchNetwork}
-                      expired={false}
-                      isConnected={isConnected}
-                      the_graph_result={the_graph_result}
-                    />
-                  ) : (
+                  )  : (
                     <></>
                   )}
                 </>
@@ -11133,24 +10833,6 @@ const EarnTopPicks = ({
                           : "No Lock"
                       }
                     />
-                  ) : activeCard5 && topList === "Vault" ? (
-                    <Vault
-                      vault={vaultArray[cardIndex]}
-                      token={tokenvaultArray[cardIndex]}
-                      platformTokenApyPercent={vaultplatformArray[cardIndex]}
-                      UNDERLYING_DECIMALS={vaultdecimalsArray[cardIndex]}
-                      UNDERLYING_SYMBOL={vaultsymbolArray[cardIndex]}
-                      expiration_time={"04 March 2023"}
-                      coinbase={coinbase}
-                      lockTime={"No Lock"}
-                      handleConnection={handleConnection}
-                      chainId={chainId}
-                      listType={listType}
-                      handleSwitchNetwork={handleSwitchNetwork}
-                      expired={false}
-                      isConnected={isConnected}
-                      the_graph_result={the_graph_result}
-                    />
                   ) : (
                     <></>
                   )}
@@ -11758,24 +11440,6 @@ const EarnTopPicks = ({
                           : "No Lock"
                       }
                     />
-                  ) : activeCard6 && topList === "Vault" ? (
-                    <Vault
-                      vault={vaultArray[cardIndex]}
-                      token={tokenvaultArray[cardIndex]}
-                      platformTokenApyPercent={vaultplatformArray[cardIndex]}
-                      UNDERLYING_DECIMALS={vaultdecimalsArray[cardIndex]}
-                      UNDERLYING_SYMBOL={vaultsymbolArray[cardIndex]}
-                      expiration_time={"04 March 2023"}
-                      coinbase={coinbase}
-                      lockTime={"No Lock"}
-                      handleConnection={handleConnection}
-                      chainId={chainId}
-                      listType={listType}
-                      handleSwitchNetwork={handleSwitchNetwork}
-                      expired={false}
-                      isConnected={isConnected}
-                      the_graph_result={the_graph_result}
-                    />
                   ) : (
                     <></>
                   )}
@@ -12321,24 +11985,6 @@ const EarnTopPicks = ({
                               )[0]
                           : "No Lock"
                       }
-                    />
-                  ) : activeCard7 && topList === "Vault" ? (
-                    <Vault
-                      vault={vaultArray[cardIndex]}
-                      token={tokenvaultArray[cardIndex]}
-                      platformTokenApyPercent={vaultplatformArray[cardIndex]}
-                      UNDERLYING_DECIMALS={vaultdecimalsArray[cardIndex]}
-                      UNDERLYING_SYMBOL={vaultsymbolArray[cardIndex]}
-                      expiration_time={"04 March 2023"}
-                      coinbase={coinbase}
-                      lockTime={"No Lock"}
-                      handleConnection={handleConnection}
-                      chainId={chainId}
-                      listType={listType}
-                      handleSwitchNetwork={handleSwitchNetwork}
-                      expired={false}
-                      isConnected={isConnected}
-                      the_graph_result={the_graph_result}
                     />
                   ) : (
                     <></>
@@ -12886,24 +12532,6 @@ const EarnTopPicks = ({
                           : "No Lock"
                       }
                     />
-                  ) : activeCard8 && topList === "Vault" ? (
-                    <Vault
-                      vault={vaultArray[cardIndex]}
-                      token={tokenvaultArray[cardIndex]}
-                      platformTokenApyPercent={vaultplatformArray[cardIndex]}
-                      UNDERLYING_DECIMALS={vaultdecimalsArray[cardIndex]}
-                      UNDERLYING_SYMBOL={vaultsymbolArray[cardIndex]}
-                      expiration_time={"04 March 2023"}
-                      coinbase={coinbase}
-                      lockTime={"No Lock"}
-                      handleConnection={handleConnection}
-                      chainId={chainId}
-                      listType={listType}
-                      handleSwitchNetwork={handleSwitchNetwork}
-                      expired={false}
-                      isConnected={isConnected}
-                      the_graph_result={the_graph_result}
-                    />
                   ) : (
                     <></>
                   )}
@@ -13361,24 +12989,6 @@ const EarnTopPicks = ({
                               )[0]
                           : "No Lock"
                       }
-                    />
-                  ) : activeCard9 && topList === "Vault" ? (
-                    <Vault
-                      vault={vaultArray[cardIndex]}
-                      token={tokenvaultArray[cardIndex]}
-                      platformTokenApyPercent={vaultplatformArray[cardIndex]}
-                      UNDERLYING_DECIMALS={vaultdecimalsArray[cardIndex]}
-                      UNDERLYING_SYMBOL={vaultsymbolArray[cardIndex]}
-                      expiration_time={"04 March 2023"}
-                      coinbase={coinbase}
-                      lockTime={"No Lock"}
-                      handleConnection={handleConnection}
-                      chainId={chainId}
-                      listType={listType}
-                      handleSwitchNetwork={handleSwitchNetwork}
-                      expired={false}
-                      isConnected={isConnected}
-                      the_graph_result={the_graph_result}
                     />
                   ) : (
                     <></>
@@ -13838,24 +13448,6 @@ const EarnTopPicks = ({
                           : "No Lock"
                       }
                     />
-                  ) : activeCard10 && topList === "Vault" ? (
-                    <Vault
-                      vault={vaultArray[cardIndex]}
-                      token={tokenvaultArray[cardIndex]}
-                      platformTokenApyPercent={vaultplatformArray[cardIndex]}
-                      UNDERLYING_DECIMALS={vaultdecimalsArray[cardIndex]}
-                      UNDERLYING_SYMBOL={vaultsymbolArray[cardIndex]}
-                      expiration_time={"04 March 2023"}
-                      coinbase={coinbase}
-                      lockTime={"No Lock"}
-                      handleConnection={handleConnection}
-                      chainId={chainId}
-                      listType={listType}
-                      handleSwitchNetwork={handleSwitchNetwork}
-                      expired={false}
-                      isConnected={isConnected}
-                      the_graph_result={the_graph_result}
-                    />
                   ) : (
                     <></>
                   )}
@@ -14312,24 +13904,6 @@ const EarnTopPicks = ({
                               )[0]
                           : "No Lock"
                       }
-                    />
-                  ) : activeCard11 && topList === "Vault" ? (
-                    <Vault
-                      vault={vaultArray[cardIndex]}
-                      token={tokenvaultArray[cardIndex]}
-                      platformTokenApyPercent={vaultplatformArray[cardIndex]}
-                      UNDERLYING_DECIMALS={vaultdecimalsArray[cardIndex]}
-                      UNDERLYING_SYMBOL={vaultsymbolArray[cardIndex]}
-                      expiration_time={"04 March 2023"}
-                      coinbase={coinbase}
-                      lockTime={"No Lock"}
-                      handleConnection={handleConnection}
-                      chainId={chainId}
-                      listType={listType}
-                      handleSwitchNetwork={handleSwitchNetwork}
-                      expired={false}
-                      isConnected={isConnected}
-                      the_graph_result={the_graph_result}
                     />
                   ) : (
                     <></>
@@ -14790,24 +14364,6 @@ const EarnTopPicks = ({
                           : "No Lock"
                       }
                     />
-                  ) : activeCard12 && topList === "Vault" ? (
-                    <Vault
-                      vault={vaultArray[cardIndex]}
-                      token={tokenvaultArray[cardIndex]}
-                      platformTokenApyPercent={vaultplatformArray[cardIndex]}
-                      UNDERLYING_DECIMALS={vaultdecimalsArray[cardIndex]}
-                      UNDERLYING_SYMBOL={vaultsymbolArray[cardIndex]}
-                      expiration_time={"04 March 2023"}
-                      coinbase={coinbase}
-                      lockTime={"No Lock"}
-                      handleConnection={handleConnection}
-                      chainId={chainId}
-                      listType={listType}
-                      handleSwitchNetwork={handleSwitchNetwork}
-                      expired={false}
-                      isConnected={isConnected}
-                      the_graph_result={the_graph_result}
-                    />
                   ) : (
                     <></>
                   )}
@@ -15070,6 +14626,13 @@ const EarnTopPicks = ({
                     tvl={"$" + getFormattedNumber(pool.tvl_usd)}
                     lockTime={
                       pool.lock_time ? pool.lock_time : locktimeFarm[index]
+                    }
+                    display={
+                      pool.expired
+                        ? pool.expired === "Yes"
+                          ? "grid"
+                          : "none"
+                        : ""
                     }
                     tokenLogo={
                       pool.icon
@@ -15912,7 +15475,25 @@ const EarnTopPicks = ({
                       : "No Lock"
                   }
                 />
-              ) : (
+              ) : activeCard && topList === "Vault" && chain === "eth" ? (
+                <Vault
+                  vault={vaultArray[cardIndex]}
+                  token={tokenvaultArray[cardIndex]}
+                  platformTokenApyPercent={vaultplatformArray[cardIndex]}
+                  UNDERLYING_DECIMALS={vaultdecimalsArray[cardIndex]}
+                  UNDERLYING_SYMBOL={vaultsymbolArray[cardIndex]}
+                  expiration_time={"04 March 2023"}
+                  coinbase={coinbase}
+                  lockTime={"No Lock"}
+                  handleConnection={handleConnection}
+                  chainId={chainId}
+                  listType={listType}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  expired={true}
+                  isConnected={isConnected}
+                  the_graph_result={the_graph_result}
+                />
+              ):(
                 <></>
               )}
             </>
@@ -15926,7 +15507,7 @@ const EarnTopPicks = ({
                       ? pool.expired === "Yes"
                         ? "grid"
                         : "none"
-                      : "none"
+                      : ""
                   }
                   key={index}
                   chain={chain}
@@ -16760,6 +16341,24 @@ const EarnTopPicks = ({
                     : "No Lock"
                 }
               />
+            ) : activeCard2 && topList === "Vault" && chain === "eth" ? (
+              <Vault
+                vault={vaultArray[cardIndex]}
+                token={tokenvaultArray[cardIndex]}
+                platformTokenApyPercent={vaultplatformArray[cardIndex]}
+                UNDERLYING_DECIMALS={vaultdecimalsArray[cardIndex]}
+                UNDERLYING_SYMBOL={vaultsymbolArray[cardIndex]}
+                expiration_time={"04 March 2023"}
+                coinbase={coinbase}
+                lockTime={"No Lock"}
+                handleConnection={handleConnection}
+                chainId={chainId}
+                listType={listType}
+                handleSwitchNetwork={handleSwitchNetwork}
+                expired={true}
+                isConnected={isConnected}
+                the_graph_result={the_graph_result}
+              />
             ) : (
               <></>
             )}
@@ -16773,7 +16372,7 @@ const EarnTopPicks = ({
                       ? pool.expired === "Yes"
                         ? "grid"
                         : "none"
-                      : "none"
+                      : ""
                   }
                   key={index}
                   chain={chain}
@@ -17607,6 +17206,24 @@ const EarnTopPicks = ({
                     : "No Lock"
                 }
               />
+            ): activeCard3 && topList === "Vault" && chain === "eth" ? (
+              <Vault
+                vault={vaultArray[cardIndex]}
+                token={tokenvaultArray[cardIndex]}
+                platformTokenApyPercent={vaultplatformArray[cardIndex]}
+                UNDERLYING_DECIMALS={vaultdecimalsArray[cardIndex]}
+                UNDERLYING_SYMBOL={vaultsymbolArray[cardIndex]}
+                expiration_time={"04 March 2023"}
+                coinbase={coinbase}
+                lockTime={"No Lock"}
+                handleConnection={handleConnection}
+                chainId={chainId}
+                listType={listType}
+                handleSwitchNetwork={handleSwitchNetwork}
+                expired={true}
+                isConnected={isConnected}
+                the_graph_result={the_graph_result}
+              />
             ) : (
               <></>
             )}
@@ -18230,7 +17847,7 @@ const EarnTopPicks = ({
                       ? pool.expired === "Yes"
                         ? ""
                         : "none"
-                      : "none"
+                      : ""
                   }
                   key={index}
                   chain={chain}
@@ -19086,6 +18703,24 @@ const EarnTopPicks = ({
                     : "No Lock"
                 }
               />
+            ): activeCard && topList === "Vault" && chain === "eth" ? (
+              <Vault
+                vault={vaultArray[cardIndex]}
+                token={tokenvaultArray[cardIndex]}
+                platformTokenApyPercent={vaultplatformArray[cardIndex]}
+                UNDERLYING_DECIMALS={vaultdecimalsArray[cardIndex]}
+                UNDERLYING_SYMBOL={vaultsymbolArray[cardIndex]}
+                expiration_time={"04 March 2023"}
+                coinbase={coinbase}
+                lockTime={"No Lock"}
+                handleConnection={handleConnection}
+                chainId={chainId}
+                listType={listType}
+                handleSwitchNetwork={handleSwitchNetwork}
+                expired={true}
+                isConnected={isConnected}
+                the_graph_result={the_graph_result}
+              />
             ) : (
               <></>
             )}
@@ -19099,7 +18734,7 @@ const EarnTopPicks = ({
                       ? pool.expired === "Yes"
                         ? ""
                         : "none"
-                      : "none"
+                      : ""
                   }
                   key={index}
                   chain={chain}
@@ -19942,7 +19577,25 @@ const EarnTopPicks = ({
                     : "No Lock"
                 }
               />
-            ) : (
+            ) : activeCard2 && topList === "Vault" && chain === "eth" ? (
+              <Vault
+                vault={vaultArray[cardIndex]}
+                token={tokenvaultArray[cardIndex]}
+                platformTokenApyPercent={vaultplatformArray[cardIndex]}
+                UNDERLYING_DECIMALS={vaultdecimalsArray[cardIndex]}
+                UNDERLYING_SYMBOL={vaultsymbolArray[cardIndex]}
+                expiration_time={"04 March 2023"}
+                coinbase={coinbase}
+                lockTime={"No Lock"}
+                handleConnection={handleConnection}
+                chainId={chainId}
+                listType={listType}
+                handleSwitchNetwork={handleSwitchNetwork}
+                expired={true}
+                isConnected={isConnected}
+                the_graph_result={the_graph_result}
+              />
+            ): (
               <></>
             )}
             <div className="top-picks-container" style={{ marginTop: "25px" }}>
@@ -19955,7 +19608,7 @@ const EarnTopPicks = ({
                       ? pool.expired === "Yes"
                         ? ""
                         : "none"
-                      : "none"
+                      : ""
                   }
                   key={index}
                   chain={chain}
@@ -20794,6 +20447,24 @@ const EarnTopPicks = ({
                     : "No Lock"
                 }
               />
+            ) : activeCard3 && topList === "Vault" && chain === "eth" ? (
+              <Vault
+                vault={vaultArray[cardIndex]}
+                token={tokenvaultArray[cardIndex]}
+                platformTokenApyPercent={vaultplatformArray[cardIndex]}
+                UNDERLYING_DECIMALS={vaultdecimalsArray[cardIndex]}
+                UNDERLYING_SYMBOL={vaultsymbolArray[cardIndex]}
+                expiration_time={"04 March 2023"}
+                coinbase={coinbase}
+                lockTime={"No Lock"}
+                handleConnection={handleConnection}
+                chainId={chainId}
+                listType={listType}
+                handleSwitchNetwork={handleSwitchNetwork}
+                expired={true}
+                isConnected={isConnected}
+                the_graph_result={the_graph_result}
+              />
             ) : (
               <></>
             )}
@@ -20807,7 +20478,7 @@ const EarnTopPicks = ({
                       ? pool.expired === "Yes"
                         ? ""
                         : "none"
-                      : "none"
+                      : ""
                   }
                   key={index}
                   chain={chain}
@@ -21443,7 +21114,7 @@ const EarnTopPicks = ({
                       ? pool.expired === "Yes"
                         ? ""
                         : "none"
-                      : "none"
+                      : ""
                   }
                   key={index}
                   chain={chain}
@@ -22754,7 +22425,7 @@ const EarnTopPicks = ({
                         ? pool.expired === "Yes"
                           ? ""
                           : "none"
-                        : "none"
+                        : ""
                     }
                     key={index}
                     chain={chain}
@@ -23611,6 +23282,24 @@ const EarnTopPicks = ({
                       : "No Lock"
                   }
                 />
+              ) : activeCard && topList === "Vault" && chain === "eth" ? (
+                <Vault
+                  vault={vaultArray[cardIndex]}
+                  token={tokenvaultArray[cardIndex]}
+                  platformTokenApyPercent={vaultplatformArray[cardIndex]}
+                  UNDERLYING_DECIMALS={vaultdecimalsArray[cardIndex]}
+                  UNDERLYING_SYMBOL={vaultsymbolArray[cardIndex]}
+                  expiration_time={"04 March 2023"}
+                  coinbase={coinbase}
+                  lockTime={"No Lock"}
+                  handleConnection={handleConnection}
+                  chainId={chainId}
+                  listType={listType}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  expired={true}
+                  isConnected={isConnected}
+                  the_graph_result={the_graph_result}
+                />
               ) : (
                 <></>
               )}
@@ -23629,7 +23318,7 @@ const EarnTopPicks = ({
                         ? pool.expired === "Yes"
                           ? ""
                           : "none"
-                        : "none"
+                        : ""
                     }
                     key={index}
                     chain={chain}
@@ -24486,6 +24175,24 @@ const EarnTopPicks = ({
                       : "No Lock"
                   }
                 />
+              ) : activeCard2 && topList === "Vault" && chain === "eth" ? (
+                <Vault
+                  vault={vaultArray[cardIndex]}
+                  token={tokenvaultArray[cardIndex]}
+                  platformTokenApyPercent={vaultplatformArray[cardIndex]}
+                  UNDERLYING_DECIMALS={vaultdecimalsArray[cardIndex]}
+                  UNDERLYING_SYMBOL={vaultsymbolArray[cardIndex]}
+                  expiration_time={"04 March 2023"}
+                  coinbase={coinbase}
+                  lockTime={"No Lock"}
+                  handleConnection={handleConnection}
+                  chainId={chainId}
+                  listType={listType}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  expired={false}
+                  isConnected={isConnected}
+                  the_graph_result={the_graph_result}
+                />
               ) : (
                 <></>
               )}
@@ -24504,7 +24211,7 @@ const EarnTopPicks = ({
                         ? pool.expired === "Yes"
                           ? ""
                           : "none"
-                        : "none"
+                        : ""
                     }
                     key={index}
                     chain={chain}
@@ -25361,6 +25068,24 @@ const EarnTopPicks = ({
                       : "No Lock"
                   }
                 />
+              ) : activeCard3 && topList === "Vault" && chain === "eth" ? (
+                <Vault
+                  vault={vaultArray[cardIndex]}
+                  token={tokenvaultArray[cardIndex]}
+                  platformTokenApyPercent={vaultplatformArray[cardIndex]}
+                  UNDERLYING_DECIMALS={vaultdecimalsArray[cardIndex]}
+                  UNDERLYING_SYMBOL={vaultsymbolArray[cardIndex]}
+                  expiration_time={"04 March 2023"}
+                  coinbase={coinbase}
+                  lockTime={"No Lock"}
+                  handleConnection={handleConnection}
+                  chainId={chainId}
+                  listType={listType}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  expired={true}
+                  isConnected={isConnected}
+                  the_graph_result={the_graph_result}
+                />
               ) : (
                 <></>
               )}
@@ -25379,7 +25104,7 @@ const EarnTopPicks = ({
                         ? pool.expired === "Yes"
                           ? ""
                           : "none"
-                        : "none"
+                        : ""
                     }
                     key={index}
                     chain={chain}
@@ -26236,6 +25961,24 @@ const EarnTopPicks = ({
                       : "No Lock"
                   }
                 />
+              ) : activeCard4 && topList === "Vault" && chain === "eth" ? (
+                <Vault
+                  vault={vaultArray[cardIndex]}
+                  token={tokenvaultArray[cardIndex]}
+                  platformTokenApyPercent={vaultplatformArray[cardIndex]}
+                  UNDERLYING_DECIMALS={vaultdecimalsArray[cardIndex]}
+                  UNDERLYING_SYMBOL={vaultsymbolArray[cardIndex]}
+                  expiration_time={"04 March 2023"}
+                  coinbase={coinbase}
+                  lockTime={"No Lock"}
+                  handleConnection={handleConnection}
+                  chainId={chainId}
+                  listType={listType}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  expired={true}
+                  isConnected={isConnected}
+                  the_graph_result={the_graph_result}
+                />
               ) : (
                 <></>
               )}
@@ -26254,7 +25997,7 @@ const EarnTopPicks = ({
                         ? pool.expired === "Yes"
                           ? ""
                           : "none"
-                        : "none"
+                        : ""
                     }
                     key={index}
                     chain={chain}
@@ -27111,7 +26854,25 @@ const EarnTopPicks = ({
                       : "No Lock"
                   }
                 />
-              ) : (
+              )  : activeCard5 && topList === "Vault" && chain === "eth" ? (
+                <Vault
+                  vault={vaultArray[cardIndex]}
+                  token={tokenvaultArray[cardIndex]}
+                  platformTokenApyPercent={vaultplatformArray[cardIndex]}
+                  UNDERLYING_DECIMALS={vaultdecimalsArray[cardIndex]}
+                  UNDERLYING_SYMBOL={vaultsymbolArray[cardIndex]}
+                  expiration_time={"04 March 2023"}
+                  coinbase={coinbase}
+                  lockTime={"No Lock"}
+                  handleConnection={handleConnection}
+                  chainId={chainId}
+                  listType={listType}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  expired={true}
+                  isConnected={isConnected}
+                  the_graph_result={the_graph_result}
+                />
+              ): (
                 <></>
               )}
             </>
@@ -27129,7 +26890,7 @@ const EarnTopPicks = ({
                         ? pool.expired === "Yes"
                           ? ""
                           : "none"
-                        : "none"
+                        :""
                     }
                     key={index}
                     chain={chain}
@@ -28004,7 +27765,7 @@ const EarnTopPicks = ({
                         ? pool.expired === "Yes"
                           ? ""
                           : "none"
-                        : "none"
+                        : ""
                     }
                     key={index}
                     chain={chain}
@@ -28456,7 +28217,7 @@ const EarnTopPicks = ({
                         ? pool.expired === "Yes"
                           ? ""
                           : "none"
-                        : "none"
+                        : ""
                     }
                     key={index}
                     chain={chain}
@@ -28908,7 +28669,7 @@ const EarnTopPicks = ({
                         ? pool.expired === "Yes"
                           ? ""
                           : "none"
-                        : "none"
+                        : ""
                     }
                     key={index}
                     chain={chain}
@@ -29304,7 +29065,7 @@ const EarnTopPicks = ({
                         ? pool.expired === "Yes"
                           ? ""
                           : "none"
-                        : "none"
+                        : ""
                     }
                     key={index}
                     chain={chain}
@@ -29700,7 +29461,7 @@ const EarnTopPicks = ({
                         ? pool.expired === "Yes"
                           ? ""
                           : "none"
-                        : "none"
+                        : ""
                     }
                     key={index}
                     chain={chain}
@@ -30609,7 +30370,7 @@ const EarnTopPicks = ({
                   ? pool.expired === "Yes"
                     ? "flex"
                     : "none"
-                  : "none"
+                  : ""
               }
             />
           ))}

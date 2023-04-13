@@ -246,7 +246,6 @@ const TopPoolsListCard = ({
   const feeUarrayStakeAvaxiDyp = [0.25, 0.25, 0, 0];
 
   const withdrawFeeiDyp = [0, 0];
-
   const vaultArray = [
     window.vault_weth,
     window.vault_wbtc,
@@ -257,9 +256,9 @@ const TopPoolsListCard = ({
   const tokenvaultArray = [
     window.token_weth,
     window.token_wbtc,
-    window.vault_usdc,
+    window.token_usdc,
     window.token_usdt,
-    window.vault_dai,
+    window.token_dai,
   ];
 
   const LP_IDBNB_Array = [
@@ -847,27 +846,6 @@ const TopPoolsListCard = ({
               }
             />
           ) : showDetails &&
-            activePools &&
-            topList === "Vault" &&
-            chain === "eth" ? (
-            <Vault
-              vault={vaultArray[cardIndex]}
-              token={tokenvaultArray[cardIndex]}
-              platformTokenApyPercent={vaultplatformArray[cardIndex]}
-              UNDERLYING_DECIMALS={vaultdecimalsArray[cardIndex]}
-              UNDERLYING_SYMBOL={vaultsymbolArray[cardIndex]}
-              expiration_time={"04 March 2023"}
-              coinbase={coinbase}
-              lockTime={"No Lock"}
-              handleConnection={handleConnection}
-              chainId={chainId}
-              listType={listType}
-              handleSwitchNetwork={handleSwitchNetwork}
-              expired={false}
-              isConnected={isConnected}
-              the_graph_result={the_graph_result}
-            />
-          ) : showDetails &&
             topList === "Staking" &&
             cardIndex === 1 &&
             chain === "eth" ? (
@@ -938,7 +916,27 @@ const TopPoolsListCard = ({
                 expired={true}
               />
             )
-          ) : showDetails &&
+          ): showDetails &&
+          topList === "Vault" &&
+          chain === "eth" ? (
+          <Vault
+            vault={vaultArray[cardIndex-1]}
+            token={tokenvaultArray[cardIndex-1]}
+            platformTokenApyPercent={vaultplatformArray[cardIndex-1]}
+            UNDERLYING_DECIMALS={vaultdecimalsArray[cardIndex-1]}
+            UNDERLYING_SYMBOL={vaultsymbolArray[cardIndex-1]}
+            expiration_time={"04 March 2023"}
+            coinbase={coinbase}
+            lockTime={"No Lock"}
+            handleConnection={handleConnection}
+            chainId={chainId}
+            listType={listType}
+            handleSwitchNetwork={handleSwitchNetwork}
+            expired={true}
+            isConnected={isConnected}
+            the_graph_result={the_graph_result}
+          />
+        ) : showDetails &&
             topList === "Staking" &&
             cardIndex === 0 &&
             chain === "eth" ? (

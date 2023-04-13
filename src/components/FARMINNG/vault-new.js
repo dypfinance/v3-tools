@@ -34,6 +34,7 @@ const Vault = ({
   handleSwitchNetwork,
   the_graph_result,
   handleConnection,
+  expired,
   isConnected,
 }) => {
   let { BigNumber, alertify, token_dyps } = window;
@@ -1088,7 +1089,7 @@ const Vault = ({
     </div> */}
             <div
               className={`otherside-border col-12 col-md-12 col-lg-4 ${
-                chainId !== "1" && "blurrypool"
+                (chainId !== "1" || expired === true) && "blurrypool"
               }`}
             >
               <div className="d-flex justify-content-between align-items-center gap-2">
