@@ -183,6 +183,7 @@ const StakeAvax = ({
   const [withdrawTooltip, setwithdrawTooltip] = useState(false);
   const [tokendata, settokendata] = useState();
   const [tvlUSD, settvlUSD] = useState(0)
+  const [passivePool, setPassivePool] = useState(false);
 
   const showModal = () => {
     setshow(true);
@@ -337,6 +338,12 @@ settvlUSD(tvlUSD)
     if (coinbase !== coinbase2 && coinbase !== null && coinbase !== undefined) {
       setcoinbase(coinbase);
     }
+    if (
+      staking &&
+      staking._address === "0x6eb643813f0b4351b993f98bdeaef6e0f79573e9"
+    ) {
+      setPassivePool(true);
+    }
     getTotalTvl();
   }, [coinbase, coinbase2]);
 
@@ -356,7 +363,7 @@ settvlUSD(tvlUSD)
   };
 
   const handleApprove = async (e) => {
-    // e.preventDefault();
+    if (passivePool === false) {
     setdepositLoading(true);
 
     if (other_info) {
@@ -383,11 +390,16 @@ settvlUSD(tvlUSD)
           seterrorMsg("");
         }, 2000);
       });
+    }
+    else if (passivePool === true) {
+      window.$.alert("This pool no longer accepts deposits!");
+      return;
+    }
   };
 
   const handleStake = async (e) => {
+    if (passivePool === false) {
     setdepositLoading(true);
-
     if (other_info) {
       window.$.alert("This pool no longer accepts deposits!");
       setdepositLoading(false);
@@ -415,6 +427,11 @@ settvlUSD(tvlUSD)
           seterrorMsg("");
         }, 10000);
       });
+    }
+    else if (passivePool === true) {
+      window.$.alert("This pool no longer accepts deposits!");
+      return;
+    }
   };
 
   const handleWithdraw = async (e) => {
