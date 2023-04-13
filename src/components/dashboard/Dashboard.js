@@ -463,7 +463,7 @@ const Dashboard = ({
                   "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" ? (
                 <StakeBsc
                   lp_id={LP_IDBNB_Array[cardIndex]}
-                  staking={window.constant_stakingbsc_new111}
+                  staking={window.constant_stakingbsc_new11}
                   apr={
                     topPools[cardIndex]?.apy_percent
                       ? topPools[cardIndex]?.apy_percent
@@ -766,7 +766,7 @@ const Dashboard = ({
                     "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" ? (
                   <StakeBsc
                     lp_id={LP_IDBNB_Array[cardIndex]}
-                    staking={stakearrayStakeBscDyp2[1]}
+                    staking={window.constant_stakingbsc_new11}
                     apr={
                       topPools[cardIndex]?.apy_percent
                         ? topPools[cardIndex]?.apy_percent
@@ -1023,7 +1023,7 @@ const Dashboard = ({
                     "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" ? (
                   <StakeBsc
                     lp_id={LP_IDBNB_Array[cardIndex]}
-                    staking={stakearrayStakeBscDyp2[1]}
+                    staking={window.constant_stakingbsc_new11}
                     apr={
                       topPools[cardIndex]?.apy_percent
                         ? topPools[cardIndex]?.apy_percent

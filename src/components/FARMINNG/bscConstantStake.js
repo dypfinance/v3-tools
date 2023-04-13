@@ -185,6 +185,7 @@ const StakeBsc = ({
   const [rewardsTooltip, setrewardsTooltip] = useState(false);
   const [withdrawTooltip, setwithdrawTooltip] = useState(false);
   const [tokendata, settokendata] = useState();
+  const [passivePool, setPassivePool] = useState(false);
 
   const showModal = () => {
     setshow(true);
@@ -201,7 +202,6 @@ const StakeBsc = ({
   const hidePopup = () => {
     setpopup(false);
   };
-
 
   const refreshBalance = async () => {
     let coinbase = coinbase2;
@@ -296,9 +296,11 @@ const StakeBsc = ({
         let tvlDyps = new BigNumber(tvlDYPS).times(usd_per_dyps).toFixed(18);
         setsettvlDyps(tvlDyps);
 
-        let balance_formatted = new BigNumber(token_balance ).div(1e18).toString(10)
-     
-        settoken_balance(balance_formatted) ;
+        let balance_formatted = new BigNumber(token_balance)
+          .div(1e18)
+          .toString(10);
+
+        settoken_balance(balance_formatted);
 
         let divs_formatted = new BigNumber(pendingDivs).div(1e18).toFixed(6);
         setpendingDivs(divs_formatted);
@@ -310,7 +312,9 @@ const StakeBsc = ({
 
         setstakingTime(stakingTime);
 
-        let depositedTokens_formatted = new BigNumber(depositedTokens).div(1e18).toString(10)
+        let depositedTokens_formatted = new BigNumber(depositedTokens)
+          .div(1e18)
+          .toString(10);
 
         setdepositedTokens(depositedTokens_formatted);
 
@@ -352,6 +356,12 @@ const StakeBsc = ({
     if (coinbase !== coinbase2 && coinbase !== null && coinbase !== undefined) {
       setcoinbase(coinbase);
     }
+    if (
+      staking &&
+      staking._address === "0x7c82513b69c1b42c23760cfc34234558119a3399"
+    ) {
+      setPassivePool(true);
+    }
   }, [coinbase, coinbase2]);
 
   useEffect(() => {
@@ -363,36 +373,41 @@ const StakeBsc = ({
 
   const handleApprove = (e) => {
     //   e.preventDefault();
-    setdepositLoading(true);
+    if (passivePool === false) {
+      setdepositLoading(true);
+      if (other_info) {
+        window.$.alert("This pool no longer accepts deposits!");
+        setdepositLoading(false);
+        return;
+      }
 
-    if (other_info) {
+      let amount = depositAmount;
+      amount = new BigNumber(amount).times(1e18).toFixed(0);
+      reward_token
+        .approve(staking._address, amount)
+        .then(() => {
+          setdepositLoading(false);
+          setdepositStatus("deposit");
+        })
+        .catch((e) => {
+          setdepositLoading(false);
+          setdepositStatus("fail");
+          seterrorMsg(e?.message);
+          setTimeout(() => {
+            depositAmount("");
+            setdepositStatus("initial");
+            seterrorMsg("");
+          }, 10000);
+        });
+    } else if (passivePool === true) {
       window.$.alert("This pool no longer accepts deposits!");
-      setdepositLoading(false);
       return;
     }
-
-    let amount = depositAmount;
-    amount = new BigNumber(amount).times(1e18).toFixed(0);
-    reward_token
-      .approve(staking._address, amount)
-      .then(() => {
-        setdepositLoading(false);
-        setdepositStatus("deposit");
-      })
-      .catch((e) => {
-        setdepositLoading(false);
-        setdepositStatus("fail");
-        seterrorMsg(e?.message);
-        setTimeout(() => {
-          depositAmount("");
-          setdepositStatus("initial");
-          seterrorMsg("");
-        }, 10000);
-      });
   };
 
   const handleStake = async (e) => {
     //   e.preventDefault();
+    if (passivePool === false) {
     setdepositLoading(true);
 
     if (other_info) {
@@ -403,7 +418,7 @@ const StakeBsc = ({
 
     let amount = depositAmount;
     amount = new BigNumber(depositAmount).times(1e18).toFixed(0);
-    console.log(amount)
+    console.log(amount);
     let referrer = window.config.ZERO_ADDRESS;
 
     //NO REFERRER HERE
@@ -418,7 +433,6 @@ const StakeBsc = ({
           setdepositLoading(false);
           setdepositStatus("initial");
         }, 5000);
-
       })
       .catch((e) => {
         setdepositLoading(false);
@@ -430,12 +444,17 @@ const StakeBsc = ({
           seterrorMsg("");
         }, 10000);
       });
+    }
+    else if (passivePool === true) {
+      window.$.alert("This pool no longer accepts deposits!");
+      return;
+    }
   };
 
   const handleWithdraw = async (e) => {
     //   e.preventDefault();
     setwithdrawLoading(true);
-    let amount = new BigNumber(withdrawAmount).times(1e18).toFixed(0)
+    let amount = new BigNumber(withdrawAmount).times(1e18).toFixed(0);
     await staking
       .unstake(amount)
       .then(() => {
@@ -472,8 +491,7 @@ const StakeBsc = ({
         setTimeout(() => {
           setclaimStatus("initial");
           seterrorMsg2("");
-        setclaimLoading(false);
-
+          setclaimLoading(false);
         }, 2000);
       });
   };
@@ -481,7 +499,7 @@ const StakeBsc = ({
   const handleSetMaxDeposit = (e) => {
     // e.preventDefault();
     const depositAmount = token_balance;
-    console.log(depositAmount)
+    console.log(depositAmount);
     checkApproval(depositAmount);
     setdepositAmount(depositAmount);
   };
@@ -489,11 +507,13 @@ const StakeBsc = ({
   const handleSetMaxWithdraw = async (e) => {
     // e.preventDefault();
     let amount;
-    await staking.depositedTokens(coinbase).then((data)=>{
-      amount = data
-    })
+    await staking.depositedTokens(coinbase).then((data) => {
+      amount = data;
+    });
 
-    let depositedTokens_formatted = new BigNumber(amount).div(1e18).toString(10)
+    let depositedTokens_formatted = new BigNumber(amount)
+      .div(1e18)
+      .toString(10);
     setwithdrawAmount(depositedTokens_formatted);
   };
 
@@ -613,7 +633,7 @@ const StakeBsc = ({
   }
   if (!isNaN(cliffTime) && !isNaN(stakingTime)) {
     if (
-      (Number(stakingTime) + Number(cliffTime) >= Date.now()/1000) &&
+      Number(stakingTime) + Number(cliffTime) >= Date.now() / 1000 &&
       lockTime !== "No Lock"
     ) {
       canWithdraw = false;
@@ -643,7 +663,7 @@ const StakeBsc = ({
         return data;
       });
     let result_formatted = new BigNumber(result).div(1e18).toFixed(6);
-console.log(amount,result_formatted)
+    console.log(amount, result_formatted);
     if (
       Number(result_formatted) >= Number(amount) &&
       Number(result_formatted) !== 0
@@ -912,9 +932,9 @@ console.log(amount,result_formatted)
                     placement="top"
                     title={
                       <div className="tooltip-text">
-                        { lockTime === 'No Lock' ? 'The initial pool size is capped at 5M DYP. Additional opportunities to stake DYP are planned to be introduced over time.' :
-                          "Deposit your assets to the staking smart contract. For lock time pools, the lock time resets if you add more deposits after making one previously."
-                        }
+                        {lockTime === "No Lock"
+                          ? "The initial pool size is capped at 5M DYP. Additional opportunities to stake DYP are planned to be introduced over time."
+                          : "Deposit your assets to the staking smart contract. For lock time pools, the lock time resets if you add more deposits after making one previously."}
                       </div>
                     }
                   >
@@ -1322,7 +1342,7 @@ console.log(amount,result_formatted)
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">My DYP Deposit</span>
                     <h6 className="stats-card-content">
-                      {getFormattedNumber(depositedTokens,6)} DYP
+                      {getFormattedNumber(depositedTokens, 6)} DYP
                     </h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
@@ -1519,7 +1539,7 @@ console.log(amount,result_formatted)
                         ) : (
                           <Countdown
                             date={
-                              (Number(stakingTime) + Number(cliffTime))*1000
+                              (Number(stakingTime) + Number(cliffTime)) * 1000
                             }
                             renderer={renderer}
                           />
@@ -1532,7 +1552,7 @@ console.log(amount,result_formatted)
                     <div className="d-flex flex-column gap-1">
                       <h6 className="withsubtitle">Balance</h6>
                       <h6 className="withtitle">
-                      {getFormattedNumber(depositedTokens,6)} {token_symbol}
+                        {getFormattedNumber(depositedTokens, 6)} {token_symbol}
                       </h6>
                     </div>
                   </div>
@@ -1685,7 +1705,10 @@ console.log(amount,result_formatted)
         <WalletModal
           show={show}
           handleClose={hideModal}
-          handleConnection={()=>{handleConnection(); setshow(false)}}
+          handleConnection={() => {
+            handleConnection();
+            setshow(false);
+          }}
         />
       )}
       {/* <div
