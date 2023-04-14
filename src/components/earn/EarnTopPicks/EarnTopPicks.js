@@ -333,18 +333,18 @@ const EarnTopPicks = ({
   const { rebase_factors, rebase_factorsavax, rebase_factorsbsc } = window;
 
   const stakeArray = [
-    window.farming_new_4,
-    window.farming_new_3,
     window.farming_new_1,
     window.farming_new_2,
+    window.farming_new_3,
+    window.farming_new_4,
     window.farming_new_5,
   ];
 
   const constantArray = [
-    window.constant_staking_new8,
-    window.constant_staking_new7,
     window.constant_staking_new5,
     window.constant_staking_new6,
+   window.constant_staking_new7,
+   window.constant_staking_new8,
     window.constant_staking_new9,
   ];
 
@@ -379,18 +379,18 @@ const EarnTopPicks = ({
   });
 
   const bscFarmArrayStake = [
-    window.farming_newbsc_2,
-    window.farming_newbsc_5,
-    window.farming_newbsc_1,
-    window.farming_newbsc_4,
+ window.farming_newbsc_1,
+     window.farming_newbsc_2,
     window.farming_newbsc_3,
+     window.farming_newbsc_4,
+      window.farming_newbsc_5,
   ];
   const bscFarmArrayConst = [
-    window.constant_stakingnewbsc_new6,
-    window.constant_stakingnewbsc_new9,
     window.constant_stakingnewbsc_new5,
-    window.constant_stakingnewbsc_new8,
+ window.constant_stakingnewbsc_new6,
     window.constant_stakingnewbsc_new7,
+       window.constant_stakingnewbsc_new8,
+    window.constant_stakingnewbsc_new9,
   ];
   const bscFarmArrayFee = [0.3, 1.2, 0.3, 0.8, 0.4];
   const lockarrayFarmbsc = ["No Lock", 3, 30, 60, 90];
@@ -418,37 +418,37 @@ const EarnTopPicks = ({
   const feearrayFarmAvax = [0.3, 0.3, 1.2, 0.4, 0.8];
 
   const constantArrayFarmAvax = [
-    window.constant_staking_newavax6,
     window.constant_staking_newavax5,
-    window.constant_staking_newavax9,
+     window.constant_staking_newavax6,
     window.constant_staking_newavax7,
     window.constant_staking_newavax8,
+    window.constant_staking_newavax9,
   ];
 
   const stakeArrayFarmAvax = [
-    window.farming_newavax_2,
     window.farming_newavax_1,
-    window.farming_newavax_5,
+     window.farming_newavax_2,
     window.farming_newavax_3,
     window.farming_newavax_4,
+      window.farming_newavax_5,
   ];
 
   const { LP_IDs_V2Avax, LP_IDs_V2BNB } = window;
 
   const LP_IDAVAX_Array = [
-    LP_IDs_V2Avax.wavax[1],
     LP_IDs_V2Avax.wavax[0],
-    LP_IDs_V2Avax.wavax[4],
+    LP_IDs_V2Avax.wavax[1],
     LP_IDs_V2Avax.wavax[2],
     LP_IDs_V2Avax.wavax[3],
+    LP_IDs_V2Avax.wavax[4],
   ];
 
   const LP_IDBNB_Array = [
-    LP_IDs_V2BNB.wbnb[1],
-    LP_IDs_V2BNB.wbnb[4],
     LP_IDs_V2BNB.wbnb[0],
-    LP_IDs_V2BNB.wbnb[3],
+    LP_IDs_V2BNB.wbnb[1],
     LP_IDs_V2BNB.wbnb[2],
+    LP_IDs_V2BNB.wbnb[3],
+    LP_IDs_V2BNB.wbnb[4],
   ];
 
   const FarmAvax = initFarmAvax({
