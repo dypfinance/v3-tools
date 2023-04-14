@@ -483,10 +483,10 @@ class App extends React.Component {
     const { ethereum } = window;
 
     const LP_ID_Array = [
-      LP_IDs_V2.weth[3],
-      LP_IDs_V2.weth[2],
       LP_IDs_V2.weth[0],
       LP_IDs_V2.weth[1],
+      LP_IDs_V2.weth[2],
+      LP_IDs_V2.weth[3],
       LP_IDs_V2.weth[4],
     ];
 
