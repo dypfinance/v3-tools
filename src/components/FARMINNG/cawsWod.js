@@ -673,6 +673,8 @@ const CawsWodDetails = ({
               : myLandNFTs
           }
           landItems={myLandNFTs}
+          cawsItems={myNFTs}
+
           cawsStakes={mystakes}
           landStakes={myLandstakes}
           onShowNextScreen={() => {

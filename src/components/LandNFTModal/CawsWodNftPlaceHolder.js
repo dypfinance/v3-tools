@@ -1,9 +1,9 @@
 import React from "react";
 import "../caws/NftMinting/components/General/NftPlaceHolder/_nftPlaceHolder.scss";
 
-const NftPlaceHolder = ({ onMintClick }) => {
+const NftPlaceHolder = ({ onMintClick, width }) => {
   return (
-    <div className="placeholder-wrapper nft-caw-card" style={{ width: 195 }}>
+    <div className="placeholder-wrapper nft-caw-card" style={{ width: width }}>
       <a
         href="https://opensea.io/collection/worldofdypians"
         target="_blank"

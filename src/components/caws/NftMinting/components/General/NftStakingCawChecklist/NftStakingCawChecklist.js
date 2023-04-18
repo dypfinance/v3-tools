@@ -18,6 +18,8 @@ const NftStakingCawChecklist = ({
   checked2,
   coinbase,
   isConnected,
+  width,
+  height
 }) => {
   const [checkbtn, setCheckBtn] = useState(false);
   const [Unstakebtn, setUnstakeBtn] = useState(false);
@@ -159,7 +161,8 @@ const NftStakingCawChecklist = ({
           handleCawClick(checklistItemID);
         }}
         style={{
-          width: 195,
+          width: width,
+          height: height,
           border: isStake
             ? checked === true
               ? Unstakebtn === true
@@ -374,6 +377,8 @@ NftStakingCawChecklist.propTypes = {
   countDownLeft: PropTypes.any,
   coinbase: PropTypes.string,
   isConnected: PropTypes.bool,
+  width: PropTypes.any,
+  height: PropTypes.any
 };
 
 export default NftStakingCawChecklist;

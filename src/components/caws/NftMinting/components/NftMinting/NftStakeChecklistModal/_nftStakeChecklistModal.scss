@@ -495,17 +495,266 @@ input[type="checkbox"]:checked {
   border-radius: 8px;
   background: transparent;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   justify-content: center;
   height: 312px;
   overflow: scroll;
 
   @media screen and (max-width: 500px) {
-   place-items: center;
+  grid-template-columns: repeat(2, 1fr);
+  height: auto;
+  overflow: auto;
+  gap: 15px;
+  padding: 0;
+
+  }
+  
+  .nft-img {
+    width: 100%;
+    border-radius: 8px;
+    // @include medium {
+    //   max-width: 360px;
+    // }
+  }
+  .id {
+    display: flex;
+    align-items: center;
+    margin-top: 13px;
+    margin-bottom: 23px;
+    h1 {
+      font-weight: 700;
+      font-size: 26px;
+      line-height: 33px;
+      color: white;
+      margin-right: auto;
+      margin-bottom: 0;
+      // @include medium {
+      //   font-size: 26px;
+      //   line-height: 33px;
+      // }
+    }
+    p {
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 20px;
+      opacity: 0.8;
+      margin: 0;
+      color: white;
+      // @include medium {
+      //   font-size: 16px;
+      //   line-height: 20px;
+      // }
+    }
+  }
+  .view-link {
+    display: flex;
+    padding: 7.5px 0;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    img {
+      margin-right: 9px;
+    }
+    p {
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 18px;
+      margin: 0;
+      color: blue;
+      // @include medium {
+      //   font-size: 14px;
+      //   line-height: 18px;
+      // }
+    }
+  }
+}
+
+
+.caw-card4 {
+  padding: 0px;
+  background: transparent;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  justify-content: center;
+  height: 100%;
+ place-items: center;
+ border-right: 1px solid rgb(86, 88, 145);
+ border-radius: 0;
+ overflow: auto;
+  @media screen and (max-width: 500px) {
+ border-right: none;
+    
+  
   grid-template-columns: repeat(1, 1fr);
   height: auto;
   overflow: auto;
   gap: 15px;
+
+  }
+  
+  .nft-img {
+    width: 100%;
+    border-radius: 8px;
+    // @include medium {
+    //   max-width: 360px;
+    // }
+  }
+  .id {
+    display: flex;
+    align-items: center;
+    margin-top: 13px;
+    margin-bottom: 23px;
+    h1 {
+      font-weight: 700;
+      font-size: 26px;
+      line-height: 33px;
+      color: white;
+      margin-right: auto;
+      margin-bottom: 0;
+      // @include medium {
+      //   font-size: 26px;
+      //   line-height: 33px;
+      // }
+    }
+    p {
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 20px;
+      opacity: 0.8;
+      margin: 0;
+      color: white;
+      // @include medium {
+      //   font-size: 16px;
+      //   line-height: 20px;
+      // }
+    }
+  }
+  .view-link {
+    display: flex;
+    padding: 7.5px 0;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    img {
+      margin-right: 9px;
+    }
+    p {
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 18px;
+      margin: 0;
+      color: blue;
+      // @include medium {
+      //   font-size: 14px;
+      //   line-height: 18px;
+      // }
+    }
+  }
+}
+
+.caw-card5 {
+  padding: 0;
+  border-radius: 8px;
+  background: transparent;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  justify-content: center;
+  height: 100%;
+  place-items: center;
+ overflow: auto;
+
+  @media screen and (max-width: 500px) {
+
+  grid-template-columns: repeat(1, 1fr);
+  height: auto;
+  overflow: auto;
+  gap: 15px;
+
+  }
+  
+  .nft-img {
+    width: 100%;
+    border-radius: 8px;
+    // @include medium {
+    //   max-width: 360px;
+    // }
+  }
+  .id {
+    display: flex;
+    align-items: center;
+    margin-top: 13px;
+    margin-bottom: 23px;
+    h1 {
+      font-weight: 700;
+      font-size: 26px;
+      line-height: 33px;
+      color: white;
+      margin-right: auto;
+      margin-bottom: 0;
+      // @include medium {
+      //   font-size: 26px;
+      //   line-height: 33px;
+      // }
+    }
+    p {
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 20px;
+      opacity: 0.8;
+      margin: 0;
+      color: white;
+      // @include medium {
+      //   font-size: 16px;
+      //   line-height: 20px;
+      // }
+    }
+  }
+  .view-link {
+    display: flex;
+    padding: 7.5px 0;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    img {
+      margin-right: 9px;
+    }
+    p {
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 18px;
+      margin: 0;
+      color: blue;
+      // @include medium {
+      //   font-size: 14px;
+      //   line-height: 18px;
+      // }
+    }
+  }
+}
+
+.caw-card6 {
+  padding: 16.5px;
+  border-radius: 8px;
+  background: transparent;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-content: center;
+  height: 312px;
+  overflow: scroll;
+  place-items: center;
+
+  @media screen and (max-width: 500px) {
+  grid-template-columns: repeat(2, 1fr);
+  height: auto;
+  overflow: auto;
+  gap: 15px;
+  padding: 0;
 
   }
   

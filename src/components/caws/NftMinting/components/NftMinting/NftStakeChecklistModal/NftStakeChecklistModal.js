@@ -494,6 +494,7 @@ const NftStakeCheckListModal = ({
                 return (
                   <NftPlaceHolder
                     key={id}
+                    width={195}
                     onMintClick={() => {
                       onClose();
                       setCheckUnstakeBtn(false);
@@ -521,6 +522,7 @@ const NftStakeCheckListModal = ({
                       <NftStakingCawChecklist
                         key={id}
                         nft={item}
+                        width={195}
                         modalId="#newNftchecklist"
                         isStake={showStaked}
                         countDownLeft={countDownLeft}
@@ -557,7 +559,8 @@ const NftStakeCheckListModal = ({
                 ].map((item, id) => {
                   return (
                     <NftPlaceHolder
-                      key={id}
+                    width={195}
+                    key={id}
                       onMintClick={() => {
                         onClose();
                         setCheckUnstakeBtn(false);
@@ -584,6 +587,7 @@ const NftStakeCheckListModal = ({
                     <NftStakingCawChecklist
                       key={id}
                       nft={item}
+                      width={195}
                       action={onShareClick}
                       modalId="#NftUnstake2"
                       isStake={showStaked}
