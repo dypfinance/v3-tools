@@ -4628,7 +4628,7 @@ right: -8% !important;
 
 .modal-content {
   border-radius: 8px;
-  padding: 20px;
+  padding: 16px;
   background: #312f69 !important;
   display: flex;
   flex-direction: column;

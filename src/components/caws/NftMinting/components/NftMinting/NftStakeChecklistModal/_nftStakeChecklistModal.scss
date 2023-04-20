@@ -578,7 +578,7 @@ input[type="checkbox"]:checked {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   justify-content: center;
-  height: 100%;
+  height: auto;
  place-items: center;
  border-right: 1px solid rgb(86, 88, 145);
  border-radius: 0;
@@ -663,7 +663,7 @@ input[type="checkbox"]:checked {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   justify-content: center;
-  height: 100%;
+  height: auto;
   place-items: center;
  overflow: auto;
 
