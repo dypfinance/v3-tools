@@ -750,7 +750,7 @@ input[type="checkbox"]:checked {
   place-items: center;
 
   @media screen and (max-width: 500px) {
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(1, 1fr);
   height: auto;
   overflow: auto;
   gap: 15px;
