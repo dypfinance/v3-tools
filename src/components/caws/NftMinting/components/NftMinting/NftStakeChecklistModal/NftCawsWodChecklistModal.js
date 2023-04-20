@@ -483,7 +483,7 @@ const NftCawsWodChecklistModal = ({
       }}
       modalId="stakechecklist"
       width="fit-content"
-      maxHeight="90%"
+      maxHeight={devicewidth < 500 ? "600" : "90%"}
     >
       <div className="left-col">
         <div className="d-flex align-items-center justify-content-between width-100">
@@ -521,11 +521,11 @@ const NftCawsWodChecklistModal = ({
               <h5
                 className="optiontext"
                 onClick={() => {
-                  onshowToStake();
-                  setshowToStake(true);
-                  setshowStaked(false);
+                  // onshowToStake();
+                  // setshowToStake(true);
+                  // setshowStaked(false);
                   //Make selectedNfts empty []
-                  setSelectedNftIds([]);
+                  // setSelectedNftIds([]);
                 }}
                 style={{ fontSize: 14 }}
               >
@@ -539,11 +539,11 @@ const NftCawsWodChecklistModal = ({
               <h5
                 className="optiontext"
                 onClick={() => {
-                  onshowStaked();
-                  setshowStaked(true);
-                  setshowToStake(false);
+                  // onshowStaked();
+                  // setshowStaked(true);
+                  // setshowToStake(false);
                   //Make selectedNfts empty []
-                  setSelectedNftIds([]);
+                  // setSelectedNftIds([]);
                 }}
                 style={{ fontSize: 14 }}
               >
