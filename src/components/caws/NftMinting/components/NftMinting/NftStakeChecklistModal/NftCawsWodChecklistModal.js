@@ -1346,7 +1346,7 @@ const NftCawsWodChecklistModal = ({
                 </button>
               )}
               <button
-                className={`btn ${
+                className={`btn m-auto ${
                   showCawsApprove === false &&
                   showLandApprove === false &&
                   getApprovedNfts(selectNftIds).length > 0 &&
