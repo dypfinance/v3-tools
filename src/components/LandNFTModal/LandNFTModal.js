@@ -367,8 +367,7 @@ const LandNftStakeCheckListModal = ({
               className="checklist-subtitle mb-2"
               style={{ color: "#C0CBF7" }}
             >
-              A list of your NFT collection that can be added and removed from
-              the staking rewards
+              A list of your NFT collection that can be added and removed from the staking pools
             </h6>
           </div>
           {/* <img

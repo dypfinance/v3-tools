@@ -159,7 +159,8 @@ const LandNftChecklist = ({
           handleCawClick(checklistItemID);
         }}
         style={{
-          width: 195,
+          width: 155,
+          height: "fit-content",
           border: isStake
             ? checked === true
               ? Unstakebtn === true

@@ -98,7 +98,7 @@ const CawsWodDetails = ({
       nfts.reverse();
 
       setMyNFTs(nfts);
-    }
+    } else setMyNFTs([]);
   };
 
   const getStakesIds = async () => {
@@ -138,7 +138,7 @@ const CawsWodDetails = ({
       nfts.reverse();
 
       setMyLandNFTs(nfts);
-    }
+    } else setMyLandNFTs([]);
   };
 
   const getLandStakesIds = async () => {
@@ -267,13 +267,13 @@ const CawsWodDetails = ({
     if (coinbase) {
       getStakesIds();
       getLandStakesIds();
-      myNft().then();
-      myStakes().then();
-      myLandNft().then();
-      myLandStakes().then();
-      checkApproval().then();
+      myNft();
+      myStakes();
+      myLandNft();
+      myLandStakes();
+      checkApproval();
       calculateAllRewards();
-      calculateCountdown().then();
+      calculateCountdown();
     }
   }, [isConnected, coinbase, screenName, newStakes]);
 
@@ -297,7 +297,7 @@ const CawsWodDetails = ({
 
   useEffect(() => {
     if (isConnected) {
-      setUSDPrice().then();
+      setUSDPrice();
     }
   }, [isConnected, EthRewards]);
 
@@ -380,48 +380,47 @@ const CawsWodDetails = ({
                 <h6 className="bottomitems">Get CAWS</h6>
               </div>
               {cawspopup === true && (
-                <div className='position-absolute'>
-                <OutsideClickHandler
-                  onOutsideClick={() => {
-                    setCawspopup(false);
-                  }}
-                 
-                >
-                  <div
-                    className="tooltip d-flex justify-content-center"
-                    style={{ opacity: 1, width: 100 }}
+                <div className="position-absolute">
+                  <OutsideClickHandler
+                    onOutsideClick={() => {
+                      setCawspopup(false);
+                    }}
                   >
-                    <div className="d-flex flex-column gap-2 align-items-center">
-                      <a
-                        href="https://nft.coinbase.com/collection/catsandwatches"
-                        target="_blank"
-                        rel="noreferrer"
-                        onClick={() => {
-                          setCawspopup(false);
-                        }}
-                      >
-                        <h6 className="bottomitems">
-                          <img src={arrowup} alt="" />
-                          Coinbase
-                        </h6>
-                      </a>
+                    <div
+                      className="tooltip d-flex justify-content-center"
+                      style={{ opacity: 1, width: 100 }}
+                    >
+                      <div className="d-flex flex-column gap-2 align-items-center">
+                        <a
+                          href="https://nft.coinbase.com/collection/catsandwatches"
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={() => {
+                            setCawspopup(false);
+                          }}
+                        >
+                          <h6 className="bottomitems">
+                            <img src={arrowup} alt="" />
+                            Coinbase
+                          </h6>
+                        </a>
 
-                      <a
-                        href="https://opensea.io/collection/catsandwatchessocietycaws"
-                        target="_blank"
-                        rel="noreferrer"
-                        onClick={() => {
-                          setCawspopup(false);
-                        }}
-                      >
-                        <h6 className="bottomitems">
-                          <img src={arrowup} alt="" />
-                          OpenSea
-                        </h6>
-                      </a>
+                        <a
+                          href="https://opensea.io/collection/catsandwatchessocietycaws"
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={() => {
+                            setCawspopup(false);
+                          }}
+                        >
+                          <h6 className="bottomitems">
+                            <img src={arrowup} alt="" />
+                            OpenSea
+                          </h6>
+                        </a>
+                      </div>
                     </div>
-                  </div>
-                </OutsideClickHandler>
+                  </OutsideClickHandler>
                 </div>
               )}
               <div
@@ -431,47 +430,47 @@ const CawsWodDetails = ({
                 <h6 className="bottomitems">Get WOD</h6>
               </div>
               {landpopup === true && (
-                <div className='position-absolute'>
-                <OutsideClickHandler
-                  onOutsideClick={() => {
-                    setLandpopup(false);
-                  }}
-                >
-                  <div
-                    className="tooltip d-flex justify-content-center"
-                    style={{ opacity: 1, width: 100, left: 90 }}
+                <div className="position-absolute">
+                  <OutsideClickHandler
+                    onOutsideClick={() => {
+                      setLandpopup(false);
+                    }}
                   >
-                    <div className="d-flex flex-column gap-2 align-items-center">
-                      <a
-                        href="https://nft.coinbase.com/collection/worldofdypians"
-                        target="_blank"
-                        rel="noreferrer"
-                        onClick={() => {
-                          setLandpopup(false);
-                        }}
-                      >
-                        <h6 className="bottomitems">
-                          <img src={arrowup} alt="" />
-                          Coinbase
-                        </h6>
-                      </a>
+                    <div
+                      className="tooltip d-flex justify-content-center"
+                      style={{ opacity: 1, width: 100, left: 90 }}
+                    >
+                      <div className="d-flex flex-column gap-2 align-items-center">
+                        <a
+                          href="https://nft.coinbase.com/collection/worldofdypians"
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={() => {
+                            setLandpopup(false);
+                          }}
+                        >
+                          <h6 className="bottomitems">
+                            <img src={arrowup} alt="" />
+                            Coinbase
+                          </h6>
+                        </a>
 
-                      <a
-                        href="https://opensea.io/collection/worldofdypians"
-                        target="_blank"
-                        rel="noreferrer"
-                        onClick={() => {
-                          setLandpopup(false);
-                        }}
-                      >
-                        <h6 className="bottomitems">
-                          <img src={arrowup} alt="" />
-                          OpenSea
-                        </h6>
-                      </a>
+                        <a
+                          href="https://opensea.io/collection/worldofdypians"
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={() => {
+                            setLandpopup(false);
+                          }}
+                        >
+                          <h6 className="bottomitems">
+                            <img src={arrowup} alt="" />
+                            OpenSea
+                          </h6>
+                        </a>
+                      </div>
                     </div>
-                  </div>
-                </OutsideClickHandler>
+                  </OutsideClickHandler>
                 </div>
               )}
             </div>
@@ -673,6 +672,7 @@ const CawsWodDetails = ({
               : myLandNFTs
           }
           landItems={myLandNFTs}
+          cawsItems={myNFTs}
           cawsStakes={mystakes}
           landStakes={myLandstakes}
           onShowNextScreen={() => {
