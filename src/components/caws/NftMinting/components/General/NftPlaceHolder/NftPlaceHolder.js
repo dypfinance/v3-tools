@@ -1,9 +1,9 @@
 import React from "react";
 import "./_nftPlaceHolder.scss";
 
-const NftPlaceHolder = ({ onMintClick }) => {
+const NftPlaceHolder = ({ onMintClick, width }) => {
   return (
-    <div className="placeholder-wrapper nft-caw-card" style={{ width: 195 }}>
+    <div className="placeholder-wrapper nft-caw-card" style={{ width: width }}>
       <a
         className="placeholder-button"
         href="https://opensea.io/collection/catsandwatchessocietycaws"

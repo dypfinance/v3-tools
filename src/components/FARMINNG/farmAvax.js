@@ -2835,11 +2835,11 @@ export default function initFarmAvax({
                           disabled={
                             this.state.selectedPool === "" ||
                               this.state.withdrawStatus === "failed" ||
-                              this.state.withdrawStatus === "success" || canWithdraw === false
+                              this.state.withdrawStatus === "success" 
                               ? true
                               : false
                           }
-                          className={` w-100 btn filledbtn ${this.state.selectedPool === "" || canWithdraw === false
+                          className={` w-100 btn filledbtn ${this.state.selectedPool === "" 
                               ? "disabled-btn"
                               : this.state.withdrawStatus === "failed"
                                 ? "fail-button"

@@ -146,6 +146,7 @@ export default function initStakingNew({
         cliffTime: "",
         stakingTime: "",
         depositedTokens: "",
+        depositedTokensUSD:"",
         lastClaimedTime: "",
         depositAmount: "",
         withdrawAmount: 0,
@@ -893,7 +894,6 @@ export default function initStakingNew({
         ); /* TVL of iDYP on Farming */
 
         let _dTokensDYP = constant.depositedTokens(this.state.coinbase);
-
         let _pendingDivsStaking = constant.getTotalPendingDivs(
           this.state.coinbase
         );
@@ -2870,15 +2870,13 @@ export default function initStakingNew({
                           disabled={
                             this.state.selectedPool === "" ||
                             this.state.withdrawStatus === "failed" ||
-                            this.state.withdrawStatus === "success" ||
-                            canWithdraw === false
+                            this.state.withdrawStatus === "success"
                               ? true
                               : false
                           }
                           className={` w-100 btn filledbtn ${
                             (this.state.selectedPool === "" &&
-                              this.state.withdrawStatus === "initial") ||
-                            canWithdraw === false
+                              this.state.withdrawStatus === "initial")
                               ? "disabled-btn"
                               : this.state.withdrawStatus === "failed"
                               ? "fail-button"
