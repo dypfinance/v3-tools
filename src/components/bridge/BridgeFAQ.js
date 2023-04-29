@@ -92,27 +92,47 @@ const BridgeFAQ = ({faqIndex}) => {
         </div>
       </div>
       <div className="col-12 col-lg-5 px-0 px-lg-2 pe-xl-0">
-        <h3 className="mb-3" style={{ color: "#f7f7fc" }}>
+        <h3 className="mb-3" style={{ color: "#f7f7fc", visibility: "hidden" }}>
           Video guide
         </h3>
-        <div className="video-container p-3">
-          <div className="video-item">
-            <div className="video-wrapper position-relative">
-            <img src={stakeVideo} alt="" className="video" />
+        <div className="video-container2 p-3 gap-3">
+          <div className="video-item2">
+            <div className="video-wrapper position-relative w-100" style={{background: 'transparent'}}>
+              <iframe
+                width="100%"
+                height="190"
+                src="https://www.youtube.com/embed/5jSI_lYb3ns"
+                title="YouTube video player"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+                style={{pointerEvents: 'auto'}}
+                borderRadius='8px'
+              ></iframe>
             </div>
-            <p style={{ color: "#7a81b4", fontSize: "13px" }}>How to set up</p>
-            <h5 style={{ color: "#C0CBF7", fontSize: "17px" }}>
-              DYP for Metamask
-            </h5>
+            <h5 style={{ color: "#C0CBF7", fontSize: "17px" }}>Dypius</h5>{" "}
+            <p style={{ color: "#7a81b4", fontSize: "13px" }}>Embrace new opportunities</p>
           </div>
-          <div className="video-item">
-            <div className="video-wrapper position-relative">
-              <img src={stakeVideo} alt="" className="video" />
+          <div className="video-item2">
+            <div className="video-wrapper position-relative w-100" style={{background: 'transparent'}}>
+              <iframe
+                width="100%"
+                height="190"
+                src="https://www.youtube.com/embed/0kUrIP4d9Tc"
+                title="YouTube video player"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+                style={{pointerEvents: 'auto'}}
+                borderRadius='8px'
+
+
+              ></iframe>
             </div>
-            <p style={{ color: "#7a81b4", fontSize: "13px" }}>How to stake</p>
             <h5 style={{ color: "#C0CBF7", fontSize: "17px" }}>
-              DYP for Stake
-            </h5>
+              CAWS on World of Dypians
+            </h5>{" "}
+            <p style={{ color: "#7a81b4", fontSize: "13px" }}>3D Rendering Comes to World of Dypians Metaverse</p>
           </div>
         </div>
       </div>
