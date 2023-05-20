@@ -1166,7 +1166,7 @@ const StakeEthDai = ({
                         color: "#c0c9ff",
                       }}
                     >
-                      WETH
+                      DAI
                     </span>
                     <span>{pendingDivs}</span>
                     {/* <input
