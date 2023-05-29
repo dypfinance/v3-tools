@@ -822,6 +822,7 @@ class App extends React.Component {
                         isConnected={this.state.isConnected}
                         key={props.match.params.pair_id}
                         theme={this.state.theme}
+                        coinbase={this.state.coinbase}
                         {...props}
                       />
                     )}

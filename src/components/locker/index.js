@@ -79,35 +79,48 @@ export default class Locker extends React.Component {
   checkNetworkId = async () => {
     if (window.ethereum) {
       window.ethereum
-        .request({ method: "net_version" })
+        .request({ method: "eth_chainId" })
         .then((data) => {
-          this.setState({
-            networkId: data,
-          });
+          this.getAllData(data);
+          if (data === "0x1") {
+            this.setState({
+              networkId: "1",
+            });
+          } else if (data === "0xa86a") {
+            this.setState({
+              networkId: "43114",
+            });
+          } else if (data === "0x38") {
+            this.setState({
+              networkId: "56",
+            });
+          } else if (data !== "undefined") {
+            this.setState({
+              networkId: "0",
+            });
+          } else {
+            this.setState({
+              networkId: "1",
+            });
+          }
 
-          this.selectBaseToken().then();
           this.refreshMyLocks().then();
           this.loadPairInfo().then();
           let pair_id = this.props.match.params.pair_id;
-          if (window.web3.utils.isAddress(pair_id)) {
-            this.refreshTokenLocks(pair_id);
-            this.checkTotalLpLocked().then();
-          }
 
-          if (window.isConnectedOneTime) {
-            this.onComponentMount();
-          } else {
-            window.addOneTimeWalletConnectionListener(this.onComponentMount);
-          }
+          // if (window.isConnectedOneTime) {
+          //   this.onComponentMount();
+          // } else {
+          //   window.addOneTimeWalletConnectionListener(this.onComponentMount);
+          // }
         })
         .catch(console.error);
     } else {
-      this.selectBaseToken().then();
-      if (window.isConnectedOneTime) {
-        this.onComponentMount();
-      } else {
-        window.addOneTimeWalletConnectionListener(this.onComponentMount);
-      }
+      // if (window.isConnectedOneTime) {
+      //   this.onComponentMount();
+      // } else {
+      //   window.addOneTimeWalletConnectionListener(this.onComponentMount);
+      // }
       this.setState({
         networkId: "1",
       });
@@ -129,19 +142,15 @@ export default class Locker extends React.Component {
     this.setState({ totalLpLocked });
   };
 
-  checkConnection() {
+  async checkConnection() {
     const logout = localStorage.getItem("logout");
+
     if (logout !== "true") {
-      if (window.ethereum && !window.ethereum.isCoin98) {
-        window.ethereum
-          .request({ method: "eth_accounts" })
-          .then((data) => {
-            this.setState({
-              coinbase: data.length === 0 ? undefined : data[0],
-            });
-          })
-          .catch(console.error);
-      }
+      window.getCoinbase().then((data) => {
+        this.setState({
+          coinbase: data,
+        });
+      });
     } else {
       this.setState({
         coinbase: undefined,
@@ -149,11 +158,40 @@ export default class Locker extends React.Component {
     }
   }
 
+  getAllData = async (data) => {
+    let pair_id;
+    if (this.props.match.params.pair_id) {
+      pair_id = this.props.match.pair_id;
+    } else if (!this.props.match.params.pair_id && data === "0x1") {
+      pair_id = "0x76911e11fddb742d75b83c9e1f611f48f19234e4";
+    } else if (!this.props.match.params.pair_id && data === "0xa86a") {
+      pair_id = "0x497070e8b6c55fd283d8b259a6971261e2021c01";
+    }
+    let baseTokens =
+      data === "0x1"
+        ? await window.getBaseTokensETH()
+        : await window.getBaseTokens();
+
+    this.setState({ baseTokens });
+    let isAddress = await window.isAddress(pair_id); 
+    if (isAddress) {
+      this.refreshTokenLocks(pair_id);
+      // this.handlePairChange(null, pair_id);
+      let totalLpLocked =
+        data === "0x1"
+          ? await window.getLockedAmountETH(pair_id)
+          : await window.getLockedAmount(pair_id);
+      this.refreshUsdValueOfLP(pair_id, totalLpLocked, baseTokens);
+      this.setState({ totalLpLocked });
+    }
+  };
+
   componentDidMount() {
     // window.scrollTo(0, 0);
-    this.checkNetworkId();
-    this.checkConnection();
+    this.checkNetworkId().then();
+    this.checkConnection().then();
   }
+
   componentWillUnmount() {
     window.removeOneTimeWalletConnectionListener(this.onComponentMount);
   }
@@ -162,7 +200,11 @@ export default class Locker extends React.Component {
     if (this.state.isLoadingMoreMyLocks) return;
     this.setState({ isLoadingMoreMyLocks: true });
     try {
-      let recipient = this.state.coinbase;
+      let recipient;
+      await window.getCoinbase().then((data) => {
+        recipient = data;
+      });
+
       let recipientLocksLength =
         this.state.networkId === "1"
           ? await window.getActiveLockIdsLengthByRecipientETH(recipient)
@@ -198,11 +240,26 @@ export default class Locker extends React.Component {
 
   onComponentMount = async () => {
     this.refreshMyLocks().then();
-    this.selectBaseToken().then();
-    this.checkNetworkId();
 
-    this.setState({ coinbase: await window.getCoinbase() });
-    let pair_id = this.props.match.params.pair_id;
+    this.checkNetworkId().then();
+    this.checkConnection().then();
+
+    // this.setState({ coinbase: await window.getCoinbase() });
+    let pair_id;
+
+    if (this.props.match.params.pair_id) {
+      pair_id = this.props.match.pair_id;
+    } else if (
+      !this.props.match.params.pair_id &&
+      this.state.networkId === "1"
+    ) {
+      pair_id = "0x76911e11fddb742d75b83c9e1f611f48f19234e4";
+    } else if (
+      !this.props.match.params.pair_id &&
+      this.state.networkId === "43314"
+    ) {
+      pair_id = "0x497070e8b6c55fd283d8b259a6971261e2021c01";
+    }
 
     let baseTokens =
       this.state.networkId === "1"
@@ -210,7 +267,8 @@ export default class Locker extends React.Component {
         : await window.getBaseTokens();
 
     this.setState({ baseTokens });
-    if (window.web3.utils.isAddress(pair_id)) {
+    let isAddress = await window.isAddress(pair_id);
+    if (isAddress) {
       this.refreshTokenLocks(pair_id);
       this.handlePairChange(null, pair_id);
       let totalLpLocked =
@@ -224,6 +282,7 @@ export default class Locker extends React.Component {
 
   refreshUsdValueOfLP = async (pair, amount, baseTokens) => {
     try {
+
       let totalSupply = await window.getTokenTotalSupply(pair);
       this.setState({ lpTotalSupply: totalSupply });
 
@@ -234,7 +293,8 @@ export default class Locker extends React.Component {
       } else if (baseTokens.includes(token1.address.toLowerCase())) {
         baseToken = token1;
       }
-      let baseTokenBalance = await window.getTokenHolderBalance(
+      if(baseToken && baseToken.address)
+     { let baseTokenBalance = await window.getTokenHolderBalance(
         baseToken.address,
         pair
       );
@@ -245,7 +305,7 @@ export default class Locker extends React.Component {
       if (!tokenCG) return;
       let usdPerBaseToken = Number(await window.getPrice(tokenCG));
       let usdValueOfLP = baseTokenInLp * usdPerBaseToken * 2;
-      this.setState({ usdValueOfLP });
+      this.setState({ usdValueOfLP });}
     } catch (e) {
       console.error(e);
     }
@@ -289,7 +349,7 @@ export default class Locker extends React.Component {
   };
 
   handlePairChange = async (e, pair_address = null) => {
-    let newPairAddress = pair_address || e.target.value;
+    let newPairAddress = pair_address || e;
 
     this.setState({ pair_address: newPairAddress }, () => {
       this.refreshTokenLocks(newPairAddress);
@@ -321,7 +381,8 @@ export default class Locker extends React.Component {
     }
     let isAddress;
 
-    isAddress = window.web3.utils.isAddress(this.state.pair_address);
+    isAddress = await window.isAddress(this.state.pair_address);
+
     if (!isAddress) {
       this.setState({
         status:
@@ -334,25 +395,25 @@ export default class Locker extends React.Component {
 
     if (this.state.placeholderState === true && isAddress && isConnected) {
       this.setState({ placeholderState: false });
-      this.selectBaseToken();
+      // this.selectBaseToken();
       this.handlePairChange(this.state.pair_address);
     }
 
     if (this.state.placeholderState === false && isAddress && isConnected) {
-      this.selectBaseToken();
+      // this.selectBaseToken();
       this.handlePairChange(this.state.pair_address);
     }
   };
 
-  selectBaseToken = async (e) => {
-    let pair = await window.getPairTokensInfo(this.state.pair_address);
-
+  selectBaseToken = async (addr) => {
+    let pair = await window.getPairTokensInfo(addr);
+    console.log(pair);
     this.setState({ pair });
     this.setState({ status: "" });
 
     if (pair) {
       let balance = await window.getTokenHolderBalance(
-        this.state.pair_address,
+        addr,
         this.state.coinbase
       );
 
@@ -365,7 +426,7 @@ export default class Locker extends React.Component {
         this.state.networkId === "1"
           ? await window.getBaseTokensETH()
           : await window.getBaseTokens();
-
+      console.log(baseTokens);
       if (baseTokens.includes(token0)) {
         this.setState({ selectedBaseToken: "0" });
         this.setState({ selectedBaseTokenTicker: pair["token0"].symbol });
@@ -377,6 +438,8 @@ export default class Locker extends React.Component {
         pair["token1"].symbol === "USDT"
       ) {
         this.setState({ selectedBaseTokenTicker: "WETH" });
+      } else {
+        this.setState({ selectedBaseTokenTicker: "TOKEN" });
       }
     }
   };
@@ -1540,7 +1603,7 @@ export default class Locker extends React.Component {
                       .humanize(true)}{" "}
                   </td>
                   <td>
-                    {String(this.state.coinbase).toLowerCase() ==
+                    {String(this.props.coinbase).toLowerCase() ==
                       lock.recipient.toLowerCase() && (
                       <button
                         onClick={this.handleClaim(lock.id)}
@@ -1960,7 +2023,6 @@ export default class Locker extends React.Component {
   };
 
   render() {
-    
     const convertTimestampToDate = (timestamp) => {
       const result = new Intl.DateTimeFormat("en-US", {
         year: "numeric",
@@ -2066,9 +2128,10 @@ export default class Locker extends React.Component {
                               disabled={this.props.match.params.pair_id}
                               value={this.state.pair_address}
                               onChange={(e) => {
-                                this.handlePairChange(e);
+                                this.handlePairChange(e.target.value);
                                 this.loadPairInfo();
-                                this.selectBaseToken(e);
+                                this.selectBaseToken(e.target.value);
+                                this.setState({ pair_address: e.target.value });
                               }}
                             />
                             <label
@@ -2391,7 +2454,7 @@ export default class Locker extends React.Component {
                   <div className="d-flex align-items-center gap-2">
                     <img src={coinStackIcon} alt="" />
                     <h6 className="locker-function-title">
-                      My DYP locker liquidity 
+                      My DYP locker liquidity
                     </h6>
                   </div>
                   <hr className="form-divider my-3" />
@@ -2409,7 +2472,7 @@ export default class Locker extends React.Component {
                       </div>
                       <div className="locker-status d-flex align-items-center gap-3 p-2">
                         <span className="locker-status-text">
-                          {this.state.lpBalance == '0'
+                          {this.state.lpBalance == "0"
                             ? 25
                             : this.getPercentageLocked()}
                           % Locked
@@ -2425,7 +2488,7 @@ export default class Locker extends React.Component {
                                       ].unlockTimestamp
                                     )
                                   )
-                                : 'Fri, 02 Feb 1996 03:04:05 GMT'
+                                : "Fri, 02 Feb 1996 03:04:05 GMT"
                             }
                           />
                         </span>
@@ -2505,9 +2568,10 @@ export default class Locker extends React.Component {
                       disabled={this.props.match.params.pair_id}
                       value={this.state.pair_address}
                       onChange={(e) => {
-                        this.handlePairChange(e);
+                        this.handlePairChange(e.target.value);
                         this.loadPairInfo();
-                        this.selectBaseToken(e);
+                        this.selectBaseToken(e.target.value);
+                        this.setState({ pair_address: e.target.value });
                       }}
                     />
                     <label
@@ -2539,8 +2603,9 @@ export default class Locker extends React.Component {
             {this.state.tokenLocks &&
               this.state.tokenLocks
                 .filter((lock) => lock.id === this.state.maxLpID)
-                .map((lock) => (
+                .map((lock, index) => (
                   <PairLockerCard
+                    key={index}
                     completed={
                       lock.claimed === false
                         ? Date.now() < lock.unlockTimestamp * 1e3
