@@ -1169,7 +1169,7 @@ const StakeAvaxDai = ({
                         color: "#c0c9ff",
                       }}
                     >
-                      WAVAX
+                      DAI
                     </span>
                     <span>{pendingDivs}</span>
                     {/* <input

@@ -374,8 +374,7 @@ const NftStakeCheckListModal = ({
               className="checklist-subtitle mb-2"
               style={{ color: "#C0CBF7" }}
             >
-              A list of your NFT collection that can be added and removed from
-              the staking rewards
+              A list of your NFT collection that can be added and removed from the staking pools
             </h6>
           </div>
           {/* <img
@@ -494,6 +493,7 @@ const NftStakeCheckListModal = ({
                 return (
                   <NftPlaceHolder
                     key={id}
+                    width={195}
                     onMintClick={() => {
                       onClose();
                       setCheckUnstakeBtn(false);
@@ -521,6 +521,7 @@ const NftStakeCheckListModal = ({
                       <NftStakingCawChecklist
                         key={id}
                         nft={item}
+                        width={195}
                         modalId="#newNftchecklist"
                         isStake={showStaked}
                         countDownLeft={countDownLeft}
@@ -557,7 +558,8 @@ const NftStakeCheckListModal = ({
                 ].map((item, id) => {
                   return (
                     <NftPlaceHolder
-                      key={id}
+                    width={195}
+                    key={id}
                       onMintClick={() => {
                         onClose();
                         setCheckUnstakeBtn(false);
@@ -584,6 +586,7 @@ const NftStakeCheckListModal = ({
                     <NftStakingCawChecklist
                       key={id}
                       nft={item}
+                      width={195}
                       action={onShareClick}
                       modalId="#NftUnstake2"
                       isStake={showStaked}

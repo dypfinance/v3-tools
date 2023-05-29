@@ -1178,7 +1178,7 @@ const StakeBscDai = ({
                         color: "#c0c9ff",
                       }}
                     >
-                      WBNB
+                      DAI
                     </span>
                     <span>{pendingDivs}</span>
                     {/* <input
