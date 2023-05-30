@@ -55,7 +55,7 @@ const VAULT_ADDRESSES_LIST = LP_ID_LIST.map((id) => id.split("-")[1]);
 window.LP_ID_LIST = LP_ID_LIST;
 
 function getTokenContract(address) {
-  return getContract({ key:null, address, ABI: window.TOKEN_ABI });
+  return getContract({ key: null, address, ABI: window.TOKEN_ABI });
 }
 
 function getVaultContract(address) {
@@ -28318,7 +28318,7 @@ async function connectWallet(provider, walletType) {
       });
 
       window.coinbase_address = coinbase_address.pop();
-      console.log(window.coinbase_address)
+      console.log(window.coinbase_address);
       return true;
     } catch (e) {
       console.error(e);
@@ -28345,14 +28345,7 @@ window.cached_contracts = Object.create(null);
 async function getCoinbase() {
   if (window.ethereum && (window.coin98 || window.ethereum.isCoinbaseWallet)) {
     return window.coinbase_address.toLowerCase();
-  } else 
-  
-  if (
-    window.ethereum &&
-    !window.coin98
-  ) 
-  
-  {
+  } else if (window.ethereum && !window.coin98) {
     const coinbase = await window.ethereum.request({
       method: "eth_accounts",
     });
@@ -29743,4 +29736,11 @@ function readAsText(file) {
 window.sign = async function (msg, account) {
   let signature = await window.web3.eth.personal.sign(msg, account);
   return signature;
+};
+
+window.isAddress = async function (address) {
+  const web3 = new Web3(window.config.infura_endpoint);
+  const result = await web3.utils.isAddress(address);
+  if (result === true) return true;
+  else return false;
 };
