@@ -294,7 +294,7 @@ const BscFarmingFunc = ({
   };
 
   const handleStake = async (e) => {
-    setDepositLoading(true)
+    setDepositLoading(true);
 
     let selectedBuybackToken = selectedBuybackToken;
     let amount = depositAmount;
@@ -796,44 +796,115 @@ const BscFarmingFunc = ({
 
       /* USD VALUE OF MY LP DEPOSITED */
       // let myDepositedLpTokens = new BigNumber(depositedTokens).times(usd_per_lp).toFixed(18)
-      let myDepositedLpTokens = new BigNumber(depositedTokens).toFixed(18);
+      let myDepositedLpTokens = new BigNumber(depositedTokens2).toFixed(18);
 
       /* USD VALUE OF WITHDRAW OF LP + iDYP */
       // let depositedTokensUSD = new BigNumber(depositedTokens).times(usd_per_lp).plus(tvlValueConstantDYP).toFixed(18)
-      let depositedTokensUSD = new BigNumber(depositedTokens).toFixed(18);
+      let depositedTokensUSD = new BigNumber(depositedTokens2).toFixed(18);
       // let tvlUSD = new BigNumber(tvl).times(usd_per_lp).plus(tvlValueiDYP).toFixed(18)
+      let withdraw_amount_formatted = new BigNumber(depositedTokensUSD)
+        .div(1e18)
+        .toFixed(2);
+      setWithdrawAmount(withdraw_amount_formatted);
 
+      setDepositedTokensUSD(getFormattedNumber(depositedTokensUSD, 2));
       /* USD VALUE OF TOTAL LP DEPOSITED */
-      let tvlUSD = new BigNumber(tvl).times(usd_per_lp).toFixed(18);
+      let tvlUSD = new BigNumber(tvl2).times(usd_per_lp).toFixed(18);
       // let tvlUSD = new BigNumber(tvl).toFixed(18)
 
-      let totalValueLocked = new BigNumber(tvlUSD)
+      let totalValueLocked_formatted = new BigNumber(tvlUSD)
         .plus(tvlValueiDYP)
         .plus(tvlValueiDYPFarming)
         .plus(tvlValueConstantDYP)
         .toFixed(18);
       //console.log({tvlValueConstantDYP})
+      setTotalValueLocked(getFormattedNumber(totalValueLocked_formatted, 2));
+      let tvl_usd = totalValueLocked_formatted / 1e18;
 
-      let tvlDyps = new BigNumber(tvlDYPS).times(usd_per_dyps).toFixed(18);
+      setTvlUSD(getFormattedNumber(tvl_usd, 2));
 
-      setToken_balance(token_balance2);
-      setReward_token_balance(reward_token_balance2);
-      setPendingDivs(pendingDivs2);
-      setTotalEarnedTokens(totalEarnedTokens2);
-      setStakingTime(stakingTime2);
-      setDepositedTokens(depositedTokens2);
+      let tvlDyps_formatted = new BigNumber(tvlDYPS2)
+        .times(usd_per_dyps)
+        .toFixed(18);
+      setTvlDyps(getFormattedNumber(tvlDyps_formatted, 2));
+      // let myShare = ((depositedTokens / tvl) * 100).toFixed(2); tbd
+      // myShare = getFormattedNumber(myShare, 2);
+
+      let token_balance_formatted = new BigNumber(
+        token_balance2 * LP_AMPLIFY_FACTOR
+      )
+        .div(1e18)
+        .toString(10);
+      setToken_balance(getFormattedNumber(token_balance_formatted, 2));
+      // token_balance = getFormattedNumber(token_balance_formatted, 2);
+
+      let pendingDivsEth_formatted = new BigNumber(pendingDivsEth2)
+        .div(1e18)
+        .toString(10);
+      setPendingDivsEth(getFormattedNumber(pendingDivsEth_formatted, 3));
+
+      let totalEarnedEth_formatted = new BigNumber(totalEarnedEth2)
+        .div(1e18)
+        .toString(10);
+      setTotalEarnedEth(getFormattedNumber(totalEarnedEth_formatted, 6));
+
+      let reward_token_balance_formatted = new BigNumber(reward_token_balance2)
+        .div(10 ** TOKEN_DECIMALS)
+        .toString(10);
+      setReward_token_balance(
+        getFormattedNumber(reward_token_balance_formatted, 6)
+      );
+
+      let pendingDivs_formatted = new BigNumber(pendingDivsStaking2)
+        .div(10 ** TOKEN_DECIMALS)
+        .times(usd_per_idyp)
+        .div(usd_per_token)
+        .toString(10);
+      setPendingDivs(getFormattedNumber(pendingDivs_formatted, 3));
+
+      let totalEarnedTokens_formatted = new BigNumber(totalEarnedTokens2)
+        .div(10 ** TOKEN_DECIMALS)
+        .toString(10);
+      setTotalEarnedTokens(getFormattedNumber(totalEarnedTokens_formatted, 6));
+
+      let depositedTokens_formatted = new BigNumber(
+        depositedTokensUSD * LP_AMPLIFY_FACTOR
+      )
+        .div(1e18)
+        .toString(10);
+      setDepositedTokens(getFormattedNumber(depositedTokens_formatted, 2));
+
+      let myDepositedLpTokens_formatted = new BigNumber(
+        myDepositedLpTokens * LP_AMPLIFY_FACTOR
+      )
+        .div(1e18)
+        .toString(10);
+      setMyDepositedLpTokens(
+        getFormattedNumber(myDepositedLpTokens_formatted, 2)
+      );
+
+      let depositedTokensDYP_formatted = new BigNumber(depositedTokensDYP2)
+        .div(1e18)
+        .toString(10);
+      setDepositedTokensDYP(
+        getFormattedNumber(depositedTokensDYP_formatted, 2)
+      );
+
+      let tvlConstantDYP_formatted = new BigNumber(tvlConstantDYP2)
+        .div(1e18)
+        .toString(10);
+      setTvlConstantDYP(getFormattedNumber(tvlConstantDYP_formatted, 2));
+
+      let tvl_formatted = new BigNumber(tvlUSD * LP_AMPLIFY_FACTOR)
+        .div(1e18)
+        .toString(10);
+      setTvl(getFormattedNumber(tvl_formatted, 2));
+
+      let stakingTime_formatted = stakingTime2 * 1e3;
+
+      setStakingTime(stakingTime_formatted);
+
       setlastClaimedTime(lastClaimedTime2);
-      setTvl(tvl2);
-      setTvlDyps(tvlDYPS2);
-      setTotalEarnedEth(totalEarnedEth2);
-      setPendingDivsEth(pendingDivsEth2);
-      setMyDepositedLpTokens(myDepositedLpTokens);
-      setDepositedTokensUSD(depositedTokensUSD);
-      setTvlUSD(tvlUSD);
-      setTotalValueLocked(totalValueLocked);
-      setDepositedTokensDYP(depositedTokensDYP2);
-      setTvlConstantDYP(tvlConstantDYP2);
-      setPendingDivsStaking(pendingDivsStaking2);
 
       let stakingOwner2 = await staking.owner();
       setStakingOwner(stakingOwner2);
@@ -844,34 +915,48 @@ const BscFarmingFunc = ({
     staking
       .cliffTime()
       .then((cliffTime) => {
-        setCliffTime(Number(cliffTime));
+        setCliffTime(Number(cliffTime * 1e3));
       })
       .catch(console.error);
 
     staking
       .tokensToBeDisbursedOrBurnt()
       .then((tokensToBeDisbursedOrBurnt2) => {
-        setTokensToBeDisbursedOrBurnt(tokensToBeDisbursedOrBurnt2);
+        let tokensToBeDisbursedOrBurnt_formatted = new BigNumber(
+          tokensToBeDisbursedOrBurnt2
+        )
+          .div(1e18)
+          .toString(10);
+
+        setTokensToBeDisbursedOrBurnt(
+          getFormattedNumber(tokensToBeDisbursedOrBurnt_formatted, 6)
+        );
       })
       .catch(console.error);
 
     staking.tokensToBeSwapped().then((tokensToBeSwapped2) => {
-      setTokensToBeSwapped(tokensToBeSwapped2);
+      let tokensToBeSwapped_formatted = new BigNumber(tokensToBeSwapped2)
+        .div(1e18)
+        .toString(10);
+      setTokensToBeSwapped(getFormattedNumber(tokensToBeSwapped_formatted, 6));
     });
 
     window.wethbsc
       .balanceOf(coinbase)
       .then((wethBalance2) => {
-        setWethBalance(wethBalance2);
+        let wethBalance_formatted = new BigNumber(wethBalance2)
+          .div(1e18)
+          .toString(10);
+        setWethBalance(getFormattedNumber(wethBalance_formatted, 6));
       })
       .catch(console.error);
 
     staking.lastSwapExecutionTime().then((lastSwapExecutionTime2) => {
-      setLastSwapExecutionTime(lastSwapExecutionTime2);
+      setLastSwapExecutionTime(lastSwapExecutionTime2 * 1e3);
     });
 
     staking.swapAttemptPeriod().then((swapAttemptPeriod2) => {
-      setSwapAttemptPeriod(swapAttemptPeriod2);
+      setSwapAttemptPeriod(swapAttemptPeriod2 * 1e3);
     });
 
     staking.contractDeployTime().then((contractDeployTime2) => {
@@ -883,8 +968,6 @@ const BscFarmingFunc = ({
     });
 
     //Set Value $ of iDYP & DYP for Withdraw Input
-
-    setWithdrawAmount(new BigNumber(depositedTokensUSD).div(1e18).toFixed(2));
 
     //console.log(disburseDuration)
     //console.log(contractDeployTime)
@@ -944,172 +1027,93 @@ const BscFarmingFunc = ({
     };
   }, []);
 
-     let is_connected = is_wallet_connected;
+  let is_connected = is_wallet_connected;
 
-        let usd_per_token = the_graph_result.token_data
-          ? the_graph_result.token_data[
-              "0x961c8c0b1aad0c0b10a51fef6a867e3091bcef17"
-            ].token_price_usd
-          : 1;
-        let usd_per_idyp = the_graph_result.token_data
-          ? the_graph_result.token_data[
-              "0xbd100d061e120b2c67a24453cf6368e63f1be056"
-            ].token_price_usd
-          : 1;
+  let usd_per_token = the_graph_result.token_data
+    ? the_graph_result.token_data["0x961c8c0b1aad0c0b10a51fef6a867e3091bcef17"]
+        .token_price_usd
+    : 1;
+  let usd_per_idyp = the_graph_result.token_data
+    ? the_graph_result.token_data["0xbd100d061e120b2c67a24453cf6368e63f1be056"]
+        .token_price_usd
+    : 1;
 
-        let myShare = ((depositedTokens / tvl) * 100).toFixed(2);
-        myShare = getFormattedNumber(myShare, 2);
+  stakingTime = stakingTime * 1e3;
+  cliffTime = cliffTime * 1e3;
+  swapAttemptPeriod = swapAttemptPeriod * 1e3;
+  lastSwapExecutionTime = lastSwapExecutionTime * 1e3;
 
-        token_balance = new BigNumber(token_balance * LP_AMPLIFY_FACTOR)
-          .div(1e18)
-          .toString(10);
-        token_balance = getFormattedNumber(token_balance, 2);
+  let showDeposit = true;
 
-        wethBalance = new BigNumber(wethBalance).div(1e18).toString(10);
-        wethBalance = getFormattedNumber(wethBalance, 6);
+  if (!isNaN(disburseDuration) && !isNaN(contractDeployTime)) {
+    let lastDay = parseInt(disburseDuration) + parseInt(contractDeployTime);
+    let lockTimeExpire = parseInt(Date.now()) + parseInt(cliffTime);
+    lockTimeExpire = lockTimeExpire.toString().substr(0, 10);
+    if (lockTimeExpire > lastDay) {
+      showDeposit = false;
+    }
+  }
 
-        tokensToBeSwapped = new BigNumber(tokensToBeSwapped)
-          .div(1e18)
-          .toString(10);
-        tokensToBeSwapped = getFormattedNumber(tokensToBeSwapped, 6);
+  let cliffTimeInWords = "lockup period";
 
-        tokensToBeDisbursedOrBurnt = new BigNumber(tokensToBeDisbursedOrBurnt)
-          .div(1e18)
-          .toString(10);
-        tokensToBeDisbursedOrBurnt = getFormattedNumber(
-          tokensToBeDisbursedOrBurnt,
-          6
-        );
+  let claimTitle = "Feel free to execute claim";
 
-        pendingDivsEth = new BigNumber(pendingDivsEth).div(1e18).toString(10);
-        pendingDivsEth = getFormattedNumber(pendingDivsEth, 3);
+  if (!isNaN(swapAttemptPeriod) && !isNaN(lastSwapExecutionTime)) {
+    if (Date.now() - lastSwapExecutionTime <= swapAttemptPeriod) {
+      claimTitle = `You can execute claim for the latest rewards ${moment
+        .duration(swapAttemptPeriod - (Date.now() - lastSwapExecutionTime))
+        .humanize(true)}`;
+    }
+  }
 
-        totalEarnedEth = new BigNumber(totalEarnedEth).div(1e18).toString(10);
-        totalEarnedEth = getFormattedNumber(totalEarnedEth, 6);
+  let canWithdraw = true;
+  if (lockTime === "No Lock") {
+    canWithdraw = true;
+  }
+  if (!isNaN(cliffTime) && !isNaN(stakingTime)) {
+    if (
+      convertTimestampToDate(Number(stakingTime) + Number(cliffTime)) >=
+        convertTimestampToDate(Date.now()) &&
+      lockTime !== "No Lock"
+    ) {
+      canWithdraw = false;
+      cliffTimeInWords = moment
+        .duration(cliffTime - (Date.now() - stakingTime))
+        .humanize(true);
+    }
+  }
 
-        reward_token_balance = new BigNumber(reward_token_balance)
-          .div(10 ** TOKEN_DECIMALS)
-          .toString(10);
-        reward_token_balance = getFormattedNumber(reward_token_balance, 6);
+  let lp_data = the_graph_result.lp_data;
+  let apy = lp_data ? lp_data[lp_id].apy : 0;
 
-        pendingDivs = new BigNumber(pendingDivsStaking)
-          .div(10 ** TOKEN_DECIMALS)
-          .times(usd_per_idyp)
-          .div(usd_per_token)
-          .toString(10);
-        pendingDivs = getFormattedNumber(pendingDivs, 3);
+  let total_stakers = lp_data ? lp_data[lp_id].stakers_num : 0;
+  // let tvl_usd = lp_data ? lp_data[lp_id].tvl_usd : 0
 
-        totalEarnedTokens = new BigNumber(totalEarnedTokens)
-          .div(10 ** TOKEN_DECIMALS)
-          .toString(10);
-        totalEarnedTokens = getFormattedNumber(totalEarnedTokens, 6);
+  apy = getFormattedNumber(apy, 2);
+  total_stakers = getFormattedNumber(total_stakers, 0);
 
-        depositedTokens = new BigNumber(
-          depositedTokensUSD * LP_AMPLIFY_FACTOR
-        )
-          .div(1e18)
-          .toString(10);
-        depositedTokens = getFormattedNumber(depositedTokens, 2);
+  //console.log(total_stakers)
 
-        myDepositedLpTokens = new BigNumber(
-          myDepositedLpTokens * LP_AMPLIFY_FACTOR
-        )
-          .div(1e18)
-          .toString(10);
-        myDepositedLpTokens = getFormattedNumber(myDepositedLpTokens, 2);
+  let isOwner =
+    String(coinbase).toLowerCase() ===
+    String(window.config.admin_address).toLowerCase();
 
-        depositedTokensDYP = new BigNumber(depositedTokensDYP)
-          .div(1e18)
-          .toString(10);
-        depositedTokensDYP = getFormattedNumber(depositedTokensDYP, 2);
+  let apr2 = 50;
+  let ApyStake = new BigNumber(apr2)
+    .div(1e2)
+    .times(usd_per_idyp)
+    .div(usd_per_token)
+    .times(1e2)
+    .toFixed(2);
 
-        tvlConstantDYP = new BigNumber(tvlConstantDYP)
-          .div(1e18)
-          .toString(10);
-        tvlConstantDYP = getFormattedNumber(tvlConstantDYP, 2);
+  let infoItems = [
+    "75% from your deposit is added to PancakeSwap V2 BNB/iDYP LP",
+    "25% from your deposit is sent to DYP Staking with " + ApyStake + "% APR",
+  ];
+  let tooltip1 = infoItems.join("\n");
 
-        tvl = new BigNumber(tvlUSD * LP_AMPLIFY_FACTOR)
-          .div(1e18)
-          .toString(10);
-        tvl = getFormattedNumber(tvl, 2);
-
-        stakingTime = stakingTime * 1e3;
-        cliffTime = cliffTime * 1e3;
-        swapAttemptPeriod = swapAttemptPeriod * 1e3;
-        lastSwapExecutionTime = lastSwapExecutionTime * 1e3;
-
-        let showDeposit = true;
-
-        if (!isNaN(disburseDuration) && !isNaN(contractDeployTime)) {
-          let lastDay = parseInt(disburseDuration) + parseInt(contractDeployTime);
-          let lockTimeExpire = parseInt(Date.now()) + parseInt(cliffTime);
-          lockTimeExpire = lockTimeExpire.toString().substr(0, 10);
-          if (lockTimeExpire > lastDay) {
-            showDeposit = false;
-          }
-        }
-
-        let cliffTimeInWords = "lockup period";
-
-        let claimTitle = "Feel free to execute claim";
-
-        if (!isNaN(swapAttemptPeriod) && !isNaN(lastSwapExecutionTime)) {
-          if (Date.now() - lastSwapExecutionTime <= swapAttemptPeriod) {
-            claimTitle = `You can execute claim for the latest rewards ${moment
-              .duration(swapAttemptPeriod - (Date.now() - lastSwapExecutionTime))
-              .humanize(true)}`;
-          }
-        }
-
-        let canWithdraw = true
-        if (lockTime === "No Lock") {
-          canWithdraw = true;
-        }
-        if (!isNaN(cliffTime) && !isNaN(stakingTime)) {
-            if ((convertTimestampToDate((Number(stakingTime) + Number(cliffTime))) >= convertTimestampToDate(Date.now())) && lockTime !== "No Lock") {
-                canWithdraw = false
-                cliffTimeInWords = moment.duration((cliffTime - (Date.now() - stakingTime))).humanize(true)
-            }
-        }
-
-        let lp_data = the_graph_result.lp_data;
-        let apy = lp_data ? lp_data[lp_id].apy : 0;
-
-        let total_stakers = lp_data ? lp_data[lp_id].stakers_num : 0;
-        // let tvl_usd = lp_data ? lp_data[lp_id].tvl_usd : 0
-        let tvl_usd = totalValueLocked / 1e18;
-
-        apy = getFormattedNumber(apy, 2);
-        total_stakers = getFormattedNumber(total_stakers, 0);
-
-        let tvlDYPS = tvlDyps / 1e18;
-        tvl_usd = tvl_usd + tvlDYPS;
-        tvl_usd = getFormattedNumber(tvl_usd, 2);
-
-        //console.log(total_stakers)
-
-        let isOwner =
-          String(coinbase).toLowerCase() ===
-          String(window.config.admin_address).toLowerCase();
-
-        let apr2 = 50;
-        let ApyStake = new BigNumber(apr2)
-          .div(1e2)
-          .times(usd_per_idyp)
-          .div(usd_per_token)
-          .times(1e2)
-          .toFixed(2);
-
-        let infoItems = [
-          "75% from your deposit is added to PancakeSwap V2 BNB/iDYP LP",
-          "25% from your deposit is sent to DYP Staking with " +
-            ApyStake +
-            "% APR",
-        ];
-        let tooltip1 = infoItems.join("\n");
-
-        let infoItems2 = ["75% WBNB/ETH rewards", "25% DYP rewards"];
-        let tooltip2 = infoItems2.join("\n");
+  let infoItems2 = ["75% WBNB/ETH rewards", "25% DYP rewards"];
+  let tooltip2 = infoItems2.join("\n");
 
   const performanceOpen = () => {
     setPerformanceTooltip(true);
@@ -1152,6 +1156,15 @@ const BscFarmingFunc = ({
     document.getElementById(field).focus();
   };
 
+
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      refreshBalance();
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [coinbase, coinbase2]);
+
+  
   return (
     <div className="container-lg p-0">
       <div
@@ -2757,10 +2770,7 @@ const BscFarmingFunc = ({
                   name="days"
                   placeholder="Days*"
                   value={approxDays}
-                  onChange={(e) =>
-                   
-                    setApproxDays(e.target.value)
-                  }
+                  onChange={(e) => setApproxDays(e.target.value)}
                 />
               </div>
               <div className="d-flex flex-column gap-3 w-50 me-5">
@@ -2780,10 +2790,11 @@ const BscFarmingFunc = ({
                       : approxDeposit
                   }
                   onChange={(e) =>
-                   
-                    setApproxDeposit(Number(e.target.value) > 0
-                    ? e.target.value / LP_AMPLIFY_FACTOR
-                    : e.target.value)
+                    setApproxDeposit(
+                      Number(e.target.value) > 0
+                        ? e.target.value / LP_AMPLIFY_FACTOR
+                        : e.target.value
+                    )
                   }
                 />
               </div>
