@@ -293,104 +293,173 @@ const BscFarmingFunc = ({
       });
   };
 
+  
   const handleStake = async (e) => {
-    setDepositLoading(true);
+      let selectedBuybackToken = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"; // wbnb/wavax
+      let amount = depositAmount;
+      setDepositLoading(true);
+      amount = new BigNumber(amount).times(10 ** 18).toFixed(0);
+  
+      let _80Percent = new BigNumber(amount).times(80e2).div(100e2).toFixed(0);
+  
+      let _20Percent = new BigNumber(amount).times(20e2).div(100e2).toFixed(0);
+      let deadline = Math.floor(
+        Date.now() / 1e3 + window.config.tx_max_wait_seconds
+      ).toFixed(0);
+  
+      let router = await window.getUniswapRouterContract();
+  
+      let platformTokenAddress = "0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17" //dyp address
+        let rewardTokenAddress = "0xBD100d061E120b2c67A24453CF6368E63f1Be056"// idyp address
+      _80Percent = new BigNumber(_80Percent).div(2).toFixed(0);
+      
+      let path1 = [
+        ...new Set([selectedBuybackToken, platformTokenAddress].map((a) => a.toLowerCase())),
+      ];
+  
+      let _amountOutMin_baseTokenReceived = new BigNumber(_80Percent)
+        .times(100 - window.config.slippage_tolerance_percent)
+        .div(100)
+        .toFixed(0);
+      let minAmountLiquidityB = new BigNumber(_amountOutMin_baseTokenReceived)
+        .times(100 - window.config.slippage_tolerance_percent_liquidity)
+        .div(100)
+        .toFixed(0);
+  
+      let path = [
+        ...new Set([selectedBuybackToken, rewardTokenAddress].map((a) => a.toLowerCase())),
+      ];
+  
+      let _amountOutMin_80Percent = await router.methods
+        .getAmountsOut(_80Percent, path)
+        .call()
+        .catch((e) => {
+          console.log(e);
+        });
+  
+  
+        let _amountOutMin_20Percent = await router.methods
+        .getAmountsOut(_20Percent, path1)
+        .call()
+        .catch((e) => {
+          console.log(e);
+        });
+  
+      console.log(_amountOutMin_80Percent, _80Percent, path);
+      if (_amountOutMin_80Percent) {
+        _amountOutMin_80Percent =
+          _amountOutMin_80Percent[_amountOutMin_80Percent.length - 1];
+        _amountOutMin_80Percent = new BigNumber(_amountOutMin_80Percent)
+          .times(100 - window.config.slippage_tolerance_percent)
+          .div(100)
+          .toFixed(0);
+  
+          _amountOutMin_20Percent =
+          _amountOutMin_20Percent[_amountOutMin_20Percent.length - 1];
+          _amountOutMin_20Percent = new BigNumber(_amountOutMin_20Percent)
+          .times(100 - window.config.slippage_tolerance_percent)
+          .div(100)
+          .toFixed(0);
+  
+  
+        let minAmountLiquidityA = new BigNumber(_amountOutMin_80Percent)
+          .times(100 - window.config.slippage_tolerance_percent_liquidity)
+          .div(100)
+          .toFixed(0);
+  
+        let _amountOutMinSwap_real = 0;
+        let _amountOutMinSwap = 0;
+        let lastSwap = await farming.lastSwapExecutionTime();
+        let now = Math.floor(Date.now() / 1000);
+        let tokensToBeSwapped = await farming.tokensToBeSwapped();
+        let tokensToBeDisbursedOrBurnt =
+          await farming.tokensToBeDisbursedOrBurnt();
+        let MaxSwappableAmount = await farming.getMaxSwappableAmount();
+        let getPendingDisbursement = await farming.getPendingDisbursement();
+        let _SwapTokens = new BigNumber(tokensToBeSwapped)
+          .plus(tokensToBeDisbursedOrBurnt)
+          .plus(getPendingDisbursement)
+          .toFixed(0);
+  
+        if (now - lastSwap > 86400 && _SwapTokens > 0) {
+          console.log(1);
+  
+          console.log(tokensToBeSwapped);
+          console.log(tokensToBeDisbursedOrBurnt);
+          console.log(MaxSwappableAmount);
+          console.log(_SwapTokens);
+  
+          if (BigNumber(_SwapTokens).gte(MaxSwappableAmount)) {
+            _amountOutMinSwap = MaxSwappableAmount;
+          }
+  
+          if (BigNumber(_SwapTokens).lt(MaxSwappableAmount)) {
+            _amountOutMinSwap = _SwapTokens;
+          }
 
-    let selectedBuybackToken = selectedBuybackToken;
-    let amount = depositAmount;
-
-    amount = new BigNumber(amount)
-      .times(10 ** selectedTokenDecimals)
-      .toFixed(0);
-
-    let _75Percent = new BigNumber(amount).times(75e2).div(100e2).toFixed(0);
-    let _25Percent = new BigNumber(amount).minus(_75Percent).toFixed(0);
-
-    let deadline = Math.floor(
-      Date.now() / 1e3 + window.config.tx_max_wait_seconds
-    ).toFixed(0);
-    let router = await window.getPancakeswapRouterContract();
-    let WETH = await router.methods.WETH().call();
-    let platformTokenAddress = window.config.reward_tokenbsc_address2;
-    let platformTokenAddress_25Percent = window.config.reward_token_address;
-
-    let path = [
-      ...new Set(
-        [selectedBuybackToken, WETH, platformTokenAddress].map((a) =>
-          a.toLowerCase()
-        )
-      ),
-    ];
-    let _amountOutMin_75Percent = await router.methods
-      .getAmountsOut(_75Percent, path)
-      .call()
-      .catch((e) => {
-        setDepositLoading(false);
-        setDepositStatus("fail");
-        setErrorMsg(e?.message);
-        setTimeout(() => {
-          setDepositStatus("initial");
-          setDepositAmount("");
-          setErrorMsg("");
-        }, 10000);
-      });
-    _amountOutMin_75Percent =
-      _amountOutMin_75Percent[_amountOutMin_75Percent.length - 1];
-    _amountOutMin_75Percent = new BigNumber(_amountOutMin_75Percent)
-      .times(100 - window.config.slippage_tolerance_percent)
-      .div(100)
-      .toFixed(0);
-
-    let path_25Percent = [
-      ...new Set(
-        [selectedBuybackToken, WETH, platformTokenAddress_25Percent].map((a) =>
-          a.toLowerCase()
-        )
-      ),
-    ];
-    let _amountOutMin_25Percent = await router.methods
-      .getAmountsOut(_25Percent, path_25Percent)
-      .call()
-      .catch((e) => {
-        setDepositLoading(false);
-        setDepositStatus("fail");
-        setErrorMsg(e?.message);
-        setTimeout(() => {
-          setDepositStatus("initial");
-          setDepositAmount("");
-          setErrorMsg("");
-        }, 10000);
-      });
-    _amountOutMin_25Percent =
-      _amountOutMin_25Percent[_amountOutMin_25Percent.length - 1];
-    _amountOutMin_25Percent = new BigNumber(_amountOutMin_25Percent)
-      .times(100 - window.config.slippage_tolerance_percent)
-      .div(100)
-      .toFixed(0);
-
-    let _amountOutMin_stakingReferralFee = new BigNumber(0).toFixed(0);
-
-    let minAmounts = [0, 0, 0, 0, 0, 0, 0, 0];
-
-    console.log({ selectedBuybackToken, amount, minAmounts, deadline });
-
-    staking
-      .deposit(selectedBuybackToken, amount, minAmounts, deadline)
-      .then(() => {
-        setDepositLoading(false);
-        setDepositStatus("success");
-      })
-      .catch((e) => {
-        setDepositLoading(false);
-        setDepositStatus("fail");
-        setErrorMsg(e?.message);
-        setTimeout(() => {
-          setDepositStatus("initial");
-          setDepositAmount("");
-          setErrorMsg("");
-        }, 10000);
-      });
-  };
+  console.log(_amountOutMinSwap);
+          _amountOutMinSwap_real = await router.methods
+            .getAmountsOut(_amountOutMinSwap, path1)
+            .call();
+          _amountOutMinSwap_real =
+            _amountOutMinSwap_real[_amountOutMinSwap_real.length - 1];
+          _amountOutMinSwap_real = new BigNumber(_amountOutMinSwap_real)
+            .times(100 - window.config.slippage_tolerance_percent_liquidity)
+            .div(100)
+            .toFixed(0);
+          _amountOutMinSwap_real.toString();
+        }
+  
+        let _amountOutMin_dypReceived = new BigNumber(0).toFixed(0);
+        let pendingDivs = await farming.getPendingDivsEth(coinbase);
+        console.log(pendingDivs);
+        if (pendingDivs > 0) {
+          _amountOutMin_dypReceived = new BigNumber(pendingDivs)
+            .times(100 - window.config.slippage_tolerance_percent)
+            .div(100)
+            .toFixed(0);
+        }
+  
+        let minAmounts = [
+          _amountOutMin_20Percent,
+          0,
+          minAmountLiquidityA,
+          minAmountLiquidityB,
+          _amountOutMin_80Percent,
+          _amountOutMin_baseTokenReceived,
+          _amountOutMin_dypReceived,
+          _amountOutMinSwap_real,
+        ];
+  
+        console.log(minAmounts);
+  
+        //console.log({selectedBuybackToken ,amount, minAmounts, deadline})
+  
+        farming
+          .deposit(selectedBuybackToken, amount, minAmounts, deadline)
+          .then(() => {
+            setDepositLoading(false);
+            setDepositStatus("success");
+            refreshBalance();
+            getBalance();
+            setTimeout(() => {
+              setDepositAmount("");
+              setDepositStatus("initial");
+              setErrorMsg("");
+            }, 5000);
+          })
+          .catch((e) => {
+            setDepositLoading(false);
+            setDepositStatus("fail");
+            setErrorMsg(e?.message);
+            setTimeout(() => {
+              setDepositAmount("");
+              setDepositStatus("initial");
+              setErrorMsg("");
+            }, 10000);
+          });
+      } else console.log("no");
+    };
 
   const handleSelectedTokenChange = async (tokenAddress) => {
     let tokenDecimals = window.buyback_tokensbsc[tokenAddress].decimals;
@@ -493,81 +562,127 @@ const BscFarmingFunc = ({
     }
   };
 
-  const handleClaimDivs = async (e) => {
-    //   e.preventDefault();
-    setClaimLoading(true);
-
+  const handleClaimDivs = async () => {
     let deadline = Math.floor(
       Date.now() / 1e3 + window.config.tx_max_wait_seconds
     );
+    setClaimLoading(true);
+    let address = coinbase;
 
-    let selectedToken = selectedClaimToken;
+    let amount = await farming.getPendingDivs(address);
 
-    if (selectedToken == 0) {
-      try {
-        staking
-          .claim(0, 0, deadline)
-          .then(() => {
-            setClaimStatus("success");
-            setClaimLoading(false);
-          })
-          .catch((e) => {
-            setClaimStatus("failed");
-            setClaimLoading(false);
-            setErrorMsg2(e?.message);
-            setTimeout(() => {
-              setClaimStatus("initial");
-              setSelectedPool("");
-              setErrorMsg2("");
-            }, 10000);
-          });
-      } catch (e) {
-        setClaimStatus("failed");
-        setClaimLoading(false);
-        setErrorMsg2(e?.message);
-        setTimeout(() => {
-          setClaimStatus("initial");
-          setSelectedPool("");
-          setErrorMsg2("");
-        }, 10000);
+    let amountETH = await farming.getPendingDivsEth(address);
 
-        console.error(e);
-        return;
+    let router = await window.getUniswapRouterContract();
+
+    let WETH = await router.methods.WETH().call();
+
+    let platformTokenAddress = window.config.reward_token_address;
+
+    let _amountOutMinConstant = 0;
+
+    let path = [
+      ...new Set([WETH, platformTokenAddress].map((a) => a.toLowerCase())),
+    ];
+
+    if (amount > 0) {
+      let _amountOutMinConstant = await router.methods
+        .getAmountsOut(amount, path)
+        .call();
+
+      _amountOutMinConstant =
+        _amountOutMinConstant[_amountOutMinConstant.length - 1];
+
+      _amountOutMinConstant = new BigNumber(_amountOutMinConstant)
+        .times(100 - window.config.slippage_tolerance_percent)
+        .div(100)
+        .toFixed(0);
+    }
+
+    let _amountOutMinConstantETH = new BigNumber(amountETH)
+      .times(100 - window.config.slippage_tolerance_percent)
+      .div(100)
+      .toFixed(0);
+    console.log(_amountOutMinConstant);
+
+    let path1 = [
+      ...new Set([platformTokenAddress, WETH].map((a) => a.toLowerCase())),
+    ];
+
+    let _amountOutMinSwap_real = 0;
+    let _amountOutMinSwap = 0;
+    let lastSwap = await farming.lastSwapExecutionTime();
+    let now = Math.floor(Date.now() / 1000);
+
+    let tokensToBeSwapped = await farming.tokensToBeSwapped();
+    let tokensToBeDisbursedOrBurnt = await farming.tokensToBeDisbursedOrBurnt();
+    let MaxSwappableAmount = await farming.getMaxSwappableAmount();
+    let getPendingDisbursement = await farming.getPendingDisbursement();
+    let _SwapTokens = new BigNumber(tokensToBeSwapped)
+      .plus(tokensToBeDisbursedOrBurnt)
+      .plus(getPendingDisbursement)
+      .toFixed(0);
+
+    if (now - lastSwap > 86400 && _SwapTokens > 0) {
+      if (BigNumber(_SwapTokens).gte(MaxSwappableAmount)) {
+        _amountOutMinSwap = MaxSwappableAmount;
       }
-    } else {
-      try {
-        staking
-          .claimAs(window.config.claim_as_eth_address, 0, 0, 0, deadline)
-          .then(() => {
-            setClaimStatus("success");
-            setClaimLoading(false);
-          })
-          .catch((e) => {
-            setClaimStatus("failed");
-            setClaimLoading(false);
-            setErrorMsg2(e?.message);
-            setTimeout(() => {
-              setClaimStatus("initial");
-              setSelectedPool("");
-              setErrorMsg2("");
-            }, 10000);
-          });
-      } catch (e) {
-        setClaimStatus("failed");
-        setClaimLoading(false);
-        setErrorMsg2(e?.message);
-        setTimeout(() => {
-          setClaimStatus("initial");
-          setSelectedPool("");
-          setErrorMsg2("");
-        }, 10000);
 
-        console.error(e);
-        return;
+      if (BigNumber(_SwapTokens).lt(MaxSwappableAmount)) {
+        _amountOutMinSwap = _SwapTokens;
       }
+
+      console.log(_amountOutMinSwap);
+      _amountOutMinSwap_real = await router.methods
+        .getAmountsOut(_amountOutMinSwap, path1)
+        .call();
+      _amountOutMinSwap_real =
+        _amountOutMinSwap_real[_amountOutMinSwap_real.length - 1];
+      _amountOutMinSwap_real = new BigNumber(_amountOutMinSwap_real)
+        .times(100 - window.config.slippage_tolerance_percent_liquidity)
+        .div(100)
+        .toFixed(0);
+      _amountOutMinSwap_real.toString();
+    }
+
+    console.log({
+      _amountOutMinConstant,
+      _amountOutMinConstantETH,
+      _amountOutMinSwap_real,
+      deadline,
+    });
+
+    try {
+      farming
+        .claimAs(
+          window.config.weth_address,
+          _amountOutMinConstantETH,
+          _amountOutMinConstant,
+          _amountOutMinSwap_real,
+          deadline
+        )
+        .then(() => {
+          setClaimStatus("success");
+          setClaimLoading(false);
+          setPendingDivs(getFormattedNumber(0, 6));
+          getBalance();
+          refreshBalance();
+        })
+        .catch((e) => {
+          setclaimStatus("fail");
+          setclaimLoading(false);
+          seterrorMsg2(e?.message);
+          console.log(e);
+          setTimeout(() => {
+            setclaimStatus("initial");
+            seterrorMsg2("");
+          }, 10000);
+        });
+    } catch (e) {
+      console.error(e);
+      return;
     }
   };
-
   const handleClaimAsDivs = async (token) => {
     let deadline = Math.floor(
       Date.now() / 1e3 + window.config.tx_max_wait_seconds
@@ -1164,7 +1279,7 @@ const BscFarmingFunc = ({
     return () => clearInterval(interval);
   }, [coinbase, coinbase2]);
 
-  
+
   return (
     <div className="container-lg p-0">
       <div
@@ -1688,121 +1803,7 @@ const BscFarmingFunc = ({
                         </div>
                       </div>
                     </div>
-                    <div
-                      className="gap-1 claimreward-wrapper"
-                      style={{
-                        // padding: '3px',
-                        background:
-                          selectedPool === "dyp" ? "#141333" : "#26264F",
-                        border:
-                          selectedPool === "dyp"
-                            ? "1px solid #57B6AB"
-                            : "1px solid #8E97CD",
-                      }}
-                      onClick={() => {
-                        setSelectedPool("dyp");
-                      }}
-                    >
-                      <img
-                        src={selectedPool === "dyp" ? check : empty}
-                        alt=""
-                        className="activestate"
-                      />
-
-                      <div className="position-relative">
-                        <input
-                          disabled
-                          value={
-                            Number(pendingDivs) > 0
-                              ? `${pendingDivs} DYP`
-                              : `${getFormattedNumber(0, 2)} DYP`
-                          }
-                          onChange={(e) =>
-                            setPendingDivs(
-                              Number(e.target.value) > 0
-                                ? e.target.value
-                                : e.target.value
-                            )
-                          }
-                          className=" left-radius inputfarming styledinput2"
-                          placeholder="0"
-                          type="text"
-                          style={{
-                            width: "120px",
-                            padding: "0px 15px 0px 15px",
-                            height: 35,
-                          }}
-                        />
-                      </div>
-
-                      <div
-                        className="d-flex align-items-center justify-content-center w-100 claimreward-header "
-                        // style={{ paddingLeft: "10px" }}
-                      >
-                        <img
-                          src={
-                            require(`./assets/avax/${selectedRewardTokenLogo2.toLowerCase()}.svg`)
-                              .default
-                          }
-                          alt=""
-                          style={{ width: 14, height: 14 }}
-                        />
-                        <select
-                          disabled
-                          defaultValue="DYP"
-                          className="form-control inputfarming"
-                          style={{ border: "none", padding: "0 0 0 3px" }}
-                        >
-                          <option value="DYP"> DYP </option>
-                        </select>
-                        {/* <div class="dropdown">
-                    <button
-                      class="btn reward-dropdown inputfarming d-flex align-items-center justify-content-center gap-1"
-                      type="button"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                    >
-                      <img
-                        src={
-                          require(`./assets/avax/dyp.svg`)
-                            .default
-                        }
-                        alt=""
-                        style={{ width: 14, height: 14 }}
-                      />
-                     DYP
-                      <img
-                        src={dropdownVector}
-                        alt=""
-                        style={{ width: 10, height: 10 }}
-                      />
-                    </button>
-                    <ul
-                      class="dropdown-menu"
-                      style={{ minWidth: "100%" }}
-                    >
-                      <span
-                        className="d-flex align-items-center justify-content-center  gap-1 inputfarming farming-dropdown-item py-1 w-100"
-                        onClick={() => {
-                          handleClaimToken("0");
-                          setState({
-                            selectedRewardTokenLogo1: "dyp",
-                          });
-                        }}
-                      >
-                        <img
-                          src={
-                            require(`./assets/avax/dyp.svg`).default
-                          }
-                          alt=""
-                          style={{ width: 14, height: 14 }}
-                        />
-                        DYP
-                      </span>
-                    </ul>
-                  </div> */}
-                      </div>
-                    </div>
+                   
                   </div>
                   <button
                     disabled={
@@ -1816,7 +1817,7 @@ const BscFarmingFunc = ({
                     className={`btn filledbtn ${
                       claimStatus === "claimed" ||
                       selectedPool === "" ||
-                      selectedPool === "wavax2" ||
+                      selectedPool === "wbnb" ||
                       selectedPool === "dyp2"
                         ? "disabled-btn"
                         : claimStatus === "failed"
@@ -1826,11 +1827,7 @@ const BscFarmingFunc = ({
                         : null
                     } d-flex justify-content-center align-items-center`}
                     style={{ height: "fit-content" }}
-                    onClick={() => {
-                      selectedPool === "wavax"
-                        ? handleClaimDivs()
-                        : handleClaimDyp();
-                    }}
+                    onClick={() => {handleClaimDivs()}}
                   >
                     {claimLoading ? (
                       <div
@@ -1933,61 +1930,6 @@ const BscFarmingFunc = ({
         >
           <div className="earn-hero-content p4token-wrapper">
             <div className="l-box pl-3 pr-3">
-              {/* <div className="container px-0">
-            <table className="table-stats table table-sm table-borderless mt-2">
-              <tbody>
-                <tr>
-                  <td className="text-right">
-                    <th>MY LP Deposit</th>
-                    <div>
-                      <strong>{myDepositedLpTokens}</strong>{" "}
-                      <small>iDYP/WETH</small>
-                    </div>
-                  </td>
-
-                  <td className="text-right">
-                    <th>Total LP Deposited</th>
-                    <div>
-                      <strong style={{ fontSize: 9 }}>{tvl}</strong>{" "}
-                      <small>iDYP/WETH</small>
-                    </div>
-                  </td>
-                  <td className="text-right">
-                    <th>My DYP Stake</th>
-                    <div>
-                      <strong>{reward_token_balance}</strong>{" "}
-                      <small>DYP</small>
-                    </div>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className="text-right">
-                    <th>Total Earned DYP</th>
-                    <div>
-                      <strong>{totalEarnedTokens}</strong>{" "}
-                      <small>DYP</small>
-                    </div>
-                  </td>
-
-                  <td className="text-right">
-                    <th>Total Earned WETH</th>
-                    <div>
-                      <strong>{totalEarnedEth}</strong>{" "}
-                      <small>WETH</small>
-                    </div>
-                  </td>
-                  <td className="text-right">
-                    <th>My Share</th>
-                    <div>
-                      <strong>{myShare}</strong> <small>%</small>
-                    </div>
-                  </td>
-                </tr>
-                <tr></tr>
-              </tbody>
-            </table>
-          </div> */}
               <div className="stats-container my-4">
                 <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                   <span className="stats-card-title">My LP Deposit</span>
@@ -2084,81 +2026,7 @@ const BscFarmingFunc = ({
                 </h6> */}
                   </div>
                 </div>
-                {/* <table className="table-stats table table-sm table-borderless mt-2">
-              <tbody>
-                <tr>
-                  <td className="text-right">
-                    <th>TVL USD</th>
-                    <div>
-                      <strong>${tvl_usd}</strong> <small>USD</small>
-                    </div>
-                  </td>
-
-                  <td className="text-right">
-                    <th>Total LP deposited</th>
-                    <div>
-                      <strong style={{ fontSize: 11 }}>{tvl}</strong>{" "}
-                      <small>DYP/ETH</small>
-                    </div>
-                  </td>
-
-                  <td className="text-right">
-                    <th>To be swapped</th>
-                    <div>
-                      <strong>{tokensToBeSwapped}</strong>{" "}
-                      <small>DYP</small>
-                    </div>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className="text-right">
-                    <th>To be burnt / disbursed</th>
-                    <div>
-                      <strong>{tokensToBeDisbursedOrBurnt}</strong>{" "}
-                      <small>iDYP</small>
-                    </div>
-                  </td>
-
-                  <td className="text-right">
-                    <th>Contract Expiration</th>
-                    <small>{expiration_time}</small>
-                  </td>
-                  <td
-                    style={{
-                      background: "transparent",
-                      border: "none",
-                      gap: 5,
-                    }}
-                  >
-                    <a
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      href={`https://github.com/dypfinance/Buyback-Farm-Stake-Governance-V2/tree/main/Audit`}
-                      className="maxbtn d-flex align-items-center"
-                      style={{ height: "25px" }}
-                    >
-                      Audit
-                      <img src={arrowup} alt="" />
-                    </a>
-                    <a
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      href={`${window.config.etherscan_baseURL}/token/${reward_token._address}?a=${coinbase}`}
-                      className="text-white mt-2"
-                      style={{
-                        height: "25px",
-                        textDecoration: "underline",
-                        fontSize: "9px",
-                      }}
-                    >
-                      View on Etherscan
-                      <img src={whiteArrowUp} alt="" className="ms-1" />
-                    </a>
-                  </td>
-                </tr>
-              </tbody>
-            </table> */}
+            
                 <div className="stats-container my-4">
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">TVL USD</span>
@@ -2449,155 +2317,7 @@ const BscFarmingFunc = ({
                           Total LP deposited{" "}
                         </h6>
                       </div>
-                      <div className="col-5 d-flex flex-column gap-1">
-                        <div
-                          className="gap-1 claimreward-wrapper w-100"
-                          style={{
-                            background:
-                              selectedPool === "dyp2" ? "#141333" : "#26264F",
-                            border:
-                              selectedPool === "dyp2"
-                                ? "1px solid #57B6AB"
-                                : "1px solid #8E97CD",
-                          }}
-                          onClick={() => {
-                            setSelectedPool("dyp2");
-                          }}
-                        >
-                          <img
-                            src={selectedPool === "dyp2" ? check : empty}
-                            alt=""
-                            className="activestate"
-                            style={{ top: "65px" }}
-                          />
-                          <div className="d-flex align-items-center gap-2 justify-content-between w-100">
-                            <div className="position-relative">
-                              <h6
-                                className="withsubtitle"
-                                style={{ padding: "5px 0 0 15px" }}
-                              >
-                                Value
-                              </h6>
-
-                              <input
-                                disabled
-                                value={
-                                  Number(withdrawAmount) > 0
-                                    ? `${withdrawAmount * LP_AMPLIFY_FACTOR} LP`
-                                    : `${withdrawAmount} LP`
-                                }
-                                onChange={(e) =>
-                                  setWithdrawAmount(
-                                    Number(e.target.value) > 0
-                                      ? e.target.value / LP_AMPLIFY_FACTOR
-                                      : e.target.value
-                                  )
-                                }
-                                className=" left-radius inputfarming styledinput2"
-                                placeholder="0"
-                                type="text"
-                                style={{
-                                  width: "150px",
-                                  padding: "0px 15px 0px 15px",
-                                  height: 35,
-                                  fontSize: 20,
-                                  fontWeight: 300,
-                                }}
-                              />
-                            </div>
-                          </div>
-                          <div className="d-flex align-items-center gap-2 justify-content-between w-100">
-                            <div className="position-relative">
-                              <h6
-                                className="withsubtitle"
-                                style={{ padding: "5px 0 0 15px" }}
-                              >
-                                LP balance
-                              </h6>
-
-                              <input
-                                disabled
-                                value={
-                                  Number(withdrawAmount) > 0
-                                    ? `${withdrawAmount * LP_AMPLIFY_FACTOR} LP`
-                                    : `${withdrawAmount} LP`
-                                }
-                                onChange={(e) =>
-                                  setWithdrawAmount(
-                                    Number(e.target.value) > 0
-                                      ? e.target.value / LP_AMPLIFY_FACTOR
-                                      : e.target.value
-                                  )
-                                }
-                                className=" left-radius inputfarming styledinput2"
-                                placeholder="0"
-                                type="text"
-                                style={{
-                                  width: "150px",
-                                  padding: "0px 15px 0px 15px",
-                                  height: 35,
-                                  fontSize: 20,
-                                  fontWeight: 300,
-                                }}
-                              />
-                            </div>
-                          </div>
-                          {/* <div className="d-flex align-items-center gap-2 justify-content-between w-100 position-relative">
-                      <div className="position-relative">
-                        <input
-                          disabled
-                          value={`${depositedTokensDYP} DYP`}
-                          onChange={(e) =>
-                            setState({
-                              withdrawAmount:
-                                Number(e.target.value) > 0
-                                  ? e.target.value / LP_AMPLIFY_FACTOR
-                                  : e.target.value,
-                            })
-                          }
-                          className=" left-radius inputfarming styledinput2"
-                          placeholder="0"
-                          type="text"
-                          style={{
-                            width: "150px",
-                            padding: "0px 15px 0px 15px",
-                            height: 35,
-                            fontSize: 20,
-                            fontWeight: 300,
-                          }}
-                        />
-                      </div>
-                      
-                    </div> */}
-                          <div
-                            className="d-flex w-100 align-items-center justify-content-center claimreward-header"
-                            // style={{ padding: "10px 0 0 10px" }}
-                          >
-                            <img
-                              src={
-                                require(`./assets/${selectedRewardTokenLogo2.toLowerCase()}.svg`)
-                                  .default
-                              }
-                              alt=""
-                              style={{ width: 14, height: 14 }}
-                            />
-                            <select
-                              disabled
-                              defaultValue="DYP"
-                              className="form-control inputfarming"
-                              style={{
-                                border: "none",
-                                padding: "0 0 0 3px",
-                              }}
-                            >
-                              <option value="DYP"> DYP </option>
-                            </select>
-                          </div>
-                        </div>
-                        <h6 className="withsubtitle d-flex justify-content-start w-100 ">
-                          Total DYP deposited{" "}
-                        </h6>
-                      </div>
+                     
                     </div>
                   </div>
 
@@ -2635,11 +2355,7 @@ const BscFarmingFunc = ({
                           : null
                       } d-flex justify-content-center align-items-center`}
                       style={{ height: "fit-content" }}
-                      onClick={() => {
-                        selectedPool === "wbnb2"
-                          ? handleWithdraw()
-                          : handleWithdrawDyp();
-                      }}
+                      onClick={handleWithdraw}
                     >
                       {withdrawLoading ? (
                         <div
