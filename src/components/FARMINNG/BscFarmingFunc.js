@@ -70,6 +70,9 @@ const BscFarmingFunc = ({
   expired,
   finalApr,
   the_graph_result,
+  farming,
+  lp_id,
+  isConnected
 }) => {
   let { reward_token, BigNumber, alertify, reward_token_idyp, token_dypsbsc } =
     window;
@@ -196,8 +199,7 @@ const BscFarmingFunc = ({
   const [selectedTokenLogo, setSelectedTokenLogo] = useState("wbnb");
   const [selectedRewardTokenLogo1, setSelectedRewardTokenLogo1] =
     useState("wbnb");
-  const [selectedRewardTokenLogo2, setSelectedRewardTokenLogo2] =
-    useState("dyp");
+    
   const [performanceTooltip, setPerformanceTooltip] = useState(false);
   const [aprTooltip, setAprTooltip] = useState(false);
   const [lockTooltip, setLockTooltip] = useState(false);
@@ -205,6 +207,12 @@ const BscFarmingFunc = ({
   const [rewardsTooltip, setRewardsTooltip] = useState(false);
   const [withdrawTooltip, setWithdrawTooltip] = useState(false);
   const [myDepositedLpTokens, setMyDepositedLpTokens] = useState("");
+  const [myShare, setmyShare] = useState("");
+  const [iDypUSD, setiDypUSD] = useState("");
+  const [dypUSD, setDypUsd] = useState("");
+  const [dypPerAvax, setdypPerAvaxPrice] = useState('')
+
+
 
   const showModal = () => {
     setShow(true);
@@ -441,7 +449,6 @@ const BscFarmingFunc = ({
             setDepositLoading(false);
             setDepositStatus("success");
             refreshBalance();
-            getBalance();
             setTimeout(() => {
               setDepositAmount("");
               setDepositStatus("initial");
@@ -665,17 +672,16 @@ const BscFarmingFunc = ({
           setClaimStatus("success");
           setClaimLoading(false);
           setPendingDivs(getFormattedNumber(0, 6));
-          getBalance();
           refreshBalance();
         })
         .catch((e) => {
-          setclaimStatus("fail");
-          setclaimLoading(false);
-          seterrorMsg2(e?.message);
+          setClaimStatus("fail");
+          setClaimLoading(false);
+          setErrorMsg2(e?.message);
           console.log(e);
           setTimeout(() => {
-            setclaimStatus("initial");
-            seterrorMsg2("");
+            setClaimStatus("initial");
+            setErrorMsg2("");
           }, 10000);
         });
     } catch (e) {
@@ -788,6 +794,25 @@ const BscFarmingFunc = ({
     return Number(apy) || 0;
   };
 
+ const getTokenData = async () => {
+    await axios
+      .get("https://api.dyp.finance/api/the_graph_avax_v2")
+      .then((data) => {
+        const propertyDyp = Object.entries(
+          data.data.the_graph_avax_v2.token_data
+        );
+        setDypUsd(propertyDyp[0][1].token_price_usd);
+
+        const propertyIDyp = Object.entries(
+          data.data.the_graph_avax_v2.token_data
+        );
+
+        const dypPerAvax = data.data.the_graph_avax_v2.price_DYPS
+        setdypPerAvaxPrice(dypPerAvax) 
+        setiDypUSD(propertyIDyp[1][1].token_price_usd);
+      });
+  };
+
   const refreshBalance = async () => {
     let coinbase = coinbase;
 
@@ -898,13 +923,13 @@ const BscFarmingFunc = ({
         _tvlDYPS,
       ]);
 
-      let tvlValueConstantDYP = new BigNumber(tvlConstantDYP)
+      let tvlValueConstantDYP = new BigNumber(tvlConstantDYP2)
         .times(usdPerToken)
         .toFixed(18);
-      let tvlValueiDYP = new BigNumber(tvlConstantiDYP)
+      let tvlValueiDYP = new BigNumber(tvlConstantiDYP2)
         .times(_amountOutMin)
         .toFixed(18);
-      let tvlValueiDYPFarming = new BigNumber(tvliDYP)
+      let tvlValueiDYPFarming = new BigNumber(tvliDYP2)
         .times(_amountOutMin)
         .toFixed(18);
       let usd_per_lp = lp_data ? lp_data[lp_id].usd_per_lp : 0;
@@ -942,8 +967,9 @@ const BscFarmingFunc = ({
         .times(usd_per_dyps)
         .toFixed(18);
       setTvlDyps(getFormattedNumber(tvlDyps_formatted, 2));
-      // let myShare = ((depositedTokens / tvl) * 100).toFixed(2); tbd
-      // myShare = getFormattedNumber(myShare, 2);
+      let myShare = ((depositedTokens2 / tvl2) * 100).toFixed(2); 
+      setmyShare(getFormattedNumber(myShare, 2))
+    
 
       let token_balance_formatted = new BigNumber(
         token_balance2 * LP_AMPLIFY_FACTOR
@@ -2030,7 +2056,7 @@ const BscFarmingFunc = ({
                 <div className="stats-container my-4">
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">TVL USD</span>
-                    <h6 className="stats-card-content">{tvl_usd} USD</h6>
+                    <h6 className="stats-card-content">{tvlUSD} USD</h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">Total LP Deposited</span>
