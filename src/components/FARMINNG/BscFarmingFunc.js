@@ -179,17 +179,17 @@ const BscFarmingFunc = ({
   const [contractDeployTime, setContractDeployTime] = useState("");
   const [disburseDuration, setDisburseDuration] = useState("");
   const [selectedBuybackToken, setselectedBuybackToken] = useState(
-    Object.keys(window.buyback_tokensbsc)[0]
+    Object.keys(window.buyback_activetokensbsc)[0]
   );
   const [selectedTokenDecimals, setselectedTokenDecimals] = useState(
-    window.buyback_tokensbsc[Object.keys(window.buyback_tokensbsc)[0]].decimals
+    window.buyback_activetokensbsc[Object.keys(window.buyback_activetokensbsc)[0]].decimals
   );
   const [selectedTokenBalance, setSelectedTokenBalance] = useState("");
   const [selectedTokenSymbol, setSelectedTokenSymbol] = useState(
-    window.buyback_tokensbsc[Object.keys(window.buyback_tokensbsc)[0]].symbol
+    window.buyback_activetokensbsc[Object.keys(window.buyback_activetokensbsc)[0]].symbol
   );
   const [selectedBuybackTokenWithdraw, setSelectedBuybackTokenWithdraw] =
-    useState(Object.keys(window.buyback_tokensbsc)[0]);
+    useState(Object.keys(window.buyback_activetokensbsc)[0]);
   const [selectedClaimToken, setSelectedClaimToken] = useState(0);
   const [show, setShow] = useState(false);
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
@@ -239,12 +239,12 @@ const BscFarmingFunc = ({
     let stakingTimes = [];
     let lastClaimedTimes = [];
     let stakedTokens = [];
-    let length = await staking.getNumberOfHolders();
+    let length = await constant.getNumberOfHolders();
     length = Number(length);
     try {
       for (let startIndex = 0; startIndex < length; startIndex += step) {
         console.log({ startIndex, endIndex: startIndex + step });
-        let array = await staking.getDepositorsList(
+        let array = await constant.getDepositorsList(
           startIndex,
           Math.min(startIndex + step, length)
         );
@@ -270,13 +270,6 @@ const BscFarmingFunc = ({
     setUsdPerToken(usdPerToken2);
   };
 
-  const handleDeposit = (e) => {
-    e.preventDefault();
-    let amount = depositAmount;
-    amount = new BigNumber(amount).times(1e18).toFixed(0);
-    staking.depositTOKEN(amount);
-  };
-
   const handleApprove = (e) => {
     setDepositLoading(true);
     let amount = depositAmount;
@@ -284,7 +277,7 @@ const BscFarmingFunc = ({
       .times(10 ** selectedTokenDecimals)
       .toFixed(0);
     window
-      .approveToken(selectedBuybackToken, staking._address, amount)
+      .approveToken(selectedBuybackToken, constant._address, amount)
       .then(() => {
         setDepositLoading(false);
         setDepositStatus("deposit");
@@ -469,14 +462,14 @@ const BscFarmingFunc = ({
     };
 
   const handleSelectedTokenChange = async (tokenAddress) => {
-    let tokenDecimals = window.buyback_tokensbsc[tokenAddress].decimals;
-    let selectedTokenSymbol = window.buyback_tokensbsc[tokenAddress].symbol;
+    let tokenDecimals = window.buyback_activetokensbsc[tokenAddress].decimals;
+    let selectedTokenSymbol = window.buyback_activetokensbsc[tokenAddress].symbol;
 
     setselectedBuybackToken(tokenAddress);
     setSelectedTokenBalance("");
     setselectedTokenDecimals(tokenDecimals);
     setSelectedTokenSymbol(selectedTokenSymbol);
-    setSelectedTokenLogo(window.buyback_tokensbsc[tokenAddress].symbol);
+    setSelectedTokenLogo(window.buyback_activetokensbsc[tokenAddress].symbol);
 
     let selectedTokenBalance = await window.getTokenHolderBalance(
       tokenAddress,
@@ -535,7 +528,7 @@ const BscFarmingFunc = ({
 
     let withdrawAsToken = selectedBuybackTokenWithdraw;
 
-    let amountBuyback = await staking.depositedTokens(coinbase);
+    let amountBuyback = await constant.depositedTokens(coinbase);
 
     let deadline = Math.floor(
       Date.now() / 1e3 + window.config.tx_max_wait_seconds
@@ -695,7 +688,7 @@ const BscFarmingFunc = ({
     );
 
     try {
-      staking.claimAs(window.config.claim_as_eth_address, 0, 0, 0, deadline);
+      constant.claimAs(window.config.claim_as_eth_address, 0, 0, 0, deadline);
     } catch (e) {
       console.error(e);
       return;
@@ -848,21 +841,21 @@ const BscFarmingFunc = ({
       let _bal = token.balanceOf(coinbase);
       let _rBal = reward_token.balanceOf(coinbase);
 
-      let _pDivs = staking.getPendingDivs(coinbase);
+      let _pDivs = constant.getPendingDivs(coinbase);
 
-      let _pDivsEth = staking.getPendingDivsEth(coinbase);
+      let _pDivsEth = constant.getPendingDivsEth(coinbase);
 
-      let _tEarned = staking.totalEarnedTokens(coinbase);
+      let _tEarned = constant.totalEarnedTokens(coinbase);
 
-      let _tEarnedEth = staking.totalEarnedEth(coinbase);
+      let _tEarnedEth = constant.totalEarnedEth(coinbase);
 
-      let _stakingTime = staking.depositTime(coinbase);
+      let _stakingTime = constant.depositTime(coinbase);
 
-      let _dTokens = staking.depositedTokens(coinbase);
+      let _dTokens = constant.depositedTokens(coinbase);
 
-      let _lClaimTime = staking.lastClaimedTime(coinbase);
+      let _lClaimTime = constant.lastClaimedTime(coinbase);
 
-      let _tvl = token.balanceOf(staking._address);
+      let _tvl = token.balanceOf(constant._address);
 
       //Take iDYP Balance on Staking & Farming
 
@@ -875,16 +868,16 @@ const BscFarmingFunc = ({
       ); /* TVL of iDYP on Staking */
 
       let _tvliDYP = reward_token_idyp.balanceOf(
-        staking._address
+        constant._address
       ); /* TVL of iDYP on Farming */
 
       let _dTokensDYP = constant.depositedTokens(coinbase);
 
-      let _pendingDivsStaking = constant.getTotalPendingDivs(coinbase);
+      // let _pendingDivsStaking = constant.getTotalPendingDivs(coinbase);
 
       //Take DYPS Balance
       let _tvlDYPS = token_dypsbsc.balanceOf(
-        staking._address
+        constant._address
       ); /* TVL of DYPS */
 
       let [
@@ -919,7 +912,7 @@ const BscFarmingFunc = ({
         _tvlConstantDYP,
         _tvliDYP,
         _dTokensDYP,
-        _pendingDivsStaking,
+        // _pendingDivsStaking,
         _tvlDYPS,
       ]);
 
@@ -996,7 +989,7 @@ const BscFarmingFunc = ({
         getFormattedNumber(reward_token_balance_formatted, 6)
       );
 
-      let pendingDivs_formatted = new BigNumber(pendingDivsStaking2)
+      let pendingDivs_formatted = new BigNumber(pendingDivs2)
         .div(10 ** TOKEN_DECIMALS)
         .times(usd_per_idyp)
         .div(usd_per_token)
@@ -1047,20 +1040,20 @@ const BscFarmingFunc = ({
 
       setlastClaimedTime(lastClaimedTime2);
 
-      let stakingOwner2 = await staking.owner();
+      let stakingOwner2 = await constant.owner();
       setStakingOwner(stakingOwner2);
     } catch (e) {
       console.error(e);
     }
 
-    staking
+    constant
       .cliffTime()
       .then((cliffTime) => {
         setCliffTime(Number(cliffTime * 1e3));
       })
       .catch(console.error);
 
-    staking
+      constant
       .tokensToBeDisbursedOrBurnt()
       .then((tokensToBeDisbursedOrBurnt2) => {
         let tokensToBeDisbursedOrBurnt_formatted = new BigNumber(
@@ -1075,7 +1068,7 @@ const BscFarmingFunc = ({
       })
       .catch(console.error);
 
-    staking.tokensToBeSwapped().then((tokensToBeSwapped2) => {
+      constant.tokensToBeSwapped().then((tokensToBeSwapped2) => {
       let tokensToBeSwapped_formatted = new BigNumber(tokensToBeSwapped2)
         .div(1e18)
         .toString(10);
@@ -1092,19 +1085,19 @@ const BscFarmingFunc = ({
       })
       .catch(console.error);
 
-    staking.lastSwapExecutionTime().then((lastSwapExecutionTime2) => {
+      constant.lastSwapExecutionTime().then((lastSwapExecutionTime2) => {
       setLastSwapExecutionTime(lastSwapExecutionTime2 * 1e3);
     });
 
-    staking.swapAttemptPeriod().then((swapAttemptPeriod2) => {
+    constant.swapAttemptPeriod().then((swapAttemptPeriod2) => {
       setSwapAttemptPeriod(swapAttemptPeriod2 * 1e3);
     });
 
-    staking.contractDeployTime().then((contractDeployTime2) => {
+    constant.contractDeployTime().then((contractDeployTime2) => {
       setContractDeployTime(contractDeployTime2);
     });
 
-    staking.disburseDuration().then((disburseDuration2) => {
+    constant.disburseDuration().then((disburseDuration2) => {
       setDisburseDuration(disburseDuration2);
     });
 
@@ -1179,10 +1172,6 @@ const BscFarmingFunc = ({
         .token_price_usd
     : 1;
 
-  stakingTime = stakingTime * 1e3;
-  cliffTime = cliffTime * 1e3;
-  swapAttemptPeriod = swapAttemptPeriod * 1e3;
-  lastSwapExecutionTime = lastSwapExecutionTime * 1e3;
 
   let showDeposit = true;
 
@@ -1524,21 +1513,21 @@ const BscFarmingFunc = ({
                           />
                         </button>
                         <ul class="dropdown-menu" style={{ minWidth: "100%" }}>
-                          {Object.keys(window.buyback_tokensbsc).map((t) => (
+                          {Object.keys(window.buyback_activetokensbsc).map((t) => (
                             <span
                               className="d-flex align-items-center justify-content-start ps-2 gap-1 inputfarming farming-dropdown-item py-1 w-100"
                               onClick={() => handleSelectedTokenChange(t)}
                             >
                               <img
                                 src={
-                                  require(`./assets/bsc/${window.buyback_tokensbsc[
+                                  require(`./assets/bsc/${window.buyback_activetokensbsc[
                                     t
                                   ].symbol.toLowerCase()}.svg`).default
                                 }
                                 alt=""
                                 style={{ width: 14, height: 14 }}
                               />
-                              {window.buyback_tokensbsc[t].symbol}
+                              {window.buyback_activetokensbsc[t].symbol}
                             </span>
                           ))}
                         </ul>

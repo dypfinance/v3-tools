@@ -242,6 +242,78 @@ class STAKINGAVAX {
   }
 }
 
+class STAKINGACTIVEBSC {
+  constructor(ticker = "STAKINGACTIVEBSC", token = "TOKEN") {
+    this.ticker = ticker;
+    this.token = token;
+    let address = window.config[ticker.toLowerCase() + "_address"];
+    this._address = address;
+    [
+      "owner",
+      "depositedTokens",
+      "depositTime",
+      "cliffTime",
+      "lastClaimedTime",
+      "totalEarnedTokens",
+      "totalEarnedEth",
+      "getPendingDivs",
+      "getPendingDivsEth",
+      "tokensToBeDisbursedOrBurnt",
+      "tokensToBeSwapped",
+      "getNumberOfHolders",
+      "getDepositorsList",
+      "swapAttemptPeriod",
+      "lastSwapExecutionTime",
+      "contractDeployTime",
+      "disburseDuration",
+    ].forEach((fn_name) => {
+      this[fn_name] = async function (...args) {
+        let contract = await getContract({ key: this.ticker });
+        return await contract.methods[fn_name](...args).call();
+      };
+    });
+
+    ["deposit", "withdraw", "claim", "claimAs"].forEach((fn_name) => {
+      this[fn_name] = async function (...args) {
+        let contract = await getContract({ key: this.ticker });
+        let value = 0;
+        console.log(value);
+        let gas = window.config.default_gas_amount;
+
+        return await contract.methods[fn_name](...args).send({
+          value,
+          gas,
+          from: await getCoinbase(),
+          gasPrice: window.config.default_gasprice_gwei * 1e9,
+        });
+      };
+    });
+  }
+
+  async depositTOKEN(amount) {
+    let token_contract = await getContract({ key: this.token });
+    let staking_contract = await getContract({ key: this.ticker });
+    let batch = new window.web3.eth.BatchRequest();
+    batch.add(
+      token_contract.methods
+        .approve(staking_contract._address, amount)
+        .send.request({
+          gas: window.config.default_gas_amount,
+          from: await getCoinbase(),
+          gasPrice: window.config.default_gasprice_gwei * 1e9,
+        })
+    );
+    batch.add(
+      staking_contract.methods.deposit(amount).send.request({
+        gas: window.config.default_gas_amount,
+        from: await getCoinbase(),
+        gasPrice: window.config.default_gasprice_gwei * 1e9,
+      })
+    );
+    return batch.execute();
+  }
+}
+
 class STAKINGBSC {
   constructor(ticker = "STAKINGBSC", token = "TOKEN") {
     this.ticker = ticker;
@@ -1961,6 +2033,8 @@ window.config = {
 
   //farming bsc
 
+  farming_activebsc_1_address: '0x131F62C87FB177CA64d2034Ece921933d2bC34B4',
+
   farming_newbsc_1_address: "0x537dc4fee298ea79a7f65676735415f1e2882f92",
   constant_stakingnewbsc_new5_address:
     "0xc794cdb8d6ac5eb42d5aba9c1e641ae17c239c8c",
@@ -2060,11 +2134,19 @@ window.staking_wbtc_60 = new STAKING("STAKING_WBTC60", "TOKEN_WBTC60");
 window.token_wbtc_90 = new TOKEN("TOKEN_WBTC90");
 window.staking_wbtc_90 = new STAKING("STAKING_WBTC90", "TOKEN_WBTC90");
 
+window.farming_activebsc_1 = new STAKINGACTIVEBSC("FARMING_ACTIVEBSC_1")
+
 window.farming_newbsc_1 = new STAKINGBSC("FARMING_NEWBSC_1");
 window.farming_newbsc_2 = new STAKINGBSC("FARMING_NEWBSC_2");
 window.farming_newbsc_3 = new STAKINGBSC("FARMING_NEWBSC_3");
 window.farming_newbsc_4 = new STAKINGBSC("FARMING_NEWBSC_4");
 window.farming_newbsc_5 = new STAKINGBSC("FARMING_NEWBSC_5");
+
+
+
+
+window.FARMING_ACTIVEBSC_1_ABI = window.FARMING_ACTIVEBSC_ABI;
+
 
 window.FARMING_NEWBSC_1_ABI = window.FARMING_NEWBSC_ABI;
 window.FARMING_NEWBSC_2_ABI = window.FARMING_NEWBSC_ABI;
@@ -29395,6 +29477,13 @@ window.buyback_tokensbsc = {
   },
 };
 
+window.buyback_activetokensbsc = {
+  "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c": {
+    symbol: "WBNB",
+    decimals: 18,
+  },
+};
+
 const LP_IDs_V2 = {
   weth: [
     "0x7463286a379f6f128058bb92b355e3d6e8bdb219-0xa68bbe793ad52d0e62bbf34a67f02235ba69e737",
@@ -29548,6 +29637,7 @@ Object.keys(window.config)
       k.startsWith("farming_newavax_4") ||
       k.startsWith("farming_newavax_5") ||
       k.startsWith("farming_newbsc_1") ||
+      k.startsWith("farming_activebsc_1") ||
       k.startsWith("farming_newbsc_2") ||
       k.startsWith("farming_newbsc_3") ||
       k.startsWith("farming_newbsc_4") ||
@@ -29690,6 +29780,8 @@ Object.keys(window.config)
       ? window.FARMING_NEW_ABI
       : k.includes("farming_newbsc_1")
       ? window.FARMING_NEWBSC_ABI
+      : k.includes("farming_activebsc_1")
+      ? window.FARMING_ACTIVEBSC_ABI
       : k.includes("farming_newbsc_2")
       ? window.FARMING_NEWBSC_ABI
       : k.includes("farming_newbsc_3")

@@ -528,7 +528,7 @@ const EarnContent = ({
           </div>
         )}
 
-        {option !== "Farming" && option!== 'Vault' && (
+        {option !== "Farming" && option !== "Vault" && (
           <>
             <div
               className={`row align-items-center gap-5 gap-lg-0 justify-content-between px-0 `}
@@ -789,7 +789,10 @@ const EarnContent = ({
           </>
         )}
       </div>
-      {option !== "Farming" && option !== "Vault" && expiredPools === false ? (
+      {option === "Farming" &&
+      (networkId === "56" || networkId === "43114") &&
+      option !== "Vault" &&
+      expiredPools === false ? (
         <EarnTopPicks
           topList={option}
           listType={listStyle}
@@ -810,19 +813,7 @@ const EarnContent = ({
           handleSwitchNetwork={handleSwitchNetwork}
           expiredPools={expiredPools}
         />
-      ) : option === "Farming" && expiredPools === false ? (
-        <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
-          <img
-            src={
-              require("../../../assets/earnAssets/disabledFarming.svg").default
-            }
-            style={{ width: "150px", height: "150px" }}
-            alt=""
-          />
-          <h6 className="no-farms">No farming pools available</h6>
-          <span className="farm-soon">New pools coming soon...</span>
-        </div>
-      ) : option === "Vault" && expiredPools === false ? (
+      ) : (option === "Vault" && expiredPools === false) ? (
         <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
           <img
             src={
@@ -831,7 +822,20 @@ const EarnContent = ({
             style={{ width: "150px", height: "150px" }}
             alt=""
           />
-            <h6 className="no-farms">No Vault pools available</h6>
+          <h6 className="no-farms">No Vault pools available</h6>
+          <span className="farm-soon">New pools coming soon...</span>
+        </div>
+      ) 
+     : (option === "Farming" && networkId === "1") ? (
+        <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
+          <img
+            src={
+              require("../../../assets/earnAssets/disabledFarming.svg").default
+            }
+            style={{ width: "150px", height: "150px" }}
+            alt=""
+          />
+          <h6 className="no-farms">No Farming pools available</h6>
           <span className="farm-soon">New pools coming soon...</span>
         </div>
       ) : (
