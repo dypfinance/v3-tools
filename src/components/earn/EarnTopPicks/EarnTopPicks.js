@@ -762,6 +762,13 @@ const EarnTopPicks = ({
     } else setcardIndex(index);
   };
 
+
+  useEffect(()=>{
+    if(topList === 'Farming' && chain === 'bnb' && expiredPools === false) {
+      setActivePools([])
+    }
+  },[topList, chain, expiredPools])
+
   return topPools.length > 0 && expiredPools === false ? (
     <div className={`row w-100 justify-content-center gap-4`}>
       {expiredPools === false ? (
@@ -905,6 +912,43 @@ const EarnTopPicks = ({
                           network={chainId}
                         />
                       ))}
+
+                    {topList === "Farming" && chain === "bnb" && (
+                      <TopPoolsCard
+                        chain={chain}
+                        top_pick={false}
+                        tokenName={"WBNB"}
+                        apr={"3%"}
+                        tvl={"$20,000"}
+                        lockTime={"3 Days"}
+                        tokenLogo={
+                          'bnb.svg'
+                        }
+                        onShowDetailsClick={() => {
+                          setActiveCard(topPools[0]);
+                          setActiveCard2(null);
+                          setActiveCard3(null);
+                          setActiveCard4(null);
+                          setActiveCardCawsLand(null);
+                          setActiveCardNFT(false);
+                          setActiveCardLandNFT(false);
+                          handleCardIndexStake(0);
+                          handleCardIndexStake30(0);
+                          handleCardIndexStakeiDyp(0);
+                          setDetails(0);
+                        }}
+                        onHideDetailsClick={() => {
+                          setActiveCard(null);
+                          setDetails();
+                        }}
+                        cardType={topList}
+                        details={details === 0 ? true : false}
+                        isNewPool={true}
+                        isStaked={false}
+                        expired={false}
+                        network={chainId}
+                      />
+                    )}
                   </div>
                   {activeCardCawsLand && (
                     <CawsWodDetails
@@ -942,16 +986,7 @@ const EarnTopPicks = ({
 
                   {activeCard && topList === "Farming" ? (
                     chain === "eth" ? (
-                      <StakingNew1
-                        is_wallet_connected={isConnected}
-                        coinbase={coinbase}
-                        the_graph_result={the_graph_result}
-                        lp_id={lp_id[cardIndex]}
-                        chainId={chainId}
-                        handleConnection={handleConnection}
-                        expired={false}
-                        handleSwitchNetwork={handleSwitchNetwork}
-                      />
+                      <></>
                     ) : chain === "bnb" ? (
                       <BscFarmingFunc
                         is_wallet_connected={isConnected}
@@ -3719,6 +3754,42 @@ const EarnTopPicks = ({
                         expired={false}
                       />
                     ))}
+                  {topList === "Farming" && chain === "bnb" && (
+                    <TopPoolsCard
+                      chain={chain}
+                      top_pick={false}
+                      tokenName={"WBNB"}
+                      apr={"3%"}
+                      tvl={"$20,000"}
+                      lockTime={"3 Days"}
+                      tokenLogo={
+                       "bnb.svg"
+                      }
+                      onShowDetailsClick={() => {
+                        setActiveCard(topPools[0]);
+                        setActiveCard2(null);
+                        setActiveCard3(null);
+                        setActiveCard4(null);
+                        setActiveCardCawsLand(null);
+                        setActiveCardNFT(false);
+                        setActiveCardLandNFT(false);
+                        handleCardIndexStake(0);
+                        handleCardIndexStake30(0);
+                        handleCardIndexStakeiDyp(0);
+                        setDetails(0);
+                      }}
+                      onHideDetailsClick={() => {
+                        setActiveCard(null);
+                        setDetails();
+                      }}
+                      cardType={topList}
+                      details={details === 0 ? true : false}
+                      isNewPool={true}
+                      isStaked={false}
+                      expired={false}
+                      network={chainId}
+                    />
+                  )}
                 </div>
                 {activeCardCawsLand && (
                   <CawsWodDetails
@@ -3859,6 +3930,30 @@ const EarnTopPicks = ({
                     referrer={referrer}
                   />
                 ) : activeCard &&
+                topList === "Farming" &&
+                chain === "bnb" ? (
+                  <BscFarmingFunc
+                  is_wallet_connected={isConnected}
+                  coinbase={coinbase}
+                  the_graph_result={the_graph_resultbsc}
+                  lp_id={LP_IDBNB_Array[cardIndex]}
+                  chainId={chainId}
+                  handleConnection={handleConnection}
+                  expired={false}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  liquidity={wbsc_address}
+                  constant={window.farming_activebsc_1}
+                  token={window.token_newbsc}
+                  lp_symbol={"USD"}
+                  lock="3 Days"
+                  rebase_factor={1}
+                  expiration_time="19 November 2024"
+                  fee="0.4"
+                  finalApr={activePools[cardIndex]?.apy_percent}
+                  lockTime={3}
+                  listType={listType}
+                />
+              ) : activeCard &&
                   topList === "Staking" &&
                   chain === "eth" &&
                   activePools[cardIndex].id ===
@@ -4038,7 +4133,7 @@ const EarnTopPicks = ({
                   />
                 ) : activeCard &&
                   topList === "Staking" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x7c82513b69c1b42c23760cfc34234558119a3399" &&
                   chain === "bnb" ? (
                   <StakeBsc
@@ -7587,6 +7682,42 @@ const EarnTopPicks = ({
                         }
                       />
                     ))}
+                    {topList === "Farming" && chain === "bnb" && (
+                      <TopPoolsCard
+                        chain={chain}
+                        top_pick={false}
+                        tokenName={"WBNB"}
+                        apr={"3%"}
+                        tvl={"$20,000"}
+                        lockTime={"3 Days"}
+                        tokenLogo={
+                         "bnb.svg"
+                        }
+                        onShowDetailsClick={() => {
+                          setActiveCard(topPools[0]);
+                          setActiveCard2(null);
+                          setActiveCard3(null);
+                          setActiveCard4(null);
+                          setActiveCardCawsLand(null);
+                          setActiveCardNFT(false);
+                          setActiveCardLandNFT(false);
+                          handleCardIndexStake(0);
+                          handleCardIndexStake30(0);
+                          handleCardIndexStakeiDyp(0);
+                          setDetails(0);
+                        }}
+                        onHideDetailsClick={() => {
+                          setActiveCard(null);
+                          setDetails();
+                        }}
+                        cardType={topList}
+                        details={details === 0 ? true : false}
+                        isNewPool={true}
+                        isStaked={false}
+                        expired={false}
+                        network={chainId}
+                      />
+                    )}
                   </div>
                   {activeCard &&
                   topList === "Staking" &&
@@ -7725,6 +7856,28 @@ const EarnTopPicks = ({
                       handleSwitchNetwork={handleSwitchNetwork}
                       expired={false}
                       referrer={referrer}
+                    />
+                  ) : activeCard && topList === "Farming" && chain === "bnb" ? (
+                    <BscFarmingFunc
+                      is_wallet_connected={isConnected}
+                      coinbase={coinbase}
+                      the_graph_result={the_graph_resultbsc}
+                      lp_id={LP_IDBNB_Array[cardIndex]}
+                      chainId={chainId}
+                      handleConnection={handleConnection}
+                      expired={false}
+                      handleSwitchNetwork={handleSwitchNetwork}
+                      liquidity={wbsc_address}
+                      constant={window.farming_activebsc_1}
+                      token={window.token_newbsc}
+                      lp_symbol={"USD"}
+                      lock="3 Days"
+                      rebase_factor={1}
+                      expiration_time="19 November 2024"
+                      fee="0.4"
+                      finalApr={activePools[cardIndex]?.apy_percent}
+                      lockTime={3}
+                      listType={listType}
                     />
                   ) : activeCard &&
                     topList === "Staking" &&
@@ -12563,60 +12716,10 @@ const EarnTopPicks = ({
                       />
                     ))}
                   </div>
-                  {activeCard9 && topList === "Farming" ? (
-                    chain === "eth" ? (
-                      <StakingNew1
-                        is_wallet_connected={isConnected}
-                        coinbase={coinbase}
-                        the_graph_result={the_graph_result}
-                        lp_id={lp_id[cardIndex]}
-                        chainId={chainId}
-                        handleConnection={handleConnection}
-                        handleSwitchNetwork={handleSwitchNetwork}
-                        expired={false}
-                      />
-                    ) : chain === "bnb" ? (
-                      <BscFarming
-                        is_wallet_connected={isConnected}
-                        coinbase={coinbase}
-                        the_graph_result={the_graph_resultbsc}
-                        lp_id={LP_IDBNB_Array[cardIndex]}
-                        chainId={chainId}
-                        handleConnection={handleConnection}
-                        handleSwitchNetwork={handleSwitchNetwork}
-                        expired={false}
-                      />
-                    ) : (
-                      <FarmAvax
-                        is_wallet_connected={isConnected}
-                        handleConnection={handleConnection}
-                        handleSwitchNetwork={handleSwitchNetwork}
-                        the_graph_result={the_graph_resultavax}
-                        lp_id={LP_IDAVAX_Array[cardIndex]}
-                        chainId={chainId}
-                        coinbase={coinbase}
-                        expired={false}
-                      />
-                    )
-                  ) : // : activeCard9 &&
-                  //   topList === "Staking" &&
-                  //   cardIndex < 3 &&
-                  //   chain === "eth" ? (
-                  //   <ConstantStaking1
-                  //     is_wallet_connected={isConnected}
-                  //     coinbase={coinbase}
-                  //     the_graph_result={the_graph_result}
-                  //     lp_id={lp_id[cardIndex]}
-                  //     chainId={chainId}
-                  //     handleConnection={handleConnection}
-                  //     handleSwitchNetwork={handleSwitchNetwork}
-                  //   />
-                  // )
-
-                  activeCard9 &&
-                    cardIndex >= 0 &&
-                    topList === "Staking" &&
-                    chain === "eth" ? (
+                  {activeCard9 &&
+                  cardIndex >= 0 &&
+                  topList === "Staking" &&
+                  chain === "eth" ? (
                     <InitConstantStakingiDYP
                       is_wallet_connected={isConnected}
                       coinbase={coinbase}
@@ -14388,64 +14491,45 @@ const EarnTopPicks = ({
                   handleSwitchNetwork={handleSwitchNetwork}
                 />
               )}
-              {/* {cawsCard &&
-                topList === "Staking" &&
-                chain === "eth" &&
-                cawsCard.map((pool, index) => (
-                  <TopPoolsListCard
-                    key={index}
-                    expired={false}
-                    chain={chain}
-                    top_pick={pool.top_pick}
-                    tokenName={
-                      pool.tokenName
-                        ? pool.tokenName
-                        : pool.pair_name
-                        ? pool.pair_name
-                        : ""
-                    }
-                    apr={pool.apy_percent + "%"}
-                    tvl={"$" + getFormattedNumber(pool.tvl_usd)}
-                    lockTime={
-                      pool.lockTime
-                        ? pool.lockTime
-                        : pool.lock_time
-                        ? pool.lock_time
-                        : locktimeFarm[index]
-                    }
-                    cardType={topList}
-                    tokenLogo={
-                      pool.icon
-                        ? pool.icon
-                        : pool.pair_name === "iDYP"
-                        ? "idypius.svg"
-                        : pool.pair_name === "DYP"
-                        ? "dyplogo.svg"
-                        : "newCawsLogo.png"
-                    }
-                    listType={listType}
-                    onShowDetailsClick={() => {
-                      setActiveCardNFT(true);
-                      setActiveCardLandNFT(false);
-                      setActiveCard(null);
-                      setActiveCard2(null);
-                      setActiveCard3(null);
-                      setActiveCard4(null);
-                      setDetails();
-                    }}
-                    onHideDetailsClick={() => {
-                      setActiveCardNFT(false);
-                      setDetails();
-                    }}
-                    showDetails={activeCardNFT}
-                    topList={topList}
-                    coinbase={coinbase}
-                    cardIndex={index + 2}
-                    chainId={chainId}
-                    handleConnection={handleConnection}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                  />
-                ))} */}
+               {topList === "Farming" &&
+            chain === "bnb" && 
+              <TopPoolsListCard
+              the_graph_resultbsc={the_graph_resultbsc}
+                expired={false}
+                chain={chain}
+                top_pick={false}
+                tokenName={
+                  "WBNB"
+                }
+                apr={"3%"}
+                tvl={"$20,000"}
+                lockTime={'3 Days'}
+                cardType={topList}
+                tokenLogo={"bnb.svg"
+                }
+                listType={listType}
+                onShowDetailsClick={() => {
+                  setActiveCardNFT(false);
+                  setActiveCardLandNFT(false);
+                  setActiveCard(topPools[0]);
+                  setActiveCard2(null);
+                  setActiveCard3(null);
+                  setActiveCard4(null);
+                  setDetails();
+                }}
+                onHideDetailsClick={() => {
+                  setActiveCardNFT(false);
+                  setDetails();
+                }}
+                showDetails={activeCardNFT}
+                topList={topList}
+                coinbase={coinbase}
+                cardIndex={1}
+                chainId={chainId}
+                handleConnection={handleConnection}
+                handleSwitchNetwork={handleSwitchNetwork}
+              />
+            }
 
               {activePools.map((pool, index) => (
                 <TopPoolsListCard
@@ -30217,6 +30301,7 @@ const EarnTopPicks = ({
               }
             />
           ))}
+         
         </div>
       )}
     </div>

@@ -16,7 +16,6 @@ import axios from "axios";
 import { useEffect } from "react";
 import getFormattedNumber from "../../../functions/getFormattedNumber2";
 import e from "cors";
-import { useRef } from "react";
 import useWindowSize from "../../../functions/useWindowSize";
 
 const EarnContent = ({

@@ -297,9 +297,9 @@ const BscFarmingFunc = ({
   
   const handleStake = async (e) => {
       let selectedBuybackToken = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"; // wbnb/wavax
-      let amount = depositAmount;
+      let amount = depositAmount; 
       setDepositLoading(true);
-      amount = new BigNumber(amount).times(10 ** 18).toFixed(0);
+      amount = new BigNumber(amount).times(10 ** 18).toFixed(0); 
   
       let _80Percent = new BigNumber(amount).times(80e2).div(100e2).toFixed(0);
   
@@ -308,7 +308,7 @@ const BscFarmingFunc = ({
         Date.now() / 1e3 + window.config.tx_max_wait_seconds
       ).toFixed(0);
   
-      let router = await window.getUniswapRouterContract();
+      let router = await window.getPancakeswapRouterContract();
   
       let platformTokenAddress = "0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17" //dyp address
         let rewardTokenAddress = "0xBD100d061E120b2c67A24453CF6368E63f1Be056"// idyp address
@@ -370,13 +370,13 @@ const BscFarmingFunc = ({
   
         let _amountOutMinSwap_real = 0;
         let _amountOutMinSwap = 0;
-        let lastSwap = await farming.lastSwapExecutionTime();
+        let lastSwap = await constant.lastSwapExecutionTime();
         let now = Math.floor(Date.now() / 1000);
-        let tokensToBeSwapped = await farming.tokensToBeSwapped();
+        let tokensToBeSwapped = await constant.tokensToBeSwapped();
         let tokensToBeDisbursedOrBurnt =
-          await farming.tokensToBeDisbursedOrBurnt();
-        let MaxSwappableAmount = await farming.getMaxSwappableAmount();
-        let getPendingDisbursement = await farming.getPendingDisbursement();
+          await constant.tokensToBeDisbursedOrBurnt();
+        let MaxSwappableAmount = await constant.getMaxSwappableAmount();
+        let getPendingDisbursement = await constant.getPendingDisbursement();
         let _SwapTokens = new BigNumber(tokensToBeSwapped)
           .plus(tokensToBeDisbursedOrBurnt)
           .plus(getPendingDisbursement)
@@ -412,7 +412,7 @@ const BscFarmingFunc = ({
         }
   
         let _amountOutMin_dypReceived = new BigNumber(0).toFixed(0);
-        let pendingDivs = await farming.getPendingDivsEth(coinbase);
+        let pendingDivs = await constant.getPendingDivsEth(coinbase);
         console.log(pendingDivs);
         if (pendingDivs > 0) {
           _amountOutMin_dypReceived = new BigNumber(pendingDivs)
@@ -436,7 +436,7 @@ const BscFarmingFunc = ({
   
         //console.log({selectedBuybackToken ,amount, minAmounts, deadline})
   
-        farming
+        constant
           .deposit(selectedBuybackToken, amount, minAmounts, deadline)
           .then(() => {
             setDepositLoading(false);
@@ -569,11 +569,11 @@ const BscFarmingFunc = ({
     setClaimLoading(true);
     let address = coinbase;
 
-    let amount = await farming.getPendingDivs(address);
+    let amount = await constant.getPendingDivs(address);
 
-    let amountETH = await farming.getPendingDivsEth(address);
+    let amountETH = await constant.getPendingDivsEth(address);
 
-    let router = await window.getUniswapRouterContract();
+    let router = await window.getPancakeswapRouterContract();
 
     let WETH = await router.methods.WETH().call();
 
@@ -611,13 +611,13 @@ const BscFarmingFunc = ({
 
     let _amountOutMinSwap_real = 0;
     let _amountOutMinSwap = 0;
-    let lastSwap = await farming.lastSwapExecutionTime();
+    let lastSwap = await constant.lastSwapExecutionTime();
     let now = Math.floor(Date.now() / 1000);
 
-    let tokensToBeSwapped = await farming.tokensToBeSwapped();
-    let tokensToBeDisbursedOrBurnt = await farming.tokensToBeDisbursedOrBurnt();
-    let MaxSwappableAmount = await farming.getMaxSwappableAmount();
-    let getPendingDisbursement = await farming.getPendingDisbursement();
+    let tokensToBeSwapped = await constant.tokensToBeSwapped();
+    let tokensToBeDisbursedOrBurnt = await constant.tokensToBeDisbursedOrBurnt();
+    let MaxSwappableAmount = await constant.getMaxSwappableAmount();
+    let getPendingDisbursement = await constant.getPendingDisbursement();
     let _SwapTokens = new BigNumber(tokensToBeSwapped)
       .plus(tokensToBeDisbursedOrBurnt)
       .plus(getPendingDisbursement)
@@ -653,7 +653,7 @@ const BscFarmingFunc = ({
     });
 
     try {
-      farming
+      constant
         .claimAs(
           window.config.weth_address,
           _amountOutMinConstantETH,
@@ -1140,6 +1140,32 @@ const BscFarmingFunc = ({
     return result;
   };
 
+
+  const checkApproval = async (amount) => {
+    let selectedBuybackToken = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"; // wbnb/wavax
+
+    const result = await window
+      .checkapproveStakePool(coinbase, selectedBuybackToken, constant._address)
+      .then((data) => {
+        console.log(data);
+        return data;
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+
+    let result_formatted = new BigNumber(result).div(1e18).toFixed(6);
+
+    if (
+      Number(result_formatted) >= Number(amount) &&
+      Number(result_formatted) !== 0
+    ) {
+      setDepositStatus("deposit");
+    } else {
+      setDepositStatus("initial");
+    }
+  };
+
   const handleBnbPool = async () => {
     await handleSwitchNetworkhook("0x38")
       .then(() => {
@@ -1576,7 +1602,7 @@ const BscFarmingFunc = ({
                             ? depositAmount
                             : depositAmount
                         }
-                        onChange={(e) => setDepositAmount(e.target.value)}
+                        onChange={(e) => {setDepositAmount(e.target.value); checkApproval(e.target.value)}}
                         placeholder=" "
                         className="text-input"
                         style={{ width: "100%" }}

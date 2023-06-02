@@ -29,6 +29,7 @@ import LandCard from "./LandCard";
 import LandDetails from "../FARMINNG/land";
 import StakeAvax from "../FARMINNG/stakeAvax";
 import CawsWodDetails from "../FARMINNG/cawsWod";
+import BscFarmingFunc from "../FARMINNG/BscFarmingFunc";
 
 const TopPoolsListCard = ({
   tokenLogo,
@@ -72,6 +73,8 @@ const TopPoolsListCard = ({
     "pancakeswap",
     "idypius",
   ];
+  const bscCoins2 = ["bsc"];
+
   const avaxCoins = [
     "avax",
     "ethereum",
@@ -322,9 +325,11 @@ const TopPoolsListCard = ({
     if (chain === "eth") {
       myStakes();
       setCoins(ethCoins);
-    } else if (chain === "bnb") {
+    }  else if (chain === "bnb" && expired === false) {
+      setCoins(bscCoins2);
+    } else if (chain === "bnb" && expired === true) {
       setCoins(bscCoins);
-    } else if (chain === "avax") {
+    }  else if (chain === "avax") {
       setCoins(avaxCoins);
     }
   }, [chain]);
@@ -565,6 +570,30 @@ const TopPoolsListCard = ({
               }
             />
           ) : showDetails &&
+          topList === "Farming" &&
+          chain === "bnb"  ? (
+            <BscFarmingFunc
+            is_wallet_connected={isConnected}
+            coinbase={coinbase}
+            the_graph_result={the_graph_resultbsc}
+            lp_id={LP_IDBNB_Array[cardIndex]}
+            chainId={chainId}
+            handleConnection={handleConnection}
+            expired={false}
+            handleSwitchNetwork={handleSwitchNetwork}
+            liquidity={wbsc_address}
+            constant={window.farming_activebsc_1}
+            token={window.token_newbsc}
+            lp_symbol={"USD"}
+            lock="3 Days"
+            rebase_factor={1}
+            expiration_time="19 November 2024"
+            fee="0.4"
+            finalApr={'3'}
+            lockTime={3}
+            listType={listType}
+          />
+        ) : showDetails &&
             activePools &&
             topList === "Staking" &&
             activePools[cardIndex - 1].id ===
