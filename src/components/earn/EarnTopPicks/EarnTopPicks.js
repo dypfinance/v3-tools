@@ -29,6 +29,7 @@ import LandDetails from "../../FARMINNG/land";
 import StakeAvax from "../../FARMINNG/stakeAvax";
 import CawsWodCard from "../../top-pools-card/CawsWodCard";
 import CawsWodDetails from "../../FARMINNG/cawsWod";
+import BscFarmingFunc from "../../FARMINNG/BscFarmingFunc";
 
 const EarnTopPicks = ({
   topList,
