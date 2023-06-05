@@ -618,7 +618,7 @@ const EarnTopPicks = ({
 
   const fetchStakingData = async () => {
     if (topList === "Staking") {
-      setTopPools([]);
+      // setTopPools([]);
       if (chain !== "eth" && chain !== "bnb" && chain === "avax") {
         // setTimeout(() => {
         await fetchAvaxStaking();
@@ -668,21 +668,21 @@ const EarnTopPicks = ({
         handleCardIndexStakeiDyp(2);
       }
 
-      if (routeOption === "Farming" && chain === "eth") {
+      if (routeOption === "Farming" && chain === "eth" && expiredPools=== true) {
         setDetails(4);
         setActiveCard2(topPools[4]);
         handleCardIndexStake(4);
         handleCardIndexStake30(4);
         handleCardIndexStakeiDyp(4);
       }
-      if (routeOption === "Farming" && chain === "bnb") {
+      if (routeOption === "Farming" && chain === "bnb" && expiredPools=== true) {
         setDetails(3);
         setActiveCard2(topPools[3]);
         handleCardIndexStake(3);
         handleCardIndexStake30(3);
         handleCardIndexStakeiDyp(3);
       }
-      if (routeOption === "Farming" && chain === "avax") {
+      if (routeOption === "Farming" && chain === "avax" && expiredPools=== true) {
         setDetails(4);
         setActiveCard2(topPools[4]);
         handleCardIndexStake(4);
@@ -696,11 +696,11 @@ const EarnTopPicks = ({
 
     setCustomPool(null);
 
-    if (networkId === "1" && topList === "Farming") {
+    if (networkId === "1" && topList === "Farming" && expiredPools=== true) {
       fetchEthFarming();
-    } else if (networkId === "56" && topList === "Farming") {
+    } else if (networkId === "56" && topList === "Farming" && expiredPools=== true) {
       fetchBscFarming();
-    } else if (networkId === "43114" && topList === "Farming") {
+    } else if (networkId === "43114" && topList === "Farming" && expiredPools=== true) {
       fetchAvaxFarming();
     }
     setShowDetails(false);
@@ -721,10 +721,10 @@ const EarnTopPicks = ({
       // setTimeout(() => {
       setTopPools(vault);
       setExpiredPools(vault);
-      setActivePools([]);
       // }, 500);
     }
   }, [topList, chainId, chain, coinbase, expiredPools]);
+
 
   useEffect(() => {
     fetchUserPools();
@@ -762,9 +762,10 @@ const EarnTopPicks = ({
     } else setcardIndex(index);
   };
 
-
+  
   useEffect(()=>{
     if(topList === 'Farming' && chain === 'bnb' && expiredPools === false) {
+      setTopPools(['1', '2'])
       setActivePools([])
     }
   },[topList, chain, expiredPools])
