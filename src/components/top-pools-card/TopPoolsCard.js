@@ -142,12 +142,15 @@ const TopPoolsCard = ({
                   coins
                     .slice(0, 5)
                     .map((coin, index) => (
+                      <h6 className="token-name d-flex align-items-center gap-2">
                       <img
                         key={index}
                         src={require(`./assets/${coin}.svg`).default}
                         alt=""
                         className="pool-coins"
                       />
+                      {tokenName}
+                      </h6>
                     ))
                 : tokenLogo !== undefined && (
                     <h6 className="token-name d-flex align-items-center gap-2">
