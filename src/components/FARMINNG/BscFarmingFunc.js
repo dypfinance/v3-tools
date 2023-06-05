@@ -533,7 +533,7 @@ const BscFarmingFunc = ({
       let selectedBuybackToken = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"; // can only be WETH
       let amount = await constant.depositedTokens(coinbase)
       let PAIR_ABI =  window.PAIR_ABI;
-      let pair_token_address = "0xfA4a60310B275C49c4687f591B0e2Ba3A4044f32"
+      let pair_token_address = "0x1bC61d08A300892e784eD37b2d0E63C85D1d57fb"
       let web3 = window.bscWeb3;
       let pair = new web3.eth.Contract(PAIR_ABI, pair_token_address);
       
