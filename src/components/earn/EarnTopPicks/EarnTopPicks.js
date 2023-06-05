@@ -30,6 +30,7 @@ import StakeAvax from "../../FARMINNG/stakeAvax";
 import CawsWodCard from "../../top-pools-card/CawsWodCard";
 import CawsWodDetails from "../../FARMINNG/cawsWod";
 import BscFarmingFunc from "../../FARMINNG/BscFarmingFunc";
+import FarmAvaxFunc from "../../FARMINNG/FarmAvaxFunc";
 
 const EarnTopPicks = ({
   topList,
@@ -764,7 +765,7 @@ const EarnTopPicks = ({
 
   
   useEffect(()=>{
-    if(topList === 'Farming' && chain === 'bnb' && expiredPools === false) {
+    if((topList === 'Farming' && chain === 'bnb' && expiredPools === false) || (topList === 'Farming' && chain === 'avax' && expiredPools === false)) {
       setTopPools(['1', '2'])
       setActivePools([])
     }
@@ -950,6 +951,43 @@ const EarnTopPicks = ({
                         network={chainId}
                       />
                     )}
+
+{topList === "Farming" && chain === "avax" && (
+                      <TopPoolsCard
+                        chain={chain}
+                        top_pick={false}
+                        tokenName={"WAVAX"}
+                        apr={"8%"}
+                        tvl={"$60,000"}
+                        lockTime={"3 Days"}
+                        tokenLogo={
+                          'wavax.svg'
+                        }
+                        onShowDetailsClick={() => {
+                          setActiveCard(topPools[0]);
+                          setActiveCard2(null);
+                          setActiveCard3(null);
+                          setActiveCard4(null);
+                          setActiveCardCawsLand(null);
+                          setActiveCardNFT(false);
+                          setActiveCardLandNFT(false);
+                          handleCardIndexStake(0);
+                          handleCardIndexStake30(0);
+                          handleCardIndexStakeiDyp(0);
+                          setDetails(0);
+                        }}
+                        onHideDetailsClick={() => {
+                          setActiveCard(null);
+                          setDetails();
+                        }}
+                        cardType={topList}
+                        details={details === 0 ? true : false}
+                        isNewPool={true}
+                        isStaked={false}
+                        expired={false}
+                        network={chainId}
+                      />
+                    )}
                   </div>
                   {activeCardCawsLand && (
                     <CawsWodDetails
@@ -1011,16 +1049,27 @@ const EarnTopPicks = ({
                         listType={listType}
                       />
                     ) : (
-                      <FarmAvax
-                        is_wallet_connected={isConnected}
-                        handleConnection={handleConnection}
-                        the_graph_result={the_graph_resultavax}
-                        lp_id={LP_IDAVAX_Array[cardIndex]}
-                        chainId={chainId}
-                        coinbase={coinbase}
-                        handleSwitchNetwork={handleSwitchNetwork}
-                        expired={false}
-                      />
+                      <FarmAvaxFunc
+                      is_wallet_connected={isConnected}
+                      coinbase={coinbase}
+                      the_graph_result={the_graph_resultavax}
+                      lp_id={LP_IDAVAX_Array[cardIndex]}
+                      chainId={chainId}
+                      handleConnection={handleConnection}
+                      expired={false}
+                      handleSwitchNetwork={handleSwitchNetwork}
+                      liquidity={wbnb_address}
+                      constant={window.farming_activeavax_1}
+                      token={window.token_newavax}
+                      lp_symbol={"USD"}
+                      lock="3 Days"
+                      rebase_factor={1}
+                      expiration_time="19 November 2024"
+                      fee="0.4"
+                      finalApr={activePools[cardIndex]?.apy_percent}
+                      lockTime={3}
+                      listType={listType}
+                    />
                     )
                   ) : activeCard &&
                     topList === "Staking" &&
@@ -3791,6 +3840,42 @@ const EarnTopPicks = ({
                       network={chainId}
                     />
                   )}
+                  {topList === "Farming" && chain === "avax" && (
+                      <TopPoolsCard
+                        chain={chain}
+                        top_pick={false}
+                        tokenName={"WAVAX"}
+                        apr={"8%"}
+                        tvl={"$60,000"}
+                        lockTime={"3 Days"}
+                        tokenLogo={
+                          'wavax.svg'
+                        }
+                        onShowDetailsClick={() => {
+                          setActiveCard(topPools[0]);
+                          setActiveCard2(null);
+                          setActiveCard3(null);
+                          setActiveCard4(null);
+                          setActiveCardCawsLand(null);
+                          setActiveCardNFT(false);
+                          setActiveCardLandNFT(false);
+                          handleCardIndexStake(0);
+                          handleCardIndexStake30(0);
+                          handleCardIndexStakeiDyp(0);
+                          setDetails(0);
+                        }}
+                        onHideDetailsClick={() => {
+                          setActiveCard(null);
+                          setDetails();
+                        }}
+                        cardType={topList}
+                        details={details === 0 ? true : false}
+                        isNewPool={true}
+                        isStaked={false}
+                        expired={false}
+                        network={chainId}
+                      />
+                    )}
                 </div>
                 {activeCardCawsLand && (
                   <CawsWodDetails
@@ -3955,6 +4040,30 @@ const EarnTopPicks = ({
                   listType={listType}
                 />
               ) : activeCard &&
+              topList === "Farming" &&
+              chain === "avax" ? (
+                <FarmAvaxFunc
+                is_wallet_connected={isConnected}
+                coinbase={coinbase}
+                the_graph_result={the_graph_resultavax}
+                lp_id={LP_IDAVAX_Array[cardIndex]}
+                chainId={chainId}
+                handleConnection={handleConnection}
+                expired={false}
+                handleSwitchNetwork={handleSwitchNetwork}
+                liquidity={wbnb_address}
+                constant={window.farming_activeavax_1}
+                token={window.token_newavax}
+                lp_symbol={"USD"}
+                lock="3 Days"
+                rebase_factor={1}
+                expiration_time="19 November 2024"
+                fee="0.4"
+                finalApr={activePools[cardIndex]?.apy_percent}
+                lockTime={3}
+                listType={listType}
+              />
+            ) : activeCard &&
                   topList === "Staking" &&
                   chain === "eth" &&
                   activePools[cardIndex].id ===
@@ -7719,6 +7828,42 @@ const EarnTopPicks = ({
                         network={chainId}
                       />
                     )}
+                    {topList === "Farming" && chain === "avax" && (
+                      <TopPoolsCard
+                        chain={chain}
+                        top_pick={false}
+                        tokenName={"WAVAX"}
+                        apr={"8%"}
+                        tvl={"$60,000"}
+                        lockTime={"3 Days"}
+                        tokenLogo={
+                          'wavax.svg'
+                        }
+                        onShowDetailsClick={() => {
+                          setActiveCard(topPools[0]);
+                          setActiveCard2(null);
+                          setActiveCard3(null);
+                          setActiveCard4(null);
+                          setActiveCardCawsLand(null);
+                          setActiveCardNFT(false);
+                          setActiveCardLandNFT(false);
+                          handleCardIndexStake(0);
+                          handleCardIndexStake30(0);
+                          handleCardIndexStakeiDyp(0);
+                          setDetails(0);
+                        }}
+                        onHideDetailsClick={() => {
+                          setActiveCard(null);
+                          setDetails();
+                        }}
+                        cardType={topList}
+                        details={details === 0 ? true : false}
+                        isNewPool={true}
+                        isStaked={false}
+                        expired={false}
+                        network={chainId}
+                      />
+                    )}
                   </div>
                   {activeCard &&
                   topList === "Staking" &&
@@ -7880,6 +8025,28 @@ const EarnTopPicks = ({
                       lockTime={3}
                       listType={listType}
                     />
+                  ): activeCard && topList === "Farming" && chain === "avax" ? (
+                    <FarmAvaxFunc
+                    is_wallet_connected={isConnected}
+                    coinbase={coinbase}
+                    the_graph_result={the_graph_resultavax}
+                    lp_id={LP_IDAVAX_Array[cardIndex]}
+                    chainId={chainId}
+                    handleConnection={handleConnection}
+                    expired={false}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    liquidity={wbnb_address}
+                    constant={window.farming_activeavax_1}
+                    token={window.token_newavax}
+                    lp_symbol={"USD"}
+                    lock="3 Days"
+                    rebase_factor={1}
+                    expiration_time="19 November 2024"
+                    fee="0.4"
+                    finalApr={activePools[cardIndex]?.apy_percent}
+                    lockTime={3}
+                    listType={listType}
+                  />
                   ) : activeCard &&
                     topList === "Staking" &&
                     chain === "eth" &&

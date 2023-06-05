@@ -60,6 +60,10 @@ const TopPoolsCard = ({
     "link",
   ];
 
+  const avaxCoins2 = [
+    "avax",
+  ];
+
   const [showDetails, setShowDetails] = useState(false);
   const [coins, setCoins] = useState(ethCoins);
 
@@ -80,7 +84,10 @@ const TopPoolsCard = ({
       setCoins(bscCoins2);
     } else if (chain === "bnb" && expired === true) {
       setCoins(bscCoins);
-    } else if (chain === "avax") {
+    } else if (chain === "avax"&& expired === false) {
+      setCoins(avaxCoins2);
+    }
+    else if (chain === "avax"&& expired === true) {
       setCoins(avaxCoins);
     }
   }, [chain]);
