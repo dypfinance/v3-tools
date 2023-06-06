@@ -2175,7 +2175,7 @@ const BscFarmingFunc = ({
                 <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                   <span className="stats-card-title">Total LP Deposited</span>
                   <h6 className="stats-card-content">
-                    {getFormattedNumber(tvl, 3)} iDYP/WBNB
+                  {getFormattedNumber(totalLPdeposited, 3)} iDYP/WBNB
                   </h6>
                   {/* <span className="stats-usd-value">
                     ${getFormattedNumber(tvl * iDypUSD)}
