@@ -1038,6 +1038,8 @@ const EarnTopPicks = ({
                         handleSwitchNetwork={handleSwitchNetwork}
                         liquidity={wbsc_address}
                         constant={window.farming_activebsc_1}
+                  staking={window.constant_staking_newbscactive1}
+
                         token={window.token_newbsc}
                         lp_symbol={"USD"}
                         lock="3 Days"
@@ -4030,6 +4032,7 @@ const EarnTopPicks = ({
                   handleSwitchNetwork={handleSwitchNetwork}
                   liquidity={wbsc_address}
                   constant={window.farming_activebsc_1}
+                  staking={window.constant_staking_newbscactive1}
                   token={window.token_newbsc}
                   lp_symbol={"USD"}
                   lock="3 Days"
@@ -8017,6 +8020,8 @@ const EarnTopPicks = ({
                       handleSwitchNetwork={handleSwitchNetwork}
                       liquidity={wbsc_address}
                       constant={window.farming_activebsc_1}
+                  staking={window.constant_staking_newbscactive1}
+
                       token={window.token_newbsc}
                       lp_symbol={"USD"}
                       lock="3 Days"

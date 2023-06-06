@@ -1759,6 +1759,9 @@ window.config = {
   constant_stakingnew_newavaxactive1_address:
   "0x245978ea5EFc6eec44AF03032F6318a81190DCbF",
 
+  constant_stakingnew_newbscactive1_address:
+  "0x543e3E97a93c77310f53B77E7Ba97d50a508A2b7",
+
   constant_stakingnew_newavax5_address:
     "0x1cA9Fc98f3b997E08bC04691414e33B1835aa7e5",
   constant_stakingnew_newavax9_address:
@@ -2113,7 +2116,7 @@ window.config = {
 
   //farming bsc
 
-  farming_activebsc_1_address: "0x131F62C87FB177CA64d2034Ece921933d2bC34B4",
+  farming_activebsc_1_address: "0x60C217019EC5c383D8468D6187796A6535996791",
   farming_activeavax_1_address: "0x6eE20ebFa4A169B2cB03bEB41DA9351a4a879676",
 
   farming_newbsc_1_address: "0x537dc4fee298ea79a7f65676735415f1e2882f92",
@@ -2496,9 +2499,11 @@ window.constant_staking_newavax5 = new CONSTANT_STAKING_NEW(
   "CONSTANT_STAKINGNEW_NEWAVAX5"
 );
 
-window.constant_staking_newavaxactive1 = new CONSTANT_STAKING_NEW(
-  "CONSTANT_STAKINGNEW_NEWAVAXACTIVE1"
+window.constant_staking_newbscactive1 = new CONSTANT_STAKING_NEW(
+  "CONSTANT_STAKINGNEW_NEWBSCACTIVE1"
 );
+
+window.constant_staking_newavaxactive1 = new CONSTANT_STAKING_NEW('CONSTANT_STAKINGNEW_NEWAVAXACTIVE1')
 
 window.constant_staking_newavax6 = new CONSTANT_STAKING_NEW(
   "CONSTANT_STAKINGNEW_NEWAVAX6"

@@ -220,6 +220,7 @@ const FarmAvaxFunc = ({
   const [myDepositedLpTokens, setMyDepositedLpTokens] = useState("");
   const [myShare, setmyShare] = useState("");
   const [lpTokens, setlpTokens] = useState("");
+  const [totalLPdeposited, setTotalLpDeposited] = ('')
 
 
   const showModal = () => {
@@ -237,6 +238,16 @@ const FarmAvaxFunc = ({
   const hidePopup = () => {
     setPopup(false);
   };
+
+  const getTotalLP = async ()=>{
+    let PAIR_ABI = window.PAIRAVAX_ABI;
+    let pair_token_address = "0x66eecc97203704d9e2db4a431cb0e9ce92539d5a";
+    let web3 = window.avaxWeb3;
+    let pair = new web3.eth.Contract(PAIR_ABI, pair_token_address);
+    const result = await pair.methods.balanceOf(constant._address).call().catch((e)=>{console.log(e)})
+    const result_formatted = new BigNumber(result).div(1e18).toFixed(18)
+    setTotalLpDeposited(result_formatted)
+  }
 
   const getTokenData = async () => {
     await axios
@@ -289,7 +300,7 @@ const FarmAvaxFunc = ({
   };
 
   const handleStake = async (e) => {
-    getLPTokens()
+
 
     let selectedBuybackToken = "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7"; // wbnb/wavax
     let amount = depositAmount;
@@ -444,6 +455,8 @@ const FarmAvaxFunc = ({
       constant
         .deposit(selectedBuybackToken, amount, minAmounts, deadline)
         .then(() => {
+          getLPTokens();
+          getTotalLP();
           setDepositLoading(false);
           setDepositStatus("success");
           refreshBalance();
@@ -1008,8 +1021,10 @@ const FarmAvaxFunc = ({
       let _tvliDYP = reward_token_idyp.balanceOf(
         constant._address
       ); /* TVL of iDYP on Farming */
-
-      let _dTokensDYP = staking.depositedTokens(coinbase);
+  let _dTokensDYP;
+      if(staking)
+     { _dTokensDYP = staking.depositedTokens(coinbase);}
+     
       
       // let _pendingDivsStaking = constant.getTotalPendingDivs(coinbase);
 
@@ -1283,6 +1298,7 @@ const FarmAvaxFunc = ({
     if (coinbase !== coinbase2) {
       setCoinbase2(coinbase);
       getLPTokens()
+      getTotalLP()
     }
     getPriceDYP();
     getTokenData();
@@ -2229,7 +2245,7 @@ const FarmAvaxFunc = ({
                 <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                   <span className="stats-card-title">Total LP Deposited</span>
                   <h6 className="stats-card-content">
-                    {getFormattedNumber(tvl, 3)} iDYP/WAVAX
+                    {getFormattedNumber(totalLPdeposited, 3)} iDYP/WAVAX
                   </h6>
                   {/* <span className="stats-usd-value">
                     ${getFormattedNumber(tvl * iDypUSD)}
@@ -2512,7 +2528,7 @@ const FarmAvaxFunc = ({
                             src={selectedPool === "wavax2" ? check : empty}
                             alt=""
                             className="activestate"
-                            style={{ top: "65px" }}
+                            style={{ top: "45px" }}
                           />
                           <div className="d-flex flex-column align-items-center gap-2 justify-content-between w-100">
                             <div className="position-relative">
@@ -2563,44 +2579,7 @@ const FarmAvaxFunc = ({
                             $200
                           </h6>
                         </div> */}
-                            <div className="d-flex flex-column align-items-center gap-2 justify-content-between w-100">
-                              <div className="position-relative">
-                                <h6
-                                  className="withsubtitle"
-                                  style={{ padding: "5px 0 0 15px" }}
-                                >
-                                  WAVAX balance
-                                </h6>
-
-                                <input
-                                  disabled
-                                  value={
-                                    Number(getFormattedNumber(lpTokens,4)) > 0
-                                      ? `${
-                                        getFormattedNumber(lpTokens,4) * LP_AMPLIFY_FACTOR
-                                        } WAVAX`
-                                      : `${getFormattedNumber(lpTokens,4)} WAVAX`
-                                  }
-                                  onChange={(e) =>
-                                    setWithdrawAmount(
-                                      Number(e.target.value) > 0
-                                        ? e.target.value / LP_AMPLIFY_FACTOR
-                                        : e.target.value
-                                    )
-                                  }
-                                  className=" left-radius inputfarming styledinput2"
-                                  placeholder="0"
-                                  type="text"
-                                  style={{
-                                    width: "165px",
-                                    padding: "0px 15px 0px 15px",
-                                    height: 35,
-                                    fontSize: 20,
-                                    fontWeight: 300,
-                                  }}
-                                />
-                              </div>
-                            </div>
+                          
                           </div>
                           <div className="d-flex align-items-center justify-content-center w-100 claimreward-header">
                             <div class="dropdown">
@@ -2671,6 +2650,8 @@ const FarmAvaxFunc = ({
                             src={selectedPool === "dyp2" ? check : empty}
                             alt=""
                             className="activestate"
+                            style={{ top: "45px" }}
+
                           />
 
                           <div className="d-flex flex-column align-items-center gap-2 justify-content-between w-100 position-relative">
@@ -2704,36 +2685,7 @@ const FarmAvaxFunc = ({
                                 }}
                               />
                             </div>
-                            <div className="position-relative">
-                              <h6
-                                className="withsubtitle"
-                                style={{ padding: "0px 15px 0px 15px" }}
-                              >
-                                Value
-                              </h6>
-
-                              <input
-                                disabled
-                                value={`${ getFormattedNumber(depositedTokensDYP) } DYP`}
-                                onChange={(e) =>
-                                  setWithdrawAmount(
-                                    Number(e.target.value) > 0
-                                      ? e.target.value / LP_AMPLIFY_FACTOR
-                                      : e.target.value
-                                  )
-                                }
-                                className=" left-radius inputfarming styledinput2"
-                                placeholder="0"
-                                type="text"
-                                style={{
-                                  width: "150px",
-                                  padding: "0px 15px 0px 15px",
-                                  height: 35,
-                                  fontSize: 20,
-                                  fontWeight: 300,
-                                }}
-                              />
-                            </div>
+                            
                           </div>
                           <div className="d-flex align-items-center justify-content-center w-100 claimreward-header">
                             <img

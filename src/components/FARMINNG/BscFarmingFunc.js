@@ -218,6 +218,8 @@ const BscFarmingFunc = ({
   const [iDypUSD, setiDypUSD] = useState("");
   const [dypUSD, setDypUsd] = useState("");
   const [dypPerAvax, setdypPerAvaxPrice] = useState("");
+  const [lpTokens, setlpTokens] = useState("");
+  const [totalLPdeposited, setTotalLpDeposited] = ('')
 
   const showModal = () => {
     setShow(true);
@@ -234,6 +236,59 @@ const BscFarmingFunc = ({
   const hidePopup = () => {
     setPopup(false);
   };
+
+  const getTotalLP = async ()=>{
+    let PAIR_ABI = window.PAIR_ABI;
+    let pair_token_address = "0x1bC61d08A300892e784eD37b2d0E63C85D1d57fb";
+    let web3 = window.bscWeb3;
+    let pair = new web3.eth.Contract(PAIR_ABI, pair_token_address);
+    const result = await pair.methods.balanceOf(constant._address).call().catch((e)=>{console.log(e)})
+    const result_formatted = new BigNumber(result).div(1e18).toFixed(18)
+    setTotalLpDeposited(result_formatted)
+  }
+
+  const getLPTokens = async () => {
+    let router = await window.getPancakeswapRouterContract();
+    let WETH = await router.methods.WETH().call();
+    let rewardTokenAddress = "0xBD100d061E120b2c67A24453CF6368E63f1Be056"; // idyp address
+ 
+    let amount = await constant.depositedTokens(coinbase);
+    let PAIR_ABI = window.PAIR_ABI;
+    let pair_token_address = "0x1bC61d08A300892e784eD37b2d0E63C85D1d57fb";
+    let web3 = window.bscWeb3;
+
+    let pair = new web3.eth.Contract(PAIR_ABI, pair_token_address);
+    let totalSupply = await pair.methods.totalSupply().call();
+    let reserves = await pair.methods.getReserves().call();
+    let maxETH = reserves[0];
+    let maxToken = reserves[1];
+
+    let maxUserEth = (amount * maxETH) / totalSupply;
+    maxUserEth = new BigNumber(maxUserEth).toFixed(0);
+    let maxUserEth1 =
+      (maxUserEth *
+        (100 - window.config.slippage_tolerance_percent_liquidity)) /
+      100;
+    maxUserEth1 = new BigNumber(maxUserEth1).toFixed(0);
+    let maxUserToken = (amount * maxToken) / totalSupply;
+    maxUserToken = new BigNumber(maxUserToken).toFixed(0);
+    let maxUserToken1 = new BigNumber(maxUserToken)
+      .times(100 - window.config.slippage_tolerance_percent_liquidity)
+      .div(100)
+      .toFixed(0);
+    let path1 = [
+      ...new Set([rewardTokenAddress, WETH].map((a) => a.toLowerCase())),
+    ];
+
+    let _userWithdrawAmount = await router.methods
+      .getAmountsOut(maxUserToken, path1)
+      .call();
+    _userWithdrawAmount = _userWithdrawAmount[_userWithdrawAmount.length - 1];
+
+    _userWithdrawAmount = BigNumber(_userWithdrawAmount).plus(maxUserEth).div(1e18).toFixed(18);
+    setlpTokens(_userWithdrawAmount)
+  };
+
 
   const handleListDownload = async (e) => {
     e.preventDefault();
@@ -451,6 +506,8 @@ const BscFarmingFunc = ({
       constant
         .deposit(selectedBuybackToken, amount, minAmounts, deadline)
         .then(() => {
+          getLPTokens();
+          getTotalLP();
           setDepositLoading(false);
           setDepositStatus("success");
           refreshBalance();
@@ -499,7 +556,7 @@ const BscFarmingFunc = ({
   };
 
   const handleWithdrawDyp = async () => {
-    let amountConstant = await constant.depositedTokens(coinbase);
+    let amountConstant = await staking.depositedTokens(coinbase);
     amountConstant = new BigNumber(amountConstant).toFixed(0);
     setWithdrawLoading(true);
 
@@ -508,7 +565,7 @@ const BscFarmingFunc = ({
     );
 
     try {
-      constant
+      staking
         .unstake(amountConstant, 0, deadline)
         .then(() => {
           setWithdrawStatus("success");
@@ -807,7 +864,7 @@ const BscFarmingFunc = ({
 
     let address = coinbase;
 
-    let amount = await constant.getTotalPendingDivs(address);
+    let amount = await staking.getTotalPendingDivs(address);
     let router = await window.getPancakeswapRouterContract();
     let WETH = await router.methods.WETH().call();
     let platformTokenAddress = window.config.reward_token_address;
@@ -846,7 +903,7 @@ const BscFarmingFunc = ({
     referralFee = referralFee.toString();
 
     try {
-      constant
+      staking
         .claim(referralFee, _amountOutMinConstant, deadline)
         .then(() => {
           setClaimStatus("success");
@@ -974,7 +1031,7 @@ const BscFarmingFunc = ({
         constant._address
       ); /* TVL of iDYP on Farming */
 
-      let _dTokensDYP = constant.depositedTokens(coinbase);
+      let _dTokensDYP = staking.depositedTokens(coinbase);
 
       // let _pendingDivsStaking = constant.getTotalPendingDivs(coinbase);
 
@@ -1278,12 +1335,12 @@ const BscFarmingFunc = ({
   useEffect(() => {
     if (coinbase !== coinbase2) {
       setCoinbase2(coinbase);
+      getTotalLP()
+      getLPTokens()
     }
 
     getPriceDYP();
-    return () => {
-      clearInterval(window._refreshBalInterval);
-    };
+   
   }, []);
 
   let is_connected = is_wallet_connected;
@@ -1856,32 +1913,8 @@ const BscFarmingFunc = ({
                       </div>
                       <div
                         className="d-flex align-items-center justify-content-center claimreward-header w-100"
-                        // style={{ padding: "3px" }}
                       >
-                        {/* <img
-                    src={
-                      require(`./assets/${selectedRewardTokenLogo1.toLowerCase()}.svg`)
-                        .default
-                    }
-                    alt=""
-                    style={{ width: 14, height: 14 }}
-                  />
-                  <select
-                    disabled={!is_connected}
-                    value={selectedClaimToken}
-                    onChange={(e) => {
-                      handleClaimToken(e.target.value);
-                      setState({
-                        selectedRewardTokenLogo1:
-                          e.target.value === "1" ? "usdt" : "weth",
-                      });
-                    }}
-                    className=" inputfarming"
-                    style={{ border: "none" }}
-                  >
-                    <option value="0"> WETH </option>
-                    <option value="1"> USDT </option>
-                  </select> */}
+                   
                         <div class="dropdown">
                           <button
                             class="btn reward-dropdown inputfarming d-flex align-items-center justify-content-center gap-1"
@@ -1927,21 +1960,93 @@ const BscFarmingFunc = ({
                         </div>
                       </div>
                     </div>
+                    <div
+                          className="gap-1 claimreward-wrapper"
+                          style={{
+                            background:
+                            selectedPool === "dyp"
+                                ? "#141333"
+                                : "#26264F",
+                            border:
+                            selectedPool === "dyp"
+                                ? "1px solid #57B6AB"
+                                : "1px solid #8E97CD",
+                          }}
+                          onClick={() => {
+                            setSelectedPool("dyp")
+                           
+                          }}
+                        >
+                          <img
+                            src={
+                             selectedPool === "dyp" ? check : empty
+                            }
+                            alt=""
+                            className="activestate"
+                          />
+
+                          <div className="position-relative">
+                            <input
+                              disabled
+                              value={
+                                Number(pendingDivs) > 0
+                                  ? `${pendingDivs} DYP`
+                                  : `${getFormattedNumber(0, 2)} DYP`
+                              }
+                              onChange={(e) =>
+                                setPendingDivs(Number(e.target.value) > 0
+                                      ? e.target.value
+                                      : e.target.value)
+                               
+                              }
+                              className=" left-radius inputfarming styledinput2"
+                              placeholder="0"
+                              type="text"
+                              style={{
+                                width: "120px",
+                                padding: "0px 15px 0px 15px",
+                                height: 35,
+                              }}
+                            />
+                          </div>
+
+                          <div
+                            className="d-flex align-items-center justify-content-center w-100 claimreward-header "
+                          >
+                            <img
+                              src={
+                                require(`./assets/dyp.svg`)
+                                  .default
+                              }
+                              alt=""
+                              style={{ width: 14, height: 14 }}
+                            />
+                            <select
+                              disabled
+                              defaultValue="DYP"
+                              className="form-control inputfarming"
+                              style={{ border: "none", padding: "0 0 0 3px" }}
+                            >
+                              <option value="DYP"> DYP </option>
+                            </select>
+                            
+                          </div>
+                        </div>
                   </div>
                   <button
                     disabled={
                       selectedPool === "" ||
                       claimStatus === "claimed" ||
                       claimStatus === "failed" ||
-                      claimStatus === "success" ||
-                      pendingDivsEth == "0"
+                      claimStatus === "success"
+                      //  || pendingDivsEth == "0"
                         ? true
                         : false
                     }
                     className={`btn filledbtn ${
                       claimStatus === "claimed" ||
-                      selectedPool === "" ||
-                      pendingDivsEth == "0"
+                      selectedPool === "" 
+                      // || pendingDivsEth == "0"
                         ? "disabled-btn"
                         : claimStatus === "failed"
                         ? "fail-button"
@@ -1951,7 +2056,9 @@ const BscFarmingFunc = ({
                     } d-flex justify-content-center align-items-center`}
                     style={{ height: "fit-content" }}
                     onClick={() => {
-                      handleClaimDivs();
+                      selectedPool === "wbnb"
+                      ? handleClaimDivs()
+                      : handleClaimDyp();
                     }}
                   >
                     {claimLoading ? (
@@ -2026,7 +2133,7 @@ const BscFarmingFunc = ({
               </h6>
 
               <button
-                disabled={Number(depositedTokens) > 0 ? false : true}
+                // disabled={Number(depositedTokens) > 0 ? false : true}
                 className={
                   // depositStatus === "success" ?
                   "outline-btn btn"
@@ -2075,9 +2182,9 @@ const BscFarmingFunc = ({
                   </span> */}
                 </div>
                 <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
-                  <span className="stats-card-title">My iDYP Stake</span>
+                  <span className="stats-card-title">My DYP Stake</span>
                   <h6 className="stats-card-content">
-                    {getFormattedNumber(reward_token_balance, 3)} DYP
+                  {getFormattedNumber(depositedTokensDYP, 3)} DYP
                   </h6>
                   {/* <span className="stats-usd-value">
                     ${getFormattedNumber(reward_token_balance * dypUSD)}
@@ -2280,7 +2387,7 @@ const BscFarmingFunc = ({
                             src={selectedPool === "wbnb2" ? check : empty}
                             alt=""
                             className="activestate"
-                            style={{ top: "65px" }}
+                            style={{ top: "45px" }}
                           />
                           <div className="d-flex align-items-center gap-2 justify-content-between w-100">
                             <div className="position-relative">
@@ -2294,9 +2401,9 @@ const BscFarmingFunc = ({
                               <input
                                 disabled
                                 value={
-                                  Number(withdrawAmount) > 0
-                                    ? `${withdrawAmount * LP_AMPLIFY_FACTOR} LP`
-                                    : `${withdrawAmount} LP`
+                                  Number(getFormattedNumber(lpTokens,4)) > 0
+                                    ? `${getFormattedNumber(lpTokens,4) * LP_AMPLIFY_FACTOR} WBNB`
+                                    : `${getFormattedNumber(lpTokens,4)} WBNB`
                                 }
                                 onChange={(e) =>
                                   setWithdrawAmount(
@@ -2309,7 +2416,7 @@ const BscFarmingFunc = ({
                                 placeholder="0"
                                 type="text"
                                 style={{
-                                  width: "150px",
+                                  width: "165px",
                                   padding: "0px 15px 0px 15px",
                                   height: 35,
                                   fontSize: 20,
@@ -2318,70 +2425,11 @@ const BscFarmingFunc = ({
                               />
                             </div>
                           </div>
-                          <div className="d-flex align-items-center gap-2 justify-content-between w-100">
-                            <div className="position-relative">
-                              <h6
-                                className="withsubtitle"
-                                style={{ padding: "5px 0 0 15px" }}
-                              >
-                                LP balance
-                              </h6>
-
-                              <input
-                                disabled
-                                value={
-                                  Number(withdrawAmount) > 0
-                                    ? `${withdrawAmount * LP_AMPLIFY_FACTOR} LP`
-                                    : `${withdrawAmount} LP`
-                                }
-                                onChange={(e) =>
-                                  setWithdrawAmount(
-                                    Number(e.target.value) > 0
-                                      ? e.target.value / LP_AMPLIFY_FACTOR
-                                      : e.target.value
-                                  )
-                                }
-                                className=" left-radius inputfarming styledinput2"
-                                placeholder="0"
-                                type="text"
-                                style={{
-                                  width: "150px",
-                                  padding: "0px 15px 0px 15px",
-                                  height: 35,
-                                  fontSize: 20,
-                                  fontWeight: 300,
-                                }}
-                              />
-                            </div>
-                          </div>
+                        
                           <div
                             className="d-flex w-100 align-items-center justify-content-center claimreward-header"
-                            // style={{ padding: "10px 0 0 10px" }}
                           >
-                            {/* <img
-                        src={
-                          require(`./assets/${selectedRewardTokenLogo1.toLowerCase()}.svg`)
-                            .default
-                        }
-                        alt=""
-                        style={{ width: 14, height: 14 }}
-                      />
-                      <select
-                        disabled={!is_connected}
-                        value={selectedClaimToken}
-                        onChange={(e) => {
-                          handleClaimToken(e.target.value);
-                          setState({
-                            selectedRewardTokenLogo1:
-                              e.target.value === "1" ? "usdt" : "weth",
-                          });
-                        }}
-                        className=" inputfarming"
-                        style={{ border: "none" }}
-                      >
-                        <option value="0"> WETH </option>
-                        <option value="1"> USDT </option>
-                      </select> */}
+                         
                             <div class="dropdown">
                               <button
                                 class="btn reward-dropdown inputfarming d-flex align-items-center justify-content-center gap-1"
@@ -2432,6 +2480,88 @@ const BscFarmingFunc = ({
                           Total LP deposited{" "}
                         </h6>
                       </div>
+                      <div className="col-5 d-flex flex-column gap-1">
+                        <div
+                          className="gap-1 claimreward-wrapper w-100"
+                          style={{
+                            background:
+                              selectedPool === "dyp2" ? "#141333" : "#26264F",
+                            border:
+                              selectedPool === "dyp2"
+                                ? "1px solid #57B6AB"
+                                : "1px solid #8E97CD",
+                          }}
+                          onClick={() => {
+                            setSelectedPool("dyp2");
+                          }}
+                        >
+                          <img
+                            src={selectedPool === "dyp2" ? check : empty}
+                            alt=""
+                            className="activestate"
+                            style={{ top: "45px" }}
+
+                          />
+
+                          <div className="d-flex flex-column align-items-center gap-2 justify-content-between w-100 position-relative">
+                            <div className="position-relative">
+                              <h6
+                                className="withsubtitle"
+                                style={{ padding: "0px 15px 0px 15px" }}
+                              >
+                                DYP Balance
+                              </h6>
+
+                              <input
+                                disabled
+                                value={`${getFormattedNumber(depositedTokensDYP)} DYP`}
+                                onChange={(e) =>
+                                  setWithdrawAmount(
+                                    Number(e.target.value) > 0
+                                      ? e.target.value / LP_AMPLIFY_FACTOR
+                                      : e.target.value
+                                  )
+                                }
+                                className=" left-radius inputfarming styledinput2"
+                                placeholder="0"
+                                type="text"
+                                style={{
+                                  width: "150px",
+                                  padding: "0px 15px 0px 15px",
+                                  height: 35,
+                                  fontSize: 20,
+                                  fontWeight: 300,
+                                }}
+                              />
+                            </div>
+                            
+                          </div>
+                          <div className="d-flex align-items-center justify-content-center w-100 claimreward-header">
+                            <img
+                              src={
+                                require(`./assets/dyp.svg`)
+                                  .default
+                              }
+                              alt=""
+                              style={{ width: 14, height: 14 }}
+                            />
+                            <select
+                              disabled
+                              defaultValue="DYP"
+                              className="form-control inputfarming"
+                              style={{
+                                border: "none",
+                                padding: "0 0 0 3px",
+                              }}
+                            >
+                              <option value="DYP"> DYP </option>
+                            </select>
+                          </div>
+                        </div>
+                        <h6 className="withsubtitle d-flex justify-content-start w-100 ">
+                          Total DYP deposited{" "}
+                        </h6>
+                      </div>
                     </div>
                   </div>
 
@@ -2471,7 +2601,11 @@ const BscFarmingFunc = ({
                           : null
                       } d-flex justify-content-center align-items-center`}
                       style={{ height: "fit-content" }}
-                      onClick={handleWithdraw}
+                      onClick={() => {
+                        selectedPool === "wbnb2"
+                          ? handleWithdraw()
+                          : handleWithdrawDyp();
+                      }}
                     >
                       {withdrawLoading ? (
                         <div
