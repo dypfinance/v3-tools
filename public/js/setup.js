@@ -2111,7 +2111,7 @@ window.config = {
   //farming bsc
 
   farming_activebsc_1_address: "0x131F62C87FB177CA64d2034Ece921933d2bC34B4",
-  farming_activeavax_1_address: "0xbbfd178b9f41c349857b753ce57f0e22089a8de3",
+  farming_activeavax_1_address: "0xd600fBcF64Da43CcBB4ab6Da61007F5b1f8Fe455",
 
   farming_newbsc_1_address: "0x537dc4fee298ea79a7f65676735415f1e2882f92",
   constant_stakingnewbsc_new5_address:
