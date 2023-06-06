@@ -1685,7 +1685,7 @@ const FarmAvaxFunc = ({
                     title={
                       <div className="tooltip-text">
                         {
-                          "Deposit your assets to the farming smart contract. 75% of your assets goes for creation of LP tokens and 25% goes for buying DYP and depositing to staking smart contract to generate rewards."
+                          "Deposit your assets to the farming smart contract. 80% of your assets goes for creation of LP tokens and 20% goes for buying DYP and depositing to staking smart contract to generate rewards."
                         }
                       </div>
                     }
@@ -2236,9 +2236,9 @@ const FarmAvaxFunc = ({
                   </span> */}
                 </div>
                 <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
-                  <span className="stats-card-title">My iDYP Stake</span>
+                  <span className="stats-card-title">My DYP Stake</span>
                   <h6 className="stats-card-content">
-                    {getFormattedNumber(reward_token_balance, 3)} DYP
+                    {getFormattedNumber(depositedTokensDYP, 3)} DYP
                   </h6>
                   {/* <span className="stats-usd-value">
                     ${getFormattedNumber(reward_token_balance * dypUSD)}
