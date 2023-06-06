@@ -133,6 +133,13 @@ const BscFarmingFunc = ({
     }
   };
 
+  const buyback_activetokensbsc = {
+    "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c": {
+      symbol: "WBNB",
+      decimals: 18,
+    },
+  };
+
   const [tvlUSD, setTvlUSD] = useState("");
   const [totalValueLocked, setTotalValueLocked] = useState("");
   const [depositedTokensDYP, setDepositedTokensDYP] = useState("");
@@ -179,21 +186,21 @@ const BscFarmingFunc = ({
   const [contractDeployTime, setContractDeployTime] = useState("");
   const [disburseDuration, setDisburseDuration] = useState("");
   const [selectedBuybackToken, setselectedBuybackToken] = useState(
-    Object.keys(window.buyback_activetokensbsc)[0]
+    Object.keys(buyback_activetokensbsc)[0]
   );
   const [selectedTokenDecimals, setselectedTokenDecimals] = useState(
-    window.buyback_activetokensbsc[
-      Object.keys(window.buyback_activetokensbsc)[0]
+    buyback_activetokensbsc[
+      Object.keys(buyback_activetokensbsc)[0]
     ].decimals
   );
   const [selectedTokenBalance, setSelectedTokenBalance] = useState("");
   const [selectedTokenSymbol, setSelectedTokenSymbol] = useState(
-    window.buyback_activetokensbsc[
-      Object.keys(window.buyback_activetokensbsc)[0]
+    buyback_activetokensbsc[
+      Object.keys(buyback_activetokensbsc)[0]
     ].symbol
   );
   const [selectedBuybackTokenWithdraw, setSelectedBuybackTokenWithdraw] =
-    useState(Object.keys(window.buyback_activetokensbsc)[0]);
+    useState(Object.keys(buyback_activetokensbsc)[0]);
   const [selectedClaimToken, setSelectedClaimToken] = useState(0);
   const [show, setShow] = useState(false);
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
@@ -471,15 +478,15 @@ const BscFarmingFunc = ({
   };
 
   const handleSelectedTokenChange = async (tokenAddress) => {
-    let tokenDecimals = window.buyback_activetokensbsc[tokenAddress].decimals;
+    let tokenDecimals = buyback_activetokensbsc[tokenAddress].decimals;
     let selectedTokenSymbol =
-      window.buyback_activetokensbsc[tokenAddress].symbol;
+      buyback_activetokensbsc[tokenAddress].symbol;
 
     setselectedBuybackToken(tokenAddress);
     setSelectedTokenBalance("");
     setselectedTokenDecimals(tokenDecimals);
     setSelectedTokenSymbol(selectedTokenSymbol);
-    setSelectedTokenLogo(window.buyback_activetokensbsc[tokenAddress].symbol);
+    setSelectedTokenLogo(buyback_activetokensbsc[tokenAddress].symbol);
 
     let selectedTokenBalance = await window.getTokenHolderBalance(
       tokenAddress,
@@ -1053,7 +1060,7 @@ const BscFarmingFunc = ({
         .toFixed(2);
       setWithdrawAmount(withdraw_amount_formatted);
 
-      setDepositedTokensUSD(getFormattedNumber(depositedTokensUSD, 2));
+      setDepositedTokensUSD(depositedTokensUSD, 2);
       /* USD VALUE OF TOTAL LP DEPOSITED */
       let tvlUSD = new BigNumber(tvl2).times(usd_per_lp).toFixed(18);
       // let tvlUSD = new BigNumber(tvl).toFixed(18)
@@ -1064,7 +1071,7 @@ const BscFarmingFunc = ({
         .plus(tvlValueConstantDYP)
         .toFixed(18);
       //console.log({tvlValueConstantDYP})
-      setTotalValueLocked(getFormattedNumber(totalValueLocked_formatted, 2));
+      setTotalValueLocked(totalValueLocked_formatted);
       let tvl_usd = totalValueLocked_formatted / 1e18;
 
       setTvlUSD(getFormattedNumber(tvl_usd, 2));
@@ -1072,53 +1079,57 @@ const BscFarmingFunc = ({
       let tvlDyps_formatted = new BigNumber(tvlDYPS2)
         .times(usd_per_dyps)
         .toFixed(18);
-      setTvlDyps(getFormattedNumber(tvlDyps_formatted, 2));
-      let myShare = ((depositedTokens2 / tvl2) * 100).toFixed(2);
-      setmyShare(getFormattedNumber(myShare, 2));
+      setTvlDyps(tvlDyps_formatted);
+
+      if (tvl2 == "0") {
+        setmyShare(0);
+      }
+      if (tvl2 != "0") {
+        let myShare2 = ((depositedTokens2 / tvl2) * 100).toFixed(2);
+        setmyShare(myShare2);
+      }
 
       let token_balance_formatted = new BigNumber(
         token_balance2 * LP_AMPLIFY_FACTOR
       )
         .div(1e18)
         .toString(10);
-      setToken_balance(getFormattedNumber(token_balance_formatted, 2));
+      setToken_balance(token_balance_formatted);
       // token_balance = getFormattedNumber(token_balance_formatted, 2);
 
       let pendingDivsEth_formatted = new BigNumber(pendingDivsEth2)
         .div(1e18)
         .toString(10);
-      setPendingDivsEth(getFormattedNumber(pendingDivsEth_formatted, 2));
+      setPendingDivsEth(pendingDivsEth_formatted);
 
       let totalEarnedEth_formatted = new BigNumber(totalEarnedEth2)
         .div(1e18)
         .toString(10);
-      setTotalEarnedEth(getFormattedNumber(totalEarnedEth_formatted, 6));
+      setTotalEarnedEth(totalEarnedEth_formatted);
 
       let reward_token_balance_formatted = new BigNumber(reward_token_balance2)
         .div(10 ** TOKEN_DECIMALS)
         .toString(10);
-      setReward_token_balance(
-        getFormattedNumber(reward_token_balance_formatted, 6)
-      );
+      setReward_token_balance(reward_token_balance_formatted);
 
       let pendingDivs_formatted = new BigNumber(pendingDivs2)
         .div(10 ** TOKEN_DECIMALS)
         .times(usd_per_idyp)
         .div(usd_per_token)
         .toString(10);
-      setPendingDivs(getFormattedNumber(pendingDivs_formatted, 3));
+      setPendingDivs(pendingDivs_formatted);
 
       let totalEarnedTokens_formatted = new BigNumber(totalEarnedTokens2)
         .div(10 ** TOKEN_DECIMALS)
         .toString(10);
-      setTotalEarnedTokens(getFormattedNumber(totalEarnedTokens_formatted, 6));
+      setTotalEarnedTokens(totalEarnedTokens_formatted);
 
       let depositedTokens_formatted = new BigNumber(
         depositedTokensUSD * LP_AMPLIFY_FACTOR
       )
         .div(1e18)
         .toString(10);
-      setDepositedTokens(getFormattedNumber(depositedTokens_formatted, 2));
+      setDepositedTokens(depositedTokens_formatted);
 
       let myDepositedLpTokens_formatted = new BigNumber(
         myDepositedLpTokens * LP_AMPLIFY_FACTOR
@@ -1126,25 +1137,23 @@ const BscFarmingFunc = ({
         .div(1e18)
         .toString(10);
       setMyDepositedLpTokens(
-        getFormattedNumber(myDepositedLpTokens_formatted, 2)
-      );
+        myDepositedLpTokens_formatted );
 
       let depositedTokensDYP_formatted = new BigNumber(depositedTokensDYP2)
         .div(1e18)
         .toString(10);
       setDepositedTokensDYP(
-        getFormattedNumber(depositedTokensDYP_formatted, 2)
-      );
+       depositedTokensDYP_formatted);
 
       let tvlConstantDYP_formatted = new BigNumber(tvlConstantDYP2)
         .div(1e18)
         .toString(10);
-      setTvlConstantDYP(getFormattedNumber(tvlConstantDYP_formatted, 2));
+      setTvlConstantDYP(tvlConstantDYP_formatted);
 
       let tvl_formatted = new BigNumber(tvlUSD * LP_AMPLIFY_FACTOR)
         .div(1e18)
         .toString(10);
-      setTvl(getFormattedNumber(tvl_formatted, 2));
+      setTvl(tvl_formatted);
 
       let stakingTime_formatted = stakingTime2 * 1e3;
 
@@ -1174,9 +1183,7 @@ const BscFarmingFunc = ({
           .div(1e18)
           .toString(10);
 
-        setTokensToBeDisbursedOrBurnt(
-          getFormattedNumber(tokensToBeDisbursedOrBurnt_formatted, 6)
-        );
+        setTokensToBeDisbursedOrBurnt(tokensToBeDisbursedOrBurnt_formatted);
       })
       .catch(console.error);
 
@@ -1184,7 +1191,7 @@ const BscFarmingFunc = ({
       let tokensToBeSwapped_formatted = new BigNumber(tokensToBeSwapped2)
         .div(1e18)
         .toString(10);
-      setTokensToBeSwapped(getFormattedNumber(tokensToBeSwapped_formatted, 6));
+      setTokensToBeSwapped(tokensToBeSwapped_formatted);
     });
 
     window.wethbsc
@@ -1193,7 +1200,7 @@ const BscFarmingFunc = ({
         let wethBalance_formatted = new BigNumber(wethBalance2)
           .div(1e18)
           .toString(10);
-        setWethBalance(getFormattedNumber(wethBalance_formatted, 6));
+        setWethBalance(wethBalance_formatted);
       })
       .catch(console.error);
 
@@ -1651,7 +1658,7 @@ const BscFarmingFunc = ({
                           />
                         </button>
                         <ul class="dropdown-menu" style={{ minWidth: "100%" }}>
-                          {Object.keys(window.buyback_activetokensbsc).map(
+                          {Object.keys(buyback_activetokensbsc).map(
                             (t) => (
                               <span
                                 className="d-flex align-items-center justify-content-start ps-2 gap-1 inputfarming farming-dropdown-item py-1 w-100"
@@ -1659,14 +1666,14 @@ const BscFarmingFunc = ({
                               >
                                 <img
                                   src={
-                                    require(`./assets/bsc/${window.buyback_activetokensbsc[
+                                    require(`./assets/bsc/${buyback_activetokensbsc[
                                       t
                                     ].symbol.toLowerCase()}.svg`).default
                                   }
                                   alt=""
                                   style={{ width: 14, height: 14 }}
                                 />
-                                {window.buyback_activetokensbsc[t].symbol}
+                                {buyback_activetokensbsc[t].symbol}
                               </span>
                             )
                           )}
@@ -2077,41 +2084,43 @@ const BscFarmingFunc = ({
                 <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                   <span className="stats-card-title">My LP Deposit</span>
                   <h6 className="stats-card-content">
-                    {myDepositedLpTokens} iDYP/WBNB
+                    {getFormattedNumber(myDepositedLpTokens,3)} iDYP/WBNB
                   </h6>
-                  <span className="stats-usd-value">
+                  {/* <span className="stats-usd-value">
                     ${getFormattedNumber(myDepositedLpTokens * iDypUSD)}
-                  </span>
+                  </span> */}
                 </div>
                 <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                   <span className="stats-card-title">Total LP Deposited</span>
-                  <h6 className="stats-card-content">{tvl} iDYP/WBNB</h6>
-                  <span className="stats-usd-value">
+                  <h6 className="stats-card-content">{getFormattedNumber(tvl,3)} iDYP/WBNB</h6>
+                  {/* <span className="stats-usd-value">
                     ${getFormattedNumber(tvl * iDypUSD)}
-                  </span>
+                  </span> */}
                 </div>
                 <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                   <span className="stats-card-title">My DYP Stake</span>
                   <h6 className="stats-card-content">
-                    {reward_token_balance} DYP
+                    {getFormattedNumber(reward_token_balance,3)} DYP
                   </h6>
-                  <span className="stats-usd-value">
+                  {/* <span className="stats-usd-value">
                     ${getFormattedNumber(reward_token_balance * dypUSD)}
-                  </span>
+                  </span> */}
                 </div>
                 <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                   <span className="stats-card-title">Total Earned DYP</span>
                   <h6 className="stats-card-content">
-                    {totalEarnedTokens} DYP
+                    {getFormattedNumber(totalEarnedTokens,3)} DYP
                   </h6>
-                  <span className="stats-usd-value">
+                  {/* <span className="stats-usd-value">
                     ${getFormattedNumber(totalEarnedTokens * dypUSD)}
-                  </span>
+                  </span> */}
                 </div>
                 <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                   <span className="stats-card-title">Total Earned WBNB</span>
-                  <h6 className="stats-card-content">{totalEarnedEth} WBNB</h6>
-                  <span className="stats-usd-value">$23,674,64</span>
+                  <h6 className="stats-card-content">{getFormattedNumber(totalEarnedEth,3)} WBNB</h6>
+                  {/* <span className="stats-usd-value">
+                    $23,674,64
+                    </span> */}
                 </div>
                 <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                   <span className="stats-card-title">My Share</span>
@@ -2173,22 +2182,22 @@ const BscFarmingFunc = ({
                 <div className="stats-container my-4">
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">TVL USD</span>
-                    <h6 className="stats-card-content">{tvlUSD} USD</h6>
+                    <h6 className="stats-card-content">{getFormattedNumber(tvlUSD,3)} USD</h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">Total LP Deposited</span>
-                    <h6 className="stats-card-content">{tvl} iDYP/WBNB</h6>
+                    <h6 className="stats-card-content">{getFormattedNumber(tvl,3)} iDYP/WBNB</h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">To be swapped</span>
                     <h6 className="stats-card-content">
-                      {tokensToBeSwapped} DYP
+                      {getFormattedNumber(tokensToBeSwapped,3)} DYP
                     </h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">To be burnt</span>
                     <h6 className="stats-card-content">
-                      {tokensToBeDisbursedOrBurnt} iDYP
+                      {getFormattedNumber(tokensToBeDisbursedOrBurnt,3)} iDYP
                     </h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">

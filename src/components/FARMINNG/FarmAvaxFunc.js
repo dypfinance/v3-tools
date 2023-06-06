@@ -130,6 +130,12 @@ const FarmAvaxFunc = ({
       return a.toUTCString();
     }
   };
+  const buyback_activetokens_farmingavax = {
+    "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7": {
+      symbol: "WAVAX",
+      decimals: 18,
+    },
+  }; 
   const [iDypUSD, setIDypUSD] = useState(0);
   const [dypUSD, setDypUSD] = useState(0);
   const [tvlUSD, setTvlUSD] = useState("");
@@ -179,21 +185,21 @@ const FarmAvaxFunc = ({
   const [contractDeployTime, setContractDeployTime] = useState("");
   const [disburseDuration, setDisburseDuration] = useState("");
   const [selectedBuybackToken, setselectedBuybackToken] = useState(
-    Object.keys(window.buyback_activetokens_farmingavax)[0]
+    Object.keys(buyback_activetokens_farmingavax)[0]
   );
   const [selectedTokenDecimals, setselectedTokenDecimals] = useState(
-    window.buyback_activetokens_farmingavax[
-      Object.keys(window.buyback_activetokens_farmingavax)[0]
+    buyback_activetokens_farmingavax[
+      Object.keys(buyback_activetokens_farmingavax)[0]
     ].decimals
   );
   const [selectedTokenBalance, setSelectedTokenBalance] = useState("");
   const [selectedTokenSymbol, setSelectedTokenSymbol] = useState(
-    window.buyback_activetokens_farmingavax[
-      Object.keys(window.buyback_activetokens_farmingavax)[0]
+    buyback_activetokens_farmingavax[
+      Object.keys(buyback_activetokens_farmingavax)[0]
     ].symbol
   );
   const [selectedBuybackTokenWithdraw, setSelectedBuybackTokenWithdraw] =
-    useState(Object.keys(window.buyback_activetokens_farmingavax)[0]);
+    useState(Object.keys(buyback_activetokens_farmingavax)[0]);
   const [selectedClaimToken, setSelectedClaimToken] = useState(0);
   const [show, setShow] = useState(false);
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
@@ -483,16 +489,16 @@ const FarmAvaxFunc = ({
 
   const handleSelectedTokenChange = async (tokenAddress) => {
     let tokenDecimals =
-      window.buyback_activetokens_farmingavax[tokenAddress].decimals;
+      buyback_activetokens_farmingavax[tokenAddress].decimals;
     let selectedTokenSymbol =
-      window.buyback_activetokens_farmingavax[tokenAddress].symbol;
+      buyback_activetokens_farmingavax[tokenAddress].symbol;
 
     setselectedBuybackToken(tokenAddress);
     setSelectedTokenBalance("");
     setselectedTokenDecimals(tokenDecimals);
     setSelectedTokenSymbol(selectedTokenSymbol);
     setSelectedTokenLogo(
-      window.buyback_activetokens_farmingavax[tokenAddress].symbol
+      buyback_activetokens_farmingavax[tokenAddress].symbol
     );
 
     let selectedTokenBalance = await window.getTokenHolderBalance(
@@ -1089,16 +1095,19 @@ const FarmAvaxFunc = ({
       setPendingDivsEth(pendingDivsEth_formatted);
 
       let myDepositedLpTokens_formatted = new BigNumber(
-        depositedTokens2
-      ).toFixed(18);
-      let myDepositedLpTokens_formatted2 =
-        myDepositedLpTokens_formatted * LP_AMPLIFY_FACTOR;
+        myDepositedLpTokens * LP_AMPLIFY_FACTOR
+      )
+        .div(1e18)
+        .toString(10);
+      setMyDepositedLpTokens(
+        myDepositedLpTokens_formatted );
+      
       if (tvl2 == "0") {
         setmyShare(0);
       }
       if (tvl2 != "0") {
-        let myShare2 = ((depositedTokens2 / tvl2) * 100).toFixed(2);
-        setmyShare(myShare2);
+        let myShare2 = ((depositedTokens2 / tvl2) * 100).toFixed(2); 
+        setmyShare(0);
       }
 
       setMyDepositedLpTokens(myDepositedLpTokens_formatted);
@@ -1124,7 +1133,12 @@ const FarmAvaxFunc = ({
 
       setDepositedTokensDYP(depositedTokensDYP_formatted);
 
-      // setPendingDivsStaking(pendingDivsStaking2);
+
+      let withdrawAmount_formatted = new BigNumber(depositedTokensUSD)
+        .div(1e18)
+        .toFixed(2);
+      setWithdrawAmount(withdrawAmount_formatted);
+
       let stakingOwner2 = await constant.owner();
       setStakingOwner(stakingOwner2);
     } catch (e) {
@@ -1174,10 +1188,7 @@ const FarmAvaxFunc = ({
     });
 
     //Set Value $ of iDYP & DYP for Withdraw Input
-    let withdrawAmount_formatted = new BigNumber(depositedTokensUSD)
-      .div(1e18)
-      .toFixed(2);
-    setWithdrawAmount(withdrawAmount_formatted);
+
 
     //console.log(disburseDuration)
     //console.log(contractDeployTime)
@@ -1587,7 +1598,7 @@ const FarmAvaxFunc = ({
                           style={{ minWidth: "100%" }}
                         >
                           {Object.keys(
-                            window.buyback_activetokens_farmingavax
+                            buyback_activetokens_farmingavax
                           ).map((t) => (
                             <span
                               className="d-flex align-items-center justify-content-start ps-2 gap-1 inputfarming farming-dropdown-item py-1 w-100"
@@ -1595,7 +1606,7 @@ const FarmAvaxFunc = ({
                             >
                               <img
                                 src={
-                                  require(`./assets/avax/${window.buyback_activetokens_farmingavax[
+                                  require(`./assets/avax/${buyback_activetokens_farmingavax[
                                     t
                                   ].symbol.toLowerCase()}.svg`).default
                                 }
@@ -1603,7 +1614,7 @@ const FarmAvaxFunc = ({
                                 style={{ width: 14, height: 14 }}
                               />
                               {
-                                window.buyback_activetokens_farmingavax[t]
+                                buyback_activetokens_farmingavax[t]
                                   .symbol
                               }
                             </span>
@@ -2094,43 +2105,43 @@ const FarmAvaxFunc = ({
                   <h6 className="stats-card-content">
                     {getFormattedNumber(myDepositedLpTokens, 3)} iDYP/WAVAX
                   </h6>
-                  <span className="stats-usd-value">
+                  {/* <span className="stats-usd-value">
                     ${getFormattedNumber(myDepositedLpTokens * iDypUSD)}
-                  </span>
+                  </span> */}
                 </div>
                 <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                   <span className="stats-card-title">Total LP Deposited</span>
                   <h6 className="stats-card-content">
                     {getFormattedNumber(tvl, 3)} iDYP/WAVAX
                   </h6>
-                  <span className="stats-usd-value">
+                  {/* <span className="stats-usd-value">
                     ${getFormattedNumber(tvl * iDypUSD)}
-                  </span>
+                  </span> */}
                 </div>
                 <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                   <span className="stats-card-title">My DYP Stake</span>
                   <h6 className="stats-card-content">
                     {getFormattedNumber(reward_token_balance, 3)} DYP
                   </h6>
-                  <span className="stats-usd-value">
+                  {/* <span className="stats-usd-value">
                     ${getFormattedNumber(reward_token_balance * dypUSD)}
-                  </span>
+                  </span> */}
                 </div>
                 <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                   <span className="stats-card-title">Total Earned DYP</span>
                   <h6 className="stats-card-content">
                     {getFormattedNumber(totalEarnedTokens, 3)} DYP
                   </h6>
-                  <span className="stats-usd-value">
+                  {/* <span className="stats-usd-value">
                     ${getFormattedNumber(totalEarnedTokens * dypUSD)}
-                  </span>
+                  </span> */}
                 </div>
                 <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                   <span className="stats-card-title">Total Earned WAVAX</span>
                   <h6 className="stats-card-content">
                     {getFormattedNumber(totalEarnedEth, 3)} WAVAX
                   </h6>
-                  <span className="stats-usd-value">{/* $23,674,64 */}</span>
+                  {/* <span className="stats-usd-value">$23,674,64</span> */}
                 </div>
                 <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                   <span className="stats-card-title">My Share</span>
@@ -2590,11 +2601,7 @@ const FarmAvaxFunc = ({
                           : null
                       } d-flex justify-content-center align-items-center`}
                       style={{ height: "fit-content" }}
-                      onClick={() => {
-                        selectedPool === "wavax2"
-                          ? handleWithdraw()
-                          : handleWithdrawDyp();
-                      }}
+                      onClick={() => { handleWithdraw()}}
                     >
                       {withdrawLoading ? (
                         <div
