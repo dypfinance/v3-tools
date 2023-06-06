@@ -30,6 +30,7 @@ import LandDetails from "../FARMINNG/land";
 import StakeAvax from "../FARMINNG/stakeAvax";
 import CawsWodDetails from "../FARMINNG/cawsWod";
 import BscFarmingFunc from "../FARMINNG/BscFarmingFunc";
+import FarmAvaxFunc from "../FARMINNG/FarmAvaxFunc";
 
 const TopPoolsListCard = ({
   tokenLogo,
@@ -87,6 +88,10 @@ const TopPoolsListCard = ({
     "benqi",
     "xava",
     "link",
+  ];
+
+  const avaxCoins2 = [
+    "avax"
   ];
 
   const [showDetails, setShowDetails] = useState(false);
@@ -329,8 +334,11 @@ const TopPoolsListCard = ({
       setCoins(bscCoins2);
     } else if (chain === "bnb" && expired === true) {
       setCoins(bscCoins);
-    }  else if (chain === "avax") {
+    }  else if (chain === "avax"&& expired === true) {
       setCoins(avaxCoins);
+    }
+    else if (chain === "avax"&& expired === false) {
+      setCoins(avaxCoins2);
     }
   }, [chain]);
 
@@ -378,12 +386,20 @@ const TopPoolsListCard = ({
               coins
                 .slice(0, 5)
                 .map((coin, index) => (
+                  <>
                   <img
                     key={index}
                     src={require(`./assets/${coin}.svg`).default}
                     alt=""
                     className="pool-coins"
                   />
+                    <h5
+                  className="text-white mx-3"
+                  style={{ fontSize: "25px", fontWeight: "600" }}
+                >
+                  {tokenName}
+                </h5>
+                  </>
                 ))
             ) : tokenLogo !== undefined && tokenLogo !== "landcaws" ? (
               <>
@@ -587,7 +603,32 @@ const TopPoolsListCard = ({
             lp_symbol={"USD"}
             lock="3 Days"
             rebase_factor={1}
-            expiration_time="19 November 2024"
+            expiration_time="7 June 2024"
+            fee="0.4"
+            finalApr={'3'}
+            lockTime={3}
+            listType={listType}
+          />
+        )
+        : showDetails &&
+          topList === "Farming" &&
+          chain === "avax"  ? (
+            <FarmAvaxFunc
+            is_wallet_connected={isConnected}
+            coinbase={coinbase}
+            the_graph_result={the_graph_resultavax}
+            lp_id={LP_IDAVAX_Array[cardIndex]}
+            chainId={chainId}
+            handleConnection={handleConnection}
+            expired={false}
+            handleSwitchNetwork={handleSwitchNetwork}
+            liquidity={wbnb_address}
+            constant={window.farming_activeavax_1}
+            token={window.token_newavax}
+            lp_symbol={"USD"}
+            lock="3 Days"
+            rebase_factor={1}
+            expiration_time="7 June 2024"
             fee="0.4"
             finalApr={'3'}
             lockTime={3}

@@ -1042,7 +1042,7 @@ const EarnTopPicks = ({
                         lp_symbol={"USD"}
                         lock="3 Days"
                         rebase_factor={1}
-                        expiration_time="19 November 2024"
+                        expiration_time="7 June 2024"
                         fee="0.4"
                         finalApr={activePools[cardIndex]?.apy_percent}
                         lockTime={3}
@@ -1064,7 +1064,7 @@ const EarnTopPicks = ({
                       lp_symbol={"USD"}
                       lock="3 Days"
                       rebase_factor={1}
-                      expiration_time="19 November 2024"
+                      expiration_time="7 June 2024"
                       fee="0.4"
                       finalApr={activePools[cardIndex]?.apy_percent}
                       lockTime={3}
@@ -4033,7 +4033,7 @@ const EarnTopPicks = ({
                   lp_symbol={"USD"}
                   lock="3 Days"
                   rebase_factor={1}
-                  expiration_time="19 November 2024"
+                  expiration_time="7 June 2024"
                   fee="0.4"
                   finalApr={activePools[cardIndex]?.apy_percent}
                   lockTime={3}
@@ -4057,7 +4057,7 @@ const EarnTopPicks = ({
                 lp_symbol={"USD"}
                 lock="3 Days"
                 rebase_factor={1}
-                expiration_time="19 November 2024"
+                expiration_time="7 June 2024"
                 fee="0.4"
                 finalApr={activePools[cardIndex]?.apy_percent}
                 lockTime={3}
@@ -8019,7 +8019,7 @@ const EarnTopPicks = ({
                       lp_symbol={"USD"}
                       lock="3 Days"
                       rebase_factor={1}
-                      expiration_time="19 November 2024"
+                      expiration_time="7 June 2024"
                       fee="0.4"
                       finalApr={activePools[cardIndex]?.apy_percent}
                       lockTime={3}
@@ -8041,7 +8041,7 @@ const EarnTopPicks = ({
                     lp_symbol={"USD"}
                     lock="3 Days"
                     rebase_factor={1}
-                    expiration_time="19 November 2024"
+                    expiration_time="7 June 2024"
                     fee="0.4"
                     finalApr={activePools[cardIndex]?.apy_percent}
                     lockTime={3}
@@ -14660,7 +14660,7 @@ const EarnTopPicks = ({
                 />
               )}
                {topList === "Farming" &&
-            chain === "bnb" && 
+            chain === "bnb" && expiredPools === false &&
               <TopPoolsListCard
               the_graph_resultbsc={the_graph_resultbsc}
                 expired={false}
@@ -14698,6 +14698,48 @@ const EarnTopPicks = ({
                 handleSwitchNetwork={handleSwitchNetwork}
               />
             }
+
+{topList === "Farming" &&
+            chain === "avax" && expiredPools === false &&
+              <TopPoolsListCard
+              the_graph_resultavax={the_graph_resultavax}
+                expired={false}
+                chain={chain}
+                top_pick={false}
+                tokenName={
+                  "WAVAX"
+                }
+                apr={"8%"}
+                tvl={"$60,000"}
+                lockTime={'3 Days'}
+                cardType={topList}
+                tokenLogo={"avax.svg"
+                }
+                listType={listType}
+                onShowDetailsClick={() => {
+                  setActiveCardNFT(false);
+                  setActiveCardLandNFT(false);
+                  setActiveCard(topPools[0]);
+                  setActiveCard2(null);
+                  setActiveCard3(null);
+                  setActiveCard4(null);
+                  setDetails();
+                }}
+                onHideDetailsClick={() => {
+                  setActiveCardNFT(false);
+                  setDetails();
+                }}
+                showDetails={activeCardNFT}
+                topList={topList}
+                coinbase={coinbase}
+                cardIndex={1}
+                chainId={chainId}
+                handleConnection={handleConnection}
+                handleSwitchNetwork={handleSwitchNetwork}
+              />
+            }
+
+
 
               {activePools.map((pool, index) => (
                 <TopPoolsListCard

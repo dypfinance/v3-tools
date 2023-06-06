@@ -321,6 +321,10 @@ const BscFarmingFunc = ({
       ),
     ];
 
+    let path2 = [
+      ...new Set([rewardTokenAddress, selectedBuybackToken].map((a) => a.toLowerCase())),
+    ];
+
     let _amountOutMin_baseTokenReceived = new BigNumber(_80Percent)
       .times(100 - window.config.slippage_tolerance_percent)
       .div(100)
@@ -403,7 +407,7 @@ const BscFarmingFunc = ({
 
         console.log(_amountOutMinSwap);
         _amountOutMinSwap_real = await router.methods
-          .getAmountsOut(_amountOutMinSwap, path1)
+          .getAmountsOut(_amountOutMinSwap, path2)
           .call();
         _amountOutMinSwap_real =
           _amountOutMinSwap_real[_amountOutMinSwap_real.length - 1];
@@ -531,6 +535,8 @@ const BscFarmingFunc = ({
 
   const handleWithdraw = async (e) => {
       let selectedBuybackToken = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"; // can only be WETH
+    let rewardTokenAddress = "0xBD100d061E120b2c67A24453CF6368E63f1Be056"; // idyp address
+
       let amount = await constant.depositedTokens(coinbase)
       let PAIR_ABI =  window.PAIR_ABI;
       let pair_token_address = "0x1bC61d08A300892e784eD37b2d0E63C85D1d57fb"
@@ -566,8 +572,8 @@ const BscFarmingFunc = ({
   
       let WETH = await router.methods.WETH().call();
       let platformTokenAddress = window.config.reward_token_address; //these will be the same addresses
-      let path1 = [
-        ...new Set([platformTokenAddress, WETH].map((a) => a.toLowerCase())),
+      let path2 = [
+        ...new Set([rewardTokenAddress, selectedBuybackToken].map((a) => a.toLowerCase())),
       ];
       let _amountOutMinSwap_real = 0;
       let _amountOutMinSwap = 0;
@@ -601,8 +607,8 @@ const BscFarmingFunc = ({
   
         console.log(_amountOutMinSwap);
         _amountOutMinSwap_real = await router.methods
-          .getAmountsOut(_amountOutMinSwap, path1)
-          .call();
+        .getAmountsOut(_amountOutMinSwap, path2)
+        .call();
         _amountOutMinSwap_real =
           _amountOutMinSwap_real[_amountOutMinSwap_real.length - 1];
         _amountOutMinSwap_real = new BigNumber(_amountOutMinSwap_real)
@@ -647,6 +653,9 @@ const BscFarmingFunc = ({
     };
 
   const handleClaimDivs = async () => {
+    let selectedBuybackToken2 = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"; // wbnb/wavax
+    let rewardTokenAddress = "0xBD100d061E120b2c67A24453CF6368E63f1Be056"; // idyp address
+
     let deadline = Math.floor(
       Date.now() / 1e3 + window.config.tx_max_wait_seconds
     );
@@ -689,8 +698,8 @@ const BscFarmingFunc = ({
       .toFixed(0);
     console.log(_amountOutMinConstant);
 
-    let path1 = [
-      ...new Set([platformTokenAddress, WETH].map((a) => a.toLowerCase())),
+    let path2 = [
+      ...new Set([rewardTokenAddress, selectedBuybackToken2].map((a) => a.toLowerCase())),
     ];
 
     let _amountOutMinSwap_real = 0;
@@ -719,8 +728,8 @@ const BscFarmingFunc = ({
 
       console.log(_amountOutMinSwap);
       _amountOutMinSwap_real = await router.methods
-        .getAmountsOut(_amountOutMinSwap, path1)
-        .call();
+      .getAmountsOut(_amountOutMinSwap, path2)
+      .call();
       _amountOutMinSwap_real =
         _amountOutMinSwap_real[_amountOutMinSwap_real.length - 1];
       _amountOutMinSwap_real = new BigNumber(_amountOutMinSwap_real)
@@ -1456,7 +1465,7 @@ const BscFarmingFunc = ({
                   <div className="d-flex align-items-center justify-content-between gap-2">
                     <h6 className="earnrewards-text">Performance fee:</h6>
                     <h6 className="earnrewards-token d-flex align-items-center gap-1">
-                      {fee}%
+                      0%
                       <ClickAwayListener onClickAway={performanceClose}>
                         <Tooltip
                           open={performanceTooltip}
