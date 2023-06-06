@@ -189,15 +189,11 @@ const BscFarmingFunc = ({
     Object.keys(buyback_activetokensbsc)[0]
   );
   const [selectedTokenDecimals, setselectedTokenDecimals] = useState(
-    buyback_activetokensbsc[
-      Object.keys(buyback_activetokensbsc)[0]
-    ].decimals
+    buyback_activetokensbsc[Object.keys(buyback_activetokensbsc)[0]].decimals
   );
   const [selectedTokenBalance, setSelectedTokenBalance] = useState("");
   const [selectedTokenSymbol, setSelectedTokenSymbol] = useState(
-    buyback_activetokensbsc[
-      Object.keys(buyback_activetokensbsc)[0]
-    ].symbol
+    buyback_activetokensbsc[Object.keys(buyback_activetokensbsc)[0]].symbol
   );
   const [selectedBuybackTokenWithdraw, setSelectedBuybackTokenWithdraw] =
     useState(Object.keys(buyback_activetokensbsc)[0]);
@@ -329,7 +325,9 @@ const BscFarmingFunc = ({
     ];
 
     let path2 = [
-      ...new Set([rewardTokenAddress, selectedBuybackToken].map((a) => a.toLowerCase())),
+      ...new Set(
+        [rewardTokenAddress, selectedBuybackToken].map((a) => a.toLowerCase())
+      ),
     ];
 
     let _amountOutMin_baseTokenReceived = new BigNumber(_80Percent)
@@ -426,9 +424,7 @@ const BscFarmingFunc = ({
       }
 
       let _amountOutMin_dypReceived = new BigNumber(0).toFixed(0);
-      let pendingDivs = await constant.getPendingDivsEth(
-        coinbase
-      );
+      let pendingDivs = await constant.getPendingDivsEth(coinbase);
 
       if (pendingDivs > 0) {
         _amountOutMin_dypReceived = new BigNumber(pendingDivs)
@@ -479,8 +475,7 @@ const BscFarmingFunc = ({
 
   const handleSelectedTokenChange = async (tokenAddress) => {
     let tokenDecimals = buyback_activetokensbsc[tokenAddress].decimals;
-    let selectedTokenSymbol =
-      buyback_activetokensbsc[tokenAddress].symbol;
+    let selectedTokenSymbol = buyback_activetokensbsc[tokenAddress].symbol;
 
     setselectedBuybackToken(tokenAddress);
     setSelectedTokenBalance("");
@@ -504,9 +499,7 @@ const BscFarmingFunc = ({
   };
 
   const handleWithdrawDyp = async () => {
-    let amountConstant = await constant.depositedTokens(
-      coinbase
-    );
+    let amountConstant = await constant.depositedTokens(coinbase);
     amountConstant = new BigNumber(amountConstant).toFixed(0);
     setWithdrawLoading(true);
 
@@ -539,125 +532,132 @@ const BscFarmingFunc = ({
     }
   };
 
-
   const handleWithdraw = async (e) => {
-      let selectedBuybackToken = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"; // can only be WETH
+    let selectedBuybackToken = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"; // can only be WETH
     let rewardTokenAddress = "0xBD100d061E120b2c67A24453CF6368E63f1Be056"; // idyp address
 
-      let amount = await constant.depositedTokens(coinbase)
-      let PAIR_ABI =  window.PAIR_ABI;
-      let pair_token_address = "0x1bC61d08A300892e784eD37b2d0E63C85D1d57fb"
-      let web3 = window.bscWeb3;
-      let pair = new web3.eth.Contract(PAIR_ABI, pair_token_address);
-      
-      let totalSupply = await pair.methods.totalSupply().call();
-      let reserves = await pair.methods.getReserves().call();
-      let maxETH = reserves[0];
-      let maxToken = reserves[1]; 
-  
-      console.log(maxETH)
-      console.log(maxToken)
-      console.log(amount);
-      console.log(totalSupply);
-  
-      let maxUserEth = (amount * maxETH) / totalSupply;
-      maxUserEth = new BigNumber(maxUserEth).toFixed(0);
-      let maxUserEth1 = maxUserEth * (100 - window.config.slippage_tolerance_percent_liquidity) / 100;
-      maxUserEth1 = new BigNumber(maxUserEth1).toFixed(0);
-      let maxUserToken = (amount * maxToken) / totalSupply;
-      maxUserToken = new BigNumber(maxUserToken).toFixed(0);
-      let maxUserToken1 = new BigNumber (maxUserToken).times(100 - window.config.slippage_tolerance_percent_liquidity).div(100).toFixed(0);
-     
-      console.log(maxUserEth);
-      console.log(maxUserToken);
-  
-      let deadline = Math.floor(
-        Date.now() / 1e3 + window.config.tx_max_wait_seconds
-      ).toFixed(0);
-  
-      let router = await window.getPancakeswapRouterContract();
-  
-      let WETH = await router.methods.WETH().call();
-      let platformTokenAddress = window.config.reward_token_address; //these will be the same addresses
-      let path2 = [
-        ...new Set([rewardTokenAddress, selectedBuybackToken].map((a) => a.toLowerCase())),
-      ];
-      let _amountOutMinSwap_real = 0;
-      let _amountOutMinSwap = 0;
-      let lastSwap = await constant.lastSwapExecutionTime();
-      let now = Math.floor(Date.now() / 1000);
-      let tokensToBeSwapped = await constant.tokensToBeSwapped();
-      let tokensToBeDisbursedOrBurnt =
-        await constant.tokensToBeDisbursedOrBurnt();
-      let MaxSwappableAmount = await constant.getMaxSwappableAmount();
-      let getPendingDisbursement = await constant.getPendingDisbursement();
-      let _SwapTokens = new BigNumber(tokensToBeSwapped)
-        .plus(tokensToBeDisbursedOrBurnt)
-        .plus(getPendingDisbursement)
-        .toFixed(0);
-  
-      if (now - lastSwap > 86400 && _SwapTokens > 0) {
-        console.log(1);
-  
-        console.log(tokensToBeSwapped);
-        console.log(tokensToBeDisbursedOrBurnt);
-        console.log(MaxSwappableAmount);
-        console.log(_SwapTokens);
-  
-        if (BigNumber(_SwapTokens).gte(MaxSwappableAmount)) {
-          _amountOutMinSwap = MaxSwappableAmount;
-        }
-  
-        if (BigNumber(_SwapTokens).lt(MaxSwappableAmount)) {
-          _amountOutMinSwap = _SwapTokens;
-        }
-  
-        console.log(_amountOutMinSwap);
-        _amountOutMinSwap_real = await router.methods
+    let amount = await constant.depositedTokens(coinbase);
+    let PAIR_ABI = window.PAIR_ABI;
+    let pair_token_address = "0x1bC61d08A300892e784eD37b2d0E63C85D1d57fb";
+    let web3 = window.bscWeb3;
+    let pair = new web3.eth.Contract(PAIR_ABI, pair_token_address);
+
+    let totalSupply = await pair.methods.totalSupply().call();
+    let reserves = await pair.methods.getReserves().call();
+    let maxETH = reserves[0];
+    let maxToken = reserves[1];
+
+    console.log(maxETH);
+    console.log(maxToken);
+    console.log(amount);
+    console.log(totalSupply);
+
+    let maxUserEth = (amount * maxETH) / totalSupply;
+    maxUserEth = new BigNumber(maxUserEth).toFixed(0);
+    let maxUserEth1 =
+      (maxUserEth *
+        (100 - window.config.slippage_tolerance_percent_liquidity)) /
+      100;
+    maxUserEth1 = new BigNumber(maxUserEth1).toFixed(0);
+    let maxUserToken = (amount * maxToken) / totalSupply;
+    maxUserToken = new BigNumber(maxUserToken).toFixed(0);
+    let maxUserToken1 = new BigNumber(maxUserToken)
+      .times(100 - window.config.slippage_tolerance_percent_liquidity)
+      .div(100)
+      .toFixed(0);
+
+    console.log(maxUserEth);
+    console.log(maxUserToken);
+
+    let deadline = Math.floor(
+      Date.now() / 1e3 + window.config.tx_max_wait_seconds
+    ).toFixed(0);
+
+    let router = await window.getPancakeswapRouterContract();
+
+    let WETH = await router.methods.WETH().call();
+    let platformTokenAddress = window.config.reward_token_address; //these will be the same addresses
+    let path2 = [
+      ...new Set(
+        [rewardTokenAddress, selectedBuybackToken].map((a) => a.toLowerCase())
+      ),
+    ];
+    let _amountOutMinSwap_real = 0;
+    let _amountOutMinSwap = 0;
+    let lastSwap = await constant.lastSwapExecutionTime();
+    let now = Math.floor(Date.now() / 1000);
+    let tokensToBeSwapped = await constant.tokensToBeSwapped();
+    let tokensToBeDisbursedOrBurnt =
+      await constant.tokensToBeDisbursedOrBurnt();
+    let MaxSwappableAmount = await constant.getMaxSwappableAmount();
+    let getPendingDisbursement = await constant.getPendingDisbursement();
+    let _SwapTokens = new BigNumber(tokensToBeSwapped)
+      .plus(tokensToBeDisbursedOrBurnt)
+      .plus(getPendingDisbursement)
+      .toFixed(0);
+
+    if (now - lastSwap > 86400 && _SwapTokens > 0) {
+      console.log(1);
+
+      console.log(tokensToBeSwapped);
+      console.log(tokensToBeDisbursedOrBurnt);
+      console.log(MaxSwappableAmount);
+      console.log(_SwapTokens);
+
+      if (BigNumber(_SwapTokens).gte(MaxSwappableAmount)) {
+        _amountOutMinSwap = MaxSwappableAmount;
+      }
+
+      if (BigNumber(_SwapTokens).lt(MaxSwappableAmount)) {
+        _amountOutMinSwap = _SwapTokens;
+      }
+
+      console.log(_amountOutMinSwap);
+      _amountOutMinSwap_real = await router.methods
         .getAmountsOut(_amountOutMinSwap, path2)
         .call();
-        _amountOutMinSwap_real =
-          _amountOutMinSwap_real[_amountOutMinSwap_real.length - 1];
-        _amountOutMinSwap_real = new BigNumber(_amountOutMinSwap_real)
-          .times(100 - window.config.slippage_tolerance_percent_liquidity)
-          .div(100)
-          .toFixed(0);
-        _amountOutMinSwap_real.toString();
-      }
-  
-      let _amountOutMin_crazReceived = new BigNumber(0).toFixed(0);
-      let pendingDivs = await constant.getPendingDivsEth(coinbase);
-      console.log(pendingDivs);
-      if (pendingDivs > 0) {
-        _amountOutMin_crazReceived = new BigNumber(pendingDivs)
-          .times(100 - window.config.slippage_tolerance_percent)
-          .div(100)
-          .toFixed(0);
-      }
-      let minAmounts = [
-        maxUserToken1,
-        maxUserEth1,
-        0,
-        0,
-        _amountOutMin_crazReceived,
-        _amountOutMinSwap_real,
-      ];
-  
-  console.log(minAmounts);
-  constant
-          .withdraw(selectedBuybackToken, amount, minAmounts, deadline)
-          .then(() => {
-            setWithdrawLoading(false);
-            setWithdrawStatus("success");
-            refreshBalance();
-            // getBalance();
-          })
-          .catch((e) => {
-            setWithdrawLoading(false);
-            setWithdrawStatus("fail");
-            setErrorMsg3(e?.message);
-          });
-    };
+      _amountOutMinSwap_real =
+        _amountOutMinSwap_real[_amountOutMinSwap_real.length - 1];
+      _amountOutMinSwap_real = new BigNumber(_amountOutMinSwap_real)
+        .times(100 - window.config.slippage_tolerance_percent_liquidity)
+        .div(100)
+        .toFixed(0);
+      _amountOutMinSwap_real.toString();
+    }
+
+    let _amountOutMin_crazReceived = new BigNumber(0).toFixed(0);
+    let pendingDivs = await constant.getPendingDivsEth(coinbase);
+    console.log(pendingDivs);
+    if (pendingDivs > 0) {
+      _amountOutMin_crazReceived = new BigNumber(pendingDivs)
+        .times(100 - window.config.slippage_tolerance_percent)
+        .div(100)
+        .toFixed(0);
+    }
+    let minAmounts = [
+      maxUserToken1,
+      maxUserEth1,
+      0,
+      0,
+      _amountOutMin_crazReceived,
+      _amountOutMinSwap_real,
+    ];
+
+    console.log(minAmounts);
+    constant
+      .withdraw(selectedBuybackToken, amount, minAmounts, deadline)
+      .then(() => {
+        setWithdrawLoading(false);
+        setWithdrawStatus("success");
+        refreshBalance();
+        // getBalance();
+      })
+      .catch((e) => {
+        setWithdrawLoading(false);
+        setWithdrawStatus("fail");
+        setErrorMsg3(e?.message);
+      });
+  };
 
   const handleClaimDivs = async () => {
     let selectedBuybackToken2 = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"; // wbnb/wavax
@@ -706,7 +706,9 @@ const BscFarmingFunc = ({
     console.log(_amountOutMinConstant);
 
     let path2 = [
-      ...new Set([rewardTokenAddress, selectedBuybackToken2].map((a) => a.toLowerCase())),
+      ...new Set(
+        [rewardTokenAddress, selectedBuybackToken2].map((a) => a.toLowerCase())
+      ),
     ];
 
     let _amountOutMinSwap_real = 0;
@@ -735,8 +737,8 @@ const BscFarmingFunc = ({
 
       console.log(_amountOutMinSwap);
       _amountOutMinSwap_real = await router.methods
-      .getAmountsOut(_amountOutMinSwap, path2)
-      .call();
+        .getAmountsOut(_amountOutMinSwap, path2)
+        .call();
       _amountOutMinSwap_real =
         _amountOutMinSwap_real[_amountOutMinSwap_real.length - 1];
       _amountOutMinSwap_real = new BigNumber(_amountOutMinSwap_real)
@@ -940,38 +942,21 @@ const BscFarmingFunc = ({
       _amountOutMin = new BigNumber(_amountOutMin).div(1e18).toFixed(18);
 
       let _bal = token.balanceOf(coinbase);
-      let _rBal = reward_token.balanceOf(
-        coinbase
-      );
+      let _rBal = reward_token.balanceOf(coinbase);
 
-      let _pDivs = constant.getPendingDivs(
-        coinbase
-      );
+      let _pDivs = constant.getPendingDivs(coinbase);
 
-      let _pDivsEth = constant.getPendingDivsEth(
-        coinbase
-      );
+      let _pDivsEth = constant.getPendingDivsEth(coinbase);
 
+      let _tEarned = constant.totalEarnedTokens(coinbase);
 
-      let _tEarned = constant.totalEarnedTokens(
-        coinbase
-      );
+      let _tEarnedEth = constant.totalEarnedEth(coinbase);
 
-      let _tEarnedEth = constant.totalEarnedEth(
-        coinbase
-      );
+      let _stakingTime = constant.depositTime(coinbase);
 
-      let _stakingTime = constant.depositTime(
-        coinbase
-      );
+      let _dTokens = constant.depositedTokens(coinbase);
 
-      let _dTokens = constant.depositedTokens(
-        coinbase
-      );
-
-      let _lClaimTime = constant.lastClaimedTime(
-        coinbase
-      );
+      let _lClaimTime = constant.lastClaimedTime(coinbase);
 
       let _tvl = token.balanceOf(constant._address);
 
@@ -989,9 +974,7 @@ const BscFarmingFunc = ({
         constant._address
       ); /* TVL of iDYP on Farming */
 
-      let _dTokensDYP = constant.depositedTokens(
-        coinbase
-      );
+      let _dTokensDYP = constant.depositedTokens(coinbase);
 
       // let _pendingDivsStaking = constant.getTotalPendingDivs(coinbase);
 
@@ -1086,7 +1069,7 @@ const BscFarmingFunc = ({
       }
       if (tvl2 != "0") {
         let myShare2 = ((depositedTokens2 / tvl2) * 100).toFixed(2);
-        setmyShare(myShare2);
+        setmyShare(0);
       }
 
       let token_balance_formatted = new BigNumber(
@@ -1136,14 +1119,12 @@ const BscFarmingFunc = ({
       )
         .div(1e18)
         .toString(10);
-      setMyDepositedLpTokens(
-        myDepositedLpTokens_formatted );
+      setMyDepositedLpTokens(myDepositedLpTokens_formatted);
 
       let depositedTokensDYP_formatted = new BigNumber(depositedTokensDYP2)
         .div(1e18)
         .toString(10);
-      setDepositedTokensDYP(
-       depositedTokensDYP_formatted);
+      setDepositedTokensDYP(depositedTokensDYP_formatted);
 
       let tvlConstantDYP_formatted = new BigNumber(tvlConstantDYP2)
         .div(1e18)
@@ -1163,62 +1144,62 @@ const BscFarmingFunc = ({
 
       let stakingOwner2 = await constant.owner();
       setStakingOwner(stakingOwner2);
+
+      constant
+        .cliffTime()
+        .then((cliffTime) => {
+          setCliffTime(Number(cliffTime * 1e3));
+        })
+        .catch(console.error);
+
+      constant
+        .tokensToBeDisbursedOrBurnt()
+        .then((tokensToBeDisbursedOrBurnt2) => {
+          let tokensToBeDisbursedOrBurnt_formatted = new BigNumber(
+            tokensToBeDisbursedOrBurnt2
+          )
+            .div(1e18)
+            .toString(10);
+
+          setTokensToBeDisbursedOrBurnt(tokensToBeDisbursedOrBurnt_formatted);
+        })
+        .catch(console.error);
+
+      constant.tokensToBeSwapped().then((tokensToBeSwapped2) => {
+        let tokensToBeSwapped_formatted = new BigNumber(tokensToBeSwapped2)
+          .div(1e18)
+          .toString(10);
+        setTokensToBeSwapped(tokensToBeSwapped_formatted);
+      });
+
+      window.wethbsc
+        .balanceOf(coinbase)
+        .then((wethBalance2) => {
+          let wethBalance_formatted = new BigNumber(wethBalance2)
+            .div(1e18)
+            .toString(10);
+          setWethBalance(wethBalance_formatted);
+        })
+        .catch(console.error);
+
+      constant.lastSwapExecutionTime().then((lastSwapExecutionTime2) => {
+        setLastSwapExecutionTime(lastSwapExecutionTime2 * 1e3);
+      });
+
+      constant.swapAttemptPeriod().then((swapAttemptPeriod2) => {
+        setSwapAttemptPeriod(swapAttemptPeriod2 * 1e3);
+      });
+
+      constant.contractDeployTime().then((contractDeployTime2) => {
+        setContractDeployTime(contractDeployTime2);
+      });
+
+      constant.disburseDuration().then((disburseDuration2) => {
+        setDisburseDuration(disburseDuration2);
+      });
     } catch (e) {
       console.error(e);
     }
-
-    constant
-      .cliffTime()
-      .then((cliffTime) => {
-        setCliffTime(Number(cliffTime * 1e3));
-      })
-      .catch(console.error);
-
-    constant
-      .tokensToBeDisbursedOrBurnt()
-      .then((tokensToBeDisbursedOrBurnt2) => {
-        let tokensToBeDisbursedOrBurnt_formatted = new BigNumber(
-          tokensToBeDisbursedOrBurnt2
-        )
-          .div(1e18)
-          .toString(10);
-
-        setTokensToBeDisbursedOrBurnt(tokensToBeDisbursedOrBurnt_formatted);
-      })
-      .catch(console.error);
-
-    constant.tokensToBeSwapped().then((tokensToBeSwapped2) => {
-      let tokensToBeSwapped_formatted = new BigNumber(tokensToBeSwapped2)
-        .div(1e18)
-        .toString(10);
-      setTokensToBeSwapped(tokensToBeSwapped_formatted);
-    });
-
-    window.wethbsc
-      .balanceOf(coinbase)
-      .then((wethBalance2) => {
-        let wethBalance_formatted = new BigNumber(wethBalance2)
-          .div(1e18)
-          .toString(10);
-        setWethBalance(wethBalance_formatted);
-      })
-      .catch(console.error);
-
-    constant.lastSwapExecutionTime().then((lastSwapExecutionTime2) => {
-      setLastSwapExecutionTime(lastSwapExecutionTime2 * 1e3);
-    });
-
-    constant.swapAttemptPeriod().then((swapAttemptPeriod2) => {
-      setSwapAttemptPeriod(swapAttemptPeriod2 * 1e3);
-    });
-
-    constant.contractDeployTime().then((contractDeployTime2) => {
-      setContractDeployTime(contractDeployTime2);
-    });
-
-    constant.disburseDuration().then((disburseDuration2) => {
-      setDisburseDuration(disburseDuration2);
-    });
 
     //Set Value $ of iDYP & DYP for Withdraw Input
 
@@ -1263,11 +1244,7 @@ const BscFarmingFunc = ({
     let selectedBuybackToken = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"; // wbnb/wavax
 
     const result = await window
-      .checkapproveStakePool(
-        coinbase,
-        selectedBuybackToken,
-        constant._address
-      )
+      .checkapproveStakePool(coinbase, selectedBuybackToken, constant._address)
       .then((data) => {
         console.log(data);
         return data;
@@ -1438,7 +1415,6 @@ const BscFarmingFunc = ({
     }, 1000);
     return () => clearInterval(interval);
   }, [coinbase, coinbase2]);
-
 
   return (
     <div className="container-lg p-0">
@@ -1658,25 +1634,23 @@ const BscFarmingFunc = ({
                           />
                         </button>
                         <ul class="dropdown-menu" style={{ minWidth: "100%" }}>
-                          {Object.keys(buyback_activetokensbsc).map(
-                            (t) => (
-                              <span
-                                className="d-flex align-items-center justify-content-start ps-2 gap-1 inputfarming farming-dropdown-item py-1 w-100"
-                                onClick={() => handleSelectedTokenChange(t)}
-                              >
-                                <img
-                                  src={
-                                    require(`./assets/bsc/${buyback_activetokensbsc[
-                                      t
-                                    ].symbol.toLowerCase()}.svg`).default
-                                  }
-                                  alt=""
-                                  style={{ width: 14, height: 14 }}
-                                />
-                                {buyback_activetokensbsc[t].symbol}
-                              </span>
-                            )
-                          )}
+                          {Object.keys(buyback_activetokensbsc).map((t) => (
+                            <span
+                              className="d-flex align-items-center justify-content-start ps-2 gap-1 inputfarming farming-dropdown-item py-1 w-100"
+                              onClick={() => handleSelectedTokenChange(t)}
+                            >
+                              <img
+                                src={
+                                  require(`./assets/bsc/${buyback_activetokensbsc[
+                                    t
+                                  ].symbol.toLowerCase()}.svg`).default
+                                }
+                                alt=""
+                                style={{ width: 14, height: 14 }}
+                              />
+                              {buyback_activetokensbsc[t].symbol}
+                            </span>
+                          ))}
                         </ul>
                       </div>
                     </div>
@@ -1949,7 +1923,6 @@ const BscFarmingFunc = ({
                               />
                               WBNB
                             </span>
-                           
                           </ul>
                         </div>
                       </div>
@@ -1960,13 +1933,15 @@ const BscFarmingFunc = ({
                       selectedPool === "" ||
                       claimStatus === "claimed" ||
                       claimStatus === "failed" ||
-                      claimStatus === "success" || pendingDivsEth == '0.00'
+                      claimStatus === "success" ||
+                      pendingDivsEth == "0"
                         ? true
                         : false
                     }
                     className={`btn filledbtn ${
                       claimStatus === "claimed" ||
-                      selectedPool === "" || pendingDivsEth == '0.00'
+                      selectedPool === "" ||
+                      pendingDivsEth == "0"
                         ? "disabled-btn"
                         : claimStatus === "failed"
                         ? "fail-button"
@@ -2084,7 +2059,7 @@ const BscFarmingFunc = ({
                 <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                   <span className="stats-card-title">My LP Deposit</span>
                   <h6 className="stats-card-content">
-                    {getFormattedNumber(myDepositedLpTokens,3)} iDYP/WBNB
+                    {getFormattedNumber(myDepositedLpTokens, 3)} iDYP/WBNB
                   </h6>
                   {/* <span className="stats-usd-value">
                     ${getFormattedNumber(myDepositedLpTokens * iDypUSD)}
@@ -2092,32 +2067,36 @@ const BscFarmingFunc = ({
                 </div>
                 <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                   <span className="stats-card-title">Total LP Deposited</span>
-                  <h6 className="stats-card-content">{getFormattedNumber(tvl,3)} iDYP/WBNB</h6>
+                  <h6 className="stats-card-content">
+                    {getFormattedNumber(tvl, 3)} iDYP/WBNB
+                  </h6>
                   {/* <span className="stats-usd-value">
                     ${getFormattedNumber(tvl * iDypUSD)}
                   </span> */}
                 </div>
                 <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
-                  <span className="stats-card-title">My DYP Stake</span>
+                  <span className="stats-card-title">My iDYP Stake</span>
                   <h6 className="stats-card-content">
-                    {getFormattedNumber(reward_token_balance,3)} DYP
+                    {getFormattedNumber(reward_token_balance, 3)} DYP
                   </h6>
                   {/* <span className="stats-usd-value">
                     ${getFormattedNumber(reward_token_balance * dypUSD)}
                   </span> */}
                 </div>
-                <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
+                {/* <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                   <span className="stats-card-title">Total Earned DYP</span>
                   <h6 className="stats-card-content">
                     {getFormattedNumber(totalEarnedTokens,3)} DYP
                   </h6>
-                  {/* <span className="stats-usd-value">
+                  <span className="stats-usd-value">
                     ${getFormattedNumber(totalEarnedTokens * dypUSD)}
-                  </span> */}
-                </div>
+                  </span>
+                </div> */}
                 <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                   <span className="stats-card-title">Total Earned WBNB</span>
-                  <h6 className="stats-card-content">{getFormattedNumber(totalEarnedEth,3)} WBNB</h6>
+                  <h6 className="stats-card-content">
+                    {getFormattedNumber(totalEarnedEth, 3)} WBNB
+                  </h6>
                   {/* <span className="stats-usd-value">
                     $23,674,64
                     </span> */}
@@ -2182,22 +2161,26 @@ const BscFarmingFunc = ({
                 <div className="stats-container my-4">
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">TVL USD</span>
-                    <h6 className="stats-card-content">{getFormattedNumber(tvlUSD,3)} USD</h6>
+                    <h6 className="stats-card-content">
+                      {getFormattedNumber(tvlUSD, 3)} USD
+                    </h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">Total LP Deposited</span>
-                    <h6 className="stats-card-content">{getFormattedNumber(tvl,3)} iDYP/WBNB</h6>
+                    <h6 className="stats-card-content">
+                      {getFormattedNumber(tvl, 3)} iDYP/WBNB
+                    </h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">To be swapped</span>
                     <h6 className="stats-card-content">
-                      {getFormattedNumber(tokensToBeSwapped,3)} DYP
+                      {getFormattedNumber(tokensToBeSwapped, 3)} DYP
                     </h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">To be burnt</span>
                     <h6 className="stats-card-content">
-                      {getFormattedNumber(tokensToBeDisbursedOrBurnt,3)} iDYP
+                      {getFormattedNumber(tokensToBeDisbursedOrBurnt, 3)} iDYP
                     </h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
@@ -2312,9 +2295,7 @@ const BscFarmingFunc = ({
                                 disabled
                                 value={
                                   Number(withdrawAmount) > 0
-                                    ? `${
-                                        withdrawAmount * LP_AMPLIFY_FACTOR
-                                      } LP`
+                                    ? `${withdrawAmount * LP_AMPLIFY_FACTOR} LP`
                                     : `${withdrawAmount} LP`
                                 }
                                 onChange={(e) =>
@@ -2350,9 +2331,7 @@ const BscFarmingFunc = ({
                                 disabled
                                 value={
                                   Number(withdrawAmount) > 0
-                                    ? `${
-                                        withdrawAmount * LP_AMPLIFY_FACTOR
-                                      } LP`
+                                    ? `${withdrawAmount * LP_AMPLIFY_FACTOR} LP`
                                     : `${withdrawAmount} LP`
                                 }
                                 onChange={(e) =>
@@ -2445,7 +2424,6 @@ const BscFarmingFunc = ({
                                   />
                                   WBNB
                                 </span>
-                              
                               </ul>
                             </div>
                           </div>
@@ -2477,12 +2455,14 @@ const BscFarmingFunc = ({
                       disabled={
                         selectedPool === "" ||
                         withdrawStatus === "failed" ||
-                        withdrawStatus === "success" || canWithdraw === false
+                        withdrawStatus === "success" ||
+                        canWithdraw === false
                           ? true
                           : false
                       }
                       className={` w-100 btn filledbtn ${
-                        (selectedPool === "" && withdrawStatus === "initial") || canWithdraw === false
+                        (selectedPool === "" && withdrawStatus === "initial") ||
+                        canWithdraw === false
                           ? "disabled-btn"
                           : withdrawStatus === "failed"
                           ? "fail-button"

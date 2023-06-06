@@ -51,7 +51,6 @@ const renderer = ({ days, hours, minutes, seconds }) => {
 
 const FarmAvaxFunc = ({
   token,
-  staking,
   constant,
   liquidity,
   lp_symbol,
@@ -71,6 +70,7 @@ const FarmAvaxFunc = ({
   the_graph_result,
   lp_id,
   isConnected,
+  staking
 }) => {
   let { reward_token, BigNumber, alertify, reward_token_idyp, token_dypsavax } =
     window;
@@ -135,7 +135,7 @@ const FarmAvaxFunc = ({
       symbol: "WAVAX",
       decimals: 18,
     },
-  }; 
+  };
   const [iDypUSD, setIDypUSD] = useState(0);
   const [dypUSD, setDypUSD] = useState(0);
   const [tvlUSD, setTvlUSD] = useState("");
@@ -219,6 +219,8 @@ const FarmAvaxFunc = ({
   const [withdrawTooltip, setWithdrawTooltip] = useState(false);
   const [myDepositedLpTokens, setMyDepositedLpTokens] = useState("");
   const [myShare, setmyShare] = useState("");
+  const [lpTokens, setlpTokens] = useState("");
+
 
   const showModal = () => {
     setShow(true);
@@ -287,6 +289,8 @@ const FarmAvaxFunc = ({
   };
 
   const handleStake = async (e) => {
+    getLPTokens()
+
     let selectedBuybackToken = "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7"; // wbnb/wavax
     let amount = depositAmount;
     setDepositLoading(true);
@@ -488,8 +492,7 @@ const FarmAvaxFunc = ({
   };
 
   const handleSelectedTokenChange = async (tokenAddress) => {
-    let tokenDecimals =
-      buyback_activetokens_farmingavax[tokenAddress].decimals;
+    let tokenDecimals = buyback_activetokens_farmingavax[tokenAddress].decimals;
     let selectedTokenSymbol =
       buyback_activetokens_farmingavax[tokenAddress].symbol;
 
@@ -497,9 +500,7 @@ const FarmAvaxFunc = ({
     setSelectedTokenBalance("");
     setselectedTokenDecimals(tokenDecimals);
     setSelectedTokenSymbol(selectedTokenSymbol);
-    setSelectedTokenLogo(
-      buyback_activetokens_farmingavax[tokenAddress].symbol
-    );
+    setSelectedTokenLogo(buyback_activetokens_farmingavax[tokenAddress].symbol);
 
     let selectedTokenBalance = await window.getTokenHolderBalance(
       tokenAddress,
@@ -517,7 +518,9 @@ const FarmAvaxFunc = ({
   };
 
   const handleWithdrawDyp = async () => {
-    let amountConstant = await constant.depositedTokens(coinbase);
+    let amountConstant = await staking.depositedTokens(coinbase).catch((e) => {
+      console.error(e);
+    });
     amountConstant = new BigNumber(amountConstant).toFixed(0);
     setWithdrawLoading(true);
 
@@ -526,7 +529,7 @@ const FarmAvaxFunc = ({
     );
 
     try {
-      constant
+      staking
         .unstake(amountConstant, 0, deadline)
         .then(() => {
           setWithdrawStatus("success");
@@ -814,9 +817,9 @@ const FarmAvaxFunc = ({
 
     let address = coinbase;
 
-    let amount = await constant.getTotalPendingDivs(address);
-    let router = await window.getPancakeswapRouterContract();
-    let WETH = await router.methods.getPangolinRouterContract().call();
+    let amount = await staking.getTotalPendingDivs(address);
+    let router = await window.getPangolinRouterContract();
+    let WETH = await router.methods.WAVAX().call();
     let platformTokenAddress = window.config.reward_token_address;
     let rewardTokenAddress = window.config.reward_token_idyp_address;
     let path = [
@@ -853,7 +856,7 @@ const FarmAvaxFunc = ({
     referralFee = referralFee.toString();
 
     try {
-      constant
+      staking
         .claim(referralFee, _amountOutMinConstant, deadline)
         .then(() => {
           setClaimStatus("success");
@@ -897,9 +900,52 @@ const FarmAvaxFunc = ({
     return Number(apy) || 0;
   };
 
+  const getLPTokens = async () => {
+    let router = await window.getPangolinRouterContract();
+    let WETH = await router.methods.WAVAX().call();
+    let rewardTokenAddress = "0xBD100d061E120b2c67A24453CF6368E63f1Be056"; // idyp address
+
+    let selectedBuybackToken = "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7"; // can only be WETH
+    let amount = await constant.depositedTokens(coinbase);
+    let PAIR_ABI = window.PAIRAVAX_ABI;
+    let pair_token_address = "0x66eecc97203704d9e2db4a431cb0e9ce92539d5a";
+    let web3 = window.avaxWeb3;
+
+    let pair = new web3.eth.Contract(PAIR_ABI, pair_token_address);
+    let totalSupply = await pair.methods.totalSupply().call();
+    let reserves = await pair.methods.getReserves().call();
+    let maxETH = reserves[0];
+    let maxToken = reserves[1];
+
+    let maxUserEth = (amount * maxETH) / totalSupply;
+    maxUserEth = new BigNumber(maxUserEth).toFixed(0);
+    let maxUserEth1 =
+      (maxUserEth *
+        (100 - window.config.slippage_tolerance_percent_liquidity)) /
+      100;
+    maxUserEth1 = new BigNumber(maxUserEth1).toFixed(0);
+    let maxUserToken = (amount * maxToken) / totalSupply;
+    maxUserToken = new BigNumber(maxUserToken).toFixed(0);
+    let maxUserToken1 = new BigNumber(maxUserToken)
+      .times(100 - window.config.slippage_tolerance_percent_liquidity)
+      .div(100)
+      .toFixed(0);
+    let path1 = [
+      ...new Set([rewardTokenAddress, WETH].map((a) => a.toLowerCase())),
+    ];
+
+    let _userWithdrawAmount = await router.methods
+      .getAmountsOut(maxUserToken, path1)
+      .call();
+    _userWithdrawAmount = _userWithdrawAmount[_userWithdrawAmount.length - 1];
+
+    _userWithdrawAmount = BigNumber(_userWithdrawAmount).plus(maxUserEth).div(1e18).toFixed(18);
+    setlpTokens(_userWithdrawAmount)
+  };
+
   const refreshBalance = async () => {
     let coinbase = coinbase;
-
+   
     if (window.coinbase_address) {
       coinbase = window.coinbase_address;
       setCoinbase2(coinbase);
@@ -963,8 +1009,8 @@ const FarmAvaxFunc = ({
         constant._address
       ); /* TVL of iDYP on Farming */
 
-      let _dTokensDYP = constant.depositedTokens(coinbase);
-
+      let _dTokensDYP = staking.depositedTokens(coinbase);
+      
       // let _pendingDivsStaking = constant.getTotalPendingDivs(coinbase);
 
       //Take DYPS Balance
@@ -1099,14 +1145,13 @@ const FarmAvaxFunc = ({
       )
         .div(1e18)
         .toString(10);
-      setMyDepositedLpTokens(
-        myDepositedLpTokens_formatted );
-      
+      setMyDepositedLpTokens(myDepositedLpTokens_formatted);
+
       if (tvl2 == "0") {
         setmyShare(0);
       }
       if (tvl2 != "0") {
-        let myShare2 = ((depositedTokens2 / tvl2) * 100).toFixed(2); 
+        let myShare2 = ((depositedTokens2 / tvl2) * 100).toFixed(2);
         setmyShare(0);
       }
 
@@ -1133,7 +1178,6 @@ const FarmAvaxFunc = ({
 
       setDepositedTokensDYP(depositedTokensDYP_formatted);
 
-
       let withdrawAmount_formatted = new BigNumber(depositedTokensUSD)
         .div(1e18)
         .toFixed(2);
@@ -1141,54 +1185,53 @@ const FarmAvaxFunc = ({
 
       let stakingOwner2 = await constant.owner();
       setStakingOwner(stakingOwner2);
+
+      constant
+        .cliffTime()
+        .then((cliffTime2) => {
+          setCliffTime(cliffTime2 * 1e3);
+        })
+        .catch(console.error);
+
+      constant
+        .tokensToBeDisbursedOrBurnt()
+        .then((tokensToBeDisbursedOrBurnt2) => {
+          let tokensToBeDisbursedOrBurnt_formatted = new BigNumber(
+            tokensToBeDisbursedOrBurnt2
+          )
+            .div(1e18)
+            .toString(10);
+          setTokensToBeDisbursedOrBurnt(tokensToBeDisbursedOrBurnt_formatted);
+        })
+        .catch(console.error);
+
+      constant.tokensToBeSwapped().then((tokensToBeSwapped2) => {
+        let tokensToBeSwapped_formatted = new BigNumber(tokensToBeSwapped2)
+          .div(1e18)
+          .toString(10);
+        setTokensToBeSwapped(tokensToBeSwapped_formatted);
+      });
+
+      constant.lastSwapExecutionTime().then((lastSwapExecutionTime2) => {
+        setLastSwapExecutionTime(lastSwapExecutionTime2 * 1e3);
+      });
+
+      constant.swapAttemptPeriod().then((swapAttemptPeriod2) => {
+        setSwapAttemptPeriod(swapAttemptPeriod2 * 1e3);
+      });
+
+      constant.contractDeployTime().then((contractDeployTime2) => {
+        setContractDeployTime(contractDeployTime2);
+      });
+
+      constant.disburseDuration().then((disburseDuration2) => {
+        setDisburseDuration(disburseDuration2);
+      });
     } catch (e) {
       console.error(e);
     }
 
-    constant
-      .cliffTime()
-      .then((cliffTime2) => {
-        setCliffTime(cliffTime2 * 1e3);
-      })
-      .catch(console.error);
-
-    constant
-      .tokensToBeDisbursedOrBurnt()
-      .then((tokensToBeDisbursedOrBurnt2) => {
-        let tokensToBeDisbursedOrBurnt_formatted = new BigNumber(
-          tokensToBeDisbursedOrBurnt2
-        )
-          .div(1e18)
-          .toString(10);
-        setTokensToBeDisbursedOrBurnt(tokensToBeDisbursedOrBurnt_formatted);
-      })
-      .catch(console.error);
-
-    constant.tokensToBeSwapped().then((tokensToBeSwapped2) => {
-      let tokensToBeSwapped_formatted = new BigNumber(tokensToBeSwapped2)
-        .div(1e18)
-        .toString(10);
-      setTokensToBeSwapped(tokensToBeSwapped_formatted);
-    });
-
-    constant.lastSwapExecutionTime().then((lastSwapExecutionTime2) => {
-      setLastSwapExecutionTime(lastSwapExecutionTime2 * 1e3);
-    });
-
-    constant.swapAttemptPeriod().then((swapAttemptPeriod2) => {
-      setSwapAttemptPeriod(swapAttemptPeriod2 * 1e3);
-    });
-
-    constant.contractDeployTime().then((contractDeployTime2) => {
-      setContractDeployTime(contractDeployTime2);
-    });
-
-    constant.disburseDuration().then((disburseDuration2) => {
-      setDisburseDuration(disburseDuration2);
-    });
-
     //Set Value $ of iDYP & DYP for Withdraw Input
-
 
     //console.log(disburseDuration)
     //console.log(contractDeployTime)
@@ -1239,6 +1282,7 @@ const FarmAvaxFunc = ({
   useEffect(() => {
     if (coinbase !== coinbase2) {
       setCoinbase2(coinbase);
+      getLPTokens()
     }
     getPriceDYP();
     getTokenData();
@@ -1597,28 +1641,25 @@ const FarmAvaxFunc = ({
                           className="dropdown-menu"
                           style={{ minWidth: "100%" }}
                         >
-                          {Object.keys(
-                            buyback_activetokens_farmingavax
-                          ).map((t) => (
-                            <span
-                              className="d-flex align-items-center justify-content-start ps-2 gap-1 inputfarming farming-dropdown-item py-1 w-100"
-                              onClick={() => handleSelectedTokenChange(t)}
-                            >
-                              <img
-                                src={
-                                  require(`./assets/avax/${buyback_activetokens_farmingavax[
-                                    t
-                                  ].symbol.toLowerCase()}.svg`).default
-                                }
-                                alt=""
-                                style={{ width: 14, height: 14 }}
-                              />
-                              {
-                                buyback_activetokens_farmingavax[t]
-                                  .symbol
-                              }
-                            </span>
-                          ))}
+                          {Object.keys(buyback_activetokens_farmingavax).map(
+                            (t) => (
+                              <span
+                                className="d-flex align-items-center justify-content-start ps-2 gap-1 inputfarming farming-dropdown-item py-1 w-100"
+                                onClick={() => handleSelectedTokenChange(t)}
+                              >
+                                <img
+                                  src={
+                                    require(`./assets/avax/${buyback_activetokens_farmingavax[
+                                      t
+                                    ].symbol.toLowerCase()}.svg`).default
+                                  }
+                                  alt=""
+                                  style={{ width: 14, height: 14 }}
+                                />
+                                {buyback_activetokens_farmingavax[t].symbol}
+                              </span>
+                            )
+                          )}
                         </ul>
                       </div>
                     </div>
@@ -1894,14 +1935,86 @@ const FarmAvaxFunc = ({
                         </div>
                       </div>
                     </div>
+                    <div
+                          className="gap-1 claimreward-wrapper"
+                          style={{
+                            background:
+                            selectedPool === "dyp"
+                                ? "#141333"
+                                : "#26264F",
+                            border:
+                            selectedPool === "dyp"
+                                ? "1px solid #57B6AB"
+                                : "1px solid #8E97CD",
+                          }}
+                          onClick={() => {
+                            setSelectedPool("dyp")
+                           
+                          }}
+                        >
+                          <img
+                            src={
+                             selectedPool === "dyp" ? check : empty
+                            }
+                            alt=""
+                            className="activestate"
+                          />
+
+                          <div className="position-relative">
+                            <input
+                              disabled
+                              value={
+                                Number(pendingDivs) > 0
+                                  ? `${pendingDivs} DYP`
+                                  : `${getFormattedNumber(0, 2)} DYP`
+                              }
+                              onChange={(e) =>
+                                setPendingDivs(Number(e.target.value) > 0
+                                      ? e.target.value
+                                      : e.target.value)
+                               
+                              }
+                              className=" left-radius inputfarming styledinput2"
+                              placeholder="0"
+                              type="text"
+                              style={{
+                                width: "120px",
+                                padding: "0px 15px 0px 15px",
+                                height: 35,
+                              }}
+                            />
+                          </div>
+
+                          <div
+                            className="d-flex align-items-center justify-content-center w-100 claimreward-header "
+                          >
+                            <img
+                              src={
+                                require(`./assets/avax/${selectedRewardTokenLogo2.toLowerCase()}.svg`)
+                                  .default
+                              }
+                              alt=""
+                              style={{ width: 14, height: 14 }}
+                            />
+                            <select
+                              disabled
+                              defaultValue="DYP"
+                              className="form-control inputfarming"
+                              style={{ border: "none", padding: "0 0 0 3px" }}
+                            >
+                              <option value="DYP"> DYP </option>
+                            </select>
+                            
+                          </div>
+                        </div>
                   </div>
                   <button
                     disabled={
                       selectedPool === "" ||
                       claimStatus === "claimed" ||
                       claimStatus === "failed" ||
-                      claimStatus === "success" ||
-                      pendingDivs <= 0
+                      claimStatus === "success"
+                      //  ||  pendingDivs <= 0
                         ? true
                         : false
                     }
@@ -1909,8 +2022,8 @@ const FarmAvaxFunc = ({
                       claimStatus === "claimed" ||
                       selectedPool === "" ||
                       selectedPool === "wavax2" ||
-                      selectedPool === "dyp2" ||
-                      pendingDivs <= 0
+                      selectedPool === "dyp2"
+                      //  || pendingDivs <= 0
                         ? "disabled-btn"
                         : claimStatus === "failed"
                         ? "fail-button"
@@ -1919,7 +2032,11 @@ const FarmAvaxFunc = ({
                         : null
                     } d-flex justify-content-center align-items-center`}
                     style={{ height: "fit-content" }}
-                    onClick={handleClaimDivs}
+                    onClick={() => {
+                      selectedPool === "wavax"
+                       ? handleClaimDivs()
+                       : handleClaimDyp();
+                    }}
                   >
                     {claimLoading ? (
                       <div
@@ -2119,7 +2236,7 @@ const FarmAvaxFunc = ({
                   </span> */}
                 </div>
                 <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
-                  <span className="stats-card-title">My DYP Stake</span>
+                  <span className="stats-card-title">My iDYP Stake</span>
                   <h6 className="stats-card-content">
                     {getFormattedNumber(reward_token_balance, 3)} DYP
                   </h6>
@@ -2127,15 +2244,15 @@ const FarmAvaxFunc = ({
                     ${getFormattedNumber(reward_token_balance * dypUSD)}
                   </span> */}
                 </div>
-                <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
+                {/* <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                   <span className="stats-card-title">Total Earned DYP</span>
                   <h6 className="stats-card-content">
                     {getFormattedNumber(totalEarnedTokens, 3)} DYP
                   </h6>
-                  {/* <span className="stats-usd-value">
+                  <span className="stats-usd-value">
                     ${getFormattedNumber(totalEarnedTokens * dypUSD)}
-                  </span> */}
-                </div>
+                  </span>
+                </div> */}
                 <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                   <span className="stats-card-title">Total Earned WAVAX</span>
                   <h6 className="stats-card-content">
@@ -2409,9 +2526,11 @@ const FarmAvaxFunc = ({
                               <input
                                 disabled
                                 value={
-                                  Number(withdrawAmount) > 0
-                                    ? `${withdrawAmount * LP_AMPLIFY_FACTOR} LP`
-                                    : `${withdrawAmount} LP`
+                                  Number(getFormattedNumber(lpTokens,4)) > 0
+                                    ? `${
+                                      getFormattedNumber(lpTokens,4) * LP_AMPLIFY_FACTOR
+                                      } WAVAX`
+                                    : `${getFormattedNumber(lpTokens,4)} WAVAX`
                                 }
                                 onChange={(e) =>
                                   setWithdrawAmount(
@@ -2450,17 +2569,17 @@ const FarmAvaxFunc = ({
                                   className="withsubtitle"
                                   style={{ padding: "5px 0 0 15px" }}
                                 >
-                                  LP balance
+                                  WAVAX balance
                                 </h6>
 
                                 <input
                                   disabled
                                   value={
-                                    Number(withdrawAmount) > 0
+                                    Number(getFormattedNumber(lpTokens,4)) > 0
                                       ? `${
-                                          withdrawAmount * LP_AMPLIFY_FACTOR
-                                        } LP`
-                                      : `${withdrawAmount} LP`
+                                        getFormattedNumber(lpTokens,4) * LP_AMPLIFY_FACTOR
+                                        } WAVAX`
+                                      : `${getFormattedNumber(lpTokens,4)} WAVAX`
                                   }
                                   onChange={(e) =>
                                     setWithdrawAmount(
@@ -2483,36 +2602,7 @@ const FarmAvaxFunc = ({
                               </div>
                             </div>
                           </div>
-                          <div
-                            className="d-flex align-items-center justify-content-center w-100 claimreward-header"
-                            // style={{ padding: "10px 0 0 10px" }}
-                          >
-                            {/* <img
-                          src={
-                            require(`./assets/avax/${selectedRewardTokenLogo1.toLowerCase()}.svg`)
-                              .default
-                          }
-                          alt=""
-                          style={{ width: 14, height: 14 }}
-                        />
-                        <select
-                          disabled={!is_connected}
-                          value={selectedClaimToken}
-                          onChange={(e) => {
-                            handleClaimToken(e.target.value);
-                            setState({
-                              selectedRewardTokenLogo1:
-                                e.target.value === "0"
-                                  ? "wavax"
-                                  : "weth.e",
-                            });
-                          }}
-                          className=" inputfarming"
-                          style={{ border: "none" }}
-                        >
-                          <option value="0"> WAVAX </option>
-                          <option value="1"> WETH.e </option>
-                        </select> */}
+                          <div className="d-flex align-items-center justify-content-center w-100 claimreward-header">
                             <div class="dropdown">
                               <button
                                 class="btn reward-dropdown inputfarming d-flex align-items-center justify-content-center gap-1"
@@ -2554,7 +2644,6 @@ const FarmAvaxFunc = ({
                                   />
                                   WAVAX
                                 </span>
-                              
                               </ul>
                             </div>
                           </div>
@@ -2563,7 +2652,115 @@ const FarmAvaxFunc = ({
                           Total LP deposited{" "}
                         </h6>
                       </div>
-                   
+                      <div className="col-5 d-flex flex-column gap-1">
+                        <div
+                          className="gap-1 claimreward-wrapper w-100"
+                          style={{
+                            background:
+                              selectedPool === "dyp2" ? "#141333" : "#26264F",
+                            border:
+                              selectedPool === "dyp2"
+                                ? "1px solid #57B6AB"
+                                : "1px solid #8E97CD",
+                          }}
+                          onClick={() => {
+                            setSelectedPool("dyp2");
+                          }}
+                        >
+                          <img
+                            src={selectedPool === "dyp2" ? check : empty}
+                            alt=""
+                            className="activestate"
+                          />
+
+                          <div className="d-flex flex-column align-items-center gap-2 justify-content-between w-100 position-relative">
+                            <div className="position-relative">
+                              <h6
+                                className="withsubtitle"
+                                style={{ padding: "0px 15px 0px 15px" }}
+                              >
+                                DYP Balance
+                              </h6>
+
+                              <input
+                                disabled
+                                value={`${getFormattedNumber(depositedTokensDYP)} DYP`}
+                                onChange={(e) =>
+                                  setWithdrawAmount(
+                                    Number(e.target.value) > 0
+                                      ? e.target.value / LP_AMPLIFY_FACTOR
+                                      : e.target.value
+                                  )
+                                }
+                                className=" left-radius inputfarming styledinput2"
+                                placeholder="0"
+                                type="text"
+                                style={{
+                                  width: "150px",
+                                  padding: "0px 15px 0px 15px",
+                                  height: 35,
+                                  fontSize: 20,
+                                  fontWeight: 300,
+                                }}
+                              />
+                            </div>
+                            <div className="position-relative">
+                              <h6
+                                className="withsubtitle"
+                                style={{ padding: "0px 15px 0px 15px" }}
+                              >
+                                Value
+                              </h6>
+
+                              <input
+                                disabled
+                                value={`${ getFormattedNumber(depositedTokensDYP) } DYP`}
+                                onChange={(e) =>
+                                  setWithdrawAmount(
+                                    Number(e.target.value) > 0
+                                      ? e.target.value / LP_AMPLIFY_FACTOR
+                                      : e.target.value
+                                  )
+                                }
+                                className=" left-radius inputfarming styledinput2"
+                                placeholder="0"
+                                type="text"
+                                style={{
+                                  width: "150px",
+                                  padding: "0px 15px 0px 15px",
+                                  height: 35,
+                                  fontSize: 20,
+                                  fontWeight: 300,
+                                }}
+                              />
+                            </div>
+                          </div>
+                          <div className="d-flex align-items-center justify-content-center w-100 claimreward-header">
+                            <img
+                              src={
+                                require(`./assets/avax/${selectedRewardTokenLogo2.toLowerCase()}.svg`)
+                                  .default
+                              }
+                              alt=""
+                              style={{ width: 14, height: 14 }}
+                            />
+                            <select
+                              disabled
+                              defaultValue="DYP"
+                              className="form-control inputfarming"
+                              style={{
+                                border: "none",
+                                padding: "0 0 0 3px",
+                              }}
+                            >
+                              <option value="DYP"> DYP </option>
+                            </select>
+                          </div>
+                        </div>
+                        <h6 className="withsubtitle d-flex justify-content-start w-100 ">
+                          Total DYP deposited{" "}
+                        </h6>
+                      </div>
                     </div>
                   </div>
 
@@ -2601,7 +2798,11 @@ const FarmAvaxFunc = ({
                           : null
                       } d-flex justify-content-center align-items-center`}
                       style={{ height: "fit-content" }}
-                      onClick={() => { handleWithdraw()}}
+                      onClick={() => {
+                        selectedPool === "wavax2"
+                          ? handleWithdraw()
+                          : handleWithdrawDyp();
+                      }}
                     >
                       {withdrawLoading ? (
                         <div

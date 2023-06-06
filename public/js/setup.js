@@ -662,7 +662,6 @@ class CONSTANT_STAKING_NEW {
           let contract = await getContract({ key: this.ticker });
           let value = 0;
           let gas = window.config.default_gas_amount;
-          console.log("methodname", contract.methods);
           return await contract.methods[fn_name](...args).send({
             value,
             gas,
@@ -1756,6 +1755,10 @@ window.config = {
   token_newavax_address: "0x66eecc97203704d9e2db4a431cb0e9ce92539d5a",
   token_newbsc_address: "0x1bC61d08A300892e784eD37b2d0E63C85D1d57fb",
 
+
+  constant_stakingnew_newavaxactive1_address:
+  "0x245978ea5EFc6eec44AF03032F6318a81190DCbF",
+
   constant_stakingnew_newavax5_address:
     "0x1cA9Fc98f3b997E08bC04691414e33B1835aa7e5",
   constant_stakingnew_newavax9_address:
@@ -2111,7 +2114,7 @@ window.config = {
   //farming bsc
 
   farming_activebsc_1_address: "0x131F62C87FB177CA64d2034Ece921933d2bC34B4",
-  farming_activeavax_1_address: "0xd600fBcF64Da43CcBB4ab6Da61007F5b1f8Fe455",
+  farming_activeavax_1_address: "0x6eE20ebFa4A169B2cB03bEB41DA9351a4a879676",
 
   farming_newbsc_1_address: "0x537dc4fee298ea79a7f65676735415f1e2882f92",
   constant_stakingnewbsc_new5_address:
@@ -2491,6 +2494,10 @@ window.constant_staking_new6 = new CONSTANT_STAKING_NEW(
 
 window.constant_staking_newavax5 = new CONSTANT_STAKING_NEW(
   "CONSTANT_STAKINGNEW_NEWAVAX5"
+);
+
+window.constant_staking_newavaxactive1 = new CONSTANT_STAKING_NEW(
+  "CONSTANT_STAKINGNEW_NEWAVAXACTIVE1"
 );
 
 window.constant_staking_newavax6 = new CONSTANT_STAKING_NEW(
