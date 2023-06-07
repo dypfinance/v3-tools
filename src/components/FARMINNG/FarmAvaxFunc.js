@@ -1167,7 +1167,7 @@ const FarmAvaxFunc = ({
       }
       if (tvl2 != "0") {
         let myShare2 = ((depositedTokens2 / tvl2) * 100).toFixed(2);
-        setmyShare(0);
+        setmyShare(myShare2);
       }
 
       setMyDepositedLpTokens(myDepositedLpTokens_formatted);
@@ -1251,15 +1251,7 @@ const FarmAvaxFunc = ({
     //console.log(disburseDuration)
     //console.log(contractDeployTime)
 
-    try {
-      let selectedTokenBalance2 = await window.getTokenHolderBalance(
-        selectedBuybackToken,
-        coinbase
-      );
-      setSelectedTokenBalance(selectedTokenBalance2);
-    } catch (e) {
-      console.warn(e);
-    }
+   
   };
   const getUsdPerETH = () => {
     return the_graph_result.usd_per_eth || 0;
@@ -1428,12 +1420,31 @@ const FarmAvaxFunc = ({
     document.getElementById(field).focus();
   };
 
+
+  const getBalance= async()=>{
+    try {
+    let TOKEN_ABI = window.ERC20_ABI;
+    let selectedBuybackToken2 = "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7"; // wbnb/wavax
+    let web3 = window.avaxWeb3;
+    let tokenContract = new web3.eth.Contract(TOKEN_ABI, selectedBuybackToken2);
+    const result = await tokenContract.methods.balanceOf(coinbase).call().catch((e)=>{console.log(e)})
+  
+     setSelectedTokenBalance(result);
+    } catch (e) {
+      console.warn(e);
+    }
+  }
+
   useEffect(() => {
     const interval = setInterval(async () => {
       refreshBalance();
     }, 1000);
     return () => clearInterval(interval);
   }, [coinbase, coinbase2, chainId]);
+
+  useEffect(() => {
+      getBalance();
+  }, [coinbase, chainId]);
 
   return (
     <div className="container-lg p-0">
@@ -2242,15 +2253,15 @@ const FarmAvaxFunc = ({
                     ${getFormattedNumber(myDepositedLpTokens * iDypUSD)}
                   </span> */}
                 </div>
-                <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
+                {/* <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                   <span className="stats-card-title">Total LP Deposited</span>
                   <h6 className="stats-card-content">
                     {getFormattedNumber(totalLPdeposited, 3)} iDYP/WAVAX
                   </h6>
-                  {/* <span className="stats-usd-value">
+                  <span className="stats-usd-value">
                     ${getFormattedNumber(tvl * iDypUSD)}
-                  </span> */}
-                </div>
+                  </span>
+                </div> */}
                 <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                   <span className="stats-card-title">My DYP Stake</span>
                   <h6 className="stats-card-content">
@@ -2417,7 +2428,7 @@ const FarmAvaxFunc = ({
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">Total LP Deposited</span>
                     <h6 className="stats-card-content">
-                      {getFormattedNumber(tvl, 3)} iDYP/WAVAX
+                    {getFormattedNumber(totalLPdeposited, 3)} iDYP/WAVAX
                     </h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">

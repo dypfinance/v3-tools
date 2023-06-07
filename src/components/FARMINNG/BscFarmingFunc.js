@@ -1128,14 +1128,6 @@ const BscFarmingFunc = ({
         .toFixed(18);
       setTvlDyps(tvlDyps_formatted);
 
-      if (tvl2 == "0") {
-        setmyShare(0);
-      }
-      if (tvl2 != "0") {
-        let myShare2 = ((depositedTokens2 / tvl2) * 100).toFixed(2);
-        setmyShare(0);
-      }
-
       let token_balance_formatted = new BigNumber(
         token_balance2 * LP_AMPLIFY_FACTOR
       )
@@ -1270,19 +1262,38 @@ const BscFarmingFunc = ({
     //console.log(disburseDuration)
     //console.log(contractDeployTime)
 
+
+  };
+
+  const getBalance = async()=>{
     try {
-      let selectedTokenBalance2 = await window.getTokenHolderBalance(
-        selectedBuybackToken,
-        coinbase
-      );
-      setSelectedTokenBalance(selectedTokenBalance2);
+    let TOKEN_ABI = window.ERC20_ABI;
+
+    let selectedBuybackToken2 = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"; // wbnb/wavax
+    let web3 = window.bscWeb3;
+    let tokenContract = new web3.eth.Contract(TOKEN_ABI, selectedBuybackToken2);
+    const result = await tokenContract.methods.balanceOf(coinbase).call().catch((e)=>{console.log(e)})
+  
+     setSelectedTokenBalance(result);
     } catch (e) {
       console.warn(e);
     }
-  };
+  }
 
   const getUsdPerETH = () => {
     return the_graph_result.usd_per_eth || 0;
+  };
+
+  const getmyShare = async () => {
+    // myshare = (my lp deposit / total lp deposited) * 100
+    if (totalLPdeposited == "0" || totalLPdeposited == "") {
+      setmyShare(0);
+    }
+    if (totalLPdeposited != "0" && totalLPdeposited != "") {
+      let myShare2 = ((myDepositedLpTokens / totalLPdeposited) * 100).toFixed(2);
+      setmyShare(myShare2);
+    }
+    console.log(myDepositedLpTokens , totalLPdeposited)
   };
 
   const getApproxReturnUSD = () => {
@@ -1478,6 +1489,14 @@ const BscFarmingFunc = ({
     }, 1000);
     return () => clearInterval(interval);
   }, [coinbase, coinbase2, chainId]);
+
+  useEffect(() => {
+      getBalance();
+  }, [coinbase, chainId]);
+
+  useEffect(() => {
+    getmyShare();
+  }, [totalLPdeposited, myDepositedLpTokens]);
 
   return (
     <div className="container-lg p-0">
@@ -1739,7 +1758,7 @@ const BscFarmingFunc = ({
                     title={
                       <div className="tooltip-text">
                         {
-                          "Deposit your assets to the farming smart contract. 75% of your assets goes for creation of LP tokens and 25% goes for buying DYP and depositing to staking smart contract to generate rewards."
+                          "Deposit your assets to the farming smart contract. 80% of your assets goes for creation of LP tokens and 20% goes for buying DYP and depositing to staking smart contract to generate rewards."
                         }
                       </div>
                     }
@@ -2164,15 +2183,15 @@ const BscFarmingFunc = ({
                     ${getFormattedNumber(myDepositedLpTokens * iDypUSD)}
                   </span> */}
                 </div>
-                <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
+                {/* <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                   <span className="stats-card-title">Total LP Deposited</span>
                   <h6 className="stats-card-content">
                     {getFormattedNumber(totalLPdeposited, 3)} iDYP/WBNB
                   </h6>
-                  {/* <span className="stats-usd-value">
+                  <span className="stats-usd-value">
                     ${getFormattedNumber(tvl * iDypUSD)}
-                  </span> */}
-                </div>
+                  </span>
+                </div> */}
                 <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                   <span className="stats-card-title">My DYP Stake</span>
                   <h6 className="stats-card-content">
@@ -2267,7 +2286,7 @@ const BscFarmingFunc = ({
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">Total LP Deposited</span>
                     <h6 className="stats-card-content">
-                      {getFormattedNumber(tvl, 3)} iDYP/WBNB
+                      {getFormattedNumber(totalLPdeposited, 3)} iDYP/WBNB
                     </h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
