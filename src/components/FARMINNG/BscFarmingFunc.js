@@ -223,6 +223,7 @@ const BscFarmingFunc = ({
 
   const [totalLPdeposited, setTotalLpDeposited] = useState("");
   const [priceUSD, setPriceUSD] = useState("");
+  const [rewardsPendingClaim , setrewardsPendingClaim ] = useState("");
 
 
   const showModal = () => {
@@ -894,7 +895,7 @@ const BscFarmingFunc = ({
 
     let address = coinbase;
 
-    let amount = await staking.getTotalPendingDivs(address);
+    let amount = await staking.rewardsPendingClaim(address);
     let router = await window.getPancakeswapRouterContract();
     let WETH = await router.methods.WETH().call();
     let platformTokenAddress = window.config.reward_token_address;
@@ -906,11 +907,52 @@ const BscFarmingFunc = ({
         )
       ),
     ];
-    let _amountOutMinConstant = await router.methods
+
+    let path1 = [
+      ...new Set([rewardTokenAddress, WETH].map((a) => a.toLowerCase())),
+    ];
+
+
+    let PAIR_ABI = window.PAIR_ABI;
+    let pair_token_address = "0x1bC61d08A300892e784eD37b2d0E63C85D1d57fb";
+    let web3 = window.bscWeb3;
+    let pair = new web3.eth.Contract(PAIR_ABI, pair_token_address);
+
+    let totalSupply = await pair.methods.totalSupply().call();
+    let reserves = await pair.methods.getReserves().call();
+
+    let amountlpContract = await pair.methods.balanceOf(constant._address).call()
+
+
+    let maxETH = reserves[0];
+    let maxToken = reserves[1];
+
+    let maxContractEth = (amountlpContract * maxETH) / totalSupply;
+    maxContractEth = new BigNumber(maxContractEth).toFixed(0);
+    let maxContractToken = (amountlpContract * maxToken) / totalSupply;
+    maxContractToken = new BigNumber(maxContractToken).toFixed(0);
+
+    
+
+    let totalContractUSD = await router.methods
+    .getAmountsOut(maxContractToken, path1)
+    .call().catch((e) => {
+      setClaimStatus("failed");
+      console.log(e)
+      setClaimLoading(false);
+      setErrorMsg2(e?.message);
+      setTimeout(() => {
+        setClaimStatus("initial");
+        setSelectedPool("");
+        setErrorMsg2("");
+      }, 10000);
+    });
+
+      let amountsPendingClaim = await router.methods
       .getAmountsOut(amount, path)
-      .call()
-      .catch((e) => {
+      .call().catch((e) => {
         setClaimStatus("failed");
+        console.log(e)
         setClaimLoading(false);
         setErrorMsg2(e?.message);
         setTimeout(() => {
@@ -919,22 +961,22 @@ const BscFarmingFunc = ({
           setErrorMsg2("");
         }, 10000);
       });
-    _amountOutMinConstant =
-      _amountOutMinConstant[_amountOutMinConstant.length - 1];
-    _amountOutMinConstant = new BigNumber(_amountOutMinConstant)
-      .times(100 - window.config.slippage_tolerance_percent)
-      .div(100)
-      .toFixed(0);
 
-    let referralFee = new BigNumber(_amountOutMinConstant)
-      .times(500)
-      .div(1e4)
-      .toFixed(0);
-    referralFee = referralFee.toString();
+    amountsPendingClaim = amountsPendingClaim[totalContractUSD.length - 1];
+    
+   amountsPendingClaim = BigNumber(amountsPendingClaim)
+      .div(1e18)
+      .toFixed(18);
 
+    amountsPendingClaim = new BigNumber(amountsPendingClaim)
+    .times(100 - window.config.slippage_tolerance_percent)
+    .div(100)
+    .toFixed(0);
+ 
+console.log(0, amountsPendingClaim, deadline)
     try {
       staking
-        .claim(0, 0, deadline)
+        .claim(0, amountsPendingClaim, deadline)
         .then(() => {
           setClaimStatus("success");
           setClaimLoading(false);
@@ -1062,6 +1104,7 @@ const BscFarmingFunc = ({
       ); /* TVL of iDYP on Farming */
 
       let _dTokensDYP = staking.depositedTokens(coinbase);
+      let _rewardsPendingClaim = staking.rewardsPendingClaim(coinbase)
 
       // let _pendingDivsStaking = constant.getTotalPendingDivs(coinbase);
 
@@ -1085,7 +1128,7 @@ const BscFarmingFunc = ({
         tvlConstantDYP2,
         tvliDYP2,
         depositedTokensDYP2,
-        // pendingDivsStaking2,
+        rewardsPendingClaim2,
         tvlDYPS2,
       ] = await Promise.all([
         _bal,
@@ -1102,7 +1145,7 @@ const BscFarmingFunc = ({
         _tvlConstantDYP,
         _tvliDYP,
         _dTokensDYP,
-        // _pendingDivsStaking,
+        _rewardsPendingClaim,
         _tvlDYPS,
       ]);
 
@@ -1180,6 +1223,9 @@ const BscFarmingFunc = ({
         .div(usd_per_token)
         .toString(10);
       setPendingDivs(pendingDivs_formatted);
+
+      let rewardsPendingClaim_formatted = new BigNumber(rewardsPendingClaim2).div(1e18).toString(10);
+      setrewardsPendingClaim(rewardsPendingClaim_formatted);
 
       let totalEarnedTokens_formatted = new BigNumber(totalEarnedTokens2)
         .div(10 ** TOKEN_DECIMALS)
@@ -1949,7 +1995,7 @@ const BscFarmingFunc = ({
                           disabled
                           value={
                             Number(pendingDivsEth) > 0
-                              ? `${pendingDivsEth} WBNB`
+                              ? `${getFormattedNumber(pendingDivsEth, 2)} WBNB`
                               : `${getFormattedNumber(0, 2)} WBNB`
                           }
                           onChange={(e) =>
@@ -2039,12 +2085,12 @@ const BscFarmingFunc = ({
                         <input
                           disabled
                           value={
-                            Number(pendingDivs) > 0
-                              ? `${pendingDivs} DYP`
+                            Number(rewardsPendingClaim) > 0
+                              ? `${getFormattedNumber(rewardsPendingClaim,6)} DYP`
                               : `${getFormattedNumber(0, 2)} DYP`
                           }
                           onChange={(e) =>
-                            setPendingDivs(
+                            setrewardsPendingClaim(
                               Number(e.target.value) > 0
                                 ? e.target.value
                                 : e.target.value

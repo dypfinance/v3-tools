@@ -223,6 +223,8 @@ const FarmAvaxFunc = ({
   const [totalLPdeposited, setTotalLpDeposited] = useState('')
   const [lpTokensContract, setlpTokensContract] = useState("");
   const [priceUSD, setPriceUSD] = useState("");
+  const [rewardsPendingClaim , setrewardsPendingClaim ] = useState("");
+
 
 
   const showModal = () => {
@@ -842,23 +844,59 @@ const FarmAvaxFunc = ({
 
     let address = coinbase;
 
-    let amount = await staking.getTotalPendingDivs(address);
+    let amount = await staking.rewardsPendingClaim(address);
     let router = await window.getPangolinRouterContract();
     let WETH = await router.methods.WAVAX().call();
     let platformTokenAddress = window.config.reward_token_address;
     let rewardTokenAddress = window.config.reward_token_idyp_address;
     let path = [
-      ...new Set(
-        [rewardTokenAddress, WETH, platformTokenAddress].map((a) =>
-          a.toLowerCase()
-        )
-      ),
+      ...new Set([rewardTokenAddress, WETH, platformTokenAddress].map((a) => a.toLowerCase())),
     ];
-    let _amountOutMinConstant = await router.methods
+
+    let path1 = [
+      ...new Set([rewardTokenAddress, WETH].map((a) => a.toLowerCase())),
+    ];
+
+    let PAIR_ABI = window.PAIRAVAX_ABI;
+    let pair_token_address = "0x66eecc97203704d9e2db4a431cb0e9ce92539d5a";
+    let web3 = window.avaxWeb3;
+
+    let pair = new web3.eth.Contract(PAIR_ABI, pair_token_address);
+    let totalSupply = await pair.methods.totalSupply().call().catch((e)=>{console.log(e)});
+    let reserves = await pair.methods.getReserves().call().catch((e)=>{console.log(e)});
+
+
+    let amountlpContract = await pair.methods.balanceOf(constant._address).call()
+
+    let maxETH = reserves[0];
+    let maxToken = reserves[1];
+
+    let maxContractEth = (amountlpContract * maxETH) / totalSupply;
+    maxContractEth = new BigNumber(maxContractEth).toFixed(0);
+    let maxContractToken = (amountlpContract * maxToken) / totalSupply;
+    maxContractToken = new BigNumber(maxContractToken).toFixed(0);
+
+    
+
+    let totalContractUSD = await router.methods
+    .getAmountsOut(maxContractToken, path1)
+    .call().call().catch((e) => {
+      setClaimStatus("failed");
+      console.log(e)
+      setClaimLoading(false);
+      setErrorMsg2(e?.message);
+      setTimeout(() => {
+        setClaimStatus("initial");
+        setSelectedPool("");
+        setErrorMsg2("");
+      }, 10000);
+    });
+
+      let amountsPendingClaim = await router.methods
       .getAmountsOut(amount, path)
-      .call()
-      .catch((e) => {
+      .call().call().catch((e) => {
         setClaimStatus("failed");
+        console.log(e)
         setClaimLoading(false);
         setErrorMsg2(e?.message);
         setTimeout(() => {
@@ -867,22 +905,25 @@ const FarmAvaxFunc = ({
           setErrorMsg2("");
         }, 10000);
       });
-    _amountOutMinConstant =
-      _amountOutMinConstant[_amountOutMinConstant.length - 1];
-    _amountOutMinConstant = new BigNumber(_amountOutMinConstant)
-      .times(100 - window.config.slippage_tolerance_percent)
-      .div(100)
-      .toFixed(0);
 
-    let referralFee = new BigNumber(_amountOutMinConstant)
-      .times(500)
-      .div(1e4)
-      .toFixed(0);
-    referralFee = referralFee.toString();
+    amountsPendingClaim = amountsPendingClaim[totalContractUSD.length - 1];
+
+   amountsPendingClaim = BigNumber(amountsPendingClaim)
+      .div(1e18)
+      .toFixed(18);
+
+    amountsPendingClaim = new BigNumber(amountsPendingClaim)
+    .times(100 - window.config.slippage_tolerance_percent)
+    .div(100)
+    .toFixed(0);
+
+
+
+console.log(0, amountsPendingClaim, deadline)
 
     try {
       staking
-        .claim(0, 0, deadline)
+        .claim(0, amountsPendingClaim, deadline)
         .then(() => {
           setClaimStatus("success");
           setClaimLoading(false);
@@ -1040,6 +1081,8 @@ const FarmAvaxFunc = ({
 
       let _tvl = token.balanceOf(constant._address); //not zero
 
+      let _rewardsPendingClaim = staking.rewardsPendingClaim(coinbase)
+
       //Take iDYP Balance on Staking & Farming
       let _tvlConstantiDYP = reward_token_idyp.balanceOf(
         constant._address
@@ -1080,7 +1123,7 @@ const FarmAvaxFunc = ({
         tvlConstantDYP2,
         tvliDYP2,
         depositedTokensDYP2,
-        // pendingDivsStaking2,
+        rewardsPendingClaim2,
         tvlDYPS2,
       ] = await Promise.all([
         _bal,
@@ -1097,7 +1140,7 @@ const FarmAvaxFunc = ({
         _tvlConstantDYP,
         _tvliDYP,
         _dTokensDYP,
-        // _pendingDivsStaking,
+        _rewardsPendingClaim,
         _tvlDYPS,
       ]);
 
@@ -1115,6 +1158,7 @@ const FarmAvaxFunc = ({
       /* USD VALUE OF MY LP DEPOSITED */
       // let myDepositedLpTokens = new BigNumber(depositedTokens).times(usd_per_lp).toFixed(18)
       let myDepositedLpTokens = new BigNumber(depositedTokens2).toFixed(18);
+
 
       /* USD VALUE OF WITHDRAW OF LP + iDYP */
       // let depositedTokensUSD = new BigNumber(depositedTokens).times(usd_per_lp).plus(tvlValueConstantDYP).toFixed(18)
@@ -1186,6 +1230,9 @@ const FarmAvaxFunc = ({
         .div(1e18)
         .toString(10);
       setPendingDivsEth(pendingDivsEth_formatted);
+
+      let rewardsPendingClaim_formatted = new BigNumber(rewardsPendingClaim2).div(1e18).toString(10);
+      setrewardsPendingClaim(rewardsPendingClaim_formatted);
 
       let myDepositedLpTokens_formatted = new BigNumber(
         myDepositedLpTokens * LP_AMPLIFY_FACTOR
@@ -1486,6 +1533,7 @@ const FarmAvaxFunc = ({
     getmyShare();
     getTvlUsdInfo()
   }, [totalLPdeposited, myDepositedLpTokens]);
+
 
   return (
     <div className="container-lg p-0">
@@ -1910,7 +1958,7 @@ const FarmAvaxFunc = ({
                           disabled
                           value={
                             Number(pendingDivsEth) > 0
-                              ? `${pendingDivsEth} WAVAX`
+                              ? `${getFormattedNumber(pendingDivsEth, 2)} WAVAX`
                               : `${getFormattedNumber(0, 2)} WAVAX`
                           }
                           onChange={(e) =>
@@ -2032,12 +2080,12 @@ const FarmAvaxFunc = ({
                             <input
                               disabled
                               value={
-                                Number(pendingDivs) > 0
-                                  ? `${pendingDivs} DYP`
+                                Number(rewardsPendingClaim) > 0
+                                  ? `${getFormattedNumber(rewardsPendingClaim,5)} DYP`
                                   : `${getFormattedNumber(0, 2)} DYP`
                               }
                               onChange={(e) =>
-                                setPendingDivs(Number(e.target.value) > 0
+                                setrewardsPendingClaim(Number(e.target.value) > 0
                                       ? e.target.value
                                       : e.target.value)
                                
