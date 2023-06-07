@@ -221,6 +221,8 @@ const FarmAvaxFunc = ({
   const [myShare, setmyShare] = useState("");
   const [lpTokens, setlpTokens] = useState("");
   const [totalLPdeposited, setTotalLpDeposited] = useState('')
+  const [lpTokensContract, setlpTokensContract] = useState("");
+  const [priceUSD, setPriceUSD] = useState("");
 
 
   const showModal = () => {
@@ -273,6 +275,16 @@ const FarmAvaxFunc = ({
     let usdPerToken2 = await window.getPrice("defi-yield-protocol");
     setUsdPerToken(usdPerToken2);
   };
+
+  const getTvlUsdInfo = async()=>{
+    const tokenPrice = await axios
+    .get(`https://api.dyp.finance/api/the_graph_avax_v2`)
+    .then((res) => {
+      return res.data.the_graph_avax_v2.usd_per_eth;
+    })
+    .catch((err) => console.error(err));
+    setPriceUSD(tokenPrice)
+  }
 
   const handleApprove = (e) => {
     setDepositLoading(true);
@@ -870,7 +882,7 @@ const FarmAvaxFunc = ({
 
     try {
       staking
-        .claim(referralFee, _amountOutMinConstant, deadline)
+        .claim(0, 0, deadline)
         .then(() => {
           setClaimStatus("success");
           setClaimLoading(false);
@@ -927,8 +939,16 @@ const FarmAvaxFunc = ({
     let pair = new web3.eth.Contract(PAIR_ABI, pair_token_address);
     let totalSupply = await pair.methods.totalSupply().call().catch((e)=>{console.log(e)});
     let reserves = await pair.methods.getReserves().call().catch((e)=>{console.log(e)});
+    let amountlpContract = await pair.methods.balanceOf(constant._address).call()
+
     let maxETH = reserves[0];
     let maxToken = reserves[1];
+
+    let maxContractEth = (amountlpContract * maxETH) / totalSupply;
+    maxContractEth = new BigNumber(maxContractEth).toFixed(0);
+    let maxContractToken = (amountlpContract * maxToken) / totalSupply;
+    maxContractToken = new BigNumber(maxContractToken).toFixed(0);
+
 
     let maxUserEth = (amount * maxETH) / totalSupply;
     maxUserEth = new BigNumber(maxUserEth).toFixed(0);
@@ -946,6 +966,18 @@ const FarmAvaxFunc = ({
     let path1 = [
       ...new Set([rewardTokenAddress, WETH].map((a) => a.toLowerCase())),
     ];
+
+    let totalContractUSD = await router.methods
+    .getAmountsOut(maxContractToken, path1)
+    .call();
+  totalContractUSD = totalContractUSD[totalContractUSD.length - 1];
+
+  totalContractUSD = BigNumber(totalContractUSD)
+      .plus(maxContractEth)
+      .div(1e18)
+      .toFixed(18);
+
+      setlpTokensContract(totalContractUSD)
 
     let _userWithdrawAmount = await router.methods
       .getAmountsOut(maxUserToken, path1)
@@ -1162,14 +1194,6 @@ const FarmAvaxFunc = ({
         .toString(10);
       setMyDepositedLpTokens(myDepositedLpTokens_formatted);
 
-      if (tvl2 == "0") {
-        setmyShare(0);
-      }
-      if (tvl2 != "0") {
-        let myShare2 = ((depositedTokens2 / tvl2) * 100).toFixed(2);
-        setmyShare(myShare2);
-      }
-
       setMyDepositedLpTokens(myDepositedLpTokens_formatted);
 
       let depositedTokensUSD_formatted = new BigNumber(
@@ -1253,6 +1277,18 @@ const FarmAvaxFunc = ({
 
    
   };
+
+  const getmyShare = async () => {
+    // myshare = (my lp deposit / total lp deposited) * 100
+    if (totalLPdeposited == "0" || totalLPdeposited == "") {
+      setmyShare(0);
+    }
+    if (totalLPdeposited != "0" && totalLPdeposited != "") {
+      let myShare2 = ((myDepositedLpTokens / totalLPdeposited) * 100).toFixed(2);
+      setmyShare(myShare2);
+    }
+  };
+
   const getUsdPerETH = () => {
     return the_graph_result.usd_per_eth || 0;
   };
@@ -1445,6 +1481,11 @@ const FarmAvaxFunc = ({
   useEffect(() => {
       getBalance();
   }, [coinbase, chainId]);
+
+  useEffect(() => {
+    getmyShare();
+    getTvlUsdInfo()
+  }, [totalLPdeposited, myDepositedLpTokens]);
 
   return (
     <div className="container-lg p-0">
@@ -2422,7 +2463,7 @@ const FarmAvaxFunc = ({
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">TVL USD</span>
                     <h6 className="stats-card-content">
-                      ${getFormattedNumber(tvlUSD, 3)} USD
+                       ${getFormattedNumber(lpTokensContract*priceUSD, 3)} USD
                     </h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
