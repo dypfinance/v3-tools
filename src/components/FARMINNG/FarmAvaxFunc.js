@@ -220,7 +220,7 @@ const FarmAvaxFunc = ({
   const [myDepositedLpTokens, setMyDepositedLpTokens] = useState("");
   const [myShare, setmyShare] = useState("");
   const [lpTokens, setlpTokens] = useState("");
-  const [totalLPdeposited, setTotalLpDeposited] = ('')
+  const [totalLPdeposited, setTotalLpDeposited] = useState('')
 
 
   const showModal = () => {
@@ -914,19 +914,19 @@ const FarmAvaxFunc = ({
   };
 
   const getLPTokens = async () => {
-    let router = await window.getPangolinRouterContract();
-    let WETH = await router.methods.WAVAX().call();
+    let router = await window.getPangolinRouterContract().catch((e)=>{console.log(e)});
+    let WETH = await router.methods.WAVAX().call().catch((e)=>{console.log(e)});
     let rewardTokenAddress = "0xBD100d061E120b2c67A24453CF6368E63f1Be056"; // idyp address
 
     let selectedBuybackToken = "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7"; // can only be WETH
-    let amount = await constant.depositedTokens(coinbase);
+    let amount = await constant.depositedTokens(coinbase).catch((e)=>{console.log(e)});
     let PAIR_ABI = window.PAIRAVAX_ABI;
     let pair_token_address = "0x66eecc97203704d9e2db4a431cb0e9ce92539d5a";
     let web3 = window.avaxWeb3;
 
     let pair = new web3.eth.Contract(PAIR_ABI, pair_token_address);
-    let totalSupply = await pair.methods.totalSupply().call();
-    let reserves = await pair.methods.getReserves().call();
+    let totalSupply = await pair.methods.totalSupply().call().catch((e)=>{console.log(e)});
+    let reserves = await pair.methods.getReserves().call().catch((e)=>{console.log(e)});
     let maxETH = reserves[0];
     let maxToken = reserves[1];
 
@@ -949,7 +949,7 @@ const FarmAvaxFunc = ({
 
     let _userWithdrawAmount = await router.methods
       .getAmountsOut(maxUserToken, path1)
-      .call();
+      .call().catch((e)=>{console.log(e);console.log('test')});
     _userWithdrawAmount = _userWithdrawAmount[_userWithdrawAmount.length - 1];
 
     _userWithdrawAmount = BigNumber(_userWithdrawAmount).plus(maxUserEth).div(1e18).toFixed(18);
@@ -1433,7 +1433,7 @@ const FarmAvaxFunc = ({
       refreshBalance();
     }, 1000);
     return () => clearInterval(interval);
-  }, [coinbase, coinbase2]);
+  }, [coinbase, coinbase2, chainId]);
 
   return (
     <div className="container-lg p-0">
@@ -2427,7 +2427,7 @@ const FarmAvaxFunc = ({
                     </h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
-                    <span className="stats-card-title">To be burnt</span>
+                    <span className="stats-card-title">To be disbursed/burnt</span>
                     <h6 className="stats-card-content">
                       {getFormattedNumber(tokensToBeDisbursedOrBurnt, 3)} iDYP
                     </h6>
@@ -2848,7 +2848,7 @@ const FarmAvaxFunc = ({
         <Modal
           title="calculator"
           modalId="calculatormodal"
-          setIsVisible={() => showCalculator(false)}
+          setIsVisible={() => setShowCalculator(false)}
           visible={showCalculator}
         >
           <div className="pools-calculator">
