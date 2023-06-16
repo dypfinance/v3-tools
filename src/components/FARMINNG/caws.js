@@ -209,7 +209,7 @@ const CawsDetails = ({
     // setunstakeAllStatus("Unstaking all please wait...");
 
     await stake_contract.methods
-      .withdraw(myStakes)
+    .emergencyWithdraw(myStakes)
       .send()
       .then(() => {
         // setunstakeAllStatus("Successfully unstaked all!");
