@@ -286,7 +286,7 @@ const NftStakeCheckListModal = ({
     setColor("#F13227");
 
     await stake_contract.methods
-      .withdraw(
+      .emergencyWithdraw(
         checkUnstakebtn === true
           ? nftIds.length === selectNftIds.length
             ? nftIds
