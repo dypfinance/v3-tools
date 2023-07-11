@@ -28317,7 +28317,7 @@ async function connectWallet(provider, walletType) {
         method: "eth_accounts",
       });
 
-      window.coinbase_address = coinbase_address.pop();
+      window.coinbase_address = coinbase_address[0];
       console.log(window.coinbase_address);
       return true;
     } catch (e) {
@@ -28351,7 +28351,7 @@ async function getCoinbase() {
     });
 
     if (coinbase && coinbase.length > 0) {
-      window.coinbase_address = coinbase.pop();
+      window.coinbase_address = coinbase[0];
       return window.coinbase_address.toLowerCase();
     }
   }
