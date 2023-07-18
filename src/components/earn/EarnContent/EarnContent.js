@@ -832,7 +832,33 @@ const EarnContent = ({
           <span className="farm-soon">New pools coming soon...</span>
         </div>
       ) 
-      : (
+      :  (option === "Farming" && stake === "eth") ? (
+          
+        <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
+          <img
+            src={
+              require("../../../assets/earnAssets/disabledFarming.svg").default
+            }
+            style={{ width: "150px", height: "150px" }}
+            alt=""
+          />
+          <h6 className="no-farms">No Farming pools available for Ethereum Chain</h6>
+          <span className="farm-soon">New pools coming soon...</span>
+        </div>
+      ) : (option === "Farming" && stake === "avax") ? (
+          
+        <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
+          <img
+            src={
+              require("../../../assets/earnAssets/disabledFarming.svg").default
+            }
+            style={{ width: "150px", height: "150px" }}
+            alt=""
+          />
+          <h6 className="no-farms">No Farming pools available for Avalanche Chain</h6>
+          <span className="farm-soon">New pools coming soon...</span>
+        </div>
+      ) : (
         <EarnTopPicks
           topList={option}
           listType={listStyle}
@@ -854,40 +880,7 @@ const EarnContent = ({
           expiredPools={expiredPools}
         />
       )}
-      {
-        option === "Farming" && stake === "eth" ? 
-          <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
-            <img
-              src={
-                require("../../../assets/earnAssets/disabledFarming.svg").default
-              }
-              style={{ width: "150px", height: "150px" }}
-              alt=""
-            />
-            <h6 className="no-farms">No Farming pools available for Ethereum Chain</h6>
-            <span className="farm-soon">New pools coming soon...</span>
-          </div>
-        :
-        null
-
-      }
-      {
-        option === "Farming" && stake === "avax" ? 
-          <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
-            <img
-              src={
-                require("../../../assets/earnAssets/disabledFarming.svg").default
-              }
-              style={{ width: "150px", height: "150px" }}
-              alt=""
-            />
-            <h6 className="no-farms">No Farming pools available for Avalanche Chain</h6>
-            <span className="farm-soon">New pools coming soon...</span>
-          </div>
-        :
-        null
-
-      }
+     
       <EarnFaq faqTypes={option} faqIndex={faqIndex} />
     </>
   );
