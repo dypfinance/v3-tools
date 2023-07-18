@@ -14632,6 +14632,7 @@ const EarnTopPicks = ({
             <div className="list-pools-container px-0">
               {cawsLandCard && topList === "Staking" && chain === "eth" && (
                 <TopPoolsListCard
+                theBnbPool={theBnbPool}
                   expired={false}
                   chain={chain}
                   top_pick={cawsLandCard.top_pick}
@@ -14667,6 +14668,8 @@ const EarnTopPicks = ({
               )}
               {landCard && topList === "Staking" && chain === "eth" && (
                 <TopPoolsListCard
+                theBnbPool={theBnbPool}
+
                   expired={false}
                   chain={chain}
                   top_pick={landCard.top_pick}
@@ -14703,6 +14706,8 @@ const EarnTopPicks = ({
                {topList === "Farming" &&
             chain === "bnb" && expiredPools === false &&
               <TopPoolsListCard
+              theBnbPool={theBnbPool}
+
               the_graph_resultbsc={the_graph_resultbsc}
                 expired={false}
                 chain={chain}
@@ -14743,6 +14748,8 @@ const EarnTopPicks = ({
 {topList === "Farming" &&
             chain === "avax" && expiredPools === false &&
               <TopPoolsListCard
+              theBnbPool={theBnbPool}
+
               the_graph_resultavax={the_graph_resultavax}
                 expired={false}
                 chain={chain}
@@ -14785,6 +14792,8 @@ const EarnTopPicks = ({
               {activePools.map((pool, index) => (
                 <TopPoolsListCard
                   key={index}
+                theBnbPool={theBnbPool}
+
                   expiredPools={expiredDYPPools}
                   activePools={activePools}
                   expired={false}
@@ -30438,6 +30447,8 @@ const EarnTopPicks = ({
             chain === "eth" &&
             cawsCard.map((pool, index) => (
               <TopPoolsListCard
+              theBnbPool={theBnbPool}
+
                 key={index}
                 expired={true}
                 chain={chain}
@@ -30494,6 +30505,8 @@ const EarnTopPicks = ({
           {expiredDYPPools.map((pool, index) => (
             <TopPoolsListCard
               key={index}
+              theBnbPool={theBnbPool}
+
               expiredPools={expiredDYPPools}
               activePools={activePools}
               expired={true}

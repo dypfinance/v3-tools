@@ -40,6 +40,7 @@ const TopPoolsListCard = ({
   lockTime,
   tvl,
   onShowDetailsClick,
+  theBnbPool,
   onHideDetailsClick,
   top_pick,
   isNewPool,
