@@ -1378,10 +1378,14 @@ export default class Subscription extends React.Component {
                 </div>
               </div>
             <hr className="form-divider my-4" />
-            <div className="d-flex flex-column gap-2 justify-content-end align-items-center">
+            <div className={`d-flex align-items-center ${!this.props.coinbase ? 'justify-content-between' : 'justify-content-end'}`}>
+            {!this.props.coinbase  &&
+              <span style={{color: 'rgb(227, 6 ,19)'}}>Please connect your wallet first</span>
+              }
+              <div className="d-flex flex-column gap-2 justify-content-end align-items-center">
                 <button
                   className={"btn success-btn px-4 align-self-end"}
-                  disabled={this.state.approveStatus === "fail" ? true : false}
+                  disabled={this.state.approveStatus === "fail"  || !this.props.coinbase ? true : false}
                   style={{
                     background:
                       this.state.approveStatus === "fail"
@@ -1415,6 +1419,8 @@ export default class Subscription extends React.Component {
                 </button>
                 <span style={{ color: "#E30613" }}>{this.state.status}</span>
               </div>
+            </div>
+            
           </div>
         </div>
       ) : (

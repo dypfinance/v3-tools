@@ -296,7 +296,7 @@ const Dashboard = ({
                     />
                   )} */}
 
-                  {network === 1 && (
+                  {network === 1 && loading === false ? (
                     <CawsWodCard
                       network={network.toString()}
                       onShowDetailsClick={() => {
@@ -313,7 +313,7 @@ const Dashboard = ({
                       expired={false}
                       tvl={"$" + getFormattedNumber(cawsLandCard.tvl_usd)}
                     />
-                  )}
+                  ) : null}
 
                   {topPools.length > 0 && loading === false ? (
                     topPools.slice(0, 2).map((item, index) => {
