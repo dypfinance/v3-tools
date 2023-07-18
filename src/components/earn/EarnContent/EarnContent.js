@@ -224,7 +224,8 @@ const EarnContent = ({
   const fetchFarmingApr = async () => {
     await axios.get(`https://api.dyp.finance/api/highest-apy`).then((res) => {
       setEthApr(res.data.highestAPY.highestAPY_ETH_V2);
-      setBnbApr(res.data.highestAPY.highestAPY_BSC_V2);
+      // setBnbApr(res.data.highestAPY.highestAPY_BSC_V2);
+      setBnbApr(138.44)
       setavaxApr(res.data.highestAPY.highestAPY_AVAX_V2);
     });
   };
@@ -310,6 +311,7 @@ const EarnContent = ({
     }else if (option === "Farming" && expiredPools === true) {
       // fetchFarmingApr();
       fetchFarmingApr();
+      setBnbApr(138.44)
     }
 
     if (option === "Staking" && stake === "eth") {
@@ -333,7 +335,11 @@ const EarnContent = ({
     } else {
       fetchVaultTvl();
     }
+  
   }, [option, stake, chainId]);
+
+
+  
 
   const checkNetworkId = () => {
     if (
