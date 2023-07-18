@@ -571,38 +571,40 @@ const EarnContent = ({
               <div className="col-12 col-lg-8 col-xl-6 d-flex gap-3 justify-content-around justify-content-lg-end justify-content-xl-center px-0 px-xl-2">
                 {option !== "Vault" ? (
                   <>
+                   {option !== "Farming" &&
                     <div
-                      className={`stake-item position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
-                        stake === "eth" ? "eth-item-active" : null
-                      }`}
-                      onClick={() => {
-                        setStake("eth");
-                        // fetchEthTvl();
-                      }}
-                    >
-                      <img
-                        src={stake === "eth" ? ethStakeActive : ethStake}
-                        alt=""
-                      />
-                      <div className="d-flex flex-column align-items-center align-items-lg-start">
-                        <p
-                          className="text-white"
-                          style={{ fontSize: "12px", fontWeight: "300" }}
-                        >
-                          Ethereum
-                        </p>
-                        <p
-                          style={{
-                            fontSize: "12px",
-                            fontWeight: "500",
-                            color: "#f7f7fc",
-                            whiteSpace: "pre",
-                          }}
-                        >
-                          {ethApr}% APR
-                        </p>
-                      </div>
+                    className={`stake-item position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
+                      stake === "eth" ? "eth-item-active" : null
+                    }`}
+                    onClick={() => {
+                      setStake("eth");
+                      // fetchEthTvl();
+                    }}
+                  >
+                    <img
+                      src={stake === "eth" ? ethStakeActive : ethStake}
+                      alt=""
+                    />
+                    <div className="d-flex flex-column align-items-center align-items-lg-start">
+                      <p
+                        className="text-white"
+                        style={{ fontSize: "12px", fontWeight: "300" }}
+                      >
+                        Ethereum
+                      </p>
+                      <p
+                        style={{
+                          fontSize: "12px",
+                          fontWeight: "500",
+                          color: "#f7f7fc",
+                          whiteSpace: "pre",
+                        }}
+                      >
+                        {ethApr}% APR
+                      </p>
                     </div>
+                  </div>
+                   }
                     <div
                       className={`stake-item position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
                         stake === "bnb" ? "bsc-item-active" : null
@@ -648,51 +650,53 @@ const EarnContent = ({
                         </p>
                       </div>
                     </div>
+                    {option !== "Farming" && 
                     <div
-                      className={`stake-item position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
-                        stake === "avax" ? "avax-item-active" : null
-                      }`}
-                      onClick={() => {
-                        setStake("avax");
-                        // fetchAvaxTvl();
-                      }}
-                    >
-                      {/* <div className="new-pools d-flex justify-content-start align-items-center gap-2 position-absolute">
+                    className={`stake-item position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
+                      stake === "avax" ? "avax-item-active" : null
+                    }`}
+                    onClick={() => {
+                      setStake("avax");
+                      // fetchAvaxTvl();
+                    }}
+                  >
+                    {/* <div className="new-pools d-flex justify-content-start align-items-center gap-2 position-absolute">
+                  <img
+                    src={addNewPools}
+                    alt=""
+                    style={{ width: "15px", height: "15px" }}
+                  />
+                  <span
+                    className="text-white d-none d-lg-flex"
+                    style={{ fontSize: "11px" }}
+                  >
+                    New Pools
+                  </span>
+                </div> */}
                     <img
-                      src={addNewPools}
+                      src={stake === "avax" ? avaxStakeActive : avaxStake}
                       alt=""
-                      style={{ width: "15px", height: "15px" }}
                     />
-                    <span
-                      className="text-white d-none d-lg-flex"
-                      style={{ fontSize: "11px" }}
-                    >
-                      New Pools
-                    </span>
-                  </div> */}
-                      <img
-                        src={stake === "avax" ? avaxStakeActive : avaxStake}
-                        alt=""
-                      />
-                      <div className="d-flex flex-column align-items-center align-items-lg-start">
-                        <p
-                          className="text-white"
-                          style={{ fontSize: "12px", fontWeight: "300" }}
-                        >
-                          Avalanche
-                        </p>
-                        <p
-                          style={{
-                            fontSize: "12px",
-                            fontWeight: "500",
-                            color: "#f7f7fc",
-                            whiteSpace: "pre",
-                          }}
-                        >
-                          {avaxApr}% APR
-                        </p>
-                      </div>
+                    <div className="d-flex flex-column align-items-center align-items-lg-start">
+                      <p
+                        className="text-white"
+                        style={{ fontSize: "12px", fontWeight: "300" }}
+                      >
+                        Avalanche
+                      </p>
+                      <p
+                        style={{
+                          fontSize: "12px",
+                          fontWeight: "500",
+                          color: "#f7f7fc",
+                          whiteSpace: "pre",
+                        }}
+                      >
+                        {avaxApr}% APR
+                      </p>
                     </div>
+                  </div>
+                    }
                   </>
                 ) : (
                   <>

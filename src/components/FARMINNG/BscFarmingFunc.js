@@ -73,7 +73,8 @@ const BscFarmingFunc = ({
   farming,
   lp_id,
   isConnected,
-  latestApr
+  latestApr,
+  wbnbPrice
 }) => {
   let { reward_token, BigNumber, alertify, reward_token_idyp, token_dypsbsc } =
     window;
@@ -225,7 +226,8 @@ const BscFarmingFunc = ({
   const [totalLPdeposited, setTotalLpDeposited] = useState("");
   const [priceUSD, setPriceUSD] = useState("");
   const [rewardsPendingClaim , setrewardsPendingClaim ] = useState("");
-
+  const [calculatedUsd, setCalculatedUsd] = useState(0)
+  const [calculatedWbnb, setCalculatedWbnb] = useState(0)
 
   const showModal = () => {
     setShow(true);
@@ -1383,13 +1385,14 @@ console.log(0, amountsPendingClaim, deadline)
   };
 
   const getApproxReturnUSD = () => {
-    let APY = getAPY();
-    let approxDays = approxDays;
-    let approxDeposit = approxDeposit;
+    // let APY = getAPY();
+    // let APY = latestApr;
+    // let approxDays = approxDays;
+    // let approxDeposit = approxDeposit;
     //let lp_data = the_graph_result.lp_data
     //let usd_per_lp = lp_data ? lp_data[lp_id].usd_per_lp : 0
-
-    return ((approxDeposit * APY) / 100 / 365) * approxDays;
+    setCalculatedUsd(approxDeposit * (1 + latestApr/ 100) ** (approxDays / 365))
+    // return ((approxDeposit * APY) / 100 / 365) * approxDays;
   };
 
   const convertTimestampToDate = (timestamp) => {
@@ -1449,6 +1452,7 @@ const checkDepositAmount = (amount) => {
       setCoinbase2(coinbase);
       getTotalLP();
       getLPTokens();
+      console.log(wbnbPrice, "wbnbprice");
     }
 
     getPriceDYP();
@@ -1717,7 +1721,7 @@ const checkDepositAmount = (amount) => {
           </a> */}
                   <h6
                     className="bottomitems"
-                    onClick={() => setShowCalculator(true)}
+                    onClick={() => {setShowCalculator(true); getApproxReturnUSD();}}
                   >
                     <img src={poolsCalculatorIcon} alt="" />
                     Calculator
@@ -1865,7 +1869,7 @@ const checkDepositAmount = (amount) => {
               <div className="d-flex flex-column gap-2 justify-content-between">
                 <div className="d-flex flex-column flex-lg-row align-items-center justify-content-between gap-2 position-relative">
                   <div className="position-absolute" style={{bottom: '-15px', left: '0px'}}>
-                    <span className="mb-0" style={{color: '#ff6232', fontSize: '10px'}}>The maximum deposit limit is 10 WBNB*</span>
+                    <span className="mb-0" style={{color: '#ff6232', fontSize: '10px'}}>The maximum deposit limit is 10 WBNB per transaction*</span>
                   </div>
                   <div className="d-flex align-items-center justify-content-between justify-content-lg-start gap-2 w-100">
                     <div className="input-container px-0">
@@ -2845,7 +2849,7 @@ const checkDepositAmount = (amount) => {
                   name="days"
                   placeholder="Days*"
                   value={approxDays}
-                  onChange={(e) => setApproxDays(e.target.value)}
+                  onChange={(e) => {setApproxDays(e.target.value); getApproxReturnUSD();}}
                 />
               </div>
               <div className="d-flex flex-column gap-3 w-50 me-5">
@@ -2865,18 +2869,21 @@ const checkDepositAmount = (amount) => {
                       : approxDeposit
                   }
                   onChange={(e) =>
-                    setApproxDeposit(
+                   { setApproxDeposit(
                       Number(e.target.value) > 0
                         ? e.target.value / LP_AMPLIFY_FACTOR
                         : e.target.value
-                    )
+                    );
+                    getApproxReturnUSD();
+                  }
                   }
                 />
               </div>
             </div>
             <div className="d-flex flex-column gap-2 mt-4">
               <h3 style={{ fontWeight: "500", fontSize: "39px" }}>
-                ${getFormattedNumber(getApproxReturnUSD(), 2, 6)} USD
+                
+                ${getFormattedNumber(calculatedUsd , 2, 6)} USD
               </h3>
               <h6
                 style={{
@@ -2886,7 +2893,7 @@ const checkDepositAmount = (amount) => {
                 }}
               >
                 Approx{" "}
-                {getFormattedNumber(getApproxReturnUSD() / getUsdPerETH())} WBNB
+                {getFormattedNumber(calculatedUsd / wbnbPrice)} WBNB
               </h6>
             </div>
             <div className="mt-4">
