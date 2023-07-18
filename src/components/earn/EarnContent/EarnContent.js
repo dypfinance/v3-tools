@@ -858,7 +858,7 @@ const EarnContent = ({
           <span className="farm-soon">New pools coming soon...</span>
         </div>
       ) 
-      :  (option === "Farming" && stake === "eth") ? (
+      :  (option === "Farming" && stake === "eth"  && expiredPools === false) ? (
           
         <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
           <img
@@ -871,7 +871,7 @@ const EarnContent = ({
           <h6 className="no-farms">No Farming pools available for Ethereum Chain</h6>
           <span className="farm-soon">New pools coming soon...</span>
         </div>
-      ) : (option === "Farming" && stake === "avax") ? (
+      ) : (option === "Farming" && stake === "avax"  && expiredPools === false) ? (
           
         <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
           <img
