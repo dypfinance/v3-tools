@@ -302,11 +302,14 @@ const EarnContent = ({
       fetchEthBuybackApr();
       fetchBnbBuybackApr();
       fetchAvaxBuybackApr();
-    } else if (option === "Farming") {
+    } else if (option === "Farming" && expiredPools === false) {
       // fetchFarmingApr();
       fetchBnbPool()
       setEthApr(0)
       setavaxApr(0)
+    }else if (option === "Farming" && expiredPools === true) {
+      // fetchFarmingApr();
+      fetchFarmingApr();
     }
 
     if (option === "Staking" && stake === "eth") {
@@ -571,7 +574,9 @@ const EarnContent = ({
               <div className="col-12 col-lg-8 col-xl-6 d-flex gap-3 justify-content-around justify-content-lg-end justify-content-xl-center px-0 px-xl-2">
                 {option !== "Vault" ? (
                   <>
-                   {option !== "Farming" &&
+                   {option === "Farming" && expiredPools === false ?
+                   null
+                   :
                     <div
                     className={`stake-item position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
                       stake === "eth" ? "eth-item-active" : null
@@ -650,7 +655,9 @@ const EarnContent = ({
                         </p>
                       </div>
                     </div>
-                    {option !== "Farming" && 
+                    {option === "Farming" && expiredPools === false ?
+                   null
+                   :
                     <div
                     className={`stake-item position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
                       stake === "avax" ? "avax-item-active" : null
