@@ -1002,11 +1002,18 @@ console.log(0, amountsPendingClaim, deadline)
   const handleSetMaxDeposit = (e) => {
     e.preventDefault();
 
-    setDepositAmount(
-      new BigNumber(selectedTokenBalance)
-        .div(10 ** selectedTokenDecimals)
-        .toFixed(selectedTokenDecimals)
-    );
+    if( new BigNumber(selectedTokenBalance)
+    .div(10 ** selectedTokenDecimals)
+    .toFixed(selectedTokenDecimals) > 13){
+      setDepositAmount(13)
+    }else{
+
+      setDepositAmount(
+        new BigNumber(selectedTokenBalance)
+          .div(10 ** selectedTokenDecimals)
+          .toFixed(selectedTokenDecimals)
+      );
+    }
   };
   const handleSetMaxWithdraw = (e) => {
     e.preventDefault();
@@ -1393,6 +1400,13 @@ console.log(0, amountsPendingClaim, deadline)
     return result;
   };
 
+const checkDepositAmount = (amount) => {
+  
+  if(Number(amount) > 13){
+    setDepositAmount(13)
+  }
+}
+
   const checkApproval = async (amount) => {
     let selectedBuybackToken = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"; // wbnb/wavax
 
@@ -1407,6 +1421,7 @@ console.log(0, amountsPendingClaim, deadline)
       });
 
     let result_formatted = new BigNumber(result).div(1e18).toFixed(6);
+
 
     if (
       Number(result_formatted) >= Number(amount) &&
@@ -1837,7 +1852,7 @@ console.log(0, amountsPendingClaim, deadline)
                     title={
                       <div className="tooltip-text">
                         {
-                          "Deposit your assets to the farming smart contract. 80% of your assets goes for creation of LP tokens and 20% goes for buying DYP and depositing to staking smart contract to generate rewards."
+                          "Deposit your assets to the farming smart contract. 80% of your assets goes to the creation of LP tokens in the iDYP/BNB Pool and 20% goes for buying DYP and depositing to staking smart contract to generate rewards."
                         }
                       </div>
                     }
@@ -1861,6 +1876,7 @@ console.log(0, amountsPendingClaim, deadline)
                         onChange={(e) => {
                           setDepositAmount(e.target.value);
                           checkApproval(e.target.value);
+                          checkDepositAmount(e.target.value)
                         }}
                         placeholder=" "
                         className="text-input"
