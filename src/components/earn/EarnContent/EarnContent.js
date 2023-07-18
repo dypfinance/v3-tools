@@ -73,6 +73,7 @@ const EarnContent = ({
   const [ethApr, setEthApr] = useState();
   const [bnbApr, setBnbApr] = useState();
   const [avaxApr, setavaxApr] = useState();
+  const [count, setCount] = useState(0)
 
   const fetchBnbPool = async () => {
     await axios
@@ -87,6 +88,16 @@ const EarnContent = ({
       
     })
     .catch((err) => console.error(err));
+  }
+
+  const toggleInactive = () => {
+    setCount(count + 1)
+    setExpiredPools(!expiredPools)
+    if(option === "Farming" && count % 2 === 0){
+      fetchFarmingApr()
+      setBnbApr(138)
+    }else if(option === "Farming" && count % 2 !== 0)
+    fetchBnbPool()
   }
 
   var tempTvl = 0;
@@ -225,7 +236,12 @@ const EarnContent = ({
     await axios.get(`https://api.dyp.finance/api/highest-apy`).then((res) => {
       setEthApr(res.data.highestAPY.highestAPY_ETH_V2);
       // setBnbApr(res.data.highestAPY.highestAPY_BSC_V2);
-      setBnbApr(138.44)
+      // if(expiredPools === true){
+
+      //   setBnbApr(138.44)
+      // }else{
+      //   fetchBnbPool();
+      // }
       setavaxApr(res.data.highestAPY.highestAPY_AVAX_V2);
     });
   };
@@ -311,7 +327,6 @@ const EarnContent = ({
     }else if (option === "Farming" && expiredPools === true) {
       // fetchFarmingApr();
       fetchFarmingApr();
-      setBnbApr(138.44)
     }
 
     if (option === "Staking" && stake === "eth") {
@@ -401,6 +416,17 @@ const EarnContent = ({
   };
 
 
+  useEffect(() => {
+    if(option === "Farming" && expiredPools === false){
+      setStake("bnb")
+      setStake("bnb")
+      setStake("bnb")
+      setStake("bnb")
+      setStake("bnb")
+    }
+  }, [option])
+  
+
   return (
     <>
       <div className="row justify-content-center w-100">
@@ -470,7 +496,10 @@ const EarnContent = ({
                 className={`pill-box ${myStakes && "pill-box-active"}`}
                 onClick={() => {
                   setMyStakes(!myStakes);
-                  setExpiredPools(!expiredPools);
+                  // setExpiredPools(!expiredPools);
+                  // option === "Farming" && fetchFarmingApr();
+                  toggleInactive()
+                  
                 }}
               >
                 <div className="pill"></div>
@@ -580,11 +609,9 @@ const EarnContent = ({
               <div className="col-12 col-lg-8 col-xl-6 d-flex gap-3 justify-content-around justify-content-lg-end justify-content-xl-center px-0 px-xl-2">
                 {option !== "Vault" ? (
                   <>
-                   {option === "Farming" && expiredPools === false ?
-                   null
-                   :
+                 
                     <div
-                    className={`stake-item position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
+                    className={`stake-item ${option === "Farming" && expiredPools === false &&  'blur-stake'} position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
                       stake === "eth" ? "eth-item-active" : null
                     }`}
                     onClick={() => {
@@ -615,7 +642,6 @@ const EarnContent = ({
                       </p>
                     </div>
                   </div>
-                   }
                     <div
                       className={`stake-item position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
                         stake === "bnb" ? "bsc-item-active" : null
@@ -661,11 +687,9 @@ const EarnContent = ({
                         </p>
                       </div>
                     </div>
-                    {option === "Farming" && expiredPools === false ?
-                   null
-                   :
+                   
                     <div
-                    className={`stake-item position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
+                    className={`stake-item ${option === "Farming" && expiredPools === false &&  'blur-stake'} position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
                       stake === "avax" ? "avax-item-active" : null
                     }`}
                     onClick={() => {
@@ -709,7 +733,6 @@ const EarnContent = ({
                       </p>
                     </div>
                   </div>
-                    }
                   </>
                 ) : (
                   <>

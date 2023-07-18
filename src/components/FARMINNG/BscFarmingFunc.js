@@ -2395,7 +2395,7 @@ const checkDepositAmount = (amount) => {
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">To be swapped</span>
                     <h6 className="stats-card-content">
-                      {getFormattedNumber(tokensToBeSwapped, 3)} DYP
+                      {getFormattedNumber(tokensToBeSwapped, 3)} iDYP
                     </h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
