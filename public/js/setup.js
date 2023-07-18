@@ -1760,7 +1760,7 @@ window.config = {
   "0x245978ea5EFc6eec44AF03032F6318a81190DCbF",
 
   constant_stakingnew_newbscactive1_address:
-  "0x543e3E97a93c77310f53B77E7Ba97d50a508A2b7",
+  "0x52b638ee4c0db759234f792b0ad59a8ce95737f3",
 
   constant_stakingnew_newavax5_address:
     "0x1cA9Fc98f3b997E08bC04691414e33B1835aa7e5",
@@ -2116,7 +2116,7 @@ window.config = {
 
   //farming bsc
 
-  farming_activebsc_1_address: "0x60C217019EC5c383D8468D6187796A6535996791",
+  farming_activebsc_1_address: "0x90124d8dcEd672986b05c17A4003f8f0a7F2E3AE",
   farming_activeavax_1_address: "0x6eE20ebFa4A169B2cB03bEB41DA9351a4a879676",
 
   farming_newbsc_1_address: "0x537dc4fee298ea79a7f65676735415f1e2882f92",

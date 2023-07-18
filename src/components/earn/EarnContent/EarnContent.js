@@ -281,12 +281,17 @@ const EarnContent = ({
       fetchEthApr();
       fetchAvaxApr();
       fetchBnbApr();
+      setEthApr(7.35)
+
     } else if (option === "Buyback") {
       fetchEthBuybackApr();
       fetchBnbBuybackApr();
       fetchAvaxBuybackApr();
     } else if (option === "Farming") {
-      fetchFarmingApr();
+      // fetchFarmingApr();
+      setBnbApr(3)
+      setEthApr(0)
+      setavaxApr(0)
     }
 
     if (option === "Staking" && stake === "eth") {
@@ -527,25 +532,27 @@ const EarnContent = ({
           </div>
         )}
 
-        {option !== "Farming" && option !== "Vault" && (
+        {option !== "Vault" && (
           <>
             <div
               className={`row align-items-center gap-5 gap-lg-0 justify-content-between px-0 `}
               style={{ minHeight: "55px" }}
             >
               <div className="col-12 col-lg-4 col-xl-3 px-0">
-                <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
-                  <span style={{ fontWeight: "300", fontSize: "13px" }}>
-                    Total value locked
-                  </span>
-                  <h6
-                    className="text-white"
-                    style={{ fontWeight: "600", fontSize: "17px" }}
-                  >
-                    ${getFormattedNumber(tvl)}
-                  </h6>
-                </div>
+             {option !== "Farming" && 
+              <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
+                <span style={{ fontWeight: "300", fontSize: "13px" }}>
+                  Total value locked
+                </span>
+                <h6
+                  className="text-white"
+                  style={{ fontWeight: "600", fontSize: "17px" }}
+                >
+                  ${getFormattedNumber(tvl)}
+                </h6>
               </div>
+             }
+            </div>
               <div className="col-12 col-lg-8 col-xl-6 d-flex gap-3 justify-content-around justify-content-lg-end justify-content-xl-center px-0 px-xl-2">
                 {option !== "Vault" ? (
                   <>
@@ -577,7 +584,7 @@ const EarnContent = ({
                             whiteSpace: "pre",
                           }}
                         >
-                          7.35% APR
+                          {ethApr}% APR
                         </p>
                       </div>
                     </div>
@@ -825,19 +832,7 @@ const EarnContent = ({
           <span className="farm-soon">New pools coming soon...</span>
         </div>
       ) 
-     : (option === "Farming" && networkId === "1") ? (
-        <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
-          <img
-            src={
-              require("../../../assets/earnAssets/disabledFarming.svg").default
-            }
-            style={{ width: "150px", height: "150px" }}
-            alt=""
-          />
-          <h6 className="no-farms">No Farming pools available</h6>
-          <span className="farm-soon">New pools coming soon...</span>
-        </div>
-      ) : (
+      : (
         <EarnTopPicks
           topList={option}
           listType={listStyle}
@@ -859,6 +854,40 @@ const EarnContent = ({
           expiredPools={expiredPools}
         />
       )}
+      {
+        option === "Farming" && stake === "eth" ? 
+          <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
+            <img
+              src={
+                require("../../../assets/earnAssets/disabledFarming.svg").default
+              }
+              style={{ width: "150px", height: "150px" }}
+              alt=""
+            />
+            <h6 className="no-farms">No Farming pools available for Ethereum Chain</h6>
+            <span className="farm-soon">New pools coming soon...</span>
+          </div>
+        :
+        null
+
+      }
+      {
+        option === "Farming" && stake === "avax" ? 
+          <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
+            <img
+              src={
+                require("../../../assets/earnAssets/disabledFarming.svg").default
+              }
+              style={{ width: "150px", height: "150px" }}
+              alt=""
+            />
+            <h6 className="no-farms">No Farming pools available for Avalanche Chain</h6>
+            <span className="farm-soon">New pools coming soon...</span>
+          </div>
+        :
+        null
+
+      }
       <EarnFaq faqTypes={option} faqIndex={faqIndex} />
     </>
   );

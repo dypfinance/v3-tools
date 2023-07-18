@@ -614,28 +614,29 @@ const TopPoolsListCard = ({
         : showDetails &&
           topList === "Farming" &&
           chain === "avax"  ? (
-            <FarmAvaxFunc
-            is_wallet_connected={isConnected}
-            coinbase={coinbase}
-            the_graph_result={the_graph_resultavax}
-            lp_id={LP_IDAVAX_Array[cardIndex]}
-            chainId={chainId}
-            handleConnection={handleConnection}
-            expired={false}
-            handleSwitchNetwork={handleSwitchNetwork}
-            liquidity={wbnb_address}
-            constant={window.farming_activeavax_1}
-                      staking={window.constant_staking_newavaxactive1}
-            token={window.token_newavax}
-            lp_symbol={"USD"}
-            lock="3 Days"
-            rebase_factor={1}
-            expiration_time="7 June 2024"
-            fee="0.4"
-            finalApr={'3'}
-            lockTime={3}
-            listType={listType}
-          />
+          //   <FarmAvaxFunc
+          //   is_wallet_connected={isConnected}
+          //   coinbase={coinbase}
+          //   the_graph_result={the_graph_resultavax}
+          //   lp_id={LP_IDAVAX_Array[cardIndex]}
+          //   chainId={chainId}
+          //   handleConnection={handleConnection}
+          //   expired={false}
+          //   handleSwitchNetwork={handleSwitchNetwork}
+          //   liquidity={wbnb_address}
+          //   constant={window.farming_activeavax_1}
+          //             staking={window.constant_staking_newavaxactive1}
+          //   token={window.token_newavax}
+          //   lp_symbol={"USD"}
+          //   lock="3 Days"
+          //   rebase_factor={1}
+          //   expiration_time="7 June 2024"
+          //   fee="0.4"
+          //   finalApr={'3'}
+          //   lockTime={3}
+          //   listType={listType}
+          // />
+          null
         ) : showDetails &&
             activePools &&
             topList === "Staking" &&
