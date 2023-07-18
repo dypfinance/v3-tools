@@ -1994,7 +1994,7 @@ const checkDepositAmount = (amount) => {
               <div className="d-flex flex-column gap-2 justify-content-between">
                 <div className="d-flex align-items-center justify-content-between gap-2"></div>
                 <div className="form-row d-flex flex-column flex-lg-row gap-2 align-items-center align-items-lg-end justify-content-between">
-                  <div className="d-flex align-items-center justify-content-between justify-content-lg-center gap-5">
+                  <div className="d-flex align-items-center justify-content-between justify-content-lg-center gap-3" style={{maxWidth: '65%'}}>
                     <div
                       className="gap-1 claimreward-wrapper"
                       onClick={() => {
@@ -2002,6 +2002,7 @@ const checkDepositAmount = (amount) => {
                       }}
                       style={{
                         // padding: "3px",
+                        maxWidth: '45%',
                         background:
                           selectedPool === "wbnb" ? "#141333" : "#26264F",
                         border:
@@ -2089,6 +2090,7 @@ const checkDepositAmount = (amount) => {
                     <div
                       className="gap-1 claimreward-wrapper"
                       style={{
+                        maxWidth: '45%',
                         background:
                           selectedPool === "dyp" ? "#141333" : "#26264F",
                         border:
