@@ -1778,7 +1778,7 @@ const checkDepositAmount = (amount) => {
       </button>
     </div> */}
             <div
-              className={`otherside-border col-12 col-md-12 col-lg-4 pb-3  ${
+              className={`otherside-border col-12 col-md-12 col-lg-4 pb-4  ${
                 chainId !== "56" || expired === true ? "blurrypool" : ""
               }`}
             >
@@ -1864,7 +1864,7 @@ const checkDepositAmount = (amount) => {
               </div>
               <div className="d-flex flex-column gap-2 justify-content-between">
                 <div className="d-flex flex-column flex-lg-row align-items-center justify-content-between gap-2 position-relative">
-                  <div className="position-absolute" style={{bottom: '-11px', left: '0px'}}>
+                  <div className="position-absolute" style={{bottom: '-15px', left: '0px'}}>
                     <span className="mb-0" style={{color: '#ff6232', fontSize: '10px'}}>The maximum deposit limit is 10 WBNB*</span>
                   </div>
                   <div className="d-flex align-items-center justify-content-between justify-content-lg-start gap-2 w-100">
