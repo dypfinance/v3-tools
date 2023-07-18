@@ -74,7 +74,8 @@ const BscFarmingFunc = ({
   lp_id,
   isConnected,
   latestApr,
-  wbnbPrice
+  wbnbPrice,
+  latestTvl
 }) => {
   let { reward_token, BigNumber, alertify, reward_token_idyp, token_dypsbsc } =
     window;
@@ -2383,7 +2384,7 @@ const checkDepositAmount = (amount) => {
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">TVL USD</span>
                     <h6 className="stats-card-content">
-                      ${getFormattedNumber(lpTokensContract*priceUSD, 3)} USD
+                      ${getFormattedNumber(latestTvl, 2)} USD
                     </h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">

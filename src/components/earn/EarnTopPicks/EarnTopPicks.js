@@ -1064,6 +1064,7 @@ const EarnTopPicks = ({
                         is_wallet_connected={isConnected}
                         wbnbPrice={wbnbPrice}
                         coinbase={coinbase}
+                        latestTvl={theBnbPool.tvl_usd}
                         the_graph_result={the_graph_resultbsc}
                         lp_id={LP_IDBNB_Array[cardIndex]}
                         chainId={chainId}
@@ -4062,8 +4063,10 @@ const EarnTopPicks = ({
                   <BscFarmingFunc
                   is_wallet_connected={isConnected}
                   wbnbPrice={wbnbPrice}
-
                   coinbase={coinbase}
+
+                  latestTvl={theBnbPool.tvl_usd}
+
                   the_graph_result={the_graph_resultbsc}
                   lp_id={LP_IDBNB_Array[cardIndex]}
                   chainId={chainId}
@@ -8056,8 +8059,10 @@ const EarnTopPicks = ({
                       is_wallet_connected={isConnected}
                       latestApr={theBnbPool.apy_percent}
                       wbnbPrice={wbnbPrice}
-
                       coinbase={coinbase}
+
+                      latestTvl={theBnbPool.tvl_usd}
+
                       the_graph_result={the_graph_resultbsc}
                       lp_id={LP_IDBNB_Array[cardIndex]}
                       chainId={chainId}
