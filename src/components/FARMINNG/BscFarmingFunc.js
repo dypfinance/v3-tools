@@ -73,6 +73,7 @@ const BscFarmingFunc = ({
   farming,
   lp_id,
   isConnected,
+  latestApr
 }) => {
   let { reward_token, BigNumber, alertify, reward_token_idyp, token_dypsbsc } =
     window;
@@ -1653,7 +1654,7 @@ const checkDepositAmount = (amount) => {
                   <div className="d-flex align-items-center justify-content-between gap-2">
                     <h6 className="earnrewards-text">APR:</h6>
                     <h6 className="earnrewards-token d-flex align-items-center gap-1">
-                      {finalApr}%
+                      {getFormattedNumber(latestApr, 0)}%
                       <ClickAwayListener onClickAway={aprClose}>
                         <Tooltip
                           open={aprTooltip}
@@ -1777,7 +1778,7 @@ const checkDepositAmount = (amount) => {
       </button>
     </div> */}
             <div
-              className={`otherside-border col-12 col-md-12 col-lg-4  ${
+              className={`otherside-border col-12 col-md-12 col-lg-4 pb-3  ${
                 chainId !== "56" || expired === true ? "blurrypool" : ""
               }`}
             >
@@ -1863,7 +1864,7 @@ const checkDepositAmount = (amount) => {
               </div>
               <div className="d-flex flex-column gap-2 justify-content-between">
                 <div className="d-flex flex-column flex-lg-row align-items-center justify-content-between gap-2 position-relative">
-                  <div className="position-absolute" style={{top: '-15px'}}>
+                  <div className="position-absolute" style={{bottom: '-11px', left: '0px'}}>
                     <span className="mb-0" style={{color: '#ff6232', fontSize: '10px'}}>The maximum deposit limit is 10 WBNB*</span>
                   </div>
                   <div className="d-flex align-items-center justify-content-between justify-content-lg-start gap-2 w-100">

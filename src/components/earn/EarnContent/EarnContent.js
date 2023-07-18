@@ -74,6 +74,21 @@ const EarnContent = ({
   const [bnbApr, setBnbApr] = useState();
   const [avaxApr, setavaxApr] = useState();
 
+  const fetchBnbPool = async () => {
+    await axios
+    .get("https://api.dyp.finance/api/the_graph_bsc_v2")
+    .then((res) => {
+      let temparray = Object.entries(res.data.the_graph_bsc_v2.lp_data);
+      let bnbpool = temparray.find((item) => {
+        return item[0] === "0x1bc61d08a300892e784ed37b2d0e63c85d1d57fb-0x90124d8dced672986b05c17a4003f8f0a7f2e3ae"
+      })
+      setBnbApr(bnbpool[1].apy_percent)
+      console.log(bnbpool[1], "bnbpool");
+      
+    })
+    .catch((err) => console.error(err));
+  }
+
   var tempTvl = 0;
   var farming = [];
 
@@ -289,7 +304,7 @@ const EarnContent = ({
       fetchAvaxBuybackApr();
     } else if (option === "Farming") {
       // fetchFarmingApr();
-      setBnbApr(3)
+      fetchBnbPool()
       setEthApr(0)
       setavaxApr(0)
     }
@@ -629,7 +644,7 @@ const EarnContent = ({
                             whiteSpace: "pre",
                           }}
                         >
-                          {bnbApr}% APR
+                          {getFormattedNumber(bnbApr, 0)}% APR
                         </p>
                       </div>
                     </div>

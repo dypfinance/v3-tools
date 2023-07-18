@@ -591,6 +591,8 @@ const TopPoolsListCard = ({
             <BscFarmingFunc
             is_wallet_connected={isConnected}
             coinbase={coinbase}
+            latestApr={theBnbPool.apy_percent}
+
             the_graph_result={the_graph_resultbsc}
             lp_id={LP_IDBNB_Array[cardIndex]}
             chainId={chainId}

@@ -1070,6 +1070,7 @@ const EarnTopPicks = ({
                         expiration_time="7 June 2024"
                         fee="0.4"
                         finalApr={activePools[cardIndex]?.apy_percent}
+                        latestApr={theBnbPool.apy_percent}
                         lockTime={3}
                         listType={listType}
                       />
@@ -4056,6 +4057,8 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   expired={false}
                   handleSwitchNetwork={handleSwitchNetwork}
+                  latestApr={theBnbPool.apy_percent}
+
                   liquidity={wbsc_address}
                   constant={window.farming_activebsc_1}
                   staking={window.constant_staking_newbscactive1}
@@ -8038,6 +8041,8 @@ const EarnTopPicks = ({
                   ) : activeCard && topList === "Farming" && chain === "bnb" ? (
                     <BscFarmingFunc
                       is_wallet_connected={isConnected}
+                      latestApr={theBnbPool.apy_percent}
+
                       coinbase={coinbase}
                       the_graph_result={the_graph_resultbsc}
                       lp_id={LP_IDBNB_Array[cardIndex]}
