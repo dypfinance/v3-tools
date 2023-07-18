@@ -757,12 +757,12 @@ const EarnTopPicks = ({
     fetchStakingData();
   }, [topList, chain, coinbase, networkId, chainId, expiredPools, listType]);
  
-  useEffect(() => {
-    console.log("Helloooo");
-    setActiveCard(null)
+  // useEffect(() => {
+  //   console.log("Helloooo");
+  //   setActiveCard(null)
  
-   setDetails(null)
-  }, [topList]);
+  //  setDetails(null)
+  // }, [topList]);
 
 
   const handleCardIndexStake = (index) => {
