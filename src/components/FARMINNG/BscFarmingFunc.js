@@ -1004,8 +1004,8 @@ console.log(0, amountsPendingClaim, deadline)
 
     if( new BigNumber(selectedTokenBalance)
     .div(10 ** selectedTokenDecimals)
-    .toFixed(selectedTokenDecimals) > 13){
-      setDepositAmount(13)
+    .toFixed(selectedTokenDecimals) > 10){
+      setDepositAmount(10)
     }else{
 
       setDepositAmount(
@@ -1402,8 +1402,8 @@ console.log(0, amountsPendingClaim, deadline)
 
 const checkDepositAmount = (amount) => {
   
-  if(Number(amount) > 13){
-    setDepositAmount(13)
+  if(Number(amount) > 10){
+    setDepositAmount(10)
   }
 }
 
@@ -1862,7 +1862,10 @@ const checkDepositAmount = (amount) => {
                 </ClickAwayListener>
               </div>
               <div className="d-flex flex-column gap-2 justify-content-between">
-                <div className="d-flex flex-column flex-lg-row align-items-center justify-content-between gap-2">
+                <div className="d-flex flex-column flex-lg-row align-items-center justify-content-between gap-2 position-relative">
+                  <div className="position-absolute" style={{top: '-15px'}}>
+                    <span className="mb-0" style={{color: '#ff6232', fontSize: '10px'}}>The maximum deposit limit is 10 WBNB*</span>
+                  </div>
                   <div className="d-flex align-items-center justify-content-between justify-content-lg-start gap-2 w-100">
                     <div className="input-container px-0">
                       <input

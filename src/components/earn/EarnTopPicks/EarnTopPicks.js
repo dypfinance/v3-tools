@@ -115,6 +115,7 @@ const EarnTopPicks = ({
   const [userPools, setuserPools] = useState([]);
   const [cawsLandCard, setCawsLandCard] = useState([]);
   const [customIndex, setCustomIndex] = useState(3);
+  const [theBnbPool, setTheBnbPool] = useState({})
   const [tvlTotal, setTvlTotal] = useState();
 
   var farming = [];
@@ -258,6 +259,11 @@ const EarnTopPicks = ({
       .get("https://api.dyp.finance/api/the_graph_bsc_v2")
       .then((res) => {
         let temparray = Object.entries(res.data.the_graph_bsc_v2.lp_data);
+        let bnbpool = temparray.filter((item) => {
+          return item.id === "0x1bc61d08a300892e784ed37b2d0e63c85d1d57fb-0x90124d8dced672986b05c17a4003f8f0a7f2e3ae"
+        })
+        setTheBnbPool(bnbpool)
+        console.log(temparray, "bnbpool");
         let farming2 = [];
         temparray.map((item) => {
           farming2.push(item[1]);
@@ -275,6 +281,21 @@ const EarnTopPicks = ({
       })
       .catch((err) => console.error(err));
   };
+
+  const fetchBnbPool = async () => {
+    await axios
+    .get("https://api.dyp.finance/api/the_graph_bsc_v2")
+    .then((res) => {
+      let temparray = Object.entries(res.data.the_graph_bsc_v2.lp_data);
+      let bnbpool = temparray.find((item) => {
+        return item[0] === "0x1bc61d08a300892e784ed37b2d0e63c85d1d57fb-0x90124d8dced672986b05c17a4003f8f0a7f2e3ae"
+      })
+      setTheBnbPool(bnbpool[1])
+      console.log(bnbpool[1], "bnbpool");
+      
+    })
+    .catch((err) => console.error(err));
+  }
   const fetchAvaxFarming = async () => {
     await axios
       .get("https://api.dyp.finance/api/the_graph_avax_v2")
@@ -706,6 +727,7 @@ const EarnTopPicks = ({
     }
     setShowDetails(false);
     setListing(listType);
+    fetchBnbPool();
   }, [
     topList,
     listType,
@@ -920,8 +942,8 @@ const EarnTopPicks = ({
                         chain={chain}
                         top_pick={false}
                         tokenName={"WBNB"}
-                        apr={"3%"}
-                        tvl={"$20,000"}
+                        apr={`${getFormattedNumber(theBnbPool.apy_percent, 0)}%`}
+                        tvl={`$${getFormattedNumber(theBnbPool.tvl_usd, 2)}`}
                         lockTime={"3 Days"}
                         tokenLogo={
                           'bnb.svg'
@@ -3816,8 +3838,8 @@ const EarnTopPicks = ({
                       chain={chain}
                       top_pick={false}
                       tokenName={"WBNB"}
-                      apr={"3%"}
-                      tvl={"$20,000"}
+                      apr={`${getFormattedNumber(theBnbPool.apy_percent, 0)}%`}
+                      tvl={`$${getFormattedNumber(theBnbPool.tvl_usd, 2)}`}
                       lockTime={"3 Days"}
                       tokenLogo={
                        "bnb.svg"
@@ -7807,8 +7829,8 @@ const EarnTopPicks = ({
                         chain={chain}
                         top_pick={false}
                         tokenName={"WBNB"}
-                        apr={"3%"}
-                        tvl={"$20,000"}
+                        apr={`${getFormattedNumber(theBnbPool.apy_percent, 0)}%`}
+                        tvl={`$${getFormattedNumber(theBnbPool.tvl_usd, 2)}`}
                         lockTime={"3 Days"}
                         tokenLogo={
                          "bnb.svg"
