@@ -2201,7 +2201,7 @@ const EarnTopPicks = ({
                 chain === "bnb" ? (
                 <StakeBsc
                   lp_id={LP_IDBNB_Array[cardIndex]}
-                  staking={window.constant_stakingbsc_new11}
+                  staking={window.constant_stakingbsc_new14}
                   apr={
                     expiredPools === false
                       ? activePools[cardIndex]?.apy_percent
@@ -2276,7 +2276,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={false}
-                staking={window.constant_staking_new11}
+                staking={window.constant_staking_new13}
                 listType={listType}
                 finalApr={
                   expiredPools === false
@@ -3102,7 +3102,7 @@ const EarnTopPicks = ({
                 chain === "bnb" ? (
                 <StakeBsc
                   lp_id={LP_IDBNB_Array[cardIndex]}
-                  staking={window.constant_stakingbsc_new11}
+                  staking={window.constant_stakingbsc_new14}
                   apr={
                     expiredPools === false
                       ? activePools[cardIndex]?.apy_percent
@@ -3177,7 +3177,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={false}
-                staking={window.constant_staking_new11}
+                staking={window.constant_staking_new13}
                 listType={listType}
                 finalApr={
                   expiredPools === false
@@ -5648,7 +5648,7 @@ const EarnTopPicks = ({
                 chain === "bnb" ? (
                 <StakeBsc
                   lp_id={LP_IDBNB_Array[cardIndex]}
-                  staking={window.constant_stakingbsc_new11}
+                  staking={window.constant_stakingbsc_new14}
                   apr={
                     expiredPools === false
                       ? activePools[cardIndex]?.apy_percent
@@ -5723,7 +5723,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={false}
-                staking={window.constant_staking_new11}
+                staking={window.constant_staking_new13}
                 listType={listType}
                 finalApr={
                   expiredPools === false
@@ -6369,7 +6369,7 @@ const EarnTopPicks = ({
                 chain === "bnb" ? (
                 <StakeBsc
                   lp_id={LP_IDBNB_Array[cardIndex]}
-                  staking={window.constant_stakingbsc_new11}
+                  staking={window.constant_stakingbsc_new14}
                   apr={
                     expiredPools === false
                       ? activePools[cardIndex]?.apy_percent
@@ -6444,7 +6444,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={false}
-                staking={window.constant_staking_new11}
+                staking={window.constant_staking_new13}
                 listType={listType}
                 finalApr={
                   expiredPools === false
@@ -7146,7 +7146,7 @@ const EarnTopPicks = ({
                 chain === "bnb" ? (
                 <StakeBsc
                   lp_id={LP_IDBNB_Array[cardIndex]}
-                  staking={window.constant_stakingbsc_new11}
+                  staking={window.constant_stakingbsc_new14}
                   apr={
                     expiredPools === false
                       ? activePools[cardIndex]?.apy_percent
@@ -7221,7 +7221,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={false}
-                staking={window.constant_staking_new11}
+                staking={window.constant_staking_new13}
                 listType={listType}
                 finalApr={
                   expiredPools === false
@@ -7813,7 +7813,7 @@ const EarnTopPicks = ({
                 chain === "bnb" ? (
                 <StakeBsc
                   lp_id={LP_IDBNB_Array[cardIndex]}
-                  staking={window.constant_stakingbsc_new11}
+                  staking={window.constant_stakingbsc_new14}
                   apr={
                     expiredPools === false
                       ? activePools[cardIndex]?.apy_percent
@@ -7888,7 +7888,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={false}
-                staking={window.constant_staking_new11}
+                staking={window.constant_staking_new13}
                 listType={listType}
                 finalApr={
                   expiredPools === false
@@ -8479,7 +8479,7 @@ const EarnTopPicks = ({
                 chain === "bnb" ? (
                 <StakeBsc
                   lp_id={LP_IDBNB_Array[cardIndex]}
-                  staking={window.constant_stakingbsc_new11}
+                  staking={window.constant_stakingbsc_new14}
                   apr={
                     expiredPools === false
                       ? activePools[cardIndex]?.apy_percent
@@ -8554,7 +8554,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={false}
-                staking={window.constant_staking_new11}
+                staking={window.constant_staking_new13}
                 listType={listType}
                 finalApr={
                   expiredPools === false
@@ -9278,7 +9278,7 @@ const EarnTopPicks = ({
                   chain === "bnb" ? (
                   <StakeBsc
                     lp_id={LP_IDBNB_Array[cardIndex]}
-                    staking={window.constant_stakingbsc_new11}
+                    staking={window.constant_stakingbsc_new14}
                     apr={
                       expiredPools === false
                         ? activePools[cardIndex]?.apy_percent
@@ -10197,7 +10197,7 @@ const EarnTopPicks = ({
                   chain === "bnb" ? (
                   <StakeBsc
                     lp_id={LP_IDBNB_Array[cardIndex]}
-                    staking={window.constant_stakingbsc_new11}
+                    staking={window.constant_stakingbsc_new14}
                     apr={
                       expiredPools === false
                         ? activePools[cardIndex]?.apy_percent
@@ -10272,7 +10272,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={false}
-                  staking={window.constant_staking_new11}
+                  staking={window.constant_staking_new13}
                   listType={listType}
                   finalApr={
                     expiredPools === false
@@ -10994,7 +10994,7 @@ const EarnTopPicks = ({
                   chain === "bnb" ? (
                   <StakeBsc
                     lp_id={LP_IDBNB_Array[cardIndex]}
-                    staking={window.constant_stakingbsc_new11}
+                    staking={window.constant_stakingbsc_new14}
                     apr={
                       expiredPools === false
                         ? activePools[cardIndex]?.apy_percent
@@ -11069,7 +11069,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={false}
-                  staking={window.constant_staking_new11}
+                  staking={window.constant_staking_new13}
                   listType={listType}
                   finalApr={
                     expiredPools === false
@@ -11791,7 +11791,7 @@ const EarnTopPicks = ({
                   chain === "bnb" ? (
                   <StakeBsc
                     lp_id={LP_IDBNB_Array[cardIndex]}
-                    staking={window.constant_stakingbsc_new11}
+                    staking={window.constant_stakingbsc_new14}
                     apr={
                       expiredPools === false
                         ? activePools[cardIndex]?.apy_percent
@@ -11866,7 +11866,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={false}
-                  staking={window.constant_staking_new11}
+                  staking={window.constant_staking_new13}
                   listType={listType}
                   finalApr={
                     expiredPools === false
@@ -12591,7 +12591,7 @@ const EarnTopPicks = ({
                   chain === "bnb" ? (
                   <StakeBsc
                     lp_id={LP_IDBNB_Array[cardIndex]}
-                    staking={window.constant_stakingbsc_new11}
+                    staking={window.constant_stakingbsc_new14}
                     apr={
                       expiredPools === false
                         ? activePools[cardIndex]?.apy_percent
@@ -12666,7 +12666,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={false}
-                  staking={window.constant_staking_new11}
+                  staking={window.constant_staking_new13}
                   listType={listType}
                   finalApr={
                     expiredPools === false
@@ -13348,7 +13348,7 @@ const EarnTopPicks = ({
                   chain === "bnb" ? (
                   <StakeBsc
                     lp_id={LP_IDBNB_Array[cardIndex]}
-                    staking={window.constant_stakingbsc_new11}
+                    staking={window.constant_stakingbsc_new14}
                     apr={
                       expiredPools === false
                         ? activePools[cardIndex]?.apy_percent
@@ -13423,7 +13423,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={false}
-                  staking={window.constant_staking_new11}
+                  staking={window.constant_staking_new13}
                   listType={listType}
                   finalApr={
                     expiredPools === false
@@ -14089,7 +14089,7 @@ const EarnTopPicks = ({
                   chain === "bnb" ? (
                   <StakeBsc
                     lp_id={LP_IDBNB_Array[cardIndex]}
-                    staking={window.constant_stakingbsc_new11}
+                    staking={window.constant_stakingbsc_new14}
                     apr={
                       expiredPools === false
                         ? activePools[cardIndex]?.apy_percent
@@ -14164,7 +14164,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={false}
-                  staking={window.constant_staking_new11}
+                  staking={window.constant_staking_new13}
                   listType={listType}
                   finalApr={
                     expiredPools === false
@@ -14768,7 +14768,7 @@ const EarnTopPicks = ({
                   chain === "bnb" ? (
                   <StakeBsc
                     lp_id={LP_IDBNB_Array[cardIndex]}
-                    staking={window.constant_stakingbsc_new11}
+                    staking={window.constant_stakingbsc_new14}
                     apr={
                       expiredPools === false
                         ? activePools[cardIndex]?.apy_percent
@@ -14843,7 +14843,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={false}
-                  staking={window.constant_staking_new11}
+                  staking={window.constant_staking_new13}
                   listType={listType}
                   finalApr={
                     expiredPools === false
@@ -15424,7 +15424,7 @@ const EarnTopPicks = ({
                   chain === "bnb" ? (
                   <StakeBsc
                     lp_id={LP_IDBNB_Array[cardIndex]}
-                    staking={window.constant_stakingbsc_new11}
+                    staking={window.constant_stakingbsc_new14}
                     apr={
                       expiredPools === false
                         ? activePools[cardIndex]?.apy_percent
@@ -15499,7 +15499,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={false}
-                  staking={window.constant_staking_new11}
+                  staking={window.constant_staking_new13}
                   listType={listType}
                   finalApr={
                     expiredPools === false
@@ -16016,7 +16016,7 @@ const EarnTopPicks = ({
                   chain === "bnb" ? (
                   <StakeBsc
                     lp_id={LP_IDBNB_Array[cardIndex]}
-                    staking={window.constant_stakingbsc_new11}
+                    staking={window.constant_stakingbsc_new14}
                     apr={
                       expiredPools === false
                         ? activePools[cardIndex]?.apy_percent
@@ -16091,7 +16091,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={false}
-                  staking={window.constant_staking_new11}
+                  staking={window.constant_staking_new13}
                   listType={listType}
                   finalApr={
                     expiredPools === false
@@ -16607,7 +16607,7 @@ const EarnTopPicks = ({
                   chain === "bnb" ? (
                   <StakeBsc
                     lp_id={LP_IDBNB_Array[cardIndex]}
-                    staking={window.constant_stakingbsc_new11}
+                    staking={window.constant_stakingbsc_new14}
                     apr={
                       expiredPools === false
                         ? activePools[cardIndex]?.apy_percent
@@ -16682,7 +16682,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={false}
-                  staking={window.constant_staking_new11}
+                  staking={window.constant_staking_new13}
                   listType={listType}
                   finalApr={
                     expiredPools === false
@@ -17201,7 +17201,7 @@ const EarnTopPicks = ({
                   chain === "bnb" ? (
                   <StakeBsc
                     lp_id={LP_IDBNB_Array[cardIndex]}
-                    staking={window.constant_stakingbsc_new11}
+                    staking={window.constant_stakingbsc_new14}
                     apr={
                       expiredPools === false
                         ? activePools[cardIndex]?.apy_percent
@@ -17276,7 +17276,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={false}
-                  staking={window.constant_staking_new11}
+                  staking={window.constant_staking_new13}
                   listType={listType}
                   finalApr={
                     expiredPools === false
