@@ -1760,7 +1760,7 @@ window.config = {
   "0x245978ea5EFc6eec44AF03032F6318a81190DCbF",
 
   constant_stakingnew_newbscactive1_address:
-  "0x52b638ee4c0db759234f792b0ad59a8ce95737f3",
+  "0x5bC3a80A1F2C4fb693d9DddceBbB5A1b5BB15D65",
 
   constant_stakingnew_newavax5_address:
     "0x1cA9Fc98f3b997E08bC04691414e33B1835aa7e5",
