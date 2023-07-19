@@ -1881,6 +1881,9 @@ window.config = {
   constant_stakingidypavax_40_address:
     "0x6eb643813f0b4351b993f98bdeaef6e0f79573e9",
 
+    constant_stakingidypavax_50_address:
+    "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712",
+
   constant_stakingnew_newavax1_address:
     "0x1A4fd0E9046aeD92B6344F17B0a53969F4d5309B",
   constant_stakingnew_newavax2_address:
@@ -2151,6 +2154,9 @@ window.config = {
     "0xf13aDbEb27ea9d9469D95e925e56a1CF79c06E90",
   constant_stakingbsc_new13_address:
     "0xaF411BF994dA1435A3150B874395B86376C5f2d5",
+
+    constant_stakingbsc_new14_address:
+    "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487",
 };
 
 window.infuraWeb3 = new Web3(window.config.infura_endpoint);
@@ -2282,12 +2288,18 @@ window.constant_stakingbsc_new13 = new CONSTANT_STAKINGBSC_NEW(
   "CONSTANT_STAKINGBSC_NEW13"
 );
 
+window.constant_stakingbsc_new14 = new CONSTANT_STAKINGBSC_NEW(
+  "CONSTANT_STAKINGBSC_NEW14"
+);
+
 window.CONSTANT_STAKINGBSC_NEW10_ABI = window.CONSTANT_STAKING_OLD_ABI;
 window.CONSTANT_STAKINGBSC_NEW11_ABI = window.CONSTANT_STAKING_OLD_ABI;
 window.CONSTANT_STAKINGBSC_NEW111_ABI = window.CONSTANT_STAKING_OLD_ABI;
+window.CONSTANT_STAKINGBSC_NEW14_ABI = window.CONSTANT_STAKING_OLD_ABI;
 
 window.CONSTANT_STAKINGBSC_NEW12_ABI = window.CONSTANT_STAKINGBSC_NEW_ABI;
 window.CONSTANT_STAKINGBSC_NEW13_ABI = window.CONSTANT_STAKINGBSC_NEW_ABI;
+
 
 window.CONSTANT_STAKINGOLD_130 = window.CONSTANT_STAKING_OLD_ABI;
 window.CONSTANT_STAKINGOLD_140 = window.CONSTANT_STAKING_OLD_ABI;
@@ -2420,13 +2432,20 @@ window.constant_staking_new11 = new CONSTANT_STAKING_NEWAVAX(
   "CONSTANT_STAKINGIDYPAVAX_4"
 );
 
+
 window.constant_staking_new12 = new CONSTANT_STAKING_NEWAVAX(
   "CONSTANT_STAKINGIDYPAVAX_40"
+);
+
+window.constant_staking_new13 = new CONSTANT_STAKING_NEWAVAX(
+  "CONSTANT_STAKINGIDYPAVAX_50"
 );
 
 window.CONSTANT_STAKINGIDYPAVAX_3_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYPAVAX_4_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYPAVAX_40_ABI = window.CONSTANT_STAKING_IDYP_ABI;
+window.CONSTANT_STAKINGIDYPAVAX_50_ABI = window.CONSTANT_STAKING_IDYP_ABI;
+
 
 window.CONSTANT_STAKINGNEW_NEW1_ABI = window.CONSTANT_STAKINGNEW_ABI;
 window.CONSTANT_STAKINGNEW_NEW2_ABI = window.CONSTANT_STAKINGNEW_ABI;
@@ -31435,6 +31454,8 @@ Object.keys(window.config)
       k.startsWith("constant_stakingidypavax_3") ||
       k.startsWith("constant_stakingidypavax_4") ||
       k.startsWith("constant_stakingidypavax_40") ||
+      k.startsWith("constant_stakingidypavax_50") ||
+
       k.startsWith("constant_stakingnew_newavax1") ||
       k.startsWith("constant_stakingnewbsc_new3") ||
       k.startsWith("constant_stakingnewbsc_new4") ||
@@ -31448,6 +31469,8 @@ Object.keys(window.config)
       k.startsWith("constant_stakingbsc_new111") ||
       k.startsWith("constant_stakingbsc_new12") ||
       k.startsWith("constant_stakingbsc_new13") ||
+      k.startsWith("constant_stakingbsc_new14") ||
+
       k.startsWith("constant_stakingnew_newavax2") ||
       k.startsWith("constant_stakingdaiavax") ||
       k.startsWith("constant_stakingdaieth") ||
@@ -31610,6 +31633,8 @@ Object.keys(window.config)
       ? window.CONSTANT_STAKING_IDYP_ABI
       : k.startsWith("constant_stakingidypavax_40")
       ? window.CONSTANT_STAKING_IDYP_ABI
+      : k.startsWith("constant_stakingidypavax_50")
+      ? window.CONSTANT_STAKING_IDYP_ABI
       : k.startsWith("constant_stakingnew_newavax1")
       ? window.CONSTANT_STAKINGNEW_ABI
       : k.startsWith("constant_stakingnewbsc_new3")
@@ -31641,7 +31666,7 @@ Object.keys(window.config)
       : k.startsWith("constant_stakingbsc_new13")
       ? window.CONSTANT_STAKINGBSC_NEW_ABI
       : k.startsWith("constant_stakingbsc_new14")
-      ? window.CONSTANT_STAKINGBSC_NEW_ABI
+      ? window.CONSTANT_STAKING_OLD_ABI
       : k.startsWith("constant_stakingnew_newavax2")
       ? window.CONSTANT_STAKINGNEW_ABI
       : k.startsWith("constant_stakingdaieth")

@@ -87,7 +87,6 @@ const EarnContent = ({
           );
         });
         setBnbApr(bnbpool[1].apy_percent);
-        console.log(bnbpool[1], "bnbpool");
       })
       .catch((err) => console.error(err));
   };
