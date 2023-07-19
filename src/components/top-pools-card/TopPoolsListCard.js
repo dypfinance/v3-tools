@@ -649,7 +649,7 @@ const TopPoolsListCard = ({
             chain === "bnb" ? (
             <StakeBsc
               lp_id={LP_IDBNB_Array[cardIndex]}
-              staking={window.constant_stakingbsc_new11}
+              staking={window.constant_stakingbsc_new14}
               apr={activePools[cardIndex - 1]?.apy_percent}
               liquidity={wbsc_address}
               expiration_time={"5 August 2023"}
@@ -866,7 +866,7 @@ const TopPoolsListCard = ({
             handleConnection={handleConnection}
             handleSwitchNetwork={handleSwitchNetwork}
             expired={false}
-            staking={window.constant_staking_new12}
+            staking={window.constant_staking_new13}
             listType={listType}
             apr={activePools[cardIndex - 1]?.apy_percent}
             liquidity={avax_address}
