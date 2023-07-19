@@ -119,38 +119,38 @@ const EarnTopPicks = ({
   const [tvlTotal, setTvlTotal] = useState();
   const [wbnbPrice, setWbnbPrice] = useState()
 
-  const dummybnbpool = [{
-    id: "testId",
-    apy_percent: 150,
-    tvl_usd: 50000,
-    link_logo: "https://www.dypius.com/logo192.png",
-    link_pair: "https://app-bsc.dyp.finance/staking-idyp-3",
-    pool_name: "DYP Constant Staking BNB",
-    pair_name: "DYP",
-    return_types: "DYP",
-    lock_time: "No Days",
-    expired: "No",
-    new_pool: "No",
-    apy_performancefee: 25,
-    performancefee: 4
-    }
-    ]
+  // const dummybnbpool = [{
+  //   id: "testId",
+  //   apy_percent: 150,
+  //   tvl_usd: 50000,
+  //   link_logo: "https://www.dypius.com/logo192.png",
+  //   link_pair: "https://app-bsc.dyp.finance/staking-idyp-3",
+  //   pool_name: "DYP Constant Staking BNB",
+  //   pair_name: "DYP",
+  //   return_types: "DYP",
+  //   lock_time: "No Days",
+  //   expired: "No",
+  //   new_pool: "No",
+  //   apy_performancefee: 25,
+  //   performancefee: 4
+  //   }
+  //   ]
 
-    const dummyavaxpool = [{
-      id: "testId2",
-      apy_percent: "0.15",
-      tvl_usd: 0.11670063374169208,
-      link_logo: "https://www.dypius.com/logo192.png",
-      link_pair: "https://app-avax.dyp.finance/constant-staking-1",
-      pool_name: "DYP Constant Staking AVAX",
-      pair_name: "DYP",
-      return_types: "iDYP",
-      lock_time: "No days",
-      expired: "No",
-      new_pool: "No",
-      apy_performancefee: "0.15",
-      performancefee: 0.25
-      }]
+  //   const dummyavaxpool = [{
+  //     id: "testId2",
+  //     apy_percent: "0.15",
+  //     tvl_usd: 0.11670063374169208,
+  //     link_logo: "https://www.dypius.com/logo192.png",
+  //     link_pair: "https://app-avax.dyp.finance/constant-staking-1",
+  //     pool_name: "DYP Constant Staking AVAX",
+  //     pair_name: "DYP",
+  //     return_types: "iDYP",
+  //     lock_time: "No days",
+  //     expired: "No",
+  //     new_pool: "No",
+  //     apy_performancefee: "0.15",
+  //     performancefee: 0.25
+  //     }]
 
   var farming = [];
 
@@ -223,8 +223,7 @@ const EarnTopPicks = ({
           return b.tvl_usd - a.tvl_usd;
         });
 
-        setActivePools([...dummybnbpool, ...sortedActive]);
-        console.log([...dummybnbpool, ...sortedActive], "ppppoools bnb");
+        setActivePools(sortedActive);
 
         setExpiredPools(sortedExpired);
         setTopPools(dypIdypBnb);
@@ -256,7 +255,7 @@ const EarnTopPicks = ({
           return b.tvl_usd - a.tvl_usd;
         });
 
-        setActivePools([...dummyavaxpool, ...sortedActive]);
+        setActivePools(sortedActive);
         setExpiredPools(sortedExpired);
         setTopPools(dypIdypAvax);
       })
@@ -296,7 +295,7 @@ const EarnTopPicks = ({
       .then((res) => {
         let temparray = Object.entries(res.data.the_graph_bsc_v2.lp_data);
         let bnbpool = temparray.filter((item) => {
-          return item.id === "0x1bc61d08a300892e784ed37b2d0e63c85d1d57fb-0x90124d8dced672986b05c17a4003f8f0a7f2e3ae"
+          return item.id === "0x1bc61d08a300892e784ed37b2d0e63c85d1d57fb-0x5bc3a80a1f2c4fb693d9dddcebbb5a1b5bb15d65"
         })
         setTheBnbPool(bnbpool)
         let farming2 = [];
@@ -323,7 +322,7 @@ const EarnTopPicks = ({
     .then((res) => {
       let temparray = Object.entries(res.data.the_graph_bsc_v2.lp_data);
       let bnbpool = temparray.find((item) => {
-        return item[0] === "0x1bc61d08a300892e784ed37b2d0e63c85d1d57fb-0x90124d8dced672986b05c17a4003f8f0a7f2e3ae"
+        return item[0] === "0x1bc61d08a300892e784ed37b2d0e63c85d1d57fb-0x5bc3a80a1f2c4fb693d9dddcebbb5a1b5bb15d65"
       })
       setWbnbPrice(res.data.the_graph_bsc_v2.usd_per_eth)
       setTheBnbPool(bnbpool[1]);
@@ -8300,6 +8299,76 @@ const EarnTopPicks = ({
                       referrer={referrer}
                     />
                   ) 
+                //   : activeCard &&
+                //   topList === "Staking" &&
+                //   activePools[cardIndex].id ===
+                //     "testId" &&
+                //   chain === "bnb" ? (
+                //   <StakeBsc
+                //     lp_id={LP_IDBNB_Array[cardIndex]}
+                //     staking={window.constant_stakingbsc_new11}
+                //     apr={
+                //       expiredPools === false
+                //         ? activePools[cardIndex]?.apy_percent
+                //         : expiredDYPPools[cardIndex]?.apy_percent
+                //     }
+                //     liquidity={wbsc_address}
+                //     expiration_time={"5 August 2023"}
+                //     finalApr={
+                //       expiredPools === false
+                //         ? activePools[cardIndex]?.apy_performancefee
+                //         : expiredDYPPools[cardIndex]?.apy_performancefee
+                //     }
+                //     fee={
+                //       expiredPools === false
+                //         ? activePools[cardIndex]?.performancefee
+                //         : expiredDYPPools[cardIndex]?.performancefee
+                //     }
+                //     lockTime={
+                //       cardIndex !== undefined
+                //         ? expiredPools === false
+                //           ? activePools[cardIndex]?.lock_time?.split(
+                //               " "
+                //             )[0] === "No"
+                //             ? "No Lock"
+                //             : parseInt(
+                //                 activePools[cardIndex]?.lock_time?.split(
+                //                   " "
+                //                 )[0]
+                //               )
+                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
+                //               " "
+                //             )[0] === "No"
+                //           ? "No Lock"
+                //           : parseInt(
+                //               expiredDYPPools[cardIndex]?.lock_time?.split(
+                //                 " "
+                //               )[0]
+                //             )
+                //         : "No Lock"
+                //     }
+                //     listType={listType}
+                //     other_info={
+                //       cardIndex !== undefined
+                //         ? expiredPools === false
+                //           ? activePools[cardIndex]?.expired === "Yes"
+                //             ? true
+                //             : false
+                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
+                //           ? true
+                //           : false
+                //         : false
+                //     }
+                //     is_wallet_connected={isConnected}
+                //     coinbase={coinbase}
+                //     the_graph_result={the_graph_resultbsc}
+                //     chainId={chainId}
+                //     handleConnection={handleConnection}
+                //     handleSwitchNetwork={handleSwitchNetwork}
+                //     expired={false}
+                //     referrer={referrer}
+                //   />
+                // )
                   : activeCard &&
                   topList === "Staking" &&
                   activePools[cardIndex].id ===
