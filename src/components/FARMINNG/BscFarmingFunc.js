@@ -899,108 +899,115 @@ const BscFarmingFunc = ({
 
     let address = coinbase;
 
-    let amount = await staking.rewardsPendingClaim(address);
-    let router = await window.getPancakeswapRouterContract();
-    let WETH = await router.methods.WETH().call();
-    let platformTokenAddress = window.config.reward_token_address;
-    let rewardTokenAddress = window.config.reward_tokenbsc_address2;
-    let path = [
-      ...new Set(
-        [rewardTokenAddress, WETH, platformTokenAddress].map((a) =>
-          a.toLowerCase()
-        )
-      ),
-    ];
+    let amount = await staking.getPendingDivs(address);
 
-    let path1 = [
-      ...new Set([rewardTokenAddress, WETH].map((a) => a.toLowerCase())),
-    ];
-
-
-    let PAIR_ABI = window.PAIR_ABI;
-    let pair_token_address = "0x1bC61d08A300892e784eD37b2d0E63C85D1d57fb";
-    let web3 = window.bscWeb3;
-    let pair = new web3.eth.Contract(PAIR_ABI, pair_token_address);
-
-    let totalSupply = await pair.methods.totalSupply().call();
-    let reserves = await pair.methods.getReserves().call();
-
-    let amountlpContract = await pair.methods.balanceOf(constant._address).call()
-
-
-    let maxETH = reserves[0];
-    let maxToken = reserves[1];
-
-    let maxContractEth = (amountlpContract * maxETH) / totalSupply;
-    maxContractEth = new BigNumber(maxContractEth).toFixed(0);
-    let maxContractToken = (amountlpContract * maxToken) / totalSupply;
-    maxContractToken = new BigNumber(maxContractToken).toFixed(0);
-
-    
-
-    let totalContractUSD = await router.methods
-    .getAmountsOut(maxContractToken, path1)
-    .call().catch((e) => {
-      setClaimStatus("failed");
-      console.log(e)
-      setClaimLoading(false);
-      setErrorMsg2(e?.message);
-      setTimeout(() => {
-        setClaimStatus("initial");
-        setSelectedPool("");
-        setErrorMsg2("");
-      }, 10000);
-    });
-
-      let amountsPendingClaim = await router.methods
-      .getAmountsOut(amount, path)
-      .call().catch((e) => {
-        setClaimStatus("failed");
-        console.log(e)
-        setClaimLoading(false);
-        setErrorMsg2(e?.message);
-        setTimeout(() => {
-          setClaimStatus("initial");
-          setSelectedPool("");
-          setErrorMsg2("");
-        }, 10000);
-      });
-
-    amountsPendingClaim = amountsPendingClaim[totalContractUSD.length - 1];
-    
-   amountsPendingClaim = BigNumber(amountsPendingClaim)
-      .div(1e18)
-      .toFixed(18);
-
-    amountsPendingClaim = new BigNumber(amountsPendingClaim)
-    .times(100 - window.config.slippage_tolerance_percent)
+    let claimdivs2 = new BigNumber(amount)
+    .times(100 - window.config.slippage_tolerance_percent_liquidity)
     .div(100)
     .toFixed(0);
- 
-console.log(0, amountsPendingClaim, deadline)
-    try {
-      staking
-        .claim(0, amountsPendingClaim, deadline)
-        .then(() => {
-          setClaimStatus("success");
-          setClaimLoading(false);
-        })
-        .catch((e) => {
-          setClaimStatus("failed");
-          setClaimLoading(false);
-          setErrorMsg2(e?.message);
-          setTimeout(() => {
-            setClaimStatus("initial");
-            setSelectedPool("");
-            setErrorMsg2("");
-          }, 10000);
-        });
-    } catch (e) {
-      setErrorMsg2(e?.message);
+    
+    staking.claim(0, claimdivs2, deadline)
+//     let router = await window.getPancakeswapRouterContract();
+//     let WETH = await router.methods.WETH().call();
+//     let platformTokenAddress = window.config.reward_token_address;
+//     let rewardTokenAddress = window.config.reward_tokenbsc_address2;
+//     let path = [
+//       ...new Set(
+//         [rewardTokenAddress, WETH, platformTokenAddress].map((a) =>
+//           a.toLowerCase()
+//         )
+//       ),
+//     ];
 
-      console.error(e);
-      return;
-    }
+//     let path1 = [
+//       ...new Set([rewardTokenAddress, WETH].map((a) => a.toLowerCase())),
+//     ];
+
+
+//     let PAIR_ABI = window.PAIR_ABI;
+//     let pair_token_address = "0x1bC61d08A300892e784eD37b2d0E63C85D1d57fb";
+//     let web3 = window.bscWeb3;
+//     let pair = new web3.eth.Contract(PAIR_ABI, pair_token_address);
+
+//     let totalSupply = await pair.methods.totalSupply().call();
+//     let reserves = await pair.methods.getReserves().call();
+
+//     let amountlpContract = await pair.methods.balanceOf(constant._address).call()
+
+
+//     let maxETH = reserves[0];
+//     let maxToken = reserves[1];
+
+//     let maxContractEth = (amountlpContract * maxETH) / totalSupply;
+//     maxContractEth = new BigNumber(maxContractEth).toFixed(0);
+//     let maxContractToken = (amountlpContract * maxToken) / totalSupply;
+//     maxContractToken = new BigNumber(maxContractToken).toFixed(0);
+
+    
+
+//     let totalContractUSD = await router.methods
+//     .getAmountsOut(maxContractToken, path1)
+//     .call().catch((e) => {
+//       setClaimStatus("failed");
+//       console.log(e)
+//       setClaimLoading(false);
+//       setErrorMsg2(e?.message);
+//       setTimeout(() => {
+//         setClaimStatus("initial");
+//         setSelectedPool("");
+//         setErrorMsg2("");
+//       }, 10000);
+//     });
+
+//       let amountsPendingClaim = await router.methods
+//       .getAmountsOut(amount, path)
+//       .call().catch((e) => {
+//         setClaimStatus("failed");
+//         console.log(e)
+//         setClaimLoading(false);
+//         setErrorMsg2(e?.message);
+//         setTimeout(() => {
+//           setClaimStatus("initial");
+//           setSelectedPool("");
+//           setErrorMsg2("");
+//         }, 10000);
+//       });
+
+//     amountsPendingClaim = amountsPendingClaim[totalContractUSD.length - 1];
+    
+//    amountsPendingClaim = BigNumber(amountsPendingClaim)
+//       .div(1e18)
+//       .toFixed(18);
+
+//     amountsPendingClaim = new BigNumber(amountsPendingClaim)
+//     .times(100 - window.config.slippage_tolerance_percent)
+//     .div(100)
+//     .toFixed(0);
+ 
+// console.log(0, amountsPendingClaim, deadline)
+//     try {
+//       staking
+//         .claim(0, amountsPendingClaim, deadline)
+//         .then(() => {
+//           setClaimStatus("success");
+//           setClaimLoading(false);
+//         })
+//         .catch((e) => {
+//           setClaimStatus("failed");
+//           setClaimLoading(false);
+//           setErrorMsg2(e?.message);
+//           setTimeout(() => {
+//             setClaimStatus("initial");
+//             setSelectedPool("");
+//             setErrorMsg2("");
+//           }, 10000);
+//         });
+//     } catch (e) {
+//       setErrorMsg2(e?.message);
+
+//       console.error(e);
+//       return;
+//     }
   };
 
   const handleSetMaxDeposit = (e) => {
@@ -1115,7 +1122,7 @@ console.log(0, amountsPendingClaim, deadline)
       ); /* TVL of iDYP on Farming */
 
       let _dTokensDYP = staking.depositedTokens(coinbase);
-      let _rewardsPendingClaim = staking.rewardsPendingClaim(coinbase)
+      let _rewardsPendingClaim = staking.getPendingDivs(coinbase)
 
       // let _pendingDivsStaking = constant.getTotalPendingDivs(coinbase);
 

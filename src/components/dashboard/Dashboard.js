@@ -67,7 +67,7 @@ const Dashboard = ({
           setWbnbPrice(res.data.the_graph_bsc_v2.usd_per_eth);
           return (
             item[1].id ===
-            "0x1bc61d08a300892e784ed37b2d0e63c85d1d57fb-0x90124d8dced672986b05c17a4003f8f0a7f2e3ae"
+            "0x1bc61d08a300892e784ed37b2d0e63c85d1d57fb-0x5bc3a80a1f2c4fb693d9dddcebbb5a1b5bb15d65"
           );
         });
         setTheBnbPool(bnbpool);
@@ -563,7 +563,7 @@ const Dashboard = ({
                     is_wallet_connected={isConnected}
                     wbnbPrice={wbnbPrice}
                     coinbase={coinbase}
-                    latestTvl={theBnbPool[0][1].apy_percent}
+                    latestTvl={theBnbPool[0][1].tvl_usd}
                     the_graph_result={the_graph_resultbsc}
                     lp_id={LP_IDBNB_Array[cardIndex]}
                     chainId={network.toString()}
@@ -860,7 +860,7 @@ const Dashboard = ({
                     is_wallet_connected={isConnected}
                     wbnbPrice={wbnbPrice}
                     coinbase={coinbase}
-                    latestTvl={theBnbPool[0][1].apy_percent}
+                    latestTvl={theBnbPool[0][1].tvl_usd}
                     the_graph_result={the_graph_resultbsc}
                     lp_id={LP_IDBNB_Array[cardIndex]}
                     chainId={network.toString()}

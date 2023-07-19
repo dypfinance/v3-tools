@@ -83,7 +83,7 @@ const EarnContent = ({
         let bnbpool = temparray.find((item) => {
           return (
             item[0] ===
-            "0x1bc61d08a300892e784ed37b2d0e63c85d1d57fb-0x90124d8dced672986b05c17a4003f8f0a7f2e3ae"
+            "0x1bc61d08a300892e784ed37b2d0e63c85d1d57fb-0x5bc3a80a1f2c4fb693d9dddcebbb5a1b5bb15d65"
           );
         });
         setBnbApr(bnbpool[1].apy_percent);
