@@ -850,7 +850,7 @@ const BscFarmingFunc = ({
     try {
       constant
         .claimAs(
-          window.config.weth_address,
+          window.config.bscweth_address,
           _amountOutMinConstantETH,
           _amountOutMinConstant,
           _amountOutMinSwap_real,
@@ -883,7 +883,7 @@ const BscFarmingFunc = ({
     );
 
     try {
-      constant.claimAs(window.config.claim_as_eth_address, 0, 0, 0, deadline);
+      constant.claimAs(window.config.bscweth_address, 0, 0, 0, deadline);
     } catch (e) {
       console.error(e);
       return;
