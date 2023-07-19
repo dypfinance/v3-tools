@@ -73,32 +73,33 @@ const EarnContent = ({
   const [ethApr, setEthApr] = useState();
   const [bnbApr, setBnbApr] = useState();
   const [avaxApr, setavaxApr] = useState();
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
 
   const fetchBnbPool = async () => {
     await axios
-    .get("https://api.dyp.finance/api/the_graph_bsc_v2")
-    .then((res) => {
-      let temparray = Object.entries(res.data.the_graph_bsc_v2.lp_data);
-      let bnbpool = temparray.find((item) => {
-        return item[0] === "0x1bc61d08a300892e784ed37b2d0e63c85d1d57fb-0x90124d8dced672986b05c17a4003f8f0a7f2e3ae"
+      .get("https://api.dyp.finance/api/the_graph_bsc_v2")
+      .then((res) => {
+        let temparray = Object.entries(res.data.the_graph_bsc_v2.lp_data);
+        let bnbpool = temparray.find((item) => {
+          return (
+            item[0] ===
+            "0x1bc61d08a300892e784ed37b2d0e63c85d1d57fb-0x5bc3a80a1f2c4fb693d9dddcebbb5a1b5bb15d65"
+          );
+        });
+        setBnbApr(bnbpool[1].apy_percent);
+        console.log(bnbpool[1], "bnbpool");
       })
-      setBnbApr(bnbpool[1].apy_percent)
-      console.log(bnbpool[1], "bnbpool");
-      
-    })
-    .catch((err) => console.error(err));
-  }
+      .catch((err) => console.error(err));
+  };
 
   const toggleInactive = () => {
-    setCount(count + 1)
-    setExpiredPools(!expiredPools)
-    if(option === "Farming" && count % 2 === 0){
-      fetchFarmingApr()
-      setBnbApr(138)
-    }else if(option === "Farming" && count % 2 !== 0)
-    fetchBnbPool()
-  }
+    setCount(count + 1);
+    setExpiredPools(!expiredPools);
+    if (option === "Farming" && count % 2 === 0) {
+      fetchFarmingApr();
+      setBnbApr(138);
+    } else if (option === "Farming" && count % 2 !== 0) fetchBnbPool();
+  };
 
   var tempTvl = 0;
   var farming = [];
@@ -313,18 +314,17 @@ const EarnContent = ({
       fetchEthApr();
       fetchAvaxApr();
       fetchBnbApr();
-      setEthApr(7.35)
-
+      setEthApr(7.35);
     } else if (option === "Buyback") {
       fetchEthBuybackApr();
       fetchBnbBuybackApr();
       fetchAvaxBuybackApr();
     } else if (option === "Farming" && expiredPools === false) {
       // fetchFarmingApr();
-      fetchBnbPool()
-      setEthApr(0)
-      setavaxApr(0)
-    }else if (option === "Farming" && expiredPools === true) {
+      fetchBnbPool();
+      setEthApr(0);
+      setavaxApr(0);
+    } else if (option === "Farming" && expiredPools === true) {
       // fetchFarmingApr();
       fetchFarmingApr();
     }
@@ -350,11 +350,7 @@ const EarnContent = ({
     } else {
       fetchVaultTvl();
     }
-  
   }, [option, stake, chainId]);
-
-
-  
 
   const checkNetworkId = () => {
     if (
@@ -404,10 +400,10 @@ const EarnContent = ({
   };
 
   useEffect(() => {
-    if (option === "Farming" || option === "Vault" || option === "Staking") {
+    if (option !== "Farming" && expiredPools === false) {
       checkNetworkId();
     }
-  }, [option, routeChain, networkId, chainId]);
+  }, [option, routeChain, networkId, chainId, expiredPools]);
 
   const setVaultEth = (vault) => {
     if (vault === "Vault") {
@@ -415,17 +411,11 @@ const EarnContent = ({
     }
   };
 
-
   useEffect(() => {
-    if(option === "Farming" && expiredPools === false){
-      setStake("bnb")
-      setStake("bnb")
-      setStake("bnb")
-      setStake("bnb")
-      setStake("bnb")
+    if (option === "Farming" && expiredPools === false) {
+      setStake("bnb");
     }
-  }, [option])
-  
+  }, [option, expiredPools]);
 
   return (
     <>
@@ -498,8 +488,7 @@ const EarnContent = ({
                   setMyStakes(!myStakes);
                   // setExpiredPools(!expiredPools);
                   // option === "Farming" && fetchFarmingApr();
-                  toggleInactive()
-                  
+                  toggleInactive();
                 }}
               >
                 <div className="pill"></div>
@@ -592,56 +581,59 @@ const EarnContent = ({
               style={{ minHeight: "55px" }}
             >
               <div className="col-12 col-lg-4 col-xl-3 px-0">
-             {option !== "Farming" && 
-              <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
-                <span style={{ fontWeight: "300", fontSize: "13px" }}>
-                  Total value locked
-                </span>
-                <h6
-                  className="text-white"
-                  style={{ fontWeight: "600", fontSize: "17px" }}
-                >
-                  ${getFormattedNumber(tvl)}
-                </h6>
+                {option !== "Farming" && (
+                  <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
+                    <span style={{ fontWeight: "300", fontSize: "13px" }}>
+                      Total value locked
+                    </span>
+                    <h6
+                      className="text-white"
+                      style={{ fontWeight: "600", fontSize: "17px" }}
+                    >
+                      ${getFormattedNumber(tvl)}
+                    </h6>
+                  </div>
+                )}
               </div>
-             }
-            </div>
               <div className="col-12 col-lg-8 col-xl-6 d-flex gap-3 justify-content-around justify-content-lg-end justify-content-xl-center px-0 px-xl-2">
                 {option !== "Vault" ? (
                   <>
-                 
                     <div
-                    className={`stake-item ${option === "Farming" && expiredPools === false &&  'blur-stake'} position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
-                      stake === "eth" ? "eth-item-active" : null
-                    }`}
-                    onClick={() => {
-                      setStake("eth");
-                      // fetchEthTvl();
-                    }}
-                  >
-                    <img
-                      src={stake === "eth" ? ethStakeActive : ethStake}
-                      alt=""
-                    />
-                    <div className="d-flex flex-column align-items-center align-items-lg-start">
-                      <p
-                        className="text-white"
-                        style={{ fontSize: "12px", fontWeight: "300" }}
-                      >
-                        Ethereum
-                      </p>
-                      <p
-                        style={{
-                          fontSize: "12px",
-                          fontWeight: "500",
-                          color: "#f7f7fc",
-                          whiteSpace: "pre",
-                        }}
-                      >
-                        {ethApr}% APR
-                      </p>
+                      className={`stake-item ${
+                        option === "Farming" &&
+                        expiredPools === false &&
+                        "blur-stake"
+                      } position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
+                        stake === "eth" ? "eth-item-active" : null
+                      }`}
+                      onClick={() => {
+                        setStake("eth");
+                        // fetchEthTvl();
+                      }}
+                    >
+                      <img
+                        src={stake === "eth" ? ethStakeActive : ethStake}
+                        alt=""
+                      />
+                      <div className="d-flex flex-column align-items-center align-items-lg-start">
+                        <p
+                          className="text-white"
+                          style={{ fontSize: "12px", fontWeight: "300" }}
+                        >
+                          Ethereum
+                        </p>
+                        <p
+                          style={{
+                            fontSize: "12px",
+                            fontWeight: "500",
+                            color: "#f7f7fc",
+                            whiteSpace: "pre",
+                          }}
+                        >
+                          {ethApr}% APR
+                        </p>
+                      </div>
                     </div>
-                  </div>
                     <div
                       className={`stake-item position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
                         stake === "bnb" ? "bsc-item-active" : null
@@ -687,17 +679,21 @@ const EarnContent = ({
                         </p>
                       </div>
                     </div>
-                   
+
                     <div
-                    className={`stake-item ${option === "Farming" && expiredPools === false &&  'blur-stake'} position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
-                      stake === "avax" ? "avax-item-active" : null
-                    }`}
-                    onClick={() => {
-                      setStake("avax");
-                      // fetchAvaxTvl();
-                    }}
-                  >
-                    {/* <div className="new-pools d-flex justify-content-start align-items-center gap-2 position-absolute">
+                      className={`stake-item ${
+                        option === "Farming" &&
+                        expiredPools === false &&
+                        "blur-stake"
+                      } position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
+                        stake === "avax" ? "avax-item-active" : null
+                      }`}
+                      onClick={() => {
+                        setStake("avax");
+                        // fetchAvaxTvl();
+                      }}
+                    >
+                      {/* <div className="new-pools d-flex justify-content-start align-items-center gap-2 position-absolute">
                   <img
                     src={addNewPools}
                     alt=""
@@ -710,29 +706,29 @@ const EarnContent = ({
                     New Pools
                   </span>
                 </div> */}
-                    <img
-                      src={stake === "avax" ? avaxStakeActive : avaxStake}
-                      alt=""
-                    />
-                    <div className="d-flex flex-column align-items-center align-items-lg-start">
-                      <p
-                        className="text-white"
-                        style={{ fontSize: "12px", fontWeight: "300" }}
-                      >
-                        Avalanche
-                      </p>
-                      <p
-                        style={{
-                          fontSize: "12px",
-                          fontWeight: "500",
-                          color: "#f7f7fc",
-                          whiteSpace: "pre",
-                        }}
-                      >
-                        {avaxApr}% APR
-                      </p>
+                      <img
+                        src={stake === "avax" ? avaxStakeActive : avaxStake}
+                        alt=""
+                      />
+                      <div className="d-flex flex-column align-items-center align-items-lg-start">
+                        <p
+                          className="text-white"
+                          style={{ fontSize: "12px", fontWeight: "300" }}
+                        >
+                          Avalanche
+                        </p>
+                        <p
+                          style={{
+                            fontSize: "12px",
+                            fontWeight: "500",
+                            color: "#f7f7fc",
+                            whiteSpace: "pre",
+                          }}
+                        >
+                          {avaxApr}% APR
+                        </p>
+                      </div>
                     </div>
-                  </div>
                   </>
                 ) : (
                   <>
@@ -851,7 +847,7 @@ const EarnContent = ({
         )}
       </div>
       {option === "Farming" &&
-      (networkId === "56" || networkId === "43114") &&
+      networkId === "56" &&
       option !== "Vault" &&
       expiredPools === false ? (
         <EarnTopPicks
@@ -874,7 +870,7 @@ const EarnContent = ({
           handleSwitchNetwork={handleSwitchNetwork}
           expiredPools={expiredPools}
         />
-      ) : (option === "Vault" && expiredPools === false) ? (
+      ) : option === "Vault" && expiredPools === false ? (
         <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
           <img
             src={
@@ -886,34 +882,35 @@ const EarnContent = ({
           <h6 className="no-farms">No Vault pools available</h6>
           <span className="farm-soon">New pools coming soon...</span>
         </div>
-      ) 
-      :  (option === "Farming" && stake === "eth"  && expiredPools === false) ? (
-          
-        <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
-          <img
-            src={
-              require("../../../assets/earnAssets/disabledFarming.svg").default
-            }
-            style={{ width: "150px", height: "150px" }}
-            alt=""
-          />
-          <h6 className="no-farms">No Farming pools available for Ethereum Chain</h6>
-          <span className="farm-soon">New pools coming soon...</span>
-        </div>
-      ) : (option === "Farming" && stake === "avax"  && expiredPools === false) ? (
-          
-        <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
-          <img
-            src={
-              require("../../../assets/earnAssets/disabledFarming.svg").default
-            }
-            style={{ width: "150px", height: "150px" }}
-            alt=""
-          />
-          <h6 className="no-farms">No Farming pools available for Avalanche Chain</h6>
-          <span className="farm-soon">New pools coming soon...</span>
-        </div>
       ) : (
+        // ) : option === "Farming" && stake === "eth" && expiredPools === false ? (
+        //   <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
+        //     <img
+        //       src={
+        //         require("../../../assets/earnAssets/disabledFarming.svg").default
+        //       }
+        //       style={{ width: "150px", height: "150px" }}
+        //       alt=""
+        //     />
+        //     <h6 className="no-farms">
+        //       No Farming pools available for Ethereum Chain
+        //     </h6>
+        //     <span className="farm-soon">New pools coming soon...</span>
+        //   </div>
+        // ) : option === "Farming" && stake === "avax" && expiredPools === false ? (
+        //   <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
+        //     <img
+        //       src={
+        //         require("../../../assets/earnAssets/disabledFarming.svg").default
+        //       }
+        //       style={{ width: "150px", height: "150px" }}
+        //       alt=""
+        //     />
+        //     <h6 className="no-farms">
+        //       No Farming pools available for Avalanche Chain
+        //     </h6>
+        //     <span className="farm-soon">New pools coming soon...</span>
+        //   </div>
         <EarnTopPicks
           topList={option}
           listType={listStyle}
@@ -935,7 +932,7 @@ const EarnContent = ({
           expiredPools={expiredPools}
         />
       )}
-     
+
       <EarnFaq faqTypes={option} faqIndex={faqIndex} />
     </>
   );
