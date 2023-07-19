@@ -1115,7 +1115,7 @@ console.log(0, amountsPendingClaim, deadline)
       ); /* TVL of iDYP on Farming */
 
       let _dTokensDYP = staking.depositedTokens(coinbase);
-      let _rewardsPendingClaim = staking.rewardsPendingClaim(coinbase)
+      let _rewardsPendingClaim = staking.getPendingDivs(coinbase)
 
       // let _pendingDivsStaking = constant.getTotalPendingDivs(coinbase);
 
