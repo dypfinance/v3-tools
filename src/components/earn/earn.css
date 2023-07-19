@@ -110,6 +110,11 @@ hr {
   transition: all 0.25s;
 }
 
+.blur-stake{
+  filter: blur(10px);
+  pointer-events: none;
+}
+
 .new-pools {
   background: linear-gradient(90.74deg, #26264f 0%, #57b6ab 100%);
   border-radius: 500px;

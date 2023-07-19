@@ -51,7 +51,6 @@ const renderer = ({ days, hours, minutes, seconds }) => {
 
 const FarmAvaxFunc = ({
   token,
-  staking,
   constant,
   liquidity,
   lp_symbol,
@@ -69,8 +68,11 @@ const FarmAvaxFunc = ({
   expired,
   finalApr,
   the_graph_result,
+  lp_id,
+  isConnected,
+  staking
 }) => {
-  let { reward_token, BigNumber, alertify, reward_token_idyp, token_dypsbsc } =
+  let { reward_token, BigNumber, alertify, reward_token_idyp, token_dypsavax } =
     window;
   const LP_AMPLIFY_FACTOR = rebase_factor || window.config.lp_amplify_factor;
   const TOKEN_DECIMALS = window.config.token_decimals;
@@ -128,10 +130,16 @@ const FarmAvaxFunc = ({
       return a.toUTCString();
     }
   };
-  const [iDypUSD, setIDypUSD] = useState(0)
-  const [dypUSD, setDypUSD] = useState(0)
+  const buyback_activetokens_farmingavax = {
+    "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7": {
+      symbol: "WAVAX",
+      decimals: 18,
+    },
+  };
+  const [iDypUSD, setIDypUSD] = useState(0);
+  const [dypUSD, setDypUSD] = useState(0);
   const [tvlUSD, setTvlUSD] = useState("");
-  const [dypPerAvaxPrice, setDypPerAvaxPrice] = useState(0)
+  const [dypPerAvaxPrice, setDypPerAvaxPrice] = useState(0);
   const [totalValueLocked, setTotalValueLocked] = useState("");
   const [depositedTokensDYP, setDepositedTokensDYP] = useState("");
   const [tvlConstantDYP, setTvlConstantDYP] = useState("");
@@ -177,17 +185,21 @@ const FarmAvaxFunc = ({
   const [contractDeployTime, setContractDeployTime] = useState("");
   const [disburseDuration, setDisburseDuration] = useState("");
   const [selectedBuybackToken, setselectedBuybackToken] = useState(
-    Object.keys(window.buyback_tokens_farmingavax)[0]
+    Object.keys(buyback_activetokens_farmingavax)[0]
   );
   const [selectedTokenDecimals, setselectedTokenDecimals] = useState(
-    window.buyback_tokens_farmingavax[Object.keys(window.buyback_tokens_farmingavax)[0]].decimals
+    buyback_activetokens_farmingavax[
+      Object.keys(buyback_activetokens_farmingavax)[0]
+    ].decimals
   );
   const [selectedTokenBalance, setSelectedTokenBalance] = useState("");
   const [selectedTokenSymbol, setSelectedTokenSymbol] = useState(
-    window.buyback_tokens_farmingavax[Object.keys(window.buyback_tokens_farmingavax)[0]].symbol
+    buyback_activetokens_farmingavax[
+      Object.keys(buyback_activetokens_farmingavax)[0]
+    ].symbol
   );
   const [selectedBuybackTokenWithdraw, setSelectedBuybackTokenWithdraw] =
-    useState(Object.keys(window.buyback_tokens_farmingavax)[0]);
+    useState(Object.keys(buyback_activetokens_farmingavax)[0]);
   const [selectedClaimToken, setSelectedClaimToken] = useState(0);
   const [show, setShow] = useState(false);
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
@@ -206,6 +218,14 @@ const FarmAvaxFunc = ({
   const [rewardsTooltip, setRewardsTooltip] = useState(false);
   const [withdrawTooltip, setWithdrawTooltip] = useState(false);
   const [myDepositedLpTokens, setMyDepositedLpTokens] = useState("");
+  const [myShare, setmyShare] = useState("");
+  const [lpTokens, setlpTokens] = useState("");
+  const [totalLPdeposited, setTotalLpDeposited] = useState('')
+  const [lpTokensContract, setlpTokensContract] = useState("");
+  const [priceUSD, setPriceUSD] = useState("");
+  const [rewardsPendingClaim , setrewardsPendingClaim ] = useState("");
+
+
 
   const showModal = () => {
     setShow(true);
@@ -223,40 +243,15 @@ const FarmAvaxFunc = ({
     setPopup(false);
   };
 
-  const handleListDownload = async (e) => {
-    e.preventDefault();
-    let m = window.alertify.message(`Processing...`);
-    m.ondismiss = () => false;
-    let step = 100;
-    let stakers = [];
-    let stakingTimes = [];
-    let lastClaimedTimes = [];
-    let stakedTokens = [];
-    let length = await staking.getNumberOfHolders();
-    length = Number(length);
-    try {
-      for (let startIndex = 0; startIndex < length; startIndex += step) {
-        console.log({ startIndex, endIndex: startIndex + step });
-        let array = await staking.getDepositorsList(
-          startIndex,
-          Math.min(startIndex + step, length)
-        );
-        console.log(array);
-        stakers = stakers.concat(array.stakers);
-        stakingTimes = stakingTimes.concat(array.stakingTimestamps);
-        lastClaimedTimes = lastClaimedTimes.concat(array.lastClaimedTimeStamps);
-        stakedTokens = stakedTokens.concat(array.stakedTokens);
-      }
-      let result = { stakers, stakingTimes, lastClaimedTimes, stakedTokens };
-      window.handleDownload(result);
-    } catch (e) {
-      console.error(e);
-      alertify.error("Something went wrong while processing!");
-    } finally {
-      m.ondismiss = (f) => true;
-      m.dismiss();
-    }
-  };
+  const getTotalLP = async ()=>{
+    let PAIR_ABI = window.PAIRAVAX_ABI;
+    let pair_token_address = "0x66eecc97203704d9e2db4a431cb0e9ce92539d5a";
+    let web3 = window.avaxWeb3;
+    let pair = new web3.eth.Contract(PAIR_ABI, pair_token_address);
+    const result = await pair.methods.balanceOf(constant._address).call().catch((e)=>{console.log(e)})
+    const result_formatted = new BigNumber(result).div(1e18).toFixed(18)
+    setTotalLpDeposited(result_formatted)
+  }
 
   const getTokenData = async () => {
     await axios
@@ -265,16 +260,16 @@ const FarmAvaxFunc = ({
         const propertyDyp = Object.entries(
           data.data.the_graph_avax_v2.token_data
         );
-        setDypUSD(propertyDyp[0][1].token_price_usd)
+        setDypUSD(propertyDyp[0][1].token_price_usd);
 
         const propertyIDyp = Object.entries(
           data.data.the_graph_avax_v2.token_data
         );
 
-        const dypPerAvax = data.data.the_graph_avax_v2.price_DYPS
-        setDypPerAvaxPrice(dypPerAvax)
-        
-        setIDypUSD(propertyIDyp[1][1].token_price_usd)
+        const dypPerAvax = data.data.the_graph_avax_v2.price_DYPS;
+        setDypPerAvaxPrice(dypPerAvax);
+
+        setIDypUSD(propertyIDyp[1][1].token_price_usd);
       });
   };
 
@@ -283,12 +278,15 @@ const FarmAvaxFunc = ({
     setUsdPerToken(usdPerToken2);
   };
 
-  const handleDeposit = (e) => {
-    e.preventDefault();
-    let amount = depositAmount;
-    amount = new BigNumber(amount).times(1e18).toFixed(0);
-    staking.depositTOKEN(amount);
-  };
+  const getTvlUsdInfo = async()=>{
+    const tokenPrice = await axios
+    .get(`https://api.dyp.finance/api/the_graph_avax_v2`)
+    .then((res) => {
+      return res.data.the_graph_avax_v2.usd_per_eth;
+    })
+    .catch((err) => console.error(err));
+    setPriceUSD(tokenPrice)
+  }
 
   const handleApprove = (e) => {
     setDepositLoading(true);
@@ -296,8 +294,9 @@ const FarmAvaxFunc = ({
     amount = new BigNumber(amount)
       .times(10 ** selectedTokenDecimals)
       .toFixed(0);
+    console.log("approve amount", amount);
     window
-      .approveToken(selectedBuybackToken, staking._address, amount)
+      .approveToken(selectedBuybackToken, constant._address, amount)
       .then(() => {
         setDepositLoading(false);
         setDepositStatus("deposit");
@@ -315,113 +314,220 @@ const FarmAvaxFunc = ({
   };
 
   const handleStake = async (e) => {
-    setDepositLoading(true);
 
-    let selectedBuybackToken = selectedBuybackToken;
+
+    let selectedBuybackToken = "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7"; // wbnb/wavax
     let amount = depositAmount;
+    setDepositLoading(true);
+    amount = new BigNumber(amount).times(10 ** 18).toFixed(0);
+    console.log("deposit amount", amount);
 
-    amount = new BigNumber(amount)
-      .times(10 ** selectedTokenDecimals)
-      .toFixed(0);
+    let _80Percent = new BigNumber(amount).times(80e2).div(100e2).toFixed(0);
 
-    let _75Percent = new BigNumber(amount).times(75e2).div(100e2).toFixed(0);
-    let _25Percent = new BigNumber(amount).minus(_75Percent).toFixed(0);
-
+    let _20Percent = new BigNumber(amount).times(20e2).div(100e2).toFixed(0);
     let deadline = Math.floor(
       Date.now() / 1e3 + window.config.tx_max_wait_seconds
     ).toFixed(0);
+
     let router = await window.getPangolinRouterContract();
     let WETH = await router.methods.WAVAX().call();
-    let platformTokenAddress = window.config.reward_token_idyp_address;
-    let platformTokenAddress_25Percent = window.config.reward_token_address;
+
+    let platformTokenAddress = "0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17"; //dyp address
+    let rewardTokenAddress = "0xBD100d061E120b2c67A24453CF6368E63f1Be056"; // idyp address
+    _80Percent = new BigNumber(_80Percent).div(2).toFixed(0);
+
+    let path1 = [
+      ...new Set(
+        [selectedBuybackToken, platformTokenAddress].map((a) => a.toLowerCase())
+      ),
+    ];
+
+    let path2 = [
+      ...new Set(
+        [rewardTokenAddress, selectedBuybackToken].map((a) => a.toLowerCase())
+      ),
+    ];
+
+    let _amountOutMin_baseTokenReceived = new BigNumber(_80Percent)
+      .times(100 - window.config.slippage_tolerance_percent)
+      .div(100)
+      .toFixed(0);
+    let minAmountLiquidityB = new BigNumber(_amountOutMin_baseTokenReceived)
+      .times(100 - window.config.slippage_tolerance_percent_liquidity)
+      .div(100)
+      .toFixed(0);
 
     let path = [
       ...new Set(
-        [selectedBuybackToken, WETH, platformTokenAddress].map((a) =>
-          a.toLowerCase()
-        )
+        [selectedBuybackToken, rewardTokenAddress].map((a) => a.toLowerCase())
       ),
     ];
-    let _amountOutMin_75Percent = await router.methods
-      .getAmountsOut(_75Percent, path)
+
+    let _amountOutMin_80Percent = await router.methods
+      .getAmountsOut(_80Percent, path)
       .call()
       .catch((e) => {
-        setDepositLoading(false);
-        setDepositStatus("fail");
-        setErrorMsg(e?.message);
-        setTimeout(() => {
-          setDepositStatus("initial");
-          setDepositAmount("");
-          setErrorMsg("");
-        }, 10000);
+        console.log(e);
       });
-    _amountOutMin_75Percent =
-      _amountOutMin_75Percent[_amountOutMin_75Percent.length - 1];
-    _amountOutMin_75Percent = new BigNumber(_amountOutMin_75Percent)
-      .times(100 - window.config.slippage_tolerance_percent)
-      .div(100)
-      .toFixed(0);
 
-    let path_25Percent = [
-      ...new Set(
-        [selectedBuybackToken, WETH, platformTokenAddress_25Percent].map((a) =>
-          a.toLowerCase()
-        )
-      ),
-    ];
-    let _amountOutMin_25Percent = await router.methods
-      .getAmountsOut(_25Percent, path_25Percent)
+    let _amountOutMin_20Percent = await router.methods
+      .getAmountsOut(_20Percent, path1)
       .call()
       .catch((e) => {
-        setDepositLoading(false);
-        setDepositStatus("fail");
-        setErrorMsg(e?.message);
-        setTimeout(() => {
-          setDepositStatus("initial");
-          setDepositAmount("");
-          setErrorMsg("");
-        }, 10000);
+        console.log(e);
       });
-    _amountOutMin_25Percent =
-      _amountOutMin_25Percent[_amountOutMin_25Percent.length - 1];
-    _amountOutMin_25Percent = new BigNumber(_amountOutMin_25Percent)
-      .times(100 - window.config.slippage_tolerance_percent)
-      .div(100)
-      .toFixed(0);
 
-    let _amountOutMin_stakingReferralFee = new BigNumber(0).toFixed(0);
+    console.log(_amountOutMin_80Percent, _80Percent, path);
+    if (_amountOutMin_80Percent) {
+      _amountOutMin_80Percent =
+        _amountOutMin_80Percent[_amountOutMin_80Percent.length - 1];
+      _amountOutMin_80Percent = new BigNumber(_amountOutMin_80Percent)
+        .times(100 - window.config.slippage_tolerance_percent)
+        .div(100)
+        .toFixed(0);
 
-    let minAmounts = [0, 0, 0, 0, 0, 0, 0, 0];
+      _amountOutMin_20Percent =
+        _amountOutMin_20Percent[_amountOutMin_20Percent.length - 1];
+      _amountOutMin_20Percent = new BigNumber(_amountOutMin_20Percent)
+        .times(100 - window.config.slippage_tolerance_percent)
+        .div(100)
+        .toFixed(0);
 
-    console.log({ selectedBuybackToken, amount, minAmounts, deadline });
+      let minAmountLiquidityA = new BigNumber(_amountOutMin_80Percent)
+        .times(100 - window.config.slippage_tolerance_percent_liquidity)
+        .div(100)
+        .toFixed(0);
 
-    staking
-      .deposit(selectedBuybackToken, amount, minAmounts, deadline)
-      .then(() => {
-        setDepositLoading(false);
-        setDepositStatus("success");
+      let _amountOutMinSwap_real = 0;
+      let _amountOutMinSwap = 0;
+      let lastSwap = await constant.lastSwapExecutionTime();
+      let now = Math.floor(Date.now() / 1000);
+      let tokensToBeSwapped = await constant.tokensToBeSwapped();
+      let tokensToBeDisbursedOrBurnt =
+        await constant.tokensToBeDisbursedOrBurnt();
+      let MaxSwappableAmount = await constant.getMaxSwappableAmount();
+      let getPendingDisbursement = await constant.getPendingDisbursement();
+      let _SwapTokens = new BigNumber(tokensToBeSwapped)
+        .plus(tokensToBeDisbursedOrBurnt)
+        .plus(getPendingDisbursement)
+        .toFixed(0);
+
+      if (now - lastSwap > 86400 && _SwapTokens > 0) {
+        console.log(1);
+
+        console.log(tokensToBeSwapped);
+        console.log(tokensToBeDisbursedOrBurnt);
+        console.log(MaxSwappableAmount);
+        console.log(_SwapTokens);
+
+        if (BigNumber(_SwapTokens).gte(MaxSwappableAmount)) {
+          _amountOutMinSwap = MaxSwappableAmount;
+        }
+
+        if (BigNumber(_SwapTokens).lt(MaxSwappableAmount)) {
+          _amountOutMinSwap = _SwapTokens;
+        }
+
+        console.log(_amountOutMinSwap);
+        _amountOutMinSwap_real = await router.methods
+          .getAmountsOut(_amountOutMinSwap, path2)
+          .call();
+        _amountOutMinSwap_real =
+          _amountOutMinSwap_real[_amountOutMinSwap_real.length - 1];
+        _amountOutMinSwap_real = new BigNumber(_amountOutMinSwap_real)
+          .times(100 - window.config.slippage_tolerance_percent_liquidity)
+          .div(100)
+          .toFixed(0);
+        _amountOutMinSwap_real.toString();
+      }
+
+      let _amountOutMin_dypReceived = new BigNumber(0).toFixed(0);
+      let pendingDivs = await constant.getPendingDivsEth(coinbase);
+
+      if (pendingDivs > 0) {
+        _amountOutMin_dypReceived = new BigNumber(pendingDivs)
+          .times(100 - window.config.slippage_tolerance_percent)
+          .div(100)
+          .toFixed(0);
+      }
+
+      let minAmounts = [
+        _amountOutMin_20Percent,
+        0,
+        minAmountLiquidityA,
+        minAmountLiquidityB,
+        _amountOutMin_80Percent,
+        _amountOutMin_baseTokenReceived,
+        _amountOutMin_dypReceived,
+        _amountOutMinSwap_real,
+      ];
+
+      console.log(minAmounts);
+
+      //console.log({selectedBuybackToken ,amount, minAmounts, deadline})
+
+      constant
+        .deposit(selectedBuybackToken, amount, minAmounts, deadline)
+        .then(() => {
+          getLPTokens();
+          getTotalLP();
+          setDepositLoading(false);
+          setDepositStatus("success");
+          refreshBalance();
+          setTimeout(() => {
+            setDepositAmount("");
+            setDepositStatus("initial");
+            setErrorMsg("");
+          }, 5000);
+        })
+        .catch((e) => {
+          setDepositLoading(false);
+          setDepositStatus("fail");
+          setErrorMsg(e?.message);
+          setTimeout(() => {
+            setDepositAmount("");
+            setDepositStatus("initial");
+            setErrorMsg("");
+          }, 10000);
+        });
+    } else console.log("no");
+  };
+
+  const checkApproval = async (amount) => {
+    let selectedBuybackToken = "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7"; // wbnb/wavax
+
+    const result = await window
+      .checkapproveStakePool(coinbase, selectedBuybackToken, constant._address)
+      .then((data) => {
+        console.log(data);
+        return data;
       })
       .catch((e) => {
-        setDepositLoading(false);
-        setDepositStatus("fail");
-        setErrorMsg(e?.message);
-        setTimeout(() => {
-          setDepositStatus("initial");
-          setDepositAmount("");
-          setErrorMsg("");
-        }, 10000);
+        console.log(e);
       });
+
+    let result_formatted = new BigNumber(result).div(1e18).toFixed(6);
+
+    if (
+      Number(result_formatted) >= Number(amount) &&
+      Number(result_formatted) !== 0
+    ) {
+      setDepositStatus("deposit");
+    } else {
+      setDepositStatus("initial");
+    }
   };
 
   const handleSelectedTokenChange = async (tokenAddress) => {
-    let tokenDecimals = window.buyback_tokens_farmingavax[tokenAddress].decimals;
-    let selectedTokenSymbol = window.buyback_tokens_farmingavax[tokenAddress].symbol;
+    let tokenDecimals = buyback_activetokens_farmingavax[tokenAddress].decimals;
+    let selectedTokenSymbol =
+      buyback_activetokens_farmingavax[tokenAddress].symbol;
 
     setselectedBuybackToken(tokenAddress);
     setSelectedTokenBalance("");
     setselectedTokenDecimals(tokenDecimals);
     setSelectedTokenSymbol(selectedTokenSymbol);
-    setSelectedTokenLogo(window.buyback_tokens_farmingavax[tokenAddress].symbol);
+    setSelectedTokenLogo(buyback_activetokens_farmingavax[tokenAddress].symbol);
 
     let selectedTokenBalance = await window.getTokenHolderBalance(
       tokenAddress,
@@ -439,7 +545,9 @@ const FarmAvaxFunc = ({
   };
 
   const handleWithdrawDyp = async () => {
-    let amountConstant = await constant.depositedTokens(coinbase);
+    let amountConstant = await staking.depositedTokens(coinbase).catch((e) => {
+      console.error(e);
+    });
     amountConstant = new BigNumber(amountConstant).toFixed(0);
     setWithdrawLoading(true);
 
@@ -448,7 +556,7 @@ const FarmAvaxFunc = ({
     );
 
     try {
-      constant
+      staking
         .unstake(amountConstant, 0, deadline)
         .then(() => {
           setWithdrawStatus("success");
@@ -471,132 +579,256 @@ const FarmAvaxFunc = ({
       return;
     }
   };
-
   const handleWithdraw = async (e) => {
-    //   e.preventDefault();
-    setWithdrawLoading(true);
-    let amountConstant = await constant.depositedTokens(coinbase);
-    amountConstant = new BigNumber(amountConstant).toFixed(0);
+    let selectedBuybackToken = "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7"; // can only be WETH
+    let rewardTokenAddress = "0xBD100d061E120b2c67A24453CF6368E63f1Be056"; // idyp address
 
-    let withdrawAsToken = selectedBuybackTokenWithdraw;
+    let amount = await constant.depositedTokens(coinbase);
+    let PAIR_ABI = window.PAIRAVAX_ABI;
+    let pair_token_address = "0x66eecc97203704d9e2db4a431cb0e9ce92539d5a";
+    let web3 = window.avaxWeb3;
+    let pair = new web3.eth.Contract(PAIR_ABI, pair_token_address);
 
-    let amountBuyback = await staking.depositedTokens(coinbase);
+    let totalSupply = await pair.methods.totalSupply().call();
+    let reserves = await pair.methods.getReserves().call();
+    let maxETH = reserves[0];
+    let maxToken = reserves[1];
+
+    console.log(maxETH);
+    console.log(maxToken);
+    console.log(amount);
+    console.log(totalSupply);
+
+    let maxUserEth = (amount * maxETH) / totalSupply;
+    maxUserEth = new BigNumber(maxUserEth).toFixed(0);
+    let maxUserEth1 =
+      (maxUserEth *
+        (100 - window.config.slippage_tolerance_percent_liquidity)) /
+      100;
+    maxUserEth1 = new BigNumber(maxUserEth1).toFixed(0);
+    let maxUserToken = (amount * maxToken) / totalSupply;
+    maxUserToken = new BigNumber(maxUserToken).toFixed(0);
+    let maxUserToken1 = new BigNumber(maxUserToken)
+      .times(100 - window.config.slippage_tolerance_percent_liquidity)
+      .div(100)
+      .toFixed(0);
+
+    console.log(maxUserEth);
+    console.log(maxUserToken);
 
     let deadline = Math.floor(
       Date.now() / 1e3 + window.config.tx_max_wait_seconds
+    ).toFixed(0);
+
+    let router = await window.getPangolinRouterContract();
+    let WETH = await router.methods.WAVAX().call();
+
+    let platformTokenAddress = window.config.reward_token_address; //these will be the same addresses
+    let path2 = [
+      ...new Set(
+        [rewardTokenAddress, selectedBuybackToken].map((a) => a.toLowerCase())
+      ),
+    ];
+    let _amountOutMinSwap_real = 0;
+    let _amountOutMinSwap = 0;
+    let lastSwap = await constant.lastSwapExecutionTime();
+    let now = Math.floor(Date.now() / 1000);
+    let tokensToBeSwapped = await constant.tokensToBeSwapped();
+    let tokensToBeDisbursedOrBurnt =
+      await constant.tokensToBeDisbursedOrBurnt();
+    let MaxSwappableAmount = await constant.getMaxSwappableAmount();
+    let getPendingDisbursement = await constant.getPendingDisbursement();
+    let _SwapTokens = new BigNumber(tokensToBeSwapped)
+      .plus(tokensToBeDisbursedOrBurnt)
+      .plus(getPendingDisbursement)
+      .toFixed(0);
+
+    if (now - lastSwap > 86400 && _SwapTokens > 0) {
+      console.log(1);
+
+      console.log(tokensToBeSwapped);
+      console.log(tokensToBeDisbursedOrBurnt);
+      console.log(MaxSwappableAmount);
+      console.log(_SwapTokens);
+
+      if (BigNumber(_SwapTokens).gte(MaxSwappableAmount)) {
+        _amountOutMinSwap = MaxSwappableAmount;
+      }
+
+      if (BigNumber(_SwapTokens).lt(MaxSwappableAmount)) {
+        _amountOutMinSwap = _SwapTokens;
+      }
+
+      console.log(_amountOutMinSwap);
+      _amountOutMinSwap_real = await router.methods
+        .getAmountsOut(_amountOutMinSwap, path2)
+        .call();
+      _amountOutMinSwap_real =
+        _amountOutMinSwap_real[_amountOutMinSwap_real.length - 1];
+      _amountOutMinSwap_real = new BigNumber(_amountOutMinSwap_real)
+        .times(100 - window.config.slippage_tolerance_percent_liquidity)
+        .div(100)
+        .toFixed(0);
+      _amountOutMinSwap_real.toString();
+    }
+
+    let _amountOutMin_crazReceived = new BigNumber(0).toFixed(0);
+    let pendingDivs = await constant.getPendingDivsEth(coinbase);
+    console.log(pendingDivs);
+    if (pendingDivs > 0) {
+      _amountOutMin_crazReceived = new BigNumber(pendingDivs)
+        .times(100 - window.config.slippage_tolerance_percent)
+        .div(100)
+        .toFixed(0);
+    }
+    let minAmounts = [
+      maxUserToken1,
+      maxUserEth1,
+      0,
+      0,
+      _amountOutMin_crazReceived,
+      _amountOutMinSwap_real,
+    ];
+
+    console.log(minAmounts);
+    constant
+      .withdraw(selectedBuybackToken, amount, minAmounts, deadline)
+      .then(() => {
+        setWithdrawLoading(false);
+        setWithdrawStatus("success");
+        refreshBalance();
+        // getBalance();
+      })
+      .catch((e) => {
+        setWithdrawLoading(false);
+        setWithdrawStatus("fail");
+        setErrorMsg3(e?.message);
+      });
+  };
+
+  const handleClaimDivs = async () => {
+    let deadline = Math.floor(
+      Date.now() / 1e3 + window.config.tx_max_wait_seconds
     );
+    setClaimLoading(true);
+    let address = coinbase;
+    let selectedBuybackToken2 = "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7"; // wbnb/wavax
+    let rewardTokenAddress = "0xBD100d061E120b2c67A24453CF6368E63f1Be056"; // idyp address
 
-    let minAmounts = [0, 0, 0, 0, 0, 0];
+    let amount = await constant.getPendingDivs(address);
 
-    console.log({ withdrawAsToken, amountBuyback, minAmounts, deadline });
+    let amountETH = await constant.getPendingDivsEth(address);
+
+    let router = await window.getPangolinRouterContract();
+    let WETH = await router.methods.WAVAX().call();
+
+    let platformTokenAddress = window.config.reward_token_address;
+
+    let _amountOutMinConstant = 0;
+
+    let path = [
+      ...new Set([WETH, platformTokenAddress].map((a) => a.toLowerCase())),
+    ];
+
+    let path2 = [
+      ...new Set(
+        [rewardTokenAddress, selectedBuybackToken2].map((a) => a.toLowerCase())
+      ),
+    ];
+
+    if (amount > 0) {
+      let _amountOutMinConstant = await router.methods
+        .getAmountsOut(amount, path)
+        .call();
+
+      _amountOutMinConstant =
+        _amountOutMinConstant[_amountOutMinConstant.length - 1];
+
+      _amountOutMinConstant = new BigNumber(_amountOutMinConstant)
+        .times(100 - window.config.slippage_tolerance_percent)
+        .div(100)
+        .toFixed(0);
+    }
+
+    let _amountOutMinConstantETH = new BigNumber(amountETH)
+      .times(100 - window.config.slippage_tolerance_percent)
+      .div(100)
+      .toFixed(0);
+    console.log(_amountOutMinConstant);
+
+    let path1 = [
+      ...new Set([platformTokenAddress, WETH].map((a) => a.toLowerCase())),
+    ];
+
+    let _amountOutMinSwap_real = 0;
+    let _amountOutMinSwap = 0;
+    let lastSwap = await constant.lastSwapExecutionTime();
+    let now = Math.floor(Date.now() / 1000);
+
+    let tokensToBeSwapped = await constant.tokensToBeSwapped();
+    let tokensToBeDisbursedOrBurnt =
+      await constant.tokensToBeDisbursedOrBurnt();
+    let MaxSwappableAmount = await constant.getMaxSwappableAmount();
+    let getPendingDisbursement = await constant.getPendingDisbursement();
+    let _SwapTokens = new BigNumber(tokensToBeSwapped)
+      .plus(tokensToBeDisbursedOrBurnt)
+      .plus(getPendingDisbursement)
+      .toFixed(0);
+
+    if (now - lastSwap > 86400 && _SwapTokens > 0) {
+      if (BigNumber(_SwapTokens).gte(MaxSwappableAmount)) {
+        _amountOutMinSwap = MaxSwappableAmount;
+      }
+
+      if (BigNumber(_SwapTokens).lt(MaxSwappableAmount)) {
+        _amountOutMinSwap = _SwapTokens;
+      }
+
+      console.log(_amountOutMinSwap);
+      _amountOutMinSwap_real = await router.methods
+        .getAmountsOut(_amountOutMinSwap, path2)
+        .call();
+      _amountOutMinSwap_real =
+        _amountOutMinSwap_real[_amountOutMinSwap_real.length - 1];
+      _amountOutMinSwap_real = new BigNumber(_amountOutMinSwap_real)
+        .times(100 - window.config.slippage_tolerance_percent_liquidity)
+        .div(100)
+        .toFixed(0);
+      _amountOutMinSwap_real.toString();
+    }
+
+    console.log({
+      _amountOutMinConstant,
+      _amountOutMinConstantETH,
+      _amountOutMinSwap_real,
+      deadline,
+    });
 
     try {
-      staking
-        .withdraw(withdrawAsToken, amountBuyback, minAmounts, deadline)
+      constant
+        .claimAs(
+          window.config.weth_address,
+          _amountOutMinConstantETH,
+          _amountOutMinConstant,
+          _amountOutMinSwap_real,
+          deadline
+        )
         .then(() => {
-          setWithdrawStatus("success");
-          setWithdrawLoading(false);
+          setClaimStatus("success");
+          setClaimLoading(false);
+          setPendingDivs(getFormattedNumber(0, 6));
+          refreshBalance();
         })
         .catch((e) => {
-          setWithdrawStatus("failed");
-          setWithdrawLoading(false);
-          setErrorMsg3(e?.message);
+          setClaimStatus("fail");
+          setClaimLoading(false);
+          setErrorMsg2(e?.message);
+          console.log(e);
           setTimeout(() => {
-            setWithdrawStatus("initial");
-            setSelectedPool("");
-            setErrorMsg3("");
+            setClaimStatus("initial");
+            setErrorMsg2("");
           }, 10000);
         });
-    } catch (e) {
-      setErrorMsg3(e?.message);
-      console.error(e);
-      return;
-    }
-  };
-
-  const handleClaimDivs = async (e) => {
-    //   e.preventDefault();
-    setClaimLoading(true);
-
-    let deadline = Math.floor(
-      Date.now() / 1e3 + window.config.tx_max_wait_seconds
-    );
-
-    let selectedToken = selectedClaimToken;
-
-    if (selectedToken == 0) {
-      try {
-        staking
-          .claim(0, 0, deadline)
-          .then(() => {
-            setClaimStatus("success");
-            setClaimLoading(false);
-            setPendingDivs(getFormattedNumber(0, 6))
-          })
-          .catch((e) => {
-            setClaimStatus("failed");
-            setClaimLoading(false);
-            setErrorMsg2(e?.message);
-            setTimeout(() => {
-              setClaimStatus("initial");
-              setSelectedPool("");
-              setErrorMsg2("");
-            }, 10000);
-          });
-      } catch (e) {
-        setClaimStatus("failed");
-        setClaimLoading(false);
-        setErrorMsg2(e?.message);
-        setTimeout(() => {
-          setClaimStatus("initial");
-          setSelectedPool("");
-          setErrorMsg2("");
-        }, 10000);
-
-        console.error(e);
-        return;
-      }
-    } else {
-      try {
-        staking
-          .claimAs(window.config.claim_as_ethavax_address, 0, 0, 0, deadline)
-          .then(() => {
-            setClaimStatus("success");
-            setClaimLoading(false);
-          })
-          .catch((e) => {
-            setClaimStatus("failed");
-            setClaimLoading(false);
-            setErrorMsg2(e?.message);
-            setTimeout(() => {
-              setClaimStatus("initial");
-              setSelectedPool("");
-              setErrorMsg2("");
-            }, 10000);
-          });
-      } catch (e) {
-        setClaimStatus("failed");
-        setClaimLoading(false);
-        setErrorMsg2(e?.message);
-        setTimeout(() => {
-          setClaimStatus("initial");
-          setSelectedPool("");
-          setErrorMsg2("");
-        }, 10000);
-
-        console.error(e);
-        return;
-      }
-    }
-  };
-
-  const handleClaimAsDivs = async (token) => {
-    let deadline = Math.floor(
-      Date.now() / 1e3 + window.config.tx_max_wait_seconds
-    );
-
-    try {
-      staking.claimAs(window.config.claim_as_ethavax_address, 0, 0, 0, deadline);
     } catch (e) {
       console.error(e);
       return;
@@ -612,23 +844,59 @@ const FarmAvaxFunc = ({
 
     let address = coinbase;
 
-    let amount = await constant.getTotalPendingDivs(address);
-    let router = await window.getPancakeswapRouterContract();
-    let WETH = await router.methods.getPangolinRouterContract().call();
+    let amount = await staking.rewardsPendingClaim(address);
+    let router = await window.getPangolinRouterContract();
+    let WETH = await router.methods.WAVAX().call();
     let platformTokenAddress = window.config.reward_token_address;
     let rewardTokenAddress = window.config.reward_token_idyp_address;
     let path = [
-      ...new Set(
-        [rewardTokenAddress, WETH, platformTokenAddress].map((a) =>
-          a.toLowerCase()
-        )
-      ),
+      ...new Set([rewardTokenAddress, WETH, platformTokenAddress].map((a) => a.toLowerCase())),
     ];
-    let _amountOutMinConstant = await router.methods
+
+    let path1 = [
+      ...new Set([rewardTokenAddress, WETH].map((a) => a.toLowerCase())),
+    ];
+
+    let PAIR_ABI = window.PAIRAVAX_ABI;
+    let pair_token_address = "0x66eecc97203704d9e2db4a431cb0e9ce92539d5a";
+    let web3 = window.avaxWeb3;
+
+    let pair = new web3.eth.Contract(PAIR_ABI, pair_token_address);
+    let totalSupply = await pair.methods.totalSupply().call().catch((e)=>{console.log(e)});
+    let reserves = await pair.methods.getReserves().call().catch((e)=>{console.log(e)});
+
+
+    let amountlpContract = await pair.methods.balanceOf(constant._address).call()
+
+    let maxETH = reserves[0];
+    let maxToken = reserves[1];
+
+    let maxContractEth = (amountlpContract * maxETH) / totalSupply;
+    maxContractEth = new BigNumber(maxContractEth).toFixed(0);
+    let maxContractToken = (amountlpContract * maxToken) / totalSupply;
+    maxContractToken = new BigNumber(maxContractToken).toFixed(0);
+
+    
+
+    let totalContractUSD = await router.methods
+    .getAmountsOut(maxContractToken, path1)
+    .call().call().catch((e) => {
+      setClaimStatus("failed");
+      console.log(e)
+      setClaimLoading(false);
+      setErrorMsg2(e?.message);
+      setTimeout(() => {
+        setClaimStatus("initial");
+        setSelectedPool("");
+        setErrorMsg2("");
+      }, 10000);
+    });
+
+      let amountsPendingClaim = await router.methods
       .getAmountsOut(amount, path)
-      .call()
-      .catch((e) => {
+      .call().call().catch((e) => {
         setClaimStatus("failed");
+        console.log(e)
         setClaimLoading(false);
         setErrorMsg2(e?.message);
         setTimeout(() => {
@@ -637,22 +905,25 @@ const FarmAvaxFunc = ({
           setErrorMsg2("");
         }, 10000);
       });
-    _amountOutMinConstant =
-      _amountOutMinConstant[_amountOutMinConstant.length - 1];
-    _amountOutMinConstant = new BigNumber(_amountOutMinConstant)
-      .times(100 - window.config.slippage_tolerance_percent)
-      .div(100)
-      .toFixed(0);
 
-    let referralFee = new BigNumber(_amountOutMinConstant)
-      .times(500)
-      .div(1e4)
-      .toFixed(0);
-    referralFee = referralFee.toString();
+    amountsPendingClaim = amountsPendingClaim[totalContractUSD.length - 1];
+
+   amountsPendingClaim = BigNumber(amountsPendingClaim)
+      .div(1e18)
+      .toFixed(18);
+
+    amountsPendingClaim = new BigNumber(amountsPendingClaim)
+    .times(100 - window.config.slippage_tolerance_percent)
+    .div(100)
+    .toFixed(0);
+
+
+
+console.log(0, amountsPendingClaim, deadline)
 
     try {
-      constant
-        .claim(referralFee, _amountOutMinConstant, deadline)
+      staking
+        .claim(0, amountsPendingClaim, deadline)
         .then(() => {
           setClaimStatus("success");
           setClaimLoading(false);
@@ -695,331 +966,80 @@ const FarmAvaxFunc = ({
     return Number(apy) || 0;
   };
 
-//   const refreshBalance = async () => {
-//     let coinbase = coinbase;
+  const getLPTokens = async () => {
+    let router = await window.getPangolinRouterContract().catch((e)=>{console.log(e)});
+    let WETH = await router.methods.WAVAX().call().catch((e)=>{console.log(e)});
+    let rewardTokenAddress = "0xBD100d061E120b2c67A24453CF6368E63f1Be056"; // idyp address
 
-//     if (window.coinbase_address) {
-//       coinbase = window.coinbase_address;
-//       setCoinbase2(coinbase);
-//     }
+    let selectedBuybackToken = "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7"; // can only be WETH
+    let amount = await constant.depositedTokens(coinbase).catch((e)=>{console.log(e)});
+    let PAIR_ABI = window.PAIRAVAX_ABI;
+    let pair_token_address = "0x66eecc97203704d9e2db4a431cb0e9ce92539d5a";
+    let web3 = window.avaxWeb3;
 
-//     let lp_data = the_graph_result.lp_data;
+    let pair = new web3.eth.Contract(PAIR_ABI, pair_token_address);
+    let totalSupply = await pair.methods.totalSupply().call().catch((e)=>{console.log(e)});
+    let reserves = await pair.methods.getReserves().call().catch((e)=>{console.log(e)});
+    let amountlpContract = await pair.methods.balanceOf(constant._address).call()
 
-//     // let usd_per_dyps = the_graph_result.price_DYPS ? the_graph_result.price_DYPS : 1
-//     let usd_per_dyps = 0.00001;
+    let maxETH = reserves[0];
+    let maxToken = reserves[1];
 
-//     try {
-//       let amount = new BigNumber(1000000000000000000).toFixed(0);
-//       let router = await window.getPangolinRouterContract();
-//       let WETH = await router.methods.WAVAX().call();
-//       let platformTokenAddress = window.config.USDCe_address;
-//       let rewardTokenAddress = window.config.reward_token_idyp_address;
-//       let path = [
-//         ...new Set(
-//           [rewardTokenAddress, WETH, platformTokenAddress].map((a) =>
-//             a.toLowerCase()
-//           )
-//         ),
-//       ];
-//       let _amountOutMin = await router.methods
-//         .getAmountsOut(amount, path)
-//         .call();
-//       _amountOutMin = _amountOutMin[_amountOutMin.length - 1];
-//       _amountOutMin = new BigNumber(_amountOutMin).div(1e18).toFixed(18);
-
-//       let _bal = token.balanceOf(coinbase);
-//       let _rBal = reward_token.balanceOf(coinbase);
-
-//       let _pDivs = staking.getPendingDivs(coinbase);
-
-//       let _pDivsEth = staking.getPendingDivsEth(coinbase);
-
-//       let _tEarned = staking.totalEarnedTokens(coinbase);
-
-//       let _tEarnedEth = staking.totalEarnedEth(coinbase);
-
-//       let _stakingTime = staking.depositTime(coinbase);
-
-//       let _dTokens = staking.depositedTokens(coinbase);
-
-//       let _lClaimTime = staking.lastClaimedTime(coinbase);
-
-//       let _tvl = token.balanceOf(staking._address);
-
-//       //Take iDYP Balance on Staking & Farming
-
-//       let _tvlConstantiDYP = reward_token_idyp.balanceOf(
-//         constant._address
-//       ); /* TVL of iDYP on Staking */
-
-//       let _tvlConstantDYP = reward_token.balanceOf(
-//         constant._address
-//       ); /* TVL of iDYP on Staking */
-
-//       let _tvliDYP = reward_token_idyp.balanceOf(
-//         staking._address
-//       ); /* TVL of iDYP on Farming */
-
-//       let _dTokensDYP = constant.depositedTokens(coinbase);
-
-//       let _pendingDivsStaking = constant.getTotalPendingDivs(coinbase);
-
-//       //Take DYPS Balance
-//       let _tvlDYPS = token_dypsbsc.balanceOf(
-//         staking._address
-//       ); /* TVL of DYPS */
-
-//       let [
-//         token_balance2,
-//         reward_token_balance2,
-//         pendingDivs2,
-//         totalEarnedTokens2,
-//         stakingTime2,
-//         depositedTokens2,
-//         lastClaimedTime2,
-//         tvl2,
-//         totalEarnedEth2,
-//         pendingDivsEth2,
-//         tvlConstantiDYP2,
-//         tvlConstantDYP2,
-//         tvliDYP2,
-//         depositedTokensDYP2,
-//         pendingDivsStaking2,
-//         tvlDYPS2,
-//       ] = await Promise.all([
-//         _bal,
-//         _rBal,
-//         _pDivs,
-//         _tEarned,
-//         _stakingTime,
-//         _dTokens,
-//         _lClaimTime,
-//         _tvl,
-//         _tEarnedEth,
-//         _pDivsEth,
-//         _tvlConstantiDYP,
-//         _tvlConstantDYP,
-//         _tvliDYP,
-//         _dTokensDYP,
-//         _pendingDivsStaking,
-//         _tvlDYPS,
-//       ]);
-
-//       let tvlValueConstantDYP = new BigNumber(tvlConstantDYP2)
-//         .times(usdPerToken)
-//         .toFixed(18);
-//       let tvlValueiDYP = new BigNumber(tvlConstantiDYP2)
-//         .times(_amountOutMin)
-//         .toFixed(18);
-//       let tvlValueiDYPFarming = new BigNumber(tvliDYP2)
-//         .times(_amountOutMin)
-//         .toFixed(18);
-//       let usd_per_lp = lp_data ? lp_data[lp_id].usd_per_lp : 0;
-
-//       /* USD VALUE OF MY LP DEPOSITED */
-//       // let myDepositedLpTokens = new BigNumber(depositedTokens).times(usd_per_lp).toFixed(18)
-//       let myDepositedLpTokens = new BigNumber(depositedTokens2).toFixed(18);
-
-//       /* USD VALUE OF WITHDRAW OF LP + iDYP */
-//       // let depositedTokensUSD = new BigNumber(depositedTokens).times(usd_per_lp).plus(tvlValueConstantDYP).toFixed(18)
-//       let depositedTokensUSD = new BigNumber(depositedTokens2).toFixed(18);
-      
-//       // let tvlUSD = new BigNumber(tvl).times(usd_per_lp).plus(tvlValueiDYP).toFixed(18)
-//       let withdraw_amount_formatted = new BigNumber(depositedTokensUSD)
-//         .div(1e18)
-//         .toFixed(2);
-//       setWithdrawAmount(withdraw_amount_formatted);
-
-//       setDepositedTokensUSD(getFormattedNumber(depositedTokensUSD, 2));
-//       /* USD VALUE OF TOTAL LP DEPOSITED */
-//       let tvlUSD = new BigNumber(tvl2).times(usd_per_lp).toFixed(18);
-//       // let tvlUSD = new BigNumber(tvl).toFixed(18)
-
-//       let totalValueLocked_formatted = new BigNumber(tvlUSD)
-//         .plus(tvlValueiDYP)
-//         .plus(tvlValueiDYPFarming)
-//         .plus(tvlValueConstantDYP)
-//         .toFixed(18);
-//       //console.log({tvlValueConstantDYP})
-//       setTotalValueLocked(getFormattedNumber(totalValueLocked_formatted, 2));
-//       let tvl_usd = totalValueLocked_formatted / 1e18;
-
-//       setTvlUSD(getFormattedNumber(tvl_usd, 2));
-
-//       let tvlDyps_formatted = new BigNumber(tvlDYPS2)
-//         .times(usd_per_dyps)
-//         .toFixed(18);
-//       setTvlDyps(getFormattedNumber(tvlDyps_formatted, 2));
-//       // let myShare = ((depositedTokens / tvl) * 100).toFixed(2); tbd
-//       // myShare = getFormattedNumber(myShare, 2);
-
-//       let token_balance_formatted = new BigNumber(
-//         token_balance2 * LP_AMPLIFY_FACTOR
-//       )
-//         .div(1e18)
-//         .toString(10);
-//       setToken_balance(getFormattedNumber(token_balance_formatted, 2));
-//       // token_balance = getFormattedNumber(token_balance_formatted, 2);
-
-//       let pendingDivsEth_formatted = new BigNumber(pendingDivsEth2)
-//         .div(1e18)
-//         .toString(10);
-//       setPendingDivsEth(getFormattedNumber(pendingDivsEth_formatted, 3));
-
-//       let totalEarnedEth_formatted = new BigNumber(totalEarnedEth2)
-//         .div(1e18)
-//         .toString(10);
-//       setTotalEarnedEth(getFormattedNumber(totalEarnedEth_formatted, 6));
-
-//       let reward_token_balance_formatted = new BigNumber(reward_token_balance2)
-//         .div(10 ** TOKEN_DECIMALS)
-//         .toString(10);
-//       setReward_token_balance(
-//         getFormattedNumber(reward_token_balance_formatted, 6)
-//       );
-
-//       let pendingDivs_formatted = new BigNumber(pendingDivsStaking2)
-//         .div(10 ** TOKEN_DECIMALS)
-//         .times(usd_per_idyp)
-//         .div(usd_per_token)
-//         .toString(10);
-//       setPendingDivs(getFormattedNumber(pendingDivs_formatted, 3));
-
-//       let totalEarnedTokens_formatted = new BigNumber(totalEarnedTokens2)
-//         .div(10 ** TOKEN_DECIMALS)
-//         .toString(10);
-//       setTotalEarnedTokens(getFormattedNumber(totalEarnedTokens_formatted, 6));
-
-//       let depositedTokens_formatted = new BigNumber(
-//         depositedTokensUSD * LP_AMPLIFY_FACTOR
-//       )
-//         .div(1e18)
-//         .toString(10);
-//       setDepositedTokens(getFormattedNumber(depositedTokens_formatted, 2));
-
-//       let myDepositedLpTokens_formatted = new BigNumber(
-//         myDepositedLpTokens * LP_AMPLIFY_FACTOR
-//       )
-//         .div(1e18)
-//         .toString(10);
-//       setMyDepositedLpTokens(
-//         getFormattedNumber(myDepositedLpTokens_formatted, 2)
-//       );
-
-//       let depositedTokensDYP_formatted = new BigNumber(depositedTokensDYP2)
-//         .div(1e18)
-//         .toString(10);
-//       setDepositedTokensDYP(
-//         getFormattedNumber(depositedTokensDYP_formatted, 2)
-//       );
-
-//       let tvlConstantDYP_formatted = new BigNumber(tvlConstantDYP2)
-//         .div(1e18)
-//         .toString(10);
-//       setTvlConstantDYP(getFormattedNumber(tvlConstantDYP_formatted, 2));
-
-//       let tvl_formatted = new BigNumber(tvlUSD * LP_AMPLIFY_FACTOR)
-//         .div(1e18)
-//         .toString(10);
-//       setTvl(getFormattedNumber(tvl_formatted, 2));
-
-//       let stakingTime_formatted = stakingTime2 * 1e3;
-
-//       setStakingTime(stakingTime_formatted);
-
-//       setlastClaimedTime(lastClaimedTime2);
-
-//       let stakingOwner2 = await staking.owner();
-//       setStakingOwner(stakingOwner2);
-//     } catch (e) {
-//       console.error(e);
-//     }
-
-//     staking
-//       .cliffTime()
-//       .then((cliffTime) => {
-//         setCliffTime(Number(cliffTime * 1e3));
-//       })
-//       .catch(console.error);
-
-//     staking
-//       .tokensToBeDisbursedOrBurnt()
-//       .then((tokensToBeDisbursedOrBurnt2) => {
-//         let tokensToBeDisbursedOrBurnt_formatted = new BigNumber(
-//           tokensToBeDisbursedOrBurnt2
-//         )
-//           .div(1e18)
-//           .toString(10);
-
-//         setTokensToBeDisbursedOrBurnt(
-//           getFormattedNumber(tokensToBeDisbursedOrBurnt_formatted, 6)
-//         );
-//       })
-//       .catch(console.error);
-
-//     staking.tokensToBeSwapped().then((tokensToBeSwapped2) => {
-//       let tokensToBeSwapped_formatted = new BigNumber(tokensToBeSwapped2)
-//         .div(1e18)
-//         .toString(10);
-//       setTokensToBeSwapped(getFormattedNumber(tokensToBeSwapped_formatted, 6));
-//     });
-
-//     window.wethbsc
-//       .balanceOf(coinbase)
-//       .then((wethBalance2) => {
-//         let wethBalance_formatted = new BigNumber(wethBalance2)
-//           .div(1e18)
-//           .toString(10);
-//         setWethBalance(getFormattedNumber(wethBalance_formatted, 6));
-//       })
-//       .catch(console.error);
-
-//     staking.lastSwapExecutionTime().then((lastSwapExecutionTime2) => {
-//       setLastSwapExecutionTime(lastSwapExecutionTime2 * 1e3);
-//     });
-
-//     staking.swapAttemptPeriod().then((swapAttemptPeriod2) => {
-//       setSwapAttemptPeriod(swapAttemptPeriod2 * 1e3);
-//     });
-
-//     staking.contractDeployTime().then((contractDeployTime2) => {
-//       setContractDeployTime(contractDeployTime2);
-//     });
-
-//     staking.disburseDuration().then((disburseDuration2) => {
-//       setDisburseDuration(disburseDuration2);
-//     });
-
-//     //Set Value $ of iDYP & DYP for Withdraw Input
-
-//     //console.log(disburseDuration)
-//     //console.log(contractDeployTime)
-
-//     try {
-//       let selectedTokenBalance2 = await window.getTokenHolderBalance(
-//         selectedBuybackToken,
-//         coinbase
-//       );
-//       setSelectedTokenBalance(selectedTokenBalance2);
-//     } catch (e) {
-//       console.warn(e);
-//     }
-//   };
+    let maxContractEth = (amountlpContract * maxETH) / totalSupply;
+    maxContractEth = new BigNumber(maxContractEth).toFixed(0);
+    let maxContractToken = (amountlpContract * maxToken) / totalSupply;
+    maxContractToken = new BigNumber(maxContractToken).toFixed(0);
 
 
+    let maxUserEth = (amount * maxETH) / totalSupply;
+    maxUserEth = new BigNumber(maxUserEth).toFixed(0);
+    let maxUserEth1 =
+      (maxUserEth *
+        (100 - window.config.slippage_tolerance_percent_liquidity)) /
+      100;
+    maxUserEth1 = new BigNumber(maxUserEth1).toFixed(0);
+    let maxUserToken = (amount * maxToken) / totalSupply;
+    maxUserToken = new BigNumber(maxUserToken).toFixed(0);
+    let maxUserToken1 = new BigNumber(maxUserToken)
+      .times(100 - window.config.slippage_tolerance_percent_liquidity)
+      .div(100)
+      .toFixed(0);
+    let path1 = [
+      ...new Set([rewardTokenAddress, WETH].map((a) => a.toLowerCase())),
+    ];
 
-const refreshBalance = async () => {
+    let totalContractUSD = await router.methods
+    .getAmountsOut(maxContractToken, path1)
+    .call();
+  totalContractUSD = totalContractUSD[totalContractUSD.length - 1];
+
+  totalContractUSD = BigNumber(totalContractUSD)
+      .plus(maxContractEth)
+      .div(1e18)
+      .toFixed(18);
+
+      setlpTokensContract(totalContractUSD)
+
+    let _userWithdrawAmount = await router.methods
+      .getAmountsOut(maxUserToken, path1)
+      .call().catch((e)=>{console.log(e);console.log('test')});
+    _userWithdrawAmount = _userWithdrawAmount[_userWithdrawAmount.length - 1];
+
+    _userWithdrawAmount = BigNumber(_userWithdrawAmount).plus(maxUserEth).div(1e18).toFixed(18);
+    setlpTokens(_userWithdrawAmount)
+  };
+
+  const refreshBalance = async () => {
     let coinbase = coinbase;
-
-
+   
     if (window.coinbase_address) {
-      coinbase3 = window.coinbase_address;
-      setCoinbase2(coinbase3)
+      coinbase = window.coinbase_address;
+      setCoinbase2(coinbase);
     }
 
-    let lp_data = props.the_graph_result.lp_data;
+    let lp_data = the_graph_result.lp_data;
 
-    // let usd_per_dyps = props.the_graph_result.price_DYPS ? props.the_graph_result.price_DYPS : 1
+    // let usd_per_dyps = the_graph_result.price_DYPS ? the_graph_result.price_DYPS : 1
     let usd_per_dyps = 0.00001;
 
     try {
@@ -1045,21 +1065,23 @@ const refreshBalance = async () => {
 
       let _rBal = reward_token.balanceOf(coinbase);
 
-      let _pDivs = staking.getPendingDivs(coinbase);
+      let _pDivs = constant.getPendingDivs(coinbase);
 
-      let _pDivsEth = staking.getPendingDivsEth(coinbase);
+      let _pDivsEth = constant.getPendingDivsEth(coinbase);
 
-      let _tEarned = staking.totalEarnedTokens(coinbase);
+      let _tEarned = constant.totalEarnedTokens(coinbase);
 
-      let _tEarnedEth = staking.totalEarnedEth(coinbase);
+      let _tEarnedEth = constant.totalEarnedEth(coinbase);
 
-      let _stakingTime = staking.depositTime(coinbase);
+      let _stakingTime = constant.depositTime(coinbase);
 
-      let _dTokens = staking.depositedTokens(coinbase);
+      let _dTokens = constant.depositedTokens(coinbase);
 
-      let _lClaimTime = staking.lastClaimedTime(coinbase);
+      let _lClaimTime = constant.lastClaimedTime(coinbase);
 
-      let _tvl = token.balanceOf(staking._address); //not zero
+      let _tvl = token.balanceOf(constant._address); //not zero
+
+      let _rewardsPendingClaim = staking.rewardsPendingClaim(coinbase)
 
       //Take iDYP Balance on Staking & Farming
       let _tvlConstantiDYP = reward_token_idyp.balanceOf(
@@ -1072,18 +1094,18 @@ const refreshBalance = async () => {
 
       //not zero
       let _tvliDYP = reward_token_idyp.balanceOf(
-        staking._address
+        constant._address
       ); /* TVL of iDYP on Farming */
-
-      let _dTokensDYP = constant.depositedTokens(coinbase);
-
-      let _pendingDivsStaking = constant.getTotalPendingDivs(
-        coinbase
-      );
+  let _dTokensDYP;
+      if(staking)
+     { _dTokensDYP = staking.depositedTokens(coinbase);}
+     
+      
+      // let _pendingDivsStaking = constant.getTotalPendingDivs(coinbase);
 
       //Take DYPS Balance
       let _tvlDYPS = token_dypsavax.balanceOf(
-        staking._address
+        constant._address
       ); /* TVL of DYPS */
 
       let [
@@ -1101,7 +1123,7 @@ const refreshBalance = async () => {
         tvlConstantDYP2,
         tvliDYP2,
         depositedTokensDYP2,
-        pendingDivsStaking2,
+        rewardsPendingClaim2,
         tvlDYPS2,
       ] = await Promise.all([
         _bal,
@@ -1118,141 +1140,202 @@ const refreshBalance = async () => {
         _tvlConstantDYP,
         _tvliDYP,
         _dTokensDYP,
-        _pendingDivsStaking,
+        _rewardsPendingClaim,
         _tvlDYPS,
       ]);
 
-      let tvlValueConstantDYP = new BigNumber(tvlConstantDYP)
+      let tvlValueConstantDYP = new BigNumber(tvlConstantDYP2)
         .times(usdPerToken)
         .toFixed(18);
-      let tvlValueiDYP = new BigNumber(tvlConstantiDYP)
+      let tvlValueiDYP = new BigNumber(tvlConstantiDYP2)
         .times(_amountOutMin)
         .toFixed(18);
-      let tvlValueiDYPFarming = new BigNumber(tvliDYP)
+      let tvlValueiDYPFarming = new BigNumber(tvliDYP2)
         .times(_amountOutMin)
         .toFixed(18);
-      let usd_per_lp = lp_data ? lp_data[props.lp_id].usd_per_lp : 0;
+      let usd_per_lp = lp_data ? lp_data[lp_id].usd_per_lp : 0;
 
       /* USD VALUE OF MY LP DEPOSITED */
       // let myDepositedLpTokens = new BigNumber(depositedTokens).times(usd_per_lp).toFixed(18)
-      let myDepositedLpTokens = new BigNumber(depositedTokens).toFixed(18);
+      let myDepositedLpTokens = new BigNumber(depositedTokens2).toFixed(18);
+
 
       /* USD VALUE OF WITHDRAW OF LP + iDYP */
       // let depositedTokensUSD = new BigNumber(depositedTokens).times(usd_per_lp).plus(tvlValueConstantDYP).toFixed(18)
-      let depositedTokensUSD = new BigNumber(depositedTokens).toFixed(18);
+
       // let tvlUSD = new BigNumber(tvl).times(usd_per_lp).plus(tvlValueiDYP).toFixed(18)
 
       /* USD VALUE OF TOTAL LP DEPOSITED */
-      let tvlUSD = new BigNumber(tvl).times(usd_per_lp).toFixed(18);
+      let tvlUSD = new BigNumber(tvl2).times(usd_per_lp).toFixed(18);
       // let tvlUSD = new BigNumber(tvl).toFixed(18)
+
+      //console.log({tvlValueConstantDYP})
+
+      let tvlDyps = new BigNumber(tvlDYPS2).times(usd_per_dyps).toFixed(18);
+      setTvlDyps(tvlDyps);
+
+      let token_balance_formatted = new BigNumber(
+        token_balance2 * LP_AMPLIFY_FACTOR
+      )
+        .div(1e18)
+        .toString(10);
+      setToken_balance(token_balance_formatted);
+
+      let reward_token_balance_formatted = new BigNumber(reward_token_balance2)
+        .div(10 ** TOKEN_DECIMALS)
+        .toString(10);
+      setReward_token_balance(reward_token_balance_formatted);
+
+      // let pendingDivs_formatted = new BigNumber(pendingDivsStaking2)
+      //   .div(10 ** TOKEN_DECIMALS)
+      //   .times(usd_per_idyp)
+      //   .div(usd_per_token)
+      //   .toString(10);
+      // setPendingDivs(pendingDivs_formatted);
+
+      let totalEarnedTokens_formatted = new BigNumber(totalEarnedTokens2)
+        .div(10 ** TOKEN_DECIMALS)
+        .toString(10);
+      setTotalEarnedTokens(totalEarnedTokens_formatted);
+
+      setStakingTime(stakingTime2 * 1e3);
+
+      let depositedTokensUSD = new BigNumber(depositedTokens2).toFixed(18);
+      let depositedTokens_formatted = new BigNumber(
+        depositedTokensUSD * LP_AMPLIFY_FACTOR
+      )
+        .div(1e18)
+        .toString(10);
+      setDepositedTokens(depositedTokens_formatted);
+
+      setlastClaimedTime(lastClaimedTime2);
+
+      let tvlConstantDYP_formatted = new BigNumber(tvlConstantDYP2)
+        .div(1e18)
+        .toString(10);
+      setTvlConstantDYP(tvlConstantDYP_formatted);
+
+      let tvl_formatted = new BigNumber(tvlUSD * LP_AMPLIFY_FACTOR)
+        .div(1e18)
+        .toString(10);
+
+      setTvl(tvl_formatted);
+
+      let totalEarnedEth_formatted = new BigNumber(totalEarnedEth2)
+        .div(1e18)
+        .toString(10);
+      setTotalEarnedEth(totalEarnedEth_formatted);
+
+      let pendingDivsEth_formatted = new BigNumber(pendingDivsEth2)
+        .div(1e18)
+        .toString(10);
+      setPendingDivsEth(pendingDivsEth_formatted);
+
+      let rewardsPendingClaim_formatted = new BigNumber(rewardsPendingClaim2).div(1e18).toString(10);
+      setrewardsPendingClaim(rewardsPendingClaim_formatted);
+
+      let myDepositedLpTokens_formatted = new BigNumber(
+        myDepositedLpTokens * LP_AMPLIFY_FACTOR
+      )
+        .div(1e18)
+        .toString(10);
+      setMyDepositedLpTokens(myDepositedLpTokens_formatted);
+
+      setMyDepositedLpTokens(myDepositedLpTokens_formatted);
+
+      let depositedTokensUSD_formatted = new BigNumber(
+        depositedTokens2
+      ).toFixed(18);
+      setDepositedTokensUSD(depositedTokensUSD_formatted);
+
+      setTvlUSD(tvlUSD);
 
       let totalValueLocked = new BigNumber(tvlUSD)
         .plus(tvlValueiDYP)
         .plus(tvlValueiDYPFarming)
         .plus(tvlValueConstantDYP)
         .toFixed(18);
-      //console.log({tvlValueConstantDYP})
 
-      let tvlDyps = new BigNumber(tvlDYPS2).times(usd_per_dyps).toFixed(18);
+      setTotalValueLocked(totalValueLocked);
 
-    //   setState({
-    //     token_balance,
-    //     reward_token_balance,
-    //     pendingDivs,
-    //     totalEarnedTokens,
-    //     stakingTime,
-    //     depositedTokens,
-    //     lastClaimedTime,
-    //     tvl,
-    //     tvlDyps,
-    //     totalEarnedEth,
-    //     pendingDivsEth,
-    //     myDepositedLpTokens,
-    //     depositedTokensUSD,
-    //     tvlUSD,
-    //     totalValueLocked,
-    //     depositedTokensDYP,
-    //     tvlConstantDYP /* DYP DEPOSITED ON STAKING */,
-    //     pendingDivsStaking,
-    //   });
+      let depositedTokensDYP_formatted = new BigNumber(depositedTokensDYP2)
+        .div(1e18)
+        .toString(10);
 
-      setToken_balance(token_balance2)
-      setReward_token_balance(reward_token_balance2)
-      setPendingDivs(pendingDivs2)
-      setTotalEarnedTokens(totalEarnedTokens2)
-      setStakingTime(stakingTime2)
-      setDepositedTokens(depositedTokens2)
-      setlastClaimedTime(lastClaimedTime2)
-      setTvl(tvl2)
-      setTvlDyps(tvlDYPS2)
-      setTotalEarnedEth(totalEarnedEth2)
-      setPendingDivsEth(pendingDivsEth2)
-      setMyDepositedLpTokens(myDepositedLpTokens)
-      setDepositedTokensUSD(depositedTokensUSD)
-      setTvlUSD(tvlUSD),
-      setTotalValueLocked(totalValueLocked)
-      setDepositedTokensDYP(depositedTokensDYP2)
-      setTvlConstantDYP(tvlConstantDYP2)
-      setPendingDivsStaking(pendingDivsStaking2)
-      let stakingOwner2 = await staking.owner();
-      setStakingOwner(stakingOwner2)
+      setDepositedTokensDYP(depositedTokensDYP_formatted);
+
+      let withdrawAmount_formatted = new BigNumber(depositedTokensUSD)
+        .div(1e18)
+        .toFixed(2);
+      setWithdrawAmount(withdrawAmount_formatted);
+
+      let stakingOwner2 = await constant.owner();
+      setStakingOwner(stakingOwner2);
+
+      constant
+        .cliffTime()
+        .then((cliffTime2) => {
+          setCliffTime(cliffTime2 * 1e3);
+        })
+        .catch(console.error);
+
+      constant
+        .tokensToBeDisbursedOrBurnt()
+        .then((tokensToBeDisbursedOrBurnt2) => {
+          let tokensToBeDisbursedOrBurnt_formatted = new BigNumber(
+            tokensToBeDisbursedOrBurnt2
+          )
+            .div(1e18)
+            .toString(10);
+          setTokensToBeDisbursedOrBurnt(tokensToBeDisbursedOrBurnt_formatted);
+        })
+        .catch(console.error);
+
+      constant.tokensToBeSwapped().then((tokensToBeSwapped2) => {
+        let tokensToBeSwapped_formatted = new BigNumber(tokensToBeSwapped2)
+          .div(1e18)
+          .toString(10);
+        setTokensToBeSwapped(tokensToBeSwapped_formatted);
+      });
+
+      constant.lastSwapExecutionTime().then((lastSwapExecutionTime2) => {
+        setLastSwapExecutionTime(lastSwapExecutionTime2 * 1e3);
+      });
+
+      constant.swapAttemptPeriod().then((swapAttemptPeriod2) => {
+        setSwapAttemptPeriod(swapAttemptPeriod2 * 1e3);
+      });
+
+      constant.contractDeployTime().then((contractDeployTime2) => {
+        setContractDeployTime(contractDeployTime2);
+      });
+
+      constant.disburseDuration().then((disburseDuration2) => {
+        setDisburseDuration(disburseDuration2);
+      });
     } catch (e) {
       console.error(e);
     }
 
-    staking
-      .cliffTime()
-      .then((cliffTime2) => {
-        setCliffTime(cliffTime2)
-      })
-      .catch(console.error);
-
-    staking
-      .tokensToBeDisbursedOrBurnt()
-      .then((tokensToBeDisbursedOrBurnt2) => {
-        setTokensToBeDisbursedOrBurnt(tokensToBeDisbursedOrBurnt2)
-      })
-      .catch(console.error);
-
-    staking.tokensToBeSwapped().then((tokensToBeSwapped2) => {
-      setTokensToBeSwapped(tokensToBeSwapped2)
-    });
-
-    staking.lastSwapExecutionTime().then((lastSwapExecutionTime2) => {
-      setLastSwapExecutionTime(lastSwapExecutionTime2)
-    });
-
-    staking.swapAttemptPeriod().then((swapAttemptPeriod2) => {
-      setSwapAttemptPeriod(swapAttemptPeriod2)
-    });
-
-    staking.contractDeployTime().then((contractDeployTime2) => {
-      setContractDeployTime(contractDeployTime2)
-    });
-
-    staking.disburseDuration().then((disburseDuration2) => {
-      setDisburseDuration(disburseDuration2)
-    });
-
     //Set Value $ of iDYP & DYP for Withdraw Input
-    
-    setWithdrawAmount(new BigNumber(depositedTokensUSD)
-    .div(1e18)
-    .toFixed(2))
 
     //console.log(disburseDuration)
     //console.log(contractDeployTime)
 
-    try {
-      let selectedTokenBalance2 = await window.getTokenHolderBalance(
-        selectedBuybackToken,
-        coinbase
-      );
-      setSelectedTokenBalance(selectedTokenBalance2)
-    } catch (e) {
-      console.warn(e);
+   
+  };
+
+  const getmyShare = async () => {
+    // myshare = (my lp deposit / total lp deposited) * 100
+    if (totalLPdeposited == "0" || totalLPdeposited == "") {
+      setmyShare(0);
+    }
+    if (totalLPdeposited != "0" && totalLPdeposited != "") {
+      let myShare2 = ((myDepositedLpTokens / totalLPdeposited) * 100).toFixed(2);
+      setmyShare(myShare2);
     }
   };
+
   const getUsdPerETH = () => {
     return the_graph_result.usd_per_eth || 0;
   };
@@ -1277,25 +1360,23 @@ const refreshBalance = async () => {
   };
 
   const handleAvaxPool = async () => {
-    await handleSwitchNetworkhook("0xa86a").then(() => {
-      props.handleSwitchNetwork('43114')
-
-    }).catch((e) => {
-      console.log(e)
-    })
-
+    await handleSwitchNetworkhook("0xa86a")
+      .then(() => {
+        handleSwitchNetwork("43114");
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   useEffect(() => {
     if (coinbase !== coinbase2) {
       setCoinbase2(coinbase);
+      getLPTokens()
+      getTotalLP()
     }
-
     getPriceDYP();
-    getTokenData()
-    return () => {
-      clearInterval(window._refreshBalInterval);
-    };
+    getTokenData();
   }, []);
 
   let is_connected = is_wallet_connected;
@@ -1308,91 +1389,6 @@ const refreshBalance = async () => {
     ? the_graph_result.token_data["0xbd100d061e120b2c67a24453cf6368e63f1be056"]
         .token_price_usd
     : 1;
-
-  stakingTime = stakingTime * 1e3;
-  cliffTime = cliffTime * 1e3;
-  swapAttemptPeriod = swapAttemptPeriod * 1e3;
-  lastSwapExecutionTime = lastSwapExecutionTime * 1e3;
-  
-  let myShare = ((depositedTokens / tvl) * 100).toFixed(2);
-  myShare = getFormattedNumber(myShare, 2);
-
-  token_balance = new BigNumber(token_balance * LP_AMPLIFY_FACTOR)
-  .div(1e18)
-  .toString(10);
-token_balance = getFormattedNumber(token_balance, 2);
-
-tokensToBeSwapped = new BigNumber(tokensToBeSwapped)
-  .div(1e18)
-  .toString(10);
-tokensToBeSwapped = getFormattedNumber(tokensToBeSwapped, 6);
-
-tokensToBeDisbursedOrBurnt = new BigNumber(tokensToBeDisbursedOrBurnt)
-  .div(1e18)
-  .toString(10);
-tokensToBeDisbursedOrBurnt = getFormattedNumber(
-  tokensToBeDisbursedOrBurnt,
-  6
-);
-
-pendingDivsEth = new BigNumber(pendingDivsEth).div(1e18).toString(10);
-pendingDivsEth = getFormattedNumber(pendingDivsEth, 3);
-
-totalEarnedEth = new BigNumber(totalEarnedEth).div(1e18).toString(10);
-totalEarnedEth = getFormattedNumber(totalEarnedEth, 6);
-
-reward_token_balance = new BigNumber(reward_token_balance)
-  .div(10 ** TOKEN_DECIMALS)
-  .toString(10);
-reward_token_balance = getFormattedNumber(reward_token_balance, 6);
-
-pendingDivs = new BigNumber(pendingDivsStaking)
-  .div(10 ** TOKEN_DECIMALS)
-  .times(usd_per_idyp)
-  .div(usd_per_token)
-  .toString(10);
-pendingDivs = getFormattedNumber(pendingDivs, 3);
-
-totalEarnedTokens = new BigNumber(totalEarnedTokens)
-  .div(10 ** TOKEN_DECIMALS)
-  .toString(10);
-totalEarnedTokens = getFormattedNumber(totalEarnedTokens, 6);
-
-depositedTokens = new BigNumber(
-  depositedTokensUSD * LP_AMPLIFY_FACTOR
-)
-  .div(1e18)
-  .toString(10);
-depositedTokens = getFormattedNumber(depositedTokens, 2);
-
-myDepositedLpTokens = new BigNumber(
-  myDepositedLpTokens * LP_AMPLIFY_FACTOR
-)
-  .div(1e18)
-  .toString(10);
-myDepositedLpTokens = getFormattedNumber(myDepositedLpTokens, 2);
-
-depositedTokensDYP = new BigNumber(depositedTokensDYP)
-  .div(1e18)
-  .toString(10);
-depositedTokensDYP = getFormattedNumber(depositedTokensDYP, 2);
-
-tvlConstantDYP = new BigNumber(tvlConstantDYP)
-  .div(1e18)
-  .toString(10);
-tvlConstantDYP = getFormattedNumber(tvlConstantDYP, 2);
-
-tvl = new BigNumber(tvlUSD * LP_AMPLIFY_FACTOR)
-  .div(1e18)
-  .toString(10);
-tvl = getFormattedNumber(tvl, 2);
-
-stakingTime = stakingTime * 1e3;
-cliffTime = cliffTime * 1e3;
-swapAttemptPeriod = swapAttemptPeriod * 1e3;
-lastSwapExecutionTime = lastSwapExecutionTime * 1e3;
-
-
 
   let showDeposit = true;
 
@@ -1508,124 +1504,146 @@ lastSwapExecutionTime = lastSwapExecutionTime * 1e3;
   };
 
 
+  const getBalance= async()=>{
+    try {
+    let TOKEN_ABI = window.ERC20_ABI;
+    let selectedBuybackToken2 = "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7"; // wbnb/wavax
+    let web3 = window.avaxWeb3;
+    let tokenContract = new web3.eth.Contract(TOKEN_ABI, selectedBuybackToken2);
+    const result = await tokenContract.methods.balanceOf(coinbase).call().catch((e)=>{console.log(e)})
+  
+     setSelectedTokenBalance(result);
+    } catch (e) {
+      console.warn(e);
+    }
+  }
+
   useEffect(() => {
     const interval = setInterval(async () => {
       refreshBalance();
     }, 1000);
     return () => clearInterval(interval);
-  }, [coinbase, coinbase2]);
+  }, [coinbase, coinbase2, chainId]);
 
-  
+  useEffect(() => {
+      getBalance();
+  }, [coinbase, chainId]);
+
+  useEffect(() => {
+    getmyShare();
+    getTvlUsdInfo()
+  }, [totalLPdeposited, myDepositedLpTokens]);
+
+
   return (
     <div className="container-lg p-0">
-    <div
-      className={`allwrapper ${listType === "table" && "my-4"}`}
-      style={{
-        border: listType !== "table" && "none",
-        borderRadius: listType !== "table" && "0px",
-      }}
-    >
-      <div className="leftside2 w-100">
-        <div className="activewrapper activewrapper-vault">
-          <div className="d-flex flex-column flex-lg-row w-100 align-items-start align-items-lg-center justify-content-between">
-            <h6 className="activetxt position-relative activetxt-vault">
-              <img
-                src={ellipse}
-                alt=""
-                className="position-relative"
-                style={{ top: '-1px' }}
-
-              />
-              Active status
-            </h6>
-            {/* <div className="d-flex align-items-center justify-content-between gap-2">
+      <div
+        className={`allwrapper ${listType === "table" && "my-4"}`}
+        style={{
+          border: listType !== "table" && "none",
+          borderRadius: listType !== "table" && "0px",
+        }}
+      >
+        <div className="leftside2 w-100">
+          <div className="activewrapper activewrapper-vault">
+            <div className="d-flex flex-column flex-lg-row w-100 align-items-start align-items-lg-center justify-content-between">
+              <h6 className="activetxt position-relative activetxt-vault">
+                <img
+                  src={ellipse}
+                  alt=""
+                  className="position-relative"
+                  style={{ top: "-1px" }}
+                />
+                Active status
+              </h6>
+              {/* <div className="d-flex align-items-center justify-content-between gap-2">
               <h6 className="earnrewards-text">Earn rewards in:</h6>
               <h6 className="earnrewards-token d-flex align-items-center gap-1">
                 {token_symbol}
               </h6>
             </div> */}
-            <div className="d-flex flex-row-reverse flex-lg-row align-items-end justify-content-between earnrewards-container">
-              <div className="d-flex flex-column flex-lg-row align-items-end align-items-lg-center gap-3 gap-lg-5">
-                <div className="d-flex align-items-center justify-content-between gap-2">
-                  <h6 className="earnrewards-text">Performance fee:</h6>
-                  <h6 className="earnrewards-token d-flex align-items-center gap-1">
-                    {fee}%
-                    <ClickAwayListener onClickAway={performanceClose}>
-                      <Tooltip
-                        open={performanceTooltip}
-                        disableFocusListener
-                        disableHoverListener
-                        disableTouchListener
-                        placement="top"
-                        title={
-                          <div className="tooltip-text">
-                            {
-                              "Performance fee is subtracted from the displayed APR."
-                            }
-                          </div>
-                        }
-                      >
-                        <img
-                          src={moreinfo}
-                          alt=""
-                          onClick={performanceOpen}
-                        />
-                      </Tooltip>
-                    </ClickAwayListener>
-                  </h6>
-                </div>
+              <div className="d-flex flex-row-reverse flex-lg-row align-items-end justify-content-between earnrewards-container">
+                <div className="d-flex flex-column flex-lg-row align-items-end align-items-lg-center gap-3 gap-lg-5">
+                  <div className="d-flex align-items-center justify-content-between gap-2">
+                    <h6 className="earnrewards-text">Performance fee:</h6>
+                    <h6 className="earnrewards-token d-flex align-items-center gap-1">
+                      0%
+                      <ClickAwayListener onClickAway={performanceClose}>
+                        <Tooltip
+                          open={performanceTooltip}
+                          disableFocusListener
+                          disableHoverListener
+                          disableTouchListener
+                          placement="top"
+                          title={
+                            <div className="tooltip-text">
+                              {
+                                "Performance fee is subtracted from the displayed APR."
+                              }
+                            </div>
+                          }
+                        >
+                          <img
+                            src={moreinfo}
+                            alt=""
+                            onClick={performanceOpen}
+                          />
+                        </Tooltip>
+                      </ClickAwayListener>
+                    </h6>
+                  </div>
 
-                <div className="d-flex align-items-center justify-content-between gap-2">
-                  <h6 className="earnrewards-text">APR:</h6>
-                  <h6 className="earnrewards-token d-flex align-items-center gap-1">
-                    {finalApr}%
-                    <ClickAwayListener onClickAway={aprClose}>
-                      <Tooltip
-                        open={aprTooltip}
-                        disableFocusListener
-                        disableHoverListener
-                        disableTouchListener
-                        placement="top"
-                        title={
-                          <div className="tooltip-text">
-                            {
-                              "APR reflects the interest rate of earnings on an account over the course of one year. "
-                            }
-                          </div>
-                        }
-                      >
-                        <img src={moreinfo} alt="" onClick={aprOpen} />
-                      </Tooltip>
-                    </ClickAwayListener>
-                  </h6>
+                  <div className="d-flex align-items-center justify-content-between gap-2">
+                    <h6 className="earnrewards-text">APR:</h6>
+                    <h6 className="earnrewards-token d-flex align-items-center gap-1">
+                      {finalApr}%
+                      <ClickAwayListener onClickAway={aprClose}>
+                        <Tooltip
+                          open={aprTooltip}
+                          disableFocusListener
+                          disableHoverListener
+                          disableTouchListener
+                          placement="top"
+                          title={
+                            <div className="tooltip-text">
+                              {
+                                "APR reflects the interest rate of earnings on an account over the course of one year. "
+                              }
+                            </div>
+                          }
+                        >
+                          <img src={moreinfo} alt="" onClick={aprOpen} />
+                        </Tooltip>
+                      </ClickAwayListener>
+                    </h6>
+                  </div>
+                  <div className="d-flex align-items-center justify-content-between gap-2">
+                    <h6 className="earnrewards-text">Lock time:</h6>
+                    <h6 className="earnrewards-token d-flex align-items-center gap-1">
+                      {lockTime} {lockTime !== "No Lock" ? "Days" : ""}
+                      <ClickAwayListener onClickAway={lockClose}>
+                        <Tooltip
+                          open={lockTooltip}
+                          disableFocusListener
+                          disableHoverListener
+                          disableTouchListener
+                          placement="top"
+                          title={
+                            <div className="tooltip-text">
+                              {
+                                "The amount of time your deposited assets will be locked."
+                              }
+                            </div>
+                          }
+                        >
+                          <img src={moreinfo} alt="" onClick={lockOpen} />
+                        </Tooltip>
+                      </ClickAwayListener>
+                    </h6>
+                  </div>
                 </div>
-                <div className="d-flex align-items-center justify-content-between gap-2">
-                  <h6 className="earnrewards-text">Lock time:</h6>
-                  <h6 className="earnrewards-token d-flex align-items-center gap-1">
-                    {lockTime} {lockTime !== "No Lock" ? "Days" : ""}
-                    <ClickAwayListener onClickAway={lockClose}>
-                      <Tooltip
-                        open={lockTooltip}
-                        disableFocusListener
-                        disableHoverListener
-                        disableTouchListener
-                        placement="top"
-                        title={
-                          <div className="tooltip-text">
-                            {
-                              "The amount of time your deposited assets will be locked."
-                            }
-                          </div>
-                        }
-                      >
-                        <img src={moreinfo} alt="" onClick={lockOpen} />
-                      </Tooltip>
-                    </ClickAwayListener>
-                  </h6>
-                </div>
-              </div>
-              <div className="d-flex flex-column flex-lg-row align-items-start align-items-lg-center justify-content-between gap-3">
-                {/* <a
+                <div className="d-flex flex-column flex-lg-row align-items-start align-items-lg-center justify-content-between gap-3">
+                  {/* <a
               href={
                 chainId === 1
                   ? "https://app.uniswap.org/#/swap?outputCurrency=0x961c8c0b1aad0c0b10a51fef6a867e3091bcef17"
@@ -1639,256 +1657,143 @@ lastSwapExecutionTime = lastSwapExecutionTime * 1e3;
                 Get DYP
               </h6>
             </a> */}
-                <h6
-                  className="bottomitems"
-                  onClick={() => setsho}
-                >
-                  <img src={poolsCalculatorIcon} alt="" />
-                  Calculator
-                </h6>
-                <div
-                  onClick={() => {
-                    showPopup();
-                  }}
-                >
-                  <h6 className="bottomitems">
-                    <img src={purplestats} alt="" />
-                    Stats
+                  <h6
+                    className="bottomitems"
+                    onClick={() => setShowCalculator(true)}
+                  >
+                    <img src={poolsCalculatorIcon} alt="" />
+                    Calculator
                   </h6>
+                  <div
+                    onClick={() => {
+                      showPopup();
+                    }}
+                  >
+                    <h6 className="bottomitems">
+                      <img src={purplestats} alt="" />
+                      Stats
+                    </h6>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className="pools-details-wrapper d-flex m-0 container-lg border-0">
-        <div className="row w-100 gap-4 gap-lg-0 justify-content-between">
-          <div className="firstblockwrapper col-12 col-md-6 col-lg-2">
-            <div
-              className="d-flex flex-row flex-lg-column align-items-center align-items-lg-start justify-content-between gap-4"
-              style={{ height: "100%" }}
-            >
-              <h6 className="start-title">Start Farming</h6>
-              {/* <h6 className="start-desc">
-                {props.coinbase === null
+        <div className="pools-details-wrapper d-flex m-0 container-lg border-0">
+          <div className="row w-100 gap-4 gap-lg-0 justify-content-between">
+            <div className="firstblockwrapper col-12 col-md-6 col-lg-2">
+              <div
+                className="d-flex flex-row flex-lg-column align-items-center align-items-lg-start justify-content-between gap-4"
+                style={{ height: "100%" }}
+              >
+                <h6 className="start-title">Start Farming</h6>
+                {/* <h6 className="start-desc">
+                {coinbase === null
                   ? "Connect wallet to view and interact with deposits and withdraws"
                   : "Interact with deposits and withdraws"}
               </h6> */}
-              {props.coinbase === null || props.coinbase === undefined || props.isConnected === false ? (
-                <button
-                  className="connectbtn btn"
-                  onClick={showModal}
-                >
-                  {" "}
-                  <img src={wallet} alt="" /> Connect wallet
-                </button>
-              ) : chainId === "43114" ? (
-                <div className="addressbtn btn">
-                  <Address a={props.coinbase} chainId={43114} />
-                </div>
-              ) : (
-                <button
-                  className="connectbtn btn"
-                  onClick={() => {
-                    handleAvaxPool();
-                  }}
-                >
-                  Change Network
-                </button>
-              )}
+                {coinbase === null ||
+                coinbase === undefined ||
+                isConnected === false ? (
+                  <button className="connectbtn btn" onClick={showModal}>
+                    {" "}
+                    <img src={wallet} alt="" /> Connect wallet
+                  </button>
+                ) : chainId === "43114" ? (
+                  <div className="addressbtn btn">
+                    <Address a={coinbase} chainId={43114} />
+                  </div>
+                ) : (
+                  <button
+                    className="connectbtn btn"
+                    onClick={() => {
+                      handleAvaxPool();
+                    }}
+                  >
+                    Change Network
+                  </button>
+                )}
+              </div>
             </div>
-          </div>
-          {/* <div className="otherside">
+            {/* <div className="otherside">
         <button className="btn green-btn">
           TBD Claim reward 0.01 ETH
         </button>
       </div> */}
-          <div className={`otherside-border col-12 col-md-12 col-lg-4  ${chainId !== '43114' || props.expired === true ? "blurrypool" : ''}`}>
-            <div className="d-flex justify-content-between align-items-start gap-2">
-              <div className="d-flex flex-column flex-lg-row align-items-start gap-3">
-                <div className="d-flex align-items-start gap-3">
-                  <h6 className="deposit-txt">Deposit</h6>
-                  <div className="d-flex justify-content-center align-items-center">
-                    <div className="dropdown">
-                      <button
-                        class="btn farming-dropdown inputfarming d-flex align-items-center justify-content-center gap-1"
-                        type="button"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                        style={{ position: "relative", bottom: "4px" }}
-                      >
-                        <img
-                          src={
-                            require(`./assets/avax/${selectedTokenLogo.toLowerCase()}.svg`)
-                              .default
-                          }
-                          alt=""
-                          style={{ width: 14, height: 14 }}
-                        />
-                        {selectedTokenLogo.toUpperCase()}
-                        <img
-                          src={dropdownVector}
-                          alt=""
-                          style={{ width: 10, height: 10 }}
-                        />
-                      </button>
-                      <ul
-                        className="dropdown-menu"
-                        style={{ minWidth: "100%" }}
-                      >
-                        {Object.keys(
-                          window.buyback_tokens_farmingavax
-                        ).map((t) => (
-                          <span
-                            className="d-flex align-items-center justify-content-start ps-2 gap-1 inputfarming farming-dropdown-item py-1 w-100"
-                            onClick={() =>
-                              handleSelectedTokenChange(t)
+            <div
+              className={`otherside-border col-12 col-md-12 col-lg-4  ${
+                chainId !== "43114" || expired === true ? "blurrypool" : ""
+              }`}
+            >
+              <div className="d-flex justify-content-between align-items-start gap-2">
+                <div className="d-flex flex-column flex-lg-row align-items-start gap-3">
+                  <div className="d-flex align-items-start gap-3">
+                    <h6 className="deposit-txt">Deposit</h6>
+                    <div className="d-flex justify-content-center align-items-center">
+                      <div className="dropdown">
+                        <button
+                          class="btn farming-dropdown inputfarming d-flex align-items-center justify-content-center gap-1"
+                          type="button"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                          style={{ position: "relative", bottom: "4px" }}
+                        >
+                          <img
+                            src={
+                              require(`./assets/avax/${selectedTokenLogo.toLowerCase()}.svg`)
+                                .default
                             }
-                          >
-                            <img
-                              src={
-                                require(`./assets/avax/${window.buyback_tokens_farmingavax[
-                                  t
-                                ].symbol.toLowerCase()}.svg`).default
-                              }
-                              alt=""
-                              style={{ width: 14, height: 14 }}
-                            />
-                            {window.buyback_tokens_farmingavax[t].symbol}
-                          </span>
-                        ))}
-                      </ul>
+                            alt=""
+                            style={{ width: 14, height: 14 }}
+                          />
+                          {selectedTokenLogo.toUpperCase()}
+                          <img
+                            src={dropdownVector}
+                            alt=""
+                            style={{ width: 10, height: 10 }}
+                          />
+                        </button>
+                        <ul
+                          className="dropdown-menu"
+                          style={{ minWidth: "100%" }}
+                        >
+                          {Object.keys(buyback_activetokens_farmingavax).map(
+                            (t) => (
+                              <span
+                                className="d-flex align-items-center justify-content-start ps-2 gap-1 inputfarming farming-dropdown-item py-1 w-100"
+                                onClick={() => handleSelectedTokenChange(t)}
+                              >
+                                <img
+                                  src={
+                                    require(`./assets/avax/${buyback_activetokens_farmingavax[
+                                      t
+                                    ].symbol.toLowerCase()}.svg`).default
+                                  }
+                                  alt=""
+                                  style={{ width: 14, height: 14 }}
+                                />
+                                {buyback_activetokens_farmingavax[t].symbol}
+                              </span>
+                            )
+                          )}
+                        </ul>
+                      </div>
                     </div>
                   </div>
+                  <h6 className="mybalance-text">
+                    Balance:
+                    <b>
+                      {getFormattedNumber(
+                        selectedTokenBalance / 10 ** selectedTokenDecimals,
+                        6
+                      )}{" "}
+                      {selectedTokenSymbol}
+                    </b>
+                  </h6>
                 </div>
-                <h6 className="mybalance-text">
-                  Balance:
-                  <b>
-                    {getFormattedNumber(
-                      selectedTokenBalance /
-                      10 ** selectedTokenDecimals,
-                      6
-                    )}{" "}
-                    {selectedTokenSymbol}
-                  </b>
-                </h6>
-              </div>
-              <ClickAwayListener onClickAway={depositClose}>
-                <Tooltip
-                  open={depositTooltip}
-                  disableFocusListener
-                  disableHoverListener
-                  disableTouchListener
-                  placement="top"
-                  title={
-                    <div className="tooltip-text">
-                      {
-                        "Deposit your assets to the farming smart contract. 75% of your assets goes for creation of LP tokens and 25% goes for buying DYP and depositing to staking smart contract to generate rewards."
-                      }
-                    </div>
-                  }
-                >
-                  <img src={moreinfo} alt="" onClick={depositOpen} />
-                </Tooltip>
-              </ClickAwayListener>
-            </div>
-            <div className="d-flex flex-column gap-2 justify-content-between">
-              <div className="d-flex flex-column flex-lg-row align-items-center justify-content-between gap-2">
-                <div className="d-flex align-items-center justify-content-between justify-content-lg-start gap-2 w-100">
-                  <div className="input-container px-0">
-                  <input
-                    type="number"
-                    autoComplete="off"
-                    value={
-                      Number(depositAmount) > 0
-                        ? depositAmount
-                        : depositAmount
-                    }
-                    onChange={(e) =>
-                  
-                      setDepositAmount(e.target.value)
-                    }
-                    placeholder=" "
-                    className="text-input"
-                    style={{ width: "100%" }}
-                    name="amount_deposit"
-                    id="amount_deposit"
-                    key="amount_deposit"
-                  />
-                  <label htmlFor="usd" className="label"
-                   onClick={() => focusInput("amount_deposit")}>
-                   Amount
-                  </label>
-                </div>
-                  <button
-                    className="btn maxbtn"
-                    onClick={handleSetMaxDeposit}
-                  >
-                    Max
-                  </button>
-                </div>
-
-                <button
-                  disabled={
-                    depositAmount === "" ||
-                      depositLoading === true ||
-                      depositStatus === "success"
-                      ? true
-                      : false
-                  }
-                  className={`btn filledbtn ${depositAmount === "" &&
-                    depositStatus === "initial" &&
-                    "disabled-btn"
-                    } ${depositStatus === "deposit" ||
-                      depositStatus === "success"
-                      ? "success-button"
-                      : depositStatus === "fail"
-                        ? "fail-button"
-                        : null
-                    } d-flex justify-content-center align-items-center gap-2`}
-                  onClick={() => {
-                    depositStatus === "deposit"
-                      ? handleStake()
-                      : depositStatus === "initial" &&
-                        depositAmount !== ""
-                        ? handleApprove()
-                        : console.log("");
-                  }}
-                >
-                  {depositLoading ? (
-                    <div
-                      class="spinner-border spinner-border-sm text-light"
-                      role="status"
-                    >
-                      <span class="visually-hidden">Loading...</span>
-                    </div>
-                  ) : depositStatus === "initial" ? (
-                    <>Approve</>
-                  ) : depositStatus === "deposit" ? (
-                    <>Deposit</>
-                  ) : depositStatus === "success" ? (
-                    <>Success</>
-                  ) : (
-                    <>
-                      <img src={failMark} alt="" />
-                      Failed
-                    </>
-                  )}
-                </button>
-              </div>
-              {errorMsg && (
-                <h6 className="errormsg">{errorMsg}</h6>
-              )}
-            </div>
-          </div>
-          <div className={`otherside-border col-12 col-md-12 col-lg-4 ${chainId !== '43114' && "blurrypool"}`}>
-            <div className="d-flex justify-content-between gap-2 ">
-              <h6 className="withdraw-txt">Rewards</h6>
-              <h6 className="withdraw-littletxt d-flex align-items-center gap-2">
-                Rewards are displayed in real-time
-                <ClickAwayListener onClickAway={rewardsClose}>
+                <ClickAwayListener onClickAway={depositClose}>
                   <Tooltip
-                    open={rewardsTooltip}
+                    open={depositTooltip}
                     disableFocusListener
                     disableHoverListener
                     disableTouchListener
@@ -1896,76 +1801,188 @@ lastSwapExecutionTime = lastSwapExecutionTime * 1e3;
                     title={
                       <div className="tooltip-text">
                         {
-                          "Rewards earned by your deposit to the farming smart contract are distributed automatically and can be claimed every day. You need to select assets individually and claim them to your wallet."
+                          "Deposit your assets to the farming smart contract. 80% of your assets goes for creation of LP tokens and 20% goes for buying DYP and depositing to staking smart contract to generate rewards."
                         }
                       </div>
                     }
                   >
-                    <img src={moreinfo} alt="" onClick={rewardsOpen} />
+                    <img src={moreinfo} alt="" onClick={depositOpen} />
                   </Tooltip>
                 </ClickAwayListener>
-              </h6>
-            </div>
-            <div className="d-flex flex-column gap-2 justify-content-between">
-              <div className="d-flex align-items-center justify-content-between gap-2"></div>
-              <div className="form-row d-flex flex-column flex-lg-row gap-2 align-items-center align-items-lg-end justify-content-between">
-                <div className="d-flex align-items-center justify-content-between justify-content-lg-center gap-5">
-                  <div
-                    className="gap-1 claimreward-wrapper"
+              </div>
+              <div className="d-flex flex-column gap-2 justify-content-between">
+                <div className="d-flex flex-column flex-lg-row align-items-center justify-content-between gap-2">
+                  <div className="d-flex align-items-center justify-content-between justify-content-lg-start gap-2 w-100">
+                    <div className="input-container px-0">
+                      <input
+                        type="number"
+                        autoComplete="off"
+                        value={
+                          Number(depositAmount) > 0
+                            ? depositAmount
+                            : depositAmount
+                        }
+                        onChange={(e) => {
+                          setDepositAmount(e.target.value);
+                          checkApproval(e.target.value);
+                        }}
+                        placeholder=" "
+                        className="text-input"
+                        style={{ width: "100%" }}
+                        name="amount_deposit"
+                        id="amount_deposit"
+                        key="amount_deposit"
+                      />
+                      <label
+                        htmlFor="usd"
+                        className="label"
+                        onClick={() => focusInput("amount_deposit")}
+                      >
+                        Amount
+                      </label>
+                    </div>
+                    <button
+                      className="btn maxbtn"
+                      onClick={handleSetMaxDeposit}
+                    >
+                      Max
+                    </button>
+                  </div>
+
+                  <button
+                    disabled={
+                      depositAmount === "" ||
+                      depositLoading === true ||
+                      depositStatus === "success"
+                        ? true
+                        : false
+                    }
+                    className={`btn filledbtn ${
+                      depositAmount === "" &&
+                      depositStatus === "initial" &&
+                      "disabled-btn"
+                    } ${
+                      depositStatus === "deposit" || depositStatus === "success"
+                        ? "success-button"
+                        : depositStatus === "fail"
+                        ? "fail-button"
+                        : null
+                    } d-flex justify-content-center align-items-center gap-2`}
                     onClick={() => {
-                      setSelectedPool("wavax")
-                    }}
-                    style={{
-                      // padding: '3px',
-                      background:
-                        selectedPool === "wavax"
-                          ? "#141333"
-                          : "#26264F",
-                      border:
-                        selectedPool === "wavax"
-                          ? "1px solid #57B6AB"
-                          : "1px solid #8E97CD",
+                      depositStatus === "deposit"
+                        ? handleStake()
+                        : depositStatus === "initial" && depositAmount !== ""
+                        ? handleApprove()
+                        : console.log("");
                     }}
                   >
-                    <img
-                      src={
-                        selectedPool === "wavax"
-                          ? check
-                          : empty
+                    {depositLoading ? (
+                      <div
+                        class="spinner-border spinner-border-sm text-light"
+                        role="status"
+                      >
+                        <span class="visually-hidden">Loading...</span>
+                      </div>
+                    ) : depositStatus === "initial" ? (
+                      <>Approve</>
+                    ) : depositStatus === "deposit" ? (
+                      <>Deposit</>
+                    ) : depositStatus === "success" ? (
+                      <>Success</>
+                    ) : (
+                      <>
+                        <img src={failMark} alt="" />
+                        Failed
+                      </>
+                    )}
+                  </button>
+                </div>
+                {errorMsg && <h6 className="errormsg">{errorMsg}</h6>}
+              </div>
+            </div>
+            <div
+              className={`otherside-border col-12 col-md-12 col-lg-4 ${
+                chainId !== "43114" && "blurrypool"
+              }`}
+            >
+              <div className="d-flex justify-content-between gap-2 ">
+                <h6 className="withdraw-txt">Rewards</h6>
+                <h6 className="withdraw-littletxt d-flex align-items-center gap-2">
+                  Rewards are displayed in real-time
+                  <ClickAwayListener onClickAway={rewardsClose}>
+                    <Tooltip
+                      open={rewardsTooltip}
+                      disableFocusListener
+                      disableHoverListener
+                      disableTouchListener
+                      placement="top"
+                      title={
+                        <div className="tooltip-text">
+                          {
+                            "Rewards earned by your deposit to the farming smart contract are distributed automatically and can be claimed every day. You need to select assets individually and claim them to your wallet."
+                          }
+                        </div>
                       }
-                      alt=""
-                      className="activestate"
-                    />
-                    <div className="position-relative">
-                      <input
-                        disabled
-                        value={
-                          Number(pendingDivsEth) > 0
-                            ? `${pendingDivsEth} WAVAX`
-                            : `${getFormattedNumber(0, 2)} WAVAX`
-                        }
-                        onChange={(e) =>
-                        
-                          setPendingDivsEth(
-                            Number(e.target.value) > 0
-                              ? e.target.value
-                              : e.target.value)
-                        }
-                        className=" left-radius inputfarming styledinput2"
-                        placeholder="0"
-                        type="text"
-                        style={{
-                          width: "120px",
-                          padding: "0px 15px 0px 15px",
-                          height: 35,
-                        }}
-                      />
-                    </div>
-                    <div
-                      className="d-flex align-items-center justify-content-center w-100 claimreward-header"
-                    // style={{ paddingLeft: "10px" }}
                     >
-                      {/* <img
+                      <img src={moreinfo} alt="" onClick={rewardsOpen} />
+                    </Tooltip>
+                  </ClickAwayListener>
+                </h6>
+              </div>
+              <div className="d-flex flex-column gap-2 justify-content-between">
+                <div className="d-flex align-items-center justify-content-between gap-2"></div>
+                <div className="form-row d-flex flex-column flex-lg-row gap-2 align-items-center align-items-lg-end justify-content-between">
+                  <div className="d-flex align-items-center justify-content-between justify-content-lg-center gap-5">
+                    <div
+                      className="gap-1 claimreward-wrapper"
+                      onClick={() => {
+                        setSelectedPool("wavax");
+                      }}
+                      style={{
+                        // padding: '3px',
+                        background:
+                          selectedPool === "wavax" ? "#141333" : "#26264F",
+                        border:
+                          selectedPool === "wavax"
+                            ? "1px solid #57B6AB"
+                            : "1px solid #8E97CD",
+                      }}
+                    >
+                      <img
+                        src={selectedPool === "wavax" ? check : empty}
+                        alt=""
+                        className="activestate"
+                      />
+                      <div className="position-relative">
+                        <input
+                          disabled
+                          value={
+                            Number(pendingDivsEth) > 0
+                              ? `${getFormattedNumber(pendingDivsEth, 2)} WAVAX`
+                              : `${getFormattedNumber(0, 2)} WAVAX`
+                          }
+                          onChange={(e) =>
+                            setPendingDivsEth(
+                              Number(e.target.value) > 0
+                                ? e.target.value
+                                : e.target.value
+                            )
+                          }
+                          className=" left-radius inputfarming styledinput2"
+                          placeholder="0"
+                          type="text"
+                          style={{
+                            width: "120px",
+                            padding: "0px 15px 0px 15px",
+                            height: 35,
+                          }}
+                        />
+                      </div>
+                      <div
+                        className="d-flex align-items-center justify-content-center w-100 claimreward-header"
+                        // style={{ paddingLeft: "10px" }}
+                      >
+                        {/* <img
                       src={
                         require(`./assets/avax/${selectedRewardTokenLogo1.toLowerCase()}.svg`)
                           .default
@@ -1989,240 +2006,175 @@ lastSwapExecutionTime = lastSwapExecutionTime * 1e3;
                       <option value="0"> WAVAX </option>
                       <option value="1"> WETH.e </option>
                     </select> */}
-                      <div class="dropdown">
-                        <button
-                          class="btn reward-dropdown inputfarming d-flex align-items-center justify-content-center gap-1"
-                          type="button"
-                          data-bs-toggle="dropdown"
-                          aria-expanded="false"
-                        >
-                          <img
-                            src={
-                              require(`./assets/avax/${selectedRewardTokenLogo1.toLowerCase()}.svg`)
-                                .default
-                            }
-                            alt=""
-                            style={{ width: 14, height: 14 }}
-                          />
-                          {selectedRewardTokenLogo1.toUpperCase()}
-                          <img
-                            src={dropdownVector}
-                            alt=""
-                            style={{ width: 10, height: 10 }}
-                          />
-                        </button>
-                        <ul
-                          class="dropdown-menu"
-                          style={{ minWidth: "100%" }}
-                        >
-                          <span
-                            className="d-flex align-items-center justify-content-center  gap-1 inputfarming farming-dropdown-item py-1 w-100"
-                            onClick={() => {
-                              handleClaimToken("1");
-                            
-                              setSelectedRewardTokenLogo1("wavax")
-                            }}
+                        <div class="dropdown">
+                          <button
+                            class="btn reward-dropdown inputfarming d-flex align-items-center justify-content-center gap-1"
+                            type="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
                           >
                             <img
                               src={
-                                require(`./assets/avax/wavax.svg`).default
-                              }
-                              alt=""
-                              style={{ width: 14, height: 14 }}
-                            />
-                            WAVAX
-                          </span>
-                          <span
-                            className="d-flex align-items-center justify-content-center  gap-1 inputfarming farming-dropdown-item py-1 w-100"
-                            onClick={() => {
-                              handleClaimToken("2");
-                            
-                              setSelectedRewardTokenLogo1("weth.e")
-                            }}
-                          >
-                            <img
-                              src={
-                                require(`./assets/avax/weth.e.svg`)
+                                require(`./assets/avax/${selectedRewardTokenLogo1.toLowerCase()}.svg`)
                                   .default
                               }
                               alt=""
                               style={{ width: 14, height: 14 }}
                             />
-                            WETH.e
-                          </span>
-                        </ul>
+                            {selectedRewardTokenLogo1.toUpperCase()}
+                            <img
+                              src={dropdownVector}
+                              alt=""
+                              style={{ width: 10, height: 10 }}
+                            />
+                          </button>
+                          <ul
+                            class="dropdown-menu"
+                            style={{ minWidth: "100%" }}
+                          >
+                            <span
+                              className="d-flex align-items-center justify-content-center  gap-1 inputfarming farming-dropdown-item py-1 w-100"
+                              onClick={() => {
+                                handleClaimToken("1");
+
+                                setSelectedRewardTokenLogo1("wavax");
+                              }}
+                            >
+                              <img
+                                src={require(`./assets/avax/wavax.svg`).default}
+                                alt=""
+                                style={{ width: 14, height: 14 }}
+                              />
+                              WAVAX
+                            </span>
+                          </ul>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div
-                    className="gap-1 claimreward-wrapper"
-                    style={{
-                      // padding: '3px',
-                      background:
-                        selectedPool === "dyp"
-                          ? "#141333"
-                          : "#26264F",
-                      border:
-                        selectedPool === "dyp"
-                          ? "1px solid #57B6AB"
-                          : "1px solid #8E97CD",
-                    }}
-                    onClick={() => {
-                      setSelectedPool("dyp")
-                    }}
-                  >
-                    <img
-                      src={
-                        selectedPool === "dyp" ? check : empty
-                      }
-                      alt=""
-                      className="activestate"
-                    />
-
-                    <div className="position-relative">
-                      <input
-                        disabled
-                        value={
-                          Number(pendingDivs) > 0
-                            ? `${pendingDivs} DYP`
-                            : `${getFormattedNumber(0, 2)} DYP`
-                        }
-                        onChange={(e) =>
-                         
-                          setPendingDivs(Number(e.target.value) > 0
-                          ? e.target.value
-                          : e.target.value)
-                        }
-                        className=" left-radius inputfarming styledinput2"
-                        placeholder="0"
-                        type="text"
-                        style={{
-                          width: "120px",
-                          padding: "0px 15px 0px 15px",
-                          height: 35,
-                        }}
-                      />
-                    </div>
-
                     <div
-                      className="d-flex align-items-center justify-content-center w-100 claimreward-header "
-                    // style={{ paddingLeft: "10px" }}
-                    >
-                      <img
-                        src={
-                          require(`./assets/avax/${selectedRewardTokenLogo2.toLowerCase()}.svg`)
-                            .default
-                        }
-                        alt=""
-                        style={{ width: 14, height: 14 }}
-                      />
-                      <select
-                        disabled
-                        defaultValue="DYP"
-                        className="form-control inputfarming"
-                        style={{ border: "none", padding: "0 0 0 3px" }}
-                      >
-                        <option value="DYP"> DYP </option>
-                      </select>
-                      {/* <div class="dropdown">
-                      <button
-                        class="btn reward-dropdown inputfarming d-flex align-items-center justify-content-center gap-1"
-                        type="button"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                      >
-                        <img
-                          src={
-                            require(`./assets/avax/dyp.svg`)
-                              .default
-                          }
-                          alt=""
-                          style={{ width: 14, height: 14 }}
-                        />
-                       DYP
-                        <img
-                          src={dropdownVector}
-                          alt=""
-                          style={{ width: 10, height: 10 }}
-                        />
-                      </button>
-                      <ul
-                        class="dropdown-menu"
-                        style={{ minWidth: "100%" }}
-                      >
-                        <span
-                          className="d-flex align-items-center justify-content-center  gap-1 inputfarming farming-dropdown-item py-1 w-100"
+                          className="gap-1 claimreward-wrapper"
+                          style={{
+                            background:
+                            selectedPool === "dyp"
+                                ? "#141333"
+                                : "#26264F",
+                            border:
+                            selectedPool === "dyp"
+                                ? "1px solid #57B6AB"
+                                : "1px solid #8E97CD",
+                          }}
                           onClick={() => {
-                            handleClaimToken("0");
-                            setState({
-                              selectedRewardTokenLogo1: "dyp",
-                            });
+                            setSelectedPool("dyp")
+                           
                           }}
                         >
                           <img
                             src={
-                              require(`./assets/avax/dyp.svg`).default
+                             selectedPool === "dyp" ? check : empty
                             }
                             alt=""
-                            style={{ width: 14, height: 14 }}
+                            className="activestate"
                           />
-                          DYP
-                        </span>
-                      </ul>
-                    </div> */}
-                    </div>
+
+                          <div className="position-relative">
+                            <input
+                              disabled
+                              value={
+                                Number(rewardsPendingClaim) > 0
+                                  ? `${getFormattedNumber(rewardsPendingClaim,5)} DYP`
+                                  : `${getFormattedNumber(0, 2)} DYP`
+                              }
+                              onChange={(e) =>
+                                setrewardsPendingClaim(Number(e.target.value) > 0
+                                      ? e.target.value
+                                      : e.target.value)
+                               
+                              }
+                              className=" left-radius inputfarming styledinput2"
+                              placeholder="0"
+                              type="text"
+                              style={{
+                                width: "120px",
+                                padding: "0px 15px 0px 15px",
+                                height: 35,
+                              }}
+                            />
+                          </div>
+
+                          <div
+                            className="d-flex align-items-center justify-content-center w-100 claimreward-header "
+                          >
+                            <img
+                              src={
+                                require(`./assets/avax/${selectedRewardTokenLogo2.toLowerCase()}.svg`)
+                                  .default
+                              }
+                              alt=""
+                              style={{ width: 14, height: 14 }}
+                            />
+                            <select
+                              disabled
+                              defaultValue="DYP"
+                              className="form-control inputfarming"
+                              style={{ border: "none", padding: "0 0 0 3px" }}
+                            >
+                              <option value="DYP"> DYP </option>
+                            </select>
+                            
+                          </div>
+                        </div>
                   </div>
-                </div>
-                <button
-                  disabled={
-                    selectedPool === "" ||
+                  <button
+                    disabled={
+                      selectedPool === "" ||
                       claimStatus === "claimed" ||
                       claimStatus === "failed" ||
-                      claimStatus === "success" || pendingDivs <= 0
-                      ? true
-                      : false
-                  }
-                  className={`btn filledbtn ${claimStatus === "claimed" ||
+                      claimStatus === "success"
+                      //  ||  pendingDivs <= 0
+                        ? true
+                        : false
+                    }
+                    className={`btn filledbtn ${
+                      claimStatus === "claimed" ||
                       selectedPool === "" ||
                       selectedPool === "wavax2" ||
-                      selectedPool === "dyp2" || pendingDivs <= 0
-                      ? "disabled-btn"
-                      : claimStatus === "failed"
+                      selectedPool === "dyp2"
+                      //  || pendingDivs <= 0
+                        ? "disabled-btn"
+                        : claimStatus === "failed"
                         ? "fail-button"
                         : claimStatus === "success"
-                          ? "success-button"
-                          : null
+                        ? "success-button"
+                        : null
                     } d-flex justify-content-center align-items-center`}
-                  style={{ height: "fit-content" }}
-                  onClick={() => {
-                    selectedPool === "wavax"
-                      ? handleClaimDivs()
-                      : handleClaimDyp();
-                  }}
-                >
-                  {claimLoading ? (
-                    <div
-                      class="spinner-border spinner-border-sm text-light"
-                      role="status"
-                    >
-                      <span class="visually-hidden">Loading...</span>
-                    </div>
-                  ) : claimStatus === "failed" ? (
-                    <>
-                      <img src={failMark} alt="" />
-                      Failed
-                    </>
-                  ) : claimStatus === "success" ? (
-                    <>Success</>
-                  ) : (
-                    <>Claim</>
-                  )}
-                </button>
-              </div>
-              {errorMsg2 && (
-                <h6 className="errormsg">{errorMsg2}</h6>
-              )}
-              {/* <button
+                    style={{ height: "fit-content" }}
+                    onClick={() => {
+                      selectedPool === "wavax"
+                       ? handleClaimDivs()
+                       : handleClaimDyp();
+                    }}
+                  >
+                    {claimLoading ? (
+                      <div
+                        class="spinner-border spinner-border-sm text-light"
+                        role="status"
+                      >
+                        <span class="visually-hidden">Loading...</span>
+                      </div>
+                    ) : claimStatus === "failed" ? (
+                      <>
+                        <img src={failMark} alt="" />
+                        Failed
+                      </>
+                    ) : claimStatus === "success" ? (
+                      <>Success</>
+                    ) : (
+                      <>Claim</>
+                    )}
+                  </button>
+                </div>
+                {errorMsg2 && <h6 className="errormsg">{errorMsg2}</h6>}
+                {/* <button
               title={claimTitle}
               disabled={!is_connected}
               className="btn  btn-primary btn-block l-outline-btn"
@@ -2231,7 +2183,7 @@ lastSwapExecutionTime = lastSwapExecutionTime * 1e3;
             >
               CLAIM
             </button> */}
-              {/* <button
+                {/* <button
             onClick={(e) => {
               e.preventDefault();
               handleClaimDyp();
@@ -2243,63 +2195,67 @@ lastSwapExecutionTime = lastSwapExecutionTime * 1e3;
           >
             CLAIM
           </button> */}
+              </div>
             </div>
-          </div>
 
-          <div className={`otherside-border col-12 col-md-12 col-lg-2 ${chainId !== '43114' && "blurrypool"}`}>
-            <h6 className="deposit-txt d-flex align-items-center gap-2 justify-content-between">
-              WITHDRAW
-              <ClickAwayListener onClickAway={withdrawClose}>
-                <Tooltip
-                  open={withdrawTooltip}
-                  disableFocusListener
-                  disableHoverListener
-                  disableTouchListener
-                  placement="top"
-                  title={
-                    <div className="tooltip-text">
-                      {
-                        "Withdraw your deposited assets from the farming smart contract."
-                      }
-                    </div>
-                  }
-                >
-                  <img src={moreinfo} alt="" onClick={withdrawOpen} />
-                </Tooltip>
-              </ClickAwayListener>
-            </h6>
-
-            <button
-             disabled={Number(depositedTokens) > 0 ? false : true}
-              className={
-                // depositStatus === "success" ?
-                "outline-btn btn"
-                // :
-                //  "btn disabled-btn"
-              }
-              onClick={() => {
-                setShowWithdrawModal(true)
-              }}
+            <div
+              className={`otherside-border col-12 col-md-12 col-lg-2 ${
+                chainId !== "43114" && "blurrypool"
+              }`}
             >
-              Withdraw
-            </button>
+              <h6 className="deposit-txt d-flex align-items-center gap-2 justify-content-between">
+                WITHDRAW
+                <ClickAwayListener onClickAway={withdrawClose}>
+                  <Tooltip
+                    open={withdrawTooltip}
+                    disableFocusListener
+                    disableHoverListener
+                    disableTouchListener
+                    placement="top"
+                    title={
+                      <div className="tooltip-text">
+                        {
+                          "Withdraw your deposited assets from the farming smart contract."
+                        }
+                      </div>
+                    }
+                  >
+                    <img src={moreinfo} alt="" onClick={withdrawOpen} />
+                  </Tooltip>
+                </ClickAwayListener>
+              </h6>
+
+              <button
+                disabled={Number(depositedTokens) > 0 ? false : true}
+                className={
+                  // depositStatus === "success" ?
+                  "outline-btn btn"
+                  // :
+                  //  "btn disabled-btn"
+                }
+                onClick={() => {
+                  setShowWithdrawModal(true);
+                }}
+              >
+                Withdraw
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    {popup && (
-      <Modal
-        visible={popup}
-        modalId="tymodal"
-        title="stats"
-        setIsVisible={() => {
-          setPopup(false)
-        }}
-        width="fit-content"
-      >
-        <div className="earn-hero-content p4token-wrapper">
-          <div className="l-box pl-3 pr-3">
-            {/* <div className="container">
+      {popup && (
+        <Modal
+          visible={popup}
+          modalId="tymodal"
+          title="stats"
+          setIsVisible={() => {
+            setPopup(false);
+          }}
+          width="fit-content"
+        >
+          <div className="earn-hero-content p4token-wrapper">
+            <div className="l-box pl-3 pr-3">
+              {/* <div className="container">
               <div className="row" style={{ marginLeft: "0px" }}>
                 <div className="d-flex justify-content-between gap-2 align-items-center p-0">
                   <h6 className="d-flex gap-2 align-items-center statstext">
@@ -2309,12 +2265,12 @@ lastSwapExecutionTime = lastSwapExecutionTime * 1e3;
                   <h6 className="d-flex gap-2 align-items-center myaddrtext">
                     My address
                     <a
-                      href={`${window.config.etherscan_baseURL}/address/${props.coinbase}`}
+                      href={`${window.config.etherscan_baseURL}/address/${coinbase}`}
                       target={"_blank"}
                       rel="noreferrer"
                     >
                       <h6 className="addresstxt">
-                        {props.coinbase?.slice(0, 10) + "..."}
+                        {coinbase?.slice(0, 10) + "..."}
                       </h6>
                     </a>
                     <img src={arrowup} alt="" />
@@ -2376,119 +2332,107 @@ lastSwapExecutionTime = lastSwapExecutionTime * 1e3;
                 </tbody>
               </table>
             </div> */}
-            <div className="stats-container my-4">
-              <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
-                <span className="stats-card-title">My LP Deposit</span>
-                <h6 className="stats-card-content">
-                  {myDepositedLpTokens} iDYP/WAVAX
-                </h6>
-                <span className="stats-usd-value">
-                  $
-                  {getFormattedNumber(
-                    myDepositedLpTokens * iDypUSD
-                  )}
-                </span>
-              </div>
-              <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
-                <span className="stats-card-title">
-                  Total LP Deposited
-                </span>
-                <h6 className="stats-card-content">{tvl} iDYP/WAVAX</h6>
-                <span className="stats-usd-value">
-                  ${getFormattedNumber(tvl * iDypUSD)}
-                </span>
-              </div>
-              <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
-                <span className="stats-card-title">My DYP Stake</span>
-                <h6 className="stats-card-content">
-                  {reward_token_balance} DYP
-                </h6>
-                <span className="stats-usd-value">
-                  $
-                  {getFormattedNumber(
-                    reward_token_balance * dypUSD
-                  )}
-                </span>
-              </div>
-              <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
-                <span className="stats-card-title">Total Earned DYP</span>
-                <h6 className="stats-card-content">
-                  {totalEarnedTokens} DYP
-                </h6>
-                <span className="stats-usd-value">
-                  $
-                  {getFormattedNumber(
-                    totalEarnedTokens * dypUSD
-                  )}
-                </span>
-              </div>
-              <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
-                <span className="stats-card-title">
-                  Total Earned WAVAX
-                </span>
-                <h6 className="stats-card-content">
-                  {totalEarnedEth} WAVAX
-                </h6>
-                <span className="stats-usd-value">$23,674,64</span>
-              </div>
-              <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
-                <span className="stats-card-title">My Share</span>
-                <h6 className="stats-card-content">{myShare}%</h6>
-              </div>
-            </div>
-            <div className="d-flex justify-content-end align-items-center gap-2">
-              <span
-                style={{
-                  fontWeight: "400",
-                  fontSize: "12px",
-                  lineHeight: "18px",
-                  color: "#C0C9FF",
-                }}
-              >
-                My address
-              </span>
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href={`${window.config.snowtrace_baseURL}/address/${coinbase}`}
-                className="stats-link"
-              >
-                {shortAddress(coinbase)}{" "}
-                <img src={statsLinkIcon} alt="" />
-              </a>
-            </div>
-            <hr />
-            <div className="container">
-              <div className="row" style={{ marginLeft: "0px" }}>
-                <div className="d-flex justify-content-between gap-2 align-items-center p-0">
-                  <h6
-                    className="d-flex gap-2 align-items-center statstext"
-                    style={{
-                      fontWeight: "500",
-                      fontSize: "20px",
-                      lineHeight: "28px",
-                      color: "#f7f7fc",
-                    }}
-                  >
-                    <img src={poolStatsIcon} alt="" />
-                    Pool stats
+              <div className="stats-container my-4">
+                <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
+                  <span className="stats-card-title">My LP Deposit</span>
+                  <h6 className="stats-card-content">
+                    {getFormattedNumber(myDepositedLpTokens, 3)} iDYP/WAVAX
                   </h6>
-                  {/* <h6 className="d-flex gap-2 align-items-center myaddrtext">
+                  {/* <span className="stats-usd-value">
+                    ${getFormattedNumber(myDepositedLpTokens * iDypUSD)}
+                  </span> */}
+                </div>
+                {/* <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
+                  <span className="stats-card-title">Total LP Deposited</span>
+                  <h6 className="stats-card-content">
+                    {getFormattedNumber(totalLPdeposited, 3)} iDYP/WAVAX
+                  </h6>
+                  <span className="stats-usd-value">
+                    ${getFormattedNumber(tvl * iDypUSD)}
+                  </span>
+                </div> */}
+                <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
+                  <span className="stats-card-title">My DYP Stake</span>
+                  <h6 className="stats-card-content">
+                    {getFormattedNumber(depositedTokensDYP, 3)} DYP
+                  </h6>
+                  {/* <span className="stats-usd-value">
+                    ${getFormattedNumber(reward_token_balance * dypUSD)}
+                  </span> */}
+                </div>
+                {/* <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
+                  <span className="stats-card-title">Total Earned DYP</span>
+                  <h6 className="stats-card-content">
+                    {getFormattedNumber(totalEarnedTokens, 3)} DYP
+                  </h6>
+                  <span className="stats-usd-value">
+                    ${getFormattedNumber(totalEarnedTokens * dypUSD)}
+                  </span>
+                </div> */}
+                <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
+                  <span className="stats-card-title">Total Earned WAVAX</span>
+                  <h6 className="stats-card-content">
+                    {getFormattedNumber(totalEarnedEth, 3)} WAVAX
+                  </h6>
+                  {/* <span className="stats-usd-value">$23,674,64</span> */}
+                </div>
+                <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
+                  <span className="stats-card-title">My Share</span>
+                  <h6 className="stats-card-content">{myShare}%</h6>
+                </div>
+              </div>
+              <div className="d-flex justify-content-end align-items-center gap-2">
+                <span
+                  style={{
+                    fontWeight: "400",
+                    fontSize: "12px",
+                    lineHeight: "18px",
+                    color: "#C0C9FF",
+                  }}
+                >
+                  My address
+                </span>
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={`${window.config.snowtrace_baseURL}/address/${coinbase}`}
+                  className="stats-link"
+                >
+                  {shortAddress(coinbase)} <img src={statsLinkIcon} alt="" />
+                </a>
+              </div>
+              <hr />
+              <div className="container">
+                <div className="row" style={{ marginLeft: "0px" }}>
+                  <div className="d-flex justify-content-between gap-2 align-items-center p-0">
+                    <h6
+                      className="d-flex gap-2 align-items-center statstext"
+                      style={{
+                        fontWeight: "500",
+                        fontSize: "20px",
+                        lineHeight: "28px",
+                        color: "#f7f7fc",
+                      }}
+                    >
+                      <img src={poolStatsIcon} alt="" />
+                      Pool stats
+                    </h6>
+                    {/* <h6 className="d-flex gap-2 align-items-center myaddrtext">
                     My address
                     <a
-                      href={`${window.config.etherscan_baseURL}/token/${reward_token._address}?a=${props.coinbase}`}
+                      href={`${window.config.etherscan_baseURL}/token/${reward_token._address}?a=${coinbase}`}
                       target={"_blank"}
                       rel="noreferrer"
                     >
                       <h6 className="addresstxt">
-                        {props.coinbase?.slice(0, 10) + "..."}
+                        {coinbase?.slice(0, 10) + "..."}
                       </h6>
                     </a>
                     <img src={arrowup} alt="" />
                   </h6> */}
+                  </div>
                 </div>
-              </div>
-              {/* <table className="table-stats table table-sm table-borderless mt-2">
+                {/* <table className="table-stats table table-sm table-borderless mt-2">
                 <tbody>
                   <tr>
                     <td className="text-right">
@@ -2548,7 +2492,7 @@ lastSwapExecutionTime = lastSwapExecutionTime * 1e3;
                       <a
                         target="_blank"
                         rel="noopener noreferrer"
-                        href={`${window.config.etherscan_baseURL}/token/${reward_token._address}?a=${props.coinbase}`}
+                        href={`${window.config.etherscan_baseURL}/token/${reward_token._address}?a=${coinbase}`}
                         className="text-white mt-2"
                         style={{
                           height: "25px",
@@ -2563,207 +2507,153 @@ lastSwapExecutionTime = lastSwapExecutionTime * 1e3;
                   </tr>
                 </tbody>
               </table> */}
-              <div className="stats-container my-4">
-                <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
-                  <span className="stats-card-title">TVL USD</span>
-                  <h6 className="stats-card-content">{tvl_usd} USD</h6>
-                </div>
-                <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
-                  <span className="stats-card-title">
-                    Total LP Deposited
-                  </span>
-                  <h6 className="stats-card-content">{tvl} iDYP/WAVAX</h6>
-                </div>
-                <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
-                  <span className="stats-card-title">To be swapped</span>
-                  <h6 className="stats-card-content">
-                    {tokensToBeSwapped} DYP
-                  </h6>
-                </div>
-                <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
-                  <span className="stats-card-title">To be burnt</span>
-                  <h6 className="stats-card-content">
-                    {tokensToBeDisbursedOrBurnt} iDYP
-                  </h6>
-                </div>
-                <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
-                  <span className="stats-card-title">
-                    Contract Expiration
-                  </span>
-                  <h6 className="stats-card-content">
-                    {expiration_time}
-                  </h6>
-                </div>
-                <div className="d-flex flex-column align-items-start justify-content-center gap-2">
-                  <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href={`https://github.com/dypfinance/staking-governance-security-audits`}
-                    className="stats-link"
-                  >
-                    Audit <img src={statsLinkIcon} alt="" />
-                  </a>
-                  <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href={`${window.config.snowtrace_baseURL}/token/${reward_token._address}?a=${coinbase}`}
-                    className="stats-link"
-                  >
-                    View transaction <img src={statsLinkIcon} alt="" />
-                  </a>
+                <div className="stats-container my-4">
+                  <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
+                    <span className="stats-card-title">TVL USD</span>
+                    <h6 className="stats-card-content">
+                       ${getFormattedNumber(lpTokensContract*priceUSD, 3)} USD
+                    </h6>
+                  </div>
+                  <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
+                    <span className="stats-card-title">Total LP Deposited</span>
+                    <h6 className="stats-card-content">
+                    {getFormattedNumber(totalLPdeposited, 3)} iDYP/WAVAX
+                    </h6>
+                  </div>
+                  <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
+                    <span className="stats-card-title">To be swapped</span>
+                    <h6 className="stats-card-content">
+                      {getFormattedNumber(tokensToBeSwapped, 3)} DYP
+                    </h6>
+                  </div>
+                  <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
+                    <span className="stats-card-title">To be disbursed/burnt</span>
+                    <h6 className="stats-card-content">
+                      {getFormattedNumber(tokensToBeDisbursedOrBurnt, 3)} iDYP
+                    </h6>
+                  </div>
+                  <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
+                    <span className="stats-card-title">
+                      Contract Expiration
+                    </span>
+                    <h6 className="stats-card-content">{expiration_time}</h6>
+                  </div>
+                  <div className="d-flex flex-column align-items-start justify-content-center gap-2">
+                    <a
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      href={`https://github.com/dypfinance/staking-governance-security-audits`}
+                      className="stats-link"
+                    >
+                      Audit <img src={statsLinkIcon} alt="" />
+                    </a>
+                    <a
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      href={`${window.config.snowtrace_baseURL}/token/${reward_token._address}?a=${coinbase}`}
+                      className="stats-link"
+                    >
+                      View transaction <img src={statsLinkIcon} alt="" />
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </Modal>
-    )}
+        </Modal>
+      )}
 
-    {showWithdrawModal && (
-      <Modal
-        visible={showWithdrawModal}
-        modalId="withdrawmodal"
-        title="withdraw"
-        setIsVisible={() => {
-          setShowWithdrawModal(false)
-        }}
-        width="fit-content"
-      >
-        <div className="earn-hero-content p4token-wrapper">
-          <div className="l-box pl-3 pr-3">
-            <div className="container">
-              <div className="row" style={{ marginLeft: "0px" }}>
-                <h6 className="withdrawdesc mt-2 p-0">
-                  {lockTime === "No Lock"
-                    ? "Your deposit has no lock-in period. You can withdraw your assets anytime, or continue to earn rewards every day."
-                    : `The pool has a lock time. You can withdraw your deposited assets after the lock time expires.`}
-                </h6>
-              </div>
-              <div className="d-flex flex-column mt-2">
-                <div className="d-flex  gap-2 justify-content-between align-items-center">
-                  <div className="d-flex flex-column gap-1">
-                    <h6 className="withsubtitle mt-3">Timer</h6>
-                    <h6 className="withtitle" style={{ fontWeight: 300 }}>
-                      {lockTime === "No Lock" ? (
-                        "No Lock"
-                      ) : (
-                        <Countdown
-                          date={Number(stakingTime) + Number(cliffTime)}
-                          renderer={renderer}
-                        />
-                      )}
-                    </h6>
-                  </div>
-                </div>
-                <div className="separator"></div>
-
-                <div className="d-flex flex-column gap-1 mt-2">
-                  <h6
-                    className="withsubtitle mb-2"
-                    style={{ color: "#4ED5D2" }}
-                  >
-                    Select assets
+      {showWithdrawModal && (
+        <Modal
+          visible={showWithdrawModal}
+          modalId="withdrawmodal"
+          title="withdraw"
+          setIsVisible={() => {
+            setShowWithdrawModal(false);
+          }}
+          width="fit-content"
+        >
+          <div className="earn-hero-content p4token-wrapper">
+            <div className="l-box pl-3 pr-3">
+              <div className="container">
+                <div className="row" style={{ marginLeft: "0px" }}>
+                  <h6 className="withdrawdesc mt-2 p-0">
+                    {lockTime === "No Lock"
+                      ? "Your deposit has no lock-in period. You can withdraw your assets anytime, or continue to earn rewards every day."
+                      : `The pool has a lock time. You can withdraw your deposited assets after the lock time expires.`}
                   </h6>
-                  <div className="row d-flex align-items-start justify-content-between gap-1 ">
-                    <div className="col-5 d-flex flex-column gap-1">
-                      <div
-                        className="gap-1 claimreward-wrapper w-100"
-                        onClick={() => {
-                          setSelectedPool("wavax2")
-                        }}
-                        style={{
-                          background:
-                            selectedPool === "wavax2"
-                              ? "#141333"
-                              : "#26264F",
-                          border:
-                            selectedPool === "wavax2"
-                              ? "1px solid #57B6AB"
-                              : "1px solid #8E97CD",
-                        }}
-                      >
-                        <img
-                          src={
-                            selectedPool === "wavax2"
-                              ? check
-                              : empty
-                          }
-                          alt=""
-                          className="activestate"
-                          style={{ top: "65px" }}
-                        />
-                        <div className="d-flex flex-column align-items-center gap-2 justify-content-between w-100">
-                          <div className="position-relative">
-                            <h6
-                              className="withsubtitle"
-                              style={{ padding: "5px 0 0 15px" }}
-                            >
-                              Value
-                            </h6>
+                </div>
+                <div className="d-flex flex-column mt-2">
+                  <div className="d-flex  gap-2 justify-content-between align-items-center">
+                    <div className="d-flex flex-column gap-1">
+                      <h6 className="withsubtitle mt-3">Timer</h6>
+                      <h6 className="withtitle" style={{ fontWeight: 300 }}>
+                        {lockTime === "No Lock" ? (
+                          "No Lock"
+                        ) : (
+                          <Countdown
+                            date={Number(stakingTime) + Number(cliffTime)}
+                            renderer={renderer}
+                          />
+                        )}
+                      </h6>
+                    </div>
+                  </div>
+                  <div className="separator"></div>
 
-                            <input
-                              disabled
-                              value={
-                                Number(withdrawAmount) > 0
-                                  ? `${withdrawAmount *
-                                    LP_AMPLIFY_FACTOR
-                                  } LP`
-                                  : `${withdrawAmount} LP`
-                              }
-                              onChange={(e) =>
-                               
-                                setWithdrawAmount(  Number(e.target.value) > 0
-                                ? e.target.value / LP_AMPLIFY_FACTOR
-                                : e.target.value)
-                              }
-                              className=" left-radius inputfarming styledinput2"
-                              placeholder="0"
-                              type="text"
-                              style={{
-                                width: "165px",
-                                padding: "0px 15px 0px 15px",
-                                height: 35,
-                                fontSize: 20,
-                                fontWeight: 300,
-                              }}
-                            />
-                          </div>
-                          {/* <div
-                          className="d-flex flex-column gap-1"
-                          style={{ paddingRight: "15px" }}
+                  <div className="d-flex flex-column gap-1 mt-2">
+                    <h6
+                      className="withsubtitle mb-2"
+                      style={{ color: "#4ED5D2" }}
+                    >
+                      Select assets
+                    </h6>
+                    <div className="row d-flex align-items-start justify-content-between gap-1 ">
+                      <div className="col-5 d-flex flex-column gap-1">
+                        <div
+                          className="gap-1 claimreward-wrapper w-100"
+                          onClick={() => {
+                            setSelectedPool("wavax2");
+                          }}
+                          style={{
+                            background:
+                              selectedPool === "wavax2" ? "#141333" : "#26264F",
+                            border:
+                              selectedPool === "wavax2"
+                                ? "1px solid #57B6AB"
+                                : "1px solid #8E97CD",
+                          }}
                         >
-                          <h6 className="withsubtitle"></h6>
-                          <h6
-                            className="withtitle"
-                            style={{ color: "#C0CBF7" }}
-                          >
-                            $200
-                          </h6>
-                        </div> */}
+                          <img
+                            src={selectedPool === "wavax2" ? check : empty}
+                            alt=""
+                            className="activestate"
+                            style={{ top: "45px" }}
+                          />
                           <div className="d-flex flex-column align-items-center gap-2 justify-content-between w-100">
                             <div className="position-relative">
                               <h6
                                 className="withsubtitle"
                                 style={{ padding: "5px 0 0 15px" }}
                               >
-                                LP balance
+                                Value
                               </h6>
 
                               <input
                                 disabled
                                 value={
-                                  Number(withdrawAmount) > 0
-                                    ? `${withdrawAmount *
-                                      LP_AMPLIFY_FACTOR
-                                    } LP`
-                                    : `${withdrawAmount} LP`
+                                  Number(getFormattedNumber(lpTokens,4)) > 0
+                                    ? `${
+                                      getFormattedNumber(lpTokens,4) * LP_AMPLIFY_FACTOR
+                                      } WAVAX`
+                                    : `${getFormattedNumber(lpTokens,4)} WAVAX`
                                 }
                                 onChange={(e) =>
-                                
-                                  setWithdrawAmount(Number(e.target.value) > 0
-                                  ? e.target.value /
-                                  LP_AMPLIFY_FACTOR
-                                  : e.target.value)
+                                  setWithdrawAmount(
+                                    Number(e.target.value) > 0
+                                      ? e.target.value / LP_AMPLIFY_FACTOR
+                                      : e.target.value
+                                  )
                                 }
                                 className=" left-radius inputfarming styledinput2"
                                 placeholder="0"
@@ -2777,198 +2667,11 @@ lastSwapExecutionTime = lastSwapExecutionTime * 1e3;
                                 }}
                               />
                             </div>
-                          </div>
-                        </div>
-                        <div
-                          className="d-flex align-items-center justify-content-center w-100 claimreward-header"
-                        // style={{ padding: "10px 0 0 10px" }}
+                            {/* <div
+                          className="d-flex flex-column gap-1"
+                          style={{ paddingRight: "15px" }}
                         >
-                          {/* <img
-                          src={
-                            require(`./assets/avax/${selectedRewardTokenLogo1.toLowerCase()}.svg`)
-                              .default
-                          }
-                          alt=""
-                          style={{ width: 14, height: 14 }}
-                        />
-                        <select
-                          disabled={!is_connected}
-                          value={selectedClaimToken}
-                          onChange={(e) => {
-                            handleClaimToken(e.target.value);
-                            setState({
-                              selectedRewardTokenLogo1:
-                                e.target.value === "0"
-                                  ? "wavax"
-                                  : "weth.e",
-                            });
-                          }}
-                          className=" inputfarming"
-                          style={{ border: "none" }}
-                        >
-                          <option value="0"> WAVAX </option>
-                          <option value="1"> WETH.e </option>
-                        </select> */}
-                          <div class="dropdown">
-                            <button
-                              class="btn reward-dropdown inputfarming d-flex align-items-center justify-content-center gap-1"
-                              type="button"
-                              data-bs-toggle="dropdown"
-                              aria-expanded="false"
-                            >
-                              <img
-                                src={
-                                  require(`./assets/${selectedRewardTokenLogo1.toLowerCase()}.svg`)
-                                    .default
-                                }
-                                alt=""
-                                style={{ width: 14, height: 14 }}
-                              />
-                              {selectedRewardTokenLogo1.toUpperCase()}
-                              <img
-                                src={dropdownVector}
-                                alt=""
-                                style={{ width: 10, height: 10 }}
-                              />
-                            </button>
-                            <ul
-                              class="dropdown-menu"
-                              style={{ minWidth: "100%" }}
-                            >
-                              <span
-                                className="d-flex align-items-center justify-content-center  gap-1 inputfarming farming-dropdown-item py-1 w-100"
-                                onClick={() => {
-                                  handleClaimToken("1");
-                                 
-                                  setSelectedRewardTokenLogo1("wavax")
-                                }}
-                              >
-                                <img
-                                  src={
-                                    require(`./assets/wavax.svg`).default
-                                  }
-                                  alt=""
-                                  style={{ width: 14, height: 14 }}
-                                />
-                                WAVAX
-                              </span>
-                              <span
-                                className="d-flex align-items-center justify-content-center  gap-1 inputfarming farming-dropdown-item py-1 w-100"
-                                onClick={() => {
-                                  handleClaimToken("2");
-                                
-                                  setSelectedRewardTokenLogo1("usdt")
-
-                                }}
-                              >
-                                <img
-                                  src={
-                                    require(`./assets/usdt.svg`).default
-                                  }
-                                  alt=""
-                                  style={{ width: 14, height: 14 }}
-                                />
-                                USDT
-                              </span>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                      <h6 className="withsubtitle d-flex justify-content-start w-100 mb-2">
-                        Total LP deposited{" "}
-                      </h6>
-                    </div>
-                    <div className="col-5 d-flex flex-column gap-1">
-                      <div
-                        className="gap-1 claimreward-wrapper w-100"
-                        style={{
-                          background:
-                            selectedPool === "dyp2"
-                              ? "#141333"
-                              : "#26264F",
-                          border:
-                            selectedPool === "dyp2"
-                              ? "1px solid #57B6AB"
-                              : "1px solid #8E97CD",
-                        }}
-                        onClick={() => {
-                          setSelectedPool("dyp2")
-                        }}
-                      >
-                        <img
-                          src={
-                            selectedPool === "dyp2"
-                              ? check
-                              : empty
-                          }
-                          alt=""
-                          className="activestate"
-                        />
-
-                        <div className="d-flex flex-column align-items-center gap-2 justify-content-between w-100 position-relative">
-                          <div className="position-relative">
-                            <h6
-                              className="withsubtitle"
-                              style={{ padding: "0px 15px 0px 15px" }}
-                            >
-                              DYP Balance
-                            </h6>
-
-                            <input
-                              disabled
-                              value={`${depositedTokensDYP} DYP`}
-                              onChange={(e) =>
-                              
-                                setWithdrawAmount(   Number(e.target.value) > 0
-                                ? e.target.value / LP_AMPLIFY_FACTOR
-                                : e.target.value)
-                              }
-                              className=" left-radius inputfarming styledinput2"
-                              placeholder="0"
-                              type="text"
-                              style={{
-                                width: "150px",
-                                padding: "0px 15px 0px 15px",
-                                height: 35,
-                                fontSize: 20,
-                                fontWeight: 300,
-                              }}
-                            />
-                          </div>
-                          <div className="position-relative">
-                            <h6
-                              className="withsubtitle"
-                              style={{ padding: "0px 15px 0px 15px" }}
-                            >
-                              Value
-                            </h6>
-
-                            <input
-                              disabled
-                              value={`${depositedTokensDYP} DYP`}
-                              onChange={(e) =>
-                               
-                                setWithdrawAmount(  Number(e.target.value) > 0
-                                ? e.target.value / LP_AMPLIFY_FACTOR
-                                : e.target.value)
-                              }
-                              className=" left-radius inputfarming styledinput2"
-                              placeholder="0"
-                              type="text"
-                              style={{
-                                width: "150px",
-                                padding: "0px 15px 0px 15px",
-                                height: 35,
-                                fontSize: 20,
-                                fontWeight: 300,
-                              }}
-                            />
-                          </div>
-                          {/* <div
-                          className="d-flex flex-column gap-1 position-relative"
-                          style={{ paddingRight: "15px", top: "-8px" }}
-                        >
-                          <h6 className="withsubtitle" >Value</h6>
+                          <h6 className="withsubtitle"></h6>
                           <h6
                             className="withtitle"
                             style={{ color: "#C0CBF7" }}
@@ -2976,42 +2679,146 @@ lastSwapExecutionTime = lastSwapExecutionTime * 1e3;
                             $200
                           </h6>
                         </div> */}
+                          
+                          </div>
+                          <div className="d-flex align-items-center justify-content-center w-100 claimreward-header">
+                            <div class="dropdown">
+                              <button
+                                class="btn reward-dropdown inputfarming d-flex align-items-center justify-content-center gap-1"
+                                type="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                              >
+                                <img
+                                  src={
+                                    require(`./assets/${selectedRewardTokenLogo1.toLowerCase()}.svg`)
+                                      .default
+                                  }
+                                  alt=""
+                                  style={{ width: 14, height: 14 }}
+                                />
+                                {selectedRewardTokenLogo1.toUpperCase()}
+                                <img
+                                  src={dropdownVector}
+                                  alt=""
+                                  style={{ width: 10, height: 10 }}
+                                />
+                              </button>
+                              <ul
+                                class="dropdown-menu"
+                                style={{ minWidth: "100%" }}
+                              >
+                                <span
+                                  className="d-flex align-items-center justify-content-center  gap-1 inputfarming farming-dropdown-item py-1 w-100"
+                                  onClick={() => {
+                                    handleClaimToken("1");
+
+                                    setSelectedRewardTokenLogo1("wavax");
+                                  }}
+                                >
+                                  <img
+                                    src={require(`./assets/wavax.svg`).default}
+                                    alt=""
+                                    style={{ width: 14, height: 14 }}
+                                  />
+                                  WAVAX
+                                </span>
+                              </ul>
+                            </div>
+                          </div>
                         </div>
+                        <h6 className="withsubtitle d-flex justify-content-start w-100 mb-2">
+                          Total LP deposited{" "}
+                        </h6>
+                      </div>
+                      <div className="col-5 d-flex flex-column gap-1">
                         <div
-                          className="d-flex align-items-center justify-content-center w-100 claimreward-header"
-                        // style={{ padding: "10px 0 0 10px" }}
+                          className="gap-1 claimreward-wrapper w-100"
+                          style={{
+                            background:
+                              selectedPool === "dyp2" ? "#141333" : "#26264F",
+                            border:
+                              selectedPool === "dyp2"
+                                ? "1px solid #57B6AB"
+                                : "1px solid #8E97CD",
+                          }}
+                          onClick={() => {
+                            setSelectedPool("dyp2");
+                          }}
                         >
                           <img
-                            src={
-                              require(`./assets/avax/${selectedRewardTokenLogo2.toLowerCase()}.svg`)
-                                .default
-                            }
+                            src={selectedPool === "dyp2" ? check : empty}
                             alt=""
-                            style={{ width: 14, height: 14 }}
+                            className="activestate"
+                            style={{ top: "45px" }}
+
                           />
-                          <select
-                            disabled
-                            defaultValue="DYP"
-                            className="form-control inputfarming"
-                            style={{
-                              border: "none",
-                              padding: "0 0 0 3px",
-                            }}
-                          >
-                            <option value="DYP"> DYP </option>
-                          </select>
+
+                          <div className="d-flex flex-column align-items-center gap-2 justify-content-between w-100 position-relative">
+                            <div className="position-relative">
+                              <h6
+                                className="withsubtitle"
+                                style={{ padding: "0px 15px 0px 15px" }}
+                              >
+                                DYP Balance
+                              </h6>
+
+                              <input
+                                disabled
+                                value={`${getFormattedNumber(depositedTokensDYP)} DYP`}
+                                onChange={(e) =>
+                                  setWithdrawAmount(
+                                    Number(e.target.value) > 0
+                                      ? e.target.value / LP_AMPLIFY_FACTOR
+                                      : e.target.value
+                                  )
+                                }
+                                className=" left-radius inputfarming styledinput2"
+                                placeholder="0"
+                                type="text"
+                                style={{
+                                  width: "150px",
+                                  padding: "0px 15px 0px 15px",
+                                  height: 35,
+                                  fontSize: 20,
+                                  fontWeight: 300,
+                                }}
+                              />
+                            </div>
+                            
+                          </div>
+                          <div className="d-flex align-items-center justify-content-center w-100 claimreward-header">
+                            <img
+                              src={
+                                require(`./assets/avax/${selectedRewardTokenLogo2.toLowerCase()}.svg`)
+                                  .default
+                              }
+                              alt=""
+                              style={{ width: 14, height: 14 }}
+                            />
+                            <select
+                              disabled
+                              defaultValue="DYP"
+                              className="form-control inputfarming"
+                              style={{
+                                border: "none",
+                                padding: "0 0 0 3px",
+                              }}
+                            >
+                              <option value="DYP"> DYP </option>
+                            </select>
+                          </div>
                         </div>
+                        <h6 className="withsubtitle d-flex justify-content-start w-100 ">
+                          Total DYP deposited{" "}
+                        </h6>
                       </div>
-                      <h6 className="withsubtitle d-flex justify-content-start w-100 ">
-                        Total DYP deposited{" "}
-                      </h6>
                     </div>
                   </div>
-                </div>
 
-                <div className="separator"></div>
-                <div className="d-flex align-items-center justify-content-between gap-2">
-                  {/* <button
+                  <div className="separator"></div>
+                  <div className="d-flex align-items-center justify-content-between gap-2">
+                    {/* <button
                   className="btn filledbtn w-100"
                   onClick={(e) => {
                     handleWithdrawDyp();
@@ -3025,49 +2832,50 @@ lastSwapExecutionTime = lastSwapExecutionTime * 1e3;
                   Withdraw
                 </button> */}
 
-                  <button
-                    disabled={
-                      selectedPool === "" ||
+                    <button
+                      disabled={
+                        selectedPool === "" ||
                         withdrawStatus === "failed" ||
-                        withdrawStatus === "success" 
-                        ? true
-                        : false
-                    }
-                    className={` w-100 btn filledbtn ${selectedPool === "" 
-                        ? "disabled-btn"
-                        : withdrawStatus === "failed"
+                        withdrawStatus === "success"
+                          ? true
+                          : false
+                      }
+                      className={` w-100 btn filledbtn ${
+                        selectedPool === ""
+                          ? "disabled-btn"
+                          : withdrawStatus === "failed"
                           ? "fail-button"
                           : withdrawStatus === "success"
-                            ? "success-button"
-                            : null
+                          ? "success-button"
+                          : null
                       } d-flex justify-content-center align-items-center`}
-                    style={{ height: "fit-content" }}
-                    onClick={() => {
-                      selectedPool === "wavax2"
-                        ? handleWithdraw()
-                        : handleWithdrawDyp();
-                    }}
-                  >
-                    {withdrawLoading ? (
-                      <div
-                        class="spinner-border spinner-border-sm text-light"
-                        role="status"
-                      >
-                        <span class="visually-hidden">Loading...</span>
-                      </div>
-                    ) : withdrawStatus === "failed" ? (
-                      <>
-                        <img src={failMark} alt="" />
-                        Failed
-                      </>
-                    ) : withdrawStatus === "success" ? (
-                      <>Success</>
-                    ) : (
-                      <>Withdraw</>
-                    )}
-                  </button>
+                      style={{ height: "fit-content" }}
+                      onClick={() => {
+                        selectedPool === "wavax2"
+                          ? handleWithdraw()
+                          : handleWithdrawDyp();
+                      }}
+                    >
+                      {withdrawLoading ? (
+                        <div
+                          class="spinner-border spinner-border-sm text-light"
+                          role="status"
+                        >
+                          <span class="visually-hidden">Loading...</span>
+                        </div>
+                      ) : withdrawStatus === "failed" ? (
+                        <>
+                          <img src={failMark} alt="" />
+                          Failed
+                        </>
+                      ) : withdrawStatus === "success" ? (
+                        <>Success</>
+                      ) : (
+                        <>Withdraw</>
+                      )}
+                    </button>
 
-                  {/* <div className="form-row">
+                    {/* <div className="form-row">
                         <div className="col-6">
                           <button
                             title={
@@ -3101,29 +2909,30 @@ lastSwapExecutionTime = lastSwapExecutionTime * 1e3;
                           </button>
                         </div>
                       </div> */}
-                </div>
-                {/* <h6 className="withsubtitle d-flex justify-content-start w-100 mt-1">
+                  </div>
+                  {/* <h6 className="withsubtitle d-flex justify-content-start w-100 mt-1">
                   *No withdrawal fee
                 </h6> */}
-                {errorMsg3 && (
-                  <h6 className="errormsg">{errorMsg3}</h6>
-                )}
+                  {errorMsg3 && <h6 className="errormsg">{errorMsg3}</h6>}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </Modal>
-    )}
+        </Modal>
+      )}
 
-    {show && (
-      <WalletModal
-        show={show}
-        handleClose={hideModal}
-        handleConnection={()=>{props.handleConnection(); setShow(false); }}
-      />
-    )}
+      {show && (
+        <WalletModal
+          show={show}
+          handleClose={hideModal}
+          handleConnection={() => {
+            handleConnection();
+            setShow(false);
+          }}
+        />
+      )}
 
-    {/* <div
+      {/* <div
       className="calculator-btn d-flex justify-content-center align-items-center gap-2 text-white"
       onClick={() => setState({ showCalculator: true })}
     >
@@ -3135,15 +2944,15 @@ lastSwapExecutionTime = lastSwapExecutionTime * 1e3;
       Calculator
     </div> */}
 
-    {showCalculator && (
-      <Modal
-        title="calculator"
-        modalId="calculatormodal"
-        setIsVisible={() => showCalculator(false)}
-        visible={showCalculator}
-      >
-        <div className="pools-calculator">
-          {/* <div className="d-flex align-items-center justify-content-between">
+      {showCalculator && (
+        <Modal
+          title="calculator"
+          modalId="calculatormodal"
+          setIsVisible={() => setShowCalculator(false)}
+          visible={showCalculator}
+        >
+          <div className="pools-calculator">
+            {/* <div className="d-flex align-items-center justify-content-between">
           <div className="d-flex align-items-center gap-3">
             <img src={calculatorIcon} alt="" />
             <h5
@@ -3165,87 +2974,80 @@ lastSwapExecutionTime = lastSwapExecutionTime * 1e3;
             className="cursor-pointer"
           />
         </div> */}
-          <hr />
-          <div className="d-flex align-items-center justify-content-between">
-            <div className="d-flex flex-column gap-3 w-50 me-5">
-              <span style={{ fontSize: "15px", fontWeight: "500" }}>
-                Days to stake
-              </span>
-              <input
-                style={{ height: "40px" }}
-                type="number"
-                className="form-control calcinput w-100"
-                id="days"
-                name="days"
-                placeholder="Days*"
-                value={approxDays}
-                onChange={(e) =>
-                  
-                  setApproxDays(e.target.value)
-                }
-              />
+            <hr />
+            <div className="d-flex align-items-center justify-content-between">
+              <div className="d-flex flex-column gap-3 w-50 me-5">
+                <span style={{ fontSize: "15px", fontWeight: "500" }}>
+                  Days to stake
+                </span>
+                <input
+                  style={{ height: "40px" }}
+                  type="number"
+                  className="form-control calcinput w-100"
+                  id="days"
+                  name="days"
+                  placeholder="Days*"
+                  value={approxDays}
+                  onChange={(e) => setApproxDays(e.target.value)}
+                />
+              </div>
+              <div className="d-flex flex-column gap-3 w-50 me-5">
+                <span style={{ fontSize: "15px", fontWeight: "500" }}>
+                  Amount to stake
+                </span>
+                <input
+                  style={{ height: "40px" }}
+                  type="number"
+                  className="form-control calcinput w-100"
+                  id="days"
+                  name="days"
+                  placeholder="Value of deposit in USD"
+                  value={
+                    Number(approxDeposit) > 0
+                      ? approxDeposit * LP_AMPLIFY_FACTOR
+                      : approxDeposit
+                  }
+                  onChange={(e) =>
+                    setApproxDeposit(
+                      Number(e.target.value) > 0
+                        ? e.target.value / LP_AMPLIFY_FACTOR
+                        : e.target.value
+                    )
+                  }
+                />
+              </div>
             </div>
-            <div className="d-flex flex-column gap-3 w-50 me-5">
-              <span style={{ fontSize: "15px", fontWeight: "500" }}>
-                Amount to stake
-              </span>
-              <input
-                style={{ height: "40px" }}
-                type="number"
-                className="form-control calcinput w-100"
-                id="days"
-                name="days"
-                placeholder="Value of deposit in USD"
-                value={
-                  Number(approxDeposit) > 0
-                    ? approxDeposit * LP_AMPLIFY_FACTOR
-                    : approxDeposit
-                }
-                onChange={(e) =>
-                 
-                  setApproxDeposit( Number(e.target.value) > 0
-                  ? e.target.value / LP_AMPLIFY_FACTOR
-                  : e.target.value)
-                }
-              />
+            <div className="d-flex flex-column gap-2 mt-4">
+              <h3 style={{ fontWeight: "500", fontSize: "39px" }}>
+                $ {getFormattedNumber(getApproxReturnUSD() / getUsdPerETH(), 6)}
+                USD
+              </h3>
+              <h6
+                style={{
+                  fontWeight: "300",
+                  fontSize: "15px",
+                  color: "#f7f7fc",
+                }}
+              >
+                Approx {getFormattedNumber(getApproxReturnUSD(), 2)} WAVAX
+              </h6>
+            </div>
+            <div className="mt-4">
+              <p
+                style={{
+                  fontWeight: "400",
+                  fontSize: "13px",
+                  color: "#f7f7fc",
+                }}
+              >
+                *This calculator is for informational purposes only. Calculated
+                yields assume that prices of the deposited assets don't change.
+              </p>
             </div>
           </div>
-          <div className="d-flex flex-column gap-2 mt-4">
-            <h3 style={{ fontWeight: "500", fontSize: "39px" }}>
-              $ {getFormattedNumber(
-                getApproxReturnUSD() / getUsdPerETH(),
-                6
-              )}
-               USD
-            </h3>
-            <h6
-              style={{
-                fontWeight: "300",
-                fontSize: "15px",
-                color: "#f7f7fc",
-              }}
-            >
-          Approx {" "}{getFormattedNumber(getApproxReturnUSD(), 2)}{" "}
-              WAVAX
-            </h6>
-          </div>
-          <div className="mt-4">
-            <p
-              style={{
-                fontWeight: "400",
-                fontSize: "13px",
-                color: "#f7f7fc",
-              }}
-            >
-              *This calculator is for informational purposes only.
-              Calculated yields assume that prices of the deposited assets
-              don't change.
-            </p>
-          </div>
-        </div>
-      </Modal>
-    )}
-  </div>
+        </Modal>
+      )}
+    </div>
   );
 };
 
