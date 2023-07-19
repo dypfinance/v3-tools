@@ -645,7 +645,7 @@ const TopPoolsListCard = ({
             activePools &&
             topList === "Staking" &&
             activePools[cardIndex - 1].id ===
-              "testId" &&
+              "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712" &&
             chain === "bnb" ? (
             <StakeBsc
               lp_id={LP_IDBNB_Array[cardIndex]}
@@ -857,7 +857,7 @@ const TopPoolsListCard = ({
           topList === "Staking" &&
           chain === "avax" &&
           activePools[cardIndex - 1].id ===
-            "testId2" ? (
+            "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712" ? (
           <StakeAvax
             is_wallet_connected={isConnected}
             coinbase={coinbase}
