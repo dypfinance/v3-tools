@@ -295,7 +295,7 @@ const EarnTopPicks = ({
       .then((res) => {
         let temparray = Object.entries(res.data.the_graph_bsc_v2.lp_data);
         let bnbpool = temparray.filter((item) => {
-          return item.id === "0x1bc61d08a300892e784ed37b2d0e63c85d1d57fb-0x90124d8dced672986b05c17a4003f8f0a7f2e3ae"
+          return item.id === "0x1bc61d08a300892e784ed37b2d0e63c85d1d57fb-0x5bc3a80a1f2c4fb693d9dddcebbb5a1b5bb15d65"
         })
         setTheBnbPool(bnbpool)
         let farming2 = [];
@@ -322,7 +322,7 @@ const EarnTopPicks = ({
     .then((res) => {
       let temparray = Object.entries(res.data.the_graph_bsc_v2.lp_data);
       let bnbpool = temparray.find((item) => {
-        return item[0] === "0x1bc61d08a300892e784ed37b2d0e63c85d1d57fb-0x90124d8dced672986b05c17a4003f8f0a7f2e3ae"
+        return item[0] === "0x1bc61d08a300892e784ed37b2d0e63c85d1d57fb-0x5bc3a80a1f2c4fb693d9dddcebbb5a1b5bb15d65"
       })
       setWbnbPrice(res.data.the_graph_bsc_v2.usd_per_eth)
       setTheBnbPool(bnbpool[1])
