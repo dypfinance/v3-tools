@@ -697,27 +697,26 @@ const EarnTopPicks = ({
   };
 
   useEffect(() => {
-    console.log("helloooordeg")
-    setActiveCard(null)
-    setActiveCard2(null)
-    setActiveCard3(null)
-    setActiveCard4(null)
-    setActiveCard5(null)
-    setActiveCard6(null)
-    setActiveCard7(null)
-    setActiveCard8(null)
-    setActiveCard9(null)
-    setActiveCard10(null)
-    setActiveCard11(null)
-    setActiveCard12(null)
-    setcardIndex(null)
-    setcardIndexiDyp(null)
-    setcardIndexavax30(null)
-    setcardIndexavaxiDyp(null)
-    setDetails(null)
-    setActiveCardNFT(null)
-    setActiveCardLandNFT(null)
-    setActiveCardCawsLand(null)
+    setActiveCard()
+    setActiveCard2()
+    setActiveCard3()
+    setActiveCard4()
+    setActiveCard5()
+    setActiveCard6()
+    setActiveCard7()
+    setActiveCard8()
+    setActiveCard9()
+    setActiveCard10()
+    setActiveCard11()
+    setActiveCard12()
+    setcardIndex()
+    setcardIndexiDyp()
+    setcardIndexavax30()
+    setcardIndexavaxiDyp()
+    setDetails()
+    setActiveCardNFT()
+    setActiveCardLandNFT()
+    setActiveCardCawsLand()
   
 }, [topList, chain])
 
@@ -865,9 +864,7 @@ const EarnTopPicks = ({
     }
   },[topList, chain, expiredPools])
 
-
-  
-
+ 
   return topPools.length > 0 && expiredPools === false ? (
     <div className={`row w-100 justify-content-center gap-4`}>
       {expiredPools === false ? (
@@ -1299,7 +1296,7 @@ const EarnTopPicks = ({
                   ) 
                   : activeCard &&
                   topList === "Staking" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                   chain === "bnb" ? (
                   <StakeBsc
@@ -1370,7 +1367,7 @@ const EarnTopPicks = ({
                   
                   : activeCard &&
                     topList === "Staking" &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" &&
                     chain === "bnb" ? (
                     <StakeBsc
@@ -1439,7 +1436,7 @@ const EarnTopPicks = ({
                     />
                   ) : activeCard &&
                     topList === "Staking" &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x7c82513b69c1b42c23760cfc34234558119a3399" &&
                     chain === "bnb" ? (
                     <StakeBsc
@@ -1567,7 +1564,7 @@ const EarnTopPicks = ({
                       totalTvl={activePools[cardIndex].tvl_usd}
                     />
                   ) : activeCard &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x4C04E53f9aAa17fc2C914694B4Aae57a9d1bE445" &&
                     topList === "Staking" &&
                     chain === "bnb" ? (
@@ -1635,7 +1632,7 @@ const EarnTopPicks = ({
                       }
                     />
                   ) : activeCard &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x7e766F7005C7a9e74123b156697B582eeCB8d2D7" &&
                     topList === "Staking" &&
                     chain === "bnb" ? (
@@ -2128,7 +2125,7 @@ const EarnTopPicks = ({
                 </div>
                 {activeCard2 &&
                 topList === "Staking" &&
-                activePools[cardIndex].id ===
+                activePools[cardIndex]?.id ===
                   "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" &&
                 chain === "bnb" ? (
                   <StakeBsc
@@ -2196,7 +2193,7 @@ const EarnTopPicks = ({
                 
                 : activeCard2 &&
                 topList === "Staking" &&
-                activePools[cardIndex].id ===
+                activePools[cardIndex]?.id ===
                   "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                 chain === "bnb" ? (
                 <StakeBsc
@@ -2330,7 +2327,7 @@ const EarnTopPicks = ({
                 : activeCard2 &&
                   topList === "Staking" &&
                   chain === "eth" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" ? (
                   <StakeNewEth
                     staking={window.constant_staking_newi3}
@@ -2386,7 +2383,7 @@ const EarnTopPicks = ({
                   />
                 ) : activeCard2 &&
                   topList === "Staking" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x7c82513b69c1b42c23760cfc34234558119a3399" &&
                   chain === "bnb" ? (
                   <StakeBsc
@@ -2453,7 +2450,7 @@ const EarnTopPicks = ({
                 ) : activeCard2 &&
                   topList === "Staking" &&
                   chain === "eth" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x50014432772b4123D04181727C6EdEAB34F5F988" ? (
                   <InitConstantStakingiDYP
                     is_wallet_connected={isConnected}
@@ -2509,7 +2506,7 @@ const EarnTopPicks = ({
                 ) : activeCard2 &&
                   topList === "Staking" &&
                   chain === "eth" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xD4bE7a106ed193BEe39D6389a481ec76027B2660" ? (
                   <InitConstantStakingiDYP
                     is_wallet_connected={isConnected}
@@ -2563,7 +2560,7 @@ const EarnTopPicks = ({
                     }
                   />
                 ) : activeCard2 &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x4C04E53f9aAa17fc2C914694B4Aae57a9d1bE445" &&
                   topList === "Staking" &&
                   chain === "bnb" ? (
@@ -2628,7 +2625,7 @@ const EarnTopPicks = ({
                     }
                   />
                 ) : activeCard2 &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x7e766F7005C7a9e74123b156697B582eeCB8d2D7" &&
                   topList === "Staking" &&
                   chain === "bnb" ? (
@@ -2695,7 +2692,7 @@ const EarnTopPicks = ({
                 ) : activeCard2 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xb1875eeBbcF4456188968f439896053809698a8B" ? (
                   <StakeAvax
                     is_wallet_connected={isConnected}
@@ -2754,7 +2751,7 @@ const EarnTopPicks = ({
                 ) : activeCard2 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x6eb643813f0b4351b993f98bdeaef6e0f79573e9" ? (
                   <StakeAvax
                     is_wallet_connected={isConnected}
@@ -2813,7 +2810,7 @@ const EarnTopPicks = ({
                 ) : activeCard2 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xd13bdC0c9a9931cF959739631B1290b6BEE0c018" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
@@ -2872,7 +2869,7 @@ const EarnTopPicks = ({
                 ) : activeCard2 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xaF411BF994dA1435A3150B874395B86376C5f2d5" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
@@ -3030,7 +3027,7 @@ const EarnTopPicks = ({
                 </div>
                 {activeCard3 &&
                 topList === "Staking" &&
-                activePools[cardIndex].id ===
+                activePools[cardIndex]?.id ===
                   "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" &&
                 chain === "bnb" ? (
                   <StakeBsc
@@ -3097,7 +3094,7 @@ const EarnTopPicks = ({
                 )
                 : activeCard3 &&
                 topList === "Staking" &&
-                activePools[cardIndex].id ===
+                activePools[cardIndex]?.id ===
                   "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                 chain === "bnb" ? (
                 <StakeBsc
@@ -3230,7 +3227,7 @@ const EarnTopPicks = ({
                 
                 : activeCard3 &&
                   topList === "Staking" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x7c82513b69c1b42c23760cfc34234558119a3399" &&
                   chain === "bnb" ? (
                   <StakeBsc
@@ -3295,7 +3292,7 @@ const EarnTopPicks = ({
                     referrer={referrer}
                   />
                 ) : activeCard3 &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x4C04E53f9aAa17fc2C914694B4Aae57a9d1bE445" &&
                   topList === "Staking" &&
                   chain === "bnb" ? (
@@ -3360,7 +3357,7 @@ const EarnTopPicks = ({
                     }
                   />
                 ) : activeCard3 &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x7e766F7005C7a9e74123b156697B582eeCB8d2D7" &&
                   topList === "Staking" &&
                   chain === "bnb" ? (
@@ -3427,7 +3424,7 @@ const EarnTopPicks = ({
                 ) : activeCard3 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xb1875eeBbcF4456188968f439896053809698a8B" ? (
                   <StakeAvax
                     is_wallet_connected={isConnected}
@@ -3486,7 +3483,7 @@ const EarnTopPicks = ({
                 ) : activeCard3 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x6eb643813f0b4351b993f98bdeaef6e0f79573e9" ? (
                   <StakeAvax
                     is_wallet_connected={isConnected}
@@ -3545,7 +3542,7 @@ const EarnTopPicks = ({
                 ) : activeCard3 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xd13bdC0c9a9931cF959739631B1290b6BEE0c018" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
@@ -3604,7 +3601,7 @@ const EarnTopPicks = ({
                 ) : activeCard3 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xaF411BF994dA1435A3150B874395B86376C5f2d5" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
@@ -3735,7 +3732,7 @@ const EarnTopPicks = ({
                 </div>
                 {activeCard4 &&
                 topList === "Staking" &&
-                activePools[cardIndex].id ===
+                activePools[cardIndex]?.id ===
                   "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" &&
                 chain === "bnb" ? (
                   <StakeBsc
@@ -3801,7 +3798,7 @@ const EarnTopPicks = ({
                   />
                 ) : activeCard4 &&
                   topList === "Staking" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x7c82513b69c1b42c23760cfc34234558119a3399" &&
                   chain === "bnb" ? (
                   <StakeBsc
@@ -3954,7 +3951,7 @@ const EarnTopPicks = ({
                 ) : activeCard4 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xb1875eeBbcF4456188968f439896053809698a8B" ? (
                   <StakeAvax
                     is_wallet_connected={isConnected}
@@ -4013,7 +4010,7 @@ const EarnTopPicks = ({
                 ) : activeCard4 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x6eb643813f0b4351b993f98bdeaef6e0f79573e9" ? (
                   <StakeAvax
                     is_wallet_connected={isConnected}
@@ -4072,7 +4069,7 @@ const EarnTopPicks = ({
                 ) : activeCard4 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xd13bdC0c9a9931cF959739631B1290b6BEE0c018" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
@@ -4131,7 +4128,7 @@ const EarnTopPicks = ({
                 ) : activeCard4 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xaF411BF994dA1435A3150B874395B86376C5f2d5" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
@@ -4473,7 +4470,7 @@ const EarnTopPicks = ({
                 ) : activeCard &&
                   topList === "Staking" &&
                   chain === "eth" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" ? (
                   <StakeNewEth
                     staking={window.constant_staking_newi3}
@@ -4587,7 +4584,7 @@ const EarnTopPicks = ({
             ) : activeCard &&
                   topList === "Staking" &&
                   chain === "eth" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x50014432772b4123D04181727C6EdEAB34F5F988" ? (
                   <InitConstantStakingiDYP
                     is_wallet_connected={isConnected}
@@ -4643,7 +4640,7 @@ const EarnTopPicks = ({
                 ) : activeCard &&
                   topList === "Staking" &&
                   chain === "eth" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xD4bE7a106ed193BEe39D6389a481ec76027B2660" ? (
                   <InitConstantStakingiDYP
                     is_wallet_connected={isConnected}
@@ -4699,7 +4696,7 @@ const EarnTopPicks = ({
                 ) 
                 : activeCard &&
                   topList === "Staking" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                   chain === "bnb" ? (
                   <StakeBsc
@@ -4770,7 +4767,7 @@ const EarnTopPicks = ({
                 
                 : activeCard &&
                   topList === "Staking" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" &&
                   chain === "bnb" ? (
                   <StakeBsc
@@ -4901,7 +4898,7 @@ const EarnTopPicks = ({
                     referrer={referrer}
                   />
                 ) : activeCard &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x4C04E53f9aAa17fc2C914694B4Aae57a9d1bE445" &&
                   topList === "Staking" &&
                   chain === "bnb" ? (
@@ -4966,7 +4963,7 @@ const EarnTopPicks = ({
                     }
                   />
                 ) : activeCard &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x7e766F7005C7a9e74123b156697B582eeCB8d2D7" &&
                   topList === "Staking" &&
                   chain === "bnb" ? (
@@ -5033,7 +5030,7 @@ const EarnTopPicks = ({
                 ) : activeCard &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xb1875eeBbcF4456188968f439896053809698a8B" ? (
                   <StakeAvax
                     is_wallet_connected={isConnected}
@@ -5156,7 +5153,7 @@ const EarnTopPicks = ({
                 : activeCard &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x6eb643813f0b4351b993f98bdeaef6e0f79573e9" ? (
                   <StakeAvax
                     is_wallet_connected={isConnected}
@@ -5215,7 +5212,7 @@ const EarnTopPicks = ({
                 ) : activeCard &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xd13bdC0c9a9931cF959739631B1290b6BEE0c018" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
@@ -5274,7 +5271,7 @@ const EarnTopPicks = ({
                 ) : activeCard &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xaF411BF994dA1435A3150B874395B86376C5f2d5" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
@@ -5474,7 +5471,7 @@ const EarnTopPicks = ({
                 {activeCard2 &&
                 topList === "Staking" &&
                 chain === "eth" &&
-                activePools[cardIndex].id ===
+                activePools[cardIndex]?.id ===
                   "0x50014432772b4123D04181727C6EdEAB34F5F988" ? (
                   <InitConstantStakingiDYP
                     is_wallet_connected={isConnected}
@@ -5530,7 +5527,7 @@ const EarnTopPicks = ({
                 ) : activeCard2 &&
                   topList === "Staking" &&
                   chain === "eth" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" ? (
                   <StakeNewEth
                     staking={window.constant_staking_newi3}
@@ -5587,7 +5584,7 @@ const EarnTopPicks = ({
                 ) : activeCard2 &&
                   topList === "Staking" &&
                   chain === "eth" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xD4bE7a106ed193BEe39D6389a481ec76027B2660" ? (
                   <InitConstantStakingiDYP
                     is_wallet_connected={isConnected}
@@ -5643,7 +5640,7 @@ const EarnTopPicks = ({
                 )
                 : activeCard2 &&
                 topList === "Staking" &&
-                activePools[cardIndex].id ===
+                activePools[cardIndex]?.id ===
                   "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                 chain === "bnb" ? (
                 <StakeBsc
@@ -5775,7 +5772,7 @@ const EarnTopPicks = ({
             )
                 
                 : activeCard2 &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x4C04E53f9aAa17fc2C914694B4Aae57a9d1bE445" &&
                   topList === "Staking" &&
                   chain === "bnb" ? (
@@ -5841,7 +5838,7 @@ const EarnTopPicks = ({
                   />
                 ) : activeCard2 &&
                   topList === "Staking" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x7c82513b69c1b42c23760cfc34234558119a3399" &&
                   chain === "bnb" ? (
                   <StakeBsc
@@ -5906,7 +5903,7 @@ const EarnTopPicks = ({
                     referrer={referrer}
                   />
                 ) : activeCard2 &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x7e766F7005C7a9e74123b156697B582eeCB8d2D7" &&
                   topList === "Staking" &&
                   chain === "bnb" ? (
@@ -5973,7 +5970,7 @@ const EarnTopPicks = ({
                 ) : activeCard2 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xb1875eeBbcF4456188968f439896053809698a8B" ? (
                   <StakeAvax
                     is_wallet_connected={isConnected}
@@ -6032,7 +6029,7 @@ const EarnTopPicks = ({
                 ) : activeCard2 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x6eb643813f0b4351b993f98bdeaef6e0f79573e9" ? (
                   <StakeAvax
                     is_wallet_connected={isConnected}
@@ -6091,7 +6088,7 @@ const EarnTopPicks = ({
                 ) : activeCard2 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xd13bdC0c9a9931cF959739631B1290b6BEE0c018" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
@@ -6150,7 +6147,7 @@ const EarnTopPicks = ({
                 ) : activeCard2 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xaF411BF994dA1435A3150B874395B86376C5f2d5" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
@@ -6297,7 +6294,7 @@ const EarnTopPicks = ({
                 </div>
                 {activeCard3 &&
                 topList === "Staking" &&
-                activePools[cardIndex].id ===
+                activePools[cardIndex]?.id ===
                   "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" &&
                 chain === "bnb" ? (
                   <StakeBsc
@@ -6364,7 +6361,7 @@ const EarnTopPicks = ({
                 )
                 : activeCard3 &&
                 topList === "Staking" &&
-                activePools[cardIndex].id ===
+                activePools[cardIndex]?.id ===
                   "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                 chain === "bnb" ? (
                 <StakeBsc
@@ -6498,7 +6495,7 @@ const EarnTopPicks = ({
                 : activeCard3 &&
                   topList === "Staking" &&
                   chain === "eth" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x50014432772b4123D04181727C6EdEAB34F5F988" ? (
                   <InitConstantStakingiDYP
                     is_wallet_connected={isConnected}
@@ -6554,7 +6551,7 @@ const EarnTopPicks = ({
                 ) : activeCard3 &&
                   topList === "Staking" &&
                   chain === "eth" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xD4bE7a106ed193BEe39D6389a481ec76027B2660" ? (
                   <InitConstantStakingiDYP
                     is_wallet_connected={isConnected}
@@ -6609,7 +6606,7 @@ const EarnTopPicks = ({
                   />
                 ) : activeCard3 &&
                   topList === "Staking" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x7c82513b69c1b42c23760cfc34234558119a3399" &&
                   chain === "bnb" ? (
                   <StakeBsc
@@ -6762,7 +6759,7 @@ const EarnTopPicks = ({
                 ) : activeCard3 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xb1875eeBbcF4456188968f439896053809698a8B" ? (
                   <StakeAvax
                     is_wallet_connected={isConnected}
@@ -6821,7 +6818,7 @@ const EarnTopPicks = ({
                 ) : activeCard3 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x6eb643813f0b4351b993f98bdeaef6e0f79573e9" ? (
                   <StakeAvax
                     is_wallet_connected={isConnected}
@@ -6880,7 +6877,7 @@ const EarnTopPicks = ({
                 ) : activeCard3 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xd13bdC0c9a9931cF959739631B1290b6BEE0c018" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
@@ -6939,7 +6936,7 @@ const EarnTopPicks = ({
                 ) : activeCard3 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xaF411BF994dA1435A3150B874395B86376C5f2d5" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
@@ -7074,7 +7071,7 @@ const EarnTopPicks = ({
                 </div>
                 {activeCard4 &&
                 topList === "Staking" &&
-                activePools[cardIndex].id ===
+                activePools[cardIndex]?.id ===
                   "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" &&
                 chain === "bnb" ? (
                   <StakeBsc
@@ -7141,7 +7138,7 @@ const EarnTopPicks = ({
                 )
                 : activeCard4 &&
                 topList === "Staking" &&
-                activePools[cardIndex].id ===
+                activePools[cardIndex]?.id ===
                   "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                 chain === "bnb" ? (
                 <StakeBsc
@@ -7274,7 +7271,7 @@ const EarnTopPicks = ({
                 
                 : activeCard4 &&
                   topList === "Staking" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x7c82513b69c1b42c23760cfc34234558119a3399" &&
                   chain === "bnb" ? (
                   <StakeBsc
@@ -7427,7 +7424,7 @@ const EarnTopPicks = ({
                 ) : activeCard4 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xb1875eeBbcF4456188968f439896053809698a8B" ? (
                   <StakeAvax
                     is_wallet_connected={isConnected}
@@ -7486,7 +7483,7 @@ const EarnTopPicks = ({
                 ) : activeCard4 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x6eb643813f0b4351b993f98bdeaef6e0f79573e9" ? (
                   <StakeAvax
                     is_wallet_connected={isConnected}
@@ -7545,7 +7542,7 @@ const EarnTopPicks = ({
                 ) : activeCard4 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xd13bdC0c9a9931cF959739631B1290b6BEE0c018" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
@@ -7604,7 +7601,7 @@ const EarnTopPicks = ({
                 ) : activeCard4 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xaF411BF994dA1435A3150B874395B86376C5f2d5" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
@@ -7741,7 +7738,7 @@ const EarnTopPicks = ({
                 </div>
                 {activeCard5 &&
                 topList === "Staking" &&
-                activePools[cardIndex].id ===
+                activePools[cardIndex]?.id ===
                   "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" &&
                 chain === "bnb" ? (
                   <StakeBsc
@@ -7808,7 +7805,7 @@ const EarnTopPicks = ({
                 )
                 : activeCard5 &&
                 topList === "Staking" &&
-                activePools[cardIndex].id ===
+                activePools[cardIndex]?.id ===
                   "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                 chain === "bnb" ? (
                 <StakeBsc
@@ -7940,7 +7937,7 @@ const EarnTopPicks = ({
             )
                 : activeCard5 &&
                   topList === "Staking" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x7c82513b69c1b42c23760cfc34234558119a3399" &&
                   chain === "bnb" ? (
                   <StakeBsc
@@ -8093,7 +8090,7 @@ const EarnTopPicks = ({
                 ) : activeCard5 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xb1875eeBbcF4456188968f439896053809698a8B" ? (
                   <StakeAvax
                     is_wallet_connected={isConnected}
@@ -8152,7 +8149,7 @@ const EarnTopPicks = ({
                 ) : activeCard5 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x6eb643813f0b4351b993f98bdeaef6e0f79573e9" ? (
                   <StakeAvax
                     is_wallet_connected={isConnected}
@@ -8211,7 +8208,7 @@ const EarnTopPicks = ({
                 ) : activeCard5 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xd13bdC0c9a9931cF959739631B1290b6BEE0c018" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
@@ -8270,7 +8267,7 @@ const EarnTopPicks = ({
                 ) : activeCard5 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xaF411BF994dA1435A3150B874395B86376C5f2d5" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
@@ -8407,7 +8404,7 @@ const EarnTopPicks = ({
                 </div>
                 {activeCard6 &&
                 topList === "Staking" &&
-                activePools[cardIndex].id ===
+                activePools[cardIndex]?.id ===
                   "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" &&
                 chain === "bnb" ? (
                   <StakeBsc
@@ -8474,7 +8471,7 @@ const EarnTopPicks = ({
                 )
                 : activeCard6 &&
                 topList === "Staking" &&
-                activePools[cardIndex].id ===
+                activePools[cardIndex]?.id ===
                   "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                 chain === "bnb" ? (
                 <StakeBsc
@@ -8607,7 +8604,7 @@ const EarnTopPicks = ({
                 
                 : activeCard6 &&
                   topList === "Staking" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x7c82513b69c1b42c23760cfc34234558119a3399" &&
                   chain === "bnb" ? (
                   <StakeBsc
@@ -8760,7 +8757,7 @@ const EarnTopPicks = ({
                 ) : activeCard6 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xb1875eeBbcF4456188968f439896053809698a8B" ? (
                   <StakeAvax
                     is_wallet_connected={isConnected}
@@ -8819,7 +8816,7 @@ const EarnTopPicks = ({
                 ) : activeCard6 &&
                   topList === "Staking" &&
                   chain === "avax" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x6eb643813f0b4351b993f98bdeaef6e0f79573e9" ? (
                   <StakeAvax
                     is_wallet_connected={isConnected}
@@ -9203,7 +9200,7 @@ const EarnTopPicks = ({
                   </div>
                   {activeCard &&
                   topList === "Staking" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" &&
                   chain === "bnb" ? (
                     <StakeBsc
@@ -9273,7 +9270,7 @@ const EarnTopPicks = ({
                   ) 
                   : activeCard &&
                   topList === "Staking" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                   chain === "bnb" ? (
                   <StakeBsc
@@ -9343,7 +9340,7 @@ const EarnTopPicks = ({
                 )
                   : activeCard &&
                   topList === "Staking" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "testId" &&
                   chain === "bnb" ? (
                   <StakeBsc
@@ -9412,7 +9409,7 @@ const EarnTopPicks = ({
                   />
                 )  : activeCard &&
                     topList === "Staking" &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x7c82513b69c1b42c23760cfc34234558119a3399" &&
                     chain === "bnb" ? (
                     <StakeBsc
@@ -9711,7 +9708,7 @@ const EarnTopPicks = ({
                       }
                     />
                   ) : activeCard &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x4C04E53f9aAa17fc2C914694B4Aae57a9d1bE445" &&
                     topList === "Staking" &&
                     chain === "bnb" ? (
@@ -9779,7 +9776,7 @@ const EarnTopPicks = ({
                       }
                     />
                   ) : activeCard &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x7e766F7005C7a9e74123b156697B582eeCB8d2D7" &&
                     topList === "Staking" &&
                     chain === "bnb" ? (
@@ -10133,7 +10130,7 @@ const EarnTopPicks = ({
                   {activeCard2 &&
                   topList === "Staking" &&
                   chain === "eth" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x50014432772b4123D04181727C6EdEAB34F5F988" ? (
                     <InitConstantStakingiDYP
                       is_wallet_connected={isConnected}
@@ -10192,7 +10189,7 @@ const EarnTopPicks = ({
                   )
                   : activeCard2 &&
                   topList === "Staking" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                   chain === "bnb" ? (
                   <StakeBsc
@@ -10383,7 +10380,7 @@ const EarnTopPicks = ({
                       }
                     />
                   ) : activeCard2 &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x4C04E53f9aAa17fc2C914694B4Aae57a9d1bE445" &&
                     topList === "Staking" &&
                     chain === "bnb" ? (
@@ -10452,7 +10449,7 @@ const EarnTopPicks = ({
                     />
                   ) : activeCard2 &&
                     topList === "Staking" &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x7c82513b69c1b42c23760cfc34234558119a3399" &&
                     chain === "bnb" ? (
                     <StakeBsc
@@ -10521,7 +10518,7 @@ const EarnTopPicks = ({
                     />
                   ) : activeCard2 &&
                     topList === "Staking" &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" &&
                     chain === "bnb" ? (
                     <StakeBsc
@@ -10589,7 +10586,7 @@ const EarnTopPicks = ({
                       referrer={referrer}
                     />
                   ) : activeCard2 &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x7e766F7005C7a9e74123b156697B582eeCB8d2D7" &&
                     topList === "Staking" &&
                     chain === "bnb" ? (
@@ -10930,7 +10927,7 @@ const EarnTopPicks = ({
                   {activeCard3 &&
                   topList === "Staking" &&
                   chain === "eth" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x50014432772b4123D04181727C6EdEAB34F5F988" ? (
                     <InitConstantStakingiDYP
                       is_wallet_connected={isConnected}
@@ -10989,7 +10986,7 @@ const EarnTopPicks = ({
                   ) 
                   : activeCard3 &&
                   topList === "Staking" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                   chain === "bnb" ? (
                   <StakeBsc
@@ -11180,7 +11177,7 @@ const EarnTopPicks = ({
                       }
                     />
                   ) : activeCard3 &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x4C04E53f9aAa17fc2C914694B4Aae57a9d1bE445" &&
                     topList === "Staking" &&
                     chain === "bnb" ? (
@@ -11248,7 +11245,7 @@ const EarnTopPicks = ({
                       }
                     />
                   ) : activeCard3 &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x7e766F7005C7a9e74123b156697B582eeCB8d2D7" &&
                     topList === "Staking" &&
                     chain === "bnb" ? (
@@ -11317,7 +11314,7 @@ const EarnTopPicks = ({
                     />
                   ) : activeCard3 &&
                     topList === "Staking" &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" &&
                     chain === "bnb" ? (
                     <StakeBsc
@@ -11386,7 +11383,7 @@ const EarnTopPicks = ({
                     />
                   ) : activeCard3 &&
                     topList === "Staking" &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x7c82513b69c1b42c23760cfc34234558119a3399" &&
                     chain === "bnb" ? (
                     <StakeBsc
@@ -11727,7 +11724,7 @@ const EarnTopPicks = ({
                   {activeCard4 &&
                   topList === "Staking" &&
                   chain === "eth" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0x50014432772b4123D04181727C6EdEAB34F5F988" ? (
                     <InitConstantStakingiDYP
                       is_wallet_connected={isConnected}
@@ -11786,7 +11783,7 @@ const EarnTopPicks = ({
                   )
                   : activeCard4 &&
                   topList === "Staking" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                   chain === "bnb" ? (
                   <StakeBsc
@@ -11978,7 +11975,7 @@ const EarnTopPicks = ({
                     />
                   ) : activeCard4 &&
                     topList === "Staking" &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" &&
                     chain === "bnb" ? (
                     <StakeBsc
@@ -12046,7 +12043,7 @@ const EarnTopPicks = ({
                       referrer={referrer}
                     />
                   ) : activeCard4 &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x4C04E53f9aAa17fc2C914694B4Aae57a9d1bE445" &&
                     topList === "Staking" &&
                     chain === "bnb" ? (
@@ -12114,7 +12111,7 @@ const EarnTopPicks = ({
                       }
                     />
                   ) : activeCard4 &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x7e766F7005C7a9e74123b156697B582eeCB8d2D7" &&
                     topList === "Staking" &&
                     chain === "bnb" ? (
@@ -12516,7 +12513,7 @@ const EarnTopPicks = ({
                   </div>
                   {activeCard5 &&
                   topList === "Staking" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" &&
                   chain === "bnb" ? (
                     <StakeBsc
@@ -12586,7 +12583,7 @@ const EarnTopPicks = ({
                   ) 
                   : activeCard5 &&
                   topList === "Staking" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                   chain === "bnb" ? (
                   <StakeBsc
@@ -12720,7 +12717,7 @@ const EarnTopPicks = ({
                   
                   : activeCard5 &&
                     topList === "Staking" &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x7c82513b69c1b42c23760cfc34234558119a3399" &&
                     chain === "bnb" ? (
                     <StakeBsc
@@ -12788,7 +12785,7 @@ const EarnTopPicks = ({
                       referrer={referrer}
                     />
                   ) : activeCard5 &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x4C04E53f9aAa17fc2C914694B4Aae57a9d1bE445" &&
                     topList === "Staking" &&
                     chain === "bnb" ? (
@@ -12856,7 +12853,7 @@ const EarnTopPicks = ({
                       }
                     />
                   ) : activeCard5 &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x7e766F7005C7a9e74123b156697B582eeCB8d2D7" &&
                     topList === "Staking" &&
                     chain === "bnb" ? (
@@ -13273,7 +13270,7 @@ const EarnTopPicks = ({
                   </div>
                   {activeCard6 &&
                   topList === "Staking" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" &&
                   chain === "bnb" ? (
                     <StakeBsc
@@ -13343,7 +13340,7 @@ const EarnTopPicks = ({
                   )
                   : activeCard6 &&
                   topList === "Staking" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                   chain === "bnb" ? (
                   <StakeBsc
@@ -13476,7 +13473,7 @@ const EarnTopPicks = ({
                   
                   : activeCard6 &&
                     topList === "Staking" &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x7c82513b69c1b42c23760cfc34234558119a3399" &&
                     chain === "bnb" ? (
                     <StakeBsc
@@ -13588,7 +13585,7 @@ const EarnTopPicks = ({
                       fee_u={withdrawFeeiDyp[cardIndex]}
                     />
                   ) : activeCard6 &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x4C04E53f9aAa17fc2C914694B4Aae57a9d1bE445" &&
                     topList === "Staking" &&
                     chain === "bnb" ? (
@@ -13656,7 +13653,7 @@ const EarnTopPicks = ({
                       }
                     />
                   ) : activeCard6 &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x7e766F7005C7a9e74123b156697B582eeCB8d2D7" &&
                     topList === "Staking" &&
                     chain === "bnb" ? (
@@ -14014,7 +14011,7 @@ const EarnTopPicks = ({
                   </div>
                   {activeCard7 &&
                   topList === "Staking" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" &&
                   chain === "bnb" ? (
                     <StakeBsc
@@ -14084,7 +14081,7 @@ const EarnTopPicks = ({
                   )
                   : activeCard7 &&
                   topList === "Staking" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                   chain === "bnb" ? (
                   <StakeBsc
@@ -14216,7 +14213,7 @@ const EarnTopPicks = ({
               )
                   : activeCard7 &&
                     topList === "Staking" &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x7c82513b69c1b42c23760cfc34234558119a3399" &&
                     chain === "bnb" ? (
                     <StakeBsc
@@ -14693,7 +14690,7 @@ const EarnTopPicks = ({
                   </div>
                   {activeCard8 &&
                   topList === "Staking" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xfc4493E85fD5424456f22135DB6864Dd4E4ED662" &&
                   chain === "bnb" ? (
                     <StakeBsc
@@ -14763,7 +14760,7 @@ const EarnTopPicks = ({
                   ) 
                   : activeCard8 &&
                   topList === "Staking" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                   chain === "bnb" ? (
                   <StakeBsc
@@ -14896,7 +14893,7 @@ const EarnTopPicks = ({
 
                   : activeCard8 &&
                     topList === "Staking" &&
-                    activePools[cardIndex].id ===
+                    activePools[cardIndex]?.id ===
                       "0x7c82513b69c1b42c23760cfc34234558119a3399" &&
                     chain === "bnb" ? (
                     <StakeBsc
@@ -15419,7 +15416,7 @@ const EarnTopPicks = ({
                   
                   : activeCard9 &&
                   topList === "Staking" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                   chain === "bnb" ? (
                   <StakeBsc
@@ -16011,7 +16008,7 @@ const EarnTopPicks = ({
                   ) 
                   : activeCard10 &&
                   topList === "Staking" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                   chain === "bnb" ? (
                   <StakeBsc
@@ -16602,7 +16599,7 @@ const EarnTopPicks = ({
                   )
                   : activeCard11 &&
                   topList === "Staking" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                   chain === "bnb" ? (
                   <StakeBsc
@@ -17196,7 +17193,7 @@ const EarnTopPicks = ({
                   
                   : activeCard12 &&
                   topList === "Staking" &&
-                  activePools[cardIndex].id ===
+                  activePools[cardIndex]?.id ===
                     "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                   chain === "bnb" ? (
                   <StakeBsc
@@ -17998,7 +17995,7 @@ const EarnTopPicks = ({
                 )
               ) : activeCard &&
                 topList === "Staking" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x8A30Be7B2780b503ff27dBeaCdecC4Fe2587Af5d" &&
                 chain === "eth" ? (
                 <StakeEth
@@ -18057,7 +18054,7 @@ const EarnTopPicks = ({
                 />
               ) : activeCard &&
                 topList === "Staking" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xa4da28B8e42680916b557459D338aF6e2D8d458f" &&
                 chain === "eth" ? (
                 <StakeEth
@@ -18115,7 +18112,7 @@ const EarnTopPicks = ({
                   referrer={referrer}
                 />
               ) : activeCard &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x44bEd8ea3296bda44870d0Da98575520De1735d4" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -18148,7 +18145,7 @@ const EarnTopPicks = ({
                   lp_id={lp_id[cardIndex]}
                 />
               ) : activeCard &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x3fAb09ACAeDDAF579d7a72c24Ef3e9EB1D2975c4" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -18207,7 +18204,7 @@ const EarnTopPicks = ({
                   }
                 />
               ) : activeCard &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x9eA966B4023049BFF858BB5E698ECfF24EA54c4A" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -18266,7 +18263,7 @@ const EarnTopPicks = ({
                   }
                 />
               ) : activeCard &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xef9e50A19358CCC8816d9BC2c2355aea596efd06" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -18298,7 +18295,7 @@ const EarnTopPicks = ({
                   referrer={referrer}
                 />
               ) : activeCard &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xaF411BF994dA1435A3150B874395B86376C5f2d5" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -18330,7 +18327,7 @@ const EarnTopPicks = ({
                   referrer={referrer}
                 />
               ) : activeCard &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xf13aDbEb27ea9d9469D95e925e56a1CF79c06E90" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -18362,7 +18359,7 @@ const EarnTopPicks = ({
                   referrer={referrer}
                 />
               ) : activeCard &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xa9efab22cCbfeAbB6dc4583d81421e76342faf8b" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -18394,7 +18391,7 @@ const EarnTopPicks = ({
                   referrer={referrer}
                 />
               ) : activeCard &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x160fF3c4A6E9Aa8E4271aa71226Cc811BFEf7ED9" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -18457,7 +18454,7 @@ const EarnTopPicks = ({
                   }
                 />
               ) : activeCard &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x58366902082B90Fca01bE07D929478bD48AcFB19" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -18536,7 +18533,7 @@ const EarnTopPicks = ({
               ) : activeCard &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xF035ec2562fbc4963e8c1c63f5c473D9696c59E3" ? (
                 <StakeAvax
                   is_wallet_connected={isConnected}
@@ -18595,7 +18592,7 @@ const EarnTopPicks = ({
               ) : activeCard &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x16429e51A64B7f88D4C018fbf66266A693df64b3" ? (
                 <StakeAvaxDai
                   staking={window.constant_stakingdaiavax}
@@ -18634,7 +18631,7 @@ const EarnTopPicks = ({
               ) : activeCard &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
@@ -18693,7 +18690,7 @@ const EarnTopPicks = ({
               ) : activeCard &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
@@ -18878,7 +18875,7 @@ const EarnTopPicks = ({
               )
             ) : activeCard2 &&
               topList === "Staking" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x8A30Be7B2780b503ff27dBeaCdecC4Fe2587Af5d" &&
               chain === "eth" ? (
               <StakeEth
@@ -18936,7 +18933,7 @@ const EarnTopPicks = ({
               />
             ) : activeCard2 &&
               topList === "Staking" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xa4da28B8e42680916b557459D338aF6e2D8d458f" &&
               chain === "eth" ? (
               <StakeEth
@@ -18993,7 +18990,7 @@ const EarnTopPicks = ({
                 referrer={referrer}
               />
             ) : activeCard2 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x44bEd8ea3296bda44870d0Da98575520De1735d4" &&
               topList === "Staking" &&
               chain === "eth" ? (
@@ -19025,7 +19022,7 @@ const EarnTopPicks = ({
                 lp_id={lp_id[cardIndex]}
               />
             ) : activeCard2 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x3fAb09ACAeDDAF579d7a72c24Ef3e9EB1D2975c4" &&
               topList === "Staking" &&
               chain === "eth" ? (
@@ -19083,7 +19080,7 @@ const EarnTopPicks = ({
                 }
               />
             ) : activeCard2 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x9eA966B4023049BFF858BB5E698ECfF24EA54c4A" &&
               topList === "Staking" &&
               chain === "eth" ? (
@@ -19141,7 +19138,7 @@ const EarnTopPicks = ({
                 }
               />
             ) : activeCard2 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xef9e50A19358CCC8816d9BC2c2355aea596efd06" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -19172,7 +19169,7 @@ const EarnTopPicks = ({
                 referrer={referrer}
               />
             ) : activeCard2 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xaF411BF994dA1435A3150B874395B86376C5f2d5" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -19203,7 +19200,7 @@ const EarnTopPicks = ({
                 referrer={referrer}
               />
             ) : activeCard2 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xf13aDbEb27ea9d9469D95e925e56a1CF79c06E90" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -19234,7 +19231,7 @@ const EarnTopPicks = ({
                 referrer={referrer}
               />
             ) : activeCard2 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xa9efab22cCbfeAbB6dc4583d81421e76342faf8b" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -19265,7 +19262,7 @@ const EarnTopPicks = ({
                 referrer={referrer}
               />
             ) : activeCard2 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x160fF3c4A6E9Aa8E4271aa71226Cc811BFEf7ED9" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -19327,7 +19324,7 @@ const EarnTopPicks = ({
                 }
               />
             ) : activeCard2 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x58366902082B90Fca01bE07D929478bD48AcFB19" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -19405,7 +19402,7 @@ const EarnTopPicks = ({
             ) : activeCard2 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xF035ec2562fbc4963e8c1c63f5c473D9696c59E3" ? (
               <StakeAvax
                 is_wallet_connected={isConnected}
@@ -19463,7 +19460,7 @@ const EarnTopPicks = ({
             ) : activeCard2 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x16429e51A64B7f88D4C018fbf66266A693df64b3" ? (
               <StakeAvaxDai
                 staking={window.constant_stakingdaiavax}
@@ -19502,7 +19499,7 @@ const EarnTopPicks = ({
             ) : activeCard2 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
               <StakeAvaxIDyp
                 is_wallet_connected={isConnected}
@@ -19560,7 +19557,7 @@ const EarnTopPicks = ({
             ) : activeCard2 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
               <StakeAvaxIDyp
                 is_wallet_connected={isConnected}
@@ -19739,7 +19736,7 @@ const EarnTopPicks = ({
               )
             ) : activeCard3 &&
               topList === "Staking" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x8A30Be7B2780b503ff27dBeaCdecC4Fe2587Af5d" &&
               chain === "eth" ? (
               <StakeEth
@@ -19797,7 +19794,7 @@ const EarnTopPicks = ({
               />
             ) : activeCard3 &&
               topList === "Staking" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xa4da28B8e42680916b557459D338aF6e2D8d458f" &&
               chain === "eth" ? (
               <StakeEth
@@ -19854,7 +19851,7 @@ const EarnTopPicks = ({
                 referrer={referrer}
               />
             ) : activeCard3 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x44bEd8ea3296bda44870d0Da98575520De1735d4" &&
               topList === "Staking" &&
               chain === "eth" ? (
@@ -19886,7 +19883,7 @@ const EarnTopPicks = ({
                 lp_id={lp_id[cardIndex]}
               />
             ) : activeCard3 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x3fAb09ACAeDDAF579d7a72c24Ef3e9EB1D2975c4" &&
               topList === "Staking" &&
               chain === "eth" ? (
@@ -19944,7 +19941,7 @@ const EarnTopPicks = ({
                 }
               />
             ) : activeCard3 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x9eA966B4023049BFF858BB5E698ECfF24EA54c4A" &&
               topList === "Staking" &&
               chain === "eth" ? (
@@ -20002,7 +19999,7 @@ const EarnTopPicks = ({
                 }
               />
             ) : activeCard3 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xef9e50A19358CCC8816d9BC2c2355aea596efd06" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -20033,7 +20030,7 @@ const EarnTopPicks = ({
                 referrer={referrer}
               />
             ) : activeCard3 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xaF411BF994dA1435A3150B874395B86376C5f2d5" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -20064,7 +20061,7 @@ const EarnTopPicks = ({
                 referrer={referrer}
               />
             ) : activeCard3 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xf13aDbEb27ea9d9469D95e925e56a1CF79c06E90" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -20095,7 +20092,7 @@ const EarnTopPicks = ({
                 referrer={referrer}
               />
             ) : activeCard3 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xa9efab22cCbfeAbB6dc4583d81421e76342faf8b" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -20126,7 +20123,7 @@ const EarnTopPicks = ({
                 referrer={referrer}
               />
             ) : activeCard3 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x160fF3c4A6E9Aa8E4271aa71226Cc811BFEf7ED9" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -20188,7 +20185,7 @@ const EarnTopPicks = ({
                 }
               />
             ) : activeCard3 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x58366902082B90Fca01bE07D929478bD48AcFB19" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -20266,7 +20263,7 @@ const EarnTopPicks = ({
             ) : activeCard3 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xF035ec2562fbc4963e8c1c63f5c473D9696c59E3" ? (
               <StakeAvax
                 is_wallet_connected={isConnected}
@@ -20324,7 +20321,7 @@ const EarnTopPicks = ({
             ) : activeCard3 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x16429e51A64B7f88D4C018fbf66266A693df64b3" ? (
               <StakeAvaxDai
                 staking={window.constant_stakingdaiavax}
@@ -20363,7 +20360,7 @@ const EarnTopPicks = ({
             ) : activeCard3 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
               <StakeAvaxIDyp
                 is_wallet_connected={isConnected}
@@ -20421,7 +20418,7 @@ const EarnTopPicks = ({
             ) : activeCard3 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
               <StakeAvaxIDyp
                 is_wallet_connected={isConnected}
@@ -20963,7 +20960,7 @@ const EarnTopPicks = ({
             ) : activeCard4 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
               <StakeAvaxIDyp
                 is_wallet_connected={isConnected}
@@ -21021,7 +21018,7 @@ const EarnTopPicks = ({
             ) : activeCard4 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
               <StakeAvaxIDyp
                 is_wallet_connected={isConnected}
@@ -21230,7 +21227,7 @@ const EarnTopPicks = ({
               )
             ) : activeCard &&
               topList === "Staking" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x8A30Be7B2780b503ff27dBeaCdecC4Fe2587Af5d" &&
               chain === "eth" ? (
               <StakeEth
@@ -21288,7 +21285,7 @@ const EarnTopPicks = ({
               />
             ) : activeCard &&
               topList === "Staking" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xa4da28B8e42680916b557459D338aF6e2D8d458f" &&
               chain === "eth" ? (
               <StakeEth
@@ -21345,7 +21342,7 @@ const EarnTopPicks = ({
                 referrer={referrer}
               />
             ) : activeCard &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x44bEd8ea3296bda44870d0Da98575520De1735d4" &&
               topList === "Staking" &&
               chain === "eth" ? (
@@ -21377,7 +21374,7 @@ const EarnTopPicks = ({
                 lp_id={lp_id[cardIndex]}
               />
             ) : activeCard &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x3fAb09ACAeDDAF579d7a72c24Ef3e9EB1D2975c4" &&
               topList === "Staking" &&
               chain === "eth" ? (
@@ -21435,7 +21432,7 @@ const EarnTopPicks = ({
                 }
               />
             ) : activeCard &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x9eA966B4023049BFF858BB5E698ECfF24EA54c4A" &&
               topList === "Staking" &&
               chain === "eth" ? (
@@ -21493,7 +21490,7 @@ const EarnTopPicks = ({
                 }
               />
             ) : activeCard &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xef9e50A19358CCC8816d9BC2c2355aea596efd06" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -21524,7 +21521,7 @@ const EarnTopPicks = ({
                 referrer={referrer}
               />
             ) : activeCard &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xaF411BF994dA1435A3150B874395B86376C5f2d5" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -21555,7 +21552,7 @@ const EarnTopPicks = ({
                 referrer={referrer}
               />
             ) : activeCard &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xf13aDbEb27ea9d9469D95e925e56a1CF79c06E90" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -21586,7 +21583,7 @@ const EarnTopPicks = ({
                 referrer={referrer}
               />
             ) : activeCard &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xa9efab22cCbfeAbB6dc4583d81421e76342faf8b" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -21617,7 +21614,7 @@ const EarnTopPicks = ({
                 referrer={referrer}
               />
             ) : activeCard &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x160fF3c4A6E9Aa8E4271aa71226Cc811BFEf7ED9" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -21679,7 +21676,7 @@ const EarnTopPicks = ({
                 }
               />
             ) : activeCard &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x58366902082B90Fca01bE07D929478bD48AcFB19" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -21757,7 +21754,7 @@ const EarnTopPicks = ({
             ) : activeCard &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xF035ec2562fbc4963e8c1c63f5c473D9696c59E3" ? (
               <StakeAvax
                 is_wallet_connected={isConnected}
@@ -21815,7 +21812,7 @@ const EarnTopPicks = ({
             ) : activeCard &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x16429e51A64B7f88D4C018fbf66266A693df64b3" ? (
               <StakeAvaxDai
                 staking={window.constant_stakingdaiavax}
@@ -21854,7 +21851,7 @@ const EarnTopPicks = ({
             ) : activeCard &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
               <StakeAvaxIDyp
                 is_wallet_connected={isConnected}
@@ -21912,7 +21909,7 @@ const EarnTopPicks = ({
             ) : activeCard &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
               <StakeAvaxIDyp
                 is_wallet_connected={isConnected}
@@ -22101,7 +22098,7 @@ const EarnTopPicks = ({
               )
             ) : activeCard2 &&
               topList === "Staking" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x8A30Be7B2780b503ff27dBeaCdecC4Fe2587Af5d" &&
               chain === "eth" ? (
               <StakeEth
@@ -22159,7 +22156,7 @@ const EarnTopPicks = ({
               />
             ) : activeCard2 &&
               topList === "Staking" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xa4da28B8e42680916b557459D338aF6e2D8d458f" &&
               chain === "eth" ? (
               <StakeEth
@@ -22216,7 +22213,7 @@ const EarnTopPicks = ({
                 referrer={referrer}
               />
             ) : activeCard2 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x44bEd8ea3296bda44870d0Da98575520De1735d4" &&
               topList === "Staking" &&
               chain === "eth" ? (
@@ -22248,7 +22245,7 @@ const EarnTopPicks = ({
                 lp_id={lp_id[cardIndex]}
               />
             ) : activeCard2 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x3fAb09ACAeDDAF579d7a72c24Ef3e9EB1D2975c4" &&
               topList === "Staking" &&
               chain === "eth" ? (
@@ -22306,7 +22303,7 @@ const EarnTopPicks = ({
                 }
               />
             ) : activeCard2 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x9eA966B4023049BFF858BB5E698ECfF24EA54c4A" &&
               topList === "Staking" &&
               chain === "eth" ? (
@@ -22364,7 +22361,7 @@ const EarnTopPicks = ({
                 }
               />
             ) : activeCard2 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xef9e50A19358CCC8816d9BC2c2355aea596efd06" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -22395,7 +22392,7 @@ const EarnTopPicks = ({
                 referrer={referrer}
               />
             ) : activeCard2 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xaF411BF994dA1435A3150B874395B86376C5f2d5" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -22426,7 +22423,7 @@ const EarnTopPicks = ({
                 referrer={referrer}
               />
             ) : activeCard2 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xf13aDbEb27ea9d9469D95e925e56a1CF79c06E90" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -22457,7 +22454,7 @@ const EarnTopPicks = ({
                 referrer={referrer}
               />
             ) : activeCard2 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xa9efab22cCbfeAbB6dc4583d81421e76342faf8b" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -22488,7 +22485,7 @@ const EarnTopPicks = ({
                 referrer={referrer}
               />
             ) : activeCard2 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x160fF3c4A6E9Aa8E4271aa71226Cc811BFEf7ED9" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -22550,7 +22547,7 @@ const EarnTopPicks = ({
                 }
               />
             ) : activeCard2 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x58366902082B90Fca01bE07D929478bD48AcFB19" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -22628,7 +22625,7 @@ const EarnTopPicks = ({
             ) : activeCard2 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xF035ec2562fbc4963e8c1c63f5c473D9696c59E3" ? (
               <StakeAvax
                 is_wallet_connected={isConnected}
@@ -22686,7 +22683,7 @@ const EarnTopPicks = ({
             ) : activeCard2 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x16429e51A64B7f88D4C018fbf66266A693df64b3" ? (
               <StakeAvaxDai
                 staking={window.constant_stakingdaiavax}
@@ -22725,7 +22722,7 @@ const EarnTopPicks = ({
             ) : activeCard2 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
               <StakeAvaxIDyp
                 is_wallet_connected={isConnected}
@@ -22783,7 +22780,7 @@ const EarnTopPicks = ({
             ) : activeCard2 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
               <StakeAvaxIDyp
                 is_wallet_connected={isConnected}
@@ -22968,7 +22965,7 @@ const EarnTopPicks = ({
               )
             ) : activeCard3 &&
               topList === "Staking" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x8A30Be7B2780b503ff27dBeaCdecC4Fe2587Af5d" &&
               chain === "eth" ? (
               <StakeEth
@@ -23026,7 +23023,7 @@ const EarnTopPicks = ({
               />
             ) : activeCard3 &&
               topList === "Staking" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xa4da28B8e42680916b557459D338aF6e2D8d458f" &&
               chain === "eth" ? (
               <StakeEth
@@ -23083,7 +23080,7 @@ const EarnTopPicks = ({
                 referrer={referrer}
               />
             ) : activeCard3 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x44bEd8ea3296bda44870d0Da98575520De1735d4" &&
               topList === "Staking" &&
               chain === "eth" ? (
@@ -23115,7 +23112,7 @@ const EarnTopPicks = ({
                 lp_id={lp_id[cardIndex]}
               />
             ) : activeCard3 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x3fAb09ACAeDDAF579d7a72c24Ef3e9EB1D2975c4" &&
               topList === "Staking" &&
               chain === "eth" ? (
@@ -23173,7 +23170,7 @@ const EarnTopPicks = ({
                 }
               />
             ) : activeCard3 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x9eA966B4023049BFF858BB5E698ECfF24EA54c4A" &&
               topList === "Staking" &&
               chain === "eth" ? (
@@ -23231,7 +23228,7 @@ const EarnTopPicks = ({
                 }
               />
             ) : activeCard3 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xef9e50A19358CCC8816d9BC2c2355aea596efd06" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -23262,7 +23259,7 @@ const EarnTopPicks = ({
                 referrer={referrer}
               />
             ) : activeCard3 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xaF411BF994dA1435A3150B874395B86376C5f2d5" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -23293,7 +23290,7 @@ const EarnTopPicks = ({
                 referrer={referrer}
               />
             ) : activeCard3 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xf13aDbEb27ea9d9469D95e925e56a1CF79c06E90" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -23324,7 +23321,7 @@ const EarnTopPicks = ({
                 referrer={referrer}
               />
             ) : activeCard3 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xa9efab22cCbfeAbB6dc4583d81421e76342faf8b" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -23355,7 +23352,7 @@ const EarnTopPicks = ({
                 referrer={referrer}
               />
             ) : activeCard3 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x160fF3c4A6E9Aa8E4271aa71226Cc811BFEf7ED9" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -23417,7 +23414,7 @@ const EarnTopPicks = ({
                 }
               />
             ) : activeCard3 &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x58366902082B90Fca01bE07D929478bD48AcFB19" &&
               topList === "Staking" &&
               chain === "bnb" ? (
@@ -23495,7 +23492,7 @@ const EarnTopPicks = ({
             ) : activeCard3 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xF035ec2562fbc4963e8c1c63f5c473D9696c59E3" ? (
               <StakeAvax
                 is_wallet_connected={isConnected}
@@ -23553,7 +23550,7 @@ const EarnTopPicks = ({
             ) : activeCard3 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x16429e51A64B7f88D4C018fbf66266A693df64b3" ? (
               <StakeAvaxDai
                 staking={window.constant_stakingdaiavax}
@@ -23592,7 +23589,7 @@ const EarnTopPicks = ({
             ) : activeCard3 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
               <StakeAvaxIDyp
                 is_wallet_connected={isConnected}
@@ -23650,7 +23647,7 @@ const EarnTopPicks = ({
             ) : activeCard3 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
               <StakeAvaxIDyp
                 is_wallet_connected={isConnected}
@@ -24122,7 +24119,7 @@ const EarnTopPicks = ({
             ) : activeCard4 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xF035ec2562fbc4963e8c1c63f5c473D9696c59E3" ? (
               <StakeAvax
                 is_wallet_connected={isConnected}
@@ -24235,7 +24232,7 @@ const EarnTopPicks = ({
             ) : activeCard4 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
               <StakeAvaxIDyp
                 is_wallet_connected={isConnected}
@@ -24293,7 +24290,7 @@ const EarnTopPicks = ({
             ) : activeCard4 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
               <StakeAvaxIDyp
                 is_wallet_connected={isConnected}
@@ -24750,7 +24747,7 @@ const EarnTopPicks = ({
             ) : activeCard5 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xF035ec2562fbc4963e8c1c63f5c473D9696c59E3" ? (
               <StakeAvax
                 is_wallet_connected={isConnected}
@@ -24863,7 +24860,7 @@ const EarnTopPicks = ({
             ) : activeCard5 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
               <StakeAvaxIDyp
                 is_wallet_connected={isConnected}
@@ -24921,7 +24918,7 @@ const EarnTopPicks = ({
             ) : activeCard5 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
               <StakeAvaxIDyp
                 is_wallet_connected={isConnected}
@@ -25384,7 +25381,7 @@ const EarnTopPicks = ({
             ) : activeCard6 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0xF035ec2562fbc4963e8c1c63f5c473D9696c59E3" ? (
               <StakeAvax
                 is_wallet_connected={isConnected}
@@ -25497,7 +25494,7 @@ const EarnTopPicks = ({
             ) : activeCard6 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
               <StakeAvaxIDyp
                 is_wallet_connected={isConnected}
@@ -25555,7 +25552,7 @@ const EarnTopPicks = ({
             ) : activeCard6 &&
               topList === "Staking" &&
               chain === "avax" &&
-              expiredDYPPools[cardIndex].id ===
+              expiredDYPPools[cardIndex]?.id ===
                 "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
               <StakeAvaxIDyp
                 is_wallet_connected={isConnected}
@@ -25763,7 +25760,7 @@ const EarnTopPicks = ({
                 )
               ) : activeCard &&
                 topList === "Staking" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x8A30Be7B2780b503ff27dBeaCdecC4Fe2587Af5d" &&
                 chain === "eth" ? (
                 <StakeEth
@@ -25822,7 +25819,7 @@ const EarnTopPicks = ({
                 />
               ) : activeCard &&
                 topList === "Staking" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xa4da28B8e42680916b557459D338aF6e2D8d458f" &&
                 chain === "eth" ? (
                 <StakeEth
@@ -25880,7 +25877,7 @@ const EarnTopPicks = ({
                   referrer={referrer}
                 />
               ) : activeCard &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x44bEd8ea3296bda44870d0Da98575520De1735d4" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -25912,7 +25909,7 @@ const EarnTopPicks = ({
                   lp_id={lp_id[cardIndex]}
                 />
               ) : activeCard &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x3fAb09ACAeDDAF579d7a72c24Ef3e9EB1D2975c4" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -25971,7 +25968,7 @@ const EarnTopPicks = ({
                   }
                 />
               ) : activeCard &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x9eA966B4023049BFF858BB5E698ECfF24EA54c4A" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -26030,7 +26027,7 @@ const EarnTopPicks = ({
                   }
                 />
               ) : activeCard &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xef9e50A19358CCC8816d9BC2c2355aea596efd06" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -26062,7 +26059,7 @@ const EarnTopPicks = ({
                   referrer={referrer}
                 />
               ) : activeCard &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xaF411BF994dA1435A3150B874395B86376C5f2d5" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -26094,7 +26091,7 @@ const EarnTopPicks = ({
                   referrer={referrer}
                 />
               ) : activeCard &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xf13aDbEb27ea9d9469D95e925e56a1CF79c06E90" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -26126,7 +26123,7 @@ const EarnTopPicks = ({
                   referrer={referrer}
                 />
               ) : activeCard &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xa9efab22cCbfeAbB6dc4583d81421e76342faf8b" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -26158,7 +26155,7 @@ const EarnTopPicks = ({
                   referrer={referrer}
                 />
               ) : activeCard &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x160fF3c4A6E9Aa8E4271aa71226Cc811BFEf7ED9" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -26221,7 +26218,7 @@ const EarnTopPicks = ({
                   }
                 />
               ) : activeCard &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x58366902082B90Fca01bE07D929478bD48AcFB19" &&
                   
                 topList === "Staking" &&
@@ -26365,7 +26362,7 @@ const EarnTopPicks = ({
               : activeCard &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xF035ec2562fbc4963e8c1c63f5c473D9696c59E3" ? (
                 <StakeAvax
                   is_wallet_connected={isConnected}
@@ -26424,7 +26421,7 @@ const EarnTopPicks = ({
               ) : activeCard &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x16429e51A64B7f88D4C018fbf66266A693df64b3" ? (
                 <StakeAvaxDai
                   staking={window.constant_stakingdaiavax}
@@ -26463,7 +26460,7 @@ const EarnTopPicks = ({
               ) : activeCard &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
@@ -26522,7 +26519,7 @@ const EarnTopPicks = ({
               ) : activeCard &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
@@ -26714,7 +26711,7 @@ const EarnTopPicks = ({
                 )
               ) : activeCard2 &&
                 topList === "Staking" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x8A30Be7B2780b503ff27dBeaCdecC4Fe2587Af5d" &&
                 chain === "eth" ? (
                 <StakeEth
@@ -26773,7 +26770,7 @@ const EarnTopPicks = ({
                 />
               ) : activeCard2 &&
                 topList === "Staking" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xa4da28B8e42680916b557459D338aF6e2D8d458f" &&
                 chain === "eth" ? (
                 <StakeEth
@@ -26831,7 +26828,7 @@ const EarnTopPicks = ({
                   referrer={referrer}
                 />
               ) : activeCard2 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x44bEd8ea3296bda44870d0Da98575520De1735d4" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -26863,7 +26860,7 @@ const EarnTopPicks = ({
                   lp_id={lp_id[cardIndex]}
                 />
               ) : activeCard2 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x3fAb09ACAeDDAF579d7a72c24Ef3e9EB1D2975c4" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -26922,7 +26919,7 @@ const EarnTopPicks = ({
                   }
                 />
               ) : activeCard2 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x9eA966B4023049BFF858BB5E698ECfF24EA54c4A" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -26981,7 +26978,7 @@ const EarnTopPicks = ({
                   }
                 />
               ) : activeCard2 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xef9e50A19358CCC8816d9BC2c2355aea596efd06" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -27013,7 +27010,7 @@ const EarnTopPicks = ({
                   referrer={referrer}
                 />
               ) : activeCard2 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xaF411BF994dA1435A3150B874395B86376C5f2d5" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -27045,7 +27042,7 @@ const EarnTopPicks = ({
                   referrer={referrer}
                 />
               ) : activeCard2 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xf13aDbEb27ea9d9469D95e925e56a1CF79c06E90" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -27077,7 +27074,7 @@ const EarnTopPicks = ({
                   referrer={referrer}
                 />
               ) : activeCard2 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xa9efab22cCbfeAbB6dc4583d81421e76342faf8b" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -27109,7 +27106,7 @@ const EarnTopPicks = ({
                   referrer={referrer}
                 />
               ) : activeCard2 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x160fF3c4A6E9Aa8E4271aa71226Cc811BFEf7ED9" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -27172,7 +27169,7 @@ const EarnTopPicks = ({
                   }
                 />
               ) : activeCard2 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x58366902082B90Fca01bE07D929478bD48AcFB19" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -27251,7 +27248,7 @@ const EarnTopPicks = ({
               ) : activeCard2 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xF035ec2562fbc4963e8c1c63f5c473D9696c59E3" ? (
                 <StakeAvax
                   is_wallet_connected={isConnected}
@@ -27310,7 +27307,7 @@ const EarnTopPicks = ({
               ) : activeCard2 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x16429e51A64B7f88D4C018fbf66266A693df64b3" ? (
                 <StakeAvaxDai
                   staking={window.constant_stakingdaiavax}
@@ -27349,7 +27346,7 @@ const EarnTopPicks = ({
               ) : activeCard2 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
@@ -27408,7 +27405,7 @@ const EarnTopPicks = ({
               ) : activeCard2 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
@@ -27600,7 +27597,7 @@ const EarnTopPicks = ({
                 )
               ) : activeCard3 &&
                 topList === "Staking" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x8A30Be7B2780b503ff27dBeaCdecC4Fe2587Af5d" &&
                 chain === "eth" ? (
                 <StakeEth
@@ -27659,7 +27656,7 @@ const EarnTopPicks = ({
                 />
               ) : activeCard3 &&
                 topList === "Staking" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xa4da28B8e42680916b557459D338aF6e2D8d458f" &&
                 chain === "eth" ? (
                 <StakeEth
@@ -27717,7 +27714,7 @@ const EarnTopPicks = ({
                   referrer={referrer}
                 />
               ) : activeCard3 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x44bEd8ea3296bda44870d0Da98575520De1735d4" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -27749,7 +27746,7 @@ const EarnTopPicks = ({
                   lp_id={lp_id[cardIndex]}
                 />
               ) : activeCard3 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x3fAb09ACAeDDAF579d7a72c24Ef3e9EB1D2975c4" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -27808,7 +27805,7 @@ const EarnTopPicks = ({
                   }
                 />
               ) : activeCard3 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x9eA966B4023049BFF858BB5E698ECfF24EA54c4A" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -27867,7 +27864,7 @@ const EarnTopPicks = ({
                   }
                 />
               ) : activeCard3 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xef9e50A19358CCC8816d9BC2c2355aea596efd06" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -27899,7 +27896,7 @@ const EarnTopPicks = ({
                   referrer={referrer}
                 />
               ) : activeCard3 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xaF411BF994dA1435A3150B874395B86376C5f2d5" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -27931,7 +27928,7 @@ const EarnTopPicks = ({
                   referrer={referrer}
                 />
               ) : activeCard3 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xf13aDbEb27ea9d9469D95e925e56a1CF79c06E90" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -27963,7 +27960,7 @@ const EarnTopPicks = ({
                   referrer={referrer}
                 />
               ) : activeCard3 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xa9efab22cCbfeAbB6dc4583d81421e76342faf8b" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -27995,7 +27992,7 @@ const EarnTopPicks = ({
                   referrer={referrer}
                 />
               ) : activeCard3 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x160fF3c4A6E9Aa8E4271aa71226Cc811BFEf7ED9" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -28058,7 +28055,7 @@ const EarnTopPicks = ({
                   }
                 />
               ) : activeCard3 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x58366902082B90Fca01bE07D929478bD48AcFB19" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -28137,7 +28134,7 @@ const EarnTopPicks = ({
               ) : activeCard3 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xF035ec2562fbc4963e8c1c63f5c473D9696c59E3" ? (
                 <StakeAvax
                   is_wallet_connected={isConnected}
@@ -28196,7 +28193,7 @@ const EarnTopPicks = ({
               ) : activeCard3 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x16429e51A64B7f88D4C018fbf66266A693df64b3" ? (
                 <StakeAvaxDai
                   staking={window.constant_stakingdaiavax}
@@ -28235,7 +28232,7 @@ const EarnTopPicks = ({
               ) : activeCard3 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
@@ -28294,7 +28291,7 @@ const EarnTopPicks = ({
               ) : activeCard3 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
@@ -28486,7 +28483,7 @@ const EarnTopPicks = ({
                 )
               ) : activeCard4 &&
                 topList === "Staking" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x8A30Be7B2780b503ff27dBeaCdecC4Fe2587Af5d" &&
                 chain === "eth" ? (
                 <StakeEth
@@ -28545,7 +28542,7 @@ const EarnTopPicks = ({
                 />
               ) : activeCard4 &&
                 topList === "Staking" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xa4da28B8e42680916b557459D338aF6e2D8d458f" &&
                 chain === "eth" ? (
                 <StakeEth
@@ -28603,7 +28600,7 @@ const EarnTopPicks = ({
                   referrer={referrer}
                 />
               ) : activeCard4 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x44bEd8ea3296bda44870d0Da98575520De1735d4" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -28635,7 +28632,7 @@ const EarnTopPicks = ({
                   lp_id={lp_id[cardIndex]}
                 />
               ) : activeCard4 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x3fAb09ACAeDDAF579d7a72c24Ef3e9EB1D2975c4" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -28694,7 +28691,7 @@ const EarnTopPicks = ({
                   }
                 />
               ) : activeCard4 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x9eA966B4023049BFF858BB5E698ECfF24EA54c4A" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -28753,7 +28750,7 @@ const EarnTopPicks = ({
                   }
                 />
               ) : activeCard4 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xef9e50A19358CCC8816d9BC2c2355aea596efd06" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -28785,7 +28782,7 @@ const EarnTopPicks = ({
                   referrer={referrer}
                 />
               ) : activeCard4 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xaF411BF994dA1435A3150B874395B86376C5f2d5" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -28817,7 +28814,7 @@ const EarnTopPicks = ({
                   referrer={referrer}
                 />
               ) : activeCard4 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xf13aDbEb27ea9d9469D95e925e56a1CF79c06E90" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -28849,7 +28846,7 @@ const EarnTopPicks = ({
                   referrer={referrer}
                 />
               ) : activeCard4 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xa9efab22cCbfeAbB6dc4583d81421e76342faf8b" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -28881,7 +28878,7 @@ const EarnTopPicks = ({
                   referrer={referrer}
                 />
               ) : activeCard4 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x160fF3c4A6E9Aa8E4271aa71226Cc811BFEf7ED9" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -28944,7 +28941,7 @@ const EarnTopPicks = ({
                   }
                 />
               ) : activeCard4 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x58366902082B90Fca01bE07D929478bD48AcFB19" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -29023,7 +29020,7 @@ const EarnTopPicks = ({
               ) : activeCard4 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xF035ec2562fbc4963e8c1c63f5c473D9696c59E3" ? (
                 <StakeAvax
                   is_wallet_connected={isConnected}
@@ -29082,7 +29079,7 @@ const EarnTopPicks = ({
               ) : activeCard4 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x16429e51A64B7f88D4C018fbf66266A693df64b3" ? (
                 <StakeAvaxDai
                   staking={window.constant_stakingdaiavax}
@@ -29121,7 +29118,7 @@ const EarnTopPicks = ({
               ) : activeCard4 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
@@ -29180,7 +29177,7 @@ const EarnTopPicks = ({
               ) : activeCard4 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
@@ -29372,7 +29369,7 @@ const EarnTopPicks = ({
                 )
               ) : activeCard5 &&
                 topList === "Staking" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x8A30Be7B2780b503ff27dBeaCdecC4Fe2587Af5d" &&
                 chain === "eth" ? (
                 <StakeEth
@@ -29431,7 +29428,7 @@ const EarnTopPicks = ({
                 />
               ) : activeCard5 &&
                 topList === "Staking" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xa4da28B8e42680916b557459D338aF6e2D8d458f" &&
                 chain === "eth" ? (
                 <StakeEth
@@ -29489,7 +29486,7 @@ const EarnTopPicks = ({
                   referrer={referrer}
                 />
               ) : activeCard5 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x44bEd8ea3296bda44870d0Da98575520De1735d4" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -29521,7 +29518,7 @@ const EarnTopPicks = ({
                   lp_id={lp_id[cardIndex]}
                 />
               ) : activeCard5 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x3fAb09ACAeDDAF579d7a72c24Ef3e9EB1D2975c4" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -29580,7 +29577,7 @@ const EarnTopPicks = ({
                   }
                 />
               ) : activeCard5 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x9eA966B4023049BFF858BB5E698ECfF24EA54c4A" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -29639,7 +29636,7 @@ const EarnTopPicks = ({
                   }
                 />
               ) : activeCard5 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xef9e50A19358CCC8816d9BC2c2355aea596efd06" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -29671,7 +29668,7 @@ const EarnTopPicks = ({
                   referrer={referrer}
                 />
               ) : activeCard5 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xaF411BF994dA1435A3150B874395B86376C5f2d5" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -29703,7 +29700,7 @@ const EarnTopPicks = ({
                   referrer={referrer}
                 />
               ) : activeCard5 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xf13aDbEb27ea9d9469D95e925e56a1CF79c06E90" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -29735,7 +29732,7 @@ const EarnTopPicks = ({
                   referrer={referrer}
                 />
               ) : activeCard5 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xa9efab22cCbfeAbB6dc4583d81421e76342faf8b" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -29767,7 +29764,7 @@ const EarnTopPicks = ({
                   referrer={referrer}
                 />
               ) : activeCard5 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x160fF3c4A6E9Aa8E4271aa71226Cc811BFEf7ED9" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -29830,7 +29827,7 @@ const EarnTopPicks = ({
                   }
                 />
               ) : activeCard5 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x58366902082B90Fca01bE07D929478bD48AcFB19" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -29909,7 +29906,7 @@ const EarnTopPicks = ({
               ) : activeCard5 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xF035ec2562fbc4963e8c1c63f5c473D9696c59E3" ? (
                 <StakeAvax
                   is_wallet_connected={isConnected}
@@ -29968,7 +29965,7 @@ const EarnTopPicks = ({
               ) : activeCard5 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x16429e51A64B7f88D4C018fbf66266A693df64b3" ? (
                 <StakeAvaxDai
                   staking={window.constant_stakingdaiavax}
@@ -30007,7 +30004,7 @@ const EarnTopPicks = ({
               ) : activeCard5 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
@@ -30066,7 +30063,7 @@ const EarnTopPicks = ({
               ) : activeCard5 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
@@ -30258,7 +30255,7 @@ const EarnTopPicks = ({
                 )
               ) : activeCard6 &&
                 topList === "Staking" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x8A30Be7B2780b503ff27dBeaCdecC4Fe2587Af5d" &&
                 chain === "eth" ? (
                 <StakeEth
@@ -30317,7 +30314,7 @@ const EarnTopPicks = ({
                 />
               ) : activeCard6 &&
                 topList === "Staking" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xa4da28B8e42680916b557459D338aF6e2D8d458f" &&
                 chain === "eth" ? (
                 <StakeEth
@@ -30375,7 +30372,7 @@ const EarnTopPicks = ({
                   referrer={referrer}
                 />
               ) : activeCard6 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x44bEd8ea3296bda44870d0Da98575520De1735d4" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -30407,7 +30404,7 @@ const EarnTopPicks = ({
                   lp_id={lp_id[cardIndex]}
                 />
               ) : activeCard6 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x3fAb09ACAeDDAF579d7a72c24Ef3e9EB1D2975c4" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -30466,7 +30463,7 @@ const EarnTopPicks = ({
                   }
                 />
               ) : activeCard6 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x9eA966B4023049BFF858BB5E698ECfF24EA54c4A" &&
                 topList === "Staking" &&
                 chain === "eth" ? (
@@ -30525,7 +30522,7 @@ const EarnTopPicks = ({
                   }
                 />
               ) : activeCard6 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xef9e50A19358CCC8816d9BC2c2355aea596efd06" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -30557,7 +30554,7 @@ const EarnTopPicks = ({
                   referrer={referrer}
                 />
               ) : activeCard6 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xaF411BF994dA1435A3150B874395B86376C5f2d5" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -30589,7 +30586,7 @@ const EarnTopPicks = ({
                   referrer={referrer}
                 />
               ) : activeCard6 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xf13aDbEb27ea9d9469D95e925e56a1CF79c06E90" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -30621,7 +30618,7 @@ const EarnTopPicks = ({
                   referrer={referrer}
                 />
               ) : activeCard6 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xa9efab22cCbfeAbB6dc4583d81421e76342faf8b" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -30653,7 +30650,7 @@ const EarnTopPicks = ({
                   referrer={referrer}
                 />
               ) : activeCard6 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x160fF3c4A6E9Aa8E4271aa71226Cc811BFEf7ED9" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -30716,7 +30713,7 @@ const EarnTopPicks = ({
                   }
                 />
               ) : activeCard6 &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x58366902082B90Fca01bE07D929478bD48AcFB19" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -30795,7 +30792,7 @@ const EarnTopPicks = ({
               ) : activeCard6 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0xF035ec2562fbc4963e8c1c63f5c473D9696c59E3" ? (
                 <StakeAvax
                   is_wallet_connected={isConnected}
@@ -30854,7 +30851,7 @@ const EarnTopPicks = ({
               ) : activeCard6 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x16429e51A64B7f88D4C018fbf66266A693df64b3" ? (
                 <StakeAvaxDai
                   staking={window.constant_stakingdaiavax}
@@ -30893,7 +30890,7 @@ const EarnTopPicks = ({
               ) : activeCard6 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
@@ -30952,7 +30949,7 @@ const EarnTopPicks = ({
               ) : activeCard6 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
@@ -31341,7 +31338,7 @@ const EarnTopPicks = ({
               ) : activeCard7 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
@@ -31400,7 +31397,7 @@ const EarnTopPicks = ({
               ) : activeCard7 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
@@ -31789,7 +31786,7 @@ const EarnTopPicks = ({
               ) : activeCard8 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x5536E02336771CFa0317D4B6a042f3c38749535e" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
@@ -31848,7 +31845,7 @@ const EarnTopPicks = ({
               ) : activeCard8 &&
                 topList === "Staking" &&
                 chain === "avax" &&
-                expiredDYPPools[cardIndex].id ===
+                expiredDYPPools[cardIndex]?.id ===
                   "0x8f28110325a727f70B64bffEbf2B9dc94B932452" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
