@@ -640,7 +640,48 @@ const TopPoolsListCard = ({
           //   listType={listType}
           // />
           null
-        ) : showDetails &&
+        )
+        : showDetails &&
+            activePools &&
+            topList === "Staking" &&
+            activePools[cardIndex - 1].id ===
+              "testId" &&
+            chain === "bnb" ? (
+            <StakeBsc
+              lp_id={LP_IDBNB_Array[cardIndex]}
+              staking={window.constant_stakingbsc_new11}
+              apr={activePools[cardIndex - 1]?.apy_percent}
+              liquidity={wbsc_address}
+              expiration_time={"5 August 2023"}
+              finalApr={activePools[cardIndex - 1]?.apy_performancefee}
+              fee={activePools[cardIndex - 1]?.performancefee}
+              lockTime={
+                activePools[cardIndex - 1]?.lock_time?.split(" ")[0] === "No"
+                  ? "No Lock"
+                  : parseInt(
+                      activePools[cardIndex - 1]?.lock_time?.split(" ")[0]
+                    )
+              }
+              listType={listType}
+              other_info={
+                activePools[cardIndex - 1]?.expired === "Yes" ? true : false
+              }
+              is_wallet_connected={isConnected}
+              coinbase={coinbase}
+              the_graph_result={the_graph_resultbsc}
+              chainId={chainId}
+              handleConnection={handleConnection}
+              handleSwitchNetwork={handleSwitchNetwork}
+              expired={false}
+              referrer={referrer}
+            />
+          )
+        
+        
+        
+        
+        
+        : showDetails &&
             activePools &&
             topList === "Staking" &&
             activePools[cardIndex - 1].id ===
@@ -808,7 +849,38 @@ const TopPoolsListCard = ({
                     )
               }
             />
-          ) : showDetails &&
+          )
+          
+          : showDetails &&
+          activePools &&
+          activePools[cardIndex] &&
+          topList === "Staking" &&
+          chain === "avax" &&
+          activePools[cardIndex - 1].id ===
+            "testId2" ? (
+          <StakeAvax
+            is_wallet_connected={isConnected}
+            coinbase={coinbase}
+            the_graph_result={the_graph_resultavax}
+            chainId={chainId.toString()}
+            handleConnection={handleConnection}
+            handleSwitchNetwork={handleSwitchNetwork}
+            expired={false}
+            staking={window.constant_staking_new12}
+            listType={listType}
+            apr={activePools[cardIndex - 1]?.apy_percent}
+            liquidity={avax_address}
+            expiration_time={"14 March 2024"}
+            other_info={false}
+            fee_s={activePools[cardIndex - 1]?.performancefee}
+            finalApr={activePools[cardIndex - 1]?.apy_performancefee}
+            fee_u={0}
+            lockTime={"No Lock"}
+          />
+        )
+
+          
+          : showDetails &&
             activePools &&
             activePools[cardIndex] &&
             topList === "Staking" &&
