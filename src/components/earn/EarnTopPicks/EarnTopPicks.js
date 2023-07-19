@@ -326,7 +326,6 @@ const EarnTopPicks = ({
       })
       setWbnbPrice(res.data.the_graph_bsc_v2.usd_per_eth)
       setTheBnbPool(bnbpool[1])
-      console.log(bnbpool[1], "bnbpool");
       
     })
     .catch((err) => console.error(err));
@@ -696,6 +695,32 @@ const EarnTopPicks = ({
       }
     }
   };
+
+  useEffect(() => {
+    console.log("helloooordeg")
+    setActiveCard(null)
+    setActiveCard2(null)
+    setActiveCard3(null)
+    setActiveCard4(null)
+    setActiveCard5(null)
+    setActiveCard6(null)
+    setActiveCard7(null)
+    setActiveCard8(null)
+    setActiveCard9(null)
+    setActiveCard10(null)
+    setActiveCard11(null)
+    setActiveCard12(null)
+    setcardIndex(null)
+    setcardIndexiDyp(null)
+    setcardIndexavax30(null)
+    setcardIndexavaxiDyp(null)
+    setDetails(null)
+    setActiveCardNFT(null)
+    setActiveCardLandNFT(null)
+    setActiveCardCawsLand(null)
+  
+}, [topList, chain])
+
   useEffect(() => {
     if (topList === "Staking" && chain === "eth") {
       setCustomIndex(2);
@@ -773,6 +798,10 @@ const EarnTopPicks = ({
     chain,
   ]);
 
+ 
+
+
+
   useEffect(() => {
     if (topList === "Vault" && chainId === "1" && expiredPools === true) {
       // setTopPools([]);
@@ -835,6 +864,9 @@ const EarnTopPicks = ({
       setActivePools([])
     }
   },[topList, chain, expiredPools])
+
+
+  
 
   return topPools.length > 0 && expiredPools === false ? (
     <div className={`row w-100 justify-content-center gap-4`}>
@@ -1268,7 +1300,7 @@ const EarnTopPicks = ({
                   : activeCard &&
                   topList === "Staking" &&
                   activePools[cardIndex].id ===
-                    "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712" &&
+                    "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                   chain === "bnb" ? (
                   <StakeBsc
                     lp_id={LP_IDBNB_Array[cardIndex]}
@@ -2165,7 +2197,7 @@ const EarnTopPicks = ({
                 : activeCard2 &&
                 topList === "Staking" &&
                 activePools[cardIndex].id ===
-                  "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712" &&
+                  "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                 chain === "bnb" ? (
                 <StakeBsc
                   lp_id={LP_IDBNB_Array[cardIndex]}
@@ -3066,7 +3098,7 @@ const EarnTopPicks = ({
                 : activeCard3 &&
                 topList === "Staking" &&
                 activePools[cardIndex].id ===
-                  "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712" &&
+                  "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                 chain === "bnb" ? (
                 <StakeBsc
                   lp_id={LP_IDBNB_Array[cardIndex]}
@@ -4668,7 +4700,7 @@ const EarnTopPicks = ({
                 : activeCard &&
                   topList === "Staking" &&
                   activePools[cardIndex].id ===
-                    "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712" &&
+                    "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                   chain === "bnb" ? (
                   <StakeBsc
                     lp_id={LP_IDBNB_Array[cardIndex]}
@@ -5612,7 +5644,7 @@ const EarnTopPicks = ({
                 : activeCard2 &&
                 topList === "Staking" &&
                 activePools[cardIndex].id ===
-                  "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712" &&
+                  "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                 chain === "bnb" ? (
                 <StakeBsc
                   lp_id={LP_IDBNB_Array[cardIndex]}
@@ -6333,7 +6365,7 @@ const EarnTopPicks = ({
                 : activeCard3 &&
                 topList === "Staking" &&
                 activePools[cardIndex].id ===
-                  "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712" &&
+                  "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                 chain === "bnb" ? (
                 <StakeBsc
                   lp_id={LP_IDBNB_Array[cardIndex]}
@@ -7110,7 +7142,7 @@ const EarnTopPicks = ({
                 : activeCard4 &&
                 topList === "Staking" &&
                 activePools[cardIndex].id ===
-                  "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712" &&
+                  "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                 chain === "bnb" ? (
                 <StakeBsc
                   lp_id={LP_IDBNB_Array[cardIndex]}
@@ -7777,7 +7809,7 @@ const EarnTopPicks = ({
                 : activeCard5 &&
                 topList === "Staking" &&
                 activePools[cardIndex].id ===
-                  "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712" &&
+                  "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                 chain === "bnb" ? (
                 <StakeBsc
                   lp_id={LP_IDBNB_Array[cardIndex]}
@@ -8443,7 +8475,7 @@ const EarnTopPicks = ({
                 : activeCard6 &&
                 topList === "Staking" &&
                 activePools[cardIndex].id ===
-                  "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712" &&
+                  "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                 chain === "bnb" ? (
                 <StakeBsc
                   lp_id={LP_IDBNB_Array[cardIndex]}
@@ -9242,7 +9274,7 @@ const EarnTopPicks = ({
                   : activeCard &&
                   topList === "Staking" &&
                   activePools[cardIndex].id ===
-                    "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712" &&
+                    "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                   chain === "bnb" ? (
                   <StakeBsc
                     lp_id={LP_IDBNB_Array[cardIndex]}
@@ -10092,7 +10124,7 @@ const EarnTopPicks = ({
                   : activeCard2 &&
                   topList === "Staking" &&
                   activePools[cardIndex].id ===
-                    "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712" &&
+                    "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                   chain === "bnb" ? (
                   <StakeBsc
                     lp_id={LP_IDBNB_Array[cardIndex]}
@@ -10889,7 +10921,7 @@ const EarnTopPicks = ({
                   : activeCard3 &&
                   topList === "Staking" &&
                   activePools[cardIndex].id ===
-                    "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712" &&
+                    "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                   chain === "bnb" ? (
                   <StakeBsc
                     lp_id={LP_IDBNB_Array[cardIndex]}
@@ -11686,7 +11718,7 @@ const EarnTopPicks = ({
                   : activeCard4 &&
                   topList === "Staking" &&
                   activePools[cardIndex].id ===
-                    "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712" &&
+                    "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                   chain === "bnb" ? (
                   <StakeBsc
                     lp_id={LP_IDBNB_Array[cardIndex]}
@@ -12486,7 +12518,7 @@ const EarnTopPicks = ({
                   : activeCard5 &&
                   topList === "Staking" &&
                   activePools[cardIndex].id ===
-                    "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712" &&
+                    "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                   chain === "bnb" ? (
                   <StakeBsc
                     lp_id={LP_IDBNB_Array[cardIndex]}
@@ -13243,7 +13275,7 @@ const EarnTopPicks = ({
                   : activeCard6 &&
                   topList === "Staking" &&
                   activePools[cardIndex].id ===
-                    "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712" &&
+                    "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                   chain === "bnb" ? (
                   <StakeBsc
                     lp_id={LP_IDBNB_Array[cardIndex]}
@@ -13984,7 +14016,7 @@ const EarnTopPicks = ({
                   : activeCard7 &&
                   topList === "Staking" &&
                   activePools[cardIndex].id ===
-                    "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712" &&
+                    "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                   chain === "bnb" ? (
                   <StakeBsc
                     lp_id={LP_IDBNB_Array[cardIndex]}
@@ -14663,7 +14695,7 @@ const EarnTopPicks = ({
                   : activeCard8 &&
                   topList === "Staking" &&
                   activePools[cardIndex].id ===
-                    "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712" &&
+                    "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                   chain === "bnb" ? (
                   <StakeBsc
                     lp_id={LP_IDBNB_Array[cardIndex]}
@@ -15319,7 +15351,7 @@ const EarnTopPicks = ({
                   : activeCard9 &&
                   topList === "Staking" &&
                   activePools[cardIndex].id ===
-                    "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712" &&
+                    "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                   chain === "bnb" ? (
                   <StakeBsc
                     lp_id={LP_IDBNB_Array[cardIndex]}
@@ -15911,7 +15943,7 @@ const EarnTopPicks = ({
                   : activeCard10 &&
                   topList === "Staking" &&
                   activePools[cardIndex].id ===
-                    "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712" &&
+                    "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                   chain === "bnb" ? (
                   <StakeBsc
                     lp_id={LP_IDBNB_Array[cardIndex]}
@@ -16502,7 +16534,7 @@ const EarnTopPicks = ({
                   : activeCard11 &&
                   topList === "Staking" &&
                   activePools[cardIndex].id ===
-                    "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712" &&
+                    "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                   chain === "bnb" ? (
                   <StakeBsc
                     lp_id={LP_IDBNB_Array[cardIndex]}
@@ -17096,7 +17128,7 @@ const EarnTopPicks = ({
                   : activeCard12 &&
                   topList === "Staking" &&
                   activePools[cardIndex].id ===
-                    "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712" &&
+                    "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
                   chain === "bnb" ? (
                   <StakeBsc
                     lp_id={LP_IDBNB_Array[cardIndex]}

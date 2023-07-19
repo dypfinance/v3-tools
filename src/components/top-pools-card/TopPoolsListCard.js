@@ -645,7 +645,7 @@ const TopPoolsListCard = ({
             activePools &&
             topList === "Staking" &&
             activePools[cardIndex - 1].id ===
-              "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712" &&
+              "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
             chain === "bnb" ? (
             <StakeBsc
               lp_id={LP_IDBNB_Array[cardIndex]}
