@@ -229,6 +229,20 @@ const BscFarmingFunc = ({
   const [rewardsPendingClaim , setrewardsPendingClaim ] = useState("");
   const [calculatedUsd, setCalculatedUsd] = useState(0)
   const [calculatedWbnb, setCalculatedWbnb] = useState(0)
+  const [dypPrice, setDypPrice] = useState(0)
+  const [idypPrice, setIdypPrice] = useState(0)
+
+
+  const fetchDypPrice = async () => {
+    axios.get('https://api.geckoterminal.com/api/v2/networks/bsc/pools/0x3fbca1072fb101e9440bb97be9ef763aac312516').then((res) => {
+      setDypPrice(res.data.data.attributes.base_token_price_usd)
+    })
+  }
+  const fetchiDypPrice = async () => {
+    axios.get('https://api.geckoterminal.com/api/v2/networks/bsc/pools/0x1bC61d08A300892e784eD37b2d0E63C85D1d57fb').then((res) => {
+      setIdypPrice(res.data.data.attributes.base_token_price_usd)
+    })
+  }
 
   const showModal = () => {
     setShow(true);
@@ -1462,7 +1476,8 @@ const checkDepositAmount = (amount) => {
       getLPTokens();
       console.log(wbnbPrice, "wbnbprice");
     }
-
+    fetchDypPrice();
+    fetchiDypPrice();
     getPriceDYP();
   }, []);
 
@@ -2120,7 +2135,7 @@ const checkDepositAmount = (amount) => {
                           disabled
                           value={
                             Number(rewardsPendingClaim) > 0
-                              ? `${getFormattedNumber(rewardsPendingClaim,6)} DYP`
+                              ? `${getFormattedNumber(idypPrice * rewardsPendingClaim / dypPrice,6)} DYP`
                               : `${getFormattedNumber(0, 2)} DYP`
                           }
                           onChange={(e) =>

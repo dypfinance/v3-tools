@@ -1141,7 +1141,7 @@ const EarnTopPicks = ({
                         lp_symbol={"USD"}
                         lock="3 Days"
                         rebase_factor={1}
-                        expiration_time="7 June 2024"
+                        expiration_time={"18 July 2024"}
                         fee="0.4"
                         finalApr={activePools[cardIndex]?.apy_percent}
                         latestApr={theBnbPool.apy_percent}
@@ -1308,7 +1308,7 @@ const EarnTopPicks = ({
                         : expiredDYPPools[cardIndex]?.apy_percent
                     }
                     liquidity={wbsc_address}
-                    expiration_time={"5 August 2023"}
+                    expiration_time={"18 July 2024"}
                     finalApr={
                       expiredPools === false
                         ? activePools[cardIndex]?.apy_performancefee
@@ -1788,7 +1788,7 @@ const EarnTopPicks = ({
                           : expiredDYPPools[cardIndex]?.apy_percent
                       }
                       liquidity={avax_address}
-                      expiration_time={"15 August 2023"}
+                      expiration_time={"18 July 2024"}
                       other_info={
                         cardIndex !== undefined
                           ? expiredPools === false
@@ -2205,7 +2205,7 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={wbsc_address}
-                  expiration_time={"5 August 2023"}
+                  expiration_time={"18 July 2024"}
                   finalApr={
                     expiredPools === false
                       ? activePools[cardIndex]?.apy_performancefee
@@ -2286,7 +2286,8 @@ const EarnTopPicks = ({
                     : expiredDYPPools[cardIndex]?.apy_percent
                 }
                 liquidity={avax_address}
-                expiration_time={"15 August 2023"}
+                expiration_time={"18 July 2024"}
+
                 other_info={
                   cardIndex !== undefined
                     ? expiredPools === false
@@ -3106,7 +3107,7 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={wbsc_address}
-                  expiration_time={"5 August 2023"}
+                  expiration_time={"18 July 2024"}
                   finalApr={
                     expiredPools === false
                       ? activePools[cardIndex]?.apy_performancefee
@@ -3187,7 +3188,8 @@ const EarnTopPicks = ({
                     : expiredDYPPools[cardIndex]?.apy_percent
                 }
                 liquidity={avax_address}
-                expiration_time={"15 August 2023"}
+                expiration_time={"18 July 2024"}
+
                 other_info={
                   cardIndex !== undefined
                     ? expiredPools === false
@@ -4549,7 +4551,7 @@ const EarnTopPicks = ({
                   lp_symbol={"USD"}
                   lock="3 Days"
                   rebase_factor={1}
-                  expiration_time="7 June 2024"
+                  expiration_time={"18 July 2024"}
                   fee="0.4"
                   finalApr={activePools[cardIndex]?.apy_percent}
                   lockTime={3}
@@ -4708,7 +4710,7 @@ const EarnTopPicks = ({
                         : expiredDYPPools[cardIndex]?.apy_percent
                     }
                     liquidity={wbsc_address}
-                    expiration_time={"5 August 2023"}
+                    expiration_time={"18 July 2024"}
                     finalApr={
                       expiredPools === false
                         ? activePools[cardIndex]?.apy_performancefee
@@ -5113,7 +5115,8 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={avax_address}
-                  expiration_time={"15 August 2023"}
+                  expiration_time={"18 July 2024"}
+
                   other_info={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -5652,7 +5655,7 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={wbsc_address}
-                  expiration_time={"5 August 2023"}
+                  expiration_time={"18 July 2024"}
                   finalApr={
                     expiredPools === false
                       ? activePools[cardIndex]?.apy_performancefee
@@ -5733,7 +5736,8 @@ const EarnTopPicks = ({
                     : expiredDYPPools[cardIndex]?.apy_percent
                 }
                 liquidity={avax_address}
-                expiration_time={"15 August 2023"}
+                expiration_time={"18 July 2024"}
+
                 other_info={
                   cardIndex !== undefined
                     ? expiredPools === false
@@ -6373,7 +6377,7 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={wbsc_address}
-                  expiration_time={"5 August 2023"}
+                  expiration_time={"18 July 2024"}
                   finalApr={
                     expiredPools === false
                       ? activePools[cardIndex]?.apy_performancefee
@@ -6454,7 +6458,8 @@ const EarnTopPicks = ({
                     : expiredDYPPools[cardIndex]?.apy_percent
                 }
                 liquidity={avax_address}
-                expiration_time={"15 August 2023"}
+                expiration_time={"18 July 2024"}
+
                 other_info={
                   cardIndex !== undefined
                     ? expiredPools === false
@@ -7150,7 +7155,7 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={wbsc_address}
-                  expiration_time={"5 August 2023"}
+                  expiration_time={"18 July 2024"}
                   finalApr={
                     expiredPools === false
                       ? activePools[cardIndex]?.apy_performancefee
@@ -7231,7 +7236,8 @@ const EarnTopPicks = ({
                     : expiredDYPPools[cardIndex]?.apy_percent
                 }
                 liquidity={avax_address}
-                expiration_time={"15 August 2023"}
+                expiration_time={"18 July 2024"}
+
                 other_info={
                   cardIndex !== undefined
                     ? expiredPools === false
@@ -7817,7 +7823,7 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={wbsc_address}
-                  expiration_time={"5 August 2023"}
+                  expiration_time={"18 July 2024"}
                   finalApr={
                     expiredPools === false
                       ? activePools[cardIndex]?.apy_performancefee
@@ -7898,7 +7904,8 @@ const EarnTopPicks = ({
                     : expiredDYPPools[cardIndex]?.apy_percent
                 }
                 liquidity={avax_address}
-                expiration_time={"15 August 2023"}
+                expiration_time={"18 July 2024"}
+
                 other_info={
                   cardIndex !== undefined
                     ? expiredPools === false
@@ -8483,7 +8490,7 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={wbsc_address}
-                  expiration_time={"5 August 2023"}
+                  expiration_time={"18 July 2024"}
                   finalApr={
                     expiredPools === false
                       ? activePools[cardIndex]?.apy_performancefee
@@ -8564,7 +8571,8 @@ const EarnTopPicks = ({
                     : expiredDYPPools[cardIndex]?.apy_percent
                 }
                 liquidity={avax_address}
-                expiration_time={"15 August 2023"}
+                expiration_time={"18 July 2024"}
+
                 other_info={
                   cardIndex !== undefined
                     ? expiredPools === false
@@ -9282,7 +9290,7 @@ const EarnTopPicks = ({
                         : expiredDYPPools[cardIndex]?.apy_percent
                     }
                     liquidity={wbsc_address}
-                    expiration_time={"5 August 2023"}
+                    expiration_time={"18 July 2024"}
                     finalApr={
                       expiredPools === false
                         ? activePools[cardIndex]?.apy_performancefee
@@ -9499,7 +9507,7 @@ const EarnTopPicks = ({
                       lp_symbol={"USD"}
                       lock="3 Days"
                       rebase_factor={1}
-                      expiration_time="7 June 2024"
+                      expiration_time={"18 July 2024"}
                       fee="0.4"
                       finalApr={activePools[cardIndex]?.apy_percent}
                       lockTime={3}
@@ -9870,7 +9878,8 @@ const EarnTopPicks = ({
                         : expiredDYPPools[cardIndex]?.apy_percent
                     }
                     liquidity={avax_address}
-                    expiration_time={"15 August 2023"}
+                    expiration_time={"18 July 2024"}
+
                     other_info={
                       cardIndex !== undefined
                         ? expiredPools === false
@@ -10201,7 +10210,7 @@ const EarnTopPicks = ({
                         : expiredDYPPools[cardIndex]?.apy_percent
                     }
                     liquidity={wbsc_address}
-                    expiration_time={"5 August 2023"}
+                    expiration_time={"18 July 2024"}
                     finalApr={
                       expiredPools === false
                         ? activePools[cardIndex]?.apy_performancefee
@@ -10282,7 +10291,8 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={avax_address}
-                  expiration_time={"15 August 2023"}
+                  expiration_time={"18 July 2024"}
+
                   other_info={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -10998,7 +11008,7 @@ const EarnTopPicks = ({
                         : expiredDYPPools[cardIndex]?.apy_percent
                     }
                     liquidity={wbsc_address}
-                    expiration_time={"5 August 2023"}
+                    expiration_time={"18 July 2024"}
                     finalApr={
                       expiredPools === false
                         ? activePools[cardIndex]?.apy_performancefee
@@ -11079,7 +11089,8 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={avax_address}
-                  expiration_time={"15 August 2023"}
+                  expiration_time={"18 July 2024"}
+
                   other_info={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -11795,7 +11806,7 @@ const EarnTopPicks = ({
                         : expiredDYPPools[cardIndex]?.apy_percent
                     }
                     liquidity={wbsc_address}
-                    expiration_time={"5 August 2023"}
+                    expiration_time={"18 July 2024"}
                     finalApr={
                       expiredPools === false
                         ? activePools[cardIndex]?.apy_performancefee
@@ -11876,7 +11887,8 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={avax_address}
-                  expiration_time={"15 August 2023"}
+                  expiration_time={"18 July 2024"}
+
                   other_info={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -12595,7 +12607,7 @@ const EarnTopPicks = ({
                         : expiredDYPPools[cardIndex]?.apy_percent
                     }
                     liquidity={wbsc_address}
-                    expiration_time={"5 August 2023"}
+                    expiration_time={"18 July 2024"}
                     finalApr={
                       expiredPools === false
                         ? activePools[cardIndex]?.apy_performancefee
@@ -12676,7 +12688,8 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={avax_address}
-                  expiration_time={"15 August 2023"}
+                  expiration_time={"18 July 2024"}
+
                   other_info={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -13352,7 +13365,7 @@ const EarnTopPicks = ({
                         : expiredDYPPools[cardIndex]?.apy_percent
                     }
                     liquidity={wbsc_address}
-                    expiration_time={"5 August 2023"}
+                    expiration_time={"18 July 2024"}
                     finalApr={
                       expiredPools === false
                         ? activePools[cardIndex]?.apy_performancefee
@@ -13433,7 +13446,8 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={avax_address}
-                  expiration_time={"15 August 2023"}
+                  expiration_time={"18 July 2024"}
+
                   other_info={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -14093,7 +14107,7 @@ const EarnTopPicks = ({
                         : expiredDYPPools[cardIndex]?.apy_percent
                     }
                     liquidity={wbsc_address}
-                    expiration_time={"5 August 2023"}
+                    expiration_time={"18 July 2024"}
                     finalApr={
                       expiredPools === false
                         ? activePools[cardIndex]?.apy_performancefee
@@ -14174,7 +14188,8 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={avax_address}
-                  expiration_time={"15 August 2023"}
+                  expiration_time={"18 July 2024"}
+
                   other_info={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -14772,7 +14787,7 @@ const EarnTopPicks = ({
                         : expiredDYPPools[cardIndex]?.apy_percent
                     }
                     liquidity={wbsc_address}
-                    expiration_time={"5 August 2023"}
+                    expiration_time={"18 July 2024"}
                     finalApr={
                       expiredPools === false
                         ? activePools[cardIndex]?.apy_performancefee
@@ -14853,7 +14868,8 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={avax_address}
-                  expiration_time={"15 August 2023"}
+                  expiration_time={"18 July 2024"}
+
                   other_info={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -15428,7 +15444,7 @@ const EarnTopPicks = ({
                         : expiredDYPPools[cardIndex]?.apy_percent
                     }
                     liquidity={wbsc_address}
-                    expiration_time={"5 August 2023"}
+                    expiration_time={"18 July 2024"}
                     finalApr={
                       expiredPools === false
                         ? activePools[cardIndex]?.apy_performancefee
@@ -15509,7 +15525,8 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={avax_address}
-                  expiration_time={"15 August 2023"}
+                  expiration_time={"18 July 2024"}
+
                   other_info={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -16020,7 +16037,7 @@ const EarnTopPicks = ({
                         : expiredDYPPools[cardIndex]?.apy_percent
                     }
                     liquidity={wbsc_address}
-                    expiration_time={"5 August 2023"}
+                    expiration_time={"18 July 2024"}
                     finalApr={
                       expiredPools === false
                         ? activePools[cardIndex]?.apy_performancefee
@@ -16101,7 +16118,8 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={avax_address}
-                  expiration_time={"15 August 2023"}
+                  expiration_time={"18 July 2024"}
+
                   other_info={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -16611,7 +16629,7 @@ const EarnTopPicks = ({
                         : expiredDYPPools[cardIndex]?.apy_percent
                     }
                     liquidity={wbsc_address}
-                    expiration_time={"5 August 2023"}
+                    expiration_time={"18 July 2024"}
                     finalApr={
                       expiredPools === false
                         ? activePools[cardIndex]?.apy_performancefee
@@ -16692,7 +16710,8 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={avax_address}
-                  expiration_time={"15 August 2023"}
+                  expiration_time={"18 July 2024"}
+
                   other_info={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -17205,7 +17224,7 @@ const EarnTopPicks = ({
                         : expiredDYPPools[cardIndex]?.apy_percent
                     }
                     liquidity={wbsc_address}
-                    expiration_time={"5 August 2023"}
+                    expiration_time={"18 July 2024"}
                     finalApr={
                       expiredPools === false
                         ? activePools[cardIndex]?.apy_performancefee
@@ -17286,7 +17305,8 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={avax_address}
-                  expiration_time={"15 August 2023"}
+                  expiration_time={"18 July 2024"}
+
                   other_info={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -26322,7 +26342,8 @@ const EarnTopPicks = ({
                     : expiredDYPPools[cardIndex]?.apy_percent
                 }
                 liquidity={avax_address}
-                expiration_time={"15 August 2023"}
+                expiration_time={"18 July 2024"}
+
                 other_info={
                   cardIndex !== undefined
                     ? expiredPools === false
