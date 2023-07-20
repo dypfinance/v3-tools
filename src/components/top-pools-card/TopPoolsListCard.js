@@ -586,7 +586,10 @@ const TopPoolsListCard = ({
                   : activePools[cardIndex - 1]?.lock_time?.split(" ")[0]
               }
             />
-          ) : showDetails &&
+          )
+         
+          
+          : showDetails &&
           topList === "Farming" &&
           chain === "bnb"  ? (
             <BscFarmingFunc
@@ -607,7 +610,7 @@ const TopPoolsListCard = ({
             lp_symbol={"USD"}
             lock="3 Days"
             rebase_factor={1}
-            expiration_time="7 June 2024"
+            expiration_time={"18 July 2024"}
             fee="0.4"
             finalApr={'3'}
             lockTime={3}
@@ -645,14 +648,14 @@ const TopPoolsListCard = ({
             activePools &&
             topList === "Staking" &&
             activePools[cardIndex - 1].id ===
-              "testId" &&
+              "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" &&
             chain === "bnb" ? (
             <StakeBsc
               lp_id={LP_IDBNB_Array[cardIndex]}
-              staking={window.constant_stakingbsc_new11}
+              staking={window.constant_stakingbsc_new14}
               apr={activePools[cardIndex - 1]?.apy_percent}
               liquidity={wbsc_address}
-              expiration_time={"5 August 2023"}
+              expiration_time={"18 July 2024"}
               finalApr={activePools[cardIndex - 1]?.apy_performancefee}
               fee={activePools[cardIndex - 1]?.performancefee}
               lockTime={
@@ -816,7 +819,10 @@ const TopPoolsListCard = ({
                     )
               }
             />
-          ) : showDetails &&
+          )
+      
+
+          : showDetails &&
             activePools &&
             activePools[cardIndex - 1].id ===
               "0x7e766F7005C7a9e74123b156697B582eeCB8d2D7" &&
@@ -857,7 +863,7 @@ const TopPoolsListCard = ({
           topList === "Staking" &&
           chain === "avax" &&
           activePools[cardIndex - 1].id ===
-            "testId2" ? (
+            "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712" ? (
           <StakeAvax
             is_wallet_connected={isConnected}
             coinbase={coinbase}
@@ -866,11 +872,11 @@ const TopPoolsListCard = ({
             handleConnection={handleConnection}
             handleSwitchNetwork={handleSwitchNetwork}
             expired={false}
-            staking={window.constant_staking_new12}
+            staking={window.constant_staking_new13}
             listType={listType}
             apr={activePools[cardIndex - 1]?.apy_percent}
             liquidity={avax_address}
-            expiration_time={"14 March 2024"}
+            expiration_time={"18 July 2024"}
             other_info={false}
             fee_s={activePools[cardIndex - 1]?.performancefee}
             finalApr={activePools[cardIndex - 1]?.apy_performancefee}
@@ -962,7 +968,10 @@ const TopPoolsListCard = ({
                   : activePools[cardIndex - 1]?.lock_time?.split(" ")[0]
               }
             />
-          ) : showDetails &&
+          ) 
+          
+          
+          : showDetails &&
             activePools &&
             topList === "Staking" &&
             chain === "avax" &&
@@ -1413,7 +1422,10 @@ const TopPoolsListCard = ({
                     )
               }
             />
-          ) : showDetails &&
+          )
+         
+
+          : showDetails &&
             expiredPools &&
             expiredPools[cardIndex - 1].id ===
               "0x58366902082B90Fca01bE07D929478bD48AcFB19" &&
