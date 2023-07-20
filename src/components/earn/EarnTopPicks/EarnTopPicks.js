@@ -204,7 +204,7 @@ const EarnTopPicks = ({
 
   const fetchBnbStaking = async () => {
     await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_bnb`)
+      .get(`https://api.dyp.finance/api/get_staking_info_bnb`)
       .then((res) => {
         const dypIdypBnb = res.data.stakingInfoDYPBnb.concat(
           res.data.stakingInfoiDYPBnb
@@ -234,7 +234,7 @@ const EarnTopPicks = ({
   };
   const fetchAvaxStaking = async () => {
     await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_avax`)
+      .get(`https://api.dyp.finance/api/get_staking_info_avax`)
       .then((res) => {
         const dypIdypAvax = res.data.stakingInfoDYPAvax.concat(
           res.data.stakingInfoiDYPAvax
