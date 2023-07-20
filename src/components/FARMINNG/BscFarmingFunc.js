@@ -906,7 +906,7 @@ const BscFarmingFunc = ({
     .div(100)
     .toFixed(0);
     
-    staking.claim(0, claimdivs2, deadline)
+    staking.claim(0, 0, deadline)
 //     let router = await window.getPancakeswapRouterContract();
 //     let WETH = await router.methods.WETH().call();
 //     let platformTokenAddress = window.config.reward_token_address;
