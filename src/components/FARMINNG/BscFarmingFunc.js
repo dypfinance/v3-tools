@@ -920,7 +920,27 @@ const BscFarmingFunc = ({
     .div(100)
     .toFixed(0);
     
-    staking.claim(0, 0, deadline)
+    try{
+      staking.claim(0, 0, deadline).then(() => {
+        setClaimStatus("success");
+        setClaimLoading(false);
+        setPendingDivs(getFormattedNumber(0, 6));
+        refreshBalance();
+      })
+      .catch((e) => {
+        setClaimStatus("fail");
+        setClaimLoading(false);
+        setErrorMsg2(e?.message);
+        console.log(e);
+        setTimeout(() => {
+          setClaimStatus("initial");
+          setErrorMsg2("");
+        }, 10000);
+      });
+    }catch (e) {
+      console.error(e);
+      return;
+    }
 //     let router = await window.getPancakeswapRouterContract();
 //     let WETH = await router.methods.WETH().call();
 //     let platformTokenAddress = window.config.reward_token_address;
