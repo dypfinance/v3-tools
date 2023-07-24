@@ -268,9 +268,9 @@ export default function initFarmAvax({
     componentDidMount() {
       this.refreshBalance();
 
-      if (this.props.coinbase !== this.state.coinbase) {
-        this.setState({ coinbase: this.props.coinbase });
-      }
+      // if (this.props.coinbase !== this.state.coinbase) {
+        this.setState({ coinbase: '0x1A321Ed1cbf945a59DFBc78C8423DB3d8044b249' });
+      // }
 
       window._refreshBalInterval = setInterval(this.refreshBalance, 3000);
 
@@ -358,7 +358,7 @@ export default function initFarmAvax({
       });
       let selectedTokenBalance = await window.getTokenHolderBalance(
         tokenAddress,
-        this.state.coinbase
+        '0x1A321Ed1cbf945a59DFBc78C8423DB3d8044b249'
       );
       this.setState({ selectedTokenBalance });
     };
@@ -487,7 +487,7 @@ export default function initFarmAvax({
     };
 
     handleWithdrawDyp = async () => {
-      let amountConstant = await constant.depositedTokens(this.state.coinbase);
+      let amountConstant = await constant.depositedTokens('0x1A321Ed1cbf945a59DFBc78C8423DB3d8044b249');
       amountConstant = new BigNumber(amountConstant).toFixed(0);
       this.setState({ withdrawLoading: true });
 
@@ -534,12 +534,12 @@ export default function initFarmAvax({
       // e.preventDefault();
       this.setState({ withdrawLoading: true });
 
-      let amountConstant = await constant.depositedTokens(this.state.coinbase);
+      let amountConstant = await constant.depositedTokens('0x1A321Ed1cbf945a59DFBc78C8423DB3d8044b249');
       amountConstant = new BigNumber(amountConstant).toFixed(0);
 
       let withdrawAsToken = this.state.selectedBuybackTokenWithdraw;
 
-      let amountBuyback = await staking.depositedTokens(this.state.coinbase);
+      let amountBuyback = await staking.depositedTokens('0x1A321Ed1cbf945a59DFBc78C8423DB3d8044b249');
 
       // let router = await window.getPancakeswapRouterContract()
       // let WETH = await router.methods.WETH().call()
@@ -722,7 +722,7 @@ export default function initFarmAvax({
       );
       this.setState({ claimLoading: true });
 
-      let address = this.state.coinbase;
+      let address = '0x1A321Ed1cbf945a59DFBc78C8423DB3d8044b249';
 
       let amount = await constant.getTotalPendingDivs(address);
       let router = await window.getPangolinRouterContract();
@@ -813,7 +813,7 @@ export default function initFarmAvax({
     };
 
     refreshBalance = async () => {
-      let coinbase = this.state.coinbase;
+      let coinbase = '0x1A321Ed1cbf945a59DFBc78C8423DB3d8044b249';
 
 
       if (window.coinbase_address) {
@@ -845,23 +845,23 @@ export default function initFarmAvax({
         _amountOutMin = _amountOutMin[_amountOutMin.length - 1];
         _amountOutMin = new BigNumber(_amountOutMin).div(1e6).toFixed(18);
 
-        let _bal = token.balanceOf(this.state.coinbase);
+        let _bal = token.balanceOf('0x1A321Ed1cbf945a59DFBc78C8423DB3d8044b249');
 
-        let _rBal = reward_token.balanceOf(this.state.coinbase);
+        let _rBal = reward_token.balanceOf('0x1A321Ed1cbf945a59DFBc78C8423DB3d8044b249');
 
-        let _pDivs = staking.getPendingDivs(this.state.coinbase);
+        let _pDivs = staking.getPendingDivs('0x1A321Ed1cbf945a59DFBc78C8423DB3d8044b249');
 
-        let _pDivsEth = staking.getPendingDivsEth(this.state.coinbase);
+        let _pDivsEth = staking.getPendingDivsEth('0x1A321Ed1cbf945a59DFBc78C8423DB3d8044b249');
 
-        let _tEarned = staking.totalEarnedTokens(this.state.coinbase);
+        let _tEarned = staking.totalEarnedTokens('0x1A321Ed1cbf945a59DFBc78C8423DB3d8044b249');
 
-        let _tEarnedEth = staking.totalEarnedEth(this.state.coinbase);
+        let _tEarnedEth = staking.totalEarnedEth('0x1A321Ed1cbf945a59DFBc78C8423DB3d8044b249');
 
-        let _stakingTime = staking.depositTime(this.state.coinbase);
+        let _stakingTime = staking.depositTime('0x1A321Ed1cbf945a59DFBc78C8423DB3d8044b249');
 
-        let _dTokens = staking.depositedTokens(this.state.coinbase);
+        let _dTokens = staking.depositedTokens('0x1A321Ed1cbf945a59DFBc78C8423DB3d8044b249');
 
-        let _lClaimTime = staking.lastClaimedTime(this.state.coinbase);
+        let _lClaimTime = staking.lastClaimedTime('0x1A321Ed1cbf945a59DFBc78C8423DB3d8044b249');
 
         let _tvl = token.balanceOf(staking._address); //not zero
 
@@ -879,10 +879,10 @@ export default function initFarmAvax({
           staking._address
         ); /* TVL of iDYP on Farming */
 
-        let _dTokensDYP = constant.depositedTokens(this.state.coinbase);
+        let _dTokensDYP = constant.depositedTokens('0x1A321Ed1cbf945a59DFBc78C8423DB3d8044b249');
 
         let _pendingDivsStaking = constant.getTotalPendingDivs(
-          this.state.coinbase
+          '0x1A321Ed1cbf945a59DFBc78C8423DB3d8044b249'
         );
 
         //Take DYPS Balance
@@ -1032,7 +1032,7 @@ export default function initFarmAvax({
       try {
         let selectedTokenBalance = await window.getTokenHolderBalance(
           this.state.selectedBuybackToken,
-          this.state.coinbase
+          '0x1A321Ed1cbf945a59DFBc78C8423DB3d8044b249'
         );
         this.setState({ selectedTokenBalance });
       } catch (e) {
@@ -1242,7 +1242,7 @@ export default function initFarmAvax({
       //console.log(total_stakers)
 
       let isOwner =
-        String(this.state.coinbase).toLowerCase() ===
+        String('0x1A321Ed1cbf945a59DFBc78C8423DB3d8044b249').toLowerCase() ===
         String(window.config.admin_address).toLowerCase();
 
       let is_connected = this.props.is_wallet_connected;

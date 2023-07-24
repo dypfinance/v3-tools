@@ -173,7 +173,7 @@ const TierLevels = ({
             alt=""
             className="tier-medal"
           />
-          <h6 className="tier-dyp-amount">5000 DYP</h6>
+          <h6 className="tier-dyp-amount">5,000 DYP</h6>
         </div>
         <div
           className="next-tier-wrapper d-flex flex-column align-items-center justify-content-start gap-2 position-relative p-3"
