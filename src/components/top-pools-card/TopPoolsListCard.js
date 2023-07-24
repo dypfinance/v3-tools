@@ -592,7 +592,7 @@ const TopPoolsListCard = ({
             chain === "eth" &&
             activePools &&
             activePools[cardIndex - 1].id ===
-              "testIdEth" ? (
+              "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
             <InitConstantStakingiDYP
               is_wallet_connected={isConnected}
               coinbase={coinbase}
@@ -607,7 +607,8 @@ const TopPoolsListCard = ({
               finalApr={activePools[cardIndex - 1]?.apy_performancefee}
               apr={activePools[cardIndex - 1]?.apy_percent}
               liquidity={eth_address}
-              expiration_time={"15 August 2023"}
+              expiration_time={"18 July 2024"}
+
               other_info={
                 activePools[cardIndex - 1]?.expired === "Yes" ? true : false
               }
@@ -856,7 +857,7 @@ const TopPoolsListCard = ({
           : showDetails &&
             activePools &&
             activePools[cardIndex - 1].id ===
-              "testIdBnb" &&
+              "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
             topList === "Staking" &&
             chain === "bnb" ? (
             <StakeBscIDyp
@@ -872,7 +873,8 @@ const TopPoolsListCard = ({
               finalApr={activePools[cardIndex - 1]?.apy_performancefee}
               apr={activePools[cardIndex - 1]?.apy_percent}
               liquidity={wbsc_address}
-              expiration_time={"15 August 2023"}
+              expiration_time={"18 July 2024"}
+
               other_info={
                 activePools[cardIndex - 1]?.expired === "Yes" ? true : false
               }
@@ -1041,7 +1043,7 @@ const TopPoolsListCard = ({
             topList === "Staking" &&
             chain === "avax" &&
             activePools[cardIndex - 1].id ===
-              "testIdAvax" ? (
+              "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
             <StakeAvaxIDyp
               is_wallet_connected={isConnected}
               coinbase={coinbase}
@@ -1055,7 +1057,8 @@ const TopPoolsListCard = ({
               finalApr={activePools[cardIndex - 1]?.apy_performancefee}
               apr={activePools[cardIndex - 1]?.apy_percent}
               liquidity={avax_address}
-              expiration_time={"15 August 2023"}
+              expiration_time={"18 July 2024"}
+
               other_info={false}
               fee_s={activePools[cardIndex - 1]?.performancefee}
               fee_u={feeUarrayStakeAvaxiDyp[cardIndexavaxiDyp - 3]}
