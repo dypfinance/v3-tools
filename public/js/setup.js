@@ -1716,6 +1716,8 @@ window.config = {
   constant_stakingold_140_address: "0x3fab09acaeddaf579d7a72c24ef3e9eb1d2975c4",
   constant_stakingold_150_address: "0x50014432772b4123d04181727c6edeab34f5f988",
   constant_stakingold_160_address: "0xd4be7a106ed193bee39d6389a481ec76027b2660",
+  constant_stakingold_170_address: "0x41b8a58f4307ea722ad0a964966caa18a6011d93",
+
 
   /*buyback*/
   buyback_staking_address: "0xe5262f38bf13410a79149cb40429f8dc5e830542",
@@ -1898,12 +1900,16 @@ window.config = {
     "0xaf411bf994da1435a3150b874395b86376c5f2d5",
   constant_stakingidypavax_6_address:
     "0xd13bdc0c9a9931cf959739631b1290b6bee0c018",
+    constant_stakingidypavax_7_address:
+    "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d",
 
   //Constant Staking iDYP bsc
   constant_stakingidyp_1_address: "0x58366902082b90fca01be07d929478bd48acfb19",
   constant_stakingidyp_2_address: "0x160ff3c4a6e9aa8e4271aa71226cc811bfef7ed9",
   constant_stakingidyp_5_address: "0x7e766f7005c7a9e74123b156697b582eecb8d2d7",
   constant_stakingidyp_6_address: "0x4c04e53f9aaa17fc2c914694b4aae57a9d1be445",
+  constant_stakingidyp_7_address: "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d",
+
 
   submission_form_link: "https://forms.gle/SFX1DyUh8TcNeysz6",
 
@@ -2406,10 +2412,17 @@ window.constant_stakingidyp_6 = new CONSTANT_STAKINGBSC_NEW(
   "CONSTANT_STAKINGIDYP_6"
 );
 
+window.constant_stakingidyp_7 = new CONSTANT_STAKINGBSC_NEW(
+  "CONSTANT_STAKINGIDYP_7"
+);
+
+
 window.CONSTANT_STAKINGIDYP_1_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYP_2_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYP_5_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYP_6_ABI = window.CONSTANT_STAKING_IDYP_ABI;
+window.CONSTANT_STAKINGIDYP_7_ABI = window.CONSTANT_STAKING_IDYP_ABI;
+
 
 window.constant_staking_new1 = new CONSTANT_STAKING_NEW(
   "CONSTANT_STAKINGNEW_NEW1"
@@ -2573,6 +2586,10 @@ window.constant_staking_idyp_4 = new CONSTANT_STAKING_OLD(
   "CONSTANT_STAKINGOLD_160"
 );
 
+window.constant_staking_idyp_5 = new CONSTANT_STAKING_OLD(
+  "CONSTANT_STAKINGOLD_170"
+);
+
 /* Constant Staking iDYP AVAX */
 window.constant_staking_idypavax_1 = new CONSTANT_STAKING_NEWAVAX(
   "CONSTANT_STAKINGIDYPAVAX_1"
@@ -2583,8 +2600,13 @@ window.constant_staking_idypavax_2 = new CONSTANT_STAKING_NEWAVAX(
 window.constant_staking_idypavax_5 = new CONSTANT_STAKING_NEWAVAX(
   "CONSTANT_STAKINGIDYPAVAX_5"
 );
+
 window.constant_staking_idypavax_6 = new CONSTANT_STAKING_NEWAVAX(
   "CONSTANT_STAKINGIDYPAVAX_6"
+);
+
+window.constant_staking_idypavax_7 = new CONSTANT_STAKING_NEWAVAX(
+  "CONSTANT_STAKINGIDYPAVAX_7"
 );
 
 const checkapproveStakePool = async (useraddr, tokenaddr, stakingaddr) => {
@@ -2906,6 +2928,8 @@ window.CONSTANT_STAKINGIDYPAVAX_1_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYPAVAX_2_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYPAVAX_5_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYPAVAX_6_ABI = window.CONSTANT_STAKING_IDYP_ABI;
+window.CONSTANT_STAKINGIDYPAVAX_7_ABI = window.CONSTANT_STAKING_IDYP_ABI;
+
 
 function getBridgeContract(address) {
   return getContract({ address, ABI: window.BRIDGE_ABI });
@@ -31447,6 +31471,7 @@ Object.keys(window.config)
       k.startsWith("farming_newbsc_5") ||
       k.startsWith("constant_stakingnew_new1") ||
       k.startsWith("constant_stakingidyp_6") ||
+      k.startsWith("constant_stakingidyp_7") ||
       k.startsWith("constant_stakingidyp_5") ||
       k.startsWith("constant_stakingidyp_2") ||
       k.startsWith("constant_stakingidyp_1") ||
@@ -31508,6 +31533,7 @@ Object.keys(window.config)
       k.startsWith("constant_stakingidypavax_2") ||
       k.startsWith("constant_stakingidypavax_5") ||
       k.startsWith("constant_stakingidypavax_6") ||
+      k.startsWith("constant_stakingidypavax_7") ||
       k.startsWith("constant_stakingnew_newavax3") ||
       k.startsWith("constant_stakingnew_newavax4") ||
       k.startsWith("new_governance") ||
@@ -31621,6 +31647,8 @@ Object.keys(window.config)
       ? window.CONSTANT_STAKINGNEW_ABI
       : k.startsWith("constant_stakingidyp_6")
       ? window.CONSTANT_STAKING_IDYP_ABI
+      : k.startsWith("constant_stakingidyp_7")
+      ? window.CONSTANT_STAKING_IDYP_ABI
       : k.startsWith("constant_stakingidyp_5")
       ? window.CONSTANT_STAKING_IDYP_ABI
       : k.startsWith("constant_stakingidyp_2")
@@ -31680,6 +31708,8 @@ Object.keys(window.config)
       : k.startsWith("constant_stakingidypavax_2")
       ? window.CONSTANT_STAKING_IDYP_ABI
       : k.startsWith("constant_stakingidypavax_5")
+      ? window.CONSTANT_STAKING_IDYP_ABI
+      : k.startsWith("constant_stakingidypavax_7")
       ? window.CONSTANT_STAKING_IDYP_ABI
       : k.startsWith("constant_stakingidypavax_6")
       ? window.CONSTANT_STAKING_IDYP_ABI

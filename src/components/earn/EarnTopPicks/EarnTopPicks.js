@@ -121,7 +121,7 @@ const EarnTopPicks = ({
 
   const dummyEthPool = [
     {
-      id: "testIdEth",
+      id: "0x41b8a58f4307ea722ad0a964966caa18a6011d93",
       apy_percent: 28,
       tvl_usd: 4234.647841581039,
       link_logo: "https://www.dypius.com/logo192.png",
@@ -139,7 +139,7 @@ const EarnTopPicks = ({
 
   const dummyBnbPool = [
     {
-      id: "testIdBnb",
+      id: "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d",
       apy_percent: 36,
       tvl_usd: 6456.132809182925,
       link_logo: "https://www.dypius.com/logo192.png",
@@ -158,7 +158,7 @@ const EarnTopPicks = ({
 
   const dummyAvaxPool = [
     {
-      id: "testIdAvax",
+      id: "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d",
       apy_percent: 19,
       tvl_usd: 11575.21380088942432,
       link_logo: "https://www.dypius.com/logo192.png",
@@ -210,7 +210,7 @@ const EarnTopPicks = ({
           return b.tvl_usd - a.tvl_usd;
         });
 
-        setActivePools([...dummyEthPool, ...activeEth]);
+        setActivePools(activeEth);
         setExpiredPools(sortedExpired);
         setTopPools(dypIdyp);
         setCawsCard(res.data.stakingInfoCAWS);
@@ -245,7 +245,7 @@ const EarnTopPicks = ({
           return b.tvl_usd - a.tvl_usd;
         });
 
-        setActivePools([...dummyBnbPool, ...sortedActive]);
+        setActivePools(sortedActive);
 
         setExpiredPools(sortedExpired);
         setTopPools(dypIdypBnb);
@@ -277,7 +277,7 @@ const EarnTopPicks = ({
           return b.tvl_usd - a.tvl_usd;
         });
 
-        setActivePools([...dummyAvaxPool, ...sortedActive]);
+        setActivePools(sortedActive);
         setExpiredPools(sortedExpired);
         setTopPools(dypIdypAvax);
       })
@@ -1787,7 +1787,7 @@ const EarnTopPicks = ({
                   topList === "Staking" &&
                   chain === "avax" &&
                   activePools[cardIndex]?.id ===
-                    "testIdAvax" ? (
+                    "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
                     coinbase={coinbase}
@@ -1796,7 +1796,7 @@ const EarnTopPicks = ({
                     handleConnection={handleConnection}
                     handleSwitchNetwork={handleSwitchNetwork}
                     expired={false}
-                    staking={window.constant_staking_idypavax_5}
+                    staking={window.constant_staking_idypavax_7}
                     listType={listType}
                     finalApr={
                       expiredPools === false
@@ -1809,7 +1809,8 @@ const EarnTopPicks = ({
                         : expiredDYPPools[cardIndex]?.apy_percent
                     }
                     liquidity={avax_address}
-                    expiration_time={"15 August 2023"}
+                    expiration_time={"18 July 2024"}
+
                     other_info={
                       cardIndex !== undefined
                         ? expiredPools === false
@@ -1847,7 +1848,7 @@ const EarnTopPicks = ({
                   />
                 ) : activeCard &&
                 activePools[cardIndex]?.id ===
-                  "testIdBnb" &&
+                  "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
                 <StakeBscIDyp
@@ -1858,7 +1859,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={false}
-                  staking={window.constant_stakingidyp_6}
+                  staking={window.constant_stakingidyp_7}
                   listType={listType}
                   finalApr={
                     expiredPools === false
@@ -1871,7 +1872,8 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={wbsc_address}
-                  expiration_time={"15 August 2023"}
+                  expiration_time={"18 July 2024"}
+
                   other_info={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -1914,7 +1916,7 @@ const EarnTopPicks = ({
               topList === "Staking" &&
               chain === "eth" &&
               activePools[cardIndex]?.id ===
-                "testIdEth" ? (
+                "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
               <InitConstantStakingiDYP
                 is_wallet_connected={isConnected}
                 coinbase={coinbase}
@@ -1924,7 +1926,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={false}
-                staking={window.constant_staking_idyp_3}
+                staking={window.constant_staking_idyp_5}
                 listType={listType}
                 finalApr={activePools[cardIndex]?.apy_performancefee}
                 apr={
@@ -1933,7 +1935,7 @@ const EarnTopPicks = ({
                     : expiredDYPPools[cardIndex]?.apy_percent
                 }
                 liquidity={eth_address}
-                expiration_time={"15 August 2023"}
+                expiration_time={"18 July 2024"}
                 other_info={
                   cardIndex !== undefined
                     ? expiredPools === false
@@ -2402,7 +2404,7 @@ const EarnTopPicks = ({
                 topList === "Staking" &&
                 chain === "avax" &&
                 activePools[cardIndex]?.id ===
-                  "testIdAvax" ? (
+                  "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
                   coinbase={coinbase}
@@ -2411,7 +2413,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={false}
-                  staking={window.constant_staking_idypavax_5}
+                  staking={window.constant_staking_idypavax_7}
                   listType={listType}
                   finalApr={
                     expiredPools === false
@@ -2424,7 +2426,8 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={avax_address}
-                  expiration_time={"15 August 2023"}
+                  expiration_time={"18 July 2024"}
+
                   other_info={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -2462,7 +2465,7 @@ const EarnTopPicks = ({
                 />
               ) : activeCard2 &&
               activePools[cardIndex]?.id ===
-                "testIdBnb" &&
+                "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
               topList === "Staking" &&
               chain === "bnb" ? (
               <StakeBscIDyp
@@ -2473,7 +2476,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={false}
-                staking={window.constant_stakingidyp_6}
+                staking={window.constant_stakingidyp_7}
                 listType={listType}
                 finalApr={
                   expiredPools === false
@@ -2486,7 +2489,8 @@ const EarnTopPicks = ({
                     : expiredDYPPools[cardIndex]?.apy_percent
                 }
                 liquidity={wbsc_address}
-                expiration_time={"15 August 2023"}
+                expiration_time={"18 July 2024"}
+
                 other_info={
                   cardIndex !== undefined
                     ? expiredPools === false
@@ -2529,7 +2533,7 @@ const EarnTopPicks = ({
             topList === "Staking" &&
             chain === "eth" &&
             activePools[cardIndex]?.id ===
-              "testIdEth" ? (
+              "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
             <InitConstantStakingiDYP
               is_wallet_connected={isConnected}
               coinbase={coinbase}
@@ -2539,7 +2543,7 @@ const EarnTopPicks = ({
               handleConnection={handleConnection}
               handleSwitchNetwork={handleSwitchNetwork}
               expired={false}
-              staking={window.constant_staking_idyp_3}
+              staking={window.constant_staking_idyp_5}
               listType={listType}
               finalApr={activePools[cardIndex]?.apy_performancefee}
               apr={
@@ -2548,7 +2552,8 @@ const EarnTopPicks = ({
                   : expiredDYPPools[cardIndex]?.apy_percent
               }
               liquidity={eth_address}
-              expiration_time={"15 August 2023"}
+              expiration_time={"18 July 2024"}
+
               other_info={
                 cardIndex !== undefined
                   ? expiredPools === false
@@ -3492,7 +3497,7 @@ const EarnTopPicks = ({
                 topList === "Staking" &&
                 chain === "avax" &&
                 activePools[cardIndex]?.id ===
-                  "testIdAvax" ? (
+                  "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
                   coinbase={coinbase}
@@ -3501,7 +3506,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={false}
-                  staking={window.constant_staking_idypavax_5}
+                  staking={window.constant_staking_idypavax_7}
                   listType={listType}
                   finalApr={
                     expiredPools === false
@@ -3514,7 +3519,8 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={avax_address}
-                  expiration_time={"15 August 2023"}
+                  expiration_time={"18 July 2024"}
+
                   other_info={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -3552,7 +3558,7 @@ const EarnTopPicks = ({
                 />
               ) : activeCard3 &&
               activePools[cardIndex]?.id ===
-                "testIdBnb" &&
+                "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
               topList === "Staking" &&
               chain === "bnb" ? (
               <StakeBscIDyp
@@ -3563,7 +3569,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={false}
-                staking={window.constant_stakingidyp_6}
+                staking={window.constant_stakingidyp_7}
                 listType={listType}
                 finalApr={
                   expiredPools === false
@@ -3576,7 +3582,8 @@ const EarnTopPicks = ({
                     : expiredDYPPools[cardIndex]?.apy_percent
                 }
                 liquidity={wbsc_address}
-                expiration_time={"15 August 2023"}
+                expiration_time={"18 July 2024"}
+
                 other_info={
                   cardIndex !== undefined
                     ? expiredPools === false
@@ -3619,7 +3626,7 @@ const EarnTopPicks = ({
             topList === "Staking" &&
             chain === "eth" &&
             activePools[cardIndex]?.id ===
-              "testIdEth" ? (
+              "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
             <InitConstantStakingiDYP
               is_wallet_connected={isConnected}
               coinbase={coinbase}
@@ -3629,7 +3636,7 @@ const EarnTopPicks = ({
               handleConnection={handleConnection}
               handleSwitchNetwork={handleSwitchNetwork}
               expired={false}
-              staking={window.constant_staking_idyp_3}
+              staking={window.constant_staking_idyp_5}
               listType={listType}
               finalApr={activePools[cardIndex]?.apy_performancefee}
               apr={
@@ -3638,7 +3645,8 @@ const EarnTopPicks = ({
                   : expiredDYPPools[cardIndex]?.apy_percent
               }
               liquidity={eth_address}
-              expiration_time={"15 August 2023"}
+              expiration_time={"18 July 2024"}
+
               other_info={
                 cardIndex !== undefined
                   ? expiredPools === false
@@ -4384,7 +4392,7 @@ const EarnTopPicks = ({
                 topList === "Staking" &&
                 chain === "avax" &&
                 activePools[cardIndex]?.id ===
-                  "testIdAvax" ? (
+                  "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
                   coinbase={coinbase}
@@ -4393,7 +4401,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={false}
-                  staking={window.constant_staking_idypavax_5}
+                  staking={window.constant_staking_idypavax_7}
                   listType={listType}
                   finalApr={
                     expiredPools === false
@@ -4406,7 +4414,8 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={avax_address}
-                  expiration_time={"15 August 2023"}
+                  expiration_time={"18 July 2024"}
+
                   other_info={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -4444,7 +4453,7 @@ const EarnTopPicks = ({
                 />
               ) : activeCard4 &&
               activePools[cardIndex]?.id ===
-                "testIdBnb" &&
+                "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
               topList === "Staking" &&
               chain === "bnb" ? (
               <StakeBscIDyp
@@ -4455,7 +4464,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={false}
-                staking={window.constant_stakingidyp_6}
+                staking={window.constant_stakingidyp_7}
                 listType={listType}
                 finalApr={
                   expiredPools === false
@@ -4468,7 +4477,8 @@ const EarnTopPicks = ({
                     : expiredDYPPools[cardIndex]?.apy_percent
                 }
                 liquidity={wbsc_address}
-                expiration_time={"15 August 2023"}
+                expiration_time={"18 July 2024"}
+
                 other_info={
                   cardIndex !== undefined
                     ? expiredPools === false
@@ -4511,7 +4521,7 @@ const EarnTopPicks = ({
             topList === "Staking" &&
             chain === "eth" &&
             activePools[cardIndex]?.id ===
-              "testIdEth" ? (
+              "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
             <InitConstantStakingiDYP
               is_wallet_connected={isConnected}
               coinbase={coinbase}
@@ -4521,7 +4531,7 @@ const EarnTopPicks = ({
               handleConnection={handleConnection}
               handleSwitchNetwork={handleSwitchNetwork}
               expired={false}
-              staking={window.constant_staking_idyp_3}
+              staking={window.constant_staking_idyp_5}
               listType={listType}
               finalApr={activePools[cardIndex]?.apy_performancefee}
               apr={
@@ -4530,7 +4540,8 @@ const EarnTopPicks = ({
                   : expiredDYPPools[cardIndex]?.apy_percent
               }
               liquidity={eth_address}
-              expiration_time={"15 August 2023"}
+              expiration_time={"18 July 2024"}
+
               other_info={
                 cardIndex !== undefined
                   ? expiredPools === false
@@ -5244,7 +5255,7 @@ const EarnTopPicks = ({
                 topList === "Staking" &&
                 chain === "avax" &&
                 activePools[cardIndex]?.id ===
-                  "testIdAvax" ? (
+                  "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
                   coinbase={coinbase}
@@ -5253,7 +5264,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={false}
-                  staking={window.constant_staking_idypavax_5}
+                  staking={window.constant_staking_idypavax_7}
                   listType={listType}
                   finalApr={
                     expiredPools === false
@@ -5266,7 +5277,8 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={avax_address}
-                  expiration_time={"15 August 2023"}
+                  expiration_time={"18 July 2024"}
+
                   other_info={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -5304,7 +5316,7 @@ const EarnTopPicks = ({
                 />
               ) : activeCard &&
               activePools[cardIndex]?.id ===
-                "testIdBnb" &&
+                "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
               topList === "Staking" &&
               chain === "bnb" ? (
               <StakeBscIDyp
@@ -5315,7 +5327,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={false}
-                staking={window.constant_stakingidyp_6}
+                staking={window.constant_stakingidyp_7}
                 listType={listType}
                 finalApr={
                   expiredPools === false
@@ -5328,7 +5340,8 @@ const EarnTopPicks = ({
                     : expiredDYPPools[cardIndex]?.apy_percent
                 }
                 liquidity={wbsc_address}
-                expiration_time={"15 August 2023"}
+                expiration_time={"18 July 2024"}
+
                 other_info={
                   cardIndex !== undefined
                     ? expiredPools === false
@@ -5371,7 +5384,7 @@ const EarnTopPicks = ({
             topList === "Staking" &&
             chain === "eth" &&
             activePools[cardIndex]?.id ===
-              "testIdEth" ? (
+              "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
             <InitConstantStakingiDYP
               is_wallet_connected={isConnected}
               coinbase={coinbase}
@@ -5381,7 +5394,7 @@ const EarnTopPicks = ({
               handleConnection={handleConnection}
               handleSwitchNetwork={handleSwitchNetwork}
               expired={false}
-              staking={window.constant_staking_idyp_3}
+              staking={window.constant_staking_idyp_5}
               listType={listType}
               finalApr={activePools[cardIndex]?.apy_performancefee}
               apr={
@@ -5390,7 +5403,8 @@ const EarnTopPicks = ({
                   : expiredDYPPools[cardIndex]?.apy_percent
               }
               liquidity={eth_address}
-              expiration_time={"15 August 2023"}
+              expiration_time={"18 July 2024"}
+
               other_info={
                 cardIndex !== undefined
                   ? expiredPools === false
@@ -6490,7 +6504,7 @@ const EarnTopPicks = ({
                 topList === "Staking" &&
                 chain === "avax" &&
                 activePools[cardIndex]?.id ===
-                  "testIdAvax" ? (
+                  "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
                   coinbase={coinbase}
@@ -6499,7 +6513,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={false}
-                  staking={window.constant_staking_idypavax_5}
+                  staking={window.constant_staking_idypavax_7}
                   listType={listType}
                   finalApr={
                     expiredPools === false
@@ -6512,7 +6526,8 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={avax_address}
-                  expiration_time={"15 August 2023"}
+                  expiration_time={"18 July 2024"}
+
                   other_info={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -6550,7 +6565,7 @@ const EarnTopPicks = ({
                 />
               ) : activeCard2 &&
               activePools[cardIndex]?.id ===
-                "testIdBnb" &&
+                "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
               topList === "Staking" &&
               chain === "bnb" ? (
               <StakeBscIDyp
@@ -6561,7 +6576,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={false}
-                staking={window.constant_stakingidyp_6}
+                staking={window.constant_stakingidyp_7}
                 listType={listType}
                 finalApr={
                   expiredPools === false
@@ -6574,7 +6589,8 @@ const EarnTopPicks = ({
                     : expiredDYPPools[cardIndex]?.apy_percent
                 }
                 liquidity={wbsc_address}
-                expiration_time={"15 August 2023"}
+                expiration_time={"18 July 2024"}
+
                 other_info={
                   cardIndex !== undefined
                     ? expiredPools === false
@@ -6617,7 +6633,7 @@ const EarnTopPicks = ({
             topList === "Staking" &&
             chain === "eth" &&
             activePools[cardIndex]?.id ===
-              "testIdEth" ? (
+              "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
             <InitConstantStakingiDYP
               is_wallet_connected={isConnected}
               coinbase={coinbase}
@@ -6627,7 +6643,7 @@ const EarnTopPicks = ({
               handleConnection={handleConnection}
               handleSwitchNetwork={handleSwitchNetwork}
               expired={false}
-              staking={window.constant_staking_idyp_3}
+              staking={window.constant_staking_idyp_5}
               listType={listType}
               finalApr={activePools[cardIndex]?.apy_performancefee}
               apr={
@@ -6636,7 +6652,8 @@ const EarnTopPicks = ({
                   : expiredDYPPools[cardIndex]?.apy_percent
               }
               liquidity={eth_address}
-              expiration_time={"15 August 2023"}
+              expiration_time={"18 July 2024"}
+
               other_info={
                 cardIndex !== undefined
                   ? expiredPools === false
@@ -7513,7 +7530,7 @@ const EarnTopPicks = ({
                 topList === "Staking" &&
                 chain === "avax" &&
                 activePools[cardIndex]?.id ===
-                  "testIdAvax" ? (
+                  "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
                   coinbase={coinbase}
@@ -7522,7 +7539,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={false}
-                  staking={window.constant_staking_idypavax_5}
+                  staking={window.constant_staking_idypavax_7}
                   listType={listType}
                   finalApr={
                     expiredPools === false
@@ -7535,7 +7552,8 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={avax_address}
-                  expiration_time={"15 August 2023"}
+                  expiration_time={"18 July 2024"}
+
                   other_info={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -7573,7 +7591,7 @@ const EarnTopPicks = ({
                 />
               ) : activeCard3 &&
               activePools[cardIndex]?.id ===
-                "testIdBnb" &&
+                "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
               topList === "Staking" &&
               chain === "bnb" ? (
               <StakeBscIDyp
@@ -7584,7 +7602,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={false}
-                staking={window.constant_stakingidyp_6}
+                staking={window.constant_stakingidyp_7}
                 listType={listType}
                 finalApr={
                   expiredPools === false
@@ -7597,7 +7615,8 @@ const EarnTopPicks = ({
                     : expiredDYPPools[cardIndex]?.apy_percent
                 }
                 liquidity={wbsc_address}
-                expiration_time={"15 August 2023"}
+                expiration_time={"18 July 2024"}
+
                 other_info={
                   cardIndex !== undefined
                     ? expiredPools === false
@@ -7640,7 +7659,7 @@ const EarnTopPicks = ({
             topList === "Staking" &&
             chain === "eth" &&
             activePools[cardIndex]?.id ===
-              "testIdEth" ? (
+              "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
             <InitConstantStakingiDYP
               is_wallet_connected={isConnected}
               coinbase={coinbase}
@@ -7650,7 +7669,7 @@ const EarnTopPicks = ({
               handleConnection={handleConnection}
               handleSwitchNetwork={handleSwitchNetwork}
               expired={false}
-              staking={window.constant_staking_idyp_3}
+              staking={window.constant_staking_idyp_5}
               listType={listType}
               finalApr={activePools[cardIndex]?.apy_performancefee}
               apr={
@@ -7659,7 +7678,8 @@ const EarnTopPicks = ({
                   : expiredDYPPools[cardIndex]?.apy_percent
               }
               liquidity={eth_address}
-              expiration_time={"15 August 2023"}
+              expiration_time={"18 July 2024"}
+
               other_info={
                 cardIndex !== undefined
                   ? expiredPools === false
@@ -8478,7 +8498,7 @@ const EarnTopPicks = ({
                 topList === "Staking" &&
                 chain === "avax" &&
                 activePools[cardIndex]?.id ===
-                  "testIdAvax" ? (
+                  "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
                   coinbase={coinbase}
@@ -8487,7 +8507,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={false}
-                  staking={window.constant_staking_idypavax_5}
+                  staking={window.constant_staking_idypavax_7}
                   listType={listType}
                   finalApr={
                     expiredPools === false
@@ -8500,7 +8520,8 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={avax_address}
-                  expiration_time={"15 August 2023"}
+                  expiration_time={"18 July 2024"}
+
                   other_info={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -8538,7 +8559,7 @@ const EarnTopPicks = ({
                 />
               ) : activeCard4 &&
               activePools[cardIndex]?.id ===
-                "testIdBnb" &&
+                "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
               topList === "Staking" &&
               chain === "bnb" ? (
               <StakeBscIDyp
@@ -8549,7 +8570,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={false}
-                staking={window.constant_stakingidyp_6}
+                staking={window.constant_stakingidyp_7}
                 listType={listType}
                 finalApr={
                   expiredPools === false
@@ -8562,7 +8583,8 @@ const EarnTopPicks = ({
                     : expiredDYPPools[cardIndex]?.apy_percent
                 }
                 liquidity={wbsc_address}
-                expiration_time={"15 August 2023"}
+                expiration_time={"18 July 2024"}
+
                 other_info={
                   cardIndex !== undefined
                     ? expiredPools === false
@@ -8605,7 +8627,7 @@ const EarnTopPicks = ({
             topList === "Staking" &&
             chain === "eth" &&
             activePools[cardIndex]?.id ===
-              "testIdEth" ? (
+              "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
             <InitConstantStakingiDYP
               is_wallet_connected={isConnected}
               coinbase={coinbase}
@@ -8615,7 +8637,7 @@ const EarnTopPicks = ({
               handleConnection={handleConnection}
               handleSwitchNetwork={handleSwitchNetwork}
               expired={false}
-              staking={window.constant_staking_idyp_3}
+              staking={window.constant_staking_idyp_5}
               listType={listType}
               finalApr={activePools[cardIndex]?.apy_performancefee}
               apr={
@@ -8624,7 +8646,8 @@ const EarnTopPicks = ({
                   : expiredDYPPools[cardIndex]?.apy_percent
               }
               liquidity={eth_address}
-              expiration_time={"15 August 2023"}
+              expiration_time={"18 July 2024"}
+
               other_info={
                 cardIndex !== undefined
                   ? expiredPools === false
@@ -9335,7 +9358,7 @@ const EarnTopPicks = ({
                 topList === "Staking" &&
                 chain === "avax" &&
                 activePools[cardIndex]?.id ===
-                  "testIdAvax" ? (
+                  "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
                   coinbase={coinbase}
@@ -9344,7 +9367,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={false}
-                  staking={window.constant_staking_idypavax_5}
+                  staking={window.constant_staking_idypavax_7}
                   listType={listType}
                   finalApr={
                     expiredPools === false
@@ -9357,7 +9380,8 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={avax_address}
-                  expiration_time={"15 August 2023"}
+                  expiration_time={"18 July 2024"}
+
                   other_info={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -9395,7 +9419,7 @@ const EarnTopPicks = ({
                 />
               ) : activeCard5 &&
               activePools[cardIndex]?.id ===
-                "testIdBnb" &&
+                "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
               topList === "Staking" &&
               chain === "bnb" ? (
               <StakeBscIDyp
@@ -9406,7 +9430,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={false}
-                staking={window.constant_stakingidyp_6}
+                staking={window.constant_stakingidyp_7}
                 listType={listType}
                 finalApr={
                   expiredPools === false
@@ -9419,7 +9443,8 @@ const EarnTopPicks = ({
                     : expiredDYPPools[cardIndex]?.apy_percent
                 }
                 liquidity={wbsc_address}
-                expiration_time={"15 August 2023"}
+                expiration_time={"18 July 2024"}
+
                 other_info={
                   cardIndex !== undefined
                     ? expiredPools === false
@@ -9462,7 +9487,7 @@ const EarnTopPicks = ({
             topList === "Staking" &&
             chain === "eth" &&
             activePools[cardIndex]?.id ===
-              "testIdEth" ? (
+              "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
             <InitConstantStakingiDYP
               is_wallet_connected={isConnected}
               coinbase={coinbase}
@@ -9472,7 +9497,7 @@ const EarnTopPicks = ({
               handleConnection={handleConnection}
               handleSwitchNetwork={handleSwitchNetwork}
               expired={false}
-              staking={window.constant_staking_idyp_3}
+              staking={window.constant_staking_idyp_5}
               listType={listType}
               finalApr={activePools[cardIndex]?.apy_performancefee}
               apr={
@@ -9481,7 +9506,8 @@ const EarnTopPicks = ({
                   : expiredDYPPools[cardIndex]?.apy_percent
               }
               liquidity={eth_address}
-              expiration_time={"15 August 2023"}
+              expiration_time={"18 July 2024"}
+
               other_info={
                 cardIndex !== undefined
                   ? expiredPools === false
@@ -10191,7 +10217,7 @@ const EarnTopPicks = ({
                 topList === "Staking" &&
                 chain === "avax" &&
                 activePools[cardIndex]?.id ===
-                  "testIdAvax" ? (
+                  "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
                   coinbase={coinbase}
@@ -10200,7 +10226,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={false}
-                  staking={window.constant_staking_idypavax_5}
+                  staking={window.constant_staking_idypavax_7}
                   listType={listType}
                   finalApr={
                     expiredPools === false
@@ -10213,7 +10239,8 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={avax_address}
-                  expiration_time={"15 August 2023"}
+                  expiration_time={"18 July 2024"}
+
                   other_info={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -10251,7 +10278,7 @@ const EarnTopPicks = ({
                 />
               ) : activeCard6 &&
               activePools[cardIndex]?.id ===
-                "testIdBnb" &&
+                "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
               topList === "Staking" &&
               chain === "bnb" ? (
               <StakeBscIDyp
@@ -10262,7 +10289,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={false}
-                staking={window.constant_stakingidyp_6}
+                staking={window.constant_stakingidyp_7}
                 listType={listType}
                 finalApr={
                   expiredPools === false
@@ -10275,7 +10302,8 @@ const EarnTopPicks = ({
                     : expiredDYPPools[cardIndex]?.apy_percent
                 }
                 liquidity={wbsc_address}
-                expiration_time={"15 August 2023"}
+                expiration_time={"18 July 2024"}
+
                 other_info={
                   cardIndex !== undefined
                     ? expiredPools === false
@@ -10318,7 +10346,7 @@ const EarnTopPicks = ({
             topList === "Staking" &&
             chain === "eth" &&
             activePools[cardIndex]?.id ===
-              "testIdEth" ? (
+              "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
             <InitConstantStakingiDYP
               is_wallet_connected={isConnected}
               coinbase={coinbase}
@@ -10328,7 +10356,7 @@ const EarnTopPicks = ({
               handleConnection={handleConnection}
               handleSwitchNetwork={handleSwitchNetwork}
               expired={false}
-              staking={window.constant_staking_idyp_3}
+              staking={window.constant_staking_idyp_5}
               listType={listType}
               finalApr={activePools[cardIndex]?.apy_performancefee}
               apr={
@@ -10337,7 +10365,8 @@ const EarnTopPicks = ({
                   : expiredDYPPools[cardIndex]?.apy_percent
               }
               liquidity={eth_address}
-              expiration_time={"15 August 2023"}
+              expiration_time={"18 July 2024"}
+
               other_info={
                 cardIndex !== undefined
                   ? expiredPools === false
@@ -11249,7 +11278,7 @@ const EarnTopPicks = ({
                 topList === "Staking" &&
                 chain === "avax" &&
                 activePools[cardIndex]?.id ===
-                  "testIdAvax" ? (
+                  "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
                 <StakeAvaxIDyp
                   is_wallet_connected={isConnected}
                   coinbase={coinbase}
@@ -11258,7 +11287,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={false}
-                  staking={window.constant_staking_idypavax_5}
+                  staking={window.constant_staking_idypavax_7}
                   listType={listType}
                   finalApr={
                     expiredPools === false
@@ -11271,7 +11300,8 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={avax_address}
-                  expiration_time={"15 August 2023"}
+                  expiration_time={"18 July 2024"}
+
                   other_info={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -11309,7 +11339,7 @@ const EarnTopPicks = ({
                 />
               ) : activeCard &&
               activePools[cardIndex]?.id ===
-                "testIdBnb" &&
+                "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
               topList === "Staking" &&
               chain === "bnb" ? (
               <StakeBscIDyp
@@ -11320,7 +11350,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={false}
-                staking={window.constant_stakingidyp_6}
+                staking={window.constant_stakingidyp_7}
                 listType={listType}
                 finalApr={
                   expiredPools === false
@@ -11333,7 +11363,8 @@ const EarnTopPicks = ({
                     : expiredDYPPools[cardIndex]?.apy_percent
                 }
                 liquidity={wbsc_address}
-                expiration_time={"15 August 2023"}
+                expiration_time={"18 July 2024"}
+
                 other_info={
                   cardIndex !== undefined
                     ? expiredPools === false
@@ -11376,7 +11407,7 @@ const EarnTopPicks = ({
             topList === "Staking" &&
             chain === "eth" &&
             activePools[cardIndex]?.id ===
-              "testIdEth" ? (
+              "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
             <InitConstantStakingiDYP
               is_wallet_connected={isConnected}
               coinbase={coinbase}
@@ -11386,7 +11417,7 @@ const EarnTopPicks = ({
               handleConnection={handleConnection}
               handleSwitchNetwork={handleSwitchNetwork}
               expired={false}
-              staking={window.constant_staking_idyp_3}
+              staking={window.constant_staking_idyp_5}
               listType={listType}
               finalApr={activePools[cardIndex]?.apy_performancefee}
               apr={
@@ -11395,7 +11426,8 @@ const EarnTopPicks = ({
                   : expiredDYPPools[cardIndex]?.apy_percent
               }
               liquidity={eth_address}
-              expiration_time={"15 August 2023"}
+              expiration_time={"18 July 2024"}
+
               other_info={
                 cardIndex !== undefined
                   ? expiredPools === false
@@ -12287,7 +12319,7 @@ const EarnTopPicks = ({
                   topList === "Staking" &&
                   chain === "avax" &&
                   activePools[cardIndex]?.id ===
-                    "testIdAvax" ? (
+                    "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
                     coinbase={coinbase}
@@ -12296,7 +12328,7 @@ const EarnTopPicks = ({
                     handleConnection={handleConnection}
                     handleSwitchNetwork={handleSwitchNetwork}
                     expired={false}
-                    staking={window.constant_staking_idypavax_5}
+                    staking={window.constant_staking_idypavax_7}
                     listType={listType}
                     finalApr={
                       expiredPools === false
@@ -12309,7 +12341,8 @@ const EarnTopPicks = ({
                         : expiredDYPPools[cardIndex]?.apy_percent
                     }
                     liquidity={avax_address}
-                    expiration_time={"15 August 2023"}
+                    expiration_time={"18 July 2024"}
+
                     other_info={
                       cardIndex !== undefined
                         ? expiredPools === false
@@ -12347,7 +12380,7 @@ const EarnTopPicks = ({
                   />
                 ) : activeCard2 &&
                 activePools[cardIndex]?.id ===
-                  "testIdBnb" &&
+                  "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
                 <StakeBscIDyp
@@ -12358,7 +12391,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={false}
-                  staking={window.constant_stakingidyp_6}
+                  staking={window.constant_stakingidyp_7}
                   listType={listType}
                   finalApr={
                     expiredPools === false
@@ -12371,7 +12404,8 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={wbsc_address}
-                  expiration_time={"15 August 2023"}
+                  expiration_time={"18 July 2024"}
+
                   other_info={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -12414,7 +12448,7 @@ const EarnTopPicks = ({
               topList === "Staking" &&
               chain === "eth" &&
               activePools[cardIndex]?.id ===
-                "testIdEth" ? (
+                "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
               <InitConstantStakingiDYP
                 is_wallet_connected={isConnected}
                 coinbase={coinbase}
@@ -12424,7 +12458,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={false}
-                staking={window.constant_staking_idyp_3}
+                staking={window.constant_staking_idyp_5}
                 listType={listType}
                 finalApr={activePools[cardIndex]?.apy_performancefee}
                 apr={
@@ -12433,7 +12467,8 @@ const EarnTopPicks = ({
                     : expiredDYPPools[cardIndex]?.apy_percent
                 }
                 liquidity={eth_address}
-                expiration_time={"15 August 2023"}
+                expiration_time={"18 July 2024"}
+
                 other_info={
                   cardIndex !== undefined
                     ? expiredPools === false
@@ -13273,7 +13308,7 @@ const EarnTopPicks = ({
                   topList === "Staking" &&
                   chain === "avax" &&
                   activePools[cardIndex]?.id ===
-                    "testIdAvax" ? (
+                    "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
                     coinbase={coinbase}
@@ -13282,7 +13317,7 @@ const EarnTopPicks = ({
                     handleConnection={handleConnection}
                     handleSwitchNetwork={handleSwitchNetwork}
                     expired={false}
-                    staking={window.constant_staking_idypavax_5}
+                    staking={window.constant_staking_idypavax_7}
                     listType={listType}
                     finalApr={
                       expiredPools === false
@@ -13295,7 +13330,8 @@ const EarnTopPicks = ({
                         : expiredDYPPools[cardIndex]?.apy_percent
                     }
                     liquidity={avax_address}
-                    expiration_time={"15 August 2023"}
+                    expiration_time={"18 July 2024"}
+
                     other_info={
                       cardIndex !== undefined
                         ? expiredPools === false
@@ -13333,7 +13369,7 @@ const EarnTopPicks = ({
                   />
                 ) : activeCard3 &&
                 activePools[cardIndex]?.id ===
-                  "testIdBnb" &&
+                  "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
                 <StakeBscIDyp
@@ -13344,7 +13380,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={false}
-                  staking={window.constant_stakingidyp_6}
+                  staking={window.constant_stakingidyp_7}
                   listType={listType}
                   finalApr={
                     expiredPools === false
@@ -13357,7 +13393,8 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={wbsc_address}
-                  expiration_time={"15 August 2023"}
+                  expiration_time={"18 July 2024"}
+
                   other_info={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -13400,7 +13437,7 @@ const EarnTopPicks = ({
               topList === "Staking" &&
               chain === "eth" &&
               activePools[cardIndex]?.id ===
-                "testIdEth" ? (
+                "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
               <InitConstantStakingiDYP
                 is_wallet_connected={isConnected}
                 coinbase={coinbase}
@@ -13410,7 +13447,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={false}
-                staking={window.constant_staking_idyp_3}
+                staking={window.constant_staking_idyp_5}
                 listType={listType}
                 finalApr={activePools[cardIndex]?.apy_performancefee}
                 apr={
@@ -13419,7 +13456,8 @@ const EarnTopPicks = ({
                     : expiredDYPPools[cardIndex]?.apy_percent
                 }
                 liquidity={eth_address}
-                expiration_time={"15 August 2023"}
+                expiration_time={"18 July 2024"}
+
                 other_info={
                   cardIndex !== undefined
                     ? expiredPools === false
@@ -14258,7 +14296,7 @@ const EarnTopPicks = ({
                   topList === "Staking" &&
                   chain === "avax" &&
                   activePools[cardIndex]?.id ===
-                    "testIdAvax" ? (
+                    "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
                     coinbase={coinbase}
@@ -14267,7 +14305,7 @@ const EarnTopPicks = ({
                     handleConnection={handleConnection}
                     handleSwitchNetwork={handleSwitchNetwork}
                     expired={false}
-                    staking={window.constant_staking_idypavax_5}
+                    staking={window.constant_staking_idypavax_7}
                     listType={listType}
                     finalApr={
                       expiredPools === false
@@ -14280,7 +14318,8 @@ const EarnTopPicks = ({
                         : expiredDYPPools[cardIndex]?.apy_percent
                     }
                     liquidity={avax_address}
-                    expiration_time={"15 August 2023"}
+                    expiration_time={"18 July 2024"}
+
                     other_info={
                       cardIndex !== undefined
                         ? expiredPools === false
@@ -14318,7 +14357,7 @@ const EarnTopPicks = ({
                   />
                 ) : activeCard4 &&
                 activePools[cardIndex]?.id ===
-                  "testIdBnb" &&
+                  "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
                 <StakeBscIDyp
@@ -14329,7 +14368,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={false}
-                  staking={window.constant_stakingidyp_6}
+                  staking={window.constant_stakingidyp_7}
                   listType={listType}
                   finalApr={
                     expiredPools === false
@@ -14342,7 +14381,8 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={wbsc_address}
-                  expiration_time={"15 August 2023"}
+                  expiration_time={"18 July 2024"}
+
                   other_info={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -14385,7 +14425,7 @@ const EarnTopPicks = ({
               topList === "Staking" &&
               chain === "eth" &&
               activePools[cardIndex]?.id ===
-                "testIdEth" ? (
+                "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
               <InitConstantStakingiDYP
                 is_wallet_connected={isConnected}
                 coinbase={coinbase}
@@ -14395,7 +14435,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={false}
-                staking={window.constant_staking_idyp_3}
+                staking={window.constant_staking_idyp_5}
                 listType={listType}
                 finalApr={activePools[cardIndex]?.apy_performancefee}
                 apr={
@@ -14404,7 +14444,8 @@ const EarnTopPicks = ({
                     : expiredDYPPools[cardIndex]?.apy_percent
                 }
                 liquidity={eth_address}
-                expiration_time={"15 August 2023"}
+                expiration_time={"18 July 2024"}
+
                 other_info={
                   cardIndex !== undefined
                     ? expiredPools === false
@@ -15248,7 +15289,7 @@ const EarnTopPicks = ({
                   topList === "Staking" &&
                   chain === "avax" &&
                   activePools[cardIndex]?.id ===
-                    "testIdAvax" ? (
+                    "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
                     coinbase={coinbase}
@@ -15257,7 +15298,7 @@ const EarnTopPicks = ({
                     handleConnection={handleConnection}
                     handleSwitchNetwork={handleSwitchNetwork}
                     expired={false}
-                    staking={window.constant_staking_idypavax_5}
+                    staking={window.constant_staking_idypavax_7}
                     listType={listType}
                     finalApr={
                       expiredPools === false
@@ -15270,7 +15311,8 @@ const EarnTopPicks = ({
                         : expiredDYPPools[cardIndex]?.apy_percent
                     }
                     liquidity={avax_address}
-                    expiration_time={"15 August 2023"}
+                    expiration_time={"18 July 2024"}
+
                     other_info={
                       cardIndex !== undefined
                         ? expiredPools === false
@@ -15308,7 +15350,7 @@ const EarnTopPicks = ({
                   />
                 ) : activeCard5 &&
                 activePools[cardIndex]?.id ===
-                  "testIdBnb" &&
+                  "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
                 <StakeBscIDyp
@@ -15319,7 +15361,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={false}
-                  staking={window.constant_stakingidyp_6}
+                  staking={window.constant_stakingidyp_7}
                   listType={listType}
                   finalApr={
                     expiredPools === false
@@ -15332,7 +15374,8 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={wbsc_address}
-                  expiration_time={"15 August 2023"}
+                  expiration_time={"18 July 2024"}
+
                   other_info={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -15375,7 +15418,7 @@ const EarnTopPicks = ({
               topList === "Staking" &&
               chain === "eth" &&
               activePools[cardIndex]?.id ===
-                "testIdEth" ? (
+                "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
               <InitConstantStakingiDYP
                 is_wallet_connected={isConnected}
                 coinbase={coinbase}
@@ -15385,7 +15428,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={false}
-                staking={window.constant_staking_idyp_3}
+                staking={window.constant_staking_idyp_5}
                 listType={listType}
                 finalApr={activePools[cardIndex]?.apy_performancefee}
                 apr={
@@ -15394,7 +15437,8 @@ const EarnTopPicks = ({
                     : expiredDYPPools[cardIndex]?.apy_percent
                 }
                 liquidity={eth_address}
-                expiration_time={"15 August 2023"}
+                expiration_time={"18 July 2024"}
+
                 other_info={
                   cardIndex !== undefined
                     ? expiredPools === false
@@ -16193,7 +16237,7 @@ const EarnTopPicks = ({
                   topList === "Staking" &&
                   chain === "avax" &&
                   activePools[cardIndex]?.id ===
-                    "testIdAvax" ? (
+                    "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
                     coinbase={coinbase}
@@ -16202,7 +16246,7 @@ const EarnTopPicks = ({
                     handleConnection={handleConnection}
                     handleSwitchNetwork={handleSwitchNetwork}
                     expired={false}
-                    staking={window.constant_staking_idypavax_5}
+                    staking={window.constant_staking_idypavax_7}
                     listType={listType}
                     finalApr={
                       expiredPools === false
@@ -16215,7 +16259,8 @@ const EarnTopPicks = ({
                         : expiredDYPPools[cardIndex]?.apy_percent
                     }
                     liquidity={avax_address}
-                    expiration_time={"15 August 2023"}
+                    expiration_time={"18 July 2024"}
+
                     other_info={
                       cardIndex !== undefined
                         ? expiredPools === false
@@ -16253,7 +16298,7 @@ const EarnTopPicks = ({
                   />
                 ) : activeCard6 &&
                 activePools[cardIndex]?.id ===
-                  "testIdBnb" &&
+                  "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
                 <StakeBscIDyp
@@ -16264,7 +16309,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={false}
-                  staking={window.constant_stakingidyp_6}
+                  staking={window.constant_stakingidyp_7}
                   listType={listType}
                   finalApr={
                     expiredPools === false
@@ -16277,7 +16322,8 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={wbsc_address}
-                  expiration_time={"15 August 2023"}
+                  expiration_time={"18 July 2024"}
+
                   other_info={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -16320,7 +16366,7 @@ const EarnTopPicks = ({
               topList === "Staking" &&
               chain === "eth" &&
               activePools[cardIndex]?.id ===
-                "testIdEth" ? (
+                "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
               <InitConstantStakingiDYP
                 is_wallet_connected={isConnected}
                 coinbase={coinbase}
@@ -16330,7 +16376,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={false}
-                staking={window.constant_staking_idyp_3}
+                staking={window.constant_staking_idyp_5}
                 listType={listType}
                 finalApr={activePools[cardIndex]?.apy_performancefee}
                 apr={
@@ -16339,7 +16385,8 @@ const EarnTopPicks = ({
                     : expiredDYPPools[cardIndex]?.apy_percent
                 }
                 liquidity={eth_address}
-                expiration_time={"15 August 2023"}
+                expiration_time={"18 July 2024"}
+
                 other_info={
                   cardIndex !== undefined
                     ? expiredPools === false
@@ -17123,7 +17170,7 @@ const EarnTopPicks = ({
                   topList === "Staking" &&
                   chain === "avax" &&
                   activePools[cardIndex]?.id ===
-                    "testIdAvax" ? (
+                    "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
                     coinbase={coinbase}
@@ -17132,7 +17179,7 @@ const EarnTopPicks = ({
                     handleConnection={handleConnection}
                     handleSwitchNetwork={handleSwitchNetwork}
                     expired={false}
-                    staking={window.constant_staking_idypavax_5}
+                    staking={window.constant_staking_idypavax_7}
                     listType={listType}
                     finalApr={
                       expiredPools === false
@@ -17145,7 +17192,8 @@ const EarnTopPicks = ({
                         : expiredDYPPools[cardIndex]?.apy_percent
                     }
                     liquidity={avax_address}
-                    expiration_time={"15 August 2023"}
+                    expiration_time={"18 July 2024"}
+
                     other_info={
                       cardIndex !== undefined
                         ? expiredPools === false
@@ -17183,7 +17231,7 @@ const EarnTopPicks = ({
                   />
                 ) : activeCard7 &&
                 activePools[cardIndex]?.id ===
-                  "testIdBnb" &&
+                  "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
                 <StakeBscIDyp
@@ -17194,7 +17242,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={false}
-                  staking={window.constant_stakingidyp_6}
+                  staking={window.constant_stakingidyp_7}
                   listType={listType}
                   finalApr={
                     expiredPools === false
@@ -17207,7 +17255,8 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={wbsc_address}
-                  expiration_time={"15 August 2023"}
+                  expiration_time={"18 July 2024"}
+
                   other_info={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -17250,7 +17299,7 @@ const EarnTopPicks = ({
               topList === "Staking" &&
               chain === "eth" &&
               activePools[cardIndex]?.id ===
-                "testIdEth" ? (
+                "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
               <InitConstantStakingiDYP
                 is_wallet_connected={isConnected}
                 coinbase={coinbase}
@@ -17260,7 +17309,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={false}
-                staking={window.constant_staking_idyp_3}
+                staking={window.constant_staking_idyp_5}
                 listType={listType}
                 finalApr={activePools[cardIndex]?.apy_performancefee}
                 apr={
@@ -17269,7 +17318,8 @@ const EarnTopPicks = ({
                     : expiredDYPPools[cardIndex]?.apy_percent
                 }
                 liquidity={eth_address}
-                expiration_time={"15 August 2023"}
+                expiration_time={"18 July 2024"}
+
                 other_info={
                   cardIndex !== undefined
                     ? expiredPools === false
@@ -17991,7 +18041,7 @@ const EarnTopPicks = ({
                   topList === "Staking" &&
                   chain === "avax" &&
                   activePools[cardIndex]?.id ===
-                    "testIdAvax" ? (
+                    "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
                     coinbase={coinbase}
@@ -18000,7 +18050,7 @@ const EarnTopPicks = ({
                     handleConnection={handleConnection}
                     handleSwitchNetwork={handleSwitchNetwork}
                     expired={false}
-                    staking={window.constant_staking_idypavax_5}
+                    staking={window.constant_staking_idypavax_7}
                     listType={listType}
                     finalApr={
                       expiredPools === false
@@ -18013,7 +18063,8 @@ const EarnTopPicks = ({
                         : expiredDYPPools[cardIndex]?.apy_percent
                     }
                     liquidity={avax_address}
-                    expiration_time={"15 August 2023"}
+                    expiration_time={"18 July 2024"}
+
                     other_info={
                       cardIndex !== undefined
                         ? expiredPools === false
@@ -18051,7 +18102,7 @@ const EarnTopPicks = ({
                   />
                 ) : activeCard8 &&
                 activePools[cardIndex]?.id ===
-                  "testIdBnb" &&
+                  "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
                 <StakeBscIDyp
@@ -18062,7 +18113,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={false}
-                  staking={window.constant_stakingidyp_6}
+                  staking={window.constant_stakingidyp_7}
                   listType={listType}
                   finalApr={
                     expiredPools === false
@@ -18075,7 +18126,8 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={wbsc_address}
-                  expiration_time={"15 August 2023"}
+                  expiration_time={"18 July 2024"}
+
                   other_info={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -18118,7 +18170,7 @@ const EarnTopPicks = ({
               topList === "Staking" &&
               chain === "eth" &&
               activePools[cardIndex]?.id ===
-                "testIdEth" ? (
+                "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
               <InitConstantStakingiDYP
                 is_wallet_connected={isConnected}
                 coinbase={coinbase}
@@ -18128,7 +18180,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={false}
-                staking={window.constant_staking_idyp_3}
+                staking={window.constant_staking_idyp_5}
                 listType={listType}
                 finalApr={activePools[cardIndex]?.apy_performancefee}
                 apr={
@@ -18137,7 +18189,8 @@ const EarnTopPicks = ({
                     : expiredDYPPools[cardIndex]?.apy_percent
                 }
                 liquidity={eth_address}
-                expiration_time={"15 August 2023"}
+                expiration_time={"18 July 2024"}
+
                 other_info={
                   cardIndex !== undefined
                     ? expiredPools === false
@@ -18835,7 +18888,7 @@ const EarnTopPicks = ({
                   topList === "Staking" &&
                   chain === "avax" &&
                   activePools[cardIndex]?.id ===
-                    "testIdAvax" ? (
+                    "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
                     coinbase={coinbase}
@@ -18844,7 +18897,7 @@ const EarnTopPicks = ({
                     handleConnection={handleConnection}
                     handleSwitchNetwork={handleSwitchNetwork}
                     expired={false}
-                    staking={window.constant_staking_idypavax_5}
+                    staking={window.constant_staking_idypavax_7}
                     listType={listType}
                     finalApr={
                       expiredPools === false
@@ -18857,7 +18910,8 @@ const EarnTopPicks = ({
                         : expiredDYPPools[cardIndex]?.apy_percent
                     }
                     liquidity={avax_address}
-                    expiration_time={"15 August 2023"}
+                    expiration_time={"18 July 2024"}
+
                     other_info={
                       cardIndex !== undefined
                         ? expiredPools === false
@@ -18895,7 +18949,7 @@ const EarnTopPicks = ({
                   />
                 ) : activeCard9 &&
                 activePools[cardIndex]?.id ===
-                  "testIdBnb" &&
+                  "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
                 <StakeBscIDyp
@@ -18906,7 +18960,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={false}
-                  staking={window.constant_stakingidyp_6}
+                  staking={window.constant_stakingidyp_7}
                   listType={listType}
                   finalApr={
                     expiredPools === false
@@ -18919,7 +18973,8 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={wbsc_address}
-                  expiration_time={"15 August 2023"}
+                  expiration_time={"18 July 2024"}
+
                   other_info={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -18962,7 +19017,7 @@ const EarnTopPicks = ({
               topList === "Staking" &&
               chain === "eth" &&
               activePools[cardIndex]?.id ===
-                "testIdEth" ? (
+                "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
               <InitConstantStakingiDYP
                 is_wallet_connected={isConnected}
                 coinbase={coinbase}
@@ -18972,7 +19027,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={false}
-                staking={window.constant_staking_idyp_3}
+                staking={window.constant_staking_idyp_5}
                 listType={listType}
                 finalApr={activePools[cardIndex]?.apy_performancefee}
                 apr={
@@ -18981,7 +19036,8 @@ const EarnTopPicks = ({
                     : expiredDYPPools[cardIndex]?.apy_percent
                 }
                 liquidity={eth_address}
-                expiration_time={"15 August 2023"}
+                expiration_time={"18 July 2024"}
+
                 other_info={
                   cardIndex !== undefined
                     ? expiredPools === false
@@ -19617,7 +19673,7 @@ const EarnTopPicks = ({
                   topList === "Staking" &&
                   chain === "avax" &&
                   activePools[cardIndex]?.id ===
-                    "testIdAvax" ? (
+                    "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
                     coinbase={coinbase}
@@ -19626,7 +19682,7 @@ const EarnTopPicks = ({
                     handleConnection={handleConnection}
                     handleSwitchNetwork={handleSwitchNetwork}
                     expired={false}
-                    staking={window.constant_staking_idypavax_5}
+                    staking={window.constant_staking_idypavax_7}
                     listType={listType}
                     finalApr={
                       expiredPools === false
@@ -19639,7 +19695,8 @@ const EarnTopPicks = ({
                         : expiredDYPPools[cardIndex]?.apy_percent
                     }
                     liquidity={avax_address}
-                    expiration_time={"15 August 2023"}
+                    expiration_time={"18 July 2024"}
+
                     other_info={
                       cardIndex !== undefined
                         ? expiredPools === false
@@ -19677,7 +19734,7 @@ const EarnTopPicks = ({
                   />
                 ) : activeCard10 &&
                 activePools[cardIndex]?.id ===
-                  "testIdBnb" &&
+                  "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
                 <StakeBscIDyp
@@ -19688,7 +19745,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={false}
-                  staking={window.constant_stakingidyp_6}
+                  staking={window.constant_stakingidyp_7}
                   listType={listType}
                   finalApr={
                     expiredPools === false
@@ -19701,7 +19758,8 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={wbsc_address}
-                  expiration_time={"15 August 2023"}
+                  expiration_time={"18 July 2024"}
+
                   other_info={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -19744,7 +19802,7 @@ const EarnTopPicks = ({
               topList === "Staking" &&
               chain === "eth" &&
               activePools[cardIndex]?.id ===
-                "testIdEth" ? (
+                "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
               <InitConstantStakingiDYP
                 is_wallet_connected={isConnected}
                 coinbase={coinbase}
@@ -19754,7 +19812,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={false}
-                staking={window.constant_staking_idyp_3}
+                staking={window.constant_staking_idyp_5}
                 listType={listType}
                 finalApr={activePools[cardIndex]?.apy_performancefee}
                 apr={
@@ -19763,7 +19821,8 @@ const EarnTopPicks = ({
                     : expiredDYPPools[cardIndex]?.apy_percent
                 }
                 liquidity={eth_address}
-                expiration_time={"15 August 2023"}
+                expiration_time={"18 July 2024"}
+
                 other_info={
                   cardIndex !== undefined
                     ? expiredPools === false
@@ -20397,7 +20456,7 @@ const EarnTopPicks = ({
                   topList === "Staking" &&
                   chain === "avax" &&
                   activePools[cardIndex]?.id ===
-                    "testIdAvax" ? (
+                    "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
                     coinbase={coinbase}
@@ -20406,7 +20465,7 @@ const EarnTopPicks = ({
                     handleConnection={handleConnection}
                     handleSwitchNetwork={handleSwitchNetwork}
                     expired={false}
-                    staking={window.constant_staking_idypavax_5}
+                    staking={window.constant_staking_idypavax_7}
                     listType={listType}
                     finalApr={
                       expiredPools === false
@@ -20419,7 +20478,8 @@ const EarnTopPicks = ({
                         : expiredDYPPools[cardIndex]?.apy_percent
                     }
                     liquidity={avax_address}
-                    expiration_time={"15 August 2023"}
+                    expiration_time={"18 July 2024"}
+
                     other_info={
                       cardIndex !== undefined
                         ? expiredPools === false
@@ -20457,7 +20517,7 @@ const EarnTopPicks = ({
                   />
                 ) : activeCard11 &&
                 activePools[cardIndex]?.id ===
-                  "testIdBnb" &&
+                  "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
                 <StakeBscIDyp
@@ -20468,7 +20528,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={false}
-                  staking={window.constant_stakingidyp_6}
+                  staking={window.constant_stakingidyp_7}
                   listType={listType}
                   finalApr={
                     expiredPools === false
@@ -20481,7 +20541,8 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={wbsc_address}
-                  expiration_time={"15 August 2023"}
+                  expiration_time={"18 July 2024"}
+
                   other_info={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -20524,7 +20585,7 @@ const EarnTopPicks = ({
               topList === "Staking" &&
               chain === "eth" &&
               activePools[cardIndex]?.id ===
-                "testIdEth" ? (
+                "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
               <InitConstantStakingiDYP
                 is_wallet_connected={isConnected}
                 coinbase={coinbase}
@@ -20534,7 +20595,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={false}
-                staking={window.constant_staking_idyp_3}
+                staking={window.constant_staking_idyp_5}
                 listType={listType}
                 finalApr={activePools[cardIndex]?.apy_performancefee}
                 apr={
@@ -20543,7 +20604,8 @@ const EarnTopPicks = ({
                     : expiredDYPPools[cardIndex]?.apy_percent
                 }
                 liquidity={eth_address}
-                expiration_time={"15 August 2023"}
+                expiration_time={"18 July 2024"}
+
                 other_info={
                   cardIndex !== undefined
                     ? expiredPools === false
@@ -21178,7 +21240,7 @@ const EarnTopPicks = ({
                   topList === "Staking" &&
                   chain === "avax" &&
                   activePools[cardIndex]?.id ===
-                    "testIdAvax" ? (
+                    "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
                   <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
                     coinbase={coinbase}
@@ -21187,7 +21249,7 @@ const EarnTopPicks = ({
                     handleConnection={handleConnection}
                     handleSwitchNetwork={handleSwitchNetwork}
                     expired={false}
-                    staking={window.constant_staking_idypavax_5}
+                    staking={window.constant_staking_idypavax_7}
                     listType={listType}
                     finalApr={
                       expiredPools === false
@@ -21200,7 +21262,8 @@ const EarnTopPicks = ({
                         : expiredDYPPools[cardIndex]?.apy_percent
                     }
                     liquidity={avax_address}
-                    expiration_time={"15 August 2023"}
+                    expiration_time={"18 July 2024"}
+
                     other_info={
                       cardIndex !== undefined
                         ? expiredPools === false
@@ -21238,7 +21301,7 @@ const EarnTopPicks = ({
                   />
                 ) : activeCard12 &&
                 activePools[cardIndex]?.id ===
-                  "testIdBnb" &&
+                  "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
                 <StakeBscIDyp
@@ -21249,7 +21312,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={false}
-                  staking={window.constant_stakingidyp_6}
+                  staking={window.constant_stakingidyp_7}
                   listType={listType}
                   finalApr={
                     expiredPools === false
@@ -21262,7 +21325,8 @@ const EarnTopPicks = ({
                       : expiredDYPPools[cardIndex]?.apy_percent
                   }
                   liquidity={wbsc_address}
-                  expiration_time={"15 August 2023"}
+                  expiration_time={"18 July 2024"}
+
                   other_info={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -21305,7 +21369,7 @@ const EarnTopPicks = ({
               topList === "Staking" &&
               chain === "eth" &&
               activePools[cardIndex]?.id ===
-                "testIdEth" ? (
+                "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
               <InitConstantStakingiDYP
                 is_wallet_connected={isConnected}
                 coinbase={coinbase}
@@ -21315,7 +21379,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={false}
-                staking={window.constant_staking_idyp_3}
+                staking={window.constant_staking_idyp_5}
                 listType={listType}
                 finalApr={activePools[cardIndex]?.apy_performancefee}
                 apr={
@@ -21324,7 +21388,8 @@ const EarnTopPicks = ({
                     : expiredDYPPools[cardIndex]?.apy_percent
                 }
                 liquidity={eth_address}
-                expiration_time={"15 August 2023"}
+                expiration_time={"18 July 2024"}
+
                 other_info={
                   cardIndex !== undefined
                     ? expiredPools === false
