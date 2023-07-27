@@ -65,7 +65,7 @@ function getVaultContract(address) {
 function getPrices(coingecko_ids = "ethereum", vs_currencies = "usd") {
   return new Promise((resolve, reject) => {
     window.$.get(
-      `https://api.coingecko.com/api/v3/simple/price?ids=${coingecko_ids}&vs_currencies=${vs_currencies}`
+      `https://pro-api.coingecko.com/api/v3/simple/price?ids=${coingecko_ids}&vs_currencies=${vs_currencies}&x_cg_pro_api_key=CG-4cvtCNDCA4oLfmxagFJ84qev`
     )
       .then((result) => {
         resolve(result);
@@ -1317,7 +1317,7 @@ class VAULT {
     UNDERLYING_DECIMALS = 18,
     PLATFORM_TOKEN_DECIMALS = 18
   ) => {
-    let ethBalance = await window.ethweb3.eth.getBalance(this._address);
+    let ethBalance = await window.web3.eth.getBalance(this._address);
     let underlyingBalance1 = await this.totalDepositedTokens();
     let underlyingBalance2 = await (
       await getTokenContract(this.tokenAddress)
@@ -1341,7 +1341,7 @@ class VAULT {
       window.config.cg_ids[window.config.token_dyp_address.toLowerCase()];
     let priceIds = `ethereum,${underlyingId},${platformTokenId}`;
     let prices = await getPrices(priceIds);
-
+    console.log(prices)
     let ethUsdValue = ethBalance * prices["ethereum"]["usd"] || 0;
     let underlyingUsdValue =
       underlyingBalance * prices[underlyingId]["usd"] || 0;
@@ -1582,7 +1582,7 @@ class VAULT_NEW {
 
       apyPercent =
         platformTokenApyPercent + compoundApyPercent + feesApyPercent || 0;
-    }
+    } 
 
     return { tvl_usd: tvlUsd, apy_percent: apyPercent };
   };
@@ -1839,7 +1839,11 @@ window.config = {
   token_dai_address: "0x6B175474E89094C44Da98b954EedeAC495271d0F",
 
   vault_weth_address: "0x28eabA060E5EF0d41eeB20d41aafaE8f685739d9",
+  vault_wethnew_address: "0xf4389cd022a0188035f366426364cc079695c436",
+
   vault_wbtc_address: "0x2F2cff66fEB7320FC9Adf91b7B74bFb5a80C7C35",
+  vault_wbtcnew_address: "0x2e660644a5582d23ba274cf406488e18bcd55b06",
+
   vault_usdt_address: "0xA987aEE0189Af45d5FA95a9FBBCB4374228f375E",
   vault_usdc_address: "0x251B9ee6cEd97565A821C5608014a107ddc9C98F",
   vault_dai_address: "0x54F30bFfeb925F47225e148f0bAe17a452d6b8c0",
@@ -30947,8 +30951,16 @@ window.vault_weth = new VAULT_NEW(
   window.config.vault_weth_address,
   window.config.token_weth_address
 );
+window.vault_wethnew = new VAULT_NEW(
+  window.config.vault_wethnew_address,
+  window.config.token_weth_address
+);
 window.vault_wbtc = new VAULT_NEW(
   window.config.vault_wbtc_address,
+  window.config.token_wbtc_address
+);
+window.vault_wbtcnew = new VAULT_NEW(
+  window.config.vault_wbtcnew_address,
   window.config.token_wbtc_address
 );
 window.vault_usdt = new VAULT_NEW(
@@ -31125,7 +31137,7 @@ function wait(ms) {
 function getPrice(coingecko_id = "ethereum", vs_currency = "usd") {
   return new Promise((resolve, reject) => {
     window.$.get(
-      `https://api.coingecko.com/api/v3/simple/price?ids=${coingecko_id}&vs_currencies=${vs_currency}`
+      `https://pro-api.coingecko.com/api/v3/simple/price?ids=${coingecko_id}&vs_currencies=${vs_currency}&x_cg_pro_api_key=CG-4cvtCNDCA4oLfmxagFJ84qev`
     )
       .then((result) => {
         resolve(result[coingecko_id][vs_currency]);

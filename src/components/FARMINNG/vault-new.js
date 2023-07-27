@@ -192,7 +192,7 @@ const Vault = ({
     );
     setvault_contract(vault_contr);
   };
-
+  
   const refreshBalance = async () => {
     let coinbase = coinbase2;
 
@@ -212,7 +212,8 @@ const Vault = ({
 
     try {
       let _bal = token.balanceOf(coinbase);
-      if (vault) {
+ 
+      if (vault && vault_contract) {
         let _stakingTime = vault_contract.methods.depositTime(coinbase).call();
 
         let _dTokens = vault_contract.methods
@@ -255,7 +256,6 @@ const Vault = ({
         let tvlUSD_final = parseInt(tvlUSD) + parseInt(tvl_usd);
 
         let tvl_usd_final = getFormattedNumber(tvlUSD_final, 2);
-        // console.log(tvl_usd_final)
         // settvl_usd(tvl_usd_final)
 
         const balance_formatted = new BigNumber(token_balance)
@@ -269,7 +269,7 @@ const Vault = ({
         let depositedTokens_formatted = new BigNumber(depositedTokens)
           .div(10 ** TOKEN_DECIMALS)
           .toString(10);
-
+          
         setdepositedTokens(getFormattedNumber(depositedTokens_formatted, 6));
 
         setlastClaimedTime(lastClaimedTime);
@@ -361,7 +361,7 @@ const Vault = ({
       .then((platform_token_balance) =>
         setplatform_token_balance(platform_token_balance)
       );
-    if (vault) {
+    if (vault && vault_contract) {
       await vault_contract.methods
         .totalDepositedTokens()
         .call()
@@ -500,21 +500,18 @@ const Vault = ({
     }
     getTokenPrice();
     fetchTvl();
-    fetch(
-      "https://data-api.defipulse.com/api/v1/egs/api/ethgasAPI.json?api-key=0cb24df6d59351fdfb85e84c264c1d89dada314bbd85bbb5bea318f7f995"
-    )
-      .then((res) => res.json())
-      .then((data) => setgasPrice(data.fast / 10))
-      .catch(console.error);
+    // fetch(
+    //   "https://data-api.defipulse.com/api/v1/egs/api/ethgasAPI.json?api-key=0cb24df6d59351fdfb85e84c264c1d89dada314bbd85bbb5bea318f7f995"
+    // )
+    //   .then((res) => res.json())
+    //   .then((data) => setgasPrice(data.fast / 10))
+    //   .catch(console.error);
   }, [coinbase, coinbase2, vault_contract, vault]);
 
-  useEffect(() => {
-    const interval = setInterval(async () => {
-      refreshBalance();
-    }, 1000);
 
-    return () => clearInterval(interval);
-  }, [coinbase, coinbase2]);
+  useEffect(() => {
+      refreshBalance();
+  }, [coinbase, coinbase2, vault_contract]);
 
   useEffect(() => {
     if (vault) {
@@ -641,6 +638,7 @@ const Vault = ({
       .then(() => {
         setwithdrawStatus("success");
         setwithdrawLoading(false);
+        refreshBalance();
       })
       .catch((e) => {
         setwithdrawLoading(false);
@@ -703,6 +701,7 @@ const Vault = ({
       .then(() => {
         setdepositLoading(false);
         setdepositStatus("success");
+        refreshBalance();
       })
       .catch((e) => {
         setdepositLoading(false);
@@ -786,6 +785,7 @@ const Vault = ({
       .then(() => {
         setclaimStatus("success");
         setclaimLoading(false);
+        refreshBalance();
       })
       .catch((e) => {
         setclaimStatus("failed");
@@ -902,6 +902,7 @@ const Vault = ({
   const focusInput = (field) => {
     document.getElementById(field).focus();
   };
+  
 
   return (
     <div className="container-lg p-0">
@@ -1494,8 +1495,8 @@ const Vault = ({
                   <span className="stats-card-title">My share</span>
                   <h6 className="stats-card-content">
                     {getFormattedNumber(
-                      !totaldepositedTokens
-                        ? "..."
+                      !totaldepositedTokens || totaldepositedTokens === '0'
+                        ? "0.00"
                         : (depositedTokens / totaldepositedTokens) * 100,
                       2
                     )}
