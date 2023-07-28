@@ -55,7 +55,7 @@ const VAULT_ADDRESSES_LIST = LP_ID_LIST.map((id) => id.split("-")[1]);
 window.LP_ID_LIST = LP_ID_LIST;
 
 function getTokenContract(address) {
-  return getContract({ key: 'token', address, ABI: window.TOKEN_ABI });
+  return getContract({ key: "token", address, ABI: window.TOKEN_ABI });
 }
 
 function getVaultContract(address) {
@@ -1341,7 +1341,7 @@ class VAULT {
       window.config.cg_ids[window.config.token_dyp_address.toLowerCase()];
     let priceIds = `ethereum,${underlyingId},${platformTokenId}`;
     let prices = await getPrices(priceIds);
-    console.log(prices)
+    console.log(prices);
     let ethUsdValue = ethBalance * prices["ethereum"]["usd"] || 0;
     let underlyingUsdValue =
       underlyingBalance * prices[underlyingId]["usd"] || 0;
@@ -1468,18 +1468,10 @@ class VAULT_NEW {
     ["claim", "getExchangeRateCurrent", "deposit", "withdraw"].forEach(
       (fn_name) => {
         this[fn_name] = async function (args, value = 0) {
-          const gasPrice = await window.web3.eth.getGasPrice();
-          const currentGwei = window.web3.utils.fromWei(gasPrice, 'gwei');
-          const increasedGwei = parseInt(currentGwei) + 3;
-          const transactionParameters = {
-            gasPrice: window.web3.utils.toWei(increasedGwei.toString(), 'gwei'),
-          };
           let contract = await getVaultContract(vaultAddress);
-          const estimateGas = 800000;
-          transactionParameters.gas = estimateGas.toString();
           return await contract.methods[fn_name](...args).send({
             value,
-            from: await getCoinbase(), ...transactionParameters
+            from: await getCoinbase(),
           });
         };
       }
@@ -1590,7 +1582,7 @@ class VAULT_NEW {
 
       apyPercent =
         platformTokenApyPercent + compoundApyPercent + feesApyPercent || 0;
-    } 
+    }
 
     return { tvl_usd: tvlUsd, apy_percent: apyPercent };
   };
@@ -1726,7 +1718,6 @@ window.config = {
   constant_stakingold_160_address: "0xd4be7a106ed193bee39d6389a481ec76027b2660",
   constant_stakingold_170_address: "0x41b8a58f4307ea722ad0a964966caa18a6011d93",
 
-
   /*buyback*/
   buyback_staking_address: "0xe5262f38bf13410a79149cb40429f8dc5e830542",
   slippage_tolerance_percent: 3, // 3% slippage tolerance
@@ -1765,12 +1756,11 @@ window.config = {
   token_newavax_address: "0x66eecc97203704d9e2db4a431cb0e9ce92539d5a",
   token_newbsc_address: "0x1bC61d08A300892e784eD37b2d0E63C85D1d57fb",
 
-
   constant_stakingnew_newavaxactive1_address:
-  "0x245978ea5EFc6eec44AF03032F6318a81190DCbF",
+    "0x245978ea5EFc6eec44AF03032F6318a81190DCbF",
 
   constant_stakingnew_newbscactive1_address:
-  "0x52b638ee4c0db759234f792b0ad59a8ce95737f3",
+    "0x52b638ee4c0db759234f792b0ad59a8ce95737f3",
 
   constant_stakingnew_newavax5_address:
     "0x1cA9Fc98f3b997E08bC04691414e33B1835aa7e5",
@@ -1861,7 +1851,6 @@ window.config = {
   vault_dai_address: "0x54F30bFfeb925F47225e148f0bAe17a452d6b8c0",
   vault_dainew_address: "0xf656dc256c60eb8417366015ee9217462b5a795d",
 
-
   subscription_address: "0x5078a4912f6e0d74dcf99482ac5910df123e9b4b",
   subscriptioneth_address: "0x6cc47d895aa6da6012c2b6bfd2f6af3ebbf1d2e4",
   subscriptionbnb_address: "0x0ec59a2d18e1e83ab393b3ac9d7d6d28cbff0d35",
@@ -1901,7 +1890,7 @@ window.config = {
   constant_stakingidypavax_40_address:
     "0x6eb643813f0b4351b993f98bdeaef6e0f79573e9",
 
-    constant_stakingidypavax_50_address:
+  constant_stakingidypavax_50_address:
     "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712",
 
   constant_stakingnew_newavax1_address:
@@ -1918,7 +1907,7 @@ window.config = {
     "0xaf411bf994da1435a3150b874395b86376c5f2d5",
   constant_stakingidypavax_6_address:
     "0xd13bdc0c9a9931cf959739631b1290b6bee0c018",
-    constant_stakingidypavax_7_address:
+  constant_stakingidypavax_7_address:
     "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d",
 
   //Constant Staking iDYP bsc
@@ -1927,7 +1916,6 @@ window.config = {
   constant_stakingidyp_5_address: "0x7e766f7005c7a9e74123b156697b582eecb8d2d7",
   constant_stakingidyp_6_address: "0x4c04e53f9aaa17fc2c914694b4aae57a9d1be445",
   constant_stakingidyp_7_address: "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d",
-
 
   submission_form_link: "https://forms.gle/SFX1DyUh8TcNeysz6",
 
@@ -2179,7 +2167,7 @@ window.config = {
   constant_stakingbsc_new13_address:
     "0xaF411BF994dA1435A3150B874395B86376C5f2d5",
 
-    constant_stakingbsc_new14_address:
+  constant_stakingbsc_new14_address:
     "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487",
 };
 
@@ -2324,7 +2312,6 @@ window.CONSTANT_STAKINGBSC_NEW14_ABI = window.CONSTANT_STAKING_OLD_ABI;
 window.CONSTANT_STAKINGBSC_NEW12_ABI = window.CONSTANT_STAKINGBSC_NEW_ABI;
 window.CONSTANT_STAKINGBSC_NEW13_ABI = window.CONSTANT_STAKINGBSC_NEW_ABI;
 
-
 window.CONSTANT_STAKINGOLD_130 = window.CONSTANT_STAKING_OLD_ABI;
 window.CONSTANT_STAKINGOLD_140 = window.CONSTANT_STAKING_OLD_ABI;
 
@@ -2434,13 +2421,11 @@ window.constant_stakingidyp_7 = new CONSTANT_STAKINGBSC_NEW(
   "CONSTANT_STAKINGIDYP_7"
 );
 
-
 window.CONSTANT_STAKINGIDYP_1_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYP_2_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYP_5_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYP_6_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYP_7_ABI = window.CONSTANT_STAKING_IDYP_ABI;
-
 
 window.constant_staking_new1 = new CONSTANT_STAKING_NEW(
   "CONSTANT_STAKINGNEW_NEW1"
@@ -2463,7 +2448,6 @@ window.constant_staking_new11 = new CONSTANT_STAKING_NEWAVAX(
   "CONSTANT_STAKINGIDYPAVAX_4"
 );
 
-
 window.constant_staking_new12 = new CONSTANT_STAKING_NEWAVAX(
   "CONSTANT_STAKINGIDYPAVAX_40"
 );
@@ -2476,7 +2460,6 @@ window.CONSTANT_STAKINGIDYPAVAX_3_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYPAVAX_4_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYPAVAX_40_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYPAVAX_50_ABI = window.CONSTANT_STAKING_IDYP_ABI;
-
 
 window.CONSTANT_STAKINGNEW_NEW1_ABI = window.CONSTANT_STAKINGNEW_ABI;
 window.CONSTANT_STAKINGNEW_NEW2_ABI = window.CONSTANT_STAKINGNEW_ABI;
@@ -2553,7 +2536,9 @@ window.constant_staking_newbscactive1 = new CONSTANT_STAKING_NEW(
   "CONSTANT_STAKINGNEW_NEWBSCACTIVE1"
 );
 
-window.constant_staking_newavaxactive1 = new CONSTANT_STAKING_NEW('CONSTANT_STAKINGNEW_NEWAVAXACTIVE1')
+window.constant_staking_newavaxactive1 = new CONSTANT_STAKING_NEW(
+  "CONSTANT_STAKINGNEW_NEWAVAXACTIVE1"
+);
 
 window.constant_staking_newavax6 = new CONSTANT_STAKING_NEW(
   "CONSTANT_STAKINGNEW_NEWAVAX6"
@@ -2947,7 +2932,6 @@ window.CONSTANT_STAKINGIDYPAVAX_2_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYPAVAX_5_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYPAVAX_6_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYPAVAX_7_ABI = window.CONSTANT_STAKING_IDYP_ABI;
-
 
 function getBridgeContract(address) {
   return getContract({ address, ABI: window.BRIDGE_ABI });
@@ -31518,7 +31502,6 @@ Object.keys(window.config)
       k.startsWith("constant_stakingidypavax_4") ||
       k.startsWith("constant_stakingidypavax_40") ||
       k.startsWith("constant_stakingidypavax_50") ||
-
       k.startsWith("constant_stakingnew_newavax1") ||
       k.startsWith("constant_stakingnewbsc_new3") ||
       k.startsWith("constant_stakingnewbsc_new4") ||
@@ -31533,7 +31516,6 @@ Object.keys(window.config)
       k.startsWith("constant_stakingbsc_new12") ||
       k.startsWith("constant_stakingbsc_new13") ||
       k.startsWith("constant_stakingbsc_new14") ||
-
       k.startsWith("constant_stakingnew_newavax2") ||
       k.startsWith("constant_stakingdaiavax") ||
       k.startsWith("constant_stakingdaieth") ||
