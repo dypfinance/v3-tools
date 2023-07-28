@@ -17,6 +17,7 @@ import poolStatsIcon from "./assets/poolStatsIcon.svg";
 import poolsCalculatorIcon from "./assets/poolsCalculatorIcon.svg";
 import { ClickAwayListener } from "@material-ui/core";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
+import axios from "axios";
 
 const Vault = ({
   vault,
@@ -212,7 +213,8 @@ const Vault = ({
 
     try {
       let _bal = token.balanceOf(coinbase);
-      if (vault) {
+
+      if (vault && vault_contract) {
         let _stakingTime = vault_contract.methods.depositTime(coinbase).call();
 
         let _dTokens = vault_contract.methods
@@ -255,14 +257,13 @@ const Vault = ({
         let tvlUSD_final = parseInt(tvlUSD) + parseInt(tvl_usd);
 
         let tvl_usd_final = getFormattedNumber(tvlUSD_final, 2);
-        // console.log(tvl_usd_final)
         // settvl_usd(tvl_usd_final)
 
         const balance_formatted = new BigNumber(token_balance)
           .div(10 ** TOKEN_DECIMALS)
           .toString(10);
 
-        settoken_balance(getFormattedNumber(balance_formatted, 6));
+        settoken_balance(balance_formatted);
 
         setstakingTime(stakingTime * 1e3);
 
@@ -270,7 +271,7 @@ const Vault = ({
           .div(10 ** TOKEN_DECIMALS)
           .toString(10);
 
-        setdepositedTokens(getFormattedNumber(depositedTokens_formatted, 6));
+        setdepositedTokens(depositedTokens_formatted);
 
         setlastClaimedTime(lastClaimedTime);
         settotal_stakers(total_stakers);
@@ -361,7 +362,7 @@ const Vault = ({
       .then((platform_token_balance) =>
         setplatform_token_balance(platform_token_balance)
       );
-    if (vault) {
+    if (vault && vault_contract) {
       await vault_contract.methods
         .totalDepositedTokens()
         .call()
@@ -466,31 +467,17 @@ const Vault = ({
   };
 
   const fetchTvl = async () => {
+    const pools = await axios.get(
+      "https://api.dyp.finance/api/get_vault_info"
+    );
+
     if (vault) {
-      const infura_web3 = window.infuraWeb3;
-      let token_contr = new infura_web3.eth.Contract(
-        window.TOKEN_ABI,
-        vault.tokenAddress
-      );
-
-      let token_contridyp = new infura_web3.eth.Contract(
-        window.TOKEN_ABI,
-        window.config.reward_token_idyp_address
-      );
-
-      vault
-        .getTvlUsdAndApyPercent(
-          UNDERLYING_DECIMALS,
-          token_contr,
-          token_contridyp
-        )
-        .then(({ tvl_usd, apy_percent }) => {
-          setapy_percent(apy_percent);
-          settvl_usd(tvl_usd);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      const vaultobj = pools.data.VaultTVLs.filter((obj) => {
+        return obj.contract_address === vault._address;
+      });
+      if (vaultobj) {
+        settvl_usd(vaultobj[0].tvl);
+      }
     }
   };
 
@@ -500,21 +487,17 @@ const Vault = ({
     }
     getTokenPrice();
     fetchTvl();
-    fetch(
-      "https://data-api.defipulse.com/api/v1/egs/api/ethgasAPI.json?api-key=0cb24df6d59351fdfb85e84c264c1d89dada314bbd85bbb5bea318f7f995"
-    )
-      .then((res) => res.json())
-      .then((data) => setgasPrice(data.fast / 10))
-      .catch(console.error);
+    // fetch(
+    //   "https://data-api.defipulse.com/api/v1/egs/api/ethgasAPI.json?api-key=0cb24df6d59351fdfb85e84c264c1d89dada314bbd85bbb5bea318f7f995"
+    // )
+    //   .then((res) => res.json())
+    //   .then((data) => setgasPrice(data.fast / 10))
+    //   .catch(console.error);
   }, [coinbase, coinbase2, vault_contract, vault]);
 
   useEffect(() => {
-    const interval = setInterval(async () => {
-      refreshBalance();
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [coinbase, coinbase2]);
+    refreshBalance();
+  }, [coinbase, coinbase2, vault_contract]);
 
   useEffect(() => {
     if (vault) {
@@ -539,10 +522,10 @@ const Vault = ({
         setdepositStatus("fail");
         seterrorMsg(e?.message);
         setTimeout(() => {
-          depositAmount("");
+          setdepositAmount("");
           setdepositStatus("initial");
           seterrorMsg("");
-        }, 10000);
+        }, 8000);
       });
   };
 
@@ -641,6 +624,7 @@ const Vault = ({
       .then(() => {
         setwithdrawStatus("success");
         setwithdrawLoading(false);
+        refreshBalance();
       })
       .catch((e) => {
         setwithdrawLoading(false);
@@ -685,7 +669,7 @@ const Vault = ({
         setdepositStatus("fail");
         seterrorMsg(e?.message);
         setTimeout(() => {
-          depositAmount("");
+          setdepositAmount("");
           setdepositStatus("initial");
           seterrorMsg("");
         }, 10000);
@@ -703,13 +687,14 @@ const Vault = ({
       .then(() => {
         setdepositLoading(false);
         setdepositStatus("success");
+        refreshBalance();
       })
       .catch((e) => {
         setdepositLoading(false);
         setdepositStatus("fail");
         seterrorMsg(e?.message);
         setTimeout(() => {
-          depositAmount("");
+          setdepositAmount("");
           setdepositStatus("initial");
           seterrorMsg("");
         }, 10000);
@@ -786,6 +771,7 @@ const Vault = ({
       .then(() => {
         setclaimStatus("success");
         setclaimLoading(false);
+        refreshBalance();
       })
       .catch((e) => {
         setclaimStatus("failed");
@@ -799,14 +785,16 @@ const Vault = ({
       });
   };
 
-  const handleSetMaxDeposit = (e) => {
-    // e.preventDefault();
+  const handleSetMaxDeposit = async (e) => {
+    let token_balance2 = await token.balanceOf(coinbase);
 
-    const depositAmount2 = new BigNumber(token_balance)
-      .div(10 ** UNDERLYING_DECIMALS)
-      .toFixed(UNDERLYING_DECIMALS);
+    const balance_formatted = new BigNumber(token_balance2)
+      .div(10 ** TOKEN_DECIMALS)
+      .toString(10)
 
-    setdepositAmount(depositAmount2);
+    if (balance_formatted > 0) {
+      setdepositAmount(balance_formatted);
+    } else setdepositAmount('0');
   };
   const rhandleSetMaxDeposit = (e) => {
     // e.preventDefault();
@@ -823,6 +811,28 @@ const Vault = ({
       .div(10 ** UNDERLYING_DECIMALS)
       .toFixed(UNDERLYING_DECIMALS);
     setwithdrawAmount(withdrawAmount2);
+  };
+
+  const checkApproval = async (amount) => {
+    const result = await window
+      .checkapproveStakePool(coinbase, token._address, vault._address)
+      .then((data) => {
+        console.log(data);
+        return data;
+      });
+
+    let result_formatted = new BigNumber(result)
+      .div(10 ** UNDERLYING_DECIMALS)
+      .toFixed(UNDERLYING_DECIMALS);
+console.log(Number(result_formatted),Number(amount))
+    if (
+      Number(result_formatted) >= Number(amount) &&
+      Number(result_formatted) !== 0
+    ) {
+      setdepositStatus("deposit");
+    } else {
+      setdepositStatus("initial");
+    }
   };
 
   const getAPY = () => {
@@ -1112,7 +1122,7 @@ const Vault = ({
                     Balance:
                     <b>
                       {token_balance !== "..."
-                        ? token_balance
+                        ? getFormattedNumber(token_balance, 6)
                         : getFormattedNumber(0, 6)}{" "}
                       {token_symbol}
                     </b>
@@ -1150,10 +1160,13 @@ const Vault = ({
                         autoComplete="off"
                         value={
                           Number(depositAmount) > 0
-                            ? depositAmount
-                            : depositAmount
+                            ? depositAmount.slice(0, depositAmount.indexOf('.')+7)
+                            : depositAmount.slice(0, depositAmount.indexOf('.')+7)
                         }
-                        onChange={(e) => setdepositAmount(e.target.value)}
+                        onChange={(e) => {
+                          setdepositAmount(e.target.value);
+                          checkApproval(e.target.value);
+                        }}
                         placeholder=" "
                         className="text-input"
                         style={{ width: "100%" }}
@@ -1302,7 +1315,7 @@ const Vault = ({
                 <div className="form-row d-flex flex-column flex-lg-row gap-2 align-items-start align-items-lg-center justify-content-between">
                   <div className="position-relative">
                     <span>
-                      {pendingDivsEth} {token_symbol}
+                      {getFormattedNumber(pendingDivsEth, 6)} {token_symbol}
                     </span>
                   </div>
                   <button
@@ -1496,7 +1509,9 @@ const Vault = ({
                     {getFormattedNumber(
                       !totaldepositedTokens
                         ? "..."
-                        : (depositedTokens / totaldepositedTokens) * 100,
+                        : (depositedTokens /
+                            (totaldepositedTokens / 10 ** TOKEN_DECIMALS)) *
+                            100,
                       2
                     )}
                     %
@@ -1609,7 +1624,7 @@ const Vault = ({
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">TVL USD</span>
                     <h6 className="stats-card-content">
-                      ${getFormattedNumber(tvlUSD + tvl_usd, 6)} USD
+                      ${getFormattedNumber(tvl_usd, 6)} USD
                     </h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
