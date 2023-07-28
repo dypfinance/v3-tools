@@ -1469,10 +1469,20 @@ class VAULT_NEW {
     ["claim", "getExchangeRateCurrent", "deposit", "withdraw"].forEach(
       (fn_name) => {
         this[fn_name] = async function (args, value = 0) {
+          const gasPrice = await window.web3.eth.getGasPrice();
+          const currentGwei = window.web3.utils.fromWei(gasPrice, 'gwei');
+          const increasedGwei = parseInt(currentGwei) + 3;
+          const transactionParameters = {
+            gasPrice: window.web3.utils.toWei(increasedGwei.toString(), 'gwei'),
+          };
           let contract = await getVaultContract(vaultAddress);
+          console.log(gasPrice,currentGwei,increasedGwei)
+
+          const estimateGas = await contract.methods[fn_name](...args).estimateGas({ from: await getCoinbase() });
+          transactionParameters.gas = estimateGas.toString();
           return await contract.methods[fn_name](...args).send({
             value,
-            from: await getCoinbase(),
+            from: await getCoinbase(), ...transactionParameters
           });
         };
       }

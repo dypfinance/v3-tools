@@ -17,6 +17,7 @@ import poolStatsIcon from "./assets/poolStatsIcon.svg";
 import poolsCalculatorIcon from "./assets/poolsCalculatorIcon.svg";
 import { ClickAwayListener } from "@material-ui/core";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
+import axios from "axios";
 
 const Vault = ({
   vault,
@@ -466,31 +467,17 @@ const Vault = ({
   };
 
   const fetchTvl = async () => {
+    const pools = await axios.get(
+      "https://api2.dyp.finance/api/get_vault_info"
+    );
+
     if (vault) {
-      const infura_web3 = window.infuraWeb3;
-      let token_contr = new infura_web3.eth.Contract(
-        window.TOKEN_ABI,
-        vault.tokenAddress
-      );
-
-      let token_contridyp = new infura_web3.eth.Contract(
-        window.TOKEN_ABI,
-        window.config.reward_token_idyp_address
-      );
-
-      vault
-        .getTvlUsdAndApyPercent(
-          UNDERLYING_DECIMALS,
-          token_contr,
-          token_contridyp
-        )
-        .then(({ tvl_usd, apy_percent }) => {
-          setapy_percent(apy_percent);
-          settvl_usd(tvl_usd);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      const vaultobj = pools.data.VaultTVLs.filter((obj) => {
+        return obj.contract_address === vault._address;
+      });
+      if (vaultobj) {
+        settvl_usd(vaultobj[0].tvl);
+      }
     }
   };
 
@@ -682,7 +669,7 @@ const Vault = ({
         setdepositStatus("fail");
         seterrorMsg(e?.message);
         setTimeout(() => {
-          depositAmount("");
+          setdepositAmount("");
           setdepositStatus("initial");
           seterrorMsg("");
         }, 10000);
@@ -707,7 +694,7 @@ const Vault = ({
         setdepositStatus("fail");
         seterrorMsg(e?.message);
         setTimeout(() => {
-          depositAmount("");
+          setdepositAmount("");
           setdepositStatus("initial");
           seterrorMsg("");
         }, 10000);
@@ -799,9 +786,7 @@ const Vault = ({
   };
 
   const handleSetMaxDeposit = async (e) => {
-    let token_balance2 = await token.balanceOf(
-      coinbase
-    );
+    let token_balance2 = await token.balanceOf(coinbase);
 
     const balance_formatted = new BigNumber(token_balance2)
       .div(10 ** TOKEN_DECIMALS)
@@ -830,11 +815,7 @@ const Vault = ({
 
   const checkApproval = async (amount) => {
     const result = await window
-      .checkapproveStakePool(
-        coinbase,
-        token._address,
-        vault._address
-      )
+      .checkapproveStakePool(coinbase, token._address, vault._address)
       .then((data) => {
         console.log(data);
         return data;
@@ -1643,7 +1624,7 @@ const Vault = ({
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">TVL USD</span>
                     <h6 className="stats-card-content">
-                      ${getFormattedNumber(tvlUSD + tvl_usd, 6)} USD
+                      ${getFormattedNumber(tvl_usd, 6)} USD
                     </h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">

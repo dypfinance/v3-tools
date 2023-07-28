@@ -55,7 +55,7 @@ const EarnTopPicks = ({
   const vault = [
     {
       icon: "ethereum.svg",
-      pair_name: "ETH",
+      pair_name: "WETH",
       apy_percent: "3 - 13",
       tvl_usd: ``,
       lock_time: "No lock",
@@ -106,7 +106,7 @@ const EarnTopPicks = ({
   const vaultNew = [
     {
       icon: "ethereum.svg",
-      pair_name: "ETH",
+      pair_name: "WETH",
       apy_percent: "3 - 5",
       tvl_usd: ``,
       lock_time: "No lock",
