@@ -55,7 +55,8 @@ const VAULT_ADDRESSES_LIST = LP_ID_LIST.map((id) => id.split("-")[1]);
 window.LP_ID_LIST = LP_ID_LIST;
 
 function getTokenContract(address) {
-  return getContract({ key: null, address, ABI: window.TOKEN_ABI });
+  console.log(address)
+  return getContract({ key: 'token', address, ABI: window.TOKEN_ABI });
 }
 
 function getVaultContract(address) {

@@ -116,13 +116,14 @@ const EarnTopPicks = ({
     {
       icon: "wbtc.svg",
       pair_name: "WBTC",
-      apy_percent: "3 - 5",
+      apy_percent: "3.3 - 4.5",
       tvl_usd: ``,
       lock_time: "No lock",
-    },    {
+    },
+    {
       icon: "usdc.svg",
       pair_name: "USDC",
-      apy_percent: "8 - 22",
+      apy_percent: "3.5 - 5",
       tvl_usd: ``,
       lock_time: "No lock",
       new_badge: false,
@@ -131,7 +132,7 @@ const EarnTopPicks = ({
     {
       icon: "usdt.svg",
       pair_name: "USDT",
-      apy_percent: "9 - 23",
+      apy_percent: "3.5 - 5",
       tvl_usd: ``,
       lock_time: "No lock",
       new_badge: false,
@@ -140,7 +141,7 @@ const EarnTopPicks = ({
     {
       icon: "dai.svg",
       pair_name: "DAI",
-      apy_percent: "8 - 21",
+      apy_percent: "3 - 5.5",
       tvl_usd: ``,
       lock_time: "No lock",
       new_badge: false,
@@ -687,9 +688,21 @@ const EarnTopPicks = ({
   const vaultdecimalsArray = [18, 8, 6, 6, 18];
   const vaultsymbolArray = ["WETH", "WBTC", "USDC", "USDT", "DAI"];
 
-  const vaultArrayNew = [window.vault_wethnew,window.vault_wbtcnew,window.vault_usdcnew,window.vault_usdtnew, window.vault_dainew];
-  const tokenvaultArrayNew = [window.token_weth,window.token_wbtc,window.token_usdc, window.token_usdt, window.token_dai];
-  const vaultplatformArrayNew = [4.2, 10, 15, 15, 15];
+  const vaultArrayNew = [
+    window.vault_wethnew,
+    window.vault_wbtcnew,
+    window.vault_usdcnew,
+    window.vault_usdtnew,
+    window.vault_dainew,
+  ];
+  const tokenvaultArrayNew = [
+    window.token_weth,
+    window.token_wbtc,
+    window.token_usdc,
+    window.token_usdt,
+    window.token_dai,
+  ];
+  const vaultplatformArrayNew = [4.2, 4.1, 4.6, 4.1, 4.8];
   const vaultdecimalsArrayNew = [18, 8, 6, 6, 18];
   const vaultsymbolArrayNew = ["WETH", "WBTC", "USDC", "USDT", "DAI"];
 
@@ -2227,7 +2240,7 @@ const EarnTopPicks = ({
                       isConnected={isConnected}
                       the_graph_result={the_graph_result}
                     />
-                  ): (
+                  ) : (
                     <></>
                   )}
                 </>
@@ -3311,7 +3324,7 @@ const EarnTopPicks = ({
                         : "No Lock"
                     }
                   />
-                )  : activeCard2 && topList === "Vault" && chain === "eth" ? (
+                ) : activeCard2 && topList === "Vault" && chain === "eth" ? (
                   <Vault
                     vault={vaultArrayNew[cardIndex]}
                     token={tokenvaultArrayNew[cardIndex]}
@@ -5483,8 +5496,7 @@ const EarnTopPicks = ({
                   />
                 ) : activeCard &&
                   topList === "Farming" &&
-                  chain === "avax" ? //   <FarmAvaxFunc
-                //   is_wallet_connected={isConnected}
+                  chain === "avax" ? //   is_wallet_connected={isConnected} //   <FarmAvaxFunc
                 //   coinbase={coinbase}
                 //   the_graph_result={the_graph_resultavax}
                 //   lp_id={LP_IDAVAX_Array[cardIndex]}
@@ -6263,7 +6275,7 @@ const EarnTopPicks = ({
                 )}
                 <div
                   className="top-picks-container"
-                  style={{ marginTop: "25px" }}
+                  style={{ marginTop: "26px" }}
                 >
                   {/* {topList === "Staking" && chain === "eth" && (
                     <CawsCard
@@ -7305,7 +7317,7 @@ const EarnTopPicks = ({
                         : "No Lock"
                     }
                   />
-                )  : activeCard2 && topList === "Vault" && chain === "eth" ? (
+                ) : activeCard2 && topList === "Vault" && chain === "eth" ? (
                   <Vault
                     vault={vaultArrayNew[cardIndex]}
                     token={tokenvaultArrayNew[cardIndex]}
@@ -7323,14 +7335,14 @@ const EarnTopPicks = ({
                     isConnected={isConnected}
                     the_graph_result={the_graph_result}
                   />
-                ): (
+                ) : (
                   <></>
                 )}
                 <div
                   className="top-picks-container"
                   style={{ marginTop: "25px" }}
                 >
-                  {topList === "Staking" && chain === "eth" && (
+                  {/* {topList === "Staking" && chain === "eth" && (
                     <>
                       {activePools.slice(2, 3).map((pool, index) => (
                         <TopPoolsCard
@@ -7402,7 +7414,108 @@ const EarnTopPicks = ({
                         />
                       ))}
                     </>
-                  )}
+                  )} */}
+                  {activePools
+                    .slice(
+                      topList === "Staking" && chain === "eth" ? 2 : 4,
+                      topList === "Staking" && chain === "eth" ? 4 : 6
+                    )
+                    .map((pool, index) => (
+                      <TopPoolsCard
+                        network={chainId}
+                        display={
+                          pool.expired
+                            ? pool.expired === "Yes"
+                              ? "none"
+                              : ""
+                            : ""
+                        }
+                        expired={false}
+                        key={index}
+                        chain={chain}
+                        top_pick={pool.top_pick}
+                        tokenName={
+                          pool.tokenName
+                            ? pool.tokenName
+                            : pool.pair_name
+                            ? pool.pair_name
+                            : ""
+                        }
+                        apr={pool.apy_percent + "%"}
+                        tvl={"$" + getFormattedNumber(pool.tvl_usd)}
+                        lockTime={
+                          pool.lockTime
+                            ? pool.lockTime
+                            : pool.lock_time
+                            ? pool.lock_time
+                            : locktimeFarm[index]
+                        }
+                        tokenLogo={
+                          pool.icon
+                            ? pool.icon
+                            : pool.pair_name === "iDYP"
+                            ? "idypius.svg"
+                            : "dyplogo.svg"
+                        }
+                        onShowDetailsClick={() => {
+                          setActiveCard(null);
+                          setActiveCard3(
+                            topPools[
+                              index +
+                                (topList === "Staking" && chain === "eth"
+                                  ? 2
+                                  : 4)
+                            ]
+                          );
+                          setActiveCard2(null);
+                          setActiveCard4(null);
+                          setActiveCard5(null);
+                          setActiveCard6(null);
+                          setActiveCardNFT(false);
+                          setActiveCardLandNFT(false);
+                          handleCardIndexStake(
+                            index +
+                              (topList === "Staking" && chain === "eth" ? 2 : 4)
+                          );
+                          handleCardIndexStake30(
+                            index +
+                              (topList === "Staking" && chain === "eth" ? 2 : 4)
+                          );
+                          handleCardIndexStakeiDyp(
+                            index +
+                              (topList === "Staking" && chain === "eth" ? 2 : 4)
+                          );
+                          setDetails(
+                            index +
+                              (topList === "Staking" && chain === "eth" ? 2 : 4)
+                          );
+                        }}
+                        onHideDetailsClick={() => {
+                          setActiveCard2(null);
+                          setActiveCard3(null);
+
+                          setDetails();
+                        }}
+                        cardType={topList}
+                        details={
+                          details ===
+                          index +
+                            (topList === "Staking" && chain === "eth" ? 2 : 4)
+                            ? true
+                            : false
+                        }
+                        isNewPool={pool.new_pool === "Yes" ? true : false}
+                        isStaked={
+                          userPools.length > 0
+                            ? userPools.find(
+                                (obj) => obj.contract_address === pool.id
+                              )
+                              ? true
+                              : false
+                            : false
+                        }
+                      />
+                    ))}
                 </div>
                 {activeCard3 &&
                 topList === "Staking" &&
@@ -8300,7 +8413,7 @@ const EarnTopPicks = ({
                   className="top-picks-container"
                   style={{ marginTop: "25px" }}
                 >
-                  {activePools.slice(4, 6).map((pool, index) => (
+                  {activePools.slice(6, 8).map((pool, index) => (
                     <TopPoolsCard
                       network={chainId}
                       display={
@@ -9137,7 +9250,7 @@ const EarnTopPicks = ({
                   style={{ marginTop: activePools.length > 8 && "25px" }}
                 >
                   {activePools
-                    .slice(6, activePools.length)
+                    .slice(8, activePools.length)
                     .map((pool, index) => (
                       <TopPoolsCard
                         network={chainId}
@@ -11504,8 +11617,7 @@ const EarnTopPicks = ({
                     />
                   ) : activeCard &&
                     topList === "Farming" &&
-                    chain === "avax" ? //   <FarmAvaxFunc
-                  //   is_wallet_connected={isConnected}
+                    chain === "avax" ? //   is_wallet_connected={isConnected} //   <FarmAvaxFunc
                   //   coinbase={coinbase}
                   //   the_graph_result={the_graph_resultavax}
                   //   lp_id={LP_IDAVAX_Array[cardIndex]}
@@ -13056,7 +13168,7 @@ const EarnTopPicks = ({
                       isConnected={isConnected}
                       the_graph_result={the_graph_result}
                     />
-                  ): (
+                  ) : (
                     <></>
                   )}
                 </>

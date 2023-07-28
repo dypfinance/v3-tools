@@ -285,7 +285,7 @@ const TopPoolsListCard = ({
 
   const vaultArrayNew = [window.vault_wethnew,window.vault_wbtcnew,window.vault_usdcnew,window.vault_usdtnew, window.vault_dainew];
   const tokenvaultArrayNew = [window.token_weth,window.token_wbtc,window.token_usdc, window.token_usdt, window.token_dai];
-  const vaultplatformArrayNew = [4.2, 10, 15, 15, 15];
+  const vaultplatformArrayNew = [4.2, 4.1, 4.6, 4.1, 4.8];
   const vaultdecimalsArrayNew = [18, 8, 6, 6, 18];
   const vaultsymbolArrayNew = ["WETH", "WBTC", "USDC", "USDT", "DAI"];
 

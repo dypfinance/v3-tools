@@ -192,7 +192,7 @@ const Vault = ({
     );
     setvault_contract(vault_contr);
   };
-  
+
   const refreshBalance = async () => {
     let coinbase = coinbase2;
 
@@ -212,7 +212,7 @@ const Vault = ({
 
     try {
       let _bal = token.balanceOf(coinbase);
- 
+
       if (vault && vault_contract) {
         let _stakingTime = vault_contract.methods.depositTime(coinbase).call();
 
@@ -269,7 +269,7 @@ const Vault = ({
         let depositedTokens_formatted = new BigNumber(depositedTokens)
           .div(10 ** TOKEN_DECIMALS)
           .toString(10);
-          
+
         setdepositedTokens(getFormattedNumber(depositedTokens_formatted, 6));
 
         setlastClaimedTime(lastClaimedTime);
@@ -508,9 +508,8 @@ const Vault = ({
     //   .catch(console.error);
   }, [coinbase, coinbase2, vault_contract, vault]);
 
-
   useEffect(() => {
-      refreshBalance();
+    refreshBalance();
   }, [coinbase, coinbase2, vault_contract]);
 
   useEffect(() => {
@@ -536,7 +535,7 @@ const Vault = ({
         setdepositStatus("fail");
         seterrorMsg(e?.message);
         setTimeout(() => {
-          depositAmount("");
+          setdepositAmount("");
           setdepositStatus("initial");
           seterrorMsg("");
         }, 10000);
@@ -801,12 +800,13 @@ const Vault = ({
 
   const handleSetMaxDeposit = (e) => {
     // e.preventDefault();
+    if (token_balance > 0) {
+      const depositAmount2 = new BigNumber(token_balance)
+        .div(10 ** UNDERLYING_DECIMALS)
+        .toFixed(UNDERLYING_DECIMALS);
 
-    const depositAmount2 = new BigNumber(token_balance)
-      .div(10 ** UNDERLYING_DECIMALS)
-      .toFixed(UNDERLYING_DECIMALS);
-
-    setdepositAmount(depositAmount2);
+      setdepositAmount(depositAmount2);
+    } else setdepositAmount(0);
   };
   const rhandleSetMaxDeposit = (e) => {
     // e.preventDefault();
@@ -823,6 +823,28 @@ const Vault = ({
       .div(10 ** UNDERLYING_DECIMALS)
       .toFixed(UNDERLYING_DECIMALS);
     setwithdrawAmount(withdrawAmount2);
+  };
+
+  const checkApproval = async (amount) => {
+    console.log(token._address, vault._address)
+    const result = await window
+      .checkapproveStakePool(coinbase, token._address, vault._address)
+      .then((data) => {
+        console.log(data);
+        return data;
+      });
+
+    let result_formatted = new BigNumber(result).div(10 ** UNDERLYING_DECIMALS)
+    .toFixed(UNDERLYING_DECIMALS);
+
+    if (
+      Number(result_formatted) >= Number(amount) &&
+      Number(result_formatted) !== 0
+    ) {
+      setdepositStatus("deposit");
+    } else {
+      setdepositStatus("initial");
+    }
   };
 
   const getAPY = () => {
@@ -902,7 +924,6 @@ const Vault = ({
   const focusInput = (field) => {
     document.getElementById(field).focus();
   };
-  
 
   return (
     <div className="container-lg p-0">
@@ -1154,7 +1175,10 @@ const Vault = ({
                             ? depositAmount
                             : depositAmount
                         }
-                        onChange={(e) => setdepositAmount(e.target.value)}
+                        onChange={(e) => {
+                          setdepositAmount(e.target.value);
+                          checkApproval(e.target.value);
+                        }}
                         placeholder=" "
                         className="text-input"
                         style={{ width: "100%" }}
@@ -1495,7 +1519,7 @@ const Vault = ({
                   <span className="stats-card-title">My share</span>
                   <h6 className="stats-card-content">
                     {getFormattedNumber(
-                      !totaldepositedTokens || totaldepositedTokens === '0'
+                      !totaldepositedTokens || totaldepositedTokens === "0"
                         ? "0.00"
                         : (depositedTokens / totaldepositedTokens) * 100,
                       2
