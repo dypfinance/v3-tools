@@ -119,6 +119,32 @@ const EarnTopPicks = ({
       apy_percent: "3 - 5",
       tvl_usd: ``,
       lock_time: "No lock",
+    },    {
+      icon: "usdc.svg",
+      pair_name: "USDC",
+      apy_percent: "8 - 22",
+      tvl_usd: ``,
+      lock_time: "No lock",
+      new_badge: false,
+      top_pick: false,
+    },
+    {
+      icon: "usdt.svg",
+      pair_name: "USDT",
+      apy_percent: "9 - 23",
+      tvl_usd: ``,
+      lock_time: "No lock",
+      new_badge: false,
+      top_pick: false,
+    },
+    {
+      icon: "dai.svg",
+      pair_name: "DAI",
+      apy_percent: "8 - 21",
+      tvl_usd: ``,
+      lock_time: "No lock",
+      new_badge: false,
+      top_pick: false,
     },
   ];
 
@@ -661,11 +687,11 @@ const EarnTopPicks = ({
   const vaultdecimalsArray = [18, 8, 6, 6, 18];
   const vaultsymbolArray = ["WETH", "WBTC", "USDC", "USDT", "DAI"];
 
-  const vaultArrayNew = [window.vault_wethnew,window.vault_wbtcnew];
-  const tokenvaultArrayNew = [window.token_weth,window.token_wbtc];
-  const vaultplatformArrayNew = [4.2, 10];
-  const vaultdecimalsArrayNew = [18, 8];
-  const vaultsymbolArrayNew = ["WETH", "WBTC"];
+  const vaultArrayNew = [window.vault_wethnew,window.vault_wbtcnew,window.vault_usdcnew,window.vault_usdtnew, window.vault_dainew];
+  const tokenvaultArrayNew = [window.token_weth,window.token_wbtc,window.token_usdc, window.token_usdt, window.token_dai];
+  const vaultplatformArrayNew = [4.2, 10, 15, 15, 15];
+  const vaultdecimalsArrayNew = [18, 8, 6, 6, 18];
+  const vaultsymbolArrayNew = ["WETH", "WBTC", "USDC", "USDT", "DAI"];
 
   const locktimeFarm = ["No Lock", "3 Days", "30 Days", "60 Days", "90 Days"];
 

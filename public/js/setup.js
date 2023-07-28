@@ -1845,8 +1845,14 @@ window.config = {
   vault_wbtcnew_address: "0x2e660644a5582d23ba274cf406488e18bcd55b06",
 
   vault_usdt_address: "0xA987aEE0189Af45d5FA95a9FBBCB4374228f375E",
+  vault_usdtnew_address: "0xE39BEd1DeC2f97dA3aEb014a28170FE5fB66065F",
+
   vault_usdc_address: "0x251B9ee6cEd97565A821C5608014a107ddc9C98F",
+  vault_usdcnew_address: "0xfc569288c4297419b776c0bdfac677256e10da3f",
+
   vault_dai_address: "0x54F30bFfeb925F47225e148f0bAe17a452d6b8c0",
+  vault_dainew_address: "0xf656dc256c60eb8417366015ee9217462b5a795d",
+
 
   subscription_address: "0x5078a4912f6e0d74dcf99482ac5910df123e9b4b",
   subscriptioneth_address: "0x6cc47d895aa6da6012c2b6bfd2f6af3ebbf1d2e4",
@@ -30967,12 +30973,24 @@ window.vault_usdt = new VAULT_NEW(
   window.config.vault_usdt_address,
   window.config.token_usdt_address
 );
+window.vault_usdtnew = new VAULT_NEW(
+  window.config.vault_usdtnew_address,
+  window.config.token_usdt_address
+);
 window.vault_usdc = new VAULT_NEW(
   window.config.vault_usdc_address,
   window.config.token_usdc_address
 );
+window.vault_usdcnew = new VAULT_NEW(
+  window.config.vault_usdcnew_address,
+  window.config.token_usdc_address
+);
 window.vault_dai = new VAULT_NEW(
   window.config.vault_dai_address,
+  window.config.token_dai_address
+);
+window.vault_dainew = new VAULT_NEW(
+  window.config.vault_dainew_address,
   window.config.token_dai_address
 );
 
