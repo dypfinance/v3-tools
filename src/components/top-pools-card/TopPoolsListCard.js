@@ -282,6 +282,14 @@ const TopPoolsListCard = ({
   const vaultdecimalsArray = [18, 8, 6, 6, 18];
   const vaultsymbolArray = ["WETH", "WBTC", "USDC", "USDT", "DAI"];
 
+
+  const vaultArrayNew = [window.vault_wethnew,window.vault_wbtcnew,window.vault_usdcnew,window.vault_usdtnew, window.vault_dainew];
+  const tokenvaultArrayNew = [window.token_weth,window.token_wbtc,window.token_usdc, window.token_usdt, window.token_dai];
+  const vaultplatformArrayNew = [4.2, 4.1, 4.6, 4.1, 4.8];
+  const vaultdecimalsArrayNew = [18, 8, 6, 6, 18];
+  const vaultsymbolArrayNew = ["WETH", "WBTC", "USDC", "USDT", "DAI"];
+
+
   const bscFarmArrayStake = [
     window.farming_newbsc_1,
     window.farming_newbsc_2,
@@ -1132,7 +1140,27 @@ const TopPoolsListCard = ({
               handleConnection={handleConnection}
               myStakes={mystakes}
             />
-          ) : (
+          ) : showDetails &&
+          topList === "Vault" &&
+          chain === "eth" ? (
+          <Vault
+            vault={vaultArrayNew[cardIndex-1]}
+            token={tokenvaultArrayNew[cardIndex-1]}
+            platformTokenApyPercent={vaultplatformArrayNew[cardIndex-1]}
+            UNDERLYING_DECIMALS={vaultdecimalsArrayNew[cardIndex-1]}
+            UNDERLYING_SYMBOL={vaultsymbolArrayNew[cardIndex-1]}
+            expiration_time={"1 August 2024"}
+            coinbase={coinbase}
+            lockTime={"No Lock"}
+            handleConnection={handleConnection}
+            chainId={chainId}
+            listType={listType}
+            handleSwitchNetwork={handleSwitchNetwork}
+            expired={false}
+            isConnected={isConnected}
+            the_graph_result={the_graph_result}
+          />
+        ):(
             <></>
           )}
         </>
