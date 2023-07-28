@@ -107,7 +107,7 @@ const EarnTopPicks = ({
     {
       icon: "ethereum.svg",
       pair_name: "WETH",
-      apy_percent: "3 - 5",
+      apy_percent: "1.9 - 3.7",
       tvl_usd: ``,
       lock_time: "No lock",
       top_pick: true,
@@ -116,14 +116,14 @@ const EarnTopPicks = ({
     {
       icon: "wbtc.svg",
       pair_name: "WBTC",
-      apy_percent: "3.3 - 4.5",
+      apy_percent: "1.6 - 3.4",
       tvl_usd: ``,
       lock_time: "No lock",
     },
     {
       icon: "usdc.svg",
       pair_name: "USDC",
-      apy_percent: "3.5 - 5",
+      apy_percent: "2.1 - 4.2",
       tvl_usd: ``,
       lock_time: "No lock",
       new_badge: false,
@@ -132,7 +132,7 @@ const EarnTopPicks = ({
     {
       icon: "usdt.svg",
       pair_name: "USDT",
-      apy_percent: "3.5 - 5",
+      apy_percent: "2.2 - 4.9",
       tvl_usd: ``,
       lock_time: "No lock",
       new_badge: false,
@@ -141,7 +141,7 @@ const EarnTopPicks = ({
     {
       icon: "dai.svg",
       pair_name: "DAI",
-      apy_percent: "3 - 5.5",
+      apy_percent: "2.3 - 5.3",
       tvl_usd: ``,
       lock_time: "No lock",
       new_badge: false,
@@ -702,7 +702,7 @@ const EarnTopPicks = ({
     window.token_usdt,
     window.token_dai,
   ];
-  const vaultplatformArrayNew = [4.2, 4.1, 4.6, 4.1, 4.8];
+  const vaultplatformArrayNew = [3.08, 3.02, 3.94, 4.46, 4.8];
   const vaultdecimalsArrayNew = [18, 8, 6, 6, 18];
   const vaultsymbolArrayNew = ["WETH", "WBTC", "USDC", "USDT", "DAI"];
 

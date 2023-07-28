@@ -55,7 +55,6 @@ const VAULT_ADDRESSES_LIST = LP_ID_LIST.map((id) => id.split("-")[1]);
 window.LP_ID_LIST = LP_ID_LIST;
 
 function getTokenContract(address) {
-  console.log(address)
   return getContract({ key: 'token', address, ABI: window.TOKEN_ABI });
 }
 
@@ -1476,9 +1475,7 @@ class VAULT_NEW {
             gasPrice: window.web3.utils.toWei(increasedGwei.toString(), 'gwei'),
           };
           let contract = await getVaultContract(vaultAddress);
-          console.log(gasPrice,currentGwei,increasedGwei)
-
-          const estimateGas = await contract.methods[fn_name](...args).estimateGas({ from: await getCoinbase() });
+          const estimateGas = 800000;
           transactionParameters.gas = estimateGas.toString();
           return await contract.methods[fn_name](...args).send({
             value,

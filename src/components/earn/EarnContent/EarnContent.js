@@ -868,21 +868,22 @@ const EarnContent = ({
           expiredPools={expiredPools}
         />
       ) : (
-        // ) : option === "Farming" && stake === "eth" && expiredPools === false ? (
-        //   <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
-        //     <img
-        //       src={
-        //         require("../../../assets/earnAssets/disabledFarming.svg").default
-        //       }
-        //       style={{ width: "150px", height: "150px" }}
-        //       alt=""
-        //     />
-        //     <h6 className="no-farms">
-        //       No Farming pools available for Ethereum Chain
-        //     </h6>
-        //     <span className="farm-soon">New pools coming soon...</span>
-        //   </div>
-        // ) : option === "Farming" && stake === "avax" && expiredPools === false ? (
+         option === "Vault" && networkId !== "1"   ? (
+          <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
+            <img
+              src={
+                require("../../../assets/earnAssets/disabledVault.svg").default
+              }
+              style={{ width: "150px", height: "150px" }}
+              alt=""
+            />
+            <h6 className="no-farms">
+              No Vault pools available for this chain
+            </h6>
+            <span className="farm-soon">Switch back to Ethereum Chain to view pools</span>
+          </div>
+        ) : 
+        //option === "Farming" && stake === "avax" && expiredPools === false ? (
         //   <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
         //     <img
         //       src={
