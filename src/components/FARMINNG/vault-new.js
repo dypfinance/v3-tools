@@ -262,7 +262,7 @@ const Vault = ({
           .div(10 ** TOKEN_DECIMALS)
           .toString(10);
 
-        settoken_balance(getFormattedNumber(balance_formatted, 6));
+        settoken_balance(balance_formatted);
 
         setstakingTime(stakingTime * 1e3);
 
@@ -270,7 +270,7 @@ const Vault = ({
           .div(10 ** TOKEN_DECIMALS)
           .toString(10);
 
-        setdepositedTokens(getFormattedNumber(depositedTokens_formatted, 6));
+        setdepositedTokens(depositedTokens_formatted);
 
         setlastClaimedTime(lastClaimedTime);
         settotal_stakers(total_stakers);
@@ -798,14 +798,17 @@ const Vault = ({
       });
   };
 
-  const handleSetMaxDeposit = (e) => {
-    // e.preventDefault();
-    if (token_balance > 0) {
-      const depositAmount2 = new BigNumber(token_balance)
-        .div(10 ** UNDERLYING_DECIMALS)
-        .toFixed(UNDERLYING_DECIMALS);
+  const handleSetMaxDeposit = async (e) => {
+    let token_balance2 = await token.balanceOf(
+      coinbase
+    );
 
-      setdepositAmount(depositAmount2);
+    const balance_formatted = new BigNumber(token_balance2)
+      .div(10 ** TOKEN_DECIMALS)
+      .toString(10);
+
+    if (balance_formatted > 0) {
+      setdepositAmount(balance_formatted);
     } else setdepositAmount(0);
   };
   const rhandleSetMaxDeposit = (e) => {
@@ -826,16 +829,20 @@ const Vault = ({
   };
 
   const checkApproval = async (amount) => {
-    console.log(token._address, vault._address)
     const result = await window
-      .checkapproveStakePool(coinbase, token._address, vault._address)
+      .checkapproveStakePool(
+        coinbase,
+        token._address,
+        vault._address
+      )
       .then((data) => {
         console.log(data);
         return data;
       });
 
-    let result_formatted = new BigNumber(result).div(10 ** UNDERLYING_DECIMALS)
-    .toFixed(UNDERLYING_DECIMALS);
+    let result_formatted = new BigNumber(result)
+      .div(10 ** UNDERLYING_DECIMALS)
+      .toFixed(UNDERLYING_DECIMALS);
 
     if (
       Number(result_formatted) >= Number(amount) &&
@@ -1134,7 +1141,7 @@ const Vault = ({
                     Balance:
                     <b>
                       {token_balance !== "..."
-                        ? token_balance
+                        ? getFormattedNumber(token_balance, 6)
                         : getFormattedNumber(0, 6)}{" "}
                       {token_symbol}
                     </b>
@@ -1327,7 +1334,7 @@ const Vault = ({
                 <div className="form-row d-flex flex-column flex-lg-row gap-2 align-items-start align-items-lg-center justify-content-between">
                   <div className="position-relative">
                     <span>
-                      {pendingDivsEth} {token_symbol}
+                      {getFormattedNumber(pendingDivsEth, 6)} {token_symbol}
                     </span>
                   </div>
                   <button
@@ -1519,9 +1526,11 @@ const Vault = ({
                   <span className="stats-card-title">My share</span>
                   <h6 className="stats-card-content">
                     {getFormattedNumber(
-                      !totaldepositedTokens || totaldepositedTokens === "0"
-                        ? "0.00"
-                        : (depositedTokens / totaldepositedTokens) * 100,
+                      !totaldepositedTokens
+                        ? "..."
+                        : (depositedTokens /
+                            (totaldepositedTokens / 10 ** TOKEN_DECIMALS)) *
+                            100,
                       2
                     )}
                     %
