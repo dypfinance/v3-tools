@@ -468,7 +468,7 @@ const Vault = ({
 
   const fetchTvl = async () => {
     const pools = await axios.get(
-      "https://api2.dyp.finance/api/get_vault_info"
+      "https://api.dyp.finance/api/get_vault_info"
     );
 
     if (vault) {
