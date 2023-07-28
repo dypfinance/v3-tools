@@ -525,7 +525,7 @@ const Vault = ({
           setdepositAmount("");
           setdepositStatus("initial");
           seterrorMsg("");
-        }, 10000);
+        }, 8000);
       });
   };
 
@@ -790,11 +790,11 @@ const Vault = ({
 
     const balance_formatted = new BigNumber(token_balance2)
       .div(10 ** TOKEN_DECIMALS)
-      .toString(10);
+      .toString(10)
 
     if (balance_formatted > 0) {
       setdepositAmount(balance_formatted);
-    } else setdepositAmount(0);
+    } else setdepositAmount('0');
   };
   const rhandleSetMaxDeposit = (e) => {
     // e.preventDefault();
@@ -824,7 +824,7 @@ const Vault = ({
     let result_formatted = new BigNumber(result)
       .div(10 ** UNDERLYING_DECIMALS)
       .toFixed(UNDERLYING_DECIMALS);
-
+console.log(Number(result_formatted),Number(amount))
     if (
       Number(result_formatted) >= Number(amount) &&
       Number(result_formatted) !== 0
@@ -1160,8 +1160,8 @@ const Vault = ({
                         autoComplete="off"
                         value={
                           Number(depositAmount) > 0
-                            ? depositAmount
-                            : depositAmount
+                            ? depositAmount.slice(0, depositAmount.indexOf('.')+7)
+                            : depositAmount.slice(0, depositAmount.indexOf('.')+7)
                         }
                         onChange={(e) => {
                           setdepositAmount(e.target.value);
