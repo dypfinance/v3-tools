@@ -161,7 +161,7 @@ const EarnContent = ({
 
   const fetchVaultTvl = async () => {
     await axios
-      .get(`https://api2.dyp.finance/api/get_vault_info`)
+      .get(`https://api.dyp.finance/api/get_vault_info`)
       .then((res) => {
         setTvl(res.data.VaultTotalTVL[0].tvl);
       })
