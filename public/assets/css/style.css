@@ -4747,7 +4747,7 @@ color: #F7F7FC !important;
 .stats-card {
   background: #26264f;
   border-radius: 8px;
-  height: 100px;
+  height: fit-content;
 }
 
 .stats-card-title {
