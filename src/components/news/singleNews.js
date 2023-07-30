@@ -44,16 +44,16 @@ const SingleNews = ({
   const logout = localStorage.getItem("logout");
 
   useEffect(() => {
-    if (bal1 === 0 && bal2 === 0 && bal3 === 0 && isPremium === true) {
+    if (bal1 === '0' && bal2 === '0' && bal3 === '0' && isPremium === true) {
       setCanVote(true);
-    } else if (bal1 !== 0 && bal2 !== 0 && bal3 !== 0 && isPremium === true) {
+    } else if (bal1 !== '0' && bal2 !== '0' && bal3 !== '0' && isPremium === true) {
       setCanVote(true);
     } else if (
-      (bal1 !== 0 || bal2 !== 0 || bal3 !== 0) &&
+      (bal1 !== '0' || bal2 !== '0' || bal3 !== '0') &&
       isPremium === false
     ) {
       setCanVote(true);
-    } else if (bal1 === 0 && bal2 === 0 && bal3 === 0 && isPremium === false) {
+    } else if (bal1 === '0' && bal2 === '0' && bal3 === '0' && isPremium === false) {
       setCanVote(false);
     } else if (logout === "true") {
       setCanVote(false);
@@ -63,14 +63,14 @@ const SingleNews = ({
   const handleLikeStates = () => {
     if (
       logout === "false" &&
-      (bal1 !== 0 || bal2 !== 0 || isPremium !== false)
+      (bal1 !== '0' || bal2 !== '0'  || bal3 !== '0' || isPremium !== false)
     ) {
       checkUpVoting(newsId);
     } else {
       setShowTooltip(true);
     }
     if (
-      (bal1 === 0 && bal2 === 0 && isPremium === false) ||
+      (bal1 === '0' && bal2 === '0'  && bal3 === '0' && isPremium === false) ||
       logout === "true" ||
       alreadyVoted === false
     ) {
@@ -92,14 +92,14 @@ const SingleNews = ({
   const handleDisLikeStates = () => {
     if (
       logout === "false" &&
-      (bal1 !== 0 || bal2 !== 0 || isPremium !== false)
+      (bal1 !== '0' || bal2 !== '0' || bal3 !== '0' || isPremium !== false)
     ) {
       checkDownVoting(newsId);
     } else {
       setShowTooltip(true);
     }
     if (
-      (bal1 === 0 && bal2 === 0 && isPremium === false) ||
+      (bal1 === '0' && bal2 === '0' && bal3 === '0' && isPremium === false) ||
       logout === "true" ||
       alreadyVoted === false
     ) {
