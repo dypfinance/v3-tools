@@ -19,7 +19,7 @@ import newsReddit from "./assets/newsReddit.svg";
 import newsShare from "./assets/newsShare.svg";
 import newsTelegram from "./assets/newsTelegram.svg";
 import newsTwitter from "./assets/newsTwitter.svg";
-import sourceLinkIcon from './assets/sourceLinkIcon.svg'
+import sourceLinkIcon from "./assets/sourceLinkIcon.svg";
 
 import { useState } from "react";
 
@@ -46,7 +46,10 @@ const NewsModal = ({
   onModalClose,
   isPremium,
   coinbase,
-  fullDate, bal1, bal2, bal3
+  fullDate,
+  bal1,
+  bal2,
+  bal3,
 }) => {
   const getItemsWithoutCurrentItem = (currentItemId, arrayOfItems) => {
     return arrayOfItems.filter((item) => item?.id !== currentItemId);
@@ -71,21 +74,32 @@ const NewsModal = ({
 
     if (content !== undefined && content.includes("&nbsp")) {
       setnewContent(content.replace(/&nbsp;/g, " "));
-    }
-    else setnewContent(content)
-  }, [newsId, content,elementRef.current?.clientHeight]);
-  
+    } else setnewContent(content);
+  }, [newsId, content, elementRef.current?.clientHeight]);
 
   const logout = localStorage.getItem("logout");
 
   useEffect(() => {
-    if (bal1 === 0 && bal2 === 0 && bal3 === 0 && isPremium === true) {
+    if (bal1 === "0" && bal2 === "0" && bal3 === "0" && isPremium === true) {
       setCanVote(true);
-    } else if (bal1 !== 0 && bal2 !== 0  && bal3 !== 0 && isPremium === true) {
+    } else if (
+      bal1 !== "0" &&
+      bal2 !== "0" &&
+      bal3 !== "0" &&
+      isPremium === true
+    ) {
       setCanVote(true);
-    } else if ((bal1 !== 0 || bal2 !== 0 || bal3 !== 0) && isPremium === false) {
+    } else if (
+      (bal1 !== "0" || bal2 !== "0" || bal3 !== "0") &&
+      isPremium === false
+    ) {
       setCanVote(true);
-    } else if (bal1 === 0 && bal2 === 0 && bal3 === 0 && isPremium === false) {
+    } else if (
+      bal1 === "0" &&
+      bal2 === "0" &&
+      bal3 === "0" &&
+      isPremium === false
+    ) {
       setCanVote(false);
     } else if (logout === "true") {
       setCanVote(false);
@@ -95,14 +109,14 @@ const NewsModal = ({
   const handleLikeStates = () => {
     if (
       logout === "false" &&
-      (bal1 !== 0 || bal2 !== 0 || isPremium !== false)
+      (bal1 !== "0" || bal2 !== "0" || bal3 !== "0" || isPremium !== false)
     ) {
       checkUpVoting(newsId);
     } else {
       setShowTooltip(true);
     }
     if (
-      (bal1 === 0 && bal2 === 0 && isPremium === false) ||
+      (bal1 === "0" && bal2 === "0" && bal3 === "0" && isPremium === false) ||
       logout === "true" ||
       alreadyVoted === false
     ) {
@@ -124,14 +138,14 @@ const NewsModal = ({
   const handleDisLikeStates = () => {
     if (
       logout === "false" &&
-      (bal1 !== 0 || bal2 !== 0 || isPremium !== false)
+      (bal1 !== "0" || bal2 !== "0" || isPremium !== false)
     ) {
       checkDownVoting(newsId);
     } else {
       setShowTooltip(true);
     }
     if (
-      (bal1 === 0 && bal2 === 0 && isPremium === false) ||
+      (bal1 === "0" && bal2 === "0" && isPremium === false) ||
       logout === "true" ||
       alreadyVoted === false
     ) {
@@ -204,38 +218,38 @@ const NewsModal = ({
   }, [newsId]);
 
   var options = { year: "numeric", month: "short", day: "numeric" };
- 
+
   const formattedDate = new Date(fullDate);
 
   return (
     <>
-    <div className="newmodal col-8 ps-0">
-      <div className="news-modal">
-        <div className="details-modal-content">
-          <div className="left-col" ref={elementRef}>
-            <div className="d-flex flex-column justify-content-start align-items-start gap-3">
-              {/* <div className="backbtn" onClick={onModalClose}>
+      <div className="newmodal col-8 ps-0">
+        <div className="news-modal">
+          <div className="details-modal-content">
+            <div className="left-col" ref={elementRef}>
+              <div className="d-flex flex-column justify-content-start align-items-start gap-3">
+                {/* <div className="backbtn" onClick={onModalClose}>
                 <i className="fas fa-arrow-left" style={{ color: "white" }}></i>
               </div> */}
-              <div className="d-flex align-items-center justify-content-between w-100">
-                <button
-                  className="btn go-back-btn d-flex align-items-center gap-2"
-                  onClick={onModalClose}
-                >
-                  <img src={goBackArrow} alt="goback" />
-                  <span className="go-back-text">Go Back</span>
-                </button>
-                <div className="date-wrapper">
-                  <img src={calendar} alt="calendar" />
-                  <span className="news-date-text">
-                    {formattedDate.toLocaleDateString("en-US", options)}
-                  </span>
+                <div className="d-flex align-items-center justify-content-between w-100">
+                  <button
+                    className="btn go-back-btn d-flex align-items-center gap-2"
+                    onClick={onModalClose}
+                  >
+                    <img src={goBackArrow} alt="goback" />
+                    <span className="go-back-text">Go Back</span>
+                  </button>
+                  <div className="date-wrapper">
+                    <img src={calendar} alt="calendar" />
+                    <span className="news-date-text">
+                      {formattedDate.toLocaleDateString("en-US", options)}
+                    </span>
+                  </div>
                 </div>
-              </div>
-              <h2 className="left-col-title" style={{ fontSize: 20 }}>
-                {title}
-              </h2>
-              {/* <div
+                <h2 className="left-col-title" style={{ fontSize: 20 }}>
+                  {title}
+                </h2>
+                {/* <div
                 className="social-share-parent"
                 style={{
                   display: "inline-block",
@@ -255,34 +269,34 @@ const NewsModal = ({
                 </button>
                  */}
 
-              {/* </div> */}
-            </div>
-            <img
-              src={image}
-              alt=""
-              className="left-col-image"
-              style={{ padding: "20px 0" }}
-            />
-            <div className="news-bottom-wrapper mb-3 justify-content-between">
-              <div className="d-flex">
-                <a
-                  className="resp-sharing-button__link"
-                  href={`https://twitter.com/intent/tweet/?text=${title}&url=${`https://app.dypius.com/news/${newsId}`}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label=""
-                >
-                  <img src={newsTwitter} alt="twitter share" />
-                </a>
+                {/* </div> */}
+              </div>
+              <img
+                src={image}
+                alt=""
+                className="left-col-image"
+                style={{ padding: "20px 0" }}
+              />
+              <div className="news-bottom-wrapper mb-3 justify-content-between">
+                <div className="d-flex">
+                  <a
+                    className="resp-sharing-button__link"
+                    href={`https://twitter.com/intent/tweet/?text=${title}&url=${`https://app.dypius.com/news/${newsId}`}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label=""
+                  >
+                    <img src={newsTwitter} alt="twitter share" />
+                  </a>
 
-                <a
-                  className="resp-sharing-button__link"
-                  href={`https://reddit.com/submit/?&url=${`https://app.dypius.com/news/${newsId}`}&resubmit=true&title=${title}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label=""
-                >
-                  {/* <div className="resp-sharing-button resp-sharing-button--reddit resp-sharing-button--small">
+                  <a
+                    className="resp-sharing-button__link"
+                    href={`https://reddit.com/submit/?&url=${`https://app.dypius.com/news/${newsId}`}&resubmit=true&title=${title}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label=""
+                  >
+                    {/* <div className="resp-sharing-button resp-sharing-button--reddit resp-sharing-button--small">
                     <div
                       aria-hidden="true"
                       className="resp-sharing-button__icon resp-sharing-button__icon--solid"
@@ -295,18 +309,17 @@ const NewsModal = ({
                       </svg>
                     </div>
                   </div> */}
-                  <img src={newsReddit} alt="reddit share" />
-                </a>
+                    <img src={newsReddit} alt="reddit share" />
+                  </a>
 
-                <a
-                  className="resp-sharing-button__link"
-                  href={`https://telegram.me/share/url?url=${`https://app.dypius.com/news/${newsId}&text=${title}`}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label=""
-                  
-                >
-                  {/* <div className="resp-sharing-button resp-sharing-button--telegram resp-sharing-button--small">
+                  <a
+                    className="resp-sharing-button__link"
+                    href={`https://telegram.me/share/url?url=${`https://app.dypius.com/news/${newsId}&text=${title}`}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label=""
+                  >
+                    {/* <div className="resp-sharing-button resp-sharing-button--telegram resp-sharing-button--small">
                     <div
                       aria-hidden="true"
                       className="resp-sharing-button__icon resp-sharing-button__icon--solid"
@@ -319,27 +332,27 @@ const NewsModal = ({
                       </svg>
                     </div>
                   </div> */}
-                  <img src={newsTelegram} alt="telegram share" />
-                </a>
-                <img
-                  src={newsShare}
-                  alt="share news"
-                  onClick={() =>
-                    navigator.clipboard.writeText(
-                      `https://app.dypius.com/news/${newsId}`
-                    )
-                  }
-                  style={{ margin: "0.5em" }}
-                />
+                    <img src={newsTelegram} alt="telegram share" />
+                  </a>
+                  <img
+                    src={newsShare}
+                    alt="share news"
+                    onClick={() =>
+                      navigator.clipboard.writeText(
+                        `https://app.dypius.com/news/${newsId}`
+                      )
+                    }
+                    style={{ margin: "0.5em" }}
+                  />
+                </div>
               </div>
-            </div>
 
-            <p
-              // style={{ maxWidth: 520 }}
-              className="left-col-content"
-              dangerouslySetInnerHTML={{ __html: newContent }}
-            ></p>
-            {/* <div
+              <p
+                // style={{ maxWidth: 520 }}
+                className="left-col-content"
+                dangerouslySetInnerHTML={{ __html: newContent }}
+              ></p>
+              {/* <div
                 className="d-flex w-100 align-items-center"
                 style={{ gap: 20 }}
               >
@@ -410,144 +423,155 @@ const NewsModal = ({
                 </div>
               </div> */}
 
-            <div className="d-flex align-items-center justify-content-between mt-5">
-            <div className="d-flex align-items-center justify-content-center gap-2 position-relative">
-              <img
-                src={
-                  likeIndicator === false && dislikeIndicator === false
-                    ? passiveUpvote
-                    : likeIndicator === true
-                    ? activeUpvote
-                    : passiveUpvote
-                }
-                alt=""
-                className="like-indicator"
-                onClick={(e) => {
-                  handleLikeStates();
-                  e.stopPropagation();
-                }}
-              />
-              <span className="votes-amount">
-                {/* {Number(upvotes) - Number(downvotes)} */}
-                {Number(votes.find((obj) => obj.id === newsId)?.up) -
-                  Number(votes.find((obj) => obj.id === newsId)?.down)}
-              </span>
-              <img
-                style={{ transform: "rotate(0deg)" }}
-                src={
-                  likeIndicator === false && dislikeIndicator === false
-                    ? passiveDownvote
-                    : dislikeIndicator === true
-                    ? activeDownvote
-                    : passiveDownvote
-                }
-                alt=""
-                className="like-indicator"
-                id="dislike"
-                onClick={(e) => {
-                  handleDisLikeStates();
-                  e.stopPropagation();
-                }}
-              />
-               {showTooltip === true ? (
-                <OutsideClickHandler
-                  onOutsideClick={() => {
-                    setShowTooltip(false);
-                  }}
-                >
-                  <ToolTip
-                    status={
-                      logout === "false" && canVote === false
-                        ? "You need to be holding DYP to vote"
-                        : logout === "true"
-                        ? "Please connect your wallet"
-                        : alreadyVoted === true && canVote === true
-                        ? "You have already voted"
-                        : "You have already voted"
+              <div className="d-flex align-items-center justify-content-between mt-5">
+                <div className="d-flex align-items-center justify-content-center gap-2 position-relative">
+                  <img
+                    src={
+                      likeIndicator === false && dislikeIndicator === false
+                        ? passiveUpvote
+                        : likeIndicator === true
+                        ? activeUpvote
+                        : passiveUpvote
                     }
+                    alt=""
+                    className="like-indicator"
+                    onClick={(e) => {
+                      handleLikeStates();
+                      e.stopPropagation();
+                    }}
                   />
-                </OutsideClickHandler>
-              ) : (
-                <></>
-              )}
-            </div>
-            {/* <p>
+                  <span className="votes-amount">
+                    {/* {Number(upvotes) - Number(downvotes)} */}
+                    {Number(votes.find((obj) => obj.id === newsId)?.up) -
+                      Number(votes.find((obj) => obj.id === newsId)?.down)}
+                  </span>
+                  <img
+                    style={{ transform: "rotate(0deg)" }}
+                    src={
+                      likeIndicator === false && dislikeIndicator === false
+                        ? passiveDownvote
+                        : dislikeIndicator === true
+                        ? activeDownvote
+                        : passiveDownvote
+                    }
+                    alt=""
+                    className="like-indicator"
+                    id="dislike"
+                    onClick={(e) => {
+                      handleDisLikeStates();
+                      e.stopPropagation();
+                    }}
+                  />
+                  {showTooltip === true ? (
+                    <OutsideClickHandler
+                      onOutsideClick={() => {
+                        setShowTooltip(false);
+                      }}
+                    >
+                      <ToolTip
+                        status={
+                          logout === "false" && canVote === false
+                            ? "You need to be holding DYP to vote"
+                            : logout === "true"
+                            ? "Please connect your wallet"
+                            : alreadyVoted === true && canVote === true
+                            ? "You have already voted"
+                            : "You have already voted"
+                        }
+                      />
+                    </OutsideClickHandler>
+                  ) : (
+                    <></>
+                  )}
+                </div>
+                {/* <p>
               Source:{" "}
               <a href={link} target="_blank">
                 <u>click here</u>
               </a>
             </p> */}
-            <div className="d-flex align-items-center gap-2">
-              <img src={sourceLinkIcon} alt="source link" />
-            <a href={link} target="_blank" className="source-link">Source link</a>
-            </div>
+                <div className="d-flex align-items-center gap-2">
+                  <img src={sourceLinkIcon} alt="source link" />
+                  <a
+                    href={link}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="source-link"
+                  >
+                    Source link
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div className="col-4 pe-0">
-    <div className="right-col position-relative w-100">
-      <div className="purplediv" style={{left: '0px', top: '20px', background: '#8E97CD'}}></div>
-      <div className="d-flex align-items-center gap-2 mt-2">
-        <img src={require(`./assets/relatedNewsIcon.svg`).default} alt="" />
-      <h3 className="related-news-side-title">Top voted news</h3>
-      </div>
-            <div className="related-news-wrapper">
-              {latestNewsData.length > 0 &&
-                getItemsWithoutCurrentItem(newsId, latestNewsData)
-                  .slice(0, parseInt(height / 127))
-                  .map((item, key)=> {
-                    if (item !== undefined) {
-                      return (
-                        <div
-                          key={key}
-                          onClick={() => {
-                            window.scrollTo(0, 0);
-                          }}
-                        >
-                          <RelatedNews
-                            newsId={item.id}
-                            theme={theme}
-                            title={item.title}
-                            date={item.date}
-                            month={item.month}
-                            year={item.year}
-                            link={item.link}
-                            // alreadyVoted={alreadyVoted}
-                            upvotes={
-                              votes.length !== 0
-                                ? votes.find((obj) => obj.id === item.id)
-                                    ?.up !== undefined
-                                  ? votes.find((obj) => obj.id === item.id)?.up
-                                  : 0
-                                : 0
-                            }
-                            downvotes={
-                              votes.length !== 0
-                                ? votes.find((obj) => obj.id === item.id)
-                                    ?.down !== undefined
-                                  ? votes.find((obj) => obj.id === item.id)
-                                      ?.down
-                                  : 0
-                                : 0
-                            }
-                            image={item.image}
-                            onSelectOtherNews={onSelectOtherNews}
-                            onHandleDownvote={onHandleDownvote}
-                            onHandleUpvote={onHandleUpvote}
-                            isConnected={isConnected}
-                            isPremium={isPremium}
-                            onVotesFetch={fetchVotingdata}
-                            coinbase={coinbase}
-                          />
-                        </div>
-                      );
-                    }
-                  })}
-            </div>
+      <div className="col-4 pe-0">
+        <div className="right-col position-relative w-100">
+          <div
+            className="purplediv"
+            style={{ left: "0px", top: "20px", background: "#8E97CD" }}
+          ></div>
+          <div className="d-flex align-items-center gap-2 mt-2">
+            <img src={require(`./assets/relatedNewsIcon.svg`).default} alt="" />
+            <h3 className="related-news-side-title">Top voted news</h3>
           </div>
-    </div>
+          <div className="related-news-wrapper">
+            {latestNewsData.length > 0 &&
+              getItemsWithoutCurrentItem(newsId, latestNewsData)
+                .slice(0, parseInt(height / 127))
+                .map((item, key) => {
+                  if (item !== undefined) {
+                    return (
+                      <div
+                        key={key}
+                        onClick={() => {
+                          window.scrollTo(0, 0);
+                        }}
+                      >
+                        <RelatedNews
+                          newsId={item.id}
+                          theme={theme}
+                          title={item.title}
+                          date={item.date}
+                          month={item.month}
+                          year={item.year}
+                          link={item.link}
+                          bal1={bal1}
+                          bal2={bal2}
+                          bal3={bal3}
+                          upvotes={
+                            votes.length !== 0
+                              ? votes.find((obj) => obj.id === item.id)?.up !==
+                                undefined
+                                ? votes.find((obj) => obj.id === item.id)?.up
+                                : 0
+                              : 0
+                          }
+                          downvotes={
+                            votes.length !== 0
+                              ? votes.find((obj) => obj.id === item.id)
+                                  ?.down !== undefined
+                                ? votes.find((obj) => obj.id === item.id)?.down
+                                : 0
+                              : 0
+                          }
+                          image={item.image}
+                          onSelectOtherNews={onSelectOtherNews}
+                          onHandleDownvote={onHandleDownvote}
+                          onHandleUpvote={onHandleUpvote}
+                          isConnected={isConnected}
+                          isPremium={isPremium}
+                          onVotesFetch={fetchVotingdata}
+                          coinbase={coinbase}
+                        />
+                      </div>
+                    );
+                  }
+                })}
+          </div>
+        </div>
+      </div>
     </>
   );
 };

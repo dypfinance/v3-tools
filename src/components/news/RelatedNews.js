@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import VotePassive from "./assets/votepassive.svg";
-import Upvote from "./assets/upvote.svg";
-import Downvote from "./assets/downvote.svg";
 import ToolTip from "./ToolTip";
 import OutsideClickHandler from "react-outside-click-handler";
-import Clock from "./assets/clock.svg";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import passiveUpvote from "./assets/passiveUpvote.svg";
 import passiveDownvote from "./assets/passiveDownvote.svg";
@@ -47,16 +43,16 @@ const RelatedNews = ({
   const logout = localStorage.getItem("logout");
 
   useEffect(() => {
-    if (bal1 === 0 && bal2 === 0 && bal3 === 0 && isPremium === true) {
+    if (bal1 === '0' && bal2 === '0' && bal3 === '0' && isPremium === true) {
       setCanVote(true);
-    } else if (bal1 !== 0 && bal2 !== 0 && bal3 !== 0 && isPremium === true) {
+    } else if (bal1 !== '0' && bal2 !== '0' && bal3 !== '0' && isPremium === true) {
       setCanVote(true);
     } else if (
-      (bal1 !== 0 || bal2 !== 0 || bal3 !== 0) &&
+      (bal1 !== '0' || bal2 !== '0' || bal3 !== '0') &&
       isPremium === false
     ) {
       setCanVote(true);
-    } else if (bal1 === 0 && bal2 === 0 && bal3 === 0 && isPremium === false) {
+    } else if (bal1 === '0' && bal2 === '0' && bal3 === '0' && isPremium === false) {
       setCanVote(false);
     } else if (logout === "true") {
       setCanVote(false);
@@ -66,7 +62,7 @@ const RelatedNews = ({
   const handleLikeStates = () => {
     if (
       logout === "false" &&
-      (bal1 !== 0 || bal2 !== 0 || isPremium !== false)
+      (bal1 !== '0' || bal2 !== '0' || bal3 !== '0' || isPremium !== false)
     ) {
       checkUpVoting(newsId);
     } else {
@@ -74,7 +70,7 @@ const RelatedNews = ({
     }
 
     if (
-      (bal1 === 0 && bal2 === 0 && isPremium === false) ||
+      (bal1 === '0' && bal2 === '0' && bal3 === '0' && isPremium === false) ||
       logout === "true" ||
       alreadyVoted === false
     ) {
@@ -95,7 +91,7 @@ const RelatedNews = ({
   const handleDisLikeStates = () => {
     if (
       logout === "false" &&
-      (bal1 !== 0 || bal2 !== 0 || isPremium !== false)
+      (bal1 !== '0' || bal2 !== '0' || bal3 !== '0' || isPremium !== false)
     ) {
       checkDownVoting(newsId);
     } else {
@@ -103,7 +99,7 @@ const RelatedNews = ({
     }
 
     if (
-      (bal1 === 0 && bal2 === 0 && isPremium === false) ||
+      (bal1 === '0' && bal2 === '0' && bal3 === '0' && isPremium === false) ||
       logout === "true" ||
       alreadyVoted === false
     ) {

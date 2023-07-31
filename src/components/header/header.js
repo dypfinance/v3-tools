@@ -22,7 +22,7 @@ import useWindowSize from "../../functions/useWindowSize";
 import toolsLogo from "../../assets/sidebarIcons/toolsLogo.svg";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
-import error from '../../assets/error.svg'
+import error from "../../assets/error.svg";
 const Header = ({
   toggleMobileSidebar,
   toggleTheme,
@@ -36,7 +36,7 @@ const Header = ({
   hideModal,
   handleConnection,
   isConnected,
-  appState
+  appState,
 }) => {
   const [gasPrice, setGasprice] = useState();
   const [ethPrice, setEthprice] = useState();
@@ -52,7 +52,6 @@ const Header = ({
   const [avatar, setAvatar] = useState("../../assets/img/person.svg");
   const routeData = useLocation();
 
-
   const { ethereum } = window;
 
   const setActiveChain = () => {
@@ -60,19 +59,15 @@ const Header = ({
       setAvaxState(false);
       setBnbState(false);
       setEthState(true);
-    }
-    else if (chainId === 43114) {
+    } else if (chainId === 43114) {
       setAvaxState(true);
       setBnbState(false);
       setEthState(false);
-    }
-    else if (chainId === 56) {
+    } else if (chainId === 56) {
       setAvaxState(false);
       setBnbState(true);
       setEthState(false);
-    }
-
-    else {
+    } else {
       setAvaxState(false);
       setBnbState(false);
       setEthState(false);
@@ -173,8 +168,7 @@ const Header = ({
 
       if (balance) {
         const infuraWeb3 = new Web3(window.config.infura_endpoint);
-        
-      
+
         const bscWeb3 = new Web3(window.config.bsc_endpoint);
         const avaxWeb3 = new Web3(window.config.avax_endpoint);
         if (chainId === 1) {
@@ -234,12 +228,12 @@ const Header = ({
     ethereum?.on("chainChanged", handleChainChanged);
   }, [chainId, ethState]);
 
-
   useEffect(() => {
-    fetchAvatar();
-    fetchUsername();
+    if (coinbase !== undefined && coinbase !== null) {
+      fetchAvatar();
+      fetchUsername();
+    }
   }, [coinbase, checklogout]);
-
 
   return (
     <>
@@ -279,7 +273,9 @@ const Header = ({
                 <div className="d-flex m-0 justify-content-between gap-3 align-items-center">
                   <NavLink className="buydyp-btn btn" to="/buydyp">
                     <img src={coin} alt="" />
-                    <span className="buy-dyp-text d-none d-lg-flex">Buy DYP</span>
+                    <span className="buy-dyp-text d-none d-lg-flex">
+                      Buy DYP
+                    </span>
                   </NavLink>
                   <div className="d-flex justify-content-between gap-3 align-items-center">
                     {routeData.pathname &&
@@ -296,7 +292,9 @@ const Header = ({
                                     ? eth
                                     : bnbState === true
                                     ? bnb
-                                    : avaxState === true ? avax : error
+                                    : avaxState === true
+                                    ? avax
+                                    : error
                                 }
                                 height={16}
                                 width={16}
@@ -307,7 +305,9 @@ const Header = ({
                                   ? "Ethereum"
                                   : bnbState === true
                                   ? "BNB Chain"
-                                  : avaxState === true ? 'Avalanche' : 'Unsupported Chain'}
+                                  : avaxState === true
+                                  ? "Avalanche"
+                                  : "Unsupported Chain"}
                               </span>
 
                               <img src={dropdown} alt="" />
@@ -377,7 +377,7 @@ const Header = ({
                     {isConnected === true &&
                       coinbase !== undefined &&
                       coinbase !== null &&
-                      routeData.pathname !== "/swap"  && (
+                      routeData.pathname !== "/swap" && (
                         <>
                           <div className="account-info d-none d-lg-flex align-items-center justify-content-center gap-2 gap-lg-3">
                             <span className="account-balance d-none d-lg-flex">
@@ -386,7 +386,9 @@ const Header = ({
                                 ? "ETH"
                                 : chainId === 56
                                 ? "BNB"
-                                : chainId === 43114 ? "AVAX" : ''}
+                                : chainId === 43114
+                                ? "AVAX"
+                                : ""}
                             </span>
                             <span className="account-address">
                               {windowSize.width > 786
@@ -411,10 +413,14 @@ const Header = ({
                             }
                           >
                             <Dropdown.Item>
-                            <NavLink to={appState.isPremium ? '/account' : '/plans'} className={'d-flex w-100'}>
-                            <span className="d-flex gap-2 align-items-center">
-                              <img src={user} alt="" />
-                              My account</span>
+                              <NavLink
+                                to={appState.isPremium ? "/account" : "/plans"}
+                                className={"d-flex w-100"}
+                              >
+                                <span className="d-flex gap-2 align-items-center">
+                                  <img src={user} alt="" />
+                                  My account
+                                </span>
                               </NavLink>
                             </Dropdown.Item>
                             <Dropdown.Item onClick={() => logout()}>
@@ -448,12 +454,20 @@ const Header = ({
                           }
                         ></DropdownButton>
                       )}
-                      {isConnected === false &&
+                    {isConnected === false &&
                       (coinbase !== undefined || coinbase !== null) &&
                       routeData.pathname !== "/swap" && (
-                        <NavLink to='/plans' className="account-user-wrapper d-flex align-items-center gap-1">
-                          <img src={require(`./assets/user2.svg`).default} alt="" />
-                          <span className="account-user d-none d-lg-flex">Account</span>
+                        <NavLink
+                          to="/plans"
+                          className="account-user-wrapper d-flex align-items-center gap-1"
+                        >
+                          <img
+                            src={require(`./assets/user2.svg`).default}
+                            alt=""
+                          />
+                          <span className="account-user d-none d-lg-flex">
+                            Account
+                          </span>
                         </NavLink>
                       )}
                   </div>
