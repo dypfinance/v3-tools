@@ -8080,79 +8080,137 @@ const EarnTopPicks = ({
                     handleSwitchNetwork={handleSwitchNetwork}
                     expired={false}
                   />
-                ) : activeCard3 &&
-                  cardIndex >= 2 &&
-                  topList === "Staking" &&
-                  chain === "bnb" ? (
-                  <StakeBscIDyp
-                    is_wallet_connected={isConnected}
-                    coinbase={coinbase}
-                    the_graph_result={the_graph_resultbsc}
-                    chainId={chainId}
-                    handleConnection={handleConnection}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
-                    staking={
-                      expiredPools === false
-                        ? stakearrayStakeBsciDyp2[cardIndex - 2]
-                        : stakearrayStakeBsciDyp2Expired[cardIndex - 3]
-                    }
-                    listType={listType}
-                    finalApr={
-                      expiredPools === false
-                        ? activePools[cardIndex]?.apy_performancefee
-                        : expiredDYPPools[cardIndex]?.apy_performancefee
-                    }
-                    apr={
-                      expiredPools === false
-                        ? activePools[cardIndex]?.apy_percent
-                        : expiredDYPPools[cardIndex]?.apy_percent
-                    }
-                    liquidity={wbsc_address}
-                    expiration_time={
-                      expiredPools === false
-                        ? expirearrayStakeBsciDyp2[cardIndex - 2]
-                        : expirearrayStakeBsciDyp2Expired[cardIndex - 3]
-                    }
-                    other_info={
-                      cardIndex !== undefined
-                        ? expiredPools === false
-                          ? activePools[cardIndex]?.expired === "Yes"
-                            ? true
-                            : false
-                          : expiredDYPPools[cardIndex]?.expired === "Yes"
+                ) :activeCard3 &&
+                activePools[cardIndex]?.id ===
+                  "0x7e766F7005C7a9e74123b156697B582eeCB8d2D7" &&
+                topList === "Staking" &&
+                chain === "bnb" ? (
+                <StakeBscIDyp
+                  is_wallet_connected={isConnected}
+                  coinbase={coinbase}
+                  the_graph_result={the_graph_resultbsc}
+                  chainId={chainId}
+                  handleConnection={handleConnection}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  expired={false}
+                  staking={window.constant_stakingidyp_5}
+                  listType={listType}
+                  finalApr={
+                    expiredPools === false
+                      ? activePools[cardIndex]?.apy_performancefee
+                      : expiredDYPPools[cardIndex]?.apy_performancefee
+                  }
+                  apr={
+                    expiredPools === false
+                      ? activePools[cardIndex]?.apy_percent
+                      : expiredDYPPools[cardIndex]?.apy_percent
+                  }
+                  liquidity={wbsc_address}
+                  expiration_time={"15 August 2023"}
+                  other_info={
+                    cardIndex !== undefined
+                      ? expiredPools === false
+                        ? activePools[cardIndex]?.expired === "Yes"
                           ? true
                           : false
+                        : expiredDYPPools[cardIndex]?.expired === "Yes"
+                        ? true
                         : false
-                    }
-                    fee_s={
-                      expiredPools === false
-                        ? activePools[cardIndex]?.performancefee
-                        : expiredDYPPools[cardIndex]?.performancefee
-                    }
-                    fee_u={0}
-                    lockTime={
-                      cardIndex !== undefined
-                        ? expiredPools === false
-                          ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                            "No"
-                            ? "No Lock"
-                            : parseInt(
-                                activePools[cardIndex]?.lock_time?.split(" ")[0]
-                              )
-                          : expiredDYPPools[cardIndex]?.lock_time?.split(
-                              " "
-                            )[0] === "No"
+                      : false
+                  }
+                  fee_s={
+                    expiredPools === false
+                      ? activePools[cardIndex]?.performancefee
+                      : expiredDYPPools[cardIndex]?.performancefee
+                  }
+                  fee_u={0}
+                  lockTime={
+                    cardIndex !== undefined
+                      ? expiredPools === false
+                        ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
+                          "No"
                           ? "No Lock"
                           : parseInt(
-                              expiredDYPPools[cardIndex]?.lock_time?.split(
-                                " "
-                              )[0]
+                              activePools[cardIndex]?.lock_time?.split(" ")[0]
                             )
-                        : "No Lock"
-                    }
-                  />
-                ) : activeCard3 &&
+                        : expiredDYPPools[cardIndex]?.lock_time?.split(
+                            " "
+                          )[0] === "No"
+                        ? "No Lock"
+                        : parseInt(
+                            expiredDYPPools[cardIndex]?.lock_time?.split(
+                              " "
+                            )[0]
+                          )
+                      : "No Lock"
+                  }
+                />
+              ) :activeCard3 &&
+              activePools[cardIndex]?.id ===
+                "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
+              topList === "Staking" &&
+              chain === "bnb" ? (
+              <StakeBscIDyp
+                is_wallet_connected={isConnected}
+                coinbase={coinbase}
+                the_graph_result={the_graph_resultbsc}
+                chainId={chainId}
+                handleConnection={handleConnection}
+                handleSwitchNetwork={handleSwitchNetwork}
+                expired={false}
+                staking={window.constant_stakingidyp_7}
+                listType={listType}
+                finalApr={
+                  expiredPools === false
+                    ? activePools[cardIndex]?.apy_performancefee
+                    : expiredDYPPools[cardIndex]?.apy_performancefee
+                }
+                apr={
+                  expiredPools === false
+                    ? activePools[cardIndex]?.apy_percent
+                    : expiredDYPPools[cardIndex]?.apy_percent
+                }
+                liquidity={wbsc_address}
+                expiration_time={"18 July 2024"}
+                other_info={
+                  cardIndex !== undefined
+                    ? expiredPools === false
+                      ? activePools[cardIndex]?.expired === "Yes"
+                        ? true
+                        : false
+                      : expiredDYPPools[cardIndex]?.expired === "Yes"
+                      ? true
+                      : false
+                    : false
+                }
+                fee_s={
+                  expiredPools === false
+                    ? activePools[cardIndex]?.performancefee
+                    : expiredDYPPools[cardIndex]?.performancefee
+                }
+                fee_u={0}
+                lockTime={
+                  cardIndex !== undefined
+                    ? expiredPools === false
+                      ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
+                        "No"
+                        ? "No Lock"
+                        : parseInt(
+                            activePools[cardIndex]?.lock_time?.split(" ")[0]
+                          )
+                      : expiredDYPPools[cardIndex]?.lock_time?.split(
+                          " "
+                        )[0] === "No"
+                      ? "No Lock"
+                      : parseInt(
+                          expiredDYPPools[cardIndex]?.lock_time?.split(
+                            " "
+                          )[0]
+                        )
+                    : "No Lock"
+                }
+              />
+            ): activeCard3 &&
                   topList === "Staking" &&
                   chain === "avax" &&
                   activePools[cardIndex]?.id ===
