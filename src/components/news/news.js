@@ -455,13 +455,13 @@ const News = ({ theme, isPremium, coinbase }) => {
   const logout = localStorage.getItem("logout");
 
   useEffect(() => {
-    if (bal1 === 0 && bal2 === 0 && isPremium === true) {
+    if (bal1 === '0' && bal2 === '0'&& bal3 === '0' && isPremium === true) {
       setCanVote(true);
-    } else if (bal1 !== 0 && bal2 !== 0 && isPremium === true) {
+    } else if (bal1 !== '0' && bal2 !== '0' && bal3 !== '0' && isPremium === true) {
       setCanVote(true);
-    } else if ((bal1 !== 0 || bal2 !== 0) && isPremium === false) {
+    } else if ((bal1 !== '0' || bal2 !== '0'  || bal3 !== '0') && isPremium === false) {
       setCanVote(true);
-    } else if (bal1 === 0 && bal2 === 0 && isPremium === false) {
+    } else if (bal1 === '0' && bal2 === '0'  && bal3 !== '0' && isPremium === false) {
       setCanVote(false);
     } else if (logout === "true") {
       setCanVote(false);
@@ -474,7 +474,7 @@ const News = ({ theme, isPremium, coinbase }) => {
     const coinbase = await window.getCoinbase();
     // console.log(itemId)
     if (
-      (bal1 === 0 && bal2 === 0 && isPremium === false) ||
+      (bal1 === '0' && bal2 === '0'  && bal3 === '0' && isPremium === false) ||
       logout === "true"
     ) {
       setShowTooltip(true);
@@ -504,7 +504,7 @@ const News = ({ theme, isPremium, coinbase }) => {
     const coinbase = await window.getCoinbase();
 
     if (
-      (bal1 === 0 && bal2 === 0 && isPremium === false) ||
+      (bal1 === '0' && bal2 === '0'  && bal3 === '0'&& isPremium === false) ||
       logout === "true"
     ) {
       setShowTooltip(true);

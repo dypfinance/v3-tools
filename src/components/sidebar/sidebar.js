@@ -64,12 +64,12 @@ const Sidebar = (props) => {
     return response;
   };
 
-  useEffect(() => {
-    const logout = localStorage.getItem("logout");
-    if (logout !== "true") {
-      fetchAvatar().then();
-    }
-  }, [account]);
+  // useEffect(() => {
+  //   const logout = localStorage.getItem("logout");
+  //   if (logout !== "true") {
+  //     fetchAvatar().then();
+  //   }
+  // }, [account]);
 
   const windowSize = useWindowSize();
 
