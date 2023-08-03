@@ -58,6 +58,12 @@
   gap: 40px;
 }
 
+.funding-grid2 {
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+}
+
+
 .launchpad-dropdown {
   font-size: 12px;
   color: #b3b3b3 !important;
@@ -146,7 +152,7 @@
     width: 100% !important;
   }
 
-  .funding-grid {
+  .funding-grid, .funding-grid2 {
     grid-template-columns: auto;
   }
 

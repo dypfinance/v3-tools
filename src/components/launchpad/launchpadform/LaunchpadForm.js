@@ -9,11 +9,15 @@ import telegramIcon from "../assets/telegramIcon.svg";
 import mediumIcon from "../assets/mediumIcon.svg";
 import discordIcon from "../assets/discordIcon.svg";
 import clearFieldsIcon from "../assets/clearFieldsIcon.svg";
-import validateFormInfo from './validateFormInfo'
-import ReCaptchaV2 from 'react-google-recaptcha'
+import validateFormInfo from "./validateFormInfo";
+import ReCaptchaV2 from "react-google-recaptcha";
 import axios from "axios";
-
-
+import Timeline from "@mui/lab/Timeline";
+import TimelineItem, { timelineItemClasses } from "@mui/lab/TimelineItem";
+import TimelineSeparator from "@mui/lab/TimelineSeparator";
+import TimelineConnector from "@mui/lab/TimelineConnector";
+import TimelineContent from "@mui/lab/TimelineContent";
+import TimelineDot from "@mui/lab/TimelineDot";
 
 const LaunchpadForm = () => {
   const projectStatusItems = [
@@ -39,6 +43,28 @@ const LaunchpadForm = () => {
     },
   ];
 
+  const refundTypeItems = [
+    {
+      value: "Refund",
+      label: "Refund",
+    },
+    {
+      value: "Burn",
+      label: "Burn",
+    },
+  ];
+
+  const routerItems = [
+    {
+      value: "Pancakeswap",
+      label: "Pancakeswap",
+    },
+    {
+      value: "Pancakeswap2",
+      label: "Pancakeswap2",
+    },
+  ];
+
   const blockchainLaunchItems = [
     {
       value: "Ethereum",
@@ -57,7 +83,6 @@ const LaunchpadForm = () => {
     },
   ];
 
-
   const [formItems, setFormItems] = useState({
     project_logo: "",
     project_name: "",
@@ -66,6 +91,25 @@ const LaunchpadForm = () => {
     email_address: "",
     project_description: "",
     project_status: "",
+    token_address: "",
+    token_name: "",
+    token_symbol: "",
+    token_decimals: "",
+    currency: "",
+    fee: "",
+    listingtype: "",
+    presale_rate: "",
+    whitelistvalue: "",
+    softcap: "",
+    hardcap: "",
+    minimumbuy: "",
+    maxbuy: "",
+    refundType_status: "",
+    router_status: "",
+    pancLiq: "",
+    pancListRate: "",
+    startDate: "",
+    endDate: "",
     team: "",
     blockchain_launch: "",
     raised_funds: "",
@@ -83,13 +127,16 @@ const LaunchpadForm = () => {
 
   const [dropdownTitles, setDropdownTitles] = useState({
     project_status: "Project status*",
+    refundType_status: "Refund type*",
+    router_status: "Router*",
     team: "Team*",
     blockchain_launch: "Blockchain launch*",
     raised_funds: "Have you raised funds",
   });
   const [imageError, setImageError] = useState(false);
-  const [errors, setErrors] = useState({})
-  const [success, setSuccess] = useState(false)
+  const [errors, setErrors] = useState({});
+  const [success, setSuccess] = useState(false);
+  const [step, setStep] = useState(1);
 
   const convert2base64 = (e) => {
     const fileTypes = ["image/jpg", "image/png", "image/jpeg"];
@@ -164,20 +211,19 @@ const LaunchpadForm = () => {
     });
     setBlockChainIcon(null);
   };
-  const recaptchaRef = useRef(null)
+  const recaptchaRef = useRef(null);
 
   useEffect(() => {
-    window.scrollTo(0, 0)
+    window.scrollTo(0, 0);
     setImageError(false);
   }, []);
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formItems);
-    setErrors(validateFormInfo(formItems))
-    if(Object.keys(validateFormInfo(formItems)).length === 0) {
-      if(
+    setErrors(validateFormInfo(formItems));
+    if (Object.keys(validateFormInfo(formItems)).length === 0) {
+      if (
         formItems.project_logo !== "" &&
         formItems.project_name !== "" &&
         formItems.ticker_symbol !== "" &&
@@ -191,52 +237,54 @@ const LaunchpadForm = () => {
         formItems.twitter !== "" &&
         formItems.telegram_user !== "" &&
         formItems.telegram_channel !== ""
-        ){
-            const captchaToken = await recaptchaRef.current.executeAsync();
-            const data = {
-              project_logo: formItems.project_logo,
-              project_name: formItems.project_name,
-              ticker_symbol: formItems.ticker_symbol,
-              name: formItems.name,
-              email_address: formItems.email_address,
-              project_description: formItems.project_description,
-              project_status: formItems.project_status,
-              team: formItems.team,
-              blockchain_launch: formItems.blockchain_launch,
-              raised_funds: formItems.raised_funds,
-              funds_amount: formItems.funds_amount,
-              ido_capital: formItems.ido_capital,
-              funding_description: formItems.funding_description,
-              website: formItems.website,
-              twitter: formItems.twitter,
-              telegram_user: formItems.telegram_user,
-              telegram_channel: formItems.telegram_channel,
-              medium: formItems.medium,
-              discord: formItems.discord,
-              additional_description: formItems.additional_description,
-              recaptcha: captchaToken
-            }
+      ) {
+        const captchaToken = await recaptchaRef.current.executeAsync();
+        const data = {
+          project_logo: formItems.project_logo,
+          project_name: formItems.project_name,
+          ticker_symbol: formItems.ticker_symbol,
+          name: formItems.name,
+          email_address: formItems.email_address,
+          project_description: formItems.project_description,
+          project_status: formItems.project_status,
+          team: formItems.team,
+          blockchain_launch: formItems.blockchain_launch,
+          raised_funds: formItems.raised_funds,
+          funds_amount: formItems.funds_amount,
+          ido_capital: formItems.ido_capital,
+          funding_description: formItems.funding_description,
+          website: formItems.website,
+          twitter: formItems.twitter,
+          telegram_user: formItems.telegram_user,
+          telegram_channel: formItems.telegram_channel,
+          medium: formItems.medium,
+          discord: formItems.discord,
+          additional_description: formItems.additional_description,
+          recaptcha: captchaToken,
+        };
 
-            const send = await axios.post("https://api-mail.dyp.finance/api/launch_form", data).then(function(result) {
-              return result.data
-            }).catch(function(error){
-              console.log(error);
-            })
-            console.log(send.status);
-            if(send.status === 1){
-              setSuccess(true)
-              alert('Form submitted succesfully!')
-            }else{
-              setSuccess(false)
-              alert('Something went wrong')
-
-            }
+        const send = await axios
+          .post("https://api-mail.dyp.finance/api/launch_form", data)
+          .then(function (result) {
+            return result.data;
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+        console.log(send.status);
+        if (send.status === 1) {
+          setSuccess(true);
+          alert("Form submitted succesfully!");
+        } else {
+          setSuccess(false);
+          alert("Something went wrong");
         }
-        recaptchaRef.current.reset();
-        clearFields();
-        console.log(success);
+      }
+      recaptchaRef.current.reset();
+      clearFields();
+      console.log(success);
     }
-  }
+  };
 
   return (
     <div className="container-lg px-0">
@@ -249,7 +297,10 @@ const LaunchpadForm = () => {
         </p>
       </div>
       <div className="form-container p-3 position-relative mt-4">
-        <div className="purplediv" style={{ background: "#8E97CD", left: '0px' }}></div>
+        <div
+          className="purplediv"
+          style={{ background: "#8E97CD", left: "0px" }}
+        ></div>
         <div className="d-flex align-items-center gap-2 mt-1">
           <img src={formIcon} alt="form icon" />
           <h6
@@ -263,11 +314,559 @@ const LaunchpadForm = () => {
             Submit form
           </h6>
         </div>
+
         <form>
           <div className="row flex-column flex-lg-row align-items-center justify-content-between first-form mt-5">
+            <div className="row gap-4 gap-lg-0 align-items-center">
+              <h6
+                style={{
+                  fontWeight: "500",
+                  fontSize: "20px",
+                  lineHeight: "30px",
+                  color: "#f7f7fc",
+                }}
+              >
+                Verify Token
+              </h6>
+              <span
+                className={`image-tip mb-3 ${imageError && "required-star"}`}
+              >
+                Enter the token address and verify
+              </span>
+              <div className="funding-grid2 d-grid">
+                <div className="input-container px-0" style={{ width: "100%" }}>
+                  <input
+                    type="text"
+                    id="token_address"
+                    name="token_address"
+                    placeholder=" "
+                    className="text-input"
+                    style={{ width: "100%" }}
+                    value={formItems.token_address}
+                    onChange={(e) =>
+                      setFormItems({
+                        ...formItems,
+                        token_address: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                  <label
+                    htmlFor="token_address"
+                    className="label"
+                    onClick={() => focusInput("token_address")}
+                  >
+                    Token address
+                  </label>
+                </div>
+
+                <div className="input-container px-0" style={{ width: "100%" }}>
+                  <input
+                    type="text"
+                    id="token_name"
+                    name="token_name"
+                    placeholder=" "
+                    className="text-input"
+                    style={{ width: "100%" }}
+                    value={formItems.token_name}
+                    onChange={(e) =>
+                      setFormItems({ ...formItems, token_name: e.target.value })
+                    }
+                    required
+                  />
+                  <label
+                    htmlFor="token_name"
+                    className="label"
+                    onClick={() => focusInput("token_name")}
+                  >
+                    Token name
+                  </label>
+                </div>
+
+                <div className="input-container px-0" style={{ width: "100%" }}>
+                  <input
+                    type="text"
+                    id="token_symbol"
+                    name="token_symbol"
+                    placeholder=" "
+                    className="text-input"
+                    style={{ width: "100%" }}
+                    value={formItems.token_symbol}
+                    onChange={(e) =>
+                      setFormItems({
+                        ...formItems,
+                        token_symbol: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                  <label
+                    htmlFor="token_symbol"
+                    className="label"
+                    onClick={() => focusInput("token_symbol")}
+                  >
+                    Token symbol
+                  </label>
+                </div>
+
+                <div className="input-container px-0" style={{ width: "100%" }}>
+                  <input
+                    type="text"
+                    id="token_decimals"
+                    name="token_decimals"
+                    placeholder=" "
+                    className="text-input"
+                    style={{ width: "100%" }}
+                    value={formItems.token_decimals}
+                    onChange={(e) =>
+                      setFormItems({
+                        ...formItems,
+                        token_decimals: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                  <label
+                    htmlFor="token_decimals"
+                    className="label"
+                    onClick={() => focusInput("token_decimals")}
+                  >
+                    Token decimals
+                  </label>
+                </div>
+                <div className="input-container px-0 w-100 d-flex position-relative">
+                  <span className="d-flex gap-2 my-2 align-items-center">
+                    <input
+                      type="radio"
+                      id="currency"
+                      name="currency"
+                      placeholder=" "
+                      className="text-input"
+                      checked
+                    />
+                    <label
+                      htmlFor="currency"
+                      className="label"
+                      onClick={() => focusInput("currency")}
+                    >
+                      Currency
+                    </label>
+                    ETH
+                  </span>
+                </div>
+                <div className="input-container px-0 w-100 d-flex position-relative">
+                  <span className="d-flex gap-2 my-2 align-items-center">
+                    <input
+                      type="radio"
+                      id="fee"
+                      name="fee"
+                      placeholder=" "
+                      className="text-input"
+                      checked
+                    />
+                    <label
+                      htmlFor="fee"
+                      className="label"
+                      onClick={() => focusInput("fee")}
+                    >
+                      Fee Option
+                    </label>
+                    5% ETH raised only
+                  </span>
+                </div>
+                <div className="input-container px-0 w-100 d-flex position-relative">
+                  <span className="d-flex gap-2 my-2 align-items-center">
+                    <input
+                      type="radio"
+                      id="listingtype"
+                      name="listingtype"
+                      placeholder=" "
+                      className="text-input"
+                      checked
+                    />
+                    <label
+                      htmlFor="listingtype"
+                      className="label"
+                      onClick={() => focusInput("listingtype")}
+                    >
+                      Listing Option
+                    </label>
+                    Auto Listing
+                  </span>
+                </div>
+              </div>
+            </div>
+            <hr className="form-divider my-4" />
+            <div className="row gap-4 gap-lg-0 align-items-center">
+              <h6
+                style={{
+                  fontWeight: "500",
+                  fontSize: "20px",
+                  lineHeight: "30px",
+                  color: "#f7f7fc",
+                }}
+              >
+                DeFi Launchpad Info
+              </h6>
+              <span
+                className={`image-tip mb-3 ${imageError && "required-star"}`}
+              >
+                Enter the launchpad information that you want to raise , that
+                should be enter all details about your presale
+              </span>
+              <div className="funding-grid2 d-grid">
+                <div className="input-container px-0" style={{ width: "100%" }}>
+                  <input
+                    type="text"
+                    id="presale_rate"
+                    name="presale_rate"
+                    placeholder=" "
+                    className="text-input"
+                    style={{ width: "100%" }}
+                    value={formItems.presale_rate}
+                    onChange={(e) =>
+                      setFormItems({
+                        ...formItems,
+                        presale_rate: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                  <label
+                    htmlFor="presale_rate"
+                    className="label"
+                    onClick={() => focusInput("presale_rate")}
+                  >
+                    Presale rate
+                  </label>
+                </div>
+
+                <div className="input-container px-0 gap-3 w-100 d-flex position-relative">
+                  <span className="d-flex gap-2 my-2 align-items-center">
+                    <input
+                      type="radio"
+                      id="whitelistno"
+                      name="whitelistno"
+                      placeholder=" "
+                      className="text-input"
+                      checked
+                    />
+                    <label
+                      htmlFor="whitelistno"
+                      className="label"
+                      onClick={() => focusInput("whitelistno")}
+                    >
+                      Whitelist
+                    </label>
+                    Disable
+                  </span>
+                  <span className="d-flex gap-2 my-2 align-items-center">
+                    <input
+                      type="radio"
+                      id="whitelistyes"
+                      name="whitelistyes"
+                      placeholder=" "
+                      className="text-input"
+                    />
+                    Enable
+                  </span>
+                </div>
+
+                <div className="input-container px-0" style={{ width: "100%" }}>
+                  <input
+                    type="text"
+                    id="softcap"
+                    name="softcap"
+                    placeholder=" "
+                    className="text-input"
+                    style={{ width: "100%" }}
+                    value={formItems.softcap}
+                    onChange={(e) =>
+                      setFormItems({
+                        ...formItems,
+                        softcap: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                  <label
+                    htmlFor="softcap"
+                    className="label"
+                    onClick={() => focusInput("softcap")}
+                  >
+                    Softcap (BNB)
+                  </label>
+                </div>
+
+                <div className="input-container px-0" style={{ width: "100%" }}>
+                  <input
+                    type="text"
+                    id="hardcap"
+                    name="hardcap"
+                    placeholder=" "
+                    className="text-input"
+                    style={{ width: "100%" }}
+                    value={formItems.hardcap}
+                    onChange={(e) =>
+                      setFormItems({
+                        ...formItems,
+                        hardcap: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                  <label
+                    htmlFor="hardcap"
+                    className="label"
+                    onClick={() => focusInput("hardcap")}
+                  >
+                    HardCap (BNB)
+                  </label>
+                </div>
+                <div className="input-container px-0" style={{ width: "100%" }}>
+                  <input
+                    type="text"
+                    id="minimumbuy"
+                    name="minimumbuy"
+                    placeholder=" "
+                    className="text-input"
+                    style={{ width: "100%" }}
+                    value={formItems.minimumbuy}
+                    onChange={(e) =>
+                      setFormItems({
+                        ...formItems,
+                        minimumbuy: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                  <label
+                    htmlFor="minimumbuy"
+                    className="label"
+                    onClick={() => focusInput("minimumbuy")}
+                  >
+                    Minimum buy (BNB)
+                  </label>
+                </div>
+                <div className="input-container px-0" style={{ width: "100%" }}>
+                  <input
+                    type="text"
+                    id="maxbuy"
+                    name="maxbuy"
+                    placeholder=" "
+                    className="text-input"
+                    style={{ width: "100%" }}
+                    value={formItems.maxbuy}
+                    onChange={(e) =>
+                      setFormItems({
+                        ...formItems,
+                        maxbuy: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                  <label
+                    htmlFor="maxbuy"
+                    className="label"
+                    onClick={() => focusInput("maxbuy")}
+                  >
+                    Maximum buy (BNB)
+                  </label>
+                </div>
+                <div class="dropdown position relative">
+                  <button
+                    class={`btn launchpad-dropdown d-flex justify-content-between align-items-center dropdown-toggle w-100 ${
+                      errors.refundType_status && "error-border"
+                    }`}
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    {dropdownTitles.refundType_status}
+                    <img src={launchpadIndicator} alt="" />
+                  </button>
+                  <ul class="dropdown-menu w-100">
+                    {refundTypeItems.map((item, index) => (
+                      <li
+                        key={index}
+                        className="dropdown-item launchpad-item"
+                        onClick={() => {
+                          setDropdownTitles({
+                            ...dropdownTitles,
+                            refundType_status: item.label,
+                          });
+                          setFormItems({
+                            ...formItems,
+                            refundType_status: item.value,
+                          });
+                        }}
+                      >
+                        {item.label}
+                      </li>
+                    ))}
+                  </ul>
+                  {errors.project_status && (
+                    <span className="error-text">
+                      {errors.refundType_status}
+                    </span>
+                  )}
+                </div>
+                <div class="dropdown position relative">
+                  <button
+                    class={`btn launchpad-dropdown d-flex justify-content-between align-items-center dropdown-toggle w-100 ${
+                      errors.router_status && "error-border"
+                    }`}
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    {dropdownTitles.router_status}
+                    <img src={launchpadIndicator} alt="" />
+                  </button>
+                  <ul class="dropdown-menu w-100">
+                    {routerItems.map((item, index) => (
+                      <li
+                        key={index}
+                        className="dropdown-item launchpad-item"
+                        onClick={() => {
+                          setDropdownTitles({
+                            ...dropdownTitles,
+                            router_status: item.label,
+                          });
+                          setFormItems({
+                            ...formItems,
+                            router_status: item.value,
+                          });
+                        }}
+                      >
+                        {item.label}
+                      </li>
+                    ))}
+                  </ul>
+                  {errors.project_status && (
+                    <span className="error-text">{errors.router_status}</span>
+                  )}
+                </div>
+                <div className="input-container px-0" style={{ width: "100%" }}>
+                  <input
+                    type="text"
+                    id="pancLiq"
+                    name="pancLiq"
+                    placeholder=" "
+                    className="text-input"
+                    style={{ width: "100%" }}
+                    value={formItems.pancLiq}
+                    onChange={(e) =>
+                      setFormItems({
+                        ...formItems,
+                        pancLiq: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                  <label
+                    htmlFor="pancLiq"
+                    className="label"
+                    onClick={() => focusInput("pancLiq")}
+                  >
+                    Pancakeswap liquidity (%)
+                  </label>
+                </div>
+                <div className="input-container px-0" style={{ width: "100%" }}>
+                  <input
+                    type="text"
+                    id="pancListRate"
+                    name="pancListRate"
+                    placeholder=" "
+                    className="text-input"
+                    style={{ width: "100%" }}
+                    value={formItems.pancListRate}
+                    onChange={(e) =>
+                      setFormItems({
+                        ...formItems,
+                        pancListRate: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                  <label
+                    htmlFor="pancListRate"
+                    className="label"
+                    onClick={() => focusInput("pancListRate")}
+                  >
+                    Pancakeswap listing rate
+                  </label>
+                </div>
+
+                <div className="input-container px-0" style={{ width: "100%" }}>
+                  <input
+                    type="date"
+                    id="startDate"
+                    name="startDate"
+                    placeholder=" "
+                    className="text-input"
+                    style={{ width: "100%" }}
+                    value={formItems.startDate}
+                    onChange={(e) =>
+                      setFormItems({
+                        ...formItems,
+                        startDate: e.target.value,
+                      })
+                    }
+                  />
+                  <label
+                    htmlFor="startDate"
+                    className="label"
+                    onClick={() => focusInput("startDate")}
+                  >
+                    Start time (UTC)
+                  </label>
+                </div>
+                <div className="input-container px-0" style={{ width: "100%" }}>
+                  <input
+                    type="date"
+                    id="endDate"
+                    name="endDate"
+                    placeholder=" "
+                    className="text-input"
+                    style={{ width: "100%" }}
+                    value={formItems.endDate}
+                    onChange={(e) =>
+                      setFormItems({
+                        ...formItems,
+                        endDate: e.target.value,
+                      })
+                    }
+                  />
+                  <label
+                    htmlFor="startDate"
+                    className="label"
+                    onClick={() => focusInput("endDate")}
+                  >
+                    End time (UTC)
+                  </label>
+                </div>
+              </div>
+            </div>
+            <hr className="form-divider my-4" />
+            <h6
+              className="my-3"
+              style={{
+                fontWeight: "500",
+                fontSize: "20px",
+                lineHeight: "30px",
+                color: "#f7f7fc",
+              }}
+            >
+              Project details
+            </h6>
             <div className="col-12 col-lg-2 align-items-center align-items-lg-start d-flex flex-column gap-3">
               <div className="form-title">Project logo</div>
-              <div className={`upload-container ${errors.project_logo && 'error-upload-container'} d-flex justify-content-center align-items-center position-relative`}>
+              <div
+                className={`upload-container ${
+                  errors.project_logo && "error-upload-container"
+                } d-flex justify-content-center align-items-center position-relative`}
+              >
                 <input
                   type="file"
                   id="file-upload"
@@ -297,7 +896,9 @@ const LaunchpadForm = () => {
                       id="project_name"
                       name="project_name"
                       placeholder=" "
-                      className={`text-input ${errors.project_name && 'error-border'}`}
+                      className={`text-input ${
+                        errors.project_name && "error-border"
+                      }`}
                       style={{ width: "100%" }}
                       value={formItems.project_name}
                       onChange={(e) =>
@@ -314,7 +915,9 @@ const LaunchpadForm = () => {
                     >
                       Project name<span className="required-star">*</span>
                     </label>
-                {errors.project_name && <span className="error-text">{errors.project_name}</span>}
+                    {errors.project_name && (
+                      <span className="error-text">{errors.project_name}</span>
+                    )}
                   </div>
                   <div
                     className="input-container px-0"
@@ -325,7 +928,9 @@ const LaunchpadForm = () => {
                       id="ticker_symbol"
                       name="ticker_symbol"
                       placeholder=" "
-                      className={`text-input ${errors.ticker_symbol && 'error-border'}`}
+                      className={`text-input ${
+                        errors.ticker_symbol && "error-border"
+                      }`}
                       style={{ width: "100%" }}
                       value={formItems.ticker_symbol}
                       onChange={(e) =>
@@ -342,8 +947,9 @@ const LaunchpadForm = () => {
                     >
                       Ticker symbol<span className="required-star">*</span>
                     </label>
-                {errors.ticker_symbol && <span className="error-text">{errors.ticker_symbol}</span>}
-
+                    {errors.ticker_symbol && (
+                      <span className="error-text">{errors.ticker_symbol}</span>
+                    )}
                   </div>{" "}
                   <div
                     className="input-container px-0"
@@ -380,7 +986,9 @@ const LaunchpadForm = () => {
                       id="email_address"
                       name="email_address"
                       placeholder=" "
-                      className={`text-input ${errors.email_address && 'error-border'}`}
+                      className={`text-input ${
+                        errors.email_address && "error-border"
+                      }`}
                       style={{ width: "100%" }}
                       value={formItems.email_address}
                       onChange={(e) =>
@@ -397,8 +1005,9 @@ const LaunchpadForm = () => {
                     >
                       Email address<span className="required-star">*</span>
                     </label>
-                {errors.email_address && <span className="error-text">{errors.email_address}</span>}
-
+                    {errors.email_address && (
+                      <span className="error-text">{errors.email_address}</span>
+                    )}
                   </div>
                 </div>
                 <div className="input-container px-0" style={{ width: "100%" }}>
@@ -431,11 +1040,13 @@ const LaunchpadForm = () => {
           </div>
           <div className="mt-3 position-relative col-12 col-lg-4">
             <span className={`image-tip mt-3 ${imageError && "required-star"}`}>
-            *Logos must have a 1:1 aspect ratio, a maximum size of 250 × 250 pixels, and a maximum file size of 150 kilobytes (kb) - jpg, jpeg, png.
+              *Logos must have a 1:1 aspect ratio, a maximum size of 250 x 250
+              pixels, and a maximum file size of 150 kilobytes (kb) - jpg, jpeg,
+              png.
             </span>
-            {errors.project_logo && <span className="error-text">
-              {errors.project_logo}
-            </span>}
+            {errors.project_logo && (
+              <span className="error-text">{errors.project_logo}</span>
+            )}
           </div>
           <hr className="form-divider my-4" />
           <div className="row gap-4 gap-lg-0 align-items-center">
@@ -453,7 +1064,9 @@ const LaunchpadForm = () => {
             <div className="funding-grid d-grid col-12 col-lg-9 col-xl-7">
               <div class="dropdown position relative">
                 <button
-                  class={`btn launchpad-dropdown d-flex justify-content-between align-items-center dropdown-toggle w-100 ${errors.project_status && 'error-border'}`}
+                  class={`btn launchpad-dropdown d-flex justify-content-between align-items-center dropdown-toggle w-100 ${
+                    errors.project_status && "error-border"
+                  }`}
                   type="button"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
@@ -481,14 +1094,16 @@ const LaunchpadForm = () => {
                     </li>
                   ))}
                 </ul>
-              {errors.project_status && <span className="error-text">{errors.project_status}</span>}
-
+                {errors.project_status && (
+                  <span className="error-text">{errors.project_status}</span>
+                )}
               </div>
 
               <div class="dropdown position relative">
                 <button
-                                    class={`btn launchpad-dropdown d-flex justify-content-between align-items-center dropdown-toggle w-100 ${errors.team && 'error-border'}`}
-
+                  class={`btn launchpad-dropdown d-flex justify-content-between align-items-center dropdown-toggle w-100 ${
+                    errors.team && "error-border"
+                  }`}
                   type="button"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
@@ -519,13 +1134,15 @@ const LaunchpadForm = () => {
                     Anonymous
                   </li>
                 </ul>
-              {errors.team && <span className="error-text">{errors.team}</span>}
-
+                {errors.team && (
+                  <span className="error-text">{errors.team}</span>
+                )}
               </div>
               <div class="dropdown position relative">
                 <button
-                                   class={`btn launchpad-dropdown d-flex justify-content-between align-items-center dropdown-toggle w-100 ${errors.blockchain_launch && 'error-border'}`}
-
+                  class={`btn launchpad-dropdown d-flex justify-content-between align-items-center dropdown-toggle w-100 ${
+                    errors.blockchain_launch && "error-border"
+                  }`}
                   type="button"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
@@ -565,8 +1182,9 @@ const LaunchpadForm = () => {
                     </li>
                   ))}
                 </ul>
-              {errors.blockchain_launch && <span className="error-text">{errors.blockchain_launch}</span>}
-
+                {errors.blockchain_launch && (
+                  <span className="error-text">{errors.blockchain_launch}</span>
+                )}
               </div>
               <div class="dropdown position relative">
                 <button
@@ -632,7 +1250,9 @@ const LaunchpadForm = () => {
                   id="ido_capital"
                   name="ido_capital"
                   placeholder=" "
-                  className={`text-input ${errors.email_address && 'error-border'}`}
+                  className={`text-input ${
+                    errors.email_address && "error-border"
+                  }`}
                   style={{ width: "100%" }}
                   value={formItems.ido_capital}
                   onChange={(e) =>
@@ -647,8 +1267,9 @@ const LaunchpadForm = () => {
                   Desired IDO capital (USD)
                   <span className="required-star">*</span>
                 </label>
-              {errors.ido_capital && <span className="error-text">{errors.ido_capital}</span>}
-
+                {errors.ido_capital && (
+                  <span className="error-text">{errors.ido_capital}</span>
+                )}
               </div>
             </div>
             <div className="input-container col-12 col-lg-3 col-xl-5">
@@ -701,8 +1322,7 @@ const LaunchpadForm = () => {
                   id="website"
                   name="website"
                   placeholder=" "
-                  className={`text-input ${errors.website && 'error-border'}`}
-
+                  className={`text-input ${errors.website && "error-border"}`}
                   style={{
                     width: "100%",
                     paddingLeft: "30px",
@@ -721,7 +1341,9 @@ const LaunchpadForm = () => {
                 >
                   Website<span className="required-star">*</span>
                 </label>
-                {errors.website && <span className="error-text">{errors.website}</span>}
+                {errors.website && (
+                  <span className="error-text">{errors.website}</span>
+                )}
               </div>
               <div className="input-container px-0" style={{ width: "100%" }}>
                 <img src={twitterIcon} alt="" className="input-icon" />
@@ -731,8 +1353,7 @@ const LaunchpadForm = () => {
                   id="twitter"
                   name="twitter"
                   placeholder=" "
-                  className={`text-input ${errors.twitter && 'error-border'}`}
-
+                  className={`text-input ${errors.twitter && "error-border"}`}
                   style={{ width: "100%", paddingLeft: "30px" }}
                   value={formItems.twitter}
                   onChange={(e) =>
@@ -747,8 +1368,9 @@ const LaunchpadForm = () => {
                 >
                   Twitter<span className="required-star">*</span>
                 </label>
-              {errors.twitter && <span className="error-text">{errors.twitter}</span>}
-
+                {errors.twitter && (
+                  <span className="error-text">{errors.twitter}</span>
+                )}
               </div>
               <div className="input-container px-0" style={{ width: "100%" }}>
                 <img src={telegramIcon} alt="" className="input-icon" />
@@ -758,8 +1380,9 @@ const LaunchpadForm = () => {
                   id="telegram_user"
                   name="telegram_user"
                   placeholder=" "
-                  className={`text-input ${errors.telegram_user && 'error-border'}`}
-
+                  className={`text-input ${
+                    errors.telegram_user && "error-border"
+                  }`}
                   style={{ width: "100%", paddingLeft: "30px" }}
                   value={formItems.telegram_user}
                   onChange={(e) =>
@@ -777,8 +1400,9 @@ const LaunchpadForm = () => {
                 >
                   Telegram username<span className="required-star">*</span>
                 </label>
-              {errors.telegram_user && <span className="error-text">{errors.telegram_user}</span>}
-
+                {errors.telegram_user && (
+                  <span className="error-text">{errors.telegram_user}</span>
+                )}
               </div>
               <div className="input-container px-0" style={{ width: "100%" }}>
                 <img src={telegramIcon} alt="" className="input-icon" />
@@ -788,8 +1412,9 @@ const LaunchpadForm = () => {
                   id="telegram_channel"
                   name="telegram_channel"
                   placeholder=" "
-                  className={`text-input ${errors.telegram_channel && 'error-border'}`}
-
+                  className={`text-input ${
+                    errors.telegram_channel && "error-border"
+                  }`}
                   style={{ width: "100%", paddingLeft: "30px" }}
                   value={formItems.telegram_channel}
                   onChange={(e) =>
@@ -808,8 +1433,9 @@ const LaunchpadForm = () => {
                   Telegram official channel
                   <span className="required-star">*</span>
                 </label>
-              {errors.telegram_channel && <span className="error-text">{errors.telegram_channel}</span>}
-
+                {errors.telegram_channel && (
+                  <span className="error-text">{errors.telegram_channel}</span>
+                )}
               </div>
               <div className="input-container px-0" style={{ width: "100%" }}>
                 <img src={mediumIcon} alt="" className="input-icon" />
@@ -894,15 +1520,20 @@ const LaunchpadForm = () => {
               Clear all fields
             </h6>
           </div>
-          <button className="btn filledbtn px-5" onClick={(e) => handleSubmit(e)}>Submit</button>
+          <button
+            className="btn filledbtn px-5"
+            onClick={(e) => handleSubmit(e)}
+          >
+            Submit
+          </button>
         </div>
         <ReCaptchaV2
-                    sitekey="6LflZgEgAAAAAO-psvqdoreRgcDdtkQUmYXoHuy2"
-                    style={{ display: "inline-block" }}
-                    theme="dark"
-                    size="invisible"
-                    ref={recaptchaRef}
-                  />
+          sitekey="6LflZgEgAAAAAO-psvqdoreRgcDdtkQUmYXoHuy2"
+          style={{ display: "inline-block" }}
+          theme="dark"
+          size="invisible"
+          ref={recaptchaRef}
+        />
       </div>
     </div>
   );
