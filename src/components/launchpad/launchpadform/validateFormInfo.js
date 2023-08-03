@@ -6,10 +6,45 @@ export default function validateFormInfo(values){
     } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email_address)) {
         errors.email_address = "Email Address is Invalid"
     }
+    if(!values.token_address.trim()){
+        errors.token_address = "Token address is required"
+    }
+
+    if(!values.softcap.trim()){
+        errors.softcap = "Softcap is required"
+    }
+    if(!values.hardcap.trim()){
+        errors.hardcap = "Hardcap is required"
+    }
+    if(!values.minimumbuy.trim()){
+        errors.minimumbuy = "Minimum buy is required"
+    }
+    if(!values.maxbuy.trim()){
+        errors.maxbuy = "Maximum buy is required"
+    }
+
+    if(!values.refundType_status.trim()){
+        errors.refundType_status = "Refund type is required"
+    }
+    if(!values.presale_rate.trim()){
+        errors.presale_rate = "Presale rate is required"
+    }
+    if(!values.router_status.trim()){
+        errors.router_status = "Router type is required"
+    }
+    if(!values.pancLiq.trim()){
+        errors.pancLiq = "Liquidity is required"
+    }
+    if(!values.pancListRate.trim()){
+        errors.pancListRate = "Listing rate is required"
+    }
+
+
 
     if(!values.project_logo.trim()){
         errors.project_logo = "Project logo is required"
     }
+
     if(!values.project_name.trim()){
         errors.project_name = "Project name is required"
     }

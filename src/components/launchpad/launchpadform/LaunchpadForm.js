@@ -12,12 +12,7 @@ import clearFieldsIcon from "../assets/clearFieldsIcon.svg";
 import validateFormInfo from "./validateFormInfo";
 import ReCaptchaV2 from "react-google-recaptcha";
 import axios from "axios";
-import Timeline from "@mui/lab/Timeline";
-import TimelineItem, { timelineItemClasses } from "@mui/lab/TimelineItem";
-import TimelineSeparator from "@mui/lab/TimelineSeparator";
-import TimelineConnector from "@mui/lab/TimelineConnector";
-import TimelineContent from "@mui/lab/TimelineContent";
-import TimelineDot from "@mui/lab/TimelineDot";
+
 
 const LaunchpadForm = () => {
   const projectStatusItems = [
@@ -340,7 +335,9 @@ const LaunchpadForm = () => {
                     id="token_address"
                     name="token_address"
                     placeholder=" "
-                    className="text-input"
+                    className={`text-input ${
+                      errors.token_address && "error-border"
+                    }`}
                     style={{ width: "100%" }}
                     value={formItems.token_address}
                     onChange={(e) =>
@@ -358,6 +355,10 @@ const LaunchpadForm = () => {
                   >
                     Token address
                   </label>
+                  {errors.token_address && (
+                      <span className="error-text">{errors.token_address}</span>
+                    )}
+
                 </div>
 
                 <div className="input-container px-0" style={{ width: "100%" }}>
@@ -366,7 +367,9 @@ const LaunchpadForm = () => {
                     id="token_name"
                     name="token_name"
                     placeholder=" "
-                    className="text-input"
+                    className={`text-input ${
+                      errors.token_name && "error-border"
+                    }`}
                     style={{ width: "100%" }}
                     value={formItems.token_name}
                     onChange={(e) =>
@@ -381,6 +384,10 @@ const LaunchpadForm = () => {
                   >
                     Token name
                   </label>
+                  {errors.token_name && (
+                      <span className="error-text">{errors.token_name}</span>
+                    )}
+
                 </div>
 
                 <div className="input-container px-0" style={{ width: "100%" }}>
@@ -389,7 +396,10 @@ const LaunchpadForm = () => {
                     id="token_symbol"
                     name="token_symbol"
                     placeholder=" "
-                    className="text-input"
+                    className={`text-input ${
+                      errors.token_symbol && "error-border"
+                    }`}
+
                     style={{ width: "100%" }}
                     value={formItems.token_symbol}
                     onChange={(e) =>
@@ -407,6 +417,10 @@ const LaunchpadForm = () => {
                   >
                     Token symbol
                   </label>
+                  {errors.token_symbol && (
+                      <span className="error-text">{errors.token_symbol}</span>
+                    )}
+
                 </div>
 
                 <div className="input-container px-0" style={{ width: "100%" }}>
@@ -415,7 +429,9 @@ const LaunchpadForm = () => {
                     id="token_decimals"
                     name="token_decimals"
                     placeholder=" "
-                    className="text-input"
+                    className={`text-input ${
+                      errors.token_decimals && "error-border"
+                    }`}
                     style={{ width: "100%" }}
                     value={formItems.token_decimals}
                     onChange={(e) =>
@@ -433,6 +449,10 @@ const LaunchpadForm = () => {
                   >
                     Token decimals
                   </label>
+                  {errors.token_decimals && (
+                      <span className="error-text">{errors.token_decimals}</span>
+                    )}
+
                 </div>
                 <div className="input-container px-0 w-100 d-flex position-relative">
                   <span className="d-flex gap-2 my-2 align-items-center">
@@ -521,7 +541,9 @@ const LaunchpadForm = () => {
                     id="presale_rate"
                     name="presale_rate"
                     placeholder=" "
-                    className="text-input"
+                    className={`text-input ${
+                      errors.presale_rate && "error-border"
+                    }`}
                     style={{ width: "100%" }}
                     value={formItems.presale_rate}
                     onChange={(e) =>
@@ -539,6 +561,10 @@ const LaunchpadForm = () => {
                   >
                     Presale rate
                   </label>
+                  {errors.presale_rate && (
+                      <span className="error-text">{errors.presale_rate}</span>
+                    )}
+
                 </div>
 
                 <div className="input-container px-0 gap-3 w-100 d-flex position-relative">
@@ -578,7 +604,9 @@ const LaunchpadForm = () => {
                     id="softcap"
                     name="softcap"
                     placeholder=" "
-                    className="text-input"
+                    className={`text-input ${
+                      errors.softcap && "error-border"
+                    }`}
                     style={{ width: "100%" }}
                     value={formItems.softcap}
                     onChange={(e) =>
@@ -596,6 +624,10 @@ const LaunchpadForm = () => {
                   >
                     Softcap (BNB)
                   </label>
+                  {errors.softcap && (
+                      <span className="error-text">{errors.softcap}</span>
+                    )}
+
                 </div>
 
                 <div className="input-container px-0" style={{ width: "100%" }}>
@@ -604,7 +636,9 @@ const LaunchpadForm = () => {
                     id="hardcap"
                     name="hardcap"
                     placeholder=" "
-                    className="text-input"
+                    className={`text-input ${
+                      errors.hardcap && "error-border"
+                    }`}
                     style={{ width: "100%" }}
                     value={formItems.hardcap}
                     onChange={(e) =>
@@ -622,6 +656,10 @@ const LaunchpadForm = () => {
                   >
                     HardCap (BNB)
                   </label>
+                  {errors.hardcap && (
+                      <span className="error-text">{errors.hardcap}</span>
+                    )}
+
                 </div>
                 <div className="input-container px-0" style={{ width: "100%" }}>
                   <input
@@ -629,7 +667,10 @@ const LaunchpadForm = () => {
                     id="minimumbuy"
                     name="minimumbuy"
                     placeholder=" "
-                    className="text-input"
+                    className={`text-input ${
+                      errors.minimumbuy && "error-border"
+                    }`}
+
                     style={{ width: "100%" }}
                     value={formItems.minimumbuy}
                     onChange={(e) =>
@@ -647,6 +688,10 @@ const LaunchpadForm = () => {
                   >
                     Minimum buy (BNB)
                   </label>
+                  {errors.minimumbuy && (
+                      <span className="error-text">{errors.minimumbuy}</span>
+                    )}
+
                 </div>
                 <div className="input-container px-0" style={{ width: "100%" }}>
                   <input
@@ -654,7 +699,9 @@ const LaunchpadForm = () => {
                     id="maxbuy"
                     name="maxbuy"
                     placeholder=" "
-                    className="text-input"
+                    className={`text-input ${
+                      errors.maxbuy && "error-border"
+                    }`}
                     style={{ width: "100%" }}
                     value={formItems.maxbuy}
                     onChange={(e) =>
@@ -672,6 +719,10 @@ const LaunchpadForm = () => {
                   >
                     Maximum buy (BNB)
                   </label>
+                  {errors.maxbuy && (
+                      <span className="error-text">{errors.maxbuy}</span>
+                    )}
+
                 </div>
                 <div class="dropdown position relative">
                   <button
@@ -753,7 +804,9 @@ const LaunchpadForm = () => {
                     id="pancLiq"
                     name="pancLiq"
                     placeholder=" "
-                    className="text-input"
+                    className={`text-input ${
+                      errors.pancLiq && "error-border"
+                    }`}
                     style={{ width: "100%" }}
                     value={formItems.pancLiq}
                     onChange={(e) =>
@@ -771,6 +824,10 @@ const LaunchpadForm = () => {
                   >
                     Pancakeswap liquidity (%)
                   </label>
+                  {errors.pancLiq && (
+                      <span className="error-text">{errors.pancLiq}</span>
+                    )}
+
                 </div>
                 <div className="input-container px-0" style={{ width: "100%" }}>
                   <input
@@ -778,7 +835,9 @@ const LaunchpadForm = () => {
                     id="pancListRate"
                     name="pancListRate"
                     placeholder=" "
-                    className="text-input"
+                    className={`text-input ${
+                      errors.pancListRate && "error-border"
+                    }`}
                     style={{ width: "100%" }}
                     value={formItems.pancListRate}
                     onChange={(e) =>
@@ -796,6 +855,10 @@ const LaunchpadForm = () => {
                   >
                     Pancakeswap listing rate
                   </label>
+                  {errors.pancListRate && (
+                      <span className="error-text">{errors.pancListRate}</span>
+                    )}
+
                 </div>
 
                 <div className="input-container px-0" style={{ width: "100%" }}>
