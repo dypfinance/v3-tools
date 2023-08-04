@@ -390,6 +390,7 @@ const BscFarmingFunc = ({
       .then(() => {
         setDepositLoading(false);
         setDepositStatus("deposit");
+        refreshBalance();
       })
       .catch((e) => {
         setDepositLoading(false);
@@ -619,6 +620,7 @@ const BscFarmingFunc = ({
         .then(() => {
           setWithdrawStatus("success");
           setWithdrawLoading(false);
+          refreshBalance();
         })
         .catch((e) => {
           setWithdrawStatus("failed");
@@ -1625,11 +1627,19 @@ const checkDepositAmount = (amount) => {
   };
 
   useEffect(() => {
-    const interval = setInterval(async () => {
       refreshBalance();
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [coinbase, coinbase2, chainId]);
+       if (depositAmount !== "") {
+      checkApproval(depositAmount);
+
+    }
+  }, [coinbase, coinbase2, chainId, staking, constant]);
+
+
+  useEffect(() => {
+      setDepositAmount('');
+      setDepositStatus('initial')
+
+  }, [ staking]);
 
   useEffect(() => {
       getBalance();
