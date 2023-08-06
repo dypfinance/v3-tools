@@ -248,8 +248,10 @@ const StakeBscIDyp = ({
         ]);
 
         let tvlDyps = new BigNumber(tvlDYPS).times(usd_per_dyps).toFixed(18);
-        let balance_formatted = new BigNumber(token_balance ).div(1e18).toString(10)
-        settoken_balance(balance_formatted) ;
+        let balance_formatted = new BigNumber(token_balance)
+          .div(1e18)
+          .toString(10);
+        settoken_balance(balance_formatted);
 
         let divs_formatted = new BigNumber(pendingDivs).div(1e18).toFixed(6);
         setpendingDivs(divs_formatted);
@@ -261,7 +263,9 @@ const StakeBscIDyp = ({
 
         setstakingTime(stakingTime);
 
-        let depositedTokens_formatted = new BigNumber(depositedTokens).div(1e18).toString(10)
+        let depositedTokens_formatted = new BigNumber(depositedTokens)
+          .div(1e18)
+          .toString(10);
 
         setdepositedTokens(depositedTokens_formatted);
 
@@ -309,11 +313,18 @@ const StakeBscIDyp = ({
   }, [coinbase, coinbase2]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      refreshBalance();
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [coinbase, coinbase2]);
+    refreshBalance();
+    if (depositAmount !== "") {
+      checkApproval(depositAmount);
+    }
+
+  }, [coinbase, coinbase2, staking]);
+
+  useEffect(() => {
+      setdepositAmount('');
+      setdepositStatus('initial')
+
+  }, [staking]);
 
   const getTotalTvl = async () => {
     let apy1 = 15;
@@ -339,6 +350,7 @@ const StakeBscIDyp = ({
       .then(() => {
         setdepositLoading(false);
         setdepositStatus("deposit");
+        refreshBalance();
       })
       .catch((e) => {
         setdepositLoading(false);
@@ -377,6 +389,7 @@ const StakeBscIDyp = ({
       .then(() => {
         setdepositLoading(false);
         setdepositStatus("success");
+        refreshBalance();
       })
       .catch((e) => {
         setdepositLoading(false);
@@ -393,13 +406,14 @@ const StakeBscIDyp = ({
   const handleWithdraw = async (e) => {
     // e.preventDefault();
     setwithdrawLoading(true);
-    let amount = new BigNumber(withdrawAmount).times(1e18).toFixed(0)
+    let amount = new BigNumber(withdrawAmount).times(1e18).toFixed(0);
     // console.log(amount)
     await staking
       .unstake(amount)
       .then(() => {
         setwithdrawLoading(false);
         setwithdrawStatus("success");
+        refreshBalance();
       })
       .catch((e) => {
         setwithdrawLoading(false);
@@ -423,6 +437,7 @@ const StakeBscIDyp = ({
         setclaimStatus("success");
         setclaimLoading(false);
         setpendingDivs(getFormattedNumber(0, 6));
+        refreshBalance();
       })
       .catch((e) => {
         setclaimStatus("failed");
@@ -446,11 +461,13 @@ const StakeBscIDyp = ({
   const handleSetMaxWithdraw = async (e) => {
     // e.preventDefault();
     let amount;
-    await staking.depositedTokens(coinbase).then((data)=>{
-      amount = data
-    })
+    await staking.depositedTokens(coinbase).then((data) => {
+      amount = data;
+    });
 
-    let depositedTokens_formatted = new BigNumber(amount).div(1e18).toString(10)
+    let depositedTokens_formatted = new BigNumber(amount)
+      .div(1e18)
+      .toString(10);
     setwithdrawAmount(depositedTokens_formatted);
   };
 
@@ -492,6 +509,7 @@ const StakeBscIDyp = ({
         setreInvestStatus("success");
         setreInvestLoading(false);
         setpendingDivs(getFormattedNumber(0, 6));
+        refreshBalance();
       })
       .catch((e) => {
         setreInvestStatus("failed");
@@ -577,11 +595,10 @@ const StakeBscIDyp = ({
     }
     if (!isNaN(cliffTime) && !isNaN(stakingTime)) {
       if (
-        (Number(stakingTime) + Number(cliffTime) >= Date.now()/1000) &&
+        Number(stakingTime) + Number(cliffTime) >= Date.now() / 1000 &&
         lockTime !== "No Lock"
       ) {
         setcanwithdraw(false);
-       
       }
     }
   }, [lockTime, canwithdraw, cliffTime, stakingTime, isCompleted]);
@@ -596,10 +613,12 @@ const StakeBscIDyp = ({
   tvl_usd = getFormattedNumber(tvl_usd, 2);
 
   const checkApproval = async (amount) => {
+
+    
     const result = await window
       .checkapproveStakePool(coinbase, reward_token._address, staking._address)
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         return data;
       });
 
@@ -1106,7 +1125,7 @@ const StakeBscIDyp = ({
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">My iDYP Deposit</span>
                     <h6 className="stats-card-content">
-                    {getFormattedNumber(depositedTokens,6)} iDYP
+                      {getFormattedNumber(depositedTokens, 6)} iDYP
                     </h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
@@ -1277,9 +1296,9 @@ const StakeBscIDyp = ({
                           "No Lock"
                         ) : (
                           <Countdown
-                          date={
-                            (Number(stakingTime) + Number(cliffTime)) * 1000
-                          }
+                            date={
+                              (Number(stakingTime) + Number(cliffTime)) * 1000
+                            }
                             renderer={renderer}
                             onComplete={() => {
                               setcanwithdraw(true);
@@ -1295,7 +1314,7 @@ const StakeBscIDyp = ({
                     <div className="d-flex flex-column gap-1">
                       <h6 className="withsubtitle">Balance</h6>
                       <h6 className="withtitle">
-                      {getFormattedNumber(depositedTokens,6)} {token_symbol}
+                        {getFormattedNumber(depositedTokens, 6)} {token_symbol}
                       </h6>
                     </div>
                   </div>
@@ -1430,7 +1449,10 @@ const StakeBscIDyp = ({
         <WalletModal
           show={show}
           handleClose={hideModal}
-          handleConnection={()=>{handleConnection(); setshow(false)}}
+          handleConnection={() => {
+            handleConnection();
+            setshow(false);
+          }}
         />
       )}
 

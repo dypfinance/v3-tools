@@ -394,11 +394,19 @@ const StakeEth = ({
   }, []);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      refreshBalance();
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [coinbase, coinbase2]);
+    refreshBalance();
+    if (depositAmount !== "") {
+      checkApproval(depositAmount);
+
+    }
+  }, [coinbase, coinbase2, staking]);
+
+  useEffect(() => {
+      setdepositAmount('');
+      setdepositStatus('initial')
+
+  }, [ staking]);
+
 
   const getTotalTvl = async () => {
     if (the_graph_result) {
@@ -445,6 +453,7 @@ const StakeEth = ({
       .then(() => {
         setdepositLoading(false);
         setdepositStatus("deposit");
+        refreshBalance();
       })
       .catch((e) => {
         setdepositLoading(false);
@@ -531,6 +540,7 @@ const StakeEth = ({
       .then(() => {
         setdepositLoading(false);
         setdepositStatus("success");
+        refreshBalance();
       })
       .catch((e) => {
         setdepositLoading(false);
@@ -558,6 +568,7 @@ const StakeEth = ({
       .then(() => {
         setwithdrawLoading(false);
         setwithdrawStatus("success");
+        refreshBalance();
       })
       .catch((e) => {
         setwithdrawLoading(false);
@@ -628,6 +639,7 @@ const StakeEth = ({
         setclaimStatus("success");
         setclaimLoading(false);
         setpendingDivs(getFormattedNumber(0, 6));
+        refreshBalance();
       })
       .catch((e) => {
         setclaimStatus("failed");
@@ -645,7 +657,6 @@ const StakeEth = ({
     const depositAmount = token_balance;
     checkApproval(token_balance);
 
-    setdepositAmount(depositAmount);
   };
 
   const handleSetMaxWithdraw = async (e) => {
@@ -743,6 +754,7 @@ const StakeEth = ({
         setreInvestStatus("success");
         setreInvestLoading(false);
         setpendingDivs(getFormattedNumber(0, 6));
+        refreshBalance();
       })
       .catch((e) => {
         setreInvestStatus("failed");

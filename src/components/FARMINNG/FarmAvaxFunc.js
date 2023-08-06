@@ -300,6 +300,7 @@ const FarmAvaxFunc = ({
       .then(() => {
         setDepositLoading(false);
         setDepositStatus("deposit");
+        refreshBalance();
       })
       .catch((e) => {
         setDepositLoading(false);
@@ -561,6 +562,7 @@ const FarmAvaxFunc = ({
         .then(() => {
           setWithdrawStatus("success");
           setWithdrawLoading(false);
+          refreshBalance();
         })
         .catch((e) => {
           setWithdrawStatus("failed");
@@ -927,6 +929,7 @@ console.log(0, amountsPendingClaim, deadline)
         .then(() => {
           setClaimStatus("success");
           setClaimLoading(false);
+          refreshBalance();
         })
         .catch((e) => {
           setClaimStatus("failed");
@@ -1519,11 +1522,21 @@ console.log(0, amountsPendingClaim, deadline)
   }
 
   useEffect(() => {
-    const interval = setInterval(async () => {
+    
       refreshBalance();
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [coinbase, coinbase2, chainId]);
+     if (depositAmount !== "") {
+      checkApproval(depositAmount);
+
+    }
+  }, [coinbase, coinbase2, chainId, staking, constant]);
+
+ 
+
+  useEffect(() => {
+      setDepositAmount('');
+      setDepositStatus('initial')
+
+  }, [ staking]);
 
   useEffect(() => {
       getBalance();
