@@ -964,7 +964,6 @@ const LaunchpadForm = () => {
             ) : step === 2 ? (
               <>
                 <h6
-                  className="my-3"
                   style={{
                     fontWeight: "500",
                     fontSize: "20px",

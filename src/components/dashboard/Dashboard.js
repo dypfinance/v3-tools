@@ -391,11 +391,11 @@ const Dashboard = ({
                             top_pick={false}
                             tokenName={"WBNB"}
                             apr={`${getFormattedNumber(
-                              theBnbPool[0][1].apy_percent,
+                              theBnbPool[0][1]?.apy_percent,
                               0
                             )}%`}
                             tvl={`$${getFormattedNumber(
-                              theBnbPool[0][1].tvl_usd,
+                              theBnbPool[0][1]?.tvl_usd,
                               2
                             )}`}
                             lockTime={"3 Days"}
@@ -780,11 +780,11 @@ const Dashboard = ({
                             top_pick={false}
                             tokenName={"WBNB"}
                             apr={`${getFormattedNumber(
-                              theBnbPool[0][1].apy_percent,
+                              theBnbPool[0][1]?.apy_percent,
                               0
                             )}%`}
                             tvl={`$${getFormattedNumber(
-                              theBnbPool[0][1].tvl_usd,
+                              theBnbPool[0][1]?.tvl_usd,
                               2
                             )}`}
                             lockTime={"3 Days"}

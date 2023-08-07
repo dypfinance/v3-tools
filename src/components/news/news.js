@@ -185,7 +185,6 @@ const News = ({ theme, isPremium, coinbase }) => {
       })
       .then((data) => {
         setPressNewsData(data);
-        // checkSingleVotes(parseInt(data._id))
       })
       .catch(console.error);
 
@@ -205,25 +204,7 @@ const News = ({ theme, isPremium, coinbase }) => {
     return result;
   };
 
-  const checkSingleVotes = async () => {
-    const topnews = [
-      ...otherNewsData,
-      ...popularNewsData,
-      ...newsData,
-      ...pressNewsData,
-    ];
 
-    if (topnews.length > 0) {
-      for (let i = 0; i < topnews.length; i++) {
-        axios
-          .get(`https://news-manage.dyp.finance/api/v1/votes/${topnews[i].id}`)
-          .then((data) => {
-            votes.push(data);
-          })
-          .catch(console.error);
-      }
-    }
-  };
 
   const fetchOtherNewsData = async () => {
     const result = await fetch(`https://news-manage.dyp.finance/api/others`)
@@ -246,7 +227,6 @@ const News = ({ theme, isPremium, coinbase }) => {
 
   useEffect(() => {
     fetchVotingdata().then();
-    // checkSingleVotes()
   }, [showModal, newsItemId, activeNews]);
 
   const { news_id } = useParams();
