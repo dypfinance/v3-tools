@@ -354,11 +354,18 @@ const StakeAvaxDai = ({
   }, []);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      refreshBalance();
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [coinbase, coinbase2]);
+    refreshBalance();
+    if (depositAmount !== "") {
+      checkApproval(depositAmount);
+
+    }
+  }, [coinbase, coinbase2, staking]);
+
+  useEffect(() => {
+      setdepositAmount('');
+      setdepositStatus('initial')
+
+  }, [ staking]);
 
   const handleApprove = (e) => {
     setdepositLoading(true);
@@ -377,6 +384,7 @@ const StakeAvaxDai = ({
       .then(() => {
         setdepositLoading(false);
         setdepositStatus("deposit");
+        refreshBalance();
       })
       .catch((e) => {
         setdepositLoading(false);
@@ -416,6 +424,7 @@ const StakeAvaxDai = ({
       .then(() => {
         setdepositLoading(false);
         setdepositStatus("success");
+        refreshBalance();
       })
       .catch((e) => {
         setdepositLoading(false);
@@ -444,6 +453,7 @@ const StakeAvaxDai = ({
       .then(() => {
         setwithdrawStatus("success");
         setwithdrawLoading(false);
+        refreshBalance();
       })
       .catch((e) => {
         setwithdrawLoading(false);
@@ -575,6 +585,7 @@ const StakeAvaxDai = ({
         setreInvestStatus("success");
         setreInvestLoading(false);
         setpendingDivs(getFormattedNumber(0, 6));
+        refreshBalance();
       })
       .catch((e) => {
         setreInvestStatus("failed");

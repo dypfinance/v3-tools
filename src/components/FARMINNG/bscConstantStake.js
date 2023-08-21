@@ -365,11 +365,22 @@ const StakeBsc = ({
   }, [coinbase, coinbase2]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      refreshBalance();
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [coinbase, coinbase2]);
+    refreshBalance();
+    if (depositAmount !== "") {
+      checkApproval(depositAmount);
+
+    }
+    else {
+      setdepositStatus('initial')
+
+    }
+  }, [coinbase, coinbase2, staking]);
+
+  useEffect(() => {
+      setdepositAmount('');
+      setdepositStatus('initial')
+
+  }, [staking]);
 
   const handleApprove = (e) => {
     //   e.preventDefault();
@@ -388,6 +399,7 @@ const StakeBsc = ({
         .then(() => {
           setdepositLoading(false);
           setdepositStatus("deposit");
+          refreshBalance();
         })
         .catch((e) => {
           setdepositLoading(false);
@@ -418,7 +430,7 @@ const StakeBsc = ({
 
     let amount = depositAmount;
     amount = new BigNumber(depositAmount).times(1e18).toFixed(0);
-    console.log(amount);
+     
     let referrer = window.config.ZERO_ADDRESS;
 
     //NO REFERRER HERE
@@ -428,7 +440,7 @@ const StakeBsc = ({
       .then(() => {
         setdepositLoading(false);
         setdepositStatus("success");
-
+        refreshBalance();
         setTimeout(() => {
           setdepositLoading(false);
           setdepositStatus("initial");
@@ -460,6 +472,7 @@ const StakeBsc = ({
       .then(() => {
         setwithdrawStatus("success");
         setwithdrawLoading(false);
+        refreshBalance();
       })
       .catch((e) => {
         setwithdrawLoading(false);
@@ -482,6 +495,7 @@ const StakeBsc = ({
         setclaimStatus("success");
         setclaimLoading(false);
         setpendingDivs(getFormattedNumber(0, 6));
+        refreshBalance();
       })
       .catch((e) => {
         setclaimStatus("failed");
@@ -557,6 +571,7 @@ const StakeBsc = ({
         setreInvestStatus("success");
         setreInvestLoading(false);
         setpendingDivs(getFormattedNumber(0, 6));
+        refreshBalance();
       })
       .catch((e) => {
         setreInvestStatus("failed");

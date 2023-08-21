@@ -348,11 +348,18 @@ settvlUSD(tvlUSD)
   }, [coinbase, coinbase2]);
 
   useEffect(() => {
-    const interval = setInterval(async () => {
-      refreshBalance();
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [coinbase, coinbase2]);
+    refreshBalance();
+    if (depositAmount !== "") {
+      checkApproval(depositAmount);
+
+    }
+  }, [coinbase, coinbase2, staking]);
+
+  useEffect(() => {
+      setdepositAmount('');
+      setdepositStatus('initial')
+
+  }, [ staking]);
 
   const getTotalTvl = async () => {
     let apy1 = 15;
@@ -379,6 +386,7 @@ settvlUSD(tvlUSD)
       .then(() => {
         setdepositLoading(false);
         setdepositStatus("deposit");
+        refreshBalance();
       })
       .catch((e) => {
         setdepositLoading(false);
@@ -416,6 +424,7 @@ settvlUSD(tvlUSD)
       .then(() => {
         setdepositLoading(false);
         setdepositStatus("success");
+        refreshBalance();
       })
       .catch((e) => {
         setdepositLoading(false);
@@ -445,6 +454,7 @@ settvlUSD(tvlUSD)
       .then(() => {
         setwithdrawLoading(false);
         setwithdrawStatus("success");
+        refreshBalance();
       })
       .catch((e) => {
         setwithdrawLoading(false);
@@ -468,7 +478,7 @@ settvlUSD(tvlUSD)
         setclaimStatus("success");
         setclaimLoading(false);
         setpendingDivs(getFormattedNumber(0, 6));
-
+        refreshBalance();
         setTimeout(() => {
           setclaimStatus("initial");
         }, 2000);
@@ -542,6 +552,7 @@ settvlUSD(tvlUSD)
         setreInvestStatus("success");
         setreInvestLoading(false);
         setpendingDivs(getFormattedNumber(0, 6));
+        refreshBalance();
       })
       .catch((e) => {
         setreInvestStatus("failed");

@@ -404,11 +404,18 @@ const StakeBsc2 = ({
   }, [coinbase, coinbase2]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      refreshBalance();
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [coinbase, coinbase2]);
+    refreshBalance();
+    if (depositAmount !== "") {
+      checkApproval(depositAmount);
+
+    }
+  }, [coinbase, coinbase2, staking]);
+
+  useEffect(() => {
+      setdepositAmount('');
+      setdepositStatus('initial')
+
+  }, [staking]);
 
   const handleApprove = (e) => {
     //   e.preventDefault();
@@ -421,6 +428,7 @@ const StakeBsc2 = ({
       .then(() => {
         setdepositLoading(false);
         setdepositStatus("deposit");
+        refreshBalance();
       })
       .catch((e) => {
         setdepositLoading(false);
@@ -498,6 +506,7 @@ const StakeBsc2 = ({
       .then(() => {
         setdepositLoading(false);
         setdepositStatus("success");
+        refreshBalance();
       })
       .catch((e) => {
         setdepositLoading(false);
@@ -526,6 +535,7 @@ const StakeBsc2 = ({
       .then(() => {
         setwithdrawStatus("success");
         setwithdrawLoading(false);
+        refreshBalance();
       })
       .catch((e) => {
         setwithdrawLoading(false);
@@ -594,6 +604,7 @@ const StakeBsc2 = ({
         setclaimStatus("success");
         setclaimLoading(false);
         setpendingDivs(getFormattedNumber(0, 6));
+        refreshBalance();
       })
       .catch((e) => {
         setclaimStatus("failed");
@@ -700,6 +711,7 @@ const StakeBsc2 = ({
         setreInvestStatus("success");
         setreInvestLoading(false);
         setpendingDivs(getFormattedNumber(0, 6));
+        refreshBalance();
       })
       .catch((e) => {
         setreInvestStatus("failed");

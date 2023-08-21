@@ -313,11 +313,19 @@ const InitConstantStakingiDYP = ({
   }, [coinbase, coinbase2]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      refreshBalance();
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [coinbase, coinbase2]);
+    refreshBalance();
+    if (depositAmount !== "") {
+      checkApproval(depositAmount);
+
+    }
+
+  }, [coinbase, coinbase2, staking]);
+
+  useEffect(() => {
+      setdepositAmount('');
+      setdepositStatus('initial')
+
+  }, [ staking]);
 
   const getTotalTvl = async () => {
     let apy1 = 15;
@@ -343,6 +351,7 @@ const InitConstantStakingiDYP = ({
       .then(() => {
         setdepositLoading(false);
         setdepositStatus("deposit");
+        refreshBalance();
       })
       .catch((e) => {
         setdepositLoading(false);
@@ -381,6 +390,7 @@ const InitConstantStakingiDYP = ({
       .then(() => {
         setdepositLoading(false);
         setdepositStatus("success");
+        refreshBalance();
       })
       .catch((e) => {
         setdepositLoading(false);
@@ -405,6 +415,7 @@ const InitConstantStakingiDYP = ({
       .then(() => {
         setwithdrawLoading(false);
         setwithdrawStatus("success");
+        refreshBalance();
       })
       .catch((e) => {
         setwithdrawLoading(false);
@@ -428,6 +439,7 @@ const InitConstantStakingiDYP = ({
         setclaimStatus("success");
         setclaimLoading(false);
         setpendingDivs(getFormattedNumber(0, 6));
+        refreshBalance();
       })
       .catch((e) => {
         setclaimStatus("failed");
@@ -498,6 +510,7 @@ const InitConstantStakingiDYP = ({
         setreInvestStatus("success");
         setreInvestLoading(false);
         setpendingDivs(getFormattedNumber(0, 6));
+        refreshBalance();
       })
       .catch((e) => {
         setreInvestStatus("failed");
