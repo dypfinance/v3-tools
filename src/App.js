@@ -339,10 +339,13 @@ class App extends React.Component {
 
   async handleEthereum() {
     const { ethereum } = window;
-    if (ethereum && (ethereum.isMetaMask === true || window.ethereum.isTrust === true)) {
+    if (
+      ethereum &&
+      (ethereum.isMetaMask === true || window.ethereum.isTrust === true)
+    ) {
       console.log("Ethereum successfully detected!");
       this.checkNetworkId();
-      await window.getCoinbase()
+      await window.getCoinbase();
       // Access the decentralized web!
     } else {
       console.log("Please install MetaMask!");
@@ -630,7 +633,27 @@ class App extends React.Component {
 
                   <Route
                     exact
-                    path="/earn"
+                    path="/earn/dypius"
+                    render={() => (
+                      <Earn
+                        coinbase={this.state.coinbase}
+                        the_graph_result={this.state.the_graph_result_ETH_V2}
+                        the_graph_resultavax={
+                          this.state.the_graph_result_AVAX_V2
+                        }
+                        the_graph_resultbsc={this.state.the_graph_result_BSC_V2}
+                        lp_id={LP_ID_Array}
+                        isConnected={this.state.isConnected}
+                        network={this.state.networkId}
+                        handleConnection={this.handleConnection}
+                        handleSwitchNetwork={this.handleSwitchNetwork}
+                        referrer={this.state.referrer}
+                      />
+                    )}
+                  />
+                  <Route
+                    exact
+                    path="/earn/other"
                     render={() => (
                       <Earn
                         coinbase={this.state.coinbase}

@@ -401,10 +401,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
     setUsdToDeposit(e.slice(0, 7));
   };
   let navigate = useHistory();
-  const gotoEarn = () => {
-    navigate.push("/earn");
-  };
-
+ 
   const [chainState, setchainState] = useState("eth");
   const [activePill, setActivePill] = useState(pillsNames[0]);
   const pillRef = useRef([]);
