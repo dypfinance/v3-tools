@@ -41,6 +41,7 @@ import { withRouter } from "react-router-dom";
 import GenesisStaking from "./components/genesisStaking/GenesisStaking";
 import CawsStaking from "./components/genesisStaking/CawsStaking";
 import Plans from "./components/account/Plans";
+import EarnOther from "./components/earnOther/EarnOther";
 
 class App extends React.Component {
   constructor(props) {
@@ -655,7 +656,7 @@ class App extends React.Component {
                     exact
                     path="/earn/other"
                     render={() => (
-                      <Earn
+                      <EarnOther
                         coinbase={this.state.coinbase}
                         the_graph_result={this.state.the_graph_result_ETH_V2}
                         the_graph_resultavax={
