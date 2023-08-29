@@ -65,6 +65,195 @@ const EarnOtherContent = ({
     },
   ];
 
+  const dummyData_eth = [
+    {
+      lockTime: "Flexible & Locked",
+      chain: "Ethereum",
+      apr: "12%",
+      tokenLogo: "dyplogo.svg",
+      expired: false,
+      top_pick: true,
+      tokenName: "Dypius",
+      tokenTicker: "DYP",
+    },
+    {
+      lockTime: "No lock",
+      chain: "Ethereum",
+      apr: "12%",
+      tokenLogo: "dyplogo.svg",
+      expired: false,
+      top_pick: true,
+      tokenName: "Dypius",
+      tokenTicker: "DYP",
+    },
+    {
+      lockTime: "Locked",
+      chain: "Ethereum",
+      apr: "12%",
+      tokenLogo: "dyplogo.svg",
+      expired: false,
+      top_pick: true,
+      tokenName: "Dypius",
+      tokenTicker: "DYP",
+    },
+    {
+      lockTime: "Locked",
+      chain: "Ethereum",
+      apr: "12%",
+      tokenLogo: "dyplogo.svg",
+      expired: false,
+      top_pick: true,
+      tokenName: "Dypius",
+      tokenTicker: "DYP",
+    },
+    {
+      lockTime: "Flexible & Locked",
+      chain: "Ethereum",
+      apr: "12%",
+      tokenLogo: "dyplogo.svg",
+      expired: false,
+      top_pick: true,
+      tokenName: "Dypius",
+      tokenTicker: "DYP",
+    },
+    {
+      lockTime: "No lock",
+      chain: "Ethereum",
+      apr: "12%",
+      tokenLogo: "dyplogo.svg",
+      expired: false,
+      top_pick: true,
+      tokenName: "Dypius",
+      tokenTicker: "DYP",
+    },
+  ];
+
+  const dummyData_bnb = [
+    {
+      lockTime: "No lock",
+      chain: "BNB Chain",
+      apr: "12%",
+      tokenLogo: "dyplogo.svg",
+      expired: false,
+      top_pick: true,
+      tokenName: "Dypius",
+      tokenTicker: "DYP",
+    },
+    {
+      lockTime: "Flexible & Locked",
+      chain: "BNB Chain",
+      apr: "12%",
+      tokenLogo: "dyplogo.svg",
+      expired: false,
+      top_pick: true,
+      tokenName: "Dypius",
+      tokenTicker: "DYP",
+    },
+    {
+      lockTime: "Locked",
+      chain: "BNB Chain",
+      apr: "12%",
+      tokenLogo: "dyplogo.svg",
+      expired: false,
+      top_pick: true,
+      tokenName: "Dypius",
+      tokenTicker: "DYP",
+    },
+    {
+      lockTime: "No lock",
+      chain: "BNB Chain",
+      apr: "12%",
+      tokenLogo: "dyplogo.svg",
+      expired: false,
+      top_pick: true,
+      tokenName: "Dypius",
+      tokenTicker: "DYP",
+    },
+    {
+      lockTime: "Locked",
+      chain: "BNB Chain",
+      apr: "12%",
+      tokenLogo: "dyplogo.svg",
+      expired: false,
+      top_pick: true,
+      tokenName: "Dypius",
+      tokenTicker: "DYP",
+    },
+    {
+      lockTime: "Flexible & Locked",
+      chain: "BNB Chain",
+      apr: "12%",
+      tokenLogo: "dyplogo.svg",
+      expired: false,
+      top_pick: true,
+      tokenName: "Dypius",
+      tokenTicker: "DYP",
+    },
+  ];
+
+  const dummyData_avax = [
+    {
+      lockTime: "Flexible & Locked",
+      chain: "Avalanche",
+      apr: "12%",
+      tokenLogo: "dyplogo.svg",
+      expired: false,
+      top_pick: true,
+      tokenName: "Dypius",
+      tokenTicker: "DYP",
+    },
+    {
+      lockTime: "No lock",
+      chain: "Avalanche",
+      apr: "12%",
+      tokenLogo: "dyplogo.svg",
+      expired: false,
+      top_pick: true,
+      tokenName: "Dypius",
+      tokenTicker: "DYP",
+    },
+    {
+      lockTime: "Flexible & Locked",
+      chain: "Avalanche",
+      apr: "12%",
+      tokenLogo: "dyplogo.svg",
+      expired: false,
+      top_pick: true,
+      tokenName: "Dypius",
+      tokenTicker: "DYP",
+    },
+    {
+      lockTime: "No lock",
+      chain: "Avalanche",
+      apr: "12%",
+      tokenLogo: "dyplogo.svg",
+      expired: false,
+      top_pick: true,
+      tokenName: "Dypius",
+      tokenTicker: "DYP",
+    },
+    {
+      lockTime: "Locked",
+      chain: "Avalanche",
+      apr: "12%",
+      tokenLogo: "dyplogo.svg",
+      expired: false,
+      top_pick: true,
+      tokenName: "Dypius",
+      tokenTicker: "DYP",
+    },
+    {
+      lockTime: "Locked",
+      chain: "Avalanche",
+      apr: "12%",
+      tokenLogo: "dyplogo.svg",
+      expired: false,
+      top_pick: true,
+      tokenName: "Dypius",
+      tokenTicker: "DYP",
+    },
+  ];
+
   const [stake, setStake] = useState(routeChain);
   const [option, setOption] = useState(routeOption);
   const [content, setContent] = useState(options[0].content);
@@ -507,107 +696,70 @@ const EarnOtherContent = ({
                 <div className="pill"></div>
               </div>
             </div>
-            <div className="col-12 row d-flex gap-0 gap-xl-3 justify-content-center px-0 px-lg-22 mt-3">
-              {options.map((item, index) => (
-                <div
-                  className={`earn-option col col-lg-3 col-xl-2 d-flex align-items-center justify-content-center ${
-                    option === item.title ? "earn-option-active" : null
-                  }`}
-                  key={index}
-                  onClick={() => {
-                    setOption(item.title);
-                    setContent(item.content);
-                    setVaultEth(item.title);
-                    // item.tvl
-                    //   ? setTvl(item.tvl)
-                    //   : stake === "eth"
-                    //   ? fetchEthTvl()
-                    //   : stake === "bnb"
-                    //   ? fetchBscTvl()
-                    //   : fetchAvaxTvl();
-                  }}
-                >
-                  <img
-                    src={
-                      require(`../../calculator/assets/${item.title.toLowerCase()}Icon.svg`)
-                        .default
-                    }
-                    alt=""
-                  />
-                  {/* <div
-                    className={`${option === item.title ? "d-flex" : "d-none"}`}
-                  > */}
-                  {item.title}
-                  {/* </div> */}
-                </div>
-              ))}
-            </div>
           </div>
         )}
 
-        {((option === "Vault" && expiredPools === false) ||
-          option !== "Vault") && (
-          <>
-            <div
-              className={`row align-items-center gap-5 gap-lg-0 justify-content-between px-0 `}
-              style={{ minHeight: "55px" }}
-            >
-              <div className="col-12 col-lg-8 col-xl-6 d-flex gap-3 align-items-center justify-content-around justify-content-lg-end justify-content-xl-center px-0 px-xl-2">
-                <span className="select-network-text">Select network:</span>
-                <>
-                  <div
-                    className={`stake-other-item ${
-                      option === "Farming" &&
-                      expiredPools === false &&
-                      "blur-stake"
-                    } position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
-                      stake === "allchains" ? "all-item-active" : null
-                    }`}
-                    onClick={() => {
-                      setStake("allchains");
-                    }}
-                  >
-                    <img
-                      src={stake === "allchains" ? allchainActive : allchain}
-                      alt=""
-                      style={{ width: 18, height: 18 }}
-                    />
-                    <div className="d-flex flex-column align-items-center align-items-lg-start">
-                      <p
-                        className="text-white"
-                        style={{ fontSize: "12px", fontWeight: "300" }}
-                      >
-                        All Chains
-                      </p>
-                    </div>
+        <div
+          className={`row m-0 flex-column flex-xxl-row flex-lg-row flex-md-row align-items-center gap-5 gap-lg-0 justify-content-between px-0 `}
+          style={{ minHeight: "55px" }}
+        >
+          <div className="col-12 col-lg-8 col-xl-6 d-flex flex-column flex-xxl-row flex-lg-row flex-md-row  gap-3 align-items-center justify-content-around justify-content-lg-end justify-content-xl-center px-0 px-xl-2">
+            <span className="select-network-text">Select network:</span>
+            <div className="d-flex flex-column flex-xxl-row flex-lg-row flex-md-row align-items-center gap-2">
+              <div className="d-flex align-items-center gap-2">
+                <div
+                  className={`stake-other-item ${
+                    option === "Farming" &&
+                    expiredPools === false &&
+                    "blur-stake"
+                  } position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
+                    stake === "allchains" ? "all-item-active" : null
+                  }`}
+                  onClick={() => {
+                    setStake("allchains");
+                  }}
+                >
+                  <img
+                    src={stake === "allchains" ? allchainActive : allchain}
+                    alt=""
+                    style={{ width: 18, height: 18 }}
+                  />
+                  <div className="d-flex flex-column align-items-center align-items-lg-start">
+                    <p
+                      className="text-white"
+                      style={{ fontSize: "12px", fontWeight: "300" }}
+                    >
+                      All Chains
+                    </p>
                   </div>
+                </div>
 
-                  <div
-                    className={`stake-other-item ${
-                      option === "Farming" &&
-                      expiredPools === false &&
-                      "blur-stake"
-                    } position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
-                      stake === "eth" ? "eth-item-active" : null
-                    }`}
-                    onClick={() => {
-                      setStake("eth");
-                      // fetchEthTvl();
-                    }}
-                  >
-                    <img
-                      src={stake === "eth" ? ethStakeActive : ethStake}
-                      alt=""
-                      style={{ width: 18, height: 18 }}
-                    />
-                    <div className="d-flex flex-column align-items-center align-items-lg-start">
-                      <p
-                        className="text-white"
-                        style={{ fontSize: "12px", fontWeight: "300" }}
-                      >
-                        Ethereum
-                      </p>
-                      {/* <p
+                <div
+                  className={`stake-other-item ${
+                    option === "Farming" &&
+                    expiredPools === false &&
+                    "blur-stake"
+                  } position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
+                    stake === "eth" ? "eth-item-active" : null
+                  }`}
+                  onClick={() => {
+                    setStake("eth");
+                    // fetchEthTvl();
+                  }}
+                >
+                  <img
+                    src={stake === "eth" ? ethStakeActive : ethStake}
+                    alt=""
+                    style={{ width: 18, height: 18 }}
+                  />
+                  <div className="d-flex flex-column align-items-center align-items-lg-start">
+                    <p
+                      className="text-white"
+                      style={{ fontSize: "12px", fontWeight: "300" }}
+                    >
+                      Ethereum
+                    </p>
+                    {/* <p
                           style={{
                             fontSize: "12px",
                             fontWeight: "500",
@@ -617,18 +769,20 @@ const EarnOtherContent = ({
                         >
                           {ethApr}% APR
                         </p> */}
-                    </div>
                   </div>
-                  <div
-                    className={`stake-other-item position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
-                      stake === "bnb" ? "bsc-item-active" : null
-                    }`}
-                    onClick={() => {
-                      setStake("bnb");
-                      // fetchBscTvl();
-                    }}
-                  >
-                    {/* <div className="new-pools d-flex justify-content-start align-items-center gap-2 position-absolute">
+                </div>
+              </div>
+              <div className="d-flex align-items-center gap-2">
+                <div
+                  className={`stake-other-item position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
+                    stake === "bnb" ? "bsc-item-active" : null
+                  }`}
+                  onClick={() => {
+                    setStake("bnb");
+                    // fetchBscTvl();
+                  }}
+                >
+                  {/* <div className="new-pools d-flex justify-content-start align-items-center gap-2 position-absolute">
                     <img
                       src={addNewPools}
                       alt=""
@@ -641,19 +795,19 @@ const EarnOtherContent = ({
                       New Pools
                     </span>
                   </div> */}
-                    <img
-                      src={stake === "bnb" ? bnbStakeActive : bnbStake}
-                      alt=""
-                      style={{ width: 18, height: 18 }}
-                    />
-                    <div className="d-flex flex-column align-items-center align-items-lg-start">
-                      <p
-                        className="text-white"
-                        style={{ fontSize: "12px", fontWeight: "300" }}
-                      >
-                        BNB Chain
-                      </p>
-                      {/* <p
+                  <img
+                    src={stake === "bnb" ? bnbStakeActive : bnbStake}
+                    alt=""
+                    style={{ width: 18, height: 18 }}
+                  />
+                  <div className="d-flex flex-column align-items-center align-items-lg-start">
+                    <p
+                      className="text-white"
+                      style={{ fontSize: "12px", fontWeight: "300" }}
+                    >
+                      BNB Chain
+                    </p>
+                    {/* <p
                           style={{
                             fontSize: "12px",
                             fontWeight: "500",
@@ -663,23 +817,23 @@ const EarnOtherContent = ({
                         >
                           {getFormattedNumber(bnbApr, 0)}% APR
                         </p> */}
-                    </div>
                   </div>
+                </div>
 
-                  <div
-                    className={`stake-other-item ${
-                      option === "Farming" &&
-                      expiredPools === false &&
-                      "blur-stake"
-                    } position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
-                      stake === "avax" ? "avax-item-active" : null
-                    }`}
-                    onClick={() => {
-                      setStake("avax");
-                      // fetchAvaxTvl();
-                    }}
-                  >
-                    {/* <div className="new-pools d-flex justify-content-start align-items-center gap-2 position-absolute">
+                <div
+                  className={`stake-other-item ${
+                    option === "Farming" &&
+                    expiredPools === false &&
+                    "blur-stake"
+                  } position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
+                    stake === "avax" ? "avax-item-active" : null
+                  }`}
+                  onClick={() => {
+                    setStake("avax");
+                    // fetchAvaxTvl();
+                  }}
+                >
+                  {/* <div className="new-pools d-flex justify-content-start align-items-center gap-2 position-absolute">
                   <img
                     src={addNewPools}
                     alt=""
@@ -692,19 +846,19 @@ const EarnOtherContent = ({
                     New Pools
                   </span>
                 </div> */}
-                    <img
-                      src={stake === "avax" ? avaxStakeActive : avaxStake}
-                      alt=""
-                      style={{ width: 18, height: 18 }}
-                    />
-                    <div className="d-flex flex-column align-items-center align-items-lg-start">
-                      <p
-                        className="text-white"
-                        style={{ fontSize: "12px", fontWeight: "300" }}
-                      >
-                        Avalanche
-                      </p>
-                      {/* <p
+                  <img
+                    src={stake === "avax" ? avaxStakeActive : avaxStake}
+                    alt=""
+                    style={{ width: 18, height: 18 }}
+                  />
+                  <div className="d-flex flex-column align-items-center align-items-lg-start">
+                    <p
+                      className="text-white"
+                      style={{ fontSize: "12px", fontWeight: "300" }}
+                    >
+                      Avalanche
+                    </p>
+                    {/* <p
                           style={{
                             fontSize: "12px",
                             fontWeight: "500",
@@ -714,90 +868,97 @@ const EarnOtherContent = ({
                         >
                           {avaxApr}% APR
                         </p> */}
-                    </div>
                   </div>
-                </>
-              </div>
-
-              <div className="col-12 col-lg-4 col-xl-3 px-0">
-                {option !== "Farming" && (
-                  <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
-                    <span style={{ fontWeight: "300", fontSize: "13px" }}>
-                      Total value locked
-                    </span>
-                    <h6
-                      className="text-white"
-                      style={{ fontWeight: "600", fontSize: "17px" }}
-                    >
-                      ${getFormattedNumber(tvl)}
-                    </h6>
-                  </div>
-                )}
+                </div>
               </div>
             </div>
-            <div className="d-flex align-items-center justify-content-center  py-0 py-lg-4 px-3"></div>
-          </>
-        )}
-      </div>
-      {listStyle === "table" ? (
-        <div className="w-100 otherpools-wrapper">
-          <TopOtherPoolsCard
-            lockTime={"No lock"}
-            chain={"Ethereum"}
-            apr={"12%"}
-            tokenLogo={"dyplogo.svg"}
-            expired={false}
-            top_pick={true}
-            tokenName={"Dypius"}
-          />
-          <TopOtherPoolsCard
-            lockTime={"No lock"}
-            chain={"Ethereum"}
-            apr={"12%"}
-            tokenLogo={"dyplogo.svg"}
-            expired={false}
-            top_pick={true}
-            tokenName={"Dypius"}
-          />
-          <TopOtherPoolsCard
-            lockTime={"No lock"}
-            chain={"Ethereum"}
-            apr={"12%"}
-            tokenLogo={"dyplogo.svg"}
-            expired={false}
-            top_pick={true}
-            tokenName={"Dypius"}
-          />
-          <TopOtherPoolsCard
-            lockTime={"No lock"}
-            chain={"Ethereum"}
-            apr={"12%"}
-            tokenLogo={"dyplogo.svg"}
-            expired={false}
-            top_pick={true}
-            tokenName={"Dypius"}
-          />
-          <TopOtherPoolsCard
-            lockTime={"No lock"}
-            chain={"Ethereum"}
-            apr={"12%"}
-            tokenLogo={"dyplogo.svg"}
-            expired={false}
-            top_pick={true}
-            tokenName={"Dypius"}
-          />
-          <TopOtherPoolsCard
-            lockTime={"No lock"}
-            chain={"Ethereum"}
-            apr={"12%"}
-            tokenLogo={"dyplogo.svg"}
-            expired={false}
-            top_pick={true}
-            tokenName={"Dypius"}
-          />
+          </div>
+
+          <div className="col-12 col-lg-4 col-xl-3 px-0">
+            {option !== "Farming" && (
+              <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
+                <span style={{ fontWeight: "300", fontSize: "13px" }}>
+                  Total value locked
+                </span>
+                <h6
+                  className="text-white"
+                  style={{ fontWeight: "600", fontSize: "17px" }}
+                >
+                  ${getFormattedNumber(tvl)}
+                </h6>
+              </div>
+            )}
+          </div>
         </div>
-      ) : (
+      </div>
+      {listStyle === "table" && (
+        <div className="w-100 otherpools-wrapper">
+          {stake === "eth"
+            ? dummyData_eth.map((item, index) => {
+                return (
+                  <TopOtherPoolsCard
+                    key={index}
+                    lockTime={item.lockTime}
+                    chain={item.chain}
+                    apr={item.apr}
+                    tokenLogo={item.tokenLogo}
+                    expired={item.expired}
+                    top_pick={item.top_pick}
+                    tokenName={item.tokenName}
+                  />
+                );
+              })
+            : stake === "bnb"
+            ? dummyData_bnb.map((item, index) => {
+                return (
+                  <TopOtherPoolsCard
+                    key={index}
+                    lockTime={item.lockTime}
+                    chain={item.chain}
+                    apr={item.apr}
+                    tokenLogo={item.tokenLogo}
+                    expired={item.expired}
+                    top_pick={item.top_pick}
+                    tokenName={item.tokenName}
+                  />
+                );
+              })
+            : stake === "avax"
+            ? dummyData_avax.map((item, index) => {
+                return (
+                  <TopOtherPoolsCard
+                    key={index}
+                    lockTime={item.lockTime}
+                    chain={item.chain}
+                    apr={item.apr}
+                    tokenLogo={item.tokenLogo}
+                    expired={item.expired}
+                    top_pick={item.top_pick}
+                    tokenName={item.tokenName}
+                  />
+                );
+              })
+            : [...dummyData_eth, ...dummyData_bnb, ...dummyData_avax].map(
+                (item, index) => {
+                  return (
+                    <TopOtherPoolsCard
+                      key={index}
+                      lockTime={item.lockTime}
+                      chain={item.chain}
+                      apr={item.apr}
+                      tokenLogo={item.tokenLogo}
+                      expired={item.expired}
+                      top_pick={item.top_pick}
+                      tokenName={item.tokenName}
+                    />
+                  );
+                }
+              )}
+        </div>
+      )}
+      {listStyle === "list" && (
         <div className="row mx-0 justify-content-between align-items-center px-2 py-3 w-100">
+          {windowSize.width > 768 &&
           <div
             className="row mx-0 justify-content-between align-items-center px-2 py-3 w-100 options-container"
             style={{ marginBottom: "10px" }}
@@ -812,62 +973,65 @@ const EarnOtherContent = ({
                 <th className="earnother-th">Stake</th>
               </thead>
             </table>
-          </div>
+          </div> }
           <div className="d-flex flex-column gap-1 px-0">
-            <TopOtherPoolsListCard
-              tokenLogo={"dyplogo.svg"}
-              chain={"Ethereum"}
-              tokenName={"Dypius"}
-              tokenTicker={"DYP"}
-              apr={"12%"}
-              lockTime={"Flexible & Locked"}
-              expired={false}
-            />
-            <TopOtherPoolsListCard
-              tokenLogo={"dyplogo.svg"}
-              chain={"BNB Chain"}
-              tokenName={"Dypius"}
-              tokenTicker={"DYP"}
-              apr={"12%"}
-              lockTime={"Locked"}
-              expired={false}
-            />
-            <TopOtherPoolsListCard
-              tokenLogo={"dyplogo.svg"}
-              chain={"Avalanche"}
-              tokenName={"Dypius"}
-              tokenTicker={"DYP"}
-              apr={"12%"}
-              lockTime={"Locked"}
-              expired={false}
-            />
-            <TopOtherPoolsListCard
-              tokenLogo={"dyplogo.svg"}
-              chain={"Ethereum"}
-              tokenName={"Dypius"}
-              tokenTicker={"DYP"}
-              apr={"12%"}
-              lockTime={"Flexible & Locked"}
-              expired={false}
-            />
-            <TopOtherPoolsListCard
-              tokenLogo={"dyplogo.svg"}
-              chain={"BNB Chain"}
-              tokenName={"Dypius"}
-              tokenTicker={"DYP"}
-              apr={"12%"}
-              lockTime={"Locked"}
-              expired={false}
-            />
-            <TopOtherPoolsListCard
-              tokenLogo={"dyplogo.svg"}
-              chain={"Avalanche"}
-              tokenName={"Dypius"}
-              tokenTicker={"DYP"}
-              apr={"12%"}
-              lockTime={"Locked"}
-              expired={false}
-            />
+            {stake === "eth"
+              ? dummyData_eth.map((item, index) => {
+                  return (
+                    <TopOtherPoolsListCard
+                      tokenLogo={item.tokenLogo}
+                      chain={item.chain}
+                      tokenName={item.tokenName}
+                      tokenTicker={item.tokenTicker}
+                      apr={item.apr}
+                      lockTime={item.lockTime}
+                      expired={item.expired}
+                    />
+                  );
+                })
+              : stake === "bnb"
+              ? dummyData_bnb.map((item, index) => {
+                  return (
+                    <TopOtherPoolsListCard
+                      tokenLogo={item.tokenLogo}
+                      chain={item.chain}
+                      tokenName={item.tokenName}
+                      tokenTicker={item.tokenTicker}
+                      apr={item.apr}
+                      lockTime={item.lockTime}
+                      expired={item.expired}
+                    />
+                  );
+                })
+              : stake === "avax"
+              ? dummyData_avax.map((item, index) => {
+                  return (
+                    <TopOtherPoolsListCard
+                      tokenLogo={item.tokenLogo}
+                      chain={item.chain}
+                      tokenName={item.tokenName}
+                      tokenTicker={item.tokenTicker}
+                      apr={item.apr}
+                      lockTime={item.lockTime}
+                      expired={item.expired}
+                    />
+                  );
+                })
+              : [...dummyData_eth, ...dummyData_bnb, ...dummyData_avax].map(
+                  (item, index) => {
+                    return (
+                      <TopOtherPoolsListCard
+                        tokenLogo={item.tokenLogo}
+                        chain={item.chain}
+                        tokenName={item.tokenName}
+                        tokenTicker={item.tokenTicker}
+                        apr={item.apr}
+                        lockTime={item.lockTime}
+                        expired={item.expired}
+                      />
+                    );
+                  }
+                )}
           </div>
         </div>
       )}

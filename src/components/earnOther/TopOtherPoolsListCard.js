@@ -6,6 +6,7 @@ import newPool from "../top-pools-card/assets/newPool.png";
 import ethStake from "../../assets/earnAssets/ethStakeActive.svg";
 import avaxStake from "../../assets/earnAssets/avaxStakeActive.svg";
 import bnbStakeActive from "../../assets/earnAssets/bnbStakeActive.svg";
+import useWindowSize from "../../functions/useWindowSize";
 
 import "../top-pools-card/top-pools.css";
 
@@ -73,9 +74,7 @@ const TopOtherPoolsListCard = ({
 
   const [showDetails, setShowDetails] = useState(false);
   const [coins, setCoins] = useState(ethCoins);
-  const [cardIndexiDyp, setcardIndexiDyp] = useState();
-  const [cardIndexavax30, setcardIndexavax30] = useState();
-  const [cardIndexavaxiDyp, setcardIndexavaxiDyp] = useState();
+  const windowSize = useWindowSize();
 
   useEffect(() => {
     if (chain === "eth") {
@@ -104,91 +103,159 @@ const TopOtherPoolsListCard = ({
         <div className="px-0 d-flex justify-content-between align-items-center">
           <table className="earnother-table">
             <tbody>
-              <tr className="d-flex w-100 align-items-center justify-content-around">
-                <td className="earnother-td col-2">
-                  <div className={` d-flex align-items-center gap-2`}>
-                    <img
-                      src={
-                        require(`../top-pools-card/assets/${tokenLogo}`).default
-                      }
-                      width={28}
-                      height={28}
-                      alt=""
-                    />
+              {windowSize.width > 768 ? (
+                <tr className="d-flex w-100 align-items-center justify-content-around">
+                  <td className="earnother-td col-2">
+                    <div className={` d-flex align-items-center gap-2`}>
+                      <img
+                        src={
+                          require(`../top-pools-card/assets/${tokenLogo}`)
+                            .default
+                        }
+                        width={28}
+                        height={28}
+                        alt=""
+                      />
+                      <h5
+                        className="text-white"
+                        style={{ fontSize: "16px", fontWeight: "600" }}
+                      >
+                        {tokenName}
+                      </h5>
+                    </div>
+                  </td>
+                  <td className="earnother-td col-2">
                     <h5
                       className="text-white"
-                      style={{ fontSize: "16px", fontWeight: "600" }}
+                      style={{
+                        fontSize: "18px",
+                        fontWeight: "300",
+                        color: "#F7F7FC",
+                      }}
                     >
-                      {tokenName}
+                      {tokenTicker}
                     </h5>
-                  </div>
-                </td>
-                <td className="earnother-td col-2">
-                  <h5
-                    className="text-white"
-                    style={{
-                      fontSize: "18px",
-                      fontWeight: "300",
-                      color: "#F7F7FC",
-                    }}
-                  >
-                    {tokenTicker}
-                  </h5>
-                </td>
-                <td className="earnother-td col-2">
-                  <h5
-                    style={{
-                      fontSize: "16px",
-                      fontWeight: "300",
-                      color: "#F7F7FC",
-                    }}
-                    className="d-flex align-items-center gap-2"
-                  >
-                    <img
-                      src={
-                        chain === "Ethereum"
-                          ? ethStake
-                          : chain === "BNB Chain"
-                          ? bnbStakeActive
-                          : avaxStake
-                      }
-                      style={{ width: 18, height: 18 }}
-                      alt=""
-                      className="pool-coins"
-                    />
-                    {chain}
-                  </h5>
-                </td>
-                <td className="earnother-td col-2">
-                  <h5
-                    style={{
-                      fontSize: "16px",
-                      fontWeight: "300",
-                      color: "#F7F7FC",
-                      marginLeft: 30,
-                    }}
-                  >
-                    {apr}
-                  </h5>
-                </td>
-                <td className="earnother-td col-2">
-                  <h5
-                    style={{
-                      fontSize: "16px",
-                      fontWeight: "300",
-                      color: "#F7F7FC",
-                      marginLeft: 30,
-                    }}
-                  >
-                    {lockTime}
-                  </h5>
-                </td>
-                <td className="earnother-td col-2">
-                  <h6 className="details-text2 gap-1 d-flex align-items-center cursor-pointer justify-content-end">
-                    Stake
-                  </h6>
-                </td>
-              </tr>
+                  </td>
+                  <td className="earnother-td col-2">
+                    <h5
+                      style={{
+                        fontSize: "16px",
+                        fontWeight: "300",
+                        color: "#F7F7FC",
+                      }}
+                      className="d-flex align-items-center gap-2"
+                    >
+                      <img
+                        src={
+                          chain === "Ethereum"
+                            ? ethStake
+                            : chain === "BNB Chain"
+                            ? bnbStakeActive
+                            : avaxStake
+                        }
+                        style={{ width: 18, height: 18 }}
+                        alt=""
+                        className="pool-coins"
+                      />
+                      {chain}
+                    </h5>
+                  </td>
+                  <td className="earnother-td col-2">
+                    <h5
+                      style={{
+                        fontSize: "16px",
+                        fontWeight: "300",
+                        color: "#F7F7FC",
+                        marginLeft: 30,
+                      }}
+                    >
+                      {apr}
+                    </h5>
+                  </td>
+                  <td className="earnother-td col-2">
+                    <h5
+                      style={{
+                        fontSize: "16px",
+                        fontWeight: "300",
+                        color: "#F7F7FC",
+                        marginLeft: 30,
+                      }}
+                    >
+                      {lockTime}
+                    </h5>
+                  </td>
+                  <td className="earnother-td col-2">
+                    <h6 className="details-text2 gap-1 d-flex align-items-center cursor-pointer justify-content-end">
+                      Stake
+                    </h6>
+                  </td>
+                </tr>
+              ) : (
+                <>
+                  <tr className="d-flex w-100 align-items-center justify-content-between mb-3">
+                    <td className="earnother-td w-100">
+                      <div className="d-flex align-items-center w-100  justify-content-between gap-2">
+                        <div className={` d-flex align-items-center gap-1`}>
+                          <img
+                            src={
+                              require(`../top-pools-card/assets/${tokenLogo}`)
+                                .default
+                            }
+                            width={28}
+                            height={28}
+                            alt=""
+                          />
+                          <div className="d-flex flex-column gap-1">
+                            <h5
+                              className="text-white"
+                              style={{ fontSize: "16px", fontWeight: "600" }}
+                            >
+                              {tokenName}
+                            </h5>
+                            <h5
+                              className="text-white"
+                              style={{
+                                fontSize: "14px",
+                                fontWeight: "300",
+                                color: "#F7F7FC",
+                              }}
+                            >
+                              {tokenTicker}
+                            </h5>
+                          </div>
+                        </div>
+                        <div className="d-flex flex-column gap-2">
+                          <h5
+                            style={{
+                              fontSize: "16px",
+                              fontWeight: "300",
+                              color: "#F7F7FC",
+                            }}
+                          >
+                            {apr}
+                          </h5>
+                          <h5
+                            style={{
+                              fontSize: "14px",
+                              fontWeight: "300",
+                              color: "#F7F7FC",
+                            }}
+                          >
+                            Max. APR
+                          </h5>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr className="d-flex w-100 align-items-center justify-content-around">
+                    <td className="earnother-td w-100">
+                      <h6 className="details-text2 gap-1 d-flex align-items-center cursor-pointer justify-content-center m-0 w-100">
+                        Stake
+                      </h6>
+                    </td>
+                  </tr>
+                </>
+              )}
             </tbody>
           </table>
         </div>
