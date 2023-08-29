@@ -12,13 +12,13 @@ import listIcon from "../../../assets/earnAssets/listIcon.svg";
 import tableIcon from "../../../assets/earnAssets/tableIcon.svg";
 import tableIconActive from "../../../assets/earnAssets/tableIconActive.svg";
 import listIconActive from "../../../assets/earnAssets/listIconActive.svg";
-
 import EarnFaq from "../../earn/EarnFaq/EarnFaq";
 import axios from "axios";
 import { useEffect } from "react";
 import getFormattedNumber from "../../../functions/getFormattedNumber2";
-import e from "cors";
 import useWindowSize from "../../../functions/useWindowSize";
+import TopOtherPoolsCard from "../TopOtherPoolsCard";
+import TopOtherPoolsListCard from "../TopOtherPoolsListCard";
 
 const EarnOtherContent = ({
   coinbase,
@@ -739,9 +739,138 @@ const EarnOtherContent = ({
           </>
         )}
       </div>
-      <div className="invisible">
-        <EarnFaq faqTypes={option} faqIndex={faqIndex} />
-      </div>
+      {listStyle === "table" ? (
+        <div className="w-100 otherpools-wrapper">
+          <TopOtherPoolsCard
+            lockTime={"No lock"}
+            chain={"Ethereum"}
+            apr={"12%"}
+            tokenLogo={"dyplogo.svg"}
+            expired={false}
+            top_pick={true}
+            tokenName={"Dypius"}
+          />
+          <TopOtherPoolsCard
+            lockTime={"No lock"}
+            chain={"Ethereum"}
+            apr={"12%"}
+            tokenLogo={"dyplogo.svg"}
+            expired={false}
+            top_pick={true}
+            tokenName={"Dypius"}
+          />
+          <TopOtherPoolsCard
+            lockTime={"No lock"}
+            chain={"Ethereum"}
+            apr={"12%"}
+            tokenLogo={"dyplogo.svg"}
+            expired={false}
+            top_pick={true}
+            tokenName={"Dypius"}
+          />
+          <TopOtherPoolsCard
+            lockTime={"No lock"}
+            chain={"Ethereum"}
+            apr={"12%"}
+            tokenLogo={"dyplogo.svg"}
+            expired={false}
+            top_pick={true}
+            tokenName={"Dypius"}
+          />
+          <TopOtherPoolsCard
+            lockTime={"No lock"}
+            chain={"Ethereum"}
+            apr={"12%"}
+            tokenLogo={"dyplogo.svg"}
+            expired={false}
+            top_pick={true}
+            tokenName={"Dypius"}
+          />
+          <TopOtherPoolsCard
+            lockTime={"No lock"}
+            chain={"Ethereum"}
+            apr={"12%"}
+            tokenLogo={"dyplogo.svg"}
+            expired={false}
+            top_pick={true}
+            tokenName={"Dypius"}
+          />
+        </div>
+      ) : (
+        <div className="row mx-0 justify-content-between align-items-center px-2 py-3 w-100">
+          <div
+            className="row mx-0 justify-content-between align-items-center px-2 py-3 w-100 options-container"
+            style={{ marginBottom: "10px" }}
+          >
+            <table className="earnother-table">
+              <thead className="d-flex w-100 align-items-center justify-content-around">
+                <th className="earnother-th">Pool Name</th>
+                <th className="earnother-th">Ticker</th>
+                <th className="earnother-th">Network</th>
+                <th className="earnother-th">Max. APR</th>
+                <th className="earnother-th">Method</th>
+                <th className="earnother-th">Stake</th>
+              </thead>
+            </table>
+          </div>
+          <div className="d-flex flex-column gap-1 px-0">
+            <TopOtherPoolsListCard
+              tokenLogo={"dyplogo.svg"}
+              chain={"Ethereum"}
+              tokenName={"Dypius"}
+              tokenTicker={"DYP"}
+              apr={"12%"}
+              lockTime={"Flexible & Locked"}
+              expired={false}
+            />
+            <TopOtherPoolsListCard
+              tokenLogo={"dyplogo.svg"}
+              chain={"BNB Chain"}
+              tokenName={"Dypius"}
+              tokenTicker={"DYP"}
+              apr={"12%"}
+              lockTime={"Locked"}
+              expired={false}
+            />
+            <TopOtherPoolsListCard
+              tokenLogo={"dyplogo.svg"}
+              chain={"Avalanche"}
+              tokenName={"Dypius"}
+              tokenTicker={"DYP"}
+              apr={"12%"}
+              lockTime={"Locked"}
+              expired={false}
+            />
+            <TopOtherPoolsListCard
+              tokenLogo={"dyplogo.svg"}
+              chain={"Ethereum"}
+              tokenName={"Dypius"}
+              tokenTicker={"DYP"}
+              apr={"12%"}
+              lockTime={"Flexible & Locked"}
+              expired={false}
+            />
+            <TopOtherPoolsListCard
+              tokenLogo={"dyplogo.svg"}
+              chain={"BNB Chain"}
+              tokenName={"Dypius"}
+              tokenTicker={"DYP"}
+              apr={"12%"}
+              lockTime={"Locked"}
+              expired={false}
+            />
+            <TopOtherPoolsListCard
+              tokenLogo={"dyplogo.svg"}
+              chain={"Avalanche"}
+              tokenName={"Dypius"}
+              tokenTicker={"DYP"}
+              apr={"12%"}
+              lockTime={"Locked"}
+              expired={false}
+            />
+          </div>
+        </div>
+      )}
     </>
   );
 };
