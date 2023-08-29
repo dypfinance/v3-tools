@@ -42,6 +42,7 @@ import GenesisStaking from "./components/genesisStaking/GenesisStaking";
 import CawsStaking from "./components/genesisStaking/CawsStaking";
 import Plans from "./components/account/Plans";
 import EarnOther from "./components/earnOther/EarnOther";
+import EarnInnerPool from "./components/earnOther/EarnInnerPool/EarnInnerPool";
 
 class App extends React.Component {
   constructor(props) {
