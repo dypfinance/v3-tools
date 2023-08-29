@@ -7,18 +7,17 @@ import avaxStake from "../../../assets/earnAssets/avaxStake.svg";
 import ethStakeActive from "../../../assets/earnAssets/ethStakeActive.svg";
 import bnbStakeActive from "../../../assets/earnAssets/bnbStakeActive.svg";
 import avaxStakeActive from "../../../assets/earnAssets/avaxStakeActive.svg";
-import addNewPools from "../../../assets/earnAssets/addNewPools.svg";
 import listIcon from "../../../assets/earnAssets/listIcon.svg";
 import tableIcon from "../../../assets/earnAssets/tableIcon.svg";
 import tableIconActive from "../../../assets/earnAssets/tableIconActive.svg";
 import listIconActive from "../../../assets/earnAssets/listIconActive.svg";
-import EarnFaq from "../../earn/EarnFaq/EarnFaq";
 import axios from "axios";
 import { useEffect } from "react";
 import getFormattedNumber from "../../../functions/getFormattedNumber2";
 import useWindowSize from "../../../functions/useWindowSize";
 import TopOtherPoolsCard from "../TopOtherPoolsCard";
 import TopOtherPoolsListCard from "../TopOtherPoolsListCard";
+import { NavLink } from "react-router-dom";
 
 const EarnOtherContent = ({
   coinbase,
@@ -896,51 +895,7 @@ const EarnOtherContent = ({
           {stake === "eth"
             ? dummyData_eth.map((item, index) => {
                 return (
-                  <TopOtherPoolsCard
-                    key={index}
-                    lockTime={item.lockTime}
-                    chain={item.chain}
-                    apr={item.apr}
-                    tokenLogo={item.tokenLogo}
-                    expired={item.expired}
-                    top_pick={item.top_pick}
-                    tokenName={item.tokenName}
-                  />
-                );
-              })
-            : stake === "bnb"
-            ? dummyData_bnb.map((item, index) => {
-                return (
-                  <TopOtherPoolsCard
-                    key={index}
-                    lockTime={item.lockTime}
-                    chain={item.chain}
-                    apr={item.apr}
-                    tokenLogo={item.tokenLogo}
-                    expired={item.expired}
-                    top_pick={item.top_pick}
-                    tokenName={item.tokenName}
-                  />
-                );
-              })
-            : stake === "avax"
-            ? dummyData_avax.map((item, index) => {
-                return (
-                  <TopOtherPoolsCard
-                    key={index}
-                    lockTime={item.lockTime}
-                    chain={item.chain}
-                    apr={item.apr}
-                    tokenLogo={item.tokenLogo}
-                    expired={item.expired}
-                    top_pick={item.top_pick}
-                    tokenName={item.tokenName}
-                  />
-                );
-              })
-            : [...dummyData_eth, ...dummyData_bnb, ...dummyData_avax].map(
-                (item, index) => {
-                  return (
+                  <NavLink to={`/earn/other/${index}`}>
                     <TopOtherPoolsCard
                       key={index}
                       lockTime={item.lockTime}
@@ -951,6 +906,58 @@ const EarnOtherContent = ({
                       top_pick={item.top_pick}
                       tokenName={item.tokenName}
                     />
+                  </NavLink>
+                );
+              })
+            : stake === "bnb"
+            ? dummyData_bnb.map((item, index) => {
+                return (
+                  <NavLink to={`/earn/other/${index}`}>
+                    <TopOtherPoolsCard
+                      key={index}
+                      lockTime={item.lockTime}
+                      chain={item.chain}
+                      apr={item.apr}
+                      tokenLogo={item.tokenLogo}
+                      expired={item.expired}
+                      top_pick={item.top_pick}
+                      tokenName={item.tokenName}
+                    />
+                  </NavLink>
+                );
+              })
+            : stake === "avax"
+            ? dummyData_avax.map((item, index) => {
+                return (
+                  <NavLink to={`/earn/other/${index}`}>
+                    <TopOtherPoolsCard
+                      key={index}
+                      lockTime={item.lockTime}
+                      chain={item.chain}
+                      apr={item.apr}
+                      tokenLogo={item.tokenLogo}
+                      expired={item.expired}
+                      top_pick={item.top_pick}
+                      tokenName={item.tokenName}
+                    />
+                  </NavLink>
+                );
+              })
+            : [...dummyData_eth, ...dummyData_bnb, ...dummyData_avax].map(
+                (item, index) => {
+                  return (
+                    <NavLink to={`/earn/other/${index}`}>
+                      <TopOtherPoolsCard
+                        key={index}
+                        lockTime={item.lockTime}
+                        chain={item.chain}
+                        apr={item.apr}
+                        tokenLogo={item.tokenLogo}
+                        expired={item.expired}
+                        top_pick={item.top_pick}
+                        tokenName={item.tokenName}
+                      />
+                    </NavLink>
                   );
                 }
               )}
@@ -958,68 +965,28 @@ const EarnOtherContent = ({
       )}
       {listStyle === "list" && (
         <div className="row mx-0 justify-content-between align-items-center px-2 py-3 w-100">
-          {windowSize.width > 768 &&
-          <div
-            className="row mx-0 justify-content-between align-items-center px-2 py-3 w-100 options-container"
-            style={{ marginBottom: "10px" }}
-          >
-            <table className="earnother-table">
-              <thead className="d-flex w-100 align-items-center justify-content-around">
-                <th className="earnother-th">Pool Name</th>
-                <th className="earnother-th">Ticker</th>
-                <th className="earnother-th">Network</th>
-                <th className="earnother-th">Max. APR</th>
-                <th className="earnother-th">Method</th>
-                <th className="earnother-th">Stake</th>
-              </thead>
-            </table>
-          </div> }
+          {windowSize.width > 768 && (
+            <div
+              className="row mx-0 justify-content-between align-items-center px-2 py-3 w-100 options-container"
+              style={{ marginBottom: "10px" }}
+            >
+              <table className="earnother-table">
+                <thead className="d-flex w-100 align-items-center justify-content-around">
+                  <th className="earnother-th">Pool Name</th>
+                  <th className="earnother-th">Ticker</th>
+                  <th className="earnother-th">Network</th>
+                  <th className="earnother-th">Max. APR</th>
+                  <th className="earnother-th">Method</th>
+                  <th className="earnother-th">Stake</th>
+                </thead>
+              </table>
+            </div>
+          )}
           <div className="d-flex flex-column gap-1 px-0">
             {stake === "eth"
               ? dummyData_eth.map((item, index) => {
                   return (
-                    <TopOtherPoolsListCard
-                      tokenLogo={item.tokenLogo}
-                      chain={item.chain}
-                      tokenName={item.tokenName}
-                      tokenTicker={item.tokenTicker}
-                      apr={item.apr}
-                      lockTime={item.lockTime}
-                      expired={item.expired}
-                    />
-                  );
-                })
-              : stake === "bnb"
-              ? dummyData_bnb.map((item, index) => {
-                  return (
-                    <TopOtherPoolsListCard
-                      tokenLogo={item.tokenLogo}
-                      chain={item.chain}
-                      tokenName={item.tokenName}
-                      tokenTicker={item.tokenTicker}
-                      apr={item.apr}
-                      lockTime={item.lockTime}
-                      expired={item.expired}
-                    />
-                  );
-                })
-              : stake === "avax"
-              ? dummyData_avax.map((item, index) => {
-                  return (
-                    <TopOtherPoolsListCard
-                      tokenLogo={item.tokenLogo}
-                      chain={item.chain}
-                      tokenName={item.tokenName}
-                      tokenTicker={item.tokenTicker}
-                      apr={item.apr}
-                      lockTime={item.lockTime}
-                      expired={item.expired}
-                    />
-                  );
-                })
-              : [...dummyData_eth, ...dummyData_bnb, ...dummyData_avax].map(
-                  (item, index) => {
-                    return (
+                    <NavLink to={`/earn/other/${index}`}>
                       <TopOtherPoolsListCard
                         tokenLogo={item.tokenLogo}
                         chain={item.chain}
@@ -1029,6 +996,55 @@ const EarnOtherContent = ({
                         lockTime={item.lockTime}
                         expired={item.expired}
                       />
+                    </NavLink>
+                  );
+                })
+              : stake === "bnb"
+              ? dummyData_bnb.map((item, index) => {
+                  return (
+                    <NavLink to={`/earn/other/${index}`}>
+                      <TopOtherPoolsListCard
+                        tokenLogo={item.tokenLogo}
+                        chain={item.chain}
+                        tokenName={item.tokenName}
+                        tokenTicker={item.tokenTicker}
+                        apr={item.apr}
+                        lockTime={item.lockTime}
+                        expired={item.expired}
+                      />
+                    </NavLink>
+                  );
+                })
+              : stake === "avax"
+              ? dummyData_avax.map((item, index) => {
+                  return (
+                    <NavLink to={`/earn/other/${index}`}>
+                      <TopOtherPoolsListCard
+                        tokenLogo={item.tokenLogo}
+                        chain={item.chain}
+                        tokenName={item.tokenName}
+                        tokenTicker={item.tokenTicker}
+                        apr={item.apr}
+                        lockTime={item.lockTime}
+                        expired={item.expired}
+                      />
+                    </NavLink>
+                  );
+                })
+              : [...dummyData_eth, ...dummyData_bnb, ...dummyData_avax].map(
+                  (item, index) => {
+                    return (
+                      <NavLink to={`/earn/other/${index}`}>
+                        <TopOtherPoolsListCard
+                          tokenLogo={item.tokenLogo}
+                          chain={item.chain}
+                          tokenName={item.tokenName}
+                          tokenTicker={item.tokenTicker}
+                          apr={item.apr}
+                          lockTime={item.lockTime}
+                          expired={item.expired}
+                        />
+                      </NavLink>
                     );
                   }
                 )}

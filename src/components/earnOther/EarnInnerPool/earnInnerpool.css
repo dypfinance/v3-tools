@@ -1,0 +1,51 @@
+.earn-inner-wrapper-hero {
+  border-radius: 8px;
+  background: #282a5c;
+  width: 100%;
+}
+
+.inner-hero-img {
+    border-radius: 8px;
+}
+
+.earn-inner-title {
+  color: #f7f7fc !important;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 28px;
+}
+
+.earn-inner-desc {
+  color: #f7f7fc !important;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.216px;
+}
+
+.single-item-wrapper {
+  border-radius: 8px;
+  border: 1px solid #3b3c68;
+  background: #26264f;
+  padding: 15px;
+}
+
+.earn-inner-greentxt {
+  color: #18ffff !important;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 8px;
+  letter-spacing: -0.18px;
+}
+
+.earn-inner-whitetxt {
+  color: #f7f7fc !important;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 12px;
+  letter-spacing: -0.216px;
+}
