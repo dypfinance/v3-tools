@@ -153,7 +153,8 @@ const TopPoolsListCardInner = ({
     const address = coinbase;
     let staking_contract = await window.getContractNFT("NFTSTAKING");
     let stakenft = [];
-    let myStakes = await staking_contract.methods
+    if(address)
+   { let myStakes = await staking_contract.methods
       .depositsOf(address)
       .call()
       .then((result) => {
@@ -162,7 +163,7 @@ const TopPoolsListCardInner = ({
         return stakenft;
       });
 
-    return myStakes;
+    return myStakes;}
   };
 
   const myStakes = async () => {
@@ -474,9 +475,9 @@ const TopPoolsListCardInner = ({
             </p>
           </div>
         </div>
-        <div className="d-flex col-12 col-lg-4 align-items-center justify-content-between">
+        <div className="d-flex col-12 col-lg-6 align-items-center justify-content-between">
           {cardType !== "Vault" && (
-            <div className="d-flex flex-column gap-2">
+            <div className=" col-lg-4 d-flex flex-column gap-2">
               <div className="d-flex flex-column gap-2">
                 <span
                   style={{
@@ -499,7 +500,7 @@ const TopPoolsListCardInner = ({
               </div>
             </div>
           )}
-          <div className="d-flex flex-column gap-2">
+          <div className="col-lg-4 d-flex flex-column gap-2">
             <span
               style={{
                 fontSize: "12px",
@@ -519,9 +520,28 @@ const TopPoolsListCardInner = ({
               {poolCap} DYP
             </h5>
           </div>
+          <div className="d-flex flex-column gap-2">
+            <div className="d-flex align-items-center gap-2 justify-content-between">
+              <span className="rewardsleft-txt">Rewards left</span>
+              <span className="rewardsleft-value">80,500.00 DYP (28%)</span>
+            </div>
+
+            <div className="progress-bar-wrapper" style={{ marginBottom: 0 }}>
+              <div className="progress">
+                <div
+                  className="progress-bar"
+                  role="progressbar"
+                  style={{width: `25%`, background: '#4ed5d2'}}
+                  aria-valuenow="25"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                ></div>
+              </div>
+            </div>
+          </div>
         </div>
         <div
-          className="col-12 col-lg-4 d-flex justify-content-end gap-5"
+          className="col-12 col-lg-2 d-flex justify-content-end gap-5"
           style={{ width: "170px" }}
         >
           {top_pick && <img src={topPick} alt="" />}
@@ -668,9 +688,7 @@ const TopPoolsListCardInner = ({
             />
           ) : showDetails &&
             topList === "Farming" &&
-            chain === "avax" ? //   <FarmAvaxFunc
-          //   is_wallet_connected={isConnected}
-          //   coinbase={coinbase}
+            chain === "avax" ? //   coinbase={coinbase} //   is_wallet_connected={isConnected} //   <FarmAvaxFunc
           //   the_graph_result={the_graph_resultavax}
           //   lp_id={LP_IDAVAX_Array[cardIndex]}
           //   chainId={chainId}

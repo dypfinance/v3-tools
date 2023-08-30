@@ -21,10 +21,10 @@
   line-height: 28px;
 }
 
-.earnother-td{
+.earnother-td {
   text-align: center;
-    justify-content: center;
-    display: flex;
+  justify-content: center;
+  display: flex;
 }
 
 .blurryCard {
@@ -77,6 +77,24 @@
   position: absolute;
   top: -8px;
   left: 44%;
+}
+
+.rewardsleft-txt {
+  color: #c0c9ff !important;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.216px;
+}
+
+.rewardsleft-value {
+  color: #f7f7fc !important;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.216px;
 }
 
 .purplediv {

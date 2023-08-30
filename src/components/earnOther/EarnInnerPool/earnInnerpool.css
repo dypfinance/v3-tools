@@ -1,11 +1,14 @@
 .earn-inner-wrapper-hero {
   border-radius: 8px;
-  background: #282a5c;
+  background: url(../../../assets/earnOtherAssets/innerupperhero.svg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   width: 100%;
 }
 
 .inner-hero-img {
-    border-radius: 8px;
+  border-radius: 8px;
 }
 
 .earn-inner-title {
