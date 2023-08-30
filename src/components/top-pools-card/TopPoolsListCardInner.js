@@ -153,17 +153,18 @@ const TopPoolsListCardInner = ({
     const address = coinbase;
     let staking_contract = await window.getContractNFT("NFTSTAKING");
     let stakenft = [];
-    if(address)
-   { let myStakes = await staking_contract.methods
-      .depositsOf(address)
-      .call()
-      .then((result) => {
-        for (let i = 0; i < result.length; i++)
-          stakenft.push(parseInt(result[i]));
-        return stakenft;
-      });
+    if (address) {
+      let myStakes = await staking_contract.methods
+        .depositsOf(address)
+        .call()
+        .then((result) => {
+          for (let i = 0; i < result.length; i++)
+            stakenft.push(parseInt(result[i]));
+          return stakenft;
+        });
 
-    return myStakes;}
+      return myStakes;
+    }
   };
 
   const myStakes = async () => {
@@ -520,7 +521,7 @@ const TopPoolsListCardInner = ({
               {poolCap} DYP
             </h5>
           </div>
-          <div className="d-flex flex-column gap-2">
+          <div className="d-none d-xxl-flex d-xl-flex d-lg-flex d-md-flex flex-column gap-2">
             <div className="d-flex align-items-center gap-2 justify-content-between">
               <span className="rewardsleft-txt">Rewards left</span>
               <span className="rewardsleft-value">80,500.00 DYP (28%)</span>
@@ -531,7 +532,7 @@ const TopPoolsListCardInner = ({
                 <div
                   className="progress-bar"
                   role="progressbar"
-                  style={{width: `25%`, background: '#4ed5d2'}}
+                  style={{ width: `25%`, background: "#4ed5d2" }}
                   aria-valuenow="25"
                   aria-valuemin="0"
                   aria-valuemax="100"
@@ -541,7 +542,7 @@ const TopPoolsListCardInner = ({
           </div>
         </div>
         <div
-          className="col-12 col-lg-2 d-flex justify-content-end gap-5"
+          className="col-12 col-lg-2 d-flex justify-content-center justify-content-xxl-end justify-content-xl-end justify-content-lg-end justify-content-md-end gap-5"
           style={{ width: "170px" }}
         >
           {top_pick && <img src={topPick} alt="" />}
@@ -551,8 +552,6 @@ const TopPoolsListCardInner = ({
             className="details-text gap-1 d-flex align-items-center cursor-pointer justify-content-end"
             style={{
               color: showDetails === false ? "#75CAC2" : "#C0C9FF",
-              minWidth: "100px",
-              maxWidth: "100px",
             }}
             onClick={() => setShowDetails(!showDetails)}
           >
@@ -688,9 +687,7 @@ const TopPoolsListCardInner = ({
             />
           ) : showDetails &&
             topList === "Farming" &&
-            chain === "avax" ? //   coinbase={coinbase} //   is_wallet_connected={isConnected} //   <FarmAvaxFunc
-          //   the_graph_result={the_graph_resultavax}
-          //   lp_id={LP_IDAVAX_Array[cardIndex]}
+            chain === "avax" ? //   lp_id={LP_IDAVAX_Array[cardIndex]} //   the_graph_result={the_graph_resultavax} //   coinbase={coinbase} //   is_wallet_connected={isConnected} //   <FarmAvaxFunc
           //   chainId={chainId}
           //   handleConnection={handleConnection}
           //   expired={false}

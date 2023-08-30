@@ -7,6 +7,9 @@ import innerHero from "../../../assets/earnOtherAssets/innerhero.png";
 import TopPoolsListCardInner from "../../top-pools-card/TopPoolsListCardInner";
 import axios from "axios";
 import ethStakeActive from "../../../assets/earnAssets/ethStakeActive.svg";
+import greenArrow from "../../../assets/earnOtherAssets/greenArrow.svg";
+import { NavLink } from "react-router-dom";
+import { shortAddress } from "../../../functions/shortAddress";
 
 const EarnInnerPool = ({
   chainId,
@@ -66,19 +69,21 @@ const EarnInnerPool = ({
 
   return (
     <div className="container-lg earn-wrapper d-flex flex-column justify-content-center align-items-center p-0 position-relative">
-      <span className="w-100 text-white cursor-pointer d-flex align-items-center gap-2">
-        <img alt="" src={whiteArrow} /> Back to Homepage
-      </span>
+      <NavLink to={"/earn/other"} style={{ alignSelf: "flex-start" }}>
+        <span className="w-100 text-white cursor-pointer d-flex align-items-center gap-2">
+          <img alt="" src={whiteArrow} /> Back to Homepage
+        </span>
+      </NavLink>
       <div className="earn-inner-wrapper-hero mt-4">
         <div className="d-flex flex-column gap-3 justify-content-between">
-          <div className="d-flex align-items-center gap-2 justify-content-between px-4 py-2">
-            <div className="d-flex flex-column gap-2">
+          <div className="d-flex flex-column flex-xxl-row flex-xl-row flex-lg-row flex-md-row align-items-start align-items-xxl-center align-items-lg-center align-items-md-center gap-2 justify-content-between px-4 py-2">
+            <div className="d-flex flex-column gap-1">
               <span className="earn-inner-title">Dypius (DYP)</span>
               <span className="earn-inner-desc">
                 Exclusive staking offer. Locked staking available.
               </span>
             </div>
-            <div className="d-flex flex-column gap-2">
+            <div className="d-flex flex-column gap-1">
               <span className="earn-inner-title">25%</span>
               <span className="earn-inner-desc">Max APR</span>
             </div>
@@ -86,7 +91,7 @@ const EarnInnerPool = ({
           <div className="inner-hero-bg">
             <img alt="" src={innerHero} className="inner-hero-img" />
           </div>
-          <div className="d-flex justify-content-between gap-3 align-items-center px-4 pb-3 pt-2">
+          <div className="d-flex justify-content-between gap-3 align-items-center px-4 pb-3 pt-2 items-big-wrapper">
             <div className="single-item-wrapper">
               <div className="d-flex flex-column gap-2">
                 <span className="earn-inner-greentxt">Category</span>
@@ -132,14 +137,30 @@ const EarnInnerPool = ({
             <div className="single-item-wrapper">
               <div className="d-flex flex-column gap-2">
                 <span className="earn-inner-greentxt">Offer Creator</span>
-                <span className="earn-inner-whitetxt">Dypius</span>
+
+                <a
+                  className="earn-inner-whitetxt d-flex align-items-center gap-1"
+                  href="https://www.dypius.com/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Dypius <img alt="" src={greenArrow} />
+                </a>
               </div>
             </div>
 
             <div className="single-item-wrapper">
               <div className="d-flex flex-column gap-2">
                 <span className="earn-inner-greentxt">Token Address</span>
-                <span className="earn-inner-whitetxt">0xa972...fd21</span>
+                <a
+                  className="earn-inner-whitetxt d-flex align-items-center gap-1"
+                  href="https://etherscan.io/token/0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {shortAddress("0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17")}{" "}
+                  <img alt="" src={greenArrow} />
+                </a>
               </div>
             </div>
           </div>

@@ -10,6 +10,12 @@
 .inner-hero-img {
   border-radius: 8px;
 }
+@media only screen and (max-width: 600px) {
+  .items-big-wrapper {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
 
 .earn-inner-title {
   color: #f7f7fc !important;
