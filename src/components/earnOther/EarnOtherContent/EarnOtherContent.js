@@ -195,10 +195,10 @@ const EarnOtherContent = ({
       lockTime: "Flexible & Locked",
       chain: "Avalanche",
       apr: "12%",
-      tokenLogo: "dyplogo.svg",
+      tokenLogo: "avax.svg",
       expired: false,
       top_pick: true,
-      tokenName: "Dypius",
+      tokenName: "Avalanche",
       tokenTicker: "DYP",
     },
     {
@@ -211,46 +211,46 @@ const EarnOtherContent = ({
       tokenName: "Dypius",
       tokenTicker: "DYP",
     },
-    {
-      lockTime: "Flexible & Locked",
-      chain: "Avalanche",
-      apr: "12%",
-      tokenLogo: "dyplogo.svg",
-      expired: false,
-      top_pick: true,
-      tokenName: "Dypius",
-      tokenTicker: "DYP",
-    },
-    {
-      lockTime: "No lock",
-      chain: "Avalanche",
-      apr: "12%",
-      tokenLogo: "dyplogo.svg",
-      expired: false,
-      top_pick: true,
-      tokenName: "Dypius",
-      tokenTicker: "DYP",
-    },
-    {
-      lockTime: "Locked",
-      chain: "Avalanche",
-      apr: "12%",
-      tokenLogo: "dyplogo.svg",
-      expired: false,
-      top_pick: true,
-      tokenName: "Dypius",
-      tokenTicker: "DYP",
-    },
-    {
-      lockTime: "Locked",
-      chain: "Avalanche",
-      apr: "12%",
-      tokenLogo: "dyplogo.svg",
-      expired: false,
-      top_pick: true,
-      tokenName: "Dypius",
-      tokenTicker: "DYP",
-    },
+    // {
+    //   lockTime: "Flexible & Locked",
+    //   chain: "Avalanche",
+    //   apr: "12%",
+    //   tokenLogo: "dyplogo.svg",
+    //   expired: false,
+    //   top_pick: true,
+    //   tokenName: "Dypius",
+    //   tokenTicker: "DYP",
+    // },
+    // {
+    //   lockTime: "No lock",
+    //   chain: "Avalanche",
+    //   apr: "12%",
+    //   tokenLogo: "dyplogo.svg",
+    //   expired: false,
+    //   top_pick: true,
+    //   tokenName: "Dypius",
+    //   tokenTicker: "DYP",
+    // },
+    // {
+    //   lockTime: "Locked",
+    //   chain: "Avalanche",
+    //   apr: "12%",
+    //   tokenLogo: "dyplogo.svg",
+    //   expired: false,
+    //   top_pick: true,
+    //   tokenName: "Dypius",
+    //   tokenTicker: "DYP",
+    // },
+    // {
+    //   lockTime: "Locked",
+    //   chain: "Avalanche",
+    //   apr: "12%",
+    //   tokenLogo: "dyplogo.svg",
+    //   expired: false,
+    //   top_pick: true,
+    //   tokenName: "Dypius",
+    //   tokenTicker: "DYP",
+    // },
   ];
 
   const [stake, setStake] = useState(routeChain);
@@ -732,7 +732,34 @@ const EarnOtherContent = ({
                     </p>
                   </div>
                 </div>
-
+                <div
+                  className={`stake-other-item ${
+                    option === "Farming" &&
+                    expiredPools === false &&
+                    "blur-stake"
+                  } position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
+                    stake === "avax" ? "avax-item-active" : null
+                  }`}
+                  onClick={() => {
+                    setStake("avax");
+                  }}
+                >
+                  <img
+                    src={stake === "avax" ? avaxStakeActive : avaxStake}
+                    alt=""
+                    style={{ width: 18, height: 18 }}
+                  />
+                  <div className="d-flex flex-column align-items-center align-items-lg-start">
+                    <p
+                      className="text-white"
+                      style={{ fontSize: "12px", fontWeight: "300" }}
+                    >
+                      Avalanche
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="d-flex align-items-center gap-2">
                 <div
                   className={`stake-other-item ${
                     option === "Farming" &&
@@ -743,7 +770,6 @@ const EarnOtherContent = ({
                   }`}
                   onClick={() => {
                     setStake("eth");
-                    // fetchEthTvl();
                   }}
                 >
                   <img
@@ -758,42 +784,16 @@ const EarnOtherContent = ({
                     >
                       Ethereum
                     </p>
-                    {/* <p
-                          style={{
-                            fontSize: "12px",
-                            fontWeight: "500",
-                            color: "#f7f7fc",
-                            whiteSpace: "pre",
-                          }}
-                        >
-                          {ethApr}% APR
-                        </p> */}
                   </div>
                 </div>
-              </div>
-              <div className="d-flex align-items-center gap-2">
                 <div
                   className={`stake-other-item position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
                     stake === "bnb" ? "bsc-item-active" : null
                   }`}
                   onClick={() => {
                     setStake("bnb");
-                    // fetchBscTvl();
                   }}
                 >
-                  {/* <div className="new-pools d-flex justify-content-start align-items-center gap-2 position-absolute">
-                    <img
-                      src={addNewPools}
-                      alt=""
-                      style={{ width: "15px", height: "15px" }}
-                    />
-                    <span
-                      className="text-white d-none d-lg-flex"
-                      style={{ fontSize: "11px" }}
-                    >
-                      New Pools
-                    </span>
-                  </div> */}
                   <img
                     src={stake === "bnb" ? bnbStakeActive : bnbStake}
                     alt=""
@@ -806,67 +806,6 @@ const EarnOtherContent = ({
                     >
                       BNB Chain
                     </p>
-                    {/* <p
-                          style={{
-                            fontSize: "12px",
-                            fontWeight: "500",
-                            color: "#f7f7fc",
-                            whiteSpace: "pre",
-                          }}
-                        >
-                          {getFormattedNumber(bnbApr, 0)}% APR
-                        </p> */}
-                  </div>
-                </div>
-
-                <div
-                  className={`stake-other-item ${
-                    option === "Farming" &&
-                    expiredPools === false &&
-                    "blur-stake"
-                  } position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
-                    stake === "avax" ? "avax-item-active" : null
-                  }`}
-                  onClick={() => {
-                    setStake("avax");
-                    // fetchAvaxTvl();
-                  }}
-                >
-                  {/* <div className="new-pools d-flex justify-content-start align-items-center gap-2 position-absolute">
-                  <img
-                    src={addNewPools}
-                    alt=""
-                    style={{ width: "15px", height: "15px" }}
-                  />
-                  <span
-                    className="text-white d-none d-lg-flex"
-                    style={{ fontSize: "11px" }}
-                  >
-                    New Pools
-                  </span>
-                </div> */}
-                  <img
-                    src={stake === "avax" ? avaxStakeActive : avaxStake}
-                    alt=""
-                    style={{ width: 18, height: 18 }}
-                  />
-                  <div className="d-flex flex-column align-items-center align-items-lg-start">
-                    <p
-                      className="text-white"
-                      style={{ fontSize: "12px", fontWeight: "300" }}
-                    >
-                      Avalanche
-                    </p>
-                    {/* <p
-                          style={{
-                            fontSize: "12px",
-                            fontWeight: "500",
-                            color: "#f7f7fc",
-                            whiteSpace: "pre",
-                          }}
-                        >
-                          {avaxApr}% APR
-                        </p> */}
                   </div>
                 </div>
               </div>
@@ -895,7 +834,7 @@ const EarnOtherContent = ({
           {stake === "eth"
             ? dummyData_eth.map((item, index) => {
                 return (
-                  <NavLink to={`/earn/other/${index}`}>
+                  <NavLink to={`/earn/defi-staking/${index}`}>
                     <TopOtherPoolsCard
                       key={index}
                       lockTime={item.lockTime}
@@ -912,7 +851,7 @@ const EarnOtherContent = ({
             : stake === "bnb"
             ? dummyData_bnb.map((item, index) => {
                 return (
-                  <NavLink to={`/earn/other/${index}`}>
+                  <NavLink to={`/earn/defi-staking/${index}`}>
                     <TopOtherPoolsCard
                       key={index}
                       lockTime={item.lockTime}
@@ -929,7 +868,7 @@ const EarnOtherContent = ({
             : stake === "avax"
             ? dummyData_avax.map((item, index) => {
                 return (
-                  <NavLink to={`/earn/other/${index}`}>
+                  <NavLink to={`/earn/defi-staking/${index}`}>
                     <TopOtherPoolsCard
                       key={index}
                       lockTime={item.lockTime}
@@ -946,7 +885,7 @@ const EarnOtherContent = ({
             : [...dummyData_eth, ...dummyData_bnb, ...dummyData_avax].map(
                 (item, index) => {
                   return (
-                    <NavLink to={`/earn/other/${index}`}>
+                    <NavLink to={`/earn/defi-staking/${index}`}>
                       <TopOtherPoolsCard
                         key={index}
                         lockTime={item.lockTime}
@@ -986,7 +925,7 @@ const EarnOtherContent = ({
             {stake === "eth"
               ? dummyData_eth.map((item, index) => {
                   return (
-                    <NavLink to={`/earn/other/${index}`}>
+                    <NavLink to={`/earn/defi-staking/${index}`}>
                       <TopOtherPoolsListCard
                         tokenLogo={item.tokenLogo}
                         chain={item.chain}
@@ -1002,7 +941,7 @@ const EarnOtherContent = ({
               : stake === "bnb"
               ? dummyData_bnb.map((item, index) => {
                   return (
-                    <NavLink to={`/earn/other/${index}`}>
+                    <NavLink to={`/earn/defi-staking/${index}`}>
                       <TopOtherPoolsListCard
                         tokenLogo={item.tokenLogo}
                         chain={item.chain}
@@ -1018,7 +957,7 @@ const EarnOtherContent = ({
               : stake === "avax"
               ? dummyData_avax.map((item, index) => {
                   return (
-                    <NavLink to={`/earn/other/${index}`}>
+                    <NavLink to={`/earn/defi-staking/${index}`}>
                       <TopOtherPoolsListCard
                         tokenLogo={item.tokenLogo}
                         chain={item.chain}
@@ -1034,7 +973,7 @@ const EarnOtherContent = ({
               : [...dummyData_eth, ...dummyData_bnb, ...dummyData_avax].map(
                   (item, index) => {
                     return (
-                      <NavLink to={`/earn/other/${index}`}>
+                      <NavLink to={`/earn/defi-staking/${index}`}>
                         <TopOtherPoolsListCard
                           tokenLogo={item.tokenLogo}
                           chain={item.chain}
