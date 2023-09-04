@@ -5,6 +5,8 @@ import topPick from "../top-pools-card/assets/toppick.svg";
 import newPool from "../top-pools-card/assets/newPool.png";
 import ethStake from "../../assets/earnAssets/ethStakeActive.svg";
 import avaxStake from "../../assets/earnAssets/avaxStakeActive.svg";
+import baseStake from "../../assets/earnAssets/baseActive.svg";
+
 import bnbStakeActive from "../../assets/earnAssets/bnbStakeActive.svg";
 import useWindowSize from "../../functions/useWindowSize";
 
@@ -150,7 +152,7 @@ const TopOtherPoolsListCard = ({
                           chain === "Ethereum"
                             ? ethStake
                             : chain === "BNB Chain"
-                            ? bnbStakeActive
+                            ? bnbStakeActive : chain === 'Base' ? baseStake
                             : avaxStake
                         }
                         style={{ width: 18, height: 18 }}

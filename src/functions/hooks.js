@@ -172,6 +172,19 @@ export const handleSwitchNetworkhook = async (chainID) => {
     blockExplorerUrls: ["https://bscscan.com"],
   };
 
+  const BASEPARAMS = {
+    chainId: "0x2105", // A 0x-prefixed hexadecimal string
+    chainName: "Base Mainnet",
+    nativeCurrency: {
+      name: "Ethereum",
+      symbol: "ETH", // 2-6 characters long
+      decimals: 18,
+    },
+    rpcUrls: ["https://rpc.ankr.com/base"],
+    blockExplorerUrls: ["https://basescan.org"],
+  };
+
+
   try {
     await ethereum.request({
       method: "wallet_switchEthereumChain",
@@ -194,6 +207,8 @@ export const handleSwitchNetworkhook = async (chainID) => {
               ? [AVAXPARAMS]
               : chainID === "0x38"
               ? [BNBPARAMS]
+              : chainID === "0x2105"
+              ? [BASEPARAMS]
               : "",
         });
         if(window.ethereum && window.ethereum.isTrust === true) {

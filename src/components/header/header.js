@@ -6,6 +6,7 @@ import coin from "./assets/coins.svg";
 import avax from "./assets/avax.svg";
 import bnb from "./assets/bnb.svg";
 import eth from "./assets/eth.svg";
+import base from "./assets/base.svg";
 import dropdown from "./assets/dropdown.svg";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
@@ -49,6 +50,8 @@ const Header = ({
   const [ethState, setEthState] = useState(true);
   const [bnbState, setBnbState] = useState(false);
   const [avaxState, setAvaxState] = useState(false);
+  const [baseState, setBaseState] = useState(false);
+
   const [avatar, setAvatar] = useState("../../assets/img/person.svg");
   const routeData = useLocation();
 
@@ -59,17 +62,27 @@ const Header = ({
       setAvaxState(false);
       setBnbState(false);
       setEthState(true);
+      setBaseState(false);
     } else if (chainId === 43114) {
       setAvaxState(true);
       setBnbState(false);
       setEthState(false);
+      setBaseState(false);
+    } else if (chainId === 8453) {
+      setAvaxState(false);
+      setBnbState(false);
+      setEthState(false);
+      setBaseState(true);
     } else if (chainId === 56) {
       setAvaxState(false);
       setBnbState(true);
       setEthState(false);
+      setBaseState(false);
     } else {
       setAvaxState(false);
       setBnbState(false);
+      setBaseState(false);
+
       setEthState(false);
     }
   };
@@ -104,6 +117,15 @@ const Header = ({
       });
   };
 
+  const handleBasePool = async () => {
+    await handleSwitchNetworkhook("0x2105")
+      .then(() => {
+        handleSwitchNetwork("8453");
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
   function handleChainChanged() {
     // We recommend reloading the page, unless you must do otherwise
     // window.location.reload();
@@ -294,6 +316,8 @@ const Header = ({
                                     ? bnb
                                     : avaxState === true
                                     ? avax
+                                    : baseState === true
+                                    ? base
                                     : error
                                 }
                                 height={16}
@@ -307,6 +331,8 @@ const Header = ({
                                   ? "BNB Chain"
                                   : avaxState === true
                                   ? "Avalanche"
+                                  : baseState === true
+                                  ? "Base"
                                   : "Unsupported Chain"}
                               </span>
 
@@ -325,6 +351,10 @@ const Header = ({
                           <Dropdown.Item onClick={() => handleAvaxPool()}>
                             <img src={avax} alt="" />
                             Avalanche
+                          </Dropdown.Item>
+                          <Dropdown.Item onClick={() => handleBasePool()}>
+                            <img src={base} alt="" />
+                            Base
                           </Dropdown.Item>
                         </DropdownButton>
                       )}

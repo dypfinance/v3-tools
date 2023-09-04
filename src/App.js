@@ -122,6 +122,11 @@ class App extends React.Component {
               this.setState({
                 networkId: "56",
               });
+            }
+            else if (data === "0x2105") {
+              this.setState({
+                networkId: "8453",
+              });
             } else if (data !== "undefined") {
               this.setState({
                 networkId: "0",
@@ -153,6 +158,10 @@ class App extends React.Component {
         } else if (chainId === "0x38") {
           this.setState({
             networkId: "56",
+          });
+        } else if (chainId === "0x2105") {
+          this.setState({
+            networkId: "8453",
           });
         } else if (chainId !== "undefined") {
           this.setState({
