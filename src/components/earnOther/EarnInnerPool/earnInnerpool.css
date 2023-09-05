@@ -39,6 +39,7 @@
   border: 1px solid #3b3c68;
   background: #26264f;
   padding: 15px;
+  min-width: 153px;
 }
 
 .earn-inner-greentxt {

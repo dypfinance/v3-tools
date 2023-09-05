@@ -195,7 +195,7 @@ const TopPoolsListCardInner = ({
     <>
       <div
         className={`row w-100 flex-column gap-3 gap-lg-0 flex-lg-row align-items-center justify-content-between  mx-0 cursor-pointer ${
-          expired === true ? "poolscardwrapperexpired" : "list-pool-card"
+          expired === true ? "poolscardwrapperexpired"  : showDetails === false ? "list-pool-card" : 'list-pool-card-active'
         }`}
         onClick={() => handleDetails()}
         style={{ display: display }}

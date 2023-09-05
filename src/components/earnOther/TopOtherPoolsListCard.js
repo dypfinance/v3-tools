@@ -137,11 +137,11 @@ const TopOtherPoolsListCard = ({
                   <td className="earnother-td col-2">
                     <h5
                       style={{
-                        fontSize: "16px",
+                        fontSize: "15px",
                         fontWeight: "300",
                         color: "#F7F7FC",
                       }}
-                      className="d-flex align-items-center gap-2"
+                      className="d-flex col-6 align-items-center gap-2"
                     >
                       <img
                         src={

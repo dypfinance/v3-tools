@@ -48,7 +48,6 @@ const EarnInnerPool = ({
 
   const dummyData_bnb2 = [
     {
-      lockTime: "Flexible & Locked",
       chain: "BNB Chain",
       apr: 25,
       tokenLogo: "bsc.svg",
@@ -62,7 +61,6 @@ const EarnInnerPool = ({
       poolCap: "50000",
     },
     {
-      lockTime: "Flexible & Locked",
       chain: "BNB Chain",
       apr: 10,
       tokenLogo: "dyplogo.svg",
@@ -79,7 +77,6 @@ const EarnInnerPool = ({
 
   const dummyData_avax2 = [
     {
-      lockTime: "Locked",
       chain: "Avalanche",
       apr: 30,
       tokenLogo: "avax.svg",
@@ -94,7 +91,6 @@ const EarnInnerPool = ({
       poolCap: "30000",
     },
     {
-      lockTime: "Locked",
       chain: "Avalanche",
       apr: 10,
       tokenLogo: "dyplogo.svg",
@@ -112,7 +108,6 @@ const EarnInnerPool = ({
 
   const dummyData_eth2 = [
     {
-      lockTime: "Flexible & Locked",
       chain: "Ethereum",
       apr: 30,
       tokenLogo: "ethereum.svg",
@@ -126,7 +121,6 @@ const EarnInnerPool = ({
       poolCap: "30000",
     },
     {
-      lockTime: "Flexible & Locked",
       chain: "Ethereum",
       apr: 10,
       tokenLogo: "dyplogo.svg",
