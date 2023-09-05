@@ -116,7 +116,7 @@ const Sidebar = (props) => {
           link: "/earn/dypius",
         },
         {
-          title: "Defi Staking",
+          title: "DeFi Staking",
           link: "/earn/defi-staking",
         },
       ],

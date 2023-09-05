@@ -68,254 +68,90 @@ const EarnOtherContent = ({
 
   const dummyData_eth = [
     {
-      lockTime: "Flexible & Locked",
-      chain: "Ethereum",
-      apr: "12%",
-      tokenLogo: "dyplogo.svg",
-      expired: false,
-      top_pick: true,
-      tokenName: "Dypius",
-      tokenTicker: "DYP",
-    },
-    {
-      lockTime: "No lock",
-      chain: "Ethereum",
-      apr: "12%",
-      tokenLogo: "dyplogo.svg",
-      expired: false,
-      top_pick: true,
-      tokenName: "Dypius",
-      tokenTicker: "DYP",
-    },
-    {
       lockTime: "Locked",
       chain: "Ethereum",
-      apr: "12%",
-      tokenLogo: "dyplogo.svg",
+      apr: "30%",
+      tokenLogo: "ethereum.svg",
       expired: false,
       top_pick: true,
-      tokenName: "Dypius",
-      tokenTicker: "DYP",
+      tokenName: "Ethereum",
+      tokenTicker: "ETH",
+      pool: 'ETH'
     },
-    {
-      lockTime: "Locked",
-      chain: "Ethereum",
-      apr: "12%",
-      tokenLogo: "dyplogo.svg",
-      expired: false,
-      top_pick: true,
-      tokenName: "Dypius",
-      tokenTicker: "DYP",
-    },
-    {
-      lockTime: "Flexible & Locked",
-      chain: "Ethereum",
-      apr: "12%",
-      tokenLogo: "dyplogo.svg",
-      expired: false,
-      top_pick: true,
-      tokenName: "Dypius",
-      tokenTicker: "DYP",
-    },
-    {
-      lockTime: "No lock",
-      chain: "Ethereum",
-      apr: "12%",
-      tokenLogo: "dyplogo.svg",
-      expired: false,
-      top_pick: true,
-      tokenName: "Dypius",
-      tokenTicker: "DYP",
-    },
+
   ];
 
   const dummyData_base = [
     {
-      lockTime: "Flexible & Locked",
+      lockTime: "Locked",
       chain: "Base",
       apr: "11%",
-      tokenLogo: "dyplogo.svg",
+      tokenLogo: "baseActive.svg",
       expired: false,
       top_pick: true,
-      tokenName: "Dypius",
-      tokenTicker: "DYP",
+      tokenName: "Base",
+      tokenTicker: "BASE",
+      pool: 'BASE'
+
     },
+  ];
+
+  const dummyData_bnb2 = [
     {
-      lockTime: "No lock",
-      chain: "Base",
-      apr: "13%",
+      lockTime: "Flexible & Locked",
+      chain: "BNB Chain",
+      apr: "10%",
       tokenLogo: "dyplogo.svg",
       expired: false,
       top_pick: true,
       tokenName: "Dypius",
       tokenTicker: "DYP",
-    },
-    {
-      lockTime: "Locked",
-      chain: "Base",
-      apr: "12%",
-      tokenLogo: "dyplogo.svg",
-      expired: false,
-      top_pick: true,
-      tokenName: "Dypius",
-      tokenTicker: "DYP",
-    },
-    {
-      lockTime: "Locked",
-      chain: "Base",
-      apr: "12%",
-      tokenLogo: "dyplogo.svg",
-      expired: false,
-      top_pick: true,
-      tokenName: "Dypius",
-      tokenTicker: "DYP",
+      pool: 'DYP-BNB'
+
     },
     {
       lockTime: "Flexible & Locked",
-      chain: "Base",
-      apr: "12%",
-      tokenLogo: "dyplogo.svg",
+      chain: "BNB Chain",
+      apr: "25%",
+      tokenLogo: "bsc.svg",
       expired: false,
       top_pick: true,
-      tokenName: "Dypius",
-      tokenTicker: "DYP",
+      tokenName: "BNB",
+      tokenTicker: "WBNB",
+      pool: 'BNB'
+
     },
-    {
-      lockTime: "No lock",
-      chain: "Base",
-      apr: "12%",
-      tokenLogo: "dyplogo.svg",
-      expired: false,
-      top_pick: true,
-      tokenName: "Dypius",
-      tokenTicker: "DYP",
-    },
+
   ];
 
   const dummyData_bnb = [
     {
-      lockTime: "No lock",
-      chain: "BNB Chain",
-      apr: "12%",
-      tokenLogo: "dyplogo.svg",
-      expired: false,
-      top_pick: true,
-      tokenName: "Dypius",
-      tokenTicker: "DYP",
-    },
-    {
-      lockTime: "Flexible & Locked",
-      chain: "BNB Chain",
-      apr: "12%",
-      tokenLogo: "dyplogo.svg",
-      expired: false,
-      top_pick: true,
-      tokenName: "Dypius",
-      tokenTicker: "DYP",
-    },
-    {
       lockTime: "Locked",
       chain: "BNB Chain",
-      apr: "12%",
-      tokenLogo: "dyplogo.svg",
+      apr: "25%",
+      tokenLogo: "bsc.svg",
       expired: false,
       top_pick: true,
-      tokenName: "Dypius",
-      tokenTicker: "DYP",
+      tokenName: "BNB",
+      tokenTicker: "BNB",
+      pool: 'BNB'
     },
-    {
-      lockTime: "No lock",
-      chain: "BNB Chain",
-      apr: "12%",
-      tokenLogo: "dyplogo.svg",
-      expired: false,
-      top_pick: true,
-      tokenName: "Dypius",
-      tokenTicker: "DYP",
-    },
-    {
-      lockTime: "Locked",
-      chain: "BNB Chain",
-      apr: "12%",
-      tokenLogo: "dyplogo.svg",
-      expired: false,
-      top_pick: true,
-      tokenName: "Dypius",
-      tokenTicker: "DYP",
-    },
-    {
-      lockTime: "Flexible & Locked",
-      chain: "BNB Chain",
-      apr: "12%",
-      tokenLogo: "dyplogo.svg",
-      expired: false,
-      top_pick: true,
-      tokenName: "Dypius",
-      tokenTicker: "DYP",
-    },
+
   ];
 
   const dummyData_avax = [
     {
-      lockTime: "Flexible & Locked",
+      lockTime: "Locked",
       chain: "Avalanche",
-      apr: "12%",
+      apr: "30%",
       tokenLogo: "avax.svg",
       expired: false,
       top_pick: true,
       tokenName: "Avalanche",
-      tokenTicker: "DYP",
+      tokenTicker: "AVAX",
+      pool: 'AVAX'
     },
-    {
-      lockTime: "No lock",
-      chain: "Avalanche",
-      apr: "12%",
-      tokenLogo: "dyplogo.svg",
-      expired: false,
-      top_pick: true,
-      tokenName: "Dypius",
-      tokenTicker: "DYP",
-    },
-    // {
-    //   lockTime: "Flexible & Locked",
-    //   chain: "Avalanche",
-    //   apr: "12%",
-    //   tokenLogo: "dyplogo.svg",
-    //   expired: false,
-    //   top_pick: true,
-    //   tokenName: "Dypius",
-    //   tokenTicker: "DYP",
-    // },
-    // {
-    //   lockTime: "No lock",
-    //   chain: "Avalanche",
-    //   apr: "12%",
-    //   tokenLogo: "dyplogo.svg",
-    //   expired: false,
-    //   top_pick: true,
-    //   tokenName: "Dypius",
-    //   tokenTicker: "DYP",
-    // },
-    // {
-    //   lockTime: "Locked",
-    //   chain: "Avalanche",
-    //   apr: "12%",
-    //   tokenLogo: "dyplogo.svg",
-    //   expired: false,
-    //   top_pick: true,
-    //   tokenName: "Dypius",
-    //   tokenTicker: "DYP",
-    // },
-    // {
-    //   lockTime: "Locked",
-    //   chain: "Avalanche",
-    //   apr: "12%",
-    //   tokenLogo: "dyplogo.svg",
-    //   expired: false,
-    //   top_pick: true,
-    //   tokenName: "Dypius",
-    //   tokenTicker: "DYP",
-    // },
+
   ];
 
   const [stake, setStake] = useState(routeChain);
@@ -670,7 +506,6 @@ const EarnOtherContent = ({
   }, [option, expiredPools]);
 
 
-  console.log(stake)
 
   return (
     <>
@@ -705,20 +540,6 @@ const EarnOtherContent = ({
               </div>
             </div>
 
-            <div className="col-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3">
-              <h5 className="text-white inactive-pools">Inactive pools</h5>
-              <div
-                className={`pill-box ${myStakes && "pill-box-active"}`}
-                onClick={() => {
-                  setMyStakes(!myStakes);
-                  // setExpiredPools(!expiredPools);
-                  // option === "Farming" && fetchFarmingApr();
-                  toggleInactive();
-                }}
-              >
-                <div className="pill"></div>
-              </div>
-            </div>
           </div>
         ) : (
           <div
@@ -749,18 +570,7 @@ const EarnOtherContent = ({
                 />
               </div>
             </div>
-            <div className="col-6 px-0 px-lg-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3">
-              <h5 className="text-white inactive-pools">Inactive pools</h5>
-              <div
-                className={`pill-box ${myStakes && "pill-box-active"}`}
-                onClick={() => {
-                  setMyStakes(!myStakes);
-                  setExpiredPools(!expiredPools);
-                }}
-              >
-                <div className="pill"></div>
-              </div>
-            </div>
+            
           </div>
         )}
 
@@ -915,7 +725,7 @@ const EarnOtherContent = ({
                   className="text-white"
                   style={{ fontWeight: "600", fontSize: "17px" }}
                 >
-                  ${getFormattedNumber(tvl)}
+                  ${getFormattedNumber('2585417',0)}
                 </h6>
               </div>
             )}
@@ -927,7 +737,7 @@ const EarnOtherContent = ({
           {stake === "eth"
             ? dummyData_eth.map((item, index) => {
                 return (
-                  <NavLink to={`/earn/defi-staking/${index}`}>
+                  <NavLink to={`/earn/defi-staking/${item.pool}/test`}>
                     <TopOtherPoolsCard
                       key={index}
                       lockTime={item.lockTime}
@@ -944,7 +754,7 @@ const EarnOtherContent = ({
             : stake == "base"
             ? dummyData_base.map((item, index) => {
                 return (
-                  <NavLink to={`/earn/defi-staking/${index}`}>
+                  <NavLink to={`/earn/defi-staking/${item.pool}/test`}>
                     <TopOtherPoolsCard
                       key={index}
                       lockTime={item.lockTime}
@@ -961,7 +771,7 @@ const EarnOtherContent = ({
             : stake === "bnb"
             ? dummyData_bnb.map((item, index) => {
                 return (
-                  <NavLink to={`/earn/defi-staking/${index}`}>
+                  <NavLink to={`/earn/defi-staking/${item.pool}/test`}>
                     <TopOtherPoolsCard
                       key={index}
                       lockTime={item.lockTime}
@@ -978,7 +788,7 @@ const EarnOtherContent = ({
             : stake === "avax"
             ? dummyData_avax.map((item, index) => {
                 return (
-                  <NavLink to={`/earn/defi-staking/${index}`}>
+                  <NavLink to={`/earn/defi-staking/${item.pool}/test`}>
                     <TopOtherPoolsCard
                       key={index}
                       lockTime={item.lockTime}
@@ -993,13 +803,13 @@ const EarnOtherContent = ({
                 );
               })
             : [
-                ...dummyData_eth,
+                 ...dummyData_avax,...dummyData_eth,
                 ...dummyData_base,
                 ...dummyData_bnb,
-                ...dummyData_avax,
+               
               ].map((item, index) => {
                 return (
-                  <NavLink to={`/earn/defi-staking/${index}`}>
+                  <NavLink to={`/earn/defi-staking/${item.pool}/test`}>
                     <TopOtherPoolsCard
                       key={index}
                       lockTime={item.lockTime}
@@ -1038,7 +848,7 @@ const EarnOtherContent = ({
             {stake === "eth"
               ? dummyData_eth.map((item, index) => {
                   return (
-                    <NavLink to={`/earn/defi-staking/${index}`}>
+                    <NavLink to={`/earn/defi-staking/${item.pool}/test`}>
                       <TopOtherPoolsListCard
                         tokenLogo={item.tokenLogo}
                         chain={item.chain}
@@ -1054,7 +864,7 @@ const EarnOtherContent = ({
               :stake === "base"
               ? dummyData_base.map((item, index) => {
                   return (
-                    <NavLink to={`/earn/defi-staking/${index}`}>
+                    <NavLink to={`/earn/defi-staking/${item.pool}/test`}>
                       <TopOtherPoolsListCard
                         tokenLogo={item.tokenLogo}
                         chain={item.chain}
@@ -1070,7 +880,7 @@ const EarnOtherContent = ({
               : stake === "bnb"
               ? dummyData_bnb.map((item, index) => {
                   return (
-                    <NavLink to={`/earn/defi-staking/${index}`}>
+                    <NavLink to={`/earn/defi-staking/${item.pool}/test`}>
                       <TopOtherPoolsListCard
                         tokenLogo={item.tokenLogo}
                         chain={item.chain}
@@ -1086,7 +896,7 @@ const EarnOtherContent = ({
               : stake === "avax"
               ? dummyData_avax.map((item, index) => {
                   return (
-                    <NavLink to={`/earn/defi-staking/${index}`}>
+                    <NavLink to={`/earn/defi-staking/${item.pool}/test`}>
                       <TopOtherPoolsListCard
                         tokenLogo={item.tokenLogo}
                         chain={item.chain}
@@ -1099,10 +909,15 @@ const EarnOtherContent = ({
                     </NavLink>
                   );
                 })
-              : [...dummyData_eth, ...dummyData_bnb, ...dummyData_avax].map(
+              : [
+               ...dummyData_avax, ...dummyData_eth,
+                ...dummyData_base,
+                ...dummyData_bnb,
+                
+              ].map(
                   (item, index) => {
                     return (
-                      <NavLink to={`/earn/defi-staking/${index}`}>
+                      <NavLink to={`/earn/defi-staking/${item.pool}/test`}>
                         <TopOtherPoolsListCard
                           tokenLogo={item.tokenLogo}
                           chain={item.chain}

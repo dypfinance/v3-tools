@@ -644,7 +644,7 @@ class App extends React.Component {
 
                   <Route
                     exact
-                    path="/earn/defi-staking/:contractId"
+                    path="/earn/defi-staking/:pool/:contractId"
                     render={(props) => (
                       <EarnInnerPool
                         coinbase={this.state.coinbase}

@@ -4,13 +4,21 @@ import "../earnOther.css";
 import "../../earn/earn.css";
 import whiteArrow from "../../../assets/earnOtherAssets/backWhiteArrow.svg";
 import innerHero from "../../../assets/earnOtherAssets/innerhero.png";
+import innerHeroAvax from "../../../assets/earnOtherAssets/innerheroAvax.jpg";
+import innerHeroBnb from "../../../assets/earnOtherAssets/innerheroBnb.jpg";
+
 import TopPoolsListCardInner from "../../top-pools-card/TopPoolsListCardInner";
 import axios from "axios";
 import ethStakeActive from "../../../assets/earnAssets/ethStakeActive.svg";
+import bnbStakeActive from "../../../assets/earnAssets/bnbStakeActive.svg";
+import avaxStakeActive from "../../../assets/earnAssets/avaxStakeActive.svg";
+import baseStakeActive from "../../../assets/earnAssets/baseActive.svg";
+
 import greenArrow from "../../../assets/earnOtherAssets/greenArrow.svg";
 import { NavLink } from "react-router-dom";
 import { shortAddress } from "../../../functions/shortAddress";
 import SwitchChainModal from "../../switch-chain-modal/SwitchChainModal";
+import { useParams } from "react-router-dom";
 
 const EarnInnerPool = ({
   chainId,
@@ -32,42 +40,131 @@ const EarnInnerPool = ({
   const [topPools, setTopPools] = useState([]);
   const [count, setCount] = useState(0);
   const [showModal, setShowModal] = useState(0);
+  const [network, setNetwork] = useState("");
+  const [tokenName, setTokenName] = useState("");
+  const [tokenTicker, setTokenTicker] = useState("");
+
+  const { pool, contractId } = useParams();
+
+  const dummyData_bnb2 = [
+    {
+      lockTime: "Flexible & Locked",
+      chain: "BNB Chain",
+      apr: 25,
+      tokenLogo: "bsc.svg",
+      expired: false,
+      top_pick: true,
+      tokenName: "BNB",
+      tokenTicker: "WBNB",
+      pool: "BNB",
+      id: "0x8652d1817f5a95172001685a28facb1d57e78a11",
+      lockTime: "60 days",
+      poolCap: "50000",
+    },
+    {
+      lockTime: "Flexible & Locked",
+      chain: "BNB Chain",
+      apr: 10,
+      tokenLogo: "dyplogo.svg",
+      expired: false,
+      top_pick: false,
+      tokenName: "DYP",
+      tokenTicker: "DYP",
+      pool: "DYP-BNB",
+      id: "0x215bD6eDa2A5372aeA17360c166761c4Eec60497",
+      lockTime: "90 days",
+      poolCap: "80000",
+    },
+  ];
+
+  const dummyData_avax2 = [
+    {
+      lockTime: "Locked",
+      chain: "Avalanche",
+      apr: 30,
+      tokenLogo: "avax.svg",
+      expired: false,
+      top_pick: false,
+      tokenName: "AVAX",
+      tokenTicker: "AVAX",
+      pool: "AVAX",
+      id: "0x8652d1817f5a95172001685a28facb1d57e78a11",
+
+      lockTime: "90 days",
+      poolCap: "30000",
+    },
+    {
+      lockTime: "Locked",
+      chain: "Avalanche",
+      apr: 10,
+      tokenLogo: "dyplogo.svg",
+      expired: false,
+      top_pick: false,
+      tokenName: "DYP",
+      tokenTicker: "DYP",
+      pool: "DYP-AVAX",
+      id: "0x215bD6eDa2A5372aeA17360c166761c4Eec60497",
+
+      lockTime: "180 days",
+      poolCap: "40000",
+    },
+  ];
+
+  const dummyData_eth2 = [
+    {
+      lockTime: "Flexible & Locked",
+      chain: "Ethereum",
+      apr: 30,
+      tokenLogo: "ethereum.svg",
+      expired: false,
+      top_pick: true,
+      tokenName: "ETH",
+      tokenTicker: "ETH",
+      pool: "ETH",
+      id: "",
+      lockTime: "90 days",
+      poolCap: "30000",
+    },
+    {
+      lockTime: "Flexible & Locked",
+      chain: "Ethereum",
+      apr: 10,
+      tokenLogo: "dyplogo.svg",
+      expired: false,
+      top_pick: false,
+      tokenName: "DYP",
+      tokenTicker: "ETH",
+      pool: "DYP-ETH",
+      id: "",
+      lockTime: "180 days",
+      poolCap: "40000",
+    },
+  ];
 
   const toggleInactive = () => {
     setCount(count + 1);
   };
 
-  const fetchEthStaking = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_eth`)
-      .then((res) => {
-        const dypIdyp = res.data.stakingInfoDYPEth.concat(
-          res.data.stakingInfoiDYPEth
-        );
-
-        const expiredEth = dypIdyp.filter((item) => {
-          return item.expired !== "No";
-        });
-        const activeEth = dypIdyp.filter((item) => {
-          return item.expired !== "Yes";
-        });
-
-        const sortedExpired = expiredEth.sort(function (a, b) {
-          return b.tvl_usd - a.tvl_usd;
-        });
-        setTopPools(dypIdyp);
-
-        setActivePools(activeEth);
-        setExpiredPools(sortedExpired);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
   useEffect(() => {
-    fetchEthStaking();
-  }, []);
+    if (pool && pool.includes("BNB")) {
+      setNetwork("BNB Chain");
+      setTokenName("BNB Chain");
+      setTokenTicker("BNB");
+    }
+    if (pool && pool.includes("ETH")) {
+      setNetwork("Ethereum");
+      setTokenName("Ethereum");
+      setTokenTicker("ETH");
+    }
+    if (pool && pool.includes("AVAX")) {
+      setNetwork("Avalanche");
+      setTokenName("Avalanche");
+      setTokenTicker("AVAX");
+    }
+    if (pool && pool.includes("BASE")) {
+      setNetwork("Base");
+    }
+  }, [pool]);
 
   return (
     <>
@@ -87,19 +184,29 @@ const EarnInnerPool = ({
                     setShowModal(true);
                   }}
                 >
-                  Dypius (DYP)
+                  {tokenName} ({tokenTicker})
                 </span>
                 <span className="earn-inner-desc">
                   Exclusive staking offer. Locked staking available.
                 </span>
               </div>
               <div className="d-flex flex-column gap-1">
-                <span className="earn-inner-title">25%</span>
+                <span className="earn-inner-title">30%</span>
                 <span className="earn-inner-desc">Max APR</span>
               </div>
             </div>
             <div className="inner-hero-bg">
-              <img alt="" src={innerHero} className="inner-hero-img" />
+              <img
+                alt=""
+                src={
+                  network === "Ethereum"
+                    ? innerHero
+                    : network === "Avalanche"
+                      ? innerHeroAvax
+                      : innerHeroBnb
+                }
+                className="inner-hero-img"
+              />
             </div>
             <div className="d-flex justify-content-between gap-3 align-items-center px-4 pb-3 pt-2 items-big-wrapper">
               <div className="single-item-wrapper">
@@ -113,18 +220,26 @@ const EarnInnerPool = ({
                   <span className="earn-inner-greentxt">Network</span>
                   <span className="earn-inner-whitetxt d-flex align-items-center gap-1">
                     <img
-                      src={ethStakeActive}
+                      src={
+                        network === "Ethereum"
+                          ? ethStakeActive
+                          : network === "BNB Chain"
+                            ? bnbStakeActive
+                            : network === "Avalanche"
+                              ? avaxStakeActive
+                              : baseStakeActive
+                      }
                       alt=""
                       style={{ width: 12, height: 12 }}
                     />
-                    Ethereum
+                    {network}
                   </span>
                 </div>
               </div>
               <div className="single-item-wrapper">
                 <div className="d-flex flex-column gap-2">
                   <span className="earn-inner-greentxt">Method</span>
-                  <span className="earn-inner-whitetxt">Flexible & Locked</span>
+                  <span className="earn-inner-whitetxt">Locked</span>
                 </div>
               </div>
 
@@ -133,16 +248,16 @@ const EarnInnerPool = ({
                   <span className="earn-inner-greentxt">
                     Total Value Locked (USD)
                   </span>
-                  <span className="earn-inner-whitetxt">$524,255.00</span>
+                  <span className="earn-inner-whitetxt">$0</span>
                 </div>
               </div>
-
+{/* 
               <div className="single-item-wrapper">
                 <div className="d-flex flex-column gap-2">
-                  <span className="earn-inner-greentxt">Total DYP locked</span>
-                  <span className="earn-inner-whitetxt">256,458.00 DYP</span>
+                  <span className="earn-inner-greentxt">Total locked</span>
+                  <span className="earn-inner-whitetxt">256,458.00 {tokenTicker}</span>
                 </div>
-              </div>
+              </div> */}
 
               <div className="single-item-wrapper">
                 <div className="d-flex flex-column gap-2">
@@ -168,7 +283,7 @@ const EarnInnerPool = ({
                     target="_blank"
                     rel="noreferrer"
                   >
-                    {shortAddress("0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17")}{" "}
+                    {shortAddress("0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7")}{" "}
                     <img alt="" src={greenArrow} />
                   </a>
                 </div>
@@ -181,7 +296,7 @@ const EarnInnerPool = ({
           style={{ marginTop: "30px", marginBottom: "40px" }}
         >
           <div className="col-2 d-flex justify-content-start align-items-center gap-3">
-            <span>Dypius Offers</span>
+            <span>{network} Offers</span>
           </div>
 
           <div className="col-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3">
@@ -199,61 +314,122 @@ const EarnInnerPool = ({
             </div>
           </div>
         </div>
-        {activePools.map((pool, index) => {
-          return (
-            <TopPoolsListCardInner
-              key={index}
-              expiredPools={expiredPools}
-              activePools={activePools}
-              tokenName={
-                pool.tokenName
-                  ? pool.tokenName
-                  : pool.pair_name
-                  ? pool.pair_name
-                  : ""
-              }
-              topList={"Staking"}
-              onShowDetailsClick={() => {
-                setShowDetails(!showDetails);
-                setActiveCard(topPools[index + 1]);
-              }}
-              top_pick={pool.top_pick}
-              expired={false}
-              tokenLogo={
-                pool.icon
-                  ? pool.icon
-                  : pool.pair_name === "iDYP"
-                  ? "idypius.svg"
-                  : "dyplogo.svg"
-              }
-              apr={pool.apy_percent + "%"}
-              lockTime={"No lock"}
-              poolCap={"48,000.00"}
-              chain={"eth"}
-              display={
-                pool.expired
-                  ? pool.expired === "Yes"
-                    ? "none"
-                    : "flex"
-                  : "flex"
-              }
-              isNewPool={pool.new_pool === "Yes" ? true : false}
-              totalTvl={pool.tvl_usd}
-              showDetails={showDetails}
-              cardIndex={index + 1}
-              chainId={chainId}
-              handleConnection={handleConnection}
-              handleSwitchNetwork={handleSwitchNetwork}
-              coinbase={coinbase}
-              referrer={referrer}
-              lp_id={lp_id[index + 1]}
-              the_graph_result={the_graph_result}
-              the_graph_resultbsc={the_graph_resultbsc}
-              isConnected={isConnected}
-              the_graph_resultavax={the_graph_resultavax}
-            />
-          );
-        })}
+        {network === "BNB Chain" &&
+          dummyData_bnb2.map((pool, index) => {
+            return (
+              <TopPoolsListCardInner
+                key={index}
+                expiredPools={expiredPools}
+                activePools={dummyData_bnb2}
+                tokenName={pool.tokenName}
+                topList={"Staking"}
+                onShowDetailsClick={() => {
+                  setShowDetails(!showDetails);
+                  setActiveCard(topPools[index + 1]);
+                }}
+                top_pick={pool.top_pick}
+                expired={false}
+                tokenLogo={pool.tokenLogo}
+                apr={pool.apr}
+                lockTime={pool.lockTime}
+                poolCap={pool.poolCap}
+                chain={"bnb"}
+                display={"flex"}
+                isNewPool={pool.new_pool === "Yes" ? true : false}
+                totalTvl={pool.tvl_usd}
+                showDetails={showDetails}
+                cardIndex={index + 1}
+                chainId={chainId}
+                handleConnection={handleConnection}
+                handleSwitchNetwork={handleSwitchNetwork}
+                coinbase={coinbase}
+                referrer={referrer}
+                lp_id={lp_id[index + 1]}
+                the_graph_result={the_graph_result}
+                the_graph_resultbsc={the_graph_resultbsc}
+                isConnected={isConnected}
+                the_graph_resultavax={the_graph_resultavax}
+              />
+            );
+          })}
+
+        {network === "Avalanche" &&
+          dummyData_avax2.map((pool, index) => {
+            return (
+              <TopPoolsListCardInner
+                key={index}
+                expiredPools={expiredPools}
+                activePools={dummyData_avax2}
+                tokenName={pool.tokenName}
+                topList={"Staking"}
+                onShowDetailsClick={() => {
+                  setShowDetails(!showDetails);
+                  setActiveCard(topPools[index + 1]);
+                }}
+                top_pick={pool.top_pick}
+                expired={false}
+                tokenLogo={pool.tokenLogo}
+                apr={pool.apr}
+                lockTime={pool.lockTime}
+                poolCap={pool.poolCap}
+                chain={"avax"}
+                display={"flex"}
+                isNewPool={pool.new_pool === "Yes" ? true : false}
+                totalTvl={pool.tvl_usd}
+                showDetails={showDetails}
+                cardIndex={index + 1}
+                chainId={chainId}
+                handleConnection={handleConnection}
+                handleSwitchNetwork={handleSwitchNetwork}
+                coinbase={coinbase}
+                referrer={referrer}
+                lp_id={lp_id[index + 1]}
+                the_graph_result={the_graph_result}
+                the_graph_resultbsc={the_graph_resultbsc}
+                isConnected={isConnected}
+                the_graph_resultavax={the_graph_resultavax}
+              />
+            );
+          })}
+
+        {network === "Ethereum" &&
+          dummyData_eth2.map((pool, index) => {
+            return (
+              <TopPoolsListCardInner
+                key={index}
+                expiredPools={expiredPools}
+                activePools={dummyData_eth2}
+                tokenName={pool.tokenName}
+                topList={"Staking"}
+                onShowDetailsClick={() => {
+                  setShowDetails(!showDetails);
+                  setActiveCard(topPools[index + 1]);
+                }}
+                top_pick={pool.top_pick}
+                expired={false}
+                tokenLogo={pool.tokenLogo}
+                apr={pool.apr}
+                lockTime={pool.lockTime}
+                poolCap={pool.poolCap}
+                chain={"eth"}
+                display={"flex"}
+                isNewPool={pool.new_pool === "Yes" ? true : false}
+                totalTvl={pool.tvl_usd}
+                showDetails={showDetails}
+                cardIndex={index + 1}
+                chainId={chainId}
+                handleConnection={handleConnection}
+                handleSwitchNetwork={handleSwitchNetwork}
+                coinbase={coinbase}
+                referrer={referrer}
+                lp_id={lp_id[index + 1]}
+                the_graph_result={the_graph_result}
+                the_graph_resultbsc={the_graph_resultbsc}
+                isConnected={isConnected}
+                the_graph_resultavax={the_graph_resultavax}
+              />
+            );
+          })}
       </div>
 
       {showModal && (
@@ -266,8 +442,8 @@ const EarnInnerPool = ({
             chainId === "56"
               ? "BNB Chain"
               : chainId === "1"
-              ? "Ethereum"
-              : "Avalanche"
+                ? "Ethereum"
+                : "Avalanche"
           }
           targetChain={"Ethereum"}
           walletType={"Metamask"}

@@ -1,8 +1,4 @@
 import React, { useEffect, useState } from "react";
-import greenArrow from "../top-pools-card/assets/greenarrow.svg";
-import orangeArrow from "../top-pools-card/assets/orangearrow.svg";
-import topPick from "../top-pools-card/assets/toppick.svg";
-import newPool from "../top-pools-card/assets/newPool.png";
 import ethStake from "../../assets/earnAssets/ethStakeActive.svg";
 import avaxStake from "../../assets/earnAssets/avaxStakeActive.svg";
 import baseStake from "../../assets/earnAssets/baseActive.svg";
@@ -108,7 +104,7 @@ const TopOtherPoolsListCard = ({
               {windowSize.width > 768 ? (
                 <tr className="d-flex w-100 align-items-center justify-content-around">
                   <td className="earnother-td col-2">
-                    <div className={` d-flex align-items-center gap-2`}>
+                    <div className={`col-6 d-flex align-items-center gap-2`}>
                       <img
                         src={
                           require(`../top-pools-card/assets/${tokenLogo}`)
