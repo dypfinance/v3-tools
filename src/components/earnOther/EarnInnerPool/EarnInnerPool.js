@@ -3,7 +3,7 @@ import "./earnInnerpool.css";
 import "../earnOther.css";
 import "../../earn/earn.css";
 import whiteArrow from "../../../assets/earnOtherAssets/backWhiteArrow.svg";
-import innerHero from "../../../assets/earnOtherAssets/innerhero.png";
+import innerHero from "../../../assets/earnOtherAssets/innerhero.jpg";
 import innerHeroAvax from "../../../assets/earnOtherAssets/innerheroAvax.jpg";
 import innerHeroBnb from "../../../assets/earnOtherAssets/innerheroBnb.jpg";
 
@@ -196,8 +196,8 @@ const EarnInnerPool = ({
                   network === "Ethereum"
                     ? innerHero
                     : network === "Avalanche"
-                      ? innerHeroAvax
-                      : innerHeroBnb
+                    ? innerHeroAvax
+                    : innerHeroBnb
                 }
                 className="inner-hero-img"
               />
@@ -218,10 +218,10 @@ const EarnInnerPool = ({
                         network === "Ethereum"
                           ? ethStakeActive
                           : network === "BNB Chain"
-                            ? bnbStakeActive
-                            : network === "Avalanche"
-                              ? avaxStakeActive
-                              : baseStakeActive
+                          ? bnbStakeActive
+                          : network === "Avalanche"
+                          ? avaxStakeActive
+                          : baseStakeActive
                       }
                       alt=""
                       style={{ width: 12, height: 12 }}
@@ -245,7 +245,7 @@ const EarnInnerPool = ({
                   <span className="earn-inner-whitetxt">$0</span>
                 </div>
               </div>
-{/* 
+              {/* 
               <div className="single-item-wrapper">
                 <div className="d-flex flex-column gap-2">
                   <span className="earn-inner-greentxt">Total locked</span>
@@ -273,11 +273,23 @@ const EarnInnerPool = ({
                   <span className="earn-inner-greentxt">Token Address</span>
                   <a
                     className="earn-inner-whitetxt d-flex align-items-center gap-1"
-                    href="https://etherscan.io/token/0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17"
+                    href={
+                      network === "Ethereum"
+                        ? "https://etherscan.io/token/0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        : network === "Avalanche"
+                        ? "https://snowtrace.io/token/0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7"
+                        : "https://bscscan.com/token/0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"
+                    }
                     target="_blank"
                     rel="noreferrer"
                   >
-                    {shortAddress("0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7")}{" "}
+                    {shortAddress(
+                      network === "BNB Chain"
+                        ? "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"
+                        : network === "Avalanche"
+                        ? "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7"
+                        : "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+                    )}{" "}
                     <img alt="" src={greenArrow} />
                   </a>
                 </div>
@@ -436,8 +448,8 @@ const EarnInnerPool = ({
             chainId === "56"
               ? "BNB Chain"
               : chainId === "1"
-                ? "Ethereum"
-                : "Avalanche"
+              ? "Ethereum"
+              : "Avalanche"
           }
           targetChain={"Ethereum"}
           walletType={"Metamask"}

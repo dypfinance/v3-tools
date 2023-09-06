@@ -337,7 +337,7 @@ hr {
   background: url(../top-pools-card/assets/toppools-bg.png), #26264f;
   margin-left: 15px;
   margin-right: 15px;
-  border-bottom: none;
+  border-bottom: none !important;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;

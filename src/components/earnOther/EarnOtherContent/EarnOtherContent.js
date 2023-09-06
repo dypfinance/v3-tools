@@ -154,7 +154,7 @@ const EarnOtherContent = ({
 
   ];
 
-  const [stake, setStake] = useState(routeChain);
+  const [stake, setStake] = useState('allchains');
   const [option, setOption] = useState(routeOption);
   const [content, setContent] = useState(options[0].content);
   const [listStyle, setListStyle] = useState("list");
@@ -442,62 +442,6 @@ const EarnOtherContent = ({
     }
   }, [option, stake, chainId]);
 
-  const checkNetworkId = () => {
-    if (
-      window.ethereum &&
-      (window.ethereum.isMetaMask === true ||
-        window.coin98 === true ||
-        window.trustwallet ||
-        window.ethereum.isCoinbaseWallet === true)
-    ) {
-      window.ethereum
-        .request({ method: "eth_chainId" })
-        .then((data) => {
-          if (data === "0x1") {
-            setStake("eth");
-          } else if (data === "0xa86a") {
-            setStake("avax");
-          } else if (data === "0x38") {
-            setStake("bnb");
-          } else if (data === "0x2105") {
-            setStake("base");
-          } else if (data !== "undefined") {
-            setStake("eth");
-          } else {
-            setStake("eth");
-          }
-        })
-        .catch(console.error);
-    } else if (
-      window.ethereum &&
-      window.ethereum.overrideIsMetaMask === true &&
-      !window.ethereum.isCoinbaseWallet
-    ) {
-      const chainId = window.ethereum.selectedProvider.chainId;
-
-      if (chainId === "0x1") {
-        setStake("eth");
-      } else if (chainId === "0xa86a") {
-        setStake("avax");
-      } else if (chainId === "0x38") {
-        setStake("bnb");
-      } else if (chainId === "0x2105") {
-        setStake("base");
-      } else if (chainId !== "undefined") {
-        setStake("eth");
-      } else {
-        setStake("eth");
-      }
-    } else {
-      setStake("eth");
-    }
-  };
-
-  useEffect(() => {
-    if (option !== "Farming" && expiredPools === false) {
-      checkNetworkId();
-    }
-  }, [option, routeChain, networkId, chainId, expiredPools]);
 
   useEffect(() => {
     if (option === "Farming" && expiredPools === false) {

@@ -6,6 +6,8 @@ import newPool from "./assets/newPool.png";
 import getFormattedNumber from "../../functions/get-formatted-number";
 import "./top-pools.css";
 import StakeBscOtherDai from "../earnOther/poolFiles/bscConstantStakeOtherDai";
+import StakeBscOther from "../earnOther/poolFiles/bscConstantStakeOther";
+
 import StakeAvaxDai from "../FARMINNG/stakeAvax3";
 import StakeAvax from "../FARMINNG/stakeAvax";
 
@@ -182,20 +184,11 @@ const TopPoolsListCardInner = ({
     }
   }, [cardIndex, topList, chain]);
 
-  console.log(
-    showDetails,
-    activePools,
-    topList === "Staking",
-    activePools[cardIndex - 1].id ===
-      "0x215bD6eDa2A5372aeA17360c166761c4Eec60497",
-    chain === "BNB Chain"
-  );
-
   return (
     <>
       <div
         className={`row w-100 flex-column gap-3 gap-lg-0 flex-lg-row align-items-center justify-content-between  mx-0 cursor-pointer ${
-          expired === true ? "poolscardwrapperexpired"  : showDetails === false ? "list-pool-card" : 'list-pool-card-active'
+          expired === true ? "poolscardwrapperexpired"  : showDetails === false ? "list-pool-card mb-2" : 'list-pool-card-active'
         }`}
         onClick={() => handleDetails()}
         style={{ display: display }}
@@ -397,6 +390,7 @@ const TopPoolsListCardInner = ({
               handleSwitchNetwork={handleSwitchNetwork}
               expired={false}
               referrer={referrer}
+              showDetails={showDetails}
             />
           ) : showDetails &&
             activePools &&
@@ -404,19 +398,19 @@ const TopPoolsListCardInner = ({
             activePools[cardIndex - 1].id ===
               "0x8652d1817f5a95172001685a28facb1d57e78a11" &&
             chain === "bnb" ? (
-            <StakeBscOtherDai
+            <StakeBscOther
               lp_id={LP_IDBNB_Array[cardIndex]}
-              staking={window.constant_stakingbsc_new11}
-              apr={activePools[cardIndex - 1]?.apy_percent}
+              staking={window.constant_stakingbscother_new1}
+              apr={activePools[cardIndex - 1]?.apr}
               liquidity={wbsc_address}
               expiration_time={"5 August 2023"}
-              finalApr={activePools[cardIndex - 1]?.apy_performancefee}
-              fee={activePools[cardIndex - 1]?.performancefee}
+              finalApr={activePools[cardIndex - 1]?.apr}
+              fee={activePools[cardIndex - 1]?.apr}
               lockTime={
-                activePools[cardIndex - 1]?.lock_time?.split(" ")[0] === "No"
+                activePools[cardIndex - 1]?.lockTime?.split(" ")[0] === "No"
                   ? "No Lock"
                   : parseInt(
-                      activePools[cardIndex - 1]?.lock_time?.split(" ")[0]
+                      activePools[cardIndex - 1]?.lockTime?.split(" ")[0]
                     )
               }
               listType={listType}
@@ -431,6 +425,8 @@ const TopPoolsListCardInner = ({
               handleSwitchNetwork={handleSwitchNetwork}
               expired={false}
               referrer={referrer}
+              showDetails={showDetails}
+
             />
           ) : showDetails &&
           activePools &&
@@ -465,6 +461,7 @@ const TopPoolsListCardInner = ({
             handleSwitchNetwork={handleSwitchNetwork}
             expired={false}
             referrer={referrer}
+            showDetails={showDetails}
           />
         ) : showDetails &&
         activePools &&
@@ -499,6 +496,8 @@ const TopPoolsListCardInner = ({
           handleSwitchNetwork={handleSwitchNetwork}
           expired={false}
           referrer={referrer}
+          showDetails={showDetails}
+
         />
       ) : (
             <></>

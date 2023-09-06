@@ -144,6 +144,8 @@ hr {
   margin-top: 30px;
 }
 
+
+
 @media only screen and (max-width: 991px) {
   .otherpools-wrapper {
     grid-template-columns: repeat(2, 1fr);
