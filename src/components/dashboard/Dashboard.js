@@ -587,7 +587,7 @@ const Dashboard = ({
                 ) : activeCard &&
                   network === 43114 &&
                   topPools[cardIndex].id ===
-                    "0xb1875eeBbcF4456188968f439896053809698a8B" ? (
+                    "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712" ? (
                   <StakeAvax
                     is_wallet_connected={isConnected}
                     coinbase={coinbase}
@@ -596,7 +596,7 @@ const Dashboard = ({
                     handleConnection={handleConnection}
                     handleSwitchNetwork={handleSwitchNetwork}
                     expired={false}
-                    staking={window.constant_staking_new11}
+                    staking={window.constant_staking_new13}
                     listType={"table"}
                     finalApr={
                       topPools[cardIndex]?.apy_performancefee
@@ -884,7 +884,7 @@ const Dashboard = ({
                 ) : activeCard &&
                   network === 43114 &&
                   topPools[cardIndex].id ===
-                    "0xb1875eeBbcF4456188968f439896053809698a8B" ? (
+                    "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712" ? (
                   <StakeAvax
                     is_wallet_connected={isConnected}
                     coinbase={coinbase}
@@ -893,7 +893,7 @@ const Dashboard = ({
                     handleConnection={handleConnection}
                     handleSwitchNetwork={handleSwitchNetwork}
                     expired={false}
-                    staking={window.constant_staking_new11}
+                    staking={window.constant_staking_new13}
                     listType={"table"}
                     finalApr={
                       topPools[cardIndex]?.apy_performancefee
@@ -1143,7 +1143,7 @@ const Dashboard = ({
                 ) : activeCard2 &&
                   network === 43114 &&
                   topPools[cardIndex].id ===
-                    "0xb1875eeBbcF4456188968f439896053809698a8B" ? (
+                    "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712" ? (
                   <StakeAvax
                     is_wallet_connected={isConnected}
                     coinbase={coinbase}
@@ -1152,7 +1152,7 @@ const Dashboard = ({
                     handleConnection={handleConnection}
                     handleSwitchNetwork={handleSwitchNetwork}
                     expired={false}
-                    staking={window.constant_staking_new11}
+                    staking={window.constant_staking_new13}
                     listType={"table"}
                     finalApr={
                       topPools[cardIndex]?.apy_performancefee
