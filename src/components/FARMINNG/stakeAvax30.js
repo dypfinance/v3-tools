@@ -246,10 +246,10 @@ export default function stakeAvax30({
 
     getUsdPerDyp = async () => {
       await axios
-        .get("https://api.dyp.finance/api/the_graph_eth_v2")
+        .get("https://api.dyp.finance/api/the_graph_avax_v2")
         .then((data) => {
           const propertyDyp = Object.entries(
-            data.data.the_graph_eth_v2.token_data
+            data.data.the_graph_avax_v2.token_data
           );
           this.setState({ tokendata: propertyDyp[0][1].token_price_usd });
         });
@@ -2099,7 +2099,7 @@ export default function stakeAvax30({
                     ${" "}
                     {getFormattedNumber(
                       this.getApproxReturn() * this.state.tokendata,
-                      6
+                      3
                     )}{" "}
                     USD
                   </h3>
