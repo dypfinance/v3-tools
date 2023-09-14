@@ -1217,7 +1217,7 @@ const Dashboard = ({
               View all <img src={rightarrow} alt="" />
             </NavLink>
             <div className="d-flex flex-column flex-md-row gap-3 justify-content-between px-0">
-              {popularNewsData !== [] && (
+              {popularNewsData.length !== 0 && (
                 <>
                   {" "}
                   <TrendingNews
@@ -1247,7 +1247,7 @@ const Dashboard = ({
         </div>
         <div className="right-side-wrapper d-flex flex-column flex-md-row flex-xxl-column gap-4">
           <div className="launchpad-section-wrapper d-flex flex-column gap-3 gap-xxl-1">
-            <h6 className="header">Launchpad</h6>
+            <h6 className="header">DeFi Staking</h6>
             <LaunchpadCard />
           </div>
           <ChainlinkCard />
