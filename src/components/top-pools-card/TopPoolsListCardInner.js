@@ -45,6 +45,8 @@ const TopPoolsListCardInner = ({
   activePools,
   totalTvl,
   totalNftsLocked,
+  isPremium,
+  network
 }) => {
   const ethCoins = ["ethereum", "wbtc", "usdc", "usdt"];
   const bscCoins = [
@@ -72,7 +74,7 @@ const TopPoolsListCardInner = ({
   ];
 
   const avaxCoins2 = ["avax"];
-
+ 
   const [showDetails, setShowDetails] = useState(false);
   const [coins, setCoins] = useState(ethCoins);
   const [cardIndexiDyp, setcardIndexiDyp] = useState();
@@ -188,7 +190,11 @@ const TopPoolsListCardInner = ({
     <>
       <div
         className={`row w-100 flex-column gap-3 gap-lg-0 flex-lg-row align-items-center justify-content-between  mx-0 cursor-pointer ${
-          expired === true ? "poolscardwrapperexpired"  : showDetails === false ? "list-pool-card mb-2" : 'list-pool-card-active'
+          expired === true
+            ? "poolscardwrapperexpired"
+            : showDetails === false
+            ? "list-pool-card mb-2"
+            : "list-pool-card-active"
         }`}
         onClick={() => handleDetails()}
         style={{ display: display }}
@@ -254,27 +260,27 @@ const TopPoolsListCardInner = ({
             )}
           </div>
           <div className=" col-lg-4 d-flex flex-column gap-2">
-              <div className="d-flex flex-column gap-2">
-                <span
-                  style={{
-                    fontSize: "12px",
-                    fontWeight: "400",
-                    color: "#C0C9FF",
-                  }}
-                >
-                  APR
-                </span>
-                <h5
-                  style={{
-                    fontSize: "18px",
-                    fontWeight: "300",
-                    color: "#F7F7FC",
-                  }}
-                >
-                  {apr}%
-                </h5>
-              </div>
+            <div className="d-flex flex-column gap-2">
+              <span
+                style={{
+                  fontSize: "12px",
+                  fontWeight: "400",
+                  color: "#C0C9FF",
+                }}
+              >
+                APR
+              </span>
+              <h5
+                style={{
+                  fontSize: "18px",
+                  fontWeight: "300",
+                  color: "#F7F7FC",
+                }}
+              >
+                {apr}%
+              </h5>
             </div>
+          </div>
         </div>
         <div className="d-flex col-12 col-lg-6 align-items-center justify-content-between">
           {cardType !== "Vault" && (
@@ -318,13 +324,21 @@ const TopPoolsListCardInner = ({
                 color: "#F7F7FC",
               }}
             >
-              ${getFormattedNumber(poolCap,0) }
+              ${getFormattedNumber(poolCap, 0)}
             </h5>
           </div>
           <div className="d-none d-xxl-flex d-xl-flex d-lg-flex d-md-flex flex-column gap-2">
             <div className="d-flex align-items-center gap-2 justify-content-between">
               <span className="rewardsleft-txt">Rewards left</span>
-              <span className="rewardsleft-value">202 AVAX (28%)</span>
+              <span className="rewardsleft-value">202 {
+                        network === "Ethereum"
+                          ? 'WETH'
+                          : network === "BNB Chain"
+                          ? 'WBNB'
+                          : network === "Avalanche"
+                          ? 'WAVAX'
+                          : 'BASE'
+                      } (28%)</span>
             </div>
 
             <div className="progress-bar-wrapper" style={{ marginBottom: 0 }}>
@@ -379,7 +393,7 @@ const TopPoolsListCardInner = ({
               expiration_time={"5 August 2024"}
               finalApr={activePools[cardIndex - 1]?.apr}
               fee={10}
-              lockTime={"No Lock"}
+              lockTime={30}
               listType={listType}
               other_info={false}
               is_wallet_connected={isConnected}
@@ -391,6 +405,7 @@ const TopPoolsListCardInner = ({
               expired={false}
               referrer={referrer}
               showDetails={showDetails}
+              isPremium={isPremium}
             />
           ) : showDetails &&
             activePools &&
@@ -401,6 +416,38 @@ const TopPoolsListCardInner = ({
             <StakeBscOther
               lp_id={LP_IDBNB_Array[cardIndex]}
               staking={window.constant_stakingbscother_new1}
+              apr={activePools[cardIndex - 1]?.apr}
+              liquidity={wbsc_address}
+              expiration_time={"5 August 2023"}
+              finalApr={activePools[cardIndex - 1]?.apr}
+              fee={activePools[cardIndex - 1]?.apr}
+              lockTime={
+                30
+              }
+              listType={listType}
+              other_info={
+                activePools[cardIndex - 1]?.expired === "Yes" ? true : false
+              }
+              is_wallet_connected={isConnected}
+              coinbase={coinbase}
+              the_graph_result={the_graph_resultbsc}
+              chainId={chainId}
+              handleConnection={handleConnection}
+              handleSwitchNetwork={handleSwitchNetwork}
+              expired={false}
+              referrer={referrer}
+              showDetails={showDetails}
+              isPremium={isPremium}
+            />
+          ) : showDetails &&
+            activePools &&
+            topList === "Staking" &&
+            activePools[cardIndex - 1].id ===
+              "0x215bD6eDa2A5372aeA17360c166761c4Eec60497" &&
+            chain === "avax" ? (
+            <StakeAvaxDai
+              lp_id={LP_IDBNB_Array[cardIndex]}
+              staking={window.constant_stakingdaiavax}
               apr={activePools[cardIndex - 1]?.apr}
               liquidity={wbsc_address}
               expiration_time={"5 August 2023"}
@@ -426,80 +473,45 @@ const TopPoolsListCardInner = ({
               expired={false}
               referrer={referrer}
               showDetails={showDetails}
-
+              isPremium={isPremium}
             />
           ) : showDetails &&
-          activePools &&
-          topList === "Staking" &&
-          activePools[cardIndex - 1].id ===
-            "0x215bD6eDa2A5372aeA17360c166761c4Eec60497" &&
-          chain === "avax" ? (
-          <StakeAvaxDai
-            lp_id={LP_IDBNB_Array[cardIndex]}
-            staking={window.constant_stakingdaiavax}
-            apr={activePools[cardIndex - 1]?.apr}
-            liquidity={wbsc_address}
-            expiration_time={"5 August 2023"}
-            finalApr={activePools[cardIndex - 1]?.apr}
-            fee={activePools[cardIndex - 1]?.apr}
-            lockTime={
-              activePools[cardIndex - 1]?.lockTime?.split(" ")[0] === "No"
-                ? "No Lock"
-                : parseInt(
-                    activePools[cardIndex - 1]?.lockTime?.split(" ")[0]
-                  )
-            }
-            listType={listType}
-            other_info={
-              activePools[cardIndex - 1]?.expired === "Yes" ? true : false
-            }
-            is_wallet_connected={isConnected}
-            coinbase={coinbase}
-            the_graph_result={the_graph_resultbsc}
-            chainId={chainId}
-            handleConnection={handleConnection}
-            handleSwitchNetwork={handleSwitchNetwork}
-            expired={false}
-            referrer={referrer}
-            showDetails={showDetails}
-          />
-        ) : showDetails &&
-        activePools &&
-        topList === "Staking" &&
-        activePools[cardIndex - 1].id ===
-          "0x8652d1817f5a95172001685a28facb1d57e78a11" &&
-        chain === "avax" ? (
-        <StakeAvax
-          lp_id={LP_IDBNB_Array[cardIndex]}
-          staking={window.constant_staking_new11}
-          apr={activePools[cardIndex - 1]?.apr}
-          liquidity={wbsc_address}
-          expiration_time={"5 August 2023"}
-          finalApr={activePools[cardIndex - 1]?.apr}
-          fee_s={activePools[cardIndex - 1]?.apr}
-          lockTime={
-            activePools[cardIndex - 1]?.lockTime?.split(" ")[0] === "No"
-              ? "No Lock"
-              : parseInt(
-                  activePools[cardIndex - 1]?.lockTime?.split(" ")[0]
-                )
-          }
-          listType={listType}
-          other_info={
-            activePools[cardIndex - 1]?.expired === "Yes" ? true : false
-          }
-          is_wallet_connected={isConnected}
-          coinbase={coinbase}
-          the_graph_result={the_graph_resultbsc}
-          chainId={chainId}
-          handleConnection={handleConnection}
-          handleSwitchNetwork={handleSwitchNetwork}
-          expired={false}
-          referrer={referrer}
-          showDetails={showDetails}
-
-        />
-      ) : (
+            activePools &&
+            topList === "Staking" &&
+            activePools[cardIndex - 1].id ===
+              "0x8652d1817f5a95172001685a28facb1d57e78a11" &&
+            chain === "avax" ? (
+            <StakeAvax
+              lp_id={LP_IDBNB_Array[cardIndex]}
+              staking={window.constant_staking_new11}
+              apr={activePools[cardIndex - 1]?.apr}
+              liquidity={wbsc_address}
+              expiration_time={"5 August 2023"}
+              finalApr={activePools[cardIndex - 1]?.apr}
+              fee_s={activePools[cardIndex - 1]?.apr}
+              lockTime={
+                activePools[cardIndex - 1]?.lockTime?.split(" ")[0] === "No"
+                  ? "No Lock"
+                  : parseInt(
+                      activePools[cardIndex - 1]?.lockTime?.split(" ")[0]
+                    )
+              }
+              listType={listType}
+              other_info={
+                activePools[cardIndex - 1]?.expired === "Yes" ? true : false
+              }
+              is_wallet_connected={isConnected}
+              coinbase={coinbase}
+              the_graph_result={the_graph_resultbsc}
+              chainId={chainId}
+              handleConnection={handleConnection}
+              handleSwitchNetwork={handleSwitchNetwork}
+              expired={false}
+              referrer={referrer}
+              showDetails={showDetails}
+              isPremium={isPremium}
+            />
+          ) : (
             <></>
           )}
         </>

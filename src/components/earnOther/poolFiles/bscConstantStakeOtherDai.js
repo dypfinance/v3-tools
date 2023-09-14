@@ -72,7 +72,8 @@ const StakeBscOtherDai = ({
   referrer,
   renderedPage,
   fee,
-  showDetails
+  showDetails,
+  isPremium,
 }) => {
   let {
     reward_token,
@@ -188,8 +189,6 @@ const StakeBscOtherDai = ({
   const [withdrawTooltip, setwithdrawTooltip] = useState(false);
   const [tokendata, settokendata] = useState();
 
-
-
   const showModal = () => {
     setshow(true);
   };
@@ -297,30 +296,33 @@ const StakeBscOtherDai = ({
 
         let tvlDyps = new BigNumber(tvlDYPS).times(usd_per_dyps).toFixed(18);
 
-        let balance_formatted = new BigNumber(token_balance ).div(1e18).toString(10)
-     settoken_balance(balance_formatted) ;
+        let balance_formatted = new BigNumber(token_balance)
+          .div(1e18)
+          .toString(10);
+        settoken_balance(balance_formatted);
 
         let usd_per_bnb = the_graph_result.token_data
-        ? the_graph_result.usd_per_eth
-        : 1;
+          ? the_graph_result.usd_per_eth
+          : 1;
 
-        let divs_formatted =new BigNumber(pendingDivs)
-        .div(10 ** TOKEN_DECIMALS)
-        .div(usd_per_bnb)
-        .toString(10);
+        let divs_formatted = new BigNumber(pendingDivs)
+          .div(10 ** TOKEN_DECIMALS)
+          .div(usd_per_bnb)
+          .toString(10);
 
-        setpendingDivs(getFormattedNumber(divs_formatted,6));
+        setpendingDivs(getFormattedNumber(divs_formatted, 6));
 
         let earnedTokens_formatted = new BigNumber(totalEarnedTokens)
-        .div(10 ** TOKEN_DECIMALS)
-        .toString(10);
-        settotalEarnedTokens( getFormattedNumber(earnedTokens_formatted,6) );
+          .div(10 ** TOKEN_DECIMALS)
+          .toString(10);
+        settotalEarnedTokens(getFormattedNumber(earnedTokens_formatted, 6));
 
         setstakingTime(stakingTime);
-        let depositedTokens_formatted = new BigNumber(depositedTokens).div(1e18).toString(10)
+        let depositedTokens_formatted = new BigNumber(depositedTokens)
+          .div(1e18)
+          .toString(10);
 
         setdepositedTokens(depositedTokens_formatted);
-        
 
         setlastClaimedTime(lastClaimedTime);
 
@@ -369,14 +371,12 @@ const StakeBscOtherDai = ({
     refreshBalance();
     if (depositAmount !== "") {
       checkApproval(depositAmount);
-
     }
   }, [coinbase, coinbase2, staking]);
 
   useEffect(() => {
-      setdepositAmount('');
-      setdepositStatus('initial')
-
+    setdepositAmount("");
+    setdepositStatus("initial");
   }, [staking]);
 
   const handleApprove = (e) => {
@@ -429,31 +429,58 @@ const StakeBscOtherDai = ({
       Date.now() / 1e3 + window.config.tx_max_wait_seconds
     );
 
-    //NO REFERRER HERE
+    const isPremiumStake = await staking.premiumStake();
 
-    staking
-      .stake(amount, referrer, 0, deadline)
-      .then(() => {
-        setdepositLoading(false);
-        setdepositStatus("success");
-        refreshBalance();
-      })
-      .catch((e) => {
-        setdepositLoading(false);
-        setdepositStatus("fail");
-        seterrorMsg(e?.message);
-        setTimeout(() => {
-          depositAmount("");
-          setdepositStatus("initial");
-          seterrorMsg("");
-        }, 10000);
-      });
+    if (isPremiumStake === false) {
+      staking
+        .stake(amount, referrer, 0, deadline)
+        .then(() => {
+          setdepositLoading(false);
+          setdepositStatus("success");
+          refreshBalance();
+        })
+        .catch((e) => {
+          setdepositLoading(false);
+          setdepositStatus("fail");
+          seterrorMsg(e?.message);
+          setTimeout(() => {
+            depositAmount("");
+            setdepositStatus("initial");
+            seterrorMsg("");
+          }, 10000);
+        });
+    } else if (isPremiumStake === true && isPremium === true) {
+      staking
+        .premiumStaking(amount, referrer, 0, deadline)
+        .then(() => {
+          setdepositLoading(false);
+          setdepositStatus("success");
+          refreshBalance();
+        })
+        .catch((e) => {
+          setdepositLoading(false);
+          setdepositStatus("fail");
+          seterrorMsg(e?.message);
+          setTimeout(() => {
+            depositAmount("");
+            setdepositStatus("initial");
+            seterrorMsg("");
+          }, 10000);
+        });
+    } else if (isPremiumStake === true && isPremium === false) {
+      window.$.alert(
+        "This pool is avaliable only to premium users at the moment! Check back later or upgrade to premium!"
+      );
+      setdepositLoading(false);
+      return;
+    }
+    //NO REFERRER HERE
   };
 
   const handleWithdraw = async (e) => {
     //   e.preventDefault();
     setwithdrawLoading(true);
-    let amount = new BigNumber(withdrawAmount).times(1e18).toFixed(0)
+    let amount = new BigNumber(withdrawAmount).times(1e18).toFixed(0);
 
     let deadline = Math.floor(
       Date.now() / 1e3 + window.config.tx_max_wait_seconds
@@ -478,10 +505,73 @@ const StakeBscOtherDai = ({
       });
   };
 
-  const handleClaimDivs = (e) => {
-    window.$.alert(
-      "Contract Expired! Your lock time ended so please withdraw your funds and move to a new pool."
+  const handleClaimDivs = async (e) => {
+    //   e.preventDefault();
+    setclaimLoading(true);
+
+    let address = coinbase;
+    let amount = await staking.getTotalPendingDivs(address);
+
+    let router = await window.getPancakeswapRouterContract();
+    let WETH = await router.methods.WETH().call();
+    let platformTokenAddress = window.config.reward_token_address;
+    let rewardTokenAddress = window.config.reward_tokenbsc_address2;
+    let path = [
+      ...new Set(
+        [rewardTokenAddress, WETH, platformTokenAddress].map((a) =>
+          a.toLowerCase()
+        )
+      ),
+    ];
+    let _amountOutMin = await router.methods
+      .getAmountsOut(amount, path)
+      .call()
+      .catch((e) => {
+        setclaimStatus("failed");
+        setclaimLoading(false);
+        seterrorMsg2(e?.message);
+
+        setTimeout(() => {
+          setclaimStatus("initial");
+          seterrorMsg2("");
+        }, 2000);
+      });
+    _amountOutMin = _amountOutMin[_amountOutMin.length - 1];
+    _amountOutMin = new BigNumber(_amountOutMin)
+      .times(100 - window.config.slippage_tolerance_percent)
+      .div(100)
+      .toFixed(0);
+
+    let referralFee = new BigNumber(_amountOutMin)
+      .times(500)
+      .div(1e4)
+      .toFixed(0);
+    referralFee = referralFee.toString();
+
+    let deadline = Math.floor(
+      Date.now() / 1e3 + window.config.tx_max_wait_seconds
     );
+
+    console.log({ referralFee, _amountOutMin, deadline });
+
+    staking
+      .claim(0, _amountOutMin, deadline)
+      .then(() => {
+        setclaimStatus("success");
+        setclaimLoading(false);
+        setpendingDivs(getFormattedNumber(0, 6));
+        refreshBalance();
+      })
+      .catch((e) => {
+        setclaimStatus("failed");
+        setclaimLoading(false);
+        seterrorMsg2(e?.message);
+
+        setTimeout(() => {
+          setclaimStatus("initial");
+          seterrorMsg2("");
+        }, 2000);
+      });
   };
 
   const handleSetMaxDeposit = () => {
@@ -490,15 +580,17 @@ const StakeBscOtherDai = ({
 
     setdepositAmount(depositAmountFormatted);
   };
-  
+
   const handleSetMaxWithdraw = async (e) => {
     // e.preventDefault();
     let amount;
-    await staking.depositedTokens(coinbase).then((data)=>{
-      amount = data
-    })
+    await staking.depositedTokens(coinbase).then((data) => {
+      amount = data;
+    });
 
-    let depositedTokens_formatted = new BigNumber(amount).div(1e18).toString(10)
+    let depositedTokens_formatted = new BigNumber(amount)
+      .div(1e18)
+      .toString(10);
     setwithdrawAmount(depositedTokens_formatted);
   };
 
@@ -717,9 +809,9 @@ const StakeBscOtherDai = ({
   }
   if (!isNaN(cliffTime) && !isNaN(stakingTime)) {
     if (
-      (Number(stakingTime) + Number(cliffTime) >= Date.now()/1000) &&
+      Number(stakingTime) + Number(cliffTime) >= Date.now() / 1000 &&
       lockTime !== "No Lock"
-    )  {
+    ) {
       canWithdraw = false;
       cliffTimeInWords = moment
         .duration(cliffTime - (Date.now() - stakingTime))
@@ -780,7 +872,9 @@ const StakeBscOtherDai = ({
   return (
     <div className="container-lg p-0">
       <div
-        className={`allwrapper ${listType === "table" && "my-4"} ${showDetails && "allwrapper-active mb-2"}`}
+        className={`allwrapper ${listType === "table" && "my-4"} ${
+          showDetails && "allwrapper-active mb-2"
+        }`}
         style={{
           borderRadius: listType !== "table" && "0px",
         }}
@@ -1190,7 +1284,7 @@ const StakeBscOtherDai = ({
                         color: "#c0c9ff",
                       }}
                     >
-                      DAI
+                      WBNB
                     </span>
                     <span>{pendingDivs}</span>
                     {/* <input
@@ -1216,9 +1310,27 @@ const StakeBscOtherDai = ({
                   </div>
                   <div className="claim-reinvest-container d-flex justify-content-between align-items-center gap-3">
                     <button
-                      className={`btn disabled-btn`}
+                       className={`btn filledbtn ${
+                        (claimStatus === "claimed" &&
+                          claimStatus === "initial") ||
+                        pendingDivs <= 0
+                          ? "disabled-btn"
+                          : claimStatus === "failed"
+                          ? "fail-button"
+                          : claimStatus === "success"
+                          ? "success-button"
+                          : null
+                      } d-flex justify-content-center align-items-center gap-2`}
+
                       style={{ height: "fit-content" }}
                       onClick={handleClaimDivs}
+                      disabled={
+                        claimStatus === "claimed" ||
+                        claimStatus === "success" ||
+                        pendingDivs <= 0
+                          ? true
+                          : false
+                      }
                     >
                       {claimLoading ? (
                         <div
@@ -1407,7 +1519,7 @@ const StakeBscOtherDai = ({
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">My DYP Deposit</span>
                     <h6 className="stats-card-content">
-                    {getFormattedNumber(depositedTokens,6)} DYP
+                      {getFormattedNumber(depositedTokens, 6)} DYP
                     </h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
@@ -1617,7 +1729,7 @@ const StakeBscOtherDai = ({
                     <div className="d-flex flex-column gap-1">
                       <h6 className="withsubtitle">Balance</h6>
                       <h6 className="withtitle">
-                      {getFormattedNumber(depositedTokens,6)} {token_symbol}
+                        {getFormattedNumber(depositedTokens, 6)} {token_symbol}
                       </h6>
                     </div>
                   </div>
@@ -1769,7 +1881,10 @@ const StakeBscOtherDai = ({
         <WalletModal
           show={show}
           handleClose={hideModal}
-          handleConnection={()=>{handleConnection(); setshow(false)}}
+          handleConnection={() => {
+            handleConnection();
+            setshow(false);
+          }}
         />
       )}
       {/* <div
@@ -1849,7 +1964,8 @@ Calculator
             </div>
             <div className="d-flex flex-column gap-2 mt-4">
               <h3 style={{ fontWeight: "500", fontSize: "39px" }}>
-                $ {getFormattedNumber(getApproxReturn() * getUsdPerETH(), 6)} USD
+                $ {getFormattedNumber(getApproxReturn() * getUsdPerETH(), 6)}{" "}
+                USD
               </h3>
               <h6
                 style={{
@@ -1858,8 +1974,7 @@ Calculator
                   color: "#f7f7fc",
                 }}
               >
-                Approx {getFormattedNumber(getApproxReturn(), 6)}{" "}
-                WBNB
+                Approx {getFormattedNumber(getApproxReturn(), 6)} WBNB
               </h6>
             </div>
             <div className="mt-4">

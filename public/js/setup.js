@@ -33077,6 +33077,7 @@ async function get_the_graph_bsc_v2() {
   try {
     const res = await getData("https://api.dyp.finance/api/the_graph_bsc_v2");
     window.the_graph_result_bsc_v2 = res.the_graph_bsc_v2;
+     
   } catch (err) {
     console.log(err);
   }

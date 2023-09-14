@@ -31,6 +31,7 @@ const EarnInnerPool = ({
   the_graph_resultbsc,
   the_graph_resultavax,
   isConnected,
+  isPremium,
 }) => {
   const [myStakes, setMyStakes] = useState(false);
   const [expiredPools, setExpiredPools] = useState([]);
@@ -57,7 +58,7 @@ const EarnInnerPool = ({
       tokenTicker: "WBNB",
       pool: "BNB",
       id: "0x8652d1817f5a95172001685a28facb1d57e78a11",
-      lockTime: "60 days",
+      lockTime: "30 days",
       poolCap: "50000",
     },
     {
@@ -70,7 +71,7 @@ const EarnInnerPool = ({
       tokenTicker: "DYP",
       pool: "DYP-BNB",
       id: "0x215bD6eDa2A5372aeA17360c166761c4Eec60497",
-      lockTime: "90 days",
+      lockTime: "30 days",
       poolCap: "80000",
     },
   ];
@@ -174,9 +175,9 @@ const EarnInnerPool = ({
               <div className="d-flex flex-column gap-1">
                 <span
                   className="earn-inner-title"
-                  onClick={() => {
-                    setShowModal(true);
-                  }}
+                  // onClick={() => {
+                  //   setShowModal(true);
+                  // }}
                 >
                   {tokenName} ({tokenTicker})
                 </span>
@@ -355,6 +356,8 @@ const EarnInnerPool = ({
                 the_graph_resultbsc={the_graph_resultbsc}
                 isConnected={isConnected}
                 the_graph_resultavax={the_graph_resultavax}
+                isPremium={isPremium}
+                network={network}
               />
             );
           })}
@@ -394,6 +397,9 @@ const EarnInnerPool = ({
                 the_graph_resultbsc={the_graph_resultbsc}
                 isConnected={isConnected}
                 the_graph_resultavax={the_graph_resultavax}
+                isPremium={isPremium}
+                network={network}
+
               />
             );
           })}
@@ -433,6 +439,9 @@ const EarnInnerPool = ({
                 the_graph_resultbsc={the_graph_resultbsc}
                 isConnected={isConnected}
                 the_graph_resultavax={the_graph_resultavax}
+                isPremium={isPremium}
+                network={network}
+
               />
             );
           })}

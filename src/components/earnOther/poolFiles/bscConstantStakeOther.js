@@ -68,7 +68,8 @@ const StakeBscOther = ({
   referrer,
   renderedPage,
   fee,
-  showDetails
+  showDetails,
+  isPremium,
 }) => {
   let {
     reward_tokenwbnb,
@@ -282,12 +283,11 @@ const StakeBscOther = ({
           _tvlDYPS,
         ]);
 
-        //console.log({tvl, tvlConstantiDYP, _amountOutMin})
-
         let usdValueDAI = new BigNumber(tvlConstantDAI).toFixed(18);
         let usd_per_lp = lp_data
-          ? lp_data[window.reward_tokenwbnb["_address"]].token_price_usd
+          ? lp_data[window.reward_token["_address"]].token_price_usd
           : 0;
+
         let tvlUSD = new BigNumber(tvl)
           .times(usd_per_lp)
           .plus(usdValueDAI)
@@ -431,28 +431,58 @@ const StakeBscOther = ({
       let referrer = window.config.ZERO_ADDRESS;
 
       //NO REFERRER HERE
-
-      staking
-        .stake(amount, referrer)
-        .then(() => {
-          setdepositLoading(false);
-          setdepositStatus("success");
-          refreshBalance();
-          setTimeout(() => {
+      const isPremiumStake = await staking.premiumStake();
+      if (isPremiumStake === false) {
+        staking
+          .stake(amount, referrer)
+          .then(() => {
             setdepositLoading(false);
-            setdepositStatus("initial");
-          }, 5000);
-        })
-        .catch((e) => {
-          setdepositLoading(false);
-          setdepositStatus("fail");
-          seterrorMsg(e?.message);
-          setTimeout(() => {
-            depositAmount("");
-            setdepositStatus("initial");
-            seterrorMsg("");
-          }, 10000);
-        });
+            setdepositStatus("success");
+            refreshBalance();
+            setTimeout(() => {
+              setdepositLoading(false);
+              setdepositStatus("initial");
+            }, 5000);
+          })
+          .catch((e) => {
+            setdepositLoading(false);
+            setdepositStatus("fail");
+            seterrorMsg(e?.message);
+            setTimeout(() => {
+              depositAmount("");
+              setdepositStatus("initial");
+              seterrorMsg("");
+            }, 10000);
+          });
+      } else if (isPremiumStake === true && isPremium === true) {
+        staking
+          .premiumStaking(amount, referrer)
+          .then(() => {
+            setdepositLoading(false);
+            setdepositStatus("success");
+            refreshBalance();
+            setTimeout(() => {
+              setdepositLoading(false);
+              setdepositStatus("initial");
+            }, 5000);
+          })
+          .catch((e) => {
+            setdepositLoading(false);
+            setdepositStatus("fail");
+            seterrorMsg(e?.message);
+            setTimeout(() => {
+              depositAmount("");
+              setdepositStatus("initial");
+              seterrorMsg("");
+            }, 10000);
+          });
+      } else if (isPremiumStake === true && isPremium === false) {
+        window.$.alert(
+          "This pool is avaliable only to premium users at the moment! Check back later or upgrade to premium!"
+        );
+        setdepositLoading(false);
+        return;
+      }
     } else if (passivePool === true) {
       window.$.alert("This pool no longer accepts deposits!");
       return;
@@ -668,7 +698,11 @@ const StakeBscOther = ({
 
   const checkApproval = async (amount) => {
     const result = await window
-      .checkapproveStakePool(coinbase, reward_tokenwbnb._address, staking._address)
+      .checkapproveStakePool(
+        coinbase,
+        reward_tokenwbnb._address,
+        staking._address
+      )
       .then((data) => {
         console.log(data);
         return data;
@@ -706,7 +740,9 @@ const StakeBscOther = ({
   return (
     <div className="container-lg p-0">
       <div
-        className={`allwrapper ${listType === "table" && "my-4"} ${showDetails && "allwrapper-active mb-2"}`}
+        className={`allwrapper ${listType === "table" && "my-4"} ${
+          showDetails && "allwrapper-active mb-2"
+        }`}
         style={{
           // border: listType !== "table" && "none",
           borderRadius: listType !== "table" && "0px",
