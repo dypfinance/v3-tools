@@ -35,6 +35,8 @@ const TopPoolsCard = ({
   display,
   expired,
   network,
+  isPremium
+
 }) => {
   const ethCoins = ["ethereum", "wbtc", "usdc", "usdt"];
   const bscCoins = [
@@ -109,7 +111,7 @@ const TopPoolsCard = ({
         onClick={() => handleDetails()}
         style={{ display: display }}
       >
-        {isStaked && (
+        {isStaked && isPremium && (
           <img
             src={staked}
             className="staked"

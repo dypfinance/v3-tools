@@ -8,7 +8,6 @@ import staked from "./assets/staked.svg";
 import topPick from "./assets/cawsbanner.svg";
 import purpleArrow from "./assets/purpleArrow.svg";
 
-
 const CawsCard = ({
   cardId,
   onShowDetailsClick,
@@ -20,6 +19,9 @@ const CawsCard = ({
   tvl,
   network,
   expired,
+  isPremium,
+  isStaked,
+
   // showDetails,
 }) => {
   const [showDetails, setShowDetails] = useState(false);
@@ -70,6 +72,13 @@ const CawsCard = ({
         }`}
         onClick={() => handleDetails()}
       >
+        {isStaked && isPremium && (
+          <img
+            src={staked}
+            className="staked"
+            alt="staked"
+          />
+        )}
         <img src={topPick} className="cawstoppick" alt="top pick" />
         <div
           className="purplediv"
@@ -143,13 +152,12 @@ const CawsCard = ({
               <img
                 src={
                   details === false && expired === false
-                     ? greenArrow :
-                     details === false && expired === true
-                      ? purpleArrow
-                      : details === true && expired === true
-                      ? orangeArrow
-                      : orangeArrow
-                 
+                    ? greenArrow
+                    : details === false && expired === true
+                    ? purpleArrow
+                    : details === true && expired === true
+                    ? orangeArrow
+                    : orangeArrow
                 }
                 alt=""
               />
