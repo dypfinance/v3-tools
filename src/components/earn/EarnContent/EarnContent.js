@@ -36,6 +36,7 @@ const EarnContent = ({
   faqIndex,
   networkId,
   handleSwitchNetwork,
+  isPremium
 }) => {
   const options = [
     {
@@ -866,6 +867,7 @@ const EarnContent = ({
           customChain={customChain}
           handleSwitchNetwork={handleSwitchNetwork}
           expiredPools={expiredPools}
+          isPremium={isPremium}
         />
       ) : (
          option === "Vault" && networkId !== "1"   ? (
@@ -916,6 +918,7 @@ const EarnContent = ({
           customChain={customChain}
           handleSwitchNetwork={handleSwitchNetwork}
           expiredPools={expiredPools}
+          isPremium={isPremium}
         />
       )}
 

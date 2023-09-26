@@ -752,10 +752,10 @@ const StakeAvaxDai = ({
 
   const getUsdPerDyp = async () => {
     await axios
-      .get("https://api.dyp.finance/api/the_graph_eth_v2")
+      .get("https://api.dyp.finance/api/the_graph_avax_v2")
       .then((data) => {
         const propertyDyp = Object.entries(
-          data.data.the_graph_eth_v2.token_data
+          data.data.the_graph_avax_v2.token_data
         );
         settokendata(propertyDyp[0][1].token_price_usd);
         return propertyDyp[0][1].token_price_usd;
@@ -1842,7 +1842,7 @@ Calculator
             </div>
             <div className="d-flex flex-column gap-2 mt-4">
               <h3 style={{ fontWeight: "500", fontSize: "39px" }}>
-                $ {getFormattedNumber(getApproxReturn() * getUsdPerETH(), 6)} USD
+                $ {getFormattedNumber(getApproxReturn() * getUsdPerETH(), 3)} USD
               </h3>
               <h6
                 style={{
