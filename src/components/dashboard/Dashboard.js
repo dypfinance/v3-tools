@@ -38,6 +38,7 @@ const Dashboard = ({
   the_graph_resultavax,
   referrer,
   handleSwitchNetwork,
+  isPremium,
 }) => {
   const [topPools, setTopPools] = useState([]);
   const [cawsLandCard, setCawsLandCard] = useState([]);
@@ -329,6 +330,7 @@ const Dashboard = ({
                       details={details === 2 ? true : false}
                       expired={false}
                       tvl={"$" + getFormattedNumber(cawsLandCard.tvl_usd)}
+                      isPremium={isPremium}
                     />
                   ) : null}
 
@@ -377,6 +379,7 @@ const Dashboard = ({
                           cardType={"table"}
                           details={details === index ? true : false}
                           expired={false}
+                          isPremium={isPremium}
                         />
                       );
                     })
@@ -417,6 +420,7 @@ const Dashboard = ({
                             isStaked={false}
                             expired={false}
                             network={network.toString()}
+                            isPremium={isPremium}
                           />
                           <TopPoolsCard
                             key={index}
@@ -458,6 +462,7 @@ const Dashboard = ({
                             cardType={"table"}
                             details={details === index ? true : false}
                             expired={false}
+                            isPremium={isPremium}
                           />
                         </>
                       );
@@ -703,6 +708,7 @@ const Dashboard = ({
                       tvl={"$" + getFormattedNumber(cawsLandCard.tvl_usd)}
                       // tvl={"$" + getFormattedNumber(landCard.tvl_usd)}
                       // apr={landCard.apy_percent}
+                      isPremium={isPremium}
                     />
                   )}
                   {activeCard && network === 1 && cardIndex === 2 ? (
@@ -766,6 +772,7 @@ const Dashboard = ({
                                 : false
                               : false
                           }
+                          isPremium={isPremium}
                         />
                       );
                     })
@@ -806,6 +813,7 @@ const Dashboard = ({
                             isStaked={false}
                             expired={false}
                             network={network.toString()}
+                            isPremium={isPremium}
                           />
                         </>
                       );
@@ -994,6 +1002,7 @@ const Dashboard = ({
                                 : false
                               : false
                           }
+                          isPremium={isPremium}
                         />
                       );
                     })
@@ -1044,6 +1053,7 @@ const Dashboard = ({
                                 : false
                               : false
                           }
+                          isPremium={isPremium}
                         />
                       );
                     })
@@ -1217,7 +1227,7 @@ const Dashboard = ({
               View all <img src={rightarrow} alt="" />
             </NavLink>
             <div className="d-flex flex-column flex-md-row gap-3 justify-content-between px-0">
-              {popularNewsData !== [] && (
+              {popularNewsData.length !== 0 && (
                 <>
                   {" "}
                   <TrendingNews

@@ -645,6 +645,7 @@ class App extends React.Component {
                         handleConnection={this.handleConnection}
                         handleSwitchNetwork={this.handleSwitchNetwork}
                         referrer={this.state.referrer}
+                        isPremium={this.state.isPremium}
                       />
                     )}
                   />
@@ -763,6 +764,7 @@ class App extends React.Component {
                         network={parseInt(this.state.networkId)}
                         handleConnection={this.handleConnection}
                         referrer={this.state.referrer}
+                        isPremium={this.state.isPremium}
                       />
                     )}
                   />
