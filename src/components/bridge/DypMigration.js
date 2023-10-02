@@ -1,12 +1,4 @@
 import React, { useState, useEffect } from "react";
-import initBridge from "./bridge";
-import BridgeFAQ from "./BridgeFAQ";
-import initBridgeidyp from "./bridge-idyp";
-import dyp from "./assets/dyp.svg";
-import idyp from "./assets/idyp.svg";
-import eth from "./assets/eth.svg";
-import bnb from "./assets/bnb.svg";
-import avax from "./assets/avax.svg";
 import "./bridge.css";
 import { useLocation } from "react-router-dom";
 import initMigration from "./migration";
@@ -40,25 +32,24 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
     const TokenABI = window.ERC20_ABI;
     const web3 = new Web3(window.ethereum);
     if (coinbase != undefined) {
-      const contract1 = new web3.eth.Contract(TokenABI, tokenAddress);
-      const contract2 = new web3.eth.Contract(TokenABI, tokenAddress_bsc);
-      const contract3 = new window.bscWeb3.eth.Contract(TokenABI, tokenAddress);
+      const contract1 = new window.goerliWeb3.eth.Contract(TokenABI, tokenAddress);
+      const contract2 = new window.bscTestWeb3.eth.Contract(TokenABI, tokenAddress_bsc);
+      const contract3 = new window.avaxWeb3.eth.Contract(TokenABI, tokenAddress);
 
 
       await contract2.methods
         .balanceOf(walletAddress)
         .call()
         .then((data) => {
-          console.log(data, "test");
           setBnbBalance(data);
         });
 
-      // await contract1.methods
-      //   .balanceOf(walletAddress)
-      //   .call()
-      //   .then((data) => {
-      //     setEthBalance(data);
-      //   });
+      await contract1.methods
+        .balanceOf(walletAddress)
+        .call()
+        .then((data) => {
+          setEthBalance(data);
+        });
 
       // await contract3.methods
       //   .balanceOf(walletAddress)
@@ -68,7 +59,7 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
       //   });
     }
   };
-
+ 
   const handleSourceChain = async (chainText) => {
     if (chainText === "eth") {
       setSourceChain(chainText);
@@ -79,7 +70,7 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
       setSourceChain(chainText);
       setSourceBridge(window.newbridge_bsc);
       setDestinationBridge(window.newbridge_eth);
-      setSourceToken(window.token_dyp_bscbsc);
+      setSourceToken(window.token_old_bsc);
       setDestinationToken(window.token_dyp_new);
       setDestinationChain("eth");
     }
@@ -88,7 +79,7 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
       setSourceChain(chainText);
       setSourceBridge(window.newbridge_bsc);
       setDestinationBridge(window.newbridge_eth);
-      setSourceToken(window.token_dyp_bscbsc);
+      setSourceToken(window.token_old_bsc);
       setDestinationToken(window.token_dyp_new);
       setDestinationChain("eth");
     }
@@ -96,10 +87,12 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
 
   useEffect(() => {
     getAllBalance();
-  }, [sourceChain, destinationChain]);
+  }, [sourceChain, destinationChain, coinbase]);
 
   useEffect(() => {
     setSourceChain("eth");
+    setDestinationChain("eth");
+
   }, []);
 
   const MigrationModal = initMigration({

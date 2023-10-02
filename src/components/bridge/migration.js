@@ -91,36 +91,14 @@ export default function initMigration({
       this.refreshBalance();
       this.getChainSymbol();
       this.checkAllowance();
-      this.fetchData();
-      window._refreshBalInterval = setInterval(this.refreshBalance, 4000);
+
+      // window._refreshBalInterval = setInterval(this.refreshBalance, 4000);
       window._refreshBalInterval = setInterval(this.getChainSymbol, 500);
     }
 
     componentWillUnmount() {
-      clearInterval(window._refreshBalInterval);
+      // clearInterval(window._refreshBalInterval);
     }
-    fetchData = async () => {
-      //Get DYP Balance BNB Chain Pool
-      let avaxPool = await window.getTokenHolderBalanceAll(
-        this.props.sourceChain === "bnb"
-          ? bridgeBSC._address
-          : bridgeETH._address,
-        bridgeETH.tokenAddress,
-        2
-      );
-      avaxPool = avaxPool / 1e18;
-
-      let bnbPool = await window.getTokenHolderBalanceAll(
-        this.props.sourceChain === "bnb"
-          ? bridgeETH._address
-          : bridgeBSC._address,
-        bridgeETH.tokenAddress,
-        3
-      );
-
-      bnbPool = bnbPool / 1e18;
-      this.setState({ avaxPool, bnbPool });
-    };
 
     checkAllowance = async (amount) => {
       const oldDyp_address = window.config.token_old_address;
@@ -137,8 +115,6 @@ export default function initMigration({
         .allowance(this.props.coinbase, claimDyp_address)
         .call();
 
-      console.log(result);
-
       let result_formatted = new BigNumber(result).div(1e18).toFixed(6);
 
       if (
@@ -152,10 +128,9 @@ export default function initMigration({
     };
 
     handleApprove = (e) => {
-      // e.preventDefault();
       let amount = this.state.depositAmount;
       this.setState({ depositLoading: true });
- console.log(tokenETH)
+      console.log(tokenETH);
       amount = new BigNumber(amount).times(10 ** TOKEN_DECIMALS).toFixed(0);
       let bridge = bridgeETH;
       tokenETH
@@ -195,7 +170,6 @@ export default function initMigration({
           .send({ from: this.props.coinbase })
           .then(() => {
             this.setState({ depositLoading: false, depositStatus: "deposit" });
-            
           })
           .catch((e) => {
             this.setState({ depositLoading: false, depositStatus: "fail" });
@@ -251,7 +225,7 @@ export default function initMigration({
       let amount = this.state.depositAmount;
       this.setState({ depositLoading: true });
       const web3 = new Web3(window.ethereum);
- 
+
       amount = new BigNumber(amount).times(10 ** TOKEN_DECIMALS).toFixed(0);
       let bridge = bridgeETH;
       let chainId = this.props.networkId;
@@ -290,7 +264,7 @@ export default function initMigration({
       let amount = this.state.withdrawAmount;
       amount = new BigNumber(amount).times(10 ** TOKEN_DECIMALS).toFixed(0);
       try {
-        let signature = window.config.SIGNATURE_API_URLNEW;
+        let signature = window.config.SIGNATURE_API_URL_NEW_BSC;
         let url =
           signature +
           `/api/withdraw-args?depositNetwork=${
@@ -345,6 +319,7 @@ export default function initMigration({
         this.setState({ coinbase });
         try {
           let chainId = this.props.networkId;
+
           let network = window.config.chain_ids[chainId] || "UNKNOWN";
 
           let token_balance = await (network === "AVAX" || network === "BSC"
@@ -359,7 +334,7 @@ export default function initMigration({
 
           if (this.state.txHash) {
             try {
-              let signature = window.config.SIGNATURE_API_URLNEW;
+              let signature = window.config.SIGNATURE_API_URL_NEW_BSC;
               let url =
                 signature +
                 `/api/withdraw-args?depositNetwork=${
@@ -619,7 +594,7 @@ export default function initMigration({
                                   placeholder="0"
                                   type="text"
                                   disabled={
-                                    this.state.destinationChain !== ""
+                                    this.props.destinationChain !== ""
                                       ? false
                                       : true
                                   }
@@ -628,7 +603,7 @@ export default function initMigration({
                                 <button
                                   className="btn maxbtn"
                                   disabled={
-                                    this.state.destinationChain !== ""
+                                    this.props.destinationChain !== ""
                                       ? false
                                       : true
                                   }
@@ -727,7 +702,7 @@ export default function initMigration({
                   <img
                     src={switchicon}
                     alt=""
-                    onClick={this.handleSwapChains}
+                    // onClick={this.handleSwapChains}
                     style={{
                       width: 55,
                       height: 55,
@@ -735,7 +710,7 @@ export default function initMigration({
                       boxShadow: "0px 6px 12px rgba(78, 213, 210, 0.32)",
                       padding: 0,
                       borderRadius: 8,
-                      cursor: "pointer",
+                      // cursor: "pointer",
                       display: this.props.sourceChain === "eth" ? "none" : "",
                     }}
                   />
@@ -961,7 +936,7 @@ export default function initMigration({
                       <h6 className="content-title2">
                         <b>Connect wallet</b>
                       </h6>
-                      Connect your wallet in order to start using Dypius Bridge.
+                      Connect your wallet in order to start migration process.
                       Your wallet chain will be associated as default.
                     </h6>
                   </TimelineContent>
@@ -970,14 +945,14 @@ export default function initMigration({
                   <TimelineSeparator>
                     <TimelineDot
                       className={
-                        this.state.destinationChain !== ""
+                        this.props.destinationChain !== ""
                           ? "greendot"
                           : "passivedot"
                       }
                     />
                     <TimelineConnector
                       className={
-                        this.state.destinationChain !== ""
+                        this.props.destinationChain !== ""
                           ? "greenline"
                           : "passiveline"
                       }
@@ -988,8 +963,8 @@ export default function initMigration({
                       <h6 className="content-title2">
                         <b>Select chains</b>
                       </h6>
-                      Select desired bridge chains at “FROM” and “TO” sections.
-                      To change the "FROM” chain you need to change it in your
+                      Select desired bridge chains at “Deposit” section. To
+                      change the "FROM” chain you need to change it in your
                       wallet.
                     </h6>
                   </TimelineContent>
@@ -1017,8 +992,8 @@ export default function initMigration({
                         <b>Fill in amount</b>
                       </h6>
                       Check your balance and fill in the desired amount you want
-                      to bridge. You can use “Max” button to fill in the maximum
-                      amount.
+                      to convert. You can use “Max” button to fill in the
+                      maximum amount.
                     </h6>
                   </TimelineContent>
                 </TimelineItem>
@@ -1042,58 +1017,61 @@ export default function initMigration({
                   <TimelineContent>
                     <h6 className="content-text">
                       <h6 className="content-title2">
-                        <b>Approve deposit</b>
+                        <b> { this.props.sourceChain === 'eth' ? 'Approve amount to claim' : 'Approve deposit'} </b>
                       </h6>
-                      Approve the transaction and then deposit the assets. These
+                      Approve the transaction and then {this.props.sourceChain === 'eth' ? 'claim your assets' : ' deposit the assets'}. These
                       steps need confirmation in your wallet.
                     </h6>
                   </TimelineContent>
                 </TimelineItem>
-                <TimelineItem>
-                  <TimelineSeparator>
-                    <TimelineDot
-                      className={
-                        this.state.txHash !== "" ? "greendot" : "passivedot"
-                      }
-                    />
-                    <TimelineConnector
-                      className={
-                        this.state.txHash !== "" ? "greenline" : "passiveline"
-                      }
-                    />
-                  </TimelineSeparator>
-                  <TimelineContent>
-                    <h6 className="content-text">
-                      <h6 className="content-title2">
-                        <b>Fill in transaction hash</b>
+                {this.props.sourceChain === "eth" ? (
+                  <TimelineItem>
+                    <TimelineSeparator>
+                      <TimelineDot
+                        className={
+                          this.state.depositStatus === "success" &&
+                          this.props.sourceChain === "eth"
+                            ? "greendot"
+                            : "passivedot"
+                        }
+                      />
+                    </TimelineSeparator>
+                    <TimelineContent>
+                      <h6 className="content-text">
+                        <h6 className="content-title2">
+                          <b>Claim new DYP token</b>
+                        </h6>
+                        After successful approval, you can claim your new DYP
+                        token. Check your wallet after tx has been approved.
                       </h6>
-                      After successful deposit, fill in the transaction hash and
-                      switch your wallet to the chosen bridge network.
-                    </h6>
-                  </TimelineContent>
-                </TimelineItem>
-                <TimelineItem>
-                  <TimelineSeparator>
-                    <TimelineDot
-                      className={
-                        canWithdraw === true ? "greendot" : "passivedot"
-                      }
-                    />
-                  </TimelineSeparator>
-                  <TimelineContent>
-                    <h6 className="content-text">
-                      <h6 className="content-title2">
-                        <b>
-                          {"Switch to destination chain. Wait timer & withdraw"}
-                        </b>
+                    </TimelineContent>
+                  </TimelineItem>
+                ) : (
+                  <TimelineItem>
+                    <TimelineSeparator>
+                      <TimelineDot
+                        className={
+                          canWithdraw === true ? "greendot" : "passivedot"
+                        }
+                      />
+                    </TimelineSeparator>
+                    <TimelineContent>
+                      <h6 className="content-text">
+                        <h6 className="content-title2">
+                          <b>
+                            {
+                              "Switch to destination chain. Wait timer & withdraw"
+                            }
+                          </b>
+                        </h6>
+                        Firstly go to your wallet and switch into the chain you
+                        want to withdraw from. Wait for the timer to end and and
+                        click withdraw button to receive the assets in the
+                        desired chain.
                       </h6>
-                      Firstly go to your wallet and switch into the chain you
-                      want to withdraw from. Wait for the timer to end and and
-                      click withdraw button to receive the assets in the desired
-                      chain.
-                    </h6>
-                  </TimelineContent>
-                </TimelineItem>
+                    </TimelineContent>
+                  </TimelineItem>
+                )}
               </Timeline>
             </div>
           </div>

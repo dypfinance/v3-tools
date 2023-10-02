@@ -98,7 +98,7 @@ class App extends React.Component {
   };
 
   checkNetworkId = () => {
-    if (!this.props.history.location.pathname.includes("bridge")) {
+    if (!this.props.history.location.pathname.includes("bridge") && !this.props.history.location.pathname.includes("migration")) {
       if (
         window.ethereum &&
         (window.ethereum.isMetaMask === true ||
@@ -492,7 +492,7 @@ class App extends React.Component {
       LP_IDs_V2.weth[4],
     ];
 
-    if (!this.props.location.pathname.includes("bridge")) {
+    if (!this.props.location.pathname.includes("bridge")&&!this.props.location.pathname.includes("migration")) {
       ethereum?.on("chainChanged", this.checkNetworkId);
       ethereum?.on("accountsChanged", this.checkConnection);
     }

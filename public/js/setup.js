@@ -1618,6 +1618,7 @@ window.config = {
   bsc_endpoint: "https://bsc-dataseed.binance.org/",
   avax_endpoint: "https://api.avax.network/ext/bc/C/rpc",
   goerli_endpoint: 'https://ethereum-goerli.publicnode.com',
+  bscTest_endpoint: "https://data-seed-prebsc-1-s1.binance.org:8545/",
   BUSD_address: "0xe9e7cea3dedca5984780bafc599bd69add087d56",
   USDCe_address: "0xa7d7079b0fead91f3e65f86e8915cb59c1a4c664",
   USDC_address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
@@ -2177,13 +2178,14 @@ window.config = {
   claim_newdyp_eth_address: "0xa80e2ad4ff20ede2797bfcb55cf2e595226e6c54",
   bridge_bsc_old_address: "0x709820e47361df09e9ad3d0030976f0faf74b7d0",
   bridge_eth_new_address: "0xfb99c497fef66b1b8cd6d6e4186649a7c79c62be",
-  SIGNATURE_API_URL_NEW_BSC: "https://claimbsc.dypius.com/",
+  SIGNATURE_API_URL_NEW_BSC: "https://claimbsc.dypius.com",
 };
 
 window.infuraWeb3 = new Web3(window.config.infura_endpoint);
 window.bscWeb3 = new Web3(window.config.bsc_endpoint);
 window.avaxWeb3 = new Web3(window.config.avax_endpoint);
 window.goerliWeb3 = new Web3(window.config.goerli_endpoint);
+window.bscTestWeb3 = new Web3(window.config.bscTest_endpoint)
 
 window.coinbase_address = "0x0000000000000000000000000000000000000111";
 
@@ -2191,6 +2193,10 @@ window.coinbase_address = "0x0000000000000000000000000000000000000111";
 
 window.token_dyp_new = new TOKEN("TOKEN_DYP_NEW");
 window.TOKEN_DYP_NEW_ABI = window.TOKEN_ABI;
+
+
+window.token_old_bsc = new TOKEN("TOKEN_OLD_BSC");
+window.TOKEN_OLD_BSC_ABI = window.TOKENBSC_ABI;
 
 window.REWARD_TOKEN_ABI = window.TOKEN_ABI;
 window.REWARD_TOKENAVAX_ABI = window.TOKENAVAX_ABI;
@@ -3429,12 +3435,12 @@ window.bridge_bscavax = new BRIDGE(
 //new dyp token bridge bsc-->eth
 window.newbridge_bsc = new BRIDGE(
   window.config.bridge_bsc_old_address,
-  window.config.token_dyp_bscavaxbsc_address
+  window.config.token_old_bsc
 );
 
 window.newbridge_avax = new BRIDGE(
   window.config.bridge_bsc_old_address,
-  window.config.token_dyp_bscavaxbsc_address
+  window.config.token_old_bsc
 );
 
 
@@ -3442,6 +3448,8 @@ window.newbridge_eth = new NEW_BRIDGE(
   window.config.bridge_eth_new_address,
   window.config.token_dyp_new_address
 );
+
+
 
 window.token_dyp_bscavaxbsc = new TOKEN("TOKEN_DYP_BSCAVAXBSC");
 window.token_dyp_bscavax = new TOKEN("TOKEN_DYP_BSCAVAX");
