@@ -108,6 +108,11 @@ const Sidebar = (props) => {
 
   const sidebarItems = [
     {
+      label: "Migration",
+      icon: "swapIcon",
+      link: "/migration",
+    },
+    {
       label: "Earn",
       icon: "earnIcon",
       link: "/earn",
@@ -122,6 +127,7 @@ const Sidebar = (props) => {
       icon: "bridgeIcon",
       link: "/bridge",
     },
+  
     {
       label: "Yields",
       icon: "yieldsIcon",
@@ -167,6 +173,7 @@ const Sidebar = (props) => {
         },
       ],
     },
+   
     {
       label: "Swap",
       icon: "swapIcon",

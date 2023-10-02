@@ -41,6 +41,7 @@ import { withRouter } from "react-router-dom";
 import GenesisStaking from "./components/genesisStaking/GenesisStaking";
 import CawsStaking from "./components/genesisStaking/CawsStaking";
 import Plans from "./components/account/Plans";
+import DypMigration from './components/bridge/DypMigration'
 
 class App extends React.Component {
   constructor(props) {
@@ -655,6 +656,18 @@ class App extends React.Component {
                     path="/bridge"
                     render={() => (
                       <Bridge
+                        networkId={parseInt(this.state.networkId)}
+                        isConnected={this.state.isConnected}
+                        handleConnection={this.handleConnection}
+                        coinbase={this.state.coinbase}
+                      />
+                    )}
+                  />
+                  <Route
+                    exact
+                    path="/migration"
+                    render={() => (
+                      <DypMigration
                         networkId={parseInt(this.state.networkId)}
                         isConnected={this.state.isConnected}
                         handleConnection={this.handleConnection}
