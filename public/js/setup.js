@@ -1617,7 +1617,7 @@ window.config = {
     "https://mainnet.infura.io/v3/94608dc6ddba490697ec4f9b723b586e",
   bsc_endpoint: "https://bsc-dataseed.binance.org/",
   avax_endpoint: "https://api.avax.network/ext/bc/C/rpc",
-
+  goerli_endpoint: 'https://ethereum-goerli.publicnode.com',
   BUSD_address: "0xe9e7cea3dedca5984780bafc599bd69add087d56",
   USDCe_address: "0xa7d7079b0fead91f3e65f86e8915cb59c1a4c664",
   USDC_address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
@@ -2169,12 +2169,28 @@ window.config = {
 
   constant_stakingbsc_new14_address:
     "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487",
+
+  //new dyp token
+  token_dyp_new_address: "0x9e32f23cdf8193167a0191ff0fc66a48837bbe2f",
+  token_old_address: "0xa4f5c83b19946488909273b6bef5aed63df9cc7b", //goerli
+  token_old_bsc_address: "0x2e0a34680c72d998e327f58dedfd48f9d4282b8c", //bsc testnet
+  claim_newdyp_eth_address: "0xa80e2ad4ff20ede2797bfcb55cf2e595226e6c54",
+  bridge_bsc_old_address: "0x709820e47361df09e9ad3d0030976f0faf74b7d0",
+  bridge_eth_new_address: "0xfb99c497fef66b1b8cd6d6e4186649a7c79c62be",
+  SIGNATURE_API_URL_NEW_BSC: "https://claimbsc.dypius.com/",
 };
 
 window.infuraWeb3 = new Web3(window.config.infura_endpoint);
 window.bscWeb3 = new Web3(window.config.bsc_endpoint);
 window.avaxWeb3 = new Web3(window.config.avax_endpoint);
+window.goerliWeb3 = new Web3(window.config.goerli_endpoint);
+
 window.coinbase_address = "0x0000000000000000000000000000000000000111";
+
+//token new dyp
+
+window.token_dyp_new = new TOKEN("TOKEN_DYP_NEW");
+window.TOKEN_DYP_NEW_ABI = window.TOKEN_ABI;
 
 window.REWARD_TOKEN_ABI = window.TOKEN_ABI;
 window.REWARD_TOKENAVAX_ABI = window.TOKENAVAX_ABI;
@@ -2961,6 +2977,34 @@ class BRIDGE {
   };
 }
 
+function getNewBridgeContract(address) {
+  return getContract({ address, ABI: window.NEW_BRIDGE_ABI });
+}
+
+class NEW_BRIDGE {
+  constructor(bridgeAddress, tokenAddress) {
+    this._address = bridgeAddress;
+    this.tokenAddress = tokenAddress;
+
+    ["deposit", "withdraw"].forEach((fn_name) => {
+      this[fn_name] = async function (args, value = 0) {
+        let contract = await getNewBridgeContract(bridgeAddress);
+        return await contract.methods[fn_name](...args).send({
+          value,
+          from: await getCoinbase(),
+        });
+      };
+    });
+  }
+
+  approveToken = async (amount) => {
+    let token_contract = await getTokenContract(this.tokenAddress);
+    return await token_contract.methods
+      .approve(this._address, amount)
+      .send({ value, from: await getCoinbase() });
+  };
+}
+
 /**
  *
  * @param {"TOKEN" | "STAKING" | "NFTSTAKING" | "NFTSTAKING50" } key
@@ -3380,6 +3424,23 @@ window.bridge_bscavaxbsc = new BRIDGE(
 window.bridge_bscavax = new BRIDGE(
   window.config.bridge_bscavax_address,
   window.config.token_dyp_bscavax_address
+);
+
+//new dyp token bridge bsc-->eth
+window.newbridge_bsc = new BRIDGE(
+  window.config.bridge_bsc_old_address,
+  window.config.token_dyp_bscavaxbsc_address
+);
+
+window.newbridge_avax = new BRIDGE(
+  window.config.bridge_bsc_old_address,
+  window.config.token_dyp_bscavaxbsc_address
+);
+
+
+window.newbridge_eth = new NEW_BRIDGE(
+  window.config.bridge_eth_new_address,
+  window.config.token_dyp_new_address
 );
 
 window.token_dyp_bscavaxbsc = new TOKEN("TOKEN_DYP_BSCAVAXBSC");
@@ -8599,6 +8660,316 @@ window.BRIDGE_ABI = [
       },
     ],
     name: "withdraw",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+];
+
+window.NEW_BRIDGE_ABI = [
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "blocknumber",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "timestamp",
+        type: "uint256",
+      },
+      { indexed: false, internalType: "uint256", name: "id", type: "uint256" },
+    ],
+    name: "Deposit",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "previousOwner",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "OwnershipTransferred",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+      { indexed: false, internalType: "uint256", name: "id", type: "uint256" },
+    ],
+    name: "Withdraw",
+    type: "event",
+  },
+  {
+    inputs: [],
+    name: "CHAIN_ID",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "ONE_DAY",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "TRUSTED_BURN",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "TRUSTED_TOKEN_ADDRESS",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    name: "claimedWithdrawalsByOtherChainDepositId",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "dailyTokenWithdrawLimitPerAccount",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "amount", type: "uint256" }],
+    name: "deposit",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "lastDepositIndex",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "lastUpdatedTokenWithdrawAmount",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "lastUpdatedTokenWithdrawTimestamp",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "owner",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "newDailyTokenWithdrawLimitPerAccount",
+        type: "uint256",
+      },
+    ],
+    name: "setDailyLimit",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "newVerifyAddress", type: "address" },
+    ],
+    name: "setVerifyAddress",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "tokenAddress", type: "address" },
+      { internalType: "address", name: "recipient", type: "address" },
+      { internalType: "uint256", name: "amount", type: "uint256" },
+    ],
+    name: "transferAnyERC20Token",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "verifyAddress",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256", name: "amount", type: "uint256" },
+      { internalType: "uint256", name: "chainId", type: "uint256" },
+      { internalType: "uint256", name: "id", type: "uint256" },
+      { internalType: "bytes", name: "signature", type: "bytes" },
+    ],
+    name: "withdraw",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+];
+
+window.CLAIM_NEW_DYP_ABI = [
+  { inputs: [], stateMutability: "nonpayable", type: "constructor" },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "holder",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "ClaimedTokens",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "previousOwner",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "OwnershipTransferred",
+    type: "event",
+  },
+  {
+    inputs: [],
+    name: "TRUSTED_BURN",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "TRUSTED_NEW_DYP",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "TRUSTED_OLD_DYP",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256", name: "amounToClaim", type: "uint256" },
+    ],
+    name: "claim",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "claimedTokens",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "owner",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
+    name: "transferOwnership",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -31479,6 +31850,7 @@ Object.keys(window.config)
       k.startsWith("staking_") ||
       k.startsWith("stakingavax_") ||
       k.startsWith("reward_tokenavax") ||
+      k.startsWith("token_dyp_new") ||
       k.startsWith("farming_newavax_1") ||
       k.startsWith("farming_newavax_2") ||
       k.startsWith("farming_newavax_3") ||
@@ -31570,6 +31942,8 @@ Object.keys(window.config)
     window[k.replace("_address", "_ABI").toUpperCase()] = k.startsWith("token_")
       ? window.TOKEN_ABI
       : k.startsWith("reward_token_idyp")
+      ? window.TOKEN_ABI
+      : k.startsWith("token_dyp_new")
       ? window.TOKEN_ABI
       : k.startsWith("buyback_stakingbsc1_1")
       ? window.BUYBACK_STAKINGBSC1_1_ABI

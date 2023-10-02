@@ -280,7 +280,7 @@ const Header = ({
                   <div className="d-flex justify-content-between gap-3 align-items-center">
                     {routeData.pathname &&
                       routeData.pathname !== "/bridge" &&
-                      routeData.pathname !== "/swap" && (
+                      routeData.pathname !== "/swap" && routeData.pathname !== "/migration" && (
                         <DropdownButton
                           id="dropdown-basic-button"
                           className="d-flex align-items-center justify-content-center"

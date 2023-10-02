@@ -20,6 +20,7 @@ import routeIcon from "./assets/route-icon.svg";
 import Address from "../FARMINNG/address";
 import WalletModal from "../WalletModal";
 import PropTypes from "prop-types";
+import Web3 from "web3";
 
 // Renderer callback with condition
 const getRenderer =
@@ -89,6 +90,7 @@ export default function initMigration({
     componentDidMount() {
       this.refreshBalance();
       this.getChainSymbol();
+      this.checkAllowance();
       this.fetchData();
       window._refreshBalInterval = setInterval(this.refreshBalance, 4000);
       window._refreshBalInterval = setInterval(this.getChainSymbol, 500);
@@ -120,29 +122,40 @@ export default function initMigration({
       this.setState({ avaxPool, bnbPool });
     };
 
+    checkAllowance = async (amount) => {
+      const oldDyp_address = window.config.token_old_address;
+      const claimDyp_address = window.config.claim_newdyp_eth_address;
+
+      const web3 = new Web3(window.ethereum);
+
+      const token_contract = new web3.eth.Contract(
+        window.TOKEN_ABI,
+        oldDyp_address
+      );
+
+      const result = await token_contract.methods
+        .allowance(this.props.coinbase, claimDyp_address)
+        .call();
+
+      console.log(result);
+
+      let result_formatted = new BigNumber(result).div(1e18).toFixed(6);
+
+      if (
+        Number(result_formatted) >= Number(amount) &&
+        Number(result_formatted) !== 0
+      ) {
+        this.setState({ depositStatus: "deposit" });
+      } else {
+        this.setState({ depositStatus: "initial" });
+      }
+    };
+
     handleApprove = (e) => {
       // e.preventDefault();
       let amount = this.state.depositAmount;
       this.setState({ depositLoading: true });
-      if (this.props.sourceChain === "bnb") {
-        if (Number(amount) > this.state.avaxPool) {
-          window.$.alert(
-            "💡 Not enough balance on the bridge, check back later!"
-          );
-          this.setState({ depositLoading: false });
-
-          return;
-        }
-      } else {
-        if (Number(amount) > this.state.bnbPool) {
-          window.$.alert(
-            "💡 Not enough balance on the bridge, check back later!"
-          );
-          this.setState({ depositLoading: false });
-
-          return;
-        }
-      }
+ console.log(tokenETH)
       amount = new BigNumber(amount).times(10 ** TOKEN_DECIMALS).toFixed(0);
       let bridge = bridgeETH;
       tokenETH
@@ -163,29 +176,82 @@ export default function initMigration({
         });
     };
 
+    handleApproveClaim = async () => {
+      let amount = this.state.depositAmount;
+      this.setState({ depositLoading: true });
+      if (this.props.sourceChain === "eth") {
+        const oldDyp_address = window.config.token_old_address;
+        const claimDyp_address = window.config.claim_newdyp_eth_address;
+        const web3 = new Web3(window.ethereum);
+        amount = new BigNumber(amount).times(10 ** TOKEN_DECIMALS).toFixed(0);
+
+        const token_contract = new web3.eth.Contract(
+          window.TOKEN_ABI,
+          oldDyp_address
+        );
+
+        token_contract.methods
+          .approve(claimDyp_address, amount)
+          .send({ from: this.props.coinbase })
+          .then(() => {
+            this.setState({ depositLoading: false, depositStatus: "deposit" });
+            
+          })
+          .catch((e) => {
+            this.setState({ depositLoading: false, depositStatus: "fail" });
+            this.setState({ errorMsg: e?.message });
+            setTimeout(() => {
+              this.setState({
+                depositStatus: "initial",
+                depositAmount: "",
+                errorMsg: "",
+              });
+            }, 8000);
+          });
+      }
+    };
+
     handleDeposit = async (e) => {
       let amount = this.state.depositAmount;
       this.setState({ depositLoading: true });
+      const web3 = new Web3(window.ethereum);
 
-      if (this.props.sourceChain === "bnb") {
-        if (Number(amount) > this.state.avaxPool) {
-          window.$.alert(
-            "💡 Not enough balance on the bridge, check back later!"
-          );
-          this.setState({ depositLoading: false });
+      if (this.props.sourceChain === "eth") {
+        amount = new BigNumber(amount).times(10 ** TOKEN_DECIMALS).toFixed(0);
 
-          return;
-        }
-      } else {
-        if (Number(amount) > this.state.bnbPool) {
-          window.$.alert(
-            "💡 Not enough balance on the bridge, check back later!"
-          );
-          this.setState({ depositLoading: false });
-
-          return;
-        }
+        const contract = new web3.eth.Contract(
+          window.CLAIM_NEW_DYP_ABI,
+          window.config.claim_newdyp_eth_address
+        );
+        contract.methods
+          .claim(amount)
+          .send({ from: this.props.coinbase })
+          .then(() => {
+            this.setState({ depositLoading: false, depositStatus: "success" });
+            this.refreshBalance();
+          })
+          .catch((e) => {
+            this.setState({
+              depositLoading: false,
+              depositStatus: "fail",
+              errorMsg: e?.message,
+            });
+            setTimeout(() => {
+              this.setState({
+                depositStatus: "initial",
+                depositAmount: "",
+                errorMsg: "",
+              });
+            }, 8000);
+          });
       }
+    };
+
+    handledepositBridge = async () => {
+      let amount = this.state.depositAmount;
+      this.setState({ depositLoading: true });
+      const web3 = new Web3(window.ethereum);
+ 
       amount = new BigNumber(amount).times(10 ** TOKEN_DECIMALS).toFixed(0);
       let bridge = bridgeETH;
       let chainId = this.props.networkId;
@@ -338,18 +404,14 @@ export default function initMigration({
     handleSwapChains = () => {
       if (this.props.activebtn === "1") {
         if (this.props.sourceChain === "bnb") {
-          this.props.onSelectChain("bnb");
           this.props.onSelectSourceChain("avax");
         } else if (this.props.sourceChain === "avax") {
-          this.props.onSelectChain("avax");
           this.props.onSelectSourceChain("bnb");
         }
       } else if (this.props.activebtn === "2") {
         if (this.props.sourceChain === "eth") {
-          this.props.onSelectChain("eth");
           this.props.onSelectSourceChain("avax");
         } else if (this.props.sourceChain === "avax") {
-          this.props.onSelectChain("avax");
           this.props.onSelectSourceChain("eth");
         }
       }
@@ -358,6 +420,7 @@ export default function initMigration({
     render() {
       let canWithdraw = false;
       let timeDiff = null;
+
       if (this.state.withdrawableUnixTimestamp) {
         timeDiff = Math.max(
           0,
@@ -367,7 +430,10 @@ export default function initMigration({
       }
       return (
         <div className="row w-100 mx-0 gap-4 justify-content-between">
-          <div className="token-staking col-12 col-lg-6 col-xxl-5">
+          <div
+            className="token-staking col-12 col-lg-6 col-xxl-5"
+            style={{ height: "fit-content" }}
+          >
             <div className="purplediv"></div>
             <div className="row">
               <div>
@@ -375,6 +441,27 @@ export default function initMigration({
                   <h6 className="fromtitle mb-2">Deposit</h6>
                   <div className="d-flex flex-column flex-lg-row align-items-center justify-content-between gap-2">
                     <div className="d-flex align-items-center justify-content-between gap-3">
+                      <div
+                        className={
+                          this.props.sourceChain === "eth"
+                            ? "optionbtn-active"
+                            : "optionbtn-passive bridge-passive"
+                        }
+                        onClick={() => {
+                          // this.props.activebtn === "5"
+                          //   ? this.props.onSelectChain("bnb")
+                          //   : this.props.onSelectChain("avax");
+                          this.props.onSelectSourceChain("eth");
+                        }}
+                      >
+                        <h6 className="optiontext d-flex align-items-center gap-2">
+                          <img src={eth} alt="" />
+                          <p className=" mb-0 optiontext d-none d-lg-flex">
+                            Ethereum
+                          </p>
+                        </h6>
+                      </div>
+
                       {this.props.activebtn !== "2" && (
                         <div
                           className={
@@ -387,7 +474,7 @@ export default function initMigration({
                               sourceChain: "bnb",
                             });
                             this.props.onSelectSourceChain("bnb");
-                            this.props.onSelectChain("avax");
+                            // this.props.onSelectChain("avax");
                           }}
                         >
                           <h6 className="optiontext d-flex align-items-center gap-2">
@@ -410,7 +497,7 @@ export default function initMigration({
                             sourceChain: "avax",
                           });
                           this.props.onSelectSourceChain("avax");
-                          this.props.onSelectChain("bnb");
+                          // this.props.onSelectChain("bnb");
                         }}
                       >
                         <h6 className="optiontext d-flex align-items-center gap-2">
@@ -434,7 +521,7 @@ export default function initMigration({
                       </button>
                     ) : (
                       <div className="addressbtn btn">
-                        <Address a={this.state.coinbase} chainId={43114} />
+                        <Address a={this.props.coinbase} chainId={43114} />
                       </div>
                     )}
                   </div>
@@ -457,11 +544,16 @@ export default function initMigration({
                                     {this.props.sourceChain === "avax"
                                       ? getFormattedNumber(
                                           this.props.avaxBalance / 1e18,
-                                          6
+                                          2
+                                        )
+                                      : this.props.sourceChain === "eth"
+                                      ? getFormattedNumber(
+                                          this.props.ethBalance / 1e18,
+                                          2
                                         )
                                       : getFormattedNumber(
                                           this.props.bnbBalance / 1e18,
-                                          6
+                                          2
                                         )}
                                   </b>
                                   DYP
@@ -500,7 +592,7 @@ export default function initMigration({
                                 title={
                                   <div className="tooltip-text">
                                     {
-                                      "Deposit your assets to bridge smart contract."
+                                      "Choose the amount of tokens you wish to convert. The conversion will be in a 1:5 ratio."
                                     }
                                   </div>
                                 }
@@ -517,11 +609,12 @@ export default function initMigration({
                                       ? this.state.depositAmount
                                       : this.state.depositAmount
                                   }
-                                  onChange={(e) =>
+                                  onChange={(e) => {
                                     this.setState({
                                       depositAmount: e.target.value,
-                                    })
-                                  }
+                                    });
+                                    this.checkAllowance(e.target.value);
+                                  }}
                                   className="styledinput"
                                   placeholder="0"
                                   type="text"
@@ -568,11 +661,19 @@ export default function initMigration({
                                     : null
                                 } d-flex justify-content-center align-items-center gap-2`}
                                 onClick={() => {
+                                  this.props.sourceChain === "eth" &&
                                   this.state.depositStatus === "deposit"
                                     ? this.handleDeposit()
+                                    : this.state.depositStatus === "deposit" &&
+                                      this.props.sourceChain !== "eth"
+                                    ? this.handledepositBridge()
                                     : this.state.depositStatus === "initial" &&
+                                      this.props.sourceChain !== "eth" &&
                                       this.state.depositAmount !== ""
                                     ? this.handleApprove()
+                                    : this.props.sourceChain === "eth" &&
+                                      this.state.depositStatus === "initial"
+                                    ? this.handleApproveClaim()
                                     : console.log("");
                                 }}
                               >
@@ -585,7 +686,14 @@ export default function initMigration({
                                       Loading...
                                     </span>
                                   </div>
-                                ) : this.state.depositStatus === "initial" ? (
+                                ) : this.state.depositStatus === "initial" &&
+                                  this.props.sourceChain !== "eth" ? (
+                                  <>Approve</>
+                                ) : this.state.depositStatus === "deposit" &&
+                                  this.props.sourceChain === "eth" ? (
+                                  <>Claim</>
+                                ) : this.state.depositStatus === "initial" &&
+                                  this.props.sourceChain === "eth" ? (
                                   <>Approve</>
                                 ) : this.state.depositStatus === "deposit" ? (
                                   <>Deposit</>
@@ -628,11 +736,22 @@ export default function initMigration({
                       padding: 0,
                       borderRadius: 8,
                       cursor: "pointer",
+                      display: this.props.sourceChain === "eth" ? "none" : "",
                     }}
                   />
                   <div className="col-12 position-relative">
-                    <div className="purplediv"></div>
-                    <div className="l-box">
+                    <div
+                      className="purplediv"
+                      style={{
+                        display: this.props.sourceChain === "eth" ? "none" : "",
+                      }}
+                    ></div>
+                    <div
+                      className="l-box"
+                      style={{
+                        display: this.props.sourceChain === "eth" ? "none" : "",
+                      }}
+                    >
                       <div className="pb-0">
                         <div className="form-group">
                           <label
@@ -643,54 +762,11 @@ export default function initMigration({
                               <h6 className="fromtitle mb-2">Withdraw</h6>
                               <div className="d-flex align-items-center justify-content-between gap-2">
                                 <div className="d-flex align-items-center justify-content-between gap-3">
-                                  {this.props.activebtn !== "2" && (
-                                    <div
-                                      className={
-                                        this.props.destinationChain === "bnb"
-                                          ? "optionbtn-active"
-                                          : "optionbtn-passive bridge-passive"
-                                      }
-                                      onClick={() => {
-                                        // this.props.onSelectChain("bnb");
-                                      }}
-                                      style={{
-                                        pointerEvents:
-                                          this.props.networkId === 43114 ||
-                                          this.props.networkId === 56
-                                            ? "none"
-                                            : "auto",
-                                      }}
-                                    >
-                                      <h6 className="optiontext d-flex align-items-center gap-2">
-                                        <img src={bnb} alt="" />
-                                        <p className=" mb-0 optiontext d-none d-lg-flex">
-                                          BNB Chain
-                                        </p>
-                                      </h6>
-                                    </div>
-                                  )}
-
-                                  <div
-                                    className={
-                                      this.props.destinationChain === "avax"
-                                        ? "optionbtn-active"
-                                        : "optionbtn-passive bridge-passive"
-                                    }
-                                    onClick={() => {
-                                      // this.props.onSelectChain("avax");
-                                    }}
-                                    style={{
-                                      pointerEvents:
-                                        this.props.networkId === 43114 ||
-                                        this.props.networkId === 56
-                                          ? "none"
-                                          : "auto",
-                                    }}
-                                  >
+                                  <div className={"optionbtn-active"}>
                                     <h6 className="optiontext d-flex align-items-center gap-2">
-                                      <img src={avax} alt="" />
+                                      <img src={eth} alt="" />
                                       <p className=" mb-0 optiontext d-none d-lg-flex">
-                                        Avalanche
+                                        Ethereum
                                       </p>
                                     </h6>
                                   </div>

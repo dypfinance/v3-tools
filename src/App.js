@@ -397,6 +397,7 @@ class App extends React.Component {
       await window.ethereum
         .request({ method: "eth_accounts" })
         .then((data) => {
+         
           this.setState({
             isConnected: data.length === 0 ? false : true,
             coinbase: data.length === 0 ? undefined : data[0],
