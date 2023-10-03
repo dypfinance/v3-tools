@@ -101,29 +101,32 @@ export default function initMigration({
     }
 
     checkAllowance = async (amount) => {
-      const oldDyp_address = window.config.token_old_address;
-      const claimDyp_address = window.config.claim_newdyp_eth_address;
+       
+      if (this.props.sourceChain === "eth") {
+        const oldDyp_address = window.config.token_old_address;
+        const claimDyp_address = window.config.claim_newdyp_eth_address;
 
-      const web3 = new Web3(window.ethereum);
+        const web3 = new Web3(window.ethereum);
 
-      const token_contract = new web3.eth.Contract(
-        window.TOKEN_ABI,
-        oldDyp_address
-      );
+        const token_contract = new window.goerliWeb3.eth.Contract(
+          window.TOKEN_ABI,
+          oldDyp_address
+        );
 
-      const result = await token_contract.methods
-        .allowance(this.props.coinbase, claimDyp_address)
-        .call();
+        const result = await token_contract.methods
+          .allowance(this.props.coinbase, claimDyp_address)
+          .call();
 
-      let result_formatted = new BigNumber(result).div(1e18).toFixed(6);
+        let result_formatted = new BigNumber(result).div(1e18).toFixed(6);
 
-      if (
-        Number(result_formatted) >= Number(amount) &&
-        Number(result_formatted) !== 0
-      ) {
-        this.setState({ depositStatus: "deposit" });
-      } else {
-        this.setState({ depositStatus: "initial" });
+        if (
+          Number(result_formatted) >= Number(amount) &&
+          Number(result_formatted) !== 0
+        ) {
+          this.setState({ depositStatus: "deposit" });
+        } else {
+          this.setState({ depositStatus: "initial" });
+        }
       }
     };
 
@@ -277,6 +280,7 @@ export default function initMigration({
         console.log({ url });
         let args = await window.jQuery.get(url);
         console.log({ args });
+        console.log(bridgeBSC);
 
         bridgeBSC
           .withdraw(args)
@@ -318,19 +322,56 @@ export default function initMigration({
         let coinbase = this.props.coinbase;
         this.setState({ coinbase });
         try {
-          let chainId = this.props.networkId;
+          const oldDyp_address = window.config.token_old_address;
+          const tokenAddress_bsc = "0x2e0a34680c72d998e327f58dedfd48f9d4282b8c";
 
-          let network = window.config.chain_ids[chainId] || "UNKNOWN";
+          if (this.props.sourceChain === "eth") {
+            const token_contract_eth = new window.goerliWeb3.eth.Contract(
+              window.TOKEN_ABI,
+              oldDyp_address
+            );
+            await token_contract_eth.methods
+              .balanceOf(this.props.coinbase)
+              .call()
+              .then((data) => {
+                this.setState({ token_balance: data });
+              });
+          } else if (this.props.sourceChain === "bnb") {
+            const token_contract_bsc = new window.bscTestWeb3.eth.Contract(
+              window.TOKENBSC_ABI,
+              tokenAddress_bsc
+            );
+            await token_contract_bsc.methods
+              .balanceOf(this.props.coinbase)
+              .call()
+              .then((data) => {
+                this.setState({ token_balance: data });
+              });
+          } else if (this.props.sourceChain === "avax") {
+            const token_contract_avax = new window.bscTestWeb3.eth.Contract(
+              window.TOKEN_ABI,
+              tokenAddress_bsc
+            );
+            await token_contract_avax.methods
+              .balanceOf(this.props.coinbase)
+              .call()
+              .then((data) => {
+                this.setState({ token_balance: data });
+              });
+          }
+          // let chainId = this.props.networkId;
 
-          let token_balance = await (network === "AVAX" || network === "BSC"
-            ? tokenBSC
-            : tokenETH
-          ).balanceOf(coinbase);
+          // let network = window.config.chain_ids[chainId] || "UNKNOWN";
 
-          this.setState({
-            token_balance,
-            network,
-          });
+          // let token_balance = await (network === "AVAX" || network === "BSC"
+          //   ? tokenBSC
+          //   : tokenETH
+          // ).balanceOf(coinbase);
+
+          // this.setState({
+          //   token_balance,
+          //   network,
+          // });
 
           if (this.state.txHash) {
             try {
@@ -1017,10 +1058,18 @@ export default function initMigration({
                   <TimelineContent>
                     <h6 className="content-text">
                       <h6 className="content-title2">
-                        <b> { this.props.sourceChain === 'eth' ? 'Approve amount to claim' : 'Approve deposit'} </b>
+                        <b>
+                          {" "}
+                          {this.props.sourceChain === "eth"
+                            ? "Approve amount to claim"
+                            : "Approve deposit"}{" "}
+                        </b>
                       </h6>
-                      Approve the transaction and then {this.props.sourceChain === 'eth' ? 'claim your assets' : ' deposit the assets'}. These
-                      steps need confirmation in your wallet.
+                      Approve the transaction and then{" "}
+                      {this.props.sourceChain === "eth"
+                        ? "claim your assets"
+                        : " deposit the assets"}
+                      . These steps need confirmation in your wallet.
                     </h6>
                   </TimelineContent>
                 </TimelineItem>
