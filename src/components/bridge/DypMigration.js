@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 import initMigration from "./migration";
 import Web3 from "web3";
 
-const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
+const DypMigration = ({ networkId, isConnected, handleConnection, coinbase }) => {
   const [sourceChain, setSourceChain] = useState("eth");
   const [destinationChain, setDestinationChain] = useState("");
   const [activebtn, setActiveBtn] = useState("");
@@ -135,4 +135,4 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
   );
 };
 
-export default Bridge;
+export default DypMigration;
