@@ -128,7 +128,10 @@ export default function initMigration({
       this.setState({ depositLoading: true });
       console.log(tokenETH);
       amount = new BigNumber(amount).times(10 ** TOKEN_DECIMALS).toFixed(0);
-      let bridge = this.props.sourceChain === 'bsc' ? window.config.bridge_bsc_old_address : window.config.bridge_bsc_old_address;;
+      let bridge =
+        this.props.sourceChain === "bsc"
+          ? window.config.bridge_bsc_old_address
+          : window.config.bridge_bsc_old_address;
       tokenETH
         .approve(bridge, amount)
         .then(() => {
@@ -222,11 +225,16 @@ export default function initMigration({
       this.setState({ depositLoading: true });
 
       amount = new BigNumber(amount).times(10 ** TOKEN_DECIMALS).toFixed(0);
-      let bridge = this.props.sourceChain === 'bsc' ? window.config.bridge_bsc_old_address : window.config.bridge_bsc_old_address;
+      let bridge =
+        this.props.sourceChain === "bsc"
+          ? window.config.bridge_bsc_old_address
+          : window.config.bridge_bsc_old_address;
       let chainId = this.props.networkId;
+      const web3 = new Web3(window.ethereum);
 
       if (chainId !== undefined) {
-        let contract = await window.getNewBridgeContract(bridge);
+        let contract = new web3.eth.Contract(window.NEW_BRIDGE_ABI, bridge);
+
         contract.methods
           .deposit(amount)
           .send({ from: await window.getCoinbase() }, (err, txHash) => {
@@ -307,8 +315,8 @@ export default function initMigration({
 
     refreshBalance = async () => {
       if (this.props.isConnected === true && this.props.networkId !== 0) {
-        let coinbase = this.props.coinbase;
-        this.setState({ coinbase });
+        // let coinbase = this.props.coinbase;
+        // this.setState({ coinbase });
         try {
           const oldDyp_address = window.config.token_old_address;
           const tokenAddress_bsc = "0x2e0a34680c72d998e327f58dedfd48f9d4282b8c";
