@@ -2091,10 +2091,10 @@ window.config = {
     AVAX: 43114, // 43114 = AVAX
     BSC: 56, // 97 = testnet, 56 = main
     1: "ETH",
-    5: "ETH",
+    // 5: "ETH",
     43114: "AVAX",
     56: "BSC",
-    97: "BSC",
+    // 97: "BSC",
 
   },
 

@@ -89,11 +89,8 @@ export default function initMigration({
     };
     componentDidMount() {
       this.refreshBalance();
-      this.getChainSymbol();
       this.checkAllowance();
-
       window._refreshBalInterval = setInterval(this.refreshBalance, 4000);
-      window._refreshBalInterval = setInterval(this.getChainSymbol, 500);
     }
 
     componentWillUnmount() {
@@ -101,13 +98,9 @@ export default function initMigration({
     }
 
     checkAllowance = async (amount) => {
-       
       if (this.props.sourceChain === "eth") {
         const oldDyp_address = window.config.token_old_address;
         const claimDyp_address = window.config.claim_newdyp_eth_address;
-
-        const web3 = new Web3(window.ethereum);
-
         const token_contract = new window.goerliWeb3.eth.Contract(
           window.TOKEN_ABI,
           oldDyp_address
@@ -135,9 +128,9 @@ export default function initMigration({
       this.setState({ depositLoading: true });
       console.log(tokenETH);
       amount = new BigNumber(amount).times(10 ** TOKEN_DECIMALS).toFixed(0);
-      let bridge = bridgeETH;
+      let bridge = this.props.sourceChain === 'bsc' ? window.config.bridge_bsc_old_address : window.config.bridge_bsc_old_address;;
       tokenETH
-        .approve(bridge._address, amount)
+        .approve(bridge, amount)
         .then(() => {
           this.setState({ depositLoading: false, depositStatus: "deposit" });
         })
@@ -227,14 +220,13 @@ export default function initMigration({
     handledepositBridge = async () => {
       let amount = this.state.depositAmount;
       this.setState({ depositLoading: true });
-      const web3 = new Web3(window.ethereum);
 
       amount = new BigNumber(amount).times(10 ** TOKEN_DECIMALS).toFixed(0);
-      let bridge = bridgeETH;
+      let bridge = this.props.sourceChain === 'bsc' ? window.config.bridge_bsc_old_address : window.config.bridge_bsc_old_address;
       let chainId = this.props.networkId;
 
       if (chainId !== undefined) {
-        let contract = await window.getBridgeContract(bridge._address);
+        let contract = await window.getNewBridgeContract(bridge);
         contract.methods
           .deposit(amount)
           .send({ from: await window.getCoinbase() }, (err, txHash) => {
@@ -242,7 +234,7 @@ export default function initMigration({
           })
           .then(() => {
             this.setState({ depositLoading: false, depositStatus: "success" });
-            this.refreshBalance();
+            // this.refreshBalance();
           })
           .catch((e) => {
             this.setState({
@@ -263,9 +255,6 @@ export default function initMigration({
 
     handleWithdraw = async (e) => {
       this.setState({ withdrawLoading: true });
-
-      let amount = this.state.withdrawAmount;
-      amount = new BigNumber(amount).times(10 ** TOKEN_DECIMALS).toFixed(0);
       try {
         let signature = window.config.SIGNATURE_API_URL_NEW_BSC;
         let url =
@@ -280,16 +269,15 @@ export default function initMigration({
         console.log({ url });
         let args = await window.jQuery.get(url);
         console.log({ args });
-        console.log(bridgeBSC);
+        const bridge = window.newbridge_eth;
 
-        bridgeBSC
+        bridge
           .withdraw(args)
           .then(() => {
             this.setState({
               withdrawLoading: false,
               withdrawStatus: "success",
             });
-            this.refreshBalance();
           })
           .catch((e) => {
             this.setState({ withdrawLoading: false, withdrawStatus: "fail" });
@@ -398,37 +386,6 @@ export default function initMigration({
           } else this.setState({ withdrawableUnixTimestamp: null });
         } catch (e) {
           console.error(e);
-        }
-      }
-    };
-
-    getChainSymbol = async () => {
-      try {
-        let chainId = this.props.networkId;
-        if (chainId === 43114) this.setState({ chainText: "AVAX" });
-        else if (chainId === 56) this.setState({ chainText: "BSC" });
-        else if (chainId === 1) this.setState({ chainText: "ETH" });
-        else {
-          this.setState({ chainText: "" });
-        }
-      } catch (err) {
-        this.setState({ chainText: "ETH" });
-        // console.log(err);
-      }
-    };
-
-    handleSwapChains = () => {
-      if (this.props.activebtn === "1") {
-        if (this.props.sourceChain === "bnb") {
-          this.props.onSelectSourceChain("avax");
-        } else if (this.props.sourceChain === "avax") {
-          this.props.onSelectSourceChain("bnb");
-        }
-      } else if (this.props.activebtn === "2") {
-        if (this.props.sourceChain === "eth") {
-          this.props.onSelectSourceChain("avax");
-        } else if (this.props.sourceChain === "avax") {
-          this.props.onSelectSourceChain("eth");
         }
       }
     };
@@ -545,7 +502,7 @@ export default function initMigration({
                 <div className="row token-staking-form gap-3">
                   <div className="col-12">
                     <div className="l-box">
-                      <form onSubmit={(e) => e.preventDefault()}>
+                      <div>
                         <div className="form-group">
                           <div className="row m-0">
                             <div className="activewrapper flex-column flex-lg-row mt-3 mb-3">
@@ -737,7 +694,7 @@ export default function initMigration({
                             )}
                           </div>
                         </div>
-                      </form>
+                      </div>
                     </div>
                   </div>
                   <img

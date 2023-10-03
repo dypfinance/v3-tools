@@ -11,7 +11,7 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
 
   const [sourceBridge, setSourceBridge] = useState(window.bridge_bscavaxbsc);
   const [destinationBridge, setDestinationBridge] = useState(
-    window.bridge_bscavax
+    window.newbridge_eth
   );
   const [sourceToken, setSourceToken] = useState(window.token_dyp_bscavaxbsc);
   const [destinationToken, setDestinationToken] = useState(
@@ -97,7 +97,7 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
 
   const MigrationModal = initMigration({
     bridgeETH: sourceBridge,
-    bridgeBSC: destinationBridge,
+    bridgeBSC: window.newbridge_eth,
     tokenETH: sourceToken,
     tokenBSC: destinationToken,
   });
@@ -127,6 +127,8 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
           ethBalance={ethBalance}
           bnbBalance={bnbBalance}
           avaxBalance={avaxBalance}
+          sourceBridge = {sourceBridge}
+          destinationBridge = {destinationBridge}
         />
       </div>
     </div>
