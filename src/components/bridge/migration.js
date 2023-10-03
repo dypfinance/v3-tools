@@ -92,12 +92,12 @@ export default function initMigration({
       this.getChainSymbol();
       this.checkAllowance();
 
-      // window._refreshBalInterval = setInterval(this.refreshBalance, 4000);
+      window._refreshBalInterval = setInterval(this.refreshBalance, 4000);
       window._refreshBalInterval = setInterval(this.getChainSymbol, 500);
     }
 
     componentWillUnmount() {
-      // clearInterval(window._refreshBalInterval);
+      clearInterval(window._refreshBalInterval);
     }
 
     checkAllowance = async (amount) => {
