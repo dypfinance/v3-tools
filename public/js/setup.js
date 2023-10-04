@@ -2174,14 +2174,23 @@ window.config = {
   constant_stakingbsc_new14_address:
     "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487",
 
-  //new dyp token
-  token_dyp_new_address: "0x9e32f23cdf8193167a0191ff0fc66a48837bbe2f",
+  //new dyp token migration
+  token_dyp_new_address: "0x9e32f23cdf8193167a0191ff0fc66a48837bbe2f", //goerli
+  token_dyp_new_bsc_address: "0x83cd3738a46ebf5bdd7d278e412ad90dff8df6e0", //bsc testnet
   token_old_address: "0xa4f5c83b19946488909273b6bef5aed63df9cc7b", //goerli
   token_old_bsc_address: "0x2e0a34680c72d998e327f58dedfd48f9d4282b8c", //bsc testnet
   claim_newdyp_eth_address: "0xa80e2ad4ff20ede2797bfcb55cf2e595226e6c54",
   bridge_bsc_old_address: "0x709820e47361df09e9ad3d0030976f0faf74b7d0",
   bridge_eth_new_address: "0xfb99c497fef66b1b8cd6d6e4186649a7c79c62be",
   SIGNATURE_API_URL_NEW_BSC: "https://claimbsc.dypius.com",
+
+
+  //new token bridge eth <-> bsc
+  new_bridge_eth_address: "0x5cb6e657a8fe74fe971ae5a6b44b735f883f3d1d",
+  new_bridge_bsc_address: "0xea71da5ab0bc280725be424fb515d62d77e8eb37",
+  SIGNATURE_API_URL_NEW_AVAX: "https://claimavax.dypius.com",
+
+
 };
 
 window.infuraWeb3 = new Web3(window.config.infura_endpoint);
@@ -2196,6 +2205,9 @@ window.coinbase_address = "0x0000000000000000000000000000000000000111";
 
 window.token_dyp_new = new TOKEN("TOKEN_DYP_NEW");
 window.TOKEN_DYP_NEW_ABI = window.TOKEN_ABI;
+
+window.token_dyp_new_bsc = new TOKENBSC("TOKEN_DYP_NEW_BSC");
+window.TOKEN_DYP_NEW_BSC_ABI = window.TOKENBSC_ABI;
 
 
 window.token_old_bsc = new TOKEN("TOKEN_OLD_BSC");
@@ -3435,15 +3447,15 @@ window.bridge_bscavax = new BRIDGE(
   window.config.token_dyp_bscavax_address
 );
 
-//new dyp token bridge bsc-->eth
+//new dyp token migration bsc-->eth
 window.newbridge_bsc = new BRIDGE(
   window.config.bridge_bsc_old_address,
-  window.config.token_old_bsc
+  window.config.token_old_bsc_address
 );
 
 window.newbridge_avax = new BRIDGE(
   window.config.bridge_bsc_old_address,
-  window.config.token_old_bsc
+  window.config.token_old_bsc_address
 );
 
 
@@ -3451,6 +3463,28 @@ window.newbridge_eth = new NEW_BRIDGE(
   window.config.bridge_eth_new_address,
   window.config.token_dyp_new_address
 );
+
+
+
+
+
+//new dyp token bridge bsc<-->eth
+window.new_bridge_bsc = new NEW_BRIDGE(
+  window.config.new_bridge_bsc_address,
+  window.config.token_dyp_new_bsc_address
+);
+
+window.new_bridge_eth = new NEW_BRIDGE(
+  window.config.new_bridge_eth_address,
+  window.config.token_dyp_new_address
+);
+
+
+window.token_old_eth = new TOKEN("TOKEN_OLD_ETH");
+window.token_old_bsc = new TOKENBSC("TOKEN_OLD_BSC");
+window.TOKEN_OLD_ETH_ABI = window.TOKEN_ABI
+window.TOKEN_OLD_BSC_ABI = window.TOKEN_ABI
+
 
 
 
@@ -31862,6 +31896,8 @@ Object.keys(window.config)
       k.startsWith("stakingavax_") ||
       k.startsWith("reward_tokenavax") ||
       k.startsWith("token_dyp_new") ||
+      k.startsWith("token_dyp_new_bsc") ||
+
       k.startsWith("farming_newavax_1") ||
       k.startsWith("farming_newavax_2") ||
       k.startsWith("farming_newavax_3") ||
@@ -31921,6 +31957,8 @@ Object.keys(window.config)
       k.startsWith("token_dyp_bsceth") ||
       k.startsWith("token_dyp_bscbsc") ||
       k.startsWith("token_dyp_bscavaxbsc") ||
+      k.startsWith("token_old_eth") ||
+      k.startsWith("token_old_bsc") ||
       k.startsWith("token_dyp_bscavax") ||
       k.startsWith("token_idyp_bsceth") ||
       k.startsWith("token_idyp_bscbsc") ||
@@ -31956,6 +31994,8 @@ Object.keys(window.config)
       ? window.TOKEN_ABI
       : k.startsWith("token_dyp_new")
       ? window.TOKEN_ABI
+      : k.startsWith("token_dyp_new_bsc")
+      ? window.TOKENBSC_ABI
       : k.startsWith("buyback_stakingbsc1_1")
       ? window.BUYBACK_STAKINGBSC1_1_ABI
       : k.startsWith("buyback_stakingbsc1_2")
@@ -31973,6 +32013,10 @@ Object.keys(window.config)
       : k.startsWith("token_dyp_bsc")
       ? window.TOKEN_ABI
       : k.startsWith("token_dyp_bscavaxbsc")
+      ? window.TOKEN_ABI
+      : k.startsWith("token_old_eth")
+      ? window.TOKEN_ABI
+      : k.startsWith("token_old_bsc")
       ? window.TOKEN_ABI
       : k.startsWith("token_dyp_bscavax")
       ? window.TOKEN_ABI

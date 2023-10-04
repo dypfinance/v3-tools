@@ -9,6 +9,7 @@ import bnb from "./assets/bnb.svg";
 import avax from "./assets/avax.svg";
 import "./bridge.css";
 import { useLocation } from "react-router-dom";
+import Web3 from "web3";
 
 const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
   const [sourceChain, setSourceChain] = useState("");
@@ -47,21 +48,63 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
   const [bnbBalanceidyp, setBnbBalanceidyp] = useState("0.0");
   const [avaxBalanceidyp, setAvaxBalanceidyp] = useState("0.0");
 
+  // const getAllBalance = async () => {
+  //   const tokenAddress = "0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17";
+  //   const walletAddress = coinbase;
+  //   const TokenABI = window.ERC20_ABI;
+
+  //   if (coinbase != undefined) {
+  //     const contract1 = new window.infuraWeb3.eth.Contract(
+  //       TokenABI,
+  //       tokenAddress
+  //     );
+  //     const contract2 = new window.avaxWeb3.eth.Contract(
+  //       TokenABI,
+  //       tokenAddress
+  //     );
+  //     const contract3 = new window.bscWeb3.eth.Contract(TokenABI, tokenAddress);
+
+  //     await contract1.methods
+  //       .balanceOf(walletAddress)
+  //       .call()
+  //       .then((data) => {
+  //         setEthBalance(data);
+  //       });
+  //     await contract2.methods
+  //       .balanceOf(walletAddress)
+  //       .call()
+  //       .then((data) => {
+  //         setAvaxBalance(data);
+  //       });
+
+  //     await contract3.methods
+  //       .balanceOf(walletAddress)
+  //       .call()
+  //       .then((data) => {
+  //         setBnbBalance(data);
+  //       });
+  //   }
+  // };
+
   const getAllBalance = async () => {
-    const tokenAddress = "0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17";
+    const tokenAddress = "0x9e32f23cdf8193167a0191ff0fc66a48837bbe2f";
+    const tokenAddress_bsc = "0x83cd3738a46ebf5bdd7d278e412ad90dff8df6e0";
+
     const walletAddress = coinbase;
     const TokenABI = window.ERC20_ABI;
-
+    const web3 = new Web3(window.ethereum);
     if (coinbase != undefined) {
-      const contract1 = new window.infuraWeb3.eth.Contract(
-        TokenABI,
-        tokenAddress
-      );
-      const contract2 = new window.avaxWeb3.eth.Contract(
-        TokenABI,
-        tokenAddress
-      );
-      const contract3 = new window.bscWeb3.eth.Contract(TokenABI, tokenAddress);
+      const contract1 = new window.goerliWeb3.eth.Contract(TokenABI, tokenAddress);
+      const contract2 = new window.bscTestWeb3.eth.Contract(TokenABI, tokenAddress_bsc);
+      const contract3 = new window.avaxWeb3.eth.Contract(TokenABI, tokenAddress);
+
+
+      await contract2.methods
+        .balanceOf(walletAddress)
+        .call()
+        .then((data) => {
+          setBnbBalance(data);
+        });
 
       await contract1.methods
         .balanceOf(walletAddress)
@@ -69,19 +112,13 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
         .then((data) => {
           setEthBalance(data);
         });
-      await contract2.methods
-        .balanceOf(walletAddress)
-        .call()
-        .then((data) => {
-          setAvaxBalance(data);
-        });
 
-      await contract3.methods
-        .balanceOf(walletAddress)
-        .call()
-        .then((data) => {
-          setBnbBalance(data);
-        });
+      // await contract3.methods
+      //   .balanceOf(walletAddress)
+      //   .call()
+      //   .then((data) => {
+      //     setAvaxBalance(data);
+      //   });
     }
   };
 
@@ -126,22 +163,18 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
   const handleSourceChain = async (chainText) => {
     if (chainText === "eth") {
       setSourceChain(chainText);
+      setSourceBridge(window.new_bridge_eth);
+      setDestinationBridge(window.new_bridge_bsc);
+      setSourceToken(window.token_dyp_new);
+      setDestinationToken(window.token_dyp_new_bsc);
     }
 
     if (chainText === "bnb") {
       setSourceChain(chainText);
-      setSourceBridge(window.bridge_bscavaxbsc);
-      setDestinationBridge(window.bridge_bscavax);
-      setSourceToken(window.token_dyp_bscavaxbsc);
-      setDestinationToken(window.token_dyp_bscavax);
-    }
-
-    if (chainText === "avax") {
-      setSourceChain(chainText);
-      setDestinationBridge(window.bridge_bscavaxbsc);
-      setSourceBridge(window.bridge_bscavax);
-      setDestinationToken(window.token_dyp_bscavaxbsc);
-      setSourceToken(window.token_dyp_bscavax);
+      setDestinationBridge(window.new_bridge_eth);
+      setSourceBridge(window.new_bridge_bsc);
+      setDestinationToken(window.token_dyp_new);
+      setSourceToken(window.token_dyp_new_bsc);
     }
   };
 
@@ -184,7 +217,7 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
   useEffect(() => {
     getAllBalance();
     getAllBalanceiDyp();
-  }, [sourceChain, destinationChain, sourceChainiDyp, destinationChainiDyp]);
+  }, [sourceChain, destinationChain, sourceChainiDyp, destinationChainiDyp, coinbase]);
 
   const BridgeModal = initBridge({
     bridgeETH: sourceBridge,
@@ -219,22 +252,22 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
           <div
             className={
               activebtn === "1"
-                ? "optionbtn-active activebscavax"
+                ? "optionbtn-active activeethbnb"
                 : "optionbtn-passive bridge-passive"
             }
             onClick={() => {
               setActiveBtn("1");
-              setSourceChain("bnb");
-              setDestinationChain("avax");
-              setSourceBridge(window.bridge_bscavaxbsc);
-              setDestinationBridge(window.bridge_bscavax);
-              setSourceToken(window.token_dyp_bscavaxbsc);
-              setDestinationToken(window.token_dyp_bscavax);
+              setSourceChain("eth");
+              setDestinationChain("bnb");
+              setSourceBridge(window.new_bridge_eth);
+              setDestinationBridge(window.new_bridge_bsc);
+              setSourceToken(window.token_dyp_new);
+              setDestinationToken(window.token_dyp_new_bsc);
             }}
           >
             <h6 className="optiontext d-flex align-items-center gap-2">
-              <img src={bnb} alt="" /> <img src={avax} alt="" />
-              <p className=" mb-0 optiontext d-none d-lg-flex">BSC/AVAX</p>
+              <img src={eth} alt="" /> <img src={bnb} alt="" />
+              <p className=" mb-0 optiontext d-none d-lg-flex">ETH/BSC</p>
             </h6>
           </div>
         </div>
@@ -258,7 +291,7 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
         />
       </div>
       <div className="bigseparator mt-5 mb-5 col-6 col-xxl-5"></div>
-      <div>
+      {/* <div>
         <h3 className="text-white mb-4">
           <img src={idyp} alt="" style={{ width: 32, height: 32 }} /> iDYP
           Bridge
@@ -327,7 +360,7 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
           bnbBalance={bnbBalanceidyp}
           avaxBalance={avaxBalanceidyp}
         />
-      </div>
+      </div> */}
       <BridgeFAQ faqIndex={routeData.state ? routeData.state.faqIndex : -1} />
     </div>
   );

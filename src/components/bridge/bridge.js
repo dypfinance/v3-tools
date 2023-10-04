@@ -20,6 +20,7 @@ import routeIcon from "./assets/route-icon.svg";
 import Address from "../FARMINNG/address";
 import WalletModal from "../WalletModal";
 import PropTypes from "prop-types";
+import Web3 from "web3";
 
 // Renderer callback with condition
 const getRenderer =
@@ -66,9 +67,9 @@ export default function initBridge({
         gasPrice: "",
         txHash: "",
         chainText: "",
-        ethPool: "...",
+        ethPool: "0",
         avaxPool: "...",
-        bnbPool: "...",
+        bnbPool: "0",
         withdrawableUnixTimestamp: null,
         depositLoading: false,
         depositStatus: "initial",
@@ -89,7 +90,7 @@ export default function initBridge({
     componentDidMount() {
       this.refreshBalance();
       this.getChainSymbol();
-      this.fetchData();
+      // this.fetchData();
       window._refreshBalInterval = setInterval(this.refreshBalance, 4000);
       window._refreshBalInterval = setInterval(this.getChainSymbol, 500);
     }
@@ -98,16 +99,17 @@ export default function initBridge({
       clearInterval(window._refreshBalInterval);
     }
     fetchData = async () => {
-      //Get DYP Balance BNB Chain Pool
-      let avaxPool = await window.getTokenHolderBalanceAll(
+      //Get DYP Balance Ethereum Pool
+      let ethPool = await window.getTokenHolderBalanceAll(
         this.props.sourceChain === "bnb"
           ? bridgeBSC._address
           : bridgeETH._address,
         bridgeETH.tokenAddress,
-        2
+        1
       );
-      avaxPool = avaxPool / 1e18;
+      ethPool = ethPool / 1e18;
 
+      //Get DYP Balance BNB Chain Pool
       let bnbPool = await window.getTokenHolderBalanceAll(
         this.props.sourceChain === "bnb"
           ? bridgeETH._address
@@ -117,32 +119,32 @@ export default function initBridge({
       );
 
       bnbPool = bnbPool / 1e18;
-      this.setState({ avaxPool, bnbPool });
+      this.setState({ ethPool, bnbPool });
     };
 
     handleApprove = (e) => {
       // e.preventDefault();
       let amount = this.state.depositAmount;
       this.setState({ depositLoading: true });
-      if (this.props.sourceChain === "bnb") {
-        if (Number(amount) > this.state.avaxPool) {
-          window.$.alert(
-            "💡 Not enough balance on the bridge, check back later!"
-          );
-          this.setState({ depositLoading: false });
+      // if (this.props.sourceChain === "bnb") {
+      //   if (Number(amount) > this.state.ethPool) {
+      //     window.$.alert(
+      //       "💡 Not enough balance on the bridge, check back later!"
+      //     );
+      //     this.setState({ depositLoading: false });
 
-          return;
-        }
-      } else {
-        if (Number(amount) > this.state.bnbPool) {
-          window.$.alert(
-            "💡 Not enough balance on the bridge, check back later!"
-          );
-          this.setState({ depositLoading: false });
+      //     return;
+      //   }
+      // } else {
+      //   if (Number(amount) > this.state.bnbPool) {
+      //     window.$.alert(
+      //       "💡 Not enough balance on the bridge, check back later!"
+      //     );
+      //     this.setState({ depositLoading: false });
 
-          return;
-        }
-      }
+      //     return;
+      //   }
+      // }
       amount = new BigNumber(amount).times(10 ** TOKEN_DECIMALS).toFixed(0);
       let bridge = bridgeETH;
       tokenETH
@@ -167,31 +169,35 @@ export default function initBridge({
       let amount = this.state.depositAmount;
       this.setState({ depositLoading: true });
 
-      if (this.props.sourceChain === "bnb") {
-        if (Number(amount) > this.state.avaxPool) {
-          window.$.alert(
-            "💡 Not enough balance on the bridge, check back later!"
-          );
-          this.setState({ depositLoading: false });
+      // if (this.props.sourceChain === "bnb") {
+      //   if (Number(amount) > this.state.ethPool) {
+      //     window.$.alert(
+      //       "💡 Not enough balance on the bridge, check back later!"
+      //     );
+      //     this.setState({ depositLoading: false });
 
-          return;
-        }
-      } else {
-        if (Number(amount) > this.state.bnbPool) {
-          window.$.alert(
-            "💡 Not enough balance on the bridge, check back later!"
-          );
-          this.setState({ depositLoading: false });
+      //     return;
+      //   }
+      // } else {
+      //   if (Number(amount) > this.state.bnbPool) {
+      //     window.$.alert(
+      //       "💡 Not enough balance on the bridge, check back later!"
+      //     );
+      //     this.setState({ depositLoading: false });
 
-          return;
-        }
-      }
+      //     return;
+      //   }
+      // }
       amount = new BigNumber(amount).times(10 ** TOKEN_DECIMALS).toFixed(0);
       let bridge = bridgeETH;
       let chainId = this.props.networkId;
+      const web3 = new Web3(window.ethereum);
 
       if (chainId !== undefined) {
-        let contract = await window.getBridgeContract(bridge._address);
+        let contract = new web3.eth.Contract(
+          window.NEW_BRIDGE_ABI,
+          bridge._address
+        );
         contract.methods
           .deposit(amount)
           .send({ from: await window.getCoinbase() }, (err, txHash) => {
@@ -199,7 +205,6 @@ export default function initBridge({
           })
           .then(() => {
             this.setState({ depositLoading: false, depositStatus: "success" });
-            this.refreshBalance();
           })
           .catch((e) => {
             this.setState({
@@ -224,14 +229,14 @@ export default function initBridge({
       let amount = this.state.withdrawAmount;
       amount = new BigNumber(amount).times(10 ** TOKEN_DECIMALS).toFixed(0);
       try {
-        let signature = window.config.SIGNATURE_API_URLNEW;
+        let signature = window.config.SIGNATURE_API_URL_NEW_AVAX;
         let url =
           signature +
           `/api/withdraw-args?depositNetwork=${
             this.props.sourceChain === "bnb"
               ? "BSC"
-              : this.props.sourceChain === "avax"
-              ? "AVAX"
+              : this.props.sourceChain === "eth"
+              ? "ETH"
               : "BSC"
           }&txHash=${this.state.txHash}`;
         console.log({ url });
@@ -245,7 +250,6 @@ export default function initBridge({
               withdrawLoading: false,
               withdrawStatus: "success",
             });
-            this.refreshBalance();
           })
           .catch((e) => {
             this.setState({ withdrawLoading: false, withdrawStatus: "fail" });
@@ -278,29 +282,55 @@ export default function initBridge({
         let coinbase = this.props.coinbase;
         this.setState({ coinbase });
         try {
-          let chainId = this.props.networkId;
-          let network = window.config.chain_ids[chainId] || "UNKNOWN";
+          const tokenAddress = "0x9e32f23cdf8193167a0191ff0fc66a48837bbe2f";
+          const tokenAddress_bsc = "0x83cd3738a46ebf5bdd7d278e412ad90dff8df6e0";
 
-          let token_balance = await (network === "AVAX" || network === "BSC"
-            ? tokenBSC
-            : tokenETH
-          ).balanceOf(coinbase);
+          // let chainId = this.props.networkId;
+          // let network = window.config.chain_ids[chainId] || "UNKNOWN";
 
-          this.setState({
-            token_balance,
-            network,
-          });
+          // let token_balance = await (network === "AVAX" || network === "BSC"
+          //   ? tokenBSC
+          //   : tokenETH
+          // ).balanceOf(coinbase);
+
+          // this.setState({
+          //   token_balance,
+          //   network,
+          // });
+          if (this.props.sourceChain === "eth") {
+            const token_contract_eth = new window.goerliWeb3.eth.Contract(
+              window.TOKEN_ABI,
+              tokenAddress
+            );
+            await token_contract_eth.methods
+              .balanceOf(this.props.coinbase)
+              .call()
+              .then((data) => {
+                this.setState({ token_balance: data });
+              });
+          } else if (this.props.sourceChain === "bnb") {
+            const token_contract_bsc = new window.bscTestWeb3.eth.Contract(
+              window.TOKENBSC_ABI,
+              tokenAddress_bsc
+            );
+            await token_contract_bsc.methods
+              .balanceOf(this.props.coinbase)
+              .call()
+              .then((data) => {
+                this.setState({ token_balance: data });
+              });
+          }
 
           if (this.state.txHash) {
             try {
-              let signature = window.config.SIGNATURE_API_URLNEW;
+              let signature = window.config.SIGNATURE_API_URL_NEW_AVAX;
               let url =
                 signature +
                 `/api/withdraw-args?depositNetwork=${
                   this.props.sourceChain === "bnb"
                     ? "BSC"
-                    : this.props.sourceChain === "avax"
-                    ? "AVAX"
+                    : this.props.sourceChain === "eth"
+                    ? "ETH"
                     : "BSC"
                 }&txHash=${
                   this.state.txHash
@@ -378,22 +408,22 @@ export default function initBridge({
                       {this.props.activebtn !== "2" && (
                         <div
                           className={
-                            this.props.sourceChain === "bnb"
+                            this.props.sourceChain === "eth"
                               ? "optionbtn-active"
                               : "optionbtn-passive bridge-passive"
                           }
                           onClick={() => {
                             this.setState({
-                              sourceChain: "bnb",
+                              sourceChain: "eth",
                             });
-                            this.props.onSelectSourceChain("bnb");
-                            this.props.onSelectChain("avax");
+                            this.props.onSelectSourceChain("eth");
+                            this.props.onSelectChain("bnb");
                           }}
                         >
                           <h6 className="optiontext d-flex align-items-center gap-2">
-                            <img src={bnb} alt="" />
+                            <img src={eth} alt="" />
                             <p className=" mb-0 optiontext d-none d-lg-flex">
-                              BNB Chain
+                              Ethereum
                             </p>
                           </h6>
                         </div>
@@ -401,22 +431,22 @@ export default function initBridge({
 
                       <div
                         className={
-                          this.props.sourceChain === "avax"
+                          this.props.sourceChain === "bnb"
                             ? "optionbtn-active"
                             : "optionbtn-passive bridge-passive"
                         }
                         onClick={() => {
                           this.setState({
-                            sourceChain: "avax",
+                            sourceChain: "bnb",
                           });
-                          this.props.onSelectSourceChain("avax");
-                          this.props.onSelectChain("bnb");
+                          this.props.onSelectSourceChain("bnb");
+                          this.props.onSelectChain("eth");
                         }}
                       >
                         <h6 className="optiontext d-flex align-items-center gap-2">
-                          <img src={avax} alt="" />
+                          <img src={bnb} alt="" />
                           <p className=" mb-0 optiontext d-none d-lg-flex">
-                            Avalanche
+                            BNB Chain
                           </p>
                         </h6>
                       </div>
@@ -454,9 +484,9 @@ export default function initBridge({
                                   Balance:
                                   <b>
                                     {" "}
-                                    {this.props.sourceChain === "avax"
+                                    {this.props.sourceChain === "eth"
                                       ? getFormattedNumber(
-                                          this.props.avaxBalance / 1e18,
+                                          this.props.ethBalance / 1e18,
                                           6
                                         )
                                       : getFormattedNumber(
@@ -472,18 +502,18 @@ export default function initBridge({
                                   className="poolbalance-text"
                                   style={{ gap: "6px" }}
                                 >
-                                  {this.props.sourceChain !== "avax"
+                                  {this.props.sourceChain === "bnb"
                                     ? "BNB Chain"
-                                    : "Avalanche"}{" "}
+                                    : "Ethereum"}{" "}
                                   Pool:{" "}
                                   <b>
-                                    {this.state.sourceChain === "avax"
+                                    {this.state.sourceChain === "bnb"
                                       ? getFormattedNumber(
-                                          this.state.avaxPool,
+                                          this.state.bnbPool,
                                           2
                                         )
                                       : getFormattedNumber(
-                                          this.state.bnbPool,
+                                          this.state.ethPool,
                                           2
                                         )}{" "}
                                     DYP
@@ -655,7 +685,7 @@ export default function initBridge({
                                       }}
                                       style={{
                                         pointerEvents:
-                                          this.props.networkId === 43114 ||
+                                          this.props.networkId === 1 ||
                                           this.props.networkId === 56
                                             ? "none"
                                             : "auto",
@@ -672,7 +702,7 @@ export default function initBridge({
 
                                   <div
                                     className={
-                                      this.props.destinationChain === "avax"
+                                      this.props.destinationChain === "eth"
                                         ? "optionbtn-active"
                                         : "optionbtn-passive bridge-passive"
                                     }
@@ -681,16 +711,16 @@ export default function initBridge({
                                     }}
                                     style={{
                                       pointerEvents:
-                                        this.props.networkId === 43114 ||
+                                        this.props.networkId === 1 ||
                                         this.props.networkId === 56
                                           ? "none"
                                           : "auto",
                                     }}
                                   >
                                     <h6 className="optiontext d-flex align-items-center gap-2">
-                                      <img src={avax} alt="" />
+                                      <img src={eth} alt="" />
                                       <p className=" mb-0 optiontext d-none d-lg-flex">
-                                        Avalanche
+                                        Ethereum
                                       </p>
                                     </h6>
                                   </div>
@@ -709,16 +739,16 @@ export default function initBridge({
                                 >
                                   {this.props.destinationChain === "bnb"
                                     ? "BNB Chain"
-                                    : "Avalanche"}{" "}
+                                    : "Ethereum"}{" "}
                                   Pool:{" "}
                                   <b>
-                                    {this.props.destinationChain === "avax"
+                                    {this.props.destinationChain === "bnb"
                                       ? getFormattedNumber(
-                                          this.state.avaxPool,
+                                          this.state.bnbPool,
                                           2
                                         )
                                       : getFormattedNumber(
-                                          this.state.bnbPool,
+                                          this.state.ethPool,
                                           2
                                         )}{" "}
                                     DYP
