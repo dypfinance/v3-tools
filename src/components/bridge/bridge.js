@@ -20,6 +20,7 @@ import routeIcon from "./assets/route-icon.svg";
 import Address from "../FARMINNG/address";
 import WalletModal from "../WalletModal";
 import PropTypes from "prop-types";
+import Web3 from "web3";
 
 // Renderer callback with condition
 const getRenderer =
@@ -189,9 +190,10 @@ export default function initBridge({
       amount = new BigNumber(amount).times(10 ** TOKEN_DECIMALS).toFixed(0);
       let bridge = bridgeETH;
       let chainId = this.props.networkId;
+      const web3 = new Web3(window.ethereum);
 
       if (chainId !== undefined) {
-        let contract = await window.getBridgeContract(bridge._address);
+        let contract =  new web3.eth.Contract(window.BRIDGE_ABI, bridge._address);
         contract.methods
           .deposit(amount)
           .send({ from: await window.getCoinbase() }, (err, txHash) => {
@@ -237,8 +239,8 @@ export default function initBridge({
         console.log({ url });
         let args = await window.jQuery.get(url);
         console.log({ args });
-
-        bridgeBSC
+        let bridge = this.props.sourceChain === 'bnb' ? window.bridge_bscavax : window.bridge_bscavaxbsc
+        bridge
           .withdraw(args)
           .then(() => {
             this.setState({
