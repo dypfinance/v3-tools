@@ -80,6 +80,10 @@ export default function initMigration({
         showWalletModal: false,
         destinationChain: this.props.destinationChain,
         sourceChain: this.props.sourceChain,
+        ethBalance: 0,
+        bnbBalance: 0,
+        avaxBalance: 0,
+
       };
     }
     static propTypes = {
@@ -90,6 +94,7 @@ export default function initMigration({
     componentDidMount() {
       this.refreshBalance();
       this.checkAllowance();
+      this.getAllBalance();
       window._refreshBalInterval = setInterval(this.refreshBalance, 4000);
     }
 
@@ -261,6 +266,41 @@ export default function initMigration({
       }
     };
 
+    getAllBalance = async () => {
+      const tokenAddress = "0xa4f5c83b19946488909273b6bef5aed63df9cc7b";
+      const tokenAddress_bsc = "0x2e0a34680c72d998e327f58dedfd48f9d4282b8c";
+  
+      const walletAddress = this.props.coinbase;
+      const TokenABI = window.ERC20_ABI;
+      const web3 = new Web3(window.ethereum);
+      if (walletAddress != undefined) {
+        const contract1 = new window.goerliWeb3.eth.Contract(TokenABI, tokenAddress);
+        const contract2 = new window.bscTestWeb3.eth.Contract(TokenABI, tokenAddress_bsc);
+  
+  
+        await contract2.methods
+          .balanceOf(walletAddress)
+          .call()
+          .then((data) => {
+            this.setState({ bnbBalance: data });
+          });
+  
+        await contract1.methods
+          .balanceOf(walletAddress)
+          .call()
+          .then((data) => {
+            this.setState({ ethBalance: data });
+          });
+  
+        // await contract3.methods
+        //   .balanceOf(walletAddress)
+        //   .call()
+        //   .then((data) => {
+        //     this.setState({ avaxBalance: data });
+        //   });
+      }
+    };
+
     handleWithdraw = async (e) => {
       this.setState({ withdrawLoading: true });
       try {
@@ -286,6 +326,7 @@ export default function initMigration({
               withdrawLoading: false,
               withdrawStatus: "success",
             });
+            this.getAllBalance()
           })
           .catch((e) => {
             this.setState({ withdrawLoading: false, withdrawStatus: "fail" });
@@ -524,16 +565,16 @@ export default function initMigration({
                                     {" "}
                                     {this.props.sourceChain === "avax"
                                       ? getFormattedNumber(
-                                          this.props.avaxBalance / 1e18,
+                                          this.state.avaxBalance / 1e18,
                                           2
                                         )
                                       : this.props.sourceChain === "eth"
                                       ? getFormattedNumber(
-                                          this.props.ethBalance / 1e18,
+                                          this.state.ethBalance / 1e18,
                                           2
                                         )
                                       : getFormattedNumber(
-                                          this.props.bnbBalance / 1e18,
+                                          this.state.bnbBalance / 1e18,
                                           2
                                         )}
                                   </b>

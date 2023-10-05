@@ -20,45 +20,9 @@ const DypMigration = ({ networkId, isConnected, handleConnection, coinbase }) =>
 
   const routeData = useLocation();
 
-  const [ethBalance, setEthBalance] = useState("0.0");
-  const [bnbBalance, setBnbBalance] = useState("0.0");
-  const [avaxBalance, setAvaxBalance] = useState("0.0");
-
-  const getAllBalance = async () => {
-    const tokenAddress = "0xa4f5c83b19946488909273b6bef5aed63df9cc7b";
-    const tokenAddress_bsc = "0x2e0a34680c72d998e327f58dedfd48f9d4282b8c";
-
-    const walletAddress = coinbase;
-    const TokenABI = window.ERC20_ABI;
-    const web3 = new Web3(window.ethereum);
-    if (coinbase != undefined) {
-      const contract1 = new window.goerliWeb3.eth.Contract(TokenABI, tokenAddress);
-      const contract2 = new window.bscTestWeb3.eth.Contract(TokenABI, tokenAddress_bsc);
-      const contract3 = new window.avaxWeb3.eth.Contract(TokenABI, tokenAddress);
+ 
 
 
-      await contract2.methods
-        .balanceOf(walletAddress)
-        .call()
-        .then((data) => {
-          setBnbBalance(data);
-        });
-
-      await contract1.methods
-        .balanceOf(walletAddress)
-        .call()
-        .then((data) => {
-          setEthBalance(data);
-        });
-
-      // await contract3.methods
-      //   .balanceOf(walletAddress)
-      //   .call()
-      //   .then((data) => {
-      //     setAvaxBalance(data);
-      //   });
-    }
-  };
  
   const handleSourceChain = async (chainText) => {
     if (chainText === "eth") {
@@ -84,15 +48,11 @@ const DypMigration = ({ networkId, isConnected, handleConnection, coinbase }) =>
       setDestinationChain("eth");
     }
   };
-
-  useEffect(() => {
-    getAllBalance();
-  }, [sourceChain, destinationChain, coinbase]);
+ 
 
   useEffect(() => {
     setSourceChain("eth");
     setDestinationChain("eth");
-
   }, []);
 
   const MigrationModal = initMigration({
@@ -124,9 +84,6 @@ const DypMigration = ({ networkId, isConnected, handleConnection, coinbase }) =>
           coinbase={coinbase}
           sourceChain={sourceChain}
           activebtn={activebtn}
-          ethBalance={ethBalance}
-          bnbBalance={bnbBalance}
-          avaxBalance={avaxBalance}
           sourceBridge = {sourceBridge}
           destinationBridge = {destinationBridge}
         />

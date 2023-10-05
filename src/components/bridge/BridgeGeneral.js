@@ -18,13 +18,13 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
   const [destinationChain, setDestinationChain] = useState("");
   const [activebtn, setActiveBtn] = useState("");
 
-  const [sourceBridge, setSourceBridge] = useState(window.bridge_bscavaxbsc);
+  const [sourceBridge, setSourceBridge] = useState(window.new_bridge_eth);
   const [destinationBridge, setDestinationBridge] = useState(
-    window.bridge_bscavax
+    window.new_bridge_bsc
   );
-  const [sourceToken, setSourceToken] = useState(window.token_dyp_bscavaxbsc);
+  const [sourceToken, setSourceToken] = useState(window.token_dyp_new);
   const [destinationToken, setDestinationToken] = useState(
-    window.token_dyp_bscavax
+    window.token_dyp_new_bsc
   );
 
   const [sourceBridgeiDyp, setSourceBridgeiDyp] = useState(
@@ -86,42 +86,6 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
   //   }
   // };
 
-  const getAllBalance = async () => {
-    const tokenAddress = "0x9e32f23cdf8193167a0191ff0fc66a48837bbe2f";
-    const tokenAddress_bsc = "0x83cd3738a46ebf5bdd7d278e412ad90dff8df6e0";
-
-    const walletAddress = coinbase;
-    const TokenABI = window.ERC20_ABI;
-    const web3 = new Web3(window.ethereum);
-    if (coinbase != undefined) {
-      const contract1 = new window.goerliWeb3.eth.Contract(TokenABI, tokenAddress);
-      const contract2 = new window.bscTestWeb3.eth.Contract(TokenABI, tokenAddress_bsc);
-      const contract3 = new window.avaxWeb3.eth.Contract(TokenABI, tokenAddress);
-
-
-      await contract2.methods
-        .balanceOf(walletAddress)
-        .call()
-        .then((data) => {
-          setBnbBalance(data);
-        });
-
-      await contract1.methods
-        .balanceOf(walletAddress)
-        .call()
-        .then((data) => {
-          setEthBalance(data);
-        });
-
-      // await contract3.methods
-      //   .balanceOf(walletAddress)
-      //   .call()
-      //   .then((data) => {
-      //     setAvaxBalance(data);
-      //   });
-    }
-  };
-
   const getAllBalanceiDyp = async () => {
     const tokenAddress = "0xbd100d061e120b2c67a24453cf6368e63f1be056";
     const walletAddress = coinbase;
@@ -162,62 +126,94 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
 
   const handleSourceChain = async (chainText) => {
     if (chainText === "eth") {
-      setSourceChain(chainText);
-      setSourceBridge(window.new_bridge_eth);
-      setDestinationBridge(window.new_bridge_bsc);
-      setSourceToken(window.token_dyp_new);
-      setDestinationToken(window.token_dyp_new_bsc);
+      window.cached_contracts = Object.create(null);
+      setTimeout(() => {
+        setSourceChain(chainText);
+        setSourceBridge(window.new_bridge_eth);
+        setDestinationBridge(window.new_bridge_bsc);
+        setSourceToken(window.token_dyp_new);
+        setDestinationToken(window.token_dyp_new_bsc);
+      }, 500);
     }
 
     if (chainText === "bnb") {
-      setSourceChain(chainText);
-      setDestinationBridge(window.new_bridge_eth);
-      setSourceBridge(window.new_bridge_bsc);
-      setDestinationToken(window.token_dyp_new);
-      setSourceToken(window.token_dyp_new_bsc);
+      window.cached_contracts = Object.create(null);
+      setTimeout(() => {
+        setSourceChain(chainText);
+        setDestinationBridge(window.new_bridge_eth);
+        setSourceBridge(window.new_bridge_bsc);
+        setDestinationToken(window.token_dyp_new);
+        setSourceToken(window.token_dyp_new_bsc);
+      }, 500);
     }
   };
 
   const handleSourceChainiDyp = async (chainText) => {
     if (activebtn === "5") {
       if (chainText === "eth") {
-        setSourceChainiDyp(chainText);
-        setSourceBridgeiDyp(window.bridge_idypbsceth);
-        setDestinationBridgeiDyp(window.bridge_idypbscbsc);
-        setSourceTokeniDyp(window.token_idyp_bsceth);
-        setDestinationTokeniDyp(window.token_idyp_bscbsc);
+        window.cached_contracts = Object.create(null);
+        setTimeout(() => {
+          setSourceChainiDyp(chainText);
+          setSourceBridgeiDyp(window.bridge_idypbsceth);
+          setDestinationBridgeiDyp(window.bridge_idypbscbsc);
+          setSourceTokeniDyp(window.token_idyp_bsceth);
+          setDestinationTokeniDyp(window.token_idyp_bscbsc);
+        }, 500);
       }
 
       if (chainText === "bnb") {
-        setSourceChainiDyp(chainText);
-        setSourceBridgeiDyp(window.bridge_idypbscbsc);
-        setDestinationBridgeiDyp(window.bridge_idypbsceth);
-        setSourceTokeniDyp(window.token_idyp_bscbsc);
-        setDestinationTokeniDyp(window.token_idyp_bsceth);
+        window.cached_contracts = Object.create(null);
+        setTimeout(() => {
+          setSourceChainiDyp(chainText);
+          setSourceBridgeiDyp(window.bridge_idypbscbsc);
+          setDestinationBridgeiDyp(window.bridge_idypbsceth);
+          setSourceTokeniDyp(window.token_idyp_bscbsc);
+          setDestinationTokeniDyp(window.token_idyp_bsceth);
+        }, 500);
       }
     } else if (activebtn === "7") {
       if (chainText === "eth") {
-        setSourceChainiDyp(chainText);
-        setSourceBridgeiDyp(window.bridge_idypeth);
-        setDestinationBridgeiDyp(window.bridge_idypbsc);
-        setSourceTokeniDyp(window.token_idyp_eth);
-        setDestinationTokeniDyp(window.token_idyp_bsc);
+        window.cached_contracts = Object.create(null);
+        setTimeout(() => {
+          setSourceChainiDyp(chainText);
+          setSourceBridgeiDyp(window.bridge_idypeth);
+          setDestinationBridgeiDyp(window.bridge_idypbsc);
+          setSourceTokeniDyp(window.token_idyp_eth);
+          setDestinationTokeniDyp(window.token_idyp_bsc);
+        }, 500);
       }
 
       if (chainText === "avax") {
-        setSourceChainiDyp(chainText);
-        setSourceBridgeiDyp(window.bridge_idypbsc);
-        setDestinationBridgeiDyp(window.bridge_idypeth);
-        setSourceTokeniDyp(window.token_idyp_bsc);
-        setDestinationTokeniDyp(window.token_idyp_eth);
+        window.cached_contracts = Object.create(null);
+        setTimeout(() => {
+          setSourceChainiDyp(chainText);
+          setSourceBridgeiDyp(window.bridge_idypbsc);
+          setDestinationBridgeiDyp(window.bridge_idypeth);
+          setSourceTokeniDyp(window.token_idyp_bsc);
+          setDestinationTokeniDyp(window.token_idyp_eth);
+        }, 500);
       }
     }
   };
 
   useEffect(() => {
-    getAllBalance();
+    // getAllBalance();
     getAllBalanceiDyp();
-  }, [sourceChain, destinationChain, sourceChainiDyp, destinationChainiDyp, coinbase]);
+  }, [
+    sourceChain,
+    destinationChain,
+    sourceChainiDyp,
+    destinationChainiDyp,
+    coinbase,
+  ]);
+
+  // useEffect(() => {
+  //   setSourceChain("eth");
+  //   setSourceBridge(window.new_bridge_eth);
+  //   setDestinationBridge(window.new_bridge_bsc);
+  //   setSourceToken(window.token_dyp_new);
+  //   setDestinationToken(window.token_dyp_new_bsc);
+  // }, []);
 
   const BridgeModal = initBridge({
     bridgeETH: sourceBridge,
@@ -285,9 +281,6 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
           coinbase={coinbase}
           sourceChain={sourceChain}
           activebtn={activebtn}
-          ethBalance={ethBalance}
-          bnbBalance={bnbBalance}
-          avaxBalance={avaxBalance}
         />
       </div>
       <div className="bigseparator mt-5 mb-5 col-6 col-xxl-5"></div>
