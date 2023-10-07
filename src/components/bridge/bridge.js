@@ -519,7 +519,7 @@ export default function initBridge({
                       </button>
                     ) : (
                       <div className="addressbtn btn">
-                        <Address a={this.state.coinbase} chainId={43114} />
+                        <Address a={this.props.coinbase} chainId={43114} />
                       </div>
                     )}
                   </div>
@@ -835,7 +835,7 @@ export default function initBridge({
                                   className="styledinput"
                                   placeholder="Enter Deposit tx hash"
                                   type="text"
-                                  // disabled={!canWithdraw}
+                                  disabled={this.props.sourceChain===""}
                                 />
                               </div>
 
