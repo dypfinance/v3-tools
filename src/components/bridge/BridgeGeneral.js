@@ -277,16 +277,7 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
           avaxBalance={avaxBalance}
         />
       </div>
-      <div className="bigseparator mt-5 mb-5 col-6 col-xxl-5"></div>
-      <div className="swiftwrapper p-3">
-        
-        <div className="d-flex flex-column gap-3">
-          <h4>Bridge DYP on SWFT</h4>
-          <a  href="https://defi.swft.pro/#/?sourceFlag=DYP" target="_blank" rel='noreferrer' className="d-flex align-items-center gap-1 btn bridgenow-btn">
-            Bridge now <img src={whiteArrow} alt="" />{" "}
-          </a>
-        </div>
-      </div>
+
       <div className="bigseparator mt-5 mb-5 col-6 col-xxl-5"></div>
 
       <div>
@@ -359,6 +350,18 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
           avaxBalance={avaxBalanceidyp}
         />
       </div>
+      <div className="bigseparator mt-5 mb-5 col-6 col-xxl-5"></div>
+      <div className="swiftwrapper p-3">
+        
+        <div className="d-flex flex-column gap-3">
+          <h4>Bridge DYP on SWFT</h4>
+          <a  href="https://defi.swft.pro/#/?sourceFlag=DYP" target="_blank" rel='noreferrer' className="d-flex align-items-center gap-1 btn bridgenow-btn">
+            Bridge now <img src={whiteArrow} alt="" />{" "}
+          </a>
+        </div>
+      </div>
+      <div className="bigseparator mt-5 mb-5 col-6 col-xxl-5"></div>
+
       <BridgeFAQ faqIndex={routeData.state ? routeData.state.faqIndex : -1} />
     </div>
   );
