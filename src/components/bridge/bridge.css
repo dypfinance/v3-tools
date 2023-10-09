@@ -17,6 +17,44 @@
   color: #f7f7fc;
 }
 
+.swiftwrapper {
+  border-radius: 12px;
+  border: 1px solid #7770df;
+  background: url(./assets/bridgebg.png);
+  background-position: center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  box-shadow: 0px 32px 64px 0px rgba(17, 17, 17, 0.08);
+}
+
+@media only screen and (max-width: 991px) {
+  .swiftwrapper {
+    border: none
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  .swiftwrapper {
+    background: url(./assets/bridgebgMobile.png);
+    aspect-ratio: 0.63/.7;
+    background-size: cover;
+  }
+}
+
+.bridgenow-btn {
+  border-radius: 8px;
+  background: linear-gradient(91deg, #4dd4d1 0%, #3ca4a1 100%);
+  padding: 5px 10px;
+  color: #fff;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  width: fit-content;
+  border: none;
+  outline: none;
+}
+
 .bottominfotxt {
   font-style: normal;
   font-weight: 400;
@@ -87,9 +125,9 @@
 
 .bigseparator {
   background: #565891;
-box-shadow: 0px 32px 64px rgba(17, 17, 17, 0.08);
-border-radius: 12px;
-height: 4px;
+  box-shadow: 0px 32px 64px rgba(17, 17, 17, 0.08);
+  border-radius: 12px;
+  height: 4px;
 }
 
 .passivedot {
