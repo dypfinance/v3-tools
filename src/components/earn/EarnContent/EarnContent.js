@@ -631,7 +631,7 @@ const EarnContent = ({
                             whiteSpace: "pre",
                           }}
                         >
-                          {ethApr}% APR
+                           7.35% APR
                         </p>
                       </div>
                     </div>
