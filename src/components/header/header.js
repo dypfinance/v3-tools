@@ -377,10 +377,10 @@ const Header = ({
                     {isConnected === true &&
                       coinbase !== undefined &&
                       coinbase !== null &&
-                      routeData.pathname !== "/swap" && (
+                      routeData.pathname !== "/swap"  && (
                         <>
                           <div className="account-info d-none d-lg-flex align-items-center justify-content-center gap-2 gap-lg-3">
-                            <span className="account-balance d-none d-lg-flex">
+                          {routeData.pathname !== "/bridge" &&   <span className="account-balance d-none d-lg-flex">
                               {currencyAmount}{" "}
                               {chainId === 1
                                 ? "ETH"
@@ -389,7 +389,7 @@ const Header = ({
                                 : chainId === 43114
                                 ? "AVAX"
                                 : ""}
-                            </span>
+                            </span>}
                             <span className="account-address">
                               {windowSize.width > 786
                                 ? shortAddress(coinbase)

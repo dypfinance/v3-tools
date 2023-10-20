@@ -7,6 +7,8 @@ import idyp from "./assets/idyp.svg";
 import eth from "./assets/eth.svg";
 import bnb from "./assets/bnb.svg";
 import avax from "./assets/avax.svg";
+import whiteArrow from "./assets/whiteArrow.svg";
+
 import "./bridge.css";
 import { useLocation } from "react-router-dom";
 
@@ -129,54 +131,72 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
     }
 
     if (chainText === "bnb") {
-      setSourceChain(chainText);
-      setSourceBridge(window.bridge_bscavaxbsc);
-      setDestinationBridge(window.bridge_bscavax);
-      setSourceToken(window.token_dyp_bscavaxbsc);
-      setDestinationToken(window.token_dyp_bscavax);
+      window.cached_contracts = Object.create(null);
+      setTimeout(() => {
+        setSourceChain(chainText);
+        setSourceBridge(window.bridge_bscavaxbsc);
+        setDestinationBridge(window.bridge_bscavax);
+        setSourceToken(window.token_dyp_bscavaxbsc);
+        setDestinationToken(window.token_dyp_bscavax);
+      }, 500);
     }
 
     if (chainText === "avax") {
-      setSourceChain(chainText);
-      setDestinationBridge(window.bridge_bscavaxbsc);
-      setSourceBridge(window.bridge_bscavax);
-      setDestinationToken(window.token_dyp_bscavaxbsc);
-      setSourceToken(window.token_dyp_bscavax);
+      window.cached_contracts = Object.create(null);
+      setTimeout(() => {
+        setSourceChain(chainText);
+        setDestinationBridge(window.bridge_bscavaxbsc);
+        setSourceBridge(window.bridge_bscavax);
+        setDestinationToken(window.token_dyp_bscavaxbsc);
+        setSourceToken(window.token_dyp_bscavax);
+      }, 500);
     }
   };
 
   const handleSourceChainiDyp = async (chainText) => {
     if (activebtn === "5") {
       if (chainText === "eth") {
-        setSourceChainiDyp(chainText);
-        setSourceBridgeiDyp(window.bridge_idypbsceth);
-        setDestinationBridgeiDyp(window.bridge_idypbscbsc);
-        setSourceTokeniDyp(window.token_idyp_bsceth);
-        setDestinationTokeniDyp(window.token_idyp_bscbsc);
+        window.cached_contracts = Object.create(null);
+        setTimeout(() => {
+          setSourceChainiDyp(chainText);
+          setSourceBridgeiDyp(window.bridge_idypbsceth);
+          setDestinationBridgeiDyp(window.bridge_idypbscbsc);
+          setSourceTokeniDyp(window.token_idyp_bsceth);
+          setDestinationTokeniDyp(window.token_idyp_bscbsc);
+        }, 500);
       }
 
       if (chainText === "bnb") {
-        setSourceChainiDyp(chainText);
-        setSourceBridgeiDyp(window.bridge_idypbscbsc);
-        setDestinationBridgeiDyp(window.bridge_idypbsceth);
-        setSourceTokeniDyp(window.token_idyp_bscbsc);
-        setDestinationTokeniDyp(window.token_idyp_bsceth);
+        window.cached_contracts = Object.create(null);
+        setTimeout(() => {
+          setSourceChainiDyp(chainText);
+          setSourceBridgeiDyp(window.bridge_idypbscbsc);
+          setDestinationBridgeiDyp(window.bridge_idypbsceth);
+          setSourceTokeniDyp(window.token_idyp_bscbsc);
+          setDestinationTokeniDyp(window.token_idyp_bsceth);
+        }, 500);
       }
     } else if (activebtn === "7") {
       if (chainText === "eth") {
-        setSourceChainiDyp(chainText);
-        setSourceBridgeiDyp(window.bridge_idypeth);
-        setDestinationBridgeiDyp(window.bridge_idypbsc);
-        setSourceTokeniDyp(window.token_idyp_eth);
-        setDestinationTokeniDyp(window.token_idyp_bsc);
+        window.cached_contracts = Object.create(null);
+        setTimeout(() => {
+          setSourceChainiDyp(chainText);
+          setSourceBridgeiDyp(window.bridge_idypeth);
+          setDestinationBridgeiDyp(window.bridge_idypbsc);
+          setSourceTokeniDyp(window.token_idyp_eth);
+          setDestinationTokeniDyp(window.token_idyp_bsc);
+        }, 500);
       }
 
       if (chainText === "avax") {
-        setSourceChainiDyp(chainText);
-        setSourceBridgeiDyp(window.bridge_idypbsc);
-        setDestinationBridgeiDyp(window.bridge_idypeth);
-        setSourceTokeniDyp(window.token_idyp_bsc);
-        setDestinationTokeniDyp(window.token_idyp_eth);
+        window.cached_contracts = Object.create(null);
+        setTimeout(() => {
+          setSourceChainiDyp(chainText);
+          setSourceBridgeiDyp(window.bridge_idypbsc);
+          setDestinationBridgeiDyp(window.bridge_idypeth);
+          setSourceTokeniDyp(window.token_idyp_bsc);
+          setDestinationTokeniDyp(window.token_idyp_eth);
+        }, 500);
       }
     }
   };
@@ -257,7 +277,9 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
           avaxBalance={avaxBalance}
         />
       </div>
+
       <div className="bigseparator mt-5 mb-5 col-6 col-xxl-5"></div>
+
       <div>
         <h3 className="text-white mb-4">
           <img src={idyp} alt="" style={{ width: 32, height: 32 }} /> iDYP
@@ -328,6 +350,18 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
           avaxBalance={avaxBalanceidyp}
         />
       </div>
+      <div className="bigseparator mt-5 mb-5 col-6 col-xxl-5"></div>
+      <div className="swiftwrapper p-3">
+        
+        <div className="d-flex flex-column gap-3">
+          <h4>Bridge DYP on SWFT</h4>
+          <a  href="https://defi.swft.pro/#/?sourceFlag=DYP" target="_blank" rel='noreferrer' className="d-flex align-items-center gap-1 btn bridgenow-btn">
+            Bridge now <img src={whiteArrow} alt="" />{" "}
+          </a>
+        </div>
+      </div>
+      <div className="bigseparator mt-5 mb-5 col-6 col-xxl-5"></div>
+
       <BridgeFAQ faqIndex={routeData.state ? routeData.state.faqIndex : -1} />
     </div>
   );
