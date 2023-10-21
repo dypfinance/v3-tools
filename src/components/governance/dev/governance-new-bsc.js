@@ -861,7 +861,7 @@ export default class Governance extends React.Component {
   render() {
 
     let { totalDeposited } = this.state;
-    totalDeposited = getFormattedNumber(totalDeposited / 1e18, 6);
+    totalDeposited = getFormattedNumber(totalDeposited / 1e18, 3);
     let canWithdrawAll = false;
     let withdrawableTitleText = "";
     let canWithdrawAllAfter =
@@ -1117,11 +1117,11 @@ export default class Governance extends React.Component {
 
                           <button
                             title={withdrawableTitleText}
-                            disabled={canWithdrawAll}
-                            className="btn withdrawButton"
+                            disabled={!canWithdrawAll|| totalDeposited === '0.000'}
+                            className={`btn filledbtn ${!canWithdrawAll || totalDeposited === '0.000' && 'disabled-btn'} `}
                             type="submit"
                           >
-                            Withdraw all
+                            Withdraw all 
                           </button>
                         </div>
                       </div>
@@ -1219,9 +1219,7 @@ export default class Governance extends React.Component {
                             <ProposalDetails
                               refreshBalance={this.refreshBalance}
                               proposalId={
-                                this.state.proposalId === undefined
-                                  ? 0
-                                  : this.state.proposalId
+                                this.state.total_proposals - index
                               }
                               connected={this.props.connected}
                               coinbase ={this.props.coinbase}
@@ -1760,7 +1758,6 @@ class ProposalDetails extends React.Component {
   refreshBalance = async () => {
     if (this.props.connected === true && this.props.networkId === 56) {
       this.refreshProposal();
-
       let coinbase = this.props.coinbase;
       if(coinbase && this.props.networkId === 56)
     {  try {
@@ -1853,7 +1850,7 @@ class ProposalDetails extends React.Component {
     if (!proposal._proposalId) return "";
 
     token_balance = getFormattedNumber(token_balance / 1e18, 6);
-    totalDeposited = getFormattedNumber(totalDeposited / 1e18, 6);
+    totalDeposited = getFormattedNumber(totalDeposited / 1e18, 3);
 
     let optionOneVotes = proposal._optionOneVotes;
     let optionTwoVotes = proposal._optionTwoVotes;
@@ -1942,7 +1939,7 @@ class ProposalDetails extends React.Component {
                     </button>
                   ) : (
                     <div className="addressbtn btn">
-                      <Address a={this.state.coinbase} chainId={43114} />
+                      <Address a={this.state.coinbase} chainId={56} />
                     </div>
                   )}
                 </div>
@@ -2287,7 +2284,7 @@ class ProposalDetails extends React.Component {
                 <a
                   target="_blank"
                   rel="noopener noreferrer"
-                  href={`${window.config.snowtrace_baseURL}/address/${governance._address}`}
+                  href={`${window.config.bscscan_baseURL}address/${governance._address}`}
                   className="stats-link"
                 >
                   {shortAddress(governance._address)}{" "}
@@ -2309,7 +2306,7 @@ class ProposalDetails extends React.Component {
                 <a
                   target="_blank"
                   rel="noopener noreferrer"
-                  href={`${window.config.snowtrace_baseURL}/address/${this.state.coinbase}`}
+                  href={`${window.config.bscscan_baseURL}address/${this.state.coinbase}`}
                   className="stats-link"
                 >
                   {shortAddress(this.state.coinbase)}{" "}
