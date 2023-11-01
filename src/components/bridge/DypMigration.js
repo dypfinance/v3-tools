@@ -4,51 +4,47 @@ import { useLocation } from "react-router-dom";
 import initMigration from "./migration";
 import Web3 from "web3";
 
-const DypMigration = ({ networkId, isConnected, handleConnection, coinbase }) => {
+const DypMigration = ({
+  networkId,
+  isConnected,
+  handleConnection,
+  coinbase,
+}) => {
   const [sourceChain, setSourceChain] = useState("eth");
   const [destinationChain, setDestinationChain] = useState("");
   const [activebtn, setActiveBtn] = useState("");
 
-  const [sourceBridge, setSourceBridge] = useState(window.bridge_bscavaxbsc);
-  const [destinationBridge, setDestinationBridge] = useState(
-    window.newbridge_eth
-  );
-  const [sourceToken, setSourceToken] = useState(window.token_dyp_bscavaxbsc);
-  const [destinationToken, setDestinationToken] = useState(
-    window.token_dyp_bscavax
-  );
+  const [sourceBridge, setSourceBridge] = useState();
+  const [destinationBridge, setDestinationBridge] = useState();
+  const [sourceToken, setSourceToken] = useState();
+  const [destinationToken, setDestinationToken] = useState();
 
-  const routeData = useLocation();
-
- 
-
-
- 
   const handleSourceChain = async (chainText) => {
     if (chainText === "eth") {
       setSourceChain(chainText);
       setDestinationChain("eth");
-    }
-
-    if (chainText === "bnb") {
+    } else if (chainText === "bnb") {
+      window.cached_contracts = Object.create(null);
       setSourceChain(chainText);
-      setSourceBridge(window.newbridge_bsc);
-      setDestinationBridge(window.newbridge_eth);
-      setSourceToken(window.token_old_bsc);
-      setDestinationToken(window.token_dyp_new);
-      setDestinationChain("eth");
-    }
-
-    if (chainText === "avax") {
+      setTimeout(() => {
+        setSourceBridge(window.newbridge_bsc);
+        setDestinationBridge(window.newbridge_eth_bsc);
+        setSourceToken(window.token_old_bsc);
+        setDestinationToken(window.token_dypius_new);
+        setDestinationChain("eth");
+      }, 500);
+    } else if (chainText === "avax") {
+      window.cached_contracts = Object.create(null);
       setSourceChain(chainText);
-      setSourceBridge(window.newbridge_bsc);
-      setDestinationBridge(window.newbridge_eth);
-      setSourceToken(window.token_old_bsc);
-      setDestinationToken(window.token_dyp_new);
-      setDestinationChain("eth");
+      setTimeout(() => {
+        setSourceBridge(window.newbridge_avax);
+        setDestinationBridge(window.newbridge_eth_avax);
+        setSourceToken(window.token_old_avax);
+        setDestinationToken(window.token_dypius_new);
+        setDestinationChain("eth");
+      }, 500);
     }
   };
- 
 
   useEffect(() => {
     setSourceChain("eth");
@@ -57,7 +53,7 @@ const DypMigration = ({ networkId, isConnected, handleConnection, coinbase }) =>
 
   const MigrationModal = initMigration({
     bridgeETH: sourceBridge,
-    bridgeBSC: window.newbridge_eth,
+    bridgeBSC: destinationBridge,
     tokenETH: sourceToken,
     tokenBSC: destinationToken,
   });
@@ -84,8 +80,8 @@ const DypMigration = ({ networkId, isConnected, handleConnection, coinbase }) =>
           coinbase={coinbase}
           sourceChain={sourceChain}
           activebtn={activebtn}
-          sourceBridge = {sourceBridge}
-          destinationBridge = {destinationBridge}
+          sourceBridge={sourceBridge}
+          destinationBridge={destinationBridge}
         />
       </div>
     </div>

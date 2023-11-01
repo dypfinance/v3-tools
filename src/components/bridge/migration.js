@@ -83,7 +83,6 @@ export default function initMigration({
         ethBalance: 0,
         bnbBalance: 0,
         avaxBalance: 0,
-
       };
     }
     static propTypes = {
@@ -93,7 +92,6 @@ export default function initMigration({
     };
     componentDidMount() {
       this.refreshBalance();
-      this.checkAllowance();
       this.getAllBalance();
       window._refreshBalInterval = setInterval(this.refreshBalance, 4000);
     }
@@ -106,7 +104,7 @@ export default function initMigration({
       if (this.props.sourceChain === "eth") {
         const oldDyp_address = window.config.token_old_address;
         const claimDyp_address = window.config.claim_newdyp_eth_address;
-        const token_contract = new window.goerliWeb3.eth.Contract(
+        const token_contract = new window.infuraWeb3.eth.Contract(
           window.TOKEN_ABI,
           oldDyp_address
         );
@@ -131,12 +129,13 @@ export default function initMigration({
     handleApprove = (e) => {
       let amount = this.state.depositAmount;
       this.setState({ depositLoading: true });
-      console.log(tokenETH);
+
       amount = new BigNumber(amount).times(10 ** TOKEN_DECIMALS).toFixed(0);
       let bridge =
         this.props.sourceChain === "bsc"
-          ? window.config.bridge_bsc_old_address
-          : window.config.bridge_bsc_old_address;
+          ? window.config.bridge_bsc_new_address
+          : window.config.bridge_avax_new_address;
+      
       tokenETH
         .approve(bridge, amount)
         .then(() => {
@@ -232,8 +231,8 @@ export default function initMigration({
       amount = new BigNumber(amount).times(10 ** TOKEN_DECIMALS).toFixed(0);
       let bridge =
         this.props.sourceChain === "bsc"
-          ? window.config.bridge_bsc_old_address
-          : window.config.bridge_bsc_old_address;
+          ? window.config.bridge_bsc_new_address
+          : window.config.bridge_avax_new_address;
       let chainId = this.props.networkId;
       const web3 = new Web3(window.ethereum);
 
@@ -267,57 +266,73 @@ export default function initMigration({
     };
 
     getAllBalance = async () => {
-      const tokenAddress = "0xa4f5c83b19946488909273b6bef5aed63df9cc7b";
-      const tokenAddress_bsc = "0x2e0a34680c72d998e327f58dedfd48f9d4282b8c";
-  
+      const tokenAddress = window.config.token_old_address;
+      const tokenAddress_bsc = window.config.token_old_bsc_address;
+      const tokenAddress_avax = window.config.token_old_avax_address;
+
       const walletAddress = this.props.coinbase;
       const TokenABI = window.ERC20_ABI;
-      const web3 = new Web3(window.ethereum);
+
       if (walletAddress != undefined) {
-        const contract1 = new window.goerliWeb3.eth.Contract(TokenABI, tokenAddress);
-        const contract2 = new window.bscTestWeb3.eth.Contract(TokenABI, tokenAddress_bsc);
-  
-  
+        const contract1 = new window.infuraWeb3.eth.Contract(
+          TokenABI,
+          tokenAddress
+        );
+        const contract2 = new window.bscWeb3.eth.Contract(
+          TokenABI,
+          tokenAddress_bsc
+        );
+        const contract3 = new window.avaxWeb3.eth.Contract(
+          TokenABI,
+          tokenAddress_avax
+        );
+
         await contract2.methods
           .balanceOf(walletAddress)
           .call()
           .then((data) => {
             this.setState({ bnbBalance: data });
           });
-  
+
         await contract1.methods
           .balanceOf(walletAddress)
           .call()
           .then((data) => {
             this.setState({ ethBalance: data });
           });
-  
-        // await contract3.methods
-        //   .balanceOf(walletAddress)
-        //   .call()
-        //   .then((data) => {
-        //     this.setState({ avaxBalance: data });
-        //   });
+
+        await contract3.methods
+          .balanceOf(walletAddress)
+          .call()
+          .then((data) => {
+            this.setState({ avaxBalance: data });
+          });
       }
     };
 
     handleWithdraw = async (e) => {
       this.setState({ withdrawLoading: true });
       try {
-        let signature = window.config.SIGNATURE_API_URL_NEW_BSC;
+        let signature =
+          this.props.sourceChain === "bnb"
+            ? window.config.SIGNATURE_API_URL_NEW_BSC
+            : window.config.SIGNATURE_API_URL_NEW_AVAX;
         let url =
           signature +
           `/api/withdraw-args?depositNetwork=${
             this.props.sourceChain === "bnb"
               ? "BSC"
               : this.props.sourceChain === "avax"
-              ? "AVAX"
+              ? "BSC"
               : "BSC"
           }&txHash=${this.state.txHash}`;
         console.log({ url });
         let args = await window.jQuery.get(url);
         console.log({ args });
-        const bridge = window.newbridge_eth;
+        const bridge =
+          this.props.sourceChain === "bnb"
+            ? window.newbridge_eth_bsc
+            : window.newbridge_eth_avax;
 
         bridge
           .withdraw(args)
@@ -326,7 +341,7 @@ export default function initMigration({
               withdrawLoading: false,
               withdrawStatus: "success",
             });
-            this.getAllBalance()
+            this.getAllBalance();
           })
           .catch((e) => {
             this.setState({ withdrawLoading: false, withdrawStatus: "fail" });
@@ -359,13 +374,14 @@ export default function initMigration({
         // let coinbase = this.props.coinbase;
         // this.setState({ coinbase });
         try {
-          const oldDyp_address = window.config.token_old_address;
-          const tokenAddress_bsc = "0x2e0a34680c72d998e327f58dedfd48f9d4282b8c";
+          const tokenAddress = window.config.token_old_address;
+          const tokenAddress_bsc = window.config.token_old_bsc_address;
+          const tokenAddress_avax = window.config.token_old_avax_address;
 
           if (this.props.sourceChain === "eth") {
-            const token_contract_eth = new window.goerliWeb3.eth.Contract(
+            const token_contract_eth = new window.infuraWeb3.eth.Contract(
               window.TOKEN_ABI,
-              oldDyp_address
+              tokenAddress
             );
             await token_contract_eth.methods
               .balanceOf(this.props.coinbase)
@@ -374,7 +390,7 @@ export default function initMigration({
                 this.setState({ token_balance: data });
               });
           } else if (this.props.sourceChain === "bnb") {
-            const token_contract_bsc = new window.bscTestWeb3.eth.Contract(
+            const token_contract_bsc = new window.bscWeb3.eth.Contract(
               window.TOKENBSC_ABI,
               tokenAddress_bsc
             );
@@ -385,9 +401,9 @@ export default function initMigration({
                 this.setState({ token_balance: data });
               });
           } else if (this.props.sourceChain === "avax") {
-            const token_contract_avax = new window.bscTestWeb3.eth.Contract(
+            const token_contract_avax = new window.avaxWeb3.eth.Contract(
               window.TOKEN_ABI,
-              tokenAddress_bsc
+              tokenAddress_avax
             );
             await token_contract_avax.methods
               .balanceOf(this.props.coinbase)
@@ -412,14 +428,17 @@ export default function initMigration({
 
           if (this.state.txHash) {
             try {
-              let signature = window.config.SIGNATURE_API_URL_NEW_BSC;
+              let signature =
+                this.props.sourceChain === "bnb"
+                  ? window.config.SIGNATURE_API_URL_NEW_BSC
+                  : window.config.SIGNATURE_API_URL_NEW_AVAX;
               let url =
                 signature +
                 `/api/withdraw-args?depositNetwork=${
                   this.props.sourceChain === "bnb"
                     ? "BSC"
                     : this.props.sourceChain === "avax"
-                    ? "AVAX"
+                    ? "BSC"
                     : "BSC"
                 }&txHash=${
                   this.state.txHash
