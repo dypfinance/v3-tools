@@ -247,8 +247,8 @@ export default function initBridge({
         console.log({ url });
         let args = await window.jQuery.get(url);
         console.log({ args });
-
-        bridgeBSC
+        let bridge = this.props.sourceChain === 'bnb' ? window.bridge_bscavax : window.bridge_bscavaxbsc
+        bridge
           .withdraw(args)
           .then(() => {
             this.setState({

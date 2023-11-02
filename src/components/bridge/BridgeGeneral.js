@@ -7,6 +7,8 @@ import idyp from "./assets/idyp.svg";
 import eth from "./assets/eth.svg";
 import bnb from "./assets/bnb.svg";
 import avax from "./assets/avax.svg";
+import whiteArrow from "./assets/whiteArrow.svg";
+
 import "./bridge.css";
 import { useLocation } from "react-router-dom";
 import Web3 from "web3";
@@ -127,8 +129,8 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
   const handleSourceChain = async (chainText) => {
     if (chainText === "eth") {
       window.cached_contracts = Object.create(null);
+      setSourceChain(chainText);
       setTimeout(() => {
-        setSourceChain(chainText);
         setSourceBridge(window.new_bridge_eth);
         setDestinationBridge(window.new_bridge_bsc);
         setSourceToken(window.token_dyp_new);
@@ -138,8 +140,8 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
 
     if (chainText === "bnb") {
       window.cached_contracts = Object.create(null);
+      setSourceChain(chainText);
       setTimeout(() => {
-        setSourceChain(chainText);
         setDestinationBridge(window.new_bridge_eth);
         setSourceBridge(window.new_bridge_bsc);
         setDestinationToken(window.token_dyp_new);
@@ -284,7 +286,7 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
         />
       </div>
       <div className="bigseparator mt-5 mb-5 col-6 col-xxl-5"></div>
-      {/* <div>
+      <div>
         <h3 className="text-white mb-4">
           <img src={idyp} alt="" style={{ width: 32, height: 32 }} /> iDYP
           Bridge
@@ -353,7 +355,24 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
           bnbBalance={bnbBalanceidyp}
           avaxBalance={avaxBalanceidyp}
         />
-      </div> */}
+      </div>
+
+      <div className="bigseparator mt-5 mb-5 col-6 col-xxl-5"></div>
+      <div className="swiftwrapper p-3">
+        <div className="d-flex flex-column gap-3">
+          <h4>Bridge DYP on SWFT</h4>
+          <a
+            href="https://defi.swft.pro/#/?sourceFlag=DYP"
+            target="_blank"
+            rel="noreferrer"
+            className="d-flex align-items-center gap-1 btn bridgenow-btn"
+          >
+            Bridge now <img src={whiteArrow} alt="" />{" "}
+          </a>
+        </div>
+      </div>
+      <div className="bigseparator mt-5 mb-5 col-6 col-xxl-5"></div>
+
       <BridgeFAQ faqIndex={routeData.state ? routeData.state.faqIndex : -1} />
     </div>
   );
