@@ -3,6 +3,9 @@ import "./bridge.css";
 import { useLocation } from "react-router-dom";
 import initMigration from "./migration";
 import Web3 from "web3";
+import avax from "./assets/avax.svg";
+import eth from "./assets/eth.svg";
+import bnb from "./assets/bnb.svg";
 
 const DypMigration = ({
   networkId,
@@ -60,13 +63,87 @@ const DypMigration = ({
 
   return (
     <div className="container-lg p-0">
+      <div className="migration-banner p-4 align-items-center mb-4">
+        <div className="col-12 col-lg-6">
+          <div className="d-flex flex-column gap-3">
+            <h6 className="migration-banner-title mb-0">Migrate DYP tokens</h6>
+            <p className="migration-banner-desc mb-0">
+              Easily migrate your old DYP tokens from Ethereum, BNB Chain, and
+              Avalanche to the new DYP v2 token on Ethereum. This upgrade
+              ensures that you will benefit from the latest features and
+              improvements in the Dypius ecosystem.
+            </p>
+          </div>
+        </div>
+      </div>
+      <h3 className="text-white mb-2">Migration Details</h3>
+      <div className="d-flex flex-column flex-lg-row gap-4 gap-lg-0 align-items-center justify-content-between mb-4">
+        <div className="migration-details-wrapper p-3 d-flex flex-column gap-3">
+          <h6 className="migration-details-title">Smart Contract</h6>
+          <div className="d-flex flex-column">
+            <span className="smart-contract-announce">
+              Old DYP smart contract address:
+            </span>
+            <div className="d-flex align-items-center gap-3">
+              <span className="old-dyp-address mb-0">
+                0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17
+              </span>
+              <div className="d-flex align-items-center gap-2">
+                <img src={eth} alt="" />
+                <img src={bnb} alt="" />
+                <img src={avax} alt="" />
+              </div>
+            </div>
+          </div>
+          <div className="d-flex flex-column">
+            <span className="smart-contract-announce">
+              New DYP smart contract address:
+            </span>
+            <div className="d-flex align-items-center gap-3">
+              <span className="new-dyp-address mb-0">
+                0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17
+              </span>
+              <img src={eth} alt="" />
+            </div>
+          </div>
+          <span className="contract-audit-text mb-0">
+            *Smart Contracts are audited by: CertiK and PeckShield
+          </span>
+        </div>
+        <div className="migration-details-wrapper p-3 d-flex flex-column gap-3">
+          <h6 className="migration-details-title">Swap Ratio</h6>
+          <span className="smart-contract-announce">
+            The swap ratio for DYP V2 vary depending on the respective
+            blockchain.
+          </span>
+          <ul>
+            <li className="migration-swap-item">
+              1 DYP ERC20 - 6 DYP ERC20 V2
+            </li>
+            <li className="migration-swap-item">
+              1 DYP BEP20 - 1 DYP ERC20 V2
+            </li>
+            <li className="migration-swap-item">
+              1 DYP ARC20 - 1 DYP ERC20 V2
+            </li>
+          </ul>
+        </div>
+        <div className="migration-details-wrapper p-3 d-flex flex-column gap-3">
+          <h6 className="migration-details-title">Help Guide</h6>
+          <span className="smart-contract-announce">
+            Read the article to gain a better understanding of the migration
+            process and learn how to follow the correct steps for converting
+            your old DYP tokens to the new DYP v2 tokens.
+          </span>
+          <div className="d-flex align-items-center.gap-2">
+            <span className="explore-migration">Explore the Guide</span>
+            <img src={require('./assets/greenArrow.svg').default} alt="" />
+          </div>
+        </div>
+      </div>
       <div className="col-12 col-lg-5 d-flex flex-column justify-content-center gap-3 mb-4">
-        <h3 className="text-white">Dypius Migration</h3>
-        <p className="text-white">
-          Migrate your DYP Tokens to the new Ecosystem
-          <br />
-          Every transaction is instant and secure.
-        </p>
+        <h3 className="text-white">Migration</h3>
+        
       </div>
       <div>
         <MigrationModal
