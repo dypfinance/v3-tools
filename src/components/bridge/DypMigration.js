@@ -6,6 +6,8 @@ import Web3 from "web3";
 import avax from "./assets/avax.svg";
 import eth from "./assets/eth.svg";
 import bnb from "./assets/bnb.svg";
+import { CircularProgressbar } from "react-circular-progressbar";
+import ReviewsBar from "./ProgressBar/ReviewsBar";
 
 const DypMigration = ({
   networkId,
@@ -63,7 +65,7 @@ const DypMigration = ({
 
   return (
     <div className="container-lg p-0">
-      <div className="migration-banner p-4 align-items-center mb-4">
+      <div className="migration-banner d-flex p-4 align-items-center mb-4">
         <div className="col-12 col-lg-6">
           <div className="d-flex flex-column gap-3">
             <h6 className="migration-banner-title mb-0">Migrate DYP tokens</h6>
@@ -75,10 +77,15 @@ const DypMigration = ({
             </p>
           </div>
         </div>
+
+        <div className="col-12 col-lg-2 d-flex justify-content-end">
+          <ReviewsBar score={75} />
+        </div>
       </div>
       <h3 className="text-white mb-2">Migration Details</h3>
       <div className="d-flex flex-column flex-lg-row gap-4 gap-lg-0 align-items-center justify-content-between mb-4">
-        <div className="migration-details-wrapper p-3 d-flex flex-column gap-3">
+        <div className="migration-details-wrapper p-3 d-flex flex-column gap-3 position-relative">
+          <div className="purplediv"></div>
           <h6 className="migration-details-title">Smart Contract</h6>
           <div className="d-flex flex-column">
             <span className="smart-contract-announce">
@@ -110,7 +117,8 @@ const DypMigration = ({
             *Smart Contracts are audited by: CertiK and PeckShield
           </span>
         </div>
-        <div className="migration-details-wrapper p-3 d-flex flex-column gap-3">
+        <div className="migration-details-wrapper p-3 d-flex flex-column gap-3 position-relative">
+          <div className="purplediv"></div>
           <h6 className="migration-details-title">Swap Ratio</h6>
           <span className="smart-contract-announce">
             The swap ratio for DYP V2 vary depending on the respective
@@ -128,7 +136,8 @@ const DypMigration = ({
             </li>
           </ul>
         </div>
-        <div className="migration-details-wrapper p-3 d-flex flex-column gap-3">
+        <div className="migration-details-wrapper p-3 d-flex flex-column gap-3 position-relative">
+          <div className="purplediv"></div>
           <h6 className="migration-details-title">Help Guide</h6>
           <span className="smart-contract-announce">
             Read the article to gain a better understanding of the migration
@@ -137,13 +146,12 @@ const DypMigration = ({
           </span>
           <div className="d-flex align-items-center.gap-2">
             <span className="explore-migration">Explore the Guide</span>
-            <img src={require('./assets/greenArrow.svg').default} alt="" />
+            <img src={require("./assets/greenArrow.svg").default} alt="" />
           </div>
         </div>
       </div>
       <div className="col-12 col-lg-5 d-flex flex-column justify-content-center gap-3 mb-4">
         <h3 className="text-white">Migration</h3>
-        
       </div>
       <div>
         <MigrationModal

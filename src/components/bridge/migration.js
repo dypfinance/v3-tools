@@ -19,6 +19,10 @@ import TimelineDot from "@mui/lab/TimelineDot";
 import routeIcon from "./assets/route-icon.svg";
 import Address from "../FARMINNG/address";
 import WalletModal from "../WalletModal";
+import migrationIcon from "./assets/migrationIcon.svg";
+import infoIcon from "./assets/infoIcon.svg";
+import dypIcon from "./assets/dypIcon.svg";
+import downArrow from "./assets/downArrow.svg";
 import PropTypes from "prop-types";
 import Web3 from "web3";
 
@@ -135,7 +139,7 @@ export default function initMigration({
         this.props.sourceChain === "bsc"
           ? window.config.bridge_bsc_new_address
           : window.config.bridge_avax_new_address;
-      
+
       tokenETH
         .approve(bridge, amount)
         .then(() => {
@@ -479,8 +483,37 @@ export default function initMigration({
             <div className="row">
               <div>
                 <div className="d-flex flex-column">
-                  <h6 className="fromtitle mb-2">Deposit</h6>
-                  <div className="d-flex flex-column flex-lg-row align-items-center justify-content-between gap-2">
+                  {/* <h6 className="fromtitle mb-2">Deposit</h6> */}
+                  <div className="d-flex align-items-end justify-content-between mb-3">
+                    <div className="d-flex flex-column gap-2">
+                      <div className="d-flex align-items-center gap-2">
+                        <img src={migrationIcon} alt="" />
+                        <h6 className="migration-title">DYP Migration</h6>
+                      </div>
+                      <span className="migration-span">
+                        Migrate your DYP tokens to the new DYP v2 tokens.
+                      </span>
+                    </div>
+                    {this.props.isConnected === false ? (
+                      <button
+                        className="connectbtn btn d-flex align-items-center gap-2"
+                        style={{ width: "fit-content" }}
+                        onClick={() => {
+                          this.setState({ showWalletModal: true });
+                        }}
+                      >
+                        <img src={wallet} alt="" />
+                        Connect wallet
+                      </button>
+                    ) : (
+                      <div className="addressbtn btn">
+                        <Address a={this.props.coinbase} chainId={43114} />
+                      </div>
+                    )}
+                  </div>
+                  <hr className="migration-divider" />
+                  <span className="fromtitle mb-2">Select Chain</span>
+                  <div className="d-flex flex-column flex-lg-row align-items-center  justify-content-between gap-2">
                     <div className="d-flex align-items-center justify-content-between gap-3">
                       <div
                         className={
@@ -549,407 +582,243 @@ export default function initMigration({
                         </h6>
                       </div>
                     </div>
-                    {this.props.isConnected === false ? (
+                  </div>
+                  <div className="conversion-rate-wrapper d-flex align-items-center my-3 justify-content-between p-2">
+                    <div className="d-flex align-items-center gap-2">
+                      <span className="conversion-rate-title">
+                        Conversion Rate:
+                      </span>
+                      <span className="conversion-rate">
+                        1 DYP (old) = 6 DYP (new)
+                      </span>
+                    </div>
+                    <img src={infoIcon} alt="" />
+                  </div>
+                  <hr className="migration-divider" />
+                </div>
+                <span className="fromtitle mt-3">Deposit</span>
+                <div className="otherside my-2 w-100 p-3">
+                  <div className="d-flex flex-column">
+                    <div className="d-flex w-100 flex-column align-items-center justify-content-center gap-2
+                    ">
+                      <div className="d-flex flex-column w-100">
+                        <span className="conversion-rate-title">
+                          My Balance: 5,000 DYP
+                        </span>
+                        <div className="conversion-input-container p-2 d-flex align-items-center justify-content-between">
+                          <div className="d-flex align-items-center gap-2">
+                            <img src={dypIcon} alt="" />
+                            <input
+                              type="number"
+                              className="conversion-input"
+                              value={1000}
+                            />
+                          </div>
+                          <div className="d-flex align-items-center gap-2">
+                            <button
+                              className="btn maxbtn"
+                              disabled={
+                                this.props.destinationChain !== ""
+                                  ? false
+                                  : true
+                              }
+                              style={{ cursor: "pointer" }}
+                              onClick={this.handleSetMaxDeposit}
+                            >
+                              MAX
+                            </button>
+                            <span className="conversion-rate">DYP (old)</span>
+                          </div>
+                        </div>
+                      </div>
+                      <img
+                        src={downArrow}
+                        style={{ position: "relative", top: "5px" }}
+                        alt=""
+                      />
+                      <div className="d-flex flex-column w-100">
+                        <span className="conversion-rate-title">
+                          You will recieve:
+                        </span>
+                        <div className="conversion-input-container p-2 d-flex align-items-center justify-content-between">
+                          <div className="d-flex align-items-center gap-2">
+                            <img src={dypIcon} alt="" />
+                            <input
+                              type="number"
+                              className="conversion-input"
+                              value={6000}
+                            />
+                          </div>
+                          <div className="d-flex align-items-center gap-2">
+                            <span className="conversion-rate">DYP (new)</span>
+                          </div>
+                        </div>
+                      </div>
                       <button
-                        className="connectbtn btn d-flex align-items-center gap-2"
                         style={{ width: "fit-content" }}
+                        disabled={
+                          this.state.depositAmount === "" ||
+                          this.state.depositLoading === true ||
+                          this.state.depositStatus === "success"
+                            ? true
+                            : false
+                        }
+                        className={`btn filledbtn ${
+                          this.state.depositAmount === "" &&
+                          this.state.depositStatus === "initial" &&
+                          "disabled-btn"
+                        } ${
+                          this.state.depositStatus === "deposit" ||
+                          this.state.depositStatus === "success"
+                            ? "success-button"
+                            : this.state.depositStatus === "fail"
+                            ? "fail-button"
+                            : null
+                        } d-flex justify-content-center align-items-center gap-2`}
                         onClick={() => {
-                          this.setState({ showWalletModal: true });
+                          this.props.sourceChain === "eth" &&
+                          this.state.depositStatus === "deposit"
+                            ? this.handleDeposit()
+                            : this.state.depositStatus === "deposit" &&
+                              this.props.sourceChain !== "eth"
+                            ? this.handledepositBridge()
+                            : this.state.depositStatus === "initial" &&
+                              this.props.sourceChain !== "eth" &&
+                              this.state.depositAmount !== ""
+                            ? this.handleApprove()
+                            : this.props.sourceChain === "eth" &&
+                              this.state.depositStatus === "initial"
+                            ? this.handleApproveClaim()
+                            : console.log("");
                         }}
                       >
-                        <img src={wallet} alt="" />
-                        Connect wallet
-                      </button>
-                    ) : (
-                      <div className="addressbtn btn">
-                        <Address a={this.props.coinbase} chainId={43114} />
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <div className="row token-staking-form gap-3">
-                  <div className="col-12">
-                    <div className="l-box">
-                      <div>
-                        <div className="form-group">
-                          <div className="row m-0">
-                            <div className="activewrapper flex-column flex-lg-row mt-3 mb-3">
-                              <label
-                                htmlFor="deposit-amount"
-                                className="chainWrapper text-left"
-                              >
-                                <h6 className="mybalance-text">
-                                  Balance:
-                                  <b>
-                                    {" "}
-                                    {this.props.sourceChain === "avax"
-                                      ? getFormattedNumber(
-                                          this.state.avaxBalance / 1e18,
-                                          2
-                                        )
-                                      : this.props.sourceChain === "eth"
-                                      ? getFormattedNumber(
-                                          this.state.ethBalance / 1e18,
-                                          2
-                                        )
-                                      : getFormattedNumber(
-                                          this.state.bnbBalance / 1e18,
-                                          2
-                                        )}
-                                  </b>
-                                  DYP
-                                </h6>
-                              </label>
-                              {/* <div className="">
-                                <h6
-                                  className="poolbalance-text"
-                                  style={{ gap: "6px" }}
-                                >
-                                  {this.props.sourceChain !== "avax"
-                                    ? "BNB Chain"
-                                    : "Avalanche"}{" "}
-                                  Pool:{" "}
-                                  <b>
-                                    {this.state.sourceChain === "avax"
-                                      ? getFormattedNumber(
-                                          this.state.avaxPool,
-                                          2
-                                        )
-                                      : getFormattedNumber(
-                                          this.state.bnbPool,
-                                          2
-                                        )}{" "}
-                                    DYP
-                                  </b>
-                                </h6>
-                              </div> */}
-                            </div>
-                          </div>
-                          <div className="mt-4 otherside w-100">
-                            <h6 className="fromtitle d-flex justify-content-between align-items-center mt-1 mb-2">
-                              Deposit
-                              <Tooltip
-                                placement="top"
-                                title={
-                                  <div className="tooltip-text">
-                                    {
-                                      "Choose the amount of tokens you wish to convert. The conversion will be in a 1:5 ratio."
-                                    }
-                                  </div>
-                                }
-                              >
-                                <img src={moreinfo} alt="" />
-                              </Tooltip>
-                            </h6>
-
-                            <div className="d-flex gap-2 flex-column flex-lg-row align-items-center justify-content-between">
-                              <div className="d-flex gap-2 align-items-center">
-                                <input
-                                  value={
-                                    Number(this.state.depositAmount) > 0
-                                      ? this.state.depositAmount
-                                      : this.state.depositAmount
-                                  }
-                                  onChange={(e) => {
-                                    this.setState({
-                                      depositAmount: e.target.value,
-                                    });
-                                    this.checkAllowance(e.target.value);
-                                  }}
-                                  className="styledinput"
-                                  placeholder="0"
-                                  type="text"
-                                  disabled={
-                                    this.props.destinationChain !== ""
-                                      ? false
-                                      : true
-                                  }
-                                />
-
-                                <button
-                                  className="btn maxbtn"
-                                  disabled={
-                                    this.props.destinationChain !== ""
-                                      ? false
-                                      : true
-                                  }
-                                  style={{ cursor: "pointer" }}
-                                  onClick={this.handleSetMaxDeposit}
-                                >
-                                  MAX
-                                </button>
-                              </div>
-
-                              <button
-                                style={{ width: "fit-content" }}
-                                disabled={
-                                  this.state.depositAmount === "" ||
-                                  this.state.depositLoading === true ||
-                                  this.state.depositStatus === "success"
-                                    ? true
-                                    : false
-                                }
-                                className={`btn filledbtn ${
-                                  this.state.depositAmount === "" &&
-                                  this.state.depositStatus === "initial" &&
-                                  "disabled-btn"
-                                } ${
-                                  this.state.depositStatus === "deposit" ||
-                                  this.state.depositStatus === "success"
-                                    ? "success-button"
-                                    : this.state.depositStatus === "fail"
-                                    ? "fail-button"
-                                    : null
-                                } d-flex justify-content-center align-items-center gap-2`}
-                                onClick={() => {
-                                  this.props.sourceChain === "eth" &&
-                                  this.state.depositStatus === "deposit"
-                                    ? this.handleDeposit()
-                                    : this.state.depositStatus === "deposit" &&
-                                      this.props.sourceChain !== "eth"
-                                    ? this.handledepositBridge()
-                                    : this.state.depositStatus === "initial" &&
-                                      this.props.sourceChain !== "eth" &&
-                                      this.state.depositAmount !== ""
-                                    ? this.handleApprove()
-                                    : this.props.sourceChain === "eth" &&
-                                      this.state.depositStatus === "initial"
-                                    ? this.handleApproveClaim()
-                                    : console.log("");
-                                }}
-                              >
-                                {this.state.depositLoading ? (
-                                  <div
-                                    class="spinner-border spinner-border-sm text-light"
-                                    role="status"
-                                  >
-                                    <span class="visually-hidden">
-                                      Loading...
-                                    </span>
-                                  </div>
-                                ) : this.state.depositStatus === "initial" &&
-                                  this.props.sourceChain !== "eth" ? (
-                                  <>Approve</>
-                                ) : this.state.depositStatus === "deposit" &&
-                                  this.props.sourceChain === "eth" ? (
-                                  <>Claim</>
-                                ) : this.state.depositStatus === "initial" &&
-                                  this.props.sourceChain === "eth" ? (
-                                  <>Approve</>
-                                ) : this.state.depositStatus === "deposit" ? (
-                                  <>Deposit</>
-                                ) : this.state.depositStatus === "success" ? (
-                                  <>Success</>
-                                ) : (
-                                  <>
-                                    <img src={failMark} alt="" />
-                                    Failed
-                                  </>
-                                )}
-                              </button>
-                            </div>
-                            <p
-                              style={{ fontSize: "10px" }}
-                              className="mt-1 text-center mb-0"
-                              id="firstPlaceholder"
-                            >
-                              Please approve before deposit.
-                            </p>
-                            {this.state.errorMsg && (
-                              <h6 className="errormsg">
-                                {this.state.errorMsg}
-                              </h6>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <img
-                    src={switchicon}
-                    alt=""
-                    // onClick={this.handleSwapChains}
-                    style={{
-                      width: 55,
-                      height: 55,
-                      margin: "auto",
-                      boxShadow: "0px 6px 12px rgba(78, 213, 210, 0.32)",
-                      padding: 0,
-                      borderRadius: 8,
-                      // cursor: "pointer",
-                      display: this.props.sourceChain === "eth" ? "none" : "",
-                    }}
-                  />
-                  <div className="col-12 position-relative">
-                    <div
-                      className="purplediv"
-                      style={{
-                        display: this.props.sourceChain === "eth" ? "none" : "",
-                      }}
-                    ></div>
-                    <div
-                      className="l-box"
-                      style={{
-                        display: this.props.sourceChain === "eth" ? "none" : "",
-                      }}
-                    >
-                      <div className="pb-0">
-                        <div className="form-group">
-                          <label
-                            htmlFor="deposit-amount"
-                            className="d-block text-left"
+                        {this.state.depositLoading ? (
+                          <div
+                            class="spinner-border spinner-border-sm text-light"
+                            role="status"
                           >
-                            <div className="d-flex flex-column">
-                              <h6 className="fromtitle mb-2">Withdraw</h6>
-                              <div className="d-flex align-items-center justify-content-between gap-2">
-                                <div className="d-flex align-items-center justify-content-between gap-3">
-                                  <div className={"optionbtn-active"}>
-                                    <h6 className="optiontext d-flex align-items-center gap-2">
-                                      <img src={eth} alt="" />
-                                      <p className=" mb-0 optiontext d-none d-lg-flex">
-                                        Ethereum
-                                      </p>
-                                    </h6>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </label>
-
-                          <div className="mt-4 otherside w-100">
-                            <h6 className="fromtitle flex-column flex-lg-row d-flex justify-content-between align-items-start align-items-lg-center mt-1 mb-2">
-                              RECEIVE
-                              {/* <div className="d-flex align-items-center gap-2">
-                                <h6
-                                  className="poolbalance-text"
-                                  style={{ gap: "6px" }}
-                                >
-                                  {this.props.destinationChain === "bnb"
-                                    ? "BNB Chain"
-                                    : "Avalanche"}{" "}
-                                  Pool:{" "}
-                                  <b>
-                                    {this.props.destinationChain === "avax"
-                                      ? getFormattedNumber(
-                                          this.state.avaxPool,
-                                          2
-                                        )
-                                      : getFormattedNumber(
-                                          this.state.bnbPool,
-                                          2
-                                        )}{" "}
-                                    DYP
-                                  </b>
-                                </h6>
-
-                                <Tooltip
-                                  placement="top"
-                                  title={
-                                    <div className="tooltip-text">
-                                      {
-                                        " Receive the assets in the selected chain."
-                                      }
-                                    </div>
-                                  }
-                                >
-                                  <img src={moreinfo} alt="" />
-                                </Tooltip>
-                              </div> */}
-                            </h6>
-
-                            <div className="d-flex gap-2 flex-column flex-lg-row align-items-center justify-content-between">
-                              <div className="d-flex gap-2 align-items-center">
-                                <input
-                                  value={this.state.txHash}
-                                  onChange={(e) =>
-                                    this.setState({ txHash: e.target.value })
-                                  }
-                                  className="styledinput"
-                                  placeholder="Enter Deposit tx hash"
-                                  type="text"
-                                  // disabled={!canWithdraw}
-                                />
-                              </div>
-
-                              <button
-                                style={{ width: "fit-content" }}
-                                disabled={
-                                  // canWithdraw === false ||
-                                  // this.state.withdrawLoading === true ||
-                                  // this.state.withdrawStatus === "success"
-                                  //   ? true
-                                  //   : false
-                                  this.state.txHash !== "" ? false : true
-                                }
-                                className={`btn filledbtn ${
-                                  (canWithdraw === false &&
-                                    this.state.txHash === "") ||
-                                  (this.state.withdrawStatus === "success" &&
-                                    "disabled-btn")
-                                } ${
-                                  this.state.withdrawStatus === "deposit" ||
-                                  this.state.withdrawStatus === "success"
-                                    ? "success-button"
-                                    : this.state.withdrawStatus === "fail"
-                                    ? "fail-button"
-                                    : null
-                                } d-flex justify-content-center align-items-center gap-2`}
-                                onClick={() => {
-                                  this.handleWithdraw();
-                                }}
-                              >
-                                {this.state.withdrawLoading ? (
-                                  <div
-                                    class="spinner-border spinner-border-sm text-light"
-                                    role="status"
-                                  >
-                                    <span class="visually-hidden">
-                                      Loading...
-                                    </span>
-                                  </div>
-                                ) : this.state.withdrawStatus === "initial" ? (
-                                  <>Withdraw</>
-                                ) : this.state.withdrawStatus === "success" ? (
-                                  <>Success</>
-                                ) : (
-                                  <>
-                                    <img src={failMark} alt="" />
-                                    Failed
-                                  </>
-                                )}
-                                {this.state.withdrawableUnixTimestamp &&
-                                  Date.now() <
-                                    this.state.withdrawableUnixTimestamp *
-                                      1e3 && (
-                                    <span>
-                                      &nbsp;
-                                      <Countdown
-                                        onComplete={() => this.forceUpdate()}
-                                        key="withdrawable"
-                                        date={
-                                          this.state.withdrawableUnixTimestamp *
-                                          1e3
-                                        }
-                                        renderer={getRenderer(undefined, true)}
-                                      />
-                                    </span>
-                                  )}
-                              </button>
-                            </div>
-
-                            <div className="separator"></div>
-
-                            {this.state.errorMsg2 && (
-                              <h6 className="errormsg">
-                                {this.state.errorMsg2}
-                              </h6>
-                            )}
+                            <span class="visually-hidden">Loading...</span>
                           </div>
-                        </div>
-                      </div>
+                        ) : this.state.depositStatus === "initial" &&
+                          this.props.sourceChain !== "eth" ? (
+                          <>Approve</>
+                        ) : this.state.depositStatus === "deposit" &&
+                          this.props.sourceChain === "eth" ? (
+                          <>Claim</>
+                        ) : this.state.depositStatus === "initial" &&
+                          this.props.sourceChain === "eth" ? (
+                          <>Approve</>
+                        ) : this.state.depositStatus === "deposit" ? (
+                          <>Deposit</>
+                        ) : this.state.depositStatus === "success" ? (
+                          <>Success</>
+                        ) : (
+                          <>
+                            <img src={failMark} alt="" />
+                            Failed
+                          </>
+                        )}
+                      </button>
                     </div>
                   </div>
                 </div>
+                {this.state.sourceChain !== "eth" && (
+                  <>
+                    <span className="fromtitle">Withdraw</span>
+                    <div className="otherside mt-2 w-100 p-3">
+                      <div className="d-flex align-items-center justify-content-between">
+                        <div className="d-flex flex-column w-75">
+                          <span className="conversion-rate-title">
+                            Recieve new DYP on Ethereum
+                          </span>
+                          <input
+                            value={
+                              Number(this.state.depositAmount) > 0
+                                ? this.state.depositAmount
+                                : this.state.depositAmount
+                            }
+                            onChange={(e) => {
+                              this.setState({
+                                depositAmount: e.target.value,
+                              });
+                              this.checkAllowance(e.target.value);
+                            }}
+                            className="styledinput w-100"
+                            placeholder="Enter deposit transaction hash"
+                            type="text"
+                            disabled={
+                              this.props.destinationChain !== "" ? false : true
+                            }
+                          />
+                        </div>
+                        <button
+              style={{ width: "fit-content", }}
+              disabled={
+                canWithdraw === false ||
+                this.state.withdrawLoading === true ||
+                this.state.withdrawStatus === "success"
+                  ? true
+                  : false
+                // this.state.txHash !== "" ? false : true
+              }
+              className={`btn filledbtn ${
+                (canWithdraw === false &&
+                  this.state.txHash === "") ||
+                (this.state.withdrawStatus === "success" &&
+                  "disabled-btn")
+              } ${
+                this.state.withdrawStatus === "deposit" ||
+                this.state.withdrawStatus === "success"
+                  ? "success-button"
+                  : this.state.withdrawStatus === "fail"
+                  ? "fail-button"
+                  : null
+              } d-flex justify-content-center align-items-center gap-2`}
+              onClick={() => {
+                this.handleWithdraw();
+              }}
+            >
+              {this.state.withdrawLoading ? (
+                <div
+                  class="spinner-border spinner-border-sm text-light"
+                  role="status"
+                >
+                  <span class="visually-hidden">
+                    Loading...
+                  </span>
+                </div>
+              ) : this.state.withdrawStatus === "initial" ? (
+                <>Withdraw</>
+              ) : this.state.withdrawStatus === "success" ? (
+                <>Success</>
+              ) : (
+                <>
+                  <img src={failMark} alt="" />
+                  Failed
+                </>
+              )}
+              {this.state.withdrawableUnixTimestamp &&
+                Date.now() <
+                  this.state.withdrawableUnixTimestamp *
+                    1e3 && (
+                  <span>
+                    &nbsp;
+                    <Countdown
+                      onComplete={() => this.forceUpdate()}
+                      key="withdrawable"
+                      date={
+                        this.state.withdrawableUnixTimestamp *
+                        1e3
+                      }
+                      renderer={getRenderer(undefined, true)}
+                    />
+                  </span>
+                )}
+            </button>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -1155,4 +1024,390 @@ export default function initMigration({
   }
 
   return Migration;
+}
+
+{
+  /* <div className="row token-staking-form gap-3">
+<div className="col-12">
+  <div className="l-box">
+    <div>
+      <div className="form-group">
+        <div className="row m-0">
+          <div className="activewrapper flex-column flex-lg-row mt-3 mb-3">
+            <label
+              htmlFor="deposit-amount"
+              className="chainWrapper text-left"
+            >
+              <h6 className="mybalance-text">
+                Balance:
+                <b>
+                  {" "}
+                  {this.props.sourceChain === "avax"
+                    ? getFormattedNumber(
+                        this.state.avaxBalance / 1e18,
+                        2
+                      )
+                    : this.props.sourceChain === "eth"
+                    ? getFormattedNumber(
+                        this.state.ethBalance / 1e18,
+                        2
+                      )
+                    : getFormattedNumber(
+                        this.state.bnbBalance / 1e18,
+                        2
+                      )}
+                </b>
+                DYP
+              </h6>
+            </label>
+            <div className="">
+              <h6
+                className="poolbalance-text"
+                style={{ gap: "6px" }}
+              >
+                {this.props.sourceChain !== "avax"
+                  ? "BNB Chain"
+                  : "Avalanche"}{" "}
+                Pool:{" "}
+                <b>
+                  {this.state.sourceChain === "avax"
+                    ? getFormattedNumber(
+                        this.state.avaxPool,
+                        2
+                      )
+                    : getFormattedNumber(
+                        this.state.bnbPool,
+                        2
+                      )}{" "}
+                  DYP
+                </b>
+              </h6>
+            </div>
+          </div>
+        </div>
+        <div className="mt-4 otherside w-100">
+          <h6 className="fromtitle d-flex justify-content-between align-items-center mt-1 mb-2">
+            Deposit
+            <Tooltip
+              placement="top"
+              title={
+                <div className="tooltip-text">
+                  {
+                    "Choose the amount of tokens you wish to convert. The conversion will be in a 1:5 ratio."
+                  }
+                </div>
+              }
+            >
+              <img src={moreinfo} alt="" />
+            </Tooltip>
+          </h6>
+
+          <div className="d-flex gap-2 flex-column flex-lg-row align-items-center justify-content-between">
+            <div className="d-flex gap-2 align-items-center">
+              <input
+                value={
+                  Number(this.state.depositAmount) > 0
+                    ? this.state.depositAmount
+                    : this.state.depositAmount
+                }
+                onChange={(e) => {
+                  this.setState({
+                    depositAmount: e.target.value,
+                  });
+                  this.checkAllowance(e.target.value);
+                }}
+                className="styledinput"
+                placeholder="0"
+                type="text"
+                disabled={
+                  this.props.destinationChain !== ""
+                    ? false
+                    : true
+                }
+              />
+
+              <button
+                className="btn maxbtn"
+                disabled={
+                  this.props.destinationChain !== ""
+                    ? false
+                    : true
+                }
+                style={{ cursor: "pointer" }}
+                onClick={this.handleSetMaxDeposit}
+              >
+                MAX
+              </button>
+            </div>
+
+            <button
+              style={{ width: "fit-content" }}
+              disabled={
+                this.state.depositAmount === "" ||
+                this.state.depositLoading === true ||
+                this.state.depositStatus === "success"
+                  ? true
+                  : false
+              }
+              className={`btn filledbtn ${
+                this.state.depositAmount === "" &&
+                this.state.depositStatus === "initial" &&
+                "disabled-btn"
+              } ${
+                this.state.depositStatus === "deposit" ||
+                this.state.depositStatus === "success"
+                  ? "success-button"
+                  : this.state.depositStatus === "fail"
+                  ? "fail-button"
+                  : null
+              } d-flex justify-content-center align-items-center gap-2`}
+              onClick={() => {
+                this.props.sourceChain === "eth" &&
+                this.state.depositStatus === "deposit"
+                  ? this.handleDeposit()
+                  : this.state.depositStatus === "deposit" &&
+                    this.props.sourceChain !== "eth"
+                  ? this.handledepositBridge()
+                  : this.state.depositStatus === "initial" &&
+                    this.props.sourceChain !== "eth" &&
+                    this.state.depositAmount !== ""
+                  ? this.handleApprove()
+                  : this.props.sourceChain === "eth" &&
+                    this.state.depositStatus === "initial"
+                  ? this.handleApproveClaim()
+                  : console.log("");
+              }}
+            >
+              {this.state.depositLoading ? (
+                <div
+                  class="spinner-border spinner-border-sm text-light"
+                  role="status"
+                >
+                  <span class="visually-hidden">
+                    Loading...
+                  </span>
+                </div>
+              ) : this.state.depositStatus === "initial" &&
+                this.props.sourceChain !== "eth" ? (
+                <>Approve</>
+              ) : this.state.depositStatus === "deposit" &&
+                this.props.sourceChain === "eth" ? (
+                <>Claim</>
+              ) : this.state.depositStatus === "initial" &&
+                this.props.sourceChain === "eth" ? (
+                <>Approve</>
+              ) : this.state.depositStatus === "deposit" ? (
+                <>Deposit</>
+              ) : this.state.depositStatus === "success" ? (
+                <>Success</>
+              ) : (
+                <>
+                  <img src={failMark} alt="" />
+                  Failed
+                </>
+              )}
+            </button>
+          </div>
+          <p
+            style={{ fontSize: "10px" }}
+            className="mt-1 text-center mb-0"
+            id="firstPlaceholder"
+          >
+            Please approve before deposit.
+          </p>
+          {this.state.errorMsg && (
+            <h6 className="errormsg">
+              {this.state.errorMsg}
+            </h6>
+          )}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<img
+  src={switchicon}
+  alt=""
+  onClick={this.handleSwapChains}
+  style={{
+    width: 55,
+    height: 55,
+    margin: "auto",
+    boxShadow: "0px 6px 12px rgba(78, 213, 210, 0.32)",
+    padding: 0,
+    borderRadius: 8,
+    // cursor: "pointer",
+    display: this.props.sourceChain === "eth" ? "none" : "",
+  }}
+/>
+<div className="col-12 position-relative">
+  <div
+    className="purplediv"
+    style={{
+      display: this.props.sourceChain === "eth" ? "none" : "",
+    }}
+  ></div>
+  <div
+    className="l-box"
+    style={{
+      display: this.props.sourceChain === "eth" ? "none" : "",
+    }}
+  >
+    <div className="pb-0">
+      <div className="form-group">
+        <label
+          htmlFor="deposit-amount"
+          className="d-block text-left"
+        >
+          <div className="d-flex flex-column">
+            <h6 className="fromtitle mb-2">Withdraw</h6>
+            <div className="d-flex align-items-center justify-content-between gap-2">
+              <div className="d-flex align-items-center justify-content-between gap-3">
+                <div className={"optionbtn-active"}>
+                  <h6 className="optiontext d-flex align-items-center gap-2">
+                    <img src={eth} alt="" />
+                    <p className=" mb-0 optiontext d-none d-lg-flex">
+                      Ethereum
+                    </p>
+                  </h6>
+                </div>
+              </div>
+            </div>
+          </div>
+        </label>
+
+        <div className="mt-4 otherside w-100">
+          <h6 className="fromtitle flex-column flex-lg-row d-flex justify-content-between align-items-start align-items-lg-center mt-1 mb-2">
+            RECEIVE
+            <div className="d-flex align-items-center gap-2">
+              <h6
+                className="poolbalance-text"
+                style={{ gap: "6px" }}
+              >
+                {this.props.destinationChain === "bnb"
+                  ? "BNB Chain"
+                  : "Avalanche"}{" "}
+                Pool:{" "}
+                <b>
+                  {this.props.destinationChain === "avax"
+                    ? getFormattedNumber(
+                        this.state.avaxPool,
+                        2
+                      )
+                    : getFormattedNumber(
+                        this.state.bnbPool,
+                        2
+                      )}{" "}
+                  DYP
+                </b>
+              </h6>
+
+              <Tooltip
+                placement="top"
+                title={
+                  <div className="tooltip-text">
+                    {
+                      " Receive the assets in the selected chain."
+                    }
+                  </div>
+                }
+              >
+                <img src={moreinfo} alt="" />
+              </Tooltip>
+            </div>
+          </h6>
+
+          <div className="d-flex gap-2 flex-column flex-lg-row align-items-center justify-content-between">
+            <div className="d-flex gap-2 align-items-center">
+              <input
+                value={this.state.txHash}
+                onChange={(e) =>
+                  this.setState({ txHash: e.target.value })
+                }
+                className="styledinput"
+                placeholder="Enter Deposit tx hash"
+                type="text"
+                // disabled={!canWithdraw}
+              />
+            </div>
+
+            <button
+              style={{ width: "fit-content" }}
+              disabled={
+                canWithdraw === false ||
+                this.state.withdrawLoading === true ||
+                this.state.withdrawStatus === "success"
+                  ? true
+                  : false
+                this.state.txHash !== "" ? false : true
+              }
+              className={`btn filledbtn ${
+                (canWithdraw === false &&
+                  this.state.txHash === "") ||
+                (this.state.withdrawStatus === "success" &&
+                  "disabled-btn")
+              } ${
+                this.state.withdrawStatus === "deposit" ||
+                this.state.withdrawStatus === "success"
+                  ? "success-button"
+                  : this.state.withdrawStatus === "fail"
+                  ? "fail-button"
+                  : null
+              } d-flex justify-content-center align-items-center gap-2`}
+              onClick={() => {
+                this.handleWithdraw();
+              }}
+            >
+              {this.state.withdrawLoading ? (
+                <div
+                  class="spinner-border spinner-border-sm text-light"
+                  role="status"
+                >
+                  <span class="visually-hidden">
+                    Loading...
+                  </span>
+                </div>
+              ) : this.state.withdrawStatus === "initial" ? (
+                <>Withdraw</>
+              ) : this.state.withdrawStatus === "success" ? (
+                <>Success</>
+              ) : (
+                <>
+                  <img src={failMark} alt="" />
+                  Failed
+                </>
+              )}
+              {this.state.withdrawableUnixTimestamp &&
+                Date.now() <
+                  this.state.withdrawableUnixTimestamp *
+                    1e3 && (
+                  <span>
+                    &nbsp;
+                    <Countdown
+                      onComplete={() => this.forceUpdate()}
+                      key="withdrawable"
+                      date={
+                        this.state.withdrawableUnixTimestamp *
+                        1e3
+                      }
+                      renderer={getRenderer(undefined, true)}
+                    />
+                  </span>
+                )}
+            </button>
+          </div>
+
+          <div className="separator"></div>
+
+          {this.state.errorMsg2 && (
+            <h6 className="errormsg">
+              {this.state.errorMsg2}
+            </h6>
+          )}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div> */
 }
