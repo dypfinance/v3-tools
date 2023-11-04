@@ -64,9 +64,9 @@ export default function initMigration({
     constructor(props) {
       super(props);
       this.state = {
-        token_balance: "",
+        token_balance: 0,
         network: "BSC",
-        depositAmount: "",
+        depositAmount: 1,
         coinbase: "",
         gasPrice: "",
         txHash: "",
@@ -589,7 +589,8 @@ export default function initMigration({
                         Conversion Rate:
                       </span>
                       <span className="conversion-rate">
-                        1 DYP (old) = 6 DYP (new)
+                        1 DYP (old) ={" "}
+                        {this.props.sourceChain === "eth" ? "6" : "1"} DYP (new)
                       </span>
                     </div>
                     <img src={infoIcon} alt="" />
@@ -599,11 +600,28 @@ export default function initMigration({
                 <span className="fromtitle mt-3">Deposit</span>
                 <div className="otherside my-2 w-100 p-3">
                   <div className="d-flex flex-column">
-                    <div className="d-flex w-100 flex-column align-items-center justify-content-center gap-2
-                    ">
+                    <div
+                      className="d-flex w-100 flex-column align-items-center justify-content-center gap-2
+                    "
+                    >
                       <div className="d-flex flex-column w-100">
                         <span className="conversion-rate-title">
-                          My Balance: 5,000 DYP
+                          My Balance:{" "}
+                          {this.props.sourceChain === "avax"
+                            ? getFormattedNumber(
+                                this.state.avaxBalance / 1e18,
+                                2
+                              )
+                            : this.props.sourceChain === "eth"
+                            ? getFormattedNumber(
+                                this.state.ethBalance / 1e18,
+                                2
+                              )
+                            : getFormattedNumber(
+                                this.state.bnbBalance / 1e18,
+                                2
+                              )}
+                          DYP
                         </span>
                         <div className="conversion-input-container p-2 d-flex align-items-center justify-content-between">
                           <div className="d-flex align-items-center gap-2">
@@ -611,7 +629,21 @@ export default function initMigration({
                             <input
                               type="number"
                               className="conversion-input"
-                              value={1000}
+                              onChange={(e) => {
+                                this.setState({
+                                  depositAmount: e.target.value,
+                                });
+                                this.checkAllowance(e.target.value);
+                              }}
+                              value={
+                                this.state.depositAmount === '' ? this.state.depositAmount : Number(this.state.depositAmount)
+                              }
+                              disabled={
+                                this.props.destinationChain !== ""
+                                  ? false
+                                  : true
+                              }
+                              placeholder={'0.0'}
                             />
                           </div>
                           <div className="d-flex align-items-center gap-2">
@@ -646,7 +678,8 @@ export default function initMigration({
                             <input
                               type="number"
                               className="conversion-input"
-                              value={6000}
+                              value={this.props.sourceChain === 'eth' ? 6* this.state.depositAmount : this.state.depositAmount}
+                              disabled
                             />
                           </div>
                           <div className="d-flex align-items-center gap-2">
@@ -732,17 +765,10 @@ export default function initMigration({
                             Recieve new DYP on Ethereum
                           </span>
                           <input
-                            value={
-                              Number(this.state.depositAmount) > 0
-                                ? this.state.depositAmount
-                                : this.state.depositAmount
-                            }
-                            onChange={(e) => {
-                              this.setState({
-                                depositAmount: e.target.value,
-                              });
-                              this.checkAllowance(e.target.value);
-                            }}
+                             value={this.state.txHash}
+                             onChange={(e) =>
+                               this.setState({ txHash: e.target.value })
+                             }
                             className="styledinput w-100"
                             placeholder="Enter deposit transaction hash"
                             type="text"
@@ -752,69 +778,65 @@ export default function initMigration({
                           />
                         </div>
                         <button
-              style={{ width: "fit-content", }}
-              disabled={
-                canWithdraw === false ||
-                this.state.withdrawLoading === true ||
-                this.state.withdrawStatus === "success"
-                  ? true
-                  : false
-                // this.state.txHash !== "" ? false : true
-              }
-              className={`btn filledbtn ${
-                (canWithdraw === false &&
-                  this.state.txHash === "") ||
-                (this.state.withdrawStatus === "success" &&
-                  "disabled-btn")
-              } ${
-                this.state.withdrawStatus === "deposit" ||
-                this.state.withdrawStatus === "success"
-                  ? "success-button"
-                  : this.state.withdrawStatus === "fail"
-                  ? "fail-button"
-                  : null
-              } d-flex justify-content-center align-items-center gap-2`}
-              onClick={() => {
-                this.handleWithdraw();
-              }}
-            >
-              {this.state.withdrawLoading ? (
-                <div
-                  class="spinner-border spinner-border-sm text-light"
-                  role="status"
-                >
-                  <span class="visually-hidden">
-                    Loading...
-                  </span>
-                </div>
-              ) : this.state.withdrawStatus === "initial" ? (
-                <>Withdraw</>
-              ) : this.state.withdrawStatus === "success" ? (
-                <>Success</>
-              ) : (
-                <>
-                  <img src={failMark} alt="" />
-                  Failed
-                </>
-              )}
-              {this.state.withdrawableUnixTimestamp &&
-                Date.now() <
-                  this.state.withdrawableUnixTimestamp *
-                    1e3 && (
-                  <span>
-                    &nbsp;
-                    <Countdown
-                      onComplete={() => this.forceUpdate()}
-                      key="withdrawable"
-                      date={
-                        this.state.withdrawableUnixTimestamp *
-                        1e3
-                      }
-                      renderer={getRenderer(undefined, true)}
-                    />
-                  </span>
-                )}
-            </button>
+                          style={{ width: "fit-content" }}
+                          disabled={
+                            canWithdraw === false ||
+                            this.state.withdrawLoading === true ||
+                            this.state.withdrawStatus === "success"
+                              ? true
+                              : false
+                            // this.state.txHash !== "" ? false : true
+                          }
+                          className={`btn filledbtn ${
+                            (canWithdraw === false &&
+                              this.state.txHash === "") ||
+                            (this.state.withdrawStatus === "success" &&
+                              "disabled-btn")
+                          } ${
+                            this.state.withdrawStatus === "deposit" ||
+                            this.state.withdrawStatus === "success"
+                              ? "success-button"
+                              : this.state.withdrawStatus === "fail"
+                              ? "fail-button"
+                              : null
+                          } d-flex justify-content-center align-items-center gap-2`}
+                          onClick={() => {
+                            this.handleWithdraw();
+                          }}
+                        >
+                          {this.state.withdrawLoading ? (
+                            <div
+                              class="spinner-border spinner-border-sm text-light"
+                              role="status"
+                            >
+                              <span class="visually-hidden">Loading...</span>
+                            </div>
+                          ) : this.state.withdrawStatus === "initial" ? (
+                            <>Withdraw</>
+                          ) : this.state.withdrawStatus === "success" ? (
+                            <>Success</>
+                          ) : (
+                            <>
+                              <img src={failMark} alt="" />
+                              Failed
+                            </>
+                          )}
+                          {this.state.withdrawableUnixTimestamp &&
+                            Date.now() <
+                              this.state.withdrawableUnixTimestamp * 1e3 && (
+                              <span>
+                                &nbsp;
+                                <Countdown
+                                  onComplete={() => this.forceUpdate()}
+                                  key="withdrawable"
+                                  date={
+                                    this.state.withdrawableUnixTimestamp * 1e3
+                                  }
+                                  renderer={getRenderer(undefined, true)}
+                                />
+                              </span>
+                            )}
+                        </button>
                       </div>
                     </div>
                   </>
