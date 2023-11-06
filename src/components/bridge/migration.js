@@ -636,14 +636,16 @@ export default function initMigration({
                                 this.checkAllowance(e.target.value);
                               }}
                               value={
-                                this.state.depositAmount === '' ? this.state.depositAmount : Number(this.state.depositAmount)
+                                this.state.depositAmount === ""
+                                  ? this.state.depositAmount
+                                  : Number(this.state.depositAmount)
                               }
                               disabled={
                                 this.props.destinationChain !== ""
                                   ? false
                                   : true
                               }
-                              placeholder={'0.0'}
+                              placeholder={"0.0"}
                             />
                           </div>
                           <div className="d-flex align-items-center gap-2">
@@ -678,7 +680,11 @@ export default function initMigration({
                             <input
                               type="number"
                               className="conversion-input"
-                              value={this.props.sourceChain === 'eth' ? 6* this.state.depositAmount : this.state.depositAmount}
+                              value={
+                                this.props.sourceChain === "eth"
+                                  ? 6 * this.state.depositAmount
+                                  : this.state.depositAmount
+                              }
                               disabled
                             />
                           </div>
@@ -765,10 +771,10 @@ export default function initMigration({
                             Recieve new DYP on Ethereum
                           </span>
                           <input
-                             value={this.state.txHash}
-                             onChange={(e) =>
-                               this.setState({ txHash: e.target.value })
-                             }
+                            value={this.state.txHash}
+                            onChange={(e) =>
+                              this.setState({ txHash: e.target.value })
+                            }
                             className="styledinput w-100"
                             placeholder="Enter deposit transaction hash"
                             type="text"
@@ -918,11 +924,10 @@ export default function initMigration({
                   <TimelineContent>
                     <h6 className="content-text">
                       <h6 className="content-title2">
-                        <b>Select chains</b>
+                        <b>Select chain</b>
                       </h6>
-                      Select desired bridge chains at “Deposit” section. To
-                      change the "FROM” chain you need to change it in your
-                      wallet.
+                      Select the chain of your DYP tokens that you want to
+                      migrate.
                     </h6>
                   </TimelineContent>
                 </TimelineItem>
@@ -981,11 +986,8 @@ export default function initMigration({
                             : "Approve deposit"}{" "}
                         </b>
                       </h6>
-                      Approve the transaction and then{" "}
-                      {this.props.sourceChain === "eth"
-                        ? "claim your assets"
-                        : " deposit the assets"}
-                      . These steps need confirmation in your wallet.
+                      Approve the transaction and then claim your assets. These
+                      steps need confirmation in your wallet.
                     </h6>
                   </TimelineContent>
                 </TimelineItem>
@@ -1007,7 +1009,8 @@ export default function initMigration({
                           <b>Claim new DYP token</b>
                         </h6>
                         After successful approval, you can claim your new DYP
-                        token. Check your wallet after tx has been approved.
+                        token. Check your wallet after the transaction has been
+                        approved.
                       </h6>
                     </TimelineContent>
                   </TimelineItem>
