@@ -759,8 +759,8 @@ export default function initMigration({
                   <>
                     <span className="fromtitle">Withdraw</span>
                     <div className="otherside mt-2 w-100 p-3">
-                      <div className="d-flex align-items-center justify-content-between">
-                        <div className="d-flex flex-column w-75">
+                      <div className="d-flex align-items-end justify-content-between">
+                        <div className="d-flex flex-column w-50">
                           <span className="conversion-rate-title">
                             Recieve new DYP on Ethereum
                           </span>

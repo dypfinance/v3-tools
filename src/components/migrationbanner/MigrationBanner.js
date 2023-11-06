@@ -1,6 +1,7 @@
 import React from "react";
 import "./migrationbanner.css";
 import migrationBannerIcon from "./assets/migrationBannerIcon.svg";
+import { NavLink } from "react-router-dom";
 
 const MigrationBanner = () => {
   return (
@@ -41,7 +42,7 @@ const MigrationBanner = () => {
         </div>
           <span className="migration-progress-info mb-0">*Total supply to be migrated: 75M DYP</span>
           <div className="d-flex align-items-center gap-2 mt-5">
-            <button className="btn filled-btn" onClick={() => console.log("hello")}>Migrate</button>
+            <NavLink to={"/migration"} className="btn filled-btn">Migrate</NavLink>
             <button className="btn outline-btn" style={{padding: "6px 24px"}}>Tutorial</button>
           </div>
       </div>

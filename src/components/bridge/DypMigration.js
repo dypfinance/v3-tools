@@ -65,7 +65,7 @@ const DypMigration = ({
 
   return (
     <div className="container-lg p-0">
-      <div className="migration-banner d-flex p-4 align-items-center mb-4">
+      <div className="migration-banner d-flex flex-column flex-lg-row p-4 gap-3 gap-lg-0 align-items-center mb-4">
         <div className="col-12 col-lg-6">
           <div className="d-flex flex-column gap-3">
             <h6 className="migration-banner-title mb-0">Migrate DYP tokens</h6>
@@ -78,7 +78,7 @@ const DypMigration = ({
           </div>
         </div>
 
-        <div className="col-12 col-lg-2 d-flex justify-content-end">
+        <div className="col-12 col-lg-2 d-flex justify-content-center justify-content-lg-end">
           <ReviewsBar score={75} />
         </div>
       </div>
@@ -92,13 +92,19 @@ const DypMigration = ({
               Old DYP smart contract address:
             </span>
             <div className="d-flex align-items-center gap-3">
-              <span className="old-dyp-address mb-0">
+              <a href="https://etherscan.io/address/0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17" target="_blank" className="old-dyp-address mb-0">
                 0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17
-              </span>
+              </a>
               <div className="d-flex align-items-center gap-2">
+                <a href="https://etherscan.io/address/0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17" target="_blank">
                 <img src={eth} alt="" />
+                </a>
+                <a href="https://bscscan.com/address/0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17" target="_blank">
                 <img src={bnb} alt="" />
+                </a>
+                <a href="https://snowtrace.io/address/0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17" target="_blank">
                 <img src={avax} alt="" />
+                </a>
               </div>
             </div>
           </div>
@@ -107,10 +113,12 @@ const DypMigration = ({
               New DYP smart contract address:
             </span>
             <div className="d-flex align-items-center gap-3">
-              <span className="new-dyp-address mb-0">
-                0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17
-              </span>
-              <img src={eth} alt="" />
+              <a href="https://etherscan.io/address/0x39b46b212bdf15b42b166779b9d1787a68b9d0c3" className="new-dyp-address mb-0">
+                0x39b46b212bdf15b42b166779b9d1787a68b9d0c3
+              </a>
+              <a href="https://etherscan.io/address/0x39b46b212bdf15b42b166779b9d1787a68b9d0c3" target="_blank">
+                <img src={eth} alt="" />
+                </a>
             </div>
           </div>
           <span className="contract-audit-text mb-0">
