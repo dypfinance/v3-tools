@@ -227,6 +227,8 @@ export default function initMigration({
           .then(() => {
             this.setState({ depositLoading: false, depositStatus: "success" });
             this.refreshBalance();
+            window.alertify.message("You claimed DYP tokens successfully!");
+
           })
           .catch((e) => {
             this.setState({
@@ -382,6 +384,8 @@ export default function initMigration({
               withdrawLoading: false,
               withdrawStatus: "success",
             });
+            window.alertify.message("You withdrew DYP tokens successfully!");
+
             this.getAllBalance();
           })
           .catch((e) => {
