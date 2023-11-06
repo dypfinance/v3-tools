@@ -354,6 +354,9 @@ export default function initBridgeidyp({
             });
             this.refreshBalance();
             this.getAllBalanceiDyp();
+            window.alertify.message("You withdrew DYP tokens successfully!");
+            
+
           })
           .catch((e) => {
             this.setState({ withdrawLoading: false, withdrawStatus: "fail" });
@@ -1150,14 +1153,14 @@ export default function initBridgeidyp({
                   <TimelineSeparator>
                     <TimelineDot
                       className={
-                        this.state.depositStatus === "deposit"
+                        this.state.depositStatus === "deposit" || this.state.depositStatus === 'success'
                           ? "greendot"
                           : "passivedot"
                       }
                     />
                     <TimelineConnector
                       className={
-                        this.state.depositStatus === "deposit"
+                        this.state.depositStatus === "deposit" || this.state.depositStatus === 'success'
                           ? "greenline"
                           : "passiveline"
                       }
@@ -1170,6 +1173,33 @@ export default function initBridgeidyp({
                       </h6>
                       Approve the transaction and then deposit the assets. These
                       steps need confirmation in your wallet.
+                    </h6>
+                  </TimelineContent>
+                </TimelineItem>
+                <TimelineItem>
+                  <TimelineSeparator>
+                    <TimelineDot
+                      className={
+                        this.state.depositStatus === 'success'
+                          ? "greendot"
+                          : "passivedot"
+                      }
+                    />
+                    <TimelineConnector
+                      className={
+                         this.state.depositStatus === 'success'
+                          ? "greenline"
+                          : "passiveline"
+                      }
+                    />
+                  </TimelineSeparator>
+                  <TimelineContent>
+                    <h6 className="content-text">
+                      <h6 className="content-title2">
+                        <b>Deposit tokens</b>
+                      </h6>
+                      Confirm the transaction and deposit the assets into the bridge contract. This
+                      step needs confirmation in your wallet.
                     </h6>
                   </TimelineContent>
                 </TimelineItem>
