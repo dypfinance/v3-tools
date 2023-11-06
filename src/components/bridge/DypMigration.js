@@ -1,198 +1,61 @@
 import React, { useState, useEffect } from "react";
-import initBridge from "./bridge";
-import BridgeFAQ from "./BridgeFAQ";
-import initBridgeidyp from "./bridge-idyp";
-import dyp from "./assets/dyp.svg";
-import idyp from "./assets/idyp.svg";
-import eth from "./assets/eth.svg";
-import bnb from "./assets/bnb.svg";
-import avax from "./assets/avax.svg";
 import "./bridge.css";
 import { useLocation } from "react-router-dom";
 import initMigration from "./migration";
+import Web3 from "web3";
+import avax from "./assets/avax.svg";
+import eth from "./assets/eth.svg";
+import bnb from "./assets/bnb.svg";
+import { CircularProgressbar } from "react-circular-progressbar";
+import ReviewsBar from "./ProgressBar/ReviewsBar";
 
-const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
-  const [sourceChain, setSourceChain] = useState("");
-  const [sourceChainiDyp, setSourceChainiDyp] = useState("");
-  const [destinationChainiDyp, setDestinationChainiDyp] = useState("");
+const DypMigration = ({
+  networkId,
+  isConnected,
+  handleConnection,
+  coinbase,
+}) => {
+  const [sourceChain, setSourceChain] = useState("eth");
   const [destinationChain, setDestinationChain] = useState("");
   const [activebtn, setActiveBtn] = useState("");
 
-  const [sourceBridge, setSourceBridge] = useState(window.bridge_bscavaxbsc);
-  const [destinationBridge, setDestinationBridge] = useState(
-    window.bridge_bscavax
-  );
-  const [sourceToken, setSourceToken] = useState(window.token_dyp_bscavaxbsc);
-  const [destinationToken, setDestinationToken] = useState(
-    window.token_dyp_bscavax
-  );
-
-  const [sourceBridgeiDyp, setSourceBridgeiDyp] = useState(
-    window.bridge_idypeth
-  );
-  const [destinationBridgeiDyp, setDestinationBridgeiDyp] = useState(
-    window.bridge_idypbsceth
-  );
-  const [sourceTokeniDyp, setSourceTokeniDyp] = useState(window.token_idyp_eth);
-  const [destinationTokeniDyp, setDestinationTokeniDyp] = useState(
-    window.token_idyp_bsceth
-  );
-
-  const routeData = useLocation();
-  const [faqSection, setFaqSection] = useState(routeData.state?.section);
-  const [ethBalance, setEthBalance] = useState("0.0");
-  const [bnbBalance, setBnbBalance] = useState("0.0");
-  const [avaxBalance, setAvaxBalance] = useState("0.0");
-
-  const [ethBalanceidyp, setEthBalanceidyp] = useState("0.0");
-  const [bnbBalanceidyp, setBnbBalanceidyp] = useState("0.0");
-  const [avaxBalanceidyp, setAvaxBalanceidyp] = useState("0.0");
-
-  const getAllBalance = async () => {
-    const tokenAddress = "0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17";
-    const walletAddress = coinbase;
-    const TokenABI = window.ERC20_ABI;
-
-    if (coinbase != undefined) {
-      const contract1 = new window.infuraWeb3.eth.Contract(
-        TokenABI,
-        tokenAddress
-      );
-      const contract2 = new window.avaxWeb3.eth.Contract(
-        TokenABI,
-        tokenAddress
-      );
-      const contract3 = new window.bscWeb3.eth.Contract(TokenABI, tokenAddress);
-
-      await contract1.methods
-        .balanceOf(walletAddress)
-        .call()
-        .then((data) => {
-          setEthBalance(data);
-        });
-      await contract2.methods
-        .balanceOf(walletAddress)
-        .call()
-        .then((data) => {
-          setAvaxBalance(data);
-        });
-
-      await contract3.methods
-        .balanceOf(walletAddress)
-        .call()
-        .then((data) => {
-          setBnbBalance(data);
-        });
-    }
-  };
-
-  const getAllBalanceiDyp = async () => {
-    const tokenAddress = "0xbd100d061e120b2c67a24453cf6368e63f1be056";
-    const walletAddress = coinbase;
-    const TokenABI = window.ERC20_ABI;
-    let bal1, bal2, bal3;
-    if (coinbase != undefined) {
-      const contract1 = new window.infuraWeb3.eth.Contract(
-        TokenABI,
-        tokenAddress
-      );
-      const contract2 = new window.avaxWeb3.eth.Contract(
-        TokenABI,
-        tokenAddress
-      );
-      const contract3 = new window.bscWeb3.eth.Contract(TokenABI, tokenAddress);
-
-      bal1 = await contract1.methods
-        .balanceOf(walletAddress)
-        .call()
-        .then((data) => {
-          setEthBalanceidyp(data);
-        });
-      bal2 = await contract2.methods
-        .balanceOf(walletAddress)
-        .call()
-        .then((data) => {
-          setAvaxBalanceidyp(data);
-        });
-
-      bal3 = await contract3.methods
-        .balanceOf(walletAddress)
-        .call()
-        .then((data) => {
-          setBnbBalanceidyp(data);
-        });
-    }
-  };
+  const [sourceBridge, setSourceBridge] = useState();
+  const [destinationBridge, setDestinationBridge] = useState();
+  const [sourceToken, setSourceToken] = useState();
+  const [destinationToken, setDestinationToken] = useState();
 
   const handleSourceChain = async (chainText) => {
     if (chainText === "eth") {
       setSourceChain(chainText);
-    }
-
-    if (chainText === "bnb") {
+      setDestinationChain("eth");
+    } else if (chainText === "bnb") {
+      window.cached_contracts = Object.create(null);
       setSourceChain(chainText);
-      setSourceBridge(window.bridge_bscavaxbsc);
-      setDestinationBridge(window.bridge_bscavax);
-      setSourceToken(window.token_dyp_bscavaxbsc);
-      setDestinationToken(window.token_dyp_bscavax);
-    }
-
-    if (chainText === "avax") {
+      setTimeout(() => {
+        setSourceBridge(window.newbridge_bsc);
+        setDestinationBridge(window.newbridge_eth_bsc);
+        setSourceToken(window.token_old_bsc);
+        setDestinationToken(window.token_dypius_new);
+        setDestinationChain("eth");
+      }, 500);
+    } else if (chainText === "avax") {
+      window.cached_contracts = Object.create(null);
       setSourceChain(chainText);
-      setDestinationBridge(window.bridge_bscavaxbsc);
-      setSourceBridge(window.bridge_bscavax);
-      setDestinationToken(window.token_dyp_bscavaxbsc);
-      setSourceToken(window.token_dyp_bscavax);
-    }
-  };
-
-  const handleSourceChainiDyp = async (chainText) => {
-    if (activebtn === "5") {
-      if (chainText === "eth") {
-        setSourceChainiDyp(chainText);
-        setSourceBridgeiDyp(window.bridge_idypbsceth);
-        setDestinationBridgeiDyp(window.bridge_idypbscbsc);
-        setSourceTokeniDyp(window.token_idyp_bsceth);
-        setDestinationTokeniDyp(window.token_idyp_bscbsc);
-      }
-
-      if (chainText === "bnb") {
-        setSourceChainiDyp(chainText);
-        setSourceBridgeiDyp(window.bridge_idypbscbsc);
-        setDestinationBridgeiDyp(window.bridge_idypbsceth);
-        setSourceTokeniDyp(window.token_idyp_bscbsc);
-        setDestinationTokeniDyp(window.token_idyp_bsceth);
-      }
-    } else if (activebtn === "7") {
-      if (chainText === "eth") {
-        setSourceChainiDyp(chainText);
-        setSourceBridgeiDyp(window.bridge_idypeth);
-        setDestinationBridgeiDyp(window.bridge_idypbsc);
-        setSourceTokeniDyp(window.token_idyp_eth);
-        setDestinationTokeniDyp(window.token_idyp_bsc);
-      }
-
-      if (chainText === "avax") {
-        setSourceChainiDyp(chainText);
-        setSourceBridgeiDyp(window.bridge_idypbsc);
-        setDestinationBridgeiDyp(window.bridge_idypeth);
-        setSourceTokeniDyp(window.token_idyp_bsc);
-        setDestinationTokeniDyp(window.token_idyp_eth);
-      }
+      setTimeout(() => {
+        setSourceBridge(window.newbridge_avax);
+        setDestinationBridge(window.newbridge_eth_avax);
+        setSourceToken(window.token_old_avax);
+        setDestinationToken(window.token_dypius_new);
+        setDestinationChain("eth");
+      }, 500);
     }
   };
 
   useEffect(() => {
-    getAllBalance();
-    getAllBalanceiDyp();
-  }, [sourceChain, destinationChain, sourceChainiDyp, destinationChainiDyp]);
+    setSourceChain("eth");
+    setDestinationChain("eth");
+  }, []);
 
-  const BridgeModal = initBridge({
-    bridgeETH: sourceBridge,
-    bridgeBSC: destinationBridge,
-    tokenETH: sourceToken,
-    tokenBSC: destinationToken,
-  });
   const MigrationModal = initMigration({
     bridgeETH: sourceBridge,
     bridgeBSC: destinationBridge,
@@ -200,118 +63,121 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
     tokenBSC: destinationToken,
   });
 
-  const BridgeiDYPModal = initBridgeidyp({
-    bridgeETH: sourceBridgeiDyp,
-    bridgeBSC: destinationBridgeiDyp,
-    tokenETH: sourceTokeniDyp,
-    tokenBSC: destinationTokeniDyp,
-  });
-
   return (
     <div className="container-lg p-0">
+      <div className="migration-banner d-flex flex-column flex-lg-row p-4 gap-3 gap-lg-0 align-items-center mb-4">
+        <div className="col-12 col-lg-6">
+          <div className="d-flex flex-column gap-3">
+            <h6 className="migration-banner-title mb-0">Migrate DYP tokens</h6>
+            <p className="migration-banner-desc mb-0">
+              Easily migrate your old DYP tokens from Ethereum, BNB Chain, and
+              Avalanche to the new DYP v2 token on Ethereum. This upgrade
+              ensures that you will benefit from the latest features and
+              improvements in the Dypius ecosystem.
+            </p>
+          </div>
+        </div>
+
+        <div className="col-12 col-lg-2 d-flex justify-content-center justify-content-lg-end">
+          <ReviewsBar score={75} />
+        </div>
+      </div>
+      <h3 className="text-white mb-2">Migration Details</h3>
+      <div className="d-flex flex-column flex-lg-row gap-4 gap-lg-0 align-items-center justify-content-between mb-4">
+        <div className="migration-details-wrapper p-3 d-flex flex-column gap-3 position-relative">
+          <div className="purplediv"></div>
+          <h6 className="migration-details-title">Smart Contract</h6>
+          <div className="d-flex flex-column">
+            <span className="smart-contract-announce">
+              Old DYP smart contract address:
+            </span>
+            <div className="d-flex align-items-center gap-3">
+              <a href="https://etherscan.io/address/0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17" target="_blank" className="old-dyp-address mb-0">
+                0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17
+              </a>
+              <div className="d-flex align-items-center gap-2">
+                <a href="https://etherscan.io/address/0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17" target="_blank">
+                <img src={eth} alt="" />
+                </a>
+                <a href="https://bscscan.com/address/0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17" target="_blank">
+                <img src={bnb} alt="" />
+                </a>
+                <a href="https://snowtrace.io/address/0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17" target="_blank">
+                <img src={avax} alt="" />
+                </a>
+              </div>
+            </div>
+          </div>
+          <div className="d-flex flex-column">
+            <span className="smart-contract-announce">
+              New DYP smart contract address:
+            </span>
+            <div className="d-flex align-items-center gap-3">
+              <a href="https://etherscan.io/address/0x39b46b212bdf15b42b166779b9d1787a68b9d0c3" className="new-dyp-address mb-0">
+                0x39b46b212bdf15b42b166779b9d1787a68b9d0c3
+              </a>
+              <a href="https://etherscan.io/address/0x39b46b212bdf15b42b166779b9d1787a68b9d0c3" target="_blank">
+                <img src={eth} alt="" />
+                </a>
+            </div>
+          </div>
+          <span className="contract-audit-text mb-0">
+            *Smart Contracts are audited by: CertiK and PeckShield
+          </span>
+        </div>
+        <div className="migration-details-wrapper p-3 d-flex flex-column gap-3 position-relative">
+          <div className="purplediv"></div>
+          <h6 className="migration-details-title">Swap Ratio</h6>
+          <span className="smart-contract-announce">
+          The swap ratio for DYP V2 varies depending on the respective blockchain.
+          </span>
+          <ul>
+            <li className="migration-swap-item">
+              1 DYP ERC20 - 6 DYP ERC20 V2
+            </li>
+            <li className="migration-swap-item">
+              1 DYP BEP20 - 1 DYP ERC20 V2
+            </li>
+            <li className="migration-swap-item">
+              1 DYP ARC20 - 1 DYP ERC20 V2
+            </li>
+          </ul>
+        </div>
+        <div className="migration-details-wrapper p-3 d-flex flex-column gap-3 position-relative">
+          <div className="purplediv"></div>
+          <h6 className="migration-details-title">Help Guide</h6>
+          <span className="smart-contract-announce">
+            Read the article to gain a better understanding of the migration
+            process and learn how to follow the correct steps for converting
+            your old DYP tokens to the new DYP v2 tokens.
+          </span>
+          <div className="d-flex align-items-center.gap-2">
+            <span className="explore-migration">Explore the Guide</span>
+            <img src={require("./assets/greenArrow.svg").default} alt="" />
+          </div>
+        </div>
+      </div>
       <div className="col-12 col-lg-5 d-flex flex-column justify-content-center gap-3 mb-4">
-        <h3 className="text-white">Dypius Migration</h3>
-        <p className="text-white">
-        Migrate your DYP Tokens to the new Ecosystem
-          <br />
-          Every transaction is instant and secure.
-        </p>
+        <h3 className="text-white">Migration</h3>
       </div>
       <div>
-       
         <MigrationModal
           isConnected={isConnected}
           networkId={networkId}
           handleConnection={handleConnection}
           destinationChain={destinationChain}
-          onSelectChain={(value) => {
-            setDestinationChain(value);
-          }}
           onSelectSourceChain={(value) => {
             handleSourceChain(value);
           }}
           coinbase={coinbase}
           sourceChain={sourceChain}
           activebtn={activebtn}
-          ethBalance={ethBalance}
-          bnbBalance={bnbBalance}
-          avaxBalance={avaxBalance}
+          sourceBridge={sourceBridge}
+          destinationBridge={destinationBridge}
         />
       </div>
-      <div className="bigseparator mt-5 mb-5 col-6 col-xxl-5"></div>
-      {/* <div>
-        <h3 className="text-white mb-4">
-          <img src={idyp} alt="" style={{ width: 32, height: 32 }} /> iDYP
-          Bridge
-        </h3>
-        <h5 className="text-white mb-2">Choose route</h5>
-        <div className="d-flex gap-3 mb-2">
-          <div
-            className={
-              activebtn === "5"
-                ? "optionbtn-active activeethbnb"
-                : "optionbtn-passive bridge-passive"
-            }
-            onClick={() => {
-              setActiveBtn("5");
-              setSourceChainiDyp("eth");
-              setDestinationChainiDyp("bnb");
-              setSourceBridgeiDyp(window.bridge_idypbsceth);
-              setDestinationBridgeiDyp(window.bridge_idypbscbsc);
-              setSourceTokeniDyp(window.token_idyp_bsceth);
-              setDestinationTokeniDyp(window.token_idyp_bscbsc);
-            }}
-          >
-            <h6 className="optiontext d-flex align-items-center gap-2">
-              <img src={eth} alt="" /> <img src={bnb} alt="" />
-              <p className=" mb-0 optiontext d-none d-lg-flex">ETH/BNB</p>
-            </h6>
-          </div>
-
-          <div
-            className={
-              activebtn === "7"
-                ? "optionbtn-active activeethavax"
-                : "optionbtn-passive bridge-passive"
-            }
-            onClick={() => {
-              setSourceChainiDyp("eth");
-              setDestinationChainiDyp("avax");
-              setActiveBtn("7");
-              setSourceBridgeiDyp(window.bridge_idypeth);
-              setDestinationBridgeiDyp(window.bridge_idypbsc);
-              setSourceTokeniDyp(window.token_idyp_eth);
-              setDestinationTokeniDyp(window.token_idyp_bsc);
-            }}
-          >
-            <h6 className="optiontext d-flex align-items-center gap-2">
-              <img src={eth} alt="" /> <img src={avax} alt="" />
-              <p className=" mb-0 optiontext d-none d-lg-flex">ETH/AVAX</p>
-            </h6>
-          </div>
-        </div>
-        <BridgeiDYPModal
-          isConnected={isConnected}
-          networkId={networkId}
-          handleConnection={handleConnection}
-          destinationChain={destinationChainiDyp}
-          onSelectChain={(value) => {
-            setDestinationChainiDyp(value);
-          }}
-          onSelectSourceChain={(value) => {
-            handleSourceChainiDyp(value);
-          }}
-          sourceChain={sourceChainiDyp}
-          coinbase={coinbase}
-          activebtn={activebtn}
-          ethBalance={ethBalanceidyp}
-          bnbBalance={bnbBalanceidyp}
-          avaxBalance={avaxBalanceidyp}
-        />
-      </div>
-      <BridgeFAQ faqIndex={routeData.state ? routeData.state.faqIndex : -1} /> */}
     </div>
   );
 };
 
-export default Bridge;
+export default DypMigration;

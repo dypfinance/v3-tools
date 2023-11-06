@@ -32,7 +32,7 @@ import NftMinting from "./components/caws/NftMinting/index";
 import Bridge from "./components/bridge/BridgeGeneral";
 import Footer from "./components/Footer/footer";
 import BuyDyp from "./components/buydyp/BuyDyp";
-import Swap from "./components/swap/Swap";
+// import Swap from "./components/swap/Swap";
 import MobileMenu from "./components/sidebar/MobileMenu";
 import Disclaimer from "./components/disclaimer/Disclaimer";
 import ScrollToTop from "./functions/ScrollToTop";
@@ -98,7 +98,7 @@ class App extends React.Component {
   };
 
   checkNetworkId = () => {
-    if (!this.props.history.location.pathname.includes("bridge")) {
+    if (!this.props.history.location.pathname.includes("bridge") && !this.props.history.location.pathname.includes("migration")) {
       if (
         window.ethereum &&
         (window.ethereum.isMetaMask === true ||
@@ -397,6 +397,7 @@ class App extends React.Component {
       await window.ethereum
         .request({ method: "eth_accounts" })
         .then((data) => {
+         
           this.setState({
             isConnected: data.length === 0 ? false : true,
             coinbase: data.length === 0 ? undefined : data[0],
@@ -491,7 +492,7 @@ class App extends React.Component {
       LP_IDs_V2.weth[4],
     ];
 
-    if (!this.props.location.pathname.includes("bridge")) {
+    if (!this.props.location.pathname.includes("bridge")&&!this.props.location.pathname.includes("migration")) {
       ethereum?.on("chainChanged", this.checkNetworkId);
       ethereum?.on("accountsChanged", this.checkConnection);
     }
@@ -698,7 +699,7 @@ class App extends React.Component {
                     path="/disclaimer"
                     render={() => <Disclaimer />}
                   />
-                  <Route exact path="/swap" component={Swap} />
+                  {/* <Route exact path="/swap" component={Swap} /> */}
 
                   {/* <Route
                     exact

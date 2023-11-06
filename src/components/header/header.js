@@ -280,7 +280,8 @@ const Header = ({
                   <div className="d-flex justify-content-between gap-3 align-items-center">
                     {routeData.pathname &&
                       routeData.pathname !== "/bridge" &&
-                      routeData.pathname !== "/swap" && (
+                      routeData.pathname !== "/swap" &&
+                      routeData.pathname !== "/migration" && (
                         <DropdownButton
                           id="dropdown-basic-button"
                           className="d-flex align-items-center justify-content-center"
@@ -380,16 +381,19 @@ const Header = ({
                       routeData.pathname !== "/swap" && (
                         <>
                           <div className="account-info d-none d-lg-flex align-items-center justify-content-center gap-2 gap-lg-3">
-                            <span className="account-balance d-none d-lg-flex">
-                              {currencyAmount}{" "}
-                              {chainId === 1
-                                ? "ETH"
-                                : chainId === 56
-                                ? "BNB"
-                                : chainId === 43114
-                                ? "AVAX"
-                                : ""}
-                            </span>
+                            {routeData.pathname !== "/bridge" &&
+                              routeData.pathname !== "/migration" && (
+                                <span className="account-balance d-none d-lg-flex">
+                                  {currencyAmount}{" "}
+                                  {chainId === 1
+                                    ? "ETH"
+                                    : chainId === 56
+                                    ? "BNB"
+                                    : chainId === 43114
+                                    ? "AVAX"
+                                    : ""}
+                                </span>
+                              )}
                             <span className="account-address">
                               {windowSize.width > 786
                                 ? shortAddress(coinbase)

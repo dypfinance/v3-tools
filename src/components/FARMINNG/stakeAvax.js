@@ -250,7 +250,7 @@ const StakeAvax = ({
         stakingTime,
         depositedTokens,
         lastClaimedTime,
-        tvl,
+        tvl2,
         referralFeeEarned,
         total_stakers,
         tvlConstantDAI,
@@ -303,7 +303,8 @@ settvlUSD(tvlUSD)
       setdepositedTokens(depositedTokens_formatted);
 
     setlastClaimedTime(lastClaimedTime);
-    let tvl_formatted =  new BigNumber(tvl).div(1e18)
+    let tvl_formatted =  new BigNumber(tvl2).div(1e18).toString(10)
+  
     settvl(tvl_formatted)
 
     setreferralFeeEarned(referralFeeEarned);
@@ -659,9 +660,9 @@ settvlUSD(tvlUSD)
  
   //let tvl_usd = this.state.tvl / 1e18 * this.state.usdPerToken
   let tvl_usd =  tvlUSD / 1e18;
-  const first = getFormattedNumber(tvl,6).replace(',','')
-  const finalTvlUsd = Number(first) * usdPerToken
-
+ 
+  const finalTvlUsd = Number(tvl) * usdPerToken
+ 
   // let tvlDYPS2 = tvlDyps / 1e18;
   // tvl_usd = tvl_usd + tvlDYPS2;
   
@@ -1210,7 +1211,7 @@ settvlUSD(tvlUSD)
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">TVL USD</span>
-                    <h6 className="stats-card-content">${getFormattedNumber(finalTvlUsd,4) } USD</h6>
+                    <h6 className="stats-card-content">${getFormattedNumber(Number(tvl) * usdPerToken,4) } USD</h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">

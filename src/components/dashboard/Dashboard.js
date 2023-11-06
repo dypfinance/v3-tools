@@ -26,6 +26,7 @@ import StakeNewEth from "../FARMINNG/stakeNewEth";
 import CawsWodDetails from "../FARMINNG/cawsWod";
 import CawsWodCard from "../top-pools-card/CawsWodCard";
 import BscFarmingFunc from "../FARMINNG/BscFarmingFunc";
+import MigrationBanner from "../migrationbanner/MigrationBanner";
 
 const Dashboard = ({
   isConnected,
@@ -271,7 +272,8 @@ const Dashboard = ({
       <div className="d-flex m-0 flex-column flex-xxl-row justify-content-between gap-4">
         <div className="d-flex flex-column gap-4 justify-content-between">
           <div className="d-flex flex-column flex-md-row m-0 gap-3 justify-content-between">
-            <Calculator />
+            {/* <Calculator /> */}
+            <MigrationBanner />
             <div className="d-flex flex-column gap-3 gap-lg-4 justify-content-between dashboard-cards-wrapper">
               <ExplorerCard />
               <div className="d-flex flex-column flex-md-row justify-content-between gap-3">

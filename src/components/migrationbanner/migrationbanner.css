@@ -1,0 +1,127 @@
+.migration-banner-wrapper {
+    position: relative;
+    background-color: #312f69;
+    box-shadow: 0px 32px 64px rgba(17, 17, 17, 0.08);
+    border-radius: 12px;
+    padding: 20px;
+    border: 2px solid #312f69;
+    /* background-image: url(./assets/calculatorbg.png); */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 49%;
+    transition: all 0.25s;
+  }
+
+  @media screen and (max-width: 768px) {
+    .migration-banner-wrapper{
+      width: 100%;
+    }
+  }
+
+  .migration-banner-wrapper::before{
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    background-image: url('./assets/migrationBannerBg.png');
+    background-size: cover;
+    background-position: right;
+    background-repeat: no-repeat;
+    pointer-events: none;
+  }
+  
+  .migration-banner-wrapper:focus,
+  .migration-banner-wrapper:hover,
+  .migration-banner-wrapper:active {
+    border: 2px solid rgb(142, 151, 205);
+  }
+
+  .migration-banner-title{
+    color: #F7F7FC !important;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+
+  .migrated-tokens-wrapper{
+    border-radius: 12px;
+    border: 1px solid #4D4E87;
+    width: 65%;
+  }
+
+  .migrated-tokens{
+    color: #F7F7FC !important;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+  }
+
+  .migrated-tokens-amount{
+    color: #F7F7FC !important;
+    text-align: right;
+    font-size: 24px;
+    font-style: italic;
+    font-weight: 700;
+    line-height: normal;
+  }
+
+  .migration-outer-progress{
+    border-radius: 30px;
+    position: relative;
+border: 1px solid #8E97CD;
+background: #3E3C75;
+width: 65%;
+height: 35px;
+  }
+
+.migration-inner-progress{
+  height: 100%;
+  border-radius: 30px;
+border: 0.5px solid #4D4E87;
+background: linear-gradient(90deg, #5B2CAF 0%, #6C53E3 100%);
+z-index: 2;
+}
+  .progress-dots{
+    position: absolute;
+    width: 90%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    margin: auto;
+  }
+.migration-dot{
+  height: 8px;
+  width: 8px;
+  background: #4D4E87;
+  border-radius: 50%;
+}
+
+.migration-percentage{
+  color: #FFF !important;
+text-align: center;
+font-size: 20px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+}
+
+.migration-dash{
+  height: 16px;
+  width: 4px;
+  background: #fff;
+  border-radius: 10px;
+}
+
+.migration-progress-info{
+  color: #F7F7FC !important;
+font-size: 10px;
+font-style: italic;
+font-weight: 300;
+line-height: normal;
+}
