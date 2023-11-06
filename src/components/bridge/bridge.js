@@ -247,7 +247,10 @@ export default function initBridge({
         console.log({ url });
         let args = await window.jQuery.get(url);
         console.log({ args });
-        let bridge = this.props.sourceChain === 'bnb' ? window.bridge_bscavax : window.bridge_bscavaxbsc
+        let bridge =
+          this.props.sourceChain === "bnb"
+            ? window.bridge_bscavax
+            : window.bridge_bscavaxbsc;
         bridge
           .withdraw(args)
           .then(() => {
@@ -289,8 +292,9 @@ export default function initBridge({
         let coinbase = this.props.coinbase;
         this.setState({ coinbase });
         try {
-          const tokenAddress = "0x9e32f23cdf8193167a0191ff0fc66a48837bbe2f";
-          const tokenAddress_bsc = "0x83cd3738a46ebf5bdd7d278e412ad90dff8df6e0";
+          const tokenAddress = window.config.token_old_address;
+          const tokenAddress_bsc = window.config.token_old_bsc_address;
+          const tokenAddress_avax = window.config.token_old_avax_address;
 
           // let chainId = this.props.networkId;
           // let network = window.config.chain_ids[chainId] || "UNKNOWN";
@@ -305,7 +309,7 @@ export default function initBridge({
           //   network,
           // });
           if (this.props.sourceChain === "eth") {
-            const token_contract_eth = new window.goerliWeb3.eth.Contract(
+            const token_contract_eth = new window.infuraWeb3.eth.Contract(
               window.TOKEN_ABI,
               tokenAddress
             );
@@ -316,7 +320,7 @@ export default function initBridge({
                 this.setState({ token_balance: data });
               });
           } else if (this.props.sourceChain === "bnb") {
-            const token_contract_bsc = new window.bscTestWeb3.eth.Contract(
+            const token_contract_bsc = new window.bscWeb3.eth.Contract(
               window.TOKENBSC_ABI,
               tokenAddress_bsc
             );
@@ -326,8 +330,18 @@ export default function initBridge({
               .then((data) => {
                 this.setState({ token_balance: data });
               });
+          } else if (this.props.sourceChain === "avax") {
+            const token_contract_avax = new window.avaxWeb3.eth.Contract(
+              window.TOKENAVAX_ABI,
+              tokenAddress_avax
+            );
+            await token_contract_avax.methods
+              .balanceOf(this.props.coinbase)
+              .call()
+              .then((data) => {
+                this.setState({ token_balance: data });
+              });
           }
-
           if (this.state.txHash) {
             try {
               let signature = window.config.SIGNATURE_API_URL_NEW_AVAX;
@@ -358,31 +372,31 @@ export default function initBridge({
     };
 
     getAllBalance = async () => {
-      const tokenAddress = "0x9e32f23cdf8193167a0191ff0fc66a48837bbe2f";
-      const tokenAddress_bsc = "0x83cd3738a46ebf5bdd7d278e412ad90dff8df6e0";
+      const tokenAddress = window.config.token_old_address;
+      const tokenAddress_bsc = window.config.token_old_bsc_address;
+      const tokenAddress_avax = window.config.token_old_avax_address;
 
       const walletAddress = this.props.coinbase;
       const TokenABI = window.ERC20_ABI;
 
       if (walletAddress != undefined) {
-        const contract1 = new window.goerliWeb3.eth.Contract(
+        const contract1 = new window.infuraWeb3.eth.Contract(
           TokenABI,
           tokenAddress
         );
-        const contract2 = new window.bscTestWeb3.eth.Contract(
+        const contract2 = new window.bscWeb3.eth.Contract(
           TokenABI,
           tokenAddress_bsc
         );
         const contract3 = new window.avaxWeb3.eth.Contract(
           TokenABI,
-          tokenAddress
+          tokenAddress_avax
         );
         if (this.props.sourceChain === "eth") {
           await contract2.methods
             .balanceOf(walletAddress)
             .call()
             .then((data) => {
-              console.log(data, "eth balance");
               this.setState({ ethBalance: data });
             });
         } else if (this.props.sourceChain === "bnb") {
@@ -390,17 +404,16 @@ export default function initBridge({
             .balanceOf(walletAddress)
             .call()
             .then((data) => {
-              console.log(data, "bnb balance");
               this.setState({ bnbBalance: data });
             });
+        } else if (this.props.sourceChain === "avax") {
+          await contract3.methods
+            .balanceOf(walletAddress)
+            .call()
+            .then((data) => {
+              this.setState({ avaxBalance: data });
+            });
         }
-
-        // await contract3.methods
-        //   .balanceOf(walletAddress)
-        //   .call()
-        //   .then((data) => {
-        //     setAvaxBalance(data);
-        //   });
       }
     };
 
@@ -460,51 +473,76 @@ export default function initBridge({
                   <h6 className="fromtitle mb-2">Deposit</h6>
                   <div className="d-flex flex-column flex-lg-row align-items-center justify-content-between gap-2">
                     <div className="d-flex align-items-center justify-content-between gap-3">
-                      {this.props.activebtn !== "2" && (
-                        <div
-                          className={
-                            this.props.sourceChain === "eth"
-                              ? "optionbtn-active"
-                              : "optionbtn-passive bridge-passive"
-                          }
-                          onClick={() => {
-                            this.setState({
-                              sourceChain: "eth",
-                            });
-                            this.props.onSelectSourceChain("eth");
-                            this.props.onSelectChain("bnb");
-                          }}
-                        >
-                          <h6 className="optiontext d-flex align-items-center gap-2">
-                            <img src={eth} alt="" />
-                            <p className=" mb-0 optiontext d-none d-lg-flex">
-                              Ethereum
-                            </p>
-                          </h6>
-                        </div>
-                      )}
-
                       <div
                         className={
-                          this.props.sourceChain === "bnb"
+                          this.props.sourceChain === "eth"
                             ? "optionbtn-active"
                             : "optionbtn-passive bridge-passive"
                         }
                         onClick={() => {
                           this.setState({
-                            sourceChain: "bnb",
+                            sourceChain: "eth",
                           });
-                          this.props.onSelectSourceChain("bnb");
-                          this.props.onSelectChain("eth");
+                          this.props.onSelectSourceChain("eth");
+                          this.props.onSelectChain(
+                            this.props.activebtn !== "2" ? "bnb" : "avax"
+                          );
                         }}
                       >
                         <h6 className="optiontext d-flex align-items-center gap-2">
-                          <img src={bnb} alt="" />
+                          <img src={eth} alt="" />
                           <p className=" mb-0 optiontext d-none d-lg-flex">
-                            BNB Chain
+                            Ethereum
                           </p>
                         </h6>
                       </div>
+
+                      {this.props.activebtn !== "2" && (
+                        <div
+                          className={
+                            this.props.sourceChain === "bnb"
+                              ? "optionbtn-active"
+                              : "optionbtn-passive bridge-passive"
+                          }
+                          onClick={() => {
+                            this.setState({
+                              sourceChain: "bnb",
+                            });
+                            this.props.onSelectSourceChain("bnb");
+                            this.props.onSelectChain("eth");
+                          }}
+                        >
+                          <h6 className="optiontext d-flex align-items-center gap-2">
+                            <img src={bnb} alt="" />
+                            <p className=" mb-0 optiontext d-none d-lg-flex">
+                              BNB Chain
+                            </p>
+                          </h6>
+                        </div>
+                      )}
+                      {this.props.activebtn === "2" && (
+                        <div
+                          className={
+                            this.props.sourceChain === "avax"
+                              ? "optionbtn-active"
+                              : "optionbtn-passive bridge-passive"
+                          }
+                          onClick={() => {
+                            this.setState({
+                              sourceChain: "avax",
+                            });
+                            this.props.onSelectSourceChain("avax");
+                            this.props.onSelectChain("eth");
+                          }}
+                        >
+                          <h6 className="optiontext d-flex align-items-center gap-2">
+                            <img src={avax} alt="" />
+                            <p className=" mb-0 optiontext d-none d-lg-flex">
+                              Avalanche
+                            </p>
+                          </h6>
+                        </div>
+                      )}
                     </div>
                     {this.props.isConnected === false ? (
                       <button
@@ -728,6 +766,30 @@ export default function initBridge({
                               <h6 className="fromtitle mb-2">Withdraw</h6>
                               <div className="d-flex align-items-center justify-content-between gap-2">
                                 <div className="d-flex align-items-center justify-content-between gap-3">
+                                  <div
+                                    className={
+                                      this.props.destinationChain === "eth"
+                                        ? "optionbtn-active"
+                                        : "optionbtn-passive bridge-passive"
+                                    }
+                                    onClick={() => {
+                                      // this.props.onSelectChain("avax");
+                                    }}
+                                    style={{
+                                      pointerEvents:
+                                        this.props.networkId === 1 ||
+                                        this.props.networkId === 56
+                                          ? "none"
+                                          : "auto",
+                                    }}
+                                  >
+                                    <h6 className="optiontext d-flex align-items-center gap-2">
+                                      <img src={eth} alt="" />
+                                      <p className=" mb-0 optiontext d-none d-lg-flex">
+                                        Ethereum
+                                      </p>
+                                    </h6>
+                                  </div>
                                   {this.props.activebtn !== "2" && (
                                     <div
                                       className={
@@ -754,31 +816,32 @@ export default function initBridge({
                                       </h6>
                                     </div>
                                   )}
-
-                                  <div
-                                    className={
-                                      this.props.destinationChain === "eth"
-                                        ? "optionbtn-active"
-                                        : "optionbtn-passive bridge-passive"
-                                    }
-                                    onClick={() => {
-                                      // this.props.onSelectChain("avax");
-                                    }}
-                                    style={{
-                                      pointerEvents:
-                                        this.props.networkId === 1 ||
-                                        this.props.networkId === 56
-                                          ? "none"
-                                          : "auto",
-                                    }}
-                                  >
-                                    <h6 className="optiontext d-flex align-items-center gap-2">
-                                      <img src={eth} alt="" />
-                                      <p className=" mb-0 optiontext d-none d-lg-flex">
-                                        Ethereum
-                                      </p>
-                                    </h6>
-                                  </div>
+                                  {this.props.activebtn === "2" && (
+                                    <div
+                                      className={
+                                        this.props.destinationChain === "avax"
+                                          ? "optionbtn-active"
+                                          : "optionbtn-passive bridge-passive"
+                                      }
+                                      onClick={() => {
+                                        // this.props.onSelectChain("bnb");
+                                      }}
+                                      style={{
+                                        pointerEvents:
+                                          this.props.networkId === 1 ||
+                                          this.props.networkId === 56
+                                            ? "none"
+                                            : "auto",
+                                      }}
+                                    >
+                                      <h6 className="optiontext d-flex align-items-center gap-2">
+                                        <img src={avax} alt="" />
+                                        <p className=" mb-0 optiontext d-none d-lg-flex">
+                                          Avalanche
+                                        </p>
+                                      </h6>
+                                    </div>
+                                  )}
                                 </div>
                               </div>
                             </div>
@@ -835,7 +898,7 @@ export default function initBridge({
                                   className="styledinput"
                                   placeholder="Enter Deposit tx hash"
                                   type="text"
-                                  disabled={this.props.sourceChain===""}
+                                  disabled={this.props.sourceChain === ""}
                                 />
                               </div>
 

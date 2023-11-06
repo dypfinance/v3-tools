@@ -2182,7 +2182,6 @@ window.config = {
   token_old_avax_address: "0x961c8c0b1aad0c0b10a51fef6a867e3091bcef17", //avax
   token_new_dypius_address: "0x39b46b212bdf15b42b166779b9d1787a68b9d0c3", //new dypius token on eth
 
-
   claim_newdyp_eth_address: "0xc40be3a801a39bdc151bf6b3468b4035f8a4d440", //migrate old dyp eth -> new dyp eth
   bridge_bsc_new_address: "0x39b46b212bdf15b42b166779b9d1787a68b9d0c3",
   bridge_migration_eth_bsc_new_address: "0x9eafb124162c17196a0e9de1bdb70384936f0dd5",
@@ -2193,13 +2192,24 @@ window.config = {
 
   bridge_eth_new_address: "0xfb99c497fef66b1b8cd6d6e4186649a7c79c62be",
   SIGNATURE_API_URL_NEW_BSC: "https://claimbsc.dypius.com",
- 
+  SIGNATURE_API_URL_NEW_AVAX: "https://claimavax.dypius.com",
 
 
   //new token bridge eth <-> bsc
   new_bridge_eth_address: "0x5cb6e657a8fe74fe971ae5a6b44b735f883f3d1d",
   new_bridge_bsc_address: "0xea71da5ab0bc280725be424fb515d62d77e8eb37",
-  SIGNATURE_API_URL_NEW_AVAX: "https://claimavax.dypius.com",
+
+
+
+  new_bridge_eth_bsc_address: "0xb9333f96133e89bc7e4a0584457445a68c9dc590",
+  new_bridge_bsc_eth_address: "0x9a51ff1005c6825f15696ce5d96783f24e58af89",
+  token_new_dypius_bsc_address: "0x1a3264f2e7b1cfc6220ec9348d33ccf02af7aaa4", //new dypius token on bsc
+
+  new_bridge_eth_avax_address: "0x1ad3b0b7ed4d06917f2765bf3384b8ee8b4d90eb",
+  new_bridge_avax_eth_address: "0x9a51ff1005c6825f15696ce5d96783f24e58af89",
+  token_new_dypius_avax_address: "0x1a3264f2e7b1cfc6220ec9348d33ccf02af7aaa4", //new dypius token on avax
+
+
 };
 
 window.infuraWeb3 = new Web3(window.config.infura_endpoint);
@@ -3486,14 +3496,15 @@ window.newbridge_eth_avax = new NEW_BRIDGE(
 
 //new dyp token bridge bsc<-->eth
 window.new_bridge_bsc = new NEW_BRIDGE(
-  window.config.new_bridge_bsc_address,
-  window.config.token_dyp_new_bsc_address
+  window.config.new_bridge_bsc_eth_address,
+  window.config.token_new_dypius_bsc_address
 );
 
 window.new_bridge_eth = new NEW_BRIDGE(
-  window.config.new_bridge_eth_address,
-  window.config.token_dyp_new_address
+  window.config.new_bridge_eth_bsc_address,
+  window.config.token_new_dypius_address
 );
+
 
 window.token_old_eth = new TOKEN("TOKEN_OLD_ETH");
 window.token_old_bsc = new TOKENBSC("TOKEN_OLD_BSC");

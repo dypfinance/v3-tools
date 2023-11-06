@@ -148,6 +148,16 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
         setSourceToken(window.token_dyp_new_bsc);
       }, 500);
     }
+    if (chainText === "avax") {
+      window.cached_contracts = Object.create(null);
+      setSourceChain(chainText);
+      setTimeout(() => {
+        setDestinationBridge(window.new_bridge_eth);
+        setSourceBridge(window.new_bridge_bsc);
+        setDestinationToken(window.token_dyp_new);
+        setSourceToken(window.token_dyp_new_bsc);
+      }, 500);
+    }
   };
 
   const handleSourceChainiDyp = async (chainText) => {
@@ -266,6 +276,27 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
             <h6 className="optiontext d-flex align-items-center gap-2">
               <img src={eth} alt="" /> <img src={bnb} alt="" />
               <p className=" mb-0 optiontext d-none d-lg-flex">ETH/BSC</p>
+            </h6>
+          </div>
+          <div
+            className={
+              activebtn === "2"
+                ? "optionbtn-active activeethavax"
+                : "optionbtn-passive bridge-passive"
+            }
+            onClick={() => {
+              setActiveBtn("2");
+              setSourceChain("eth");
+              setDestinationChain("avax");
+              setSourceBridge(window.new_bridge_eth);
+              setDestinationBridge(window.new_bridge_bsc);
+              setSourceToken(window.token_dyp_new);
+              setDestinationToken(window.token_dyp_new_bsc);
+            }}
+          >
+            <h6 className="optiontext d-flex align-items-center gap-2">
+              <img src={eth} alt="" /> <img src={avax} alt="" />
+              <p className=" mb-0 optiontext d-none d-lg-flex">ETH/AVAX</p>
             </h6>
           </div>
         </div>
