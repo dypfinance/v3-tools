@@ -129,8 +129,7 @@ const DypMigration = ({
           <div className="purplediv"></div>
           <h6 className="migration-details-title">Swap Ratio</h6>
           <span className="smart-contract-announce">
-            The swap ratio for DYP V2 vary depending on the respective
-            blockchain.
+          The swap ratio for DYP V2 varies depending on the respective blockchain.
           </span>
           <ul>
             <li className="migration-swap-item">
