@@ -20,13 +20,15 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
   const [destinationChain, setDestinationChain] = useState("");
   const [activebtn, setActiveBtn] = useState("");
 
-  const [sourceBridge, setSourceBridge] = useState(window.new_bridge_eth);
-  const [destinationBridge, setDestinationBridge] = useState(
-    window.new_bridge_bsc
+  const [sourceBridge, setSourceBridge] = useState(
+    window.new_dypius_bridge_ethbsc
   );
-  const [sourceToken, setSourceToken] = useState(window.token_dyp_new);
+  const [destinationBridge, setDestinationBridge] = useState(
+    window.new_dypius_bridge_bsc
+  );
+  const [sourceToken, setSourceToken] = useState(window.token_dypius_new);
   const [destinationToken, setDestinationToken] = useState(
-    window.token_dyp_new_bsc
+    window.token_dypius_new_bsc
   );
 
   const [sourceBridgeiDyp, setSourceBridgeiDyp] = useState(
@@ -127,35 +129,48 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
   };
 
   const handleSourceChain = async (chainText) => {
-    if (chainText === "eth") {
-      window.cached_contracts = Object.create(null);
-      setSourceChain(chainText);
-      setTimeout(() => {
-        setSourceBridge(window.new_bridge_eth);
-        setDestinationBridge(window.new_bridge_bsc);
-        setSourceToken(window.token_dyp_new);
-        setDestinationToken(window.token_dyp_new_bsc);
-      }, 500);
-    }
+    if (activebtn === "1") {
+      if (chainText === "eth") {
+        window.cached_contracts = Object.create(null);
+        setSourceChain(chainText);
+        setTimeout(() => {
+          setSourceBridge(window.new_dypius_bridge_ethbsc);
+          setDestinationBridge(window.new_dypius_bridge_bsc);
+          setSourceToken(window.token_dypius_new);
+          setDestinationToken(window.token_dypius_new_bsc);
+        }, 500);
+      }
 
-    if (chainText === "bnb") {
-      window.cached_contracts = Object.create(null);
-      setSourceChain(chainText);
-      setTimeout(() => {
-        setDestinationBridge(window.new_bridge_eth);
-        setSourceBridge(window.new_bridge_bsc);
-        setDestinationToken(window.token_dyp_new);
-        setSourceToken(window.token_dyp_new_bsc);
-      }, 500);
+      if (chainText === "bnb") {
+        window.cached_contracts = Object.create(null);
+        setSourceChain(chainText);
+        setTimeout(() => {
+          setDestinationBridge(window.new_dypius_bridge_ethbsc);
+          setSourceBridge(window.new_dypius_bridge_bsc);
+          setDestinationToken(window.token_dypius_new);
+          setSourceToken(window.token_dypius_new_bsc);
+        }, 500);
+      }
+    } else if (activebtn === "2") {
+      if (chainText === "eth") {
+        window.cached_contracts = Object.create(null);
+        setSourceChain(chainText);
+        setTimeout(() => {
+          setSourceBridge(window.new_dypius_bridge_ethavax);
+          setDestinationBridge(window.new_dypius_bridge_avax);
+          setSourceToken(window.token_dypius_new);
+          setDestinationToken(window.token_dypius_new_avax);
+        }, 500);
+      }
     }
     if (chainText === "avax") {
       window.cached_contracts = Object.create(null);
       setSourceChain(chainText);
       setTimeout(() => {
-        setDestinationBridge(window.new_bridge_eth);
-        setSourceBridge(window.new_bridge_bsc);
-        setDestinationToken(window.token_dyp_new);
-        setSourceToken(window.token_dyp_new_bsc);
+        setSourceBridge(window.new_dypius_bridge_avax);
+        setDestinationBridge(window.new_dypius_bridge_ethavax);
+        setDestinationToken(window.token_dypius_new);
+        setSourceToken(window.token_dypius_new_avax);
       }, 500);
     }
   };
@@ -221,10 +236,10 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
 
   // useEffect(() => {
   //   setSourceChain("eth");
-  //   setSourceBridge(window.new_bridge_eth);
-  //   setDestinationBridge(window.new_bridge_bsc);
-  //   setSourceToken(window.token_dyp_new);
-  //   setDestinationToken(window.token_dyp_new_bsc);
+  //   setSourceBridge(window.new_dypius_bridge_ethbsc);
+  //   setDestinationBridge(window.new_dypius_bridge_bsc);
+  //   setSourceToken(window.token_dypius_new);
+  //   setDestinationToken(window.token_dypius_new_bsc);
   // }, []);
 
   const BridgeModal = initBridge({
@@ -267,10 +282,10 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
               setActiveBtn("1");
               setSourceChain("eth");
               setDestinationChain("bnb");
-              setSourceBridge(window.new_bridge_eth);
-              setDestinationBridge(window.new_bridge_bsc);
-              setSourceToken(window.token_dyp_new);
-              setDestinationToken(window.token_dyp_new_bsc);
+              setSourceBridge(window.new_dypius_bridge_ethbsc);
+              setDestinationBridge(window.new_dypius_bridge_bsc);
+              setSourceToken(window.token_dypius_new);
+              setDestinationToken(window.token_dypius_new_bsc);
             }}
           >
             <h6 className="optiontext d-flex align-items-center gap-2">
@@ -288,10 +303,10 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
               setActiveBtn("2");
               setSourceChain("eth");
               setDestinationChain("avax");
-              setSourceBridge(window.new_bridge_eth);
-              setDestinationBridge(window.new_bridge_bsc);
-              setSourceToken(window.token_dyp_new);
-              setDestinationToken(window.token_dyp_new_bsc);
+              setSourceBridge(window.new_dypius_bridge_ethavax);
+              setDestinationBridge(window.new_dypius_bridge_avax);
+              setSourceToken(window.token_dypius_new);
+              setDestinationToken(window.token_dypius_new_avax);
             }}
           >
             <h6 className="optiontext d-flex align-items-center gap-2">
