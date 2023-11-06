@@ -87,6 +87,7 @@ export default function initMigration({
         ethBalance: 0,
         bnbBalance: 0,
         avaxBalance: 0,
+        destinationChain: "",
       };
     }
     static propTypes = {
@@ -97,12 +98,28 @@ export default function initMigration({
     componentDidMount() {
       this.refreshBalance();
       this.getAllBalance();
+      this.checkNetworkId();
       window._refreshBalInterval = setInterval(this.refreshBalance, 4000);
     }
 
     componentWillUnmount() {
       clearInterval(window._refreshBalInterval);
     }
+
+    checkNetworkId = async () => {
+      if (window.ethereum) {
+        await window.ethereum
+          .request({ method: "eth_chainId" })
+          .then((data) => {
+            console.log(data);
+            if (data === "0x1") {
+              this.setState({
+                destinationChain: "eth",
+              });
+            }
+          });
+      }
+    };
 
     checkAllowance = async (amount) => {
       if (this.props.sourceChain === "eth") {
@@ -269,6 +286,26 @@ export default function initMigration({
       }
     };
 
+    switchToEthereum = async () => {
+      if (window.ethereum) {
+        await window.ethereum
+          .request({
+            method: "wallet_switchEthereumChain",
+            params: [
+              {
+                chainId: "0x1",
+              },
+            ],
+          })
+          .then((data) => {
+            this.setState({ destinationChain: "eth" });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    };
+
     getAllBalance = async () => {
       const tokenAddress = window.config.token_old_address;
       const tokenAddress_bsc = window.config.token_old_bsc_address;
@@ -360,6 +397,7 @@ export default function initMigration({
           });
       } catch (e) {
         window.alertify.error("Something went wrong!");
+        this.setState({ withdrawLoading: false, withdrawStatus: "fail" });
         console.error(e);
       }
     };
@@ -786,12 +824,12 @@ export default function initMigration({
                         <button
                           style={{ width: "fit-content" }}
                           disabled={
-                            canWithdraw === false ||
                             this.state.withdrawLoading === true ||
+                            this.state.txHash === "" ||
                             this.state.withdrawStatus === "success"
                               ? true
                               : false
-                            // this.state.txHash !== "" ? false : true
+                            //  ? false : true
                           }
                           className={`btn filledbtn ${
                             (canWithdraw === false &&
@@ -807,7 +845,9 @@ export default function initMigration({
                               : null
                           } d-flex justify-content-center align-items-center gap-2`}
                           onClick={() => {
-                            this.handleWithdraw();
+                            this.state.destinationChain === "eth"
+                              ? this.handleWithdraw()
+                              : this.switchToEthereum();
                           }}
                         >
                           {this.state.withdrawLoading ? (
@@ -817,8 +857,17 @@ export default function initMigration({
                             >
                               <span class="visually-hidden">Loading...</span>
                             </div>
-                          ) : this.state.withdrawStatus === "initial" ? (
+                          ) : this.state.withdrawStatus === "initial" &&
+                            this.state.destinationChain === "eth" &&
+                            this.state.txHash !== "" ? (
                             <>Withdraw</>
+                          ) : this.state.withdrawStatus === "initial" &&
+                          this.state.txHash === "" ? (
+                          <>Withdraw</>
+                        ) : this.state.withdrawStatus === "initial" &&
+                            
+                            this.state.destinationChain !== "eth" ? (
+                            <>Switch to Ethereum</>
                           ) : this.state.withdrawStatus === "success" ? (
                             <>Success</>
                           ) : (
@@ -908,14 +957,16 @@ export default function initMigration({
                   <TimelineSeparator>
                     <TimelineDot
                       className={
-                        this.props.destinationChain !== ""
+                        this.props.destinationChain !== "" &&
+                        this.props.isConnected === true
                           ? "greendot"
                           : "passivedot"
                       }
                     />
                     <TimelineConnector
                       className={
-                        this.props.destinationChain !== ""
+                        this.props.destinationChain !== "" &&
+                        this.props.isConnected === true
                           ? "greenline"
                           : "passiveline"
                       }
@@ -935,14 +986,16 @@ export default function initMigration({
                   <TimelineSeparator>
                     <TimelineDot
                       className={
-                        this.state.depositAmount !== ""
+                        this.state.depositAmount !== "" &&
+                        this.props.isConnected === true
                           ? "greendot"
                           : "passivedot"
                       }
                     />
                     <TimelineConnector
                       className={
-                        this.state.depositAmount !== ""
+                        this.state.depositAmount !== "" &&
+                        this.props.isConnected === true
                           ? "greenline"
                           : "passiveline"
                       }
@@ -963,14 +1016,16 @@ export default function initMigration({
                   <TimelineSeparator>
                     <TimelineDot
                       className={
-                        this.state.depositStatus === "deposit"
+                        this.state.depositStatus === "deposit" ||
+                        this.state.depositStatus === "success"
                           ? "greendot"
                           : "passivedot"
                       }
                     />
                     <TimelineConnector
                       className={
-                        this.state.depositStatus === "deposit"
+                        this.state.depositStatus === "deposit" ||
+                        this.state.depositStatus === "success"
                           ? "greenline"
                           : "passiveline"
                       }
@@ -991,6 +1046,35 @@ export default function initMigration({
                     </h6>
                   </TimelineContent>
                 </TimelineItem>
+                {this.props.sourceChain !== "eth" && (
+                  <TimelineItem>
+                    <TimelineSeparator>
+                      <TimelineDot
+                        className={
+                          this.state.depositStatus === "success"
+                            ? "greendot"
+                            : "passivedot"
+                        }
+                      />
+                      <TimelineConnector
+                        className={
+                          this.state.depositStatus === "success"
+                            ? "greenline"
+                            : "passiveline"
+                        }
+                      />
+                    </TimelineSeparator>
+                    <TimelineContent>
+                      <h6 className="content-text">
+                        <h6 className="content-title2">
+                          <b>Deposit tokens</b>
+                        </h6>
+                        Deposit your DYP tokens into the bridge contract. These
+                        step needs confirmation in your wallet.
+                      </h6>
+                    </TimelineContent>
+                  </TimelineItem>
+                )}
                 {this.props.sourceChain === "eth" ? (
                   <TimelineItem>
                     <TimelineSeparator>
@@ -1019,7 +1103,10 @@ export default function initMigration({
                     <TimelineSeparator>
                       <TimelineDot
                         className={
-                          canWithdraw === true ? "greendot" : "passivedot"
+                          canWithdraw === true &&
+                          this.state.destinationChain === "eth"
+                            ? "greendot"
+                            : "passivedot"
                         }
                       />
                     </TimelineSeparator>
@@ -1028,12 +1115,11 @@ export default function initMigration({
                         <h6 className="content-title2">
                           <b>
                             {
-                              "Switch to destination chain. Wait timer & withdraw"
+                              "Switch to Ethereum network. Wait timer & withdraw"
                             }
                           </b>
                         </h6>
-                        Firstly go to your wallet and switch into the chain you
-                        want to withdraw from. Wait for the timer to end and and
+                        Firstly go to your wallet and switch into Ethereum network. Wait for the timer to end and and
                         click withdraw button to receive the assets in the
                         desired chain.
                       </h6>
