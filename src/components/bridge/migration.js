@@ -121,6 +121,12 @@ export default function initMigration({
       }
     };
 
+    async componentDidUpdate(prevProps, prevState) {
+      if (prevProps.sourceChain != this.props.sourceChain) {
+        this.checkNetworkId();
+      }
+    }
+
     checkAllowance = async (amount) => {
       if (this.props.sourceChain === "eth") {
         const oldDyp_address = window.config.token_old_address;
@@ -228,7 +234,6 @@ export default function initMigration({
             this.setState({ depositLoading: false, depositStatus: "success" });
             this.refreshBalance();
             window.alertify.message("You claimed DYP tokens successfully!");
-
           })
           .catch((e) => {
             this.setState({
@@ -384,7 +389,9 @@ export default function initMigration({
               withdrawLoading: false,
               withdrawStatus: "success",
             });
-            window.alertify.message("Congratulations on successfully withdrawing your new DYP tokens!");
+            window.alertify.message(
+              "Congratulations on successfully withdrawing your new DYP tokens!"
+            );
 
             this.getAllBalance();
           })
@@ -870,10 +877,9 @@ export default function initMigration({
                             this.state.txHash !== "" ? (
                             <>Withdraw</>
                           ) : this.state.withdrawStatus === "initial" &&
-                          this.state.txHash === "" ? (
-                          <>Withdraw</>
-                        ) : this.state.withdrawStatus === "initial" &&
-                            
+                            this.state.txHash === "" ? (
+                            <>Withdraw</>
+                          ) : this.state.withdrawStatus === "initial" &&
                             this.state.destinationChain !== "eth" ? (
                             <>Switch to Ethereum</>
                           ) : this.state.withdrawStatus === "success" ? (
@@ -1127,9 +1133,10 @@ export default function initMigration({
                             }
                           </b>
                         </h6>
-                        Firstly go to your wallet and switch into Ethereum network. Wait for the timer to end and and
-                        click withdraw button to receive the assets in the
-                        desired chain.
+                        Firstly go to your wallet and switch into Ethereum
+                        network. Wait for the timer to end and and click
+                        withdraw button to receive the assets in the desired
+                        chain.
                       </h6>
                     </TimelineContent>
                   </TimelineItem>

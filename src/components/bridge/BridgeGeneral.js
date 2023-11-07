@@ -261,9 +261,10 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
       <div className="col-12 col-lg-5 d-flex flex-column justify-content-center gap-3 mb-4">
         <h3 className="text-white">Dypius Bridge</h3>
         <p className="text-white">
-          Send tokens from BNB Chain to Avalanche with ease.
+          Bridge tokens between Ethereum to BNB Chain, Avalanche and many more
+          to come.
           <br />
-          Every transaction is instant and secure.
+          Instant and secure transactions.
         </p>
       </div>
       <div>
