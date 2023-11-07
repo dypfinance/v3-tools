@@ -95,7 +95,7 @@ const DypMigration = ({
         </div>
 
         <div className="col-12 col-lg-2 d-flex justify-content-center justify-content-lg-end">
-          <ReviewsBar score={migrationPercentage} />
+          {/* <ReviewsBar score={migrationPercentage} /> */}
         </div>
       </div>
       <h3 className="text-white mb-2">Migration Details</h3>
