@@ -117,7 +117,7 @@ const MigrationBanner = () => {
           </div>
         </div>
         <span className="migration-progress-info mb-0">
-          *Total supply to be migrated: 75M DYP
+          *Total supply to be migrated: 79.9M DYP
         </span>
         <div className="d-flex align-items-center gap-2 mt-3">
           <NavLink to={"/migration"} className="btn filled-btn">
