@@ -62,7 +62,7 @@ const MigrationBanner = () => {
         <div className="migrated-tokens-wrapper my-4 d-flex align-items-center justify-content-between p-3">
           {countdown ? (
             <>
-              <span className="migrated-tokens mb-0">Live in</span>
+              <span className="migrated-tokens mb-0">Coming soon</span>
               <Countdown
                 renderer={renderer}
                 date={lastDay}
@@ -98,12 +98,14 @@ const MigrationBanner = () => {
           </div>
           <div
             className="migration-inner-progress d-flex align-items-center justify-content-end px-3"
-            style={{ width: `${migrationPercentage >= 50 ? migrationPercentage : ''}%` }}
+            style={{
+              width: `${migrationPercentage >= 35 ? migrationPercentage : ""}%`,
+            }}
           >
             <div className="d-flex align-items-center gap-2">
               {countdown ? (
                 <>
-                  <h6 className="migration-percentage mb-0">Coming soon</h6>
+                  <h6 className="migration-percentage mb-0">0%</h6>
                 </>
               ) : (
                 <>
@@ -123,9 +125,15 @@ const MigrationBanner = () => {
           <NavLink to={"/migration"} className="btn filled-btn">
             Migrate
           </NavLink>
-          <button className="btn outline-btn" style={{ padding: "6px 24px" }}>
+          <a
+            href="https://medium.com/@dypius/how-to-convert-your-old-dyp-to-the-new-dyp-v2-63b8965bbfa5"
+            target="_blank"
+            rel="noreferrer"
+            className="btn outline-btn"
+            style={{ padding: "6px 24px" }}
+          >
             Tutorial
-          </button>
+          </a>
         </div>
       </div>
     </div>
