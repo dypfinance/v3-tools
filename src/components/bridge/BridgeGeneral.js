@@ -279,13 +279,16 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
                 : "optionbtn-passive bridge-passive"
             }
             onClick={() => {
+              window.cached_contracts = Object.create(null);
               setActiveBtn("1");
               setSourceChain("eth");
               setDestinationChain("bnb");
-              setSourceBridge(window.new_dypius_bridge_ethbsc);
-              setDestinationBridge(window.new_dypius_bridge_bsc);
-              setSourceToken(window.token_dypius_new);
-              setDestinationToken(window.token_dypius_new_bsc);
+              setTimeout(() => {
+                setSourceBridge(window.new_dypius_bridge_ethbsc);
+                setDestinationBridge(window.new_dypius_bridge_bsc);
+                setSourceToken(window.token_dypius_new);
+                setDestinationToken(window.token_dypius_new_bsc);
+              }, 500);
             }}
           >
             <h6 className="optiontext d-flex align-items-center gap-2">
@@ -300,13 +303,16 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
                 : "optionbtn-passive bridge-passive"
             }
             onClick={() => {
+              window.cached_contracts = Object.create(null);
               setActiveBtn("2");
               setSourceChain("eth");
               setDestinationChain("avax");
-              setSourceBridge(window.new_dypius_bridge_ethavax);
-              setDestinationBridge(window.new_dypius_bridge_avax);
-              setSourceToken(window.token_dypius_new);
-              setDestinationToken(window.token_dypius_new_avax);
+              setTimeout(() => {
+                setSourceBridge(window.new_dypius_bridge_ethavax);
+                setDestinationBridge(window.new_dypius_bridge_avax);
+                setSourceToken(window.token_dypius_new);
+                setDestinationToken(window.token_dypius_new_avax);
+              }, 500);
             }}
           >
             <h6 className="optiontext d-flex align-items-center gap-2">
@@ -346,13 +352,16 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
                 : "optionbtn-passive bridge-passive"
             }
             onClick={() => {
+              window.cached_contracts = Object.create(null);
               setActiveBtn("5");
               setSourceChainiDyp("eth");
               setDestinationChainiDyp("bnb");
-              setSourceBridgeiDyp(window.bridge_idypbsceth);
-              setDestinationBridgeiDyp(window.bridge_idypbscbsc);
-              setSourceTokeniDyp(window.token_idyp_bsceth);
-              setDestinationTokeniDyp(window.token_idyp_bscbsc);
+              setTimeout(() => {
+                setSourceBridgeiDyp(window.bridge_idypbsceth);
+                setDestinationBridgeiDyp(window.bridge_idypbscbsc);
+                setSourceTokeniDyp(window.token_idyp_bsceth);
+                setDestinationTokeniDyp(window.token_idyp_bscbsc);
+              }, 500);
             }}
           >
             <h6 className="optiontext d-flex align-items-center gap-2">
@@ -368,13 +377,16 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
                 : "optionbtn-passive bridge-passive"
             }
             onClick={() => {
+              window.cached_contracts = Object.create(null);
               setSourceChainiDyp("eth");
               setDestinationChainiDyp("avax");
               setActiveBtn("7");
-              setSourceBridgeiDyp(window.bridge_idypeth);
-              setDestinationBridgeiDyp(window.bridge_idypbsc);
-              setSourceTokeniDyp(window.token_idyp_eth);
-              setDestinationTokeniDyp(window.token_idyp_bsc);
+              setTimeout(() => {
+                setSourceBridgeiDyp(window.bridge_idypeth);
+                setDestinationBridgeiDyp(window.bridge_idypbsc);
+                setSourceTokeniDyp(window.token_idyp_eth);
+                setDestinationTokeniDyp(window.token_idyp_bsc);
+              }, 500);
             }}
           >
             <h6 className="optiontext d-flex align-items-center gap-2">

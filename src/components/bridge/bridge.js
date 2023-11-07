@@ -609,6 +609,11 @@ export default function initBridge({
                                           this.state.ethBalance / 1e18,
                                           2
                                         )
+                                      :this.props.sourceChain === "avax"
+                                      ? getFormattedNumber(
+                                          this.state.avaxBalance / 1e18,
+                                          2
+                                        )
                                       : getFormattedNumber(
                                           this.state.bnbBalance / 1e18,
                                           2
