@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./migrationbanner.css";
-import migrationBannerIcon from "./assets/migrationBannerIcon.svg";
+import migrationBannerIcon from "./assets/migrationBannerIcon.png";
 import { NavLink } from "react-router-dom";
 import Countdown from "react-countdown";
 import axios from "axios";

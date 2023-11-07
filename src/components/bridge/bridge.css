@@ -163,6 +163,7 @@
   background-image: url("./assets/migrationBannerBg.png");
   background-repeat: no-repeat;
   background-position: right;
+  border-radius: 20px;
 }
 
 @media screen and (max-width: 786px) {
