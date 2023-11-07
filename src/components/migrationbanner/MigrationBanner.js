@@ -33,7 +33,7 @@ const MigrationBanner = () => {
   const [migrationAmount, setMigrationAmount] = useState(0);
   const [migrationPercentage, setMigrationPercentage] = useState(true);
 
-  let lastDay = new Date("2023-11-07T15:00:00.000+01:00");
+  let lastDay = new Date("2023-11-08T09:00:00.000+01:00");
 
   const getMigrationData = async () => {
     const result = await axios.get(
@@ -63,21 +63,6 @@ const MigrationBanner = () => {
           {countdown ? (
             <>
               <span className="migrated-tokens mb-0">Live in</span>
-              {/* <div className="d-flex align-items-start gap-2">
-                <div className="d-flex flex-column">
-                  <h6 className="migrated-tokens-amount mb-0">
-                    15
-                  </h6>
-                  <span className="migrated-tokens mb-0">Hours</span>
-                </div>
-                <h6 className="migrated-tokens-amount mb-0">:</h6>
-                <div className="d-flex flex-column">
-                  <h6 className="migrated-tokens-amount mb-0">
-                    06
-                  </h6>
-                  <span className="migrated-tokens mb-0">Minutes</span>
-                </div>
-              </div> */}
               <Countdown
                 renderer={renderer}
                 date={lastDay}
