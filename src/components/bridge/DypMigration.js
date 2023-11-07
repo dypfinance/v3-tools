@@ -8,6 +8,7 @@ import eth from "./assets/eth.svg";
 import bnb from "./assets/bnb.svg";
 import { CircularProgressbar } from "react-circular-progressbar";
 import ReviewsBar from "./ProgressBar/ReviewsBar";
+import axios from "axios";
 
 const DypMigration = ({
   networkId,
@@ -23,6 +24,7 @@ const DypMigration = ({
   const [destinationBridge, setDestinationBridge] = useState();
   const [sourceToken, setSourceToken] = useState();
   const [destinationToken, setDestinationToken] = useState();
+  const [migrationPercentage, setMigrationPercentage] = useState(true);
 
   const handleSourceChain = async (chainText) => {
     if (chainText === "eth") {
@@ -50,6 +52,20 @@ const DypMigration = ({
       }, 500);
     }
   };
+
+  const getMigrationData = async () => {
+    const result = await axios.get(
+      "https://api.dyp.finance/api/migratedTokens"
+    );
+    if (result && result.status === 200) {
+      const percentage = result.data.tokenPercentage;
+      setMigrationPercentage(percentage);
+    }
+  };
+
+  useEffect(() => {
+    getMigrationData();
+  }, []);
 
   useEffect(() => {
     setSourceChain("eth");
@@ -79,7 +95,7 @@ const DypMigration = ({
         </div>
 
         <div className="col-12 col-lg-2 d-flex justify-content-center justify-content-lg-end">
-          <ReviewsBar score={75} />
+          <ReviewsBar score={migrationPercentage} />
         </div>
       </div>
       <h3 className="text-white mb-2">Migration Details</h3>
