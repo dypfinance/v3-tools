@@ -33,7 +33,7 @@ const MigrationBanner = () => {
   const [migrationAmount, setMigrationAmount] = useState(0);
   const [migrationPercentage, setMigrationPercentage] = useState(true);
 
-  let lastDay = new Date("2023-11-07T15:00:00.000+03:00");
+  let lastDay = new Date("2023-11-07T15:00:00.000+01:00");
 
   const getMigrationData = async () => {
     const result = await axios.get(
