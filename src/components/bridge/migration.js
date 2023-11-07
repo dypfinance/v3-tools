@@ -745,43 +745,41 @@ export default function initMigration({
                       </div>
                       <button
                         style={{ width: "fit-content" }}
-                        // disabled={
-                        //   this.state.depositAmount === "" ||
-                        //   this.state.depositLoading === true ||
-                        //   this.state.depositStatus === "success"
-                        //     ? true
-                        //     : false
-                        // }
-                        // className={`btn filledbtn ${
-                        //   this.state.depositAmount === "" &&
-                        //   this.state.depositStatus === "initial" &&
-                        //   "disabled-btn"
-                        // } ${
-                        //   this.state.depositStatus === "deposit" ||
-                        //   this.state.depositStatus === "success"
-                        //     ? "success-button"
-                        //     : this.state.depositStatus === "fail"
-                        //     ? "fail-button"
-                        //     : null
-                        // } d-flex justify-content-center align-items-center gap-2`}
-                        // onClick={() => {
-                        //   this.props.sourceChain === "eth" &&
-                        //   this.state.depositStatus === "deposit"
-                        //     ? this.handleDeposit()
-                        //     : this.state.depositStatus === "deposit" &&
-                        //       this.props.sourceChain !== "eth"
-                        //     ? this.handledepositBridge()
-                        //     : this.state.depositStatus === "initial" &&
-                        //       this.props.sourceChain !== "eth" &&
-                        //       this.state.depositAmount !== ""
-                        //     ? this.handleApprove()
-                        //     : this.props.sourceChain === "eth" &&
-                        //       this.state.depositStatus === "initial"
-                        //     ? this.handleApproveClaim()
-                        //     : console.log("");
-                        // }}
-                        disabled={true}
-                        className="btn disabled-btn"
+                        disabled={
+                          this.state.depositAmount === "" ||
+                          this.state.depositLoading === true ||
+                          this.state.depositStatus === "success"
+                            ? true
+                            : false
+                        }
+                        className={`btn filledbtn ${
+                          this.state.depositAmount === "" &&
+                          this.state.depositStatus === "initial" &&
+                          "disabled-btn"
+                        } ${
+                          this.state.depositStatus === "deposit" ||
+                          this.state.depositStatus === "success"
+                            ? "success-button"
+                            : this.state.depositStatus === "fail"
+                            ? "fail-button"
+                            : null
+                        } d-flex justify-content-center align-items-center gap-2`}
+                        onClick={() => {
+                          this.props.sourceChain === "eth" &&
+                          this.state.depositStatus === "deposit"
+                            ? this.handleDeposit()
+                            : this.state.depositStatus === "deposit" &&
+                              this.props.sourceChain !== "eth"
+                            ? this.handledepositBridge()
+                            : this.state.depositStatus === "initial" &&
+                              this.props.sourceChain !== "eth" &&
+                              this.state.depositAmount !== ""
+                            ? this.handleApprove()
+                            : this.props.sourceChain === "eth" &&
+                              this.state.depositStatus === "initial"
+                            ? this.handleApproveClaim()
+                            : console.log("");
+                        }}
                       >
                         {this.state.depositLoading ? (
                           <div
@@ -837,33 +835,31 @@ export default function initMigration({
                         </div>
                         <button
                           style={{ width: "fit-content" }}
-                          // disabled={
-                          //   this.state.withdrawLoading === true ||
-                          //   this.state.txHash === "" ||
-                          //   this.state.withdrawStatus === "success"
-                          //     ? true
-                          //     : false
-                          // }
-                          // className={`btn filledbtn ${
-                          //   (canWithdraw === false &&
-                          //     this.state.txHash === "") ||
-                          //   (this.state.withdrawStatus === "success" &&
-                          //     "disabled-btn")
-                          // } ${
-                          //   this.state.withdrawStatus === "deposit" ||
-                          //   this.state.withdrawStatus === "success"
-                          //     ? "success-button"
-                          //     : this.state.withdrawStatus === "fail"
-                          //     ? "fail-button"
-                          //     : null
-                          // } d-flex justify-content-center align-items-center gap-2`}
-                          // onClick={() => {
-                          //   this.state.destinationChain === "eth"
-                          //     ? this.handleWithdraw()
-                          //     : this.switchToEthereum();
-                          // }}
-                          disabled={true}
-                          className="btn disabled-btn"
+                          disabled={
+                            this.state.withdrawLoading === true ||
+                            this.state.txHash === "" ||
+                            this.state.withdrawStatus === "success"
+                              ? true
+                              : false
+                          }
+                          className={`btn filledbtn ${
+                            (canWithdraw === false &&
+                              this.state.txHash === "") ||
+                            (this.state.withdrawStatus === "success" &&
+                              "disabled-btn")
+                          } ${
+                            this.state.withdrawStatus === "deposit" ||
+                            this.state.withdrawStatus === "success"
+                              ? "success-button"
+                              : this.state.withdrawStatus === "fail"
+                              ? "fail-button"
+                              : null
+                          } d-flex justify-content-center align-items-center gap-2`}
+                          onClick={() => {
+                            this.state.destinationChain === "eth"
+                              ? this.handleWithdraw()
+                              : this.switchToEthereum();
+                          }}
                         >
                           {this.state.withdrawLoading ? (
                             <div

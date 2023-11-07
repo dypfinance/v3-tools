@@ -114,8 +114,8 @@ export default function initBridge({
       );
 
       ethPool = ethPool / 1e18;
-      this.setState({ ethPool: ethPool });
-
+      this.setState({ethPool: ethPool})
+     
       //Get DYP Balance BNB Chain Pool
       let avaxPool = await window.getTokenHolderBalanceAll(
         this.props.sourceChain === "eth"
@@ -124,9 +124,10 @@ export default function initBridge({
         bridgeETH.tokenAddress,
         2
       );
+   
 
       avaxPool = avaxPool / 1e18;
-      this.setState({ avaxPool: avaxPool });
+      this.setState({avaxPool: avaxPool})
 
       let bnbPool = await window.getTokenHolderBalanceAll(
         this.props.sourceChain === "bnb"
@@ -135,9 +136,10 @@ export default function initBridge({
         bridgeETH.tokenAddress,
         3
       );
+     
 
       bnbPool = bnbPool / 1e18;
-      this.setState({ bnbPool: bnbPool });
+      this.setState({bnbPool: bnbPool}) 
     };
 
     handleApprove = (e) => {
@@ -277,9 +279,7 @@ export default function initBridge({
             });
             this.getAllBalance();
             this.refreshBalance();
-            window.alertify.message(
-              "Congratulations on successfully withdrawing your new DYP tokens!"
-            );
+            window.alertify.message("Congratulations on successfully withdrawing your new DYP tokens!");
           })
           .catch((e) => {
             this.setState({ withdrawLoading: false, withdrawStatus: "fail" });
@@ -489,6 +489,7 @@ export default function initBridge({
         canWithdraw = timeDiff === 0;
       }
 
+ 
       return (
         <div className="row w-100 mx-0 gap-4 justify-content-between">
           <div className="token-staking col-12 col-lg-6 col-xxl-5">
@@ -608,7 +609,7 @@ export default function initBridge({
                                           this.state.ethBalance / 1e18,
                                           2
                                         )
-                                      : this.props.sourceChain === "avax"
+                                      :this.props.sourceChain === "avax"
                                       ? getFormattedNumber(
                                           this.state.avaxBalance / 1e18,
                                           2
@@ -716,30 +717,25 @@ export default function initBridge({
                                     ? true
                                     : false
                                 }
-                                // className={`btn filledbtn ${
-                                //   this.state.depositAmount === "" &&
-                                //   this.state.depositStatus === "initial" &&
-                                //   "disabled-btn"
-                                // } ${
-                                //   this.state.depositStatus === "deposit" ||
-                                //   this.state.depositStatus === "success"
-                                //     ? "success-button"
-                                //     : this.state.depositStatus === "fail"
-                                //     ? "fail-button"
-                                //     : null
-                                // } d-flex justify-content-center align-items-center gap-2`}
-
-                                className={`btn filledbtn disabled-btn d-flex justify-content-center align-items-center gap-2`}
+                                className={`btn filledbtn ${
+                                  this.state.depositAmount === "" &&
+                                  this.state.depositStatus === "initial" &&
+                                  "disabled-btn"
+                                } ${
+                                  this.state.depositStatus === "deposit" ||
+                                  this.state.depositStatus === "success"
+                                    ? "success-button"
+                                    : this.state.depositStatus === "fail"
+                                    ? "fail-button"
+                                    : null
+                                } d-flex justify-content-center align-items-center gap-2`}
                                 onClick={() => {
-                                  // this.state.depositStatus === "deposit"
-                                  //   ? this.handleDeposit()
-                                  //   : this.state.depositStatus === "initial" &&
-                                  //     this.state.depositAmount !== ""
-                                  //   ? this.handleApprove()
-                                  //   : console.log("");
-                                  window.$.alert(
-                                    "The dypius bridge will be available once the migration starts."
-                                  );
+                                  this.state.depositStatus === "deposit"
+                                    ? this.handleDeposit()
+                                    : this.state.depositStatus === "initial" &&
+                                      this.state.depositAmount !== ""
+                                    ? this.handleApprove()
+                                    : console.log("");
                                 }}
                               >
                                 {this.state.depositLoading ? (
@@ -962,29 +958,21 @@ export default function initBridge({
                                   //   : false
                                   this.state.txHash !== "" ? false : true
                                 }
-                                // className={`btn filledbtn
-                                //  ${
-                                //   (canWithdraw === false &&
-                                //     this.state.txHash === "") ||
-                                //   (this.state.withdrawStatus === "success" &&
-                                //     "disabled-btn")
-                                // } ${
-                                //   this.state.withdrawStatus === "deposit" ||
-                                //   this.state.withdrawStatus === "success"
-                                //     ? "success-button"
-                                //     : this.state.withdrawStatus === "fail"
-                                //     ? "fail-button"
-                                //     : null
-                                // } d-flex justify-content-center align-items-center gap-2`}
-                                className={`btn filledbtn
-                               
-                                   disabled-btn
-                                d-flex justify-content-center align-items-center gap-2`}
+                                className={`btn filledbtn ${
+                                  (canWithdraw === false &&
+                                    this.state.txHash === "") ||
+                                  (this.state.withdrawStatus === "success" &&
+                                    "disabled-btn")
+                                } ${
+                                  this.state.withdrawStatus === "deposit" ||
+                                  this.state.withdrawStatus === "success"
+                                    ? "success-button"
+                                    : this.state.withdrawStatus === "fail"
+                                    ? "fail-button"
+                                    : null
+                                } d-flex justify-content-center align-items-center gap-2`}
                                 onClick={() => {
-                                  // this.handleWithdraw();
-                                  window.$.alert(
-                                    "The dypius bridge will be available once the migration starts."
-                                  );
+                                  this.handleWithdraw();
                                 }}
                               >
                                 {this.state.withdrawLoading ? (
@@ -1156,16 +1144,14 @@ export default function initBridge({
                   <TimelineSeparator>
                     <TimelineDot
                       className={
-                        this.state.depositStatus === "deposit" ||
-                        this.state.depositStatus === "success"
+                        this.state.depositStatus === "deposit" || this.state.depositStatus === 'success'
                           ? "greendot"
                           : "passivedot"
                       }
                     />
                     <TimelineConnector
                       className={
-                        this.state.depositStatus === "deposit" ||
-                        this.state.depositStatus === "success"
+                        this.state.depositStatus === "deposit" || this.state.depositStatus === 'success'
                           ? "greenline"
                           : "passiveline"
                       }
@@ -1185,14 +1171,14 @@ export default function initBridge({
                   <TimelineSeparator>
                     <TimelineDot
                       className={
-                        this.state.depositStatus === "success"
+                        this.state.depositStatus === 'success'
                           ? "greendot"
                           : "passivedot"
                       }
                     />
                     <TimelineConnector
                       className={
-                        this.state.depositStatus === "success"
+                         this.state.depositStatus === 'success'
                           ? "greenline"
                           : "passiveline"
                       }
@@ -1203,9 +1189,8 @@ export default function initBridge({
                       <h6 className="content-title2">
                         <b>Deposit tokens</b>
                       </h6>
-                      Confirm the transaction and deposit the assets into the
-                      bridge contract. This step needs confirmation in your
-                      wallet.
+                      Confirm the transaction and deposit the assets into the bridge contract. This
+                      step needs confirmation in your wallet.
                     </h6>
                   </TimelineContent>
                 </TimelineItem>
