@@ -95,7 +95,11 @@ const DypMigration = ({
         </div>
 
         <div className="col-12 col-lg-2 d-flex justify-content-center justify-content-lg-end">
+          <div className="position-relative d-flex align-items-center flex-column">
           <ReviewsBar score={migrationPercentage} />
+          <div className="position-relative migration-text-wrapper">
+          <span className="migration-status-text">Migration Status</span></div>
+          </div>
         </div>
       </div>
       <h3 className="text-white mb-2">Migration Details</h3>

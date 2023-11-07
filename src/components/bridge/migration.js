@@ -111,10 +111,13 @@ export default function initMigration({
         await window.ethereum
           .request({ method: "eth_chainId" })
           .then((data) => {
-            console.log(data);
             if (data === "0x1") {
               this.setState({
                 destinationChain: "eth",
+              });
+            } else {
+              this.setState({
+                destinationChain: "",
               });
             }
           });
@@ -255,6 +258,7 @@ export default function initMigration({
     handledepositBridge = async () => {
       let amount = this.state.depositAmount;
       this.setState({ depositLoading: true });
+      this.checkNetworkId();
 
       amount = new BigNumber(amount).times(10 ** TOKEN_DECIMALS).toFixed(0);
       let bridge =
@@ -274,7 +278,6 @@ export default function initMigration({
           })
           .then(() => {
             this.setState({ depositLoading: false, depositStatus: "success" });
-            // this.refreshBalance();
           })
           .catch((e) => {
             this.setState({
@@ -700,14 +703,13 @@ export default function initMigration({
                           <div className="d-flex align-items-center gap-2">
                             <button
                               className="btn maxbtn"
-                              // disabled={
-                              //   this.props.destinationChain !== ""
-                              //     ? false
-                              //     : true
-                              // }
+                              disabled={
+                                this.props.destinationChain !== ""
+                                  ? false
+                                  : true
+                              }
                               style={{ cursor: "pointer" }}
-                              // onClick={this.handleSetMaxDeposit}
-                              disabled={true}
+                              onClick={this.handleSetMaxDeposit}
                             >
                               MAX
                             </button>
@@ -815,16 +817,16 @@ export default function initMigration({
                   <>
                     <span className="fromtitle">Withdraw</span>
                     <div className="otherside mt-2 w-100 p-3">
-                      <div className="d-flex align-items-end justify-content-between">
-                        <div className="d-flex flex-column w-50">
+                      <div className="d-flex align-items-end gap-4 justify-content-between">
+                        <div className="d-flex flex-column w-100">
                           <span className="conversion-rate-title">
                             Recieve new DYP on Ethereum
                           </span>
                           <input
                             value={this.state.txHash}
-                            onChange={(e) =>
-                              this.setState({ txHash: e.target.value })
-                            }
+                            onChange={(e) => {
+                              this.setState({ txHash: e.target.value });
+                            }}
                             className="styledinput w-100"
                             placeholder="Enter deposit transaction hash"
                             type="text"
@@ -834,7 +836,7 @@ export default function initMigration({
                           />
                         </div>
                         <button
-                          style={{ width: "fit-content" }}
+                          style={{ width: "fit-content", textWrap: 'nowrap' }}
                           disabled={
                             this.state.withdrawLoading === true ||
                             this.state.txHash === "" ||
@@ -843,10 +845,10 @@ export default function initMigration({
                               : false
                           }
                           className={`btn filledbtn ${
-                            (canWithdraw === false &&
+                            ((canWithdraw === false &&
                               this.state.txHash === "") ||
-                            (this.state.withdrawStatus === "success" &&
-                              "disabled-btn")
+                              this.state.withdrawStatus === "success") &&
+                            "disabled-btn"
                           } ${
                             this.state.withdrawStatus === "deposit" ||
                             this.state.withdrawStatus === "success"

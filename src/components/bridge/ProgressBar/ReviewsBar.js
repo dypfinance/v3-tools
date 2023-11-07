@@ -26,13 +26,14 @@ const ReviewsBar = (props) => {
           circleRatio={0.7} /* Make the circle only 0.7 of the full diameter */
           styles={{
             trail: {
-              strokeLinecap: 'butt',
+              // strokeLinecap: 'butt',
               transform: 'rotate(-126deg)',
               transformOrigin: 'center center',
               stroke: "#B8B8E0"
+              
             },
             path: {
-              strokeLinecap: 'butt',
+              // strokeLinecap: 'butt',
               transform: 'rotate(-126deg)',
               transformOrigin: 'center center',
               stroke: "#5040BC",
