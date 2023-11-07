@@ -268,8 +268,10 @@ const StakeNewEth = ({
         ]);
 
         let tvlDyps = new BigNumber(tvlDYPS).times(usd_per_dyps).toFixed(18);
-        let balance_formatted = new BigNumber(token_balance ).div(1e18).toString(10)
-     settoken_balance(balance_formatted) ;
+        let balance_formatted = new BigNumber(token_balance)
+          .div(1e18)
+          .toString(10);
+        settoken_balance(balance_formatted);
 
         let divs_formatted = new BigNumber(pendingDivs).div(1e18).toFixed(6);
         setpendingDivs(divs_formatted);
@@ -281,7 +283,9 @@ const StakeNewEth = ({
 
         setstakingTime(stakingTime);
 
-        let depositedTokens_formatted = new BigNumber(depositedTokens).div(1e18).toString(10)
+        let depositedTokens_formatted = new BigNumber(depositedTokens)
+          .div(1e18)
+          .toString(10);
 
         setdepositedTokens(depositedTokens_formatted);
 
@@ -333,14 +337,13 @@ const StakeNewEth = ({
     refreshBalance();
     if (depositAmount !== "") {
       checkApproval(depositAmount);
-
     }
   }, [coinbase, coinbase2, staking]);
 
   useEffect(() => {
-      setdepositAmount('');
-      setdepositStatus('initial')
-  }, [ staking]);
+    setdepositAmount("");
+    setdepositStatus("initial");
+  }, [staking]);
 
   const getTotalTvl = async () => {
     let apy1 = 15;
@@ -424,8 +427,8 @@ const StakeNewEth = ({
     // e.preventDefault();
     setwithdrawLoading(true);
 
-    let amount = new BigNumber(withdrawAmount).times(1e18).toFixed(0)
-    
+    let amount = new BigNumber(withdrawAmount).times(1e18).toFixed(0);
+
     await staking
       .unstake(amount)
       .then(() => {
@@ -479,11 +482,13 @@ const StakeNewEth = ({
   const handleSetMaxWithdraw = async (e) => {
     // e.preventDefault();
     let amount;
-    await staking.depositedTokens(coinbase).then((data)=>{
-      amount = data
-    })
+    await staking.depositedTokens(coinbase).then((data) => {
+      amount = data;
+    });
 
-    let depositedTokens_formatted = new BigNumber(amount).div(1e18).toString(10)
+    let depositedTokens_formatted = new BigNumber(amount)
+      .div(1e18)
+      .toString(10);
     setwithdrawAmount(depositedTokens_formatted);
   };
 
@@ -626,7 +631,7 @@ const StakeNewEth = ({
   }
   if (!isNaN(cliffTime) && !isNaN(stakingTime)) {
     if (
-      (Number(stakingTime) + Number(cliffTime) >= Date.now()/1000) &&
+      Number(stakingTime) + Number(cliffTime) >= Date.now() / 1000 &&
       lockTime !== "No Lock"
     ) {
       canWithdraw = false;
@@ -898,25 +903,36 @@ const StakeNewEth = ({
                     disabled={
                       depositAmount === "" ||
                       depositLoading === true ||
-                      depositStatus === "success"
+                      depositStatus === "success" ||
+                      staking?._address.toLowerCase() ===
+                        "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d".toLowerCase()
                         ? true
                         : false
                     }
                     className={`btn filledbtn ${
-                      depositAmount === "" &&
-                      depositStatus === "initial" &&
+                      ((depositAmount === "" && depositStatus === "initial") ||
+                        staking?._address.toLowerCase() ===
+                          "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d".toLowerCase()) &&
                       "disabled-btn"
                     } ${
-                      depositStatus === "deposit" || depositStatus === "success"
+                      (depositStatus === "deposit" ||
+                        depositStatus === "success") &&
+                      staking?._address.toLowerCase() !==
+                        "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d".toLowerCase()
                         ? "success-button"
                         : depositStatus === "fail"
                         ? "fail-button"
                         : null
                     } d-flex justify-content-center align-items-center gap-2`}
                     onClick={() => {
-                      depositStatus === "deposit"
+                      depositStatus === "deposit" &&
+                      staking?._address.toLowerCase() !==
+                        "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d".toLowerCase()
                         ? handleStake()
-                        : depositStatus === "initial" && depositAmount !== ""
+                        : depositStatus === "initial" &&
+                          depositAmount !== "" &&
+                          staking?._address.toLowerCase() !==
+                            "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d".toLowerCase()
                         ? handleApprove()
                         : console.log("");
                     }}
@@ -1126,7 +1142,7 @@ const StakeNewEth = ({
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">My DYP Deposit</span>
                     <h6 className="stats-card-content">
-                    {getFormattedNumber(depositedTokens,6)} DYP
+                      {getFormattedNumber(depositedTokens, 6)} DYP
                     </h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
@@ -1311,7 +1327,7 @@ const StakeNewEth = ({
                     <div className="d-flex flex-column gap-1">
                       <h6 className="withsubtitle">Balance</h6>
                       <h6 className="withtitle">
-                      {getFormattedNumber(depositedTokens,6)} {token_symbol}
+                        {getFormattedNumber(depositedTokens, 6)} {token_symbol}
                       </h6>
                     </div>
                   </div>
@@ -1446,7 +1462,10 @@ const StakeNewEth = ({
         <WalletModal
           show={show}
           handleClose={hideModal}
-          handleConnection={()=>{handleConnection(); setshow(false)}}
+          handleConnection={() => {
+            handleConnection();
+            setshow(false);
+          }}
         />
       )}
 
