@@ -279,7 +279,7 @@ export default function initBridge({
             });
             this.getAllBalance();
             this.refreshBalance();
-            window.alertify.message("You withdrew DYP tokens successfully!");
+            window.alertify.message("Congratulations on successfully withdrawing your new DYP tokens!");
           })
           .catch((e) => {
             this.setState({ withdrawLoading: false, withdrawStatus: "fail" });

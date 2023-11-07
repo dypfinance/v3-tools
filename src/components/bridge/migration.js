@@ -384,7 +384,7 @@ export default function initMigration({
               withdrawLoading: false,
               withdrawStatus: "success",
             });
-            window.alertify.message("You withdrew DYP tokens successfully!");
+            window.alertify.message("Congratulations on successfully withdrawing your new DYP tokens!");
 
             this.getAllBalance();
           })
