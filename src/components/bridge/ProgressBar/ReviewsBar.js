@@ -44,7 +44,7 @@ const ReviewsBar = (props) => {
               fontWeight: "800"
             },
           }}
-          strokeWidth={10}
+          strokeWidth={15}
         />
       )}
     </ReviewsProvider>

@@ -95,7 +95,7 @@ const DypMigration = ({
         </div>
 
         <div className="col-12 col-lg-2 d-flex justify-content-center justify-content-lg-end">
-          {/* <ReviewsBar score={migrationPercentage} /> */}
+          <ReviewsBar score={migrationPercentage} />
         </div>
       </div>
       <h3 className="text-white mb-2">Migration Details</h3>
@@ -108,18 +108,31 @@ const DypMigration = ({
               Old DYP smart contract address:
             </span>
             <div className="d-flex align-items-center gap-3">
-              <a href="https://etherscan.io/address/0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17" target="_blank" className="old-dyp-address mb-0">
+              <a
+                href="https://etherscan.io/address/0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17"
+                target="_blank"
+                className="old-dyp-address mb-0"
+              >
                 0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17
               </a>
               <div className="d-flex align-items-center gap-2">
-                <a href="https://etherscan.io/address/0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17" target="_blank">
-                <img src={eth} alt="" />
+                <a
+                  href="https://etherscan.io/address/0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17"
+                  target="_blank"
+                >
+                  <img src={eth} alt="" />
                 </a>
-                <a href="https://bscscan.com/address/0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17" target="_blank">
-                <img src={bnb} alt="" />
+                <a
+                  href="https://bscscan.com/address/0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17"
+                  target="_blank"
+                >
+                  <img src={bnb} alt="" />
                 </a>
-                <a href="https://snowtrace.io/address/0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17" target="_blank">
-                <img src={avax} alt="" />
+                <a
+                  href="https://snowtrace.io/address/0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17"
+                  target="_blank"
+                >
+                  <img src={avax} alt="" />
                 </a>
               </div>
             </div>
@@ -129,12 +142,19 @@ const DypMigration = ({
               New DYP smart contract address:
             </span>
             <div className="d-flex align-items-center gap-3">
-              <a href="https://etherscan.io/address/0x39b46b212bdf15b42b166779b9d1787a68b9d0c3" className="new-dyp-address mb-0">
+              <a
+                href="https://etherscan.io/address/0x39b46b212bdf15b42b166779b9d1787a68b9d0c3"
+                className="new-dyp-address mb-0"
+                target="_blank"
+              >
                 0x39b46b212bdf15b42b166779b9d1787a68b9d0c3
               </a>
-              <a href="https://etherscan.io/address/0x39b46b212bdf15b42b166779b9d1787a68b9d0c3" target="_blank">
+              <a
+                href="https://etherscan.io/address/0x39b46b212bdf15b42b166779b9d1787a68b9d0c3"
+                target="_blank"
+              >
                 <img src={eth} alt="" />
-                </a>
+              </a>
             </div>
           </div>
           <span className="contract-audit-text mb-0">
@@ -145,7 +165,8 @@ const DypMigration = ({
           <div className="purplediv"></div>
           <h6 className="migration-details-title">Swap Ratio</h6>
           <span className="smart-contract-announce">
-          The swap ratio for DYP V2 varies depending on the respective blockchain.
+            The swap ratio for DYP V2 varies depending on the respective
+            blockchain.
           </span>
           <ul>
             <li className="migration-swap-item">
@@ -167,16 +188,30 @@ const DypMigration = ({
             process and learn how to follow the correct steps for converting
             your old DYP tokens to the new DYP v2 tokens.
           </span>
-          <a
-            href="https://medium.com/@dypius/how-to-convert-your-old-dyp-to-the-new-dyp-v2-63b8965bbfa5"
-            target="_blank"
-            style={{width: 'fit-content'}}
-            rel="noreferrer">
-          <div className="d-flex align-items-center.gap-2">
-            <span className="explore-migration">Explore the Guide</span>
-            <img src={require("./assets/greenArrow.svg").default} alt="" />
+          <div className="d-flex align-items-center gap-2 justify-content-between">
+            <a
+              href="https://medium.com/@dypius/how-to-convert-your-old-dyp-to-the-new-dyp-v2-63b8965bbfa5"
+              target="_blank"
+              style={{ width: "fit-content" }}
+              rel="noreferrer"
+            >
+              <div className="d-flex align-items-center.gap-2">
+                <span className="explore-migration">Explore the Guide</span>
+                <img src={require("./assets/greenArrow.svg").default} alt="" />
+              </div>
+            </a>
+            <a
+              href="https://dypius.medium.com/dyp-migration-faqs-e1b052da868c"
+              target="_blank"
+              style={{ width: "fit-content" }}
+              rel="noreferrer"
+            >
+              <div className="d-flex align-items-center.gap-2">
+                <span className="explore-migration">FAQs</span>
+                <img src={require("./assets/greenArrow.svg").default} alt="" />
+              </div>
+            </a>
           </div>
-          </a>
         </div>
       </div>
       <div className="col-12 col-lg-5 d-flex flex-column justify-content-center gap-3 mb-4">
