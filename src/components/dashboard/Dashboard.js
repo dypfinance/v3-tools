@@ -26,6 +26,7 @@ import StakeNewEth from "../FARMINNG/stakeNewEth";
 import CawsWodDetails from "../FARMINNG/cawsWod";
 import CawsWodCard from "../top-pools-card/CawsWodCard";
 import BscFarmingFunc from "../FARMINNG/BscFarmingFunc";
+import MigrationBanner from "../migrationbanner/MigrationBanner";
 
 const Dashboard = ({
   isConnected,
@@ -271,7 +272,8 @@ const Dashboard = ({
       <div className="d-flex m-0 flex-column flex-xxl-row justify-content-between gap-4">
         <div className="d-flex flex-column gap-4 justify-content-between">
           <div className="d-flex flex-column flex-md-row m-0 gap-3 justify-content-between">
-            <Calculator />
+            {/* <Calculator /> */}
+            <MigrationBanner />
             <div className="d-flex flex-column gap-3 gap-lg-4 justify-content-between dashboard-cards-wrapper">
               <ExplorerCard />
               <div className="d-flex flex-column flex-md-row justify-content-between gap-3">
@@ -530,17 +532,17 @@ const Dashboard = ({
                 ) : activeCard &&
                   network === 56 &&
                   topPools[cardIndex]?.id ===
-                    "0x7c82513b69c1b42c23760cfc34234558119a3399" ? (
+                    "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" ? (
                   <StakeBsc
                     lp_id={LP_IDBNB_Array[cardIndex]}
-                    staking={window.constant_stakingbsc_new111}
+                    staking={window.constant_stakingbsc_new14}
                     apr={
                       topPools[cardIndex]?.apy_percent
                         ? topPools[cardIndex]?.apy_percent
                         : 30
                     }
                     liquidity={wbsc_address}
-                    expiration_time={"14 March 2024"}
+                    expiration_time={"18 July 2024"}
                     finalApr={
                       topPools[cardIndex]?.apy_performancefee
                         ? topPools[cardIndex]?.apy_performancefee
@@ -1117,17 +1119,17 @@ const Dashboard = ({
                 ) : activeCard2 &&
                   network === 56 &&
                   topPools[0]?.id ===
-                    "0x7c82513b69c1b42c23760cfc34234558119a3399" ? (
+                    "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487" ? (
                   <StakeBsc
                     lp_id={LP_IDBNB_Array[cardIndex]}
-                    staking={window.constant_stakingbsc_new111}
+                    staking={window.constant_stakingbsc_new14}
                     apr={
                       topPools[cardIndex]?.apy_percent
                         ? topPools[cardIndex]?.apy_percent
                         : 30
                     }
                     liquidity={wbsc_address}
-                    expiration_time={"14 March 2024"}
+                    expiration_time={"18 July 2024"}
                     finalApr={
                       topPools[cardIndex]?.apy_performancefee
                         ? topPools[cardIndex]?.apy_performancefee

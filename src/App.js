@@ -41,6 +41,7 @@ import { withRouter } from "react-router-dom";
 import GenesisStaking from "./components/genesisStaking/GenesisStaking";
 import CawsStaking from "./components/genesisStaking/CawsStaking";
 import Plans from "./components/account/Plans";
+import DypMigration from './components/bridge/DypMigration'
 
 class App extends React.Component {
   constructor(props) {
@@ -97,7 +98,7 @@ class App extends React.Component {
   };
 
   checkNetworkId = () => {
-    if (!this.props.history.location.pathname.includes("bridge")) {
+    if (!this.props.history.location.pathname.includes("bridge") && !this.props.history.location.pathname.includes("migration")) {
       if (
         window.ethereum &&
         (window.ethereum.isMetaMask === true ||
@@ -396,6 +397,7 @@ class App extends React.Component {
       await window.ethereum
         .request({ method: "eth_accounts" })
         .then((data) => {
+         
           this.setState({
             isConnected: data.length === 0 ? false : true,
             coinbase: data.length === 0 ? undefined : data[0],
@@ -490,7 +492,7 @@ class App extends React.Component {
       LP_IDs_V2.weth[4],
     ];
 
-    if (!this.props.location.pathname.includes("bridge")) {
+    if (!this.props.location.pathname.includes("bridge")&&!this.props.location.pathname.includes("migration")) {
       ethereum?.on("chainChanged", this.checkNetworkId);
       ethereum?.on("accountsChanged", this.checkConnection);
     }
@@ -655,6 +657,18 @@ class App extends React.Component {
                     path="/bridge"
                     render={() => (
                       <Bridge
+                        networkId={parseInt(this.state.networkId)}
+                        isConnected={this.state.isConnected}
+                        handleConnection={this.handleConnection}
+                        coinbase={this.state.coinbase}
+                      />
+                    )}
+                  />
+                  <Route
+                    exact
+                    path="/migration"
+                    render={() => (
+                      <DypMigration
                         networkId={parseInt(this.state.networkId)}
                         isConnected={this.state.isConnected}
                         handleConnection={this.handleConnection}
