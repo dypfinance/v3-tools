@@ -141,7 +141,7 @@ const Footer = () => {
           <li>
             <a
               target={"_blank"}
-              href="https://etherscan.io/address/0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17#code"
+              href="https://etherscan.io/address/0x39b46b212bdf15b42b166779b9d1787a68b9d0c3#code"
             >
               Token Contract
             </a>
