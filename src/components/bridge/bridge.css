@@ -17,6 +17,14 @@
   color: #f7f7fc;
 }
 
+.jconfirm-content-pane {
+  padding: 5px 0 !important;
+}
+
+.jconfirm-content {
+  padding: 0 0 8px 0 !important;
+}
+
 .swiftwrapper {
   border-radius: 12px;
   border: 1px solid #7770df;
@@ -29,14 +37,14 @@
 
 @media only screen and (max-width: 991px) {
   .swiftwrapper {
-    border: none
+    border: none;
   }
 }
 
 @media only screen and (max-width: 700px) {
   .swiftwrapper {
     background: url(./assets/bridgebgMobile.png);
-    aspect-ratio: 0.63/.7;
+    aspect-ratio: 0.63/0.7;
     background-size: cover;
   }
 }
@@ -144,4 +152,195 @@
 
 .passiveline {
   background-color: #565891 !important;
+}
+
+.migration-banner {
+  position: relative;
+  background: #282a5c;
+  border-radius: 20px;
+}
+
+.migration-banner::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  margin: auto;
+  background-image: url("./assets/migrationBannerBg.png");
+  background-repeat: no-repeat;
+  background-position: right;
+  border-radius: 20px;
+}
+
+@media screen and (max-width: 786px) {
+  .migration-banner::before{
+    background-image: none;
+  }
+}
+
+.migration-banner-title {
+  color: #f7f7fc;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 28px; /* 116.667% */
+}
+
+.migration-banner-desc {
+  color: #f7f7fc;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px; /* 166.667% */
+  letter-spacing: -0.216px;
+}
+
+
+.migration-details-wrapper{
+  border-radius: 12px;
+border: 1px solid #3B3C68;
+background: #26264F;
+box-shadow: 0px 32px 64px 0px rgba(17, 17, 17, 0.08);
+width: 30%;
+}
+
+.migration-details-title{
+  color: #F7F7FC;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  letter-spacing: -0.324px;
+}
+
+.smart-contract-announce{
+  color: #D6D8E7;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.old-dyp-address{
+  color: #F07C58 !important;
+text-align: right;
+font-size: 10px;
+font-style: italic;
+font-weight: 400;
+line-height: normal;
+letter-spacing: -0.18px;
+text-decoration-line: underline;
+}
+
+.new-dyp-address{
+  color: #25DAFF !important;
+  text-align: right;
+  font-size: 10px;
+  font-style: italic;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.18px;
+  text-decoration-line: underline;
+}
+
+.contract-audit-text{
+  color: #D6D8E7;
+  font-size: 10px;
+  font-style: italic;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.migration-swap-item{
+  color: #D6D8E7;
+font-size: 14px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+}
+
+.explore-migration{
+  color: #4ED5D2 !important;
+font-size: 12px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+}
+
+
+@media screen and (max-width: 991px) {
+  .migration-details-wrapper{
+    width: 100%;
+  }
+}
+
+.migration-title{
+color: #F7F7FC !important;
+font-size: 16px;
+font-style: normal;
+font-weight: 500;
+line-height: 10px; /* 62.5% */
+letter-spacing: -0.288px;
+}
+
+.migration-span{
+  color: #7A81B4 !important;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 12px; /* 150% */
+  letter-spacing: -0.144px;
+}
+
+.migration-divider{
+  width: 100% !important;
+  height: 2px;
+  background: #3B3C68;
+  margin-top: 0;
+}
+
+.conversion-rate-wrapper{
+  border-radius: 8px;
+  border: 1px solid #C0CBF7;
+  background: rgba(192, 203, 247, 0.10);
+}
+
+.conversion-rate-title{
+  color: #7A81B4 !important;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 14px; /* 140% */
+  letter-spacing: -0.18px;
+}
+
+.conversion-rate{
+  color: #C0CBF7 !important;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 16px; /* 133.333% */
+  letter-spacing: -0.216px;
+}
+
+.conversion-input-container{
+  border-radius: 8px;
+border: 1px solid #8E97CD;
+height: 48px;
+width: 100% !important;
+}
+
+
+.conversion-input{
+  border-radius: 8px !important;
+  height: 100% !important;
+  background: #26264f !important;
+}
+
+@media screen and (max-width: 786px) {
+  .conversion-input{
+    width: 50%;
+  }
 }

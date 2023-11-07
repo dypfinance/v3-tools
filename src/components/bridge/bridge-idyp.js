@@ -77,6 +77,9 @@ export default function initBridgeidyp({
         errorMsg2: "",
         showWalletModal: false,
         destinationChain: this.props.destinationChain,
+        ethBalance: 0,
+        bnbBalance: 0,
+        avaxBalance: 0,
       };
     }
 
@@ -84,6 +87,7 @@ export default function initBridgeidyp({
       this.refreshBalance();
       this.getChainSymbol();
       this.fetchData();
+      this.getAllBalanceiDyp();
       window._refreshBalInterval = setInterval(this.refreshBalance, 4000);
       window._refreshBalInterval = setInterval(this.getChainSymbol, 500);
     }
@@ -172,7 +176,7 @@ export default function initBridgeidyp({
           }
         }
       }
-      
+
       amount = new BigNumber(amount).times(10 ** TOKEN_DECIMALS).toFixed(0);
       let bridge = bridgeETH;
       tokenETH
@@ -244,7 +248,6 @@ export default function initBridgeidyp({
       amount = new BigNumber(amount).times(10 ** TOKEN_DECIMALS).toFixed(0);
       let bridge = bridgeETH;
       let chainId = this.props.networkId;
-      
 
       if (chainId !== undefined) {
         let contract = await window.getBridgeContract(bridge._address);
@@ -271,6 +274,49 @@ export default function initBridgeidyp({
               });
             }, 8000);
           });
+      }
+    };
+
+    getAllBalanceiDyp = async () => {
+      const tokenAddress = "0xbd100d061e120b2c67a24453cf6368e63f1be056";
+      const walletAddress = this.props.coinbase;
+      const TokenABI = window.ERC20_ABI;
+
+      if (walletAddress != undefined) {
+        const contract1 = new window.infuraWeb3.eth.Contract(
+          TokenABI,
+          tokenAddress
+        );
+        const contract2 = new window.avaxWeb3.eth.Contract(
+          TokenABI,
+          tokenAddress
+        );
+        const contract3 = new window.bscWeb3.eth.Contract(
+          TokenABI,
+          tokenAddress
+        );
+        if (this.props.sourceChain === "eth") {
+          await contract1.methods
+            .balanceOf(walletAddress)
+            .call()
+            .then((data) => {
+              this.setState({ ethBalance: data });
+            });
+        } else if (this.props.sourceChain === "avax") {
+          await contract2.methods
+            .balanceOf(walletAddress)
+            .call()
+            .then((data) => {
+              this.setState({ avaxBalance: data });
+            });
+        } else if (this.props.sourceChain === "bnb") {
+          await contract3.methods
+            .balanceOf(walletAddress)
+            .call()
+            .then((data) => {
+              this.setState({ bnbBalance: data });
+            });
+        }
       }
     };
 
@@ -307,6 +353,10 @@ export default function initBridgeidyp({
               withdrawStatus: "success",
             });
             this.refreshBalance();
+            this.getAllBalanceiDyp();
+            window.alertify.message("Congratulations on successfully withdrawing your new DYP tokens!");
+            
+
           })
           .catch((e) => {
             this.setState({ withdrawLoading: false, withdrawStatus: "fail" });
@@ -443,7 +493,7 @@ export default function initBridgeidyp({
         );
         canWithdraw = timeDiff === 0;
       }
-      
+
       return (
         <div className="d-flex gap-4 justify-content-between">
           <div className="token-staking col-12 col-lg-6 col-xxl-5">
@@ -451,7 +501,7 @@ export default function initBridgeidyp({
             <div className="row">
               <div>
                 <div className="d-flex flex-column">
-                  <h6 className="fromtitle mb-2">Deposit</h6>
+                  {/* <h6 className="fromtitle mb-2">Deposit</h6> */}
                   <div className="d-flex flex-column flex-lg-row align-items-center justify-content-between gap-2">
                     <div className="d-flex align-items-center justify-content-between gap-3">
                       <div
@@ -555,16 +605,16 @@ export default function initBridgeidyp({
                                   <b>
                                     {this.props.sourceChain === "eth"
                                       ? getFormattedNumber(
-                                          this.props.ethBalance / 1e18,
+                                          this.state.ethBalance / 1e18,
                                           6
                                         )
                                       : this.props.sourceChain === "avax"
                                       ? getFormattedNumber(
-                                          this.props.avaxBalance / 1e18,
+                                          this.state.avaxBalance / 1e18,
                                           6
                                         )
                                       : getFormattedNumber(
-                                          this.props.bnbBalance / 1e18,
+                                          this.state.bnbBalance / 1e18,
                                           6
                                         )}
                                   </b>
@@ -1103,14 +1153,14 @@ export default function initBridgeidyp({
                   <TimelineSeparator>
                     <TimelineDot
                       className={
-                        this.state.depositStatus === "deposit"
+                        this.state.depositStatus === "deposit" || this.state.depositStatus === 'success'
                           ? "greendot"
                           : "passivedot"
                       }
                     />
                     <TimelineConnector
                       className={
-                        this.state.depositStatus === "deposit"
+                        this.state.depositStatus === "deposit" || this.state.depositStatus === 'success'
                           ? "greenline"
                           : "passiveline"
                       }
@@ -1123,6 +1173,33 @@ export default function initBridgeidyp({
                       </h6>
                       Approve the transaction and then deposit the assets. These
                       steps need confirmation in your wallet.
+                    </h6>
+                  </TimelineContent>
+                </TimelineItem>
+                <TimelineItem>
+                  <TimelineSeparator>
+                    <TimelineDot
+                      className={
+                        this.state.depositStatus === 'success'
+                          ? "greendot"
+                          : "passivedot"
+                      }
+                    />
+                    <TimelineConnector
+                      className={
+                         this.state.depositStatus === 'success'
+                          ? "greenline"
+                          : "passiveline"
+                      }
+                    />
+                  </TimelineSeparator>
+                  <TimelineContent>
+                    <h6 className="content-text">
+                      <h6 className="content-title2">
+                        <b>Deposit tokens</b>
+                      </h6>
+                      Confirm the transaction and deposit the assets into the bridge contract. This
+                      step needs confirmation in your wallet.
                     </h6>
                   </TimelineContent>
                 </TimelineItem>

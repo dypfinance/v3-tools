@@ -1022,33 +1022,40 @@ const StakeBsc = ({
                       Max
                     </button>
                   </div>
-                  {/* <button
-                      className="btn filledbtn"
-                      onClick={this.handleApprove}
-                    >
-                      Approve
-                    </button> */}
+                 
                   <button
                     disabled={
-                      depositAmount === "" || depositLoading === true
+                      depositAmount === "" || depositLoading === true ||
+                      depositStatus === "success" ||
+                      staking?._address.toLowerCase() ===
+                        "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487".toLowerCase()
                         ? true
                         : false
                     }
                     className={`btn filledbtn ${
-                      depositAmount === "" &&
-                      depositStatus === "initial" &&
+                      ((depositAmount === "" && depositStatus === "initial") ||
+                      staking?._address.toLowerCase() ===
+                        "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487".toLowerCase()) &&
                       "disabled-btn"
                     } ${
-                      depositStatus === "deposit" || depositStatus === "success"
+                      (depositStatus === "deposit" ||
+                        depositStatus === "success") &&
+                      staking?._address.toLowerCase() !==
+                        "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487".toLowerCase()
                         ? "success-button"
                         : depositStatus === "fail"
                         ? "fail-button"
                         : null
                     } d-flex justify-content-center align-items-center gap-2`}
                     onClick={() => {
-                      depositStatus === "deposit"
+                      depositStatus === "deposit" &&
+                      staking?._address.toLowerCase() !==
+                        "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487".toLowerCase()
                         ? handleStake()
-                        : depositStatus === "initial" && depositAmount !== ""
+                        : depositStatus === "initial" &&
+                        depositAmount !== "" &&
+                        staking?._address.toLowerCase() !==
+                          "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487".toLowerCase()
                         ? handleApprove()
                         : console.log("");
                     }}
