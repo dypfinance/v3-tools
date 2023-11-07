@@ -167,16 +167,30 @@ const DypMigration = ({
             process and learn how to follow the correct steps for converting
             your old DYP tokens to the new DYP v2 tokens.
           </span>
-          <a
-            href="https://medium.com/@dypius/how-to-convert-your-old-dyp-to-the-new-dyp-v2-63b8965bbfa5"
-            target="_blank"
-            style={{width: 'fit-content'}}
-            rel="noreferrer">
-          <div className="d-flex align-items-center.gap-2">
-            <span className="explore-migration">Explore the Guide</span>
-            <img src={require("./assets/greenArrow.svg").default} alt="" />
+          <div className="d-flex align-items-center gap-2 justify-content-between">
+            <a
+              href="https://medium.com/@dypius/how-to-convert-your-old-dyp-to-the-new-dyp-v2-63b8965bbfa5"
+              target="_blank"
+              style={{ width: "fit-content" }}
+              rel="noreferrer"
+            >
+              <div className="d-flex align-items-center.gap-2">
+                <span className="explore-migration">Explore the Guide</span>
+                <img src={require("./assets/greenArrow.svg").default} alt="" />
+              </div>
+            </a>
+            <a
+              href="https://dypius.medium.com/dyp-migration-faqs-e1b052da868c"
+              target="_blank"
+              style={{ width: "fit-content" }}
+              rel="noreferrer"
+            >
+              <div className="d-flex align-items-center.gap-2">
+                <span className="explore-migration">FAQs</span>
+                <img src={require("./assets/greenArrow.svg").default} alt="" />
+              </div>
+            </a>
           </div>
-          </a>
         </div>
       </div>
       <div className="col-12 col-lg-5 d-flex flex-column justify-content-center gap-3 mb-4">
