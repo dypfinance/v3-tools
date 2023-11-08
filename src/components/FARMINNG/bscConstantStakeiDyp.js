@@ -490,9 +490,9 @@ const StakeBscIDyp = ({
   };
 
   const handleEthPool = async () => {
-    await handleSwitchNetworkhook("0x1")
+    await handleSwitchNetworkhook("0x38")
       .then(() => {
-        handleSwitchNetwork("1");
+        handleSwitchNetwork("56");
       })
       .catch((e) => {
         console.log(e);

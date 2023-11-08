@@ -555,7 +555,7 @@ const TopPoolsListCard = ({
               is_wallet_connected={isConnected}
               coinbase={coinbase}
               the_graph_result={the_graph_result}
-              lp_id={lp_id[cardIndex - 1]}
+              
               chainId={chainId}
               handleConnection={handleConnection}
               handleSwitchNetwork={handleSwitchNetwork}
@@ -603,8 +603,7 @@ const TopPoolsListCard = ({
             />
           ) : showDetails &&
             topList === "Farming" &&
-            chain === "avax" ? //   coinbase={coinbase} //   is_wallet_connected={isConnected} //   <FarmAvaxFunc
-          //   the_graph_result={the_graph_resultavax}
+            chain === "avax" ? //   the_graph_result={the_graph_resultavax} //   coinbase={coinbase} //   is_wallet_connected={isConnected} //   <FarmAvaxFunc
           //   lp_id={LP_IDAVAX_Array[cardIndex]}
           //   chainId={chainId}
           //   handleConnection={handleConnection}
@@ -658,10 +657,9 @@ const TopPoolsListCard = ({
             />
           ) : showDetails &&
             activePools &&
-            activePools[cardIndex] &&
             topList === "Staking" &&
             chain === "avax" &&
-            activePools[cardIndex - 1].id ===
+            activePools[cardIndex - 1]?.id ===
               "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
             <StakeAvaxIDyp
               is_wallet_connected={isConnected}
@@ -837,7 +835,7 @@ const TopPoolsListCard = ({
               chainId={chainId}
               handleConnection={handleConnection}
               handleSwitchNetwork={handleSwitchNetwork}
-              expired={false}
+              expired={true}
               referrer={referrer}
               totalTvl={expiredPools[cardIndex - 1].tvl_usd}
             />
@@ -872,7 +870,7 @@ const TopPoolsListCard = ({
               chainId={chainId}
               handleConnection={handleConnection}
               handleSwitchNetwork={handleSwitchNetwork}
-              expired={false}
+              expired={true}
               referrer={referrer}
             />
           ) : showDetails &&
@@ -906,7 +904,7 @@ const TopPoolsListCard = ({
               chainId={chainId}
               handleConnection={handleConnection}
               handleSwitchNetwork={handleSwitchNetwork}
-              expired={false}
+              expired={true}
               referrer={referrer}
             />
           ) : showDetails &&
@@ -923,7 +921,7 @@ const TopPoolsListCard = ({
               chainId={chainId.toString()}
               handleConnection={handleConnection}
               handleSwitchNetwork={handleSwitchNetwork}
-              expired={false}
+              expired={true}
               staking={window.constant_staking_new12}
               listType={listType}
               apr={expiredPools[cardIndex - 1]?.apy_percent}
@@ -949,7 +947,7 @@ const TopPoolsListCard = ({
               chainId={chainId.toString()}
               handleConnection={handleConnection}
               handleSwitchNetwork={handleSwitchNetwork}
-              expired={false}
+              expired={true}
               staking={window.constant_staking_new13}
               listType={listType}
               apr={expiredPools[cardIndex - 1]?.apy_percent}
@@ -971,7 +969,7 @@ const TopPoolsListCard = ({
               is_wallet_connected={isConnected}
               coinbase={coinbase}
               the_graph_result={the_graph_result}
-              lp_id={lp_id[cardIndex - 1]}
+              
               chainId={chainId}
               handleConnection={handleConnection}
               handleSwitchNetwork={handleSwitchNetwork}
@@ -1003,7 +1001,7 @@ const TopPoolsListCard = ({
               is_wallet_connected={isConnected}
               coinbase={coinbase}
               the_graph_result={the_graph_result}
-              lp_id={lp_id[cardIndex - 1]}
+             
               chainId={chainId}
               handleConnection={handleConnection}
               handleSwitchNetwork={handleSwitchNetwork}
@@ -1546,7 +1544,7 @@ const TopPoolsListCard = ({
               chainId={chainId}
               handleConnection={handleConnection}
               handleSwitchNetwork={handleSwitchNetwork}
-              expired={false}
+              expired={true}
               staking={window.constant_staking_idypavax_5}
               listType={listType}
               finalApr={expiredPools[cardIndex - 1]?.apy_performancefee}
@@ -1612,7 +1610,7 @@ const TopPoolsListCard = ({
               chainId={chainId.toString()}
               handleConnection={handleConnection}
               handleSwitchNetwork={handleSwitchNetwork}
-              expired={false}
+              expired={true}
               staking={window.constant_staking_new10}
               listType={listType}
               finalApr={expiredPools[cardIndex - 1]?.apy_performancefee}
