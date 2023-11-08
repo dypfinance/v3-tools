@@ -50,73 +50,15 @@ const BuyDyp = () => {
       link: "https://www.huobi.com/en-us/exchange/dyp_usdt",
       totalvids: "0 videos",
       videos: "",
+      active: true,
     },
-    {
-      title: "Coinbase",
-      logo: "coinbase.png",
-      link: "https://pro.coinbase.com/trade/DYP-USD",
-      totalvids: "1 video",
-      videos: [
-        {
-          link: "https://www.youtube.com/embed/mjUUqNy-zW8",
-          image: "coinbase.png",
-          title: "How to buy DeFi Yield Protocol (DYP) on Coinbase",
-          walletName: "Coinbase",
-          thumbnail: "coinbase.png",
-        },
-      ],
-    },
-    {
-      title: "KuCoin",
-      logo: "kucoin.png",
-      link: "https://www.kucoin.com/trade/DYP-USDT",
-      totalvids: "1 video",
-      videos: [
-        {
-          link: "https://www.youtube.com/embed/BIuy1A-_-dU",
-          image: "kucoin.png",
-          title: "How to buy DeFi Yield Protocol (DYP) on KuCoin",
-          walletName: "KuCoin",
-          thumbnail: "kucoin.png",
-        },
-      ],
-    },
-    {
-      title: "Gate.io",
-      logo: "gateio.png",
-      link: "https://www.gate.io/zh/trade/DYP_USDT",
-      totalvids: "1 video",
-      videos: [
-        {
-          link: "https://www.youtube.com/embed/arVFXf5hESE",
-          image: "gate.png",
-          title: "How to buy DeFi Yield Protocol (DYP) on Gate.io",
-          walletName: "Gate.io",
-          thumbnail: "gate.png",
-        },
-      ],
-    },
-    {
-      title: "Poloniex",
-      logo: "poloniex.png",
-      link: "https://poloniex.com/spot/BTC_USDT",
-      totalvids: "0 videos",
-      videos: "",
-    },
-    {
-      title: "MEXC",
-      logo: "mexc.png",
-      link: "https://www.mexc.com/exchange/DYP_USDT",
-      totalvids: "0 videos",
-      videos: "",
-      id: "collapsefive",
-    },
-
     {
       title: "Uniswap V2",
       logo: "uniswap.png",
-      link: "https://app.uniswap.org/#/swap?use=V2&inputCurrency=0x961c8c0b1aad0c0b10a51fef6a867e3091bcef17",
+      link: "https://app.uniswap.org/swap?use=V2&inputCurrency=0x39b46B212bDF15b42B166779b9d1787A68b9D0c3",
       totalvids: "8 videos",
+      active: true,
+
       videos: [
         {
           link: "https://www.youtube.com/embed/yBzIPecqKY8",
@@ -184,9 +126,9 @@ const BuyDyp = () => {
     {
       title: "PancakeSwap V2",
       logo: "pancake.png",
-
-      link: "https://pancakeswap.finance/swap?inputCurrencty=BNB&outputCurrency=0x961c8c0b1aad0c0b10a51fef6a867e3091bcef17",
+      link: "https://pancakeswap.finance/swap?inputCurrencty=BNB&outputCurrency=0x1a3264f2e7b1cfc6220ec9348d33ccf02af7aaa4",
       totalvids: "4 videos",
+      active: true,
       videos: [
         {
           link: "https://www.youtube.com/embed/yBzIPecqKY8",
@@ -221,49 +163,121 @@ const BuyDyp = () => {
       ],
     },
     {
-      title: "Pangolin",
-      logo: "pangolin.png",
-      link: "https://app.pangolin.exchange/#/swap?&outputCurrency=0x961c8c0b1aad0c0b10a51fef6a867e3091bcef17",
-      totalvids: "4 videos",
+      title: "Trader Joe",
+      logo: "traderjoe.webp",
+      link: "https://traderjoexyz.com/avalanche/trade?outputCurrency=0x1a3264f2e7b1cfc6220ec9348d33ccf02af7aaa4",
+      totalvids: "0 videos",
+      active: true,
+      videos: "",
+      //  [
+      //   {
+      //     link: "https://www.youtube.com/embed/yBzIPecqKY8",
+      //     image: "metamask.png",
+      //     walletName: "Metamask",
+      //     title: "How to set up MetaMask for DeFi Yield Protocol (DYP)",
+      //     thumbnail: "uni1.png",
+      //   },
+      //   {
+      //     link: "https://www.youtube.com/embed/T6qYvErqD-M",
+      //     image: "metamask.png",
+      //     walletName: "Metamask",
+      //     title:
+      //       "How to buy DeFi Yield Protocol (DYP) on the Pangolin exchange using MetaMask",
+      //     thumbnail: "pan1.png",
+      //   },
+      //   {
+      //     link: "https://www.youtube.com/embed/-kE6mM6d9ek",
+      //     image: "coin98.png",
+      //     walletName: "Coin98",
+      //     title:
+      //       "How to set up Coin98 Wallet (Desktop) for DeFi Yield Protocol (DYP)",
+      //     thumbnail: "coin1.png",
+      //   },
+      //   {
+      //     link: "https://www.youtube.com/embed/FmrgSuCo_nk",
+      //     image: "coin98.png",
+      //     walletName: "Coin98",
+      //     title:
+      //       "How to buy DeFi Yield Protocol (DYP) on the Avalanche Network using the Coin98 Wallet",
+      //     thumbnail: "pan2.png",
+      //   },
+      // ],
+    },
+    {
+      title: "Coinbase",
+      logo: "coinbase.png",
+      link: "https://pro.coinbase.com/trade/DYP-USD",
+      totalvids: "1 video",
+      active: false,
       videos: [
         {
-          link: "https://www.youtube.com/embed/yBzIPecqKY8",
-          image: "metamask.png",
-          walletName: "Metamask",
-          title: "How to set up MetaMask for DeFi Yield Protocol (DYP)",
-          thumbnail: "uni1.png",
-        },
-        {
-          link: "https://www.youtube.com/embed/T6qYvErqD-M",
-          image: "metamask.png",
-          walletName: "Metamask",
-          title:
-            "How to buy DeFi Yield Protocol (DYP) on the Pangolin exchange using MetaMask",
-          thumbnail: "pan1.png",
-        },
-        {
-          link: "https://www.youtube.com/embed/-kE6mM6d9ek",
-          image: "coin98.png",
-          walletName: "Coin98",
-          title:
-            "How to set up Coin98 Wallet (Desktop) for DeFi Yield Protocol (DYP)",
-          thumbnail: "coin1.png",
-        },
-        {
-          link: "https://www.youtube.com/embed/FmrgSuCo_nk",
-          image: "coin98.png",
-          walletName: "Coin98",
-          title:
-            "How to buy DeFi Yield Protocol (DYP) on the Avalanche Network using the Coin98 Wallet",
-          thumbnail: "pan2.png",
+          link: "https://www.youtube.com/embed/mjUUqNy-zW8",
+          image: "coinbase.png",
+          title: "How to buy DeFi Yield Protocol (DYP) on Coinbase",
+          walletName: "Coinbase",
+          thumbnail: "coinbase.png",
         },
       ],
     },
+    {
+      title: "KuCoin",
+      logo: "kucoin.png",
+      link: "https://www.kucoin.com/trade/DYP-USDT",
+      totalvids: "1 video",
+      active: false,
+
+      videos: [
+        {
+          link: "https://www.youtube.com/embed/BIuy1A-_-dU",
+          image: "kucoin.png",
+          title: "How to buy DeFi Yield Protocol (DYP) on KuCoin",
+          walletName: "KuCoin",
+          thumbnail: "kucoin.png",
+        },
+      ],
+    },
+    {
+      title: "Gate.io",
+      logo: "gateio.png",
+      link: "https://www.gate.io/zh/trade/DYP_USDT",
+      totalvids: "1 video",
+      active: false,
+
+      videos: [
+        {
+          link: "https://www.youtube.com/embed/arVFXf5hESE",
+          image: "gate.png",
+          title: "How to buy DeFi Yield Protocol (DYP) on Gate.io",
+          walletName: "Gate.io",
+          thumbnail: "gate.png",
+        },
+      ],
+    },
+    {
+      title: "Poloniex",
+      logo: "poloniex.png",
+      link: "https://poloniex.com/spot/BTC_USDT",
+      totalvids: "0 videos",
+      videos: "",
+      active: false,
+    },
+    {
+      title: "MEXC",
+      logo: "mexc.png",
+      link: "https://www.mexc.com/exchange/DYP_USDT",
+      totalvids: "0 videos",
+      videos: "",
+      id: "collapsefive",
+      active: false,
+    },
+
     {
       title: "Coin98",
       logo: "coin98.png",
       link: "",
       totalvids: "3 videos",
+      active: false,
+
       videos: [
         {
           link: "https://www.youtube.com/embed/SvUaexmtgnU",
@@ -296,6 +310,8 @@ const BuyDyp = () => {
       logo: "oneinch.png",
       link: "https://app.1inch.io/#/1/swap/DYP/ETH",
       totalvids: "6 videos",
+      active: false,
+
       videos: [
         {
           link: "https://www.youtube.com/embed/yBzIPecqKY8",
@@ -347,6 +363,8 @@ const BuyDyp = () => {
       logo: "kyber.png",
       link: "https://kyberswap.com/swap/bnb/bnb-to-dyp",
       totalvids: "1 video",
+      active: false,
+
       videos: [
         {
           link: "https://www.youtube.com/embed/olhIziGMs0Y",
@@ -402,6 +420,7 @@ const BuyDyp = () => {
                   window.scrollTo(0, 0);
                 }}
                 active={activeVendor === index ? true : false}
+                activeLink={vendor.active}
               />
             ))}
           </div>
@@ -426,7 +445,7 @@ const BuyDyp = () => {
                   {buyDypItems[activeVendor].title} videos
                 </h6>
               </div>
-              {buyDypItems[activeVendor].title === "Huobi" ? (
+              {buyDypItems[activeVendor].active === true ? (
                 <a
                   href={buyDypItems[activeVendor].link}
                   target="_blank"
