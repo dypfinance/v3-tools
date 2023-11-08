@@ -27,6 +27,7 @@ import CawsWodDetails from "../FARMINNG/cawsWod";
 import CawsWodCard from "../top-pools-card/CawsWodCard";
 import BscFarmingFunc from "../FARMINNG/BscFarmingFunc";
 import MigrationBanner from "../migrationbanner/MigrationBanner";
+import StakeAvaxIDyp from "../FARMINNG/stakeAvaxiDyp";
 
 const Dashboard = ({
   isConnected,
@@ -78,31 +79,74 @@ const Dashboard = ({
   };
 
   const fetchBnbStaking = async () => {
-    return await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_bnb`)
-      .then((res) => {
-        const dypdypBnb = res.data.stakingInfoDYPBnb;
+    const comingSoonPool = [
+      {
+        id: "",
+        apy_percent: 12.5,
+        tvl_usd: "--",
+        pool_name: "iDYP Constant Staking ETH",
+        pair_name: "DYP",
+        return_types: "DYP",
+        lock_time: "No lock",
+        expired: "No",
+        new_pool: "Yes",
+      },
+    ];
+    setTopPools(comingSoonPool);
 
-        const cleanCards = dypdypBnb.filter((item) => {
-          return item.expired !== "Yes";
-        });
+    // return await axios
+    //   .get(`https://api2.dyp.finance/api/get_staking_info_bnb`)
+    //   .then((res) => {
+    //     const dypdypBnb = res.data.stakingInfoiDYPBnb;
 
-        const sortedAprs = cleanCards.sort(function (a, b) {
-          return b.tvl_usd - a.tvl_usd;
-        });
-        // console.log(sortedAprs[0])
-        setTopPools(sortedAprs.slice(0, 1));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // const cleanCards = dypdypBnb.filter((item) => {
+    //   return item.expired === "No";
+    // });
+
+    // const comingSoonPool = [
+    //   {
+    //     id: "",
+    //     apy_percent: 12.5,
+    //     tvl_usd: "--",
+    //     pool_name: "iDYP Constant Staking ETH",
+    //     pair_name: "DYP",
+    //     return_types: "DYP",
+    //     lock_time: "No lock",
+    //     expired: "No",
+    //     new_pool: "Yes",
+    //   },
+    // ];
+
+    // const sortedAprs = cleanCards.sort(function (a, b) {
+    //   return b.tvl_usd - a.tvl_usd;
+    // });
+    // console.log(sortedAprs[0])
+    // setTopPools(comingSoonPool);
+    // })
+    // .catch((err) => {
+    //   console.log(err);
+    // });
   };
 
   const fetchAvaxStaking = async () => {
     return await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_avax`)
+      .get(`https://api2.dyp.finance/api/get_staking_info_avax`)
       .then((res) => {
-        const dypIdypBnb = res.data.stakingInfoDYPAvax;
+        const dypIdypBnb = res.data.stakingInfoiDYPAvax;
+
+        const comingSoonPool = [
+          {
+            id: "",
+            apy_percent: 12.5,
+            tvl_usd: "--",
+            pool_name: "iDYP Constant Staking ETH",
+            pair_name: "DYP",
+            return_types: "DYP",
+            lock_time: "No lock",
+            expired: "No",
+            new_pool: "Yes",
+          },
+        ];
 
         const cleanCards = dypIdypBnb.filter((item) => {
           return item.expired !== "Yes";
@@ -111,7 +155,10 @@ const Dashboard = ({
         const sortedAprs = cleanCards.sort(function (a, b) {
           return b.tvl_usd - a.tvl_usd;
         });
-        setTopPools(sortedAprs);
+
+        const final = [...sortedAprs, ...comingSoonPool];
+
+        setTopPools(final);
       })
       .catch((err) => {
         console.log(err);
@@ -119,10 +166,22 @@ const Dashboard = ({
   };
 
   const [landCard, setLandCard] = useState({});
-
+  const comingSoonPool = [
+    {
+      id: "",
+      apy_percent: 12.5,
+      tvl_usd: "--",
+      pool_name: "iDYP Constant Staking ETH",
+      pair_name: "DYP",
+      return_types: "DYP",
+      lock_time: "No lock",
+      expired: "No",
+      new_pool: "Yes",
+    },
+  ];
   const fetchEthStaking = async () => {
     await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_eth`)
+      .get(`https://api2.dyp.finance/api/get_staking_info_eth`)
       .then((res) => {
         const dypIdyp = res.data.stakingInfoDYPEth;
 
@@ -135,7 +194,7 @@ const Dashboard = ({
         });
 
         const finalEthCards = sortedAprs;
-        setTopPools(finalEthCards.slice(0, 1));
+        setTopPools(comingSoonPool);
 
         setLandCard(res.data.stakingInfoLAND[0]);
 
@@ -336,9 +395,7 @@ const Dashboard = ({
                     />
                   ) : null}
 
-                  {topPools.length > 0 &&
-                  network !== 56 &&
-                  loading === false ? (
+                  {topPools.length > 0 && network === 1 && loading === false ? (
                     topPools.slice(0, 2).map((item, index) => {
                       return (
                         <TopPoolsCard
@@ -358,7 +415,7 @@ const Dashboard = ({
                           top_pick={item.top_pick}
                           tokenName={item.pair_name}
                           apr={item.apy_percent + "%"}
-                          tvl={"$" + getFormattedNumber(item.tvl_usd)}
+                          tvl={"--"}
                           lockTime={item.lock_time ? item.lock_time : 30}
                           tokenLogo={
                             item.icon
@@ -370,9 +427,64 @@ const Dashboard = ({
                               : "newCawsLogo.png"
                           }
                           onShowDetailsClick={() => {
-                            setActiveCard(topPools[index]);
-                            setcardIndex(index);
-                            setDetails(index);
+                            // setActiveCard(topPools[index]);
+                            // setcardIndex(index);
+                            // setDetails(index);
+                          }}
+                          onHideDetailsClick={() => {
+                            // setActiveCard(null);
+                            // setDetails();
+                          }}
+                          cardType={"table"}
+                          details={details === index ? true : false}
+                          expired={false}
+                          isPremium={isPremium}
+                        />
+                      );
+                    })
+                  ) : topPools.length > 0 &&
+                    network === 43114 &&
+                    loading === false ? (
+                    topPools.slice(0, 2).map((item, index) => {
+                      return (
+                        <TopPoolsCard
+                          key={index}
+                          network={network.toString()}
+                          isNewPool={item.new_pool === "Yes" ? true : false}
+                          isStaked={
+                            userPools.length > 0
+                              ? userPools.find(
+                                  (obj) => obj.contract_address === item.id
+                                )
+                                ? true
+                                : false
+                              : false
+                          }
+                          chain={network}
+                          top_pick={item.top_pick}
+                          tokenName={item.pair_name}
+                          apr={item.apy_percent + "%"}
+                          tvl={
+                            item.tvl_usd === "--"
+                              ? item.tvl_usd
+                              : "$" + getFormattedNumber(item.tvl_usd)
+                          }
+                          lockTime={item.lock_time ? item.lock_time : 30}
+                          tokenLogo={
+                            item.icon
+                              ? item.icon
+                              : item.pair_name === "iDYP"
+                              ? "idypius.svg"
+                              : item.pair_name === "DYP"
+                              ? "dyplogo.svg"
+                              : "newCawsLogo.png"
+                          }
+                          onShowDetailsClick={() => {
+                            setActiveCard(
+                              item.tvl_usd !== "--" ? topPools[index] : null
+                            );
+                            setcardIndex(item.tvl_usd !== "--" ? index : null);
+                            setDetails(item.tvl_usd !== "--" ? index : null);
                           }}
                           onHideDetailsClick={() => {
                             setActiveCard(null);
@@ -424,6 +536,7 @@ const Dashboard = ({
                             network={network.toString()}
                             isPremium={isPremium}
                           />
+
                           <TopPoolsCard
                             key={index}
                             network={network.toString()}
@@ -441,7 +554,11 @@ const Dashboard = ({
                             top_pick={item.top_pick}
                             tokenName={item.pair_name}
                             apr={item.apy_percent + "%"}
-                            tvl={"$" + getFormattedNumber(item.tvl_usd)}
+                            tvl={
+                              item.tvl_usd === "--"
+                                ? item.tvl_usd
+                                : "$" + getFormattedNumber(item.tvl_usd)
+                            }
                             lockTime={item.lock_time ? item.lock_time : 30}
                             tokenLogo={
                               item.icon
@@ -453,13 +570,13 @@ const Dashboard = ({
                                 : "newCawsLogo.png"
                             }
                             onShowDetailsClick={() => {
-                              setActiveCard(topPools[index]);
-                              setcardIndex(index);
-                              setDetails(index);
+                              // setActiveCard(topPools[index]);
+                              // setcardIndex(index);
+                              // setDetails(index);
                             }}
                             onHideDetailsClick={() => {
-                              setActiveCard(null);
-                              setDetails();
+                              // setActiveCard(null);
+                              // setDetails();
                             }}
                             cardType={"table"}
                             details={details === index ? true : false}
@@ -594,8 +711,8 @@ const Dashboard = ({
                 ) : activeCard &&
                   network === 43114 &&
                   topPools[cardIndex].id ===
-                    "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712" ? (
-                  <StakeAvax
+                    "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
+                  <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
                     coinbase={coinbase}
                     the_graph_result={the_graph_resultavax}
@@ -603,7 +720,7 @@ const Dashboard = ({
                     handleConnection={handleConnection}
                     handleSwitchNetwork={handleSwitchNetwork}
                     expired={false}
-                    staking={window.constant_staking_new13}
+                    staking={window.constant_staking_idypavax_7}
                     listType={"table"}
                     finalApr={
                       topPools[cardIndex]?.apy_performancefee
@@ -616,7 +733,7 @@ const Dashboard = ({
                         : 30
                     }
                     liquidity={avax_address}
-                    expiration_time={"15 August 2023"}
+                    expiration_time={"18 July 2024"}
                     other_info={false}
                     fee_s={topPools[cardIndex]?.performancefee}
                     fee_u={topPools[cardIndex]?.performancefee}
@@ -660,38 +777,6 @@ const Dashboard = ({
             ) : (
               <div className="d-flex flex-column gap-4">
                 <div className="row m-0 gap-4 toppool-allwrapper">
-                  {/* {network === 1 && (
-                    <LandCard
-                      network={network.toString()}
-                      onShowDetailsClick={() => {
-                        setActiveCard(1);
-                        setcardIndex(1);
-                        setDetails(1);
-                      }}
-                      onHideDetailsClick={() => {
-                        setActiveCard(null);
-                        setDetails();
-                      }}
-                      cardType={"table"}
-                      details={details === 1 ? true : false}
-                      expired={false}
-                      // tvl={"$" + getFormattedNumber(cawsCard2.tvl_usd)}
-                      tvl={"$" + getFormattedNumber(landCard.tvl_usd)}
-                      apr={landCard.apy_percent}
-                    />
-                  )}
-                  {activeCard && network === 1 && cardIndex === 1 && (
-                    <LandDetails
-                      coinbase={coinbase}
-                      isConnected={isConnected}
-                      listType={"table"}
-                      chainId={network.toString()}
-                      handleSwitchNetwork={handleSwitchNetwork}
-                      handleConnection={handleConnection}
-                      apr={landCard.apy_percent}
-                      totalNftsLocked={landCard.total_nfts_locked}
-                    />
-                  )} */}
                   {network === 1 && (
                     <CawsWodCard
                       network={network.toString()}
@@ -727,19 +812,27 @@ const Dashboard = ({
                   ) : (
                     <></>
                   )}
-                  {topPools.length > 0 &&
-                  loading === false &&
-                  network !== 56 ? (
-                    topPools.slice(0, 1).map((item, index) => {
+                  {topPools.length > 0 && network === 1 && loading === false ? (
+                    topPools.slice(0, 2).map((item, index) => {
                       return (
                         <TopPoolsCard
                           key={index}
                           network={network.toString()}
+                          isNewPool={item.new_pool === "Yes" ? true : false}
+                          isStaked={
+                            userPools.length > 0
+                              ? userPools.find(
+                                  (obj) => obj.contract_address === item.id
+                                )
+                                ? true
+                                : false
+                              : false
+                          }
                           chain={network}
                           top_pick={item.top_pick}
                           tokenName={item.pair_name}
                           apr={item.apy_percent + "%"}
-                          tvl={"$" + getFormattedNumber(item.tvl_usd)}
+                          tvl={"--"}
                           lockTime={item.lock_time ? item.lock_time : 30}
                           tokenLogo={
                             item.icon
@@ -751,75 +844,203 @@ const Dashboard = ({
                               : "newCawsLogo.png"
                           }
                           onShowDetailsClick={() => {
-                            setActiveCard(topPools[index]);
-                            setcardIndex(index);
-                            setActiveCard2(null);
-                            setDetails(index);
+                            // setActiveCard(topPools[index]);
+                            // setcardIndex(index);
+                            // setDetails(index);
                           }}
                           onHideDetailsClick={() => {
-                            setActiveCard(null);
-                            setActiveCard2(null);
-                            setDetails();
+                            // setActiveCard(null);
+                            // setDetails();
                           }}
                           cardType={"table"}
                           details={details === index ? true : false}
                           expired={false}
-                          isNewPool={item.new_pool === "Yes" ? true : false}
-                          isStaked={
-                            userPools.length > 0
-                              ? userPools.find(
-                                  (obj) => obj.contract_address === item.id
-                                )
-                                ? true
-                                : false
-                              : false
-                          }
                           isPremium={isPremium}
                         />
                       );
                     })
                   ) : topPools.length > 0 &&
-                    loading === false &&
-                    network === 56 ? (
-                    topPools.map((item, index) => {
+                    network === 43114 &&
+                    loading === false ? (
+                    topPools.slice(0, 2).map((item, index) => {
                       return (
                         <>
                           <TopPoolsCard
-                            chain={"bnb"}
-                            top_pick={false}
-                            tokenName={"WBNB"}
-                            apr={`${getFormattedNumber(
-                              theBnbPool[0][1].apy_percent,
-                              0
-                            )}%`}
-                            tvl={`$${getFormattedNumber(
-                              theBnbPool[0][1].tvl_usd,
-                              2
-                            )}`}
-                            lockTime={"3 Days"}
-                            tokenLogo={"bnb.svg"}
+                            key={index}
+                            network={network.toString()}
+                            isNewPool={item.new_pool === "Yes" ? true : false}
+                            isStaked={
+                              userPools.length > 0
+                                ? userPools.find(
+                                    (obj) => obj.contract_address === item.id
+                                  )
+                                  ? true
+                                  : false
+                                : false
+                            }
+                            chain={network}
+                            top_pick={item.top_pick}
+                            tokenName={item.pair_name}
+                            apr={item.apy_percent + "%"}
+                            tvl={
+                              item.tvl_usd === "--"
+                                ? item.tvl_usd
+                                : "$" + getFormattedNumber(item.tvl_usd)
+                            }
+                            lockTime={item.lock_time ? item.lock_time : 30}
+                            tokenLogo={
+                              item.icon
+                                ? item.icon
+                                : item.pair_name === "iDYP"
+                                ? "idypius.svg"
+                                : item.pair_name === "DYP"
+                                ? "dyplogo.svg"
+                                : "newCawsLogo.png"
+                            }
                             onShowDetailsClick={() => {
-                              setActiveCard();
-                              setActiveCard2();
-                              setDetails(1);
-                              setActiveCardFarm(1);
+                              setActiveCard(
+                                item.tvl_usd !== "--" ? topPools[index] : null
+                              );
+                              setcardIndex(
+                                item.tvl_usd !== "--" ? index : null
+                              );
+                              setDetails(item.tvl_usd !== "--" ? index : null);
                             }}
                             onHideDetailsClick={() => {
-                              setActiveCard();
+                              setActiveCard(null);
                               setDetails();
-                              setActiveCardFarm();
                             }}
-                            cardType={"Farming"}
-                            details={details === 1 ? true : false}
-                            isNewPool={true}
-                            isStaked={false}
+                            cardType={"table"}
+                            details={details === index ? true : false}
                             expired={false}
-                            network={network.toString()}
                             isPremium={isPremium}
                           />
+                          {activeCard &&
+                            network === 43114 &&
+                            topPools[cardIndex].id ===
+                              "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" && (
+                              <StakeAvaxIDyp
+                                is_wallet_connected={isConnected}
+                                coinbase={coinbase}
+                                the_graph_result={the_graph_resultavax}
+                                chainId={network.toString()}
+                                handleConnection={handleConnection}
+                                handleSwitchNetwork={handleSwitchNetwork}
+                                expired={false}
+                                staking={window.constant_staking_idypavax_7}
+                                listType={"table"}
+                                finalApr={
+                                  topPools[cardIndex]?.apy_performancefee
+                                    ? topPools[cardIndex]?.apy_performancefee
+                                    : 30
+                                }
+                                apr={
+                                  topPools[cardIndex]?.apy_percent
+                                    ? topPools[cardIndex]?.apy_percent
+                                    : 30
+                                }
+                                liquidity={avax_address}
+                                expiration_time={"18 July 2024"}
+                                other_info={false}
+                                fee_s={topPools[cardIndex]?.performancefee}
+                                fee_u={topPools[cardIndex]?.performancefee}
+                                lockTime={30}
+                              />
+                            )}
                         </>
                       );
                     })
+                  ) : comingSoonPool.length > 0 &&
+                    loading === false &&
+                    network === 56 ? (
+                    <>
+                      <TopPoolsCard
+                        chain={"bnb"}
+                        top_pick={false}
+                        tokenName={"WBNB"}
+                        apr={`${getFormattedNumber(
+                          theBnbPool[0][1].apy_percent,
+                          0
+                        )}%`}
+                        tvl={`$${getFormattedNumber(
+                          theBnbPool[0][1].tvl_usd,
+                          2
+                        )}`}
+                        lockTime={"3 Days"}
+                        tokenLogo={"bnb.svg"}
+                        onShowDetailsClick={() => {
+                          setActiveCard();
+                          setActiveCard2();
+                          setDetails(1);
+                          setActiveCardFarm(1);
+                        }}
+                        onHideDetailsClick={() => {
+                          setActiveCard();
+                          setDetails();
+                          setActiveCardFarm();
+                        }}
+                        cardType={"Farming"}
+                        details={details === 1 ? true : false}
+                        isNewPool={true}
+                        isStaked={false}
+                        expired={false}
+                        network={network.toString()}
+                        isPremium={isPremium}
+                      />
+                      {activeCardFarm && network === 56 && (
+                        <BscFarmingFunc
+                          is_wallet_connected={isConnected}
+                          wbnbPrice={wbnbPrice}
+                          coinbase={coinbase}
+                          latestTvl={theBnbPool[0][1].tvl_usd}
+                          the_graph_result={the_graph_resultbsc}
+                          lp_id={LP_IDBNB_Array[cardIndex]}
+                          chainId={network.toString()}
+                          handleConnection={handleConnection}
+                          expired={false}
+                          handleSwitchNetwork={handleSwitchNetwork}
+                          latestApr={theBnbPool[0][1].apy_percent}
+                          liquidity={wbsc_address}
+                          constant={window.farming_activebsc_1}
+                          staking={window.constant_staking_newbscactive1}
+                          token={window.token_newbsc}
+                          lp_symbol={"USD"}
+                          lock="3 Days"
+                          rebase_factor={1}
+                          expiration_time={"18 July 2024"}
+                          fee="0.4"
+                          finalApr={theBnbPool[0][1].apy_percent}
+                          lockTime={3}
+                          listType={"table"}
+                        />
+                      )}
+                      <TopPoolsCard
+                        // key={index}
+                        network={network.toString()}
+                        isNewPool={true}
+                        isStaked={false}
+                        chain={network}
+                        top_pick={false}
+                        tokenName={"DYP"}
+                        apr={12.5 + "%"}
+                        tvl={"--"}
+                        lockTime={"No lock"}
+                        tokenLogo={"DYP" ? "dyplogo.svg" : "newCawsLogo.png"}
+                        onShowDetailsClick={() => {
+                          // setActiveCard(topPools[index]);
+                          // setcardIndex(index);
+                          // setDetails(index);
+                        }}
+                        onHideDetailsClick={() => {
+                          // setActiveCard(null);
+                          // setDetails();
+                        }}
+                        cardType={"table"}
+                        // details={details === index ? true : false}
+                        expired={false}
+                        isPremium={isPremium}
+                      />
+                    </>
                   ) : (
                     <div
                       className="w-100 d-flex justify-content-center align-items-center mt-5"
@@ -830,7 +1051,7 @@ const Dashboard = ({
                   )}
                 </div>
 
-                {activeCard && network === 1 && cardIndex === 0 && (
+                {/* {activeCard && network === 1 && cardIndex === 0 && (
                   <StakeNewEth
                     staking={window.constant_staking_newi3}
                     apr={
@@ -863,69 +1084,12 @@ const Dashboard = ({
                     expired={false}
                     referrer={referrer}
                   />
-                )}
+                )} */}
 
-                {activeCardFarm && network === 56 ? (
-                  <BscFarmingFunc
-                    is_wallet_connected={isConnected}
-                    wbnbPrice={wbnbPrice}
-                    coinbase={coinbase}
-                    latestTvl={theBnbPool[0][1].tvl_usd}
-                    the_graph_result={the_graph_resultbsc}
-                    lp_id={LP_IDBNB_Array[cardIndex]}
-                    chainId={network.toString()}
-                    handleConnection={handleConnection}
-                    expired={false}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    latestApr={theBnbPool[0][1].apy_percent}
-                    liquidity={wbsc_address}
-                    constant={window.farming_activebsc_1}
-                    staking={window.constant_staking_newbscactive1}
-                    token={window.token_newbsc}
-                    lp_symbol={"USD"}
-                    lock="3 Days"
-                    rebase_factor={1}
-                    expiration_time={"18 July 2024"}
-                    fee="0.4"
-                    finalApr={theBnbPool[0][1].apy_percent}
-                    lockTime={3}
-                    listType={"table"}
-                  />
-                ) : activeCard &&
-                  network === 43114 &&
-                  topPools[cardIndex].id ===
-                    "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712" ? (
-                  <StakeAvax
-                    is_wallet_connected={isConnected}
-                    coinbase={coinbase}
-                    the_graph_result={the_graph_resultavax}
-                    chainId={network.toString()}
-                    handleConnection={handleConnection}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
-                    staking={window.constant_staking_new13}
-                    listType={"table"}
-                    finalApr={
-                      topPools[cardIndex]?.apy_performancefee
-                        ? topPools[cardIndex]?.apy_performancefee
-                        : 30
-                    }
-                    apr={
-                      topPools[cardIndex]?.apy_percent
-                        ? topPools[cardIndex]?.apy_percent
-                        : 30
-                    }
-                    liquidity={avax_address}
-                    expiration_time={"15 August 2023"}
-                    other_info={false}
-                    fee_s={topPools[cardIndex]?.performancefee}
-                    fee_u={topPools[cardIndex]?.performancefee}
-                    lockTime={30}
-                  />
-                ) : activeCard &&
-                  network === 43114 &&
-                  topPools[cardIndex].id ===
-                    "0x6eb643813f0b4351b993f98bdeaef6e0f79573e9" ? (
+                {activeCard &&
+                network === 43114 &&
+                topPools[cardIndex].id ===
+                  "0x6eb643813f0b4351b993f98bdeaef6e0f79573e9" ? (
                   <StakeAvax
                     is_wallet_connected={isConnected}
                     coinbase={coinbase}
@@ -956,61 +1120,10 @@ const Dashboard = ({
                 ) : (
                   <></>
                 )}
-                <div className="row m-0 gap-4 toppool-allwrapper">
-                  {topPools.length > 0 &&
-                  loading === false &&
-                  network !== 56 ? (
-                    topPools.slice(1, 2).map((item, index) => {
-                      return (
-                        <TopPoolsCard
-                          network={network.toString()}
-                          key={index}
-                          chain={network}
-                          top_pick={item.top_pick}
-                          tokenName={item.pair_name}
-                          apr={item.apy_percent + "%"}
-                          tvl={"$" + getFormattedNumber(item.tvl_usd)}
-                          lockTime={item.lock_time ? item.lock_time : 30}
-                          tokenLogo={
-                            item.icon
-                              ? item.icon
-                              : item.pair_name === "iDYP"
-                              ? "idypius.svg"
-                              : item.pair_name === "DYP"
-                              ? "dyplogo.svg"
-                              : "newCawsLogo.png"
-                          }
-                          onShowDetailsClick={() => {
-                            setActiveCard2(topPools[index + 1]);
-                            setActiveCard(null);
-                            setcardIndex(index + 1);
-                            setDetails(index + 1);
-                          }}
-                          onHideDetailsClick={() => {
-                            setActiveCard2(null);
-                            setDetails();
-                            setActiveCard(null);
-                          }}
-                          cardType={"table"}
-                          details={details === index + 1 ? true : false}
-                          expired={false}
-                          isNewPool={item.new_pool === "Yes" ? true : false}
-                          isStaked={
-                            userPools.length > 0
-                              ? userPools.find(
-                                  (obj) => obj.contract_address === item.id
-                                )
-                                ? true
-                                : false
-                              : false
-                          }
-                          isPremium={isPremium}
-                        />
-                      );
-                    })
-                  ) : topPools.length > 0 &&
+                {/* <div className="row m-0 gap-4 toppool-allwrapper">
+                  { topPools.length > 0 &&
                     loading === false &&
-                    network === 56 ? (
+                    network === 56 && (
                     topPools.map((item, index) => {
                       return (
                         <TopPoolsCard
@@ -1032,15 +1145,15 @@ const Dashboard = ({
                               : "newCawsLogo.png"
                           }
                           onShowDetailsClick={() => {
-                            setActiveCard2(1);
-                            setActiveCard(null);
-                            setcardIndex(3);
-                            setDetails(index + 2);
+                            // setActiveCard2(1);
+                            // setActiveCard(null);
+                            // setcardIndex(3);
+                            // setDetails(index + 2);
                           }}
                           onHideDetailsClick={() => {
-                            setActiveCard2(null);
-                            setDetails();
-                            setActiveCard(null);
+                            // setActiveCard2(null);
+                            // setDetails();
+                            // setActiveCard(null);
                           }}
                           cardType={"table"}
                           details={details === index + 2 ? true : false}
@@ -1059,50 +1172,10 @@ const Dashboard = ({
                         />
                       );
                     })
-                  ) : (
-                    <div
-                      className="w-100 d-flex justify-content-center align-items-center mt-5"
-                      style={{ gridColumn: "1 / 3" }}
-                    >
-                      <FadeLoader color="#7770DF" />
-                    </div>
-                  )}
-                </div>
+                  ) }
+                </div> */}
                 {activeCard2 && network === 1 ? (
-                  activeCard2 && network === 1 && cardIndex === 0 ? (
-                    <StakeNewEth
-                      staking={window.constant_staking_newi3}
-                      apr={
-                        topPools[cardIndex]?.apy_percent
-                          ? topPools[cardIndex]?.apy_percent
-                          : 30
-                      }
-                      liquidity={eth_address}
-                      expiration_time={"11 January 2024"}
-                      finalApr={
-                        topPools[cardIndex]?.apy_performancefee
-                          ? topPools[cardIndex]?.apy_performancefee
-                          : 30
-                      }
-                      fee_s={0}
-                      lockTime={
-                        topPools[cardIndex]?.lock_time === "No lock"
-                          ? "No Lock"
-                          : topPools[cardIndex]?.lock_time?.split(" ")[0]
-                      }
-                      lp_id={LP_IDBNB_Array[cardIndex]}
-                      listType={"table"}
-                      other_info={false}
-                      is_wallet_connected={isConnected}
-                      coinbase={coinbase}
-                      the_graph_result={the_graph_result}
-                      chainId={network.toString()}
-                      handleConnection={handleConnection}
-                      handleSwitchNetwork={handleSwitchNetwork}
-                      expired={false}
-                      referrer={referrer}
-                    />
-                  ) : activeCard2 && network === 1 && cardIndex === 2 ? (
+                  activeCard2 && network === 1 && cardIndex === 2 ? (
                     <CawsWodDetails
                       coinbase={coinbase}
                       isConnected={isConnected}
@@ -1155,8 +1228,8 @@ const Dashboard = ({
                 ) : activeCard2 &&
                   network === 43114 &&
                   topPools[cardIndex].id ===
-                    "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712" ? (
-                  <StakeAvax
+                    "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
+                  <StakeAvaxIDyp
                     is_wallet_connected={isConnected}
                     coinbase={coinbase}
                     the_graph_result={the_graph_resultavax}
@@ -1164,7 +1237,7 @@ const Dashboard = ({
                     handleConnection={handleConnection}
                     handleSwitchNetwork={handleSwitchNetwork}
                     expired={false}
-                    staking={window.constant_staking_new13}
+                    staking={window.constant_staking_idypavax_7}
                     listType={"table"}
                     finalApr={
                       topPools[cardIndex]?.apy_performancefee
@@ -1177,7 +1250,7 @@ const Dashboard = ({
                         : 30
                     }
                     liquidity={avax_address}
-                    expiration_time={"15 August 2023"}
+                    expiration_time={"18 July 2024"}
                     other_info={false}
                     fee_s={topPools[cardIndex]?.performancefee}
                     fee_u={topPools[cardIndex]?.performancefee}
