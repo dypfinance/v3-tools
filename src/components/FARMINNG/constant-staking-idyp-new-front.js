@@ -1015,7 +1015,7 @@ const InitConstantStakingiDYP = ({
                       onClick={() => {
                         expired ? 
                         window.$.alert(
-                          "*The rewards earned from the day of the migration until the expiration of the contracts will be distributed to the users automatically at the end of the contract."
+                          "*The rewards earned from the day of the migration until the end of the lock time will be distributed to the users automatically at the end of the contract."
                         ) : handleClaimDivs()
                       }}
                     >
