@@ -3,7 +3,7 @@ import "./buydyp.css";
 import VendorCard from "./VendorCard";
 import Slider from "react-slick";
 import VideoCard from "./VideoCard";
-import customSliderArrow from '../launchpad/assets/customSliderArrow.svg'
+import customSliderArrow from "../launchpad/assets/customSliderArrow.svg";
 
 const BuyDyp = () => {
   const settings = {
@@ -21,29 +21,36 @@ const BuyDyp = () => {
           slidesToShow: 3,
           slidesToScroll: 3,
           infinite: true,
-          dots: true
-        }
+          dots: true,
+        },
       },
       {
         breakpoint: 600,
         settings: {
           slidesToShow: 2,
           slidesToScroll: 2,
-        }
+        },
       },
       {
         breakpoint: 480,
         settings: {
           slidesToShow: 2,
-          slidesToScroll: 1
-        }
-      }
-    ]
+          slidesToScroll: 1,
+        },
+      },
+    ],
   };
 
-const slider = useRef()
+  const slider = useRef();
 
   const buyDypItems = [
+    {
+      title: "Huobi",
+      logo: "huobi.png",
+      link: "https://www.huobi.com/en-us/exchange/dyp_usdt",
+      totalvids: "0 videos",
+      videos: "",
+    },
     {
       title: "Coinbase",
       logo: "coinbase.png",
@@ -58,13 +65,6 @@ const slider = useRef()
           thumbnail: "coinbase.png",
         },
       ],
-    },
-    {
-      title: "Huobi",
-      logo: "huobi.png",
-      link: "https://www.huobi.com/en-us/exchange/dyp_usdt/",
-      totalvids: "0 videos",
-      videos: "",
     },
     {
       title: "KuCoin",
@@ -111,7 +111,7 @@ const slider = useRef()
       videos: "",
       id: "collapsefive",
     },
-   
+
     {
       title: "Uniswap V2",
       logo: "uniswap.png",
@@ -358,7 +358,6 @@ const slider = useRef()
         },
       ],
     },
-   
   ];
 
   const next = () => {
@@ -371,15 +370,9 @@ const slider = useRef()
   const [videoList, setVideoList] = useState(buyDypItems[0].videos);
   const [activeVideo, setActiveVideo] = useState(videoList[0]);
   const [activeVendor, setActiveVendor] = useState(0);
-  const [activeVideoCard, setactiveVideoCard] = useState(0)
+  const [activeVideoCard, setactiveVideoCard] = useState(0);
 
-  const emptyVideos = [
-    '1',
-    '2',
-    '3',
-    '4',
-  ]
-
+  const emptyVideos = ["1", "2", "3", "4"];
 
   return (
     <div className="container-lg px-0">
@@ -395,7 +388,6 @@ const slider = useRef()
       <div className="row gap-4 gap-lg-0 mx-0 mt-3 px-0 w-100">
         <div className="col-12 col-lg-5">
           <div className="d-grid vendor-container  py-3 py-lg-0">
-        
             {buyDypItems.map((vendor, index) => (
               <VendorCard
                 key={index}
@@ -407,7 +399,7 @@ const slider = useRef()
                   setVideoList(vendor.videos);
                   setActiveVendor(index);
                   setActiveVideo(vendor.videos[0]);
-                  window.scrollTo(0,0);
+                  window.scrollTo(0, 0);
                 }}
                 active={activeVendor === index ? true : false}
               />
@@ -434,70 +426,100 @@ const slider = useRef()
                   {buyDypItems[activeVendor].title} videos
                 </h6>
               </div>
-              <a href={buyDypItems[activeVendor].link} target="_blank" rel="noreferrer">
-              <button className="btn filledbtn px-5">Buy DYP</button>
-              </a>
+              {buyDypItems[activeVendor].title === "Huobi" ? (
+                <a
+                  href={buyDypItems[activeVendor].link}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <button className="btn filled-btn px-5">Buy DYP</button>
+                </a>
+              ) : (
+                <button disabled className="btn disabled-btn px-5">
+                  Buy DYP
+                </button>
+              )}
             </div>
             <hr className="form-divider my-3" />
-            {videoList.length <= 0 ?
-              <img src={require('./assets/commingSoon.svg').default} />
-              :
+            {videoList.length <= 0 ? (
+              <img src={require("./assets/commingSoon.svg").default} />
+            ) : (
               <iframe
-              src={activeVideo?.link}
-              style={{ height: "375px", width: "100%", pointerEvents: "auto" }}
-              frameborder="0"
-              allowFullScreen
-            ></iframe> 
-            }
+                src={activeVideo?.link}
+                style={{
+                  height: "375px",
+                  width: "100%",
+                  pointerEvents: "auto",
+                }}
+                frameborder="0"
+                allowFullScreen
+              ></iframe>
+            )}
             <div className="d-flex align-items center justify-content-between">
               <h6 className="playlist-title mt-3">Video playlist</h6>
-            {videoList.length > 4 &&
-              <div className="d-flex justify-content-center align-items-center gap-2">
-              <div className="p-3 d-flex justify-content-center align-items-center cursor-pointer" onClick={() => previous()}>
-                  <img src={customSliderArrow} alt="" className="prev-arrow" />
-              </div>
-              <div className="p-3 d-flex justify-content-center align-items-center cursor-pointer" onClick={() => next()}>
-                  <img src={customSliderArrow} alt=""  className="next-arrow"/>
-              </div>
-            </div>
-            }
+              {videoList.length > 4 && (
+                <div className="d-flex justify-content-center align-items-center gap-2">
+                  <div
+                    className="p-3 d-flex justify-content-center align-items-center cursor-pointer"
+                    onClick={() => previous()}
+                  >
+                    <img
+                      src={customSliderArrow}
+                      alt=""
+                      className="prev-arrow"
+                    />
+                  </div>
+                  <div
+                    className="p-3 d-flex justify-content-center align-items-center cursor-pointer"
+                    onClick={() => next()}
+                  >
+                    <img
+                      src={customSliderArrow}
+                      alt=""
+                      className="next-arrow"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
             <div className="mt-2">
-           {videoList.length <= 0 ?
-              <Slider {...settings} ref={slider}>
-             <img src={require('./assets/noVideo.svg').default} alt="" />
-             <img src={require('./assets/noVideo.svg').default} alt="" />
-             <img src={require('./assets/noVideo.svg').default} alt="" />
-             <img src={require('./assets/noVideo.svg').default} alt="" />
-             <img src={require('./assets/noVideo.svg').default} alt="" />
-             <img src={require('./assets/noVideo.svg').default} alt="" />
-            </Slider>
-          :
-           <Slider {...settings} ref={slider}>
-           {
-             videoList?.map((video, index) => (
-               <VideoCard
-                 key={index}
-                 thumbnail={video.thumbnail}
-                 title={video.title}
-                 onSelect={() => 
-                 {
-                  setActiveVideo(video);
-                  setactiveVideoCard(index);
-                 }
-                }
-                 walletName={video.walletName}
-                 walletImage={video.image}
-                 active={activeVideoCard === index ? true : false}
-               />
-             ))}
-             {videoList?.length < 4 &&
-             emptyVideos.slice(0, 4 - videoList.length).map((item) => (
-             <img src={require('./assets/noVideo.svg').default} className="d-none d-lg-flex" alt="" />
-             ))
-             }
-         </Slider>
-          }
+              {videoList.length <= 0 ? (
+                <Slider {...settings} ref={slider}>
+                  <img src={require("./assets/noVideo.svg").default} alt="" />
+                  <img src={require("./assets/noVideo.svg").default} alt="" />
+                  <img src={require("./assets/noVideo.svg").default} alt="" />
+                  <img src={require("./assets/noVideo.svg").default} alt="" />
+                  <img src={require("./assets/noVideo.svg").default} alt="" />
+                  <img src={require("./assets/noVideo.svg").default} alt="" />
+                </Slider>
+              ) : (
+                <Slider {...settings} ref={slider}>
+                  {videoList?.map((video, index) => (
+                    <VideoCard
+                      key={index}
+                      thumbnail={video.thumbnail}
+                      title={video.title}
+                      onSelect={() => {
+                        setActiveVideo(video);
+                        setactiveVideoCard(index);
+                      }}
+                      walletName={video.walletName}
+                      walletImage={video.image}
+                      active={activeVideoCard === index ? true : false}
+                    />
+                  ))}
+                  {videoList?.length < 4 &&
+                    emptyVideos
+                      .slice(0, 4 - videoList.length)
+                      .map((item) => (
+                        <img
+                          src={require("./assets/noVideo.svg").default}
+                          className="d-none d-lg-flex"
+                          alt=""
+                        />
+                      ))}
+                </Slider>
+              )}
             </div>
           </div>
         </div>
