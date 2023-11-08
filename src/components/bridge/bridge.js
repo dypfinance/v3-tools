@@ -716,30 +716,25 @@ export default function initBridge({
                                     ? true
                                     : false
                                 }
-                                // className={`btn filledbtn ${
-                                //   this.state.depositAmount === "" &&
-                                //   this.state.depositStatus === "initial" &&
-                                //   "disabled-btn"
-                                // } ${
-                                //   this.state.depositStatus === "deposit" ||
-                                //   this.state.depositStatus === "success"
-                                //     ? "success-button"
-                                //     : this.state.depositStatus === "fail"
-                                //     ? "fail-button"
-                                //     : null
-                                // } d-flex justify-content-center align-items-center gap-2`}
-
-                                className={`btn filledbtn disabled-btn d-flex justify-content-center align-items-center gap-2`}
+                                className={`btn filledbtn ${
+                                  this.state.depositAmount === "" &&
+                                  this.state.depositStatus === "initial" &&
+                                  "disabled-btn"
+                                } ${
+                                  this.state.depositStatus === "deposit" ||
+                                  this.state.depositStatus === "success"
+                                    ? "success-button"
+                                    : this.state.depositStatus === "fail"
+                                    ? "fail-button"
+                                    : null
+                                } d-flex justify-content-center align-items-center gap-2`}
                                 onClick={() => {
-                                  // this.state.depositStatus === "deposit"
-                                  //   ? this.handleDeposit()
-                                  //   : this.state.depositStatus === "initial" &&
-                                  //     this.state.depositAmount !== ""
-                                  //   ? this.handleApprove()
-                                  //   : console.log("");
-                                  window.$.alert(
-                                    "The dypius bridge will be available once the migration starts."
-                                  );
+                                  this.state.depositStatus === "deposit"
+                                    ? this.handleDeposit()
+                                    : this.state.depositStatus === "initial" &&
+                                      this.state.depositAmount !== ""
+                                    ? this.handleApprove()
+                                    : console.log("");
                                 }}
                               >
                                 {this.state.depositLoading ? (
@@ -962,29 +957,20 @@ export default function initBridge({
                                   //   : false
                                   this.state.txHash !== "" ? false : true
                                 }
-                                // className={`btn filledbtn
-                                //  ${
-                                //   (canWithdraw === false &&
-                                //     this.state.txHash === "") ||
-                                //   (this.state.withdrawStatus === "success" &&
-                                //     "disabled-btn")
-                                // } ${
-                                //   this.state.withdrawStatus === "deposit" ||
-                                //   this.state.withdrawStatus === "success"
-                                //     ? "success-button"
-                                //     : this.state.withdrawStatus === "fail"
-                                //     ? "fail-button"
-                                //     : null
-                                // } d-flex justify-content-center align-items-center gap-2`}
-                                className={`btn filledbtn
-                               
-                                   disabled-btn
-                                d-flex justify-content-center align-items-center gap-2`}
+                                className={`btn filledbtn ${
+                                 ( (canWithdraw === false && this.state.txHash === "") ||
+                                  this.state.withdrawStatus === "success") &&
+                                    "disabled-btn"
+                                } ${
+                                  this.state.withdrawStatus === "deposit" ||
+                                  this.state.withdrawStatus === "success"
+                                    ? "success-button"
+                                    : this.state.withdrawStatus === "fail"
+                                    ? "fail-button"
+                                    : null
+                                } d-flex justify-content-center align-items-center gap-2`}
                                 onClick={() => {
-                                  // this.handleWithdraw();
-                                  window.$.alert(
-                                    "The dypius bridge will be available once the migration starts."
-                                  );
+                                  this.handleWithdraw();
                                 }}
                               >
                                 {this.state.withdrawLoading ? (
