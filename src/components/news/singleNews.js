@@ -303,7 +303,7 @@ const SingleNews = ({
                   <ToolTip
                     status={
                       logout === "false" && canVote === false
-                        ? "You need to be holding DYP to vote"
+                        ? "You need to be holding DYPv2 to vote"
                         : logout === "true"
                         ? "Please connect your wallet"
                         : alreadyVoted === true && canVote === true
