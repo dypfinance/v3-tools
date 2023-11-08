@@ -496,7 +496,7 @@ export default function initBridge({
             <div className="row">
               <div>
                 <div className="d-flex flex-column">
-                  <h6 className="fromtitle mb-2">Deposit</h6>
+                  {/* <h6 className="fromtitle mb-2">Deposit</h6> */}
                   <div className="d-flex flex-column flex-lg-row align-items-center justify-content-between gap-2">
                     <div className="d-flex align-items-center justify-content-between gap-3">
                       <div
