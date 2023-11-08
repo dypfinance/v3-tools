@@ -157,6 +157,11 @@
   top: -16px;
 }
 
+.comingsoon {
+  position: absolute;
+  right: 40%;
+  top: -16px;
+}
 
 .staked{
   position: absolute;
