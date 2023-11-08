@@ -60,28 +60,16 @@ const MigrationBanner = () => {
       </div>
       <div className="d-flex flex-column gap-3">
         <div className="migrated-tokens-wrapper my-4 d-flex align-items-center justify-content-between p-3">
-          {countdown ? (
-            <>
-              <span className="migrated-tokens mb-0">Coming soon</span>
-              <Countdown
-                renderer={renderer}
-                date={lastDay}
-                zeroPadTime={2}
-                onComplete={() => setCountdown(false)}
-              />
-            </>
-          ) : (
-            <>
-              <span className="migrated-tokens mb-0">
-                Migrated
-                <br />
-                DYP Tokens
-              </span>
-              <h6 className="migrated-tokens-amount mb-0">
-                {getFormattedNumber(migrationAmount, 0)}
-              </h6>
-            </>
-          )}
+          <>
+            <span className="migrated-tokens mb-0">
+              Migrated
+              <br />
+              DYP Tokens
+            </span>
+            <h6 className="migrated-tokens-amount mb-0">
+              {getFormattedNumber(migrationAmount, 0)}
+            </h6>
+          </>
         </div>
         <div className="migration-outer-progress d-flex align-items-center justify-content-start">
           <div className="progress-dots d-flex align-items-center justify-content-between">
@@ -103,18 +91,12 @@ const MigrationBanner = () => {
             }}
           >
             <div className="d-flex align-items-center gap-2">
-              {countdown ? (
-                <>
-                  <h6 className="migration-percentage mb-0">0%</h6>
-                </>
-              ) : (
-                <>
-                  <h6 className="migration-percentage mb-0">
-                    {migrationPercentage}%
-                  </h6>
-                  <span className="migration-dash"></span>
-                </>
-              )}
+              <>
+                <h6 className="migration-percentage mb-0">
+                  {migrationPercentage}%
+                </h6>
+                <span className="migration-dash"></span>
+              </>
             </div>
           </div>
         </div>
