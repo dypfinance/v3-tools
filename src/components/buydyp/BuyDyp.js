@@ -3,7 +3,7 @@ import "./buydyp.css";
 import VendorCard from "./VendorCard";
 import Slider from "react-slick";
 import VideoCard from "./VideoCard";
-import customSliderArrow from '../launchpad/assets/customSliderArrow.svg'
+import customSliderArrow from "../launchpad/assets/customSliderArrow.svg";
 
 const BuyDyp = () => {
   const settings = {
@@ -21,102 +21,44 @@ const BuyDyp = () => {
           slidesToShow: 3,
           slidesToScroll: 3,
           infinite: true,
-          dots: true
-        }
+          dots: true,
+        },
       },
       {
         breakpoint: 600,
         settings: {
           slidesToShow: 2,
           slidesToScroll: 2,
-        }
+        },
       },
       {
         breakpoint: 480,
         settings: {
           slidesToShow: 2,
-          slidesToScroll: 1
-        }
-      }
-    ]
+          slidesToScroll: 1,
+        },
+      },
+    ],
   };
 
-const slider = useRef()
+  const slider = useRef();
 
   const buyDypItems = [
     {
-      title: "Coinbase",
-      logo: "coinbase.png",
-      link: "https://pro.coinbase.com/trade/DYP-USD",
-      totalvids: "1 video",
-      videos: [
-        {
-          link: "https://www.youtube.com/embed/mjUUqNy-zW8",
-          image: "coinbase.png",
-          title: "How to buy DeFi Yield Protocol (DYP) on Coinbase",
-          walletName: "Coinbase",
-          thumbnail: "coinbase.png",
-        },
-      ],
-    },
-    {
       title: "Huobi",
       logo: "huobi.png",
-      link: "https://www.huobi.com/en-us/exchange/dyp_usdt/",
+      link: "https://www.huobi.com/en-us/exchange/dyp_usdt",
       totalvids: "0 videos",
       videos: "",
+      active: true,
     },
-    {
-      title: "KuCoin",
-      logo: "kucoin.png",
-      link: "https://www.kucoin.com/trade/DYP-USDT",
-      totalvids: "1 video",
-      videos: [
-        {
-          link: "https://www.youtube.com/embed/BIuy1A-_-dU",
-          image: "kucoin.png",
-          title: "How to buy DeFi Yield Protocol (DYP) on KuCoin",
-          walletName: "KuCoin",
-          thumbnail: "kucoin.png",
-        },
-      ],
-    },
-    {
-      title: "Gate.io",
-      logo: "gateio.png",
-      link: "https://www.gate.io/zh/trade/DYP_USDT",
-      totalvids: "1 video",
-      videos: [
-        {
-          link: "https://www.youtube.com/embed/arVFXf5hESE",
-          image: "gate.png",
-          title: "How to buy DeFi Yield Protocol (DYP) on Gate.io",
-          walletName: "Gate.io",
-          thumbnail: "gate.png",
-        },
-      ],
-    },
-    {
-      title: "Poloniex",
-      logo: "poloniex.png",
-      link: "https://poloniex.com/spot/BTC_USDT",
-      totalvids: "0 videos",
-      videos: "",
-    },
-    {
-      title: "MEXC",
-      logo: "mexc.png",
-      link: "https://www.mexc.com/exchange/DYP_USDT",
-      totalvids: "0 videos",
-      videos: "",
-      id: "collapsefive",
-    },
-   
     {
       title: "Uniswap V2",
       logo: "uniswap.png",
-      link: "https://app.uniswap.org/#/swap?use=V2&inputCurrency=0x961c8c0b1aad0c0b10a51fef6a867e3091bcef17",
+      link: "https://app.uniswap.org/swap?use=V2&inputCurrency=0x39b46B212bDF15b42B166779b9d1787A68b9D0c3",
       totalvids: "8 videos",
+      active: true,
+
       videos: [
         {
           link: "https://www.youtube.com/embed/yBzIPecqKY8",
@@ -184,9 +126,9 @@ const slider = useRef()
     {
       title: "PancakeSwap V2",
       logo: "pancake.png",
-
-      link: "https://pancakeswap.finance/swap?inputCurrencty=BNB&outputCurrency=0x961c8c0b1aad0c0b10a51fef6a867e3091bcef17",
+      link: "https://pancakeswap.finance/swap?inputCurrencty=BNB&outputCurrency=0x1a3264f2e7b1cfc6220ec9348d33ccf02af7aaa4",
       totalvids: "4 videos",
+      active: true,
       videos: [
         {
           link: "https://www.youtube.com/embed/yBzIPecqKY8",
@@ -221,49 +163,121 @@ const slider = useRef()
       ],
     },
     {
-      title: "Pangolin",
-      logo: "pangolin.png",
-      link: "https://app.pangolin.exchange/#/swap?&outputCurrency=0x961c8c0b1aad0c0b10a51fef6a867e3091bcef17",
-      totalvids: "4 videos",
+      title: "Trader Joe",
+      logo: "traderjoe.webp",
+      link: "https://traderjoexyz.com/avalanche/trade?outputCurrency=0x1a3264f2e7b1cfc6220ec9348d33ccf02af7aaa4",
+      totalvids: "0 videos",
+      active: true,
+      videos: "",
+      //  [
+      //   {
+      //     link: "https://www.youtube.com/embed/yBzIPecqKY8",
+      //     image: "metamask.png",
+      //     walletName: "Metamask",
+      //     title: "How to set up MetaMask for DeFi Yield Protocol (DYP)",
+      //     thumbnail: "uni1.png",
+      //   },
+      //   {
+      //     link: "https://www.youtube.com/embed/T6qYvErqD-M",
+      //     image: "metamask.png",
+      //     walletName: "Metamask",
+      //     title:
+      //       "How to buy DeFi Yield Protocol (DYP) on the Pangolin exchange using MetaMask",
+      //     thumbnail: "pan1.png",
+      //   },
+      //   {
+      //     link: "https://www.youtube.com/embed/-kE6mM6d9ek",
+      //     image: "coin98.png",
+      //     walletName: "Coin98",
+      //     title:
+      //       "How to set up Coin98 Wallet (Desktop) for DeFi Yield Protocol (DYP)",
+      //     thumbnail: "coin1.png",
+      //   },
+      //   {
+      //     link: "https://www.youtube.com/embed/FmrgSuCo_nk",
+      //     image: "coin98.png",
+      //     walletName: "Coin98",
+      //     title:
+      //       "How to buy DeFi Yield Protocol (DYP) on the Avalanche Network using the Coin98 Wallet",
+      //     thumbnail: "pan2.png",
+      //   },
+      // ],
+    },
+    {
+      title: "Coinbase",
+      logo: "coinbase.png",
+      link: "https://pro.coinbase.com/trade/DYP-USD",
+      totalvids: "1 video",
+      active: false,
       videos: [
         {
-          link: "https://www.youtube.com/embed/yBzIPecqKY8",
-          image: "metamask.png",
-          walletName: "Metamask",
-          title: "How to set up MetaMask for DeFi Yield Protocol (DYP)",
-          thumbnail: "uni1.png",
-        },
-        {
-          link: "https://www.youtube.com/embed/T6qYvErqD-M",
-          image: "metamask.png",
-          walletName: "Metamask",
-          title:
-            "How to buy DeFi Yield Protocol (DYP) on the Pangolin exchange using MetaMask",
-          thumbnail: "pan1.png",
-        },
-        {
-          link: "https://www.youtube.com/embed/-kE6mM6d9ek",
-          image: "coin98.png",
-          walletName: "Coin98",
-          title:
-            "How to set up Coin98 Wallet (Desktop) for DeFi Yield Protocol (DYP)",
-          thumbnail: "coin1.png",
-        },
-        {
-          link: "https://www.youtube.com/embed/FmrgSuCo_nk",
-          image: "coin98.png",
-          walletName: "Coin98",
-          title:
-            "How to buy DeFi Yield Protocol (DYP) on the Avalanche Network using the Coin98 Wallet",
-          thumbnail: "pan2.png",
+          link: "https://www.youtube.com/embed/mjUUqNy-zW8",
+          image: "coinbase.png",
+          title: "How to buy DeFi Yield Protocol (DYP) on Coinbase",
+          walletName: "Coinbase",
+          thumbnail: "coinbase.png",
         },
       ],
     },
+    {
+      title: "KuCoin",
+      logo: "kucoin.png",
+      link: "https://www.kucoin.com/trade/DYP-USDT",
+      totalvids: "1 video",
+      active: false,
+
+      videos: [
+        {
+          link: "https://www.youtube.com/embed/BIuy1A-_-dU",
+          image: "kucoin.png",
+          title: "How to buy DeFi Yield Protocol (DYP) on KuCoin",
+          walletName: "KuCoin",
+          thumbnail: "kucoin.png",
+        },
+      ],
+    },
+    {
+      title: "Gate.io",
+      logo: "gateio.png",
+      link: "https://www.gate.io/zh/trade/DYP_USDT",
+      totalvids: "1 video",
+      active: false,
+
+      videos: [
+        {
+          link: "https://www.youtube.com/embed/arVFXf5hESE",
+          image: "gate.png",
+          title: "How to buy DeFi Yield Protocol (DYP) on Gate.io",
+          walletName: "Gate.io",
+          thumbnail: "gate.png",
+        },
+      ],
+    },
+    {
+      title: "Poloniex",
+      logo: "poloniex.png",
+      link: "https://poloniex.com/spot/BTC_USDT",
+      totalvids: "0 videos",
+      videos: "",
+      active: false,
+    },
+    {
+      title: "MEXC",
+      logo: "mexc.png",
+      link: "https://www.mexc.com/exchange/DYP_USDT",
+      totalvids: "0 videos",
+      videos: "",
+      id: "collapsefive",
+      active: false,
+    },
+
     {
       title: "Coin98",
       logo: "coin98.png",
       link: "",
       totalvids: "3 videos",
+      active: false,
+
       videos: [
         {
           link: "https://www.youtube.com/embed/SvUaexmtgnU",
@@ -296,6 +310,8 @@ const slider = useRef()
       logo: "oneinch.png",
       link: "https://app.1inch.io/#/1/swap/DYP/ETH",
       totalvids: "6 videos",
+      active: false,
+
       videos: [
         {
           link: "https://www.youtube.com/embed/yBzIPecqKY8",
@@ -347,6 +363,8 @@ const slider = useRef()
       logo: "kyber.png",
       link: "https://kyberswap.com/swap/bnb/bnb-to-dyp",
       totalvids: "1 video",
+      active: false,
+
       videos: [
         {
           link: "https://www.youtube.com/embed/olhIziGMs0Y",
@@ -358,7 +376,6 @@ const slider = useRef()
         },
       ],
     },
-   
   ];
 
   const next = () => {
@@ -371,15 +388,9 @@ const slider = useRef()
   const [videoList, setVideoList] = useState(buyDypItems[0].videos);
   const [activeVideo, setActiveVideo] = useState(videoList[0]);
   const [activeVendor, setActiveVendor] = useState(0);
-  const [activeVideoCard, setactiveVideoCard] = useState(0)
+  const [activeVideoCard, setactiveVideoCard] = useState(0);
 
-  const emptyVideos = [
-    '1',
-    '2',
-    '3',
-    '4',
-  ]
-
+  const emptyVideos = ["1", "2", "3", "4"];
 
   return (
     <div className="container-lg px-0">
@@ -395,7 +406,6 @@ const slider = useRef()
       <div className="row gap-4 gap-lg-0 mx-0 mt-3 px-0 w-100">
         <div className="col-12 col-lg-5">
           <div className="d-grid vendor-container  py-3 py-lg-0">
-        
             {buyDypItems.map((vendor, index) => (
               <VendorCard
                 key={index}
@@ -407,9 +417,10 @@ const slider = useRef()
                   setVideoList(vendor.videos);
                   setActiveVendor(index);
                   setActiveVideo(vendor.videos[0]);
-                  window.scrollTo(0,0);
+                  window.scrollTo(0, 0);
                 }}
                 active={activeVendor === index ? true : false}
+                activeLink={vendor.active}
               />
             ))}
           </div>
@@ -434,70 +445,100 @@ const slider = useRef()
                   {buyDypItems[activeVendor].title} videos
                 </h6>
               </div>
-              <a href={buyDypItems[activeVendor].link} target="_blank" rel="noreferrer">
-              <button className="btn filledbtn px-5">Buy DYP</button>
-              </a>
+              {buyDypItems[activeVendor].active === true ? (
+                <a
+                  href={buyDypItems[activeVendor].link}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <button className="btn filled-btn px-5">Buy DYP</button>
+                </a>
+              ) : (
+                <button disabled className="btn disabled-btn px-5">
+                  Buy DYP
+                </button>
+              )}
             </div>
             <hr className="form-divider my-3" />
-            {videoList.length <= 0 ?
-              <img src={require('./assets/commingSoon.svg').default} />
-              :
+            {videoList.length <= 0 ? (
+              <img src={require("./assets/commingSoon.svg").default} />
+            ) : (
               <iframe
-              src={activeVideo?.link}
-              style={{ height: "375px", width: "100%", pointerEvents: "auto" }}
-              frameborder="0"
-              allowFullScreen
-            ></iframe> 
-            }
+                src={activeVideo?.link}
+                style={{
+                  height: "375px",
+                  width: "100%",
+                  pointerEvents: "auto",
+                }}
+                frameborder="0"
+                allowFullScreen
+              ></iframe>
+            )}
             <div className="d-flex align-items center justify-content-between">
               <h6 className="playlist-title mt-3">Video playlist</h6>
-            {videoList.length > 4 &&
-              <div className="d-flex justify-content-center align-items-center gap-2">
-              <div className="p-3 d-flex justify-content-center align-items-center cursor-pointer" onClick={() => previous()}>
-                  <img src={customSliderArrow} alt="" className="prev-arrow" />
-              </div>
-              <div className="p-3 d-flex justify-content-center align-items-center cursor-pointer" onClick={() => next()}>
-                  <img src={customSliderArrow} alt=""  className="next-arrow"/>
-              </div>
-            </div>
-            }
+              {videoList.length > 4 && (
+                <div className="d-flex justify-content-center align-items-center gap-2">
+                  <div
+                    className="p-3 d-flex justify-content-center align-items-center cursor-pointer"
+                    onClick={() => previous()}
+                  >
+                    <img
+                      src={customSliderArrow}
+                      alt=""
+                      className="prev-arrow"
+                    />
+                  </div>
+                  <div
+                    className="p-3 d-flex justify-content-center align-items-center cursor-pointer"
+                    onClick={() => next()}
+                  >
+                    <img
+                      src={customSliderArrow}
+                      alt=""
+                      className="next-arrow"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
             <div className="mt-2">
-           {videoList.length <= 0 ?
-              <Slider {...settings} ref={slider}>
-             <img src={require('./assets/noVideo.svg').default} alt="" />
-             <img src={require('./assets/noVideo.svg').default} alt="" />
-             <img src={require('./assets/noVideo.svg').default} alt="" />
-             <img src={require('./assets/noVideo.svg').default} alt="" />
-             <img src={require('./assets/noVideo.svg').default} alt="" />
-             <img src={require('./assets/noVideo.svg').default} alt="" />
-            </Slider>
-          :
-           <Slider {...settings} ref={slider}>
-           {
-             videoList?.map((video, index) => (
-               <VideoCard
-                 key={index}
-                 thumbnail={video.thumbnail}
-                 title={video.title}
-                 onSelect={() => 
-                 {
-                  setActiveVideo(video);
-                  setactiveVideoCard(index);
-                 }
-                }
-                 walletName={video.walletName}
-                 walletImage={video.image}
-                 active={activeVideoCard === index ? true : false}
-               />
-             ))}
-             {videoList?.length < 4 &&
-             emptyVideos.slice(0, 4 - videoList.length).map((item) => (
-             <img src={require('./assets/noVideo.svg').default} className="d-none d-lg-flex" alt="" />
-             ))
-             }
-         </Slider>
-          }
+              {videoList.length <= 0 ? (
+                <Slider {...settings} ref={slider}>
+                  <img src={require("./assets/noVideo.svg").default} alt="" />
+                  <img src={require("./assets/noVideo.svg").default} alt="" />
+                  <img src={require("./assets/noVideo.svg").default} alt="" />
+                  <img src={require("./assets/noVideo.svg").default} alt="" />
+                  <img src={require("./assets/noVideo.svg").default} alt="" />
+                  <img src={require("./assets/noVideo.svg").default} alt="" />
+                </Slider>
+              ) : (
+                <Slider {...settings} ref={slider}>
+                  {videoList?.map((video, index) => (
+                    <VideoCard
+                      key={index}
+                      thumbnail={video.thumbnail}
+                      title={video.title}
+                      onSelect={() => {
+                        setActiveVideo(video);
+                        setactiveVideoCard(index);
+                      }}
+                      walletName={video.walletName}
+                      walletImage={video.image}
+                      active={activeVideoCard === index ? true : false}
+                    />
+                  ))}
+                  {videoList?.length < 4 &&
+                    emptyVideos
+                      .slice(0, 4 - videoList.length)
+                      .map((item) => (
+                        <img
+                          src={require("./assets/noVideo.svg").default}
+                          className="d-none d-lg-flex"
+                          alt=""
+                        />
+                      ))}
+                </Slider>
+              )}
             </div>
           </div>
         </div>
