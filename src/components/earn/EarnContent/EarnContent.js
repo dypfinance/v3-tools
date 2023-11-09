@@ -676,7 +676,7 @@ const EarnContent = ({
                             whiteSpace: "pre",
                           }}
                         >
-                          {getFormattedNumber(bnbApr, 0)}% APR
+                          12.5% APR
                         </p>
                       </div>
                     </div>
@@ -726,7 +726,7 @@ const EarnContent = ({
                             whiteSpace: "pre",
                           }}
                         >
-                          {avaxApr}% APR
+                          12.5% APR
                         </p>
                       </div>
                     </div>

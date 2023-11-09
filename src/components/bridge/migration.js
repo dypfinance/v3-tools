@@ -205,6 +205,7 @@ export default function initMigration({
             this.setState({ depositLoading: false, depositStatus: "deposit" });
           })
           .catch((e) => {
+            console.log(e)
             this.setState({ depositLoading: false, depositStatus: "fail" });
             this.setState({ errorMsg: e?.message });
             setTimeout(() => {
