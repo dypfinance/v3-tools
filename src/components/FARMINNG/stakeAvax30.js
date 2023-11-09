@@ -1443,15 +1443,15 @@ export default function stakeAvax30({
                         <button
                           disabled={
                             this.state.claimStatus === "claimed" ||
-                            this.state.claimStatus === "success" ||
-                            pendingDivs <= 0
+                            this.state.claimStatus === "success"||  pendingDivs <= 0
+                            //  
                               ? true
                               : false
                           }
                           className={`btn filledbtn ${
                             (this.state.claimStatus === "claimed" &&
-                              this.state.claimStatus === "initial") ||
-                            pendingDivs <= 0
+                              this.state.claimStatus === "initial") ||  pendingDivs <= 0
+                              // 
                               ? "disabled-btn"
                               : this.state.claimStatus === "failed"
                               ? "fail-button"
@@ -1460,7 +1460,13 @@ export default function stakeAvax30({
                               : null
                           } d-flex justify-content-center align-items-center gap-2`}
                           style={{ height: "fit-content" }}
-                          onClick={this.handleClaimDivs}
+                          // onClick={this.handleClaimDivs}
+                          onClick={() => {
+                            expired ? 
+                            window.$.alert(
+                              "*The rewards earned from the day of the migration until the end of the lock time will be distributed to the users automatically at the end of the contract."
+                            ) : this.handleClaimDivs()
+                          }}
                         >
                           {this.state.claimLoading ? (
                             <div

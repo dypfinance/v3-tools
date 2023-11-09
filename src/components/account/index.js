@@ -85,7 +85,7 @@ export default class Subscription extends React.Component {
 
   fetchEthStaking = async () => {
     await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_eth`)
+      .get(`https://api2.dyp.finance/api/get_staking_info_eth`)
       .then((res) => {
         const dypIdyp = res.data.stakingInfoDYPEth.concat(
           res.data.stakingInfoiDYPEth
@@ -111,7 +111,7 @@ export default class Subscription extends React.Component {
 
   fetchBnbStaking = async () => {
     await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_bnb`)
+      .get(`https://api2.dyp.finance/api/get_staking_info_bnb`)
       .then((res) => {
         const dypIdypBnb = res.data.stakingInfoDYPBnb.concat(
           res.data.stakingInfoiDYPBnb
@@ -140,7 +140,7 @@ export default class Subscription extends React.Component {
 
   fetchAvaxStaking = async () => {
     await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_avax`)
+      .get(`https://api2.dyp.finance/api/get_staking_info_avax`)
       .then((res) => {
         const dypIdypAvax = res.data.stakingInfoDYPAvax.concat(
           res.data.stakingInfoiDYPAvax
@@ -329,13 +329,14 @@ export default class Subscription extends React.Component {
     );
     const web3avax = new Web3("https://api.avax.network/ext/bc/C/rpc");
     const web3bsc = new Web3("https://bsc-dataseed.binance.org/");
-    const tokenAddress = "0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17";
+    const tokenAddress = window.config.token_dypius_new_address;
+    const tokenAddress_bsc = window.config.token_dypius_new_bsc_address;
     const walletAddress = this.props.coinbase;
     const TokenABI = window.ERC20_ABI;
     if (walletAddress && walletAddress !== undefined) {
       const contract1 = new web3eth.eth.Contract(TokenABI, tokenAddress);
-      const contract2 = new web3avax.eth.Contract(TokenABI, tokenAddress);
-      const contract3 = new web3bsc.eth.Contract(TokenABI, tokenAddress);
+      const contract2 = new web3avax.eth.Contract(TokenABI, tokenAddress_bsc);
+      const contract3 = new web3bsc.eth.Contract(TokenABI, tokenAddress_bsc);
 
       const baleth = await contract1.methods
         .balanceOf(walletAddress)
@@ -369,7 +370,8 @@ export default class Subscription extends React.Component {
   };
 
   getAllBalance = async () => {
-    const tokenAddress = "0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17";
+    const tokenAddress = window.config.token_dypius_new_address;
+    const tokenAddress_bsc = window.config.token_dypius_new_bsc_address;
     const walletAddress = this.props.coinbase;
     const TokenABI = window.ERC20_ABI;
 
@@ -380,9 +382,9 @@ export default class Subscription extends React.Component {
       );
       const contract2 = new window.avaxWeb3.eth.Contract(
         TokenABI,
-        tokenAddress
+        tokenAddress_bsc
       );
-      const contract3 = new window.bscWeb3.eth.Contract(TokenABI, tokenAddress);
+      const contract3 = new window.bscWeb3.eth.Contract(TokenABI, tokenAddress_bsc);
 
       await contract1.methods
         .balanceOf(walletAddress)

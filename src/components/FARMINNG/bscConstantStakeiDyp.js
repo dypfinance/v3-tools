@@ -490,9 +490,9 @@ const StakeBscIDyp = ({
   };
 
   const handleEthPool = async () => {
-    await handleSwitchNetworkhook("0x1")
+    await handleSwitchNetworkhook("0x38")
       .then(() => {
-        handleSwitchNetwork("1");
+        handleSwitchNetwork("56");
       })
       .catch((e) => {
         console.log(e);
@@ -989,46 +989,50 @@ const StakeBscIDyp = ({
                   <span>{pendingDivs}</span>
                 </div>
                 <div className="claim-reinvest-container d-flex justify-content-between align-items-center gap-3">
-                  <button
-                    disabled={
-                      claimStatus === "claimed" ||
-                      claimStatus === "success" ||
-                      pendingDivs <= 0
-                        ? true
-                        : false
-                    }
-                    className={`btn filledbtn ${
-                      (claimStatus === "claimed" &&
-                        claimStatus === "initial") ||
-                      pendingDivs <= 0
-                        ? "disabled-btn"
-                        : claimStatus === "failed"
-                        ? "fail-button"
-                        : claimStatus === "success"
-                        ? "success-button"
-                        : null
-                    } d-flex justify-content-center align-items-center gap-2`}
-                    style={{ height: "fit-content" }}
-                    onClick={handleClaimDivs}
-                  >
-                    {claimLoading ? (
-                      <div
-                        class="spinner-border spinner-border-sm text-light"
-                        role="status"
-                      >
-                        <span class="visually-hidden">Loading...</span>
-                      </div>
-                    ) : claimStatus === "failed" ? (
-                      <>
-                        <img src={failMark} alt="" />
-                        Failed
-                      </>
-                    ) : claimStatus === "success" ? (
-                      <>Success</>
-                    ) : (
-                      <>Claim</>
-                    )}
-                  </button>
+                <button
+                      disabled={
+                        claimStatus === "claimed" || claimStatus === "success" || pendingDivs <= 0
+                          ? //
+                            true
+                          : false
+                      }
+                      className={`btn filledbtn ${
+                        claimStatus === "claimed" && claimStatus === "initial" ||  pendingDivs <= 0
+                          ? //
+                            "disabled-btn"
+                          : claimStatus === "failed"
+                          ? "fail-button"
+                          : claimStatus === "success"
+                          ? "success-button"
+                          : null
+                      } d-flex justify-content-center align-items-center gap-2`}
+                      style={{ height: "fit-content" }}
+                      // onClick={handleClaimDivs}
+                      onClick={() => {
+                        expired ? 
+                        window.$.alert(
+                          "*The rewards earned from the day of the migration until the end of the lock time will be distributed to the users automatically at the end of the contract."
+                        ) : handleClaimDivs()
+                      }}
+                    >
+                      {claimLoading ? (
+                        <div
+                          class="spinner-border spinner-border-sm text-light"
+                          role="status"
+                        >
+                          <span class="visually-hidden">Loading...</span>
+                        </div>
+                      ) : claimStatus === "failed" ? (
+                        <>
+                          <img src={failMark} alt="" />
+                          Failed
+                        </>
+                      ) : claimStatus === "success" ? (
+                        <>Success</>
+                      ) : (
+                        <>Claim</>
+                      )}
+                    </button>
                   {expired === false && (
                     <button
                       disabled={pendingDivs > 0 ? false : true}

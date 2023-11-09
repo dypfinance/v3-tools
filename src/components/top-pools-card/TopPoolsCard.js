@@ -8,6 +8,8 @@ import TopPoolsDetails from "./TopPoolsDetails";
 import newPool from "./assets/newPool.png";
 import staked from "./assets/staked.svg";
 import topPick from "./assets/toppick.svg";
+import comingSoon from "./assets/comingSoon.svg";
+
 import stakeTag from "../../assets/earnAssets/stakeTag.svg";
 import vaultTag from "../../assets/earnAssets/vaultTag.svg";
 import cawsLabel from "./assets/cawsLabel.svg";
@@ -35,8 +37,7 @@ const TopPoolsCard = ({
   display,
   expired,
   network,
-  isPremium
-
+  isPremium,
 }) => {
   const ethCoins = ["ethereum", "wbtc", "usdc", "usdt"];
   const bscCoins = [
@@ -62,9 +63,7 @@ const TopPoolsCard = ({
     "link",
   ];
 
-  const avaxCoins2 = [
-    "avax",
-  ];
+  const avaxCoins2 = ["avax"];
 
   const [showDetails, setShowDetails] = useState(false);
   const [coins, setCoins] = useState(ethCoins);
@@ -86,10 +85,9 @@ const TopPoolsCard = ({
       setCoins(bscCoins2);
     } else if (chain === "bnb" && expired === true) {
       setCoins(bscCoins);
-    } else if (chain === "avax"&& expired === false) {
+    } else if (chain === "avax" && expired === false) {
       setCoins(avaxCoins2);
-    }
-    else if (chain === "avax"&& expired === true) {
+    } else if (chain === "avax" && expired === true) {
       setCoins(avaxCoins);
     }
   }, [chain]);
@@ -122,6 +120,9 @@ const TopPoolsCard = ({
         {top_pick === true && (
           <img src={topPick} className="toppick" alt="top pick" />
         )}
+        {tvl === '--' && (
+          <img src={comingSoon} className="comingsoon" alt="top pick" />
+        )}
         {isNewPool && <img src={newPool} className="new-pool" alt="new pool" />}
         {tag && (
           <img
@@ -148,10 +149,8 @@ const TopPoolsCard = ({
             <div className="d-flex align-items-center">
               {cardType === "Farming" || cardType === "Buyback"
                 ? coins.length > 0 &&
-                  coins
-                    .slice(0, 5)
-                    .map((coin, index) => (
-                      <h6 className="token-name d-flex align-items-center gap-2">
+                  coins.slice(0, 5).map((coin, index) => (
+                    <h6 className="token-name d-flex align-items-center gap-2">
                       <img
                         key={index}
                         src={require(`./assets/${coin}.svg`).default}
@@ -159,8 +158,8 @@ const TopPoolsCard = ({
                         className="pool-coins"
                       />
                       {tokenName}
-                      </h6>
-                    ))
+                    </h6>
+                  ))
                 : tokenLogo !== undefined && (
                     <h6 className="token-name d-flex align-items-center gap-2">
                       <img
@@ -200,44 +199,46 @@ const TopPoolsCard = ({
               <h6 className="locktime-amount">{lockTime}</h6>
             </div>
           </div>
-          <div
-            className={
-              expired === true ? "details-wrapperexpired" : "details-wrapper"
-            }
-            onClick={() => {
-              handleDetails();
-            }}
-          >
-            <h6
-              className="details-text gap-1 d-flex align-items-center"
-              style={{
-                color:
-                  details === false && expired === false
-                    ? "#75CAC2"
-                    : details === false && expired === true
-                    ? "#C1CCF8"
-                    : "#C0C9FF",
+          {tvl != "--" && (
+            <div
+              className={
+                expired === true ? "details-wrapperexpired" : "details-wrapper"
+              }
+              onClick={() => {
+                handleDetails();
               }}
             >
-              {details === false && expired === false
-                ? "Deposit"
-                : details === false && expired === true
-                ? "Details"
-                : "Close"}
-              <img
-                src={
-                  details === false && expired === false
-                    ? greenArrow
-                    : details === false && expired === true
-                    ? purpleArrow
-                    : details === true && expired === true
-                    ? orangeArrow
-                    : orangeArrow
-                }
-                alt=""
-              />
-            </h6>
-          </div>
+              <h6
+                className="details-text gap-1 d-flex align-items-center"
+                style={{
+                  color:
+                    details === false && expired === false
+                      ? "#75CAC2"
+                      : details === false && expired === true
+                      ? "#C1CCF8"
+                      : "#C0C9FF",
+                }}
+              >
+                {details === false && expired === false
+                  ? "Deposit"
+                  : details === false && expired === true
+                  ? "Details"
+                  : "Close"}
+                <img
+                  src={
+                    details === false && expired === false
+                      ? greenArrow
+                      : details === false && expired === true
+                      ? purpleArrow
+                      : details === true && expired === true
+                      ? orangeArrow
+                      : orangeArrow
+                  }
+                  alt=""
+                />
+              </h6>
+            </div>
+          )}
         </div>
       </div>
     </>
