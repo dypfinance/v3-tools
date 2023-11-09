@@ -188,7 +188,7 @@ const EarnTopPicks = ({
   const fetchUserPools = async () => {
     if (coinbase && coinbase.includes("0x")) {
       const result = await axios
-        .get(`https://api.dyp.finance/api/user_pools/0xc173a9808cc2263b09ee6cf96eaaf5426639aa4d`)
+        .get(`https://api.dyp.finance/api/user_pools/${coinbase}`)
         .then((data) => {
           return data.data.PoolsUserIn;
         });
