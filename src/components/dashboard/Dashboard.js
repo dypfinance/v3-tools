@@ -579,8 +579,7 @@ const Dashboard = ({
                       expiration_time={"09 November 2024"}
                       finalApr={
                         topPools[cardIndex]?.apy_performancefee
-                          ? topPools[cardIndex]?.apy_performancefee
-                          : 30
+                          
                       }
                       fee={0}
                       lockTime={

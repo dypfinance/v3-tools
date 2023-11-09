@@ -188,7 +188,7 @@ const EarnTopPicks = ({
   const fetchUserPools = async () => {
     if (coinbase && coinbase.includes("0x")) {
       const result = await axios
-        .get(`https://api.dyp.finance/api/user_pools/${coinbase}`)
+        .get(`https://api.dyp.finance/api/user_pools/0xc173a9808cc2263b09ee6cf96eaaf5426639aa4d`)
         .then((data) => {
           return data.data.PoolsUserIn;
         });
@@ -331,7 +331,7 @@ const EarnTopPicks = ({
       avax_result2.status === 200
     ) {
       const dypIdypAvax = avax_result.data.stakingInfoiDYPAvax.concat(
-        avax_result.data.stakingInfoiDYPAvax
+        avax_result.data.stakingInfoDYPAvax
       );
       const dypAvax = avax_result2.data.stakingInfoDYPAvax;
 
@@ -421,6 +421,7 @@ const EarnTopPicks = ({
       })
       .catch((err) => console.error(err));
   };
+
 
   const fetchBnbPool = async () => {
     await axios
@@ -946,6 +947,7 @@ const EarnTopPicks = ({
     chain,
   ]);
 
+
   useEffect(() => {
     if (topList === "Vault" && chainId === "1" && expiredPools === true) {
       setTopPools(vault);
@@ -1287,16 +1289,14 @@ const EarnTopPicks = ({
                     <StakeDypiusEth
                       staking={window.constant_staking_dypius_eth1}
                       apr={
-                        expiredPools === false
-                          ? activePools[cardIndex]?.apy_percent
-                          : expiredDYPPools[cardIndex]?.apy_percent
+                       activePools[cardIndex]?.apy_percent
+                         
                       }
                       liquidity={eth_address}
                       expiration_time={"09 November 2024"}
                       finalApr={
-                        activePools === false
-                          ? activePools[cardIndex]?.apy_performancefee
-                          : expiredDYPPools[cardIndex]?.apy_performancefee
+                         activePools[cardIndex]?.apy_performancefee
+                          
                       }
                       lockTime={
                         cardIndex !== undefined
@@ -1865,10 +1865,9 @@ const EarnTopPicks = ({
                     liquidity={eth_address}
                     expiration_time={"09 November 2024"}
                     finalApr={
-                      activePools === false
-                        ? activePools[cardIndex]?.apy_performancefee
-                        : expiredDYPPools[cardIndex]?.apy_performancefee
-                    }
+                      activePools[cardIndex]?.apy_performancefee
+                       
+                   }
                     lockTime={
                       cardIndex !== undefined
                         ? expiredPools === false
@@ -2348,10 +2347,9 @@ const EarnTopPicks = ({
                     liquidity={eth_address}
                     expiration_time={"09 November 2024"}
                     finalApr={
-                      activePools === false
-                        ? activePools[cardIndex]?.apy_performancefee
-                        : expiredDYPPools[cardIndex]?.apy_performancefee
-                    }
+                      activePools[cardIndex]?.apy_performancefee
+                       
+                   }
                     lockTime={
                       cardIndex !== undefined
                         ? expiredPools === false
@@ -2786,10 +2784,9 @@ const EarnTopPicks = ({
                     liquidity={eth_address}
                     expiration_time={"09 November 2024"}
                     finalApr={
-                      activePools === false
-                        ? activePools[cardIndex]?.apy_performancefee
-                        : expiredDYPPools[cardIndex]?.apy_performancefee
-                    }
+                      activePools[cardIndex]?.apy_performancefee
+                       
+                   }
                     lockTime={
                       cardIndex !== undefined
                         ? expiredPools === false
@@ -3461,10 +3458,9 @@ const EarnTopPicks = ({
                     liquidity={eth_address}
                     expiration_time={"09 November 2024"}
                     finalApr={
-                      activePools === false
-                        ? activePools[cardIndex]?.apy_performancefee
-                        : expiredDYPPools[cardIndex]?.apy_performancefee
-                    }
+                      activePools[cardIndex]?.apy_performancefee
+                       
+                   }
                     lockTime={
                       cardIndex !== undefined
                         ? expiredPools === false
@@ -4147,10 +4143,9 @@ const EarnTopPicks = ({
                     liquidity={eth_address}
                     expiration_time={"09 November 2024"}
                     finalApr={
-                      activePools === false
-                        ? activePools[cardIndex]?.apy_performancefee
-                        : expiredDYPPools[cardIndex]?.apy_performancefee
-                    }
+                      activePools[cardIndex]?.apy_performancefee
+                       
+                   }
                     lockTime={
                       cardIndex !== undefined
                         ? expiredPools === false
@@ -4651,10 +4646,9 @@ const EarnTopPicks = ({
                     liquidity={eth_address}
                     expiration_time={"09 November 2024"}
                     finalApr={
-                      activePools === false
-                        ? activePools[cardIndex]?.apy_performancefee
-                        : expiredDYPPools[cardIndex]?.apy_performancefee
-                    }
+                      activePools[cardIndex]?.apy_performancefee
+                       
+                   }
                     lockTime={
                       cardIndex !== undefined
                         ? expiredPools === false
@@ -5190,10 +5184,9 @@ const EarnTopPicks = ({
                     liquidity={eth_address}
                     expiration_time={"09 November 2024"}
                     finalApr={
-                      activePools === false
-                        ? activePools[cardIndex]?.apy_performancefee
-                        : expiredDYPPools[cardIndex]?.apy_performancefee
-                    }
+                      activePools[cardIndex]?.apy_performancefee
+                       
+                   }
                     lockTime={
                       cardIndex !== undefined
                         ? expiredPools === false
@@ -6671,10 +6664,9 @@ const EarnTopPicks = ({
                       liquidity={eth_address}
                       expiration_time={"09 November 2024"}
                       finalApr={
-                        activePools === false
-                          ? activePools[cardIndex]?.apy_performancefee
-                          : expiredDYPPools[cardIndex]?.apy_performancefee
-                      }
+                        activePools[cardIndex]?.apy_performancefee
+                         
+                     }
                       lockTime={
                         cardIndex !== undefined
                           ? expiredPools === false
@@ -7273,10 +7265,9 @@ const EarnTopPicks = ({
                       liquidity={eth_address}
                       expiration_time={"09 November 2024"}
                       finalApr={
-                        activePools === false
-                          ? activePools[cardIndex]?.apy_performancefee
-                          : expiredDYPPools[cardIndex]?.apy_performancefee
-                      }
+                        activePools[cardIndex]?.apy_performancefee
+                         
+                     }
                       lockTime={
                         cardIndex !== undefined
                           ? expiredPools === false
@@ -7756,10 +7747,9 @@ const EarnTopPicks = ({
                       liquidity={eth_address}
                       expiration_time={"09 November 2024"}
                       finalApr={
-                        activePools === false
-                          ? activePools[cardIndex]?.apy_performancefee
-                          : expiredDYPPools[cardIndex]?.apy_performancefee
-                      }
+                        activePools[cardIndex]?.apy_performancefee
+                         
+                     }
                       lockTime={
                         cardIndex !== undefined
                           ? expiredPools === false
@@ -8236,10 +8226,9 @@ const EarnTopPicks = ({
                       liquidity={eth_address}
                       expiration_time={"09 November 2024"}
                       finalApr={
-                        activePools === false
-                          ? activePools[cardIndex]?.apy_performancefee
-                          : expiredDYPPools[cardIndex]?.apy_performancefee
-                      }
+                        activePools[cardIndex]?.apy_performancefee
+                         
+                     }
                       lockTime={
                         cardIndex !== undefined
                           ? expiredPools === false
@@ -10267,7 +10256,7 @@ const EarnTopPicks = ({
                   "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" &&
                 chain === "eth" ? (
                 <StakeEth
-                  staking={window.constant_staking_new2}
+                  staking={window.constant_staking_newi3}
                   apr={
                     expiredPools === false
                       ? activePools[cardIndex]?.apy_percent
@@ -10333,7 +10322,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={true}
-                  staking={window.constant_staking_new11}
+                  staking={window.constant_staking_new12}
                   listType={listType}
                   finalApr={expiredDYPPools[cardIndex]?.apy_performancefee}
                   apr={expiredDYPPools[cardIndex]?.apy_percent}
@@ -10384,7 +10373,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={true}
-                  staking={window.constant_staking_new11}
+                  staking={window.constant_staking_new13}
                   listType={listType}
                   finalApr={expiredDYPPools[cardIndex]?.apy_performancefee}
                   apr={expiredDYPPools[cardIndex]?.apy_percent}
@@ -11810,7 +11799,7 @@ const EarnTopPicks = ({
                 "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" &&
               chain === "eth" ? (
               <StakeEth
-                staking={window.constant_staking_new2}
+                staking={window.constant_staking_newi3}
                 apr={
                   expiredPools === false
                     ? activePools[cardIndex]?.apy_percent
@@ -11875,7 +11864,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={true}
-                staking={window.constant_staking_new11}
+                staking={window.constant_staking_new12}
                 listType={listType}
                 finalApr={expiredDYPPools[cardIndex]?.apy_performancefee}
                 apr={expiredDYPPools[cardIndex]?.apy_percent}
@@ -11925,7 +11914,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={true}
-                staking={window.constant_staking_new11}
+                staking={window.constant_staking_new13}
                 listType={listType}
                 finalApr={expiredDYPPools[cardIndex]?.apy_performancefee}
                 apr={expiredDYPPools[cardIndex]?.apy_percent}
@@ -12996,7 +12985,7 @@ const EarnTopPicks = ({
                 "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" &&
               chain === "eth" ? (
               <StakeEth
-                staking={window.constant_staking_new2}
+                staking={window.constant_staking_newi3}
                 apr={
                   expiredPools === false
                     ? activePools[cardIndex]?.apy_percent
@@ -13061,7 +13050,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={true}
-                staking={window.constant_staking_new11}
+                staking={window.constant_staking_new12}
                 listType={listType}
                 finalApr={expiredDYPPools[cardIndex]?.apy_performancefee}
                 apr={expiredDYPPools[cardIndex]?.apy_percent}
@@ -13111,7 +13100,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={true}
-                staking={window.constant_staking_new11}
+                staking={window.constant_staking_new13}
                 listType={listType}
                 finalApr={expiredDYPPools[cardIndex]?.apy_performancefee}
                 apr={expiredDYPPools[cardIndex]?.apy_percent}
@@ -14495,7 +14484,7 @@ const EarnTopPicks = ({
                 "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" &&
               chain === "eth" ? (
               <StakeEth
-                staking={window.constant_staking_new2}
+                staking={window.constant_staking_newi3}
                 apr={
                   expiredPools === false
                     ? activePools[cardIndex]?.apy_percent
@@ -14560,7 +14549,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={true}
-                staking={window.constant_staking_new11}
+                staking={window.constant_staking_new12}
                 listType={listType}
                 finalApr={expiredDYPPools[cardIndex]?.apy_performancefee}
                 apr={expiredDYPPools[cardIndex]?.apy_percent}
@@ -14610,7 +14599,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={true}
-                staking={window.constant_staking_new11}
+                staking={window.constant_staking_new13}
                 listType={listType}
                 finalApr={expiredDYPPools[cardIndex]?.apy_performancefee}
                 apr={expiredDYPPools[cardIndex]?.apy_percent}
@@ -15444,7 +15433,7 @@ const EarnTopPicks = ({
                 "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" &&
               chain === "eth" ? (
               <StakeEth
-                staking={window.constant_staking_new2}
+                staking={window.constant_staking_newi3}
                 apr={
                   expiredPools === false
                     ? activePools[cardIndex]?.apy_percent
@@ -15509,7 +15498,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={true}
-                staking={window.constant_staking_new11}
+                staking={window.constant_staking_new12}
                 listType={listType}
                 finalApr={expiredDYPPools[cardIndex]?.apy_performancefee}
                 apr={expiredDYPPools[cardIndex]?.apy_percent}
@@ -15559,7 +15548,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={true}
-                staking={window.constant_staking_new11}
+                staking={window.constant_staking_new13}
                 listType={listType}
                 finalApr={expiredDYPPools[cardIndex]?.apy_performancefee}
                 apr={expiredDYPPools[cardIndex]?.apy_percent}
@@ -16983,7 +16972,7 @@ const EarnTopPicks = ({
                 "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" &&
               chain === "eth" ? (
               <StakeEth
-                staking={window.constant_staking_new2}
+                staking={window.constant_staking_newi3}
                 apr={
                   expiredPools === false
                     ? activePools[cardIndex]?.apy_percent
@@ -17048,7 +17037,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={true}
-                staking={window.constant_staking_new11}
+                staking={window.constant_staking_new12}
                 listType={listType}
                 finalApr={expiredDYPPools[cardIndex]?.apy_performancefee}
                 apr={expiredDYPPools[cardIndex]?.apy_percent}
@@ -17098,7 +17087,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={true}
-                staking={window.constant_staking_new11}
+                staking={window.constant_staking_new13}
                 listType={listType}
                 finalApr={expiredDYPPools[cardIndex]?.apy_performancefee}
                 apr={expiredDYPPools[cardIndex]?.apy_percent}
@@ -18518,7 +18507,7 @@ const EarnTopPicks = ({
                 "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" &&
               chain === "eth" ? (
               <StakeEth
-                staking={window.constant_staking_new2}
+                staking={window.constant_staking_newi3}
                 apr={
                   expiredPools === false
                     ? activePools[cardIndex]?.apy_percent
@@ -18583,7 +18572,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={true}
-                staking={window.constant_staking_new11}
+                staking={window.constant_staking_new12}
                 listType={listType}
                 finalApr={expiredDYPPools[cardIndex]?.apy_performancefee}
                 apr={expiredDYPPools[cardIndex]?.apy_percent}
@@ -18633,7 +18622,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={true}
-                staking={window.constant_staking_new11}
+                staking={window.constant_staking_new13}
                 listType={listType}
                 finalApr={expiredDYPPools[cardIndex]?.apy_performancefee}
                 apr={expiredDYPPools[cardIndex]?.apy_percent}
@@ -20082,7 +20071,7 @@ const EarnTopPicks = ({
                 "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" &&
               chain === "eth" ? (
               <StakeEth
-                staking={window.constant_staking_new2}
+                staking={window.constant_staking_newi3}
                 apr={
                   expiredPools === false
                     ? activePools[cardIndex]?.apy_percent
@@ -20296,7 +20285,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={true}
-                staking={window.constant_staking_new11}
+                staking={window.constant_staking_new12}
                 listType={listType}
                 finalApr={expiredDYPPools[cardIndex]?.apy_performancefee}
                 apr={expiredDYPPools[cardIndex]?.apy_percent}
@@ -20346,7 +20335,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={true}
-                staking={window.constant_staking_new11}
+                staking={window.constant_staking_new13}
                 listType={listType}
                 finalApr={expiredDYPPools[cardIndex]?.apy_performancefee}
                 apr={expiredDYPPools[cardIndex]?.apy_percent}
@@ -21759,7 +21748,7 @@ const EarnTopPicks = ({
                 "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" &&
               chain === "eth" ? (
               <StakeEth
-                staking={window.constant_staking_new2}
+                staking={window.constant_staking_newi3}
                 apr={
                   expiredPools === false
                     ? activePools[cardIndex]?.apy_percent
@@ -21824,7 +21813,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={true}
-                staking={window.constant_staking_new11}
+                staking={window.constant_staking_new12}
                 listType={listType}
                 finalApr={expiredDYPPools[cardIndex]?.apy_performancefee}
                 apr={expiredDYPPools[cardIndex]?.apy_percent}
@@ -21874,7 +21863,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={true}
-                staking={window.constant_staking_new11}
+                staking={window.constant_staking_new13}
                 listType={listType}
                 finalApr={expiredDYPPools[cardIndex]?.apy_performancefee}
                 apr={expiredDYPPools[cardIndex]?.apy_percent}
@@ -22647,7 +22636,7 @@ const EarnTopPicks = ({
                 "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" &&
               chain === "eth" ? (
               <StakeEth
-                staking={window.constant_staking_new2}
+                staking={window.constant_staking_newi3}
                 apr={
                   expiredPools === false
                     ? activePools[cardIndex]?.apy_percent
@@ -22712,7 +22701,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={true}
-                staking={window.constant_staking_new11}
+                staking={window.constant_staking_new12}
                 listType={listType}
                 finalApr={expiredDYPPools[cardIndex]?.apy_performancefee}
                 apr={expiredDYPPools[cardIndex]?.apy_percent}
@@ -22762,7 +22751,7 @@ const EarnTopPicks = ({
                 handleConnection={handleConnection}
                 handleSwitchNetwork={handleSwitchNetwork}
                 expired={true}
-                staking={window.constant_staking_new11}
+                staking={window.constant_staking_new13}
                 listType={listType}
                 finalApr={expiredDYPPools[cardIndex]?.apy_performancefee}
                 apr={expiredDYPPools[cardIndex]?.apy_percent}
@@ -23546,7 +23535,7 @@ const EarnTopPicks = ({
                   "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" &&
                 chain === "eth" ? (
                 <StakeEth
-                  staking={window.constant_staking_new2}
+                  staking={window.constant_staking_newi3}
                   apr={
                     expiredPools === false
                       ? activePools[cardIndex]?.apy_percent
@@ -23612,7 +23601,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={true}
-                  staking={window.constant_staking_new11}
+                  staking={window.constant_staking_new12}
                   listType={listType}
                   finalApr={expiredDYPPools[cardIndex]?.apy_performancefee}
                   apr={expiredDYPPools[cardIndex]?.apy_percent}
@@ -23663,7 +23652,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={true}
-                  staking={window.constant_staking_new11}
+                  staking={window.constant_staking_new13}
                   listType={listType}
                   finalApr={expiredDYPPools[cardIndex]?.apy_performancefee}
                   apr={expiredDYPPools[cardIndex]?.apy_percent}
@@ -25113,7 +25102,7 @@ const EarnTopPicks = ({
                   "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" &&
                 chain === "eth" ? (
                 <StakeEth
-                  staking={window.constant_staking_new2}
+                  staking={window.constant_staking_newi3}
                   apr={
                     expiredPools === false
                       ? activePools[cardIndex]?.apy_percent
@@ -25179,7 +25168,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={true}
-                  staking={window.constant_staking_new11}
+                  staking={window.constant_staking_new12}
                   listType={listType}
                   finalApr={expiredDYPPools[cardIndex]?.apy_performancefee}
                   apr={expiredDYPPools[cardIndex]?.apy_percent}
@@ -25230,7 +25219,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={true}
-                  staking={window.constant_staking_new11}
+                  staking={window.constant_staking_new13}
                   listType={listType}
                   finalApr={expiredDYPPools[cardIndex]?.apy_performancefee}
                   apr={expiredDYPPools[cardIndex]?.apy_percent}
@@ -26680,7 +26669,7 @@ const EarnTopPicks = ({
                   "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" &&
                 chain === "eth" ? (
                 <StakeEth
-                  staking={window.constant_staking_new2}
+                  staking={window.constant_staking_newi3}
                   apr={
                     expiredPools === false
                       ? activePools[cardIndex]?.apy_percent
@@ -26746,7 +26735,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={true}
-                  staking={window.constant_staking_new11}
+                  staking={window.constant_staking_new12}
                   listType={listType}
                   finalApr={expiredDYPPools[cardIndex]?.apy_performancefee}
                   apr={expiredDYPPools[cardIndex]?.apy_percent}
@@ -26797,7 +26786,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={true}
-                  staking={window.constant_staking_new11}
+                  staking={window.constant_staking_new13}
                   listType={listType}
                   finalApr={expiredDYPPools[cardIndex]?.apy_performancefee}
                   apr={expiredDYPPools[cardIndex]?.apy_percent}
@@ -28199,7 +28188,7 @@ const EarnTopPicks = ({
                   "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" &&
                 chain === "eth" ? (
                 <StakeEth
-                  staking={window.constant_staking_new2}
+                  staking={window.constant_staking_newi3}
                   apr={
                     expiredPools === false
                       ? activePools[cardIndex]?.apy_percent
@@ -28265,7 +28254,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={true}
-                  staking={window.constant_staking_new11}
+                  staking={window.constant_staking_new12}
                   listType={listType}
                   finalApr={expiredDYPPools[cardIndex]?.apy_performancefee}
                   apr={expiredDYPPools[cardIndex]?.apy_percent}
@@ -28316,7 +28305,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={true}
-                  staking={window.constant_staking_new11}
+                  staking={window.constant_staking_new13}
                   listType={listType}
                   finalApr={expiredDYPPools[cardIndex]?.apy_performancefee}
                   apr={expiredDYPPools[cardIndex]?.apy_percent}
@@ -29766,7 +29755,7 @@ const EarnTopPicks = ({
                   "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" &&
                 chain === "eth" ? (
                 <StakeEth
-                  staking={window.constant_staking_new2}
+                  staking={window.constant_staking_newi3}
                   apr={
                     expiredPools === false
                       ? activePools[cardIndex]?.apy_percent
@@ -29832,7 +29821,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={true}
-                  staking={window.constant_staking_new11}
+                  staking={window.constant_staking_new12}
                   listType={listType}
                   finalApr={expiredDYPPools[cardIndex]?.apy_performancefee}
                   apr={expiredDYPPools[cardIndex]?.apy_percent}
@@ -29883,7 +29872,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={true}
-                  staking={window.constant_staking_new11}
+                  staking={window.constant_staking_new13}
                   listType={listType}
                   finalApr={expiredDYPPools[cardIndex]?.apy_performancefee}
                   apr={expiredDYPPools[cardIndex]?.apy_percent}
@@ -31333,7 +31322,7 @@ const EarnTopPicks = ({
                   "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" &&
                 chain === "eth" ? (
                 <StakeEth
-                  staking={window.constant_staking_new2}
+                  staking={window.constant_staking_newi3}
                   apr={
                     expiredPools === false
                       ? activePools[cardIndex]?.apy_percent
@@ -31399,7 +31388,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={true}
-                  staking={window.constant_staking_new11}
+                  staking={window.constant_staking_new12}
                   listType={listType}
                   finalApr={expiredDYPPools[cardIndex]?.apy_performancefee}
                   apr={expiredDYPPools[cardIndex]?.apy_percent}
@@ -31450,7 +31439,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={true}
-                  staking={window.constant_staking_new11}
+                  staking={window.constant_staking_new13}
                   listType={listType}
                   finalApr={expiredDYPPools[cardIndex]?.apy_performancefee}
                   apr={expiredDYPPools[cardIndex]?.apy_percent}
@@ -32882,7 +32871,7 @@ const EarnTopPicks = ({
                   "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" &&
                 chain === "eth" ? (
                 <StakeEth
-                  staking={window.constant_staking_new2}
+                  staking={window.constant_staking_newi3}
                   apr={
                     expiredPools === false
                       ? activePools[cardIndex]?.apy_percent
@@ -32948,7 +32937,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={true}
-                  staking={window.constant_staking_new11}
+                  staking={window.constant_staking_new12}
                   listType={listType}
                   finalApr={expiredDYPPools[cardIndex]?.apy_performancefee}
                   apr={expiredDYPPools[cardIndex]?.apy_percent}
@@ -32999,7 +32988,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={true}
-                  staking={window.constant_staking_new11}
+                  staking={window.constant_staking_new13}
                   listType={listType}
                   finalApr={expiredDYPPools[cardIndex]?.apy_performancefee}
                   apr={expiredDYPPools[cardIndex]?.apy_percent}
@@ -34431,7 +34420,7 @@ const EarnTopPicks = ({
                   "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" &&
                 chain === "eth" ? (
                 <StakeEth
-                  staking={window.constant_staking_new2}
+                  staking={window.constant_staking_newi3}
                   apr={
                     expiredPools === false
                       ? activePools[cardIndex]?.apy_percent
@@ -34497,7 +34486,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={true}
-                  staking={window.constant_staking_new11}
+                  staking={window.constant_staking_new12}
                   listType={listType}
                   finalApr={expiredDYPPools[cardIndex]?.apy_performancefee}
                   apr={expiredDYPPools[cardIndex]?.apy_percent}
@@ -34548,7 +34537,7 @@ const EarnTopPicks = ({
                   handleConnection={handleConnection}
                   handleSwitchNetwork={handleSwitchNetwork}
                   expired={true}
-                  staking={window.constant_staking_new11}
+                  staking={window.constant_staking_new13}
                   listType={listType}
                   finalApr={expiredDYPPools[cardIndex]?.apy_performancefee}
                   apr={expiredDYPPools[cardIndex]?.apy_percent}

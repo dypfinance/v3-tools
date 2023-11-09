@@ -703,8 +703,19 @@ settvlUSD(tvlUSD)
   };
 
   const getPriceDYP = async () => {
-    let usdPerToken = await window.getPrice("defi-yield-protocol");
-    setusdPerToken(usdPerToken)
+    const dypprice = await axios
+    .get(
+      "https://api.geckoterminal.com/api/v2/networks/eth/pools/0x7c81087310a228470db28c1068f0663d6bf88679"
+    )
+    .then((res) => {
+      return res.data.data.attributes.base_token_price_usd;
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+
+    // let usdPerToken = await window.getPrice("defi-yield-protocol");
+    setusdPerToken(dypprice);
   };
 
 

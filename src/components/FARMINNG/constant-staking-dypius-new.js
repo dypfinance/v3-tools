@@ -206,8 +206,19 @@ const StakeDypiusEth = ({
   };
 
   const getPriceDYP = async () => {
-    let usdPerToken = await window.getPrice("defi-yield-protocol");
-    setusdPerToken(usdPerToken);
+    const dypprice = await axios
+    .get(
+      "https://api.geckoterminal.com/api/v2/networks/eth/pools/0x7c81087310a228470db28c1068f0663d6bf88679"
+    )
+    .then((res) => {
+      return res.data.data.attributes.base_token_price_usd;
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+
+    // let usdPerToken = await window.getPrice("defi-yield-protocol");
+    setusdPerToken(dypprice);
   };
 
   const refreshBalance = async () => {
@@ -283,6 +294,7 @@ const StakeDypiusEth = ({
         let _dTokens = staking.depositedTokens(coinbase);
         let _lClaimTime = staking.lastClaimedTime(coinbase);
         let _tvl = reward_token_dypius_eth.balanceOf(staking._address);
+        // console.log('tvl', _tvl)
         let _rFeeEarned = staking.totalReferralFeeEarned(coinbase);
         let tStakers = staking.getNumberOfHolders();
 
@@ -398,7 +410,7 @@ const StakeDypiusEth = ({
       });
     }
   };
-
+  
   useEffect(() => {
     if (coinbase !== coinbase2 && coinbase !== null && coinbase !== undefined) {
       setcoinbase(coinbase);
@@ -524,12 +536,8 @@ const StakeDypiusEth = ({
     let amount = new BigNumber(withdrawAmount).times(1e18).toFixed(0);
     setwithdrawLoading(true);
 
-    let deadline = Math.floor(
-      Date.now() / 1e3 + window.config.tx_max_wait_seconds
-    );
-
     staking
-      .unstake(amount, 0, deadline)
+      .unstake(amount)
       .then(() => {
         setwithdrawLoading(false);
         setwithdrawStatus("success");
@@ -551,55 +559,9 @@ const StakeDypiusEth = ({
   const handleClaimDivs = async (e) => {
     // e.preventDefault();
     setclaimLoading(true);
-    // this.setState({ claimStatus: "claim" });
-
-    let address = coinbase;
-    let amount = await staking.getTotalPendingDivs(address);
-
-    let router = await window.getUniswapRouterContract();
-    let WETH = await router.methods.WETH().call();
-    let platformTokenAddress = window.config.reward_token_dypius_eth_address;
-    let rewardTokenAddress = window.config.reward_token_idyp_address;
-    let path = [
-      ...new Set(
-        [rewardTokenAddress, WETH, platformTokenAddress].map((a) =>
-          a.toLowerCase()
-        )
-      ),
-    ];
-    let _amountOutMin = await router.methods
-      .getAmountsOut(amount, path)
-      .call()
-      .catch((e) => {
-        setclaimStatus("failed");
-        setclaimLoading(false);
-        seterrorMsg2(e?.message);
-
-        setTimeout(() => {
-          setclaimStatus("initial");
-          seterrorMsg2("");
-        }, 10000);
-      });
-    _amountOutMin = _amountOutMin[_amountOutMin.length - 1];
-    _amountOutMin = new BigNumber(_amountOutMin)
-      .times(100 - window.config.slippage_tolerance_percent)
-      .div(100)
-      .toFixed(0);
-
-    let referralFee = new BigNumber(_amountOutMin)
-      .times(500)
-      .div(1e4)
-      .toFixed(0);
-    referralFee = referralFee.toString();
-
-    let deadline = Math.floor(
-      Date.now() / 1e3 + window.config.tx_max_wait_seconds
-    );
-
-    console.log({ referralFee, _amountOutMin, deadline });
-
+ 
     staking
-      .claim(0, _amountOutMin, deadline)
+      .claim()
       .then(() => {
         setclaimStatus("success");
         setclaimLoading(false);
@@ -667,56 +629,8 @@ const StakeDypiusEth = ({
     setreInvestStatus("invest");
     setreInvestLoading(true);
 
-    let address = coinbase;
-    let amount = await staking.getTotalPendingDivs(address);
-
-    let router = await window.getUniswapRouterContract();
-    let WETH = await router.methods.WETH().call();
-    let platformTokenAddress = window.config.reward_token_dypius_eth_address;
-    let rewardTokenAddress = window.config.reward_token_idyp_address;
-    let path = [
-      ...new Set(
-        [rewardTokenAddress, WETH, platformTokenAddress].map((a) =>
-          a.toLowerCase()
-        )
-      ),
-    ];
-    let _amountOutMin = await router.methods
-      .getAmountsOut(amount, path)
-      .call()
-      .catch((e) => {
-        setreInvestStatus("failed");
-        setreInvestLoading(false);
-        seterrorMsg2(e?.message);
-
-        setTimeout(() => {
-          setreInvestStatus("initial");
-          seterrorMsg2("");
-        }, 10000);
-      });
-    _amountOutMin = _amountOutMin[_amountOutMin.length - 1];
-    _amountOutMin = new BigNumber(_amountOutMin)
-      .times(100 - window.config.slippage_tolerance_percent)
-      .div(100)
-      .toFixed(0);
-
-    let referralFee = new BigNumber(_amountOutMin)
-      .times(500)
-      .div(1e4)
-      .toFixed(0);
-    referralFee = referralFee.toString();
-
-    // _amountOutMin = _amountOutMin - referralFee
-    // _amountOutMin = _amountOutMin.toString()
-
-    let deadline = Math.floor(
-      Date.now() / 1e3 + window.config.tx_max_wait_seconds
-    );
-
-    console.log({ referralFee, _amountOutMin, deadline });
-
     staking
-      .reInvest(0, _amountOutMin, deadline)
+      .reInvest()
       .then(() => {
         setreInvestStatus("success");
         setreInvestLoading(false);
@@ -1534,7 +1448,7 @@ const StakeDypiusEth = ({
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">TVL USD</span>
-                    <h6 className="stats-card-content">${tvl_usd} USD</h6>
+                    <h6 className="stats-card-content">${getFormattedNumber(Number(tvl) * usdPerToken,4) } USD</h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">

@@ -730,7 +730,10 @@ class CONSTANT_STAKING_DYPIUS {
     ].forEach((fn_name) => {
       this[fn_name] = async function (...args) {
         window.web3 = new Web3(window.ethereum);
-        let contract = new window.web3.eth.Contract(window.CONSTANT_STAKING_DYPIUS_ABI,address) 
+        let contract = new window.web3.eth.Contract(
+          window.CONSTANT_STAKING_DYPIUS_ABI,
+          address
+        );
         // getContract({ key: this.ticker });
         return await contract.methods[fn_name](...args).call();
       };
@@ -740,14 +743,34 @@ class CONSTANT_STAKING_DYPIUS {
       (fn_name) => {
         this[fn_name] = async function (...args) {
           // let contract = await getContract({ key: this.ticker });
-        let contract = new window.web3.eth.Contract(window.CONSTANT_STAKING_DYPIUS_ABI,address) 
+          let contract = new window.web3.eth.Contract(
+            window.CONSTANT_STAKING_DYPIUS_ABI,
+            address
+          );
 
           let value = 0;
+          let { latestGasPrice, maxPriorityFeePerGas } = await getMaxFee();
+          console.log({ latestGasPrice, maxPriorityFeePerGas });
+
           let gas = window.config.default_gas_amount;
+
+          try {
+            let estimatedGas = await contract.methods[fn_name](
+              ...args
+            ).estimateGas({from: await getCoinbase(), gas });
+            if (estimatedGas) {
+              gas = Math.min(estimatedGas, gas);
+              console.log("estimatedgas" + gas);
+            }
+          } catch (e) {
+            console.log(e);
+          }
+
           return await contract.methods[fn_name](...args).send({
             value,
             gas,
             from: await getCoinbase(),
+            
             gasPrice: window.config.default_gasprice_gwei * 1e9,
           });
         };
