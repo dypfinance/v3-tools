@@ -1920,6 +1920,17 @@ window.config = {
 
   submission_form_link: "https://forms.gle/SFX1DyUh8TcNeysz6",
 
+  //new dypv2 staking contracts
+
+  constant_staking_dypius_eth1_address:
+    "0xC9075092Cc46E176B1F3c0D0EB8223F1e46555B0",
+
+  constant_staking_dypius_bsc1_address:
+    "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603",
+
+  constant_staking_dypius_avax1_address:
+    "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603",
+
   // lowercase base tokens on uniswap
   // order matters!
   base_tokens: [
@@ -2205,11 +2216,10 @@ window.config = {
 
   new_bridge_eth_avax_address: "0x1ad3b0b7ed4d06917f2765bf3384b8ee8b4d90eb",
   new_bridge_avax_eth_address: "0x9a51ff1005c6825f15696ce5d96783f24e58af89",
-  token_dypius_new_avax_address: "0x1a3264f2e7b1cfc6220ec9348d33ccf02af7aaa4", //new dypius token on avax 
+  token_dypius_new_avax_address: "0x1a3264f2e7b1cfc6220ec9348d33ccf02af7aaa4", //new dypius token on avax
 
   SIGNATURE_APIBRIDGE_AVAX_URL_NEW: "https://bridge-avax.dypius.com",
   SIGNATURE_APIBRIDGE_BSC_URL_NEW: "https://bridge-bsc.dypius.com",
-
 };
 
 window.infuraWeb3 = new Web3(window.config.infura_endpoint);
@@ -2371,10 +2381,17 @@ window.constant_stakingbsc_new14 = new CONSTANT_STAKINGBSC_NEW(
   "CONSTANT_STAKINGBSC_NEW14"
 );
 
+window.constant_staking_dypius_bsc1 = new CONSTANT_STAKINGBSC_NEW(
+  "CONSTANT_STAKING_DYPIUS_BSC1"
+);
+
+
 window.CONSTANT_STAKINGBSC_NEW10_ABI = window.CONSTANT_STAKING_OLD_ABI;
 window.CONSTANT_STAKINGBSC_NEW11_ABI = window.CONSTANT_STAKING_OLD_ABI;
 window.CONSTANT_STAKINGBSC_NEW111_ABI = window.CONSTANT_STAKING_OLD_ABI;
 window.CONSTANT_STAKINGBSC_NEW14_ABI = window.CONSTANT_STAKING_OLD_ABI;
+window.CONSTANT_STAKING_DYPIUS_BSC1_ABI = window.CONSTANT_STAKING_OLD_ABI;
+
 
 window.CONSTANT_STAKINGBSC_NEW12_ABI = window.CONSTANT_STAKINGBSC_NEW_ABI;
 window.CONSTANT_STAKINGBSC_NEW13_ABI = window.CONSTANT_STAKINGBSC_NEW_ABI;
@@ -2501,6 +2518,10 @@ window.constant_staking_new2 = new CONSTANT_STAKING_NEW(
   "CONSTANT_STAKINGNEW_NEW2"
 );
 
+window.constant_staking_dypius_eth1 = new CONSTANT_STAKING_NEW(
+  "CONSTANT_STAKING_DYPIUS_ETH1"
+);
+
 window.constant_staking_newi3 = new CONSTANT_STAKING_OLD(
   "CONSTANT_STAKING_NEWI3"
 );
@@ -2523,13 +2544,21 @@ window.constant_staking_new13 = new CONSTANT_STAKING_NEWAVAX(
   "CONSTANT_STAKINGIDYPAVAX_50"
 );
 
+window.constant_staking_dypius_avax1 = new CONSTANT_STAKING_NEWAVAX(
+  "CONSTANT_STAKING_DYPIUS_AVAX1"
+);
+
 window.CONSTANT_STAKINGIDYPAVAX_3_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYPAVAX_4_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYPAVAX_40_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYPAVAX_50_ABI = window.CONSTANT_STAKING_IDYP_ABI;
+window.CONSTANT_STAKING_DYPIUS_AVAX1_ABI = window.CONSTANT_STAKING_IDYP_ABI;
+
 
 window.CONSTANT_STAKINGNEW_NEW1_ABI = window.CONSTANT_STAKINGNEW_ABI;
 window.CONSTANT_STAKINGNEW_NEW2_ABI = window.CONSTANT_STAKINGNEW_ABI;
+window.CONSTANT_STAKING_DYPIUS_ETH1_ABI = window.CONSTANT_STAKINGNEW_ABI;
+
 window.CONSTANT_STAKINGNEW_NEW3_ABI = window.CONSTANT_STAKINGNEW_ABI;
 window.CONSTANT_STAKING_NEWI3 = window.CONSTANT_STAKING_OLD_ABI;
 
@@ -3603,7 +3632,6 @@ window.BUYBACK_STAKINGBSC1_1_ABI = window.BUYBACK_STAKINGBSC1_1_ABI;
 window.BUYBACK_STAKINGBSC1_1_ABI = window.BUYBACK_STAKINGBSC1_2_ABI;
 
 async function getTokenHolderBalanceAll(holder, token_address, network) {
-  
   if (network == 1) {
     let tokenContract = new window.infuraWeb3.eth.Contract(
       window.TOKEN_ABI,
@@ -32195,10 +32223,12 @@ Object.keys(window.config)
       k.startsWith("constant_stakingidyp_2") ||
       k.startsWith("constant_stakingidyp_1") ||
       k.startsWith("constant_stakingnew_new2") ||
+      k.startsWith("constant_staking_dypius_eth1") ||
       k.startsWith("constant_stakingidypavax_3") ||
       k.startsWith("constant_stakingidypavax_4") ||
       k.startsWith("constant_stakingidypavax_40") ||
       k.startsWith("constant_stakingidypavax_50") ||
+      k.startsWith("constant_staking_dypius_avax1") ||
       k.startsWith("constant_stakingnew_newavax1") ||
       k.startsWith("constant_stakingnewbsc_new3") ||
       k.startsWith("constant_stakingnewbsc_new4") ||
@@ -32213,6 +32243,7 @@ Object.keys(window.config)
       k.startsWith("constant_stakingbsc_new12") ||
       k.startsWith("constant_stakingbsc_new13") ||
       k.startsWith("constant_stakingbsc_new14") ||
+      k.startsWith("constant_staking_dypius_bsc1") ||
       k.startsWith("constant_stakingnew_newavax2") ||
       k.startsWith("constant_stakingdaiavax") ||
       k.startsWith("constant_stakingdaieth") ||
@@ -32393,11 +32424,15 @@ Object.keys(window.config)
       ? window.CONSTANT_STAKING_IDYP_ABI
       : k.startsWith("constant_stakingnew_new2")
       ? window.CONSTANT_STAKINGNEW_ABI
+      : k.startsWith("constant_staking_dypius_eth1")
+      ? window.CONSTANT_STAKINGNEW_ABI
       : k.startsWith("constant_stakingidypavax_4")
       ? window.CONSTANT_STAKING_IDYP_ABI
       : k.startsWith("constant_stakingidypavax_40")
       ? window.CONSTANT_STAKING_IDYP_ABI
       : k.startsWith("constant_stakingidypavax_50")
+      ? window.CONSTANT_STAKING_IDYP_ABI
+      : k.startsWith("constant_staking_dypius_avax1")
       ? window.CONSTANT_STAKING_IDYP_ABI
       : k.startsWith("constant_stakingnew_newavax1")
       ? window.CONSTANT_STAKINGNEW_ABI
@@ -32430,6 +32465,8 @@ Object.keys(window.config)
       : k.startsWith("constant_stakingbsc_new13")
       ? window.CONSTANT_STAKINGBSC_NEW_ABI
       : k.startsWith("constant_stakingbsc_new14")
+      ? window.CONSTANT_STAKING_OLD_ABI
+      : k.startsWith("constant_staking_dypius_bsc1")
       ? window.CONSTANT_STAKING_OLD_ABI
       : k.startsWith("constant_stakingnew_newavax2")
       ? window.CONSTANT_STAKINGNEW_ABI
