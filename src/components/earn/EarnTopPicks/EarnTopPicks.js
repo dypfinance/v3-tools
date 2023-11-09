@@ -216,7 +216,9 @@ const EarnTopPicks = ({
       eth_result2 &&
       eth_result2.status === 200
     ) {
-      const dypIdyp = eth_result.data.stakingInfoiDYPEth;
+      const dypIdyp = eth_result.data.stakingInfoiDYPEth.concat(
+        eth_result.data.stakingInfoDYPEth
+      );
       const dypData = eth_result2.data.stakingInfoDYPEth;
 
       const expiredEth = dypIdyp.filter((item) => {
@@ -328,7 +330,9 @@ const EarnTopPicks = ({
       avax_result2 &&
       avax_result2.status === 200
     ) {
-      const dypIdypAvax = avax_result.data.stakingInfoiDYPAvax;
+      const dypIdypAvax = avax_result.data.stakingInfoiDYPAvax.concat(
+        avax_result.data.stakingInfoiDYPAvax
+      );
       const dypAvax = avax_result2.data.stakingInfoDYPAvax;
 
       const expiredAvax = dypIdypAvax.filter((item) => {
