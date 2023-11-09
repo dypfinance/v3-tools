@@ -138,7 +138,7 @@ const StakeDypiusBsc = ({
     }
   };
 
-  const [token_balance, settoken_balance] = useState("...");
+  const [token_balance, settoken_balance] = useState(0);
   const [pendingDivs, setpendingDivs] = useState("");
   const [totalEarnedTokens, settotalEarnedTokens] = useState("");
   const [cliffTime, setcliffTime] = useState("");
@@ -282,10 +282,14 @@ const StakeDypiusBsc = ({
         ]);
 
         //console.log({tvl, tvlConstantiDYP, _amountOutMin})
+        const dypprice = await axios.get('https://api.geckoterminal.com/api/v2/networks/eth/pools/0x7c81087310a228470db28c1068f0663d6bf88679').then((res)=>{
+            return res.data.data.attributes.base_token_price_usd
+        }).catch((e)=>{console.log(e)})
 
+ 
         let usdValueDAI = new BigNumber(tvlConstantDAI).toFixed(18);
         let usd_per_lp = lp_data
-          ? lp_data[window.reward_token_dypius_bsc["_address"]].token_price_usd
+          ? dypprice
           : 0;
         let tvlUSD = new BigNumber(tvl)
           .times(usd_per_lp)
@@ -512,9 +516,7 @@ const StakeDypiusBsc = ({
   };
 
   const handleSetMaxDeposit = (e) => {
-    // e.preventDefault();
     const depositAmount = token_balance;
-    console.log(depositAmount);
     checkApproval(depositAmount);
     setdepositAmount(depositAmount);
   };

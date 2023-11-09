@@ -69,8 +69,13 @@ const StakeDypiusEth = ({
   fee,
   renderedPage,
 }) => {
-  let { reward_token_dypius_eth, BigNumber, alertify, reward_token_idyp, token_dyps } =
-    window;
+  let {
+    reward_token_dypius_eth,
+    BigNumber,
+    alertify,
+    reward_token_idyp,
+    token_dyps,
+  } = window;
   let token_symbol = "DYP";
 
   // token, staking
@@ -131,7 +136,7 @@ const StakeDypiusEth = ({
     }
   };
 
-  const [token_balance, settoken_balance] = useState("...");
+  const [token_balance, settoken_balance] = useState(0);
   const [pendingDivs, setpendingDivs] = useState("");
   const [totalEarnedTokens, settotalEarnedTokens] = useState("");
   const [cliffTime, setcliffTime] = useState("");
@@ -265,12 +270,12 @@ const StakeDypiusEth = ({
       _amountOutMin = _amountOutMin[_amountOutMin.length - 1];
       _amountOutMin = new BigNumber(_amountOutMin).div(1e6).toFixed(18);
 
-      let _bal
-      if (chainId === "1" && coinbase!==undefined && coinbase!==null) {
-       
-       _bal = reward_token_dypius_eth.balanceOf(coinbase);
+      let _bal;
+      if (chainId === "1" && coinbase && is_wallet_connected) {
+        _bal = reward_token_dypius_eth.balanceOf(coinbase);
+        console.log(_bal);
       }
-      if (staking && coinbase!==undefined && coinbase!==null) {
+      if (staking && coinbase !== undefined && coinbase !== null) {
         let _pDivs = staking.getTotalPendingDivs(coinbase);
 
         let _tEarned = staking.totalEarnedTokens(coinbase);
@@ -300,7 +305,7 @@ const StakeDypiusEth = ({
           referralFeeEarned,
           total_stakers,
           tvlConstantiDYP,
-        //   tvlDYPS,
+          //   tvlDYPS,
         ] = await Promise.all([
           _bal,
           _pDivs,
@@ -312,27 +317,37 @@ const StakeDypiusEth = ({
           _rFeeEarned,
           tStakers,
           _tvlConstantiDYP,
-        //   _tvlDYPS,
+          //   _tvlDYPS,
         ]);
 
         //console.log({tvl, tvlConstantiDYP, _amountOutMin})
+        const dypprice = await axios
+          .get(
+            "https://api.geckoterminal.com/api/v2/networks/eth/pools/0x7c81087310a228470db28c1068f0663d6bf88679"
+          )
+          .then((res) => {
+            return res.data.data.attributes.base_token_price_usd;
+          })
+          .catch((e) => {
+            console.log(e);
+          });
 
         let usdValueiDYP = new BigNumber(tvlConstantiDYP)
           .times(_amountOutMin)
           .toFixed(18);
         let usdValueDYPS = 0;
-        let usd_per_lp = lp_data
-          ? lp_data[window.reward_token_dypius_eth["_address"]].token_price_usd
-          : 0;
+        let usd_per_lp = lp_data ? dypprice : 0;
         let tvlUSD = new BigNumber(tvl)
           .times(usd_per_lp)
           .plus(usdValueiDYP)
           .plus(usdValueDYPS)
           .toFixed(18);
         settvlusd(tvlUSD);
-
-        let balance_formatted = new BigNumber(token_balance ).div(1e18).toString(10)
-        settoken_balance(balance_formatted) ;
+ 
+        let balance_formatted = new BigNumber(token_balance ?? 0)
+          .div(1e18)
+          .toString(10);
+        settoken_balance(balance_formatted);
 
         let divs_formatted = new BigNumber(pendingDivs).div(1e18).toFixed(6);
         setpendingDivs(divs_formatted);
@@ -344,7 +359,9 @@ const StakeDypiusEth = ({
 
         setstakingTime(stakingTime);
 
-        let depositedTokens_formatted = new BigNumber(depositedTokens).div(1e18).toString(10)
+        let depositedTokens_formatted = new BigNumber(depositedTokens)
+          .div(1e18)
+          .toString(10);
 
         setdepositedTokens(depositedTokens_formatted);
 
@@ -396,16 +413,13 @@ const StakeDypiusEth = ({
     refreshBalance();
     if (depositAmount !== "") {
       checkApproval(depositAmount);
-
     }
-  }, [coinbase, coinbase2, staking]);
+  }, [coinbase, coinbase2, staking, is_wallet_connected]);
 
   useEffect(() => {
-      setdepositAmount('');
-      setdepositStatus('initial')
-
-  }, [ staking]);
-
+    setdepositAmount("");
+    setdepositStatus("initial");
+  }, [staking]);
 
   const getTotalTvl = async () => {
     if (the_graph_result) {
@@ -465,8 +479,8 @@ const StakeDypiusEth = ({
         }, 10000);
       });
   };
-// console.log(staking)
-const handleStake = async (e) => {
+  // console.log(staking)
+  const handleStake = async (e) => {
     setdepositLoading(true);
 
     if (other_info) {
@@ -507,7 +521,7 @@ const handleStake = async (e) => {
 
   const handleWithdraw = async (e) => {
     // e.preventDefault();
-    let amount = new BigNumber(withdrawAmount).times(1e18).toFixed(0)
+    let amount = new BigNumber(withdrawAmount).times(1e18).toFixed(0);
     setwithdrawLoading(true);
 
     let deadline = Math.floor(
@@ -606,18 +620,20 @@ const handleStake = async (e) => {
 
   const handleSetMaxDeposit = (e) => {
     const depositAmount = token_balance;
-    checkApproval(token_balance);
-
+    checkApproval(depositAmount);
+    setdepositAmount(depositAmount);
   };
 
   const handleSetMaxWithdraw = async (e) => {
     // e.preventDefault();
     let amount;
-    await staking.depositedTokens(coinbase).then((data)=>{
-      amount = data
-    })
+    await staking.depositedTokens(coinbase).then((data) => {
+      amount = data;
+    });
 
-    let depositedTokens_formatted = new BigNumber(amount).div(1e18).toString(10)
+    let depositedTokens_formatted = new BigNumber(amount)
+      .div(1e18)
+      .toString(10);
     setwithdrawAmount(depositedTokens_formatted);
   };
 
@@ -793,7 +809,7 @@ const handleStake = async (e) => {
   }
   if (!isNaN(cliffTime) && !isNaN(stakingTime)) {
     if (
-      (Number(stakingTime) + Number(cliffTime) >= Date.now()/1000) &&
+      Number(stakingTime) + Number(cliffTime) >= Date.now() / 1000 &&
       lockTime !== "No Lock"
     ) {
       canWithdraw = false;
@@ -811,7 +827,11 @@ const handleStake = async (e) => {
 
   const checkApproval = async (amount) => {
     const result = await window
-      .checkapproveStakePool(coinbase, reward_token_dypius_eth._address, staking._address)
+      .checkapproveStakePool(
+        coinbase,
+        reward_token_dypius_eth._address,
+        staking._address
+      )
       .then((data) => {
         console.log(data);
         return data;
@@ -1274,15 +1294,19 @@ const handleStake = async (e) => {
                         /> */}
                   </div>
                   <div className="claim-reinvest-container d-flex justify-content-between align-items-center gap-3">
-                  <button
+                    <button
                       disabled={
-                        claimStatus === "claimed" || claimStatus === "success" || pendingDivs <= 0
+                        claimStatus === "claimed" ||
+                        claimStatus === "success" ||
+                        pendingDivs <= 0
                           ? //
                             true
                           : false
                       }
                       className={`btn filledbtn ${
-                        claimStatus === "claimed" && claimStatus === "initial" ||  pendingDivs <= 0
+                        (claimStatus === "claimed" &&
+                          claimStatus === "initial") ||
+                        pendingDivs <= 0
                           ? //
                             "disabled-btn"
                           : claimStatus === "failed"
@@ -1294,10 +1318,11 @@ const handleStake = async (e) => {
                       style={{ height: "fit-content" }}
                       // onClick={handleClaimDivs}
                       onClick={() => {
-                        expired ? 
-                        window.$.alert(
-                          "*The rewards earned from the day of the migration until the end of the lock time will be distributed to the users automatically at the end of the contract."
-                        ) : handleClaimDivs()
+                        expired
+                          ? window.$.alert(
+                              "*The rewards earned from the day of the migration until the end of the lock time will be distributed to the users automatically at the end of the contract."
+                            )
+                          : handleClaimDivs();
                       }}
                     >
                       {claimLoading ? (
@@ -1486,7 +1511,7 @@ const handleStake = async (e) => {
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">My DYP Deposit</span>
                     <h6 className="stats-card-content">
-                    {getFormattedNumber(depositedTokens,6)} DYP
+                      {getFormattedNumber(depositedTokens, 6)} DYP
                     </h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
@@ -1694,7 +1719,7 @@ const handleStake = async (e) => {
                     <div className="d-flex flex-column gap-1">
                       <h6 className="withsubtitle">Balance</h6>
                       <h6 className="withtitle">
-                      {getFormattedNumber(depositedTokens,6)} {token_symbol}
+                        {getFormattedNumber(depositedTokens, 6)} {token_symbol}
                       </h6>
                     </div>
                   </div>
@@ -1846,7 +1871,10 @@ const handleStake = async (e) => {
         <WalletModal
           show={show}
           handleClose={hideModal}
-          handleConnection={()=>{handleConnection(); setshow(false)}}
+          handleConnection={() => {
+            handleConnection();
+            setshow(false);
+          }}
         />
       )}
       {/* <div

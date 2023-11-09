@@ -270,10 +270,13 @@ const StakeDypiusAvax = ({
       ]);
 
       //console.log({tvl, tvlConstantiDYP, _amountOutMin})
+      const dypprice = await axios.get('https://api.geckoterminal.com/api/v2/networks/eth/pools/0x7c81087310a228470db28c1068f0663d6bf88679').then((res)=>{
+        return res.data.data.attributes.base_token_price_usd
+    }).catch((e)=>{console.log(e)})
 
       let usdValueDAI = new BigNumber(tvlConstantDAI).toFixed(18);
       let usd_per_lp = lp_data
-        ? lp_data[window.reward_token_dypius_bsc["_address"]].token_price_usd
+        ? dypprice
         : 0;
 
       let tvlUSD = new BigNumber(tvl)
@@ -500,8 +503,7 @@ settvlUSD(tvlUSD)
 
   const handleSetMaxDeposit = () => {
     const depositAmount = token_balance;
-    checkApproval(token_balance);
-
+    checkApproval(depositAmount);
     setdepositAmount(depositAmount);
   };
 
