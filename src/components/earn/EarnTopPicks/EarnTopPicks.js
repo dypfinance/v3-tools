@@ -1763,10 +1763,10 @@ const EarnTopPicks = ({
                         }
                         apr={pool.apy_percent + "%"}
                         tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
+                          pool.tvl_usd === "--"
+                            ? pool.tvl_usd
+                            : "$" + getFormattedNumber(pool.tvl_usd)
+                        }
                         lockTime={
                           pool.lock_time ? pool.lock_time : locktimeFarm[index]
                         }
@@ -2045,10 +2045,10 @@ const EarnTopPicks = ({
                         }
                         apr={pool.apy + "%"}
                         tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
+                          pool.tvl_usd === "--"
+                            ? pool.tvl_usd
+                            : "$" + getFormattedNumber(pool.tvl_usd)
+                        }
                         lockTime={
                           pool.lock_time ? pool.lock_time : locktimeFarm[index]
                         }
@@ -2440,10 +2440,10 @@ const EarnTopPicks = ({
                         }
                         apr={pool.apy_percent + "%"}
                         tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
+                          pool.tvl_usd === "--"
+                            ? pool.tvl_usd
+                            : "$" + getFormattedNumber(pool.tvl_usd)
+                        }
                         lockTime={
                           pool.lockTime
                             ? pool.lockTime
@@ -2854,8 +2854,7 @@ const EarnTopPicks = ({
                   />
                 ) : activeCard &&
                   topList === "Farming" &&
-                  chain === "avax" ? //   liquidity={wbnb_address} //   handleSwitchNetwork={handleSwitchNetwork} //   expired={false} //   handleConnection={handleConnection} //   chainId={chainId} //   lp_id={LP_IDAVAX_Array[cardIndex]} //   the_graph_result={the_graph_resultavax} //   coinbase={coinbase} //   is_wallet_connected={isConnected} //   <FarmAvaxFunc
-                //   constant={window.farming_activeavax_1}
+                  chain === "avax" ? //   constant={window.farming_activeavax_1} //   liquidity={wbnb_address} //   handleSwitchNetwork={handleSwitchNetwork} //   expired={false} //   handleConnection={handleConnection} //   chainId={chainId} //   lp_id={LP_IDAVAX_Array[cardIndex]} //   the_graph_result={the_graph_resultavax} //   coinbase={coinbase} //   is_wallet_connected={isConnected} //   <FarmAvaxFunc
                 //   staking={window.constant_staking_newavaxactive1}
                 //   token={window.token_newavax}
                 //   lp_symbol={"USD"}
@@ -2943,10 +2942,10 @@ const EarnTopPicks = ({
                         }
                         apr={pool.apy_percent + "%"}
                         tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
+                          pool.tvl_usd === "--"
+                            ? pool.tvl_usd
+                            : "$" + getFormattedNumber(pool.tvl_usd)
+                        }
                         lockTime={
                           pool.lockTime
                             ? pool.lockTime
@@ -3341,10 +3340,10 @@ const EarnTopPicks = ({
                         }
                         apr={pool.apy_percent + "%"}
                         tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
+                          pool.tvl_usd === "--"
+                            ? pool.tvl_usd
+                            : "$" + getFormattedNumber(pool.tvl_usd)
+                        }
                         lockTime={
                           pool.lockTime
                             ? pool.lockTime
@@ -3727,10 +3726,10 @@ const EarnTopPicks = ({
                       }
                       apr={pool.apy_percent + "%"}
                       tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
+                        pool.tvl_usd === "--"
+                          ? pool.tvl_usd
+                          : "$" + getFormattedNumber(pool.tvl_usd)
+                      }
                       lockTime={
                         pool.lockTime
                           ? pool.lockTime
@@ -4077,10 +4076,10 @@ const EarnTopPicks = ({
                         }
                         apr={pool.apy_percent + "%"}
                         tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
+                          pool.tvl_usd === "--"
+                            ? pool.tvl_usd
+                            : "$" + getFormattedNumber(pool.tvl_usd)
+                        }
                         lockTime={
                           pool.lockTime
                             ? pool.lockTime
@@ -4427,10 +4426,10 @@ const EarnTopPicks = ({
                         }
                         apr={pool.apy_percent + "%"}
                         tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
+                          pool.tvl_usd === "--"
+                            ? pool.tvl_usd
+                            : "$" + getFormattedNumber(pool.tvl_usd)
+                        }
                         lockTime={
                           pool.lockTime
                             ? pool.lockTime
@@ -4944,10 +4943,10 @@ const EarnTopPicks = ({
                         }
                         apr={pool.apy_percent + "%"}
                         tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
+                          pool.tvl_usd === "--"
+                            ? pool.tvl_usd
+                            : "$" + getFormattedNumber(pool.tvl_usd)
+                        }
                         lockTime={
                           pool.lockTime
                             ? pool.lockTime
@@ -5362,8 +5361,8 @@ const EarnTopPicks = ({
                     />
                   ) : activeCard &&
                     topList === "Farming" &&
-                    chain === "avax" ? //   liquidity={wbnb_address} //   handleSwitchNetwork={handleSwitchNetwork} //   expired={false} //   handleConnection={handleConnection} //   chainId={chainId} //   lp_id={LP_IDAVAX_Array[cardIndex]} //   the_graph_result={the_graph_resultavax} //   coinbase={coinbase} //   is_wallet_connected={isConnected} //   <FarmAvaxFunc
-                  //   constant={window.farming_activeavax_1}
+                    chain ===
+                      "avax" ? //   constant={window.farming_activeavax_1} //   liquidity={wbnb_address} //   handleSwitchNetwork={handleSwitchNetwork} //   expired={false} //   handleConnection={handleConnection} //   chainId={chainId} //   lp_id={LP_IDAVAX_Array[cardIndex]} //   the_graph_result={the_graph_resultavax} //   coinbase={coinbase} //   is_wallet_connected={isConnected} //   <FarmAvaxFunc
                   //   staking={window.constant_staking_newavaxactive1}
                   //   token={window.token_newavax}
                   //   lp_symbol={"USD"}
@@ -5427,10 +5426,10 @@ const EarnTopPicks = ({
                         }
                         apr={pool.apy_percent + "%"}
                         tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
+                          pool.tvl_usd === "--"
+                            ? pool.tvl_usd
+                            : "$" + getFormattedNumber(pool.tvl_usd)
+                        }
                         lockTime={
                           pool.lockTime
                             ? pool.lockTime
@@ -5735,10 +5734,10 @@ const EarnTopPicks = ({
                         }
                         apr={pool.apy_percent + "%"}
                         tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
+                          pool.tvl_usd === "--"
+                            ? pool.tvl_usd
+                            : "$" + getFormattedNumber(pool.tvl_usd)
+                        }
                         lockTime={
                           pool.lockTime
                             ? pool.lockTime
@@ -6032,10 +6031,10 @@ const EarnTopPicks = ({
                         }
                         apr={pool.apy_percent + "%"}
                         tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
+                          pool.tvl_usd === "--"
+                            ? pool.tvl_usd
+                            : "$" + getFormattedNumber(pool.tvl_usd)
+                        }
                         lockTime={
                           pool.lockTime
                             ? pool.lockTime
@@ -6388,10 +6387,10 @@ const EarnTopPicks = ({
                         }
                         apr={pool.apy_percent + "%"}
                         tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
+                          pool.tvl_usd === "--"
+                            ? pool.tvl_usd
+                            : "$" + getFormattedNumber(pool.tvl_usd)
+                        }
                         lockTime={
                           pool.lockTime
                             ? pool.lockTime
@@ -6685,10 +6684,10 @@ const EarnTopPicks = ({
                         }
                         apr={pool.apy_percent + "%"}
                         tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
+                          pool.tvl_usd === "--"
+                            ? pool.tvl_usd
+                            : "$" + getFormattedNumber(pool.tvl_usd)
+                        }
                         lockTime={
                           pool.lockTime
                             ? pool.lockTime
@@ -7073,10 +7072,10 @@ const EarnTopPicks = ({
                         }
                         apr={pool.apy_percent + "%"}
                         tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
+                          pool.tvl_usd === "--"
+                            ? pool.tvl_usd
+                            : "$" + getFormattedNumber(pool.tvl_usd)
+                        }
                         lockTime={
                           pool.lockTime
                             ? pool.lockTime
@@ -7308,10 +7307,10 @@ const EarnTopPicks = ({
                   }
                   apr={pool.apy_percent + "%"}
                   tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
+                    pool.tvl_usd === "--"
+                      ? pool.tvl_usd
+                      : "$" + getFormattedNumber(pool.tvl_usd)
+                  }
                   lockTime={
                     pool.lockTime
                       ? pool.lockTime
@@ -7433,10 +7432,10 @@ const EarnTopPicks = ({
                       tokenName={pool.pair_name}
                       apr={pool.apy_percent + "%"}
                       tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
+                        pool.tvl_usd === "--"
+                          ? pool.tvl_usd
+                          : "$" + getFormattedNumber(pool.tvl_usd)
+                      }
                       lockTime={
                         pool.lock_time ? pool.lock_time : locktimeFarm[index]
                       }
@@ -8171,7 +8170,7 @@ const EarnTopPicks = ({
                 chain === "bnb" ? (
                 <StakeBsc
                   lp_id={LP_IDBNB_Array[cardIndex]}
-                  staking={window.constant_stakingbsc_new11}
+                  staking={window.constant_stakingbsc_new111}
                   apr={expiredDYPPools[cardIndex]?.apy_percent}
                   liquidity={wbsc_address}
                   expiration_time={"5 August 2023"}
@@ -8223,7 +8222,7 @@ const EarnTopPicks = ({
                 chain === "bnb" ? (
                 <StakeBsc
                   lp_id={LP_IDBNB_Array[cardIndex]}
-                  staking={window.constant_stakingbsc_new11}
+                  staking={window.constant_stakingbsc_new14}
                   apr={expiredDYPPools[cardIndex]?.apy_percent}
                   liquidity={wbsc_address}
                   expiration_time={"5 August 2023"}
@@ -9031,10 +9030,10 @@ const EarnTopPicks = ({
                       pool.apy_percent ? pool.apy_percent + "%" : pool.apy + "%"
                     }
                     tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
+                      pool.tvl_usd === "--"
+                        ? pool.tvl_usd
+                        : "$" + getFormattedNumber(pool.tvl_usd)
+                    }
                     lockTime={
                       pool.lock_time
                         ? pool.lock_time
@@ -9711,7 +9710,7 @@ const EarnTopPicks = ({
               chain === "bnb" ? (
               <StakeBsc
                 lp_id={LP_IDBNB_Array[cardIndex]}
-                staking={window.constant_stakingbsc_new11}
+                staking={window.constant_stakingbsc_new111}
                 apr={expiredDYPPools[cardIndex]?.apy_percent}
                 liquidity={wbsc_address}
                 expiration_time={"5 August 2023"}
@@ -9762,7 +9761,7 @@ const EarnTopPicks = ({
               chain === "bnb" ? (
               <StakeBsc
                 lp_id={LP_IDBNB_Array[cardIndex]}
-                staking={window.constant_stakingbsc_new11}
+                staking={window.constant_stakingbsc_new14}
                 apr={expiredDYPPools[cardIndex]?.apy_percent}
                 liquidity={wbsc_address}
                 expiration_time={"5 August 2023"}
@@ -10583,10 +10582,10 @@ const EarnTopPicks = ({
                       pool.apy_percent ? pool.apy_percent + "%" : pool.apy + "%"
                     }
                     tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
+                      pool.tvl_usd === "--"
+                        ? pool.tvl_usd
+                        : "$" + getFormattedNumber(pool.tvl_usd)
+                    }
                     lockTime={
                       pool.lock_time ? pool.lock_time : locktimeFarm[index]
                     }
@@ -10897,7 +10896,7 @@ const EarnTopPicks = ({
               chain === "bnb" ? (
               <StakeBsc
                 lp_id={LP_IDBNB_Array[cardIndex]}
-                staking={window.constant_stakingbsc_new11}
+                staking={window.constant_stakingbsc_new111}
                 apr={expiredDYPPools[cardIndex]?.apy_percent}
                 liquidity={wbsc_address}
                 expiration_time={"5 August 2023"}
@@ -10948,7 +10947,7 @@ const EarnTopPicks = ({
               chain === "bnb" ? (
               <StakeBsc
                 lp_id={LP_IDBNB_Array[cardIndex]}
-                staking={window.constant_stakingbsc_new11}
+                staking={window.constant_stakingbsc_new14}
                 apr={expiredDYPPools[cardIndex]?.apy_percent}
                 liquidity={wbsc_address}
                 expiration_time={"5 August 2023"}
@@ -12150,10 +12149,10 @@ const EarnTopPicks = ({
                     }
                     apr={pool.apy + "%"}
                     tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
+                      pool.tvl_usd === "--"
+                        ? pool.tvl_usd
+                        : "$" + getFormattedNumber(pool.tvl_usd)
+                    }
                     lockTime={
                       pool.lock_time ? pool.lock_time : locktimeFarm[index]
                     }
@@ -12396,7 +12395,7 @@ const EarnTopPicks = ({
               chain === "bnb" ? (
               <StakeBsc
                 lp_id={LP_IDBNB_Array[cardIndex]}
-                staking={window.constant_stakingbsc_new11}
+                staking={window.constant_stakingbsc_new111}
                 apr={expiredDYPPools[cardIndex]?.apy_percent}
                 liquidity={wbsc_address}
                 expiration_time={"5 August 2023"}
@@ -12447,7 +12446,7 @@ const EarnTopPicks = ({
               chain === "bnb" ? (
               <StakeBsc
                 lp_id={LP_IDBNB_Array[cardIndex]}
-                staking={window.constant_stakingbsc_new11}
+                staking={window.constant_stakingbsc_new14}
                 apr={expiredDYPPools[cardIndex]?.apy_percent}
                 liquidity={wbsc_address}
                 expiration_time={"5 August 2023"}
@@ -13029,10 +13028,10 @@ const EarnTopPicks = ({
                     }
                     apr={pool.apy_percent + "%"}
                     tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
+                      pool.tvl_usd === "--"
+                        ? pool.tvl_usd
+                        : "$" + getFormattedNumber(pool.tvl_usd)
+                    }
                     lockTime={
                       pool.lockTime
                         ? pool.lockTime
@@ -13345,7 +13344,7 @@ const EarnTopPicks = ({
               chain === "bnb" ? (
               <StakeBsc
                 lp_id={LP_IDBNB_Array[cardIndex]}
-                staking={window.constant_stakingbsc_new11}
+                staking={window.constant_stakingbsc_new111}
                 apr={expiredDYPPools[cardIndex]?.apy_percent}
                 liquidity={wbsc_address}
                 expiration_time={"5 August 2023"}
@@ -13396,7 +13395,7 @@ const EarnTopPicks = ({
               chain === "bnb" ? (
               <StakeBsc
                 lp_id={LP_IDBNB_Array[cardIndex]}
-                staking={window.constant_stakingbsc_new11}
+                staking={window.constant_stakingbsc_new14}
                 apr={expiredDYPPools[cardIndex]?.apy_percent}
                 liquidity={wbsc_address}
                 expiration_time={"5 August 2023"}
@@ -14581,10 +14580,10 @@ const EarnTopPicks = ({
                     }
                     apr={pool.apy_percent + "%"}
                     tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
+                      pool.tvl_usd === "--"
+                        ? pool.tvl_usd
+                        : "$" + getFormattedNumber(pool.tvl_usd)
+                    }
                     lockTime={
                       pool.lockTime
                         ? pool.lockTime
@@ -14884,7 +14883,7 @@ const EarnTopPicks = ({
               chain === "bnb" ? (
               <StakeBsc
                 lp_id={LP_IDBNB_Array[cardIndex]}
-                staking={window.constant_stakingbsc_new11}
+                staking={window.constant_stakingbsc_new111}
                 apr={expiredDYPPools[cardIndex]?.apy_percent}
                 liquidity={wbsc_address}
                 expiration_time={"5 August 2023"}
@@ -14935,7 +14934,7 @@ const EarnTopPicks = ({
               chain === "bnb" ? (
               <StakeBsc
                 lp_id={LP_IDBNB_Array[cardIndex]}
-                staking={window.constant_stakingbsc_new11}
+                staking={window.constant_stakingbsc_new14}
                 apr={expiredDYPPools[cardIndex]?.apy_percent}
                 liquidity={wbsc_address}
                 expiration_time={"5 August 2023"}
@@ -16120,10 +16119,10 @@ const EarnTopPicks = ({
                     }
                     apr={pool.apy_percent + "%"}
                     tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
+                      pool.tvl_usd === "--"
+                        ? pool.tvl_usd
+                        : "$" + getFormattedNumber(pool.tvl_usd)
+                    }
                     lockTime={
                       pool.lockTime
                         ? pool.lockTime
@@ -16419,7 +16418,7 @@ const EarnTopPicks = ({
               chain === "bnb" ? (
               <StakeBsc
                 lp_id={LP_IDBNB_Array[cardIndex]}
-                staking={window.constant_stakingbsc_new11}
+                staking={window.constant_stakingbsc_new111}
                 apr={expiredDYPPools[cardIndex]?.apy_percent}
                 liquidity={wbsc_address}
                 expiration_time={"5 August 2023"}
@@ -16470,7 +16469,7 @@ const EarnTopPicks = ({
               chain === "bnb" ? (
               <StakeBsc
                 lp_id={LP_IDBNB_Array[cardIndex]}
-                staking={window.constant_stakingbsc_new11}
+                staking={window.constant_stakingbsc_new14}
                 apr={expiredDYPPools[cardIndex]?.apy_percent}
                 liquidity={wbsc_address}
                 expiration_time={"5 August 2023"}
@@ -17655,10 +17654,10 @@ const EarnTopPicks = ({
                     }
                     apr={pool.apy_percent + "%"}
                     tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
+                      pool.tvl_usd === "--"
+                        ? pool.tvl_usd
+                        : "$" + getFormattedNumber(pool.tvl_usd)
+                    }
                     lockTime={
                       pool.lockTime
                         ? pool.lockTime
@@ -18132,7 +18131,7 @@ const EarnTopPicks = ({
               chain === "bnb" ? (
               <StakeBsc
                 lp_id={LP_IDBNB_Array[cardIndex]}
-                staking={window.constant_stakingbsc_new11}
+                staking={window.constant_stakingbsc_new111}
                 apr={expiredDYPPools[cardIndex]?.apy_percent}
                 liquidity={wbsc_address}
                 expiration_time={"5 August 2023"}
@@ -18183,7 +18182,7 @@ const EarnTopPicks = ({
               chain === "bnb" ? (
               <StakeBsc
                 lp_id={LP_IDBNB_Array[cardIndex]}
-                staking={window.constant_stakingbsc_new11}
+                staking={window.constant_stakingbsc_new14}
                 apr={expiredDYPPools[cardIndex]?.apy_percent}
                 liquidity={wbsc_address}
                 expiration_time={"5 August 2023"}
@@ -19134,10 +19133,10 @@ const EarnTopPicks = ({
                     }
                     apr={pool.apy_percent + "%"}
                     tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
+                      pool.tvl_usd === "--"
+                        ? pool.tvl_usd
+                        : "$" + getFormattedNumber(pool.tvl_usd)
+                    }
                     lockTime={
                       pool.lockTime
                         ? pool.lockTime
@@ -19660,7 +19659,7 @@ const EarnTopPicks = ({
               chain === "bnb" ? (
               <StakeBsc
                 lp_id={LP_IDBNB_Array[cardIndex]}
-                staking={window.constant_stakingbsc_new11}
+                staking={window.constant_stakingbsc_new111}
                 apr={expiredDYPPools[cardIndex]?.apy_percent}
                 liquidity={wbsc_address}
                 expiration_time={"5 August 2023"}
@@ -19711,7 +19710,7 @@ const EarnTopPicks = ({
               chain === "bnb" ? (
               <StakeBsc
                 lp_id={LP_IDBNB_Array[cardIndex]}
-                staking={window.constant_stakingbsc_new11}
+                staking={window.constant_stakingbsc_new14}
                 apr={expiredDYPPools[cardIndex]?.apy_percent}
                 liquidity={wbsc_address}
                 expiration_time={"5 August 2023"}
@@ -20171,10 +20170,10 @@ const EarnTopPicks = ({
                     }
                     apr={pool.apy_percent + "%"}
                     tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
+                      pool.tvl_usd === "--"
+                        ? pool.tvl_usd
+                        : "$" + getFormattedNumber(pool.tvl_usd)
+                    }
                     lockTime={
                       pool.lockTime
                         ? pool.lockTime
@@ -20548,7 +20547,7 @@ const EarnTopPicks = ({
               chain === "bnb" ? (
               <StakeBsc
                 lp_id={LP_IDBNB_Array[cardIndex]}
-                staking={window.constant_stakingbsc_new11}
+                staking={window.constant_stakingbsc_new111}
                 apr={expiredDYPPools[cardIndex]?.apy_percent}
                 liquidity={wbsc_address}
                 expiration_time={"5 August 2023"}
@@ -20599,7 +20598,7 @@ const EarnTopPicks = ({
               chain === "bnb" ? (
               <StakeBsc
                 lp_id={LP_IDBNB_Array[cardIndex]}
-                staking={window.constant_stakingbsc_new11}
+                staking={window.constant_stakingbsc_new14}
                 apr={expiredDYPPools[cardIndex]?.apy_percent}
                 liquidity={wbsc_address}
                 expiration_time={"5 August 2023"}
@@ -21141,10 +21140,10 @@ const EarnTopPicks = ({
                     }
                     apr={pool.apy_percent + "%"}
                     tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
+                      pool.tvl_usd === "--"
+                        ? pool.tvl_usd
+                        : "$" + getFormattedNumber(pool.tvl_usd)
+                    }
                     lockTime={
                       pool.lockTime
                         ? pool.lockTime
@@ -21450,7 +21449,7 @@ const EarnTopPicks = ({
                 chain === "bnb" ? (
                 <StakeBsc
                   lp_id={LP_IDBNB_Array[cardIndex]}
-                  staking={window.constant_stakingbsc_new11}
+                  staking={window.constant_stakingbsc_new111}
                   apr={expiredDYPPools[cardIndex]?.apy_percent}
                   liquidity={wbsc_address}
                   expiration_time={"5 August 2023"}
@@ -21502,7 +21501,7 @@ const EarnTopPicks = ({
                 chain === "bnb" ? (
                 <StakeBsc
                   lp_id={LP_IDBNB_Array[cardIndex]}
-                  staking={window.constant_stakingbsc_new11}
+                  staking={window.constant_stakingbsc_new14}
                   apr={expiredDYPPools[cardIndex]?.apy_percent}
                   liquidity={wbsc_address}
                   expiration_time={"5 August 2023"}
@@ -22708,10 +22707,10 @@ const EarnTopPicks = ({
                     }
                     apr={pool.apy_percent + "%"}
                     tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
+                      pool.tvl_usd === "--"
+                        ? pool.tvl_usd
+                        : "$" + getFormattedNumber(pool.tvl_usd)
+                    }
                     lockTime={
                       pool.lockTime
                         ? pool.lockTime
@@ -23017,7 +23016,7 @@ const EarnTopPicks = ({
                 chain === "bnb" ? (
                 <StakeBsc
                   lp_id={LP_IDBNB_Array[cardIndex]}
-                  staking={window.constant_stakingbsc_new11}
+                  staking={window.constant_stakingbsc_new111}
                   apr={expiredDYPPools[cardIndex]?.apy_percent}
                   liquidity={wbsc_address}
                   expiration_time={"5 August 2023"}
@@ -23069,7 +23068,7 @@ const EarnTopPicks = ({
                 chain === "bnb" ? (
                 <StakeBsc
                   lp_id={LP_IDBNB_Array[cardIndex]}
-                  staking={window.constant_stakingbsc_new11}
+                  staking={window.constant_stakingbsc_new14}
                   apr={expiredDYPPools[cardIndex]?.apy_percent}
                   liquidity={wbsc_address}
                   expiration_time={"5 August 2023"}
@@ -24275,10 +24274,10 @@ const EarnTopPicks = ({
                     }
                     apr={pool.apy_percent + "%"}
                     tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
+                      pool.tvl_usd === "--"
+                        ? pool.tvl_usd
+                        : "$" + getFormattedNumber(pool.tvl_usd)
+                    }
                     lockTime={
                       pool.lockTime
                         ? pool.lockTime
@@ -24584,7 +24583,7 @@ const EarnTopPicks = ({
                 chain === "bnb" ? (
                 <StakeBsc
                   lp_id={LP_IDBNB_Array[cardIndex]}
-                  staking={window.constant_stakingbsc_new11}
+                  staking={window.constant_stakingbsc_new111}
                   apr={expiredDYPPools[cardIndex]?.apy_percent}
                   liquidity={wbsc_address}
                   expiration_time={"5 August 2023"}
@@ -24636,7 +24635,7 @@ const EarnTopPicks = ({
                 chain === "bnb" ? (
                 <StakeBsc
                   lp_id={LP_IDBNB_Array[cardIndex]}
-                  staking={window.constant_stakingbsc_new11}
+                  staking={window.constant_stakingbsc_new14}
                   apr={expiredDYPPools[cardIndex]?.apy_percent}
                   liquidity={wbsc_address}
                   expiration_time={"5 August 2023"}
@@ -25842,10 +25841,10 @@ const EarnTopPicks = ({
                     }
                     apr={pool.apy_percent + "%"}
                     tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
+                      pool.tvl_usd === "--"
+                        ? pool.tvl_usd
+                        : "$" + getFormattedNumber(pool.tvl_usd)
+                    }
                     lockTime={
                       pool.lockTime
                         ? pool.lockTime
@@ -26103,7 +26102,7 @@ const EarnTopPicks = ({
                 chain === "bnb" ? (
                 <StakeBsc
                   lp_id={LP_IDBNB_Array[cardIndex]}
-                  staking={window.constant_stakingbsc_new11}
+                  staking={window.constant_stakingbsc_new111}
                   apr={expiredDYPPools[cardIndex]?.apy_percent}
                   liquidity={wbsc_address}
                   expiration_time={"5 August 2023"}
@@ -26155,7 +26154,7 @@ const EarnTopPicks = ({
                 chain === "bnb" ? (
                 <StakeBsc
                   lp_id={LP_IDBNB_Array[cardIndex]}
-                  staking={window.constant_stakingbsc_new11}
+                  staking={window.constant_stakingbsc_new14}
                   apr={expiredDYPPools[cardIndex]?.apy_percent}
                   liquidity={wbsc_address}
                   expiration_time={"5 August 2023"}
@@ -27409,10 +27408,10 @@ const EarnTopPicks = ({
                     }
                     apr={pool.apy_percent + "%"}
                     tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
+                      pool.tvl_usd === "--"
+                        ? pool.tvl_usd
+                        : "$" + getFormattedNumber(pool.tvl_usd)
+                    }
                     lockTime={
                       pool.lockTime
                         ? pool.lockTime
@@ -27670,7 +27669,7 @@ const EarnTopPicks = ({
                 chain === "bnb" ? (
                 <StakeBsc
                   lp_id={LP_IDBNB_Array[cardIndex]}
-                  staking={window.constant_stakingbsc_new11}
+                  staking={window.constant_stakingbsc_new111}
                   apr={expiredDYPPools[cardIndex]?.apy_percent}
                   liquidity={wbsc_address}
                   expiration_time={"5 August 2023"}
@@ -27722,7 +27721,7 @@ const EarnTopPicks = ({
                 chain === "bnb" ? (
                 <StakeBsc
                   lp_id={LP_IDBNB_Array[cardIndex]}
-                  staking={window.constant_stakingbsc_new11}
+                  staking={window.constant_stakingbsc_new14}
                   apr={expiredDYPPools[cardIndex]?.apy_percent}
                   liquidity={wbsc_address}
                   expiration_time={"5 August 2023"}
@@ -28976,10 +28975,10 @@ const EarnTopPicks = ({
                     }
                     apr={pool.apy_percent + "%"}
                     tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
+                      pool.tvl_usd === "--"
+                        ? pool.tvl_usd
+                        : "$" + getFormattedNumber(pool.tvl_usd)
+                    }
                     lockTime={
                       pool.lockTime
                         ? pool.lockTime
@@ -29237,7 +29236,7 @@ const EarnTopPicks = ({
                 chain === "bnb" ? (
                 <StakeBsc
                   lp_id={LP_IDBNB_Array[cardIndex]}
-                  staking={window.constant_stakingbsc_new11}
+                  staking={window.constant_stakingbsc_new111}
                   apr={expiredDYPPools[cardIndex]?.apy_percent}
                   liquidity={wbsc_address}
                   expiration_time={"5 August 2023"}
@@ -29289,7 +29288,7 @@ const EarnTopPicks = ({
                 chain === "bnb" ? (
                 <StakeBsc
                   lp_id={LP_IDBNB_Array[cardIndex]}
-                  staking={window.constant_stakingbsc_new11}
+                  staking={window.constant_stakingbsc_new14}
                   apr={expiredDYPPools[cardIndex]?.apy_percent}
                   liquidity={wbsc_address}
                   expiration_time={"5 August 2023"}
@@ -30525,10 +30524,10 @@ const EarnTopPicks = ({
                     }
                     apr={pool.apy_percent + "%"}
                     tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
+                      pool.tvl_usd === "--"
+                        ? pool.tvl_usd
+                        : "$" + getFormattedNumber(pool.tvl_usd)
+                    }
                     lockTime={
                       pool.lockTime
                         ? pool.lockTime
@@ -30786,7 +30785,7 @@ const EarnTopPicks = ({
                 chain === "bnb" ? (
                 <StakeBsc
                   lp_id={LP_IDBNB_Array[cardIndex]}
-                  staking={window.constant_stakingbsc_new11}
+                  staking={window.constant_stakingbsc_new111}
                   apr={expiredDYPPools[cardIndex]?.apy_percent}
                   liquidity={wbsc_address}
                   expiration_time={"5 August 2023"}
@@ -30838,7 +30837,7 @@ const EarnTopPicks = ({
                 chain === "bnb" ? (
                 <StakeBsc
                   lp_id={LP_IDBNB_Array[cardIndex]}
-                  staking={window.constant_stakingbsc_new11}
+                  staking={window.constant_stakingbsc_new14}
                   apr={expiredDYPPools[cardIndex]?.apy_percent}
                   liquidity={wbsc_address}
                   expiration_time={"5 August 2023"}
@@ -32074,10 +32073,10 @@ const EarnTopPicks = ({
                     }
                     apr={pool.apy_percent + "%"}
                     tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
+                      pool.tvl_usd === "--"
+                        ? pool.tvl_usd
+                        : "$" + getFormattedNumber(pool.tvl_usd)
+                    }
                     lockTime={
                       pool.lockTime
                         ? pool.lockTime
@@ -32335,7 +32334,7 @@ const EarnTopPicks = ({
                 chain === "bnb" ? (
                 <StakeBsc
                   lp_id={LP_IDBNB_Array[cardIndex]}
-                  staking={window.constant_stakingbsc_new11}
+                  staking={window.constant_stakingbsc_new111}
                   apr={expiredDYPPools[cardIndex]?.apy_percent}
                   liquidity={wbsc_address}
                   expiration_time={"5 August 2023"}
@@ -32387,7 +32386,7 @@ const EarnTopPicks = ({
                 chain === "bnb" ? (
                 <StakeBsc
                   lp_id={LP_IDBNB_Array[cardIndex]}
-                  staking={window.constant_stakingbsc_new11}
+                  staking={window.constant_stakingbsc_new14}
                   apr={expiredDYPPools[cardIndex]?.apy_percent}
                   liquidity={wbsc_address}
                   expiration_time={"5 August 2023"}
@@ -33628,10 +33627,10 @@ const EarnTopPicks = ({
                 }
                 apr={pool.apy_percent + "%"}
                 tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
+                  pool.tvl_usd === "--"
+                    ? pool.tvl_usd
+                    : "$" + getFormattedNumber(pool.tvl_usd)
+                }
                 lockTime={
                   pool.lockTime
                     ? pool.lockTime
@@ -33690,10 +33689,10 @@ const EarnTopPicks = ({
               }
               apr={pool.apy_percent + "%"}
               tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
+                pool.tvl_usd === "--"
+                  ? pool.tvl_usd
+                  : "$" + getFormattedNumber(pool.tvl_usd)
+              }
               lockTime={
                 pool.lockTime
                   ? pool.lockTime
