@@ -87,7 +87,7 @@ export default function initMigration({
         ethBalance: 0,
         bnbBalance: 0,
         avaxBalance: 0,
-        destinationChain: "",
+        destinationChainText: "",
       };
     }
     static propTypes = {
@@ -113,11 +113,11 @@ export default function initMigration({
           .then((data) => {
             if (data === "0x1") {
               this.setState({
-                destinationChain: "eth",
+                destinationChainText: "eth",
               });
             } else {
               this.setState({
-                destinationChain: "",
+                destinationChainText: "",
               });
             }
           });
@@ -205,6 +205,7 @@ export default function initMigration({
             this.setState({ depositLoading: false, depositStatus: "deposit" });
           })
           .catch((e) => {
+            console.log(e)
             this.setState({ depositLoading: false, depositStatus: "fail" });
             this.setState({ errorMsg: e?.message });
             setTimeout(() => {
@@ -308,7 +309,7 @@ export default function initMigration({
             ],
           })
           .then((data) => {
-            this.setState({ destinationChain: "eth" });
+            this.setState({ destinationChainText: "eth" });
           })
           .catch((err) => {
             console.log(err);
@@ -858,7 +859,7 @@ export default function initMigration({
                               : null
                           } d-flex justify-content-center align-items-center gap-2`}
                           onClick={() => {
-                            this.state.destinationChain === "eth"
+                            this.state.destinationChainText === "eth"
                               ? this.handleWithdraw()
                               : this.switchToEthereum();
                           }}
@@ -871,14 +872,14 @@ export default function initMigration({
                               <span class="visually-hidden">Loading...</span>
                             </div>
                           ) : this.state.withdrawStatus === "initial" &&
-                            this.state.destinationChain === "eth" &&
+                            this.state.destinationChainText === "eth" &&
                             this.state.txHash !== "" ? (
                             <>Withdraw</>
                           ) : this.state.withdrawStatus === "initial" &&
                             this.state.txHash === "" ? (
                             <>Withdraw</>
                           ) : this.state.withdrawStatus === "initial" &&
-                            this.state.destinationChain !== "eth" ? (
+                            this.state.destinationChainText !== "eth" ? (
                             <>Switch to Ethereum</>
                           ) : this.state.withdrawStatus === "success" ? (
                             <>Success</>

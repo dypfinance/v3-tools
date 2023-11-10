@@ -652,6 +652,7 @@ class CONSTANT_STAKING_NEW {
     ].forEach((fn_name) => {
       this[fn_name] = async function (...args) {
         let contract = await getContract({ key: this.ticker });
+
         return await contract.methods[fn_name](...args).call();
       };
     });
@@ -666,6 +667,110 @@ class CONSTANT_STAKING_NEW {
             value,
             gas,
             from: await getCoinbase(),
+            gasPrice: window.config.default_gasprice_gwei * 1e9,
+          });
+        };
+      }
+    );
+  }
+
+  async depositTOKEN(amount, referrer) {
+    let token_contract = await getContract({ key: this.token });
+    let staking_contract = await getContract({ key: this.ticker });
+    let batch = new window.web3.eth.BatchRequest();
+    batch.add(
+      token_contract.methods
+        .approve(staking_contract._address, amount)
+        .send.request({
+          gas: window.config.default_gas_amount,
+          from: await getCoinbase(),
+          gasPrice: window.config.default_gasprice_gwei * 1e9,
+        })
+    );
+    batch.add(
+      staking_contract.methods.deposit(amount, referrer).send.request({
+        gas: window.config.default_gas_amount,
+        from: await getCoinbase(),
+        gasPrice: window.config.default_gasprice_gwei * 1e9,
+      })
+    );
+    return batch.execute();
+  }
+}
+
+class CONSTANT_STAKING_DYPIUS {
+  constructor(
+    ticker = "CONSTANT_STAKING_DYPIUS",
+    token = "REWARD_TOKEN_DYPIUS_ETH"
+  ) {
+    this.ticker = ticker;
+    this.token = token;
+    let address = window.config[ticker.toLowerCase() + "_address"];
+    this._address = address;
+    [
+      "owner",
+      "depositedTokens",
+      "stakingTime",
+      "LOCKUP_TIME",
+      "lastClaimedTime",
+      "totalEarnedTokens",
+      "getPendingDivs",
+      "totalReferralFeeEarned",
+      "getNumberOfHolders",
+      "getStakersList",
+      "getTotalPendingDivs",
+      "getNumberOfReferredStakers",
+      "getReferredStaker",
+      "getActiveReferredStaker",
+      "contractStartTime",
+      "REWARD_INTERVAL",
+      "rewardsPendingClaim",
+      "getPendingDivs",
+      "ADMIN_CAN_CLAIM_AFTER",
+    ].forEach((fn_name) => {
+      this[fn_name] = async function (...args) {
+        window.web3 = new Web3(window.ethereum);
+        let contract = new window.web3.eth.Contract(
+          window.CONSTANT_STAKING_DYPIUS_ABI,
+          address
+        );
+        // getContract({ key: this.ticker });
+        return await contract.methods[fn_name](...args).call();
+      };
+    });
+
+    ["stake", "unstake", "claim", "reInvest", "stakeExternal"].forEach(
+      (fn_name) => {
+        this[fn_name] = async function (...args) {
+          // let contract = await getContract({ key: this.ticker });
+          let contract = new window.web3.eth.Contract(
+            window.CONSTANT_STAKING_DYPIUS_ABI,
+            address
+          );
+
+          let value = 0;
+          let { latestGasPrice, maxPriorityFeePerGas } = await getMaxFee();
+          console.log({ latestGasPrice, maxPriorityFeePerGas });
+
+          let gas = window.config.default_gas_amount;
+
+          try {
+            let estimatedGas = await contract.methods[fn_name](
+              ...args
+            ).estimateGas({from: await getCoinbase(), gas });
+            if (estimatedGas) {
+              gas = Math.min(estimatedGas, gas);
+              console.log("estimatedgas" + gas);
+            }
+          } catch (e) {
+            console.log(e);
+          }
+
+          return await contract.methods[fn_name](...args).send({
+            value,
+            gas,
+            from: await getCoinbase(),
+            
             gasPrice: window.config.default_gasprice_gwei * 1e9,
           });
         };
@@ -1696,6 +1801,9 @@ window.config = {
   reward_token_address: "0x961c8c0b1aad0c0b10a51fef6a867e3091bcef17", //REWARD TOKEN
   reward_tokenavax_address: "0x961c8c0b1aad0c0b10a51fef6a867e3091bcef17", //REWARD TOKEN
 
+  reward_token_dypius_eth_address: "0x39b46b212bdf15b42b166779b9d1787a68b9d0c3", //REWARD TOKEN DYPV2
+  reward_token_dypius_bsc_address: "0x1a3264f2e7b1cfc6220ec9348d33ccf02af7aaa4", //REWARD TOKEN DYPV2
+
   weth_address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
   etherscan_baseURL: "https://etherscan.io",
   snowtrace_baseURL: "https://snowtrace.io",
@@ -2254,8 +2362,14 @@ window.token_old_avax = new TOKEN("TOKEN_OLD_AVAX");
 window.TOKEN_OLD_AVAX_ABI = window.TOKENAVAX_ABI;
 
 window.REWARD_TOKEN_ABI = window.TOKEN_ABI;
+window.REWARD_TOKEN_DYPIUS_ETH_ABI = window.TOKEN_ABI;
+window.REWARD_TOKEN_DYPIUS_BSC_ABI = window.TOKEN_ABI;
+
 window.REWARD_TOKENAVAX_ABI = window.TOKENAVAX_ABI;
 window.reward_token = new TOKEN("REWARD_TOKEN");
+window.reward_token_dypius_eth = new TOKEN("REWARD_TOKEN_DYPIUS_ETH");
+window.reward_token_dypius_bsc = new TOKENBSC("REWARD_TOKEN_DYPIUS_BSC");
+
 window.reward_tokenavax = new TOKENAVAX("REWARD_TOKENAVAX");
 window.constant_stakingavax_30 = new TOKENAVAX("REWARD_TOKENAVAX");
 
@@ -2381,17 +2495,15 @@ window.constant_stakingbsc_new14 = new CONSTANT_STAKINGBSC_NEW(
   "CONSTANT_STAKINGBSC_NEW14"
 );
 
-window.constant_staking_dypius_bsc1 = new CONSTANT_STAKINGBSC_NEW(
+window.constant_staking_dypius_bsc1 = new CONSTANT_STAKING_DYPIUS(
   "CONSTANT_STAKING_DYPIUS_BSC1"
 );
-
 
 window.CONSTANT_STAKINGBSC_NEW10_ABI = window.CONSTANT_STAKING_OLD_ABI;
 window.CONSTANT_STAKINGBSC_NEW11_ABI = window.CONSTANT_STAKING_OLD_ABI;
 window.CONSTANT_STAKINGBSC_NEW111_ABI = window.CONSTANT_STAKING_OLD_ABI;
 window.CONSTANT_STAKINGBSC_NEW14_ABI = window.CONSTANT_STAKING_OLD_ABI;
-window.CONSTANT_STAKING_DYPIUS_BSC1_ABI = window.CONSTANT_STAKING_OLD_ABI;
-
+window.CONSTANT_STAKING_DYPIUS_BSC1_ABI = window.CONSTANT_STAKING_DYPIUS_ABI;
 
 window.CONSTANT_STAKINGBSC_NEW12_ABI = window.CONSTANT_STAKINGBSC_NEW_ABI;
 window.CONSTANT_STAKINGBSC_NEW13_ABI = window.CONSTANT_STAKINGBSC_NEW_ABI;
@@ -2518,7 +2630,7 @@ window.constant_staking_new2 = new CONSTANT_STAKING_NEW(
   "CONSTANT_STAKINGNEW_NEW2"
 );
 
-window.constant_staking_dypius_eth1 = new CONSTANT_STAKING_NEW(
+window.constant_staking_dypius_eth1 = new CONSTANT_STAKING_DYPIUS(
   "CONSTANT_STAKING_DYPIUS_ETH1"
 );
 
@@ -2544,7 +2656,7 @@ window.constant_staking_new13 = new CONSTANT_STAKING_NEWAVAX(
   "CONSTANT_STAKINGIDYPAVAX_50"
 );
 
-window.constant_staking_dypius_avax1 = new CONSTANT_STAKING_NEWAVAX(
+window.constant_staking_dypius_avax1 = new CONSTANT_STAKING_DYPIUS(
   "CONSTANT_STAKING_DYPIUS_AVAX1"
 );
 
@@ -2552,12 +2664,11 @@ window.CONSTANT_STAKINGIDYPAVAX_3_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYPAVAX_4_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYPAVAX_40_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYPAVAX_50_ABI = window.CONSTANT_STAKING_IDYP_ABI;
-window.CONSTANT_STAKING_DYPIUS_AVAX1_ABI = window.CONSTANT_STAKING_IDYP_ABI;
-
+window.CONSTANT_STAKING_DYPIUS_AVAX1_ABI = window.CONSTANT_STAKING_DYPIUS_ABI;
 
 window.CONSTANT_STAKINGNEW_NEW1_ABI = window.CONSTANT_STAKINGNEW_ABI;
 window.CONSTANT_STAKINGNEW_NEW2_ABI = window.CONSTANT_STAKINGNEW_ABI;
-window.CONSTANT_STAKING_DYPIUS_ETH1_ABI = window.CONSTANT_STAKINGNEW_ABI;
+window.CONSTANT_STAKING_DYPIUS_ETH1_ABI = window.CONSTANT_STAKING_DYPIUS_ABI;
 
 window.CONSTANT_STAKINGNEW_NEW3_ABI = window.CONSTANT_STAKINGNEW_ABI;
 window.CONSTANT_STAKING_NEWI3 = window.CONSTANT_STAKING_OLD_ABI;
@@ -25177,6 +25288,509 @@ window.CONSTANT_STAKING_OLD_ABI = [
   },
 ];
 
+window.CONSTANT_STAKING_DYPIUS_ABI = [
+  { inputs: [], stateMutability: "nonpayable", type: "constructor" },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "owner",
+        type: "address",
+      },
+    ],
+    name: "EmergencyDeclared",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "maxPoolSize",
+        type: "uint256",
+      },
+    ],
+    name: "MaxPoolSizeChanged",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "previousOwner",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "OwnershipTransferred",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "referrer",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "ReferralFeeTransferred",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "holder",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "Reinvest",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "rewardRate",
+        type: "uint256",
+      },
+    ],
+    name: "RewardRateChanged",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "holder",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "RewardsTransferred",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: false, internalType: "uint256", name: "fee", type: "uint256" },
+    ],
+    name: "StakingFeeChanged",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: false, internalType: "uint256", name: "fee", type: "uint256" },
+    ],
+    name: "UnstakingFeeChanged",
+    type: "event",
+  },
+  {
+    inputs: [],
+    name: "ADMIN_CAN_CLAIM_AFTER",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "EMERGENCY_WAIT_TIME",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "LOCKUP_TIME",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "REFERRAL_FEE_RATE_X_100",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "REWARD_INTERVAL",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "REWARD_RATE_X_100",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "STAKING_FEE_RATE_X_100",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "TRUSTED_TOKEN_ADDRESS",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "UNSTAKING_FEE_RATE_X_100",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "adminClaimableTime",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "claim",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "contractStartTime",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "declareEmergency",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "depositedTokens",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256", name: "amountToWithdraw", type: "uint256" },
+    ],
+    name: "emergencyUnstake",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "account", type: "address" },
+      { internalType: "uint256", name: "i", type: "uint256" },
+    ],
+    name: "getActiveReferredStaker",
+    outputs: [
+      { internalType: "address", name: "_staker", type: "address" },
+      { internalType: "uint256", name: "_totalEarned", type: "uint256" },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getNumberOfHolders",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "referrer", type: "address" }],
+    name: "getNumberOfReferredStakers",
+    outputs: [
+      { internalType: "uint256", name: "_activeStakers", type: "uint256" },
+      { internalType: "uint256", name: "_totalStakers", type: "uint256" },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "_holder", type: "address" }],
+    name: "getPendingDivs",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "account", type: "address" },
+      { internalType: "uint256", name: "i", type: "uint256" },
+    ],
+    name: "getReferredStaker",
+    outputs: [
+      { internalType: "address", name: "_staker", type: "address" },
+      { internalType: "uint256", name: "_totalEarned", type: "uint256" },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256", name: "startIndex", type: "uint256" },
+      { internalType: "uint256", name: "endIndex", type: "uint256" },
+    ],
+    name: "getStakersList",
+    outputs: [
+      { internalType: "address[]", name: "stakers", type: "address[]" },
+      {
+        internalType: "uint256[]",
+        name: "stakingTimestamps",
+        type: "uint256[]",
+      },
+      {
+        internalType: "uint256[]",
+        name: "lastClaimedTimeStamps",
+        type: "uint256[]",
+      },
+      { internalType: "uint256[]", name: "stakedTokens", type: "uint256[]" },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "_holder", type: "address" }],
+    name: "getTotalPendingDivs",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "isEmergency",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "lastClaimedTime",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "maxPoolSize",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "owner",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "reInvest",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "referrals",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "rewardsPendingClaim",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "newPoolSize", type: "uint256" }],
+    name: "setMaxPoolSize",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256", name: "newRewardRate", type: "uint256" },
+    ],
+    name: "setRewardRateX100",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "newStakingFeeRateX100",
+        type: "uint256",
+      },
+    ],
+    name: "setStakingFeeRateX100",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "newUnstakingFeeRateX100",
+        type: "uint256",
+      },
+    ],
+    name: "setUnstakingFeeRateX100",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256", name: "amountToStake", type: "uint256" },
+      { internalType: "address", name: "referrer", type: "address" },
+    ],
+    name: "stake",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "stakingTime",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "totalClaimedReferralFee",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "totalClaimedRewards",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "totalDeposited",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "totalEarnedTokens",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "totalReferralFeeEarned",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "tokenAddress", type: "address" },
+      { internalType: "address", name: "recipient", type: "address" },
+      { internalType: "uint256", name: "amount", type: "uint256" },
+    ],
+    name: "transferAnyERC20Token",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "tokenAddress", type: "address" },
+      { internalType: "address", name: "recipient", type: "address" },
+      { internalType: "uint256", name: "amount", type: "uint256" },
+    ],
+    name: "transferAnyLegacyERC20Token",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256", name: "amountToWithdraw", type: "uint256" },
+    ],
+    name: "unstake",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+];
+
 window.VAULT_ABI = [
   {
     inputs: [],
@@ -32199,6 +32813,8 @@ Object.keys(window.config)
       k.startsWith("staking_") ||
       k.startsWith("stakingavax_") ||
       k.startsWith("reward_tokenavax") ||
+      k.startsWith("reward_token_dypius_eth") ||
+      k.startsWith("reward_token_dypius_bsc") ||
       k.startsWith("token_dyp_new") ||
       k.startsWith("token_dypius_new") ||
       k.startsWith("token_dypius_new_avax") ||
@@ -32301,6 +32917,10 @@ Object.keys(window.config)
     window[k.replace("_address", "_ABI").toUpperCase()] = k.startsWith("token_")
       ? window.TOKEN_ABI
       : k.startsWith("reward_token_idyp")
+      ? window.TOKEN_ABI
+      : k.startsWith("reward_token_dypius_eth")
+      ? window.TOKEN_ABI
+      : k.startsWith("reward_token_dypius_bsc")
       ? window.TOKEN_ABI
       : k.startsWith("token_dyp_new")
       ? window.TOKEN_ABI
@@ -32425,7 +33045,7 @@ Object.keys(window.config)
       : k.startsWith("constant_stakingnew_new2")
       ? window.CONSTANT_STAKINGNEW_ABI
       : k.startsWith("constant_staking_dypius_eth1")
-      ? window.CONSTANT_STAKINGNEW_ABI
+      ? window.CONSTANT_STAKING_DYPIUS_ABI
       : k.startsWith("constant_stakingidypavax_4")
       ? window.CONSTANT_STAKING_IDYP_ABI
       : k.startsWith("constant_stakingidypavax_40")
@@ -32433,7 +33053,7 @@ Object.keys(window.config)
       : k.startsWith("constant_stakingidypavax_50")
       ? window.CONSTANT_STAKING_IDYP_ABI
       : k.startsWith("constant_staking_dypius_avax1")
-      ? window.CONSTANT_STAKING_IDYP_ABI
+      ? window.CONSTANT_STAKING_DYPIUS_ABI
       : k.startsWith("constant_stakingnew_newavax1")
       ? window.CONSTANT_STAKINGNEW_ABI
       : k.startsWith("constant_stakingnewbsc_new3")
@@ -32467,7 +33087,7 @@ Object.keys(window.config)
       : k.startsWith("constant_stakingbsc_new14")
       ? window.CONSTANT_STAKING_OLD_ABI
       : k.startsWith("constant_staking_dypius_bsc1")
-      ? window.CONSTANT_STAKING_OLD_ABI
+      ? window.CONSTANT_STAKING_DYPIUS_ABI
       : k.startsWith("constant_stakingnew_newavax2")
       ? window.CONSTANT_STAKINGNEW_ABI
       : k.startsWith("constant_stakingdaieth")

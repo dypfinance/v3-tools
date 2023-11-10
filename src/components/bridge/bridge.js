@@ -83,6 +83,7 @@ export default function initBridge({
         ethBalance: 0,
         bnbBalance: 0,
         avaxBalance: 0,
+        destinationChainText: "",
       };
     }
     static propTypes = {
@@ -95,8 +96,41 @@ export default function initBridge({
       this.getChainSymbol();
       this.getAllBalance();
       this.fetchData();
+      this.checkNetworkId();
       window._refreshBalInterval = setInterval(this.refreshBalance, 4000);
       window._refreshBalInterval = setInterval(this.getChainSymbol, 500);
+    }
+
+    checkNetworkId = async () => {
+      if (window.ethereum) {
+        await window.ethereum
+          .request({ method: "eth_chainId" })
+          .then((data) => {
+            if (data === "0x1") {
+              this.setState({
+                destinationChainText: "eth",
+              });
+            } else if (data === "0xa86a") {
+              this.setState({
+                destinationChainText: "avax",
+              });
+            } else if (data === "0x38") {
+              this.setState({
+                destinationChainText: "bnb",
+              });
+            } else {
+              this.setState({
+                destinationChainText: "",
+              });
+            }
+          });
+      }
+    };
+
+    async componentDidUpdate(prevProps, prevState) {
+      if (prevProps.sourceChain != this.props.sourceChain) {
+        this.checkNetworkId();
+      }
     }
 
     componentWillUnmount() {
@@ -186,7 +220,7 @@ export default function initBridge({
     handleDeposit = async (e) => {
       let amount = this.state.depositAmount;
       this.setState({ depositLoading: true });
-
+      this.checkNetworkId();
       // if (this.props.sourceChain === "bnb") {
       //   if (Number(amount) > this.state.ethPool) {
       //     window.$.alert(
@@ -295,6 +329,26 @@ export default function initBridge({
       } catch (e) {
         window.alertify.error("Something went wrong!");
         console.error(e);
+      }
+    };
+
+    switchToDestinationChain = async (chainID, chainText) => {
+      if (window.ethereum) {
+        await window.ethereum
+          .request({
+            method: "wallet_switchEthereumChain",
+            params: [
+              {
+                chainId: chainID,
+              },
+            ],
+          })
+          .then((data) => {
+            this.setState({ destinationChainText: chainText });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
     };
 
@@ -459,23 +513,23 @@ export default function initBridge({
     };
 
     handleSwapChains = () => {
-      if (this.props.activebtn === "1") {
-        if (this.props.sourceChain === "bnb") {
-          this.props.onSelectChain("bnb");
-          this.props.onSelectSourceChain("avax");
-        } else if (this.props.sourceChain === "avax") {
-          this.props.onSelectChain("avax");
-          this.props.onSelectSourceChain("bnb");
-        }
-      } else if (this.props.activebtn === "2") {
-        if (this.props.sourceChain === "eth") {
-          this.props.onSelectChain("eth");
-          this.props.onSelectSourceChain("avax");
-        } else if (this.props.sourceChain === "avax") {
-          this.props.onSelectChain("avax");
-          this.props.onSelectSourceChain("eth");
-        }
-      }
+      // if (this.props.activebtn === "1") {
+      //   if (this.props.sourceChain === "bnb") {
+      //     this.props.onSelectChain("bnb");
+      //     this.props.onSelectSourceChain("avax");
+      //   } else if (this.props.sourceChain === "avax") {
+      //     this.props.onSelectChain("avax");
+      //     this.props.onSelectSourceChain("bnb");
+      //   }
+      // } else if (this.props.activebtn === "2") {
+      //   if (this.props.sourceChain === "eth") {
+      //     this.props.onSelectChain("eth");
+      //     this.props.onSelectSourceChain("avax");
+      //   } else if (this.props.sourceChain === "avax") {
+      //     this.props.onSelectChain("avax");
+      //     this.props.onSelectSourceChain("eth");
+      //   }
+      // }
     };
 
     render() {
@@ -948,19 +1002,22 @@ export default function initBridge({
                               </div>
 
                               <button
-                                style={{ width: "fit-content" }}
+                                style={{
+                                  width: "fit-content",
+                                  textWrap: "nowrap",
+                                }}
                                 disabled={
-                                  // canWithdraw === false ||
-                                  // this.state.withdrawLoading === true ||
-                                  // this.state.withdrawStatus === "success"
-                                  //   ? true
-                                  //   : false
-                                  this.state.txHash !== "" ? false : true
+                                  this.state.withdrawLoading === true ||
+                                  this.state.txHash === "" ||
+                                  this.state.withdrawStatus === "success"
+                                    ? true
+                                    : false
                                 }
                                 className={`btn filledbtn ${
-                                 ( (canWithdraw === false && this.state.txHash === "") ||
-                                  this.state.withdrawStatus === "success") &&
-                                    "disabled-btn"
+                                  ((canWithdraw === false &&
+                                    this.state.txHash === "") ||
+                                    this.state.withdrawStatus === "success") &&
+                                  "disabled-btn"
                                 } ${
                                   this.state.withdrawStatus === "deposit" ||
                                   this.state.withdrawStatus === "success"
@@ -970,7 +1027,18 @@ export default function initBridge({
                                     : null
                                 } d-flex justify-content-center align-items-center gap-2`}
                                 onClick={() => {
-                                  this.handleWithdraw();
+                                  this.state.destinationChainText ===
+                                  this.props.destinationChain
+                                    ? this.handleWithdraw()
+                                    : this.switchToDestinationChain(
+                                        this.props.destinationChain === "eth"
+                                          ? "0x1"
+                                          : this.props.destinationChain ===
+                                            "avax"
+                                          ? "0xa86a"
+                                          : "0x38",
+                                        this.props.destinationChain
+                                      );
                                 }}
                               >
                                 {this.state.withdrawLoading ? (
@@ -982,8 +1050,25 @@ export default function initBridge({
                                       Loading...
                                     </span>
                                   </div>
-                                ) : this.state.withdrawStatus === "initial" ? (
+                                ) : this.state.withdrawStatus === "initial" &&
+                                  this.state.destinationChainText ===
+                                    this.props.destinationChain &&
+                                  this.state.txHash !== "" ? (
                                   <>Withdraw</>
+                                ) : this.state.withdrawStatus === "initial" &&
+                                  this.state.txHash === "" ? (
+                                  <>Withdraw</>
+                                ) : this.state.withdrawStatus === "initial" &&
+                                  this.state.destinationChainText !==
+                                    this.props.destinationChain ? (
+                                  <>
+                                    Switch{" "}
+                                    {this.props.destinationChain === "eth"
+                                      ? "to Ethereum"
+                                      : this.props.destinationChain === "bnb"
+                                      ? "to BNB Chain"
+                                      : "to Avalanche"}
+                                  </>
                                 ) : this.state.withdrawStatus === "success" ? (
                                   <>Success</>
                                 ) : (

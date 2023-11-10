@@ -15,6 +15,7 @@ import vaultTag from "../../assets/earnAssets/vaultTag.svg";
 import cawsLabel from "./assets/cawsLabel.svg";
 
 import buybackTag from "../../assets/earnAssets/buybackTag.svg";
+import getFormattedNumber from "../../functions/getFormattedNumber2";
 
 const TopPoolsCard = ({
   isAccount,
@@ -92,7 +93,7 @@ const TopPoolsCard = ({
     }
   }, [chain]);
 
-  // console.log(network)
+ 
 
   return (
     <>
