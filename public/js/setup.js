@@ -2820,7 +2820,8 @@ window.constant_staking_idypavax_7 = new CONSTANT_STAKING_NEWAVAX(
 );
 
 const checkapproveStakePool = async (useraddr, tokenaddr, stakingaddr) => {
-  let token_contract = await getTokenContract(tokenaddr);
+  window.web3 = new Web3(window.ethereum)
+  let token_contract = new window.web3.eth.Contract(window.TOKEN_ABI, tokenaddr)
 
   return await token_contract.methods.allowance(useraddr, stakingaddr).call();
 };
