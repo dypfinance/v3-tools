@@ -220,7 +220,9 @@ const EarnTopPicks = ({
         eth_result.data.stakingInfoDYPEth
       );
       const dypData = eth_result2.data.stakingInfoDYPEth;
-
+      const object2 = dypData.map((item) => {
+        return {...item, tvl_usd: item.tvl_usd/1e18}
+      })
       const expiredEth = dypIdyp.filter((item) => {
         return item.expired !== "No";
       });
@@ -228,10 +230,10 @@ const EarnTopPicks = ({
         return item.expired !== "Yes";
       });
 
-      const expiredEth2 = dypData.filter((item) => {
+      const expiredEth2 = object2.filter((item) => {
         return item.expired !== "No";
       });
-      const activeEth2 = dypData.filter((item) => {
+      const activeEth2 = object2.filter((item) => {
         return item.expired !== "Yes";
       });
 
@@ -247,7 +249,7 @@ const EarnTopPicks = ({
 
       setActivePools(sortedActive);
       setExpiredPools(sortedExpired);
-      setTopPools([...dypIdyp, ...dypData]);
+      setTopPools([...dypIdyp, ...object2]);
       setCawsCard(eth_result.data.stakingInfoCAWS);
       setCawsCard2(eth_result.data.stakingInfoCAWS[0]);
       setLandCard(eth_result.data.stakingInfoLAND[0]);
@@ -279,8 +281,11 @@ const EarnTopPicks = ({
         bnb_result.data.stakingInfoiDYPBnb
       );
 
-      const dypBnb = bnb_result2.data.stakingInfoDYPBnb;
-
+      const dypBnb = bnb_result2.data.stakingInfoDYPBnb 
+      const object2 = dypBnb.map((item) => {
+        return {...item, tvl_usd: item.tvl_usd/1e18}
+      })
+    
       const expiredBnb = dypIdypBnb.filter((item) => {
         return item.expired !== "No";
       });
@@ -288,11 +293,11 @@ const EarnTopPicks = ({
         return item.expired !== "Yes";
       });
 
-      const activeBnb2 = dypBnb.filter((item) => {
+      const activeBnb2 = object2.filter((item) => {
         return item.expired === "No";
       });
 
-      const expiredBnb2 = dypBnb.filter((item) => {
+      const expiredBnb2 = object2.filter((item) => {
         return item.expired === "Yes";
       });
 
@@ -308,7 +313,7 @@ const EarnTopPicks = ({
 
       setActivePools(sortedActive);
       setExpiredPools(sortedExpired);
-      setTopPools([...dypIdypBnb, ...dypBnb]);
+      setTopPools([...dypIdypBnb, ...object2]);
     }
   };
   const fetchAvaxStaking = async () => {
@@ -334,7 +339,9 @@ const EarnTopPicks = ({
         avax_result.data.stakingInfoDYPAvax
       );
       const dypAvax = avax_result2.data.stakingInfoDYPAvax;
-
+      const object2 = dypAvax.map((item) => {
+        return {...item, tvl_usd: item.tvl_usd/1e18}
+      })
       const expiredAvax = dypIdypAvax.filter((item) => {
         return item.expired !== "No";
       });
@@ -343,11 +350,11 @@ const EarnTopPicks = ({
         return item.expired !== "Yes";
       });
 
-      const expiredAvax2 = dypAvax.filter((item) => {
+      const expiredAvax2 = object2.filter((item) => {
         return item.expired !== "No";
       });
 
-      const activeAvax2 = dypAvax.filter((item) => {
+      const activeAvax2 = object2.filter((item) => {
         return item.expired !== "Yes";
       });
 
@@ -363,7 +370,7 @@ const EarnTopPicks = ({
 
       setActivePools(sortedActive);
       setExpiredPools(sortedExpired);
-      setTopPools([...dypIdypAvax, ...dypAvax]);
+      setTopPools([...dypIdypAvax, ...object2]);
     }
   };
 
@@ -1356,10 +1363,9 @@ const EarnTopPicks = ({
                       liquidity={wbsc_address}
                       expiration_time={"09 November 2024"}
                       finalApr={
-                        activePools === false
-                          ? activePools[cardIndex]?.apy_performancefee
-                          : expiredDYPPools[cardIndex]?.apy_performancefee
-                      }
+                        activePools[cardIndex]?.apy_performancefee
+                         
+                     }
                       lockTime={
                         cardIndex !== undefined
                           ? expiredPools === false
@@ -1411,11 +1417,10 @@ const EarnTopPicks = ({
                     chain === "avax" ? (
                     <StakeDypiusAvax
                       staking={window.constant_staking_dypius_avax1}
-                      apr={
-                        expiredPools === false
-                          ? activePools[cardIndex]?.apy_percent
-                          : expiredDYPPools[cardIndex]?.apy_percent
-                      }
+                      finalApr={
+                        activePools[cardIndex]?.apy_performancefee
+                         
+                     }
                       liquidity={avax_address}
                       expiration_time={"09 November 2024"}
                       finalApr={
@@ -1923,10 +1928,9 @@ const EarnTopPicks = ({
                     liquidity={wbsc_address}
                     expiration_time={"09 November 2024"}
                     finalApr={
-                      activePools === false
-                        ? activePools[cardIndex]?.apy_performancefee
-                        : expiredDYPPools[cardIndex]?.apy_performancefee
-                    }
+                      activePools[cardIndex]?.apy_performancefee
+                       
+                   }
                     lockTime={
                       cardIndex !== undefined
                         ? expiredPools === false
@@ -1982,10 +1986,9 @@ const EarnTopPicks = ({
                   liquidity={avax_address}
                   expiration_time={"09 November 2024"}
                   finalApr={
-                    activePools === false
-                      ? activePools[cardIndex]?.apy_performancefee
-                      : expiredDYPPools[cardIndex]?.apy_performancefee
-                  }
+                    activePools[cardIndex]?.apy_performancefee
+                     
+                 }
                   lockTime={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -2405,10 +2408,9 @@ const EarnTopPicks = ({
                     liquidity={wbsc_address}
                     expiration_time={"09 November 2024"}
                     finalApr={
-                      activePools === false
-                        ? activePools[cardIndex]?.apy_performancefee
-                        : expiredDYPPools[cardIndex]?.apy_performancefee
-                    }
+                      activePools[cardIndex]?.apy_performancefee
+                       
+                   }
                     lockTime={
                       cardIndex !== undefined
                         ? expiredPools === false
@@ -2464,10 +2466,9 @@ const EarnTopPicks = ({
                   liquidity={avax_address}
                   expiration_time={"09 November 2024"}
                   finalApr={
-                    activePools === false
-                      ? activePools[cardIndex]?.apy_performancefee
-                      : expiredDYPPools[cardIndex]?.apy_performancefee
-                  }
+                    activePools[cardIndex]?.apy_performancefee
+                     
+                 }
                   lockTime={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -2842,10 +2843,9 @@ const EarnTopPicks = ({
                     liquidity={wbsc_address}
                     expiration_time={"09 November 2024"}
                     finalApr={
-                      activePools === false
-                        ? activePools[cardIndex]?.apy_performancefee
-                        : expiredDYPPools[cardIndex]?.apy_performancefee
-                    }
+                      activePools[cardIndex]?.apy_performancefee
+                       
+                   }
                     lockTime={
                       cardIndex !== undefined
                         ? expiredPools === false
@@ -2901,10 +2901,9 @@ const EarnTopPicks = ({
                   liquidity={avax_address}
                   expiration_time={"09 November 2024"}
                   finalApr={
-                    activePools === false
-                      ? activePools[cardIndex]?.apy_performancefee
-                      : expiredDYPPools[cardIndex]?.apy_performancefee
-                  }
+                    activePools[cardIndex]?.apy_performancefee
+                     
+                 }
                   lockTime={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -3516,10 +3515,9 @@ const EarnTopPicks = ({
                     liquidity={wbsc_address}
                     expiration_time={"09 November 2024"}
                     finalApr={
-                      activePools === false
-                        ? activePools[cardIndex]?.apy_performancefee
-                        : expiredDYPPools[cardIndex]?.apy_performancefee
-                    }
+                      activePools[cardIndex]?.apy_performancefee
+                       
+                   }
                     lockTime={
                       cardIndex !== undefined
                         ? expiredPools === false
@@ -3575,10 +3573,9 @@ const EarnTopPicks = ({
                   liquidity={avax_address}
                   expiration_time={"09 November 2024"}
                   finalApr={
-                    activePools === false
-                      ? activePools[cardIndex]?.apy_performancefee
-                      : expiredDYPPools[cardIndex]?.apy_performancefee
-                  }
+                    activePools[cardIndex]?.apy_performancefee
+                     
+                 }
                   lockTime={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -4201,10 +4198,9 @@ const EarnTopPicks = ({
                     liquidity={wbsc_address}
                     expiration_time={"09 November 2024"}
                     finalApr={
-                      activePools === false
-                        ? activePools[cardIndex]?.apy_performancefee
-                        : expiredDYPPools[cardIndex]?.apy_performancefee
-                    }
+                      activePools[cardIndex]?.apy_performancefee
+                       
+                   }
                     lockTime={
                       cardIndex !== undefined
                         ? expiredPools === false
@@ -4260,10 +4256,9 @@ const EarnTopPicks = ({
                   liquidity={avax_address}
                   expiration_time={"09 November 2024"}
                   finalApr={
-                    activePools === false
-                      ? activePools[cardIndex]?.apy_performancefee
-                      : expiredDYPPools[cardIndex]?.apy_performancefee
-                  }
+                    activePools[cardIndex]?.apy_performancefee
+                     
+                 }
                   lockTime={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -4704,10 +4699,9 @@ const EarnTopPicks = ({
                     liquidity={wbsc_address}
                     expiration_time={"09 November 2024"}
                     finalApr={
-                      activePools === false
-                        ? activePools[cardIndex]?.apy_performancefee
-                        : expiredDYPPools[cardIndex]?.apy_performancefee
-                    }
+                      activePools[cardIndex]?.apy_performancefee
+                       
+                   }
                     lockTime={
                       cardIndex !== undefined
                         ? expiredPools === false
@@ -4763,10 +4757,9 @@ const EarnTopPicks = ({
                   liquidity={avax_address}
                   expiration_time={"09 November 2024"}
                   finalApr={
-                    activePools === false
-                      ? activePools[cardIndex]?.apy_performancefee
-                      : expiredDYPPools[cardIndex]?.apy_performancefee
-                  }
+                    activePools[cardIndex]?.apy_performancefee
+                     
+                 }
                   lockTime={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -5242,10 +5235,9 @@ const EarnTopPicks = ({
                     liquidity={wbsc_address}
                     expiration_time={"09 November 2024"}
                     finalApr={
-                      activePools === false
-                        ? activePools[cardIndex]?.apy_performancefee
-                        : expiredDYPPools[cardIndex]?.apy_performancefee
-                    }
+                      activePools[cardIndex]?.apy_performancefee
+                       
+                   }
                     lockTime={
                       cardIndex !== undefined
                         ? expiredPools === false
@@ -5301,10 +5293,9 @@ const EarnTopPicks = ({
                   liquidity={avax_address}
                   expiration_time={"09 November 2024"}
                   finalApr={
-                    activePools === false
-                      ? activePools[cardIndex]?.apy_performancefee
-                      : expiredDYPPools[cardIndex]?.apy_performancefee
-                  }
+                    activePools[cardIndex]?.apy_performancefee
+                     
+                 }
                   lockTime={
                     cardIndex !== undefined
                       ? expiredPools === false
@@ -6725,10 +6716,9 @@ const EarnTopPicks = ({
                       liquidity={wbsc_address}
                       expiration_time={"09 November 2024"}
                       finalApr={
-                        activePools === false
-                          ? activePools[cardIndex]?.apy_performancefee
-                          : expiredDYPPools[cardIndex]?.apy_performancefee
-                      }
+                        activePools[cardIndex]?.apy_performancefee
+                         
+                     }
                       lockTime={
                         cardIndex !== undefined
                           ? expiredPools === false
@@ -6787,10 +6777,9 @@ const EarnTopPicks = ({
                     liquidity={avax_address}
                     expiration_time={"09 November 2024"}
                     finalApr={
-                      activePools === false
-                        ? activePools[cardIndex]?.apy_performancefee
-                        : expiredDYPPools[cardIndex]?.apy_performancefee
-                    }
+                      activePools[cardIndex]?.apy_performancefee
+                       
+                   }
                     lockTime={
                       cardIndex !== undefined
                         ? expiredPools === false
@@ -7326,10 +7315,9 @@ const EarnTopPicks = ({
                       liquidity={wbsc_address}
                       expiration_time={"09 November 2024"}
                       finalApr={
-                        activePools === false
-                          ? activePools[cardIndex]?.apy_performancefee
-                          : expiredDYPPools[cardIndex]?.apy_performancefee
-                      }
+                        activePools[cardIndex]?.apy_performancefee
+                         
+                     }
                       lockTime={
                         cardIndex !== undefined
                           ? expiredPools === false
@@ -7388,10 +7376,9 @@ const EarnTopPicks = ({
                     liquidity={avax_address}
                     expiration_time={"09 November 2024"}
                     finalApr={
-                      activePools === false
-                        ? activePools[cardIndex]?.apy_performancefee
-                        : expiredDYPPools[cardIndex]?.apy_performancefee
-                    }
+                      activePools[cardIndex]?.apy_performancefee
+                       
+                   }
                     lockTime={
                       cardIndex !== undefined
                         ? expiredPools === false
@@ -7808,10 +7795,9 @@ const EarnTopPicks = ({
                       liquidity={wbsc_address}
                       expiration_time={"09 November 2024"}
                       finalApr={
-                        activePools === false
-                          ? activePools[cardIndex]?.apy_performancefee
-                          : expiredDYPPools[cardIndex]?.apy_performancefee
-                      }
+                        activePools[cardIndex]?.apy_performancefee
+                         
+                     }
                       lockTime={
                         cardIndex !== undefined
                           ? expiredPools === false
@@ -8287,10 +8273,9 @@ const EarnTopPicks = ({
                       liquidity={wbsc_address}
                       expiration_time={"09 November 2024"}
                       finalApr={
-                        activePools === false
-                          ? activePools[cardIndex]?.apy_performancefee
-                          : expiredDYPPools[cardIndex]?.apy_performancefee
-                      }
+                        activePools[cardIndex]?.apy_performancefee
+                         
+                     }
                       lockTime={
                         cardIndex !== undefined
                           ? expiredPools === false
@@ -8349,10 +8334,9 @@ const EarnTopPicks = ({
                     liquidity={avax_address}
                     expiration_time={"09 November 2024"}
                     finalApr={
-                      activePools === false
-                        ? activePools[cardIndex]?.apy_performancefee
-                        : expiredDYPPools[cardIndex]?.apy_performancefee
-                    }
+                      activePools[cardIndex]?.apy_performancefee
+                       
+                   }
                     lockTime={
                       cardIndex !== undefined
                         ? expiredPools === false

@@ -266,7 +266,7 @@ const StakeDypiusBsc = ({
           referralFeeEarned,
           total_stakers,
           tvlConstantDAI,
-        //   tvlDYPS,
+          //   tvlDYPS,
         ] = await Promise.all([
           _bal,
           _pDivs,
@@ -278,19 +278,23 @@ const StakeDypiusBsc = ({
           _rFeeEarned,
           tStakers,
           _tvlConstantDAI,
-        //   _tvlDYPS,
+          //   _tvlDYPS,
         ]);
 
         //console.log({tvl, tvlConstantiDYP, _amountOutMin})
-        const dypprice = await axios.get('https://api.geckoterminal.com/api/v2/networks/eth/pools/0x7c81087310a228470db28c1068f0663d6bf88679').then((res)=>{
-            return res.data.data.attributes.base_token_price_usd
-        }).catch((e)=>{console.log(e)})
+        const dypprice = await axios
+          .get(
+            "https://api.geckoterminal.com/api/v2/networks/eth/pools/0x7c81087310a228470db28c1068f0663d6bf88679"
+          )
+          .then((res) => {
+            return res.data.data.attributes.base_token_price_usd;
+          })
+          .catch((e) => {
+            console.log(e);
+          });
 
- 
         let usdValueDAI = new BigNumber(tvlConstantDAI).toFixed(18);
-        let usd_per_lp = lp_data
-          ? dypprice
-          : 0;
+        let usd_per_lp = lp_data ? dypprice : 0;
         let tvlUSD = new BigNumber(tvl)
           .times(usd_per_lp)
           .plus(usdValueDAI)
@@ -357,6 +361,27 @@ const StakeDypiusBsc = ({
       });
     }
   };
+
+  const getPriceDYP = async () => {
+    const dypprice = await axios
+      .get(
+        "https://api.geckoterminal.com/api/v2/networks/eth/pools/0x7c81087310a228470db28c1068f0663d6bf88679"
+      )
+      .then((res) => {
+        return res.data.data.attributes.base_token_price_usd;
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+
+    // let usdPerToken = await window.getPrice("defi-yield-protocol");
+    setusdPerToken(dypprice);
+  };
+
+  useEffect(() => {
+    getPriceDYP();
+  }, []);
+
   useEffect(() => {
     if (coinbase !== coinbase2 && coinbase !== null && coinbase !== undefined) {
       setcoinbase(coinbase);
@@ -373,18 +398,14 @@ const StakeDypiusBsc = ({
     refreshBalance();
     if (depositAmount !== "") {
       checkApproval(depositAmount);
-
-    }
-    else {
-      setdepositStatus('initial')
-
+    } else {
+      setdepositStatus("initial");
     }
   }, [coinbase, coinbase2, staking]);
 
   useEffect(() => {
-      setdepositAmount('');
-      setdepositStatus('initial')
-
+    setdepositAmount("");
+    setdepositStatus("initial");
   }, [staking]);
 
   const handleApprove = (e) => {
@@ -425,44 +446,43 @@ const StakeDypiusBsc = ({
   const handleStake = async (e) => {
     //   e.preventDefault();
     if (passivePool === false) {
-    setdepositLoading(true);
+      setdepositLoading(true);
 
-    if (other_info) {
-      window.$.alert("This pool no longer accepts deposits!");
-      setdepositLoading(false);
-      return;
-    }
-
-    let amount = depositAmount;
-    amount = new BigNumber(depositAmount).times(1e18).toFixed(0);
-     
-    let referrer = window.config.ZERO_ADDRESS;
-
-    //NO REFERRER HERE
-
-    staking
-      .stake(amount, referrer)
-      .then(() => {
+      if (other_info) {
+        window.$.alert("This pool no longer accepts deposits!");
         setdepositLoading(false);
-        setdepositStatus("success");
-        refreshBalance();
-        setTimeout(() => {
+        return;
+      }
+
+      let amount = depositAmount;
+      amount = new BigNumber(depositAmount).times(1e18).toFixed(0);
+
+      let referrer = window.config.ZERO_ADDRESS;
+
+      //NO REFERRER HERE
+
+      staking
+        .stake(amount, referrer)
+        .then(() => {
           setdepositLoading(false);
-          setdepositStatus("initial");
-        }, 5000);
-      })
-      .catch((e) => {
-        setdepositLoading(false);
-        setdepositStatus("fail");
-        seterrorMsg(e?.message);
-        setTimeout(() => {
-          depositAmount("");
-          setdepositStatus("initial");
-          seterrorMsg("");
-        }, 10000);
-      });
-    }
-    else if (passivePool === true) {
+          setdepositStatus("success");
+          refreshBalance();
+          setTimeout(() => {
+            setdepositLoading(false);
+            setdepositStatus("initial");
+          }, 5000);
+        })
+        .catch((e) => {
+          setdepositLoading(false);
+          setdepositStatus("fail");
+          seterrorMsg(e?.message);
+          setTimeout(() => {
+            depositAmount("");
+            setdepositStatus("initial");
+            seterrorMsg("");
+          }, 10000);
+        });
+    } else if (passivePool === true) {
       window.$.alert("This pool no longer accepts deposits!");
       return;
     }
@@ -663,8 +683,7 @@ const StakeDypiusBsc = ({
 
   let tvl_usd = tvl * tokendata;
 
-//   let tvlDYPS = tvlDyps / 1e18;
-
+  //   let tvlDYPS = tvlDyps / 1e18;
 
   tvl_usd = getFormattedNumber(tvl_usd, 2);
 
@@ -674,7 +693,11 @@ const StakeDypiusBsc = ({
 
   const checkApproval = async (amount) => {
     const result = await window
-      .checkapproveStakePool(coinbase, reward_token_dypius_bsc._address, staking._address)
+      .checkapproveStakePool(
+        coinbase,
+        reward_token_dypius_bsc._address,
+        staking._address
+      )
       .then((data) => {
         console.log(data);
         return data;
@@ -1024,10 +1047,11 @@ const StakeDypiusBsc = ({
                       Max
                     </button>
                   </div>
-                 
+
                   <button
                     disabled={
-                      depositAmount === "" || depositLoading === true ||
+                      depositAmount === "" ||
+                      depositLoading === true ||
                       depositStatus === "success" ||
                       staking?._address.toLowerCase() ===
                         "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487".toLowerCase()
@@ -1036,8 +1060,8 @@ const StakeDypiusBsc = ({
                     }
                     className={`btn filledbtn ${
                       ((depositAmount === "" && depositStatus === "initial") ||
-                      staking?._address.toLowerCase() ===
-                        "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487".toLowerCase()) &&
+                        staking?._address.toLowerCase() ===
+                          "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487".toLowerCase()) &&
                       "disabled-btn"
                     } ${
                       (depositStatus === "deposit" ||
@@ -1055,9 +1079,9 @@ const StakeDypiusBsc = ({
                         "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487".toLowerCase()
                         ? handleStake()
                         : depositStatus === "initial" &&
-                        depositAmount !== "" &&
-                        staking?._address.toLowerCase() !==
-                          "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487".toLowerCase()
+                          depositAmount !== "" &&
+                          staking?._address.toLowerCase() !==
+                            "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487".toLowerCase()
                         ? handleApprove()
                         : console.log("");
                     }}
@@ -1157,16 +1181,20 @@ const StakeDypiusBsc = ({
                         /> */}
                   </div>
                   <div className="claim-reinvest-container d-flex justify-content-between align-items-center gap-3">
-                  <button
+                    <button
                       disabled={
-                        claimStatus === "claimed" || claimStatus === "success" || pendingDivs <= 0
+                        claimStatus === "claimed" ||
+                        claimStatus === "success" ||
+                        pendingDivs <= 0
                           ? //
                             true
                           : false
                       }
                       className={`btn filledbtn ${
-                        claimStatus === "claimed" && claimStatus === "initial"||  pendingDivs <= 0
-                          ? // 
+                        (claimStatus === "claimed" &&
+                          claimStatus === "initial") ||
+                        pendingDivs <= 0
+                          ? //
                             "disabled-btn"
                           : claimStatus === "failed"
                           ? "fail-button"
@@ -1177,10 +1205,11 @@ const StakeDypiusBsc = ({
                       style={{ height: "fit-content" }}
                       // onClick={handleClaimDivs}
                       onClick={() => {
-                        expired ? 
-                        window.$.alert(
-                          "*The rewards earned from the day of the migration until the end of the lock time will be distributed to the users automatically at the end of the contract."
-                        ) : handleClaimDivs()
+                        expired
+                          ? window.$.alert(
+                              "*The rewards earned from the day of the migration until the end of the lock time will be distributed to the users automatically at the end of the contract."
+                            )
+                          : handleClaimDivs();
                       }}
                     >
                       {claimLoading ? (
@@ -1395,7 +1424,9 @@ const StakeDypiusBsc = ({
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">TVL USD</span>
-                    <h6 className="stats-card-content">${tvl_usd} USD</h6>
+                    <h6 className="stats-card-content">
+                      ${getFormattedNumber(Number(tvl) * usdPerToken, 4)} USD
+                    </h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">

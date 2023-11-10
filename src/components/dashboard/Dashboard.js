@@ -96,12 +96,14 @@ const Dashboard = ({
     if (bnb_result2 && bnb_result2.status === 200) {
       // const dypdypBnb = bnb_result.data.stakingInfoiDYPBnb;
       const dypBnb = bnb_result2.data.stakingInfoDYPBnb;
-
+      const object2 = dypBnb.map((item) => {
+        return {...item, tvl_usd: item.tvl_usd/1e18}
+      })
       // const cleanCards = dypdypBnb.filter((item) => {
       //   return item.expired === "No";
       // });
 
-      const cleanCards2 = dypBnb.filter((item) => {
+      const cleanCards2 = object2.filter((item) => {
         return item.expired === "No";
       });
 
@@ -134,12 +136,14 @@ const Dashboard = ({
     ) {
       const dypIdypAvax = result_avax.data.stakingInfoiDYPAvax;
       const dypAvax = result_avax2.data.stakingInfoDYPAvax;
-
+      const object2 = dypAvax.map((item) => {
+        return {...item, tvl_usd: item.tvl_usd/1e18}
+      })
       const cleanCards = dypIdypAvax.filter((item) => {
         return item.expired !== "Yes";
       });
 
-      const cleanCards2 = dypAvax.filter((item) => {
+      const cleanCards2 = object2.filter((item) => {
         return item.expired !== "Yes";
       });
 
@@ -175,8 +179,10 @@ const Dashboard = ({
       eth_result2.status === 200
     ) {
       const dypEth = eth_result2.data.stakingInfoDYPEth;
-
-      const cleanCards = dypEth.filter((item) => {
+      const object2 = dypEth.map((item) => {
+        return {...item, tvl_usd: item.tvl_usd/1e18}
+      })
+      const cleanCards = object2.filter((item) => {
         return item.expired !== "Yes";
       });
 
@@ -629,8 +635,7 @@ const Dashboard = ({
                     expiration_time={"09 November 2024"}
                     finalApr={
                       topPools[cardIndex]?.apy_performancefee
-                        ? topPools[cardIndex]?.apy_performancefee
-                        : 30
+                       
                     }
                     fee={topPools[cardIndex]?.performancefee}
                     lockTime={
@@ -1147,8 +1152,7 @@ const Dashboard = ({
                     expiration_time={"09 November 2024"}
                     finalApr={
                       topPools[cardIndex]?.apy_performancefee
-                        ? topPools[cardIndex]?.apy_performancefee
-                        : 30
+                       
                     }
                     fee={topPools[cardIndex]?.performancefee}
                     lockTime={

@@ -187,7 +187,7 @@ const TopPoolsCard = ({
             {cardType !== "Vault" && (
               <div className="d-flex flex-column">
                 <h6 className="tvl-text">Total Value Locked</h6>
-                <h6 className="tvl-amount">{isNewPool && tokenName === 'DYP' ? getFormattedNumber(parseInt(tvl.slice(1, tvl.length).replace(/,/g, ''))/1e18,2)  : tvl}</h6>
+                <h6 className="tvl-amount">{tvl}</h6>
               </div>
             )}
             <div
