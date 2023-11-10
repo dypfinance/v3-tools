@@ -2198,7 +2198,7 @@ const checkDepositAmount = (amount) => {
                           className="form-control inputfarming"
                           style={{ border: "none", padding: "0 0 0 3px" }}
                         >
-                          <option value="DYP"> DYP </option>
+                          <option value="DYP"> DYP (old) </option>
                         </select>
                       </div>
                     </div>

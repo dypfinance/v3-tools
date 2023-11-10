@@ -31,6 +31,9 @@ import StakeAvax from "../FARMINNG/stakeAvax";
 import CawsWodDetails from "../FARMINNG/cawsWod";
 import BscFarmingFunc from "../FARMINNG/BscFarmingFunc";
 import FarmAvaxFunc from "../FARMINNG/FarmAvaxFunc";
+import StakeDypiusEth from "../FARMINNG/constant-staking-dypius-new";
+import StakeDypiusAvax from "../FARMINNG/stakeDypiusAvax";
+import StakeDypiusBsc from "../FARMINNG/bscConstantStakeDypius";
 
 const TopPoolsListCard = ({
   tokenLogo,
@@ -555,7 +558,6 @@ const TopPoolsListCard = ({
               is_wallet_connected={isConnected}
               coinbase={coinbase}
               the_graph_result={the_graph_result}
-              
               chainId={chainId}
               handleConnection={handleConnection}
               handleSwitchNetwork={handleSwitchNetwork}
@@ -577,7 +579,94 @@ const TopPoolsListCard = ({
                   : activePools[cardIndex - 1]?.lock_time?.split(" ")[0]
               }
             />
-          ) : showDetails && topList === "Farming" && chain === "bnb" ? (
+          ) : showDetails &&
+            activePools &&
+            activePools[cardIndex - 1]?.id ===
+              "0xC9075092Cc46E176B1F3c0D0EB8223F1e46555B0" &&
+            topList === "Staking" &&
+            chain === "eth" ? (
+            <StakeDypiusEth
+              staking={window.constant_staking_dypius_eth1}
+              apr={activePools[cardIndex - 1]?.apy_percent}
+              liquidity={eth_address}
+              expiration_time={"09 November 2024"}
+              finalApr={activePools[cardIndex - 1]?.apy_performancefee}
+              lockTime={
+                activePools[cardIndex - 1]?.lock_time?.split(" ")[0] === "No"
+                  ? "No Lock"
+                  : activePools[cardIndex - 1]?.lock_time?.split(" ")[0]
+              }
+              listType={listType}
+              other_info={false}
+              fee={activePools[cardIndex - 1]?.performancefee}
+              is_wallet_connected={isConnected}
+              coinbase={coinbase}
+              the_graph_result={the_graph_result}
+              chainId={chainId}
+              handleConnection={handleConnection}
+              handleSwitchNetwork={handleSwitchNetwork}
+              expired={false}
+              referrer={referrer}
+            />
+          )  : showDetails &&
+          activePools &&
+          activePools[cardIndex - 1]?.id ===
+            "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603" &&
+          topList === "Staking" &&
+          chain === "bnb" ? (
+          <StakeDypiusBsc
+            staking={window.constant_staking_dypius_bsc1}
+            apr={activePools[cardIndex - 1]?.apy_percent}
+            liquidity={wbsc_address}
+            expiration_time={"09 November 2024"}
+            finalApr={activePools[cardIndex - 1]?.apy_performancefee}
+            lockTime={
+              activePools[cardIndex - 1]?.lock_time?.split(" ")[0] === "No"
+                ? "No Lock"
+                : activePools[cardIndex - 1]?.lock_time?.split(" ")[0]
+            }
+            listType={listType}
+            other_info={false}
+            fee={activePools[cardIndex - 1]?.performancefee}
+            is_wallet_connected={isConnected}
+            coinbase={coinbase}
+            the_graph_result={the_graph_resultbsc}
+            chainId={chainId}
+            handleConnection={handleConnection}
+            handleSwitchNetwork={handleSwitchNetwork}
+            expired={false}
+            referrer={referrer}
+          />
+        )  : showDetails &&
+        activePools &&
+        activePools[cardIndex - 1]?.id ===
+          "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603" &&
+        topList === "Staking" &&
+        chain === "avax" ? (
+        <StakeDypiusAvax
+          staking={window.constant_staking_dypius_bsc1}
+          apr={activePools[cardIndex - 1]?.apy_percent}
+          liquidity={avax_address}
+          expiration_time={"09 November 2024"}
+          finalApr={activePools[cardIndex - 1]?.apy_performancefee}
+          lockTime={
+            activePools[cardIndex - 1]?.lock_time?.split(" ")[0] === "No"
+              ? "No Lock"
+              : activePools[cardIndex - 1]?.lock_time?.split(" ")[0]
+          }
+          listType={listType}
+          other_info={false}
+          fee_s={activePools[cardIndex - 1]?.performancefee}
+          is_wallet_connected={isConnected}
+          coinbase={coinbase}
+          the_graph_result={the_graph_resultavax}
+          chainId={chainId}
+          handleConnection={handleConnection}
+          handleSwitchNetwork={handleSwitchNetwork}
+          expired={false}
+          referrer={referrer}
+        />
+      ) : showDetails && topList === "Farming" && chain === "bnb" ? (
             <BscFarmingFunc
               is_wallet_connected={isConnected}
               coinbase={coinbase}
@@ -603,9 +692,7 @@ const TopPoolsListCard = ({
             />
           ) : showDetails &&
             topList === "Farming" &&
-            chain === "avax" ? //   the_graph_result={the_graph_resultavax} //   coinbase={coinbase} //   is_wallet_connected={isConnected} //   <FarmAvaxFunc
-          //   lp_id={LP_IDAVAX_Array[cardIndex]}
-          //   chainId={chainId}
+            chain === "avax" ? //   chainId={chainId} //   lp_id={LP_IDAVAX_Array[cardIndex]} //   the_graph_result={the_graph_resultavax} //   coinbase={coinbase} //   is_wallet_connected={isConnected} //   <FarmAvaxFunc
           //   handleConnection={handleConnection}
           //   expired={false}
           //   handleSwitchNetwork={handleSwitchNetwork}
@@ -969,7 +1056,6 @@ const TopPoolsListCard = ({
               is_wallet_connected={isConnected}
               coinbase={coinbase}
               the_graph_result={the_graph_result}
-              
               chainId={chainId}
               handleConnection={handleConnection}
               handleSwitchNetwork={handleSwitchNetwork}
@@ -1001,7 +1087,6 @@ const TopPoolsListCard = ({
               is_wallet_connected={isConnected}
               coinbase={coinbase}
               the_graph_result={the_graph_result}
-             
               chainId={chainId}
               handleConnection={handleConnection}
               handleSwitchNetwork={handleSwitchNetwork}

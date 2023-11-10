@@ -314,7 +314,7 @@ const EarnContent = ({
       fetchEthApr();
       fetchAvaxApr();
       fetchBnbApr();
-      setEthApr(7.35);
+      setEthApr(12.5);
     } else if (option === "Buyback") {
       fetchEthBuybackApr();
       fetchBnbBuybackApr();
@@ -631,7 +631,7 @@ const EarnContent = ({
                             whiteSpace: "pre",
                           }}
                         >
-                           7.35% APR
+                           12.5% APR
                         </p>
                       </div>
                     </div>
@@ -676,7 +676,7 @@ const EarnContent = ({
                             whiteSpace: "pre",
                           }}
                         >
-                          {getFormattedNumber(bnbApr, 0)}% APR
+                          12.5% APR
                         </p>
                       </div>
                     </div>
@@ -726,7 +726,7 @@ const EarnContent = ({
                             whiteSpace: "pre",
                           }}
                         >
-                          {avaxApr}% APR
+                          12.5% APR
                         </p>
                       </div>
                     </div>
@@ -760,7 +760,7 @@ const EarnContent = ({
                             color: "#f7f7fc",
                           }}
                         >
-                          7.35% APR
+                          12.5% APR
                         </p>
                       </div>
                     </div>
