@@ -502,9 +502,9 @@ export default class Subscription extends React.Component {
     const bscWeb3 = new Web3(window.config.bsc_endpoint);
     const avaxWeb3 = new Web3(window.config.avax_endpoint);
 
-    const ethsubscribeAddress = window.config.subscriptioneth_address;
-    const avaxsubscribeAddress = window.config.subscription_address;
-    const bnbsubscribeAddress = window.config.subscriptionbnb_address;
+    const ethsubscribeAddress = window.config.subscription_neweth_address;
+    const avaxsubscribeAddress = window.config.subscription_newavax_address;
+    const bnbsubscribeAddress = window.config.subscription_newbnb_address;
 
     const subscribeToken = token;
     const subscribeTokencontract = new web3eth.eth.Contract(
@@ -577,10 +577,10 @@ export default class Subscription extends React.Component {
     let subscriptionContract = await window.getContract({
       key:
         this.props.networkId === 1
-          ? "SUBSCRIPTIONETH"
+          ? "SUBSCRIPTION_NEWETH"
           : this.props.networkId === 56
-          ? "SUBSCRIPTIONBNB"
-          : "SUBSCRIPTION",
+          ? "SUBSCRIPTION_NEWBNB"
+          : "SUBSCRIPTION_NEWAVAX",
     });
 
     this.setState({ loadspinnerSub: true });
@@ -622,11 +622,11 @@ export default class Subscription extends React.Component {
     e.preventDefault();
     let subscriptionContract = await window.getContract({
       key:
-        this.props.networkId === 1
-          ? "SUBSCRIPTIONETH"
-          : this.props.networkId === 56
-          ? "SUBSCRIPTIONBNB"
-          : "SUBSCRIPTION",
+      this.props.networkId === 1
+      ? "SUBSCRIPTION_NEWETH"
+      : this.props.networkId === 56
+      ? "SUBSCRIPTION_NEWBNB"
+      : "SUBSCRIPTION_NEWAVAX",
     });
     await subscriptionContract.methods
       .unsubscribe()
