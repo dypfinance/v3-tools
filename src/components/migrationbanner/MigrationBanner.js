@@ -5,6 +5,7 @@ import { NavLink } from "react-router-dom";
 import Countdown from "react-countdown";
 import axios from "axios";
 import getFormattedNumber from "../../functions/get-formatted-number";
+import useWindowSize from "../../functions/useWindowSize";
 
 const renderer = ({ days, hours, minutes }) => {
   return (
@@ -33,6 +34,8 @@ const MigrationBanner = () => {
   const [migrationAmount, setMigrationAmount] = useState(0);
   const [migrationPercentage, setMigrationPercentage] = useState(true);
 
+  const windowSize = useWindowSize();
+
   let lastDay = new Date("2023-11-08T09:00:00.000+01:00");
 
   const getMigrationData = async () => {
@@ -59,11 +62,11 @@ const MigrationBanner = () => {
         <h6 className="migration-banner-title mb-0">Migration Status</h6>
       </div>
       <div className="d-flex flex-column gap-3">
-        <div className="migrated-tokens-wrapper my-4 d-flex align-items-center justify-content-between p-3">
+        <div className="migrated-tokens-wrapper my-4 d-flex flex-column flex-xl-row align-items-center justify-content-between p-3">
           <>
             <span className="migrated-tokens mb-0">
               Migrated
-              <br />
+              {windowSize.width > 500 && <br />}
               DYP Tokens
             </span>
             <h6 className="migrated-tokens-amount mb-0">
@@ -87,7 +90,15 @@ const MigrationBanner = () => {
           <div
             className="migration-inner-progress d-flex align-items-center justify-content-end px-3"
             style={{
-              width: `${migrationPercentage >= 35 ? migrationPercentage : ""}%`,
+              width: `${
+                windowSize.width > 500
+                  ? migrationPercentage >= 35
+                    ? migrationPercentage
+                    : ""
+                  : migrationPercentage >= 55
+                  ? migrationPercentage
+                  : ""
+              }%`,
             }}
           >
             <div className="d-flex align-items-center gap-2">
