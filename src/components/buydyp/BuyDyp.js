@@ -204,6 +204,15 @@ const BuyDyp = () => {
       // ],
     },
     {
+      title: "MEXC",
+      logo: "mexc.png",
+      link: "https://www.mexc.com/exchange/DYP_USDT",
+      totalvids: "0 videos",
+      videos: "",
+      id: "collapsefive",
+      active: true,
+    },
+    {
       title: "Coinbase",
       logo: "coinbase.png",
       link: "https://pro.coinbase.com/trade/DYP-USD",
@@ -261,15 +270,7 @@ const BuyDyp = () => {
       videos: "",
       active: false,
     },
-    {
-      title: "MEXC",
-      logo: "mexc.png",
-      link: "https://www.mexc.com/exchange/DYP_USDT",
-      totalvids: "0 videos",
-      videos: "",
-      id: "collapsefive",
-      active: false,
-    },
+
 
     {
       title: "Coin98",
