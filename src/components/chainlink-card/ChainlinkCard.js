@@ -87,7 +87,7 @@ const ChainlinkCard = () => {
             }}
           >
             {/* ${getFormattedNumber(totalpaid?.totalPaidInUsd)} */}
-            <CountUp
+            {/* <CountUp
               className="count-up"
               style={{
                 fontWeight: "300",
@@ -102,7 +102,16 @@ const ChainlinkCard = () => {
               separator=","
               decimals={2}
               prefix="$"
-            />
+            /> */}
+            <span className="count-up" 
+             style={{
+              fontWeight: "300",
+            fontSize: "18px",
+            lineHeight: "27px",
+            color: "#f7f7fc",
+            letterSpacing: '0.05em'
+            }}
+            >${getFormattedNumber(totalpaid?.totalPaidInUsd, 2)}</span>
           </h6>
         </div>
       </div>
