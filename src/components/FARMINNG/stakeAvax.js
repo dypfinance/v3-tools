@@ -1079,7 +1079,7 @@ settvlUSD(tvlUSD)
                       style={{ height: "fit-content" }}
                       // onClick={handleClaimDivs}
                       onClick={() => {
-                        expired ? 
+                        staking._address === '0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712' ? 
                         window.$.alert(
                           "*The rewards earned from the day of the migration until the end of the lock time will be distributed to the users automatically at the end of the contract."
                         ) : handleClaimDivs()
