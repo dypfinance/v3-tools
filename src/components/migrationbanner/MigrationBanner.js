@@ -67,7 +67,7 @@ const MigrationBanner = () => {
             <span className="migrated-tokens mb-0">
               Migrated
               {windowSize.width > 500 && <br />}
-              DYP Tokens
+              {" "}DYP Tokens
             </span>
             <h6 className="migrated-tokens-amount mb-0">
               {getFormattedNumber(migrationAmount, 0)}
