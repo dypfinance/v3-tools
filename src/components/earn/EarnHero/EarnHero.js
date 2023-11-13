@@ -101,7 +101,7 @@ const EarnHero = () => {
               >
                 Rewards paid out
               </p>
-              <CountUp
+              {/* <CountUp
                 className="count-up"
                 style={{
                   fontSize: "19px",
@@ -115,7 +115,15 @@ const EarnHero = () => {
                 separator=","
                 decimals={2}
                 prefix="$"
-              />
+              /> */}
+              <h6 className="count-up"
+               style={{
+                fontSize: "19px",
+                color: "#f7f7fc",
+                fontWeight: "600",
+                textAlign: "start",
+              }}
+              >${getFormattedNumber(totalpaid?.totalPaidInUsd, 2)}</h6>
             </div>
             <img
               src={earnHeroStats}
