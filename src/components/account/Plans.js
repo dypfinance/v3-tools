@@ -1080,7 +1080,7 @@ export default class Subscription extends React.Component {
                 ))}
               </ul>
             </div>
-            <div className="premium-subscribe-wrapper p-3">
+            <div className="premium-subscribe-wrapper col-3 p-3">
               <div className="premium-gradient d-flex align-items-center justify-content-between p-3">
                 <div className="d-flex flex-column">
                   <span className="premium-span">Premium</span>
@@ -1092,14 +1092,14 @@ export default class Subscription extends React.Component {
                 className="d-flex flex-column"
                 style={{ position: "relative", top: "-25px" }}
               >
-                <span className="lifetime-subscription">
+                <span className="lifetime-subscription text-center">
                   Lifetime subscription
                 </span>
-                <span className="lifetime-desc">
+                {/* <span className="lifetime-desc invisible">
                   The subscription tokens will be used to buy DYP
-                </span>
+                </span> */}
               </div>
-              <div className="d-flex justify-content-end mt-0 mt-lg-3">
+              <div className="d-flex justify-content-center mt-0 mt-lg-3">
                 <div
                   className="btn filledbtn px-3 px-lg-5"
                   style={{ whiteSpace: "pre" }}
