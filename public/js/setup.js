@@ -1961,13 +1961,13 @@ window.config = {
   vault_dainew_address: "0xf656dc256c60eb8417366015ee9217462b5a795d",
 
   subscription_address: "0x5078a4912f6e0d74dcf99482ac5910df123e9b4b",
-  subscription_newavax_address: "0x669A026E2d647d78882887691E7c18Da84BCFe7D",
+  subscription_newavax_address: "0x82446d96129597ec6db0bf7f7be5a1ce7c0bef1a",
 
   subscriptioneth_address: "0x6cc47d895aa6da6012c2b6bfd2f6af3ebbf1d2e4",
-  subscription_neweth_address: "0x29c90c6a1243455266afd7f92649e384213d45b0",
+  subscription_neweth_address: "0xa1d6178f3d96b9da85802b6abd553e2b854c7382",
 
   subscriptionbnb_address: "0x0ec59a2d18e1e83ab393b3ac9d7d6d28cbff0d35",
-  subscription_newbnb_address: "0xFE5a91b1F48095ac2943240f8E1A9da19557911d",
+  subscription_newbnb_address: "0xB1c10aCbB6e4CCF24Cd57db4E5B524E39841A97C",
 
   ZERO_ADDRESS: "0x0000000000000000000000000000000000000000",
   MAX_LOCKS_TO_LOAD_PER_CALL: 10,
@@ -2097,14 +2097,10 @@ window.config = {
       symbol: "USDT",
       decimals: 6,
     },
-    "0xdac17f958d2ee523a2206206994597c13d831ec7": {
-      symbol: "USDT",
-      decimals: 6,
-    },
-    "0x39b46b212bdf15b42b166779b9d1787a68b9d0c3": {
-      symbol: "DYP",
-      decimals: 18,
-    },
+    // "0x39b46b212bdf15b42b166779b9d1787a68b9d0c3": {
+    //   symbol: "DYP",
+    //   decimals: 18,
+    // },
   },
   subscriptionbnb_tokens: {
     "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c": {
@@ -15753,6 +15749,7 @@ window.SUBSCRIPTION_NEWAVAX_ABI = [
     type: "function",
   },
 ];
+
 
 window.SUBSCRIPTIONBNB_ABI = [
   { inputs: [], stateMutability: "nonpayable", type: "constructor" },
