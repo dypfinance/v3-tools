@@ -414,7 +414,7 @@ export default class Subscription extends React.Component {
         : this.props.networkId === 56
         ? await window.getEstimatedTokenSubscriptionAmountBNB(token)
         : await window.getEstimatedTokenSubscriptionAmount(token);
-    price = new BigNumber(price).times(1.1).toFixed(0);
+    price = new BigNumber(price).toFixed(0);
 
     let formattedPrice = getFormattedNumber(
       price / 10 ** tokenDecimals,
@@ -429,17 +429,28 @@ export default class Subscription extends React.Component {
 
   handleApprove = async (e) => {
     // e.preventDefault();
+    const web3 = new Web3(window.ethereum);
+    let tokenContract = new web3.eth.Contract(
+      window.ERC20_ABI,
+      this.state.selectedSubscriptionToken
+    );
 
-    let tokenContract = await window.getContract({
-      address: this.state.selectedSubscriptionToken,
-      ABI: window.ERC20_ABI,
-    });
+    const ethsubscribeAddress = window.config.subscription_neweth_address;
+    const avaxsubscribeAddress = window.config.subscription_newavax_address;
+    const bnbsubscribeAddress = window.config.subscription_newbnb_address;
 
     this.setState({ loadspinner: true });
 
     await tokenContract.methods
-      .approve(this.state.selectedSubscriptionToken, this.state.price)
-      .send()
+      .approve(
+        this.props.networkId === 1
+          ? ethsubscribeAddress
+          : this.props.networkId === 56
+          ? bnbsubscribeAddress
+          : avaxsubscribeAddress,
+        this.state.price
+      )
+      .send({ from: this.props.coinbase })
       .then(() => {
         this.setState({ lockActive: true });
         this.setState({ loadspinner: false });
@@ -544,6 +555,7 @@ export default class Subscription extends React.Component {
           .allowance(this.props.coinbase, bnbsubscribeAddress)
           .call()
           .then();
+
         if (result != 0) {
           this.setState({ lockActive: true });
           this.setState({ loadspinner: false });
@@ -592,6 +604,7 @@ export default class Subscription extends React.Component {
     //   ? await window.getEstimatedTokenSubscriptionAmountBNB(this.state.selectedSubscriptionToken)
     //   : await window.getEstimatedTokenSubscriptionAmount(this.state.selectedSubscriptionToken);
     // console.log(this.state.price, this.state.selectedSubscriptionToken)
+    console.log(this.state.selectedSubscriptionToken, this.state.price);
     await subscriptionContract.methods
       .subscribe(this.state.selectedSubscriptionToken, this.state.price)
       .send({ from: await window.getCoinbase() })
@@ -622,11 +635,11 @@ export default class Subscription extends React.Component {
     e.preventDefault();
     let subscriptionContract = await window.getContract({
       key:
-      this.props.networkId === 1
-      ? "SUBSCRIPTION_NEWETH"
-      : this.props.networkId === 56
-      ? "SUBSCRIPTION_NEWBNB"
-      : "SUBSCRIPTION_NEWAVAX",
+        this.props.networkId === 1
+          ? "SUBSCRIPTION_NEWETH"
+          : this.props.networkId === 56
+          ? "SUBSCRIPTION_NEWBNB"
+          : "SUBSCRIPTION_NEWAVAX",
     });
     await subscriptionContract.methods
       .unsubscribe()
@@ -1067,11 +1080,11 @@ export default class Subscription extends React.Component {
                 ))}
               </ul>
             </div>
-            <div className="premium-subscribe-wrapper p-3">
+            <div className="premium-subscribe-wrapper col-3 p-3">
               <div className="premium-gradient d-flex align-items-center justify-content-between p-3">
                 <div className="d-flex flex-column">
                   <span className="premium-span">Premium</span>
-                  <h6 className="premium-price">$75</h6>
+                  <h6 className="premium-price">$100</h6>
                 </div>
                 <img src={premiumDypTag} alt="premium dyp" />
               </div>
@@ -1079,14 +1092,14 @@ export default class Subscription extends React.Component {
                 className="d-flex flex-column"
                 style={{ position: "relative", top: "-25px" }}
               >
-                <span className="lifetime-subscription">
+                <span className="lifetime-subscription text-center">
                   Lifetime subscription
                 </span>
-                <span className="lifetime-desc">
+                {/* <span className="lifetime-desc invisible">
                   The subscription tokens will be used to buy DYP
-                </span>
+                </span> */}
               </div>
-              <div className="d-flex justify-content-end mt-0 mt-lg-3">
+              <div className="d-flex justify-content-center mt-0 mt-lg-3">
                 <div
                   className="btn filledbtn px-3 px-lg-5"
                   style={{ whiteSpace: "pre" }}

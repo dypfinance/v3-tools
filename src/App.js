@@ -181,9 +181,6 @@ class App extends React.Component {
 
   refreshSubscription = async () => {
     let coinbase = this.state.coinbase;
-    let subscribedPlatformTokenAmountETH;
-    let subscribedPlatformTokenAmountAvax;
-    let subscribedPlatformTokenAmountBNB;
 
     let subscribedPlatformTokenAmountNewETH;
     let subscribedPlatformTokenAmountNewAvax;
@@ -193,56 +190,30 @@ class App extends React.Component {
     const web3avax = window.avaxWeb3;
     const web3bnb = window.bscWeb3;
 
-    const AvaxABI = window.SUBSCRIPTION_ABI;
-    const EthABI = window.SUBSCRIPTIONETH_ABI;
-    const BnbABI = window.SUBSCRIPTIONBNB_ABI;
-
     const AvaxNewABI = window.SUBSCRIPTION_NEWAVAX_ABI;
     const EthNewABI = window.SUBSCRIPTION_NEWETH_ABI;
     const BnbNewABI = window.SUBSCRIPTION_NEWBNB_ABI;
-
-    const ethsubscribeAddress = window.config.subscriptioneth_address;
-    const avaxsubscribeAddress = window.config.subscription_address;
-    const bnbsubscribeAddress = window.config.subscriptionbnb_address;
 
     const ethsubscribeNewAddress = window.config.subscription_neweth_address;
     const avaxsubscribeNewAddress = window.config.subscription_newavax_address;
     const bnbsubscribeNewAddress = window.config.subscription_newbnb_address;
 
-    const ethcontract = new web3eth.eth.Contract(EthABI, ethsubscribeAddress);
     const ethNewcontract = new web3eth.eth.Contract(
       EthNewABI,
       ethsubscribeNewAddress
     );
 
-    const avaxcontract = new web3avax.eth.Contract(
-      AvaxABI,
-      avaxsubscribeAddress
-    );
     const avaxNewcontract = new web3avax.eth.Contract(
       AvaxNewABI,
       avaxsubscribeNewAddress
     );
 
-    const bnbcontract = new web3bnb.eth.Contract(BnbABI, bnbsubscribeAddress);
     const bnbNewcontract = new web3bnb.eth.Contract(
       BnbNewABI,
       bnbsubscribeNewAddress
     );
 
     if (coinbase) {
-      subscribedPlatformTokenAmountETH = await ethcontract.methods
-        .subscriptionPlatformTokenAmount(coinbase)
-        .call();
-
-      subscribedPlatformTokenAmountAvax = await avaxcontract.methods
-        .subscriptionPlatformTokenAmount(coinbase)
-        .call();
-
-      subscribedPlatformTokenAmountBNB = await bnbcontract.methods
-        .subscriptionPlatformTokenAmount(coinbase)
-        .call();
-
       subscribedPlatformTokenAmountNewETH = await ethNewcontract.methods
         .subscriptionPlatformTokenAmount(coinbase)
         .call();
@@ -256,18 +227,12 @@ class App extends React.Component {
         .call();
 
       if (
-        subscribedPlatformTokenAmountAvax === "0" &&
-        subscribedPlatformTokenAmountETH === "0" &&
-        subscribedPlatformTokenAmountBNB === "0" &&
         subscribedPlatformTokenAmountNewETH === "0" &&
         subscribedPlatformTokenAmountNewAvax === "0" &&
         subscribedPlatformTokenAmountNewBNB === "0"
       ) {
         this.setState({ subscribedPlatformTokenAmount: "0", isPremium: false });
       } else if (
-        subscribedPlatformTokenAmountAvax !== "0" ||
-        subscribedPlatformTokenAmountETH !== "0" ||
-        subscribedPlatformTokenAmountBNB !== "0" ||
         subscribedPlatformTokenAmountNewETH !== "0" ||
         subscribedPlatformTokenAmountNewAvax !== "0" ||
         subscribedPlatformTokenAmountNewBNB !== "0"
@@ -280,47 +245,6 @@ class App extends React.Component {
     }
   };
 
-  handleConnection = async () => {
-    let isConnected = this.state.isConnected;
-    let referrer = window.param("r");
-
-    try {
-      localStorage.setItem("logout", "false");
-      isConnected = await window.connectWallet(undefined, false);
-      if (isConnected) {
-        if (referrer) {
-          referrer = String(referrer).trim().toLowerCase();
-        }
-        if (!window.web3.utils.isAddress(referrer)) {
-          referrer = window.config.ZERO_ADDRESS;
-        }
-      }
-      this.setState({
-        referrer,
-      });
-
-      let the_graph_result_ETH_V2 = await window.get_the_graph_eth_v2();
-      this.setState({
-        the_graph_result_ETH_V2: JSON.parse(
-          JSON.stringify(the_graph_result_ETH_V2)
-        ),
-      });
-    } catch (e) {
-      this.setState({ show: false });
-      window.alertify.error(String(e) || "Cannot connect wallet!");
-      console.log(e);
-      return;
-    }
-
-    this.setState({ isConnected });
-    // console.log(window.coinbase_address)
-    let coinbase = await window.getCoinbase();
-    if (coinbase != null || coinbase != undefined) {
-      this.setState({ coinbase: coinbase });
-    }
-    this.setState({ show: false });
-    return isConnected;
-  };
 
   tvl = async () => {
     try {

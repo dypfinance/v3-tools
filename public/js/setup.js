@@ -1961,13 +1961,13 @@ window.config = {
   vault_dainew_address: "0xf656dc256c60eb8417366015ee9217462b5a795d",
 
   subscription_address: "0x5078a4912f6e0d74dcf99482ac5910df123e9b4b",
-  subscription_newavax_address: "0x82446d96129597ec6db0bf7f7be5a1ce7c0bef1a",
+  subscription_newavax_address: "0xef3819fc5bb5a5468cac4d47e2a1ee6905b8cc7d",
 
   subscriptioneth_address: "0x6cc47d895aa6da6012c2b6bfd2f6af3ebbf1d2e4",
-  subscription_neweth_address: "0xa1d6178f3d96b9da85802b6abd553e2b854c7382",
+  subscription_neweth_address: "0x29c90c6a1243455266afd7f92649e384213d45b0",
 
   subscriptionbnb_address: "0x0ec59a2d18e1e83ab393b3ac9d7d6d28cbff0d35",
-  subscription_newbnb_address: "0xB1c10aCbB6e4CCF24Cd57db4E5B524E39841A97C",
+  subscription_newbnb_address: "0xc8adbef45b75ee4f3b5c9d4da2e1a1af408378a2",
 
   ZERO_ADDRESS: "0x0000000000000000000000000000000000000000",
   MAX_LOCKS_TO_LOAD_PER_CALL: 10,
@@ -2072,14 +2072,14 @@ window.config = {
       symbol: "USDT",
       decimals: 6,
     },
-    "0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E": {
-      symbol: "USDC",
-      decimals: 6,
+    "0xd586E7F844cEa2F87f50152665BCbc2C279D8d70": {
+      symbol: "DAI",
+      decimals: 18,
     },
-    // "0x1a3264F2e7b1CFC6220ec9348d33cCF02Af7aaa4": {
-    //   symbol: "DYP",
-    //   decimals: 18,
-    // },
+    "0x1a3264F2e7b1CFC6220ec9348d33cCF02Af7aaa4": {
+      symbol: "DYP",
+      decimals: 18,
+    },
   },
 
   // add supported subscription tokens here, lowercase
@@ -2097,14 +2097,10 @@ window.config = {
       symbol: "USDT",
       decimals: 6,
     },
-    "0xdac17f958d2ee523a2206206994597c13d831ec7": {
-      symbol: "USDT",
-      decimals: 6,
+    "0x39b46b212bdf15b42b166779b9d1787a68b9d0c3": {
+      symbol: "DYP",
+      decimals: 18,
     },
-    // "0x39b46b212bdf15b42b166779b9d1787a68b9d0c3": {
-    //   symbol: "DYP",
-    //   decimals: 18,
-    // },
   },
   subscriptionbnb_tokens: {
     "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c": {
@@ -2119,10 +2115,10 @@ window.config = {
       symbol: "USDT",
       decimals: 18,
     },
-    // "0x1a3264F2e7b1CFC6220ec9348d33cCF02Af7aaa4": {
-    //   symbol: "DYP",
-    //   decimals: 18,
-    // },
+    "0x1a3264F2e7b1CFC6220ec9348d33cCF02Af7aaa4": {
+      symbol: "DYP",
+      decimals: 18,
+    },
   },
 
   automated_trust_scores: {
@@ -15626,7 +15622,35 @@ window.SUBSCRIPTION_NEWAVAX_ABI = [
   },
   {
     inputs: [],
+    name: "TRUSTED_DYP_WAVAX_PAIR",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "TRUSTED_PLATFORM_TOKEN_ADDRESS",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "TRUSTED_USDT_ADDRESS",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "TRUSTED_USDT_WAVAX_PAIR",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "TRUSTED_WAVAX_ADDRESS",
     outputs: [{ internalType: "address", name: "", type: "address" }],
     stateMutability: "view",
     type: "function",
@@ -15686,6 +15710,11 @@ window.SUBSCRIPTION_NEWAVAX_ABI = [
         name: "newSubscriptionFeeInDai",
         type: "uint256",
       },
+      {
+        internalType: "uint128",
+        name: "newSubscriptionFeeInUSDT",
+        type: "uint128",
+      },
     ],
     name: "setSubscriptionFee",
     outputs: [],
@@ -15706,6 +15735,13 @@ window.SUBSCRIPTION_NEWAVAX_ABI = [
     inputs: [],
     name: "subscriptionFeeInDai",
     outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "subscriptionFeeInUSDT",
+    outputs: [{ internalType: "uint128", name: "", type: "uint128" }],
     stateMutability: "view",
     type: "function",
   },
