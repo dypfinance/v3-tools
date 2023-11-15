@@ -2097,10 +2097,10 @@ window.config = {
       symbol: "USDT",
       decimals: 6,
     },
-    // "0x39b46b212bdf15b42b166779b9d1787a68b9d0c3": {
-    //   symbol: "DYP",
-    //   decimals: 18,
-    // },
+    "0x39b46b212bdf15b42b166779b9d1787a68b9d0c3": {
+      symbol: "DYP",
+      decimals: 18,
+    },
   },
   subscriptionbnb_tokens: {
     "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c": {

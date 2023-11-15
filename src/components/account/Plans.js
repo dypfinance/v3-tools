@@ -414,7 +414,7 @@ export default class Subscription extends React.Component {
         : this.props.networkId === 56
         ? await window.getEstimatedTokenSubscriptionAmountBNB(token)
         : await window.getEstimatedTokenSubscriptionAmount(token);
-    price = new BigNumber(price).times(1.1).toFixed(0);
+    price = new BigNumber(price).toFixed(0);
 
     let formattedPrice = getFormattedNumber(
       price / 10 ** tokenDecimals,
@@ -1084,7 +1084,7 @@ export default class Subscription extends React.Component {
               <div className="premium-gradient d-flex align-items-center justify-content-between p-3">
                 <div className="d-flex flex-column">
                   <span className="premium-span">Premium</span>
-                  <h6 className="premium-price">$75</h6>
+                  <h6 className="premium-price">$100</h6>
                 </div>
                 <img src={premiumDypTag} alt="premium dyp" />
               </div>
