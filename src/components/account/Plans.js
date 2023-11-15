@@ -429,17 +429,28 @@ export default class Subscription extends React.Component {
 
   handleApprove = async (e) => {
     // e.preventDefault();
+    const web3 = new Web3(window.ethereum);
+    let tokenContract = new web3.eth.Contract(
+      window.ERC20_ABI,
+      this.state.selectedSubscriptionToken
+    );
 
-    let tokenContract = await window.getContract({
-      address: this.state.selectedSubscriptionToken,
-      ABI: window.ERC20_ABI,
-    });
+    const ethsubscribeAddress = window.config.subscription_neweth_address;
+    const avaxsubscribeAddress = window.config.subscription_newavax_address;
+    const bnbsubscribeAddress = window.config.subscription_newbnb_address;
 
     this.setState({ loadspinner: true });
 
     await tokenContract.methods
-      .approve(this.state.selectedSubscriptionToken, this.state.price)
-      .send()
+      .approve(
+        this.props.networkId === 1
+          ? ethsubscribeAddress
+          : this.props.networkId === 56
+          ? bnbsubscribeAddress
+          : avaxsubscribeAddress,
+        this.state.price
+      )
+      .send({ from: this.props.coinbase })
       .then(() => {
         this.setState({ lockActive: true });
         this.setState({ loadspinner: false });
@@ -544,6 +555,7 @@ export default class Subscription extends React.Component {
           .allowance(this.props.coinbase, bnbsubscribeAddress)
           .call()
           .then();
+
         if (result != 0) {
           this.setState({ lockActive: true });
           this.setState({ loadspinner: false });
@@ -592,6 +604,7 @@ export default class Subscription extends React.Component {
     //   ? await window.getEstimatedTokenSubscriptionAmountBNB(this.state.selectedSubscriptionToken)
     //   : await window.getEstimatedTokenSubscriptionAmount(this.state.selectedSubscriptionToken);
     // console.log(this.state.price, this.state.selectedSubscriptionToken)
+    console.log(this.state.selectedSubscriptionToken, this.state.price);
     await subscriptionContract.methods
       .subscribe(this.state.selectedSubscriptionToken, this.state.price)
       .send({ from: await window.getCoinbase() })
@@ -622,11 +635,11 @@ export default class Subscription extends React.Component {
     e.preventDefault();
     let subscriptionContract = await window.getContract({
       key:
-      this.props.networkId === 1
-      ? "SUBSCRIPTION_NEWETH"
-      : this.props.networkId === 56
-      ? "SUBSCRIPTION_NEWBNB"
-      : "SUBSCRIPTION_NEWAVAX",
+        this.props.networkId === 1
+          ? "SUBSCRIPTION_NEWETH"
+          : this.props.networkId === 56
+          ? "SUBSCRIPTION_NEWBNB"
+          : "SUBSCRIPTION_NEWAVAX",
     });
     await subscriptionContract.methods
       .unsubscribe()
