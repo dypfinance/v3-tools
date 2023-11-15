@@ -414,7 +414,7 @@ export default class Subscription extends React.Component {
         : this.props.networkId === 56
         ? await window.getEstimatedTokenSubscriptionAmountBNB(token)
         : await window.getEstimatedTokenSubscriptionAmount(token);
-    price = new BigNumber(price).times(1.1).toFixed(0);
+    price = new BigNumber(price).toFixed(0);
 
     let formattedPrice = getFormattedNumber(
       price / 10 ** tokenDecimals,
