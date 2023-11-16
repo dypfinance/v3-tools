@@ -245,6 +245,48 @@ class App extends React.Component {
     }
   };
 
+  handleConnection = async () => {
+    let isConnected = this.state.isConnected;
+    let referrer = window.param("r");
+
+    try {
+      localStorage.setItem("logout", "false");
+      isConnected = await window.connectWallet(undefined, false);
+      if (isConnected) {
+        if (referrer) {
+          referrer = String(referrer).trim().toLowerCase();
+        }
+        if (!window.web3.utils.isAddress(referrer)) {
+          referrer = window.config.ZERO_ADDRESS;
+        }
+      }
+      this.setState({
+        referrer,
+      });
+
+      let the_graph_result_ETH_V2 = await window.get_the_graph_eth_v2();
+      this.setState({
+        the_graph_result_ETH_V2: JSON.parse(
+          JSON.stringify(the_graph_result_ETH_V2)
+        ),
+      });
+    } catch (e) {
+      this.setState({ show: false });
+      window.alertify.error(String(e) || "Cannot connect wallet!");
+      console.log(e);
+      return;
+    }
+
+    this.setState({ isConnected });
+    // console.log(window.coinbase_address)
+    let coinbase = await window.getCoinbase();
+    if (coinbase != null || coinbase != undefined) {
+      this.setState({ coinbase: coinbase });
+    }
+    this.setState({ show: false });
+    return isConnected;
+  };
+
 
   tvl = async () => {
     try {
