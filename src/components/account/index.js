@@ -1170,7 +1170,7 @@ export default class Subscription extends React.Component {
                       {getFormattedNumber(this.state.ethBalance)} DYP
                     </span>
                     <img
-                      src={require(`./assets/dypIcon.svg`).default}
+                      src={require(`./assets/dypv1Icon.svg`).default}
                       width={20}
                       height={20}
                       alt=""
@@ -1189,7 +1189,7 @@ export default class Subscription extends React.Component {
                       {getFormattedNumber(this.state.bnbBalance)} DYP
                     </span>
                     <img
-                      src={require(`./assets/dypIcon.svg`).default}
+                      src={require(`./assets/dypv1Icon.svg`).default}
                       width={20}
                       height={20}
                       alt=""
@@ -1203,7 +1203,7 @@ export default class Subscription extends React.Component {
                       {getFormattedNumber(this.state.avaxBalance)} DYP
                     </span>
                     <img
-                      src={require(`./assets/dypIcon.svg`).default}
+                      src={require(`./assets/dypv1Icon.svg`).default}
                       width={20}
                       height={20}
                       alt=""

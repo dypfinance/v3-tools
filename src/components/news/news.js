@@ -94,9 +94,13 @@ const News = ({ theme, isPremium, coinbase }) => {
   const [next, setNext] = useState(newsPerRow);
   const [userAlreadyVoted, setUserAlreadyVoted] = useState(true);
   const [canVote, setCanVote] = useState(false);
-  const [bal1, setbal1] = useState(0);
-  const [bal2, setbal2] = useState(0);
-  const [bal3, setbal3] = useState(0);
+  const [bal1, setbal1] = useState('0');
+  const [bal2, setbal2] = useState('0');
+  const [bal3, setbal3] = useState('0');
+
+  const [bal4, setbal4] = useState('0');
+  const [bal5, setbal5] = useState('0');
+  const [bal6, setbal6] = useState('0');
 
   const checkFunds = async (account) => {
     const web3eth = new Web3(
@@ -107,6 +111,9 @@ const News = ({ theme, isPremium, coinbase }) => {
     const tokenAddress = window.config.token_dypius_new_address;
     const tokenAddress_bsc = window.config.token_dypius_new_bsc_address;
 
+    const tokenAddress_old = window.config.token_old_address;
+
+
     const walletAddress = account;
     const TokenABI = window.ERC20_ABI;
     if (account != undefined) {
@@ -114,20 +121,41 @@ const News = ({ theme, isPremium, coinbase }) => {
       const contract2 = new web3avax.eth.Contract(TokenABI, tokenAddress_bsc);
       const contract3 = new web3bsc.eth.Contract(TokenABI, tokenAddress_bsc);
 
+      const contract4 = new web3eth.eth.Contract(TokenABI, tokenAddress_old);
+      const contract5 = new web3avax.eth.Contract(TokenABI, tokenAddress_old);
+      const contract6 = new web3bsc.eth.Contract(TokenABI, tokenAddress_old);
+
       const baleth = await contract1.methods
         .balanceOf(walletAddress)
         .call()
         .then((data) => {
           return web3eth.utils.fromWei(data, "ether");
         });
+        const baleth_old = await contract4.methods
+        .balanceOf(walletAddress)
+        .call()
+        .then((data) => {
+          return web3eth.utils.fromWei(data, "ether");
+        });
+
       setbal1(baleth);
+      setbal4(baleth_old);
+
       const balavax = await contract2.methods
         .balanceOf(walletAddress)
         .call()
         .then((data) => {
           return web3avax.utils.fromWei(data, "ether");
         });
+        const balavax_old = await contract5.methods
+        .balanceOf(walletAddress)
+        .call()
+        .then((data) => {
+          return web3avax.utils.fromWei(data, "ether");
+        });
+
       setbal2(balavax);
+      setbal5(balavax_old);
 
       const balbnb = await contract3.methods
         .balanceOf(walletAddress)
@@ -135,7 +163,16 @@ const News = ({ theme, isPremium, coinbase }) => {
         .then((data) => {
           return web3bsc.utils.fromWei(data, "ether");
         });
+
+        const balbnb_old = await contract6.methods
+        .balanceOf(walletAddress)
+        .call()
+        .then((data) => {
+          return web3bsc.utils.fromWei(data, "ether");
+        });
+      setbal6(balbnb_old);
       setbal3(balbnb);
+
     }
   };
 
@@ -457,26 +494,25 @@ const News = ({ theme, isPremium, coinbase }) => {
   const logout = localStorage.getItem("logout");
 
   useEffect(() => {
-    if (bal1 === '0' && bal2 === '0'&& bal3 === '0' && isPremium === true) {
+    if (bal1 === '0' && bal2 === '0'&& bal3 === '0' && bal4 === '0' && bal5 === '0' && bal6 === '0' && isPremium === true) {
       setCanVote(true);
-    } else if (bal1 !== '0' && bal2 !== '0' && bal3 !== '0' && isPremium === true) {
+    } else if (bal1 !== '0' && bal2 !== '0' && bal3 !== '0' && bal4 !== '0' && bal5 !== '0' && bal6 !== '0' && isPremium === true) {
       setCanVote(true);
-    } else if ((bal1 !== '0' || bal2 !== '0'  || bal3 !== '0') && isPremium === false) {
+    } else if ((bal1 !== '0' || bal2 !== '0'  || bal3 !== '0' || bal4 !== '0' || bal5 !== '0' || bal6 !== '0') && isPremium === false) {
       setCanVote(true);
     } else if (bal1 === '0' && bal2 === '0'  && bal3 !== '0' && isPremium === false) {
       setCanVote(false);
     } else if (logout === "true") {
       setCanVote(false);
     }
-  }, [userAlreadyVoted, bal1, bal2, isPremium, logout, coinbase]);
+  }, [userAlreadyVoted, bal1, bal2, bal3, bal4, bal5, bal6, isPremium, logout, coinbase]);
 
-  // console.log(isPremium)
-
+ 
   const handleUpVoting = async (itemId) => {
     const coinbase = await window.getCoinbase();
     // console.log(itemId)
     if (
-      (bal1 === '0' && bal2 === '0'  && bal3 === '0' && isPremium === false) ||
+      (bal1 === '0' && bal2 === '0'  && bal3 === '0' && bal4 === '0' && bal5 === '0' && bal6 === '0' && isPremium === false) ||
       logout === "true"
     ) {
       setShowTooltip(true);
@@ -506,7 +542,7 @@ const News = ({ theme, isPremium, coinbase }) => {
     const coinbase = await window.getCoinbase();
 
     if (
-      (bal1 === '0' && bal2 === '0'  && bal3 === '0'&& isPremium === false) ||
+      (bal1 === '0' && bal2 === '0'  && bal3 === '0' && bal4 === '0' && bal5 === '0' && bal6 === '0' && isPremium === false)  ||
       logout === "true"
     ) {
       setShowTooltip(true);
@@ -609,6 +645,9 @@ const News = ({ theme, isPremium, coinbase }) => {
             bal1={bal1}
             bal2={bal2}
             bal3={bal3}
+            bal4={bal4}
+            bal5={bal5}
+            bal6={bal6}
             style={{ width: "fit-content" }}
             onSelectOtherNews={(key) => {
               window.scrollTo(0, 0);
@@ -664,6 +703,9 @@ const News = ({ theme, isPremium, coinbase }) => {
                             bal1={bal1}
                             bal2={bal2}
                             bal3={bal3}
+                            bal4={bal4}
+                            bal5={bal5}
+                            bal6={bal6}
                             image={item.image}
                             title={item.title}
                             link={item.link}
@@ -762,9 +804,12 @@ const News = ({ theme, isPremium, coinbase }) => {
                         key={key}
                       >
                         <SingleNews
-                          bal1={bal1}
-                          bal2={bal2}
-                          bal3={bal3}
+                         bal1={bal1}
+                         bal2={bal2}
+                         bal3={bal3}
+                         bal4={bal4}
+                         bal5={bal5}
+                         bal6={bal6}
                           image={item.image}
                           title={item.title}
                           link={item.link}
@@ -803,6 +848,9 @@ const News = ({ theme, isPremium, coinbase }) => {
                             bal1={bal1}
                             bal2={bal2}
                             bal3={bal3}
+                            bal4={bal4}
+                            bal5={bal5}
+                            bal6={bal6}
                             image={item.image}
                             title={item.title}
                             link={item.link}
@@ -893,6 +941,9 @@ const News = ({ theme, isPremium, coinbase }) => {
                         bal1={bal1}
                         bal2={bal2}
                         bal3={bal3}
+                        bal4={bal4}
+                        bal5={bal5}
+                        bal6={bal6}
                         image={item.image}
                         title={item.title}
                         link={item.link}
@@ -940,6 +991,9 @@ const News = ({ theme, isPremium, coinbase }) => {
                     bal1={bal1}
                     bal2={bal2}
                     bal3={bal3}
+                    bal4={bal4}
+                    bal5={bal5}
+                    bal6={bal6}
                     image={item.image}
                     title={item.title}
                     link={item.link}

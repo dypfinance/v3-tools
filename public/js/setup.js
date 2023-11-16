@@ -2077,7 +2077,7 @@ window.config = {
       decimals: 18,
     },
     "0x1a3264F2e7b1CFC6220ec9348d33cCF02Af7aaa4": {
-      symbol: "DYP",
+      symbol: "DYPv2",
       decimals: 18,
     },
   },
@@ -2098,9 +2098,13 @@ window.config = {
       decimals: 6,
     },
     "0x39b46b212bdf15b42b166779b9d1787a68b9d0c3": {
-      symbol: "DYP",
+      symbol: "DYPv2",
       decimals: 18,
     },
+    "0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17" : {
+      symbol: "DYPv1",
+      decimals: 18,
+    }
   },
   subscriptionbnb_tokens: {
     "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c": {
@@ -2116,7 +2120,7 @@ window.config = {
       decimals: 18,
     },
     "0x1a3264F2e7b1CFC6220ec9348d33cCF02Af7aaa4": {
-      symbol: "DYP",
+      symbol: "DYPv2",
       decimals: 18,
     },
   },
