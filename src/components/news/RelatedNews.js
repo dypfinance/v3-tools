@@ -30,7 +30,7 @@ const RelatedNews = ({
   coinbase,
   bal1,
   bal2,
-  bal3,
+  bal3, bal4, bal5, bal6
 }) => {
   const [likeIndicator, setLikeIndicator] = useState(false);
   const [dislikeIndicator, setDislikeIndicator] = useState(false);
@@ -43,26 +43,69 @@ const RelatedNews = ({
   const logout = localStorage.getItem("logout");
 
   useEffect(() => {
-    if (bal1 === '0' && bal2 === '0' && bal3 === '0' && isPremium === true) {
-      setCanVote(true);
-    } else if (bal1 !== '0' && bal2 !== '0' && bal3 !== '0' && isPremium === true) {
+    if (
+      bal1 === "0" &&
+      bal2 === "0" &&
+      bal3 === "0" &&
+      bal4 === "0" &&
+      bal5 === "0" &&
+      bal6 === "0" &&
+      isPremium === true
+    ) {
       setCanVote(true);
     } else if (
-      (bal1 !== '0' || bal2 !== '0' || bal3 !== '0') &&
+      bal1 !== "0" &&
+      bal2 !== "0" &&
+      bal3 !== "0" &&
+      bal4 !== "0" &&
+      bal5 !== "0" &&
+      bal6 !== "0" &&
+      isPremium === true
+    ) {
+      setCanVote(true);
+    } else if (
+      (bal1 !== "0" ||
+        bal2 !== "0" ||
+        bal3 !== "0" ||
+        bal4 !== "0" ||
+        bal5 !== "0" ||
+        bal6 !== "0") &&
       isPremium === false
     ) {
       setCanVote(true);
-    } else if (bal1 === '0' && bal2 === '0' && bal3 === '0' && isPremium === false) {
+    } else if (
+      bal1 === "0" &&
+      bal2 === "0" &&
+      bal3 !== "0" &&
+      isPremium === false
+    ) {
       setCanVote(false);
     } else if (logout === "true") {
       setCanVote(false);
     }
-  }, [alreadyVoted, bal1, bal2, bal3, isPremium, logout, coinbase]);
+  }, [
+    alreadyVoted,
+    bal1,
+    bal2,
+    bal3,
+    bal4,
+    bal5,
+    bal6,
+    isPremium,
+    logout,
+    coinbase,
+  ]);
 
   const handleLikeStates = () => {
     if (
       logout === "false" &&
-      (bal1 !== '0' || bal2 !== '0' || bal3 !== '0' || isPremium !== false)
+      (bal1 !== "0" ||
+    bal2 !== "0" ||
+    bal3 !== "0" ||
+    bal4 !== "0" ||
+    bal5 !== "0" ||
+    bal6 !== "0" ||
+    isPremium !== false)
     ) {
       checkUpVoting(newsId);
     } else {
@@ -70,7 +113,13 @@ const RelatedNews = ({
     }
 
     if (
-      (bal1 === '0' && bal2 === '0' && bal3 === '0' && isPremium === false) ||
+      (bal1 === "0" &&
+        bal2 === "0" &&
+        bal3 === "0" &&
+        bal4 === "0" &&
+        bal5 === "0" &&
+        bal6 === "0" &&
+        isPremium === false) ||
       logout === "true" ||
       alreadyVoted === false
     ) {
@@ -91,7 +140,13 @@ const RelatedNews = ({
   const handleDisLikeStates = () => {
     if (
       logout === "false" &&
-      (bal1 !== '0' || bal2 !== '0' || bal3 !== '0' || isPremium !== false)
+      (bal1 !== "0" ||
+    bal2 !== "0" ||
+    bal3 !== "0" ||
+    bal4 !== "0" ||
+    bal5 !== "0" ||
+    bal6 !== "0" ||
+    isPremium !== false)
     ) {
       checkDownVoting(newsId);
     } else {
@@ -99,7 +154,13 @@ const RelatedNews = ({
     }
 
     if (
-      (bal1 === '0' && bal2 === '0' && bal3 === '0' && isPremium === false) ||
+      (bal1 === "0" &&
+      bal2 === "0" &&
+      bal3 === "0" &&
+      bal4 === "0" &&
+      bal5 === "0" &&
+      bal6 === "0" &&
+      isPremium === false) ||
       logout === "true" ||
       alreadyVoted === false
     ) {
@@ -367,7 +428,7 @@ const RelatedNews = ({
                     <ToolTip
                       status={
                         logout === "false" && canVote === false
-                          ? "You need to be holding DYPv2 to vote"
+                          ? "You need to be holding DYPv1 or DYPv2 to vote"
                           : logout === "true"
                           ? "Please connect your wallet"
                           : alreadyVoted === true && canVote === true
