@@ -51,6 +51,7 @@ const BuyDyp = () => {
       totalvids: "0 videos",
       videos: "",
       active: true,
+      version: "DYP v2",
     },
     {
       title: "Uniswap V2",
@@ -58,7 +59,7 @@ const BuyDyp = () => {
       link: "https://app.uniswap.org/swap?use=V2&inputCurrency=0x39b46B212bDF15b42B166779b9d1787A68b9D0c3",
       totalvids: "8 videos",
       active: true,
-
+      version: "DYP v2",
       videos: [
         {
           link: "https://www.youtube.com/embed/yBzIPecqKY8",
@@ -129,6 +130,8 @@ const BuyDyp = () => {
       link: "https://pancakeswap.finance/swap?inputCurrencty=BNB&outputCurrency=0x1a3264f2e7b1cfc6220ec9348d33ccf02af7aaa4",
       totalvids: "4 videos",
       active: true,
+      version: "DYP v2",
+
       videos: [
         {
           link: "https://www.youtube.com/embed/yBzIPecqKY8",
@@ -168,6 +171,8 @@ const BuyDyp = () => {
       link: "https://traderjoexyz.com/avalanche/trade?outputCurrency=0x1a3264f2e7b1cfc6220ec9348d33ccf02af7aaa4",
       totalvids: "0 videos",
       active: true,
+      version: "DYP v2",
+
       videos: "",
       //  [
       //   {
@@ -211,13 +216,16 @@ const BuyDyp = () => {
       videos: "",
       id: "collapsefive",
       active: true,
+      version: "DYP v2",
     },
     {
       title: "Coinbase",
       logo: "coinbase.png",
       link: "https://pro.coinbase.com/trade/DYP-USD",
       totalvids: "1 video",
-      active: false,
+      active: true,
+      version: "DYP v1",
+
       videos: [
         {
           link: "https://www.youtube.com/embed/mjUUqNy-zW8",
@@ -233,7 +241,8 @@ const BuyDyp = () => {
       logo: "kucoin.png",
       link: "https://www.kucoin.com/trade/DYP-USDT",
       totalvids: "1 video",
-      active: false,
+      active: true,
+      version: "DYP v1",
 
       videos: [
         {
@@ -250,7 +259,8 @@ const BuyDyp = () => {
       logo: "gateio.png",
       link: "https://www.gate.io/zh/trade/DYP_USDT",
       totalvids: "1 video",
-      active: false,
+      active: true,
+      version: "DYP v1",
 
       videos: [
         {
@@ -268,17 +278,18 @@ const BuyDyp = () => {
       link: "https://poloniex.com/spot/BTC_USDT",
       totalvids: "0 videos",
       videos: "",
-      active: false,
-    },
+      version: "DYP v1",
 
+      active: true,
+    },
 
     {
       title: "Coin98",
       logo: "coin98.png",
-      link: "",
+      link: "https://exchange.coin98.com/binancesmart/bnb/0x961c8c0b1aad0c0b10a51fef6a867e3091bcef17",
       totalvids: "3 videos",
-      active: false,
-
+      active: true,
+      version: "DYP v1",
       videos: [
         {
           link: "https://www.youtube.com/embed/SvUaexmtgnU",
@@ -311,7 +322,8 @@ const BuyDyp = () => {
       logo: "oneinch.png",
       link: "https://app.1inch.io/#/1/swap/DYP/ETH",
       totalvids: "6 videos",
-      active: false,
+      active: true,
+      version: "DYP v1",
 
       videos: [
         {
@@ -364,7 +376,8 @@ const BuyDyp = () => {
       logo: "kyber.png",
       link: "https://kyberswap.com/swap/bnb/bnb-to-dyp",
       totalvids: "1 video",
-      active: false,
+      active: true,
+      version: "DYP v1",
 
       videos: [
         {
@@ -411,7 +424,7 @@ const BuyDyp = () => {
               <VendorCard
                 key={index}
                 logo={vendor.logo}
-                videoAmount={vendor.totalvids}
+                videoAmount={vendor.version}
                 title={vendor.title}
                 link={vendor.link}
                 onSelect={() => {
@@ -446,19 +459,15 @@ const BuyDyp = () => {
                   {buyDypItems[activeVendor].title} videos
                 </h6>
               </div>
-              {buyDypItems[activeVendor].active === true ? (
+            
                 <a
                   href={buyDypItems[activeVendor].link}
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <button className="btn filled-btn px-5">Buy DYP</button>
+                  <button className="btn filled-btn px-5">Buy {buyDypItems[activeVendor].version}</button>
                 </a>
-              ) : (
-                <button disabled className="btn disabled-btn px-5">
-                  Buy DYP
-                </button>
-              )}
+              
             </div>
             <hr className="form-divider my-3" />
             {videoList.length <= 0 ? (

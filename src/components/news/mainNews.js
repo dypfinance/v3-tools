@@ -27,7 +27,12 @@ const MainNews = ({
   isPremium,
   onVotesFetch,
   coinbase,
-  bal1, bal2, bal3
+  bal1,
+  bal2,
+  bal3,
+  bal4,
+  bal5,
+  bal6,
 }) => {
   const [likeIndicator, setLikeIndicator] = useState(false);
   const [dislikeIndicator, setDislikeIndicator] = useState(false);
@@ -40,23 +45,59 @@ const MainNews = ({
 
   const logout = localStorage.getItem("logout");
 
-  
   useEffect(() => {
-    if (bal1 === 0 && bal2 === 0 && bal3 === 0 && isPremium === true) {
+    if (
+      bal1 === "0" &&
+      bal2 === "0" &&
+      bal3 === "0" &&
+      bal4 === "0" &&
+      bal5 === "0" &&
+      bal6 === "0" &&
+      isPremium === true
+    ) {
       setCanVote(true);
-    } else if (bal1 !== 0 && bal2 !== 0  && bal3 !== 0 && isPremium === true) {
+    } else if (
+      bal1 !== "0" &&
+      bal2 !== "0" &&
+      bal3 !== "0" &&
+      bal4 !== "0" &&
+      bal5 !== "0" &&
+      bal6 !== "0" &&
+      isPremium === true
+    ) {
       setCanVote(true);
-    } else if ((bal1 !== 0 || bal2 !== 0 || bal3 !== 0) && isPremium === false) {
+    } else if (
+      (bal1 !== "0" ||
+        bal2 !== "0" ||
+        bal3 !== "0" ||
+        bal4 !== "0" ||
+        bal5 !== "0" ||
+        bal6 !== "0") &&
+      isPremium === false
+    ) {
       setCanVote(true);
-    } else if (bal1 === 0 && bal2 === 0 && bal3 === 0 && isPremium === false) {
+    } else if (
+      bal1 === "0" &&
+      bal2 === "0" &&
+      bal3 !== "0" &&
+      isPremium === false
+    ) {
       setCanVote(false);
     } else if (logout === "true") {
       setCanVote(false);
     }
-  }, [alreadyVoted, bal1, bal2, bal3, isPremium, logout, coinbase]);
-
-  
-
+  }, [
+    alreadyVoted,
+    bal1,
+    bal2,
+    bal3,
+    bal4,
+    bal5,
+    bal6,
+    isPremium,
+    logout,
+    coinbase,
+  ]);
 
   var options = { year: "numeric", month: "short", day: "numeric" };
 
