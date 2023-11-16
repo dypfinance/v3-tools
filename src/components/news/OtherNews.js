@@ -39,7 +39,7 @@ const OtherNews = ({
   const [likeIndicator, setLikeIndicator] = useState(false);
   const [dislikeIndicator, setDislikeIndicator] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
-  const [alreadyVoted, setalreadyVoted] = useState(true);
+  const [alreadyVoted, setalreadyVoted] = useState(false);
   const [canVote, setCanVote] = useState(false);
   const [upvote, setUpvote] = useState(upvotes);
   const [downvote, setDownvote] = useState(downvotes);
@@ -188,9 +188,8 @@ const OtherNews = ({
       )
       .then((data) => {
         if (data.data.status === "success") {
-          // onVotesFetch()
-
           setUpvote(upvote + 1);
+          setalreadyVoted(true)
         } else {
           setalreadyVoted(false);
           setShowTooltip(true);
@@ -208,7 +207,7 @@ const OtherNews = ({
       .then((data) => {
         if (data.data.status === "success") {
           // onVotesFetch()
-
+          setalreadyVoted(true)
           setDownvote(downvote + 1);
         } else {
           setalreadyVoted(false);

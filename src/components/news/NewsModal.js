@@ -64,7 +64,7 @@ const NewsModal = ({
   const [showTooltip, setShowTooltip] = useState(false);
   const [votes, setVotes] = useState([]);
 
-  const [alreadyVoted, setalreadyVoted] = useState(true);
+  const [alreadyVoted, setalreadyVoted] = useState(false);
   const [canVote, setCanVote] = useState(false);
   const [newContent, setnewContent] = useState(content);
 
@@ -224,7 +224,9 @@ const NewsModal = ({
       )
       .then((data) => {
         if (data.data.status === "success") {
-          fetchVotingdata().then();
+          fetchVotingdata().then(()=>{
+            setalreadyVoted(true)
+          })
         } else {
           setalreadyVoted(false);
           setShowTooltip(true);
@@ -241,7 +243,9 @@ const NewsModal = ({
       )
       .then((data) => {
         if (data.data.status === "success") {
-          fetchVotingdata();
+          fetchVotingdata().then(()=>{
+               setalreadyVoted(true)
+          });
         } else {
           setalreadyVoted(false);
           setShowTooltip(true);
