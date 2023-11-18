@@ -200,8 +200,6 @@ export default function initBscFarming({
         iDypUSD: 0,
         dypUSD: 0,
         dypPerBnbPrice: 0,
-
-
       };
 
       this.showModal = this.showModal.bind(this);
@@ -273,12 +271,18 @@ export default function initBscFarming({
       this.getPriceDYP();
       this.getTokenData();
 
-      // this.refreshBalance();
-      window._refreshBalInterval = setInterval(this.refreshBalance, 3000);
+      this.refreshBalance();
+      // window._refreshBalInterval = setInterval(this.refreshBalance, 3000);
     }
 
     componentWillUnmount() {
-      clearInterval(window._refreshBalInterval);
+      // clearInterval(window._refreshBalInterval);
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+      if (prevProps.staking !== this.props.staking) {
+        this.refreshBalance();
+      }
     }
 
     getTokenData = async () => {
@@ -294,15 +298,12 @@ export default function initBscFarming({
             data.data.the_graph_bsc_v2.token_data
           );
 
-          const dypPerBnb = data.data.the_graph_bsc_v2.price_DYPS
-          this.setState({dypPerBnbPrice: dypPerBnb})
-          
+          const dypPerBnb = data.data.the_graph_bsc_v2.price_DYPS;
+          this.setState({ dypPerBnbPrice: dypPerBnb });
 
           this.setState({ iDypUSD: propertyIDyp[1][1].token_price_usd });
         });
     };
-
-
 
     getPriceDYP = async () => {
       let usdPerToken = await window.getPrice("defi-yield-protocol");
@@ -1126,7 +1127,7 @@ export default function initBscFarming({
       tvl = new BigNumber(this.state.tvlUSD * LP_AMPLIFY_FACTOR)
         .div(1e18)
         .toString(10);
-        
+
       tvl = getFormattedNumber(tvl, 2);
 
       stakingTime = stakingTime * 1e3;
@@ -1157,15 +1158,22 @@ export default function initBscFarming({
         }
       }
 
-      let canWithdraw = true
+      let canWithdraw = true;
       if (lockTime === "No Lock") {
         canWithdraw = true;
       }
       if (!isNaN(cliffTime) && !isNaN(stakingTime)) {
-          if ((this.convertTimestampToDate((Number(stakingTime) + Number(cliffTime))) >= this.convertTimestampToDate(Date.now())) && lockTime !== "No Lock") {
-              canWithdraw = false
-              cliffTimeInWords = moment.duration((cliffTime - (Date.now() - stakingTime))).humanize(true)
-          }
+        if (
+          this.convertTimestampToDate(
+            Number(stakingTime) + Number(cliffTime)
+          ) >= this.convertTimestampToDate(Date.now()) &&
+          lockTime !== "No Lock"
+        ) {
+          canWithdraw = false;
+          cliffTimeInWords = moment
+            .duration(cliffTime - (Date.now() - stakingTime))
+            .humanize(true);
+        }
       }
 
       let lp_data = this.props.the_graph_result.lp_data;
@@ -1247,7 +1255,6 @@ export default function initBscFarming({
       const focusInput = (field) => {
         document.getElementById(field).focus();
       };
-
 
       return (
         <div className="container-lg p-0">
@@ -1534,33 +1541,35 @@ export default function initBscFarming({
                   <div className="d-flex flex-column gap-2 justify-content-between">
                     <div className="d-flex flex-column flex-lg-row align-items-center justify-content-between gap-2">
                       <div className="d-flex align-items-center justify-content-between justify-content-lg-start gap-2 w-100">
-                      
                         <div className="input-container px-0">
-                        <input
-                          type="number"
-                          autoComplete="off"
-                          value={
-                            Number(this.state.depositAmount) > 0
-                              ? this.state.depositAmount
-                              : this.state.depositAmount
-                          }
-                          onChange={(e) =>
-                            this.setState({
-                              depositAmount: e.target.value,
-                            })
-                          }
-                          placeholder=" "
-                          className="text-input"
-                          style={{ width: "100%" }}
-                          name="amount_deposit"
-                          id="amount_deposit"
-                          key="amount_deposit"
-                        />
-                        <label htmlFor="usd" className="label"
-                         onClick={() => focusInput("amount_deposit")}>
-                        Amount
-                        </label>
-                      </div>
+                          <input
+                            type="number"
+                            autoComplete="off"
+                            value={
+                              Number(this.state.depositAmount) > 0
+                                ? this.state.depositAmount
+                                : this.state.depositAmount
+                            }
+                            onChange={(e) =>
+                              this.setState({
+                                depositAmount: e.target.value,
+                              })
+                            }
+                            placeholder=" "
+                            className="text-input"
+                            style={{ width: "100%" }}
+                            name="amount_deposit"
+                            id="amount_deposit"
+                            key="amount_deposit"
+                          />
+                          <label
+                            htmlFor="usd"
+                            className="label"
+                            onClick={() => focusInput("amount_deposit")}
+                          >
+                            Amount
+                          </label>
+                        </div>
 
                         <button
                           className="btn maxbtn"
@@ -2023,7 +2032,9 @@ export default function initBscFarming({
                   </h6>
 
                   <button
-                    disabled={Number(this.state.depositedTokens) > 0 ? false : true}
+                    disabled={
+                      Number(this.state.depositedTokens) > 0 ? false : true
+                    }
                     className={
                       // this.state.depositStatus === "success" ?
                       "outline-btn btn"
@@ -2441,9 +2452,7 @@ export default function initBscFarming({
                                             this.state.withdrawAmount *
                                             LP_AMPLIFY_FACTOR
                                           } LP`
-                                        : `${
-                                            this.state.withdrawAmount
-                                          } LP`
+                                        : `${this.state.withdrawAmount} LP`
                                     }
                                     onChange={(e) =>
                                       this.setState({
@@ -2483,9 +2492,7 @@ export default function initBscFarming({
                                             this.state.withdrawAmount *
                                             LP_AMPLIFY_FACTOR
                                           } LP`
-                                        : `${
-                                            this.state.withdrawAmount
-                                          } LP`
+                                        : `${this.state.withdrawAmount} LP`
                                     }
                                     onChange={(e) =>
                                       this.setState({
@@ -2512,7 +2519,6 @@ export default function initBscFarming({
                                 className="d-flex w-100 align-items-center justify-content-center claimreward-header"
                                 // style={{ padding: "10px 0 0 10px" }}
                               >
-                                 
                                 <div class="dropdown">
                                   <button
                                     class="btn reward-dropdown inputfarming d-flex align-items-center justify-content-center gap-1"
@@ -2957,14 +2963,8 @@ export default function initBscFarming({
                   </div>
                 </div>
                 <div className="d-flex flex-column gap-2 mt-4">
-                
                   <h3 style={{ fontWeight: "500", fontSize: "39px" }}>
-                    $
-                    {getFormattedNumber(
-                      this.getApproxReturnUSD(),2,
-                      6
-                    )} USD
-
+                    ${getFormattedNumber(this.getApproxReturnUSD(), 2, 6)} USD
                   </h3>
                   <h6
                     style={{
@@ -2973,8 +2973,10 @@ export default function initBscFarming({
                       color: "#f7f7fc",
                     }}
                   >
-                    Approx {" "}{getFormattedNumber(this.getApproxReturnUSD() / this.getUsdPerETH())}{" "}
-                   {" "}
+                    Approx{" "}
+                    {getFormattedNumber(
+                      this.getApproxReturnUSD() / this.getUsdPerETH()
+                    )}{" "}
                     WBNB
                   </h6>
                 </div>
