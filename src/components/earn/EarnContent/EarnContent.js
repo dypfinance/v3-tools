@@ -254,7 +254,7 @@ const EarnContent = ({
       });
 
       const ethRestult2 =  await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_eth_new`).catch((err) => {
+      .get(`https://api.dyp.finance/api/get_staking_info_eth_new`).catch((err) => {
         console.log(err);
       });
 
@@ -262,6 +262,7 @@ const EarnContent = ({
         const ethv1Tvl = ethRestult.data.totalTVL_ETH;
 
         const ethv2Tvl = ethRestult2.data.stakingInfoDYPEth[0].tvl_usd/1e18
+     
       
         setTvl(ethv1Tvl+ethv2Tvl)
 
@@ -274,7 +275,7 @@ const EarnContent = ({
       });
 
       const bnbResult2 =   await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_bnb_new`) .catch((err) => {
+      .get(`https://api.dyp.finance/api/get_staking_info_bnb_new`) .catch((err) => {
         console.log(err);
       });
 
@@ -292,7 +293,7 @@ const EarnContent = ({
       });
 
       const avaxResult2 =   await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_avax_new`) .catch((err) => {
+      .get(`https://api.dyp.finance/api/get_staking_info_avax_new`) .catch((err) => {
         console.log(err);
       });
 
