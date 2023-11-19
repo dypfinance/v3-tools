@@ -200,12 +200,12 @@ const EarnTopPicks = ({
 
   const fetchEthStaking = async () => {
     const eth_result = await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_eth`)
+      .get(`https://api.dyp.finance/api/get_staking_info_eth`)
       .catch((err) => {
         console.log(err);
       });
     const eth_result2 = await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_eth_new`)
+      .get(`https://api.dyp.finance/api/get_staking_info_eth_new`)
       .catch((err) => {
         console.log(err);
       });
@@ -260,13 +260,13 @@ const EarnTopPicks = ({
 
   const fetchBnbStaking = async () => {
     const bnb_result = await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_bnb`)
+      .get(`https://api.dyp.finance/api/get_staking_info_bnb`)
       .catch((err) => {
         console.log(err);
       });
 
     const bnb_result2 = await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_bnb_new`)
+      .get(`https://api.dyp.finance/api/get_staking_info_bnb_new`)
       .catch((err) => {
         console.log(err);
       });
@@ -318,13 +318,13 @@ const EarnTopPicks = ({
   };
   const fetchAvaxStaking = async () => {
     const avax_result = await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_avax`)
+      .get(`https://api.dyp.finance/api/get_staking_info_avax`)
       .catch((err) => {
         console.log(err);
       });
 
     const avax_result2 = await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_avax_new`)
+      .get(`https://api.dyp.finance/api/get_staking_info_avax_new`)
       .catch((err) => {
         console.log(err);
       });

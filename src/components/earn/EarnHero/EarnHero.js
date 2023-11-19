@@ -27,19 +27,19 @@ const EarnHero = () => {
       });
 
     const avaxResult2 = await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_avax_new`)
+      .get(`https://api.dyp.finance/api/get_staking_info_avax_new`)
       .catch((err) => {
         console.log(err);
       });
 
     const bnbResult2 = await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_bnb_new`)
+      .get(`https://api.dyp.finance/api/get_staking_info_bnb_new`)
       .catch((err) => {
         console.log(err);
       });
 
     const ethRestult2 = await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_eth_new`)
+      .get(`https://api.dyp.finance/api/get_staking_info_eth_new`)
       .catch((err) => {
         console.log(err);
       });
