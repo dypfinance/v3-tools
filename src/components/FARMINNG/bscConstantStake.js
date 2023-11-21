@@ -368,18 +368,14 @@ const StakeBsc = ({
     refreshBalance();
     if (depositAmount !== "") {
       checkApproval(depositAmount);
-
-    }
-    else {
-      setdepositStatus('initial')
-
+    } else {
+      setdepositStatus("initial");
     }
   }, [coinbase, coinbase2, staking]);
 
   useEffect(() => {
-      setdepositAmount('');
-      setdepositStatus('initial')
-
+    setdepositAmount("");
+    setdepositStatus("initial");
   }, [staking]);
 
   const handleApprove = (e) => {
@@ -420,44 +416,43 @@ const StakeBsc = ({
   const handleStake = async (e) => {
     //   e.preventDefault();
     if (passivePool === false) {
-    setdepositLoading(true);
+      setdepositLoading(true);
 
-    if (other_info) {
-      window.$.alert("This pool no longer accepts deposits!");
-      setdepositLoading(false);
-      return;
-    }
-
-    let amount = depositAmount;
-    amount = new BigNumber(depositAmount).times(1e18).toFixed(0);
-     
-    let referrer = window.config.ZERO_ADDRESS;
-
-    //NO REFERRER HERE
-
-    staking
-      .stake(amount, referrer)
-      .then(() => {
+      if (other_info) {
+        window.$.alert("This pool no longer accepts deposits!");
         setdepositLoading(false);
-        setdepositStatus("success");
-        refreshBalance();
-        setTimeout(() => {
+        return;
+      }
+
+      let amount = depositAmount;
+      amount = new BigNumber(depositAmount).times(1e18).toFixed(0);
+
+      let referrer = window.config.ZERO_ADDRESS;
+
+      //NO REFERRER HERE
+
+      staking
+        .stake(amount, referrer)
+        .then(() => {
           setdepositLoading(false);
-          setdepositStatus("initial");
-        }, 5000);
-      })
-      .catch((e) => {
-        setdepositLoading(false);
-        setdepositStatus("fail");
-        seterrorMsg(e?.message);
-        setTimeout(() => {
-          depositAmount("");
-          setdepositStatus("initial");
-          seterrorMsg("");
-        }, 10000);
-      });
-    }
-    else if (passivePool === true) {
+          setdepositStatus("success");
+          refreshBalance();
+          setTimeout(() => {
+            setdepositLoading(false);
+            setdepositStatus("initial");
+          }, 5000);
+        })
+        .catch((e) => {
+          setdepositLoading(false);
+          setdepositStatus("fail");
+          seterrorMsg(e?.message);
+          setTimeout(() => {
+            depositAmount("");
+            setdepositStatus("initial");
+            seterrorMsg("");
+          }, 10000);
+        });
+    } else if (passivePool === true) {
       window.$.alert("This pool no longer accepts deposits!");
       return;
     }
@@ -1022,10 +1017,11 @@ const StakeBsc = ({
                       Max
                     </button>
                   </div>
-                 
+
                   <button
                     disabled={
-                      depositAmount === "" || depositLoading === true ||
+                      depositAmount === "" ||
+                      depositLoading === true ||
                       depositStatus === "success" ||
                       staking?._address.toLowerCase() ===
                         "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487".toLowerCase()
@@ -1034,8 +1030,8 @@ const StakeBsc = ({
                     }
                     className={`btn filledbtn ${
                       ((depositAmount === "" && depositStatus === "initial") ||
-                      staking?._address.toLowerCase() ===
-                        "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487".toLowerCase()) &&
+                        staking?._address.toLowerCase() ===
+                          "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487".toLowerCase()) &&
                       "disabled-btn"
                     } ${
                       (depositStatus === "deposit" ||
@@ -1053,9 +1049,9 @@ const StakeBsc = ({
                         "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487".toLowerCase()
                         ? handleStake()
                         : depositStatus === "initial" &&
-                        depositAmount !== "" &&
-                        staking?._address.toLowerCase() !==
-                          "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487".toLowerCase()
+                          depositAmount !== "" &&
+                          staking?._address.toLowerCase() !==
+                            "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487".toLowerCase()
                         ? handleApprove()
                         : console.log("");
                     }}
@@ -1155,16 +1151,20 @@ const StakeBsc = ({
                         /> */}
                   </div>
                   <div className="claim-reinvest-container d-flex justify-content-between align-items-center gap-3">
-                  <button
+                    <button
                       disabled={
-                        claimStatus === "claimed" || claimStatus === "success" || pendingDivs <= 0
+                        claimStatus === "claimed" ||
+                        claimStatus === "success" ||
+                        pendingDivs <= 0
                           ? //
                             true
                           : false
                       }
                       className={`btn filledbtn ${
-                        claimStatus === "claimed" && claimStatus === "initial"||  pendingDivs <= 0
-                          ? // 
+                        (claimStatus === "claimed" &&
+                          claimStatus === "initial") ||
+                        pendingDivs <= 0
+                          ? //
                             "disabled-btn"
                           : claimStatus === "failed"
                           ? "fail-button"
@@ -1175,10 +1175,12 @@ const StakeBsc = ({
                       style={{ height: "fit-content" }}
                       // onClick={handleClaimDivs}
                       onClick={() => {
-                        expired ? 
-                        window.$.alert(
-                          "*The rewards earned from the day of the migration until the end of the lock time will be distributed to the users automatically at the end of the contract."
-                        ) : handleClaimDivs()
+                        staking?._address?.toLowerCase() ===
+                        "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487"
+                          ? window.$.alert(
+                              "*The rewards earned from the day of the migration until the end of the lock time will be distributed to the users automatically at the end of the contract."
+                            )
+                          : handleClaimDivs();
                       }}
                     >
                       {claimLoading ? (

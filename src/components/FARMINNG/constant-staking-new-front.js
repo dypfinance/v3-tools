@@ -1326,13 +1326,13 @@ const StakeEth = ({
                   <button
                       disabled={
                         claimStatus === "claimed" || claimStatus === "success" || pendingDivs <= 0
-                          ? //
+                          ? 
                             true
                           : false
                       }
                       className={`btn filledbtn ${
                         claimStatus === "claimed" && claimStatus === "initial" ||  pendingDivs <= 0
-                          ? //
+                          ? 
                             "disabled-btn"
                           : claimStatus === "failed"
                           ? "fail-button"
@@ -1343,7 +1343,7 @@ const StakeEth = ({
                       style={{ height: "fit-content" }}
                       // onClick={handleClaimDivs}
                       onClick={() => {
-                        expired ? 
+                        staking?._address?.toLowerCase() === '0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d' ? 
                         window.$.alert(
                           "*The rewards earned from the day of the migration until the end of the lock time will be distributed to the users automatically at the end of the contract."
                         ) : handleClaimDivs()

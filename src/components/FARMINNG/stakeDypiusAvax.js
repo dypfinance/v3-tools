@@ -921,7 +921,7 @@ settvlUSD(tvlUSD)
                     placement="top"
                     title={
                       <div className="tooltip-text">
-                        { lockTime === 'No Lock' ? 'The initial pool size is capped at 4M DYP. Additional opportunities to stake DYP are planned to be introduced over time.' :
+                        { lockTime === 'No Lock' ? 'The initial pool size is capped at 2M DYP. Additional opportunities to stake DYP are planned to be introduced over time.' :
                           "Deposit your assets to the staking smart contract. For lock time pools, the lock time resets if you add more deposits after making one previously."
                         }
                       </div>
@@ -1091,11 +1091,7 @@ settvlUSD(tvlUSD)
                       } d-flex justify-content-center align-items-center gap-2`}
                       style={{ height: "fit-content" }}
                       // onClick={handleClaimDivs}
-                      onClick={() => {
-                        expired ? 
-                        window.$.alert(
-                          "*The rewards earned from the day of the migration until the end of the lock time will be distributed to the users automatically at the end of the contract."
-                        ) : handleClaimDivs()
+                      onClick={() => {handleClaimDivs()
                       }}
                     >
                       {claimLoading ? (

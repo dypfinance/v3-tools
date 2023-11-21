@@ -85,7 +85,7 @@ export default class Subscription extends React.Component {
 
   fetchEthStaking = async () => {
     await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_eth`)
+      .get(`https://api.dyp.finance/api/get_staking_info_eth`)
       .then((res) => {
         const dypIdyp = res.data.stakingInfoDYPEth.concat(
           res.data.stakingInfoiDYPEth
@@ -111,7 +111,7 @@ export default class Subscription extends React.Component {
 
   fetchBnbStaking = async () => {
     await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_bnb`)
+      .get(`https://api.dyp.finance/api/get_staking_info_bnb`)
       .then((res) => {
         const dypIdypBnb = res.data.stakingInfoDYPBnb.concat(
           res.data.stakingInfoiDYPBnb
@@ -140,7 +140,7 @@ export default class Subscription extends React.Component {
 
   fetchAvaxStaking = async () => {
     await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_avax`)
+      .get(`https://api.dyp.finance/api/get_staking_info_avax`)
       .then((res) => {
         const dypIdypAvax = res.data.stakingInfoDYPAvax.concat(
           res.data.stakingInfoiDYPAvax
@@ -1170,7 +1170,7 @@ export default class Subscription extends React.Component {
                       {getFormattedNumber(this.state.ethBalance)} DYP
                     </span>
                     <img
-                      src={require(`./assets/dypIcon.svg`).default}
+                      src={require(`./assets/dypv1Icon.svg`).default}
                       width={20}
                       height={20}
                       alt=""
@@ -1189,7 +1189,7 @@ export default class Subscription extends React.Component {
                       {getFormattedNumber(this.state.bnbBalance)} DYP
                     </span>
                     <img
-                      src={require(`./assets/dypIcon.svg`).default}
+                      src={require(`./assets/dypv1Icon.svg`).default}
                       width={20}
                       height={20}
                       alt=""
@@ -1203,7 +1203,7 @@ export default class Subscription extends React.Component {
                       {getFormattedNumber(this.state.avaxBalance)} DYP
                     </span>
                     <img
-                      src={require(`./assets/dypIcon.svg`).default}
+                      src={require(`./assets/dypv1Icon.svg`).default}
                       width={20}
                       height={20}
                       alt=""

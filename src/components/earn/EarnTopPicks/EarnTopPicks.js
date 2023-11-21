@@ -200,12 +200,12 @@ const EarnTopPicks = ({
 
   const fetchEthStaking = async () => {
     const eth_result = await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_eth`)
+      .get(`https://api.dyp.finance/api/get_staking_info_eth`)
       .catch((err) => {
         console.log(err);
       });
     const eth_result2 = await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_eth_new`)
+      .get(`https://api.dyp.finance/api/get_staking_info_eth_new`)
       .catch((err) => {
         console.log(err);
       });
@@ -221,7 +221,7 @@ const EarnTopPicks = ({
       );
       const dypData = eth_result2.data.stakingInfoDYPEth;
       const object2 = dypData.map((item) => {
-        return {...item, tvl_usd: item.tvl_usd/1e18}
+        return {...item, tvl_usd: item.tvl_usd}
       })
       const expiredEth = dypIdyp.filter((item) => {
         return item.expired !== "No";
@@ -260,13 +260,13 @@ const EarnTopPicks = ({
 
   const fetchBnbStaking = async () => {
     const bnb_result = await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_bnb`)
+      .get(`https://api.dyp.finance/api/get_staking_info_bnb`)
       .catch((err) => {
         console.log(err);
       });
 
     const bnb_result2 = await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_bnb_new`)
+      .get(`https://api.dyp.finance/api/get_staking_info_bnb_new`)
       .catch((err) => {
         console.log(err);
       });
@@ -283,7 +283,7 @@ const EarnTopPicks = ({
 
       const dypBnb = bnb_result2.data.stakingInfoDYPBnb 
       const object2 = dypBnb.map((item) => {
-        return {...item, tvl_usd: item.tvl_usd/1e18}
+        return {...item, tvl_usd: item.tvl_usd}
       })
     
       const expiredBnb = dypIdypBnb.filter((item) => {
@@ -318,13 +318,13 @@ const EarnTopPicks = ({
   };
   const fetchAvaxStaking = async () => {
     const avax_result = await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_avax`)
+      .get(`https://api.dyp.finance/api/get_staking_info_avax`)
       .catch((err) => {
         console.log(err);
       });
 
     const avax_result2 = await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_avax_new`)
+      .get(`https://api.dyp.finance/api/get_staking_info_avax_new`)
       .catch((err) => {
         console.log(err);
       });
@@ -340,7 +340,7 @@ const EarnTopPicks = ({
       );
       const dypAvax = avax_result2.data.stakingInfoDYPAvax;
       const object2 = dypAvax.map((item) => {
-        return {...item, tvl_usd: item.tvl_usd/1e18}
+        return {...item, tvl_usd: item.tvl_usd}
       })
       const expiredAvax = dypIdypAvax.filter((item) => {
         return item.expired !== "No";
@@ -10202,7 +10202,7 @@ const EarnTopPicks = ({
                 expiredDYPPools[cardIndex]?.id ===
                   "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" &&
                 chain === "eth" ? (
-                <StakeEth
+                <StakeNewEth
                   staking={window.constant_staking_newi3}
                   apr={
                     expiredPools === false
@@ -11745,7 +11745,7 @@ const EarnTopPicks = ({
               expiredDYPPools[cardIndex]?.id ===
                 "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" &&
               chain === "eth" ? (
-              <StakeEth
+              <StakeNewEth
                 staking={window.constant_staking_newi3}
                 apr={
                   expiredPools === false
@@ -12931,7 +12931,7 @@ const EarnTopPicks = ({
               expiredDYPPools[cardIndex]?.id ===
                 "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" &&
               chain === "eth" ? (
-              <StakeEth
+              <StakeNewEth
                 staking={window.constant_staking_newi3}
                 apr={
                   expiredPools === false
@@ -14430,7 +14430,7 @@ const EarnTopPicks = ({
               expiredDYPPools[cardIndex]?.id ===
                 "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" &&
               chain === "eth" ? (
-              <StakeEth
+              <StakeNewEth
                 staking={window.constant_staking_newi3}
                 apr={
                   expiredPools === false
@@ -15379,7 +15379,7 @@ const EarnTopPicks = ({
               expiredDYPPools[cardIndex]?.id ===
                 "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" &&
               chain === "eth" ? (
-              <StakeEth
+              <StakeNewEth
                 staking={window.constant_staking_newi3}
                 apr={
                   expiredPools === false
@@ -16918,7 +16918,7 @@ const EarnTopPicks = ({
               expiredDYPPools[cardIndex]?.id ===
                 "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" &&
               chain === "eth" ? (
-              <StakeEth
+              <StakeNewEth
                 staking={window.constant_staking_newi3}
                 apr={
                   expiredPools === false
@@ -18453,7 +18453,7 @@ const EarnTopPicks = ({
               expiredDYPPools[cardIndex]?.id ===
                 "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" &&
               chain === "eth" ? (
-              <StakeEth
+              <StakeNewEth
                 staking={window.constant_staking_newi3}
                 apr={
                   expiredPools === false
@@ -20017,7 +20017,7 @@ const EarnTopPicks = ({
               expiredDYPPools[cardIndex]?.id ===
                 "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" &&
               chain === "eth" ? (
-              <StakeEth
+              <StakeNewEth
                 staking={window.constant_staking_newi3}
                 apr={
                   expiredPools === false
@@ -21694,7 +21694,7 @@ const EarnTopPicks = ({
               expiredDYPPools[cardIndex]?.id ===
                 "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" &&
               chain === "eth" ? (
-              <StakeEth
+              <StakeNewEth
                 staking={window.constant_staking_newi3}
                 apr={
                   expiredPools === false
@@ -22582,7 +22582,7 @@ const EarnTopPicks = ({
               expiredDYPPools[cardIndex]?.id ===
                 "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" &&
               chain === "eth" ? (
-              <StakeEth
+              <StakeNewEth
                 staking={window.constant_staking_newi3}
                 apr={
                   expiredPools === false
@@ -23481,7 +23481,7 @@ const EarnTopPicks = ({
                 expiredDYPPools[cardIndex]?.id ===
                   "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" &&
                 chain === "eth" ? (
-                <StakeEth
+                <StakeNewEth
                   staking={window.constant_staking_newi3}
                   apr={
                     expiredPools === false
@@ -25048,7 +25048,7 @@ const EarnTopPicks = ({
                 expiredDYPPools[cardIndex]?.id ===
                   "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" &&
                 chain === "eth" ? (
-                <StakeEth
+                <StakeNewEth
                   staking={window.constant_staking_newi3}
                   apr={
                     expiredPools === false
@@ -26615,7 +26615,7 @@ const EarnTopPicks = ({
                 expiredDYPPools[cardIndex]?.id ===
                   "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" &&
                 chain === "eth" ? (
-                <StakeEth
+                <StakeNewEth
                   staking={window.constant_staking_newi3}
                   apr={
                     expiredPools === false
@@ -28134,7 +28134,7 @@ const EarnTopPicks = ({
                 expiredDYPPools[cardIndex]?.id ===
                   "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" &&
                 chain === "eth" ? (
-                <StakeEth
+                <StakeNewEth
                   staking={window.constant_staking_newi3}
                   apr={
                     expiredPools === false
@@ -29701,7 +29701,7 @@ const EarnTopPicks = ({
                 expiredDYPPools[cardIndex]?.id ===
                   "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" &&
                 chain === "eth" ? (
-                <StakeEth
+                <StakeNewEth
                   staking={window.constant_staking_newi3}
                   apr={
                     expiredPools === false
@@ -31268,7 +31268,7 @@ const EarnTopPicks = ({
                 expiredDYPPools[cardIndex]?.id ===
                   "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" &&
                 chain === "eth" ? (
-                <StakeEth
+                <StakeNewEth
                   staking={window.constant_staking_newi3}
                   apr={
                     expiredPools === false
@@ -32817,7 +32817,7 @@ const EarnTopPicks = ({
                 expiredDYPPools[cardIndex]?.id ===
                   "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" &&
                 chain === "eth" ? (
-                <StakeEth
+                <StakeNewEth
                   staking={window.constant_staking_newi3}
                   apr={
                     expiredPools === false
@@ -34366,7 +34366,7 @@ const EarnTopPicks = ({
                 expiredDYPPools[cardIndex]?.id ===
                   "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d" &&
                 chain === "eth" ? (
-                <StakeEth
+                <StakeNewEth
                   staking={window.constant_staking_newi3}
                   apr={
                     expiredPools === false

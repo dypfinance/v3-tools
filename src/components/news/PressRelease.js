@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ToolTip from "./ToolTip";
 import OutsideClickHandler from "react-outside-click-handler";
-import passiveUpvote from './assets/passiveUpvote.svg'
-import passiveDownvote from './assets/passiveDownvote.svg'
-import activeUpvote from './assets/activeUpvote.svg'
-import activeDownvote from './assets/activeDownvote.svg'
-import calendar from '../newsCard/assets/calendar.svg'
+import passiveUpvote from "./assets/passiveUpvote.svg";
+import passiveDownvote from "./assets/passiveDownvote.svg";
+import activeUpvote from "./assets/activeUpvote.svg";
+import activeDownvote from "./assets/activeDownvote.svg";
+import calendar from "../newsCard/assets/calendar.svg";
 
 const PressRealease = ({
   title,
@@ -21,14 +21,20 @@ const PressRealease = ({
   isConnected,
   onDownVoteClick,
   onUpVoteClick,
-onVotesFetch,
-votes,
-coinbase, bal1, bal2, bal3
+  onVotesFetch,
+  votes,
+  coinbase,
+  bal1,
+  bal2,
+  bal3,
+  bal4,
+  bal5,
+  bal6,
 }) => {
   const [likeIndicator, setLikeIndicator] = useState(false);
   const [dislikeIndicator, setDislikeIndicator] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
-  const [alreadyVoted, setalreadyVoted] = useState(true);
+  const [alreadyVoted, setalreadyVoted] = useState(false);
   const [canVote, setCanVote] = useState(false);
   const [upvote, setUpvote] = useState(upvotes);
   const [downvote, setDownvote] = useState(downvotes);
@@ -37,33 +43,88 @@ coinbase, bal1, bal2, bal3
   const logout = localStorage.getItem("logout");
 
   useEffect(() => {
-    if (bal1 === '0' && bal2 === '0' && bal3 === '0' && isPremium === true) {
+    if (
+      bal1 === "0" &&
+      bal2 === "0" &&
+      bal3 === "0" &&
+      bal4 === "0" &&
+      bal5 === "0" &&
+      bal6 === "0" &&
+      isPremium === true
+    ) {
       setCanVote(true);
-    } else if (bal1 !== '0' && bal2 !== '0'  && bal3 !== '0' && isPremium === true) {
+    } else if (
+      bal1 !== "0" &&
+      bal2 !== "0" &&
+      bal3 !== "0" &&
+      bal4 !== "0" &&
+      bal5 !== "0" &&
+      bal6 !== "0" &&
+      isPremium === true
+    ) {
       setCanVote(true);
-    } else if ((bal1 !== '0' || bal2 !== '0' || bal3 !== '0') && isPremium === false) {
+    } else if (
+      (bal1 !== "0" ||
+        bal2 !== "0" ||
+        bal3 !== "0" ||
+        bal4 !== "0" ||
+        bal5 !== "0" ||
+        bal6 !== "0") &&
+      isPremium === false
+    ) {
       setCanVote(true);
-    } else if (bal1 === '0' && bal2 === '0' && bal3 === '0' && isPremium === false) {
+    } else if (
+      bal1 === "0" &&
+      bal2 === "0" &&
+      bal3 !== "0" &&
+      isPremium === false
+    ) {
       setCanVote(false);
     } else if (logout === "true") {
       setCanVote(false);
     }
-  }, [alreadyVoted, bal1, bal2, bal3, isPremium, logout, coinbase]);
-
+  }, [
+    alreadyVoted,
+    bal1,
+    bal2,
+    bal3,
+    bal4,
+    bal5,
+    bal6,
+    isPremium,
+    logout,
+    coinbase,
+  ]);
 
   const handleLikeStates = () => {
-    if (logout === "false" && (bal1 !== '0' || bal2 !== '0' || bal3 !== '0' || isPremium !== false)) {
-      checkUpVoting(newsId);
-    }
-    else {setShowTooltip(true);}
     if (
-      (bal1 === '0' && bal2 === '0' && bal3 === '0' && isPremium === false) ||
-      logout === "true" || alreadyVoted === false
+      logout === "false" &&
+      (bal1 !== "0" ||
+        bal2 !== "0" ||
+        bal3 !== "0" ||
+        bal4 !== "0" ||
+        bal5 !== "0" ||
+        bal6 !== "0" ||
+        isPremium !== false)
+    ) {
+      checkUpVoting(newsId);
+    } else {
+      setShowTooltip(true);
+    }
+    if (
+      (bal1 === "0" &&
+        bal2 === "0" &&
+        bal3 === "0" &&
+        bal4 === "0" &&
+        bal5 === "0" &&
+        bal6 === "0" &&
+        isPremium === false) ||
+      logout === "true" ||
+      alreadyVoted === false
     ) {
       setLikeIndicator(false);
       setShowTooltip(true);
       setDislikeIndicator(false);
-
     } else {
       if (likeIndicator === true) {
         setLikeIndicator(false);
@@ -77,13 +138,30 @@ coinbase, bal1, bal2, bal3
   };
 
   const handleDisLikeStates = () => {
-    if (logout === "false" && (bal1 !== '0' || bal2 !== '0' || bal3 !== '0' || isPremium !== false)) {
-      checkDownVoting(newsId);
-    }
-    else {setShowTooltip(true);}
     if (
-      (bal1 === '0' && bal2 === '0'  && bal3 === '0' && isPremium === false) ||
-      logout === "true" || alreadyVoted === false
+      logout === "false" &&
+      (bal1 !== "0" ||
+        bal2 !== "0" ||
+        bal3 !== "0" ||
+        bal4 !== "0" ||
+        bal5 !== "0" ||
+        bal6 !== "0" ||
+        isPremium !== false)
+    ) {
+      checkDownVoting(newsId);
+    } else {
+      setShowTooltip(true);
+    }
+    if (
+      (bal1 === "0" &&
+        bal2 === "0" &&
+        bal3 === "0" &&
+        bal4 === "0" &&
+        bal5 === "0" &&
+        bal6 === "0" &&
+        isPremium === false) ||
+      logout === "true" ||
+      alreadyVoted === false
     ) {
       setLikeIndicator(false);
       setShowTooltip(true);
@@ -99,50 +177,38 @@ coinbase, bal1, bal2, bal3
     }
   };
 
-
-
   const checkUpVoting = async (itemId) => {
-
     return await axios
       .get(
         `https://news-manage.dyp.finance/api/v1/vote/${itemId}/${coinbase}/up`
       )
       .then((data) => {
-
         if (data.data.status === "success") {
-
-          // onVotesFetch()
-
-          setUpvote(upvote + 1)
-
+          setalreadyVoted(true)
+          setUpvote(upvote + 1);
         } else {
           setalreadyVoted(false);
-          setShowTooltip(true)
-          setLikeIndicator(false)
+          setShowTooltip(true);
+          setLikeIndicator(false);
         }
       })
       .catch(console.error);
   };
 
   const checkDownVoting = async (itemId) => {
-
     return await axios
       .get(
         `https://news-manage.dyp.finance/api/v1/vote/${itemId}/${coinbase}/down`
       )
       .then((data) => {
-
         if (data.data.status === "success") {
-          // onVotesFetch()
-
-            setDownvote(downvote + 1)
-
+          setalreadyVoted(true)
+          setDownvote(downvote + 1);
         } else {
           setalreadyVoted(false);
-          setShowTooltip(true)
-          setLikeIndicator(false)
-          setDislikeIndicator(false)
-
+          setShowTooltip(true);
+          setLikeIndicator(false);
+          setDislikeIndicator(false);
         }
       })
       .catch(console.error);
@@ -169,7 +235,7 @@ coinbase, bal1, bal2, bal3
 
   var options = { year: "numeric", month: "short", day: "numeric" };
 
-  const formattedDate = new Date(date)
+  const formattedDate = new Date(date);
 
   return (
     <div className="single-press-wrapper" onClick={onSinglePressHighlightClick}>
@@ -180,20 +246,18 @@ coinbase, bal1, bal2, bal3
         <img src={image} alt="" className="press-image" />
         <div className="date-wrapper-press">
           {/* <a href={link} target="_blank"> */}
-          <h6 className="press-title">{title?.slice(0,50) + '...'}</h6>
+          <h6 className="press-title">{title?.slice(0, 50) + "..."}</h6>
           {/* </a> */}
 
-          <div
-            className="d-flex align-items-center gap-3 position-relative"
-          >
+          <div className="d-flex align-items-center gap-3 position-relative">
             <div className="d-flex align-items-center justify-content-center gap-2 ">
               <img
                 src={
                   likeIndicator === false && dislikeIndicator === false
-                  ? passiveUpvote
-                  : likeIndicator === true
-                  ? activeUpvote
-                  : passiveUpvote
+                    ? passiveUpvote
+                    : likeIndicator === true
+                    ? activeUpvote
+                    : passiveUpvote
                 }
                 alt=""
                 className="like-indicator"
@@ -207,7 +271,7 @@ coinbase, bal1, bal2, bal3
                 {Number(upvote) - Number(downvote)}
               </span>
               <img
-              style={{transform: 'rotate(0deg)'}}
+                style={{ transform: "rotate(0deg)" }}
                 src={
                   likeIndicator === false && dislikeIndicator === false
                     ? passiveDownvote
@@ -223,7 +287,6 @@ coinbase, bal1, bal2, bal3
                   e.stopPropagation();
                 }}
               />
-
             </div>
             {/* <img
               src={theme === "theme-dark" ? WhiteDots : Dots}
@@ -231,33 +294,33 @@ coinbase, bal1, bal2, bal3
               style={{ width: "auto" }}
             /> */}
             <div className="date-wrapper">
-              <img src={calendar} alt="calendar"  />
+              <img src={calendar} alt="calendar" />
               <span className="news-date-text">
-              {formattedDate.toLocaleDateString("en-US", options)}
+                {formattedDate.toLocaleDateString("en-US", options)}
               </span>
             </div>
             {showTooltip === true ? (
-                <OutsideClickHandler
-                  onOutsideClick={() => {
-                    setShowTooltip(false);
-                  }}
-                >
-                  <ToolTip
-                    status={
-                      logout === "false" && canVote === false
-                          ? "You need to be holding DYPv2 to vote"
-                          : logout === 'true'
-                         ? "Please connect your wallet"
-                         :   alreadyVoted === true && canVote === true
-                         ? "You have already voted"
-                         : "You have already voted"
-                    }
-                    style={{ width: 195 }}
-                  />
-                </OutsideClickHandler>
-              ) : (
-                <></>
-              )}
+              <OutsideClickHandler
+                onOutsideClick={() => {
+                  setShowTooltip(false);
+                }}
+              >
+                <ToolTip
+                  status={
+                    logout === "false" && canVote === false
+                      ? "You need to be holding DYPv1 or DYPv2 to vote"
+                      : logout === "true"
+                      ? "Please connect your wallet"
+                      : alreadyVoted === true && canVote === true
+                      ? "You have already voted"
+                      : "You have already voted"
+                  }
+                  style={{ width: 195 }}
+                />
+              </OutsideClickHandler>
+            ) : (
+              <></>
+            )}
           </div>
         </div>
       </div>

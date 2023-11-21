@@ -88,7 +88,7 @@ const Dashboard = ({
     //     console.log(err);
     //   });
     const bnb_result2 = await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_bnb_new`)
+      .get(`https://api.dyp.finance/api/get_staking_info_bnb_new`)
       .catch((err) => {
         console.log(err);
       });
@@ -97,7 +97,7 @@ const Dashboard = ({
       // const dypdypBnb = bnb_result.data.stakingInfoiDYPBnb;
       const dypBnb = bnb_result2.data.stakingInfoDYPBnb;
       const object2 = dypBnb.map((item) => {
-        return {...item, tvl_usd: item.tvl_usd/1e18}
+        return {...item, tvl_usd: item.tvl_usd}
       })
       // const cleanCards = dypdypBnb.filter((item) => {
       //   return item.expired === "No";
@@ -117,13 +117,13 @@ const Dashboard = ({
 
   const fetchAvaxStaking = async () => {
     const result_avax = await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_avax`)
+      .get(`https://api.dyp.finance/api/get_staking_info_avax`)
       .catch((err) => {
         console.log(err);
       });
 
     const result_avax2 = await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_avax_new`)
+      .get(`https://api.dyp.finance/api/get_staking_info_avax_new`)
       .catch((err) => {
         console.log(err);
       });
@@ -137,7 +137,7 @@ const Dashboard = ({
       const dypIdypAvax = result_avax.data.stakingInfoiDYPAvax;
       const dypAvax = result_avax2.data.stakingInfoDYPAvax;
       const object2 = dypAvax.map((item) => {
-        return {...item, tvl_usd: item.tvl_usd/1e18}
+        return {...item, tvl_usd: item.tvl_usd}
       })
       const cleanCards = dypIdypAvax.filter((item) => {
         return item.expired !== "Yes";
@@ -161,13 +161,13 @@ const Dashboard = ({
 
   const fetchEthStaking = async () => {
     const eth_result = await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_eth`)
+      .get(`https://api.dyp.finance/api/get_staking_info_eth`)
       .catch((err) => {
         console.log(err);
       });
 
     const eth_result2 = await axios
-      .get(`https://api2.dyp.finance/api/get_staking_info_eth_new`)
+      .get(`https://api.dyp.finance/api/get_staking_info_eth_new`)
       .catch((err) => {
         console.log(err);
       });
@@ -180,7 +180,7 @@ const Dashboard = ({
     ) {
       const dypEth = eth_result2.data.stakingInfoDYPEth;
       const object2 = dypEth.map((item) => {
-        return {...item, tvl_usd: item.tvl_usd/1e18}
+        return {...item, tvl_usd: item.tvl_usd}
       })
       const cleanCards = object2.filter((item) => {
         return item.expired !== "Yes";
