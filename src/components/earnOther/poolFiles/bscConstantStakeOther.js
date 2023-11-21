@@ -1,27 +1,27 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment";
-import getFormattedNumber from "../../functions/get-formatted-number";
-import Modal from "../Modal/Modal";
-import Address from "./address";
-import WalletModal from "../WalletModal";
-import "./top-pools.css";
-import ellipse from "./assets/ellipse.svg";
-import failMark from "../../assets/failMark.svg";
+import getFormattedNumber from "../../../functions/get-formatted-number";
+import Modal from "../../Modal/Modal";
+import Address from "../../FARMINNG/address";
+import WalletModal from "../../WalletModal";
+import "../../FARMINNG/top-pools.css";
+import ellipse from "../../FARMINNG/assets/ellipse.svg";
+// import failMark from "../../assets/failMark.svg";
 import Clipboard from "react-clipboard.js";
 import ReactTooltip from "react-tooltip";
-import arrowup from "./assets/arrow-up.svg";
-import moreinfo from "./assets/more-info.svg";
-import purplestats from "./assets/purpleStat.svg";
-import referralimg from "./assets/referral.svg";
-import copy from "./assets/copy.svg";
-import wallet from "./assets/wallet.svg";
+import arrowup from "../../FARMINNG/assets/arrow-up.svg";
+import moreinfo from "../../FARMINNG/assets/more-info.svg";
+import purplestats from "../../FARMINNG/assets/purpleStat.svg";
+import referralimg from "../../FARMINNG/assets/referral.svg";
+import copy from "../../FARMINNG/assets/copy.svg";
+import wallet from "../../FARMINNG/assets/wallet.svg";
 import Tooltip from "@material-ui/core/Tooltip";
 import Countdown from "react-countdown";
-import poolsCalculatorIcon from "./assets/poolsCalculatorIcon.svg";
-import statsLinkIcon from "./assets/statsLinkIcon.svg";
-import { shortAddress } from "../../functions/shortAddress";
+import poolsCalculatorIcon from "../../FARMINNG/assets/poolsCalculatorIcon.svg";
+import statsLinkIcon from "../../FARMINNG/assets/statsLinkIcon.svg";
+import { shortAddress } from "../../../functions/shortAddress";
 import { ClickAwayListener } from "@material-ui/core";
-import { handleSwitchNetworkhook } from "../../functions/hooks";
+import { handleSwitchNetworkhook } from "../../../functions/hooks";
 import axios from "axios";
 
 const renderer = ({ days, hours, minutes, seconds }) => {
@@ -45,7 +45,7 @@ const renderer = ({ days, hours, minutes, seconds }) => {
   );
 };
 
-const StakeBsc2 = ({
+const StakeBscOther = ({
   staking,
   is_wallet_connected,
   apr,
@@ -68,10 +68,19 @@ const StakeBsc2 = ({
   referrer,
   renderedPage,
   fee,
+  showDetails,
+  isPremium,
 }) => {
-  let { reward_token, BigNumber, alertify, reward_token_idyp, token_dypsbsc } =
-    window;
-  let token_symbol = "DYP";
+  let {
+    reward_tokenwbnb,
+    BigNumber,
+    alertify,
+    reward_token_idyp,
+    token_dypsbsc,
+    reward_token_daibsc,
+  } = window;
+
+  let token_symbol = "WBNB";
 
   // token, staking
 
@@ -131,7 +140,7 @@ const StakeBsc2 = ({
     }
   };
 
-  const [token_balance, settoken_balance] = useState("");
+  const [token_balance, settoken_balance] = useState("...");
   const [pendingDivs, setpendingDivs] = useState("");
   const [totalEarnedTokens, settotalEarnedTokens] = useState("");
   const [cliffTime, setcliffTime] = useState("");
@@ -157,6 +166,7 @@ const StakeBsc2 = ({
   const [approxDeposit, setapproxDeposit] = useState(100);
   const [approxDays, setapproxDays] = useState(365);
   const [showCalculator, setshowCalculator] = useState(false);
+  const [usdPerToken, setusdPerToken] = useState("");
   const [errorMsg, seterrorMsg] = useState("");
   const [errorMsg2, seterrorMsg2] = useState("");
   const [errorMsg3, seterrorMsg3] = useState("");
@@ -170,9 +180,6 @@ const StakeBsc2 = ({
   const [showWithdrawModal, setshowWithdrawModal] = useState(false);
   const [popup, setpopup] = useState(false);
   const [apy, setapy] = useState(false);
-  const [apy1, setapy1] = useState(false);
-  const [apy2, setapy2] = useState(false);
-
   const [performanceTooltip, setperformanceTooltip] = useState(false);
   const [aprTooltip, setaprTooltip] = useState(false);
   const [lockTooltip, setlockTooltip] = useState(false);
@@ -180,8 +187,7 @@ const StakeBsc2 = ({
   const [rewardsTooltip, setrewardsTooltip] = useState(false);
   const [withdrawTooltip, setwithdrawTooltip] = useState(false);
   const [tokendata, settokendata] = useState();
-  const [canwithdraw, setcanwithdraw] = useState(true);
-  const [isCompleted, setisCompleted] = useState(false);
+  const [passivePool, setPassivePool] = useState(false);
 
   const showModal = () => {
     setshow(true);
@@ -199,39 +205,6 @@ const StakeBsc2 = ({
     setpopup(false);
   };
 
-  const getTotalTvl = async () => {
-    if (the_graph_result) {
-      let usd_per_token = the_graph_result.token_data
-        ? the_graph_result.token_data[
-            "0x961c8c0b1aad0c0b10a51fef6a867e3091bcef17"
-          ].token_price_usd
-        : 1;
-      let usd_per_idyp = the_graph_result.token_data
-        ? the_graph_result.token_data[
-            "0xbd100d061e120b2c67a24453cf6368e63f1be056"
-          ].token_price_usd
-        : 1;
-
-      let apr1 = 25;
-      let apr2 = 50;
-      let apy1 = new BigNumber(apr1)
-        .div(1e2)
-        .times(usd_per_idyp)
-        .div(usd_per_token)
-        .times(1e2)
-        .toFixed(2);
-
-      let apy2 = new BigNumber(apr2)
-        .div(1e2)
-        .times(usd_per_idyp)
-        .div(usd_per_token)
-        .times(1e2)
-        .toFixed(2);
-      setapy1(apy1);
-      setapy2(apy2);
-    }
-  };
-
   const refreshBalance = async () => {
     let coinbase = coinbase2;
 
@@ -239,9 +212,6 @@ const StakeBsc2 = ({
       coinbase = window.coinbase_address;
       setcoinbase(coinbase);
     }
-
-    getTotalTvl();
-
     let lp_data;
     if (the_graph_result) {
       lp_data = the_graph_result.token_data;
@@ -249,51 +219,38 @@ const StakeBsc2 = ({
     //console.log({lp_data})
 
     //Calculate APY
+    let usd_per_dyps;
+    if (the_graph_result) {
+      let usd_per_token = the_graph_result.token_data
+        ? the_graph_result.token_data[
+            "0x961c8c0b1aad0c0b10a51fef6a867e3091bcef17"
+          ].token_price_usd
+        : 1;
+      // let usd_per_idyp = the_graph_result.token_data ? the_graph_result.token_data["0xbd100d061e120b2c67a24453cf6368e63f1be056"].token_price_usd : 1
+      let apy2 = apr - fee;
+      setapy(apy2);
 
-    let apy = new BigNumber(apr);
-
-    let usd_per_dyps = 0;
-    setapy(apy);
+      usd_per_dyps = the_graph_result.price_DYPS
+        ? the_graph_result.price_DYPS
+        : 1;
+    }
 
     try {
-      let amount = new BigNumber(1000000000000000000).toFixed(0);
-      let router = await window.getPancakeswapRouterContract();
-      let WETH = await router.methods.WETH().call();
-      let platformTokenAddress = window.config.BUSD_address;
-      let rewardTokenAddress = window.config.reward_tokenbsc_address2;
-      let path = [
-        ...new Set(
-          [rewardTokenAddress, WETH, platformTokenAddress].map((a) =>
-            a.toLowerCase()
-          )
-        ),
-      ];
-      let _amountOutMin = await router.methods
-        .getAmountsOut(amount, path)
-        .call();
-      _amountOutMin = _amountOutMin[_amountOutMin.length - 1];
-      _amountOutMin = new BigNumber(_amountOutMin).div(1e18).toFixed(18);
-
+      let _bal = reward_tokenwbnb.balanceOf(coinbase);
       if (staking) {
-        let _bal = reward_token.balanceOf(coinbase);
         let _pDivs = staking.getTotalPendingDivs(coinbase);
-
         let _tEarned = staking.totalEarnedTokens(coinbase);
-
         let _stakingTime = staking.stakingTime(coinbase);
-
         let _dTokens = staking.depositedTokens(coinbase);
         let _lClaimTime = staking.lastClaimedTime(coinbase);
-        let _tvl = reward_token.balanceOf(staking._address);
-
+        let _tvl = reward_tokenwbnb.balanceOf(staking._address);
         let _rFeeEarned = staking.totalReferralFeeEarned(coinbase);
-
         let tStakers = staking.getNumberOfHolders();
 
-        //Take iDYP Balance on Staking
-        let _tvlConstantiDYP = reward_token_idyp.balanceOf(
+        //Take DAI Balance on Staking
+        let _tvlConstantDAI = reward_token_daibsc.balanceOf(
           staking._address
-        ); /* TVL of iDYP on Staking */
+        ); /* TVL of DAI on Staking */
 
         //Take DYPS Balance
         let _tvlDYPS = token_dypsbsc.balanceOf(
@@ -310,7 +267,7 @@ const StakeBsc2 = ({
           tvl,
           referralFeeEarned,
           total_stakers,
-          tvlConstantiDYP,
+          tvlConstantDAI,
           tvlDYPS,
         ] = await Promise.all([
           _bal,
@@ -322,21 +279,18 @@ const StakeBsc2 = ({
           _tvl,
           _rFeeEarned,
           tStakers,
-          _tvlConstantiDYP,
+          _tvlConstantDAI,
           _tvlDYPS,
         ]);
 
-        //console.log({tvl, tvlConstantiDYP, _amountOutMin})
-
-        let usdValueiDYP = new BigNumber(tvlConstantiDYP)
-          .times(_amountOutMin)
-          .toFixed(18);
+        let usdValueDAI = new BigNumber(tvlConstantDAI).toFixed(18);
         let usd_per_lp = lp_data
           ? lp_data[window.reward_token["_address"]].token_price_usd
           : 0;
+
         let tvlUSD = new BigNumber(tvl)
           .times(usd_per_lp)
-          .plus(usdValueiDYP)
+          .plus(usdValueDAI)
           .toFixed(18);
         //console.log({tvlUSD})
 
@@ -346,6 +300,7 @@ const StakeBsc2 = ({
         let balance_formatted = new BigNumber(token_balance)
           .div(1e18)
           .toString(10);
+
         settoken_balance(balance_formatted);
 
         let divs_formatted = new BigNumber(pendingDivs).div(1e18).toFixed(6);
@@ -372,10 +327,10 @@ const StakeBsc2 = ({
         setsettvlDyps(tvlDyps);
         setreferralFeeEarned(referralFeeEarned);
         settotal_stakers(total_stakers);
-        settvlUSD(tvlUSD);
 
         let stakingOwner = await staking.owner();
         setstakingOwner(stakingOwner);
+        settvlUSD(tvlUSD);
       }
     } catch (e) {
       console.error(e);
@@ -385,7 +340,7 @@ const StakeBsc2 = ({
       staking
         .LOCKUP_TIME()
         .then((cliffTime) => {
-          setcliffTime(Number(cliffTime));
+          setcliffTime(cliffTime);
         })
         .catch(console.error);
 
@@ -398,10 +353,15 @@ const StakeBsc2 = ({
       });
     }
   };
-
   useEffect(() => {
     if (coinbase !== coinbase2 && coinbase !== null && coinbase !== undefined) {
       setcoinbase(coinbase);
+    }
+    if (
+      staking &&
+      staking._address === "0x7c82513b69c1b42c23760cfc34234558119a3399"
+    ) {
+      setPassivePool(true);
     }
   }, [coinbase, coinbase2]);
 
@@ -409,6 +369,8 @@ const StakeBsc2 = ({
     refreshBalance();
     if (depositAmount !== "") {
       checkApproval(depositAmount);
+    } else {
+      setdepositStatus("initial");
     }
   }, [coinbase, coinbase2, staking]);
 
@@ -419,119 +381,120 @@ const StakeBsc2 = ({
 
   const handleApprove = (e) => {
     //   e.preventDefault();
-    setdepositLoading(true);
+    if (passivePool === false) {
+      setdepositLoading(true);
+      if (other_info) {
+        window.$.alert("This pool no longer accepts deposits!");
+        setdepositLoading(false);
+        return;
+      }
 
-    let amount = depositAmount;
-    amount = new BigNumber(amount).times(1e18).toFixed(0);
-    reward_token
-      .approve(staking._address, amount)
-      .then(() => {
-        setdepositLoading(false);
-        setdepositStatus("deposit");
-        refreshBalance();
-      })
-      .catch((e) => {
-        setdepositLoading(false);
-        setdepositStatus("fail");
-        seterrorMsg(e?.message);
-        setTimeout(() => {
-          depositAmount("");
-          setdepositStatus("initial");
-          seterrorMsg("");
-        }, 10000);
-      });
+      let amount = depositAmount;
+      amount = new BigNumber(amount).times(1e18).toFixed(0);
+      reward_tokenwbnb
+        .approve(staking._address, amount)
+        .then(() => {
+          setdepositLoading(false);
+          setdepositStatus("deposit");
+          refreshBalance();
+        })
+        .catch((e) => {
+          setdepositLoading(false);
+          setdepositStatus("fail");
+          seterrorMsg(e?.message);
+          setTimeout(() => {
+            depositAmount("");
+            setdepositStatus("initial");
+            seterrorMsg("");
+          }, 10000);
+        });
+    } else if (passivePool === true) {
+      window.$.alert("This pool no longer accepts deposits!");
+      return;
+    }
   };
 
   const handleStake = async (e) => {
     //   e.preventDefault();
-    setdepositLoading(true);
+    if (passivePool === false) {
+      setdepositLoading(true);
 
-    let amount = depositAmount;
-    amount = new BigNumber(amount).times(1e18).toFixed(0);
-    let referrer = referrer;
+      if (other_info) {
+        window.$.alert("This pool no longer accepts deposits!");
+        setdepositLoading(false);
+        return;
+      }
 
-    if (referrer) {
-      referrer = String(referrer).trim().toLowerCase();
+      let amount = depositAmount;
+      amount = new BigNumber(depositAmount).times(1e18).toFixed(0);
+
+      let referrer = window.config.ZERO_ADDRESS;
+
+      //NO REFERRER HERE
+      const isPremiumStake = await staking.premiumStake();
+      if (isPremiumStake === false) {
+        staking
+          .stake(amount, referrer)
+          .then(() => {
+            setdepositLoading(false);
+            setdepositStatus("success");
+            refreshBalance();
+            setTimeout(() => {
+              setdepositLoading(false);
+              setdepositStatus("initial");
+            }, 5000);
+          })
+          .catch((e) => {
+            setdepositLoading(false);
+            setdepositStatus("fail");
+            seterrorMsg(e?.message);
+            setTimeout(() => {
+              depositAmount("");
+              setdepositStatus("initial");
+              seterrorMsg("");
+            }, 10000);
+          });
+      } else if (isPremiumStake === true && isPremium === true) {
+        staking
+          .premiumStaking(amount, referrer)
+          .then(() => {
+            setdepositLoading(false);
+            setdepositStatus("success");
+            refreshBalance();
+            setTimeout(() => {
+              setdepositLoading(false);
+              setdepositStatus("initial");
+            }, 5000);
+          })
+          .catch((e) => {
+            setdepositLoading(false);
+            setdepositStatus("fail");
+            seterrorMsg(e?.message);
+            setTimeout(() => {
+              depositAmount("");
+              setdepositStatus("initial");
+              seterrorMsg("");
+            }, 10000);
+          });
+      } else if (isPremiumStake === true && isPremium === false) {
+        window.$.alert(
+          "This pool is avaliable only to premium users at the moment! Check back later or upgrade to premium!"
+        );
+        setdepositLoading(false);
+        return;
+      }
+    } else if (passivePool === true) {
+      window.$.alert("This pool no longer accepts deposits!");
+      return;
     }
-
-    if (!window.web3.utils.isAddress(referrer)) {
-      referrer = window.config.ZERO_ADDRESS;
-    }
-
-    let referralFee = new BigNumber(amount).times(500).div(1e4).toFixed(0);
-    //console.log({referralFee})
-    //let selectedBuybackToken = this.state.selectedBuybackToken
-
-    let deadline = Math.floor(
-      Date.now() / 1e3 + window.config.tx_max_wait_seconds
-    );
-    let router = await window.getPancakeswapRouterContract();
-    let WETH = await router.methods.WETH().call();
-    let platformTokenAddress = window.config.reward_token_address;
-    let rewardTokenAddress = window.config.reward_tokenbsc_address2;
-    let path = [
-      ...new Set(
-        [rewardTokenAddress, WETH, platformTokenAddress].map((a) =>
-          a.toLowerCase()
-        )
-      ),
-    ];
-    let _amountOutMin_referralFee = await router.methods
-      .getAmountsOut(referralFee, path)
-      .call()
-      .catch((e) => {
-        setdepositLoading(false);
-        setdepositStatus("fail");
-        seterrorMsg(e?.message);
-        setTimeout(() => {
-          depositAmount("");
-          setdepositStatus("initial");
-          seterrorMsg("");
-        }, 10000);
-      });
-    //console.log({_amountOutMin_referralFee})
-    _amountOutMin_referralFee =
-      _amountOutMin_referralFee[_amountOutMin_referralFee.length - 1];
-    _amountOutMin_referralFee = new BigNumber(_amountOutMin_referralFee)
-      .times(100 - window.config.slippage_tolerance_percent)
-      .div(100)
-      .toFixed(0);
-    referralFee = referralFee - _amountOutMin_referralFee;
-    referralFee = referralFee.toString();
-
-    console.log({ amount, referrer, referralFee, deadline });
-
-    staking
-      .stake(amount, referrer, 0, deadline)
-      .then(() => {
-        setdepositLoading(false);
-        setdepositStatus("success");
-        refreshBalance();
-      })
-      .catch((e) => {
-        setdepositLoading(false);
-        setdepositStatus("fail");
-        seterrorMsg(e?.message);
-        setTimeout(() => {
-          depositAmount("");
-          setdepositStatus("initial");
-          seterrorMsg("");
-        }, 10000);
-      });
   };
 
   const handleWithdraw = async (e) => {
     //   e.preventDefault();
     setwithdrawLoading(true);
-
     let amount = new BigNumber(withdrawAmount).times(1e18).toFixed(0);
-
-    let deadline = Math.floor(
-      Date.now() / 1e3 + window.config.tx_max_wait_seconds
-    );
-
-    staking
-      .unstake(amount, 0, deadline)
+    await staking
+      .unstake(amount)
       .then(() => {
         setwithdrawStatus("success");
         setwithdrawLoading(false);
@@ -550,56 +513,10 @@ const StakeBsc2 = ({
   };
 
   const handleClaimDivs = async (e) => {
-    //   e.preventDefault();
     setclaimLoading(true);
-
-    let address = coinbase;
-    let amount = await staking.getTotalPendingDivs(address);
-
-    let router = await window.getPancakeswapRouterContract();
-    let WETH = await router.methods.WETH().call();
-    let platformTokenAddress = window.config.reward_token_address;
-    let rewardTokenAddress = window.config.reward_tokenbsc_address2;
-    let path = [
-      ...new Set(
-        [rewardTokenAddress, WETH, platformTokenAddress].map((a) =>
-          a.toLowerCase()
-        )
-      ),
-    ];
-    let _amountOutMin = await router.methods
-      .getAmountsOut(amount, path)
-      .call()
-      .catch((e) => {
-        setclaimStatus("failed");
-        setclaimLoading(false);
-        seterrorMsg2(e?.message);
-
-        setTimeout(() => {
-          setclaimStatus("initial");
-          seterrorMsg2("");
-        }, 2000);
-      });
-    _amountOutMin = _amountOutMin[_amountOutMin.length - 1];
-    _amountOutMin = new BigNumber(_amountOutMin)
-      .times(100 - window.config.slippage_tolerance_percent)
-      .div(100)
-      .toFixed(0);
-
-    let referralFee = new BigNumber(_amountOutMin)
-      .times(500)
-      .div(1e4)
-      .toFixed(0);
-    referralFee = referralFee.toString();
-
-    let deadline = Math.floor(
-      Date.now() / 1e3 + window.config.tx_max_wait_seconds
-    );
-
-    console.log({ referralFee, _amountOutMin, deadline });
-
+    //   e.preventDefault();
     staking
-      .claim(0, _amountOutMin, deadline)
+      .claim()
       .then(() => {
         setclaimStatus("success");
         setclaimLoading(false);
@@ -614,6 +531,7 @@ const StakeBsc2 = ({
         setTimeout(() => {
           setclaimStatus("initial");
           seterrorMsg2("");
+          setclaimLoading(false);
         }, 2000);
       });
   };
@@ -621,10 +539,11 @@ const StakeBsc2 = ({
   const handleSetMaxDeposit = (e) => {
     // e.preventDefault();
     const depositAmount = token_balance;
-    checkApproval(token_balance);
-
+    console.log(depositAmount);
+    checkApproval(depositAmount);
     setdepositAmount(depositAmount);
   };
+
   const handleSetMaxWithdraw = async (e) => {
     // e.preventDefault();
     let amount;
@@ -642,73 +561,38 @@ const StakeBsc2 = ({
     return apr;
   };
 
+  const handleBnbPool = async () => {
+    await handleSwitchNetworkhook("0x38")
+      .then(() => {
+        handleSwitchNetwork("56");
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
   const getUsdPerETH = () => {
     return the_graph_result.usd_per_eth || 0;
   };
 
   const getApproxReturn = () => {
-    return ((approxDeposit * apy) / 100 / 365) * approxDays;
+    let APY = getAPY() - fee;
+
+    return ((approxDeposit * APY) / 100 / 365) * approxDays;
   };
 
   const getReferralLink = () => {
-    return window.location.origin + window.location.pathname + "?r=" + coinbase;
+    return (
+      window.location.origin + window.location.pathname + "?r=" + coinbase2
+    );
   };
 
   const handleReinvest = async (e) => {
-    // e.preventDefault();
     setreInvestStatus("invest");
     setreInvestLoading(true);
 
-    let address = coinbase;
-    let amount = await staking.getTotalPendingDivs(address);
-
-    let router = await window.getPancakeswapRouterContract();
-    let WETH = await router.methods.WETH().call();
-    let platformTokenAddress = window.config.reward_token_address;
-    let rewardTokenAddress = window.config.reward_tokenbsc_address2;
-    let path = [
-      ...new Set(
-        [rewardTokenAddress, WETH, platformTokenAddress].map((a) =>
-          a.toLowerCase()
-        )
-      ),
-    ];
-    let _amountOutMin = await router.methods
-      .getAmountsOut(amount, path)
-      .call()
-      .catch((e) => {
-        setreInvestStatus("failed");
-        setreInvestLoading(false);
-        seterrorMsg2(e?.message);
-
-        setTimeout(() => {
-          setreInvestStatus("initial");
-          seterrorMsg2("");
-        }, 10000);
-      });
-    _amountOutMin = _amountOutMin[_amountOutMin.length - 1];
-    _amountOutMin = new BigNumber(_amountOutMin)
-      .times(100 - window.config.slippage_tolerance_percent)
-      .div(100)
-      .toFixed(0);
-
-    let referralFee = new BigNumber(_amountOutMin)
-      .times(500)
-      .div(1e4)
-      .toFixed(0);
-    referralFee = referralFee.toString();
-
-    // _amountOutMin = _amountOutMin - referralFee
-    // _amountOutMin = _amountOutMin.toString()
-
-    let deadline = Math.floor(
-      Date.now() / 1e3 + window.config.tx_max_wait_seconds
-    );
-
-    console.log({ referralFee, _amountOutMin, deadline });
-
+    //   e.preventDefault();
     staking
-      .reInvest(0, _amountOutMin, deadline)
+      .reInvest()
       .then(() => {
         setreInvestStatus("success");
         setreInvestLoading(false);
@@ -723,7 +607,7 @@ const StakeBsc2 = ({
         setTimeout(() => {
           setreInvestStatus("initial");
           seterrorMsg2("");
-        }, 10000);
+        }, 2000);
       });
   };
 
@@ -734,16 +618,6 @@ const StakeBsc2 = ({
       day: "2-digit",
     }).format(timestamp * 1000);
     return result;
-  };
-
-  const handleBnbPool = async () => {
-    await handleSwitchNetworkhook("0x38")
-      .then(() => {
-        handleSwitchNetwork("56");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
   };
 
   let id = Math.random().toString(36);
@@ -789,22 +663,26 @@ const StakeBsc2 = ({
     let lastDay = parseInt(disburseDuration) + parseInt(contractDeployTime);
     let lockTimeExpire = parseInt(Date.now()) + parseInt(cliffTime);
     lockTimeExpire = lockTimeExpire.toString().substr(0, 10);
+    //console.log("now " + lockTimeExpire)
+    //console.log('last ' + lastDay)
   }
-
   let cliffTimeInWords = "lockup period";
-  useEffect(() => {
-    if (lockTime === "No Lock") {
-      setcanwithdraw(true);
+
+  let canWithdraw = true;
+  if (lockTime === "No Lock") {
+    canWithdraw = true;
+  }
+  if (!isNaN(cliffTime) && !isNaN(stakingTime)) {
+    if (
+      Number(stakingTime) + Number(cliffTime) >= Date.now() / 1000 &&
+      lockTime !== "No Lock"
+    ) {
+      canWithdraw = false;
+      cliffTimeInWords = moment
+        .duration(cliffTime - (Date.now() - stakingTime))
+        .humanize(true);
     }
-    if (!isNaN(cliffTime) && !isNaN(stakingTime)) {
-      if (
-        Number(stakingTime) + Number(cliffTime) >= Date.now() / 1000 &&
-        lockTime !== "No Lock"
-      ) {
-        setcanwithdraw(false);
-      }
-    }
-  }, [lockTime, canwithdraw, cliffTime, stakingTime, isCompleted]);
+  }
 
   let tvl_usd = tvl * tokendata;
 
@@ -817,16 +695,20 @@ const StakeBsc2 = ({
   const focusInput = (field) => {
     document.getElementById(field).focus();
   };
+
   const checkApproval = async (amount) => {
     const result = await window
-      .checkapproveStakePool(coinbase, reward_token._address, staking._address)
+      .checkapproveStakePool(
+        coinbase,
+        reward_tokenwbnb._address,
+        staking._address
+      )
       .then((data) => {
         console.log(data);
         return data;
       });
-
     let result_formatted = new BigNumber(result).div(1e18).toFixed(6);
-
+    console.log(amount, result_formatted);
     if (
       Number(result_formatted) >= Number(amount) &&
       Number(result_formatted) !== 0
@@ -839,10 +721,10 @@ const StakeBsc2 = ({
 
   const getUsdPerDyp = async () => {
     await axios
-      .get("https://api.dyp.finance/api/the_graph_bsc_v2")
+      .get("https://api.dyp.finance/api/the_graph_eth_v2")
       .then((data) => {
         const propertyDyp = Object.entries(
-          data.data.the_graph_bsc_v2.token_data
+          data.data.the_graph_eth_v2.token_data
         );
         settokendata(propertyDyp[0][1].token_price_usd);
         return propertyDyp[0][1].token_price_usd;
@@ -853,12 +735,16 @@ const StakeBsc2 = ({
     getUsdPerDyp();
   }, []);
 
+  // console.log(Number(depositedTokens))
+
   return (
     <div className="container-lg p-0">
       <div
-        className={`allwrapper ${listType === "table" && "my-4"}`}
+        className={`allwrapper ${listType === "table" && "my-4"} ${
+          showDetails && "allwrapper-active mb-2"
+        }`}
         style={{
-          border: listType !== "table" && "none",
+          // border: listType !== "table" && "none",
           borderRadius: listType !== "table" && "0px",
         }}
       >
@@ -881,11 +767,11 @@ const StakeBsc2 = ({
                 Active status
               </h6>
               {/* <div className="d-flex align-items-center justify-content-between gap-2">
-            <h6 className="earnrewards-text">Earn rewards in:</h6>
-            <h6 className="earnrewards-token d-flex align-items-center gap-1">
-              DYP
-            </h6>
-          </div> */}
+                    <h6 className="earnrewards-text">Earn rewards in:</h6>
+                    <h6 className="earnrewards-token d-flex align-items-center gap-1">
+                      DYP
+                    </h6>
+                  </div> */}
               <div className="d-flex flex-row-reverse flex-lg-row align-items-center justify-content-between earnrewards-container">
                 <div className="d-flex flex-column flex-lg-row align-items-end align-items-lg-center gap-3 gap-lg-5">
                   <div className="d-flex align-items-center justify-content-between gap-2">
@@ -1013,10 +899,11 @@ const StakeBsc2 = ({
               >
                 <h6 className="start-title">Start Staking</h6>
                 {/* <h6 className="start-desc">
-              {this.props.coinbase === null
-                ? "Connect wallet to view and interact with deposits and withdraws"
-                : "Interact with deposits and withdraws"}
-            </h6> */}
+                      {this.props.coinbase === null
+                        ? "Connect wallet to view and interact with deposits and withdraws"
+                        : "Interact with deposits and withdraws"}
+                    </h6> */}
+
                 {coinbase === null ||
                 coinbase === undefined ||
                 is_wallet_connected === false ? (
@@ -1028,6 +915,7 @@ const StakeBsc2 = ({
                       fontSize: renderedPage === "dashboard" && "10px",
                     }}
                   >
+                    {" "}
                     <img src={wallet} alt="" /> Connect wallet
                   </button>
                 ) : chainId === "56" ? (
@@ -1047,12 +935,12 @@ const StakeBsc2 = ({
               </div>
             </div>
             {/* <div className="otherside">
-      <button className="btn green-btn">
-        TBD Claim reward 0.01 ETH
-      </button>
-    </div> */}
+              <button className="btn green-btn">
+                TBD Claim reward 0.01 ETH
+              </button>
+            </div> */}
             <div
-              className={`otherside-border col-12 col-md-12 col-lg-4  ${
+              className={`otherside-border col-12 col-md-12 col-lg-4 ${
                 chainId !== "56" || expired === true ? "blurrypool" : ""
               }`}
             >
@@ -1060,25 +948,26 @@ const StakeBsc2 = ({
                 <div className="d-flex justify-content-center align-items-center gap-3">
                   <h6 className="deposit-txt">Deposit</h6>
                   {/* <div className="d-flex gap-2 align-items-center">
-                <img
-                  src={require(`./assets/dyp.svg`).default}
-                  alt=""
-                  style={{ width: 15, height: 15 }}
-                />
-                <h6
-                  className="text-white"
-                  style={{ fontSize: "11px", fontWeight: "600" }}
-                >
-                  DYP
-                </h6>
-              </div> */}
+                        <img
+                          src={require(`./assets/dyp.svg`).default}
+                          alt=""
+                          style={{ width: 15, height: 15 }}
+                        />
+                        <h6
+                          className="text-white"
+                          style={{ fontSize: "11px", fontWeight: "600" }}
+                        >
+                          DYP
+                        </h6>
+                      </div> */}
                   <h6 className="mybalance-text">
                     Balance:
                     <b>
                       {token_balance !== "..."
                         ? getFormattedNumber(token_balance, 6)
-                        : "..."}{" "}
-                      {token_symbol}
+                        : getFormattedNumber(0, 6)}{" "}
+                      {/* {token_symbol} */}
+                      WBNB
                     </b>
                   </h6>
                 </div>
@@ -1091,9 +980,9 @@ const StakeBsc2 = ({
                     placement="top"
                     title={
                       <div className="tooltip-text">
-                        {
-                          "Deposit your assets to the staking smart contract. For lock time pools, the lock time resets if you add more deposits after making one previously."
-                        }
+                        {lockTime === "No Lock"
+                          ? "The initial pool size is capped at 5M DYP. Additional opportunities to stake DYP are planned to be introduced over time."
+                          : "Deposit your assets to the staking smart contract. For lock time pools, the lock time resets if you add more deposits after making one previously."}
                       </div>
                     }
                   >
@@ -1104,7 +993,7 @@ const StakeBsc2 = ({
               <div className="d-flex flex-column gap-2 justify-content-between">
                 <div className="d-flex flex-column flex-lg-row align-items-center justify-content-between gap-2">
                   <div className="d-flex align-items-center justify-content-between justify-content-lg-start w-100 gap-2">
-                    <div className="input-container px-0">
+                    <div className="input-container  px-0">
                       <input
                         type="number"
                         autoComplete="off"
@@ -1132,32 +1021,33 @@ const StakeBsc2 = ({
                         Amount
                       </label>
                     </div>
+
                     {/* <div
-                className="input-container px-0"
-                style={{ width: "32%" }}
-              >
-                <input
-                  type="number"
-                  min={1}
-                  id="amount"
-                  name="amount"
-                  value={ Number(depositAmount) > 0
-                    ? depositAmount
-                    : depositAmount
-                  }
-                  placeholder=" "
-                  className="text-input"
-                  onChange={(e) => this.setState({depositAmount: e.target.value})}
-                  style={{ width: "100%" }}
-                />
-                <label
-                  htmlFor="usd"
-                  className="label"
-                  onClick={() => focusInput("amount")}
-                >
-                  DYP Amount
-                </label>
-              </div> */}
+                        className="input-container px-0"
+                        style={{ width: "32%" }}
+                      >
+                        <input
+                          type="number"
+                          min={1}
+                          id="amount"
+                          name="amount"
+                          value={ Number(depositAmount) > 0
+                            ? depositAmount
+                            : depositAmount
+                          }
+                          placeholder=" "
+                          className="text-input"
+                          onChange={(e) => this.setState({depositAmount: e.target.value})}
+                          style={{ width: "100%" }}
+                        />
+                        <label
+                          htmlFor="usd"
+                          className="label"
+                          onClick={() => focusInput("amount")}
+                        >
+                          DYP Amount
+                        </label>
+                      </div> */}
                     <button
                       className="btn maxbtn"
                       onClick={handleSetMaxDeposit}
@@ -1166,11 +1056,11 @@ const StakeBsc2 = ({
                     </button>
                   </div>
                   {/* <button
-              className="btn filledbtn"
-              onClick={this.handleApprove}
-            >
-              Approve
-            </button> */}
+                      className="btn filledbtn"
+                      onClick={this.handleApprove}
+                    >
+                      Approve
+                    </button> */}
                   <button
                     disabled={
                       depositAmount === "" || depositLoading === true
@@ -1211,7 +1101,7 @@ const StakeBsc2 = ({
                       <>Success</>
                     ) : (
                       <>
-                        <img src={failMark} alt="" />
+                        {/* <img src={failMark} alt="" /> */}
                         Failed
                       </>
                     )}
@@ -1266,42 +1156,44 @@ const StakeBsc2 = ({
                         color: "#c0c9ff",
                       }}
                     >
-                      DYP
+                      WBNB
                     </span>
                     <span>{pendingDivs}</span>
                     {/* <input
-                  disabled
-                  value={
-                    Number(pendingDivs) > 0
-                      ? `${pendingDivs}`
-                      : `${pendingDivs}`
-                  }
-                  onChange={(e) =>
-                    this.setState({
-                      pendingDivs:
-                        Number(e.target.value) > 0
-                          ? e.target.value
-                          : e.target.value,
-                    })
-                  }
-                  className=" left-radius inputfarming styledinput2"
-                  placeholder="0"
-                  type="text"
-                  style={{ fontSize: "14px", width: renderedPage === "dashboard" && '120px', padding: 0 }}
-                /> */}
+                          disabled
+                          value={
+                            Number(pendingDivs) > 0
+                              ? `${pendingDivs}`
+                              : `${pendingDivs}`
+                          }
+                          onChange={(e) =>
+                            this.setState({
+                              pendingDivs:
+                                Number(e.target.value) > 0
+                                  ? e.target.value
+                                  : e.target.value,
+                            })
+                          }
+                          className=" left-radius inputfarming styledinput2"
+                          placeholder="0"
+                          type="text"
+                          style={{ fontSize: "14px", width: renderedPage === "dashboard" && '120px', padding: 0 }}
+                        /> */}
                   </div>
                   <div className="claim-reinvest-container d-flex justify-content-between align-items-center gap-3">
                     <button
                       disabled={
-                        claimStatus === "claimed" || claimStatus === "success" || pendingDivs <= 0
-                          ? //
-                            true
+                        claimStatus === "claimed" ||
+                        claimStatus === "success" ||
+                        pendingDivs <= 0
+                          ? true
                           : false
                       }
                       className={`btn filledbtn ${
-                        claimStatus === "claimed" && claimStatus === "initial"||  pendingDivs <= 0
-                          ? // 
-                            "disabled-btn"
+                        (claimStatus === "claimed" &&
+                          claimStatus === "initial") ||
+                        pendingDivs <= 0
+                          ? "disabled-btn"
                           : claimStatus === "failed"
                           ? "fail-button"
                           : claimStatus === "success"
@@ -1309,11 +1201,9 @@ const StakeBsc2 = ({
                           : null
                       } d-flex justify-content-center align-items-center gap-2`}
                       style={{ height: "fit-content" }}
-                      // onClick={handleClaimDivs}
-                      onClick={() => {handleClaimDivs()
-                      }}
+                      onClick={handleClaimDivs}
                     >
-                      {claimLoading ? (
+                      {claimLoading === true && claimStatus === "initial" ? (
                         <div
                           class="spinner-border spinner-border-sm text-light"
                           role="status"
@@ -1322,7 +1212,7 @@ const StakeBsc2 = ({
                         </div>
                       ) : claimStatus === "failed" ? (
                         <>
-                          <img src={failMark} alt="" />
+                          {/* <img src={failMark} alt="" /> */}
                           Failed
                         </>
                       ) : claimStatus === "success" ? (
@@ -1331,6 +1221,7 @@ const StakeBsc2 = ({
                         <>Claim</>
                       )}
                     </button>
+
                     {expired === false && (
                       <button
                         disabled={pendingDivs > 0 ? false : true}
@@ -1355,7 +1246,7 @@ const StakeBsc2 = ({
                           </div>
                         ) : reInvestStatus === "failed" ? (
                           <>
-                            <img src={failMark} alt="" />
+                            {/* <img src={failMark} alt="" /> */}
                             Failed
                           </>
                         ) : reInvestStatus === "success" ? (
@@ -1425,87 +1316,87 @@ const StakeBsc2 = ({
             <div className="l-box pl-3 pr-3">
               <div className="container px-0">
                 {/* <div className="row" style={{ marginLeft: "0px" }}>
-          <div className="d-flex justify-content-between gap-2 align-items-center p-0">
-            <h6 className="d-flex gap-2 align-items-center statstext">
-              <img src={stats} alt="" />
-              Stats
-            </h6>
-            <h6 className="d-flex gap-2 align-items-center myaddrtext">
-              My address
-              <a
-                href={`${window.config.etherscan_baseURL}/address/${this.props.coinbase}`}
-                target={"_blank"}
-                rel="noreferrer"
-              >
-                <h6 className="addresstxt">
-                  {this.props.coinbase?.slice(0, 10) + "..."}
-                </h6>
-              </a>
-              <img src={arrowup} alt="" />
-            </h6>
-          </div>
-        </div> */}
+                    <div className="d-flex justify-content-between gap-2 align-items-center p-0">
+                      <h6 className="d-flex gap-2 align-items-center statstext">
+                        <img src={stats} alt="" />
+                        Stats
+                      </h6>
+                      <h6 className="d-flex gap-2 align-items-center myaddrtext">
+                        My address
+                        <a
+                          href={`${window.config.etherscan_baseURL}/address/${this.props.coinbase}`}
+                          target={"_blank"}
+                          rel="noreferrer"
+                        >
+                          <h6 className="addresstxt">
+                            {this.props.coinbase?.slice(0, 10) + "..."}
+                          </h6>
+                        </a>
+                        <img src={arrowup} alt="" />
+                      </h6>
+                    </div>
+                  </div> */}
                 {/* <table className="table-stats table table-sm table-borderless mt-2">
-          <tbody>
-            <tr>
-              <td className="text-right">
-                <th>My DYP Deposit</th>
-                <div>
-                  <strong>{depositedTokens}</strong>{" "}
-                  <small>DYP</small>
-                </div>
-              </td>
+                    <tbody>
+                      <tr>
+                        <td className="text-right">
+                          <th>My DYP Deposit</th>
+                          <div>
+                            <strong>{depositedTokens}</strong>{" "}
+                            <small>DYP</small>
+                          </div>
+                        </td>
 
-              <td className="text-right">
-                <th>My DYP Balance</th>
-                <div>
-                  <strong>{token_balance}</strong>{" "}
-                  <small>DYP</small>
-                </div>
-              </td>
-              <td className="text-right">
-                <th>Referral Fee Earned</th>
-                <div>
-                  <strong>{referralFeeEarned}</strong>{" "}
-                  <small>DYP</small>
-                </div>
-              </td>
+                        <td className="text-right">
+                          <th>My DYP Balance</th>
+                          <div>
+                            <strong>{token_balance}</strong>{" "}
+                            <small>DYP</small>
+                          </div>
+                        </td>
+                        <td className="text-right">
+                          <th>Referral Fee Earned</th>
+                          <div>
+                            <strong>{referralFeeEarned}</strong>{" "}
+                            <small>DYP</small>
+                          </div>
+                        </td>
 
-            
-            </tr>
+                      
+                      </tr>
 
-            <tr>
-              <td className="text-right">
-                <th>Total DYP Locked</th>
-                <div>
-                  <strong>{tvl}</strong> <small>DYP</small>
-                </div>
-              </td>
-              <td className="text-right">
-                <th>TVL USD</th>
-                <div>
-                  <strong>${tvl_usd}</strong> <small>USD</small>
-                </div>
-              </td>
+                      <tr>
+                        <td className="text-right">
+                          <th>Total DYP Locked</th>
+                          <div>
+                            <strong>{tvl}</strong> <small>DYP</small>
+                          </div>
+                        </td>
+                        <td className="text-right">
+                          <th>TVL USD</th>
+                          <div>
+                            <strong>${tvl_usd}</strong> <small>USD</small>
+                          </div>
+                        </td>
 
-              <td className="text-right">
-                <th>Contract Expiration</th>
-                <small>{expiration_time}</small>
-              </td>
-            </tr>
-          </tbody>
-        </table> */}
+                        <td className="text-right">
+                          <th>Contract Expiration</th>
+                          <small>{expiration_time}</small>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table> */}
                 <div className="stats-container my-4">
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
-                    <span className="stats-card-title">My DYP Deposit</span>
+                    <span className="stats-card-title">My WBNB Deposit</span>
                     <h6 className="stats-card-content">
-                      {getFormattedNumber(depositedTokens, 6)} DYP
+                      {getFormattedNumber(depositedTokens, 6)} WBNB
                     </h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
-                    <span className="stats-card-title">My DYP Balance</span>
+                    <span className="stats-card-title">My WBNB Balance</span>
                     <h6 className="stats-card-content">
-                      {getFormattedNumber(token_balance, 6)} DYP
+                      {getFormattedNumber(token_balance, 6)} {token_symbol}
                     </h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
@@ -1517,9 +1408,9 @@ const StakeBsc2 = ({
                     </h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
-                    <span className="stats-card-title">Total DYP Locked</span>
+                    <span className="stats-card-title">Total WBNB Locked</span>
                     <h6 className="stats-card-content">
-                      {getFormattedNumber(tvl, 6)} DYP
+                      {getFormattedNumber(tvl, 6)} WBNB
                     </h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
@@ -1570,12 +1461,12 @@ const StakeBsc2 = ({
                             </h6>
                             <br />
                             {/* <a
-                    className="text-muted small"
-                    href={this.getReferralLink()}
-                  >
-                    {" "}
-                    {this.getReferralLink()}{" "}
-                  </a> */}
+                              className="text-muted small"
+                              href={this.getReferralLink()}
+                            >
+                              {" "}
+                              {this.getReferralLink()}{" "}
+                            </a> */}
                           </span>
                         </div>
 
@@ -1634,7 +1525,7 @@ const StakeBsc2 = ({
                     <a
                       target="_blank"
                       rel="noopener noreferrer"
-                      href={`${window.config.bscscan_baseURL}/token/${reward_token._address}?a=${coinbase}`}
+                      href={`${window.config.bscscan_baseURL}/token/${reward_tokenwbnb._address}?a=${coinbase}`}
                       className="stats-link"
                     >
                       View transaction <img src={statsLinkIcon} alt="" />
@@ -1642,17 +1533,17 @@ const StakeBsc2 = ({
                   </div>
                 </div>
                 {/* <div className="mt-4">
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href={`${window.config.etherscan_baseURL}/token/${reward_token._address}?a=${coinbase}`}
-            className="maxbtn"
-            style={{ color: "#7770e0" }}
-          >
-            Etherscan
-            <img src={arrowup} alt="" />
-          </a>
-        </div> */}
+                    <a
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      href={`${window.config.etherscan_baseURL}/token/${reward_token._address}?a=${coinbase}`}
+                      className="maxbtn"
+                      style={{ color: "#7770e0" }}
+                    >
+                      Etherscan
+                      <img src={arrowup} alt="" />
+                    </a>
+                  </div> */}
               </div>
             </div>
           </div>
@@ -1674,11 +1565,11 @@ const StakeBsc2 = ({
               <div className="container px-0">
                 <div className="row" style={{ marginLeft: "0px" }}>
                   {/* <div className="d-flex justify-content-between gap-2 align-items-center p-0">
-            <h6 className="d-flex gap-2 align-items-center statstext">
-              <img src={stats} alt="" />
-              Withdraw
-            </h6>
-          </div> */}
+                      <h6 className="d-flex gap-2 align-items-center statstext">
+                        <img src={stats} alt="" />
+                        Withdraw
+                      </h6>
+                    </div> */}
                   <h6 className="withdrawdesc mt-2 p-0">
                     {lockTime === "No Lock"
                       ? "Your deposit has no lock-in period. You can withdraw your assets anytime, or continue to earn rewards every day."
@@ -1699,10 +1590,6 @@ const StakeBsc2 = ({
                               (Number(stakingTime) + Number(cliffTime)) * 1000
                             }
                             renderer={renderer}
-                            onComplete={() => {
-                              setcanwithdraw(true);
-                              setisCompleted(true);
-                            }}
                           />
                         )}
                       </h6>
@@ -1740,6 +1627,7 @@ const StakeBsc2 = ({
                         Withdraw Amount
                       </label>
                     </div>
+
                     <button
                       className="btn maxbtn"
                       onClick={handleSetMaxWithdraw}
@@ -1754,7 +1642,7 @@ const StakeBsc2 = ({
                         withdrawStatus === "failed" ||
                         withdrawStatus === "success" ||
                         withdrawAmount === "" ||
-                        canwithdraw === false
+                        canWithdraw === false
                           ? true
                           : false
                       }
@@ -1765,16 +1653,16 @@ const StakeBsc2 = ({
                           ? "success-button"
                           : (withdrawAmount === "" &&
                               withdrawStatus === "initial") ||
-                            canwithdraw === false
+                            canWithdraw === false
                           ? "disabled-btn"
-                          : null
+                          : "filledbtn"
                       } d-flex justify-content-center align-items-center`}
                       style={{ height: "fit-content" }}
                       onClick={() => {
                         handleWithdraw();
                       }}
                     >
-                      {withdrawLoading ? (
+                      {withdrawLoading === true ? (
                         <div
                           class="spinner-border spinner-border-sm text-light"
                           role="status"
@@ -1783,7 +1671,7 @@ const StakeBsc2 = ({
                         </div>
                       ) : withdrawStatus === "failed" ? (
                         <>
-                          <img src={failMark} alt="" />
+                          {/* <img src={failMark} alt="" /> */}
                           Failed
                         </>
                       ) : withdrawStatus === "success" ? (
@@ -1804,54 +1692,54 @@ const StakeBsc2 = ({
                       *No withdrawal fee
                     </span> */}
                     {/* <button
-              className="btn filledbtn w-100"
-              onClick={(e) => {
-                // e.preventDefault();
-                this.handleWithdraw();
-              }}
-              title={
-                canWithdraw
-                  ? ""
-                  : `You recently staked, you can unstake ${cliffTimeInWords}`
-              }
-            >
-              Withdraw
-            </button> */}
+                        className="btn filledbtn w-100"
+                        onClick={(e) => {
+                          // e.preventDefault();
+                          this.handleWithdraw();
+                        }}
+                        title={
+                          canWithdraw
+                            ? ""
+                            : `You recently staked, you can unstake ${cliffTimeInWords}`
+                        }
+                      >
+                        Withdraw
+                      </button> */}
 
                     {/* <div className="form-row">
-                  <div className="col-6">
-                    <button
-                      title={
-                        canWithdraw
-                          ? ""
-                          : `You recently staked, you can unstake ${cliffTimeInWords}`
-                      }
-                      disabled={!canWithdraw || !is_connected}
-                      className="btn  btn-primary btn-block l-outline-btn"
-                      type="submit"
-                    >
-                      WITHDRAW
-                    </button>
-                  </div>
-                  <div className="col-6">
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        this.handleWithdrawDyp();
-                      }}
-                      title={
-                        canWithdraw
-                          ? ""
-                          : `You recently staked, you can unstake ${cliffTimeInWords}`
-                      }
-                      disabled={!canWithdraw || !is_connected}
-                      className="btn  btn-primary btn-block l-outline-btn"
-                      type="submit"
-                    >
-                      WITHDRAW
-                    </button>
-                  </div>
-                </div> */}
+                            <div className="col-6">
+                              <button
+                                title={
+                                  canWithdraw
+                                    ? ""
+                                    : `You recently staked, you can unstake ${cliffTimeInWords}`
+                                }
+                                disabled={!canWithdraw || !is_connected}
+                                className="btn  btn-primary btn-block l-outline-btn"
+                                type="submit"
+                              >
+                                WITHDRAW
+                              </button>
+                            </div>
+                            <div className="col-6">
+                              <button
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  this.handleWithdrawDyp();
+                                }}
+                                title={
+                                  canWithdraw
+                                    ? ""
+                                    : `You recently staked, you can unstake ${cliffTimeInWords}`
+                                }
+                                disabled={!canWithdraw || !is_connected}
+                                className="btn  btn-primary btn-block l-outline-btn"
+                                type="submit"
+                              >
+                                WITHDRAW
+                              </button>
+                            </div>
+                          </div> */}
                   </div>
                   {errorMsg3 && <h6 className="errormsg">{errorMsg3}</h6>}
                 </div>
@@ -1872,16 +1760,16 @@ const StakeBsc2 = ({
         />
       )}
       {/* <div
-className="calculator-btn d-flex justify-content-center align-items-center gap-2 text-white"
-onClick={() => this.setState({ showCalculator: true })}
->
-<img
-  src={calculatorIcon}
-  alt=""
-  style={{ width: 30, height: 30 }}
-/>{" "}
-Calculator
-</div> */}
+          className="calculator-btn d-flex justify-content-center align-items-center gap-2 text-white"
+          onClick={() => this.setState({ showCalculator: true })}
+        >
+          <img
+            src={calculatorIcon}
+            alt=""
+            style={{ width: 30, height: 30 }}
+          />{" "}
+          Calculator
+        </div> */}
 
       {showCalculator && (
         <Modal
@@ -1892,27 +1780,27 @@ Calculator
         >
           <div className="pools-calculator">
             {/* <div className="d-flex align-items-center justify-content-between">
-        <div className="d-flex align-items-center gap-3">
-          <img src={calculatorIcon} alt="" />
-          <h5
-            style={{
-              fontSize: "23px",
-              fontWeight: "500",
-              color: "#f7f7fc",
-            }}
-          >
-            Calculator
-          </h5>
-        </div>
-        <img
-          src={xMark}
-          alt=""
-          onClick={() => {
-            this.setState({ showCalculator: false });
-          }}
-          className="cursor-pointer"
-        />
-      </div> */}
+                <div className="d-flex align-items-center gap-3">
+                  <img src={calculatorIcon} alt="" />
+                  <h5
+                    style={{
+                      fontSize: "23px",
+                      fontWeight: "500",
+                      color: "#f7f7fc",
+                    }}
+                  >
+                    Calculator
+                  </h5>
+                </div>
+                <img
+                  src={xMark}
+                  alt=""
+                  onClick={() => {
+                    this.setState({ showCalculator: false });
+                  }}
+                  className="cursor-pointer"
+                />
+              </div> */}
             <hr />
             <div className="d-flex align-items-center justify-content-between">
               <div className="d-flex flex-column gap-3 w-50 me-5">
@@ -1948,7 +1836,7 @@ Calculator
             </div>
             <div className="d-flex flex-column gap-2 mt-4">
               <h3 style={{ fontWeight: "500", fontSize: "39px" }}>
-                $ {getFormattedNumber(getApproxReturn() * tokendata, 3)} USD
+                $ {getFormattedNumber(getApproxReturn() * tokendata, 6)} USD
               </h3>
               <h6
                 style={{
@@ -1978,6 +1866,7 @@ Calculator
       )}
     </div>
   );
+
   // <div>
   //   <div className="row">
   //     <div className="col-12 header-image-staking-new">
@@ -1988,44 +1877,25 @@ Calculator
   //               <b>DYP Staking</b>
   //             </p>
   //             <p>
-  //               Stake your DYP tokens and earn{" "}
-  //               {apy2 == 0 ? (
-  //                 <Dots />
-  //               ) : (
-  //                 getFormattedNumber(apy2, 0)
-  //               )}
-  //               % APR with no Impermanent Loss.
+  //               Stake your DYP tokens and earn {apy}% APR with
+  //               no Impermanent Loss.
   //             </p>
   //             <p>
   //               To start earning, all you need is to deposit DYP tokens
-  //               into the Staking contract. You can choose from two
-  //               different staking options, with rewards starting from{" "}
-  //               {apy1 == 0 ? (
-  //                 <Dots />
-  //               ) : (
-  //                 getFormattedNumber(this.state.apy1, 0)
-  //               )}
-  //               % APR up to{" "}
-  //               {this.state.apy2 == 0 ? (
-  //                 <Dots />
-  //               ) : (
-  //                 getFormattedNumber(this.state.apy2, 0)
-  //               )}
-  //               % APR, depending on the lock time from a minimum of
-  //               zero-days up to a maximum of 90 days.
+  //               into the Staking contract and earn DYP as rewards.
   //             </p>
   //             <p>
   //               The staking pools have the REINVEST function integrated,
   //               meaning that you can automatically add your daily rewards
   //               to the staking pool. Moreover, the DYP Referral is
   //               available. If you refer DYP to your friends, 5% of your
-  //               friends’ rewards will automatically be sent to you
+  //               friends' rewards will automatically be sent to you
   //               whenever they stake DYP.
   //             </p>
   //           </div>
   //         </Popup>
   //         <Modal
-  //           show={this.state.show}
+  //           show={show}
   //           handleConnection={this.props.handleConnection}
   //           handleConnectionWalletConnect={
   //             this.props.handleConnectionWalletConnect
@@ -2084,7 +1954,7 @@ Calculator
   //         <div className="row p-3 p-sm-0 p-md-0">
   //           <div className="col-12">
   //             <div className="row">
-  //               <div className="col-lg-6">
+  //               <div className="col-lg-6 col-xs-12">
   //                 <div className="row token-staking-form">
   //                   <div className="col-12">
   //                     <div
@@ -2269,7 +2139,6 @@ Calculator
   //                         </div>
   //                         <div className="input-group ">
   //                           <input
-  //                             disabled={!is_connected}
   //                             value={
   //                               Number(this.state.depositAmount) > 0
   //                                 ? this.state.depositAmount
@@ -2372,7 +2241,6 @@ Calculator
   //                       </label>
   //                       <div className="input-group ">
   //                         <input
-  //                           disabled={!is_connected}
   //                           value={this.state.withdrawAmount}
   //                           onChange={(e) =>
   //                             this.setState({
@@ -2538,6 +2406,18 @@ Calculator
   //             </div>
   //           </div>
   //           <div className="col-lg-6">
+  //             <Boxes
+  //               items={[
+  //                 {
+  //                   title: "TVL USD",
+  //                   number: "$" + tvl_usd,
+  //                 },
+  //                 {
+  //                   title: `APR`,
+  //                   number: getFormattedNumber(this.state.apy, 2) + "%",
+  //                 },
+  //               ]}
+  //             />
   //             <div className="l-box">
   //               <div className="table-responsive">
   //                 <h3
@@ -2580,13 +2460,7 @@ Calculator
   //                         <small>{token_symbol}</small>
   //                       </td>
   //                     </tr>
-  //                     <tr>
-  //                       <th>Referral Fee Earned</th>
-  //                       <td className="text-right">
-  //                         <strong>{referralFeeEarned}</strong>{" "}
-  //                         <small>DYP</small>
-  //                       </td>
-  //                     </tr>
+
   //                     <tr>
   //                       <th>TVL USD</th>
   //                       <td className="text-right">
@@ -2594,7 +2468,7 @@ Calculator
   //                       </td>
   //                     </tr>
 
-  //                     {is_connected && (
+  //                     {is_connected ? (
   //                       <tr>
   //                         <td
   //                           style={{
@@ -2618,51 +2492,8 @@ Calculator
   //                           ></i>
   //                         </td>
   //                       </tr>
-  //                     )}
-
-  //                     {is_connected && (
-  //                       <tr>
-  //                         <td colSpan="2">
-  //                           <div>
-  //                             <span style={{ fontSize: ".8rem" }}>
-  //                               <span style={{ cursor: "pointer" }}>
-  //                                 <Clipboard
-  //                                   component="span"
-  //                                   onSuccess={(e) => {
-  //                                     setTimeout(
-  //                                       () => ReactTooltip.hide(),
-  //                                       2000
-  //                                     );
-  //                                   }}
-  //                                   data-event="click"
-  //                                   data-for={id}
-  //                                   data-tip="Copied To Clipboard!"
-  //                                   data-clipboard-text={this.getReferralLink()}
-  //                                 >
-  //                                   Referral Link: &nbsp;{" "}
-  //                                   <span
-  //                                     title="Copy link to clipboard"
-  //                                     style={{
-  //                                       cursor: "pointer",
-  //                                     }}
-  //                                     className="fas fa-paste"
-  //                                   ></span>
-  //                                 </Clipboard>
-  //                                 <ReactTooltip id={id} effect="solid" />
-  //                               </span>
-
-  //                               <br />
-  //                               <a
-  //                                 className="text-muted small"
-  //                                 href={this.getReferralLink()}
-  //                               >
-  //                                 {" "}
-  //                                 {this.getReferralLink()}{" "}
-  //                               </a>
-  //                             </span>
-  //                           </div>
-  //                         </td>
-  //                       </tr>
+  //                     ) : (
+  //                       ""
   //                     )}
 
   //                     <tr></tr>
@@ -2700,4 +2531,4 @@ Calculator
   // </div>;
 };
 
-export default StakeBsc2;
+export default StakeBscOther;

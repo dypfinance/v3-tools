@@ -42,6 +42,8 @@ import GenesisStaking from "./components/genesisStaking/GenesisStaking";
 import CawsStaking from "./components/genesisStaking/CawsStaking";
 import Plans from "./components/account/Plans";
 import DypMigration from "./components/bridge/DypMigration";
+import EarnOther from "./components/earnOther/EarnOther";
+import EarnInnerPool from "./components/earnOther/EarnInnerPool/EarnInnerPool";
 
 class App extends React.Component {
   constructor(props) {
@@ -58,12 +60,19 @@ class App extends React.Component {
       the_graph_result_ETH_V2: JSON.parse(
         JSON.stringify(window.the_graph_result_eth_v2)
       ),
+      the_graph_result: JSON.parse(
+        JSON.stringify(window.the_graph_result_eth_v2)
+      ),
       the_graph_result_AVAX_V2: JSON.parse(
         JSON.stringify(window.the_graph_result_avax_v2)
       ),
       the_graph_result_BSC_V2: JSON.parse(
         JSON.stringify(window.the_graph_result_bsc_v2)
       ),
+      the_graph_resultbsc: JSON.parse(
+        JSON.stringify(window.the_graph_result_bsc_v2)
+      ),
+      the_graph_resultavax: JSON.parse(JSON.stringify(window.the_graph_result_avax_v2)),
       windowWidth: 0,
       windowHeight: 0,
       subscribedPlatformTokenAmount: "...",
@@ -124,6 +133,10 @@ class App extends React.Component {
               this.setState({
                 networkId: "56",
               });
+            } else if (data === "0x2105") {
+              this.setState({
+                networkId: "8453",
+              });
             } else if (data !== "undefined") {
               this.setState({
                 networkId: "0",
@@ -155,6 +168,10 @@ class App extends React.Component {
         } else if (chainId === "0x38") {
           this.setState({
             networkId: "56",
+          });
+        } else if (chainId === "0x2105") {
+          this.setState({
+            networkId: "8453",
           });
         } else if (chainId !== "undefined") {
           this.setState({
@@ -350,6 +367,7 @@ class App extends React.Component {
       (ethereum.isMetaMask === true || window.ethereum.isTrust === true)
     ) {
       console.log("Ethereum successfully detected!");
+      this.tvl();
       this.checkNetworkId();
       await window.getCoinbase();
       // Access the decentralized web!
@@ -359,7 +377,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.tvl().then();
+    this.tvl();
     this.updateWindowDimensions();
     window.addEventListener("resize", this.updateWindowDimensions);
     if (
@@ -391,6 +409,7 @@ class App extends React.Component {
 
   checkConnection = async () => {
     this.refreshSubscription();
+    this.tvl();
     const logout = localStorage.getItem("logout");
 
     if (
@@ -490,7 +509,7 @@ class App extends React.Component {
   render() {
     const { LP_IDs_V2 } = window;
     const { ethereum } = window;
-
+    // console.log("the_graph_resultbsc", this.state.the_graph_resultbsc);
     const LP_ID_Array = [
       LP_IDs_V2.weth[0],
       LP_IDs_V2.weth[1],
@@ -642,7 +661,29 @@ class App extends React.Component {
 
                   <Route
                     exact
-                    path="/earn"
+                    path="/earn/defi-staking/:pool/:contractId"
+                    render={(props) => (
+                      <EarnInnerPool
+                        coinbase={this.state.coinbase}
+                        handleSwitchNetwork={this.handleSwitchNetwork}
+                        handleConnection={this.handleConnection}
+                        isConnected={this.state.isConnected}
+                        chainId={this.state.networkId}
+                        the_graph_result={this.state.the_graph_result_ETH_V2}
+                        the_graph_resultavax={
+                          this.state.the_graph_result_AVAX_V2
+                        }
+                        the_graph_resultbsc={this.state.the_graph_result_BSC_V2}
+                        lp_id={LP_ID_Array}
+                        referrer={this.state.referrer}
+                        isPremium={this.state.isPremium}
+                      />
+                    )}
+                  />
+
+                  <Route
+                    exact
+                    path="/earn/dypius"
                     render={() => (
                       <Earn
                         coinbase={this.state.coinbase}
@@ -658,6 +699,26 @@ class App extends React.Component {
                         handleSwitchNetwork={this.handleSwitchNetwork}
                         referrer={this.state.referrer}
                         isPremium={this.state.isPremium}
+                      />
+                    )}
+                  />
+                  <Route
+                    exact
+                    path="/earn/defi-staking"
+                    render={() => (
+                      <EarnOther
+                        coinbase={this.state.coinbase}
+                        the_graph_result={this.state.the_graph_result_ETH_V2}
+                        the_graph_resultavax={
+                          this.state.the_graph_result_AVAX_V2
+                        }
+                        the_graph_resultbsc={this.state.the_graph_result_BSC_V2}
+                        lp_id={LP_ID_Array}
+                        isConnected={this.state.isConnected}
+                        network={this.state.networkId}
+                        handleConnection={this.handleConnection}
+                        handleSwitchNetwork={this.handleSwitchNetwork}
+                        referrer={this.state.referrer}
                       />
                     )}
                   />

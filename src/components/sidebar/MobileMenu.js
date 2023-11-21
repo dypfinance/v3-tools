@@ -60,7 +60,7 @@ const MobileMenu = () => {
     >
       <div className="row w-100">
         <NavLink
-          to="/earn"
+          to="/earn/dypius"
           className="col"
           onClick={() => setActiveIcon("earn")}
         >

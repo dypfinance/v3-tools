@@ -43,9 +43,8 @@ const Sidebar = (props) => {
 
   const { active, account } = useWeb3React();
 
-    const triedEager = useEagerConnect();
-    useInactiveListener(!triedEager);
-
+  const triedEager = useEagerConnect();
+  useInactiveListener(!triedEager);
 
   const fetchAvatar = async () => {
     const response = await fetch(
@@ -116,6 +115,16 @@ const Sidebar = (props) => {
       label: "Earn",
       icon: "earnIcon",
       link: "/earn",
+      children: [
+        {
+          title: "Dypius",
+          link: "/earn/dypius",
+        },
+        {
+          title: "DeFi Staking",
+          link: "/earn/defi-staking",
+        },
+      ],
     },
     {
       label: "Governance",
@@ -358,14 +367,15 @@ const Sidebar = (props) => {
           </div>
         </div>
       </div>
-      {activeSidebar && (props.isPremium === false || props.isPremium === null) && (
-        <NavLink
-          to={"/plans"}
-          className="d-flex align-items-center justify-content-center"
-        >
-          <img src={sidebarPremium} alt="" style={{ width: "80%" }} />
-        </NavLink>
-      )}
+      {activeSidebar &&
+        (props.isPremium === false || props.isPremium === null) && (
+          <NavLink
+            to={"/plans"}
+            className="d-flex align-items-center justify-content-center"
+          >
+            <img src={sidebarPremium} alt="" style={{ width: "80%" }} />
+          </NavLink>
+        )}
     </div>
     // <div
     //   onClick={props.toggleMobileSidebar}
