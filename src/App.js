@@ -32,7 +32,7 @@ import NftMinting from "./components/caws/NftMinting/index";
 import Bridge from "./components/bridge/BridgeGeneral";
 import Footer from "./components/Footer/footer";
 import BuyDyp from "./components/buydyp/BuyDyp";
-import Swap from "./components/swap/Swap";
+// import Swap from "./components/swap/Swap";
 import MobileMenu from "./components/sidebar/MobileMenu";
 import Disclaimer from "./components/disclaimer/Disclaimer";
 import ScrollToTop from "./functions/ScrollToTop";
@@ -41,6 +41,7 @@ import { withRouter } from "react-router-dom";
 import GenesisStaking from "./components/genesisStaking/GenesisStaking";
 import CawsStaking from "./components/genesisStaking/CawsStaking";
 import Plans from "./components/account/Plans";
+import DypMigration from "./components/bridge/DypMigration";
 import EarnOther from "./components/earnOther/EarnOther";
 import EarnInnerPool from "./components/earnOther/EarnInnerPool/EarnInnerPool";
 
@@ -106,7 +107,10 @@ class App extends React.Component {
   };
 
   checkNetworkId = () => {
-    if (!this.props.history.location.pathname.includes("bridge")) {
+    if (
+      !this.props.history.location.pathname.includes("bridge") &&
+      !this.props.history.location.pathname.includes("migration")
+    ) {
       if (
         window.ethereum &&
         (window.ethereum.isMetaMask === true ||
@@ -194,63 +198,64 @@ class App extends React.Component {
 
   refreshSubscription = async () => {
     let coinbase = this.state.coinbase;
-    let subscribedPlatformTokenAmountETH;
-    let subscribedPlatformTokenAmountAvax;
-    let subscribedPlatformTokenAmountBNB;
+
+    let subscribedPlatformTokenAmountNewETH;
+    let subscribedPlatformTokenAmountNewAvax;
+    let subscribedPlatformTokenAmountNewBNB;
 
     const web3eth = window.infuraWeb3;
     const web3avax = window.avaxWeb3;
     const web3bnb = window.bscWeb3;
 
-    const AvaxABI = window.SUBSCRIPTION_ABI;
-    const EthABI = window.SUBSCRIPTIONETH_ABI;
-    const BnbABI = window.SUBSCRIPTIONBNB_ABI;
+    const AvaxNewABI = window.SUBSCRIPTION_NEWAVAX_ABI;
+    const EthNewABI = window.SUBSCRIPTION_NEWETH_ABI;
+    const BnbNewABI = window.SUBSCRIPTION_NEWBNB_ABI;
 
-    const ethsubscribeAddress = window.config.subscriptioneth_address;
-    const avaxsubscribeAddress = window.config.subscription_address;
-    const bnbsubscribeAddress = window.config.subscriptionbnb_address;
+    const ethsubscribeNewAddress = window.config.subscription_neweth_address;
+    const avaxsubscribeNewAddress = window.config.subscription_newavax_address;
+    const bnbsubscribeNewAddress = window.config.subscription_newbnb_address;
 
-    const ethcontract = new web3eth.eth.Contract(EthABI, ethsubscribeAddress);
-    const avaxcontract = new web3avax.eth.Contract(
-      AvaxABI,
-      avaxsubscribeAddress
+    const ethNewcontract = new web3eth.eth.Contract(
+      EthNewABI,
+      ethsubscribeNewAddress
     );
 
-    const bnbcontract = new web3bnb.eth.Contract(BnbABI, bnbsubscribeAddress);
+    const avaxNewcontract = new web3avax.eth.Contract(
+      AvaxNewABI,
+      avaxsubscribeNewAddress
+    );
+
+    const bnbNewcontract = new web3bnb.eth.Contract(
+      BnbNewABI,
+      bnbsubscribeNewAddress
+    );
 
     if (coinbase) {
-      subscribedPlatformTokenAmountETH = await ethcontract.methods
+      subscribedPlatformTokenAmountNewETH = await ethNewcontract.methods
         .subscriptionPlatformTokenAmount(coinbase)
         .call();
 
-      subscribedPlatformTokenAmountAvax = await avaxcontract.methods
+      subscribedPlatformTokenAmountNewAvax = await avaxNewcontract.methods
         .subscriptionPlatformTokenAmount(coinbase)
         .call();
 
-      subscribedPlatformTokenAmountBNB = await bnbcontract.methods
+      subscribedPlatformTokenAmountNewBNB = await bnbNewcontract.methods
         .subscriptionPlatformTokenAmount(coinbase)
         .call();
 
       if (
-        subscribedPlatformTokenAmountAvax === "0" &&
-        subscribedPlatformTokenAmountETH === "0" &&
-        subscribedPlatformTokenAmountBNB === "0"
+        subscribedPlatformTokenAmountNewETH === "0" &&
+        subscribedPlatformTokenAmountNewAvax === "0" &&
+        subscribedPlatformTokenAmountNewBNB === "0"
       ) {
         this.setState({ subscribedPlatformTokenAmount: "0", isPremium: false });
-      }
-      if (subscribedPlatformTokenAmountAvax !== "0") {
+      } else if (
+        subscribedPlatformTokenAmountNewETH !== "0" ||
+        subscribedPlatformTokenAmountNewAvax !== "0" ||
+        subscribedPlatformTokenAmountNewBNB !== "0"
+      ) {
         this.setState({
-          subscribedPlatformTokenAmount: subscribedPlatformTokenAmountAvax,
-          isPremium: true,
-        });
-      } else if (subscribedPlatformTokenAmountETH !== "0") {
-        this.setState({
-          subscribedPlatformTokenAmount: subscribedPlatformTokenAmountETH,
-          isPremium: true,
-        });
-      } else if (subscribedPlatformTokenAmountBNB !== "0") {
-        this.setState({
-          subscribedPlatformTokenAmount: subscribedPlatformTokenAmountBNB,
+          // subscribedPlatformTokenAmount: subscribedPlatformTokenAmountBNB,
           isPremium: true,
         });
       }
@@ -298,6 +303,7 @@ class App extends React.Component {
     this.setState({ show: false });
     return isConnected;
   };
+
 
   tvl = async () => {
     try {
@@ -512,7 +518,10 @@ class App extends React.Component {
       LP_IDs_V2.weth[4],
     ];
 
-    if (!this.props.location.pathname.includes("bridge")) {
+    if (
+      !this.props.location.pathname.includes("bridge") &&
+      !this.props.location.pathname.includes("migration")
+    ) {
       ethereum?.on("chainChanged", this.checkNetworkId);
       ethereum?.on("accountsChanged", this.checkConnection);
     }
@@ -689,6 +698,7 @@ class App extends React.Component {
                         handleConnection={this.handleConnection}
                         handleSwitchNetwork={this.handleSwitchNetwork}
                         referrer={this.state.referrer}
+                        isPremium={this.state.isPremium}
                       />
                     )}
                   />
@@ -725,6 +735,18 @@ class App extends React.Component {
                       />
                     )}
                   />
+                  <Route
+                    exact
+                    path="/migration"
+                    render={() => (
+                      <DypMigration
+                        networkId={parseInt(this.state.networkId)}
+                        isConnected={this.state.isConnected}
+                        handleConnection={this.handleConnection}
+                        coinbase={this.state.coinbase}
+                      />
+                    )}
+                  />
 
                   <Route
                     exact
@@ -748,7 +770,7 @@ class App extends React.Component {
                     path="/disclaimer"
                     render={() => <Disclaimer />}
                   />
-                  <Route exact path="/swap" component={Swap} />
+                  {/* <Route exact path="/swap" component={Swap} /> */}
 
                   {/* <Route
                     exact
@@ -827,6 +849,7 @@ class App extends React.Component {
                         network={parseInt(this.state.networkId)}
                         handleConnection={this.handleConnection}
                         referrer={this.state.referrer}
+                        isPremium={this.state.isPremium}
                       />
                     )}
                   />

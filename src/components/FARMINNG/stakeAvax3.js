@@ -752,10 +752,10 @@ const StakeAvaxDai = ({
 
   const getUsdPerDyp = async () => {
     await axios
-      .get("https://api.dyp.finance/api/the_graph_eth_v2")
+      .get("https://api.dyp.finance/api/the_graph_avax_v2")
       .then((data) => {
         const propertyDyp = Object.entries(
-          data.data.the_graph_eth_v2.token_data
+          data.data.the_graph_avax_v2.token_data
         );
         settokendata(propertyDyp[0][1].token_price_usd);
         return propertyDyp[0][1].token_price_usd;
@@ -1205,10 +1205,27 @@ const StakeAvaxDai = ({
                 /> */}
                   </div>
                   <div className="claim-reinvest-container d-flex justify-content-between align-items-center gap-3">
-                    <button
-                      className={`btn disabled-btn`}
+                  <button
+                      disabled={
+                        claimStatus === "claimed" || claimStatus === "success"|| pendingDivs <= 0
+                          ? 
+                            true
+                          : false
+                      }
+                      className={`btn filledbtn ${
+                        claimStatus === "claimed" && claimStatus === "initial" ||  pendingDivs <= 0
+                          ? 
+                            "disabled-btn"
+                          : claimStatus === "failed"
+                          ? "fail-button"
+                          : claimStatus === "success"
+                          ? "success-button"
+                          : null
+                      } d-flex justify-content-center align-items-center gap-2`}
                       style={{ height: "fit-content" }}
-                      onClick={handleClaimDivs}
+                      // onClick={handleClaimDivs}
+                      onClick={() => {handleClaimDivs()
+                      }}
                     >
                       {claimLoading ? (
                         <div
@@ -1842,7 +1859,7 @@ Calculator
             </div>
             <div className="d-flex flex-column gap-2 mt-4">
               <h3 style={{ fontWeight: "500", fontSize: "39px" }}>
-                $ {getFormattedNumber(getApproxReturn() * getUsdPerETH(), 6)} USD
+                $ {getFormattedNumber(getApproxReturn() * getUsdPerETH(), 3)} USD
               </h3>
               <h6
                 style={{

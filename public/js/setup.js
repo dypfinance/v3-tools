@@ -652,6 +652,7 @@ class CONSTANT_STAKING_NEW {
     ].forEach((fn_name) => {
       this[fn_name] = async function (...args) {
         let contract = await getContract({ key: this.ticker });
+
         return await contract.methods[fn_name](...args).call();
       };
     });
@@ -666,6 +667,110 @@ class CONSTANT_STAKING_NEW {
             value,
             gas,
             from: await getCoinbase(),
+            gasPrice: window.config.default_gasprice_gwei * 1e9,
+          });
+        };
+      }
+    );
+  }
+
+  async depositTOKEN(amount, referrer) {
+    let token_contract = await getContract({ key: this.token });
+    let staking_contract = await getContract({ key: this.ticker });
+    let batch = new window.web3.eth.BatchRequest();
+    batch.add(
+      token_contract.methods
+        .approve(staking_contract._address, amount)
+        .send.request({
+          gas: window.config.default_gas_amount,
+          from: await getCoinbase(),
+          gasPrice: window.config.default_gasprice_gwei * 1e9,
+        })
+    );
+    batch.add(
+      staking_contract.methods.deposit(amount, referrer).send.request({
+        gas: window.config.default_gas_amount,
+        from: await getCoinbase(),
+        gasPrice: window.config.default_gasprice_gwei * 1e9,
+      })
+    );
+    return batch.execute();
+  }
+}
+
+class CONSTANT_STAKING_DYPIUS {
+  constructor(
+    ticker = "CONSTANT_STAKING_DYPIUS",
+    token = "REWARD_TOKEN_DYPIUS_ETH"
+  ) {
+    this.ticker = ticker;
+    this.token = token;
+    let address = window.config[ticker.toLowerCase() + "_address"];
+    this._address = address;
+    [
+      "owner",
+      "depositedTokens",
+      "stakingTime",
+      "LOCKUP_TIME",
+      "lastClaimedTime",
+      "totalEarnedTokens",
+      "getPendingDivs",
+      "totalReferralFeeEarned",
+      "getNumberOfHolders",
+      "getStakersList",
+      "getTotalPendingDivs",
+      "getNumberOfReferredStakers",
+      "getReferredStaker",
+      "getActiveReferredStaker",
+      "contractStartTime",
+      "REWARD_INTERVAL",
+      "rewardsPendingClaim",
+      "getPendingDivs",
+      "ADMIN_CAN_CLAIM_AFTER",
+    ].forEach((fn_name) => {
+      this[fn_name] = async function (...args) {
+        window.web3 = new Web3(window.ethereum);
+        let contract = new window.web3.eth.Contract(
+          window.CONSTANT_STAKING_DYPIUS_ABI,
+          address
+        );
+        // getContract({ key: this.ticker });
+        return await contract.methods[fn_name](...args).call();
+      };
+    });
+
+    ["stake", "unstake", "claim", "reInvest", "stakeExternal"].forEach(
+      (fn_name) => {
+        this[fn_name] = async function (...args) {
+          // let contract = await getContract({ key: this.ticker });
+          let contract = new window.web3.eth.Contract(
+            window.CONSTANT_STAKING_DYPIUS_ABI,
+            address
+          );
+
+          let value = 0;
+          let { latestGasPrice, maxPriorityFeePerGas } = await getMaxFee();
+          console.log({ latestGasPrice, maxPriorityFeePerGas });
+
+          let gas = window.config.default_gas_amount;
+
+          try {
+            let estimatedGas = await contract.methods[fn_name](
+              ...args
+            ).estimateGas({ from: await getCoinbase(), gas });
+            if (estimatedGas) {
+              gas = Math.min(estimatedGas, gas);
+              console.log("estimatedgas" + gas);
+            }
+          } catch (e) {
+            console.log(e);
+          }
+
+          return await contract.methods[fn_name](...args).send({
+            value,
+            gas,
+            from: await getCoinbase(),
+
             gasPrice: window.config.default_gasprice_gwei * 1e9,
           });
         };
@@ -1801,7 +1906,8 @@ window.config = {
     "https://mainnet.infura.io/v3/94608dc6ddba490697ec4f9b723b586e",
   bsc_endpoint: "https://bsc-dataseed.binance.org/",
   avax_endpoint: "https://api.avax.network/ext/bc/C/rpc",
-
+  goerli_endpoint: "https://ethereum-goerli.publicnode.com",
+  bscTest_endpoint: "https://data-seed-prebsc-1-s1.binance.org:8545/",
   BUSD_address: "0xe9e7cea3dedca5984780bafc599bd69add087d56",
   USDCe_address: "0xa7d7079b0fead91f3e65f86e8915cb59c1a4c664",
   USDC_address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
@@ -1880,6 +1986,9 @@ window.config = {
   reward_tokenavax_address: "0x961c8c0b1aad0c0b10a51fef6a867e3091bcef17", //REWARD TOKEN
   reward_tokenwbnb_address: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c", //REWARD TOKEN wbnb
 
+
+  reward_token_dypius_eth_address: "0x39b46b212bdf15b42b166779b9d1787a68b9d0c3", //REWARD TOKEN DYPV2
+  reward_token_dypius_bsc_address: "0x1a3264f2e7b1cfc6220ec9348d33ccf02af7aaa4", //REWARD TOKEN DYPV2
 
   weth_address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
   etherscan_baseURL: "https://etherscan.io",
@@ -2040,8 +2149,14 @@ window.config = {
   vault_dainew_address: "0xf656dc256c60eb8417366015ee9217462b5a795d",
 
   subscription_address: "0x5078a4912f6e0d74dcf99482ac5910df123e9b4b",
+  subscription_newavax_address: "0xef3819fc5bb5a5468cac4d47e2a1ee6905b8cc7d",
+
   subscriptioneth_address: "0x6cc47d895aa6da6012c2b6bfd2f6af3ebbf1d2e4",
+  subscription_neweth_address: "0x29c90c6a1243455266afd7f92649e384213d45b0",
+
   subscriptionbnb_address: "0x0ec59a2d18e1e83ab393b3ac9d7d6d28cbff0d35",
+  subscription_newbnb_address: "0xc8adbef45b75ee4f3b5c9d4da2e1a1af408378a2",
+
   ZERO_ADDRESS: "0x0000000000000000000000000000000000000000",
   MAX_LOCKS_TO_LOAD_PER_CALL: 10,
   pangolin_router_address: "0xE54Ca86531e17Ef3616d22Ca28b0D458b6C89106",
@@ -2107,6 +2222,17 @@ window.config = {
 
   submission_form_link: "https://forms.gle/SFX1DyUh8TcNeysz6",
 
+  //new dypv2 staking contracts
+
+  constant_staking_dypius_eth1_address:
+    "0xC9075092Cc46E176B1F3c0D0EB8223F1e46555B0",
+
+  constant_staking_dypius_bsc1_address:
+    "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603",
+
+  constant_staking_dypius_avax1_address:
+    "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603",
+
   // lowercase base tokens on uniswap
   // order matters!
   base_tokens: [
@@ -2130,21 +2256,17 @@ window.config = {
       symbol: "WAVAX",
       decimals: 18,
     },
-    // "0x60781c2586d68229fde47564546784ab3faca982": {
-    //   symbol: "PNG",
-    //   decimals: 18,
-    // },
-    // "0x49d5c2bdffac6ce2bfdb6640f4f80f226bc10bab": {
-    //   symbol: "WETH.e",
-    //   decimals: 18,
-    // },
     "0x9702230A8Ea53601f5cD2dc00fDBc13d4dF4A8c7": {
       symbol: "USDT",
       decimals: 6,
     },
-    "0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E": {
-      symbol: "USDC",
-      decimals: 6,
+    "0xd586E7F844cEa2F87f50152665BCbc2C279D8d70": {
+      symbol: "DAI",
+      decimals: 18,
+    },
+    "0x1a3264F2e7b1CFC6220ec9348d33cCF02Af7aaa4": {
+      symbol: "DYPv2",
+      decimals: 18,
     },
   },
 
@@ -2155,10 +2277,6 @@ window.config = {
       symbol: "WETH",
       decimals: 18,
     },
-    // "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599": {
-    //   symbol: "WBTC",
-    //   decimals: 8,
-    // },
     "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48": {
       symbol: "USDC",
       decimals: 6,
@@ -2167,20 +2285,20 @@ window.config = {
       symbol: "USDT",
       decimals: 6,
     },
-    // "0x6b175474e89094c44da98b954eedeac495271d0f": {
-    //   symbol: "DAI",
-    //   decimals: 18,
-    // },
+    "0x39b46b212bdf15b42b166779b9d1787a68b9d0c3": {
+      symbol: "DYPv2",
+      decimals: 18,
+    },
+    "0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17" : {
+      symbol: "DYPv1",
+      decimals: 18,
+    }
   },
   subscriptionbnb_tokens: {
     "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c": {
       symbol: "WBNB",
       decimals: 18,
     },
-    // "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599": {
-    //   symbol: "WBTC",
-    //   decimals: 8,
-    // },
     "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56": {
       symbol: "BUSD",
       decimals: 18,
@@ -2189,10 +2307,10 @@ window.config = {
       symbol: "USDT",
       decimals: 18,
     },
-    // "0x6b175474e89094c44da98b954eedeac495271d0f": {
-    //   symbol: "DAI",
-    //   decimals: 18,
-    // },
+    "0x1a3264F2e7b1CFC6220ec9348d33cCF02Af7aaa4": {
+      symbol: "DYPv2",
+      decimals: 18,
+    },
   },
 
   automated_trust_scores: {
@@ -2278,8 +2396,10 @@ window.config = {
     AVAX: 43114, // 43114 = AVAX
     BSC: 56, // 97 = testnet, 56 = main
     1: "ETH",
+    // 5: "ETH",
     43114: "AVAX",
     56: "BSC",
+    // 97: "BSC",
   },
 
   SIGNATURE_API_URLAVAX: "https://bridge-avax.dyp.finance",
@@ -2360,18 +2480,87 @@ window.config = {
 
   constant_stakingbsc_new14_address:
     "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487",
+
+  //new dyp token migration
+  token_dyp_new_address: "0x9e32f23cdf8193167a0191ff0fc66a48837bbe2f", //goerli
+  token_dyp_new_bsc_address: "0x83cd3738a46ebf5bdd7d278e412ad90dff8df6e0", //bsc testnet
+
+  token_old_address: "0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17", //eth
+  token_old_bsc_address: "0x961c8c0b1aad0c0b10a51fef6a867e3091bcef17", //bsc
+  token_old_avax_address: "0x961c8c0b1aad0c0b10a51fef6a867e3091bcef17", //avax
+
+  claim_newdyp_eth_address: "0xc40be3a801a39bdc151bf6b3468b4035f8a4d440", //migrate old dyp eth -> new dyp eth
+  bridge_bsc_new_address: "0x39b46b212bdf15b42b166779b9d1787a68b9d0c3",
+  bridge_migration_eth_bsc_new_address:
+    "0x9eafb124162c17196a0e9de1bdb70384936f0dd5",
+
+  bridge_avax_new_address: "0x39b46b212bdf15b42b166779b9d1787a68b9d0c3",
+  bridge_migration_eth_avax_new_address:
+    "0xfd165914114dc4d571d74f994c45c2ecb55c719e",
+
+  bridge_eth_new_address: "0xfb99c497fef66b1b8cd6d6e4186649a7c79c62be",
+  SIGNATURE_API_URL_NEW_BSC: "https://claimbsc.dypius.com",
+
+  //new token bridge eth <-> bsc
+  new_bridge_eth_address: "0x5cb6e657a8fe74fe971ae5a6b44b735f883f3d1d",
+  new_bridge_bsc_address: "0xea71da5ab0bc280725be424fb515d62d77e8eb37",
+  SIGNATURE_API_URL_NEW_AVAX: "https://claimavax.dypius.com",
+  token_dypius_new_address: "0x39b46b212bdf15b42b166779b9d1787a68b9d0c3", //new dypius token on eth
+
+  new_bridge_eth_bsc_address: "0xb9333f96133e89bc7e4a0584457445a68c9dc590",
+  new_bridge_bsc_eth_address: "0x9a51ff1005c6825f15696ce5d96783f24e58af89",
+  token_dypius_new_bsc_address: "0x1a3264f2e7b1cfc6220ec9348d33ccf02af7aaa4", //new dypius token on bsc
+
+  new_bridge_eth_avax_address: "0x1ad3b0b7ed4d06917f2765bf3384b8ee8b4d90eb",
+  new_bridge_avax_eth_address: "0x9a51ff1005c6825f15696ce5d96783f24e58af89",
+  token_dypius_new_avax_address: "0x1a3264f2e7b1cfc6220ec9348d33ccf02af7aaa4", //new dypius token on avax
+
+  SIGNATURE_APIBRIDGE_AVAX_URL_NEW: "https://bridge-avax.dypius.com",
+  SIGNATURE_APIBRIDGE_BSC_URL_NEW: "https://bridge-bsc.dypius.com",
 };
 
 window.infuraWeb3 = new Web3(window.config.infura_endpoint);
 window.bscWeb3 = new Web3(window.config.bsc_endpoint);
 window.avaxWeb3 = new Web3(window.config.avax_endpoint);
+window.goerliWeb3 = new Web3(window.config.goerli_endpoint);
+window.bscTestWeb3 = new Web3(window.config.bscTest_endpoint);
+
 window.coinbase_address = "0x0000000000000000000000000000000000000111";
 
+//token new dyp
+
+window.token_dyp_new = new TOKEN("TOKEN_DYP_NEW");
+window.TOKEN_DYP_NEW_ABI = window.TOKEN_ABI;
+
+window.token_dypius_new = new TOKEN("TOKEN_DYPIUS_NEW");
+window.TOKEN_DYPIUS_NEW_ABI = window.TOKEN_ABI;
+
+window.token_dypius_new_bsc = new TOKENBSC("TOKEN_DYPIUS_NEW_BSC");
+window.TOKEN_DYPIUS_NEW_BSC_ABI = window.TOKENBSC_ABI;
+
+window.token_dypius_new_avax = new TOKENAVAX("TOKEN_DYPIUS_NEW_AVAX");
+window.TOKEN_DYPIUS_NEW_AVAX_ABI = window.TOKENAVAX_ABI;
+
+window.token_dyp_new_bsc = new TOKENBSC("TOKEN_DYP_NEW_BSC");
+window.TOKEN_DYP_NEW_BSC_ABI = window.TOKENBSC_ABI;
+
+window.token_old_bsc = new TOKEN("TOKEN_OLD_BSC");
+window.TOKEN_OLD_BSC_ABI = window.TOKENBSC_ABI;
+
+window.token_old_avax = new TOKEN("TOKEN_OLD_AVAX");
+window.TOKEN_OLD_AVAX_ABI = window.TOKENAVAX_ABI;
+
 window.REWARD_TOKEN_ABI = window.TOKEN_ABI;
+window.REWARD_TOKEN_DYPIUS_ETH_ABI = window.TOKEN_ABI;
+window.REWARD_TOKEN_DYPIUS_BSC_ABI = window.TOKEN_ABI;
+
 window.REWARD_TOKENAVAX_ABI = window.TOKENAVAX_ABI;
 window.REWARD_TOKENWBNB_ABI = window.TOKENBSC_ABI;
 
 window.reward_token = new TOKEN("REWARD_TOKEN");
+window.reward_token_dypius_eth = new TOKEN("REWARD_TOKEN_DYPIUS_ETH");
+window.reward_token_dypius_bsc = new TOKENBSC("REWARD_TOKEN_DYPIUS_BSC");
+
 window.reward_tokenavax = new TOKENAVAX("REWARD_TOKENAVAX");
 window.reward_tokenwbnb = new TOKENBSC("REWARD_TOKENWBNB");
 
@@ -2499,6 +2688,9 @@ window.constant_stakingbsc_new14 = new CONSTANT_STAKINGBSC_NEW(
   "CONSTANT_STAKINGBSC_NEW14"
 );
 
+window.constant_staking_dypius_bsc1 = new CONSTANT_STAKING_DYPIUS(
+  "CONSTANT_STAKING_DYPIUS_BSC1"
+);
 /*Staking bsc other*/
 
 window.constant_stakingbscother_new1 = new CONSTANT_STAKINGBSCOTHER_NEW(
@@ -2511,6 +2703,7 @@ window.CONSTANT_STAKINGBSC_NEW10_ABI = window.CONSTANT_STAKING_OLD_ABI;
 window.CONSTANT_STAKINGBSC_NEW11_ABI = window.CONSTANT_STAKING_OLD_ABI;
 window.CONSTANT_STAKINGBSC_NEW111_ABI = window.CONSTANT_STAKING_OLD_ABI;
 window.CONSTANT_STAKINGBSC_NEW14_ABI = window.CONSTANT_STAKING_OLD_ABI;
+window.CONSTANT_STAKING_DYPIUS_BSC1_ABI = window.CONSTANT_STAKING_DYPIUS_ABI;
 
 window.CONSTANT_STAKINGBSC_NEW12_ABI = window.CONSTANT_STAKINGBSC_NEW_ABI;
 window.CONSTANT_STAKINGBSC_NEW13_ABI = window.CONSTANT_STAKINGBSC_NEW_ABI;
@@ -2646,6 +2839,10 @@ window.constant_staking_new2 = new CONSTANT_STAKING_NEW(
   "CONSTANT_STAKINGNEW_NEW2"
 );
 
+window.constant_staking_dypius_eth1 = new CONSTANT_STAKING_DYPIUS(
+  "CONSTANT_STAKING_DYPIUS_ETH1"
+);
+
 window.constant_staking_newi3 = new CONSTANT_STAKING_OLD(
   "CONSTANT_STAKING_NEWI3"
 );
@@ -2668,13 +2865,20 @@ window.constant_staking_new13 = new CONSTANT_STAKING_NEWAVAX(
   "CONSTANT_STAKINGIDYPAVAX_50"
 );
 
+window.constant_staking_dypius_avax1 = new CONSTANT_STAKING_DYPIUS(
+  "CONSTANT_STAKING_DYPIUS_AVAX1"
+);
+
 window.CONSTANT_STAKINGIDYPAVAX_3_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYPAVAX_4_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYPAVAX_40_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYPAVAX_50_ABI = window.CONSTANT_STAKING_IDYP_ABI;
+window.CONSTANT_STAKING_DYPIUS_AVAX1_ABI = window.CONSTANT_STAKING_DYPIUS_ABI;
 
 window.CONSTANT_STAKINGNEW_NEW1_ABI = window.CONSTANT_STAKINGNEW_ABI;
 window.CONSTANT_STAKINGNEW_NEW2_ABI = window.CONSTANT_STAKINGNEW_ABI;
+window.CONSTANT_STAKING_DYPIUS_ETH1_ABI = window.CONSTANT_STAKING_DYPIUS_ABI;
+
 window.CONSTANT_STAKINGNEW_NEW3_ABI = window.CONSTANT_STAKINGNEW_ABI;
 window.CONSTANT_STAKING_NEWI3 = window.CONSTANT_STAKING_OLD_ABI;
 
@@ -2825,7 +3029,11 @@ window.constant_staking_idypavax_7 = new CONSTANT_STAKING_NEWAVAX(
 );
 
 const checkapproveStakePool = async (useraddr, tokenaddr, stakingaddr) => {
-  let token_contract = await getTokenContract(tokenaddr);
+  window.web3 = new Web3(window.ethereum);
+  let token_contract = new window.web3.eth.Contract(
+    window.TOKEN_ABI,
+    tokenaddr
+  );
 
   return await token_contract.methods.allowance(useraddr, stakingaddr).call();
 };
@@ -3157,6 +3365,62 @@ class BRIDGE {
     ["deposit", "withdraw"].forEach((fn_name) => {
       this[fn_name] = async function (args, value = 0) {
         let contract = await getBridgeContract(bridgeAddress);
+        return await contract.methods[fn_name](...args).send({
+          value,
+          from: await getCoinbase(),
+        });
+      };
+    });
+  }
+
+  approveToken = async (amount) => {
+    let token_contract = await getTokenContract(this.tokenAddress);
+    return await token_contract.methods
+      .approve(this._address, amount)
+      .send({ value, from: await getCoinbase() });
+  };
+}
+
+function getNewBridgeContract(address) {
+  return getContract({ address, ABI: window.NEW_BRIDGE_ABI });
+}
+
+class NEW_BRIDGE {
+  constructor(bridgeAddress, tokenAddress) {
+    this._address = bridgeAddress;
+    this.tokenAddress = tokenAddress;
+
+    ["deposit", "withdraw"].forEach((fn_name) => {
+      this[fn_name] = async function (args, value = 0) {
+        let contract = await getNewBridgeContract(bridgeAddress);
+        return await contract.methods[fn_name](...args).send({
+          value,
+          from: await getCoinbase(),
+        });
+      };
+    });
+  }
+
+  approveToken = async (amount) => {
+    let token_contract = await getTokenContract(this.tokenAddress);
+    return await token_contract.methods
+      .approve(this._address, amount)
+      .send({ value, from: await getCoinbase() });
+  };
+}
+
+function getNewBridgeContract2(address) {
+  return getContract({ address, ABI: window.NEW_BRIDGE_ABI2 });
+}
+
+class NEW_BRIDGE2 {
+  constructor(bridgeAddress, tokenAddress) {
+    this._address = bridgeAddress;
+    this.tokenAddress = tokenAddress;
+
+    ["deposit", "withdraw"].forEach((fn_name) => {
+      this[fn_name] = async function (args, value = 0) {
+        let contract = await getNewBridgeContract2(bridgeAddress);
         return await contract.methods[fn_name](...args).send({
           value,
           from: await getCoinbase(),
@@ -3593,6 +3857,65 @@ window.bridge_bscavax = new BRIDGE(
   window.config.bridge_bscavax_address,
   window.config.token_dyp_bscavax_address
 );
+
+//new dyp token migration bsc-->eth
+window.newbridge_bsc = new BRIDGE(
+  window.config.bridge_bsc_new_address,
+  window.config.token_old_bsc_address
+);
+
+window.newbridge_avax = new BRIDGE(
+  window.config.bridge_avax_old_address,
+  window.config.token_old_avax_address
+);
+
+window.newbridge_eth_bsc = new NEW_BRIDGE(
+  window.config.bridge_migration_eth_bsc_new_address,
+  window.config.token_new_dypius_address
+);
+
+window.newbridge_eth_avax = new NEW_BRIDGE(
+  window.config.bridge_migration_eth_avax_new_address,
+  window.config.token_new_dypius_address
+);
+
+//new dyp token bridge bsc<-->eth
+window.new_bridge_bsc = new NEW_BRIDGE(
+  window.config.new_bridge_bsc_address,
+  window.config.token_dyp_new_bsc_address
+);
+
+window.new_bridge_eth = new NEW_BRIDGE(
+  window.config.new_bridge_eth_address,
+  window.config.token_dyp_new_address
+);
+
+//new dypius token bridge bsc<-->eth
+window.new_dypius_bridge_bsc = new NEW_BRIDGE2(
+  window.config.new_bridge_bsc_eth_address,
+  window.config.token_dypius_new_bsc_address
+);
+
+window.new_dypius_bridge_ethbsc = new NEW_BRIDGE2(
+  window.config.new_bridge_eth_bsc_address,
+  window.config.token_dypius_new_address
+);
+
+//new dypius token bridge eth<-->avax
+window.new_dypius_bridge_avax = new NEW_BRIDGE2(
+  window.config.new_bridge_avax_eth_address,
+  window.config.token_dypius_new_avax_address
+);
+
+window.new_dypius_bridge_ethavax = new NEW_BRIDGE2(
+  window.config.new_bridge_eth_avax_address,
+  window.config.token_dypius_new_address
+);
+
+window.token_old_eth = new TOKEN("TOKEN_OLD_ETH");
+window.token_old_bsc = new TOKENBSC("TOKEN_OLD_BSC");
+window.TOKEN_OLD_ETH_ABI = window.TOKEN_ABI;
+window.TOKEN_OLD_BSC_ABI = window.TOKEN_ABI;
 
 window.token_dyp_bscavaxbsc = new TOKEN("TOKEN_DYP_BSCAVAXBSC");
 window.token_dyp_bscavax = new TOKEN("TOKEN_DYP_BSCAVAX");
@@ -8811,6 +9134,515 @@ window.BRIDGE_ABI = [
       },
     ],
     name: "withdraw",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+];
+
+window.NEW_BRIDGE_ABI = [
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "blocknumber",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "timestamp",
+        type: "uint256",
+      },
+      { indexed: false, internalType: "uint256", name: "id", type: "uint256" },
+    ],
+    name: "Deposit",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "previousOwner",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "OwnershipTransferred",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+      { indexed: false, internalType: "uint256", name: "id", type: "uint256" },
+    ],
+    name: "Withdraw",
+    type: "event",
+  },
+  {
+    inputs: [],
+    name: "CHAIN_ID",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "ONE_DAY",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "TRUSTED_BURN",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "TRUSTED_TOKEN_ADDRESS",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    name: "claimedWithdrawalsByOtherChainDepositId",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "dailyTokenWithdrawLimitPerAccount",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "amount", type: "uint256" }],
+    name: "deposit",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "lastDepositIndex",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "lastUpdatedTokenWithdrawAmount",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "lastUpdatedTokenWithdrawTimestamp",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "owner",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "newDailyTokenWithdrawLimitPerAccount",
+        type: "uint256",
+      },
+    ],
+    name: "setDailyLimit",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "newVerifyAddress", type: "address" },
+    ],
+    name: "setVerifyAddress",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "tokenAddress", type: "address" },
+      { internalType: "address", name: "recipient", type: "address" },
+      { internalType: "uint256", name: "amount", type: "uint256" },
+    ],
+    name: "transferAnyERC20Token",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "verifyAddress",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256", name: "amount", type: "uint256" },
+      { internalType: "uint256", name: "chainId", type: "uint256" },
+      { internalType: "uint256", name: "id", type: "uint256" },
+      { internalType: "bytes", name: "signature", type: "bytes" },
+    ],
+    name: "withdraw",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+];
+
+window.NEW_BRIDGE_ABI2 = [
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "blocknumber",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "timestamp",
+        type: "uint256",
+      },
+      { indexed: false, internalType: "uint256", name: "id", type: "uint256" },
+    ],
+    name: "Deposit",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "previousOwner",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "OwnershipTransferred",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+      { indexed: false, internalType: "uint256", name: "id", type: "uint256" },
+    ],
+    name: "Withdraw",
+    type: "event",
+  },
+  {
+    inputs: [],
+    name: "CHAIN_ID",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "ONE_DAY",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "TRUSTED_TOKEN_ADDRESS",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    name: "claimedWithdrawalsByOtherChainDepositId",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "dailyTokenWithdrawLimitPerAccount",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "amount", type: "uint256" }],
+    name: "deposit",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "lastDepositIndex",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "lastUpdatedTokenWithdrawAmount",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "lastUpdatedTokenWithdrawTimestamp",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "owner",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "newDailyTokenWithdrawLimitPerAccount",
+        type: "uint256",
+      },
+    ],
+    name: "setDailyLimit",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "newVerifyAddress", type: "address" },
+    ],
+    name: "setVerifyAddress",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "verifyAddress",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256", name: "amount", type: "uint256" },
+      { internalType: "uint256", name: "chainId", type: "uint256" },
+      { internalType: "uint256", name: "id", type: "uint256" },
+      { internalType: "bytes", name: "signature", type: "bytes" },
+    ],
+    name: "withdraw",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+];
+
+window.CLAIM_NEW_DYP_ABI = [
+  { inputs: [], stateMutability: "nonpayable", type: "constructor" },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "holder",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "ClaimedTokens",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "previousOwner",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "OwnershipTransferred",
+    type: "event",
+  },
+  {
+    inputs: [],
+    name: "TRUSTED_BURN",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "TRUSTED_NEW_DYP",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "TRUSTED_OLD_DYP",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256", name: "amounToClaim", type: "uint256" },
+    ],
+    name: "claim",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "claimedTokens",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "owner",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
+    name: "transferOwnership",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -14398,6 +15230,775 @@ window.SUBSCRIPTIONETH_ABI = [
   {
     inputs: [],
     name: "unsubscribe",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+];
+
+window.SUBSCRIPTION_NEWETH_ABI = [
+  { inputs: [], stateMutability: "nonpayable", type: "constructor" },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "previousOwner",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "OwnershipTransferred",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "platformTokenAmount",
+        type: "uint256",
+      },
+    ],
+    name: "Subscribe",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amountDai",
+        type: "uint256",
+      },
+    ],
+    name: "SubscriptionFeeSet",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "tokenAddress",
+        type: "address",
+      },
+    ],
+    name: "SupportedTokenAdded",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "tokenAddress",
+        type: "address",
+      },
+    ],
+    name: "SupportedTokenRemoved",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "accountAddress",
+        type: "address",
+      },
+    ],
+    name: "UnsubscribeAddress",
+    type: "event",
+  },
+  {
+    inputs: [],
+    name: "ONE_HUNDRED_X_100",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "SLIPPAGE_TOLERANCE_X_100",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "TRUSTED_DAI_ADDRESS",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "TRUSTED_PLATFORM_TOKEN_ADDRESS",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "tokenAddress", type: "address" },
+    ],
+    name: "addSupportedToken",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "tokenAddress", type: "address" },
+    ],
+    name: "getEstimatedTokenSubscriptionAmount",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "isTokenSupported",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "owner",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "tokenAddress", type: "address" },
+    ],
+    name: "removeSupportedToken",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "newSubscriptionFeeInDai",
+        type: "uint256",
+      },
+    ],
+    name: "setSubscriptionFee",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "tokenAddress", type: "address" },
+      { internalType: "uint256", name: "amount", type: "uint256" },
+    ],
+    name: "subscribe",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "subscriptionFeeInDai",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "subscriptionPlatformTokenAmount",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "token", type: "address" },
+      { internalType: "address", name: "recipient", type: "address" },
+      { internalType: "uint256", name: "amount", type: "uint256" },
+    ],
+    name: "transferAnyERC20Token",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "uniswapRouterV2",
+    outputs: [
+      { internalType: "contract IUniswapV2Router", name: "", type: "address" },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "accountAddress", type: "address" },
+    ],
+    name: "unsubscribeAddress",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+];
+
+window.SUBSCRIPTION_NEWBNB_ABI = [
+  { inputs: [], stateMutability: "nonpayable", type: "constructor" },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "previousOwner",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "OwnershipTransferred",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "platformTokenAmount",
+        type: "uint256",
+      },
+    ],
+    name: "Subscribe",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amountDai",
+        type: "uint256",
+      },
+    ],
+    name: "SubscriptionFeeSet",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "tokenAddress",
+        type: "address",
+      },
+    ],
+    name: "SupportedTokenAdded",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "tokenAddress",
+        type: "address",
+      },
+    ],
+    name: "SupportedTokenRemoved",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "accountAddress",
+        type: "address",
+      },
+    ],
+    name: "UnsubscribeAddress",
+    type: "event",
+  },
+  {
+    inputs: [],
+    name: "ONE_HUNDRED_X_100",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "SLIPPAGE_TOLERANCE_X_100",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "TRUSTED_DAI_ADDRESS",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "TRUSTED_PLATFORM_TOKEN_ADDRESS",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "tokenAddress", type: "address" },
+    ],
+    name: "addSupportedToken",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "tokenAddress", type: "address" },
+    ],
+    name: "getEstimatedTokenSubscriptionAmount",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "isTokenSupported",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "owner",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "tokenAddress", type: "address" },
+    ],
+    name: "removeSupportedToken",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "newSubscriptionFeeInDai",
+        type: "uint256",
+      },
+    ],
+    name: "setSubscriptionFee",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "tokenAddress", type: "address" },
+      { internalType: "uint256", name: "amount", type: "uint256" },
+    ],
+    name: "subscribe",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "subscriptionFeeInDai",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "subscriptionPlatformTokenAmount",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "token", type: "address" },
+      { internalType: "address", name: "recipient", type: "address" },
+      { internalType: "uint256", name: "amount", type: "uint256" },
+    ],
+    name: "transferAnyERC20Token",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "uniswapRouterV2",
+    outputs: [
+      { internalType: "contract IUniswapV2Router", name: "", type: "address" },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "accountAddress", type: "address" },
+    ],
+    name: "unsubscribeAddress",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+];
+
+window.SUBSCRIPTION_NEWAVAX_ABI = [
+  { inputs: [], stateMutability: "nonpayable", type: "constructor" },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "previousOwner",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "OwnershipTransferred",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "platformTokenAmount",
+        type: "uint256",
+      },
+    ],
+    name: "Subscribe",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amountDai",
+        type: "uint256",
+      },
+    ],
+    name: "SubscriptionFeeSet",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "tokenAddress",
+        type: "address",
+      },
+    ],
+    name: "SupportedTokenAdded",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "tokenAddress",
+        type: "address",
+      },
+    ],
+    name: "SupportedTokenRemoved",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "accountAddress",
+        type: "address",
+      },
+    ],
+    name: "UnsubscribeAddress",
+    type: "event",
+  },
+  {
+    inputs: [],
+    name: "ONE_HUNDRED_X_100",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "SLIPPAGE_TOLERANCE_X_100",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "TRUSTED_DAI_ADDRESS",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "TRUSTED_DYP_WAVAX_PAIR",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "TRUSTED_PLATFORM_TOKEN_ADDRESS",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "TRUSTED_USDT_ADDRESS",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "TRUSTED_USDT_WAVAX_PAIR",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "TRUSTED_WAVAX_ADDRESS",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "tokenAddress", type: "address" },
+    ],
+    name: "addSupportedToken",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "tokenAddress", type: "address" },
+    ],
+    name: "getEstimatedTokenSubscriptionAmount",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "isTokenSupported",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "owner",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "tokenAddress", type: "address" },
+    ],
+    name: "removeSupportedToken",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "newSubscriptionFeeInDai",
+        type: "uint256",
+      },
+      {
+        internalType: "uint128",
+        name: "newSubscriptionFeeInUSDT",
+        type: "uint128",
+      },
+    ],
+    name: "setSubscriptionFee",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "tokenAddress", type: "address" },
+      { internalType: "uint256", name: "amount", type: "uint256" },
+    ],
+    name: "subscribe",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "subscriptionFeeInDai",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "subscriptionFeeInUSDT",
+    outputs: [{ internalType: "uint128", name: "", type: "uint128" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "subscriptionPlatformTokenAmount",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "token", type: "address" },
+      { internalType: "address", name: "recipient", type: "address" },
+      { internalType: "uint256", name: "amount", type: "uint256" },
+    ],
+    name: "transferAnyERC20Token",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "uniswapRouterV2",
+    outputs: [
+      { internalType: "contract IUniswapV2Router", name: "", type: "address" },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "accountAddress", type: "address" },
+    ],
+    name: "unsubscribeAddress",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -24669,6 +26270,509 @@ window.CONSTANT_STAKING_OLD_ABI = [
   },
 ];
 
+window.CONSTANT_STAKING_DYPIUS_ABI = [
+  { inputs: [], stateMutability: "nonpayable", type: "constructor" },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "owner",
+        type: "address",
+      },
+    ],
+    name: "EmergencyDeclared",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "maxPoolSize",
+        type: "uint256",
+      },
+    ],
+    name: "MaxPoolSizeChanged",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "previousOwner",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "OwnershipTransferred",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "referrer",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "ReferralFeeTransferred",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "holder",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "Reinvest",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "rewardRate",
+        type: "uint256",
+      },
+    ],
+    name: "RewardRateChanged",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "holder",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "RewardsTransferred",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: false, internalType: "uint256", name: "fee", type: "uint256" },
+    ],
+    name: "StakingFeeChanged",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: false, internalType: "uint256", name: "fee", type: "uint256" },
+    ],
+    name: "UnstakingFeeChanged",
+    type: "event",
+  },
+  {
+    inputs: [],
+    name: "ADMIN_CAN_CLAIM_AFTER",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "EMERGENCY_WAIT_TIME",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "LOCKUP_TIME",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "REFERRAL_FEE_RATE_X_100",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "REWARD_INTERVAL",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "REWARD_RATE_X_100",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "STAKING_FEE_RATE_X_100",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "TRUSTED_TOKEN_ADDRESS",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "UNSTAKING_FEE_RATE_X_100",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "adminClaimableTime",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "claim",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "contractStartTime",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "declareEmergency",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "depositedTokens",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256", name: "amountToWithdraw", type: "uint256" },
+    ],
+    name: "emergencyUnstake",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "account", type: "address" },
+      { internalType: "uint256", name: "i", type: "uint256" },
+    ],
+    name: "getActiveReferredStaker",
+    outputs: [
+      { internalType: "address", name: "_staker", type: "address" },
+      { internalType: "uint256", name: "_totalEarned", type: "uint256" },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getNumberOfHolders",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "referrer", type: "address" }],
+    name: "getNumberOfReferredStakers",
+    outputs: [
+      { internalType: "uint256", name: "_activeStakers", type: "uint256" },
+      { internalType: "uint256", name: "_totalStakers", type: "uint256" },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "_holder", type: "address" }],
+    name: "getPendingDivs",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "account", type: "address" },
+      { internalType: "uint256", name: "i", type: "uint256" },
+    ],
+    name: "getReferredStaker",
+    outputs: [
+      { internalType: "address", name: "_staker", type: "address" },
+      { internalType: "uint256", name: "_totalEarned", type: "uint256" },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256", name: "startIndex", type: "uint256" },
+      { internalType: "uint256", name: "endIndex", type: "uint256" },
+    ],
+    name: "getStakersList",
+    outputs: [
+      { internalType: "address[]", name: "stakers", type: "address[]" },
+      {
+        internalType: "uint256[]",
+        name: "stakingTimestamps",
+        type: "uint256[]",
+      },
+      {
+        internalType: "uint256[]",
+        name: "lastClaimedTimeStamps",
+        type: "uint256[]",
+      },
+      { internalType: "uint256[]", name: "stakedTokens", type: "uint256[]" },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "_holder", type: "address" }],
+    name: "getTotalPendingDivs",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "isEmergency",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "lastClaimedTime",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "maxPoolSize",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "owner",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "reInvest",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "referrals",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "rewardsPendingClaim",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "newPoolSize", type: "uint256" }],
+    name: "setMaxPoolSize",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256", name: "newRewardRate", type: "uint256" },
+    ],
+    name: "setRewardRateX100",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "newStakingFeeRateX100",
+        type: "uint256",
+      },
+    ],
+    name: "setStakingFeeRateX100",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "newUnstakingFeeRateX100",
+        type: "uint256",
+      },
+    ],
+    name: "setUnstakingFeeRateX100",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256", name: "amountToStake", type: "uint256" },
+      { internalType: "address", name: "referrer", type: "address" },
+    ],
+    name: "stake",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "stakingTime",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "totalClaimedReferralFee",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "totalClaimedRewards",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "totalDeposited",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "totalEarnedTokens",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "totalReferralFeeEarned",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "tokenAddress", type: "address" },
+      { internalType: "address", name: "recipient", type: "address" },
+      { internalType: "uint256", name: "amount", type: "uint256" },
+    ],
+    name: "transferAnyERC20Token",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "tokenAddress", type: "address" },
+      { internalType: "address", name: "recipient", type: "address" },
+      { internalType: "uint256", name: "amount", type: "uint256" },
+    ],
+    name: "transferAnyLegacyERC20Token",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256", name: "amountToWithdraw", type: "uint256" },
+    ],
+    name: "unstake",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+];
+
 window.CONSTANT_STAKINGBSCOTHER_NEW_ABI = [
   { inputs: [], stateMutability: "nonpayable", type: "constructor" },
   {
@@ -33140,8 +35244,14 @@ Object.keys(window.config)
       k.startsWith("staking_") ||
       k.startsWith("stakingavax_") ||
       k.startsWith("reward_tokenavax") ||
+      k.startsWith("reward_token_dypius_eth") ||
+      k.startsWith("reward_token_dypius_bsc") ||
+      k.startsWith("token_dyp_new") ||
+      k.startsWith("token_dypius_new") ||
+      k.startsWith("token_dypius_new_avax") ||
+      k.startsWith("token_dypius_new_bsc") ||
+      k.startsWith("token_dyp_new_bsc") ||
       k.startsWith("reward_tokenwbnb") ||
-
       k.startsWith("farming_newavax_1") ||
       k.startsWith("farming_newavax_2") ||
       k.startsWith("farming_newavax_3") ||
@@ -33161,10 +35271,12 @@ Object.keys(window.config)
       k.startsWith("constant_stakingidyp_2") ||
       k.startsWith("constant_stakingidyp_1") ||
       k.startsWith("constant_stakingnew_new2") ||
+      k.startsWith("constant_staking_dypius_eth1") ||
       k.startsWith("constant_stakingidypavax_3") ||
       k.startsWith("constant_stakingidypavax_4") ||
       k.startsWith("constant_stakingidypavax_40") ||
       k.startsWith("constant_stakingidypavax_50") ||
+      k.startsWith("constant_staking_dypius_avax1") ||
       k.startsWith("constant_stakingnew_newavax1") ||
       k.startsWith("constant_stakingnewbsc_new3") ||
       k.startsWith("constant_stakingnewbsc_new4") ||
@@ -33181,6 +35293,7 @@ Object.keys(window.config)
       k.startsWith("constant_stakingbsc_new12") ||
       k.startsWith("constant_stakingbsc_new13") ||
       k.startsWith("constant_stakingbsc_new14") ||
+      k.startsWith("constant_staking_dypius_bsc1") ||
       k.startsWith("constant_stakingnew_newavax2") ||
       k.startsWith("constant_stakingdaiavax") ||
       k.startsWith("constant_stakingdaieth") ||
@@ -33204,6 +35317,9 @@ Object.keys(window.config)
       k.startsWith("token_dyp_bsceth") ||
       k.startsWith("token_dyp_bscbsc") ||
       k.startsWith("token_dyp_bscavaxbsc") ||
+      k.startsWith("token_old_eth") ||
+      k.startsWith("token_old_bsc") ||
+      k.startsWith("token_old_avax") ||
       k.startsWith("token_dyp_bscavax") ||
       k.startsWith("token_idyp_bsceth") ||
       k.startsWith("token_idyp_bscbsc") ||
@@ -33237,6 +35353,20 @@ Object.keys(window.config)
       ? window.TOKEN_ABI
       : k.startsWith("reward_token_idyp")
       ? window.TOKEN_ABI
+      : k.startsWith("reward_token_dypius_eth")
+      ? window.TOKEN_ABI
+      : k.startsWith("reward_token_dypius_bsc")
+      ? window.TOKEN_ABI
+      : k.startsWith("token_dyp_new")
+      ? window.TOKEN_ABI
+      : k.startsWith("token_dypius_new")
+      ? window.TOKEN_ABI
+      : k.startsWith("token_dypius_new_avax")
+      ? window.TOKEN_ABI
+      : k.startsWith("token_dypius_new_bsc")
+      ? window.TOKEN_ABI
+      : k.startsWith("token_dyp_new_bsc")
+      ? window.TOKENBSC_ABI
       : k.startsWith("buyback_stakingbsc1_1")
       ? window.BUYBACK_STAKINGBSC1_1_ABI
       : k.startsWith("buyback_stakingbsc1_2")
@@ -33254,6 +35384,12 @@ Object.keys(window.config)
       : k.startsWith("token_dyp_bsc")
       ? window.TOKEN_ABI
       : k.startsWith("token_dyp_bscavaxbsc")
+      ? window.TOKEN_ABI
+      : k.startsWith("token_old_eth")
+      ? window.TOKEN_ABI
+      : k.startsWith("token_old_bsc")
+      ? window.TOKEN_ABI
+      : k.startsWith("token_old_avax")
       ? window.TOKEN_ABI
       : k.startsWith("token_dyp_bscavax")
       ? window.TOKEN_ABI
@@ -33345,12 +35481,16 @@ Object.keys(window.config)
       ? window.CONSTANT_STAKING_IDYP_ABI
       : k.startsWith("constant_stakingnew_new2")
       ? window.CONSTANT_STAKINGNEW_ABI
+      : k.startsWith("constant_staking_dypius_eth1")
+      ? window.CONSTANT_STAKING_DYPIUS_ABI
       : k.startsWith("constant_stakingidypavax_4")
       ? window.CONSTANT_STAKING_IDYP_ABI
       : k.startsWith("constant_stakingidypavax_40")
       ? window.CONSTANT_STAKING_IDYP_ABI
       : k.startsWith("constant_stakingidypavax_50")
       ? window.CONSTANT_STAKING_IDYP_ABI
+      : k.startsWith("constant_staking_dypius_avax1")
+      ? window.CONSTANT_STAKING_DYPIUS_ABI
       : k.startsWith("constant_stakingnew_newavax1")
       ? window.CONSTANT_STAKINGNEW_ABI
       : k.startsWith("constant_stakingnewbsc_new3")
@@ -33385,6 +35525,8 @@ Object.keys(window.config)
       ? window.CONSTANT_STAKINGBSC_NEW_ABI
       : k.startsWith("constant_stakingbsc_new14")
       ? window.CONSTANT_STAKING_OLD_ABI
+      : k.startsWith("constant_staking_dypius_bsc1")
+      ? window.CONSTANT_STAKING_DYPIUS_ABI
       : k.startsWith("constant_stakingnew_newavax2")
       ? window.CONSTANT_STAKINGNEW_ABI
       : k.startsWith("constant_stakingdaieth")
@@ -33837,9 +35979,11 @@ async function subscriptionPlatformTokenAmount(account) {
   }
 }
 
-async function subscriptionPlatformTokenAmountETH(account) {
+async function subscriptionPlatformTokenAmountNew(account) {
   if (account) {
-    let subscriptionContract = await getContract({ key: "SUBSCRIPTIONETH" });
+    let subscriptionContract = await getContract({
+      key: "SUBSCRIPTION_NEWAVAX",
+    });
     return await subscriptionContract.methods
       .subscriptionPlatformTokenAmount(account)
       .call()
@@ -33848,35 +35992,35 @@ async function subscriptionPlatformTokenAmountETH(account) {
 }
 
 async function subscribe(tokenAddress, amount) {
-  let subscriptionContract = await getContract({ key: "SUBSCRIPTION" });
+  let subscriptionContract = await getContract({ key: "SUBSCRIPTION_NEWAVAX" });
   return await subscriptionContract.methods
     .subscribe(tokenAddress, amount)
     .send({ from: await getCoinbase() });
 }
 
 async function unsubscribe() {
-  let subscriptionContract = await getContract({ key: "SUBSCRIPTION" });
+  let subscriptionContract = await getContract({ key: "SUBSCRIPTION_NEWAVAX" });
   return await subscriptionContract.methods
     .unsubscribe()
     .send({ from: await getCoinbase() });
 }
 
 async function getEstimatedTokenSubscriptionAmount(tokenAddress) {
-  let subscriptionContract = await getContract({ key: "SUBSCRIPTION" });
+  let subscriptionContract = await getContract({ key: "SUBSCRIPTION_NEWAVAX" });
   return await subscriptionContract.methods
     .getEstimatedTokenSubscriptionAmount(tokenAddress)
     .call();
 }
 
 async function getEstimatedTokenSubscriptionAmountETH(tokenAddress) {
-  let subscriptionContract = await getContract({ key: "SUBSCRIPTIONETH" });
+  let subscriptionContract = await getContract({ key: "SUBSCRIPTION_NEWETH" });
   return await subscriptionContract.methods
     .getEstimatedTokenSubscriptionAmount(tokenAddress)
     .call();
 }
 
 async function getEstimatedTokenSubscriptionAmountBNB(tokenAddress) {
-  let subscriptionContract = await getContract({ key: "SUBSCRIPTIONBNB" });
+  let subscriptionContract = await getContract({ key: "SUBSCRIPTION_NEWBNB" });
   return await subscriptionContract.methods
     .getEstimatedTokenSubscriptionAmount(tokenAddress)
     .call();

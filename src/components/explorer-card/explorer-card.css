@@ -1,26 +1,26 @@
 .explorercard-wrapper {
   padding: 20px;
-  background-color: #312F69;
+  background-color: #312f69;
   border-radius: 12px;
-  border: 2px solid #312F69;
-  background-image: url("./assets/swapBanner.png");
-  background-position: center;
+  border: 2px solid #312f69;
+  background-image: url("./assets/yieldBanner.svg");
+  background-position: right 50px center;
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: auto;
   position: relative;
   min-height: 195px;
   /* width: 27%; */
-  transition: all .25s;
+  transition: all 0.25s;
   cursor: pointer;
 }
 
 .explorercard-wrapper:focus,
 .explorercard-wrapper:hover,
-.explorercard-wrapper:active{
+.explorercard-wrapper:active {
   border: 2px solid rgb(142, 151, 205);
 }
 
-.explorer-chart{
+.explorer-chart {
   position: absolute;
   left: 0;
   right: 0;
@@ -69,7 +69,7 @@
   font-weight: 400;
   font-size: 12px;
   line-height: 17px;
-  color: #D6D8E7;
+  color: #d6d8e7;
   /* width: 43%; */
 }
 
@@ -77,22 +77,21 @@
   font-weight: 500;
   font-size: 12px;
   line-height: 18px;
-  color: #4ED5D2;
+  color: #4ed5d2;
 }
 
 @media screen and (max-width: 786px) {
-
-  .explorercard-wrapper{
-    background-size: contain !important;
+  .explorercard-wrapper {
+    background-position: right 20px center;
   }
-  .explorer-chart{
+  .explorer-chart {
     position: absolute;
     right: 0;
     top: 5px;
     width: 150px;
   }
 
-  .explorercard-desc{
+  .explorercard-desc {
     width: 50% !important;
   }
 }

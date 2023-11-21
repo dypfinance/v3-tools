@@ -36,6 +36,7 @@ const EarnContent = ({
   faqIndex,
   networkId,
   handleSwitchNetwork,
+  isPremium
 }) => {
   const options = [
     {
@@ -247,34 +248,61 @@ const EarnContent = ({
   };
 
   const fetchEthStaking = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_eth`)
-      .then((res) => {
-        setTvl(res.data.totalTVL_ETH);
-      })
-      .catch((err) => {
+   const ethRestult =  await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_eth`).catch((err) => {
         console.log(err);
       });
+
+      const ethRestult2 =  await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_eth_new`).catch((err) => {
+        console.log(err);
+      });
+
+      if(ethRestult && ethRestult.status === 200 && ethRestult2 && ethRestult2.status === 200) {
+        const ethv1Tvl = ethRestult.data.totalTVL_ETH;
+
+        const ethv2Tvl = ethRestult2.data.stakingInfoDYPEth[0].tvl_usd/1e18
+     
+      
+        setTvl(ethv1Tvl+ethv2Tvl)
+
+      }
   };
   const fetchBnbStaking = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_bnb`)
-      .then((res) => {
-        setTvl(res.data.totalTVL_BNB);
-      })
-      .catch((err) => {
+ const bnbResult =   await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_bnb`) .catch((err) => {
         console.log(err);
       });
+
+      const bnbResult2 =   await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_bnb_new`) .catch((err) => {
+        console.log(err);
+      });
+
+      if(bnbResult && bnbResult.status===200 && bnbResult2 && bnbResult2.status===200) {
+        const bnbTvl1= bnbResult.data.totalTVL_BNB;
+        const bnbTvl2 = bnbResult2.data.stakingInfoDYPBnb[0].tvl_usd/1e18
+        setTvl(bnbTvl1+bnbTvl2)
+
+      }
   };
   const fetchAvaxStaking = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_avax`)
-      .then((res) => {
-        setTvl(res.data.totalTVL_AVAX);
-      })
-      .catch((err) => {
+    const avaxResult = await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_avax`).catch((err) => {
         console.log(err);
       });
+
+      const avaxResult2 =   await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_avax_new`) .catch((err) => {
+        console.log(err);
+      });
+
+
+      if(avaxResult && avaxResult.status === 200 && avaxResult2 && avaxResult2.status === 200) {
+        const avaxtvl1 = avaxResult.data.totalTVL_AVAX;
+        const avaxtvl2 = avaxResult2.data.stakingInfoDYPAvax[0].tvl_usd/1e18
+        setTvl(avaxtvl1+avaxtvl2)
+      }
   };
 
   const fetchEthBuyback = async () => {
@@ -313,7 +341,7 @@ const EarnContent = ({
       fetchEthApr();
       fetchAvaxApr();
       fetchBnbApr();
-      setEthApr(7.35);
+      setEthApr(12.5);
     } else if (option === "Buyback") {
       fetchEthBuybackApr();
       fetchBnbBuybackApr();
@@ -630,7 +658,7 @@ const EarnContent = ({
                             whiteSpace: "pre",
                           }}
                         >
-                          {ethApr}% APR
+                           12.5% APR
                         </p>
                       </div>
                     </div>
@@ -675,7 +703,7 @@ const EarnContent = ({
                             whiteSpace: "pre",
                           }}
                         >
-                          {getFormattedNumber(bnbApr, 0)}% APR
+                          12.5% APR
                         </p>
                       </div>
                     </div>
@@ -725,7 +753,7 @@ const EarnContent = ({
                             whiteSpace: "pre",
                           }}
                         >
-                          {avaxApr}% APR
+                          12.5% APR
                         </p>
                       </div>
                     </div>
@@ -759,7 +787,7 @@ const EarnContent = ({
                             color: "#f7f7fc",
                           }}
                         >
-                          7.35% APR
+                          12.5% APR
                         </p>
                       </div>
                     </div>
@@ -866,6 +894,7 @@ const EarnContent = ({
           customChain={customChain}
           handleSwitchNetwork={handleSwitchNetwork}
           expiredPools={expiredPools}
+          isPremium={isPremium}
         />
       ) : (
          option === "Vault" && networkId !== "1"   ? (
@@ -916,6 +945,7 @@ const EarnContent = ({
           customChain={customChain}
           handleSwitchNetwork={handleSwitchNetwork}
           expiredPools={expiredPools}
+          isPremium={isPremium}
         />
       )}
 

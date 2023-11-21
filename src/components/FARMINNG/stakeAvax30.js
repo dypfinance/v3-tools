@@ -246,10 +246,10 @@ export default function stakeAvax30({
 
     getUsdPerDyp = async () => {
       await axios
-        .get("https://api.dyp.finance/api/the_graph_eth_v2")
+        .get("https://api.dyp.finance/api/the_graph_avax_v2")
         .then((data) => {
           const propertyDyp = Object.entries(
-            data.data.the_graph_eth_v2.token_data
+            data.data.the_graph_avax_v2.token_data
           );
           this.setState({ tokendata: propertyDyp[0][1].token_price_usd });
         });
@@ -1443,15 +1443,15 @@ export default function stakeAvax30({
                         <button
                           disabled={
                             this.state.claimStatus === "claimed" ||
-                            this.state.claimStatus === "success" ||
-                            pendingDivs <= 0
+                            this.state.claimStatus === "success"||  pendingDivs <= 0
+                            //  
                               ? true
                               : false
                           }
                           className={`btn filledbtn ${
                             (this.state.claimStatus === "claimed" &&
-                              this.state.claimStatus === "initial") ||
-                            pendingDivs <= 0
+                              this.state.claimStatus === "initial") ||  pendingDivs <= 0
+                              // 
                               ? "disabled-btn"
                               : this.state.claimStatus === "failed"
                               ? "fail-button"
@@ -1460,7 +1460,9 @@ export default function stakeAvax30({
                               : null
                           } d-flex justify-content-center align-items-center gap-2`}
                           style={{ height: "fit-content" }}
-                          onClick={this.handleClaimDivs}
+                          // onClick={this.handleClaimDivs}
+                          onClick={() => {this.handleClaimDivs()
+                          }}
                         >
                           {this.state.claimLoading ? (
                             <div
@@ -2099,7 +2101,7 @@ export default function stakeAvax30({
                     ${" "}
                     {getFormattedNumber(
                       this.getApproxReturn() * this.state.tokendata,
-                      6
+                      3
                     )}{" "}
                     USD
                   </h3>

@@ -368,18 +368,14 @@ const StakeBsc = ({
     refreshBalance();
     if (depositAmount !== "") {
       checkApproval(depositAmount);
-
-    }
-    else {
-      setdepositStatus('initial')
-
+    } else {
+      setdepositStatus("initial");
     }
   }, [coinbase, coinbase2, staking]);
 
   useEffect(() => {
-      setdepositAmount('');
-      setdepositStatus('initial')
-
+    setdepositAmount("");
+    setdepositStatus("initial");
   }, [staking]);
 
   const handleApprove = (e) => {
@@ -420,44 +416,43 @@ const StakeBsc = ({
   const handleStake = async (e) => {
     //   e.preventDefault();
     if (passivePool === false) {
-    setdepositLoading(true);
+      setdepositLoading(true);
 
-    if (other_info) {
-      window.$.alert("This pool no longer accepts deposits!");
-      setdepositLoading(false);
-      return;
-    }
-
-    let amount = depositAmount;
-    amount = new BigNumber(depositAmount).times(1e18).toFixed(0);
-     
-    let referrer = window.config.ZERO_ADDRESS;
-
-    //NO REFERRER HERE
-
-    staking
-      .stake(amount, referrer)
-      .then(() => {
+      if (other_info) {
+        window.$.alert("This pool no longer accepts deposits!");
         setdepositLoading(false);
-        setdepositStatus("success");
-        refreshBalance();
-        setTimeout(() => {
+        return;
+      }
+
+      let amount = depositAmount;
+      amount = new BigNumber(depositAmount).times(1e18).toFixed(0);
+
+      let referrer = window.config.ZERO_ADDRESS;
+
+      //NO REFERRER HERE
+
+      staking
+        .stake(amount, referrer)
+        .then(() => {
           setdepositLoading(false);
-          setdepositStatus("initial");
-        }, 5000);
-      })
-      .catch((e) => {
-        setdepositLoading(false);
-        setdepositStatus("fail");
-        seterrorMsg(e?.message);
-        setTimeout(() => {
-          depositAmount("");
-          setdepositStatus("initial");
-          seterrorMsg("");
-        }, 10000);
-      });
-    }
-    else if (passivePool === true) {
+          setdepositStatus("success");
+          refreshBalance();
+          setTimeout(() => {
+            setdepositLoading(false);
+            setdepositStatus("initial");
+          }, 5000);
+        })
+        .catch((e) => {
+          setdepositLoading(false);
+          setdepositStatus("fail");
+          seterrorMsg(e?.message);
+          setTimeout(() => {
+            depositAmount("");
+            setdepositStatus("initial");
+            seterrorMsg("");
+          }, 10000);
+        });
+    } else if (passivePool === true) {
       window.$.alert("This pool no longer accepts deposits!");
       return;
     }
@@ -549,7 +544,7 @@ const StakeBsc = ({
   };
 
   const getApproxReturn = () => {
-    let APY = getAPY() - fee;
+    let APY = apr - fee;
 
     return ((approxDeposit * APY) / 100 / 365) * approxDays;
   };
@@ -691,10 +686,10 @@ const StakeBsc = ({
 
   const getUsdPerDyp = async () => {
     await axios
-      .get("https://api.dyp.finance/api/the_graph_eth_v2")
+      .get("https://api.dyp.finance/api/the_graph_bsc_v2")
       .then((data) => {
         const propertyDyp = Object.entries(
-          data.data.the_graph_eth_v2.token_data
+          data.data.the_graph_bsc_v2.token_data
         );
         settokendata(propertyDyp[0][1].token_price_usd);
         return propertyDyp[0][1].token_price_usd;
@@ -1022,33 +1017,41 @@ const StakeBsc = ({
                       Max
                     </button>
                   </div>
-                  {/* <button
-                      className="btn filledbtn"
-                      onClick={this.handleApprove}
-                    >
-                      Approve
-                    </button> */}
+
                   <button
                     disabled={
-                      depositAmount === "" || depositLoading === true
+                      depositAmount === "" ||
+                      depositLoading === true ||
+                      depositStatus === "success" ||
+                      staking?._address.toLowerCase() ===
+                        "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487".toLowerCase()
                         ? true
                         : false
                     }
                     className={`btn filledbtn ${
-                      depositAmount === "" &&
-                      depositStatus === "initial" &&
+                      ((depositAmount === "" && depositStatus === "initial") ||
+                        staking?._address.toLowerCase() ===
+                          "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487".toLowerCase()) &&
                       "disabled-btn"
                     } ${
-                      depositStatus === "deposit" || depositStatus === "success"
+                      (depositStatus === "deposit" ||
+                        depositStatus === "success") &&
+                      staking?._address.toLowerCase() !==
+                        "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487".toLowerCase()
                         ? "success-button"
                         : depositStatus === "fail"
                         ? "fail-button"
                         : null
                     } d-flex justify-content-center align-items-center gap-2`}
                     onClick={() => {
-                      depositStatus === "deposit"
+                      depositStatus === "deposit" &&
+                      staking?._address.toLowerCase() !==
+                        "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487".toLowerCase()
                         ? handleStake()
-                        : depositStatus === "initial" && depositAmount !== ""
+                        : depositStatus === "initial" &&
+                          depositAmount !== "" &&
+                          staking?._address.toLowerCase() !==
+                            "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487".toLowerCase()
                         ? handleApprove()
                         : console.log("");
                     }}
@@ -1153,14 +1156,16 @@ const StakeBsc = ({
                         claimStatus === "claimed" ||
                         claimStatus === "success" ||
                         pendingDivs <= 0
-                          ? true
+                          ? //
+                            true
                           : false
                       }
                       className={`btn filledbtn ${
                         (claimStatus === "claimed" &&
                           claimStatus === "initial") ||
                         pendingDivs <= 0
-                          ? "disabled-btn"
+                          ? //
+                            "disabled-btn"
                           : claimStatus === "failed"
                           ? "fail-button"
                           : claimStatus === "success"
@@ -1168,9 +1173,17 @@ const StakeBsc = ({
                           : null
                       } d-flex justify-content-center align-items-center gap-2`}
                       style={{ height: "fit-content" }}
-                      onClick={handleClaimDivs}
+                      // onClick={handleClaimDivs}
+                      onClick={() => {
+                        staking._address ===
+                        "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487"
+                          ? window.$.alert(
+                              "*The rewards earned from the day of the migration until the end of the lock time will be distributed to the users automatically at the end of the contract."
+                            )
+                          : handleClaimDivs();
+                      }}
                     >
-                      {claimLoading === true && claimStatus === "initial" ? (
+                      {claimLoading ? (
                         <div
                           class="spinner-border spinner-border-sm text-light"
                           role="status"
@@ -1803,7 +1816,7 @@ const StakeBsc = ({
             </div>
             <div className="d-flex flex-column gap-2 mt-4">
               <h3 style={{ fontWeight: "500", fontSize: "39px" }}>
-                $ {getFormattedNumber(getApproxReturn() * tokendata, 6)} USD
+                $ {getFormattedNumber(getApproxReturn() * tokendata, 3)} USD
               </h3>
               <h6
                 style={{

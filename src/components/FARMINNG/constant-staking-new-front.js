@@ -564,7 +564,7 @@ const StakeEth = ({
     );
 
     staking
-      .unstake(amount, 0, deadline)
+      .unstake(amount)
       .then(() => {
         setwithdrawLoading(false);
         setwithdrawStatus("success");
@@ -1323,19 +1323,17 @@ const StakeEth = ({
                         /> */}
                   </div>
                   <div className="claim-reinvest-container d-flex justify-content-between align-items-center gap-3">
-                    <button
+                  <button
                       disabled={
-                        claimStatus === "claimed" ||
-                        claimStatus === "success" ||
-                        pendingDivs <= 0
-                          ? true
+                        claimStatus === "claimed" || claimStatus === "success" || pendingDivs <= 0
+                          ? 
+                            true
                           : false
                       }
                       className={`btn filledbtn ${
-                        (claimStatus === "claimed" &&
-                          claimStatus === "initial") ||
-                        pendingDivs <= 0
-                          ? "disabled-btn"
+                        claimStatus === "claimed" && claimStatus === "initial" ||  pendingDivs <= 0
+                          ? 
+                            "disabled-btn"
                           : claimStatus === "failed"
                           ? "fail-button"
                           : claimStatus === "success"
@@ -1343,7 +1341,13 @@ const StakeEth = ({
                           : null
                       } d-flex justify-content-center align-items-center gap-2`}
                       style={{ height: "fit-content" }}
-                      onClick={handleClaimDivs}
+                      // onClick={handleClaimDivs}
+                      onClick={() => {
+                        staking._address === '0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d' ? 
+                        window.$.alert(
+                          "*The rewards earned from the day of the migration until the end of the lock time will be distributed to the users automatically at the end of the contract."
+                        ) : handleClaimDivs()
+                      }}
                     >
                       {claimLoading ? (
                         <div
@@ -1554,7 +1558,7 @@ const StakeEth = ({
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">TVL USD</span>
-                    <h6 className="stats-card-content">${tvl_usd} USD</h6>
+                    <h6 className="stats-card-content">${getFormattedNumber(Number(tvl) * usdPerToken,4) } USD</h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">

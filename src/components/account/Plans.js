@@ -343,11 +343,9 @@ export default class Subscription extends React.Component {
   };
 
   componentDidUpdate(prevProps) {
-
-    if(this.props.isPremium){
-      window.location.href = 'https://app.dypius.com/account'
+    if (this.props.isPremium) {
+      window.location.href = "https://app.dypius.com/account";
     }
-
 
     // Typical usage (don't forget to compare props):
     if (this.props.coinbase !== prevProps.coinbase) {
@@ -370,7 +368,7 @@ export default class Subscription extends React.Component {
     }
 
     if (this.props.networkId !== prevProps.networkId) {
-      this.setState({subscribe_now: false})
+      this.setState({ subscribe_now: false });
       this.getDypBalance();
 
       if (this.props.networkId === 43114) {
@@ -386,8 +384,8 @@ export default class Subscription extends React.Component {
   }
 
   componentDidMount() {
-    if(this.props.isPremium){
-      window.location.href = 'https://app.dypius.com/account'
+    if (this.props.isPremium) {
+      window.location.href = "https://app.dypius.com/account";
     }
     this.getDypBalance();
 
@@ -416,7 +414,7 @@ export default class Subscription extends React.Component {
         : this.props.networkId === 56
         ? await window.getEstimatedTokenSubscriptionAmountBNB(token)
         : await window.getEstimatedTokenSubscriptionAmount(token);
-    price = new BigNumber(price).times(1.1).toFixed(0);
+    price = new BigNumber(price).toFixed(0);
 
     let formattedPrice = getFormattedNumber(
       price / 10 ** tokenDecimals,
@@ -427,6 +425,48 @@ export default class Subscription extends React.Component {
       this.props.coinbase
     );
     this.setState({ price, formattedPrice, tokenBalance });
+  };
+
+  handleApprove = async (e) => {
+    // e.preventDefault();
+    const web3 = new Web3(window.ethereum);
+    let tokenContract = new web3.eth.Contract(
+      window.ERC20_ABI,
+      this.state.selectedSubscriptionToken
+    );
+
+    const ethsubscribeAddress = window.config.subscription_neweth_address;
+    const avaxsubscribeAddress = window.config.subscription_newavax_address;
+    const bnbsubscribeAddress = window.config.subscription_newbnb_address;
+
+    this.setState({ loadspinner: true });
+
+    await tokenContract.methods
+      .approve(
+        this.props.networkId === 1
+          ? ethsubscribeAddress
+          : this.props.networkId === 56
+          ? bnbsubscribeAddress
+          : avaxsubscribeAddress,
+        this.state.price
+      )
+      .send({ from: this.props.coinbase })
+      .then(() => {
+        this.setState({ lockActive: true });
+        this.setState({ loadspinner: false });
+        this.setState({ isApproved: true, approveStatus: "deposit" });
+      })
+      .catch((e) => {
+        this.setState({ status: e?.message });
+        this.setState({ loadspinner: false, approveStatus: "fail" });
+        setTimeout(() => {
+          this.setState({
+            status: "",
+            loadspinner: false,
+            approveStatus: "initial",
+          });
+        }, 8000);
+      });
   };
 
   myNft = async () => {
@@ -468,52 +508,14 @@ export default class Subscription extends React.Component {
     this.setState({ myStakess: stakes });
   };
 
-  handleApprove = async (e) => {
-    // e.preventDefault();
-
-    let tokenContract = await window.getContract({
-      address: this.state.selectedSubscriptionToken,
-      ABI: window.ERC20_ABI,
-    });
-
-    this.setState({ loadspinner: true });
-
-    await tokenContract.methods
-      .approve(
-        this.props.networkId === 1
-          ? window.config.subscriptioneth_address
-          : this.props.networkId === 56
-          ? window.config.subscriptionbnb_address
-          : window.config.subscription_address,
-        this.state.price
-      )
-      .send()
-      .then(() => {
-        this.setState({ lockActive: true });
-        this.setState({ loadspinner: false });
-        this.setState({ isApproved: true, approveStatus: "deposit" });
-      })
-      .catch((e) => {
-        this.setState({ status: e?.message });
-        this.setState({ loadspinner: false, approveStatus: "fail" });
-        setTimeout(() => {
-          this.setState({
-            status: "",
-            loadspinner: false,
-            approveStatus: "initial",
-          });
-        }, 8000);
-      });
-  };
-
   handleCheckIfAlreadyApproved = async (token) => {
     const web3eth = new Web3(window.config.infura_endpoint);
     const bscWeb3 = new Web3(window.config.bsc_endpoint);
     const avaxWeb3 = new Web3(window.config.avax_endpoint);
 
-    const ethsubscribeAddress = window.config.subscriptioneth_address;
-    const avaxsubscribeAddress = window.config.subscription_address;
-    const bnbsubscribeAddress = window.config.subscriptionbnb_address;
+    const ethsubscribeAddress = window.config.subscription_neweth_address;
+    const avaxsubscribeAddress = window.config.subscription_newavax_address;
+    const bnbsubscribeAddress = window.config.subscription_newbnb_address;
 
     const subscribeToken = token;
     const subscribeTokencontract = new web3eth.eth.Contract(
@@ -553,6 +555,7 @@ export default class Subscription extends React.Component {
           .allowance(this.props.coinbase, bnbsubscribeAddress)
           .call()
           .then();
+
         if (result != 0) {
           this.setState({ lockActive: true });
           this.setState({ loadspinner: false });
@@ -586,10 +589,10 @@ export default class Subscription extends React.Component {
     let subscriptionContract = await window.getContract({
       key:
         this.props.networkId === 1
-          ? "SUBSCRIPTIONETH"
+          ? "SUBSCRIPTION_NEWETH"
           : this.props.networkId === 56
-          ? "SUBSCRIPTIONBNB"
-          : "SUBSCRIPTION",
+          ? "SUBSCRIPTION_NEWBNB"
+          : "SUBSCRIPTION_NEWAVAX",
     });
 
     this.setState({ loadspinnerSub: true });
@@ -600,19 +603,23 @@ export default class Subscription extends React.Component {
     //   : this.props.networkId === 56
     //   ? await window.getEstimatedTokenSubscriptionAmountBNB(this.state.selectedSubscriptionToken)
     //   : await window.getEstimatedTokenSubscriptionAmount(this.state.selectedSubscriptionToken);
-// console.log(this.state.price, this.state.selectedSubscriptionToken)
+    // console.log(this.state.price, this.state.selectedSubscriptionToken)
+    console.log(this.state.selectedSubscriptionToken, this.state.price);
     await subscriptionContract.methods
       .subscribe(this.state.selectedSubscriptionToken, this.state.price)
       .send({ from: await window.getCoinbase() })
       .then(() => {
         this.setState({ loadspinnerSub: false, approveStatus: "success" });
-        this.props.onSubscribe()
-        window.location.href = 'https://app.dypius.com/account'
-
+        this.props.onSubscribe();
+        window.location.href = "https://app.dypius.com/account";
       })
       .catch((e) => {
         this.setState({ status: e?.message });
-        this.setState({ loadspinner: false, approveStatus: "fail", loadspinnerSub: false });
+        this.setState({
+          loadspinner: false,
+          approveStatus: "fail",
+          loadspinnerSub: false,
+        });
         setTimeout(() => {
           this.setState({
             status: "",
@@ -629,10 +636,10 @@ export default class Subscription extends React.Component {
     let subscriptionContract = await window.getContract({
       key:
         this.props.networkId === 1
-          ? "SUBSCRIPTIONETH"
+          ? "SUBSCRIPTION_NEWETH"
           : this.props.networkId === 56
-          ? "SUBSCRIPTIONBNB"
-          : "SUBSCRIPTION",
+          ? "SUBSCRIPTION_NEWBNB"
+          : "SUBSCRIPTION_NEWAVAX",
     });
     await subscriptionContract.methods
       .unsubscribe()
@@ -797,47 +804,45 @@ export default class Subscription extends React.Component {
       "Guaranteed allocation to presales of new projects launched using our Launchpad",
     ];
 
-   
+    const benefits = [
+      "DYP Tools administrative dashboard",
+      "Exclusive access to World of Dypians metaverse platform",
+      "Priority allocation to presales of new projects through Dypius Launchpad",
+      "Voting capabilities in the News section",
+      "Early access to upcoming features and updates",
+    ];
 
-  const benefits = [
-    'DYP Tools administrative dashboard',
-    'Exclusive access to World of Dypians metaverse platform',
-    'Priority allocation to presales of new projects through Dypius Launchpad',
-    'Voting capabilities in the News section',
-    'Early access to upcoming features and updates'
-  ]
+    const keyFeatures = [
+      {
+        icon: "chart",
+        content:
+          "Easy access to a range of tools and features, all in one convenient location.",
+      },
+      {
+        icon: "globe",
+        content:
+          "Access unique content and experiences only available in the WoD.",
+      },
+      {
+        icon: "coins",
+        content:
+          "Be among the first to find new projects before they hit the market.",
+      },
+      {
+        icon: "notes",
+        content: `Vote instantly for your preferred news articles in real-time.`,
+      },
+      {
+        icon: "eye",
+        content: `Get a sneak peek at what's coming next and plan ahead.`,
+      },
+    ];
 
-  const keyFeatures = [
-    {
-      icon: 'chart',
-      content: 'Easy access to a range of tools and features, all in one convenient location.'
-    },
-    {
-      icon: 'globe',
-      content: 'Access unique content and experiences only available in the WoD.'
-    },
-    {
-      icon: 'coins',
-      content: 'Be among the first to find new projects before they hit the market.'
-    },
-    {
-      icon: 'notes',
-      content: `Vote instantly for your preferred news articles in real-time.`
-    },
-    {
-      icon: 'eye',
-      content: `Get a sneak peek at what's coming next and plan ahead.`
-    },
-  
-  ]
-
-    return (
-      this.props.appState.isPremium ? 
-      <>
-      </>
-      :
+    return this.props.appState.isPremium ? (
+      <></>
+    ) : (
       <div style={{ minHeight: "65vh" }}>
-      {/* <div className="row mt-5 gap-4 gap-lg-0">
+        {/* <div className="row mt-5 gap-4 gap-lg-0">
         <div className="col-12 col-lg-6 position-relative d-flex justify-content-center">
           <div
             className={`purplediv`}
@@ -1050,131 +1055,147 @@ export default class Subscription extends React.Component {
           </div>
         </div>
       </div> */}
-      <div className="row mt-5">
-        <div className="d-flex flex-column">
-        <h6 className="plans-page-title">
-        Upgrade to Premium Membership and Unlock Exclusive Benefits Today!
-        </h6>
-        <p className="plans-page-desc mt-4">
-        The premium membership is designed to enhance your experience and provide you with outstanding value.
-        </p>
-        </div>
-        <div className="d-flex flex-column flex-lg-row align-items-center align-items-lg-end justify-content-center justify-content-lg-between all-plans-wrapper mt-4">
-          <div className="plans-benefits d-flex align-items-center p-3">
-            <ul className="d-flex flex-column gap-3">
-              {benefits.map((item, index) => (
-                <li key={index} className="d-flex align-items-center gap-2">
-                  <img src={greenCheck} className="green-check" alt="checkmark" />
-                  <span className="plans-benefit-title mb-0">{item}</span>
-                </li>
-              ))}
-            </ul>
+        <div className="row mt-5">
+          <div className="d-flex flex-column">
+            <h6 className="plans-page-title">
+              Upgrade to Premium Membership and Unlock Exclusive Benefits Today!
+            </h6>
+            <p className="plans-page-desc mt-4">
+              The premium membership is designed to enhance your experience and
+              provide you with outstanding value.
+            </p>
           </div>
-          <div className="premium-subscribe-wrapper p-3">
-            <div className="premium-gradient d-flex align-items-center justify-content-between p-3">
-              <div className="d-flex flex-column">
-                <span className="premium-span">
-                  Premium
-                </span>
-                <h6 className="premium-price">
-                $75
-                </h6>
-              </div>
-              <img src={premiumDypTag} alt="premium dyp" />
+          <div className="d-flex flex-column flex-lg-row align-items-center align-items-lg-end justify-content-center justify-content-lg-between all-plans-wrapper mt-4">
+            <div className="plans-benefits d-flex align-items-center p-3">
+              <ul className="d-flex flex-column gap-3">
+                {benefits.map((item, index) => (
+                  <li key={index} className="d-flex align-items-center gap-2">
+                    <img
+                      src={greenCheck}
+                      className="green-check"
+                      alt="checkmark"
+                    />
+                    <span className="plans-benefit-title mb-0">{item}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
-             <div className="d-flex flex-column" style={{position: 'relative', top: '-25px'}}>
-             <span className="lifetime-subscription">Lifetime subscription</span>
-              <span className="lifetime-desc">The subscription tokens will be used to buy DYP</span>
-             </div>
-              <div className="d-flex justify-content-end mt-0 mt-lg-3">
+            <div className="premium-subscribe-wrapper col-3 p-3">
+              <div className="premium-gradient d-flex align-items-center justify-content-between p-3">
+                <div className="d-flex flex-column">
+                  <span className="premium-span">Premium</span>
+                  <h6 className="premium-price">$100</h6>
+                </div>
+                <img src={premiumDypTag} alt="premium dyp" />
+              </div>
               <div
-                      className="btn filledbtn px-3 px-lg-5"
-                      style={{ whiteSpace: "pre" }}
-                      type=""
-                      onClick={() => {
-                        this.setState({
-                          subscribe_now: !this.state.subscribe_now,
-                        });
-                        this.props.networkId === 1
-                          ? this.handleSubscriptionTokenChange(
-                              this.state.wethAddress
-                            )
-                          : this.props.networkId === 56
-                          ? this.handleSubscriptionTokenChange(
-                              this.state.wbnbAddress
-                            )
-                          : this.handleSubscriptionTokenChange(
-                              this.state.wavaxAddress
-                            );
-                        this.handleCheckIfAlreadyApproved(
-                          this.props.networkId === 1
-                            ? this.state.wethAddress
-                            : this.props.networkId === 56
-                            ? this.state.wbnbAddress
-                            : this.state.wavaxAddress
+                className="d-flex flex-column"
+                style={{ position: "relative", top: "-25px" }}
+              >
+                <span className="lifetime-subscription text-center">
+                  Lifetime subscription
+                </span>
+                {/* <span className="lifetime-desc invisible">
+                  The subscription tokens will be used to buy DYP
+                </span> */}
+              </div>
+              <div className="d-flex justify-content-center mt-0 mt-lg-3">
+                <div
+                  className="btn filledbtn px-3 px-lg-5"
+                  style={{ whiteSpace: "pre" }}
+                  type=""
+                  onClick={() => {
+                    this.setState({
+                      subscribe_now: !this.state.subscribe_now,
+                    });
+                    this.props.networkId === 1
+                      ? this.handleSubscriptionTokenChange(
+                          this.state.wethAddress
+                        )
+                      : this.props.networkId === 56
+                      ? this.handleSubscriptionTokenChange(
+                          this.state.wbnbAddress
+                        )
+                      : this.handleSubscriptionTokenChange(
+                          this.state.wavaxAddress
                         );
-                        this.props.networkId === 1
-                          ? this.setState({
-                              dropdownIcon: "weth",
-                              dropdownTitle: "WETH",
-                            })
-                          : this.props.networkId === 56
-                          ? this.setState({
-                              dropdownIcon: "wbnb",
-                              dropdownTitle: "WBNB",
-                            })
-                          : this.setState({
-                              dropdownIcon: "wavax",
-                              dropdownTitle: "WAVAX",
-                            });
-                      }}
-                    >
-                      Subscribe now
-                    </div>
+                    this.handleCheckIfAlreadyApproved(
+                      this.props.networkId === 1
+                        ? this.state.wethAddress
+                        : this.props.networkId === 56
+                        ? this.state.wbnbAddress
+                        : this.state.wavaxAddress
+                    );
+                    this.props.networkId === 1
+                      ? this.setState({
+                          dropdownIcon: "weth",
+                          dropdownTitle: "WETH",
+                        })
+                      : this.props.networkId === 56
+                      ? this.setState({
+                          dropdownIcon: "wbnb",
+                          dropdownTitle: "WBNB",
+                        })
+                      : this.setState({
+                          dropdownIcon: "wavax",
+                          dropdownTitle: "WAVAX",
+                        });
+                  }}
+                >
+                  Subscribe now
+                </div>
               </div>
-          </div>
-          <div className="premium-dyp-wrapper">
-            <img src={premiumDypBanner} className="premium-dyp-banner" alt="" />
-          </div>
-          {/* <img src={premiumDyp} alt="premium dyp banner" className="premium-dyp-banner" /> */}
-        </div>
-        <div className="features-wrapper w-100 d-flex align-items-center justify-content-between my-5 flex-column flex-lg-row gap-3 gap-lg-0">
-   {keyFeatures.map((item) => (
-    <KeyFeaturesCard icon={item.icon} plansClass={'plans-feature'} content={item.content} /> 
-   ))}
-  </div>
-      </div>
-      
-      {this.state.subscribe_now === true ? (
-        <div
-          className="subscribe-wrapper row mt-4 justify-content-end"
-          id="subscribe"
-        >
-          <div className="subscribe-container p-3 position-relative">
-            <div
-              className="purplediv"
-              style={{ background: "#8E97CD" }}
-            ></div>
-            <div className="d-flex justify-content-between align-items-center">
-              <div className="d-flex align-items-center gap-2">
-                <img src={coinStackIcon} alt="coin stack" />
-                <h6 className="free-plan-title">Dypian Plan Subscription</h6>
-              </div>
+            </div>
+            <div className="premium-dyp-wrapper">
               <img
-                src={require(`./assets/clearFieldIcon.svg`).default}
-                height={28}
-                width={28}
-                className="cursor-pointer"
-                onClick={() => this.setState({ subscribe_now: false })}
-                alt="close subscription"
+                src={premiumDypBanner}
+                className="premium-dyp-banner"
+                alt=""
               />
             </div>
-            <div className="d-flex mt-4 align-items-end justify-content-between flex-column-reverse flex-lg-row w-100">
-              <div className="d-flex flex-column gap-3 subscribe-input-container">
-                <span className="token-amount-placeholder">
-                  Select Subscription Token
-                </span>
-                {/* <div
+            {/* <img src={premiumDyp} alt="premium dyp banner" className="premium-dyp-banner" /> */}
+          </div>
+          <div className="features-wrapper w-100 d-flex align-items-center justify-content-between my-5 flex-column flex-lg-row gap-3 gap-lg-0">
+            {keyFeatures.map((item) => (
+              <KeyFeaturesCard
+                icon={item.icon}
+                plansClass={"plans-feature"}
+                content={item.content}
+              />
+            ))}
+          </div>
+        </div>
+
+        {this.state.subscribe_now === true ? (
+          <div
+            className="subscribe-wrapper row mt-4 justify-content-end"
+            id="subscribe"
+          >
+            <div className="subscribe-container p-3 position-relative">
+              <div
+                className="purplediv"
+                style={{ background: "#8E97CD" }}
+              ></div>
+              <div className="d-flex justify-content-between align-items-center">
+                <div className="d-flex align-items-center gap-2">
+                  <img src={coinStackIcon} alt="coin stack" />
+                  <h6 className="free-plan-title">Dypian Plan Subscription</h6>
+                </div>
+                <img
+                  src={require(`./assets/clearFieldIcon.svg`).default}
+                  height={28}
+                  width={28}
+                  className="cursor-pointer"
+                  onClick={() => this.setState({ subscribe_now: false })}
+                  alt="close subscription"
+                />
+              </div>
+              <div className="d-flex mt-4 align-items-end justify-content-between flex-column-reverse flex-lg-row w-100">
+                <div className="d-flex flex-column gap-3 subscribe-input-container">
+                  <span className="token-amount-placeholder">
+                    Select Subscription Token
+                  </span>
+                  {/* <div
                     className="input-container px-0"
                     style={{ width: "100%" }}
                   >
@@ -1198,30 +1219,30 @@ export default class Subscription extends React.Component {
                       Subscription Token Amount
                     </label>
                   </div> */}
-                <div class="dropdown position relative">
-                  <button
-                    class={`btn launchpad-dropdown d-flex justify-content-between align-items-center dropdown-toggle w-100`}
-                    type="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    <div
-                      className="d-flex align-items-center gap-2"
-                      style={{ color: "#fff" }}
+                  <div class="dropdown position relative">
+                    <button
+                      class={`btn launchpad-dropdown d-flex justify-content-between align-items-center dropdown-toggle w-100`}
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
                     >
-                      <img
-                        src={
-                          require(`./assets/${this.state.dropdownIcon.toLowerCase()}Icon.svg`)
-                            .default
-                        }
-                        alt=""
-                      />
-                      {this.state.dropdownTitle}
-                    </div>
-                    <img src={launchpadIndicator} alt="" />
-                  </button>
-                  <ul class="dropdown-menu w-100">
-                    {/* <li className="dropdown-item launchpad-item d-flex align-items-center gap-2"
+                      <div
+                        className="d-flex align-items-center gap-2"
+                        style={{ color: "#fff" }}
+                      >
+                        <img
+                          src={
+                            require(`./assets/${this.state.dropdownIcon.toLowerCase()}Icon.svg`)
+                              .default
+                          }
+                          alt=""
+                        />
+                        {this.state.dropdownTitle}
+                      </div>
+                      <img src={launchpadIndicator} alt="" />
+                    </button>
+                    <ul class="dropdown-menu w-100">
+                      {/* <li className="dropdown-item launchpad-item d-flex align-items-center gap-2"
                     onClick={() => {
                       this.setState({dropdownTitle: 'WETH', dropdownIcon: 'wethIcon.svg'})
                     }}
@@ -1254,107 +1275,110 @@ export default class Subscription extends React.Component {
                       />
                       USDC
                     </li> */}
-                    {Object.keys(
-                      this.props.networkId === 1
-                        ? window.config.subscriptioneth_tokens
-                        : this.props.networkId === 56
-                        ? window.config.subscriptionbnb_tokens
-                        : window.config.subscription_tokens
-                    ).map((t, i) => (
-                      // <span className="radio-wrapper" key={t}>
-                      //   <input
-                      //     type="radio"
-                      //     value={t}
-                      //     name={"tokensymbol"}
-                      //     checked={
-                      //       t == this.state.selectedSubscriptionToken
-                      //     }
-                      //     disabled={!this.props.appState.isConnected}
-                      //     onChange={
-                      //       (e) => {
-                      //         this.handleSubscriptionTokenChange(
-                      //           e.target.value
-                      //         );
-                      //         this.handleCheckIfAlreadyApproved();
-                      //       console.log(e.target.value);
-
-                      //       }
-
-                      //     }
-                      //   />
-                      //   {this.props.networkId === 1
-                      //     ? window.config.subscriptioneth_tokens[t]?.symbol
-                      //     : window.config.subscription_tokens[t]?.symbol}
-                      // </span>
-                      <li
-                      key={i}
-                        className="dropdown-item launchpad-item d-flex align-items-center gap-2"
-                        onClick={() => {
-                          this.setState({
-                            dropdownTitle:
-                              this.props.networkId === 1
-                                ? window.config.subscriptioneth_tokens[t]
-                                    ?.symbol
-                                : this.props.networkId === 56
-                                ? window.config.subscriptionbnb_tokens[t]
-                                    ?.symbol
-                                : window.config.subscription_tokens[t]
-                                    ?.symbol,
-                            dropdownIcon:
-                              this.props.networkId === 1
-                                ? window.config.subscriptioneth_tokens[t]
-                                    ?.symbol
-                                : this.props.networkId === 56
-                                ? window.config.subscriptionbnb_tokens[t]
-                                    ?.symbol
-                                : window.config.subscription_tokens[t]
-                                    ?.symbol,
-                          });
-                          // console.log(t);
-                          this.handleSubscriptionTokenChange(t);
-                          this.handleCheckIfAlreadyApproved(t);
-                        }}
-                      >
-                        <img
-                          src={
-                            this.props.networkId === 1
-                              ? require(`./assets/${window.config.subscriptioneth_tokens[
-                                  t
-                                ]?.symbol.toLowerCase()}Icon.svg`).default
-                              : this.props.networkId === 56
-                              ? require(`./assets/${window.config.subscriptionbnb_tokens[
-                                  t
-                                ]?.symbol.toLowerCase()}Icon.svg`).default
-                              : require(`./assets/${window.config.subscription_tokens[
-                                  t
-                                ]?.symbol.toLowerCase()}Icon.svg`).default
-                          }
-                          alt=""
-                        />
-                        {this.props.networkId === 1
-                          ? window.config.subscriptioneth_tokens[t]?.symbol
+                      {Object.keys(
+                        this.props.networkId === 1
+                          ? window.config.subscriptioneth_tokens
                           : this.props.networkId === 56
-                          ? window.config.subscriptionbnb_tokens[t]?.symbol
-                          : window.config.subscription_tokens[t]?.symbol}
-                      </li>
-                    ))}
-                  </ul>
+                          ? window.config.subscriptionbnb_tokens
+                          : window.config.subscription_tokens
+                      ).map((t, i) => (
+                        // <span className="radio-wrapper" key={t}>
+                        //   <input
+                        //     type="radio"
+                        //     value={t}
+                        //     name={"tokensymbol"}
+                        //     checked={
+                        //       t == this.state.selectedSubscriptionToken
+                        //     }
+                        //     disabled={!this.props.appState.isConnected}
+                        //     onChange={
+                        //       (e) => {
+                        //         this.handleSubscriptionTokenChange(
+                        //           e.target.value
+                        //         );
+                        //         this.handleCheckIfAlreadyApproved();
+                        //       console.log(e.target.value);
+
+                        //       }
+
+                        //     }
+                        //   />
+                        //   {this.props.networkId === 1
+                        //     ? window.config.subscriptioneth_tokens[t]?.symbol
+                        //     : window.config.subscription_tokens[t]?.symbol}
+                        // </span>
+                        <li
+                          key={i}
+                          className="dropdown-item launchpad-item d-flex align-items-center gap-2"
+                          onClick={() => {
+                            window.cached_contracts = Object.create(null);
+                            setTimeout(() => {
+                              this.setState({
+                                dropdownTitle:
+                                  this.props.networkId === 1
+                                    ? window.config.subscriptioneth_tokens[t]
+                                        ?.symbol
+                                    : this.props.networkId === 56
+                                    ? window.config.subscriptionbnb_tokens[t]
+                                        ?.symbol
+                                    : window.config.subscription_tokens[t]
+                                        ?.symbol,
+                                dropdownIcon:
+                                  this.props.networkId === 1
+                                    ? window.config.subscriptioneth_tokens[t]
+                                        ?.symbol
+                                    : this.props.networkId === 56
+                                    ? window.config.subscriptionbnb_tokens[t]
+                                        ?.symbol
+                                    : window.config.subscription_tokens[t]
+                                        ?.symbol,
+                              });
+                              // console.log(t);
+                              this.handleSubscriptionTokenChange(t);
+                              this.handleCheckIfAlreadyApproved(t);
+                            }, 200);
+                          }}
+                        >
+                          <img
+                            src={
+                              this.props.networkId === 1
+                                ? require(`./assets/${window.config.subscriptioneth_tokens[
+                                    t
+                                  ]?.symbol.toLowerCase()}Icon.svg`).default
+                                : this.props.networkId === 56
+                                ? require(`./assets/${window.config.subscriptionbnb_tokens[
+                                    t
+                                  ]?.symbol.toLowerCase()}Icon.svg`).default
+                                : require(`./assets/${window.config.subscription_tokens[
+                                    t
+                                  ]?.symbol.toLowerCase()}Icon.svg`).default
+                            }
+                            alt=""
+                          />
+                          {this.props.networkId === 1
+                            ? window.config.subscriptioneth_tokens[t]?.symbol
+                            : this.props.networkId === 56
+                            ? window.config.subscriptionbnb_tokens[t]?.symbol
+                            : window.config.subscription_tokens[t]?.symbol}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+                <div className="d-flex flex-column align-items-end justify-content-lg-end">
+                  <span className="token-balance-placeholder">
+                    Token Balance
+                  </span>
+                  <h6 className="account-token-amount">
+                    {" "}
+                    {getFormattedNumber(
+                      this.state.tokenBalance / 10 ** tokenDecimals,
+                      6
+                    )}
+                  </h6>
                 </div>
               </div>
-              <div className="d-flex flex-column align-items-end justify-content-lg-end">
-                <span className="token-balance-placeholder">
-                  Token Balance
-                </span>
-                <h6 className="account-token-amount">
-                  {" "}
-                  {getFormattedNumber(
-                    this.state.tokenBalance / 10 ** tokenDecimals,
-                    6
-                  )}
-                </h6>
-              </div>
-            </div>
-            <div
+              <div
                 className="subscription-token-wrapper  p-2 d-flex align-items-center justify-content-between  mt-3"
                 style={{ width: "100%" }}
               >
@@ -1377,56 +1401,72 @@ export default class Subscription extends React.Component {
                   />
                 </div>
               </div>
-            <hr className="form-divider my-4" />
-            <div className={`d-flex align-items-center ${!this.props.coinbase ? 'justify-content-between' : 'justify-content-end'}`}>
-            {!this.props.coinbase  &&
-              <span style={{color: 'rgb(227, 6 ,19)'}}>Please connect your wallet first</span>
-              }
-              <div className="d-flex flex-column gap-2 justify-content-end align-items-center">
-                <button
-                  className={"btn success-btn px-4 align-self-end"}
-                  disabled={this.state.approveStatus === "fail"  || !this.props.coinbase ? true : false}
-                  style={{
-                    background:
-                      this.state.approveStatus === "fail"
-                        ? "linear-gradient(90.74deg, #f8845b 0%, #f0603a 100%)"
-                        : "linear-gradient(90.74deg, #75CAC2 0%, #57B6AB 100%)",
-                  }}
-                  onClick={(e) =>
-                    this.state.isApproved === false
-                      ? this.handleApprove(e)
-                      : this.handleSubscribe()
-                  }
-                >
-                  {this.state.isApproved === true &&
-                  this.state.loadspinner === false && this.state.loadspinnerSub === false &&
-                  (this.state.approveStatus === "deposit" || this.state.approveStatus === "initial") ? (
-                    "Subscribe"
-                  ) : this.state.isApproved === false &&
+              <hr className="form-divider my-4" />
+              <div
+                className={`d-flex align-items-center ${
+                  !this.props.coinbase
+                    ? "justify-content-between"
+                    : "justify-content-end"
+                }`}
+              >
+                {!this.props.coinbase && (
+                  <span style={{ color: "rgb(227, 6 ,19)" }}>
+                    Please connect your wallet first
+                  </span>
+                )}
+                <div className="d-flex flex-column gap-2 justify-content-end align-items-center">
+                  <button
+                    className={"btn success-btn px-4 align-self-end"}
+                    disabled={
+                      this.state.approveStatus === "fail" ||
+                      !this.props.coinbase
+                        ? true
+                        : false
+                    }
+                    style={{
+                      background:
+                        this.state.approveStatus === "fail"
+                          ? "linear-gradient(90.74deg, #f8845b 0%, #f0603a 100%)"
+                          : "linear-gradient(90.74deg, #75CAC2 0%, #57B6AB 100%)",
+                    }}
+                    onClick={(e) =>
+                      this.state.isApproved === false
+                        ? this.handleApprove(e)
+                        : this.handleSubscribe()
+                    }
+                  >
+                    {this.state.isApproved === true &&
                     this.state.loadspinner === false &&
-                    this.state.approveStatus === "initial" && this.state.loadspinnerSub === false ? (
-                    "Approve"
-                  ) : this.state.loadspinner === false &&
-                    this.state.approveStatus === "fail" && this.state.loadspinnerSub === false ? (
-                    "Failed"
-                  ) : (
-                    <div
-                      className="spinner-border "
-                      role="status"
-                      style={{ height: "1.5rem", width: "1.5rem" }}
-                    ></div>
-                  )}
-                </button>
-                <span style={{ color: "#E30613" }}>{this.state.status}</span>
+                    this.state.loadspinnerSub === false &&
+                    (this.state.approveStatus === "deposit" ||
+                      this.state.approveStatus === "initial") ? (
+                      "Subscribe"
+                    ) : this.state.isApproved === false &&
+                      this.state.loadspinner === false &&
+                      this.state.approveStatus === "initial" &&
+                      this.state.loadspinnerSub === false ? (
+                      "Approve"
+                    ) : this.state.loadspinner === false &&
+                      this.state.approveStatus === "fail" &&
+                      this.state.loadspinnerSub === false ? (
+                      "Failed"
+                    ) : (
+                      <div
+                        className="spinner-border "
+                        role="status"
+                        style={{ height: "1.5rem", width: "1.5rem" }}
+                      ></div>
+                    )}
+                  </button>
+                  <span style={{ color: "#E30613" }}>{this.state.status}</span>
+                </div>
               </div>
             </div>
-            
           </div>
-        </div>
-      ) : (
-        <></>
-      )}
-      {/* <form onSubmit={this.handleSubscribe}>     
+        ) : (
+          <></>
+        )}
+        {/* <form onSubmit={this.handleSubscribe}>     
         <div>
           {!this.props.isPremium ? (
             <table className="w-100">
@@ -1761,7 +1801,7 @@ export default class Subscription extends React.Component {
         )}
       </form> */}
 
-      {/* <h4 className="d-block mb-5 mt-5" id="my-fav">
+        {/* <h4 className="d-block mb-5 mt-5" id="my-fav">
         My favourite pairs
       </h4>
       <div className="row p-0 m-0 favorites-grid">
@@ -1954,7 +1994,7 @@ export default class Subscription extends React.Component {
           );
         })}
       </div> */}
-    </div>
+      </div>
     );
   };
 

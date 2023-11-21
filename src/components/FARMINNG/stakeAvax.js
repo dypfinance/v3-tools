@@ -250,7 +250,7 @@ const StakeAvax = ({
         stakingTime,
         depositedTokens,
         lastClaimedTime,
-        tvl,
+        tvl2,
         referralFeeEarned,
         total_stakers,
         tvlConstantDAI,
@@ -303,7 +303,8 @@ settvlUSD(tvlUSD)
       setdepositedTokens(depositedTokens_formatted);
 
     setlastClaimedTime(lastClaimedTime);
-    let tvl_formatted =  new BigNumber(tvl).div(1e18)
+    let tvl_formatted =  new BigNumber(tvl2).div(1e18).toString(10)
+  
     settvl(tvl_formatted)
 
     setreferralFeeEarned(referralFeeEarned);
@@ -659,9 +660,9 @@ settvlUSD(tvlUSD)
  
   //let tvl_usd = this.state.tvl / 1e18 * this.state.usdPerToken
   let tvl_usd =  tvlUSD / 1e18;
-  const first = getFormattedNumber(tvl,6).replace(',','')
-  const finalTvlUsd = Number(first) * usdPerToken
-
+ 
+  const finalTvlUsd = Number(tvl) * usdPerToken
+ 
   // let tvlDYPS2 = tvlDyps / 1e18;
   // tvl_usd = tvl_usd + tvlDYPS2;
   
@@ -689,10 +690,10 @@ settvlUSD(tvlUSD)
 
   const getUsdPerDyp = async () => {
     await axios
-      .get("https://api.dyp.finance/api/the_graph_eth_v2")
+      .get("https://api.dyp.finance/api/the_graph_avax_v2")
       .then((data) => {
         const propertyiDyp = Object.entries(
-          data.data.the_graph_eth_v2.token_data
+          data.data.the_graph_avax_v2.token_data
         );
         settokendata(propertyiDyp[0][1].token_price_usd);
         return propertyiDyp[0][1].token_price_usd;
@@ -955,27 +956,36 @@ settvlUSD(tvlUSD)
 
                   <button
                     disabled={
-                      depositAmount === "" ||
-                      depositLoading === true ||
-                      depositStatus === "success"
+                      depositAmount === "" || depositLoading === true ||
+                      depositStatus === "success" ||
+                      staking?._address.toLowerCase() ===
+                        "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712".toLowerCase()
                         ? true
                         : false
                     }
                     className={`btn filledbtn ${
-                      depositAmount === "" &&
-                      depositStatus === "initial" &&
+                      ((depositAmount === "" && depositStatus === "initial") ||
+                      staking?._address.toLowerCase() ===
+                        "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712".toLowerCase()) &&
                       "disabled-btn"
                     } ${
-                      depositStatus === "deposit" || depositStatus === "success"
+                      (depositStatus === "deposit" ||
+                        depositStatus === "success") &&
+                      staking?._address.toLowerCase() !==
+                        "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712".toLowerCase()
                         ? "success-button"
                         : depositStatus === "fail"
                         ? "fail-button"
                         : null
                     } d-flex justify-content-center align-items-center gap-2`}
                     onClick={() => {
-                      depositStatus === "deposit"
+                      depositStatus === "deposit" &&
+                      staking?._address.toLowerCase() !==
+                        "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712".toLowerCase()
                         ? handleStake()
-                        : depositStatus === "initial" && depositAmount !== ""
+                        : depositStatus === "initial" &&  depositAmount !== "" &&
+                        staking?._address.toLowerCase() !==
+                          "0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712".toLowerCase()
                         ? handleApprove()
                         : console.log("");
                     }}
@@ -1049,46 +1059,50 @@ settvlUSD(tvlUSD)
                   <span>{pendingDivs}</span>
                 </div>
                 <div className="claim-reinvest-container d-flex justify-content-between align-items-center gap-3">
-                  <button
-                    disabled={
-                      claimStatus === "claimed" ||
-                      claimStatus === "success" ||
-                      pendingDivs <= 0
-                        ? true
-                        : false
-                    }
-                    className={`btn filledbtn ${
-                      (claimStatus === "claimed" &&
-                        claimStatus === "initial") ||
-                      pendingDivs <= 0
-                        ? "disabled-btn"
-                        : claimStatus === "failed"
-                        ? "fail-button"
-                        : claimStatus === "success"
-                        ? "success-button"
-                        : null
-                    } d-flex justify-content-center align-items-center gap-2`}
-                    style={{ height: "fit-content" }}
-                    onClick={handleClaimDivs}
-                  >
-                    {claimLoading ? (
-                      <div
-                        class="spinner-border spinner-border-sm text-light"
-                        role="status"
-                      >
-                        <span class="visually-hidden">Loading...</span>
-                      </div>
-                    ) : claimStatus === "failed" ? (
-                      <>
-                        <img src={failMark} alt="" />
-                        Failed
-                      </>
-                    ) : claimStatus === "success" ? (
-                      <>Success</>
-                    ) : (
-                      <>Claim</>
-                    )}
-                  </button>
+                <button
+                      disabled={
+                        claimStatus === "claimed" || claimStatus === "success" || pendingDivs <= 0
+                          ? //
+                            true
+                          : false
+                      }
+                      className={`btn filledbtn ${
+                        claimStatus === "claimed" && claimStatus === "initial" ||  pendingDivs <= 0
+                          ? //
+                            "disabled-btn"
+                          : claimStatus === "failed"
+                          ? "fail-button"
+                          : claimStatus === "success"
+                          ? "success-button"
+                          : null
+                      } d-flex justify-content-center align-items-center gap-2`}
+                      style={{ height: "fit-content" }}
+                      // onClick={handleClaimDivs}
+                      onClick={() => {
+                        staking._address === '0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712' ? 
+                        window.$.alert(
+                          "*The rewards earned from the day of the migration until the end of the lock time will be distributed to the users automatically at the end of the contract."
+                        ) : handleClaimDivs()
+                      }}
+                    >
+                      {claimLoading ? (
+                        <div
+                          class="spinner-border spinner-border-sm text-light"
+                          role="status"
+                        >
+                          <span class="visually-hidden">Loading...</span>
+                        </div>
+                      ) : claimStatus === "failed" ? (
+                        <>
+                          <img src={failMark} alt="" />
+                          Failed
+                        </>
+                      ) : claimStatus === "success" ? (
+                        <>Success</>
+                      ) : (
+                        <>Claim</>
+                      )}
+                    </button>
                   {expired === false && (
                     <button
                       disabled={pendingDivs > 0 ? false : true}
@@ -1210,7 +1224,7 @@ settvlUSD(tvlUSD)
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">TVL USD</span>
-                    <h6 className="stats-card-content">${getFormattedNumber(finalTvlUsd,4) } USD</h6>
+                    <h6 className="stats-card-content">${getFormattedNumber(Number(tvl) * usdPerToken,4) } USD</h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">
@@ -1553,7 +1567,7 @@ settvlUSD(tvlUSD)
             </div>
             <div className="d-flex flex-column gap-2 mt-4">
               <h3 style={{ fontWeight: "500", fontSize: "39px" }}>
-                $ {getFormattedNumber(getApproxReturn() * tokendata, 6)} USD
+                $ {getFormattedNumber(getApproxReturn() * tokendata, 3)} USD
               </h3>
               <h6
                 style={{

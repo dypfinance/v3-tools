@@ -490,9 +490,9 @@ const StakeBscIDyp = ({
   };
 
   const handleEthPool = async () => {
-    await handleSwitchNetworkhook("0x1")
+    await handleSwitchNetworkhook("0x38")
       .then(() => {
-        handleSwitchNetwork("1");
+        handleSwitchNetwork("56");
       })
       .catch((e) => {
         console.log(e);
@@ -636,10 +636,10 @@ const StakeBscIDyp = ({
 
   const getUsdPerDyp = async () => {
     await axios
-      .get("https://api.dyp.finance/api/the_graph_eth_v2")
+      .get("https://api.dyp.finance/api/the_graph_bsc_v2")
       .then((data) => {
         const propertyiDyp = Object.entries(
-          data.data.the_graph_eth_v2.token_data
+          data.data.the_graph_bsc_v2.token_data
         );
         settokendata(propertyiDyp[1][1].token_price_usd);
         return propertyiDyp[1][1].token_price_usd;
@@ -989,46 +989,46 @@ const StakeBscIDyp = ({
                   <span>{pendingDivs}</span>
                 </div>
                 <div className="claim-reinvest-container d-flex justify-content-between align-items-center gap-3">
-                  <button
-                    disabled={
-                      claimStatus === "claimed" ||
-                      claimStatus === "success" ||
-                      pendingDivs <= 0
-                        ? true
-                        : false
-                    }
-                    className={`btn filledbtn ${
-                      (claimStatus === "claimed" &&
-                        claimStatus === "initial") ||
-                      pendingDivs <= 0
-                        ? "disabled-btn"
-                        : claimStatus === "failed"
-                        ? "fail-button"
-                        : claimStatus === "success"
-                        ? "success-button"
-                        : null
-                    } d-flex justify-content-center align-items-center gap-2`}
-                    style={{ height: "fit-content" }}
-                    onClick={handleClaimDivs}
-                  >
-                    {claimLoading ? (
-                      <div
-                        class="spinner-border spinner-border-sm text-light"
-                        role="status"
-                      >
-                        <span class="visually-hidden">Loading...</span>
-                      </div>
-                    ) : claimStatus === "failed" ? (
-                      <>
-                        <img src={failMark} alt="" />
-                        Failed
-                      </>
-                    ) : claimStatus === "success" ? (
-                      <>Success</>
-                    ) : (
-                      <>Claim</>
-                    )}
-                  </button>
+                <button
+                      disabled={
+                        claimStatus === "claimed" || claimStatus === "success" || pendingDivs <= 0
+                          ? //
+                            true
+                          : false
+                      }
+                      className={`btn filledbtn ${
+                        claimStatus === "claimed" && claimStatus === "initial" ||  pendingDivs <= 0
+                          ? //
+                            "disabled-btn"
+                          : claimStatus === "failed"
+                          ? "fail-button"
+                          : claimStatus === "success"
+                          ? "success-button"
+                          : null
+                      } d-flex justify-content-center align-items-center gap-2`}
+                      style={{ height: "fit-content" }}
+                      // onClick={handleClaimDivs}
+                      onClick={() => { handleClaimDivs()
+                      }}
+                    >
+                      {claimLoading ? (
+                        <div
+                          class="spinner-border spinner-border-sm text-light"
+                          role="status"
+                        >
+                          <span class="visually-hidden">Loading...</span>
+                        </div>
+                      ) : claimStatus === "failed" ? (
+                        <>
+                          <img src={failMark} alt="" />
+                          Failed
+                        </>
+                      ) : claimStatus === "success" ? (
+                        <>Success</>
+                      ) : (
+                        <>Claim</>
+                      )}
+                    </button>
                   {expired === false && (
                     <button
                       disabled={pendingDivs > 0 ? false : true}
@@ -1499,7 +1499,7 @@ const StakeBscIDyp = ({
             </div>
             <div className="d-flex flex-column gap-2 mt-4">
               <h3 style={{ fontWeight: "500", fontSize: "39px" }}>
-                $ {getFormattedNumber(getApproxReturn() * tokendata, 6)} USD
+                $ {getFormattedNumber(getApproxReturn() * tokendata, 3)} USD
               </h3>
               <h6
                 style={{

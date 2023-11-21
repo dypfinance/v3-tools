@@ -1202,17 +1202,27 @@ const StakeEthDai = ({
                 /> */}
                   </div>
                   <div className="claim-reinvest-container d-flex justify-content-between align-items-center gap-3">
-                    <button
+                  <button
                       disabled={
-                        claimStatus === "claimed" ||
-                        claimStatus === "success" ||
-                        pendingDivs <= 0
-                          ? true
+                        claimStatus === "claimed" || claimStatus === "success" || pendingDivs <= 0
+                          ? //
+                            true
                           : false
                       }
-                      className={`btn disabled-btn`}
+                      className={`btn filledbtn ${
+                        claimStatus === "claimed" && claimStatus === "initial" ||  pendingDivs <= 0
+                          ? //
+                            "disabled-btn"
+                          : claimStatus === "failed"
+                          ? "fail-button"
+                          : claimStatus === "success"
+                          ? "success-button"
+                          : null
+                      } d-flex justify-content-center align-items-center gap-2`}
                       style={{ height: "fit-content" }}
-                      onClick={handleClaimDivs}
+                      // onClick={handleClaimDivs}
+                      onClick={() => {handleClaimDivs()
+                      }}
                     >
                       {claimLoading ? (
                         <div

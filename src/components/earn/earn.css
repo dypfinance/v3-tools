@@ -260,7 +260,7 @@ hr {
   letter-spacing: -0.018em !important;
   color: #f0f0f5 !important;
   padding: 10px;
-  background: #1e1c40;
+  /* background: #1e1c40; */
   border: 1px solid #565891;
   border-top: none;
 }

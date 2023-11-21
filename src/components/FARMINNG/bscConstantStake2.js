@@ -199,8 +199,6 @@ const StakeBsc2 = ({
     setpopup(false);
   };
 
-
-
   const getTotalTvl = async () => {
     if (the_graph_result) {
       let usd_per_token = the_graph_result.token_data
@@ -345,8 +343,10 @@ const StakeBsc2 = ({
         let tvlDyps = new BigNumber(tvlDYPS).times(usd_per_dyps).toFixed(18);
         setsettvlDyps(tvlDyps);
 
-        let balance_formatted = new BigNumber(token_balance ).div(1e18).toString(10)
-     settoken_balance(balance_formatted) ;
+        let balance_formatted = new BigNumber(token_balance)
+          .div(1e18)
+          .toString(10);
+        settoken_balance(balance_formatted);
 
         let divs_formatted = new BigNumber(pendingDivs).div(1e18).toFixed(6);
         setpendingDivs(divs_formatted);
@@ -358,7 +358,9 @@ const StakeBsc2 = ({
 
         setstakingTime(stakingTime);
 
-        let depositedTokens_formatted = new BigNumber(depositedTokens).div(1e18).toString(10)
+        let depositedTokens_formatted = new BigNumber(depositedTokens)
+          .div(1e18)
+          .toString(10);
 
         setdepositedTokens(depositedTokens_formatted);
 
@@ -407,14 +409,12 @@ const StakeBsc2 = ({
     refreshBalance();
     if (depositAmount !== "") {
       checkApproval(depositAmount);
-
     }
   }, [coinbase, coinbase2, staking]);
 
   useEffect(() => {
-      setdepositAmount('');
-      setdepositStatus('initial')
-
+    setdepositAmount("");
+    setdepositStatus("initial");
   }, [staking]);
 
   const handleApprove = (e) => {
@@ -524,7 +524,7 @@ const StakeBsc2 = ({
     //   e.preventDefault();
     setwithdrawLoading(true);
 
-    let amount = new BigNumber(withdrawAmount).times(1e18).toFixed(0)
+    let amount = new BigNumber(withdrawAmount).times(1e18).toFixed(0);
 
     let deadline = Math.floor(
       Date.now() / 1e3 + window.config.tx_max_wait_seconds
@@ -628,11 +628,13 @@ const StakeBsc2 = ({
   const handleSetMaxWithdraw = async (e) => {
     // e.preventDefault();
     let amount;
-    await staking.depositedTokens(coinbase).then((data)=>{
-      amount = data
-    })
+    await staking.depositedTokens(coinbase).then((data) => {
+      amount = data;
+    });
 
-    let depositedTokens_formatted = new BigNumber(amount).div(1e18).toString(10)
+    let depositedTokens_formatted = new BigNumber(amount)
+      .div(1e18)
+      .toString(10);
     setwithdrawAmount(depositedTokens_formatted);
   };
 
@@ -796,7 +798,7 @@ const StakeBsc2 = ({
     }
     if (!isNaN(cliffTime) && !isNaN(stakingTime)) {
       if (
-        (Number(stakingTime) + Number(cliffTime) >= Date.now()/1000) &&
+        Number(stakingTime) + Number(cliffTime) >= Date.now() / 1000 &&
         lockTime !== "No Lock"
       ) {
         setcanwithdraw(false);
@@ -815,7 +817,6 @@ const StakeBsc2 = ({
   const focusInput = (field) => {
     document.getElementById(field).focus();
   };
-
   const checkApproval = async (amount) => {
     const result = await window
       .checkapproveStakePool(coinbase, reward_token._address, staking._address)
@@ -838,10 +839,10 @@ const StakeBsc2 = ({
 
   const getUsdPerDyp = async () => {
     await axios
-      .get("https://api.dyp.finance/api/the_graph_eth_v2")
+      .get("https://api.dyp.finance/api/the_graph_bsc_v2")
       .then((data) => {
         const propertyDyp = Object.entries(
-          data.data.the_graph_eth_v2.token_data
+          data.data.the_graph_bsc_v2.token_data
         );
         settokendata(propertyDyp[0][1].token_price_usd);
         return propertyDyp[0][1].token_price_usd;
@@ -1074,7 +1075,9 @@ const StakeBsc2 = ({
                   <h6 className="mybalance-text">
                     Balance:
                     <b>
-                      {token_balance !== "..." ? getFormattedNumber(token_balance, 6) : "..."}{" "}
+                      {token_balance !== "..."
+                        ? getFormattedNumber(token_balance, 6)
+                        : "..."}{" "}
                       {token_symbol}
                     </b>
                   </h6>
@@ -1290,17 +1293,15 @@ const StakeBsc2 = ({
                   <div className="claim-reinvest-container d-flex justify-content-between align-items-center gap-3">
                     <button
                       disabled={
-                        claimStatus === "claimed" ||
-                        claimStatus === "success" ||
-                        pendingDivs <= 0
-                          ? true
+                        claimStatus === "claimed" || claimStatus === "success" || pendingDivs <= 0
+                          ? //
+                            true
                           : false
                       }
                       className={`btn filledbtn ${
-                        (claimStatus === "claimed" &&
-                          claimStatus === "initial") ||
-                        pendingDivs <= 0
-                          ? "disabled-btn"
+                        claimStatus === "claimed" && claimStatus === "initial"||  pendingDivs <= 0
+                          ? // 
+                            "disabled-btn"
                           : claimStatus === "failed"
                           ? "fail-button"
                           : claimStatus === "success"
@@ -1308,7 +1309,9 @@ const StakeBsc2 = ({
                           : null
                       } d-flex justify-content-center align-items-center gap-2`}
                       style={{ height: "fit-content" }}
-                      onClick={handleClaimDivs}
+                      // onClick={handleClaimDivs}
+                      onClick={() => {handleClaimDivs()
+                      }}
                     >
                       {claimLoading ? (
                         <div
@@ -1496,12 +1499,14 @@ const StakeBsc2 = ({
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">My DYP Deposit</span>
                     <h6 className="stats-card-content">
-                      {getFormattedNumber(depositedTokens,6)} DYP
+                      {getFormattedNumber(depositedTokens, 6)} DYP
                     </h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">My DYP Balance</span>
-                    <h6 className="stats-card-content">{getFormattedNumber(token_balance,6) } DYP</h6>
+                    <h6 className="stats-card-content">
+                      {getFormattedNumber(token_balance, 6)} DYP
+                    </h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">
@@ -1513,7 +1518,9 @@ const StakeBsc2 = ({
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">Total DYP Locked</span>
-                    <h6 className="stats-card-content">{getFormattedNumber(tvl,6) } DYP</h6>
+                    <h6 className="stats-card-content">
+                      {getFormattedNumber(tvl, 6)} DYP
+                    </h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">TVL USD</span>
@@ -1688,9 +1695,9 @@ const StakeBsc2 = ({
                           "No Lock"
                         ) : (
                           <Countdown
-                          date={
-                            (Number(stakingTime) + Number(cliffTime)) * 1000
-                          }
+                            date={
+                              (Number(stakingTime) + Number(cliffTime)) * 1000
+                            }
                             renderer={renderer}
                             onComplete={() => {
                               setcanwithdraw(true);
@@ -1706,7 +1713,7 @@ const StakeBsc2 = ({
                     <div className="d-flex flex-column gap-1">
                       <h6 className="withsubtitle">Balance</h6>
                       <h6 className="withtitle">
-                      {getFormattedNumber(depositedTokens,6)} {token_symbol}
+                        {getFormattedNumber(depositedTokens, 6)} {token_symbol}
                       </h6>
                     </div>
                   </div>
@@ -1858,7 +1865,10 @@ const StakeBsc2 = ({
         <WalletModal
           show={show}
           handleClose={hideModal}
-          handleConnection={()=>{handleConnection(); setshow(false)}}
+          handleConnection={() => {
+            handleConnection();
+            setshow(false);
+          }}
         />
       )}
       {/* <div
@@ -1938,7 +1948,7 @@ Calculator
             </div>
             <div className="d-flex flex-column gap-2 mt-4">
               <h3 style={{ fontWeight: "500", fontSize: "39px" }}>
-                $ {getFormattedNumber(getApproxReturn() * tokendata, 6)} USD
+                $ {getFormattedNumber(getApproxReturn() * tokendata, 3)} USD
               </h3>
               <h6
                 style={{

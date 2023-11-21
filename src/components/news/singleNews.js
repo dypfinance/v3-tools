@@ -29,13 +29,13 @@ const SingleNews = ({
   coinbase,
   bal1,
   bal2,
-  bal3,
+  bal3, bal4, bal5, bal6,
   votes
 }) => {
   const [likeIndicator, setLikeIndicator] = useState(false);
   const [dislikeIndicator, setDislikeIndicator] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
-  const [alreadyVoted, setalreadyVoted] = useState(true);
+  const [alreadyVoted, setalreadyVoted] = useState(false);
   const [canVote, setCanVote] = useState(false);
   const [upvote, setUpvote] = useState(upvotes);
   const [downvote, setDownvote] = useState(downvotes);
@@ -44,33 +44,82 @@ const SingleNews = ({
   const logout = localStorage.getItem("logout");
 
   useEffect(() => {
-    if (bal1 === '0' && bal2 === '0' && bal3 === '0' && isPremium === true) {
-      setCanVote(true);
-    } else if (bal1 !== '0' && bal2 !== '0' && bal3 !== '0' && isPremium === true) {
+    if (
+      bal1 === "0" &&
+      bal2 === "0" &&
+      bal3 === "0" &&
+      bal4 === "0" &&
+      bal5 === "0" &&
+      bal6 === "0" &&
+      isPremium === true
+    ) {
       setCanVote(true);
     } else if (
-      (bal1 !== '0' || bal2 !== '0' || bal3 !== '0') &&
+      bal1 !== "0" &&
+      bal2 !== "0" &&
+      bal3 !== "0" &&
+      bal4 !== "0" &&
+      bal5 !== "0" &&
+      bal6 !== "0" &&
+      isPremium === true
+    ) {
+      setCanVote(true);
+    } else if (
+      (bal1 !== "0" ||
+        bal2 !== "0" ||
+        bal3 !== "0" ||
+        bal4 !== "0" ||
+        bal5 !== "0" ||
+        bal6 !== "0") &&
       isPremium === false
     ) {
       setCanVote(true);
-    } else if (bal1 === '0' && bal2 === '0' && bal3 === '0' && isPremium === false) {
+    } else if (
+      bal1 === "0" &&
+      bal2 === "0" &&
+      bal3 !== "0" &&
+      isPremium === false
+    ) {
       setCanVote(false);
     } else if (logout === "true") {
       setCanVote(false);
     }
-  }, [alreadyVoted, bal1, bal2, bal3, isPremium, logout, coinbase]);
+  }, [
+    alreadyVoted,
+    bal1,
+    bal2,
+    bal3,
+    bal4,
+    bal5,
+    bal6,
+    isPremium,
+    logout,
+    coinbase,
+  ]);
 
   const handleLikeStates = () => {
     if (
       logout === "false" &&
-      (bal1 !== '0' || bal2 !== '0'  || bal3 !== '0' || isPremium !== false)
+      (bal1 !== "0" ||
+    bal2 !== "0" ||
+    bal3 !== "0" ||
+    bal4 !== "0" ||
+    bal5 !== "0" ||
+    bal6 !== "0" ||
+    isPremium !== false)
     ) {
       checkUpVoting(newsId);
     } else {
       setShowTooltip(true);
     }
     if (
-      (bal1 === '0' && bal2 === '0'  && bal3 === '0' && isPremium === false) ||
+      (bal1 === "0" &&
+        bal2 === "0" &&
+        bal3 === "0" &&
+        bal4 === "0" &&
+        bal5 === "0" &&
+        bal6 === "0" &&
+        isPremium === false)  ||
       logout === "true" ||
       alreadyVoted === false
     ) {
@@ -92,14 +141,26 @@ const SingleNews = ({
   const handleDisLikeStates = () => {
     if (
       logout === "false" &&
-      (bal1 !== '0' || bal2 !== '0' || bal3 !== '0' || isPremium !== false)
+      (bal1 !== "0" ||
+    bal2 !== "0" ||
+    bal3 !== "0" ||
+    bal4 !== "0" ||
+    bal5 !== "0" ||
+    bal6 !== "0" ||
+    isPremium !== false)
     ) {
       checkDownVoting(newsId);
     } else {
       setShowTooltip(true);
     }
     if (
-      (bal1 === '0' && bal2 === '0' && bal3 === '0' && isPremium === false) ||
+      (bal1 === "0" &&
+      bal2 === "0" &&
+      bal3 === "0" &&
+      bal4 === "0" &&
+      bal5 === "0" &&
+      bal6 === "0" &&
+      isPremium === false) ||
       logout === "true" ||
       alreadyVoted === false
     ) {
@@ -126,7 +187,7 @@ const SingleNews = ({
       )
       .then((data) => {
         if (data.data.status === "success") {
-          // onVotesFetch()
+          setalreadyVoted(true)
           setUpvote(upvote + 1);
         } else {
           setalreadyVoted(false);
@@ -144,7 +205,7 @@ const SingleNews = ({
       )
       .then((data) => {
         if (data.data.status === "success") {
-          // onVotesFetch()
+          setalreadyVoted(true)
           setDownvote(downvote + 1);
         } else {
           setalreadyVoted(false);
@@ -303,7 +364,7 @@ const SingleNews = ({
                   <ToolTip
                     status={
                       logout === "false" && canVote === false
-                        ? "You need to be holding DYP to vote"
+                        ? "You need to be holding DYPv1 or DYPv2 to vote"
                         : logout === "true"
                         ? "Please connect your wallet"
                         : alreadyVoted === true && canVote === true
