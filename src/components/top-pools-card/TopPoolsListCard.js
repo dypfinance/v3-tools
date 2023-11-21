@@ -905,7 +905,7 @@ const TopPoolsListCard = ({
               liquidity={eth_address}
               expiration_time={"11 January 2024"}
               finalApr={expiredPools[cardIndex - 1]?.apy_performancefee}
-              fee_s={0}
+              fee={0}
               lockTime={
                 expiredPools[cardIndex - 1]?.lock_time?.split(" ")[0] === "No"
                   ? "No Lock"

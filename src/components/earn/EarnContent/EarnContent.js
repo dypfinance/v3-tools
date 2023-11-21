@@ -261,7 +261,7 @@ const EarnContent = ({
       if(ethRestult && ethRestult.status === 200 && ethRestult2 && ethRestult2.status === 200) {
         const ethv1Tvl = ethRestult.data.totalTVL_ETH;
 
-        const ethv2Tvl = ethRestult2.data.stakingInfoDYPEth[0].tvl_usd/1e18
+        const ethv2Tvl = ethRestult2.data.stakingInfoDYPEth[0].tvl_usd
      
       
         setTvl(ethv1Tvl+ethv2Tvl)
@@ -281,7 +281,7 @@ const EarnContent = ({
 
       if(bnbResult && bnbResult.status===200 && bnbResult2 && bnbResult2.status===200) {
         const bnbTvl1= bnbResult.data.totalTVL_BNB;
-        const bnbTvl2 = bnbResult2.data.stakingInfoDYPBnb[0].tvl_usd/1e18
+        const bnbTvl2 = bnbResult2.data.stakingInfoDYPBnb[0].tvl_usd
         setTvl(bnbTvl1+bnbTvl2)
 
       }
@@ -300,7 +300,7 @@ const EarnContent = ({
 
       if(avaxResult && avaxResult.status === 200 && avaxResult2 && avaxResult2.status === 200) {
         const avaxtvl1 = avaxResult.data.totalTVL_AVAX;
-        const avaxtvl2 = avaxResult2.data.stakingInfoDYPAvax[0].tvl_usd/1e18
+        const avaxtvl2 = avaxResult2.data.stakingInfoDYPAvax[0].tvl_usd
         setTvl(avaxtvl1+avaxtvl2)
       }
   };

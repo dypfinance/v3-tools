@@ -54,9 +54,9 @@ const EarnHero = () => {
     ) {
       
       const apiData = apitvl.data;
-      const ethv2Tvl = ethRestult2.data.stakingInfoDYPEth[0].tvl_usd/1e18
-      const bnbTvl2 = bnbResult2.data.stakingInfoDYPBnb[0].tvl_usd/1e18
-      const avaxtvl2 = avaxResult2.data.stakingInfoDYPAvax[0].tvl_usd/1e18
+      const ethv2Tvl = ethRestult2.data.stakingInfoDYPEth[0].tvl_usd
+      const bnbTvl2 = bnbResult2.data.stakingInfoDYPBnb[0].tvl_usd
+      const avaxtvl2 = avaxResult2.data.stakingInfoDYPAvax[0].tvl_usd
       setTotalTvl(apiData+ethv2Tvl+bnbTvl2+avaxtvl2)
 
     }
