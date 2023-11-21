@@ -1175,7 +1175,7 @@ const StakeBsc = ({
                       style={{ height: "fit-content" }}
                       // onClick={handleClaimDivs}
                       onClick={() => {
-                        staking._address ===
+                        staking?._address?.toLowerCase() ===
                         "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487"
                           ? window.$.alert(
                               "*The rewards earned from the day of the migration until the end of the lock time will be distributed to the users automatically at the end of the contract."

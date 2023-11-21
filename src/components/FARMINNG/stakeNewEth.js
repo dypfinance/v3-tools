@@ -67,6 +67,7 @@ const StakeNewEth = ({
   coinbase,
   referrer,
   totalTvl,
+  renderedPage,fee
 }) => {
   let { reward_token, BigNumber, alertify, token_dyps } = window;
   let token_symbol = "DYP";
@@ -664,7 +665,13 @@ const StakeNewEth = ({
       >
         <div className="leftside2 w-100">
           <div className="activewrapper">
-            <div className="d-flex flex-column flex-lg-row w-100 align-items-start align-items-lg-center justify-content-between gap-3 gap-lg-5">
+            <div
+              className={`d-flex flex-column flex-lg-row w-100 align-items-start align-items-lg-center justify-content-between ${
+                renderedPage === "dashboard"
+                  ? "gap-3 gap-lg-4"
+                  : "gap-3 gap-lg-5"
+              }`}
+            >
               <h6 className="activetxt">
                 <img
                   src={ellipse}
@@ -680,7 +687,7 @@ const StakeNewEth = ({
                   <div className="d-flex align-items-center justify-content-between gap-2">
                     <h6 className="earnrewards-text">Performance fee:</h6>
                     <h6 className="earnrewards-token d-flex align-items-center gap-1">
-                      {fee_s}%
+                      {fee}%
                       <ClickAwayListener onClickAway={performanceClose}>
                         <Tooltip
                           open={performanceTooltip}
@@ -793,8 +800,8 @@ const StakeNewEth = ({
             </div>
           </div>
         </div>
-        <div className="pools-details-wrapper d-flex m-0 container-lg border-0">
-          <div className="row gap-4 gap-lg-0 w-100 justify-content-between">
+        <div className="pools-details-wrapper d-flex m-0  container-lg border-0">
+          <div className="row w-100 flex-column flex-lg-row gap-4 gap-lg-0 justify-content-between">
             <div className="firstblockwrapper col-12 col-md-6 col-lg-2">
               <div
                 className="d-flex flex-row flex-lg-column align-items-center align-items-lg-start justify-content-between gap-4"
@@ -864,75 +871,96 @@ const StakeNewEth = ({
                 </ClickAwayListener>
               </div>
               <div className="d-flex flex-column gap-2 justify-content-between">
-                <div className="d-flex align-items-center justify-content-between gap-2">
-                  <div className="input-container px-0">
-                    <input
-                      type="number"
-                      autoComplete="off"
-                      value={
-                        Number(depositAmount) > 0
+                <div className="d-flex flex-column flex-lg-row align-items-center justify-content-between gap-2">
+                  <div className="d-flex align-items-center justify-content-between justify-content-lg-start w-100 gap-2">
+                    <div className="input-container px-0">
+                      <input
+                        type="number"
+                        autoComplete="off"
+                        value={
+                          Number(depositAmount) > 0
+                            ? depositAmount
+                            : depositAmount
+                        }
+                        onChange={(e) => {
+                          setdepositAmount(e.target.value);
+                          checkApproval(e.target.value);
+                        }}
+                        placeholder=" "
+                        className="text-input"
+                        style={{ width: "100%" }}
+                        name="amount_deposit"
+                        id="amount_deposit"
+                        key="amount_deposit"
+                      />
+                      <label
+                        htmlFor="usd"
+                        className="label"
+                        onClick={() => focusInput("amount_deposit")}
+                      >
+                        Amount
+                      </label>
+                    </div>
+                    {/* <div
+                      className="input-container px-0"
+                      style={{ width: "32%" }}
+                    >
+                      <input
+                        type="number"
+                        min={1}
+                        id="amount"
+                        name="amount"
+                        value={ Number(depositAmount) > 0
                           ? depositAmount
                           : depositAmount
-                      }
-                      onChange={(e) => {
-                        setdepositAmount(e.target.value);
-                        checkApproval(e.target.value);
-                      }}
-                      placeholder=" "
-                      className="text-input"
-                      style={{ width: "100%" }}
-                      name="amount_deposit"
-                      id="amount_deposit"
-                      key="amount_deposit"
-                    />
-                    <label
-                      className="label"
-                      onClick={() => {
-                        focusInput("amount_deposit");
-                      }}
+                        }
+                        placeholder=" "
+                        className="text-input"
+                        onChange={(e) => this.setState({depositAmount: e.target.value})}
+                        style={{ width: "100%" }}
+                      />
+                      <label
+                        htmlFor="usd"
+                        className="label"
+                        onClick={() => focusInput("amount")}
+                      >
+                        DYP Amount
+                      </label>
+                    </div> */}
+                    <button
+                      className="btn maxbtn"
+                      onClick={handleSetMaxDeposit}
                     >
-                      Amount
-                    </label>
+                      Max
+                    </button>
                   </div>
-
-                  <button className="btn maxbtn" onClick={handleSetMaxDeposit}>
-                    Max
-                  </button>
-
+                  {/* <button
+                    className="btn filledbtn"
+                    onClick={this.handleApprove}
+                  >
+                    Approve
+                  </button> */}
                   <button
                     disabled={
-                      depositAmount === "" ||
-                      depositLoading === true ||
-                      depositStatus === "success" ||
-                      staking?._address.toLowerCase() ===
-                        "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d".toLowerCase()
+                      depositAmount === "" || depositLoading === true
                         ? true
                         : false
                     }
                     className={`btn filledbtn ${
-                      ((depositAmount === "" && depositStatus === "initial") ||
-                        staking?._address.toLowerCase() ===
-                          "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d".toLowerCase()) &&
+                      depositAmount === "" &&
+                      depositStatus === "initial" &&
                       "disabled-btn"
                     } ${
-                      (depositStatus === "deposit" ||
-                        depositStatus === "success") &&
-                      staking?._address.toLowerCase() !==
-                        "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d".toLowerCase()
+                      depositStatus === "deposit" || depositStatus === "success"
                         ? "success-button"
                         : depositStatus === "fail"
                         ? "fail-button"
                         : null
                     } d-flex justify-content-center align-items-center gap-2`}
                     onClick={() => {
-                      depositStatus === "deposit" &&
-                      staking?._address.toLowerCase() !==
-                        "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d".toLowerCase()
+                      depositStatus === "deposit"
                         ? handleStake()
-                        : depositStatus === "initial" &&
-                          depositAmount !== "" &&
-                          staking?._address.toLowerCase() !==
-                            "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d".toLowerCase()
+                        : depositStatus === "initial" && depositAmount !== ""
                         ? handleApprove()
                         : console.log("");
                     }}
@@ -966,9 +994,14 @@ const StakeNewEth = ({
                 chainId !== "1" && "blurrypool"
               }`}
             >
-              <div className="d-flex justify-content-between gap-2">
+              <div className="d-flex justify-content-between gap-2 ">
                 <h6 className="withdraw-txt">Rewards</h6>
-                <h6 className="withdraw-littletxt d-flex align-items-center gap-2">
+                <h6
+                  className="withdraw-littletxt d-flex align-items-center gap-2"
+                  style={{
+                    fontSize: renderedPage === "dashboard" && "9px",
+                  }}
+                >
                   Rewards are displayed in real-time
                   <ClickAwayListener onClickAway={rewardsClose}>
                     <Tooltip
@@ -990,100 +1023,111 @@ const StakeNewEth = ({
                   </ClickAwayListener>
                 </h6>
               </div>
-
-              <div className="form-row flex-column flex-lg-row d-flex gap-2 align-item-start align-items-lg-center justify-content-between">
-                <div className="d-flex flex-column">
-                  <span
-                    style={{
-                      fontWeight: "500",
-                      fontSize: "12px",
-                      lineHeight: "18px",
-                      color: "#c0c9ff",
-                    }}
-                  >
-                    DYP
-                  </span>
-                  <span>{pendingDivs}</span>
-                </div>
-                <div className="claim-reinvest-container d-flex justify-content-between align-items-center gap-3">
-                  <button
-                    disabled={
-                      claimStatus === "claimed" ||
-                      claimStatus === "success" ||
-                      pendingDivs <= 0
-                        ? true
-                        : false
-                    }
-                    className={`btn filledbtn ${
-                      (claimStatus === "claimed" &&
-                        claimStatus === "initial") ||
-                      pendingDivs <= 0
-                        ? "disabled-btn"
-                        : claimStatus === "failed"
-                        ? "fail-button"
-                        : claimStatus === "success"
-                        ? "success-button"
-                        : null
-                    } d-flex justify-content-center align-items-center gap-2`}
-                    style={{ height: "fit-content" }}
-                    onClick={handleClaimDivs}
-                  >
-                    {claimLoading ? (
-                      <div
-                        class="spinner-border spinner-border-sm text-light"
-                        role="status"
-                      >
-                        <span class="visually-hidden">Loading...</span>
-                      </div>
-                    ) : claimStatus === "failed" ? (
-                      <>
-                        <img src={failMark} alt="" />
-                        Failed
-                      </>
-                    ) : claimStatus === "success" ? (
-                      <>Success</>
-                    ) : (
-                      <>Claim</>
-                    )}
-                  </button>
-                  {expired === false && (
+              <div className="d-flex flex-column gap-2 justify-content-between">
+                {/* <div className="d-flex align-items-center justify-content-between gap-2"></div> */}
+                <div className="form-row flex-column flex-lg-row gap-2 d-flex  align-items-start align-items-lg-center justify-content-between">
+                  <div className="position-relative d-flex flex-column">
+                    <span
+                      style={{
+                        fontWeight: "500",
+                        fontSize: "12px",
+                        lineHeight: "18px",
+                        color: "#c0c9ff",
+                      }}
+                    >
+                      DYP
+                    </span>
+                    <span>{pendingDivs}</span>
+                  </div>
+                  <div className="claim-reinvest-container d-flex justify-content-between align-items-center gap-3">
                     <button
-                      disabled={pendingDivs > 0 ? false : true}
-                      className={`btn outline-btn ${
-                        reInvestStatus === "invest" || pendingDivs <= 0
+                      disabled={
+                        claimStatus === "claimed" ||
+                        claimStatus === "success" ||
+                        pendingDivs <= 0
+                          ? true
+                          : false
+                      }
+                      className={`btn filledbtn ${
+                        (claimStatus === "claimed" &&
+                          claimStatus === "initial") ||
+                        pendingDivs <= 0
                           ? "disabled-btn"
-                          : reInvestStatus === "failed"
+                          : claimStatus === "failed"
                           ? "fail-button"
-                          : reInvestStatus === "success"
+                          : claimStatus === "success"
                           ? "success-button"
                           : null
                       } d-flex justify-content-center align-items-center gap-2`}
                       style={{ height: "fit-content" }}
-                      onClick={handleReinvest}
+                      // onClick={handleClaimDivs}
+                      onClick={() => {
+                        staking?._address?.toLowerCase() ===
+                        "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d"
+                          ? window.$.alert(
+                              "*The rewards earned from the day of the migration until the end of the lock time will be distributed to the users automatically at the end of the contract."
+                            )
+                          : handleClaimDivs();
+                      }}
                     >
-                      {reInvestLoading ? (
+                      {claimLoading ? (
                         <div
                           class="spinner-border spinner-border-sm text-light"
                           role="status"
                         >
                           <span class="visually-hidden">Loading...</span>
                         </div>
-                      ) : reInvestStatus === "failed" ? (
+                      ) : claimStatus === "failed" ? (
                         <>
                           <img src={failMark} alt="" />
                           Failed
                         </>
-                      ) : reInvestStatus === "success" ? (
+                      ) : claimStatus === "success" ? (
                         <>Success</>
                       ) : (
-                        <>Reinvest</>
+                        <>Claim</>
                       )}
                     </button>
-                  )}
+                    {expired === false && (
+                      <button
+                        disabled={pendingDivs > 0 ? false : true}
+                        className={`btn outline-btn ${
+                          reInvestStatus === "invest" || pendingDivs <= 0
+                            ? "disabled-btn"
+                            : reInvestStatus === "failed"
+                            ? "fail-button"
+                            : reInvestStatus === "success"
+                            ? "success-button"
+                            : null
+                        } d-flex justify-content-center align-items-center gap-2`}
+                        style={{ height: "fit-content" }}
+                        onClick={handleReinvest}
+                      >
+                        {reInvestLoading ? (
+                          <div
+                            class="spinner-border spinner-border-sm text-light"
+                            role="status"
+                          >
+                            <span class="visually-hidden">Loading...</span>
+                          </div>
+                        ) : reInvestStatus === "failed" ? (
+                          <>
+                            <img src={failMark} alt="" />
+                            Failed
+                          </>
+                        ) : reInvestStatus === "success" ? (
+                          <>Success</>
+                        ) : (
+                          <>Reinvest</>
+                        )}
+                      </button>
+                    )}
+                  </div>
                 </div>
+                {errorMsg2 && <h6 className="errormsg">{errorMsg2}</h6>}
               </div>
-              {errorMsg2 && <h6 className="errormsg">{errorMsg2}</h6>}
             </div>
+
             <div
               className={`otherside-border col-12 col-md-12 col-lg-2 ${
                 chainId !== "1" && "blurrypool"
@@ -1112,11 +1156,11 @@ const StakeNewEth = ({
               </h6>
 
               <button
-                className="btn outline-btn"
+                disabled={Number(depositedTokens) > 0 ? false : true}
+                className={"outline-btn btn"}
                 onClick={() => {
                   setshowWithdrawModal(true);
                 }}
-                disabled={Number(depositedTokens) > 0 ? false : true}
               >
                 Withdraw
               </button>
@@ -1128,7 +1172,6 @@ const StakeNewEth = ({
         <Modal
           visible={popup}
           modalId="tymodal"
-          icon="stats"
           title="stats"
           setIsVisible={() => {
             setpopup(false);
@@ -1147,9 +1190,7 @@ const StakeNewEth = ({
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">My DYP Balance</span>
-                    <h6 className="stats-card-content">
-                      {getFormattedNumber(token_balance, 6)} {token_symbol}
-                    </h6>
+                    <h6 className="stats-card-content">{getFormattedNumber(token_balance, 6)} DYP</h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">
@@ -1162,12 +1203,12 @@ const StakeNewEth = ({
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">Total DYP Locked</span>
                     <h6 className="stats-card-content">
-                      {getFormattedNumber(tvl / 1e18, 2)} {token_symbol}
+                    {getFormattedNumber(tvl / 1e18, 2)} DYP
                     </h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">TVL USD</span>
-                    <h6 className="stats-card-content">{tvl_usd} USD</h6>
+                    <h6 className="stats-card-content">${tvl_usd} USD</h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">
@@ -1176,8 +1217,8 @@ const StakeNewEth = ({
                     <h6 className="stats-card-content">{expiration_time}</h6>
                   </div>
                 </div>
-                <div className="d-flex align-items-center justify-content-between">
-                  <div className="referralwrapper col-8">
+                <div className="d-flex flex-column flex-lg-row gap-3 gap-lg-0 align-items-center justify-content-between">
+                  <div className="referralwrapper col-12 col-lg-8">
                     <div className="d-flex gap-2 align-items-start justify-content-between">
                       <img src={referralimg} alt="" />
                       <div
@@ -1212,6 +1253,13 @@ const StakeNewEth = ({
                               <ReactTooltip id={id} effect="solid" />
                             </h6>
                             <br />
+                            {/* <a
+                              className="text-muted small"
+                              href={this.getReferralLink()}
+                            >
+                              {" "}
+                              {this.getReferralLink()}{" "}
+                            </a> */}
                           </span>
                         </div>
 
@@ -1239,7 +1287,7 @@ const StakeNewEth = ({
                       &nbsp;{" "}
                     </div>
                   </div>
-                  <div className="col-3 d-flex flex-column gap-1">
+                  <div className="col-12 col-lg-3 d-flex flex-column gap-1">
                     <span
                       style={{
                         fontWeight: "400",
@@ -1270,13 +1318,25 @@ const StakeNewEth = ({
                     <a
                       target="_blank"
                       rel="noopener noreferrer"
-                      href={`${window.config.etherscan_baseURL}/token/${reward_tokenn._address}?a=${coinbase}`}
+                      href={`${window.config.etherscan_baseURL}/token/${reward_token._address}?a=${coinbase}`}
                       className="stats-link"
                     >
                       View transaction <img src={statsLinkIcon} alt="" />
                     </a>
                   </div>
                 </div>
+                {/* <div className="mt-4">
+                    <a
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      href={`${window.config.etherscan_baseURL}/token/${reward_token._address}?a=${coinbase}`}
+                      className="maxbtn"
+                      style={{ color: "#7770e0" }}
+                    >
+                      Etherscan
+                      <img src={arrowup} alt="" />
+                    </a>
+                  </div> */}
               </div>
             </div>
           </div>
@@ -1297,6 +1357,12 @@ const StakeNewEth = ({
             <div className="l-box pl-3 pr-3">
               <div className="container px-0">
                 <div className="row" style={{ marginLeft: "0px" }}>
+                  {/* <div className="d-flex justify-content-between gap-2 align-items-center p-0">
+                      <h6 className="d-flex gap-2 align-items-center statstext">
+                        <img src={stats} alt="" />
+                        Withdraw
+                      </h6>
+                    </div> */}
                   <h6 className="withdrawdesc mt-2 p-0">
                     {lockTime === "No Lock"
                       ? "Your deposit has no lock-in period. You can withdraw your assets anytime, or continue to earn rewards every day."
@@ -1305,7 +1371,7 @@ const StakeNewEth = ({
                 </div>
 
                 <div className="d-flex flex-column mt-2">
-                  <div className="d-flex  gap-2 justify-content-between align-items-center mt-2">
+                  <div className="d-flex  gap-2 justify-content-between align-items-center">
                     <div className="d-flex flex-column gap-1">
                       <h6 className="withsubtitle mt-3">Timer</h6>
                       <h6 className="withtitle" style={{ fontWeight: 300 }}>
@@ -1347,13 +1413,13 @@ const StakeNewEth = ({
                         key="amount_withdraw"
                       />
                       <label
+                        htmlFor="usd"
                         className="label"
                         onClick={() => focusInput("amount_withdraw")}
                       >
                         Withdraw Amount
                       </label>
                     </div>
-
                     <button
                       className="btn maxbtn"
                       onClick={handleSetMaxWithdraw}
@@ -1365,26 +1431,28 @@ const StakeNewEth = ({
                   <div className="d-flex flex-column align-items-start justify-content-between gap-2 mt-4">
                     <button
                       disabled={
-                        withdrawAmount === "" ||
                         withdrawStatus === "failed" ||
                         withdrawStatus === "success" ||
+                        withdrawAmount === "" ||
                         canWithdraw === false
                           ? true
                           : false
                       }
                       className={` w-100 btn filledbtn ${
-                        (withdrawAmount === "" &&
-                          withdrawStatus === "initial") ||
-                        canWithdraw === false
-                          ? "disabled-btn"
-                          : withdrawStatus === "failed"
+                        withdrawStatus === "failed"
                           ? "fail-button"
                           : withdrawStatus === "success"
                           ? "success-button"
+                          : (withdrawAmount === "" &&
+                              withdrawStatus === "initial") ||
+                            canWithdraw === false
+                          ? "disabled-btn"
                           : null
                       } d-flex justify-content-center align-items-center`}
                       style={{ height: "fit-content" }}
-                      onClick={() => handleWithdraw()}
+                      onClick={() => {
+                        handleWithdraw();
+                      }}
                     >
                       {withdrawLoading ? (
                         <div
@@ -1405,16 +1473,31 @@ const StakeNewEth = ({
                       )}
                     </button>
                     {/* <span
-                      className="mt-2"
-                      style={{
-                        fontWeight: "400",
-                        fontSize: "12px",
-                        lineHeight: "18px",
-                        color: "#C0C9FF",
-                      }}
-                    >
-                      *No withdrawal fee
-                    </span> */}
+                    className="mt-2"
+                    style={{
+                      fontWeight: "400",
+                      fontSize: "12px",
+                      lineHeight: "18px",
+                      color: "#C0C9FF",
+                    }}
+                  >
+                    *No withdrawal fee
+                  </span> */}
+                    {/* <button
+                        className="btn filledbtn w-100"
+                        onClick={(e) => {
+                          // e.preventDefault();
+                          this.handleWithdraw();
+                        }}
+                        title={
+                          canWithdraw
+                            ? ""
+                            : `You recently staked, you can unstake ${cliffTimeInWords}`
+                        }
+                      >
+                        Withdraw
+                      </button> */}
+
                     {/* <div className="form-row">
                             <div className="col-6">
                               <button
@@ -1458,7 +1541,7 @@ const StakeNewEth = ({
         </Modal>
       )}
 
-      {show === true && (
+      {show && (
         <WalletModal
           show={show}
           handleClose={hideModal}
@@ -1468,13 +1551,27 @@ const StakeNewEth = ({
           }}
         />
       )}
+      {/* <div
+          className="calculator-btn d-flex justify-content-center align-items-center gap-2 text-white"
+          onClick={() => this.setState({ showCalculator: true })}
+        >
+          <img
+            src={calculatorIcon}
+            alt=""
+            style={{ width: 30, height: 30 }}
+          />{" "}
+          Calculator
+        </div> */}
 
-      {showCalculator === true && (
+      {showCalculator && (
         <Modal
           visible={showCalculator}
-          title="calculator"
           modalId="calculatormodal"
-          setIsVisible={() => setshowCalculator(false)}
+          title="calculator"
+          setIsVisible={() => {
+            setshowCalculator(false);
+          }}
+          width="fit-content"
         >
           <div className="pools-calculator">
             <hr />
