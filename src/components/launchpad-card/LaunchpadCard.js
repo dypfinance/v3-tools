@@ -1,5 +1,5 @@
 import React from "react";
-import launchpadbg from "./assets/launchpadBg.png";
+import launchpadbg from "./assets/launchpadbg.png";
 import rightlogo from "./assets/filledArrow.svg";
 import "./launchpad.css";
 import { NavLink } from "react-router-dom";
