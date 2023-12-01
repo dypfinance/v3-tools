@@ -120,17 +120,15 @@ class App extends React.Component {
               this.setState({
                 networkId: "43114",
               });
-            }  else if (data === "0x2105") {
+            } else if (data === "0x2105") {
               this.setState({
                 networkId: "8453",
               });
-            }
-            else if (data === "0x406") {
+            } else if (data === "0x406") {
               this.setState({
                 networkId: "1030",
               });
-            }
-            else if (data === "0x38") {
+            } else if (data === "0x38") {
               this.setState({
                 networkId: "56",
               });
@@ -166,13 +164,11 @@ class App extends React.Component {
           this.setState({
             networkId: "8453",
           });
-        }
-        else if (chainId === "0x406") {
+        } else if (chainId === "0x406") {
           this.setState({
             networkId: "1030",
           });
-        }
-         else if (chainId === "0x38") {
+        } else if (chainId === "0x38") {
           this.setState({
             networkId: "56",
           });

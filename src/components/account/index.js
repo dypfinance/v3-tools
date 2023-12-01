@@ -1160,7 +1160,7 @@ export default class Subscription extends React.Component {
               <div className="d-flex flex-column flex-lg-row gap-3 align-items-center justify-content-between">
                 <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-3 gap-xxl-3 gap-lg-1">
                   <img
-                    src={require(`./assets/wethIcon.svg`).default}
+                    src={require(`./assets/ethIcon.svg`).default}
                     width={20}
                     height={20}
                     alt=""
@@ -2177,7 +2177,7 @@ export default class Subscription extends React.Component {
           <div className="col-12 col-lg-6">
             <div className="mycawsCollection position-relative mb-5">
               <div className="nft-ethereum-tag p-2 d-flex align-items-center gap-2">
-                <img src={require("./assets/wethIcon.svg").default} alt="" />
+                <img src={require("./assets/ethIcon.svg").default} alt="" />
                 <span className="nft-ethereum-span">Ethereum</span>
               </div>
               <div className="d-flex flex-column gap-2 justify-content-between align-items-start">
@@ -2239,7 +2239,7 @@ export default class Subscription extends React.Component {
           <div className="col-12 col-lg-6">
             <div className="mycawsCollection position-relative mb-5">
               <div className="nft-ethereum-tag p-2 d-flex align-items-center gap-2">
-                <img src={require("./assets/wethIcon.svg").default} alt="" />
+                <img src={require("./assets/ethIcon.svg").default} alt="" />
                 <span className="nft-ethereum-span">Ethereum</span>
               </div>
               <div className="d-flex flex-column gap-2 justify-content-between align-items-start">
