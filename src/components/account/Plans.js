@@ -806,7 +806,7 @@ export default class Subscription extends React.Component {
 
     const benefits = [
       "DYP Tools administrative dashboard",
-      "Exclusive access to World of Dypians metaverse platform (available only for Ethereum/BNB Chain Subscribers)",
+      "Exclusive access to World of Dypians metaverse platform for Ethereum/BNB Chain Subscribers",
       "Priority allocation to presales of new projects through Dypius Launchpad",
       "Voting capabilities in the News section",
       "Early access to upcoming features and updates",
@@ -821,7 +821,7 @@ export default class Subscription extends React.Component {
       {
         icon: "globe",
         content:
-          "Access unique content and experiences only available in the WoD (only for Ethereum/BNB Chain Subscribers).",
+          "Access unique content and experiences exclusively available in the WoD for Ethereum/BNB Chain Subscribers.",
       },
       {
         icon: "coins",
