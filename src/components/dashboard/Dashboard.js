@@ -291,19 +291,14 @@ const Dashboard = ({
 
   const fetchStakeData = async () => {
     if (network === 1) {
-      // setTimeout(() => {
       await fetchEthStaking();
-      // }, 1000);
     } else if (network === 56) {
-      // setTimeout(() => {
       await fetchBnbStaking();
-      // }, 1000);
     }
-    if (network === 43114) {
-      // setTimeout(() => {
+    else if (network === 43114) {
       await fetchAvaxStaking();
-      // }, 1000);
     }
+    else await fetchEthStaking();
   };
 
   useEffect(() => {
@@ -346,7 +341,7 @@ const Dashboard = ({
             {windowSize.width > 786 ? (
               <div>
                 <div className="row m-0 gap-4 toppool-allwrapper">
-                  {network === 1 && loading === false ? (
+                  {(network === 1 || network === 1030 || network === 8453) && loading === false ? (
                     <CawsWodCard
                       network={network.toString()}
                       onShowDetailsClick={() => {
@@ -366,7 +361,7 @@ const Dashboard = ({
                     />
                   ) : null}
 
-                  {topPools.length > 0 && network === 1 && loading === false ? (
+                  {topPools.length > 0 && (network === 1 || network === 1030 || network === 8453) && loading === false ? (
                     topPools.slice(0, 2).map((item, index) => {
                       return (
                         <TopPoolsCard
@@ -569,9 +564,9 @@ const Dashboard = ({
                     </div>
                   )}
                 </div>
-                {activeCard && network === 1 ? (
+                {activeCard && (network === 1 || network === 1030 || network === 8453) ? (
                   activeCard &&
-                  network === 1 &&
+                  (network === 1 || network === 1030 || network === 8453) &&
                   topPools[cardIndex]?.id ===
                     "0xC9075092Cc46E176B1F3c0D0EB8223F1e46555B0" ? (
                     <StakeDypiusEth
@@ -605,7 +600,7 @@ const Dashboard = ({
                       expired={false}
                       referrer={referrer}
                     />
-                  ) : activeCard && network === 1 && cardIndex === 2 ? (
+                  ) : activeCard && (network === 1 || network === 1030 || network === 8453) && cardIndex === 2 ? (
                     <CawsWodDetails
                       coinbase={coinbase}
                       isConnected={isConnected}
@@ -749,7 +744,7 @@ const Dashboard = ({
             ) : (
               <div className="d-flex flex-column gap-4">
                 <div className="row m-0 gap-4 toppool-allwrapper">
-                  {network === 1 && (
+                  {(network === 1 || network === 1030 || network === 8453) && (
                     <CawsWodCard
                       network={network.toString()}
                       onShowDetailsClick={() => {
@@ -770,7 +765,7 @@ const Dashboard = ({
                       isPremium={isPremium}
                     />
                   )}
-                  {activeCard && network === 1 && cardIndex === 2 ? (
+                  {activeCard && (network === 1 || network === 1030 || network === 8453) && cardIndex === 2 ? (
                     <CawsWodDetails
                       coinbase={coinbase}
                       isConnected={isConnected}
@@ -784,7 +779,7 @@ const Dashboard = ({
                   ) : (
                     <></>
                   )}
-                  {topPools.length > 0 && network === 1 && loading === false ? (
+                  {topPools.length > 0 && (network === 1 || network === 1030 || network === 8453) && loading === false ? (
                     topPools.slice(0, 2).map((item, index) => {
                       return (
                         <TopPoolsCard
@@ -1051,7 +1046,7 @@ const Dashboard = ({
                   )}
                 </div>
 
-                {activeCard && network === 1 && cardIndex === 0 && (
+                {activeCard && (network === 1 || network === 1030 || network === 8453) && cardIndex === 0 && (
                   <StakeDypiusEth
                     staking={window.constant_staking_dypius_eth1}
                     apr={
@@ -1121,8 +1116,8 @@ const Dashboard = ({
                   <></>
                 )}
 
-                {activeCard2 && network === 1 ? (
-                  activeCard2 && network === 1 && cardIndex === 2 ? (
+                {activeCard2 && (network === 1 || network === 1030 || network === 8453) ? (
+                  activeCard2 && (network === 1 || network === 1030 || network === 8453) && cardIndex === 2 ? (
                     <CawsWodDetails
                       coinbase={coinbase}
                       isConnected={isConnected}
