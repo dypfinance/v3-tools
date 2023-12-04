@@ -725,7 +725,7 @@ export default function initMigration({
                       />
                       <div className="d-flex flex-column w-100">
                         <span className="conversion-rate-title">
-                          You will recieve:
+                          You will receive:
                         </span>
                         <div className="conversion-input-container p-2 d-flex align-items-center justify-content-between">
                           <div className="d-flex align-items-center gap-2">
@@ -821,7 +821,7 @@ export default function initMigration({
                       <div className="d-flex align-items-end gap-4 justify-content-between">
                         <div className="d-flex flex-column w-100">
                           <span className="conversion-rate-title">
-                            Recieve new DYP on Ethereum
+                          Receive new DYP on Ethereum
                           </span>
                           <input
                             value={this.state.txHash}
