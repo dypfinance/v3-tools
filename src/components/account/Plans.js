@@ -567,6 +567,22 @@ export default class Subscription extends React.Component {
       subscribeToken
     );
 
+    
+    let tokenprice =
+    this.props.networkId === 1
+        ? await window.getEstimatedTokenSubscriptionAmountETH(token)
+        : this.props.networkId === 56
+        ? await window.getEstimatedTokenSubscriptionAmountBNB(token)
+        : this.props.networkId === 1030
+        ? await window.getEstimatedTokenSubscriptionAmountCFX(token)
+        : this.props.networkId === 43114
+        ? await window.getEstimatedTokenSubscriptionAmount(token)
+        : this.props.networkId === 8453
+        ? await window.getEstimatedTokenSubscriptionAmountBase(token)
+        : await window.getEstimatedTokenSubscriptionAmount(token);
+
+    tokenprice = new BigNumber(tokenprice).toFixed(0);
+
     if (this.props.coinbase && this.props.coinbase.includes("0x")) {
       if (this.props.networkId === 1) {
         const result = await subscribeTokencontract.methods
@@ -574,11 +590,11 @@ export default class Subscription extends React.Component {
           .call()
           .then();
 
-        if (result != 0) {
+        if (result != 0 && Number(result) >= Number(tokenprice)) {
           this.setState({ lockActive: true });
           this.setState({ loadspinner: false });
           this.setState({ isApproved: true });
-        } else if (result == 0) {
+        } else if (result == 0 || Number(result) < Number(tokenprice)) {
           this.setState({ lockActive: false });
           this.setState({ loadspinner: false });
           this.setState({ isApproved: false });
@@ -589,11 +605,11 @@ export default class Subscription extends React.Component {
           .call()
           .then();
 
-        if (result != 0) {
+        if (result != 0 && Number(result) >= Number(tokenprice)) {
           this.setState({ lockActive: true });
           this.setState({ loadspinner: false });
           this.setState({ isApproved: true });
-        } else if (result == 0) {
+        } else if (result == 0 || Number(result) < Number(tokenprice))  {
           this.setState({ lockActive: false });
           this.setState({ loadspinner: false });
           this.setState({ isApproved: false });
@@ -604,11 +620,11 @@ export default class Subscription extends React.Component {
           .call()
           .then();
 
-        if (result != 0) {
+        if (result != 0 && Number(result) >= Number(tokenprice)) {
           this.setState({ lockActive: true });
           this.setState({ loadspinner: false });
           this.setState({ isApproved: true });
-        } else if (result == 0) {
+        } else if (result == 0 || Number(result) < Number(tokenprice)) {
           this.setState({ lockActive: false });
           this.setState({ loadspinner: false });
           this.setState({ isApproved: false });
@@ -619,11 +635,11 @@ export default class Subscription extends React.Component {
           .call()
           .then();
 
-        if (result != 0) {
+        if (result != 0 && Number(result) >= Number(tokenprice)) {
           this.setState({ lockActive: true });
           this.setState({ loadspinner: false });
           this.setState({ isApproved: true });
-        } else if (result == 0) {
+        } else if (result == 0 || Number(result) < Number(tokenprice)) {
           this.setState({ lockActive: false });
           this.setState({ loadspinner: false });
           this.setState({ isApproved: false });
@@ -634,11 +650,11 @@ export default class Subscription extends React.Component {
           .call()
           .then();
 
-        if (result != 0) {
+        if (result != 0 && Number(result) >= Number(tokenprice)) {
           this.setState({ lockActive: true });
           this.setState({ loadspinner: false });
           this.setState({ isApproved: true });
-        } else if (result == 0) {
+        } else if (result == 0 || Number(result) < Number(tokenprice)) {
           this.setState({ lockActive: false });
           this.setState({ loadspinner: false });
           this.setState({ isApproved: false });
