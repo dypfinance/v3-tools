@@ -45,9 +45,9 @@ const BuyDyp = () => {
 
   const buyDypItems = [
     {
-      title: "Huobi",
+      title: "HTX",
       logo: "huobi.png",
-      link: "https://www.huobi.com/en-us/exchange/dyp_usdt",
+      link: "https://www.htx.com/en-us/trade/dyp_usdt/",
       totalvids: "0 videos",
       videos: "",
       active: true,
