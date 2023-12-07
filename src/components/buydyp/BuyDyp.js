@@ -219,6 +219,24 @@ const BuyDyp = () => {
       version: "DYP v2",
     },
     {
+      title: "Gate.io",
+      logo: "gateio.png",
+      link: "https://www.gate.io/zh/trade/DYP_USDT",
+      totalvids: "1 video",
+      active: true,
+      version: "DYP v2",
+
+      videos: [
+        {
+          link: "https://www.youtube.com/embed/arVFXf5hESE",
+          image: "gate.png",
+          title: "How to buy DeFi Yield Protocol (DYP) on Gate.io",
+          walletName: "Gate.io",
+          thumbnail: "gate.png",
+        },
+      ],
+    },
+    {
       title: "Coinbase",
       logo: "coinbase.png",
       link: "https://pro.coinbase.com/trade/DYP-USD",
@@ -254,24 +272,7 @@ const BuyDyp = () => {
         },
       ],
     },
-    {
-      title: "Gate.io",
-      logo: "gateio.png",
-      link: "https://www.gate.io/zh/trade/DYP_USDT",
-      totalvids: "1 video",
-      active: true,
-      version: "DYP v1",
-
-      videos: [
-        {
-          link: "https://www.youtube.com/embed/arVFXf5hESE",
-          image: "gate.png",
-          title: "How to buy DeFi Yield Protocol (DYP) on Gate.io",
-          walletName: "Gate.io",
-          thumbnail: "gate.png",
-        },
-      ],
-    },
+    
     {
       title: "Poloniex",
       logo: "poloniex.png",
