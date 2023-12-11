@@ -3,10 +3,10 @@
   background-color: #312f69;
   border-radius: 12px;
   border: 2px solid #312f69;
-  background-image: url("./assets/yieldBanner.svg");
-  background-position: right 50px center;
+  background-image: url("./assets/wodBanner.webp");
+  background-position: right center;
   background-repeat: no-repeat;
-  background-size: auto;
+  background-size: contain;
   position: relative;
   min-height: 195px;
   /* width: 27%; */
@@ -82,7 +82,7 @@
 
 @media screen and (max-width: 786px) {
   .explorercard-wrapper {
-    background-position: right 20px center;
+    background-position: right -55px center;
   }
   .explorer-chart {
     position: absolute;

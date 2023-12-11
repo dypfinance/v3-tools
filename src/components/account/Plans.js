@@ -50,6 +50,8 @@ export default class Subscription extends React.Component {
       wethAddress: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
       wavaxAddress: "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7",
       wbnbAddress: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+      wcfxAddress: "0x14b2D3bC65e74DAE1030EAFd8ac30c533c976A9b",
+      wbaseAddress: "0x4200000000000000000000000000000000000006",
       triggerText: "See more V",
       isApproved: false,
       approveStatus: "initial",
@@ -379,6 +381,10 @@ export default class Subscription extends React.Component {
         this.myStakes().then();
       } else if (this.props.networkId === 56) {
         this.handleSubscriptionTokenChange(this.state.wbnbAddress);
+      } else if (this.props.networkId === 1030) {
+        this.handleSubscriptionTokenChange(this.state.wcfxAddress);
+      } else if (this.props.networkId === 8453) {
+        this.handleSubscriptionTokenChange(this.state.wbaseAddress);
       }
     }
   }
@@ -400,6 +406,10 @@ export default class Subscription extends React.Component {
         ? window.config.subscriptioneth_tokens[token]?.decimals
         : this.props.networkId === 56
         ? window.config.subscriptionbnb_tokens[token]?.decimals
+        : this.props.networkId === 1030
+        ? window.config.subscriptioncfx_tokens[token]?.decimals
+        : this.props.networkId === 8453
+        ? window.config.subscriptionbase_tokens[token]?.decimals
         : window.config.subscription_tokens[token]?.decimals;
     this.setState({
       selectedSubscriptionToken: token,
@@ -413,6 +423,10 @@ export default class Subscription extends React.Component {
         ? await window.getEstimatedTokenSubscriptionAmountETH(token)
         : this.props.networkId === 56
         ? await window.getEstimatedTokenSubscriptionAmountBNB(token)
+        : this.props.networkId === 1030
+        ? await window.getEstimatedTokenSubscriptionAmountCFX(token)
+        : this.props.networkId === 8453
+        ? await window.getEstimatedTokenSubscriptionAmountBase(token)
         : await window.getEstimatedTokenSubscriptionAmount(token);
     price = new BigNumber(price).toFixed(0);
 
@@ -438,6 +452,8 @@ export default class Subscription extends React.Component {
     const ethsubscribeAddress = window.config.subscription_neweth_address;
     const avaxsubscribeAddress = window.config.subscription_newavax_address;
     const bnbsubscribeAddress = window.config.subscription_newbnb_address;
+    const cfxsubscribeAddress = window.config.subscription_cfx_address;
+    const basesubscribeAddress = window.config.subscription_base_address;
 
     this.setState({ loadspinner: true });
 
@@ -447,6 +463,10 @@ export default class Subscription extends React.Component {
           ? ethsubscribeAddress
           : this.props.networkId === 56
           ? bnbsubscribeAddress
+          : this.props.networkId === 1030
+          ? cfxsubscribeAddress
+          : this.props.networkId === 8453
+          ? basesubscribeAddress
           : avaxsubscribeAddress,
         this.state.price
       )
@@ -512,10 +532,14 @@ export default class Subscription extends React.Component {
     const web3eth = new Web3(window.config.infura_endpoint);
     const bscWeb3 = new Web3(window.config.bsc_endpoint);
     const avaxWeb3 = new Web3(window.config.avax_endpoint);
+    const cfxWeb3 = new Web3(window.config.conflux_endpoint);
+    const baseWeb3 = new Web3(window.config.base_endpoint);
 
     const ethsubscribeAddress = window.config.subscription_neweth_address;
     const avaxsubscribeAddress = window.config.subscription_newavax_address;
     const bnbsubscribeAddress = window.config.subscription_newbnb_address;
+    const confluxsubscribeAddress = window.config.subscription_cfx_address;
+    const basesubscribeAddress = window.config.subscription_base_address;
 
     const subscribeToken = token;
     const subscribeTokencontract = new web3eth.eth.Contract(
@@ -533,6 +557,32 @@ export default class Subscription extends React.Component {
       subscribeToken
     );
 
+    const subscribeTokencontractcfx = new cfxWeb3.eth.Contract(
+      window.ERC20_ABI,
+      subscribeToken
+    );
+
+    const subscribeTokencontractbase = new baseWeb3.eth.Contract(
+      window.ERC20_ABI,
+      subscribeToken
+    );
+
+    
+    let tokenprice =
+    this.props.networkId === 1
+        ? await window.getEstimatedTokenSubscriptionAmountETH(token)
+        : this.props.networkId === 56
+        ? await window.getEstimatedTokenSubscriptionAmountBNB(token)
+        : this.props.networkId === 1030
+        ? await window.getEstimatedTokenSubscriptionAmountCFX(token)
+        : this.props.networkId === 43114
+        ? await window.getEstimatedTokenSubscriptionAmount(token)
+        : this.props.networkId === 8453
+        ? await window.getEstimatedTokenSubscriptionAmountBase(token)
+        : await window.getEstimatedTokenSubscriptionAmount(token);
+
+    tokenprice = new BigNumber(tokenprice).toFixed(0);
+
     if (this.props.coinbase && this.props.coinbase.includes("0x")) {
       if (this.props.networkId === 1) {
         const result = await subscribeTokencontract.methods
@@ -540,27 +590,56 @@ export default class Subscription extends React.Component {
           .call()
           .then();
 
-        if (result != 0) {
+        if (result != 0 && Number(result) >= Number(tokenprice)) {
           this.setState({ lockActive: true });
           this.setState({ loadspinner: false });
           this.setState({ isApproved: true });
-        } else if (result == 0) {
+        } else if (result == 0 || Number(result) < Number(tokenprice)) {
           this.setState({ lockActive: false });
           this.setState({ loadspinner: false });
           this.setState({ isApproved: false });
         }
-      }
-      if (this.props.networkId === 56) {
+      } else if (this.props.networkId === 56) {
         const result = await subscribeTokencontractbnb.methods
           .allowance(this.props.coinbase, bnbsubscribeAddress)
           .call()
           .then();
 
-        if (result != 0) {
+        if (result != 0 && Number(result) >= Number(tokenprice)) {
           this.setState({ lockActive: true });
           this.setState({ loadspinner: false });
           this.setState({ isApproved: true });
-        } else if (result == 0) {
+        } else if (result == 0 || Number(result) < Number(tokenprice))  {
+          this.setState({ lockActive: false });
+          this.setState({ loadspinner: false });
+          this.setState({ isApproved: false });
+        }
+      } else if (this.props.networkId === 1030) {
+        const result = await subscribeTokencontractcfx.methods
+          .allowance(this.props.coinbase, confluxsubscribeAddress)
+          .call()
+          .then();
+
+        if (result != 0 && Number(result) >= Number(tokenprice)) {
+          this.setState({ lockActive: true });
+          this.setState({ loadspinner: false });
+          this.setState({ isApproved: true });
+        } else if (result == 0 || Number(result) < Number(tokenprice)) {
+          this.setState({ lockActive: false });
+          this.setState({ loadspinner: false });
+          this.setState({ isApproved: false });
+        }
+      } else if (this.props.networkId === 8453) {
+        const result = await subscribeTokencontractbase.methods
+          .allowance(this.props.coinbase, basesubscribeAddress)
+          .call()
+          .then();
+
+        if (result != 0 && Number(result) >= Number(tokenprice)) {
+          this.setState({ lockActive: true });
+          this.setState({ loadspinner: false });
+          this.setState({ isApproved: true });
+        } else if (result == 0 || Number(result) < Number(tokenprice)) {
           this.setState({ lockActive: false });
           this.setState({ loadspinner: false });
           this.setState({ isApproved: false });
@@ -571,11 +650,11 @@ export default class Subscription extends React.Component {
           .call()
           .then();
 
-        if (result != 0) {
+        if (result != 0 && Number(result) >= Number(tokenprice)) {
           this.setState({ lockActive: true });
           this.setState({ loadspinner: false });
           this.setState({ isApproved: true });
-        } else if (result == 0) {
+        } else if (result == 0 || Number(result) < Number(tokenprice)) {
           this.setState({ lockActive: false });
           this.setState({ loadspinner: false });
           this.setState({ isApproved: false });
@@ -592,6 +671,10 @@ export default class Subscription extends React.Component {
           ? "SUBSCRIPTION_NEWETH"
           : this.props.networkId === 56
           ? "SUBSCRIPTION_NEWBNB"
+          : this.props.networkId === 1030
+          ? "SUBSCRIPTION_CFX"
+          : this.props.networkId === 8453
+          ? "SUBSCRIPTION_BASE"
           : "SUBSCRIPTION_NEWAVAX",
     });
 
@@ -773,6 +856,14 @@ export default class Subscription extends React.Component {
         ? window.config.subscriptionbnb_tokens[
             this.state.selectedSubscriptionToken
           ]?.decimals
+        : this.props.networkId === 1030
+        ? window.config.subscriptioncfx_tokens[
+            this.state.selectedSubscriptionToken
+          ]?.decimals
+        : this.props.networkId === 8453
+        ? window.config.subscriptionbase_tokens[
+            this.state.selectedSubscriptionToken
+          ]?.decimals
         : window.config.subscription_tokens[
             this.state.selectedSubscriptionToken
           ]?.decimals;
@@ -806,7 +897,7 @@ export default class Subscription extends React.Component {
 
     const benefits = [
       "DYP Tools administrative dashboard",
-      "Exclusive access to World of Dypians metaverse platform",
+      " Exclusive access to World of Dypians metaverse platform",
       "Priority allocation to presales of new projects through Dypius Launchpad",
       "Voting capabilities in the News section",
       "Early access to upcoming features and updates",
@@ -821,7 +912,7 @@ export default class Subscription extends React.Component {
       {
         icon: "globe",
         content:
-          "Access unique content and experiences only available in the WoD.",
+          "Access unique content and experiences in the World of Dypians.",
       },
       {
         icon: "coins",
@@ -1116,6 +1207,14 @@ export default class Subscription extends React.Component {
                       ? this.handleSubscriptionTokenChange(
                           this.state.wbnbAddress
                         )
+                      : this.props.networkId === 1030
+                      ? this.handleSubscriptionTokenChange(
+                          this.state.wcfxAddress
+                        )
+                      : this.props.networkId === 8453
+                      ? this.handleSubscriptionTokenChange(
+                          this.state.wbaseAddress
+                        )
                       : this.handleSubscriptionTokenChange(
                           this.state.wavaxAddress
                         );
@@ -1124,6 +1223,10 @@ export default class Subscription extends React.Component {
                         ? this.state.wethAddress
                         : this.props.networkId === 56
                         ? this.state.wbnbAddress
+                        : this.props.networkId === 1030
+                        ? this.state.wcfxAddress
+                        : this.props.networkId === 8453
+                        ? this.state.wbaseAddress
                         : this.state.wavaxAddress
                     );
                     this.props.networkId === 1
@@ -1135,6 +1238,16 @@ export default class Subscription extends React.Component {
                       ? this.setState({
                           dropdownIcon: "wbnb",
                           dropdownTitle: "WBNB",
+                        })
+                      : this.props.networkId === 1030
+                      ? this.setState({
+                          dropdownIcon: "wcfx",
+                          dropdownTitle: "WCFX",
+                        })
+                      : this.props.networkId === 8453
+                      ? this.setState({
+                          dropdownIcon: "weth",
+                          dropdownTitle: "WETH",
                         })
                       : this.setState({
                           dropdownIcon: "wavax",
@@ -1280,6 +1393,10 @@ export default class Subscription extends React.Component {
                           ? window.config.subscriptioneth_tokens
                           : this.props.networkId === 56
                           ? window.config.subscriptionbnb_tokens
+                          : this.props.networkId === 1030
+                          ? window.config.subscriptioncfx_tokens
+                          : this.props.networkId === 8453
+                          ? window.config.subscriptionbase_tokens
                           : window.config.subscription_tokens
                       ).map((t, i) => (
                         // <span className="radio-wrapper" key={t}>
@@ -1321,6 +1438,12 @@ export default class Subscription extends React.Component {
                                     : this.props.networkId === 56
                                     ? window.config.subscriptionbnb_tokens[t]
                                         ?.symbol
+                                    : this.props.networkId === 1030
+                                    ? window.config.subscriptioncfx_tokens[t]
+                                        ?.symbol
+                                    : this.props.networkId === 8453
+                                    ? window.config.subscriptionbase_tokens[t]
+                                        ?.symbol
                                     : window.config.subscription_tokens[t]
                                         ?.symbol,
                                 dropdownIcon:
@@ -1329,6 +1452,12 @@ export default class Subscription extends React.Component {
                                         ?.symbol
                                     : this.props.networkId === 56
                                     ? window.config.subscriptionbnb_tokens[t]
+                                        ?.symbol
+                                    : this.props.networkId === 1030
+                                    ? window.config.subscriptioncfx_tokens[t]
+                                        ?.symbol
+                                    : this.props.networkId === 8453
+                                    ? window.config.subscriptionbase_tokens[t]
                                         ?.symbol
                                     : window.config.subscription_tokens[t]
                                         ?.symbol,
@@ -1349,6 +1478,14 @@ export default class Subscription extends React.Component {
                                 ? require(`./assets/${window.config.subscriptionbnb_tokens[
                                     t
                                   ]?.symbol.toLowerCase()}Icon.svg`).default
+                                : this.props.networkId === 1030
+                                ? require(`./assets/${window.config.subscriptioncfx_tokens[
+                                    t
+                                  ]?.symbol.toLowerCase()}Icon.svg`).default
+                                : this.props.networkId === 8453
+                                ? require(`./assets/${window.config.subscriptionbase_tokens[
+                                    t
+                                  ]?.symbol.toLowerCase()}Icon.svg`).default
                                 : require(`./assets/${window.config.subscription_tokens[
                                     t
                                   ]?.symbol.toLowerCase()}Icon.svg`).default
@@ -1359,6 +1496,10 @@ export default class Subscription extends React.Component {
                             ? window.config.subscriptioneth_tokens[t]?.symbol
                             : this.props.networkId === 56
                             ? window.config.subscriptionbnb_tokens[t]?.symbol
+                            : this.props.networkId === 1030
+                            ? window.config.subscriptioncfx_tokens[t]?.symbol
+                            : this.props.networkId === 8453
+                            ? window.config.subscriptionbase_tokens[t]?.symbol
                             : window.config.subscription_tokens[t]?.symbol}
                         </li>
                       ))}

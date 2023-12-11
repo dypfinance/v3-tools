@@ -14,7 +14,7 @@ const NftConfirmUnstakeModal = ({ visible, onSuccessClick, onCancelClick, setIsV
                     {title}
                 </h1>
                 <p className="loading-modal-content-text">
-                By Unstaking your NFT you will still be able to recieve your current amout of ETH rewards that will be added to your wallet.
+                By Unstaking your NFT you will still be able to receive your current amout of ETH rewards that will be added to your wallet.
                 </p>
                 <div className="loading-modal-content-buttons">
                     <button onClick={onSuccessClick} className="btn btn-primary" data-dismiss="modal">

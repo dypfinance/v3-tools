@@ -120,6 +120,14 @@ class App extends React.Component {
               this.setState({
                 networkId: "43114",
               });
+            } else if (data === "0x2105") {
+              this.setState({
+                networkId: "8453",
+              });
+            } else if (data === "0x406") {
+              this.setState({
+                networkId: "1030",
+              });
             } else if (data === "0x38") {
               this.setState({
                 networkId: "56",
@@ -151,6 +159,14 @@ class App extends React.Component {
         } else if (chainId === "0xa86a") {
           this.setState({
             networkId: "43114",
+          });
+        } else if (chainId === "0x2105") {
+          this.setState({
+            networkId: "8453",
+          });
+        } else if (chainId === "0x406") {
+          this.setState({
+            networkId: "1030",
           });
         } else if (chainId === "0x38") {
           this.setState({
@@ -185,18 +201,26 @@ class App extends React.Component {
     let subscribedPlatformTokenAmountNewETH;
     let subscribedPlatformTokenAmountNewAvax;
     let subscribedPlatformTokenAmountNewBNB;
+    let subscribedPlatformTokenAmountCfx;
+    let subscribedPlatformTokenAmountBase;
 
     const web3eth = window.infuraWeb3;
     const web3avax = window.avaxWeb3;
     const web3bnb = window.bscWeb3;
+    const web3cfx = window.confluxWeb3;
+    const web3base = window.baseWeb3;
 
     const AvaxNewABI = window.SUBSCRIPTION_NEWAVAX_ABI;
     const EthNewABI = window.SUBSCRIPTION_NEWETH_ABI;
     const BnbNewABI = window.SUBSCRIPTION_NEWBNB_ABI;
+    const CfxABI = window.SUBSCRIPTION_CFX_ABI;
+    const BaseABI = window.SUBSCRIPTION_BASE_ABI;
 
     const ethsubscribeNewAddress = window.config.subscription_neweth_address;
     const avaxsubscribeNewAddress = window.config.subscription_newavax_address;
     const bnbsubscribeNewAddress = window.config.subscription_newbnb_address;
+    const cfxsubscribeAddress = window.config.subscription_cfx_address;
+    const basesubscribeAddress = window.config.subscription_base_address;
 
     const ethNewcontract = new web3eth.eth.Contract(
       EthNewABI,
@@ -213,6 +237,13 @@ class App extends React.Component {
       bnbsubscribeNewAddress
     );
 
+    const cfxcontract = new web3cfx.eth.Contract(CfxABI, cfxsubscribeAddress);
+
+    const basecontract = new web3base.eth.Contract(
+      BaseABI,
+      basesubscribeAddress
+    );
+
     if (coinbase) {
       subscribedPlatformTokenAmountNewETH = await ethNewcontract.methods
         .subscriptionPlatformTokenAmount(coinbase)
@@ -226,14 +257,26 @@ class App extends React.Component {
         .subscriptionPlatformTokenAmount(coinbase)
         .call();
 
+      subscribedPlatformTokenAmountCfx = await cfxcontract.methods
+        .subscriptionPlatformTokenAmount(coinbase)
+        .call();
+
+      subscribedPlatformTokenAmountBase = await basecontract.methods
+        .subscriptionPlatformTokenAmount(coinbase)
+        .call();
+
       if (
         subscribedPlatformTokenAmountNewETH === "0" &&
+        subscribedPlatformTokenAmountCfx === "0" &&
+        subscribedPlatformTokenAmountBase === "0" &&
         subscribedPlatformTokenAmountNewAvax === "0" &&
         subscribedPlatformTokenAmountNewBNB === "0"
       ) {
         this.setState({ subscribedPlatformTokenAmount: "0", isPremium: false });
       } else if (
         subscribedPlatformTokenAmountNewETH !== "0" ||
+        subscribedPlatformTokenAmountCfx !== "0" ||
+        subscribedPlatformTokenAmountBase !== "0" ||
         subscribedPlatformTokenAmountNewAvax !== "0" ||
         subscribedPlatformTokenAmountNewBNB !== "0"
       ) {
@@ -286,7 +329,6 @@ class App extends React.Component {
     this.setState({ show: false });
     return isConnected;
   };
-
 
   tvl = async () => {
     try {
