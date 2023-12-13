@@ -805,7 +805,10 @@ export default class Subscription extends React.Component {
       .then((response) => response.json())
       .then((result) => {
         console.log("Success:", result);
-        window.location.reload();
+        setTimeout(() => {
+         window.location.reload();  
+        }, 3000);
+       
       })
       .catch((error) => {
         console.error("Error:", error);
