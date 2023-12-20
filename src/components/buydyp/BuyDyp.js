@@ -65,7 +65,7 @@ const BuyDyp = () => {
     {
       title: "Gate.io",
       logo: "gateio.png",
-      link: "https://www.gate.io/zh/trade/DYP_USDT",
+      link: "https://www.gate.io/trade/DYP_USDT",
       totalvids: "1 video",
       active: true,
       version: "DYP v2",
