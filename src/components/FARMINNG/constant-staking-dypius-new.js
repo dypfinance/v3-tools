@@ -1806,7 +1806,6 @@ const StakeDypiusEth = ({
           setIsVisible={() => {
             setshowCalculator(false);
           }}
-          width="fit-content"
         >
           <div className="pools-calculator">
             {/* <div className="d-flex align-items-center justify-content-between">
@@ -1867,7 +1866,7 @@ const StakeDypiusEth = ({
             <div className="d-flex flex-column gap-2 mt-4">
               <h3 style={{ fontWeight: "500", fontSize: "39px" }}>
                 {" "}
-                ${getFormattedNumber(getApproxReturn() * tokendata, 6)} USD
+                ${getFormattedNumber(getApproxReturn() * usdPerToken, 6)} USD
               </h3>
               <h6
                 style={{
