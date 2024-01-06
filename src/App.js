@@ -103,9 +103,8 @@ class App extends React.Component {
       !this.props.history.location.pathname.includes("migration")
     ) {
       if (
-        window.ethereum &&
+        window.ethereum && !window.coin98 &&
         (window.ethereum.isMetaMask === true ||
-          window.coin98 === true ||
           window.ethereum.isTrust === true ||
           window.ethereum.isCoinbaseWallet === true)
       ) {
@@ -147,7 +146,7 @@ class App extends React.Component {
           .catch(console.error);
       } else if (
         window.ethereum &&
-        window.ethereum.overrideIsMetaMask === true &&
+        window.ethereum.overrideIsMetaMask === true && !window.coin98 &&
         !window.ethereum.isCoinbaseWallet
       ) {
         const chainId = window.ethereum.selectedProvider.chainId;
@@ -183,7 +182,25 @@ class App extends React.Component {
         }
 
         this.refreshSubscription().then();
-      } else {
+      } else  if (
+        window.ethereum && window.coin98) {
+        window.ethereum
+          .request({ method: "net_version" })
+          .then((data) => {
+            if (data !== undefined) {
+              this.setState({
+                networkId: data,
+              });
+            }  else if (data !== "undefined") {
+              this.setState({
+                networkId: "0",
+              });
+            } 
+
+            this.refreshSubscription().then();
+          })
+          .catch(console.error);
+      }else {
         this.setState({
           networkId: "1",
         });
