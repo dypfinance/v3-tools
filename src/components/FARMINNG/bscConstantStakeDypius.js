@@ -1842,7 +1842,7 @@ const StakeDypiusBsc = ({
             </div>
             <div className="d-flex flex-column gap-2 mt-4">
               <h3 style={{ fontWeight: "500", fontSize: "39px" }}>
-                $ {getFormattedNumber(getApproxReturn() * tokendata, 3)} USD
+                $ {getFormattedNumber(getApproxReturn() * usdPerToken, 3)} USD
               </h3>
               <h6
                 style={{
