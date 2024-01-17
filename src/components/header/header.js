@@ -209,6 +209,8 @@ const Header = ({
         })
         .catch((err) => {
           console.log(err);
+          setUsername("Dypian");
+
         });
     } else {
       setUsername("Dypian");
@@ -305,6 +307,7 @@ const Header = ({
       fetchAvatar();
       fetchUsername();
     }
+    else setUsername('Dypian')
   }, [coinbase, checklogout]);
 
   return (
