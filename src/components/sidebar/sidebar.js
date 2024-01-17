@@ -43,9 +43,8 @@ const Sidebar = (props) => {
 
   const { active, account } = useWeb3React();
 
-    const triedEager = useEagerConnect();
-    useInactiveListener(!triedEager);
-
+  const triedEager = useEagerConnect();
+  useInactiveListener(!triedEager);
 
   const fetchAvatar = async () => {
     const response = await fetch(
@@ -127,7 +126,7 @@ const Sidebar = (props) => {
       icon: "bridgeIcon",
       link: "/bridge",
     },
-  
+
     {
       label: "Yields",
       icon: "yieldsIcon",
@@ -192,7 +191,9 @@ const Sidebar = (props) => {
   return (
     <div
       id="sidebar"
-      style={{ padding: "2.5rem 0" }}
+      style={{
+        padding: props.showRibbon === true ? "70px 0 2.5rem 0px" : "2.5rem 0",
+      }}
       className={`testbar ${
         activeSidebar ? "testbar-open" : null
       } d-none d-lg-flex flex-column gap-3 justify-content-between align-items-start`}
@@ -358,14 +359,15 @@ const Sidebar = (props) => {
           </div>
         </div>
       </div>
-      {activeSidebar && (props.isPremium === false || props.isPremium === null) && (
-        <NavLink
-          to={"/plans"}
-          className="d-flex align-items-center justify-content-center"
-        >
-          <img src={sidebarPremium} alt="" style={{ width: "80%" }} />
-        </NavLink>
-      )}
+      {activeSidebar &&
+        (props.isPremium === false || props.isPremium === null) && (
+          <NavLink
+            to={"/plans"}
+            className="d-flex align-items-center justify-content-center"
+          >
+            <img src={sidebarPremium} alt="" style={{ width: "80%" }} />
+          </NavLink>
+        )}
     </div>
     // <div
     //   onClick={props.toggleMobileSidebar}
