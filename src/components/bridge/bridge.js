@@ -143,7 +143,9 @@ export default function initBridge({
         this.props.sourceChain === "avax" || this.props.sourceChain === "bnb"
           ? bridgeBSC._address
           : bridgeETH._address,
-        bridgeETH.tokenAddress,
+        this.props.sourceChain === "avax" || this.props.sourceChain === "bnb"
+          ? bridgeBSC.tokenAddress
+          : bridgeETH.tokenAddress,
         1
       );
 
@@ -151,27 +153,32 @@ export default function initBridge({
       this.setState({ ethPool: ethPool });
 
       //Get DYP Balance BNB Chain Pool
-      let avaxPool = await window.getTokenHolderBalanceAll(
-        this.props.sourceChain === "eth"
-          ? bridgeBSC._address
-          : bridgeETH._address,
-        bridgeETH.tokenAddress,
-        2
-      );
+      // let avaxPool = await window.getTokenHolderBalanceAll(
+      //   this.props.sourceChain === "avax"
+      //     ? bridgeETH._address
+      //     : bridgeBSC._address,
+      //   this.props.sourceChain === "avax"
+      //     ? bridgeETH.tokenAddress
+      //     : bridgeBSC.tokenAddress,
+      //   2
+      // );
 
-      avaxPool = avaxPool / 1e18;
-      this.setState({ avaxPool: avaxPool });
+      // avaxPool = avaxPool / 1e18;
 
-      let bnbPool = await window.getTokenHolderBalanceAll(
-        this.props.sourceChain === "bnb"
-          ? bridgeETH._address
-          : bridgeBSC._address,
-        bridgeETH.tokenAddress,
-        3
-      );
+      // this.setState({ avaxPool: avaxPool });
 
-      bnbPool = bnbPool / 1e18;
-      this.setState({ bnbPool: bnbPool });
+      // let bnbPool = await window.getTokenHolderBalanceAll(
+      //   this.props.sourceChain === "bnb"
+      //     ? bridgeETH._address
+      //     : bridgeBSC._address,
+      //   this.props.sourceChain === "bnb"
+      //     ? bridgeETH.tokenAddress
+      //     : bridgeBSC.tokenAddress,
+      //   3
+      // );
+
+      // bnbPool = bnbPool / 1e18;
+      // this.setState({ bnbPool: bnbPool });
     };
 
     handleApprove = (e) => {
@@ -680,27 +687,22 @@ export default function initBridge({
                                   className="poolbalance-text"
                                   style={{ gap: "6px" }}
                                 >
-                                  {this.props.sourceChain === "eth"
-                                    ? "Ethereum"
-                                    : this.props.sourceChain !== "avax"
-                                    ? "BNB Chain"
-                                    : "Avalanche"}{" "}
-                                  Pool:{" "}
+                                  Ethereum Pool:{" "}
                                   <b>
-                                    {this.props.sourceChain === "bnb"
-                                      ? getFormattedNumber(
-                                          this.state.bnbPool,
-                                          2
-                                        )
-                                      : this.props.sourceChain === "avax"
-                                      ? getFormattedNumber(
-                                          this.state.avaxPool,
-                                          2
-                                        )
-                                      : getFormattedNumber(
-                                          this.state.ethPool,
-                                          2
-                                        )}{" "}
+                                    {
+                                      // this.props.sourceChain === "bnb"
+                                      //   ? getFormattedNumber(
+                                      //       this.state.bnbPool,
+                                      //       2
+                                      //     )
+                                      //   : this.props.sourceChain === "avax"
+                                      //   ? getFormattedNumber(
+                                      //       this.state.avaxPool,
+                                      //       2
+                                      //     )
+                                      //   :
+                                      getFormattedNumber(this.state.ethPool, 2)
+                                    }{" "}
                                     DYP
                                   </b>
                                 </h6>
@@ -942,7 +944,7 @@ export default function initBridge({
                           <div className="mt-4 otherside w-100">
                             <h6 className="fromtitle flex-column flex-lg-row d-flex justify-content-between align-items-start align-items-lg-center mt-1 mb-2">
                               RECEIVE
-                              <div className="d-flex align-items-center gap-2">
+                              {/* <div className="d-flex align-items-center gap-2">
                                 <h6
                                   className="poolbalance-text"
                                   style={{ gap: "6px" }}
@@ -984,7 +986,7 @@ export default function initBridge({
                                 >
                                   <img src={moreinfo} alt="" />
                                 </Tooltip>
-                              </div>
+                              </div> */}
                             </h6>
 
                             <div className="d-flex gap-2 flex-column flex-lg-row align-items-center justify-content-between">

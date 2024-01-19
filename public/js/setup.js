@@ -3786,24 +3786,26 @@ async function getTokenHolderBalanceAll(holder, token_address, network) {
       token_address,
       { from: undefined }
     );
-    return await tokenContract.methods.balanceOf(holder).call();
+
+    return await tokenContract.methods.balanceOf(holder).call().catch((e)=>{console.log(e)});
   }
-  if (network == 2) {
+  else if (network == 2) {
+   
     let tokenContract = new window.avaxWeb3.eth.Contract(
       window.TOKEN_ABI,
       token_address,
       { from: undefined }
     );
-    return await tokenContract.methods.balanceOf(holder).call();
+    return await tokenContract.methods.balanceOf(holder).call().catch((e)=>{console.log(e)});
   }
 
-  if (network == 3) {
+ else if (network == 3) {
     let tokenContract = new window.bscWeb3.eth.Contract(
       window.TOKEN_ABI,
-      token_address,
-      { from: undefined }
+      token_address
     );
-    return await tokenContract.methods.balanceOf(holder).call();
+
+    return await tokenContract.methods.balanceOf(holder).call().catch((e)=>{console.log(e)});
   }
   return 0;
 }
