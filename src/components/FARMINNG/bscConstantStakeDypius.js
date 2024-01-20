@@ -973,7 +973,7 @@ const StakeDypiusBsc = ({
                     title={
                       <div className="tooltip-text">
                         {lockTime === "No Lock"
-                          ? "The initial pool size is capped at 3M DYP. Additional opportunities to stake DYP are planned to be introduced over time."
+                          ? "The initial pool size is capped at 2.5M DYP. Additional opportunities to stake DYP are planned to be introduced over time."
                           : "Deposit your assets to the staking smart contract. For lock time pools, the lock time resets if you add more deposits after making one previously."}
                       </div>
                     }
