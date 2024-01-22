@@ -2139,7 +2139,7 @@ const BscFarmingFunc = ({
                           disabled
                           value={
                             Number(pendingDivsEth) > 0
-                              ? `${getFormattedNumber(pendingDivsEth, 3)} WBNB`
+                              ? `${getFormattedNumber(pendingDivsEth, 4)} WBNB`
                               : `${getFormattedNumber(0, 2)} WBNB`
                           }
                           onChange={(e) =>
@@ -2154,7 +2154,7 @@ const BscFarmingFunc = ({
                           type="text"
                           style={{
                             width: "100px",
-                            padding: "0px 15px 0px 15px",
+                            textAlign: "center",
                             height: 35,
                           }}
                         />
