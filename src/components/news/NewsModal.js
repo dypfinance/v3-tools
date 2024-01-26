@@ -281,7 +281,7 @@ const NewsModal = ({
 
   return (
     <>
-      <div className="newmodal col-8 ps-0">
+      <div className="newmodal col-12 col-lg-8 ps-lg-0" style={{overflow: "hidden"}}>
         <div className="news-modal">
           <div className="details-modal-content">
             <div className="left-col" ref={elementRef}>
