@@ -2891,6 +2891,7 @@ border-radius: 8px;
   background: #312F69;
 box-shadow: 0px 32px 64px rgba(17, 17, 17, 0.12);
 border-radius: 12px;
+width: 100%;
 }
 
 .button-wrapper {
