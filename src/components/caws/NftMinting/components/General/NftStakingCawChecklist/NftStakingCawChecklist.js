@@ -83,7 +83,7 @@ const NftStakingCawChecklist = ({
     setloading(true);
 
     await stake_contract.methods
-      .withdraw([itemId])
+      .emergencyWithdraw([itemId])
       .send()
       .then(() => {
         setcheckPassiveBtn(false);
