@@ -34,6 +34,8 @@ import FarmAvaxFunc from "../FARMINNG/FarmAvaxFunc";
 import StakeDypiusEth from "../FARMINNG/constant-staking-dypius-new";
 import StakeDypiusAvax from "../FARMINNG/stakeDypiusAvax";
 import StakeDypiusBsc from "../FARMINNG/bscConstantStakeDypius";
+import StakeEthOld from "../FARMINNG/stakingEthOld";
+
 
 const TopPoolsListCard = ({
   tokenLogo,
@@ -1115,7 +1117,7 @@ const TopPoolsListCard = ({
             expiredPools[cardIndex - 1].id ===
               "0x8A30Be7B2780b503ff27dBeaCdecC4Fe2587Af5d" &&
             chain === "eth" ? (
-            <StakeEth
+            <StakeEthOld
               staking={window.constant_staking_new2}
               apr={expiredPools[cardIndex - 1]?.apy_percent}
               liquidity={eth_address}
