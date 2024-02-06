@@ -1720,7 +1720,7 @@ window.config = {
 
   infura_endpoint:
     "https://mainnet.infura.io/v3/94608dc6ddba490697ec4f9b723b586e",
-  bsc_endpoint: "https://bsc-dataseed.binance.org/",
+  bsc_endpoint: "https://bsc-dataseed.bnbchain.org",
   avax_endpoint: "https://api.avax.network/ext/bc/C/rpc",
   conflux_endpoint: "https://evm.confluxrpc.com/",
   base_endpoint: "https://base.publicnode.com",
