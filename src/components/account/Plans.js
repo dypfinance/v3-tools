@@ -567,9 +567,8 @@ export default class Subscription extends React.Component {
       subscribeToken
     );
 
-    
     let tokenprice =
-    this.props.networkId === 1
+      this.props.networkId === 1
         ? await window.getEstimatedTokenSubscriptionAmountETH(token)
         : this.props.networkId === 56
         ? await window.getEstimatedTokenSubscriptionAmountBNB(token)
@@ -609,7 +608,7 @@ export default class Subscription extends React.Component {
           this.setState({ lockActive: true });
           this.setState({ loadspinner: false });
           this.setState({ isApproved: true });
-        } else if (result == 0 || Number(result) < Number(tokenprice))  {
+        } else if (result == 0 || Number(result) < Number(tokenprice)) {
           this.setState({ lockActive: false });
           this.setState({ loadspinner: false });
           this.setState({ isApproved: false });
@@ -663,6 +662,15 @@ export default class Subscription extends React.Component {
     }
   };
 
+  handleUpdatePremiumUser = async () => {
+    const wallet = await window.getCoinbase();
+    await axios
+      .get(`https://api.worldofdypians.com/api/sub/${wallet}`)
+      .catch((e) => {
+        console.error(e);
+      });
+  };
+
   handleSubscribe = async (e) => {
     // e.preventDefault();
     let subscriptionContract = await window.getContract({
@@ -694,6 +702,7 @@ export default class Subscription extends React.Component {
       .then(() => {
         this.setState({ loadspinnerSub: false, approveStatus: "success" });
         this.props.onSubscribe();
+        this.handleUpdatePremiumUser();
         window.location.href = "https://app.dypius.com/account";
       })
       .catch((e) => {
@@ -806,9 +815,8 @@ export default class Subscription extends React.Component {
       .then((result) => {
         console.log("Success:", result);
         setTimeout(() => {
-         window.location.reload();  
+          window.location.reload();
         }, 3000);
-       
       })
       .catch((error) => {
         console.error("Error:", error);
