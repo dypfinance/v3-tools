@@ -959,7 +959,10 @@ const EarnContent = ({
           />
           <h6 className="no-farms"> No Farming pools available</h6>
         </div>
-      )  : option === "Staking" && expiredPools === true && stake !=='eth' ? (
+      ) : option === "Staking" &&
+        expiredPools === true &&
+        stake !== "eth" &&
+        !showRibbon ? (
         <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
           <img
             src={
@@ -970,7 +973,7 @@ const EarnContent = ({
           />
           <h6 className="no-farms"> No Staking pools available</h6>
         </div>
-      ): (
+      ) : (
         //option === "Farming" && stake === "avax" && expiredPools === false ? (
         //   <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
         //     <img
