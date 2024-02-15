@@ -620,6 +620,7 @@ const CawsDetails = ({
           countDownLeft={countDownLeft}
           open={openStakeChecklist ? true : false}
           hideItem={hide}
+          showbutton={true}
         />
       )}
 

@@ -9464,7 +9464,7 @@ const EarnTopPicks = ({
                     }
                   />
                 )}
-                {}
+                
                 {expiredDYPPools
                   .slice(0, topList === "Staking" && chain === "eth" ? 2 : 3)
                   .map((pool, index) => (

@@ -34,6 +34,7 @@ const NftStakeCheckListModal = ({
   getApprovedNfts,
   hideItem,
   onDepositComplete,
+  showbutton,
 }) => {
   const style = {
     position: "absolute",
@@ -374,7 +375,8 @@ const NftStakeCheckListModal = ({
               className="checklist-subtitle mb-2"
               style={{ color: "#C0CBF7" }}
             >
-              A list of your NFT collection that can be added and removed from the staking pools
+              A list of your NFT collection that can be added and removed from
+              the staking pools
             </h6>
           </div>
           {/* <img
@@ -526,10 +528,12 @@ const NftStakeCheckListModal = ({
                         isStake={showStaked}
                         countDownLeft={countDownLeft}
                         checked={
-                        (  (showToStake === true && checkbtn === true) ||
-                          (showStaked === true && checkUnstakebtn === true)) && (selectNftIds.length <=50)
+                          ((showToStake === true && checkbtn === true) ||
+                            (showStaked === true &&
+                              checkUnstakebtn === true)) &&
+                          selectNftIds.length <= 50
                         }
-                        checked2 = {selectNftIds.length <=50 ? true : false}
+                        checked2={selectNftIds.length <= 50 ? true : false}
                         checklistItemID={nftId}
                         onChange={(value) => {
                           selectNftIds.indexOf(value) === -1
@@ -545,6 +549,7 @@ const NftStakeCheckListModal = ({
                         }}
                         coinbase={coinbase}
                         isConnected={isConnected}
+                        showbutton={showbutton}
                       />
                     </>
                   );
@@ -558,8 +563,8 @@ const NftStakeCheckListModal = ({
                 ].map((item, id) => {
                   return (
                     <NftPlaceHolder
-                    width={195}
-                    key={id}
+                      width={195}
+                      key={id}
                       onMintClick={() => {
                         onClose();
                         setCheckUnstakeBtn(false);
@@ -592,10 +597,11 @@ const NftStakeCheckListModal = ({
                       isStake={showStaked}
                       countDownLeft={countDownLeft}
                       checked={
-                        (  (showToStake === true && checkbtn === true) ||
-                          (showStaked === true && checkUnstakebtn === true)) && (selectNftIds.length <=50)
-                        }
-                        checked2 = {selectNftIds.length <=50 ? true : false}
+                        ((showToStake === true && checkbtn === true) ||
+                          (showStaked === true && checkUnstakebtn === true)) &&
+                        selectNftIds.length <= 50
+                      }
+                      checked2={selectNftIds.length <= 50 ? true : false}
                       checklistItemID={nftId}
                       onChange={(value) => {
                         selectNftIds.indexOf(value) === -1
@@ -608,6 +614,7 @@ const NftStakeCheckListModal = ({
                       }}
                       coinbase={coinbase}
                       isConnected={isConnected}
+                      showbutton={showbutton}
                     />
                   </>
                 );
@@ -820,6 +827,7 @@ const NftStakeCheckListModal = ({
 
                 <button
                   className="btn claim-reward-button"
+                  disabled
                   onClick={() => {
                     checkUnstakebtn === true &&
                     selectNftIds.length === nftItem.length
@@ -833,14 +841,12 @@ const NftStakeCheckListModal = ({
                     // setCheckUnstakeBtn(false);
                   }}
                   style={{
-                    background:
-                      ETHrewards != 0
-                        ? "linear-gradient(90.74deg, #7770E0 0%, #554FD8 100%)"
-                        : "#14142A",
-                    pointerEvents: ETHrewards != 0 ? "auto" : "none",
+                    background: "#14142A",
+                    pointerEvents: "none",
                     width: "50%",
                     borderRadius: "8px",
                     color: ETHrewards != 0 ? "#FFFFFF" : "#C0C9FF",
+                    border: 'none',
                     margin: "auto",
                   }}
                 >
