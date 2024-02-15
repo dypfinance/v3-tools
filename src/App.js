@@ -761,7 +761,7 @@ class App extends React.Component {
                     )}
                   />
 
-                  <Route
+                  {/* <Route
                     exact
                     path="/caws"
                     render={() => (
@@ -771,7 +771,7 @@ class App extends React.Component {
                         handleConnection={this.handleConnection}
                       />
                     )}
-                  />
+                  /> */}
 
                   {/* <Route
                     exact

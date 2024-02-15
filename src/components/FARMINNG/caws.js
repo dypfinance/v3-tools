@@ -289,14 +289,9 @@ const CawsDetails = ({
         <div className="leftside2 w-100">
           <div className="activewrapper position-relative flex-row-reverse flex-lg-row align-items-end align-items-lg-center">
             <div className="d-flex flex-column flex-lg-row align-items-end align-items-lg-center justify-content-between gap-3 gap-lg-5">
-              <h6 className="activetxt caws-active-txt">
-                <img
-                  src={ellipse}
-                  alt=""
-                  className="position-relative"
-                  style={{ top: "-1px" }}
-                />
-                Active Pool
+              <h6 className="expiredtxt caws-active-txt">
+               
+                Expired Pool
               </h6>
               {/* <div className="d-flex align-items-center justify-content-between gap-2">
                     <h6 className="earnrewards-text">Earn rewards in:</h6>
@@ -509,7 +504,7 @@ const CawsDetails = ({
             <div
               className={`otherside-border col-12 col-md-6 ${
                 renderedPage === "dashboard" ? "col-lg-5" : "col-lg-4"
-              }  ${chainId !== "1" && "blurrypool"}`}
+              }  ${chainId !== "1" && "blurrypool"} ${expired === true && "blurrypool"}`}
             >
               <div className="d-flex justify-content-between gap-2 flex-column flex-lg-row">
                 <h6 className="withdraw-txt d-flex gap-2 align-items-center">
@@ -551,7 +546,7 @@ const CawsDetails = ({
                     } d-flex justify-content-center align-items-center`}
                     style={{ height: "fit-content" }}
                     onClick={claimRewards}
-                    disabled={EthRewards === 0 ? true : false}
+                    disabled={true}
                   >
                     <>Claim</>
                   </button>
