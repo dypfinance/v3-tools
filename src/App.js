@@ -584,6 +584,9 @@ class App extends React.Component {
             onClose={() => {
               this.setState({ showRibbon: false });
             }}
+            onComplete={() => {
+              this.setState({ showRibbon: false });
+            }}
           />
         )}
         {(this.props?.location?.pathname === "/genesis" &&
@@ -728,6 +731,7 @@ class App extends React.Component {
                         handleSwitchNetwork={this.handleSwitchNetwork}
                         referrer={this.state.referrer}
                         isPremium={this.state.isPremium}
+                        showRibbon={this.state.showRibbon}
                       />
                     )}
                   />

@@ -36,7 +36,8 @@ const EarnContent = ({
   faqIndex,
   networkId,
   handleSwitchNetwork,
-  isPremium
+  isPremium,
+  showRibbon,
 }) => {
   const options = [
     {
@@ -248,61 +249,78 @@ const EarnContent = ({
   };
 
   const fetchEthStaking = async () => {
-   const ethRestult =  await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_eth`).catch((err) => {
+    const ethRestult = await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_eth`)
+      .catch((err) => {
         console.log(err);
       });
 
-      const ethRestult2 =  await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_eth_new`).catch((err) => {
+    const ethRestult2 = await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_eth_new`)
+      .catch((err) => {
         console.log(err);
       });
 
-      if(ethRestult && ethRestult.status === 200 && ethRestult2 && ethRestult2.status === 200) {
-        const ethv1Tvl = ethRestult.data.totalTVL_ETH;
+    if (
+      ethRestult &&
+      ethRestult.status === 200 &&
+      ethRestult2 &&
+      ethRestult2.status === 200
+    ) {
+      const ethv1Tvl = ethRestult.data.totalTVL_ETH;
 
-        const ethv2Tvl = ethRestult2.data.stakingInfoDYPEth[0].tvl_usd
-     
-      
-        setTvl(ethv1Tvl+ethv2Tvl)
+      const ethv2Tvl = ethRestult2.data.stakingInfoDYPEth[0].tvl_usd;
 
-      }
+      setTvl(ethv1Tvl + ethv2Tvl);
+    }
   };
   const fetchBnbStaking = async () => {
- const bnbResult =   await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_bnb`) .catch((err) => {
+    const bnbResult = await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_bnb`)
+      .catch((err) => {
         console.log(err);
       });
 
-      const bnbResult2 =   await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_bnb_new`) .catch((err) => {
+    const bnbResult2 = await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_bnb_new`)
+      .catch((err) => {
         console.log(err);
       });
 
-      if(bnbResult && bnbResult.status===200 && bnbResult2 && bnbResult2.status===200) {
-        const bnbTvl1= bnbResult.data.totalTVL_BNB;
-        const bnbTvl2 = bnbResult2.data.stakingInfoDYPBnb[0].tvl_usd
-        setTvl(bnbTvl1+bnbTvl2)
-
-      }
+    if (
+      bnbResult &&
+      bnbResult.status === 200 &&
+      bnbResult2 &&
+      bnbResult2.status === 200
+    ) {
+      const bnbTvl1 = bnbResult.data.totalTVL_BNB;
+      const bnbTvl2 = bnbResult2.data.stakingInfoDYPBnb[0].tvl_usd;
+      setTvl(bnbTvl1 + bnbTvl2);
+    }
   };
   const fetchAvaxStaking = async () => {
     const avaxResult = await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_avax`).catch((err) => {
+      .get(`https://api.dyp.finance/api/get_staking_info_avax`)
+      .catch((err) => {
         console.log(err);
       });
 
-      const avaxResult2 =   await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_avax_new`) .catch((err) => {
+    const avaxResult2 = await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_avax_new`)
+      .catch((err) => {
         console.log(err);
       });
 
-
-      if(avaxResult && avaxResult.status === 200 && avaxResult2 && avaxResult2.status === 200) {
-        const avaxtvl1 = avaxResult.data.totalTVL_AVAX;
-        const avaxtvl2 = avaxResult2.data.stakingInfoDYPAvax[0].tvl_usd
-        setTvl(avaxtvl1+avaxtvl2)
-      }
+    if (
+      avaxResult &&
+      avaxResult.status === 200 &&
+      avaxResult2 &&
+      avaxResult2.status === 200
+    ) {
+      const avaxtvl1 = avaxResult.data.totalTVL_AVAX;
+      const avaxtvl2 = avaxResult2.data.stakingInfoDYPAvax[0].tvl_usd;
+      setTvl(avaxtvl1 + avaxtvl2);
+    }
   };
 
   const fetchEthBuyback = async () => {
@@ -507,20 +525,28 @@ const EarnContent = ({
                 </div>
               ))}
             </div>
-            <div className="col-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3">
-              <h5 className="text-white inactive-pools">Inactive pools</h5>
+            {showRibbon ? (
               <div
-                className={`pill-box ${myStakes && "pill-box-active"}`}
-                onClick={() => {
-                  setMyStakes(!myStakes);
-                  // setExpiredPools(!expiredPools);
-                  // option === "Farming" && fetchFarmingApr();
-                  toggleInactive();
-                }}
+                className={`col-2  justify-content-end align-items-center gap-1 gap-lg-3 d-flex `}
               >
-                <div className="pill"></div>
+                <h5 className="text-white inactive-pools">Inactive pools</h5>
+                <div
+                  className={`pill-box ${myStakes && "pill-box-active"}`}
+                  onClick={() => {
+                    setMyStakes(!myStakes);
+                    // setExpiredPools(!expiredPools);
+                    // option === "Farming" && fetchFarmingApr();
+                    toggleInactive();
+                  }}
+                >
+                  <div className="pill"></div>
+                </div>
               </div>
-            </div>
+            ) : (
+              <div
+                className={`col-2  justify-content-end align-items-center gap-1 gap-lg-3 d-flex `}
+              ></div>
+            )}
           </div>
         ) : (
           <div
@@ -551,6 +577,7 @@ const EarnContent = ({
                 />
               </div>
             </div>
+            {showRibbon ? 
             <div className="col-6 px-0 px-lg-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3">
               <h5 className="text-white inactive-pools">Inactive pools</h5>
               <div
@@ -562,7 +589,7 @@ const EarnContent = ({
               >
                 <div className="pill"></div>
               </div>
-            </div>
+            </div> : <div className="col-6 px-0 px-lg-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3"></div>}
             <div className="col-12 row d-flex gap-0 gap-xl-3 justify-content-center px-0 px-lg-22 mt-3">
               {options.map((item, index) => (
                 <div
@@ -658,7 +685,7 @@ const EarnContent = ({
                             whiteSpace: "pre",
                           }}
                         >
-                           12.5% APR
+                          12.5% APR
                         </p>
                       </div>
                     </div>
@@ -896,22 +923,21 @@ const EarnContent = ({
           expiredPools={expiredPools}
           isPremium={isPremium}
         />
+      ) : option === "Vault" && networkId !== "1" ? (
+        <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
+          <img
+            src={
+              require("../../../assets/earnAssets/disabledVault.svg").default
+            }
+            style={{ width: "150px", height: "150px" }}
+            alt=""
+          />
+          <h6 className="no-farms">No Vault pools available for this chain</h6>
+          <span className="farm-soon">
+            Switch back to Ethereum Chain to view pools
+          </span>
+        </div>
       ) : (
-         option === "Vault" && networkId !== "1"   ? (
-          <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
-            <img
-              src={
-                require("../../../assets/earnAssets/disabledVault.svg").default
-              }
-              style={{ width: "150px", height: "150px" }}
-              alt=""
-            />
-            <h6 className="no-farms">
-              No Vault pools available for this chain
-            </h6>
-            <span className="farm-soon">Switch back to Ethereum Chain to view pools</span>
-          </div>
-        ) : 
         //option === "Farming" && stake === "avax" && expiredPools === false ? (
         //   <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
         //     <img
