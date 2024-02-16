@@ -75,6 +75,8 @@ class App extends React.Component {
       show: false,
       referrer: "",
       showRibbon: true,
+      showRibbon2: true,
+
     };
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
@@ -586,6 +588,7 @@ class App extends React.Component {
             }}
             onComplete={() => {
               this.setState({ showRibbon: false });
+              this.setState({ showRibbon2: false });
             }}
           />
         )}
@@ -731,7 +734,7 @@ class App extends React.Component {
                         handleSwitchNetwork={this.handleSwitchNetwork}
                         referrer={this.state.referrer}
                         isPremium={this.state.isPremium}
-                        showRibbon={this.state.showRibbon}
+                        showRibbon={this.state.showRibbon2}
                       />
                     )}
                   />
@@ -761,7 +764,7 @@ class App extends React.Component {
                     )}
                   />
 
-                  <Route
+                  {/* <Route
                     exact
                     path="/caws"
                     render={() => (
@@ -771,7 +774,7 @@ class App extends React.Component {
                         handleConnection={this.handleConnection}
                       />
                     )}
-                  />
+                  /> */}
 
                   {/* <Route
                     exact
@@ -894,6 +897,7 @@ class App extends React.Component {
                         isConnected={this.state.isConnected}
                         isPremium={this.state.isPremium}
                         onSubscribe={this.refreshSubscription}
+                        showRibbon={this.state.showRibbon2}
                       />
                     )}
                   />

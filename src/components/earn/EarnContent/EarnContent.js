@@ -525,28 +525,24 @@ const EarnContent = ({
                 </div>
               ))}
             </div>
-            {showRibbon ? (
+
+            <div
+              className={`col-2  justify-content-end align-items-center gap-1 gap-lg-3 d-flex `}
+            >
+              <h5 className="text-white inactive-pools">Inactive pools</h5>
               <div
-                className={`col-2  justify-content-end align-items-center gap-1 gap-lg-3 d-flex `}
+                className={`pill-box ${myStakes && "pill-box-active"}`}
+                onClick={() => {
+                  setMyStakes(!myStakes);
+                  // setExpiredPools(!expiredPools);
+                  // option === "Farming" && fetchFarmingApr();
+                  toggleInactive();
+                  !showRibbon && setStake("eth");
+                }}
               >
-                <h5 className="text-white inactive-pools">Inactive pools</h5>
-                <div
-                  className={`pill-box ${myStakes && "pill-box-active"}`}
-                  onClick={() => {
-                    setMyStakes(!myStakes);
-                    // setExpiredPools(!expiredPools);
-                    // option === "Farming" && fetchFarmingApr();
-                    toggleInactive();
-                  }}
-                >
-                  <div className="pill"></div>
-                </div>
+                <div className="pill"></div>
               </div>
-            ) : (
-              <div
-                className={`col-2  justify-content-end align-items-center gap-1 gap-lg-3 d-flex `}
-              ></div>
-            )}
+            </div>
           </div>
         ) : (
           <div
@@ -577,7 +573,7 @@ const EarnContent = ({
                 />
               </div>
             </div>
-            {showRibbon ? 
+
             <div className="col-6 px-0 px-lg-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3">
               <h5 className="text-white inactive-pools">Inactive pools</h5>
               <div
@@ -585,11 +581,12 @@ const EarnContent = ({
                 onClick={() => {
                   setMyStakes(!myStakes);
                   setExpiredPools(!expiredPools);
+                  !showRibbon && setStake("eth");
                 }}
               >
                 <div className="pill"></div>
               </div>
-            </div> : <div className="col-6 px-0 px-lg-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3"></div>}
+            </div>
             <div className="col-12 row d-flex gap-0 gap-xl-3 justify-content-center px-0 px-lg-22 mt-3">
               {options.map((item, index) => (
                 <div
@@ -650,6 +647,7 @@ const EarnContent = ({
                   </div>
                 )}
               </div>
+
               <div className="col-12 col-lg-8 col-xl-6 d-flex gap-3 justify-content-around justify-content-lg-end justify-content-xl-center px-0 px-xl-2">
                 {option !== "Vault" ? (
                   <>
@@ -895,6 +893,7 @@ const EarnContent = ({
                   </>
                 )}
               </div>
+
               <div className="col-3"></div>
             </div>
             <div className="d-flex align-items-center justify-content-center  py-0 py-lg-4 px-3"></div>
@@ -922,6 +921,7 @@ const EarnContent = ({
           handleSwitchNetwork={handleSwitchNetwork}
           expiredPools={expiredPools}
           isPremium={isPremium}
+          showRibbon={showRibbon}
         />
       ) : option === "Vault" && networkId !== "1" ? (
         <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
@@ -936,6 +936,42 @@ const EarnContent = ({
           <span className="farm-soon">
             Switch back to Ethereum Chain to view pools
           </span>
+        </div>
+      ) : option === "Vault" && expiredPools === true ? (
+        <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
+          <img
+            src={
+              require("../../../assets/earnAssets/disabledVault.svg").default
+            }
+            style={{ width: "150px", height: "150px" }}
+            alt=""
+          />
+          <h6 className="no-farms">No Vault pools available</h6>
+        </div>
+      ) : option === "Farming" && expiredPools === true ? (
+        <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
+          <img
+            src={
+              require("../../../assets/earnAssets/disabledFarming.svg").default
+            }
+            style={{ width: "150px", height: "150px" }}
+            alt=""
+          />
+          <h6 className="no-farms"> No Farming pools available</h6>
+        </div>
+      ) : option === "Staking" &&
+        expiredPools === true &&
+        stake !== "eth" &&
+        !showRibbon ? (
+        <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
+          <img
+            src={
+              require("../../../assets/earnAssets/disabledStaking.svg").default
+            }
+            style={{ width: "150px", height: "150px" }}
+            alt=""
+          />
+          <h6 className="no-farms"> No Staking pools available</h6>
         </div>
       ) : (
         //option === "Farming" && stake === "avax" && expiredPools === false ? (
@@ -972,6 +1008,7 @@ const EarnContent = ({
           handleSwitchNetwork={handleSwitchNetwork}
           expiredPools={expiredPools}
           isPremium={isPremium}
+          showRibbon={showRibbon}
         />
       )}
 
