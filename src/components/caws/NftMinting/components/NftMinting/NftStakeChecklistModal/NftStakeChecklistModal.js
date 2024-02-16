@@ -778,7 +778,7 @@ const NftStakeCheckListModal = ({
               className="mt-4 d-flex flex-column flex-xxl-row flex-lg-row flex-md-row align-items-center justify-content-between"
               style={{ gap: 20 }}
             >
-              <div className="row m-0 claimAll-wrapper">
+              <div className="row m-0 claimAll-wrapper blurrypool">
                 <div
                   className="earn-checklist-container d-flex align-items-start justify-content-between mb-0 w-100"
                   style={{
