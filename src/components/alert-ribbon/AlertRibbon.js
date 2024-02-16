@@ -8,7 +8,7 @@ const renderer = ({ days }) => {
 };
 
 const AlertRibbon = ({ onClose, onComplete }) => {
-  let daysUntilFutureDate = new Date("2024-02-16T23:59:59.000+02:00");
+  let daysUntilFutureDate = new Date("2024-02-15T23:59:59.000+02:00");
 
   return (
     <div className="ribbon-wrapper p-2">
