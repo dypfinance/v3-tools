@@ -184,6 +184,18 @@ export const handleSwitchNetworkhook = async (chainID) => {
     blockExplorerUrls: ["https://basescan.org"],
   };
 
+  const CONFLUXPARAMS = {
+    chainId: "0x406", // A 0x-prefixed hexadecimal string
+    chainName: "Conflux eSpace",
+    nativeCurrency: {
+      name: "CFX",
+      symbol: "CFX", // 2-6 characters long
+      decimals: 18,
+    },
+    rpcUrls: ["https://evm.confluxrpc.com"],
+    blockExplorerUrls: ["https://evm.confluxscan.net"],
+  };
+
 
   try {
     await ethereum.request({
@@ -196,7 +208,14 @@ export const handleSwitchNetworkhook = async (chainID) => {
   } catch (switchError) {
     // This error code indicates that the chain has not been added to MetaMask.
     console.log(switchError, "switch");
-    if (switchError.code === 4902) {
+    if (
+      switchError.code === 4902 ||
+      (chainID === "0x406" && switchError.code.toString().includes("32603")) ||
+      (chainID === "0x2105" && switchError.code.toString().includes("32603")) ||
+      (chainID === "0xcc" && switchError.code.toString().includes("32603")) ||
+      (switchError.code === 4902 &&
+        switchError.message.includes("Unrecognized chainID"))
+    ) {
       try {
         await ethereum.request({
           method: "wallet_addEthereumChain",
@@ -209,6 +228,8 @@ export const handleSwitchNetworkhook = async (chainID) => {
               ? [BNBPARAMS]
               : chainID === "0x2105"
               ? [BASEPARAMS]
+              : chainID === "0x406"
+              ? [CONFLUXPARAMS]
               : "",
         });
         if(window.ethereum && window.ethereum.isTrust === true) {

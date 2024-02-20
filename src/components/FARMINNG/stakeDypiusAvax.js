@@ -736,15 +736,19 @@ settvlUSD(tvlUSD)
         <div className="leftside2 w-100">
           <div className="activewrapper">
             <div className="d-flex flex-column flex-lg-row w-100 align-items-start align-items-lg-center justify-content-between gap-3 gap-lg-5">
-              <h6 className="activetxt">
-                <img
-                  src={ellipse}
-                  alt=""
-                  className="position-relative"
-                  style={{ top: "-1px" }}
-                />
-                Active status
-              </h6>
+            {expired === true ? (
+                <h6 className="expiredtxt caws-active-txt">Expired Pool</h6>
+              ) : (
+                <h6 className="activetxt">
+                  <img
+                    src={ellipse}
+                    alt=""
+                    className="position-relative"
+                    style={{ top: "-1px" }}
+                  />
+                  Active status
+                </h6>
+              )}
 
               <div className="d-flex flex-row-reverse flex-lg-row align-items-center justify-content-between earnrewards-container">
                 <div className="d-flex flex-column flex-lg-row align-items-end align-items-lg-center gap-3 gap-lg-5">
@@ -921,7 +925,7 @@ settvlUSD(tvlUSD)
                     placement="top"
                     title={
                       <div className="tooltip-text">
-                        { lockTime === 'No Lock' ? 'The initial pool size is capped at 2M DYP. Additional opportunities to stake DYP are planned to be introduced over time.' :
+                        { lockTime === 'No Lock' ? 'The initial pool size is capped at 1M DYP. Additional opportunities to stake DYP are planned to be introduced over time.' :
                           "Deposit your assets to the staking smart contract. For lock time pools, the lock time resets if you add more deposits after making one previously."
                         }
                       </div>
@@ -1576,7 +1580,7 @@ settvlUSD(tvlUSD)
             </div>
             <div className="d-flex flex-column gap-2 mt-4">
               <h3 style={{ fontWeight: "500", fontSize: "39px" }}>
-                $ {getFormattedNumber(getApproxReturn() * tokendata, 3)} USD
+                $ {getFormattedNumber(getApproxReturn() * usdPerToken, 3)} USD
               </h3>
               <h6
                 style={{

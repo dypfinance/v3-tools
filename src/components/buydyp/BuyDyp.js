@@ -45,9 +45,55 @@ const BuyDyp = () => {
 
   const buyDypItems = [
     {
-      title: "Huobi",
+      title: "KuCoin",
+      logo: "kucoin.png",
+      link: "https://www.kucoin.com/trade/DYP-USDT",
+      totalvids: "1 video",
+      active: true,
+      version: "DYP v2",
+
+      videos: [
+        {
+          link: "https://www.youtube.com/embed/BIuy1A-_-dU",
+          image: "kucoin.png",
+          title: "How to buy DeFi Yield Protocol (DYP) on KuCoin",
+          walletName: "KuCoin",
+          thumbnail: "kucoin.png",
+        },
+      ],
+    },
+    {
+      title: "Gate.io",
+      logo: "gateio.png",
+      link: "https://www.gate.io/trade/DYP_USDT",
+      totalvids: "1 video",
+      active: true,
+      version: "DYP v2",
+
+      videos: [
+        {
+          link: "https://www.youtube.com/embed/arVFXf5hESE",
+          image: "gate.png",
+          title: "How to buy DeFi Yield Protocol (DYP) on Gate.io",
+          walletName: "Gate.io",
+          thumbnail: "gate.png",
+        },
+      ],
+    },
+    {
+      title: "MEXC",
+      logo: "mexc.png",
+      link: "https://www.mexc.com/exchange/DYP_USDT",
+      totalvids: "0 videos",
+      videos: "",
+      id: "collapsefive",
+      active: true,
+      version: "DYP v2",
+    },
+    {
+      title: "HTX",
       logo: "huobi.png",
-      link: "https://www.huobi.com/en-us/exchange/dyp_usdt",
+      link: "https://www.htx.com/en-us/trade/dyp_usdt/",
       totalvids: "0 videos",
       videos: "",
       active: true,
@@ -121,6 +167,24 @@ const BuyDyp = () => {
           title:
             "How to buy DeFi Yield Protocol (DYP) on Uniswap V2 using SafePal",
           thumbnail: "safe2.png",
+        },
+      ],
+    },
+    {
+      title: "Coinbase",
+      logo: "coinbase.png",
+      link: "https://pro.coinbase.com/trade/DYP-USD",
+      totalvids: "1 video",
+      active: true,
+      version: "DYP v1",
+
+      videos: [
+        {
+          link: "https://www.youtube.com/embed/mjUUqNy-zW8",
+          image: "coinbase.png",
+          title: "How to buy DeFi Yield Protocol (DYP) on Coinbase",
+          walletName: "Coinbase",
+          thumbnail: "coinbase.png",
         },
       ],
     },
@@ -208,188 +272,130 @@ const BuyDyp = () => {
       //   },
       // ],
     },
-    {
-      title: "MEXC",
-      logo: "mexc.png",
-      link: "https://www.mexc.com/exchange/DYP_USDT",
-      totalvids: "0 videos",
-      videos: "",
-      id: "collapsefive",
-      active: true,
-      version: "DYP v2",
-    },
-    {
-      title: "Coinbase",
-      logo: "coinbase.png",
-      link: "https://pro.coinbase.com/trade/DYP-USD",
-      totalvids: "1 video",
-      active: true,
-      version: "DYP v1",
 
-      videos: [
-        {
-          link: "https://www.youtube.com/embed/mjUUqNy-zW8",
-          image: "coinbase.png",
-          title: "How to buy DeFi Yield Protocol (DYP) on Coinbase",
-          walletName: "Coinbase",
-          thumbnail: "coinbase.png",
-        },
-      ],
-    },
-    {
-      title: "KuCoin",
-      logo: "kucoin.png",
-      link: "https://www.kucoin.com/trade/DYP-USDT",
-      totalvids: "1 video",
-      active: true,
-      version: "DYP v1",
+  
+  
+   
 
-      videos: [
-        {
-          link: "https://www.youtube.com/embed/BIuy1A-_-dU",
-          image: "kucoin.png",
-          title: "How to buy DeFi Yield Protocol (DYP) on KuCoin",
-          walletName: "KuCoin",
-          thumbnail: "kucoin.png",
-        },
-      ],
-    },
-    {
-      title: "Gate.io",
-      logo: "gateio.png",
-      link: "https://www.gate.io/zh/trade/DYP_USDT",
-      totalvids: "1 video",
-      active: true,
-      version: "DYP v1",
+    
+    // {
+    //   title: "Poloniex",
+    //   logo: "poloniex.png",
+    //   link: "https://poloniex.com/spot/BTC_USDT",
+    //   totalvids: "0 videos",
+    //   videos: "",
+    //   version: "DYP v1",
 
-      videos: [
-        {
-          link: "https://www.youtube.com/embed/arVFXf5hESE",
-          image: "gate.png",
-          title: "How to buy DeFi Yield Protocol (DYP) on Gate.io",
-          walletName: "Gate.io",
-          thumbnail: "gate.png",
-        },
-      ],
-    },
-    {
-      title: "Poloniex",
-      logo: "poloniex.png",
-      link: "https://poloniex.com/spot/BTC_USDT",
-      totalvids: "0 videos",
-      videos: "",
-      version: "DYP v1",
+    //   active: true,
+    // },
 
-      active: true,
-    },
+    // {
+    //   title: "Coin98",
+    //   logo: "coin98.png",
+    //   link: "https://exchange.coin98.com/binancesmart/bnb/0x961c8c0b1aad0c0b10a51fef6a867e3091bcef17",
+    //   totalvids: "3 videos",
+    //   active: true,
+    //   version: "DYP v1",
+    //   videos: [
+    //     {
+    //       link: "https://www.youtube.com/embed/SvUaexmtgnU",
+    //       image: "uniswap.png",
+    //       walletName: "UniSwap",
+    //       title:
+    //         "How to buy DeFi Yield Protocol (DYP) on Ethereum using the Coin98 Wallet App",
+    //       thumbnail: "coineth.png",
+    //     },
+    //     {
+    //       link: "https://www.youtube.com/embed/7jf8HGOrdBM",
+    //       image: "pangolin.png",
+    //       walletName: "Pangolin",
+    //       title:
+    //         "How to buy DeFi Yield Protocol (DYP) on the Avalanche Network using the Coin98 Mobile Wallet App",
+    //       thumbnail: "coinbsc.png",
+    //     },
+    //     {
+    //       link: "https://www.youtube.com/embed/8xaXadlb_Iw",
+    //       image: "pancake.png",
+    //       walletName: "PancakeSwap",
+    //       title:
+    //         "How to buy DeFi Yield Protocol (DYP) on the Binance Smart Chain using the Coin98 Mobile Wallet App",
+    //       thumbnail: "coinavax.png",
+    //     },
+    //   ],
+    // },
+    // {
+    //   title: "1inch",
+    //   logo: "oneinch.png",
+    //   link: "https://app.1inch.io/#/1/swap/DYP/ETH",
+    //   totalvids: "6 videos",
+    //   active: true,
+    //   version: "DYP v1",
 
-    {
-      title: "Coin98",
-      logo: "coin98.png",
-      link: "https://exchange.coin98.com/binancesmart/bnb/0x961c8c0b1aad0c0b10a51fef6a867e3091bcef17",
-      totalvids: "3 videos",
-      active: true,
-      version: "DYP v1",
-      videos: [
-        {
-          link: "https://www.youtube.com/embed/SvUaexmtgnU",
-          image: "uniswap.png",
-          walletName: "UniSwap",
-          title:
-            "How to buy DeFi Yield Protocol (DYP) on Ethereum using the Coin98 Wallet App",
-          thumbnail: "coineth.png",
-        },
-        {
-          link: "https://www.youtube.com/embed/7jf8HGOrdBM",
-          image: "pangolin.png",
-          walletName: "Pangolin",
-          title:
-            "How to buy DeFi Yield Protocol (DYP) on the Avalanche Network using the Coin98 Mobile Wallet App",
-          thumbnail: "coinbsc.png",
-        },
-        {
-          link: "https://www.youtube.com/embed/8xaXadlb_Iw",
-          image: "pancake.png",
-          walletName: "PancakeSwap",
-          title:
-            "How to buy DeFi Yield Protocol (DYP) on the Binance Smart Chain using the Coin98 Mobile Wallet App",
-          thumbnail: "coinavax.png",
-        },
-      ],
-    },
-    {
-      title: "1inch",
-      logo: "oneinch.png",
-      link: "https://app.1inch.io/#/1/swap/DYP/ETH",
-      totalvids: "6 videos",
-      active: true,
-      version: "DYP v1",
+    //   videos: [
+    //     {
+    //       link: "https://www.youtube.com/embed/yBzIPecqKY8",
+    //       image: "metamask.png",
+    //       walletName: "Metamask",
+    //       title: "How to set up MetaMask for DeFi Yield Protocol (DYP)",
+    //       thumbnail: "uni1.png",
+    //     },
+    //     {
+    //       link: "https://www.youtube.com/embed/IE5danKYD-c",
+    //       image: "metamask.png",
+    //       walletName: "Metamask",
+    //       title: "How to buy DeFi Yield Protocol (DYP) on 1Inch using MetaMask",
+    //       thumbnail: "inch1.png",
+    //     },
+    //     {
+    //       link: "https://www.youtube.com/embed/amM9wOGNVpg",
+    //       image: "trustwallet.png",
+    //       walletName: "Trust wallet",
+    //       title: "How to set up Trust Wallet for DeFi Yield Protocol (DYP)",
+    //       thumbnail: "trust1.png",
+    //     },
+    //     {
+    //       link: "https://www.youtube.com/embed/UtcP4cWkXwg",
+    //       image: "trustwallet.png",
+    //       walletName: "Trust wallet",
+    //       title:
+    //         "How to buy DeFi Yield Protocol (DYP) on 1Inch using Trust Wallet",
+    //       thumbnail: "inch2.png",
+    //     },
+    //     {
+    //       link: "https://www.youtube.com/embed/lTD8DAsxmtY",
+    //       image: "safepal.png",
+    //       walletName: "SafePal",
+    //       title: "How to set up SafePal for DeFi Yield Protocol",
+    //       thumbnail: "safe1.png",
+    //     },
+    //     {
+    //       link: "https://www.youtube.com/embed/nUvFG00QqS0",
+    //       image: "safepal.png",
+    //       walletName: "SafePal",
+    //       title: "How to buy DeFi Yield Protocol (DYP) on 1Inch using SafePal",
+    //       thumbnail: "inch3.png",
+    //     },
+    //   ],
+    // },
+    // {
+    //   title: "KyberDMM",
+    //   logo: "kyber.png",
+    //   link: "https://kyberswap.com/swap/bnb/bnb-to-dyp",
+    //   totalvids: "1 video",
+    //   active: true,
+    //   version: "DYP v1",
 
-      videos: [
-        {
-          link: "https://www.youtube.com/embed/yBzIPecqKY8",
-          image: "metamask.png",
-          walletName: "Metamask",
-          title: "How to set up MetaMask for DeFi Yield Protocol (DYP)",
-          thumbnail: "uni1.png",
-        },
-        {
-          link: "https://www.youtube.com/embed/IE5danKYD-c",
-          image: "metamask.png",
-          walletName: "Metamask",
-          title: "How to buy DeFi Yield Protocol (DYP) on 1Inch using MetaMask",
-          thumbnail: "inch1.png",
-        },
-        {
-          link: "https://www.youtube.com/embed/amM9wOGNVpg",
-          image: "trustwallet.png",
-          walletName: "Trust wallet",
-          title: "How to set up Trust Wallet for DeFi Yield Protocol (DYP)",
-          thumbnail: "trust1.png",
-        },
-        {
-          link: "https://www.youtube.com/embed/UtcP4cWkXwg",
-          image: "trustwallet.png",
-          walletName: "Trust wallet",
-          title:
-            "How to buy DeFi Yield Protocol (DYP) on 1Inch using Trust Wallet",
-          thumbnail: "inch2.png",
-        },
-        {
-          link: "https://www.youtube.com/embed/lTD8DAsxmtY",
-          image: "safepal.png",
-          walletName: "SafePal",
-          title: "How to set up SafePal for DeFi Yield Protocol",
-          thumbnail: "safe1.png",
-        },
-        {
-          link: "https://www.youtube.com/embed/nUvFG00QqS0",
-          image: "safepal.png",
-          walletName: "SafePal",
-          title: "How to buy DeFi Yield Protocol (DYP) on 1Inch using SafePal",
-          thumbnail: "inch3.png",
-        },
-      ],
-    },
-    {
-      title: "KyberDMM",
-      logo: "kyber.png",
-      link: "https://kyberswap.com/swap/bnb/bnb-to-dyp",
-      totalvids: "1 video",
-      active: true,
-      version: "DYP v1",
-
-      videos: [
-        {
-          link: "https://www.youtube.com/embed/olhIziGMs0Y",
-          image: "metamask.png",
-          walletName: "Metamask",
-          title:
-            "How to buy DeFi Yield Protocol (DYP) on KyberDMM using MetaMask",
-          thumbnail: "kyberdmm.png",
-        },
-      ],
-    },
+    //   videos: [
+    //     {
+    //       link: "https://www.youtube.com/embed/olhIziGMs0Y",
+    //       image: "metamask.png",
+    //       walletName: "Metamask",
+    //       title:
+    //         "How to buy DeFi Yield Protocol (DYP) on KyberDMM using MetaMask",
+    //       thumbnail: "kyberdmm.png",
+    //     },
+    //   ],
+    // },
   ];
 
   const next = () => {

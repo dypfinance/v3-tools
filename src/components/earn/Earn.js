@@ -15,7 +15,7 @@ const Earn = ({
   the_graph_resultbsc,
   referrer,
   handleSwitchNetwork,
-  isPremium
+  isPremium,showRibbon
 }) => {
   const [showCalculator, setShowCalculator] = useState(false);
   const html = document.querySelector("html");
@@ -60,6 +60,7 @@ const Earn = ({
         faqIndex={routeData.state ? routeData.state.faqIndex : -1}
         handleSwitchNetwork={handleSwitchNetwork}
         isPremium={isPremium}
+        showRibbon={showRibbon}
       />
     </div>
   );

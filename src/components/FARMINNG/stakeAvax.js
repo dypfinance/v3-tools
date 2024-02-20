@@ -723,15 +723,19 @@ settvlUSD(tvlUSD)
         <div className="leftside2 w-100">
           <div className="activewrapper">
             <div className="d-flex flex-column flex-lg-row w-100 align-items-start align-items-lg-center justify-content-between gap-3 gap-lg-5">
-              <h6 className="activetxt">
-                <img
-                  src={ellipse}
-                  alt=""
-                  className="position-relative"
-                  style={{ top: "-1px" }}
-                />
-                Active status
-              </h6>
+            {expired === true ? (
+                <h6 className="expiredtxt caws-active-txt">Expired Pool</h6>
+              ) : (
+                <h6 className="activetxt">
+                  <img
+                    src={ellipse}
+                    alt=""
+                    className="position-relative"
+                    style={{ top: "-1px" }}
+                  />
+                  Active status
+                </h6>
+              )}
 
               <div className="d-flex flex-row-reverse flex-lg-row align-items-center justify-content-between earnrewards-container">
                 <div className="d-flex flex-column flex-lg-row align-items-end align-items-lg-center gap-3 gap-lg-5">
@@ -1079,7 +1083,7 @@ settvlUSD(tvlUSD)
                       style={{ height: "fit-content" }}
                       // onClick={handleClaimDivs}
                       onClick={() => {
-                        staking._address === '0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712' ? 
+                        staking?._address?.toLowerCase() === '0xdb2e1287aac9974ab28a66fabf9bcb34c5f37712' ? 
                         window.$.alert(
                           "*The rewards earned from the day of the migration until the end of the lock time will be distributed to the users automatically at the end of the contract."
                         ) : handleClaimDivs()

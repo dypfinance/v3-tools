@@ -7,6 +7,7 @@ import avax from "./assets/avax.svg";
 import bnb from "./assets/bnb.svg";
 import eth from "./assets/eth.svg";
 import base from "./assets/base.svg";
+import conflux from "./assets/conflux.svg";
 import dropdown from "./assets/dropdown.svg";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
@@ -51,7 +52,8 @@ const Header = ({
   const [bnbState, setBnbState] = useState(false);
   const [avaxState, setAvaxState] = useState(false);
   const [baseState, setBaseState] = useState(false);
-
+  const [confluxState, setConfluxState] = useState(false);
+  
   const [avatar, setAvatar] = useState("../../assets/img/person.svg");
   const routeData = useLocation();
 
@@ -77,17 +79,30 @@ const Header = ({
       setAvaxState(false);
       setBnbState(true);
       setEthState(false);
+    } else if (chainId === 8453) {
+      setAvaxState(false);
+      setBnbState(false);
+      setEthState(false);
+      setBaseState(true);
+    
+    }  else if (chainId === 1030) {
+      setAvaxState(false);
+      setBnbState(false);
+      setEthState(false);
       setBaseState(false);
+      setConfluxState(true);
+  
     } else {
       setAvaxState(false);
       setBnbState(false);
       setBaseState(false);
-
       setEthState(false);
+      setConfluxState(false);
     }
   };
 
   const handleEthPool = async () => {
+    if (window.ethereum) {
     await handleSwitchNetworkhook("0x1")
       .then(() => {
         handleSwitchNetwork("1");
@@ -95,9 +110,13 @@ const Header = ({
       .catch((e) => {
         console.log(e);
       });
+    }else {
+      window.alertify.error("No web3 detected. Please install Metamask!");
+    }
   };
 
   const handleBnbPool = async () => {
+    if (window.ethereum) {
     await handleSwitchNetworkhook("0x38")
       .then(() => {
         handleSwitchNetwork("56");
@@ -105,9 +124,13 @@ const Header = ({
       .catch((e) => {
         console.log(e);
       });
+    } else {
+      window.alertify.error("No web3 detected. Please install Metamask!");
+    }
   };
 
   const handleAvaxPool = async () => {
+    if (window.ethereum) {
     await handleSwitchNetworkhook("0xa86a")
       .then(() => {
         handleSwitchNetwork("43114");
@@ -115,6 +138,25 @@ const Header = ({
       .catch((e) => {
         console.log(e);
       });
+    } else {
+      window.alertify.error("No web3 detected. Please install Metamask!");
+    }
+  };
+
+
+
+  const handleConfluxPool = async () => {
+    if (window.ethereum) {
+    await handleSwitchNetworkhook("0x406")
+      .then(() => {
+        handleSwitchNetwork("1030");
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    } else {
+      window.alertify.error("No web3 detected. Please install Metamask!");
+    }
   };
 
   const handleBasePool = async () => {
@@ -173,6 +215,8 @@ const Header = ({
         })
         .catch((err) => {
           console.log(err);
+          setUsername("Dypian");
+
         });
     } else {
       setUsername("Dypian");
@@ -193,21 +237,35 @@ const Header = ({
 
         const bscWeb3 = new Web3(window.config.bsc_endpoint);
         const avaxWeb3 = new Web3(window.config.avax_endpoint);
+        const web3cfx = new Web3(window.config.conflux_endpoint);
+    const web3base = new Web3(window.config.base_endpoint);
+
         if (chainId === 1) {
           const stringBalance = infuraWeb3.utils.hexToNumberString(balance);
           const amount = infuraWeb3.utils.fromWei(stringBalance, "ether");
           setCurrencyAmount(amount.slice(0, 7));
         }
 
-        if (chainId === 43114) {
+        else if (chainId === 43114) {
           const stringBalance = avaxWeb3.utils.hexToNumberString(balance);
           const amount = avaxWeb3.utils.fromWei(stringBalance, "ether");
           setCurrencyAmount(amount.slice(0, 7));
         }
 
-        if (chainId === 56) {
+        else if (chainId === 56) {
           const stringBalance = bscWeb3.utils.hexToNumberString(balance);
           const amount = bscWeb3.utils.fromWei(stringBalance, "ether");
+          setCurrencyAmount(amount.slice(0, 7));
+        }
+        else if (chainId === 1030) {
+          const stringBalance = web3cfx.utils.hexToNumberString(balance);
+          const amount = web3cfx.utils.fromWei(stringBalance, "ether");
+          setCurrencyAmount(amount.slice(0, 7));
+        }
+
+        else if (chainId === 8453) {
+          const stringBalance = web3base.utils.hexToNumberString(balance);
+          const amount = web3base.utils.fromWei(stringBalance, "ether");
           setCurrencyAmount(amount.slice(0, 7));
         }
       }
@@ -255,6 +313,7 @@ const Header = ({
       fetchAvatar();
       fetchUsername();
     }
+    else setUsername('Dypian')
   }, [coinbase, checklogout]);
 
   return (
@@ -318,7 +377,9 @@ const Header = ({
                                     : avaxState === true
                                     ? avax
                                     : baseState === true
-                                    ? base
+                                      ? base
+                                      : confluxState === true
+                                        ? conflux
                                     : error
                                 }
                                 height={16}
@@ -333,7 +394,9 @@ const Header = ({
                                   : avaxState === true
                                   ? "Avalanche"
                                   : baseState === true
-                                  ? "Base"
+                                    ? "Base"
+                                    : confluxState === true
+                                      ? "Conflux"
                                   : "Unsupported Chain"}
                               </span>
 
@@ -353,10 +416,14 @@ const Header = ({
                             <img src={avax} alt="" />
                             Avalanche
                           </Dropdown.Item>
-                          <Dropdown.Item onClick={() => handleBasePool()}>
-                            <img src={base} alt="" />
-                            Base
-                          </Dropdown.Item>
+                          <Dropdown.Item onClick={() => handleConfluxPool()}>
+                    <img src={conflux} alt="" />
+                    Conflux
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={() => handleBasePool()}>
+                    <img src={base} alt="" />
+                    Base
+                  </Dropdown.Item>
                         </DropdownButton>
                       )}
                     {/* <DropdownButton
@@ -421,6 +488,10 @@ const Header = ({
                                     ? "BNB"
                                     : chainId === 43114
                                     ? "AVAX"
+                                    : chainId === 1030
+                                    ? "CFX"
+                                    : chainId === 8453
+                                    ? "ETH"
                                     : ""}
                                 </span>
                               )}

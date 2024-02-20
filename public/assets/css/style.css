@@ -2891,6 +2891,7 @@ border-radius: 8px;
   background: #312F69;
 box-shadow: 0px 32px 64px rgba(17, 17, 17, 0.12);
 border-radius: 12px;
+width: 100%;
 }
 
 .button-wrapper {
@@ -3116,9 +3117,9 @@ padding: 12px;
     font-size: 1rem !important;
   }
 
-  .newmodal {
+  /* .newmodal {
     width: 100% !important;
-  }
+  } */
 
   .left-col-image {
     max-width: 100% !important;
@@ -4694,6 +4695,10 @@ color: #F7F7FC !important;
     column-gap: 40px !important;
     row-gap: 20px !important;
   }
+}
+
+figure{
+  max-width: 100% !important;
 }
 
 @media all and (max-width: 992px) {

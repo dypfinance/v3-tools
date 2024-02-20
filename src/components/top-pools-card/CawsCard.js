@@ -127,7 +127,7 @@ const CawsCard = ({
           </div>
           <div
             className={
-              expired === true ? "details-wrapperexpired" : "details-wrapper"
+              expired === true ? "cawsdetails-wrapperexpired" : "details-wrapper"
             }
             onClick={() => {
               handleDetails();

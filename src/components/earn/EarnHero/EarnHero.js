@@ -19,15 +19,16 @@ const EarnHero = () => {
       setTotalPaid(data.data);
     });
   };
+  var tempTvl = 0;
   const fetchTotalTvl = async () => {
-    const apitvl = await axios
-      .get("https://api.dyp.finance/api/totaltvl")
+    const avaxResult2 = await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_avax_new`)
       .catch((err) => {
         console.log(err);
       });
 
-    const avaxResult2 = await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_avax_new`)
+    const avaxResult = await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_avax`)
       .catch((err) => {
         console.log(err);
       });
@@ -38,27 +39,84 @@ const EarnHero = () => {
         console.log(err);
       });
 
+    const bnbResult = await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_bnb`)
+      .catch((err) => {
+        console.log(err);
+      });
+
     const ethRestult2 = await axios
       .get(`https://api.dyp.finance/api/get_staking_info_eth_new`)
       .catch((err) => {
         console.log(err);
       });
 
+    const ethRestult = await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_eth`)
+      .catch((err) => {
+        console.log(err);
+      });
+
+    const vaulttvl = await axios
+      .get(`https://api.dyp.finance/api/get_vault_info`)
+      .catch((err) => {
+        console.log(err);
+      });
+
+    const bscFarming = await axios
+      .get(`https://api.dyp.finance/api/the_graph_bsc_v2`)
+      .catch((err) => console.error(err));
+
     if (
       avaxResult2 &&
       avaxResult2.status === 200 &&
       bnbResult2 &&
       bnbResult2.status === 200 &&
+      bnbResult &&
+      bnbResult.status === 200 &&
+      ethRestult &&
+      ethRestult.status === 200 &&
       ethRestult2 &&
-      ethRestult2.status === 200 && apitvl && apitvl.status === 200
+      ethRestult2.status === 200 &&
+      vaulttvl &&
+      vaulttvl.status === 200 &&
+      bscFarming &&
+      bscFarming.status === 200
     ) {
-      
-      const apiData = apitvl.data;
-      const ethv2Tvl = ethRestult2.data.stakingInfoDYPEth[0].tvl_usd/1e18
-      const bnbTvl2 = bnbResult2.data.stakingInfoDYPBnb[0].tvl_usd/1e18
-      const avaxtvl2 = avaxResult2.data.stakingInfoDYPAvax[0].tvl_usd/1e18
-      setTotalTvl(apiData+ethv2Tvl+bnbTvl2+avaxtvl2)
+      const ethv2Tvl = ethRestult2.data.stakingInfoDYPEth[0].tvl_usd;
+      const ethv1Tvl = ethRestult.data.totalTVL_ETH;
 
+      const bnbTvl2 = bnbResult2.data.stakingInfoDYPBnb[0].tvl_usd;
+      const bnbTvl = bnbResult.data.totalTVL_BNB;
+
+      const avaxtvl2 = avaxResult2.data.stakingInfoDYPAvax[0].tvl_usd;
+      const avaxtvl = avaxResult.data.totalTVL_AVAX;
+
+      const vaultTvl = vaulttvl.data.VaultTotalTVL[0].tvl;
+      let bscFarmingTvl = Object.entries(
+        bscFarming.data.the_graph_bsc_v2.lp_data
+      );
+      const finalitem = bscFarmingTvl.filter((item) => {
+        return (
+          item[1].id ===
+          "0x1bc61d08a300892e784ed37b2d0e63c85d1d57fb-0x5bc3a80a1f2c4fb693d9dddcebbb5a1b5bb15d65"
+        );
+      });
+      const tmp = finalitem[0];
+      if (tmp) {
+        tempTvl = tmp[1].tvl_usd;
+      }
+
+      setTotalTvl(
+        ethv1Tvl +
+          ethv2Tvl +
+          bnbTvl2 +
+          bnbTvl +
+          avaxtvl2 +
+          vaultTvl +
+          tempTvl +
+          avaxtvl
+      );
     }
   };
 
@@ -116,14 +174,17 @@ const EarnHero = () => {
                 decimals={2}
                 prefix="$"
               /> */}
-              <h6 className="count-up"
-               style={{
-                fontSize: "19px",
-                color: "#f7f7fc",
-                fontWeight: "600",
-                textAlign: "start",
-              }}
-              >${getFormattedNumber(totalpaid?.totalPaidInUsd, 2)}</h6>
+              <h6
+                className="count-up"
+                style={{
+                  fontSize: "19px",
+                  color: "#f7f7fc",
+                  fontWeight: "600",
+                  textAlign: "start",
+                }}
+              >
+                ${getFormattedNumber(totalpaid?.totalPaidInUsd, 2)}
+              </h6>
             </div>
             <img
               src={earnHeroStats}

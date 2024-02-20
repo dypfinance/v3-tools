@@ -84,89 +84,186 @@ export default class Subscription extends React.Component {
   };
 
   fetchEthStaking = async () => {
-    await axios
+    const eth_result = await axios
       .get(`https://api.dyp.finance/api/get_staking_info_eth`)
-      .then((res) => {
-        const dypIdyp = res.data.stakingInfoDYPEth.concat(
-          res.data.stakingInfoiDYPEth
-        );
-
-        const expiredEth = dypIdyp.filter((item) => {
-          return item.expired !== "No";
-        });
-        const activeEth = dypIdyp.filter((item) => {
-          return item.expired !== "Yes";
-        });
-
-        const sortedExpired = expiredEth.sort(function (a, b) {
-          return b.tvl_usd - a.tvl_usd;
-        });
-        const allEthPools = [...activeEth, ...sortedExpired];
-        this.setState({ ethStake: allEthPools });
-      })
       .catch((err) => {
         console.log(err);
       });
+    const eth_result2 = await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_eth_new`)
+      .catch((err) => {
+        console.log(err);
+      });
+
+    if (
+      eth_result &&
+      eth_result.status === 200 &&
+      eth_result2 &&
+      eth_result2.status === 200
+    ) {
+      const dypIdyp = eth_result.data.stakingInfoiDYPEth.concat(
+        eth_result.data.stakingInfoDYPEth
+      );
+      const dypData = eth_result2.data.stakingInfoDYPEth;
+      const object2 = dypData.map((item) => {
+        return { ...item, tvl_usd: item.tvl_usd };
+      });
+      const expiredEth = dypIdyp.filter((item) => {
+        return item.expired !== "No";
+      });
+      const activeEth = dypIdyp.filter((item) => {
+        return item.expired !== "Yes";
+      });
+
+      const expiredEth2 = object2.filter((item) => {
+        return item.expired !== "No";
+      });
+      const activeEth2 = object2.filter((item) => {
+        return item.expired !== "Yes";
+      });
+
+      const allActiveEth = [...activeEth, ...activeEth2];
+      const allExpireEth = [...expiredEth, ...expiredEth2];
+
+      const sortedActive = allActiveEth.sort(function (a, b) {
+        return b.tvl_usd - a.tvl_usd;
+      });
+      const sortedExpired = allExpireEth.sort(function (a, b) {
+        return b.tvl_usd - a.tvl_usd;
+      });
+      if (this.props.showRibbon === true) {
+        const allEthPools = [...sortedActive, ...sortedExpired];
+        this.setState({ ethStake: allEthPools });
+      } else if (this.props.showRibbon === false) {
+        const allEthPools = [...sortedActive];
+        this.setState({ ethStake: allEthPools });
+      }
+    }
   };
 
   fetchBnbStaking = async () => {
-    await axios
+    const bnb_result = await axios
       .get(`https://api.dyp.finance/api/get_staking_info_bnb`)
-      .then((res) => {
-        const dypIdypBnb = res.data.stakingInfoDYPBnb.concat(
-          res.data.stakingInfoiDYPBnb
-        );
-
-        const expiredBnb = dypIdypBnb.filter((item) => {
-          return item.expired !== "No";
-        });
-        const activeBnb = dypIdypBnb.filter((item) => {
-          return item.expired !== "Yes";
-        });
-        const sortedActive = activeBnb.sort(function (a, b) {
-          return b.tvl_usd - a.tvl_usd;
-        });
-        const sortedExpired = expiredBnb.sort(function (a, b) {
-          return b.tvl_usd - a.tvl_usd;
-        });
-
-        const allBnbPools = [...sortedActive, ...sortedExpired];
-        this.setState({ bnbStake: allBnbPools });
-      })
       .catch((err) => {
         console.log(err);
       });
+
+    const bnb_result2 = await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_bnb_new`)
+      .catch((err) => {
+        console.log(err);
+      });
+
+    if (
+      bnb_result &&
+      bnb_result.status === 200 &&
+      bnb_result2 &&
+      bnb_result2.status === 200
+    ) {
+      const dypIdypBnb = bnb_result.data.stakingInfoDYPBnb.concat(
+        bnb_result.data.stakingInfoiDYPBnb
+      );
+
+      const dypBnb = bnb_result2.data.stakingInfoDYPBnb;
+      const object2 = dypBnb.map((item) => {
+        return { ...item, tvl_usd: item.tvl_usd };
+      });
+
+      const expiredBnb = dypIdypBnb.filter((item) => {
+        return item.expired !== "No";
+      });
+      const activeBnb = dypIdypBnb.filter((item) => {
+        return item.expired !== "Yes";
+      });
+
+      const activeBnb2 = object2.filter((item) => {
+        return item.expired === "No";
+      });
+
+      const expiredBnb2 = object2.filter((item) => {
+        return item.expired === "Yes";
+      });
+
+      const allActiveBnb = [...activeBnb, ...activeBnb2];
+      const allExpireBnb = [...expiredBnb, ...expiredBnb2];
+
+      const sortedActive = allActiveBnb.sort(function (a, b) {
+        return b.tvl_usd - a.tvl_usd;
+      });
+      const sortedExpired = allExpireBnb.sort(function (a, b) {
+        return b.tvl_usd - a.tvl_usd;
+      });
+
+      if (this.props.showRibbon === true) {
+        const allBnbPools = [...sortedActive, ...sortedExpired];
+        this.setState({ bnbStake: allBnbPools });
+      } else if (this.props.showRibbon === false) {
+        const allBnbPools = [...sortedActive];
+        this.setState({ bnbStake: allBnbPools });
+      }
+    }
   };
 
   fetchAvaxStaking = async () => {
-    await axios
+    const avax_result = await axios
       .get(`https://api.dyp.finance/api/get_staking_info_avax`)
-      .then((res) => {
-        const dypIdypAvax = res.data.stakingInfoDYPAvax.concat(
-          res.data.stakingInfoiDYPAvax
-        );
-
-        const expiredAvax = dypIdypAvax.filter((item) => {
-          return item.expired !== "No";
-        });
-
-        const activeAvax = dypIdypAvax.filter((item) => {
-          return item.expired !== "Yes";
-        });
-
-        const sortedActive = activeAvax.sort(function (a, b) {
-          return b.tvl_usd - a.tvl_usd;
-        });
-        const sortedExpired = expiredAvax.sort(function (a, b) {
-          return b.tvl_usd - a.tvl_usd;
-        });
-
-        const avaxAllPools = [...sortedActive, ...sortedExpired];
-        this.setState({ avaxStake: avaxAllPools });
-      })
       .catch((err) => {
         console.log(err);
       });
+
+    const avax_result2 = await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_avax_new`)
+      .catch((err) => {
+        console.log(err);
+      });
+
+    if (
+      avax_result &&
+      avax_result.status === 200 &&
+      avax_result2 &&
+      avax_result2.status === 200
+    ) {
+      const dypIdypAvax = avax_result.data.stakingInfoiDYPAvax.concat(
+        avax_result.data.stakingInfoDYPAvax
+      );
+      const dypAvax = avax_result2.data.stakingInfoDYPAvax;
+      const object2 = dypAvax.map((item) => {
+        return { ...item, tvl_usd: item.tvl_usd };
+      });
+      const expiredAvax = dypIdypAvax.filter((item) => {
+        return item.expired !== "No";
+      });
+
+      const activeAvax = dypIdypAvax.filter((item) => {
+        return item.expired !== "Yes";
+      });
+
+      const expiredAvax2 = object2.filter((item) => {
+        return item.expired !== "No";
+      });
+
+      const activeAvax2 = object2.filter((item) => {
+        return item.expired !== "Yes";
+      });
+
+      const allActiveAvax = [...activeAvax, ...activeAvax2];
+      const allExpireAvax = [...expiredAvax, ...expiredAvax2];
+
+      const sortedActive = allActiveAvax.sort(function (a, b) {
+        return b.tvl_usd - a.tvl_usd;
+      });
+      const sortedExpired = allExpireAvax.sort(function (a, b) {
+        return b.tvl_usd - a.tvl_usd;
+      });
+
+      if (this.props.showRibbon === true) {
+        const avaxAllPools = [...sortedActive, ...sortedExpired];
+        this.setState({ avaxStake: avaxAllPools });
+      } else if (this.props.showRibbon === false) {
+        const avaxAllPools = [...sortedActive];
+        this.setState({ avaxStake: avaxAllPools });
+      }
+    }
   };
 
   fetchEthFarming = async () => {
@@ -193,8 +290,13 @@ export default class Subscription extends React.Component {
           return b.tvl_usd - a.tvl_usd;
         });
 
-        const ethAllPools = [...sortedActive, ...sortedExpired];
-        this.setState({ ethFarm: ethAllPools });
+        if (this.props.showRibbon === true) {
+          const ethAllPools = [...sortedActive, ...sortedExpired];
+          this.setState({ ethFarm: ethAllPools });
+        } else if (this.props.showRibbon === false) {
+          const ethAllPools = [...sortedActive];
+          this.setState({ ethFarm: ethAllPools });
+        }
       })
       .catch((err) => console.error(err));
   };
@@ -222,8 +324,13 @@ export default class Subscription extends React.Component {
           return b.tvl_usd - a.tvl_usd;
         });
 
-        const bnbAllpools = [...sortedActive, ...sortedExpired];
-        this.setState({ bscFarm: bnbAllpools });
+        if (this.props.showRibbon === true) {
+          const bnbAllpools = [...sortedActive, ...sortedExpired];
+          this.setState({ bscFarm: bnbAllpools });
+        } else if (this.props.showRibbon === false) {
+          const bnbAllpools = [...sortedActive];
+          this.setState({ bscFarm: bnbAllpools });
+        }
       })
       .catch((err) => console.error(err));
   };
@@ -384,7 +491,10 @@ export default class Subscription extends React.Component {
         TokenABI,
         tokenAddress_bsc
       );
-      const contract3 = new window.bscWeb3.eth.Contract(TokenABI, tokenAddress_bsc);
+      const contract3 = new window.bscWeb3.eth.Contract(
+        TokenABI,
+        tokenAddress_bsc
+      );
 
       await contract1.methods
         .balanceOf(walletAddress)
@@ -434,7 +544,7 @@ export default class Subscription extends React.Component {
       this.fetchEthFarming();
       this.fetchEthStaking();
       this.getAllBalance();
-      this.props.onSubscribe()
+      this.props.onSubscribe();
       this.myNft().then();
       this.myStakes().then();
       this.myLandNft().then();
@@ -448,6 +558,16 @@ export default class Subscription extends React.Component {
         this.handleSubscriptionTokenChange(this.state.usdtAddress);
       }
     }
+
+    if (this.props.showRibbon !== prevProps.showRibbon) {
+      this.fetchUserPools();
+      this.fetchAvaxFarming();
+      this.fetchAvaxStaking();
+      this.fetchBnbStaking();
+      this.fetchBscFarming();
+      this.fetchEthFarming();
+      this.fetchEthStaking();
+    }
   }
 
   componentDidMount() {
@@ -457,7 +577,7 @@ export default class Subscription extends React.Component {
     // window._refreshBalIntervalDyp = setInterval(this.getDypBalance, 2000);
     this.getAllBalance();
     this.fetchUserPools();
-    this.props.onSubscribe()
+    this.props.onSubscribe();
     this.fetchAvatar();
     this.fetchUsername();
     this.fetchUserPools();
@@ -680,19 +800,21 @@ export default class Subscription extends React.Component {
 
   myStakes = async () => {
     let myStakes = await this.getStakesIds();
-    if(myStakes && myStakes.length > 0)
-   { let stakes = myStakes.map((stake) => window.getNft(stake));
-    stakes = await Promise.all(stakes);
-    stakes.reverse();
-    this.setState({ myStakess: stakes });}
+    if (myStakes && myStakes.length > 0) {
+      let stakes = myStakes.map((stake) => window.getNft(stake));
+      stakes = await Promise.all(stakes);
+      stakes.reverse();
+      this.setState({ myStakess: stakes });
+    }
   };
   myLandStakes = async () => {
     let myStakes = await this.getLandStakesIds();
-    if(myStakes && myStakes.length > 0)
-   { let stakes = myStakes.map((stake) => window.getLandNft(stake));
-    stakes = await Promise.all(stakes);
-    stakes.reverse();
-    this.setState({ landStakes: stakes });}
+    if (myStakes && myStakes.length > 0) {
+      let stakes = myStakes.map((stake) => window.getLandNft(stake));
+      stakes = await Promise.all(stakes);
+      stakes.reverse();
+      this.setState({ landStakes: stakes });
+    }
   };
 
   handleApprove = async (e) => {
@@ -776,7 +898,7 @@ export default class Subscription extends React.Component {
 
   handleSubscribe = async (e) => {
     e.preventDefault();
-    
+
     let subscriptionContract = await window.getContract({
       key: this.props.networkId === 1 ? "SUBSCRIPTIONETH" : "SUBSCRIPTION",
     });
@@ -882,7 +1004,9 @@ export default class Subscription extends React.Component {
       .then((response) => response.json())
       .then((result) => {
         console.log("Success:", result);
-        window.location.reload();
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000);
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -968,9 +1092,6 @@ export default class Subscription extends React.Component {
     const handleTooltipOpen = () => {
       this.setState({ openTooltip: true });
     };
-
-    
-
 
     return this.props.isPremium ? (
       <div>
@@ -1160,7 +1281,7 @@ export default class Subscription extends React.Component {
               <div className="d-flex flex-column flex-lg-row gap-3 align-items-center justify-content-between">
                 <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-3 gap-xxl-3 gap-lg-1">
                   <img
-                    src={require(`./assets/wethIcon.svg`).default}
+                    src={require(`./assets/ethIcon.svg`).default}
                     width={20}
                     height={20}
                     alt=""
@@ -1981,7 +2102,7 @@ export default class Subscription extends React.Component {
                         </div>
                       </NavLink>
                     ))}
-                    {this.state.bnbStake &&
+                {this.state.bnbStake &&
                   this.state.bnbStake
                     .slice(0, this.state.bnbStake.length)
                     .map((pool, index) => (
@@ -2073,7 +2194,7 @@ export default class Subscription extends React.Component {
                         </div>
                       </NavLink>
                     ))}
-                    {this.state.avaxStake &&
+                {this.state.avaxStake &&
                   this.state.avaxStake
                     .slice(0, this.state.avaxStake.length)
                     .map((pool, index) => (
@@ -2166,7 +2287,6 @@ export default class Subscription extends React.Component {
                       </NavLink>
                     ))}
               </div>
-            
             </div>
           </>
         )}
@@ -2177,7 +2297,7 @@ export default class Subscription extends React.Component {
           <div className="col-12 col-lg-6">
             <div className="mycawsCollection position-relative mb-5">
               <div className="nft-ethereum-tag p-2 d-flex align-items-center gap-2">
-                <img src={require("./assets/wethIcon.svg").default} alt="" />
+                <img src={require("./assets/ethIcon.svg").default} alt="" />
                 <span className="nft-ethereum-span">Ethereum</span>
               </div>
               <div className="d-flex flex-column gap-2 justify-content-between align-items-start">
@@ -2239,7 +2359,7 @@ export default class Subscription extends React.Component {
           <div className="col-12 col-lg-6">
             <div className="mycawsCollection position-relative mb-5">
               <div className="nft-ethereum-tag p-2 d-flex align-items-center gap-2">
-                <img src={require("./assets/wethIcon.svg").default} alt="" />
+                <img src={require("./assets/ethIcon.svg").default} alt="" />
                 <span className="nft-ethereum-span">Ethereum</span>
               </div>
               <div className="d-flex flex-column gap-2 justify-content-between align-items-start">

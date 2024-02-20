@@ -136,7 +136,7 @@ const Sidebar = (props) => {
       icon: "bridgeIcon",
       link: "/bridge",
     },
-  
+
     {
       label: "Yields",
       icon: "yieldsIcon",
@@ -201,7 +201,9 @@ const Sidebar = (props) => {
   return (
     <div
       id="sidebar"
-      style={{ padding: "2.5rem 0" }}
+      style={{
+        padding: props.showRibbon === true ? "70px 0 2.5rem 0px" : "2.5rem 0",
+      }}
       className={`testbar ${
         activeSidebar ? "testbar-open" : null
       } d-none d-lg-flex flex-column gap-3 justify-content-between align-items-start`}

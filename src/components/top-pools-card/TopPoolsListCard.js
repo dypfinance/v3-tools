@@ -34,6 +34,8 @@ import FarmAvaxFunc from "../FARMINNG/FarmAvaxFunc";
 import StakeDypiusEth from "../FARMINNG/constant-staking-dypius-new";
 import StakeDypiusAvax from "../FARMINNG/stakeDypiusAvax";
 import StakeDypiusBsc from "../FARMINNG/bscConstantStakeDypius";
+import StakeEthOld from "../FARMINNG/stakingEthOld";
+
 
 const TopPoolsListCard = ({
   tokenLogo,
@@ -905,7 +907,7 @@ const TopPoolsListCard = ({
               liquidity={eth_address}
               expiration_time={"11 January 2024"}
               finalApr={expiredPools[cardIndex - 1]?.apy_performancefee}
-              fee_s={0}
+              fee={0}
               lockTime={
                 expiredPools[cardIndex - 1]?.lock_time?.split(" ")[0] === "No"
                   ? "No Lock"
@@ -1115,7 +1117,7 @@ const TopPoolsListCard = ({
             expiredPools[cardIndex - 1].id ===
               "0x8A30Be7B2780b503ff27dBeaCdecC4Fe2587Af5d" &&
             chain === "eth" ? (
-            <StakeEth
+            <StakeEthOld
               staking={window.constant_staking_new2}
               apr={expiredPools[cardIndex - 1]?.apy_percent}
               liquidity={eth_address}

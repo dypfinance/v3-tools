@@ -19,7 +19,8 @@ const NftStakingCawChecklist = ({
   coinbase,
   isConnected,
   width,
-  height
+  height,
+  showbutton,
 }) => {
   const [checkbtn, setCheckBtn] = useState(false);
   const [Unstakebtn, setUnstakeBtn] = useState(false);
@@ -83,7 +84,7 @@ const NftStakingCawChecklist = ({
     setloading(true);
 
     await stake_contract.methods
-      .withdraw([itemId])
+      .emergencyWithdraw([itemId])
       .send()
       .then(() => {
         setcheckPassiveBtn(false);
@@ -237,7 +238,9 @@ const NftStakingCawChecklist = ({
                       type="checkbox"
                       id={checklistItemID}
                       name="checkbtn"
-                      checked={checkbtn && isStake === false && checked2 === true}
+                      checked={
+                        checkbtn && isStake === false && checked2 === true
+                      }
                       onChange={(e) => {
                         setCheckBtn(!checkbtn);
                       }}
@@ -289,24 +292,26 @@ const NftStakingCawChecklist = ({
                       /> */}
                     </div>{" "}
                   </div>
-                  <button
-                    className="claim-rewards-btn-countdown mb-1"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleClaim(checklistItemID);
-                    }}
-                    style={{
-                      pointerEvents: EthRewards == 0 ? "none" : "auto",
-                      borderColor: EthRewards == 0 ? "#14142A" : "#857DFA",
-                      color: EthRewards == 0 ? "#C0C9FF" : "#857DFA",
-                      background: EthRewards == 0 ? "#14142A" : "#312F69",
-                      padding: 5,
-                      borderRadius: 8,
-                      width: "100%",
-                    }}
-                  >
-                    Claim reward
-                  </button>
+                  {!showbutton && (
+                    <button
+                      className="claim-rewards-btn-countdown mb-1"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleClaim(checklistItemID);
+                      }}
+                      style={{
+                        pointerEvents: EthRewards == 0 ? "none" : "auto",
+                        borderColor: EthRewards == 0 ? "#14142A" : "#857DFA",
+                        color: EthRewards == 0 ? "#C0C9FF" : "#857DFA",
+                        background: EthRewards == 0 ? "#14142A" : "#312F69",
+                        padding: 5,
+                        borderRadius: 8,
+                        width: "100%",
+                      }}
+                    >
+                      Claim reward
+                    </button>
+                  )}
                 </>
               )}
             </div>
@@ -378,7 +383,7 @@ NftStakingCawChecklist.propTypes = {
   coinbase: PropTypes.string,
   isConnected: PropTypes.bool,
   width: PropTypes.any,
-  height: PropTypes.any
+  height: PropTypes.any,
 };
 
 export default NftStakingCawChecklist;

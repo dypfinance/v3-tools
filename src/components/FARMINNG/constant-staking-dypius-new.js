@@ -797,15 +797,19 @@ const StakeDypiusEth = ({
                   : "gap-3 gap-lg-5"
               }`}
             >
-              <h6 className="activetxt">
-                <img
-                  src={ellipse}
-                  alt=""
-                  className="position-relative"
-                  style={{ top: "-1px" }}
-                />
-                Active status
-              </h6>
+            {expired === true ? (
+                <h6 className="expiredtxt caws-active-txt">Expired Pool</h6>
+              ) : (
+                <h6 className="activetxt">
+                  <img
+                    src={ellipse}
+                    alt=""
+                    className="position-relative"
+                    style={{ top: "-1px" }}
+                  />
+                  Active status
+                </h6>
+              )}
               {/* <div className="d-flex align-items-center justify-content-between gap-2">
                     <h6 className="earnrewards-text">Earn rewards in:</h6>
                     <h6 className="earnrewards-token d-flex align-items-center gap-1">
@@ -1009,7 +1013,7 @@ const StakeDypiusEth = ({
                     title={
                       <div className="tooltip-text">
                         {
-                          "The initial pool size is capped at 10M DYP. Additional opportunities to stake DYP are planned to be introduced over time."
+                          "The initial pool size is capped at 11.5M DYP. Additional opportunities to stake DYP are planned to be introduced over time."
                         }
                       </div>
                     }
@@ -1806,7 +1810,6 @@ const StakeDypiusEth = ({
           setIsVisible={() => {
             setshowCalculator(false);
           }}
-          width="fit-content"
         >
           <div className="pools-calculator">
             {/* <div className="d-flex align-items-center justify-content-between">
@@ -1867,7 +1870,7 @@ const StakeDypiusEth = ({
             <div className="d-flex flex-column gap-2 mt-4">
               <h3 style={{ fontWeight: "500", fontSize: "39px" }}>
                 {" "}
-                ${getFormattedNumber(getApproxReturn() * tokendata, 6)} USD
+                ${getFormattedNumber(getApproxReturn() * usdPerToken, 6)} USD
               </h3>
               <h6
                 style={{

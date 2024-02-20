@@ -45,7 +45,7 @@ const renderer = ({ days, hours, minutes, seconds }) => {
   );
 };
 
-const StakeEth = ({
+const StakeEthOld = ({
   staking,
   is_wallet_connected,
   apr,
@@ -265,11 +265,11 @@ const StakeEth = ({
       _amountOutMin = _amountOutMin[_amountOutMin.length - 1];
       _amountOutMin = new BigNumber(_amountOutMin).div(1e6).toFixed(18);
 
-      let _bal
-      if (chainId === "1" && coinbase!==undefined && coinbase!==null) {
-       _bal = reward_token.balanceOf(coinbase);
+      let _bal;
+      if (chainId === "1" && coinbase !== undefined && coinbase !== null) {
+        _bal = reward_token.balanceOf(coinbase);
       }
-      if (staking && coinbase!==undefined && coinbase!==null) {
+      if (staking && coinbase !== undefined && coinbase !== null) {
         let _pDivs = staking.getTotalPendingDivs(coinbase);
 
         let _tEarned = staking.totalEarnedTokens(coinbase);
@@ -332,8 +332,10 @@ const StakeEth = ({
           .toFixed(18);
         settvlusd(tvlUSD);
 
-        let balance_formatted = new BigNumber(token_balance ).div(1e18).toString(10)
-        settoken_balance(balance_formatted) ;
+        let balance_formatted = new BigNumber(token_balance)
+          .div(1e18)
+          .toString(10);
+        settoken_balance(balance_formatted);
 
         let divs_formatted = new BigNumber(pendingDivs).div(1e18).toFixed(6);
         setpendingDivs(divs_formatted);
@@ -345,7 +347,9 @@ const StakeEth = ({
 
         setstakingTime(stakingTime);
 
-        let depositedTokens_formatted = new BigNumber(depositedTokens).div(1e18).toString(10)
+        let depositedTokens_formatted = new BigNumber(depositedTokens)
+          .div(1e18)
+          .toString(10);
 
         setdepositedTokens(depositedTokens_formatted);
 
@@ -397,16 +401,13 @@ const StakeEth = ({
     refreshBalance();
     if (depositAmount !== "") {
       checkApproval(depositAmount);
-
     }
   }, [coinbase, coinbase2, staking]);
 
   useEffect(() => {
-      setdepositAmount('');
-      setdepositStatus('initial')
-
-  }, [ staking]);
-
+    setdepositAmount("");
+    setdepositStatus("initial");
+  }, [staking]);
 
   const getTotalTvl = async () => {
     if (the_graph_result) {
@@ -556,7 +557,7 @@ const StakeEth = ({
 
   const handleWithdraw = async (e) => {
     // e.preventDefault();
-    let amount = new BigNumber(withdrawAmount).times(1e18).toFixed(0)
+    let amount = new BigNumber(withdrawAmount).times(1e18).toFixed(0);
     setwithdrawLoading(true);
 
     let deadline = Math.floor(
@@ -564,7 +565,7 @@ const StakeEth = ({
     );
 
     staking
-      .unstake(amount)
+      .unstake(amount, 0, deadline)
       .then(() => {
         setwithdrawLoading(false);
         setwithdrawStatus("success");
@@ -656,17 +657,18 @@ const StakeEth = ({
   const handleSetMaxDeposit = (e) => {
     const depositAmount = token_balance;
     checkApproval(token_balance);
-
   };
 
   const handleSetMaxWithdraw = async (e) => {
     // e.preventDefault();
     let amount;
-    await staking.depositedTokens(coinbase).then((data)=>{
-      amount = data
-    })
+    await staking.depositedTokens(coinbase).then((data) => {
+      amount = data;
+    });
 
-    let depositedTokens_formatted = new BigNumber(amount).div(1e18).toString(10)
+    let depositedTokens_formatted = new BigNumber(amount)
+      .div(1e18)
+      .toString(10);
     setwithdrawAmount(depositedTokens_formatted);
   };
 
@@ -842,7 +844,7 @@ const StakeEth = ({
   }
   if (!isNaN(cliffTime) && !isNaN(stakingTime)) {
     if (
-      (Number(stakingTime) + Number(cliffTime) >= Date.now()/1000) &&
+      Number(stakingTime) + Number(cliffTime) >= Date.now() / 1000 &&
       lockTime !== "No Lock"
     ) {
       canWithdraw = false;
@@ -912,7 +914,7 @@ const StakeEth = ({
                   : "gap-3 gap-lg-5"
               }`}
             >
-           {expired === true ? (
+             {expired === true ? (
                 <h6 className="expiredtxt caws-active-txt">Expired Pool</h6>
               ) : (
                 <h6 className="activetxt">
@@ -1327,17 +1329,19 @@ const StakeEth = ({
                         /> */}
                   </div>
                   <div className="claim-reinvest-container d-flex justify-content-between align-items-center gap-3">
-                  <button
+                    <button
                       disabled={
-                        claimStatus === "claimed" || claimStatus === "success" || pendingDivs <= 0
-                          ? 
-                            true
+                        claimStatus === "claimed" ||
+                        claimStatus === "success" ||
+                        pendingDivs <= 0
+                          ? true
                           : false
                       }
                       className={`btn filledbtn ${
-                        claimStatus === "claimed" && claimStatus === "initial" ||  pendingDivs <= 0
-                          ? 
-                            "disabled-btn"
+                        (claimStatus === "claimed" &&
+                          claimStatus === "initial") ||
+                        pendingDivs <= 0
+                          ? "disabled-btn"
                           : claimStatus === "failed"
                           ? "fail-button"
                           : claimStatus === "success"
@@ -1347,10 +1351,12 @@ const StakeEth = ({
                       style={{ height: "fit-content" }}
                       // onClick={handleClaimDivs}
                       onClick={() => {
-                        staking?._address?.toLowerCase() === '0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d' ? 
-                        window.$.alert(
-                          "*The rewards earned from the day of the migration until the end of the lock time will be distributed to the users automatically at the end of the contract."
-                        ) : handleClaimDivs()
+                        staking?._address?.toLowerCase() ===
+                        "0xeb7dd6b50db34f7ff14898d0be57a99a9f158c4d"
+                          ? window.$.alert(
+                              "*The rewards earned from the day of the migration until the end of the lock time will be distributed to the users automatically at the end of the contract."
+                            )
+                          : handleClaimDivs();
                       }}
                     >
                       {claimLoading ? (
@@ -1539,7 +1545,7 @@ const StakeEth = ({
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">My DYP Deposit</span>
                     <h6 className="stats-card-content">
-                    {getFormattedNumber(depositedTokens,6)} DYP
+                      {getFormattedNumber(depositedTokens, 6)} DYP
                     </h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
@@ -1562,7 +1568,9 @@ const StakeEth = ({
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">TVL USD</span>
-                    <h6 className="stats-card-content">${getFormattedNumber(Number(tvl) * usdPerToken,4) } USD</h6>
+                    <h6 className="stats-card-content">
+                      ${getFormattedNumber(Number(tvl) * usdPerToken, 4)} USD
+                    </h6>
                   </div>
                   <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                     <span className="stats-card-title">
@@ -1747,7 +1755,7 @@ const StakeEth = ({
                     <div className="d-flex flex-column gap-1">
                       <h6 className="withsubtitle">Balance</h6>
                       <h6 className="withtitle">
-                      {getFormattedNumber(depositedTokens,6)} {token_symbol}
+                        {getFormattedNumber(depositedTokens, 6)} {token_symbol}
                       </h6>
                     </div>
                   </div>
@@ -1899,7 +1907,10 @@ const StakeEth = ({
         <WalletModal
           show={show}
           handleClose={hideModal}
-          handleConnection={()=>{handleConnection(); setshow(false)}}
+          handleConnection={() => {
+            handleConnection();
+            setshow(false);
+          }}
         />
       )}
       {/* <div
@@ -2736,4 +2747,4 @@ const StakeEth = ({
   // </div>
 };
 
-export default StakeEth;
+export default StakeEthOld;

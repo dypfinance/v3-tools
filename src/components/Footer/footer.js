@@ -88,7 +88,7 @@ const Footer = () => {
           <li>
             <a
               target={"_blank"}
-              href="https://www.coingecko.com/en/coins/defi-yield-protocol"
+              href="https://www.coingecko.com/en/coins/dypius"
             >
               <img src="/assets/img/coingecko-logo.svg" alt="Coingecko"
               height={24} width={24}></img>
@@ -97,7 +97,7 @@ const Footer = () => {
           <li>
             <a
               target={"_blank"}
-              href="https://coinmarketcap.com/currencies/defi-yield-protocol/"
+              href="https://coinmarketcap.com/currencies/defi-yield-protocol-v2/"
             >
               <img
                 src="/assets/img/coinmarketcap.svg"
@@ -113,7 +113,7 @@ const Footer = () => {
           <li>
             <a
               target={"_blank"}
-              href="https://www.coingecko.com/en/coins/defi-yield-protocol"
+              href="https://www.coingecko.com/en/coins/dypius"
             >
               <img src="/assets/img/coingecko-logo.svg" alt="Coingecko"
               height={24} width={24}></img>
@@ -122,7 +122,7 @@ const Footer = () => {
           <li>
             <a
               target={"_blank"}
-              href="https://coinmarketcap.com/currencies/defi-yield-protocol/"
+              href="https://coinmarketcap.com/currencies/defi-yield-protocol-v2/"
             >
               <img
                 src="/assets/img/coinmarketcap.svg"

@@ -750,15 +750,19 @@ const StakeDypiusBsc = ({
                   : "gap-3 gap-lg-5"
               }`}
             >
-              <h6 className="activetxt">
-                <img
-                  src={ellipse}
-                  alt=""
-                  className="position-relative"
-                  style={{ top: "-1px" }}
-                />
-                Active status
-              </h6>
+              {expired === true ? (
+                <h6 className="expiredtxt caws-active-txt">Expired Pool</h6>
+              ) : (
+                <h6 className="activetxt">
+                  <img
+                    src={ellipse}
+                    alt=""
+                    className="position-relative"
+                    style={{ top: "-1px" }}
+                  />
+                  Active status
+                </h6>
+              )}
               {/* <div className="d-flex align-items-center justify-content-between gap-2">
                     <h6 className="earnrewards-text">Earn rewards in:</h6>
                     <h6 className="earnrewards-token d-flex align-items-center gap-1">
@@ -973,7 +977,7 @@ const StakeDypiusBsc = ({
                     title={
                       <div className="tooltip-text">
                         {lockTime === "No Lock"
-                          ? "The initial pool size is capped at 3M DYP. Additional opportunities to stake DYP are planned to be introduced over time."
+                          ? "The initial pool size is capped at 2.5M DYP. Additional opportunities to stake DYP are planned to be introduced over time."
                           : "Deposit your assets to the staking smart contract. For lock time pools, the lock time resets if you add more deposits after making one previously."}
                       </div>
                     }
@@ -1842,7 +1846,7 @@ const StakeDypiusBsc = ({
             </div>
             <div className="d-flex flex-column gap-2 mt-4">
               <h3 style={{ fontWeight: "500", fontSize: "39px" }}>
-                $ {getFormattedNumber(getApproxReturn() * tokendata, 3)} USD
+                $ {getFormattedNumber(getApproxReturn() * usdPerToken, 3)} USD
               </h3>
               <h6
                 style={{

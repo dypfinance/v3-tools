@@ -75,7 +75,7 @@ const BscFarmingFunc = ({
   isConnected,
   latestApr,
   wbnbPrice,
-  latestTvl
+  latestTvl,
 }) => {
   let { reward_token, BigNumber, alertify, reward_token_idyp, token_dypsbsc } =
     window;
@@ -226,23 +226,30 @@ const BscFarmingFunc = ({
 
   const [totalLPdeposited, setTotalLpDeposited] = useState("");
   const [priceUSD, setPriceUSD] = useState("");
-  const [rewardsPendingClaim , setrewardsPendingClaim ] = useState("");
-  const [calculatedUsd, setCalculatedUsd] = useState(0)
-  const [calculatedWbnb, setCalculatedWbnb] = useState(0)
-  const [dypPrice, setDypPrice] = useState(0)
-  const [idypPrice, setIdypPrice] = useState(0)
-
+  const [rewardsPendingClaim, setrewardsPendingClaim] = useState("");
+  const [calculatedUsd, setCalculatedUsd] = useState(0);
+  const [calculatedWbnb, setCalculatedWbnb] = useState(0);
+  const [dypPrice, setDypPrice] = useState(0);
+  const [idypPrice, setIdypPrice] = useState(0);
 
   const fetchDypPrice = async () => {
-    axios.get('https://api.geckoterminal.com/api/v2/networks/bsc/pools/0x3fbca1072fb101e9440bb97be9ef763aac312516').then((res) => {
-      setDypPrice(res.data.data.attributes.base_token_price_usd)
-    })
-  }
+    axios
+      .get(
+        "https://api.geckoterminal.com/api/v2/networks/bsc/pools/0x3fbca1072fb101e9440bb97be9ef763aac312516"
+      )
+      .then((res) => {
+        setDypPrice(res.data.data.attributes.base_token_price_usd);
+      });
+  };
   const fetchiDypPrice = async () => {
-    axios.get('https://api.geckoterminal.com/api/v2/networks/bsc/pools/0x1bC61d08A300892e784eD37b2d0E63C85D1d57fb').then((res) => {
-      setIdypPrice(res.data.data.attributes.base_token_price_usd)
-    })
-  }
+    axios
+      .get(
+        "https://api.geckoterminal.com/api/v2/networks/bsc/pools/0x1bC61d08A300892e784eD37b2d0E63C85D1d57fb"
+      )
+      .then((res) => {
+        setIdypPrice(res.data.data.attributes.base_token_price_usd);
+      });
+  };
 
   const showModal = () => {
     setShow(true);
@@ -280,7 +287,9 @@ const BscFarmingFunc = ({
     let WETH = await router.methods.WETH().call();
     let rewardTokenAddress = "0xBD100d061E120b2c67A24453CF6368E63f1Be056"; // idyp address
 
-    let amount = await constant.depositedTokens(coinbase);
+    let amount = await constant.depositedTokens(
+      coinbase
+    );
     let PAIR_ABI = window.PAIR_ABI;
     let pair_token_address = "0x1bC61d08A300892e784eD37b2d0E63C85D1d57fb";
     let web3 = window.bscWeb3;
@@ -288,7 +297,9 @@ const BscFarmingFunc = ({
     let pair = new web3.eth.Contract(PAIR_ABI, pair_token_address);
     let totalSupply = await pair.methods.totalSupply().call();
     let reserves = await pair.methods.getReserves().call();
-    let amountlpContract = await pair.methods.balanceOf(constant._address).call()
+    let amountlpContract = await pair.methods
+      .balanceOf(constant._address)
+      .call();
 
     let maxETH = reserves[0];
     let maxToken = reserves[1];
@@ -316,16 +327,16 @@ const BscFarmingFunc = ({
     ];
 
     let totalContractUSD = await router.methods
-    .getAmountsOut(maxContractToken, path1)
-    .call();
-  totalContractUSD = totalContractUSD[totalContractUSD.length - 1];
+      .getAmountsOut(maxContractToken, path1)
+      .call();
+    totalContractUSD = totalContractUSD[totalContractUSD.length - 1];
 
-  totalContractUSD = BigNumber(totalContractUSD)
+    totalContractUSD = BigNumber(totalContractUSD)
       .plus(maxContractEth)
       .div(1e18)
       .toFixed(18);
 
-      setlpTokensContract(totalContractUSD)
+    setlpTokensContract(totalContractUSD);
 
     let _userWithdrawAmount = await router.methods
       .getAmountsOut(maxUserToken, path1)
@@ -403,7 +414,7 @@ const BscFarmingFunc = ({
         }, 2000);
       });
   };
-  
+
   const handleStake = async (e) => {
     let selectedBuybackToken = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"; // wbnb/wavax
     let amount = depositAmount;
@@ -529,7 +540,9 @@ const BscFarmingFunc = ({
       }
 
       let _amountOutMin_dypReceived = new BigNumber(0).toFixed(0);
-      let pendingDivs = await constant.getPendingDivsEth(coinbase);
+      let pendingDivs = await constant.getPendingDivsEth(
+        coinbase
+      );
 
       if (pendingDivs > 0) {
         _amountOutMin_dypReceived = new BigNumber(pendingDivs)
@@ -606,7 +619,9 @@ const BscFarmingFunc = ({
   };
 
   const handleWithdrawDyp = async () => {
-    let amountConstant = await staking.depositedTokens(coinbase);
+    let amountConstant = await staking.depositedTokens(
+      coinbase
+    );
     amountConstant = new BigNumber(amountConstant).toFixed(0);
     setWithdrawLoading(true);
 
@@ -644,7 +659,9 @@ const BscFarmingFunc = ({
     let selectedBuybackToken = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"; // can only be WETH
     let rewardTokenAddress = "0xBD100d061E120b2c67A24453CF6368E63f1Be056"; // idyp address
 
-    let amount = await constant.depositedTokens(coinbase);
+    let amount = await constant.depositedTokens(
+      coinbase
+    );
     let PAIR_ABI = window.PAIR_ABI;
     let pair_token_address = "0x1bC61d08A300892e784eD37b2d0E63C85D1d57fb";
     let web3 = window.bscWeb3;
@@ -734,7 +751,9 @@ const BscFarmingFunc = ({
     }
 
     let _amountOutMin_crazReceived = new BigNumber(0).toFixed(0);
-    let pendingDivs = await constant.getPendingDivsEth(coinbase);
+    let pendingDivs = await constant.getPendingDivsEth(
+      coinbase
+    );
     console.log(pendingDivs);
     if (pendingDivs > 0) {
       _amountOutMin_crazReceived = new BigNumber(pendingDivs)
@@ -918,143 +937,142 @@ const BscFarmingFunc = ({
     let amount = await staking.getPendingDivs(address);
 
     let claimdivs2 = new BigNumber(amount)
-    .times(100 - window.config.slippage_tolerance_percent_liquidity)
-    .div(100)
-    .toFixed(0);
-    
-    try{
-      staking.claim(0, 0, deadline).then(() => {
-        setClaimStatus("success");
-        setClaimLoading(false);
-        setPendingDivs(getFormattedNumber(0, 6));
-        refreshBalance();
-      })
-      .catch((e) => {
-        setClaimStatus("fail");
-        setClaimLoading(false);
-        setErrorMsg2(e?.message);
-        console.log(e);
-        setTimeout(() => {
-          setClaimStatus("initial");
-          setErrorMsg2("");
-        }, 10000);
-      });
-    }catch (e) {
+      .times(100 - window.config.slippage_tolerance_percent_liquidity)
+      .div(100)
+      .toFixed(0);
+
+    try {
+      staking
+        .claim(0, 0, deadline)
+        .then(() => {
+          setClaimStatus("success");
+          setClaimLoading(false);
+          setPendingDivs(getFormattedNumber(0, 6));
+          refreshBalance();
+        })
+        .catch((e) => {
+          setClaimStatus("fail");
+          setClaimLoading(false);
+          setErrorMsg2(e?.message);
+          console.log(e);
+          setTimeout(() => {
+            setClaimStatus("initial");
+            setErrorMsg2("");
+          }, 10000);
+        });
+    } catch (e) {
       console.error(e);
       return;
     }
-//     let router = await window.getPancakeswapRouterContract();
-//     let WETH = await router.methods.WETH().call();
-//     let platformTokenAddress = window.config.reward_token_address;
-//     let rewardTokenAddress = window.config.reward_tokenbsc_address2;
-//     let path = [
-//       ...new Set(
-//         [rewardTokenAddress, WETH, platformTokenAddress].map((a) =>
-//           a.toLowerCase()
-//         )
-//       ),
-//     ];
+    //     let router = await window.getPancakeswapRouterContract();
+    //     let WETH = await router.methods.WETH().call();
+    //     let platformTokenAddress = window.config.reward_token_address;
+    //     let rewardTokenAddress = window.config.reward_tokenbsc_address2;
+    //     let path = [
+    //       ...new Set(
+    //         [rewardTokenAddress, WETH, platformTokenAddress].map((a) =>
+    //           a.toLowerCase()
+    //         )
+    //       ),
+    //     ];
 
-//     let path1 = [
-//       ...new Set([rewardTokenAddress, WETH].map((a) => a.toLowerCase())),
-//     ];
+    //     let path1 = [
+    //       ...new Set([rewardTokenAddress, WETH].map((a) => a.toLowerCase())),
+    //     ];
 
+    //     let PAIR_ABI = window.PAIR_ABI;
+    //     let pair_token_address = "0x1bC61d08A300892e784eD37b2d0E63C85D1d57fb";
+    //     let web3 = window.bscWeb3;
+    //     let pair = new web3.eth.Contract(PAIR_ABI, pair_token_address);
 
-//     let PAIR_ABI = window.PAIR_ABI;
-//     let pair_token_address = "0x1bC61d08A300892e784eD37b2d0E63C85D1d57fb";
-//     let web3 = window.bscWeb3;
-//     let pair = new web3.eth.Contract(PAIR_ABI, pair_token_address);
+    //     let totalSupply = await pair.methods.totalSupply().call();
+    //     let reserves = await pair.methods.getReserves().call();
 
-//     let totalSupply = await pair.methods.totalSupply().call();
-//     let reserves = await pair.methods.getReserves().call();
+    //     let amountlpContract = await pair.methods.balanceOf(constant._address).call()
 
-//     let amountlpContract = await pair.methods.balanceOf(constant._address).call()
+    //     let maxETH = reserves[0];
+    //     let maxToken = reserves[1];
 
+    //     let maxContractEth = (amountlpContract * maxETH) / totalSupply;
+    //     maxContractEth = new BigNumber(maxContractEth).toFixed(0);
+    //     let maxContractToken = (amountlpContract * maxToken) / totalSupply;
+    //     maxContractToken = new BigNumber(maxContractToken).toFixed(0);
 
-//     let maxETH = reserves[0];
-//     let maxToken = reserves[1];
+    //     let totalContractUSD = await router.methods
+    //     .getAmountsOut(maxContractToken, path1)
+    //     .call().catch((e) => {
+    //       setClaimStatus("failed");
+    //       console.log(e)
+    //       setClaimLoading(false);
+    //       setErrorMsg2(e?.message);
+    //       setTimeout(() => {
+    //         setClaimStatus("initial");
+    //         setSelectedPool("");
+    //         setErrorMsg2("");
+    //       }, 10000);
+    //     });
 
-//     let maxContractEth = (amountlpContract * maxETH) / totalSupply;
-//     maxContractEth = new BigNumber(maxContractEth).toFixed(0);
-//     let maxContractToken = (amountlpContract * maxToken) / totalSupply;
-//     maxContractToken = new BigNumber(maxContractToken).toFixed(0);
+    //       let amountsPendingClaim = await router.methods
+    //       .getAmountsOut(amount, path)
+    //       .call().catch((e) => {
+    //         setClaimStatus("failed");
+    //         console.log(e)
+    //         setClaimLoading(false);
+    //         setErrorMsg2(e?.message);
+    //         setTimeout(() => {
+    //           setClaimStatus("initial");
+    //           setSelectedPool("");
+    //           setErrorMsg2("");
+    //         }, 10000);
+    //       });
 
-    
+    //     amountsPendingClaim = amountsPendingClaim[totalContractUSD.length - 1];
 
-//     let totalContractUSD = await router.methods
-//     .getAmountsOut(maxContractToken, path1)
-//     .call().catch((e) => {
-//       setClaimStatus("failed");
-//       console.log(e)
-//       setClaimLoading(false);
-//       setErrorMsg2(e?.message);
-//       setTimeout(() => {
-//         setClaimStatus("initial");
-//         setSelectedPool("");
-//         setErrorMsg2("");
-//       }, 10000);
-//     });
+    //    amountsPendingClaim = BigNumber(amountsPendingClaim)
+    //       .div(1e18)
+    //       .toFixed(18);
 
-//       let amountsPendingClaim = await router.methods
-//       .getAmountsOut(amount, path)
-//       .call().catch((e) => {
-//         setClaimStatus("failed");
-//         console.log(e)
-//         setClaimLoading(false);
-//         setErrorMsg2(e?.message);
-//         setTimeout(() => {
-//           setClaimStatus("initial");
-//           setSelectedPool("");
-//           setErrorMsg2("");
-//         }, 10000);
-//       });
+    //     amountsPendingClaim = new BigNumber(amountsPendingClaim)
+    //     .times(100 - window.config.slippage_tolerance_percent)
+    //     .div(100)
+    //     .toFixed(0);
 
-//     amountsPendingClaim = amountsPendingClaim[totalContractUSD.length - 1];
-    
-//    amountsPendingClaim = BigNumber(amountsPendingClaim)
-//       .div(1e18)
-//       .toFixed(18);
+    // console.log(0, amountsPendingClaim, deadline)
+    //     try {
+    //       staking
+    //         .claim(0, amountsPendingClaim, deadline)
+    //         .then(() => {
+    //           setClaimStatus("success");
+    //           setClaimLoading(false);
+    //         })
+    //         .catch((e) => {
+    //           setClaimStatus("failed");
+    //           setClaimLoading(false);
+    //           setErrorMsg2(e?.message);
+    //           setTimeout(() => {
+    //             setClaimStatus("initial");
+    //             setSelectedPool("");
+    //             setErrorMsg2("");
+    //           }, 10000);
+    //         });
+    //     } catch (e) {
+    //       setErrorMsg2(e?.message);
 
-//     amountsPendingClaim = new BigNumber(amountsPendingClaim)
-//     .times(100 - window.config.slippage_tolerance_percent)
-//     .div(100)
-//     .toFixed(0);
- 
-// console.log(0, amountsPendingClaim, deadline)
-//     try {
-//       staking
-//         .claim(0, amountsPendingClaim, deadline)
-//         .then(() => {
-//           setClaimStatus("success");
-//           setClaimLoading(false);
-//         })
-//         .catch((e) => {
-//           setClaimStatus("failed");
-//           setClaimLoading(false);
-//           setErrorMsg2(e?.message);
-//           setTimeout(() => {
-//             setClaimStatus("initial");
-//             setSelectedPool("");
-//             setErrorMsg2("");
-//           }, 10000);
-//         });
-//     } catch (e) {
-//       setErrorMsg2(e?.message);
-
-//       console.error(e);
-//       return;
-//     }
+    //       console.error(e);
+    //       return;
+    //     }
   };
 
   const handleSetMaxDeposit = (e) => {
     e.preventDefault();
 
-    if( new BigNumber(selectedTokenBalance)
-    .div(10 ** selectedTokenDecimals)
-    .toFixed(selectedTokenDecimals) > 10){
-      setDepositAmount(10)
-    }else{
-
+    if (
+      new BigNumber(selectedTokenBalance)
+        .div(10 ** selectedTokenDecimals)
+        .toFixed(selectedTokenDecimals) > 10
+    ) {
+      setDepositAmount(10);
+    } else {
       setDepositAmount(
         new BigNumber(selectedTokenBalance)
           .div(10 ** selectedTokenDecimals)
@@ -1125,21 +1143,38 @@ const BscFarmingFunc = ({
       _amountOutMin = new BigNumber(_amountOutMin).div(1e18).toFixed(18);
 
       let _bal = token.balanceOf(coinbase);
-      let _rBal = reward_token.balanceOf(coinbase);
+      let _rBal = reward_token.balanceOf(
+        coinbase
+      );
 
-      let _pDivs = constant.getPendingDivs(coinbase);
+      let _pDivs = constant.getPendingDivs(
+        coinbase
+      );
 
-      let _pDivsEth = constant.getPendingDivsEth(coinbase);
+      let _pDivsEth = constant.getPendingDivsEth(
+        coinbase
+      );
+      console.log(_pDivsEth);
 
-      let _tEarned = constant.totalEarnedTokens(coinbase);
+      let _tEarned = constant.totalEarnedTokens(
+        coinbase
+      );
 
-      let _tEarnedEth = constant.totalEarnedEth(coinbase);
+      let _tEarnedEth = constant.totalEarnedEth(
+        coinbase
+      );
 
-      let _stakingTime = constant.depositTime(coinbase);
+      let _stakingTime = constant.depositTime(
+        coinbase
+      );
 
-      let _dTokens = constant.depositedTokens(coinbase);
+      let _dTokens = constant.depositedTokens(
+        coinbase
+      );
 
-      let _lClaimTime = constant.lastClaimedTime(coinbase);
+      let _lClaimTime = constant.lastClaimedTime(
+        coinbase
+      );
 
       let _tvl = token.balanceOf(constant._address);
 
@@ -1157,8 +1192,12 @@ const BscFarmingFunc = ({
         constant._address
       ); /* TVL of iDYP on Farming */
 
-      let _dTokensDYP = staking.depositedTokens(coinbase);
-      let _rewardsPendingClaim = staking.getPendingDivs(coinbase)
+      let _dTokensDYP = staking.depositedTokens(
+        coinbase
+      );
+      let _rewardsPendingClaim = staking.getPendingDivs(
+        coinbase
+      );
 
       // let _pendingDivsStaking = constant.getTotalPendingDivs(coinbase);
 
@@ -1169,6 +1208,7 @@ const BscFarmingFunc = ({
 
       let [
         token_balance2,
+        pendingDivsEth2,
         reward_token_balance2,
         pendingDivs2,
         totalEarnedTokens2,
@@ -1177,7 +1217,7 @@ const BscFarmingFunc = ({
         lastClaimedTime2,
         tvl2,
         totalEarnedEth2,
-        pendingDivsEth2,
+
         tvlConstantiDYP2,
         tvlConstantDYP2,
         tvliDYP2,
@@ -1186,6 +1226,7 @@ const BscFarmingFunc = ({
         tvlDYPS2,
       ] = await Promise.all([
         _bal,
+        _pDivsEth,
         _rBal,
         _pDivs,
         _tEarned,
@@ -1194,7 +1235,7 @@ const BscFarmingFunc = ({
         _lClaimTime,
         _tvl,
         _tEarnedEth,
-        _pDivsEth,
+
         _tvlConstantiDYP,
         _tvlConstantDYP,
         _tvliDYP,
@@ -1278,7 +1319,9 @@ const BscFarmingFunc = ({
         .toString(10);
       setPendingDivs(pendingDivs_formatted);
 
-      let rewardsPendingClaim_formatted = new BigNumber(rewardsPendingClaim2).div(1e18).toString(10);
+      let rewardsPendingClaim_formatted = new BigNumber(rewardsPendingClaim2)
+        .div(1e18)
+        .toString(10);
       setrewardsPendingClaim(rewardsPendingClaim_formatted);
 
       let totalEarnedTokens_formatted = new BigNumber(totalEarnedTokens2)
@@ -1384,38 +1427,44 @@ const BscFarmingFunc = ({
 
     //console.log(disburseDuration)
     //console.log(contractDeployTime)
-
-
   };
 
-  const getBalance = async()=>{
+  const getBalance = async () => {
     try {
-    let TOKEN_ABI = window.ERC20_ABI;
+      let TOKEN_ABI = window.ERC20_ABI;
 
-    let selectedBuybackToken2 = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"; // wbnb/wavax
-    let web3 = window.bscWeb3;
-    let tokenContract = new web3.eth.Contract(TOKEN_ABI, selectedBuybackToken2);
-    const result = await tokenContract.methods.balanceOf(coinbase).call().catch((e)=>{console.log(e)})
-  
-     setSelectedTokenBalance(result);
+      let selectedBuybackToken2 = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"; // wbnb/wavax
+      let web3 = window.bscWeb3;
+      let tokenContract = new web3.eth.Contract(
+        TOKEN_ABI,
+        selectedBuybackToken2
+      );
+      const result = await tokenContract.methods
+        .balanceOf(coinbase)
+        .call()
+        .catch((e) => {
+          console.log(e);
+        });
+
+      setSelectedTokenBalance(result);
     } catch (e) {
       console.warn(e);
     }
-  }
+  };
 
   const getUsdPerETH = () => {
     return the_graph_result.usd_per_eth || 0;
   };
 
-  const getTvlUsdInfo = async()=>{
+  const getTvlUsdInfo = async () => {
     const tokenPrice = await axios
-    .get(`https://api.dyp.finance/api/the_graph_bsc_v2`)
-    .then((res) => {
-      return res.data.the_graph_bsc_v2.usd_per_eth;
-    })
-    .catch((err) => console.error(err));
-    setPriceUSD(tokenPrice)
-  }
+      .get(`https://api.dyp.finance/api/the_graph_bsc_v2`)
+      .then((res) => {
+        return res.data.the_graph_bsc_v2.usd_per_eth;
+      })
+      .catch((err) => console.error(err));
+    setPriceUSD(tokenPrice);
+  };
 
   const getmyShare = async () => {
     // myshare = (my lp deposit / total lp deposited) * 100
@@ -1423,7 +1472,9 @@ const BscFarmingFunc = ({
       setmyShare(0);
     }
     if (totalLPdeposited != "0" && totalLPdeposited != "") {
-      let myShare2 = ((myDepositedLpTokens / totalLPdeposited) * 100).toFixed(2);
+      let myShare2 = ((myDepositedLpTokens / totalLPdeposited) * 100).toFixed(
+        2
+      );
       setmyShare(myShare2);
     }
   };
@@ -1435,7 +1486,9 @@ const BscFarmingFunc = ({
     // let approxDeposit = approxDeposit;
     //let lp_data = the_graph_result.lp_data
     //let usd_per_lp = lp_data ? lp_data[lp_id].usd_per_lp : 0
-    setCalculatedUsd(approxDeposit * (1 + latestApr/ 100) ** (approxDays / 365))
+    setCalculatedUsd(
+      approxDeposit * (1 + latestApr / 100) ** (approxDays / 365)
+    );
     // return ((approxDeposit * APY) / 100 / 365) * approxDays;
   };
 
@@ -1448,18 +1501,21 @@ const BscFarmingFunc = ({
     return result;
   };
 
-const checkDepositAmount = (amount) => {
-  
-  if(Number(amount) > 10){
-    setDepositAmount(10)
-  }
-}
+  const checkDepositAmount = (amount) => {
+    if (Number(amount) > 10) {
+      setDepositAmount(10);
+    }
+  };
 
   const checkApproval = async (amount) => {
     let selectedBuybackToken = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"; // wbnb/wavax
 
     const result = await window
-      .checkapproveStakePool(coinbase, selectedBuybackToken, constant._address)
+      .checkapproveStakePool(
+        coinbase,
+        selectedBuybackToken,
+        constant._address
+      )
       .then((data) => {
         console.log(data);
         return data;
@@ -1469,7 +1525,6 @@ const checkDepositAmount = (amount) => {
       });
 
     let result_formatted = new BigNumber(result).div(1e18).toFixed(6);
-
 
     if (
       Number(result_formatted) >= Number(amount) &&
@@ -1627,27 +1682,24 @@ const checkDepositAmount = (amount) => {
   };
 
   useEffect(() => {
-      refreshBalance();
-       if (depositAmount !== "") {
+    refreshBalance();
+    if (depositAmount !== "") {
       checkApproval(depositAmount);
-
     }
   }, [coinbase, coinbase2, chainId, staking, constant]);
 
+  useEffect(() => {
+    setDepositAmount("");
+    setDepositStatus("initial");
+  }, [staking]);
 
   useEffect(() => {
-      setDepositAmount('');
-      setDepositStatus('initial')
-
-  }, [ staking]);
-
-  useEffect(() => {
-      getBalance();
+    getBalance();
   }, [coinbase, chainId]);
 
   useEffect(() => {
     getmyShare();
-    getTvlUsdInfo()
+    getTvlUsdInfo();
   }, [totalLPdeposited, myDepositedLpTokens]);
 
   return (
@@ -1774,7 +1826,10 @@ const checkDepositAmount = (amount) => {
           </a> */}
                   <h6
                     className="bottomitems"
-                    onClick={() => {setShowCalculator(true); getApproxReturnUSD();}}
+                    onClick={() => {
+                      setShowCalculator(true);
+                      getApproxReturnUSD();
+                    }}
                   >
                     <img src={poolsCalculatorIcon} alt="" />
                     Calculator
@@ -1921,8 +1976,16 @@ const checkDepositAmount = (amount) => {
               </div>
               <div className="d-flex flex-column gap-2 justify-content-between">
                 <div className="d-flex flex-column flex-lg-row align-items-center justify-content-between gap-2 position-relative">
-                  <div className="position-absolute" style={{bottom: '-15px', left: '0px'}}>
-                    <span className="mb-0" style={{color: '#ff6232', fontSize: '10px'}}>The maximum deposit limit is 10 WBNB per transaction*</span>
+                  <div
+                    className="position-absolute"
+                    style={{ bottom: "-15px", left: "0px" }}
+                  >
+                    <span
+                      className="mb-0"
+                      style={{ color: "#ff6232", fontSize: "10px" }}
+                    >
+                      The maximum deposit limit is 10 WBNB per transaction*
+                    </span>
                   </div>
                   <div className="d-flex align-items-center justify-content-between justify-content-lg-start gap-2 w-100">
                     <div className="input-container px-0">
@@ -1937,7 +2000,7 @@ const checkDepositAmount = (amount) => {
                         onChange={(e) => {
                           setDepositAmount(e.target.value);
                           checkApproval(e.target.value);
-                          checkDepositAmount(e.target.value)
+                          checkDepositAmount(e.target.value);
                         }}
                         placeholder=" "
                         className="text-input"
@@ -2046,7 +2109,10 @@ const checkDepositAmount = (amount) => {
               <div className="d-flex flex-column gap-2 justify-content-between">
                 <div className="d-flex align-items-center justify-content-between gap-2"></div>
                 <div className="form-row d-flex flex-column flex-lg-row gap-2 align-items-center align-items-lg-end justify-content-between">
-                  <div className="d-flex align-items-center justify-content-between justify-content-lg-center gap-3" style={{maxWidth: '65%'}}>
+                  <div
+                    className="d-flex align-items-center justify-content-between justify-content-lg-center gap-3"
+                    style={{ maxWidth: "65%" }}
+                  >
                     <div
                       className="gap-1 claimreward-wrapper"
                       onClick={() => {
@@ -2054,7 +2120,7 @@ const checkDepositAmount = (amount) => {
                       }}
                       style={{
                         // padding: "3px",
-                        maxWidth: '45%',
+                        maxWidth: "45%",
                         background:
                           selectedPool === "wbnb" ? "#141333" : "#26264F",
                         border:
@@ -2073,7 +2139,7 @@ const checkDepositAmount = (amount) => {
                           disabled
                           value={
                             Number(pendingDivsEth) > 0
-                              ? `${getFormattedNumber(pendingDivsEth, 2)} WBNB`
+                              ? `${getFormattedNumber(pendingDivsEth, 4)} WBNB`
                               : `${getFormattedNumber(0, 2)} WBNB`
                           }
                           onChange={(e) =>
@@ -2088,7 +2154,7 @@ const checkDepositAmount = (amount) => {
                           type="text"
                           style={{
                             width: "100px",
-                            padding: "0px 15px 0px 15px",
+                            textAlign: "center",
                             height: 35,
                           }}
                         />
@@ -2142,7 +2208,7 @@ const checkDepositAmount = (amount) => {
                     <div
                       className="gap-1 claimreward-wrapper"
                       style={{
-                        maxWidth: '45%',
+                        maxWidth: "45%",
                         background:
                           selectedPool === "dyp" ? "#141333" : "#26264F",
                         border:
@@ -2165,7 +2231,10 @@ const checkDepositAmount = (amount) => {
                           disabled
                           value={
                             Number(rewardsPendingClaim) > 0
-                              ? `${getFormattedNumber(idypPrice * rewardsPendingClaim / dypPrice,6)} DYP`
+                              ? `${getFormattedNumber(
+                                  (idypPrice * rewardsPendingClaim) / dypPrice,
+                                  6
+                                )} DYP`
                               : `${getFormattedNumber(0, 2)} DYP`
                           }
                           onChange={(e) =>
@@ -2904,7 +2973,10 @@ const checkDepositAmount = (amount) => {
                   name="days"
                   placeholder="Days*"
                   value={approxDays}
-                  onChange={(e) => {setApproxDays(e.target.value); getApproxReturnUSD();}}
+                  onChange={(e) => {
+                    setApproxDays(e.target.value);
+                    getApproxReturnUSD();
+                  }}
                 />
               </div>
               <div className="d-flex flex-column gap-3 w-50 me-5">
@@ -2923,22 +2995,20 @@ const checkDepositAmount = (amount) => {
                       ? approxDeposit * LP_AMPLIFY_FACTOR
                       : approxDeposit
                   }
-                  onChange={(e) =>
-                   { setApproxDeposit(
+                  onChange={(e) => {
+                    setApproxDeposit(
                       Number(e.target.value) > 0
                         ? e.target.value / LP_AMPLIFY_FACTOR
                         : e.target.value
                     );
                     getApproxReturnUSD();
-                  }
-                  }
+                  }}
                 />
               </div>
             </div>
             <div className="d-flex flex-column gap-2 mt-4">
               <h3 style={{ fontWeight: "500", fontSize: "39px" }}>
-                
-                ${getFormattedNumber(calculatedUsd , 2, 6)} USD
+                ${getFormattedNumber(calculatedUsd, 2, 6)} USD
               </h3>
               <h6
                 style={{
@@ -2947,8 +3017,7 @@ const checkDepositAmount = (amount) => {
                   color: "#f7f7fc",
                 }}
               >
-                Approx{" "}
-                {getFormattedNumber(calculatedUsd / wbnbPrice)} WBNB
+                Approx {getFormattedNumber(calculatedUsd / wbnbPrice)} WBNB
               </h6>
             </div>
             <div className="mt-4">
