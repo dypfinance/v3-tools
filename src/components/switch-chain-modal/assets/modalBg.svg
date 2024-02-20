@@ -1,0 +1,30 @@
+<svg width="400" height="342" viewBox="0 0 400 342" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="400" height="342" rx="8" fill="#282A5C"/>
+<mask id="mask0_1290_6129" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="342">
+<path d="M400 334C400 338.418 396.418 342 392 342L8 342C3.58173 342 3.66227e-07 338.418 8.17991e-07 334L3.41511e-05 8C3.46029e-05 3.58173 3.58176 8.86713e-07 8.00003 1.21696e-06L392 2.99196e-05C396.418 3.02499e-05 400 3.58176 400 8.00003L400 334Z" fill="#282A5C"/>
+</mask>
+<g mask="url(#mask0_1290_6129)">
+<g opacity="0.7" filter="url(#filter0_f_1290_6129)">
+<ellipse cx="-32.7817" cy="37.6894" rx="80.4301" ry="69.4572" transform="rotate(-180 -32.7817 37.6894)" fill="#4A3AFF"/>
+<ellipse cx="-6.94711" cy="-65.1429" rx="110.174" ry="95.1429" transform="rotate(-180 -6.94711 -65.1429)" fill="#F0603A"/>
+<ellipse cx="-44.6659" cy="30" rx="110.174" ry="95.1429" transform="rotate(-180 -44.6659 30)" fill="#554FD8"/>
+</g>
+<g opacity="0.7" filter="url(#filter1_f_1290_6129)">
+<ellipse cx="74.0453" cy="76.2272" rx="74.0453" ry="76.2272" transform="matrix(-0.687268 -0.726404 0.817085 -0.576517 368.578 471.758)" fill="#4A3AFF"/>
+<ellipse cx="101.428" cy="104.417" rx="101.428" ry="104.417" transform="matrix(-0.687268 -0.726404 0.817085 -0.576517 472.922 460.117)" fill="#F0603A"/>
+<ellipse cx="101.428" cy="104.417" rx="101.428" ry="104.417" transform="matrix(-0.687268 -0.726404 0.817085 -0.576517 363.734 495.092)" fill="#554FD8"/>
+</g>
+</g>
+<defs>
+<filter id="filter0_f_1290_6129" x="-258.836" y="-264.286" width="466.062" height="493.429" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="52" result="effect1_foregroundBlur_1290_6129"/>
+</filter>
+<filter id="filter1_f_1290_6129" x="165.164" y="127.096" width="537.547" height="433.266" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="52" result="effect1_foregroundBlur_1290_6129"/>
+</filter>
+</defs>
+</svg>

@@ -64,10 +64,17 @@ const Header = ({
       setAvaxState(false);
       setBnbState(false);
       setEthState(true);
+      setBaseState(false);
     } else if (chainId === 43114) {
       setAvaxState(true);
       setBnbState(false);
       setEthState(false);
+      setBaseState(false);
+    } else if (chainId === 8453) {
+      setAvaxState(false);
+      setBnbState(false);
+      setEthState(false);
+      setBaseState(true);
     } else if (chainId === 56) {
       setAvaxState(false);
       setBnbState(true);
@@ -85,10 +92,12 @@ const Header = ({
       setBaseState(false);
       setConfluxState(true);
   
-    }  else {
+    } else {
       setAvaxState(false);
       setBnbState(false);
+      setBaseState(false);
       setEthState(false);
+      setConfluxState(false);
     }
   };
 
@@ -134,19 +143,7 @@ const Header = ({
     }
   };
 
-  const handleBasePool = async () => {
-    if (window.ethereum) {
-    await handleSwitchNetworkhook("0x2105")
-      .then(() => {
-        handleSwitchNetwork("8453");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-    } else {
-      window.alertify.error("No web3 detected. Please install Metamask!");
-    }
-  };
+
 
   const handleConfluxPool = async () => {
     if (window.ethereum) {
@@ -162,6 +159,15 @@ const Header = ({
     }
   };
 
+  const handleBasePool = async () => {
+    await handleSwitchNetworkhook("0x2105")
+      .then(() => {
+        handleSwitchNetwork("8453");
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
   function handleChainChanged() {
     // We recommend reloading the page, unless you must do otherwise
     // window.location.reload();
