@@ -184,11 +184,6 @@ const News = ({ theme, isPremium, coinbase }) => {
     setNext(next + newsPerRow);
   };
 
-  const handleSingleNewsUpdate = (id) => {
-    setActiveNews(newsData[id]);
-    setShowModal(true);
-  };
-
   const fetchVotingdata = async () => {
     const response = await fetch(
       `https://news-manage.dyp.finance/api/v1/votes/all`
@@ -485,7 +480,7 @@ const News = ({ theme, isPremium, coinbase }) => {
     fetchPressData().then();
     fetchPopularNewsData().then();
     fetchOtherNewsData().then();
-  }, [newsData.length, popularNewsData.length]);
+  }, []);
 
   useEffect(() => {
     fetchVotingdata().then();

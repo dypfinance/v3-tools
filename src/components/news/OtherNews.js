@@ -46,6 +46,11 @@ const OtherNews = ({
 
   const logout = localStorage.getItem("logout");
 
+  useEffect(()=>{
+    setUpvote(upvotes)
+    setDownvote(downvotes)
+  },[upvotes, downvotes])
+
   useEffect(() => {
     if (
       bal1 === "0" &&
@@ -121,11 +126,10 @@ const OtherNews = ({
         bal6 !== "0" ||
         isPremium !== false)
     ) {
+      
       checkUpVoting(newsId);
-    } else {
-      setShowTooltip(true);
-    }
-    if (
+    }  
+   else if (
       (bal1 === "0" &&
         bal2 === "0" &&
         bal3 === "0" &&
@@ -133,8 +137,7 @@ const OtherNews = ({
         bal5 === "0" &&
         bal6 === "0" &&
         isPremium === false) ||
-      logout === "true" ||
-      alreadyVoted === false
+      logout === "true" 
     ) {
       setLikeIndicator(false);
       setShowTooltip(true);
@@ -163,10 +166,7 @@ const OtherNews = ({
         isPremium !== false)
     ) {
       checkDownVoting(newsId);
-    } else {
-      setShowTooltip(true);
-    }
-    if (
+    } else if (
       (bal1 === "0" &&
         bal2 === "0" &&
         bal3 === "0" &&
@@ -174,8 +174,7 @@ const OtherNews = ({
         bal5 === "0" &&
         bal6 === "0" &&
         isPremium === false) ||
-      logout === "true" ||
-      alreadyVoted === false
+      logout === "true" 
     ) {
       setLikeIndicator(false);
       setShowTooltip(true);
@@ -197,12 +196,19 @@ const OtherNews = ({
         `https://news-manage.dyp.finance/api/v1/vote/${itemId}/${coinbase}/up`
       )
       .then((data) => {
+        
         if (data.data.status === "success") {
-          setUpvote(upvote + 1);
-          setalreadyVoted(true)
+          setUpvote(upvotes + 1);
+          setShowTooltip(false);
+          setLikeIndicator(true)
+        } else if (data.data.status === "already voted") {
+          setalreadyVoted(true);
+          setUpvote(upvotes);
+          setShowTooltip(true);
+          setLikeIndicator(false);
         } else {
           setalreadyVoted(false);
-          setShowTooltip(true);
+          setShowTooltip(false);
           setLikeIndicator(false);
         }
       })
@@ -216,12 +222,15 @@ const OtherNews = ({
       )
       .then((data) => {
         if (data.data.status === "success") {
-          // onVotesFetch()
+          setShowTooltip(false)
+          setDownvote(downvotes + 1);
+          setLikeIndicator(true)
+        } else  if (data.data.status === "already voted") {
           setalreadyVoted(true)
-          setDownvote(downvote + 1);
+          setDownvote(downvotes);
+          setLikeIndicator(false);
         } else {
           setalreadyVoted(false);
-          setShowTooltip(true);
           setLikeIndicator(false);
           setDislikeIndicator(false);
         }
@@ -232,6 +241,7 @@ const OtherNews = ({
   var options = { year: "numeric", month: "short", day: "numeric" };
 
   const formattedDate = new Date(fulldate);
+
 
   return (
     <div

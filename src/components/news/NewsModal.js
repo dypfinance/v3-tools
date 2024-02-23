@@ -158,10 +158,7 @@ const NewsModal = ({
         isPremium !== false)
     ) {
       checkUpVoting(newsId);
-    } else {
-      setShowTooltip(true);
-    }
-    if (
+    } else if (
       (bal1 === "0" &&
         bal2 === "0" &&
         bal3 === "0" &&
@@ -169,8 +166,7 @@ const NewsModal = ({
         bal5 === "0" &&
         bal6 === "0" &&
         isPremium === false) ||
-      logout === "true" ||
-      alreadyVoted === false
+      logout === "true"
     ) {
       setLikeIndicator(false);
       setDislikeIndicator(false);
@@ -199,10 +195,7 @@ const NewsModal = ({
         isPremium !== false)
     ) {
       checkDownVoting(newsId);
-    } else {
-      setShowTooltip(true);
-    }
-    if (
+    } else if (
       (bal1 === "0" &&
         bal2 === "0" &&
         bal3 === "0" &&
@@ -210,8 +203,7 @@ const NewsModal = ({
         bal5 === "0" &&
         bal6 === "0" &&
         isPremium === false) ||
-      logout === "true" ||
-      alreadyVoted === false
+      logout === "true"  
     ) {
       setLikeIndicator(false);
       setShowTooltip(true);
@@ -237,11 +229,17 @@ const NewsModal = ({
           fetchVotingdata().then(()=>{
             setalreadyVoted(true)
           })
+        } else  if (data.data.status === "already voted") {
+          setShowTooltip(true);
+          setLikeIndicator(false);
+          setalreadyVoted(true)
+         
         } else {
           setalreadyVoted(false);
           setShowTooltip(true);
           setLikeIndicator(false);
         }
+ 
       })
       .catch(console.error);
   };
