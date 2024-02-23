@@ -53,6 +53,16 @@ const RelatedNews = ({
       isPremium === true
     ) {
       setCanVote(true);
+    }else if (
+      (bal1 !== "0" ||
+        bal2 !== "0" ||
+        bal3 !== "0" ||
+        bal4 !== "0" ||
+        bal5 !== "0" ||
+        bal6 !== "0") &&
+      isPremium === true
+    ) {
+      setCanVote(true);
     } else if (
       bal1 !== "0" &&
       bal2 !== "0" &&
