@@ -29,8 +29,11 @@ const SingleNews = ({
   coinbase,
   bal1,
   bal2,
-  bal3, bal4, bal5, bal6,
-  votes
+  bal3,
+  bal4,
+  bal5,
+  bal6,
+  votes,
 }) => {
   const [likeIndicator, setLikeIndicator] = useState(false);
   const [dislikeIndicator, setDislikeIndicator] = useState(false);
@@ -51,6 +54,16 @@ const SingleNews = ({
       bal4 === "0" &&
       bal5 === "0" &&
       bal6 === "0" &&
+      isPremium === true
+    ) {
+      setCanVote(true);
+    } else if (
+      (bal1 !== "0" ||
+        bal2 !== "0" ||
+        bal3 !== "0" ||
+        bal4 !== "0" ||
+        bal5 !== "0" ||
+        bal6 !== "0") &&
       isPremium === true
     ) {
       setCanVote(true);
@@ -101,27 +114,23 @@ const SingleNews = ({
     if (
       logout === "false" &&
       (bal1 !== "0" ||
-    bal2 !== "0" ||
-    bal3 !== "0" ||
-    bal4 !== "0" ||
-    bal5 !== "0" ||
-    bal6 !== "0" ||
-    isPremium !== false)
+        bal2 !== "0" ||
+        bal3 !== "0" ||
+        bal4 !== "0" ||
+        bal5 !== "0" ||
+        bal6 !== "0" ||
+        isPremium !== false)
     ) {
       checkUpVoting(newsId);
-    } else {
-      setShowTooltip(true);
-    }
-    if (
+    } else if (
       (bal1 === "0" &&
         bal2 === "0" &&
         bal3 === "0" &&
         bal4 === "0" &&
         bal5 === "0" &&
         bal6 === "0" &&
-        isPremium === false)  ||
-      logout === "true" ||
-      alreadyVoted === false
+        isPremium === false) ||
+      logout === "true" 
     ) {
       setLikeIndicator(false);
       setDislikeIndicator(false);
@@ -142,27 +151,23 @@ const SingleNews = ({
     if (
       logout === "false" &&
       (bal1 !== "0" ||
-    bal2 !== "0" ||
-    bal3 !== "0" ||
-    bal4 !== "0" ||
-    bal5 !== "0" ||
-    bal6 !== "0" ||
-    isPremium !== false)
+        bal2 !== "0" ||
+        bal3 !== "0" ||
+        bal4 !== "0" ||
+        bal5 !== "0" ||
+        bal6 !== "0" ||
+        isPremium !== false)
     ) {
       checkDownVoting(newsId);
-    } else {
-      setShowTooltip(true);
-    }
-    if (
+    } else if (
       (bal1 === "0" &&
-      bal2 === "0" &&
-      bal3 === "0" &&
-      bal4 === "0" &&
-      bal5 === "0" &&
-      bal6 === "0" &&
-      isPremium === false) ||
-      logout === "true" ||
-      alreadyVoted === false
+        bal2 === "0" &&
+        bal3 === "0" &&
+        bal4 === "0" &&
+        bal5 === "0" &&
+        bal6 === "0" &&
+        isPremium === false) ||
+      logout === "true" 
     ) {
       setLikeIndicator(false);
       setDislikeIndicator(false);
@@ -186,12 +191,19 @@ const SingleNews = ({
         `https://news-manage.dyp.finance/api/v1/vote/${itemId}/${coinbase}/up`
       )
       .then((data) => {
+        console.log(data.data)
         if (data.data.status === "success") {
-          setalreadyVoted(true)
-          setUpvote(upvote + 1);
+          setUpvote(upvotes + 1);
+          setShowTooltip(false);
+          setLikeIndicator(true)
+        } else if (data.data.status === "already voted") {
+          setalreadyVoted(true);
+          setUpvote(upvotes);
+          setShowTooltip(true);
+          setLikeIndicator(false);
         } else {
           setalreadyVoted(false);
-          setShowTooltip(true);
+          setShowTooltip(false);
           setLikeIndicator(false);
         }
       })
@@ -205,11 +217,15 @@ const SingleNews = ({
       )
       .then((data) => {
         if (data.data.status === "success") {
+          setShowTooltip(false)
+          setDownvote(downvotes + 1);
+          setLikeIndicator(true)
+        } else  if (data.data.status === "already voted") {
           setalreadyVoted(true)
-          setDownvote(downvote + 1);
+          setDownvote(downvotes);
+          setLikeIndicator(false);
         } else {
           setalreadyVoted(false);
-          setShowTooltip(true);
           setLikeIndicator(false);
           setDislikeIndicator(false);
         }
@@ -239,6 +255,7 @@ const SingleNews = ({
   var options = { year: "numeric", month: "short", day: "numeric" };
 
   const formattedDate = new Date(fullDate);
+
 
   return (
     <div className="singlenews-body">
