@@ -286,23 +286,23 @@ class App extends React.Component {
     if (coinbase) {
       subscribedPlatformTokenAmountNewETH = await ethNewcontract.methods
         .subscriptionPlatformTokenAmount(coinbase)
-        .call();
+        .call().catch((e)=>{console.log(e); return 0})
 
       subscribedPlatformTokenAmountNewAvax = await avaxNewcontract.methods
         .subscriptionPlatformTokenAmount(coinbase)
-        .call();
+        .call().catch((e)=>{console.log(e); return 0})
 
       subscribedPlatformTokenAmountNewBNB = await bnbNewcontract.methods
         .subscriptionPlatformTokenAmount(coinbase)
-        .call();
+        .call().catch((e)=>{console.log(e); return 0})
 
       subscribedPlatformTokenAmountCfx = await cfxcontract.methods
         .subscriptionPlatformTokenAmount(coinbase)
-        .call();
+        .call().catch((e)=>{console.log(e); return 0})
 
       subscribedPlatformTokenAmountBase = await basecontract.methods
         .subscriptionPlatformTokenAmount(coinbase)
-        .call();
+        .call().catch((e)=>{console.log(e); return 0})
 
       if (
         subscribedPlatformTokenAmountNewETH === "0" &&
