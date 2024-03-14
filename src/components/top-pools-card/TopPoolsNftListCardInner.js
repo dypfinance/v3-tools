@@ -7,13 +7,12 @@ import comingSoonTag from "./assets/comingSoonTag.svg";
 import newPool from "./assets/newPool.png";
 import getFormattedNumber from "../../functions/get-formatted-number";
 import "./top-pools.css";
-import StakeBscOtherDai from "../earnOther/poolFiles/bscConstantStakeOtherDai";
-import StakeBscOther from "../earnOther/poolFiles/bscConstantStakeOther";
+import LandDetails from "../FARMINNG/land";
+import CawsDetails from "../FARMINNG/caws";
+import CawsWodDetails from "../FARMINNG/cawsWod";
+import axios from "axios";
 
-import StakeAvaxDai from "../FARMINNG/stakeAvax3";
-import StakeAvax from "../FARMINNG/stakeAvax";
-
-const TopPoolsListCardInner = ({
+const TopPoolsNftListCardInner = ({
   tokenLogo,
   cardId,
   poolCap,
@@ -44,7 +43,6 @@ const TopPoolsListCardInner = ({
   listType,
   display,
   expired,
-  expiredPools,
   activePools,
   totalTvl,
   totalNftsLocked,
@@ -80,13 +78,8 @@ const TopPoolsListCardInner = ({
 
   const [showDetails, setShowDetails] = useState(false);
   const [coins, setCoins] = useState(ethCoins);
-  const [cardIndexiDyp, setcardIndexiDyp] = useState();
-  const [cardIndexavax30, setcardIndexavax30] = useState();
-  const [cardIndexavaxiDyp, setcardIndexavaxiDyp] = useState();
-
-  const eth_address = "ETH";
-  const wbnb_address = "0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7";
-  const wbsc_address = "0x2170Ed0880ac9A755fd29B2688956BD959F933F8";
+  const [cardIndexDyp, setcardIndex] = useState();
+  const [landCard, setLandCard] = useState({});
 
   const cawswodcoins = ["newCawsLogo", "lanft-poolicon"];
 
@@ -110,6 +103,32 @@ const TopPoolsListCardInner = ({
     }
   };
 
+  const fetchEthStaking = async () => {
+    const eth_result = await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_eth`)
+      .catch((err) => {
+        console.log(err);
+      });
+    const eth_result2 = await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_eth_new`)
+      .catch((err) => {
+        console.log(err);
+      });
+
+    if (
+      eth_result &&
+      eth_result.status === 200 &&
+      eth_result2 &&
+      eth_result2.status === 200
+    ) {
+    
+      setLandCard(eth_result.data.stakingInfoLAND[0]);
+    
+    }
+  };
+
+
+
   const myStakes = async () => {
     let myStakes = await getStakesIds();
 
@@ -120,34 +139,14 @@ const TopPoolsListCardInner = ({
     setMystakes(stakes);
   };
 
-  const { LP_IDs_V2Avax, LP_IDs_V2BNB } = window;
-
-  const LP_IDAVAX_Array = [
-    LP_IDs_V2Avax.wavax[0],
-    LP_IDs_V2Avax.wavax[1],
-    LP_IDs_V2Avax.wavax[2],
-    LP_IDs_V2Avax.wavax[3],
-    LP_IDs_V2Avax.wavax[4],
-  ];
-
-  const feeUarrayStakeAvaxiDyp = [0.25, 0.25, 0, 0];
-
-  const withdrawFeeiDyp = [0, 0];
-
-  const LP_IDBNB_Array = [
-    LP_IDs_V2BNB.wbnb[0],
-    LP_IDs_V2BNB.wbnb[1],
-    LP_IDs_V2BNB.wbnb[2],
-    LP_IDs_V2BNB.wbnb[3],
-    LP_IDs_V2BNB.wbnb[4],
-  ];
-
   const handleDetails = () => {
     if (showDetails === false) {
       setShowDetails(true);
+      setcardIndex(cardIndex);
       // onShowDetailsClick();
     } else if (showDetails === true) {
       setShowDetails(false);
+      setcardIndex();
     }
   };
 
@@ -166,33 +165,10 @@ const TopPoolsListCardInner = ({
     }
   }, [chain]);
 
-  useEffect(() => {
-    if (topList === "Staking") {
-      if (cardIndex >= 2) {
-        const newIndex = cardIndex - 2;
-        setcardIndexiDyp(newIndex);
-      }
-    }
-
-    if (topList === "Staking" && chain === "avax") {
-      if (cardIndex >= 2) {
-        const newIndex = cardIndex - 2;
-        setcardIndexavax30(newIndex);
-      }
-    }
-
-    if (topList === "Staking" && chain === "avax") {
-      if (cardIndex >= 5) {
-        const newIndex = cardIndex - 5;
-        setcardIndexavaxiDyp(newIndex);
-      }
-    }
-  }, [cardIndex, topList, chain]);
-
   return (
     <>
       <div
-        className={`row w-100 flex-column gap-3 gap-lg-0 flex-lg-row align-items-center justify-content-between  mx-0 cursor-pointer ${
+        className={`row w-100 flex-column gap-3 gap-lg-0 flex-lg-row align-items-center justify-content-between  mx-0 cursor-pointer position-relative ${
           expired === true
             ? "poolscardwrapperexpired"
             : showDetails === false
@@ -202,6 +178,8 @@ const TopPoolsListCardInner = ({
         onClick={() => handleDetails()}
         style={{ display: display }}
       >
+        {" "}
+        {isNewPool && <img src={newPool} alt="" className="new-pool2" />}
         <div className="col-12 col-lg-4 d-flex justify-content-between align-items-center">
           <div
             className={` d-flex align-items-center ${
@@ -209,25 +187,9 @@ const TopPoolsListCardInner = ({
             }`}
             style={{ width: "100px" }}
           >
-            {cardType === "Farming" || cardType === "Buyback" ? (
-              coins.length > 0 &&
-              coins.slice(0, 5).map((coin, index) => (
-                <>
-                  <img
-                    key={index}
-                    src={require(`./assets/${coin}.svg`).default}
-                    alt=""
-                    className="pool-coins"
-                  />
-                  <h5
-                    className="text-white mx-3"
-                    style={{ fontSize: "25px", fontWeight: "600" }}
-                  >
-                    {tokenName}
-                  </h5>
-                </>
-              ))
-            ) : tokenLogo !== undefined && tokenLogo !== "landcaws" ? (
+            {tokenLogo !== undefined &&
+            tokenLogo !== "landcaws" &&
+            typeof tokenLogo === "string" ? (
               <>
                 <img
                   src={require(`./assets/${tokenLogo}`).default}
@@ -237,7 +199,28 @@ const TopPoolsListCardInner = ({
                 />
                 <h5
                   className="text-white"
-                  style={{ fontSize: "25px", fontWeight: "600" }}
+                  style={{ fontSize: "20px", fontWeight: "600" }}
+                >
+                  {tokenName}
+                </h5>
+              </>
+            ) : tokenLogo !== undefined &&
+              tokenLogo !== "landcaws" &&
+              typeof tokenLogo !== "string" ? (
+              <>
+                {tokenLogo.length > 0 &&
+                  tokenLogo.map((coin, index) => (
+                    <img
+                      key={index}
+                      src={require(`./assets/${coin}`).default}
+                      alt=""
+                      className="pool-coins"
+                    />
+                  ))}
+
+                <h5
+                  className="text-white"
+                  style={{ fontSize: "20px", fontWeight: "600" }}
                 >
                   {tokenName}
                 </h5>
@@ -255,7 +238,7 @@ const TopPoolsListCardInner = ({
                   ))}
                 <h5
                   className="text-white"
-                  style={{ fontSize: "25px", fontWeight: "600" }}
+                  style={{ fontSize: "20px", fontWeight: "600" }}
                 >
                   {tokenName}
                 </h5>
@@ -327,7 +310,7 @@ const TopPoolsListCardInner = ({
                 color: "#F7F7FC",
               }}
             >
-             {tokenName} {getFormattedNumber(poolCap, 0)}
+              {getFormattedNumber(poolCap, 0)} CAWS
             </h5>
           </div>
           <div className="d-none d-xxl-flex d-xl-flex d-lg-flex d-md-flex flex-column gap-2">
@@ -367,8 +350,6 @@ const TopPoolsListCardInner = ({
           {top_pick && <img src={topPick} alt="" />}
           {comingSoon && <img src={comingSoonTag} alt="" />}
 
-          {/* {isNewPool && <img src={newPool} alt="" />} */}
-
           <h6
             className="details-text gap-1 d-flex align-items-center cursor-pointer justify-content-end"
             style={{
@@ -384,149 +365,43 @@ const TopPoolsListCardInner = ({
           </h6>
         </div>
       </div>
-      {/* {expired === false ? (
+      {expired === true && showDetails ? (
         <>
-          {showDetails &&
-          activePools &&
-          topList === "Staking" &&
-          activePools[cardIndex - 1].id ===
-            "0x215bD6eDa2A5372aeA17360c166761c4Eec60497" &&
-          chain === "bnb" ? (
-            <StakeBscOtherDai
-              lp_id={LP_IDBNB_Array[cardIndex]}
-              staking={window.constant_stakingotherdaibsc}
-              apr={activePools[cardIndex - 1]?.apr}
-              liquidity={wbsc_address}
-              expiration_time={"5 August 2024"}
-              finalApr={activePools[cardIndex - 1]?.apr}
-              fee={10}
-              lockTime={30}
-              listType={listType}
-              other_info={false}
-              is_wallet_connected={isConnected}
-              coinbase={coinbase}
-              the_graph_result={the_graph_resultbsc}
-              chainId={chainId}
-              handleConnection={handleConnection}
-              handleSwitchNetwork={handleSwitchNetwork}
-              expired={false}
-              referrer={referrer}
-              showDetails={showDetails}
-              isPremium={isPremium}
-            />
-          ) : showDetails &&
-            activePools &&
-            topList === "Staking" &&
-            activePools[cardIndex - 1].id ===
-              "0x8652d1817f5a95172001685a28facb1d57e78a11" &&
-            chain === "bnb" ? (
-            <StakeBscOther
-              lp_id={LP_IDBNB_Array[cardIndex]}
-              staking={window.constant_stakingbscother_new1}
-              apr={activePools[cardIndex - 1]?.apr}
-              liquidity={wbsc_address}
-              expiration_time={"5 August 2023"}
-              finalApr={activePools[cardIndex - 1]?.apr}
-              fee={activePools[cardIndex - 1]?.apr}
-              lockTime={
-                30
-              }
-              listType={listType}
-              other_info={
-                activePools[cardIndex - 1]?.expired === "Yes" ? true : false
-              }
-              is_wallet_connected={isConnected}
-              coinbase={coinbase}
-              the_graph_result={the_graph_resultbsc}
-              chainId={chainId}
-              handleConnection={handleConnection}
-              handleSwitchNetwork={handleSwitchNetwork}
-              expired={false}
-              referrer={referrer}
-              showDetails={showDetails}
-              isPremium={isPremium}
-            />
-          ) : showDetails &&
-            activePools &&
-            topList === "Staking" &&
-            activePools[cardIndex - 1].id ===
-              "0x215bD6eDa2A5372aeA17360c166761c4Eec60497" &&
-            chain === "avax" ? (
-            <StakeAvaxDai
-              lp_id={LP_IDBNB_Array[cardIndex]}
-              staking={window.constant_stakingdaiavax}
-              apr={activePools[cardIndex - 1]?.apr}
-              liquidity={wbsc_address}
-              expiration_time={"5 August 2023"}
-              finalApr={activePools[cardIndex - 1]?.apr}
-              fee={activePools[cardIndex - 1]?.apr}
-              lockTime={
-                activePools[cardIndex - 1]?.lockTime?.split(" ")[0] === "No"
-                  ? "No Lock"
-                  : parseInt(
-                      activePools[cardIndex - 1]?.lockTime?.split(" ")[0]
-                    )
-              }
-              listType={listType}
-              other_info={
-                activePools[cardIndex - 1]?.expired === "Yes" ? true : false
-              }
-              is_wallet_connected={isConnected}
-              coinbase={coinbase}
-              the_graph_result={the_graph_resultbsc}
-              chainId={chainId}
-              handleConnection={handleConnection}
-              handleSwitchNetwork={handleSwitchNetwork}
-              expired={false}
-              referrer={referrer}
-              showDetails={showDetails}
-              isPremium={isPremium}
-            />
-          ) : showDetails &&
-            activePools &&
-            topList === "Staking" &&
-            activePools[cardIndex - 1].id ===
-              "0x8652d1817f5a95172001685a28facb1d57e78a11" &&
-            chain === "avax" ? (
-            <StakeAvax
-              lp_id={LP_IDBNB_Array[cardIndex]}
-              staking={window.constant_staking_new11}
-              apr={activePools[cardIndex - 1]?.apr}
-              liquidity={wbsc_address}
-              expiration_time={"5 August 2023"}
-              finalApr={activePools[cardIndex - 1]?.apr}
-              fee_s={activePools[cardIndex - 1]?.apr}
-              lockTime={
-                activePools[cardIndex - 1]?.lockTime?.split(" ")[0] === "No"
-                  ? "No Lock"
-                  : parseInt(
-                      activePools[cardIndex - 1]?.lockTime?.split(" ")[0]
-                    )
-              }
-              listType={listType}
-              other_info={
-                activePools[cardIndex - 1]?.expired === "Yes" ? true : false
-              }
-              is_wallet_connected={isConnected}
-              coinbase={coinbase}
-              the_graph_result={the_graph_resultbsc}
-              chainId={chainId}
-              handleConnection={handleConnection}
-              handleSwitchNetwork={handleSwitchNetwork}
-              expired={false}
-              referrer={referrer}
-              showDetails={showDetails}
-              isPremium={isPremium}
-            />
-          ) : (
-            <></>
-          )}
+          <CawsDetails
+            coinbase={coinbase}
+            isConnected={isConnected}
+            listType={listType}
+            chainId={chainId}
+            handleSwitchNetwork={handleSwitchNetwork}
+            handleConnection={handleConnection}
+          />
         </>
+      ) : showDetails && expired === false && cardIndex === 2 ? (
+        <CawsWodDetails
+          coinbase={coinbase}
+          isConnected={isConnected}
+          listType={listType}
+          chainId={chainId}
+          handleSwitchNetwork={handleSwitchNetwork}
+          handleConnection={handleConnection}
+          expired={false}
+        />
+      ) : showDetails && expired === false && cardIndex === 3 ? (
+        <LandDetails
+          coinbase={coinbase}
+          isConnected={isConnected}
+          listType={listType}
+          chainId={chainId}
+          handleSwitchNetwork={handleSwitchNetwork}
+          handleConnection={handleConnection}
+        //   apr={landCard.apy_percent}
+        //   totalNftsLocked={landCard.total_nfts_locked}
+        />
       ) : (
         <></>
-      )} */}
+      )}
     </>
   );
 };
 
-export default TopPoolsListCardInner;
+export default TopPoolsNftListCardInner;

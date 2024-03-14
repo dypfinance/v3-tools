@@ -8,7 +8,7 @@ import useWindowSize from "../../functions/useWindowSize";
 
 import "../top-pools-card/top-pools.css";
 
-const TopOtherPoolsListCard = ({
+const TopOtherPoolsNftListCard = ({
   tokenLogo,
   cardId,
   tokenName,
@@ -262,4 +262,4 @@ const TopOtherPoolsListCard = ({
   );
 };
 
-export default TopOtherPoolsListCard;
+export default TopOtherPoolsNftListCard;

@@ -227,6 +227,13 @@
   width: 65px;
 }
 
+.new-pool2 {
+  position: absolute;
+  top: -3px;
+  right: -15px;
+  width: 65px;
+}
+
 /* .top-pick::after {
   content: "";
   position: absolute;

@@ -44,7 +44,9 @@ import Plans from "./components/account/Plans";
 import DypMigration from "./components/bridge/DypMigration";
 import AlertRibbon from "./components/alert-ribbon/AlertRibbon";
 import EarnOther from "./components/earnOther/EarnOther";
-import EarnInnerPool from './components/earnOther/EarnInnerPool/EarnInnerPool'
+import EarnInnerPool from "./components/earnOther/EarnInnerPool/EarnInnerPool";
+import EarnOtherNft from "./components/earnOther/EarnOtherNft";
+import EarnInnerPoolNft from "./components/earnOther/EarnInnerPool/EarnInnerPoolNft";
 
 class App extends React.Component {
   constructor(props) {
@@ -73,7 +75,9 @@ class App extends React.Component {
       the_graph_resultbsc: JSON.parse(
         JSON.stringify(window.the_graph_result_bsc_v2)
       ),
-      the_graph_resultavax: JSON.parse(JSON.stringify(window.the_graph_result_avax_v2)),
+      the_graph_resultavax: JSON.parse(
+        JSON.stringify(window.the_graph_result_avax_v2)
+      ),
       windowWidth: 0,
       windowHeight: 0,
       subscribedPlatformTokenAmount: "...",
@@ -85,7 +89,6 @@ class App extends React.Component {
       referrer: "",
       showRibbon: true,
       showRibbon2: true,
-
     };
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
@@ -286,23 +289,43 @@ class App extends React.Component {
     if (coinbase) {
       subscribedPlatformTokenAmountNewETH = await ethNewcontract.methods
         .subscriptionPlatformTokenAmount(coinbase)
-        .call().catch((e)=>{console.log(e); return 0})
+        .call()
+        .catch((e) => {
+          console.log(e);
+          return 0;
+        });
 
       subscribedPlatformTokenAmountNewAvax = await avaxNewcontract.methods
         .subscriptionPlatformTokenAmount(coinbase)
-        .call().catch((e)=>{console.log(e); return 0})
+        .call()
+        .catch((e) => {
+          console.log(e);
+          return 0;
+        });
 
       subscribedPlatformTokenAmountNewBNB = await bnbNewcontract.methods
         .subscriptionPlatformTokenAmount(coinbase)
-        .call().catch((e)=>{console.log(e); return 0})
+        .call()
+        .catch((e) => {
+          console.log(e);
+          return 0;
+        });
 
       subscribedPlatformTokenAmountCfx = await cfxcontract.methods
         .subscriptionPlatformTokenAmount(coinbase)
-        .call().catch((e)=>{console.log(e); return 0})
+        .call()
+        .catch((e) => {
+          console.log(e);
+          return 0;
+        });
 
       subscribedPlatformTokenAmountBase = await basecontract.methods
         .subscriptionPlatformTokenAmount(coinbase)
-        .call().catch((e)=>{console.log(e); return 0})
+        .call()
+        .catch((e) => {
+          console.log(e);
+          return 0;
+        });
 
       if (
         subscribedPlatformTokenAmountNewETH === "0" &&
@@ -737,7 +760,7 @@ class App extends React.Component {
 
                   <Route
                     exact
-                    path="/earn/defi-staking/:pool/:contractId"
+                    path="/earn/defi-staking/:pool"
                     render={(props) => (
                       <EarnInnerPool
                         coinbase={this.state.coinbase}
@@ -796,6 +819,43 @@ class App extends React.Component {
                         handleConnection={this.handleConnection}
                         handleSwitchNetwork={this.handleSwitchNetwork}
                         referrer={this.state.referrer}
+                      />
+                    )}
+                  />
+
+                  <Route
+                    exact
+                    path="/earn/nft-staking"
+                    render={() => (
+                      <EarnOtherNft
+                        coinbase={this.state.coinbase}
+                        isConnected={this.state.isConnected}
+                        network={this.state.networkId}
+                        handleConnection={this.handleConnection}
+                        handleSwitchNetwork={this.handleSwitchNetwork}
+                      />
+                    )}
+                  />
+
+
+<Route
+                    exact
+                    path="/earn/nft-staking/:pool"
+                    render={(props) => (
+                      <EarnInnerPoolNft
+                        coinbase={this.state.coinbase}
+                        handleSwitchNetwork={this.handleSwitchNetwork}
+                        handleConnection={this.handleConnection}
+                        isConnected={this.state.isConnected}
+                        chainId={this.state.networkId}
+                        the_graph_result={this.state.the_graph_result_ETH_V2}
+                        the_graph_resultavax={
+                          this.state.the_graph_result_AVAX_V2
+                        }
+                        the_graph_resultbsc={this.state.the_graph_result_BSC_V2}
+                        lp_id={LP_ID_Array}
+                        referrer={this.state.referrer}
+                        isPremium={this.state.isPremium}
                       />
                     )}
                   />

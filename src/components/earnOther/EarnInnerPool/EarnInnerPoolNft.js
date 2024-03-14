@@ -7,7 +7,6 @@ import innerHero from "../../../assets/earnOtherAssets/innerhero.jpg";
 import innerHeroAvax from "../../../assets/earnOtherAssets/innerheroAvax.jpg";
 import innerHeroBnb from "../../../assets/earnOtherAssets/innerheroBnb.jpg";
 
-import TopPoolsListCardInner from "../../top-pools-card/TopPoolsListCardInner";
 import axios from "axios";
 import ethStakeActive from "../../../assets/earnAssets/ethStakeActive.svg";
 import bnbStakeActive from "../../../assets/earnAssets/bnbStakeActive.svg";
@@ -19,8 +18,9 @@ import { NavLink } from "react-router-dom";
 import { shortAddress } from "../../../functions/shortAddress";
 import SwitchChainModal from "../../switch-chain-modal/SwitchChainModal";
 import { useParams } from "react-router-dom";
+import TopPoolsNftListCardInner from "../../top-pools-card/TopPoolsNftListCardInner";
 
-const EarnInnerPool = ({
+const EarnInnerPoolNft = ({
   chainId,
   handleConnection,
   handleSwitchNetwork,
@@ -34,7 +34,7 @@ const EarnInnerPool = ({
   isPremium,
 }) => {
   const [myStakes, setMyStakes] = useState(false);
-  const [expiredPools, setExpiredPools] = useState([]);
+  const [expiredPools, setExpiredPools] = useState(false);
   const [activePools, setActivePools] = useState([]);
   const [activeCard, setActiveCard] = useState();
   const [showDetails, setShowDetails] = useState(false);
@@ -47,116 +47,75 @@ const EarnInnerPool = ({
 
   const { pool, contractId } = useParams();
 
-  const dummyData_bnb2 = [
-    {
-      chain: "BNB Chain",
-      apr: 25,
-      tokenLogo: "bsc.svg",
-      expired: false,
-      top_pick: false,
-      tokenName: "BNB",
-      tokenTicker: "WBNB",
-      pool: "BNB",
-      id: "0x8652d1817f5a95172001685a28facb1d57e78a11",
-      lockTime: "90 days",
-      poolCap: "467",
-      coming_soon: true
-    },
-    // {
-    //   chain: "BNB Chain",
-    //   apr: 10,
-    //   tokenLogo: "dyplogo.svg",
-    //   expired: false,
-    //   top_pick: false,
-    //   tokenName: "DYP",
-    //   tokenTicker: "DYP",
-    //   pool: "DYP-BNB",
-    //   id: "0x215bD6eDa2A5372aeA17360c166761c4Eec60497",
-    //   lockTime: "30 days",
-    //   poolCap: "80000",
-    // },
-  ];
-
-  const dummyData_avax2 = [
-    {
-      chain: "Avalanche",
-      apr: 10,
-      tokenLogo: "avax.svg",
-      expired: false,
-      top_pick: false,
-      tokenName: "AVAX",
-      tokenTicker: "AVAX",
-      pool: "AVAX",
-      id: "0x8652d1817f5a95172001685a28facb1d57e78a11",
-      coming_soon: true,
-      lockTime: "30 days",
-      poolCap: "7413",
-    },
-    // {
-    //   chain: "Avalanche",
-    //   apr: 10,
-    //   tokenLogo: "dyplogo.svg",
-    //   expired: false,
-    //   top_pick: false,
-    //   tokenName: "DYP",
-    //   tokenTicker: "DYP",
-    //   pool: "DYP-AVAX",
-    //   id: "0x215bD6eDa2A5372aeA17360c166761c4Eec60497",
-
-    //   lockTime: "180 days",
-    //   poolCap: "40000",
-    // },
-  ];
-
   const dummyData_eth2 = [
     {
       chain: "Ethereum",
-      apr: 30,
-      tokenLogo: "ethereum.svg",
+      apr: 25,
+      tokenLogo: "cawslogo.svg",
+      expired: false,
+      top_pick: false,
+      tokenName: "ETH",
+      tokenTicker: "ETH",
+      pool: "CAWS",
+      id: "",
+      coming_soon: true,
+      lockTime: "180 days",
+      poolCap: "100",
+      new_pool: "Yes",
+    },
+    {
+      chain: "Ethereum",
+      apr: 50,
+      tokenLogo: ["cawslogo.svg", "lanft-poolicon.png"],
       expired: false,
       top_pick: true,
       tokenName: "ETH",
       tokenTicker: "ETH",
-      pool: "ETH",
+      pool: "CAWS+WOD",
       id: "",
-      lockTime: "90 days",
-      poolCap: "30000",
+      coming_soon: false,
+      lockTime: "No lock",
+      poolCap: "100",
+      new_pool: "No",
     },
+
     {
       chain: "Ethereum",
-      apr: 10,
-      tokenLogo: "dyplogo.svg",
-      expired: false,
-      top_pick: false,
-      tokenName: "DYP",
-      tokenTicker: "ETH",
-      pool: "DYP-ETH",
-      id: "",
-      lockTime: "180 days",
-      poolCap: "40000",
-    },
-  ];
-
-  const dummyData_base2 = [
-    {
-      chain: "Base",
-      apr: 15,
-      tokenLogo: "baseActive.svg",
+      apr: 25,
+      tokenLogo: "lanft-poolicon.png",
       expired: false,
       top_pick: false,
       tokenName: "ETH",
       tokenTicker: "ETH",
-      pool: "ETH",
+      pool: "Land",
       id: "",
-      lockTime: "60 days",
-      poolCap: "234",
-      coming_soon: true
-
+      coming_soon: false,
+      lockTime: "No lock",
+      poolCap: "100",
+      new_pool: "No",
     },
-    
+  ];
+
+  const dummyData_eth_expired = [
+    {
+      chain: "Ethereum",
+      apr: 50,
+      tokenLogo: "cawslogo.svg",
+      expired: true,
+      top_pick: false,
+      tokenName: "ETH",
+      tokenTicker: "ETH",
+      pool: "CAWS",
+      id: "",
+      coming_soon: false,
+      lockTime: "30 days",
+      poolCap: "100",
+      new_pool: "No",
+    },
   ];
 
   const toggleInactive = () => {
+    setExpiredPools(!expiredPools);
     setCount(count + 1);
   };
 
@@ -186,7 +145,7 @@ const EarnInnerPool = ({
   return (
     <>
       <div className="container-lg earn-wrapper d-flex flex-column justify-content-center align-items-center p-0 position-relative">
-        <NavLink to={"/earn/defi-staking"} style={{ alignSelf: "flex-start" }}>
+        <NavLink to={"/earn/nft-staking"} style={{ alignSelf: "flex-start" }}>
           <span className="w-100 text-white cursor-pointer d-flex align-items-center gap-2">
             <img alt="" src={whiteArrow} /> Back to Homepage
           </span>
@@ -208,8 +167,9 @@ const EarnInnerPool = ({
                 </span>
               </div>
               <div className="d-flex flex-column gap-1">
-                <span className="earn-inner-title">{network === "BNB Chain" ?
-          dummyData_bnb2[0].apr : network === 'Avalanche' ? dummyData_avax2[0].apr : dummyData_base2[0].apr}%</span>
+                <span className="earn-inner-title">
+                  {dummyData_eth2[0].apr}%
+                </span>
                 <span className="earn-inner-desc">APR</span>
               </div>
             </div>
@@ -230,7 +190,7 @@ const EarnInnerPool = ({
               <div className="single-item-wrapper">
                 <div className="d-flex flex-column gap-2">
                   <span className="earn-inner-greentxt">Category</span>
-                  <span className="earn-inner-whitetxt">DeFi Staking</span>
+                  <span className="earn-inner-whitetxt">NFT Staking</span>
                 </div>
               </div>
               <div className="single-item-wrapper">
@@ -329,29 +289,28 @@ const EarnInnerPool = ({
             <span>{network} Offers</span>
           </div>
 
-          {/* <div className="col-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3">
+          <div className="col-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3">
             <h5 className="text-white inactive-pools">Inactive pools</h5>
             <div
               className={`pill-box ${myStakes && "pill-box-active"}`}
               onClick={() => {
                 setMyStakes(!myStakes);
-                // setExpiredPools(!expiredPools);
-                // option === "Farming" && fetchFarmingApr();
                 toggleInactive();
               }}
             >
               <div className="pill"></div>
             </div>
-          </div> */}
+          </div>
         </div>
-        {network === "BNB Chain" &&
-          dummyData_bnb2.map((pool, index) => {
+
+        {network === "Ethereum" &&
+          expiredPools === false &&
+          dummyData_eth2.map((pool, index) => {
             return (
-              <TopPoolsListCardInner
+              <TopPoolsNftListCardInner
                 key={index}
-                expiredPools={expiredPools}
-                activePools={dummyData_bnb2}
-                tokenName={pool.tokenName}
+                activePools={dummyData_eth2}
+                tokenName={pool.pool}
                 topList={"Staking"}
                 onShowDetailsClick={() => {
                   setShowDetails(!showDetails);
@@ -359,95 +318,7 @@ const EarnInnerPool = ({
                 }}
                 top_pick={pool.top_pick}
                 comingSoon={pool.coming_soon}
-
-                expired={false}
-                tokenLogo={pool.tokenLogo}
-                apr={pool.apr}
-                lockTime={pool.lockTime}
-                poolCap={pool.poolCap}
-                chain={"bnb"}
-                display={"flex"}
-                isNewPool={pool.new_pool === "Yes" ? true : false}
-                totalTvl={pool.tvl_usd}
-                showDetails={showDetails}
-                cardIndex={index + 1}
-                chainId={chainId}
-                handleConnection={handleConnection}
-                handleSwitchNetwork={handleSwitchNetwork}
-                coinbase={coinbase}
-                referrer={referrer}
-                lp_id={lp_id[index + 1]}
-                the_graph_result={the_graph_result}
-                the_graph_resultbsc={the_graph_resultbsc}
-                isConnected={isConnected}
-                the_graph_resultavax={the_graph_resultavax}
-                isPremium={isPremium}
-                network={network}
-              />
-            );
-          })}
-
-        {network === "Avalanche" &&
-          dummyData_avax2.map((pool, index) => {
-            return (
-              <TopPoolsListCardInner
-                key={index}
-                expiredPools={expiredPools}
-                activePools={dummyData_avax2}
-                tokenName={pool.tokenName}
-                topList={"Staking"}
-                onShowDetailsClick={() => {
-                  setShowDetails(!showDetails);
-                  setActiveCard(topPools[index + 1]);
-                }}
-                top_pick={pool.top_pick}
-                comingSoon={pool.coming_soon}
-
-                expired={false}
-                tokenLogo={pool.tokenLogo}
-                apr={pool.apr}
-                lockTime={pool.lockTime}
-                poolCap={pool.poolCap}
-                chain={"avax"}
-                display={"flex"}
-                isNewPool={pool.new_pool === "Yes" ? true : false}
-                totalTvl={pool.tvl_usd}
-                showDetails={showDetails}
-                cardIndex={index + 1}
-                chainId={chainId}
-                handleConnection={handleConnection}
-                handleSwitchNetwork={handleSwitchNetwork}
-                coinbase={coinbase}
-                referrer={referrer}
-                lp_id={lp_id[index + 1]}
-                the_graph_result={the_graph_result}
-                the_graph_resultbsc={the_graph_resultbsc}
-                isConnected={isConnected}
-                the_graph_resultavax={the_graph_resultavax}
-                isPremium={isPremium}
-                network={network}
-
-              />
-            );
-          })}
-
-        {network === "Base" &&
-          dummyData_base2.map((pool, index) => {
-            return (
-              <TopPoolsListCardInner
-                key={index}
-                expiredPools={expiredPools}
-                activePools={dummyData_base2}
-                tokenName={pool.tokenName}
-                topList={"Staking"}
-                onShowDetailsClick={() => {
-                  setShowDetails(!showDetails);
-                  setActiveCard(topPools[index + 1]);
-                }}
-                top_pick={pool.top_pick}
-                comingSoon={pool.coming_soon}
-
-                expired={false}
+                expired={pool.expired}
                 tokenLogo={pool.tokenLogo}
                 apr={pool.apr}
                 lockTime={pool.lockTime}
@@ -470,7 +341,48 @@ const EarnInnerPool = ({
                 the_graph_resultavax={the_graph_resultavax}
                 isPremium={isPremium}
                 network={network}
+              />
+            );
+          })}
 
+        {network === "Ethereum" &&
+          expiredPools === true &&
+          dummyData_eth_expired.map((pool, index) => {
+            return (
+              <TopPoolsNftListCardInner
+                key={index}
+                activePools={dummyData_eth_expired}
+                tokenName={pool.pool}
+                topList={"Staking"}
+                onShowDetailsClick={() => {
+                  setShowDetails(!showDetails);
+                  setActiveCard(topPools[index + 1]);
+                }}
+                top_pick={pool.top_pick}
+                comingSoon={pool.coming_soon}
+                expired={pool.expired}
+                tokenLogo={pool.tokenLogo}
+                apr={pool.apr}
+                lockTime={pool.lockTime}
+                poolCap={pool.poolCap}
+                chain={"eth"}
+                display={"flex"}
+                isNewPool={pool.new_pool === "Yes" ? true : false}
+                totalTvl={pool.tvl_usd}
+                showDetails={showDetails}
+                cardIndex={index + 1}
+                chainId={chainId}
+                handleConnection={handleConnection}
+                handleSwitchNetwork={handleSwitchNetwork}
+                coinbase={coinbase}
+                referrer={referrer}
+                lp_id={lp_id[index + 1]}
+                the_graph_result={the_graph_result}
+                the_graph_resultbsc={the_graph_resultbsc}
+                isConnected={isConnected}
+                the_graph_resultavax={the_graph_resultavax}
+                isPremium={isPremium}
+                network={network}
               />
             );
           })}
@@ -498,4 +410,4 @@ const EarnInnerPool = ({
   );
 };
 
-export default EarnInnerPool;
+export default EarnInnerPoolNft;
