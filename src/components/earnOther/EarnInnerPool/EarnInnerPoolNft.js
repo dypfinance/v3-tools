@@ -217,7 +217,7 @@ const EarnInnerPoolNft = ({
               <div className="single-item-wrapper">
                 <div className="d-flex flex-column gap-2">
                   <span className="earn-inner-greentxt">Method</span>
-                  <span className="earn-inner-whitetxt">Locked</span>
+                  <span className="earn-inner-whitetxt">Flexible</span>
                 </div>
               </div>
 

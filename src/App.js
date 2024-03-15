@@ -634,6 +634,7 @@ class App extends React.Component {
             }}
           />
         )}
+        <div>
         {(this.props?.location?.pathname === "/genesis" &&
           window.innerWidth < 786) ||
         (this.props?.location?.pathname === "/caws-staking" &&
@@ -1104,7 +1105,7 @@ class App extends React.Component {
           this.props?.location?.pathname === "/caws-staking" ? null : (
             <MobileMenu />
           )}
-        </div>
+        </div></div>
         {(this.props?.location?.pathname === "/genesis" &&
           window.innerWidth < 786) ||
         (this.props?.location?.pathname === "/caws-staking" &&
