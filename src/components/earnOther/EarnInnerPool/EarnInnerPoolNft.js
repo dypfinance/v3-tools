@@ -59,7 +59,7 @@ const EarnInnerPoolNft = ({
       pool: "CAWS",
       id: "",
       coming_soon: true,
-      lockTime: "180 days",
+      lockTime: "No lock",
       poolCap: "100",
       new_pool: "Yes",
     },

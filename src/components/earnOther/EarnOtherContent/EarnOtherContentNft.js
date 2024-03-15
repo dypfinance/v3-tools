@@ -68,7 +68,7 @@ const EarnOtherContentNft = ({
 
   const dummyData_eth = [
     {
-      lockTime: "Locked",
+      lockTime: "Flexible",
       chain: "Ethereum",
       apr: "25%",
       tokenLogo: "ethereum.svg",
