@@ -308,7 +308,7 @@ const TopPoolsNftListCardInner = ({
                 color: "#F7F7FC",
               }}
             >
-              {getFormattedNumber(poolCap, 0)} CAWS
+              { poolCap !== '∞' ? getFormattedNumber(poolCap, 0) : '∞'} {poolCap !== '∞' && 'CAWS'}
             </h5>
           </div>
           <div className="d-none d-xxl-flex d-xl-flex d-lg-flex d-md-flex flex-column gap-2">

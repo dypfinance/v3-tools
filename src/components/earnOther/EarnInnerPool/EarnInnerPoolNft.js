@@ -75,7 +75,7 @@ const EarnInnerPoolNft = ({
       id: "",
       coming_soon: false,
       lockTime: "No lock",
-      poolCap: "100",
+      poolCap: "∞",
       new_pool: "No",
     },
 
@@ -91,7 +91,7 @@ const EarnInnerPoolNft = ({
       id: "",
       coming_soon: false,
       lockTime: "No lock",
-      poolCap: "100",
+      poolCap: "∞",
       new_pool: "No",
     },
   ];
@@ -109,7 +109,7 @@ const EarnInnerPoolNft = ({
       id: "",
       coming_soon: false,
       lockTime: "30 days",
-      poolCap: "100",
+      poolCap: "∞",
       new_pool: "No",
     },
   ];

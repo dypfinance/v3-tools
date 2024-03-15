@@ -89,7 +89,7 @@ const EarnOtherContent = ({
       expired: false,
       top_pick: false,
       tokenName: "Base",
-      tokenTicker: "BASE",
+      tokenTicker: "ETH",
       pool: "BASE",
       new_pool: 'Yes'
 
