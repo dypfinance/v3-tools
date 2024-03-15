@@ -143,11 +143,13 @@ const TopPoolsListCardInner = ({
   ];
 
   const handleDetails = () => {
-    if (showDetails === false) {
-      setShowDetails(true);
-      // onShowDetailsClick();
-    } else if (showDetails === true) {
-      setShowDetails(false);
+    if (!comingSoon) {
+      if (showDetails === false) {
+        setShowDetails(true);
+        // onShowDetailsClick();
+      } else if (showDetails === true) {
+        setShowDetails(false);
+      }
     }
   };
 
@@ -192,7 +194,7 @@ const TopPoolsListCardInner = ({
   return (
     <>
       <div
-        className={`row w-100 flex-column gap-3 gap-lg-0 flex-lg-row align-items-center justify-content-between  mx-0 cursor-pointer ${
+        className={`row w-100 flex-column gap-3 gap-lg-0 flex-lg-row align-items-center justify-content-between  mx-0 cursor-pointer position-relative ${
           expired === true
             ? "poolscardwrapperexpired"
             : showDetails === false
@@ -202,6 +204,7 @@ const TopPoolsListCardInner = ({
         onClick={() => handleDetails()}
         style={{ display: display }}
       >
+        {isNewPool && <img src={newPool} alt="" className="new-pool2" />}
         <div className="col-12 col-lg-4 d-flex justify-content-between align-items-center">
           <div
             className={` d-flex align-items-center ${
@@ -327,7 +330,7 @@ const TopPoolsListCardInner = ({
                 color: "#F7F7FC",
               }}
             >
-             {tokenName} {getFormattedNumber(poolCap, 0)}
+              {tokenName} {getFormattedNumber(poolCap, 0)}
             </h5>
           </div>
           <div className="d-none d-xxl-flex d-xl-flex d-lg-flex d-md-flex flex-column gap-2">
@@ -366,8 +369,6 @@ const TopPoolsListCardInner = ({
         >
           {top_pick && <img src={topPick} alt="" />}
           {comingSoon && <img src={comingSoonTag} alt="" />}
-
-          {/* {isNewPool && <img src={newPool} alt="" />} */}
 
           <h6
             className="details-text gap-1 d-flex align-items-center cursor-pointer justify-content-end"

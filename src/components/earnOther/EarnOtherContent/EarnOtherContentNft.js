@@ -445,7 +445,7 @@ const EarnOtherContentNft = ({
           style={{ minHeight: "55px" }}
         >
           <div className="col-12 col-lg-8 col-xl-5 d-flex flex-column flex-xxl-row flex-lg-row flex-md-row  gap-3 align-items-center justify-content-around justify-content-lg-end justify-content-xl-start px-0 px-xl-2">
-            <div className="d-flex flex-column flex-xxl-row flex-lg-row flex-md-row align-items-center gap-2">
+            <div className="d-flex flex-row flex-xxl-row flex-lg-row flex-md-row align-items-center gap-3">
               <div className="d-flex align-items-center gap-2">
                 <div
                   className={`stake-other-item  position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${

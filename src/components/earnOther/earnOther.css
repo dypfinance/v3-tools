@@ -149,6 +149,7 @@ hr {
 @media only screen and (max-width: 991px) {
   .otherpools-wrapper {
     grid-template-columns: repeat(2, 1fr);
+    display: grid !important;
   }
 }
 
@@ -156,6 +157,12 @@ hr {
   .otherpools-wrapper {
     grid-template-columns: auto;
   }
+
+   .items-wrapper-other {
+    grid-template-columns: repeat(2, 1fr);
+    display: grid !important;
+  }
+
 }
 
 .details-text2 {

@@ -60,7 +60,8 @@ const EarnInnerPool = ({
       id: "0x8652d1817f5a95172001685a28facb1d57e78a11",
       lockTime: "90 days",
       poolCap: "467",
-      coming_soon: true
+      coming_soon: true,
+      new_pool: "Yes",
     },
     // {
     //   chain: "BNB Chain",
@@ -91,6 +92,7 @@ const EarnInnerPool = ({
       coming_soon: true,
       lockTime: "30 days",
       poolCap: "7413",
+      new_pool: "Yes",
     },
     // {
     //   chain: "Avalanche",
@@ -150,10 +152,9 @@ const EarnInnerPool = ({
       id: "",
       lockTime: "60 days",
       poolCap: "234",
-      coming_soon: true
-
+      coming_soon: true,
+      new_pool: "Yes",
     },
-    
   ];
 
   const toggleInactive = () => {
@@ -208,8 +209,14 @@ const EarnInnerPool = ({
                 </span>
               </div>
               <div className="d-flex flex-column gap-1">
-                <span className="earn-inner-title">{network === "BNB Chain" ?
-          dummyData_bnb2[0].apr : network === 'Avalanche' ? dummyData_avax2[0].apr : dummyData_base2[0].apr}%</span>
+                <span className="earn-inner-title">
+                  {network === "BNB Chain"
+                    ? dummyData_bnb2[0].apr
+                    : network === "Avalanche"
+                    ? dummyData_avax2[0].apr
+                    : dummyData_base2[0].apr}
+                  %
+                </span>
                 <span className="earn-inner-desc">APR</span>
               </div>
             </div>
@@ -359,7 +366,6 @@ const EarnInnerPool = ({
                 }}
                 top_pick={pool.top_pick}
                 comingSoon={pool.coming_soon}
-
                 expired={false}
                 tokenLogo={pool.tokenLogo}
                 apr={pool.apr}
@@ -402,7 +408,6 @@ const EarnInnerPool = ({
                 }}
                 top_pick={pool.top_pick}
                 comingSoon={pool.coming_soon}
-
                 expired={false}
                 tokenLogo={pool.tokenLogo}
                 apr={pool.apr}
@@ -426,7 +431,6 @@ const EarnInnerPool = ({
                 the_graph_resultavax={the_graph_resultavax}
                 isPremium={isPremium}
                 network={network}
-
               />
             );
           })}
@@ -442,11 +446,10 @@ const EarnInnerPool = ({
                 topList={"Staking"}
                 onShowDetailsClick={() => {
                   setShowDetails(!showDetails);
-                  setActiveCard(topPools[index + 1]);
+                    setActiveCard(topPools[index + 1]);
                 }}
                 top_pick={pool.top_pick}
                 comingSoon={pool.coming_soon}
-
                 expired={false}
                 tokenLogo={pool.tokenLogo}
                 apr={pool.apr}
@@ -470,7 +473,6 @@ const EarnInnerPool = ({
                 the_graph_resultavax={the_graph_resultavax}
                 isPremium={isPremium}
                 network={network}
-
               />
             );
           })}

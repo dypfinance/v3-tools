@@ -121,13 +121,9 @@ const TopPoolsNftListCardInner = ({
       eth_result2 &&
       eth_result2.status === 200
     ) {
-    
       setLandCard(eth_result.data.stakingInfoLAND[0]);
-    
     }
   };
-
-
 
   const myStakes = async () => {
     let myStakes = await getStakesIds();
@@ -140,13 +136,15 @@ const TopPoolsNftListCardInner = ({
   };
 
   const handleDetails = () => {
-    if (showDetails === false) {
-      setShowDetails(true);
-      setcardIndex(cardIndex);
-      // onShowDetailsClick();
-    } else if (showDetails === true) {
-      setShowDetails(false);
-      setcardIndex();
+    if (!comingSoon) {
+      if (showDetails === false) {
+        setShowDetails(true);
+        setcardIndex(cardIndex);
+        // onShowDetailsClick();
+      } else if (showDetails === true) {
+        setShowDetails(false);
+        setcardIndex();
+      }
     }
   };
 
@@ -394,8 +392,8 @@ const TopPoolsNftListCardInner = ({
           chainId={chainId}
           handleSwitchNetwork={handleSwitchNetwork}
           handleConnection={handleConnection}
-        //   apr={landCard.apy_percent}
-        //   totalNftsLocked={landCard.total_nfts_locked}
+          //   apr={landCard.apy_percent}
+          //   totalNftsLocked={landCard.total_nfts_locked}
         />
       ) : (
         <></>

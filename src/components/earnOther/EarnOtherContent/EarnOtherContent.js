@@ -76,9 +76,8 @@ const EarnOtherContent = ({
       top_pick: false,
       tokenName: "Ethereum",
       tokenTicker: "ETH",
-      pool: 'ETH'
+      pool: "ETH",
     },
-
   ];
 
   const dummyData_base = [
@@ -91,7 +90,8 @@ const EarnOtherContent = ({
       top_pick: false,
       tokenName: "Base",
       tokenTicker: "BASE",
-      pool: 'BASE'
+      pool: "BASE",
+      new_pool: 'Yes'
 
     },
   ];
@@ -106,8 +106,7 @@ const EarnOtherContent = ({
       top_pick: true,
       tokenName: "Dypius",
       tokenTicker: "DYP",
-      pool: 'DYP-BNB'
-
+      pool: "DYP-BNB",
     },
     {
       lockTime: "Flexible & Locked",
@@ -118,10 +117,8 @@ const EarnOtherContent = ({
       top_pick: true,
       tokenName: "BNB",
       tokenTicker: "WBNB",
-      pool: 'BNB'
-
+      pool: "BNB",
     },
-
   ];
 
   const dummyData_bnb = [
@@ -134,9 +131,10 @@ const EarnOtherContent = ({
       top_pick: false,
       tokenName: "BNB",
       tokenTicker: "BNB",
-      pool: 'BNB'
-    },
+      pool: "BNB",
+      new_pool: 'Yes'
 
+    },
   ];
 
   const dummyData_avax = [
@@ -149,12 +147,12 @@ const EarnOtherContent = ({
       top_pick: false,
       tokenName: "Avalanche",
       tokenTicker: "AVAX",
-      pool: 'AVAX'
+      pool: "AVAX",
+      new_pool: 'Yes'
     },
-
   ];
 
-  const [stake, setStake] = useState('allchains');
+  const [stake, setStake] = useState("allchains");
   const [option, setOption] = useState(routeOption);
   const [content, setContent] = useState(options[0].content);
   const [listStyle, setListStyle] = useState("list");
@@ -442,14 +440,11 @@ const EarnOtherContent = ({
     }
   }, [option, stake, chainId]);
 
-
   useEffect(() => {
     if (option === "Farming" && expiredPools === false) {
       setStake("bnb");
     }
   }, [option, expiredPools]);
-
-
 
   return (
     <>
@@ -483,7 +478,6 @@ const EarnOtherContent = ({
                 />
               </div>
             </div>
-
           </div>
         ) : (
           <div
@@ -514,7 +508,6 @@ const EarnOtherContent = ({
                 />
               </div>
             </div>
-            
           </div>
         )}
 
@@ -524,7 +517,7 @@ const EarnOtherContent = ({
         >
           <div className="col-12 col-lg-8 col-xl-5 d-flex flex-column flex-xxl-row flex-lg-row flex-md-row  gap-3 align-items-center justify-content-around justify-content-lg-end justify-content-xl-start px-0 px-xl-2">
             <div className="d-flex flex-column flex-xxl-row flex-lg-row flex-md-row align-items-center gap-2">
-              <div className="d-flex align-items-center gap-2">
+              <div className="d-flex align-items-center gap-2 items-wrapper-other">
                 <div
                   className={`stake-other-item ${
                     option === "Farming" &&
@@ -577,34 +570,6 @@ const EarnOtherContent = ({
                     </p>
                   </div>
                 </div>
-              </div>
-              <div className="d-flex align-items-center gap-2">
-                {/* <div
-                  className={`stake-other-item ${
-                    option === "Farming" &&
-                    expiredPools === false &&
-                    "blur-stake"
-                  } position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
-                    stake === "eth" ? "eth-item-active" : null
-                  }`}
-                  onClick={() => {
-                    setStake("eth");
-                  }}
-                >
-                  <img
-                    src={stake === "eth" ? ethStakeActive : ethStake}
-                    alt=""
-                    style={{ width: 18, height: 18 }}
-                  />
-                  <div className="d-flex flex-column align-items-center align-items-lg-start">
-                    <p
-                      className="text-white"
-                      style={{ fontSize: "12px", fontWeight: "300" }}
-                    >
-                      Ethereum
-                    </p>
-                  </div>
-                </div> */}
                 <div
                   className={`stake-other-item position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
                     stake === "bnb" ? "bsc-item-active" : null
@@ -627,8 +592,6 @@ const EarnOtherContent = ({
                     </p>
                   </div>
                 </div>
-              </div>
-              <div className="d-flex align-items-center gap-2">
                 <div
                   className={`stake-other-item ${
                     option === "Farming" &&
@@ -656,6 +619,38 @@ const EarnOtherContent = ({
                   </div>
                 </div>
               </div>
+              {/*  <div className="d-flex align-items-center gap-2">
+                 <div
+                  className={`stake-other-item ${
+                    option === "Farming" &&
+                    expiredPools === false &&
+                    "blur-stake"
+                  } position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
+                    stake === "eth" ? "eth-item-active" : null
+                  }`}
+                  onClick={() => {
+                    setStake("eth");
+                  }}
+                >
+                  <img
+                    src={stake === "eth" ? ethStakeActive : ethStake}
+                    alt=""
+                    style={{ width: 18, height: 18 }}
+                  />
+                  <div className="d-flex flex-column align-items-center align-items-lg-start">
+                    <p
+                      className="text-white"
+                      style={{ fontSize: "12px", fontWeight: "300" }}
+                    >
+                      Ethereum
+                    </p>
+                  </div>
+                </div> 
+             
+              </div>
+              <div className="d-flex align-items-center gap-2">
+              
+              </div>*/}
             </div>
           </div>
 
@@ -669,7 +664,7 @@ const EarnOtherContent = ({
                   className="text-white"
                   style={{ fontWeight: "600", fontSize: "17px" }}
                 >
-                  ${getFormattedNumber('2585417',0)}
+                  ${getFormattedNumber("2585417", 0)}
                 </h6>
               </div>
             )}
@@ -691,6 +686,7 @@ const EarnOtherContent = ({
                       expired={item.expired}
                       top_pick={item.top_pick}
                       tokenName={item.tokenName}
+                      isNewPool={item.new_pool === "Yes" ? true : false}
                     />
                   </NavLink>
                 );
@@ -708,6 +704,7 @@ const EarnOtherContent = ({
                       expired={item.expired}
                       top_pick={item.top_pick}
                       tokenName={item.tokenName}
+                      isNewPool={item.new_pool === "Yes" ? true : false}
                     />
                   </NavLink>
                 );
@@ -725,6 +722,7 @@ const EarnOtherContent = ({
                       expired={item.expired}
                       top_pick={item.top_pick}
                       tokenName={item.tokenName}
+                      isNewPool={item.new_pool === "Yes" ? true : false}
                     />
                   </NavLink>
                 );
@@ -742,31 +740,30 @@ const EarnOtherContent = ({
                       expired={item.expired}
                       top_pick={item.top_pick}
                       tokenName={item.tokenName}
+                      isNewPool={item.new_pool === "Yes" ? true : false}
                     />
                   </NavLink>
                 );
               })
-            : [
-                 ...dummyData_avax,
-                ...dummyData_base,
-                ...dummyData_bnb,
-               
-              ].map((item, index) => {
-                return (
-                  <NavLink to={`/earn/defi-staking/${item.pool}`}>
-                    <TopOtherPoolsCard
-                      key={index}
-                      lockTime={item.lockTime}
-                      chain={item.chain}
-                      apr={item.apr}
-                      tokenLogo={item.tokenLogo}
-                      expired={item.expired}
-                      top_pick={item.top_pick}
-                      tokenName={item.tokenName}
-                    />
-                  </NavLink>
-                );
-              })}
+            : [...dummyData_avax, ...dummyData_base, ...dummyData_bnb].map(
+                (item, index) => {
+                  return (
+                    <NavLink to={`/earn/defi-staking/${item.pool}`}>
+                      <TopOtherPoolsCard
+                        key={index}
+                        lockTime={item.lockTime}
+                        chain={item.chain}
+                        apr={item.apr}
+                        tokenLogo={item.tokenLogo}
+                        expired={item.expired}
+                        top_pick={item.top_pick}
+                        tokenName={item.tokenName}
+                        isNewPool={item.new_pool === "Yes" ? true : false}
+                      />
+                    </NavLink>
+                  );
+                }
+              )}
         </div>
       )}
       {listStyle === "list" && (
@@ -800,12 +797,13 @@ const EarnOtherContent = ({
                         tokenTicker={item.tokenTicker}
                         apr={item.apr}
                         lockTime={item.lockTime}
+                        isNewPool={item.new_pool === "Yes" ? true : false}
                         expired={item.expired}
                       />
                     </NavLink>
                   );
                 })
-              :stake === "base"
+              : stake === "base"
               ? dummyData_base.map((item, index) => {
                   return (
                     <NavLink to={`/earn/defi-staking/${item.pool}`}>
@@ -817,6 +815,7 @@ const EarnOtherContent = ({
                         apr={item.apr}
                         lockTime={item.lockTime}
                         expired={item.expired}
+                        isNewPool={item.new_pool === "Yes" ? true : false}
                       />
                     </NavLink>
                   );
@@ -832,6 +831,7 @@ const EarnOtherContent = ({
                         tokenTicker={item.tokenTicker}
                         apr={item.apr}
                         lockTime={item.lockTime}
+                        isNewPool={item.new_pool === "Yes" ? true : false}
                         expired={item.expired}
                       />
                     </NavLink>
@@ -848,17 +848,13 @@ const EarnOtherContent = ({
                         tokenTicker={item.tokenTicker}
                         apr={item.apr}
                         lockTime={item.lockTime}
+                        isNewPool={item.new_pool === "Yes" ? true : false}
                         expired={item.expired}
                       />
                     </NavLink>
                   );
                 })
-              : [
-               ...dummyData_avax,
-                ...dummyData_base,
-                ...dummyData_bnb,
-                
-              ].map(
+              : [...dummyData_avax, ...dummyData_base, ...dummyData_bnb].map(
                   (item, index) => {
                     return (
                       <NavLink to={`/earn/defi-staking/${item.pool}`}>
@@ -870,6 +866,7 @@ const EarnOtherContent = ({
                           apr={item.apr}
                           lockTime={item.lockTime}
                           expired={item.expired}
+                          isNewPool={item.new_pool === "Yes" ? true : false}
                         />
                       </NavLink>
                     );
