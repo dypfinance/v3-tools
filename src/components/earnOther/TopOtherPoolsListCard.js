@@ -134,7 +134,7 @@ const TopOtherPoolsListCard = ({
                       {tokenTicker}
                     </h5>
                   </td>
-                  <td className="earnother-td col-2">
+                  {/* <td className="earnother-td col-2">
                     <h5
                       style={{
                         fontSize: "15px",
@@ -157,7 +157,7 @@ const TopOtherPoolsListCard = ({
                       />
                       {chain}
                     </h5>
-                  </td>
+                  </td> */}
                   <td className="earnother-td col-2">
                     <h5
                       style={{
