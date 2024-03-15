@@ -3,7 +3,7 @@ import "./earnInnerpool.css";
 import "../earnOther.css";
 import "../../earn/earn.css";
 import whiteArrow from "../../../assets/earnOtherAssets/backWhiteArrow.svg";
-import innerHero from "../../../assets/earnOtherAssets/innerhero.jpg";
+import innerHero from "../../../assets/earnOtherAssets/innerheroBase.jpg";
 import innerHeroAvax from "../../../assets/earnOtherAssets/innerheroAvax.jpg";
 import innerHeroBnb from "../../../assets/earnOtherAssets/innerheroBnb.jpg";
 
@@ -224,7 +224,7 @@ const EarnInnerPool = ({
               <img
                 alt=""
                 src={
-                  network === "Ethereum"
+                  network === "Base"
                     ? innerHero
                     : network === "Avalanche"
                     ? innerHeroAvax
