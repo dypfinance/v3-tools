@@ -1,16 +1,10 @@
 import React, { useEffect, useState } from "react";
-import ethStake from "../../assets/earnAssets/ethStakeActive.svg";
-import avaxStake from "../../assets/earnAssets/avaxStakeActive.svg";
-import baseStake from "../../assets/earnAssets/baseActive.svg";
-
-import bnbStakeActive from "../../assets/earnAssets/bnbStakeActive.svg";
 import useWindowSize from "../../functions/useWindowSize";
-
 import "../top-pools-card/top-pools.css";
+import TopPoolsListCardInner from "../top-pools-card/TopPoolsListCardInner";
 
 const TopOtherPoolsListCard = ({
-  tokenLogo,
-  cardId,
+  tokenLogo, 
   tokenName,
   tokenTicker,
   apr,
@@ -24,7 +18,6 @@ const TopOtherPoolsListCard = ({
   cardType,
   chain,
   topList,
-  cardIndex,
   chainId,
   handleConnection,
   handleSwitchNetwork,
@@ -42,6 +35,9 @@ const TopOtherPoolsListCard = ({
   activePools,
   totalTvl,
   totalNftsLocked,
+  cardIndex,
+  showDetails,
+  onCardClick,cardId
 }) => {
   const ethCoins = ["ethereum", "wbtc", "usdc", "usdt"];
   const bscCoins = [
@@ -70,7 +66,60 @@ const TopOtherPoolsListCard = ({
 
   const avaxCoins2 = ["avax"];
 
-  const [showDetails, setShowDetails] = useState(false);
+  const dummyData_avax2 = [
+    {
+      chain: "Avalanche",
+      apr: 10,
+      tokenLogo: "avax.svg",
+      expired: false,
+      top_pick: false,
+      tokenName: "AVAX",
+      tokenTicker: "AVAX",
+      pool: "AVAX",
+      id: "0x8652d1817f5a95172001685a28facb1d57e78a11",
+      coming_soon: true,
+      lockTime: "30 days",
+      poolCap: "7413",
+      new_pool: "Yes",
+    },
+  ];
+
+  const dummyData_base2 = [
+    {
+      chain: "Base",
+      apr: 15,
+      tokenLogo: "baseActive.svg",
+      expired: false,
+      top_pick: false,
+      tokenName: "ETH",
+      tokenTicker: "ETH",
+      pool: "ETH",
+      id: "",
+      lockTime: "60 days",
+      poolCap: "234",
+      coming_soon: true,
+      new_pool: "Yes",
+    },
+  ];
+
+  const dummyData_bnb2 = [
+    {
+      chain: "BNB Chain",
+      apr: 25,
+      tokenLogo: "bsc.svg",
+      expired: false,
+      top_pick: false,
+      tokenName: "BNB",
+      tokenTicker: "WBNB",
+      pool: "BNB",
+      id: "0x8652d1817f5a95172001685a28facb1d57e78a11",
+      lockTime: "90 days",
+      poolCap: "467",
+      coming_soon: true,
+      new_pool: "Yes",
+    },
+  ];
+
   const [coins, setCoins] = useState(ethCoins);
   const windowSize = useWindowSize();
 
@@ -87,16 +136,17 @@ const TopOtherPoolsListCard = ({
       setCoins(avaxCoins2);
     }
   }, [chain]);
-
+  
   return (
     <>
       <div
         className={`row w-100 flex-column gap-3 gap-lg-0 flex-lg-row align-items-center justify-content-between  mx-0 cursor-pointer ${
           expired === true ? "poolscardwrapperexpired" : "list-pool-card2"
         } ${showDetails && "pools-card-hover"} `}
-        onMouseEnter={() => setShowDetails(true)}
-        onMouseLeave={() => setShowDetails(false)}
+        // onMouseEnter={() => setShowDetails(true)}
+        // onMouseLeave={() => setShowDetails(false)}
         style={{ display: display }}
+        onClick={onCardClick}
       >
         <div className="px-0 d-flex justify-content-between align-items-center">
           <table className="earnother-table">
@@ -258,6 +308,66 @@ const TopOtherPoolsListCard = ({
           </table>
         </div>
       </div>
+      {showDetails && cardId ===cardIndex &&
+      ((cardIndex === 0 && chain === "base") ||
+        (cardIndex === 1 && chain === "allchains")) ? (
+        dummyData_base2.map((item, index) => {
+          return (
+            <TopPoolsListCardInner
+              key={index}
+              expired={item.expired}
+              tokenLogo={item.tokenLogo}
+              tokenName={item.tokenName}
+              top_pick={item.top_pick}
+              comingSoon={item.coming_soon}
+              chain={chain}
+              apr={item.apr}
+              lockTime={item.lockTime}
+              poolCap={item.poolCap}
+            />
+          );
+        })
+      ) : showDetails  && cardId ===cardIndex &&
+        ((cardIndex === 0 && chain === "bnb") ||
+          (cardIndex === 2 && chain === "allchains")) ? (
+        dummyData_bnb2.map((item, index) => {
+          return (
+            <TopPoolsListCardInner
+              key={index}
+              expired={item.expired}
+              tokenLogo={item.tokenLogo}
+              tokenName={item.tokenName}
+              top_pick={item.top_pick}
+              comingSoon={item.coming_soon}
+              chain={chain}
+              apr={item.apr}
+              lockTime={item.lockTime}
+              poolCap={item.poolCap}
+            />
+          );
+        })
+      ) : showDetails && cardId ===cardIndex &&
+        ((cardIndex === 0 && chain === "avax") ||
+          (cardIndex === 0 && chain === "allchains")) ? (
+        dummyData_avax2.map((item, index) => {
+          return (
+            <TopPoolsListCardInner
+              key={index}
+              expired={item.expired}
+              tokenLogo={item.tokenLogo}
+              tokenName={item.tokenName}
+              top_pick={item.top_pick}
+              comingSoon={item.coming_soon}
+              chain={chain}
+              apr={item.apr}
+              lockTime={item.lockTime}
+              poolCap={item.poolCap}
+            />
+          );
+        })
+      ) : (
+        <></>
+      )}
     </>
   );
 };

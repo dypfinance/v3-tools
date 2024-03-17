@@ -63,19 +63,7 @@ const EarnInnerPool = ({
       coming_soon: true,
       new_pool: "Yes",
     },
-    // {
-    //   chain: "BNB Chain",
-    //   apr: 10,
-    //   tokenLogo: "dyplogo.svg",
-    //   expired: false,
-    //   top_pick: false,
-    //   tokenName: "DYP",
-    //   tokenTicker: "DYP",
-    //   pool: "DYP-BNB",
-    //   id: "0x215bD6eDa2A5372aeA17360c166761c4Eec60497",
-    //   lockTime: "30 days",
-    //   poolCap: "80000",
-    // },
+  
   ];
 
   const dummyData_avax2 = [
