@@ -255,8 +255,8 @@ const EarnTopPicks = ({
       setCawsCard(eth_result.data.stakingInfoCAWS);
       setCawsCard2(eth_result.data.stakingInfoCAWS[0]);
       setLandCard(eth_result.data.stakingInfoLAND[0]);
-      const land = eth_result.data.stakinginfoCAWSLAND;
-      setCawsLandCard(land[0]);
+      const land = eth_result.data.stakinginfoCAWSLAND[0];
+      setCawsLandCard(land);
     }
   };
 
@@ -1031,121 +1031,62 @@ const EarnTopPicks = ({
               <div className="px-0">
                 <>
                   <div className="top-picks-container">
-                    {topList === "Staking" && chain === "eth" && (
-                      <CawsWodCard
-                        network={chainId}
+                    {activePools.slice(0, 3).map((pool, index) => (
+                      <TopPoolsCard
+                        key={index}
+                        chain={chain}
+                        top_pick={pool.top_pick}
+                        tokenName={pool.pair_name}
+                        apr={pool.apy_percent + "%"}
+                        tvl={
+                          pool.tvl_usd === "--"
+                            ? pool.tvl_usd
+                            : "$" + getFormattedNumber(pool.tvl_usd)
+                        }
+                        lockTime={
+                          pool.lock_time ? pool.lock_time : locktimeFarm[index]
+                        }
+                        tokenLogo={
+                          pool.icon
+                            ? pool.icon
+                            : pool.pair_name === "DYP"
+                            ? "dyplogo.svg"
+                            : "idypius.svg"
+                        }
                         onShowDetailsClick={() => {
-                          setActiveCardCawsLand(true);
-                          setActiveCardNFT(null);
-                          setActiveCardLandNFT(null);
-                          setActiveCard(null);
-                          setActiveCard2(null);
-                          setActiveCard3(null);
-                          setActiveCard4(null);
-                          setDetails();
-                        }}
-                        onHideDetailsClick={() => {
-                          setActiveCardCawsLand(null);
-
-                          setDetails();
-                        }}
-                        cardType={topList}
-                        details={activeCardCawsLand === true ? true : false}
-                        listType={listType}
-                        tvl={"$" + getFormattedNumber(cawsLandCard.tvl_usd)}
-                        apr={cawsLandCard.apy_percent}
-                        isPremium={isPremium}
-                      />
-                    )}
-                    {topList === "Staking" && chain === "eth" && (
-                      <LandCard
-                        network={chainId}
-                        onShowDetailsClick={() => {
-                          setActiveCardNFT();
-                          setActiveCardLandNFT(true);
-                          setActiveCard(null);
+                          setActiveCard(topPools[index]);
                           setActiveCard2(null);
                           setActiveCard3(null);
                           setActiveCard4(null);
                           setActiveCardCawsLand(null);
-                          setDetails();
-                        }}
-                        onHideDetailsClick={() => {
+                          setActiveCardNFT(false);
                           setActiveCardLandNFT(false);
+                          handleCardIndexStake(index);
+                          handleCardIndexStake30(index);
+                          handleCardIndexStakeiDyp(index);
+                          setDetails(index);
+                        }}
+                        onHideDetailsClick={() => {
+                          setActiveCard(null);
                           setDetails();
                         }}
                         cardType={topList}
-                        details={activeCardLandNFT === true ? true : false}
-                        listType={listType}
-                        tvl={"$" + getFormattedNumber(landCard.tvl_usd)}
-                        apr={landCard.apy_percent}
+                        details={details === index ? true : false}
+                        isNewPool={pool.new_pool === "Yes" ? true : false}
+                        isStaked={
+                          userPools.length > 0
+                            ? userPools.find(
+                                (obj) => obj.contract_address === pool.id
+                              )
+                              ? true
+                              : false
+                            : false
+                        }
+                        expired={false}
+                        network={chainId}
                         isPremium={isPremium}
                       />
-                    )}
-
-                    {activePools
-                      .slice(
-                        0,
-                        topList === "Staking" && chain === "eth" ? 1 : 3
-                      )
-                      .map((pool, index) => (
-                        <TopPoolsCard
-                          key={index}
-                          chain={chain}
-                          top_pick={pool.top_pick}
-                          tokenName={pool.pair_name}
-                          apr={pool.apy_percent + "%"}
-                          tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
-                          lockTime={
-                            pool.lock_time
-                              ? pool.lock_time
-                              : locktimeFarm[index]
-                          }
-                          tokenLogo={
-                            pool.icon
-                              ? pool.icon
-                              : pool.pair_name === "DYP"
-                              ? "dyplogo.svg"
-                              : "idypius.svg"
-                          }
-                          onShowDetailsClick={() => {
-                            setActiveCard(topPools[index]);
-                            setActiveCard2(null);
-                            setActiveCard3(null);
-                            setActiveCard4(null);
-                            setActiveCardCawsLand(null);
-                            setActiveCardNFT(false);
-                            setActiveCardLandNFT(false);
-                            handleCardIndexStake(index);
-                            handleCardIndexStake30(index);
-                            handleCardIndexStakeiDyp(index);
-                            setDetails(index);
-                          }}
-                          onHideDetailsClick={() => {
-                            setActiveCard(null);
-                            setDetails();
-                          }}
-                          cardType={topList}
-                          details={details === index ? true : false}
-                          isNewPool={pool.new_pool === "Yes" ? true : false}
-                          isStaked={
-                            userPools.length > 0
-                              ? userPools.find(
-                                  (obj) => obj.contract_address === pool.id
-                                )
-                                ? true
-                                : false
-                              : false
-                          }
-                          expired={false}
-                          network={chainId}
-                          isPremium={isPremium}
-                        />
-                      ))}
+                    ))}
 
                     {topList === "Farming" && chain === "bnb" && (
                       <TopPoolsCard
@@ -1224,39 +1165,6 @@ const EarnTopPicks = ({
                       // />
                       null}
                   </div>
-                  {activeCardCawsLand && (
-                    <CawsWodDetails
-                      coinbase={coinbase}
-                      isConnected={isConnected}
-                      listType={listType}
-                      chainId={chainId}
-                      handleSwitchNetwork={handleSwitchNetwork}
-                      handleConnection={handleConnection}
-                      expired={false}
-                    />
-                  )}
-                  {activeCardLandNFT && (
-                    <LandDetails
-                      coinbase={coinbase}
-                      isConnected={isConnected}
-                      listType={listType}
-                      chainId={chainId}
-                      handleSwitchNetwork={handleSwitchNetwork}
-                      handleConnection={handleConnection}
-                      apr={landCard.apy_percent}
-                      totalNftsLocked={landCard.total_nfts_locked}
-                    />
-                  )}
-                  {activeCardNFT && (
-                    <CawsDetails
-                      coinbase={coinbase}
-                      isConnected={isConnected}
-                      listType={listType}
-                      chainId={chainId}
-                      handleSwitchNetwork={handleSwitchNetwork}
-                      handleConnection={handleConnection}
-                    />
-                  )}
 
                   {activeCard && topList === "Farming" ? (
                     chain === "eth" ? (
@@ -1669,114 +1577,79 @@ const EarnTopPicks = ({
                   className="top-picks-container"
                   style={{ marginTop: "25px" }}
                 >
-                  {activePools
-                    .slice(
-                      topList === "Staking" && chain === "eth" ? 1 : 3,
-                      topList === "Staking" && chain === "eth" ? 4 : 6
-                    )
-                    .map((pool, index) => (
-                      <TopPoolsCard
-                        display={
-                          pool.expired
-                            ? pool.expired === "Yes"
-                              ? "none"
-                              : ""
+                  {activePools.slice(3, 6).map((pool, index) => (
+                    <TopPoolsCard
+                      display={
+                        pool.expired
+                          ? pool.expired === "Yes"
+                            ? "none"
                             : ""
-                        }
-                        key={index}
-                        chain={chain}
-                        top_pick={pool.top_pick}
-                        tokenName={
-                          pool.tokenName
-                            ? pool.tokenName
-                            : pool.pair_name
-                            ? pool.pair_name
-                            : ""
-                        }
-                        apr={
-                          pool.apy_percent
-                            ? pool.apy_percent + "%"
-                            : pool.apy + "%"
-                        }
-                        tvl={
-                          pool.tvl_usd === "--"
-                            ? pool.tvl_usd
-                            : "$" + getFormattedNumber(pool.tvl_usd)
-                        }
-                        lockTime={
-                          pool.lock_time
-                            ? pool.lock_time
-                            : locktimeFarm[
-                                index +
-                                  (topList === "Staking" && chain === "eth"
-                                    ? 3
-                                    : 3)
-                              ]
-                        }
-                        tokenLogo={
-                          pool.icon
-                            ? pool.icon
-                            : pool.pair_name === "DYP"
-                            ? "dyplogo.svg"
-                            : "idypius.svg"
-                        }
-                        onShowDetailsClick={() => {
-                          setActiveCard(null);
-                          setActiveCard2(
-                            topPools[
-                              index +
-                                (topList === "Staking" && chain === "eth"
-                                  ? 3
-                                  : 3)
-                            ]
-                          );
-                          setActiveCard3(null);
-                          setActiveCardNFT(false);
-                          setActiveCardLandNFT(false);
-                          handleCardIndexStake(
-                            index +
-                              (topList === "Staking" && chain === "eth" ? 1 : 3)
-                          );
-                          handleCardIndexStake30(
-                            index +
-                              (topList === "Staking" && chain === "eth" ? 1 : 3)
-                          );
-                          handleCardIndexStakeiDyp(
-                            index +
-                              (topList === "Staking" && chain === "eth" ? 1 : 3)
-                          );
-                          setDetails(
-                            index +
-                              (topList === "Staking" && chain === "eth" ? 1 : 3)
-                          );
-                        }}
-                        onHideDetailsClick={() => {
-                          setActiveCard2(null);
-                          setDetails();
-                        }}
-                        cardType={topList}
-                        details={
-                          details ===
-                          index +
-                            (topList === "Staking" && chain === "eth" ? 1 : 3)
+                          : ""
+                      }
+                      key={index}
+                      chain={chain}
+                      top_pick={pool.top_pick}
+                      tokenName={
+                        pool.tokenName
+                          ? pool.tokenName
+                          : pool.pair_name
+                          ? pool.pair_name
+                          : ""
+                      }
+                      apr={
+                        pool.apy_percent
+                          ? pool.apy_percent + "%"
+                          : pool.apy + "%"
+                      }
+                      tvl={
+                        pool.tvl_usd === "--"
+                          ? pool.tvl_usd
+                          : "$" + getFormattedNumber(pool.tvl_usd)
+                      }
+                      lockTime={
+                        pool.lock_time
+                          ? pool.lock_time
+                          : locktimeFarm[index + 3]
+                      }
+                      tokenLogo={
+                        pool.icon
+                          ? pool.icon
+                          : pool.pair_name === "DYP"
+                          ? "dyplogo.svg"
+                          : "idypius.svg"
+                      }
+                      onShowDetailsClick={() => {
+                        setActiveCard(null);
+                        setActiveCard2(topPools[index + 3]);
+                        setActiveCard3(null);
+                        setActiveCardNFT(false);
+                        setActiveCardLandNFT(false);
+                        handleCardIndexStake(index + 3);
+                        handleCardIndexStake30(index + 3);
+                        handleCardIndexStakeiDyp(index + 3);
+                        setDetails(index + 3);
+                      }}
+                      onHideDetailsClick={() => {
+                        setActiveCard2(null);
+                        setDetails();
+                      }}
+                      cardType={topList}
+                      details={details === index + 3 ? true : false}
+                      isNewPool={pool.new_pool === "Yes" ? true : false}
+                      isStaked={
+                        userPools.length > 0
+                          ? userPools.find(
+                              (obj) => obj.contract_address === pool.id
+                            )
                             ? true
                             : false
-                        }
-                        isNewPool={pool.new_pool === "Yes" ? true : false}
-                        isStaked={
-                          userPools.length > 0
-                            ? userPools.find(
-                                (obj) => obj.contract_address === pool.id
-                              )
-                              ? true
-                              : false
-                            : false
-                        }
-                        expired={false}
-                        network={chainId}
-                        isPremium={isPremium}
-                      />
-                    ))}
+                          : false
+                      }
+                      expired={false}
+                      network={chainId}
+                      isPremium={isPremium}
+                    />
+                  ))}
                 </div>
                 {activeCard2 &&
                 topList === "Staking" &&
@@ -2144,103 +2017,73 @@ const EarnTopPicks = ({
                   className="top-picks-container"
                   style={{ marginTop: "25px" }}
                 >
-                  {activePools
-                    .slice(
-                      topList === "Staking" && chain === "eth" ? 4 : 6,
-                      topList === "Staking" && chain === "eth" ? 7 : 9
-                    )
-                    .map((pool, index) => (
-                      <TopPoolsCard
-                        network={chainId}
-                        display={
-                          pool.expired
-                            ? pool.expired === "Yes"
-                              ? "none"
-                              : ""
+                  {activePools.slice(6, 9).map((pool, index) => (
+                    <TopPoolsCard
+                      network={chainId}
+                      display={
+                        pool.expired
+                          ? pool.expired === "Yes"
+                            ? "none"
                             : ""
-                        }
-                        key={index}
-                        chain={chain}
-                        top_pick={pool.top_pick}
-                        tokenName={
-                          pool.tokenName
-                            ? pool.tokenName
-                            : pool.pair_name
-                            ? pool.pair_name
-                            : ""
-                        }
-                        apr={pool.apy_percent + "%"}
-                        tvl={
-                          pool.tvl_usd === "--"
-                            ? pool.tvl_usd
-                            : "$" + getFormattedNumber(pool.tvl_usd)
-                        }
-                        lockTime={
-                          pool.lock_time ? pool.lock_time : locktimeFarm[index]
-                        }
-                        tokenLogo={
-                          pool.icon
-                            ? pool.icon
-                            : pool.pair_name === "iDYP"
-                            ? "idypius.svg"
-                            : "dyplogo.svg"
-                        }
-                        onShowDetailsClick={() => {
-                          setActiveCard(null);
-                          setActiveCard2(null);
-                          setActiveCard3(
-                            topPools[
-                              index +
-                                (topList === "Staking" && chain === "eth"
-                                  ? 5
-                                  : 6)
-                            ]
-                          );
-                          setActiveCardNFT(false);
-                          setActiveCardLandNFT(false);
-                          handleCardIndexStake(
-                            index +
-                              (topList === "Staking" && chain === "eth" ? 4 : 6)
-                          );
-                          handleCardIndexStake30(
-                            index +
-                              (topList === "Staking" && chain === "eth" ? 4 : 6)
-                          );
-                          handleCardIndexStakeiDyp(
-                            index +
-                              (topList === "Staking" && chain === "eth" ? 4 : 6)
-                          );
-                          setDetails(
-                            index +
-                              (topList === "Staking" && chain === "eth" ? 4 : 6)
-                          );
-                        }}
-                        onHideDetailsClick={() => {
-                          setActiveCard3(null);
-                          setDetails();
-                        }}
-                        cardType={topList}
-                        details={
-                          details ===
-                          index +
-                            (topList === "Staking" && chain === "eth" ? 4 : 6)
+                          : ""
+                      }
+                      key={index}
+                      chain={chain}
+                      top_pick={pool.top_pick}
+                      tokenName={
+                        pool.tokenName
+                          ? pool.tokenName
+                          : pool.pair_name
+                          ? pool.pair_name
+                          : ""
+                      }
+                      apr={pool.apy_percent + "%"}
+                      tvl={
+                        pool.tvl_usd === "--"
+                          ? pool.tvl_usd
+                          : "$" + getFormattedNumber(pool.tvl_usd)
+                      }
+                      lockTime={
+                        pool.lock_time ? pool.lock_time : locktimeFarm[index]
+                      }
+                      tokenLogo={
+                        pool.icon
+                          ? pool.icon
+                          : pool.pair_name === "iDYP"
+                          ? "idypius.svg"
+                          : "dyplogo.svg"
+                      }
+                      onShowDetailsClick={() => {
+                        setActiveCard(null);
+                        setActiveCard2(null);
+                        setActiveCard3(topPools[index + 6]);
+                        setActiveCardNFT(false);
+                        setActiveCardLandNFT(false);
+                        handleCardIndexStake(index + 6);
+                        handleCardIndexStake30(index + 6);
+                        handleCardIndexStakeiDyp(index + 6);
+                        setDetails(index + 6);
+                      }}
+                      onHideDetailsClick={() => {
+                        setActiveCard3(null);
+                        setDetails();
+                      }}
+                      cardType={topList}
+                      details={details === index + 6 ? true : false}
+                      isNewPool={pool.new_pool === "Yes" ? true : false}
+                      isStaked={
+                        userPools.length > 0
+                          ? userPools.find(
+                              (obj) => obj.contract_address === pool.id
+                            )
                             ? true
                             : false
-                        }
-                        isNewPool={pool.new_pool === "Yes" ? true : false}
-                        isStaked={
-                          userPools.length > 0
-                            ? userPools.find(
-                                (obj) => obj.contract_address === pool.id
-                              )
-                              ? true
-                              : false
-                            : false
-                        }
-                        expired={false}
-                        isPremium={isPremium}
-                      />
-                    ))}
+                          : false
+                      }
+                      expired={false}
+                      isPremium={isPremium}
+                    />
+                  ))}
                 </div>
                 {activeCard3 &&
                 topList === "Staking" &&
@@ -3095,135 +2938,82 @@ const EarnTopPicks = ({
             ) : windowSize.width > 786 ? (
               <div className="px-0">
                 <div className="top-picks-container">
-                  {topList === "Staking" && chain === "eth" && (
-                    <CawsWodCard
+                  {activePools.slice(0, 2).map((pool, index) => (
+                    <TopPoolsCard
                       network={chainId}
+                      display={
+                        pool.expired
+                          ? pool.expired === "Yes"
+                            ? "none"
+                            : ""
+                          : ""
+                      }
+                      key={index}
+                      chain={chain}
+                      top_pick={pool.top_pick}
+                      tokenName={
+                        pool.tokenName
+                          ? pool.tokenName
+                          : pool.pair_name
+                          ? pool.pair_name
+                          : ""
+                      }
+                      apr={pool.apy_percent + "%"}
+                      tvl={
+                        pool.tvl_usd === "--"
+                          ? pool.tvl_usd
+                          : "$" + getFormattedNumber(pool.tvl_usd)
+                      }
+                      lockTime={
+                        pool.lockTime
+                          ? pool.lockTime
+                          : pool.lock_time
+                          ? pool.lock_time
+                          : locktimeFarm[index]
+                      }
+                      tokenLogo={
+                        pool.icon
+                          ? pool.icon
+                          : pool.pair_name === "iDYP"
+                          ? "idypius.svg"
+                          : "dyplogo.svg"
+                      }
                       onShowDetailsClick={() => {
-                        setActiveCardCawsLand(true);
-                        setActiveCardNFT(null);
-                        setActiveCardLandNFT(null);
-                        setActiveCard(null);
+                        setActiveCard(topPools[index]);
                         setActiveCard2(null);
                         setActiveCard3(null);
                         setActiveCard4(null);
-                        setDetails();
-                      }}
-                      onHideDetailsClick={() => {
+                        setActiveCard5(null);
+                        setActiveCard6(null);
                         setActiveCardCawsLand(null);
 
-                        setDetails();
-                      }}
-                      cardType={topList}
-                      details={activeCardCawsLand === true ? true : false}
-                      listType={listType}
-                      tvl={"$" + getFormattedNumber(cawsLandCard.tvl_usd)}
-                      apr={cawsLandCard.apy_percent}
-                      isPremium={isPremium}
-                    />
-                  )}
-                  {topList === "Staking" && chain === "eth" && (
-                    <LandCard
-                      network={chainId}
-                      onShowDetailsClick={() => {
-                        setActiveCardNFT();
-                        setActiveCardLandNFT(true);
-                        setActiveCard(null);
-                        setActiveCard2(null);
-                        setActiveCard3(null);
-                        setActiveCard4(null);
-                        setActiveCardCawsLand(null);
-                        setDetails();
-                      }}
-                      onHideDetailsClick={() => {
+                        setActiveCardNFT(false);
                         setActiveCardLandNFT(false);
+                        handleCardIndexStake(index);
+                        handleCardIndexStake30(index);
+                        handleCardIndexStakeiDyp(index);
+                        setDetails(index);
+                      }}
+                      onHideDetailsClick={() => {
+                        setActiveCard(null);
                         setDetails();
                       }}
                       cardType={topList}
-                      details={activeCardLandNFT === true ? true : false}
-                      listType={listType}
-                      tvl={"$" + getFormattedNumber(landCard.tvl_usd)}
-                      apr={landCard.apy_percent}
+                      details={details === index ? true : false}
+                      isNewPool={pool.new_pool === "Yes" ? true : false}
+                      isStaked={
+                        userPools.length > 0
+                          ? userPools.find(
+                              (obj) => obj.contract_address === pool.id
+                            )
+                            ? true
+                            : false
+                          : false
+                      }
+                      expired={false}
                       isPremium={isPremium}
                     />
-                  )}
-                  {activePools
-                    .slice(0, topList === "Staking" && chain === "eth" ? 0 : 2)
-                    .map((pool, index) => (
-                      <TopPoolsCard
-                        network={chainId}
-                        display={
-                          pool.expired
-                            ? pool.expired === "Yes"
-                              ? "none"
-                              : ""
-                            : ""
-                        }
-                        key={index}
-                        chain={chain}
-                        top_pick={pool.top_pick}
-                        tokenName={
-                          pool.tokenName
-                            ? pool.tokenName
-                            : pool.pair_name
-                            ? pool.pair_name
-                            : ""
-                        }
-                        apr={pool.apy_percent + "%"}
-                        tvl={
-                          pool.tvl_usd === "--"
-                            ? pool.tvl_usd
-                            : "$" + getFormattedNumber(pool.tvl_usd)
-                        }
-                        lockTime={
-                          pool.lockTime
-                            ? pool.lockTime
-                            : pool.lock_time
-                            ? pool.lock_time
-                            : locktimeFarm[index]
-                        }
-                        tokenLogo={
-                          pool.icon
-                            ? pool.icon
-                            : pool.pair_name === "iDYP"
-                            ? "idypius.svg"
-                            : "dyplogo.svg"
-                        }
-                        onShowDetailsClick={() => {
-                          setActiveCard(topPools[index]);
-                          setActiveCard2(null);
-                          setActiveCard3(null);
-                          setActiveCard4(null);
-                          setActiveCard5(null);
-                          setActiveCard6(null);
-                          setActiveCardCawsLand(null);
-
-                          setActiveCardNFT(false);
-                          setActiveCardLandNFT(false);
-                          handleCardIndexStake(index);
-                          handleCardIndexStake30(index);
-                          handleCardIndexStakeiDyp(index);
-                          setDetails(index);
-                        }}
-                        onHideDetailsClick={() => {
-                          setActiveCard(null);
-                          setDetails();
-                        }}
-                        cardType={topList}
-                        details={details === index ? true : false}
-                        isNewPool={pool.new_pool === "Yes" ? true : false}
-                        isStaked={
-                          userPools.length > 0
-                            ? userPools.find(
-                                (obj) => obj.contract_address === pool.id
-                              )
-                              ? true
-                              : false
-                            : false
-                        }
-                        expired={false}
-                        isPremium={isPremium}
-                      />
-                    ))}
+                  ))}
                   {topList === "Farming" && chain === "bnb" && (
                     <TopPoolsCard
                       chain={chain}
@@ -3295,30 +3085,6 @@ const EarnTopPicks = ({
                     />
                   )}
                 </div>
-                {activeCardCawsLand && (
-                  <CawsWodDetails
-                    coinbase={coinbase}
-                    isConnected={isConnected}
-                    listType={listType}
-                    chainId={chainId}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    handleConnection={handleConnection}
-                    expired={false}
-                  />
-                )}
-
-                {activeCardLandNFT && (
-                  <LandDetails
-                    coinbase={coinbase}
-                    isConnected={isConnected}
-                    listType={listType}
-                    chainId={chainId}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    handleConnection={handleConnection}
-                    apr={landCard.apy_percent}
-                    totalNftsLocked={landCard.total_nfts_locked}
-                  />
-                )}
 
                 {activeCard &&
                 topList === "Staking" &&
@@ -3745,10 +3511,8 @@ const EarnTopPicks = ({
                   />
                 ) : activeCard &&
                   topList === "Farming" &&
-                  chain === "avax" ? //   rebase_factor={1} //   lock="3 Days" //   lp_symbol={"USD"} //   token={window.token_newavax} //   staking={window.constant_staking_newavaxactive1} //   constant={window.farming_activeavax_1} //   liquidity={wbnb_address} //   handleSwitchNetwork={handleSwitchNetwork} //   expired={false} //   handleConnection={handleConnection} //   chainId={chainId} //   lp_id={LP_IDAVAX_Array[cardIndex]} //   the_graph_result={the_graph_resultavax} //   coinbase={coinbase} //   is_wallet_connected={isConnected} //   <FarmAvaxFunc
-                //   expiration_time="7 June 2024"
-                //   fee="0.4"
-                //   finalApr={activePools[cardIndex]?.apy_percent}
+                  chain ===
+                    "avax" ? //   finalApr={activePools[cardIndex]?.apy_percent} //   fee="0.4" //   expiration_time="7 June 2024" //   rebase_factor={1} //   lock="3 Days" //   lp_symbol={"USD"} //   token={window.token_newavax} //   staking={window.constant_staking_newavaxactive1} //   constant={window.farming_activeavax_1} //   liquidity={wbnb_address} //   handleSwitchNetwork={handleSwitchNetwork} //   expired={false} //   handleConnection={handleConnection} //   chainId={chainId} //   lp_id={LP_IDAVAX_Array[cardIndex]} //   the_graph_result={the_graph_resultavax} //   coinbase={coinbase} //   is_wallet_connected={isConnected} //   <FarmAvaxFunc
                 //   lockTime={3}
                 //   listType={listType}
                 // />
@@ -3800,121 +3564,86 @@ const EarnTopPicks = ({
                       network={chainId}
                     />
                   )} */}
-                  {activePools
-                    .slice(
-                      topList === "Staking" && chain === "eth" ? 0 : 2,
-                      topList === "Staking" && chain === "eth" ? 2 : 4
-                    )
-                    .map((pool, index) => (
-                      <TopPoolsCard
-                        network={chainId}
-                        display={
-                          pool.expired
-                            ? pool.expired === "Yes"
-                              ? "none"
-                              : ""
+                  {activePools.slice(2, 4).map((pool, index) => (
+                    <TopPoolsCard
+                      network={chainId}
+                      display={
+                        pool.expired
+                          ? pool.expired === "Yes"
+                            ? "none"
                             : ""
-                        }
-                        expired={false}
-                        key={index}
-                        chain={chain}
-                        top_pick={pool.top_pick}
-                        tokenName={
-                          pool.tokenName
-                            ? pool.tokenName
-                            : pool.pair_name
-                            ? pool.pair_name
-                            : ""
-                        }
-                        apr={pool.apy_percent + "%"}
-                        tvl={
-                          pool.tvl_usd === "--"
-                            ? pool.tvl_usd
-                            : "$" + getFormattedNumber(pool.tvl_usd)
-                        }
-                        lockTime={
-                          pool.lockTime
-                            ? pool.lockTime
-                            : pool.lock_time
-                            ? pool.lock_time
-                            : locktimeFarm[index]
-                        }
-                        tokenLogo={
-                          pool.icon
-                            ? pool.icon
-                            : pool.pair_name === "iDYP"
-                            ? "idypius.svg"
-                            : "dyplogo.svg"
-                        }
-                        onShowDetailsClick={() => {
-                          setActiveCard(null);
-                          setActiveCard2(
-                            topPools[
-                              index +
-                                (topList === "Staking" && chain === "eth"
-                                  ? 1
-                                  : 2)
-                            ]
-                          );
-                          setActiveCard3(null);
-                          setActiveCard4(null);
-                          setActiveCard5(null);
-                          setActiveCard6(null);
-                          setActiveCardNFT(false);
-                          setActiveCardLandNFT(false);
-                          handleCardIndexStake(
+                          : ""
+                      }
+                      expired={false}
+                      key={index}
+                      chain={chain}
+                      top_pick={pool.top_pick}
+                      tokenName={
+                        pool.tokenName
+                          ? pool.tokenName
+                          : pool.pair_name
+                          ? pool.pair_name
+                          : ""
+                      }
+                      apr={pool.apy_percent + "%"}
+                      tvl={
+                        pool.tvl_usd === "--"
+                          ? pool.tvl_usd
+                          : "$" + getFormattedNumber(pool.tvl_usd)
+                      }
+                      lockTime={
+                        pool.lockTime
+                          ? pool.lockTime
+                          : pool.lock_time
+                          ? pool.lock_time
+                          : locktimeFarm[index]
+                      }
+                      tokenLogo={
+                        pool.icon
+                          ? pool.icon
+                          : pool.pair_name === "iDYP"
+                          ? "idypius.svg"
+                          : "dyplogo.svg"
+                      }
+                      onShowDetailsClick={() => {
+                        setActiveCard(null);
+                        setActiveCard2(
+                          topPools[
                             index +
-                              (topList === "Staking" && chain === "eth" ? 0 : 2)
-                          );
-                          handleCardIndexStake30(
-                            index +
-                              (topList === "Staking" && chain === "eth" ? 0 : 2)
-                          );
-                          handleCardIndexStakeiDyp(
-                            index +
-                              (topList === "Staking" && chain === "eth" ? 0 : 2)
-                          );
-                          setDetails(
-                            index +
-                              (topList === "Staking" && chain === "eth" ? 0 : 2)
-                          );
-                        }}
-                        onHideDetailsClick={() => {
-                          setActiveCard2(null);
-                          setDetails();
-                        }}
-                        cardType={topList}
-                        details={
-                          details ===
-                          index +
-                            (topList === "Staking" && chain === "eth" ? 0 : 2)
+                              (topList === "Staking" && chain === "eth" ? 1 : 2)
+                          ]
+                        );
+                        setActiveCard3(null);
+                        setActiveCard4(null);
+                        setActiveCard5(null);
+                        setActiveCard6(null);
+                        setActiveCardNFT(false);
+                        setActiveCardLandNFT(false);
+                        handleCardIndexStake(index + 2);
+                        handleCardIndexStake30(index + 2);
+                        handleCardIndexStakeiDyp(index + 2);
+                        setDetails(index + 2);
+                      }}
+                      onHideDetailsClick={() => {
+                        setActiveCard2(null);
+                        setDetails();
+                      }}
+                      cardType={topList}
+                      details={details === index + 2 ? true : false}
+                      isNewPool={pool.new_pool === "Yes" ? true : false}
+                      isStaked={
+                        userPools.length > 0
+                          ? userPools.find(
+                              (obj) => obj.contract_address === pool.id
+                            )
                             ? true
                             : false
-                        }
-                        isNewPool={pool.new_pool === "Yes" ? true : false}
-                        isStaked={
-                          userPools.length > 0
-                            ? userPools.find(
-                                (obj) => obj.contract_address === pool.id
-                              )
-                              ? true
-                              : false
-                            : false
-                        }
-                        isPremium={isPremium}
-                      />
-                    ))}
+                          : false
+                      }
+                      isPremium={isPremium}
+                    />
+                  ))}
                 </div>
-                {activeCardNFT && (
-                  <CawsDetails
-                    coinbase={coinbase}
-                    isConnected={isConnected}
-                    listType={listType}
-                    chainId={chainId}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    handleConnection={handleConnection}
-                  />
-                )}
 
                 {activeCard2 &&
                 topList === "Staking" &&
@@ -4359,112 +4088,87 @@ const EarnTopPicks = ({
                       ))}
                     </>
                   )} */}
-                  {activePools
-                    .slice(
-                      topList === "Staking" && chain === "eth" ? 2 : 4,
-                      topList === "Staking" && chain === "eth" ? 4 : 6
-                    )
-                    .map((pool, index) => (
-                      <TopPoolsCard
-                        network={chainId}
-                        display={
-                          pool.expired
-                            ? pool.expired === "Yes"
-                              ? "none"
-                              : ""
+                  {activePools.slice(4, 6).map((pool, index) => (
+                    <TopPoolsCard
+                      network={chainId}
+                      display={
+                        pool.expired
+                          ? pool.expired === "Yes"
+                            ? "none"
                             : ""
-                        }
-                        expired={false}
-                        key={index}
-                        chain={chain}
-                        top_pick={pool.top_pick}
-                        tokenName={
-                          pool.tokenName
-                            ? pool.tokenName
-                            : pool.pair_name
-                            ? pool.pair_name
-                            : ""
-                        }
-                        apr={pool.apy_percent + "%"}
-                        tvl={
-                          pool.tvl_usd === "--"
-                            ? pool.tvl_usd
-                            : "$" + getFormattedNumber(pool.tvl_usd)
-                        }
-                        lockTime={
-                          pool.lockTime
-                            ? pool.lockTime
-                            : pool.lock_time
-                            ? pool.lock_time
-                            : locktimeFarm[index]
-                        }
-                        tokenLogo={
-                          pool.icon
-                            ? pool.icon
-                            : pool.pair_name === "iDYP"
-                            ? "idypius.svg"
-                            : "dyplogo.svg"
-                        }
-                        onShowDetailsClick={() => {
-                          setActiveCard(null);
-                          setActiveCard3(
-                            topPools[
-                              index +
-                                (topList === "Staking" && chain === "eth"
-                                  ? 2
-                                  : 4)
-                            ]
-                          );
-                          setActiveCard2(null);
-                          setActiveCard4(null);
-                          setActiveCard5(null);
-                          setActiveCard6(null);
-                          setActiveCardNFT(false);
-                          setActiveCardLandNFT(false);
-                          handleCardIndexStake(
+                          : ""
+                      }
+                      expired={false}
+                      key={index}
+                      chain={chain}
+                      top_pick={pool.top_pick}
+                      tokenName={
+                        pool.tokenName
+                          ? pool.tokenName
+                          : pool.pair_name
+                          ? pool.pair_name
+                          : ""
+                      }
+                      apr={pool.apy_percent + "%"}
+                      tvl={
+                        pool.tvl_usd === "--"
+                          ? pool.tvl_usd
+                          : "$" + getFormattedNumber(pool.tvl_usd)
+                      }
+                      lockTime={
+                        pool.lockTime
+                          ? pool.lockTime
+                          : pool.lock_time
+                          ? pool.lock_time
+                          : locktimeFarm[index]
+                      }
+                      tokenLogo={
+                        pool.icon
+                          ? pool.icon
+                          : pool.pair_name === "iDYP"
+                          ? "idypius.svg"
+                          : "dyplogo.svg"
+                      }
+                      onShowDetailsClick={() => {
+                        setActiveCard(null);
+                        setActiveCard3(
+                          topPools[
                             index +
                               (topList === "Staking" && chain === "eth" ? 2 : 4)
-                          );
-                          handleCardIndexStake30(
-                            index +
-                              (topList === "Staking" && chain === "eth" ? 2 : 4)
-                          );
-                          handleCardIndexStakeiDyp(
-                            index +
-                              (topList === "Staking" && chain === "eth" ? 2 : 4)
-                          );
-                          setDetails(
-                            index +
-                              (topList === "Staking" && chain === "eth" ? 2 : 4)
-                          );
-                        }}
-                        onHideDetailsClick={() => {
-                          setActiveCard2(null);
-                          setActiveCard3(null);
+                          ]
+                        );
+                        setActiveCard2(null);
+                        setActiveCard4(null);
+                        setActiveCard5(null);
+                        setActiveCard6(null);
+                        setActiveCardNFT(false);
+                        setActiveCardLandNFT(false);
+                        handleCardIndexStake(index + 4);
+                        handleCardIndexStake30(index + 4);
+                        handleCardIndexStakeiDyp(index + 4);
+                        setDetails(index + 4);
+                      }}
+                      onHideDetailsClick={() => {
+                        setActiveCard2(null);
+                        setActiveCard3(null);
 
-                          setDetails();
-                        }}
-                        cardType={topList}
-                        details={
-                          details ===
-                          index +
-                            (topList === "Staking" && chain === "eth" ? 2 : 4)
+                        setDetails();
+                      }}
+                      cardType={topList}
+                      details={details === index + 4 ? true : false}
+                      isNewPool={pool.new_pool === "Yes" ? true : false}
+                      isStaked={
+                        userPools.length > 0
+                          ? userPools.find(
+                              (obj) => obj.contract_address === pool.id
+                            )
                             ? true
                             : false
-                        }
-                        isNewPool={pool.new_pool === "Yes" ? true : false}
-                        isStaked={
-                          userPools.length > 0
-                            ? userPools.find(
-                                (obj) => obj.contract_address === pool.id
-                              )
-                              ? true
-                              : false
-                            : false
-                        }
-                        isPremium={isPremium}
-                      />
-                    ))}
+                          : false
+                      }
+                      isPremium={isPremium}
+                    />
+                  ))}
                 </div>
                 {activeCard3 &&
                 topList === "Staking" &&
@@ -4956,15 +4660,15 @@ const EarnTopPicks = ({
                         setActiveCard(null);
                         setActiveCard2(null);
                         setActiveCard3(null);
-                        setActiveCard4(topPools[index + 4]);
+                        setActiveCard4(topPools[index + 6]);
                         setActiveCard5(null);
                         setActiveCard6(null);
                         setActiveCardNFT(false);
                         setActiveCardLandNFT(false);
-                        handleCardIndexStake(index + 4);
-                        handleCardIndexStake30(index + 4);
-                        handleCardIndexStakeiDyp(index + 4);
-                        setDetails(index + 4);
+                        handleCardIndexStake(index + 6);
+                        handleCardIndexStake30(index + 6);
+                        handleCardIndexStakeiDyp(index + 6);
+                        setDetails(index + 6);
                       }}
                       onHideDetailsClick={() => {
                         setActiveCard4(null);
@@ -6183,77 +5887,6 @@ const EarnTopPicks = ({
               <div className="px-0">
                 <>
                   <div className="top-picks-container">
-                    {topList === "Staking" && chain === "eth" && (
-                      <CawsWodCard
-                        network={chainId}
-                        onShowDetailsClick={() => {
-                          setActiveCardCawsLand(true);
-                          setActiveCardNFT(null);
-                          setActiveCardLandNFT(null);
-                          setActiveCard(null);
-                          setActiveCard2(null);
-                          setActiveCard3(null);
-                          setActiveCard4(null);
-                          setDetails();
-                        }}
-                        onHideDetailsClick={() => {
-                          setActiveCardCawsLand(null);
-
-                          setDetails();
-                        }}
-                        cardType={topList}
-                        details={activeCardCawsLand === true ? true : false}
-                        listType={listType}
-                        tvl={"$" + getFormattedNumber(cawsLandCard.tvl_usd)}
-                        apr={cawsLandCard.apy_percent}
-                      />
-                    )}
-                    {activeCardCawsLand && (
-                      <CawsWodDetails
-                        coinbase={coinbase}
-                        isConnected={isConnected}
-                        listType={listType}
-                        chainId={chainId}
-                        handleSwitchNetwork={handleSwitchNetwork}
-                        handleConnection={handleConnection}
-                      />
-                    )}
-                    {topList === "Staking" && chain === "eth" && (
-                      <LandCard
-                        network={chainId}
-                        onShowDetailsClick={() => {
-                          setActiveCardNFT();
-                          setActiveCardLandNFT(true);
-                          setActiveCard(null);
-                          setActiveCard2(null);
-                          setActiveCard3(null);
-                          setActiveCard4(null);
-                          setActiveCardCawsLand(null);
-                          setDetails();
-                        }}
-                        onHideDetailsClick={() => {
-                          setActiveCardLandNFT(false);
-                          setDetails();
-                        }}
-                        cardType={topList}
-                        details={activeCardLandNFT === true ? true : false}
-                        listType={listType}
-                        tvl={"$" + getFormattedNumber(landCard.tvl_usd)}
-                        apr={landCard.apy_percent}
-                      />
-                    )}
-                    {activeCardLandNFT && (
-                      <LandDetails
-                        coinbase={coinbase}
-                        isConnected={isConnected}
-                        listType={listType}
-                        chainId={chainId}
-                        handleSwitchNetwork={handleSwitchNetwork}
-                        handleConnection={handleConnection}
-                        apr={landCard.apy_percent}
-                        totalNftsLocked={landCard.total_nfts_locked}
-                      />
-                    )}
                     {/* {topList === "Staking" && chain === "eth" && (
                       <CawsCard
                         onShowDetailsClick={() => {
@@ -6900,10 +6533,8 @@ const EarnTopPicks = ({
                     />
                   ) : activeCard &&
                     topList === "Farming" &&
-                    chain === "avax" ? //   rebase_factor={1} //   lock="3 Days" //   lp_symbol={"USD"} //   token={window.token_newavax} //   staking={window.constant_staking_newavaxactive1} //   constant={window.farming_activeavax_1} //   liquidity={wbnb_address} //   handleSwitchNetwork={handleSwitchNetwork} //   expired={false} //   handleConnection={handleConnection} //   chainId={chainId} //   lp_id={LP_IDAVAX_Array[cardIndex]} //   the_graph_result={the_graph_resultavax} //   coinbase={coinbase} //   is_wallet_connected={isConnected} //   <FarmAvaxFunc
-                  //   expiration_time="7 June 2024"
-                  //   fee="0.4"
-                  //   finalApr={activePools[cardIndex]?.apy_percent}
+                    chain ===
+                      "avax" ? //   finalApr={activePools[cardIndex]?.apy_percent} //   fee="0.4" //   expiration_time="7 June 2024" //   rebase_factor={1} //   lock="3 Days" //   lp_symbol={"USD"} //   token={window.token_newavax} //   staking={window.constant_staking_newavaxactive1} //   constant={window.farming_activeavax_1} //   liquidity={wbnb_address} //   handleSwitchNetwork={handleSwitchNetwork} //   expired={false} //   handleConnection={handleConnection} //   chainId={chainId} //   lp_id={LP_IDAVAX_Array[cardIndex]} //   the_graph_result={the_graph_resultavax} //   coinbase={coinbase} //   is_wallet_connected={isConnected} //   <FarmAvaxFunc
                   //   lockTime={3}
                   //   listType={listType}
                   // />
@@ -7017,16 +6648,6 @@ const EarnTopPicks = ({
                       />
                     ))}
                   </div>
-                  {activeCardNFT && (
-                    <CawsDetails
-                      coinbase={coinbase}
-                      isConnected={isConnected}
-                      listType={listType}
-                      chainId={chainId}
-                      handleSwitchNetwork={handleSwitchNetwork}
-                      handleConnection={handleConnection}
-                    />
-                  )}
 
                   {activeCard2 &&
                   topList === "Staking" &&
@@ -9178,80 +8799,6 @@ const EarnTopPicks = ({
             )
           ) : (
             <div className="list-pools-container px-0">
-              {cawsLandCard && topList === "Staking" && chain === "eth" && (
-                <TopPoolsListCard
-                  theBnbPool={theBnbPool}
-                  expired={false}
-                  chain={chain}
-                  top_pick={cawsLandCard.top_pick}
-                  totalNftsLocked={cawsLandCard.total_nfts_locked}
-                  tokenName={"CAWS + WoD"}
-                  apr={cawsLandCard.apy_percent + "%"}
-                  tvl={"$" + getFormattedNumber(cawsLandCard.tvl_usd)}
-                  lockTime={
-                    cawsLandCard.lockTime
-                      ? cawsLandCard.lockTime
-                      : cawsLandCard.lock_time
-                      ? cawsLandCard.lock_time
-                      : locktimeFarm[0]
-                  }
-                  cardType={topList}
-                  tokenLogo={"landcaws"}
-                  listType={listType}
-                  onShowDetailsClick={() => {
-                    setShowDetails(!showDetails);
-                    setActiveCardLandNFT(true);
-                  }}
-                  onHideDetailsClick={() => {
-                    setActiveCardLandNFT(false);
-                  }}
-                  showDetails={activeCardCawsLand}
-                  topList={topList}
-                  coinbase={coinbase}
-                  cardIndex={0}
-                  chainId={chainId}
-                  handleConnection={handleConnection}
-                  isPremium={isPremium}
-                  handleSwitchNetwork={handleSwitchNetwork}
-                />
-              )}
-              {landCard && topList === "Staking" && chain === "eth" && (
-                <TopPoolsListCard
-                  theBnbPool={theBnbPool}
-                  expired={false}
-                  chain={chain}
-                  top_pick={landCard.top_pick}
-                  totalNftsLocked={landCard.total_nfts_locked}
-                  tokenName={"Genesis"}
-                  apr={landCard.apy_percent + "%"}
-                  tvl={"$" + getFormattedNumber(landCard.tvl_usd)}
-                  lockTime={
-                    landCard.lockTime
-                      ? landCard.lockTime
-                      : landCard.lock_time
-                      ? landCard.lock_time
-                      : locktimeFarm[0]
-                  }
-                  cardType={topList}
-                  tokenLogo={"lanft-poolicon.png"}
-                  listType={listType}
-                  onShowDetailsClick={() => {
-                    setShowDetails(!showDetails);
-                    setActiveCardLandNFT(true);
-                  }}
-                  onHideDetailsClick={() => {
-                    setActiveCardLandNFT(false);
-                  }}
-                  showDetails={activeCardLandNFT}
-                  topList={topList}
-                  coinbase={coinbase}
-                  cardIndex={1}
-                  chainId={chainId}
-                  handleConnection={handleConnection}
-                  handleSwitchNetwork={handleSwitchNetwork}
-                  isPremium={isPremium}
-                />
-              )}
               {topList === "Farming" &&
                 chain === "bnb" &&
                 expiredPools === false && (
@@ -9427,6 +8974,60 @@ const EarnTopPicks = ({
             <>
               <div className="top-picks-container">
                 {topList === "Staking" && chain === "eth" && (
+                  <CawsWodCard
+                    expired={true}
+                    network={chainId}
+                    onShowDetailsClick={() => {
+                      setActiveCardCawsLand(true);
+                      setActiveCardNFT(null);
+                      setActiveCardLandNFT(null);
+                      setActiveCard(null);
+                      setActiveCard2(null);
+                      setActiveCard3(null);
+                      setActiveCard4(null);
+                      setDetails();
+                    }}
+                    onHideDetailsClick={() => {
+                      setActiveCardCawsLand(null);
+
+                      setDetails();
+                    }}
+                    cardType={topList}
+                    details={activeCardCawsLand === true ? true : false}
+                    listType={listType}
+                    tvl={"$" + getFormattedNumber(cawsLandCard.tvl_usd)}
+                    apr={cawsLandCard.apy_percent}
+                    isPremium={isPremium}
+                  />
+                )}
+                {topList === "Staking" && chain === "eth" && (
+                  <LandCard
+                    expired={true}
+                    network={chainId}
+                    onShowDetailsClick={() => {
+                      setActiveCardNFT();
+                      setActiveCardLandNFT(true);
+                      setActiveCard(null);
+                      setActiveCard2(null);
+                      setActiveCard3(null);
+                      setActiveCard4(null);
+                      setActiveCardCawsLand(null);
+                      setDetails();
+                    }}
+                    onHideDetailsClick={() => {
+                      setActiveCardLandNFT(false);
+                      setDetails();
+                    }}
+                    cardType={topList}
+                    details={activeCardLandNFT === true ? true : false}
+                    listType={listType}
+                    tvl={"$" + getFormattedNumber(landCard.tvl_usd)}
+                    apr={landCard.apy_percent}
+                    isPremium={isPremium}
+                  />
+                )}
+
+                {topList === "Staking" && chain === "eth" && (
                   <CawsCard
                     network={chainId}
                     onShowDetailsClick={() => {
@@ -9463,6 +9064,32 @@ const EarnTopPicks = ({
                   />
                 )}
               </div>
+              {activeCardCawsLand && (
+                <CawsWodDetails
+                  coinbase={coinbase}
+                  isConnected={isConnected}
+                  listType={listType}
+                  chainId={chainId}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  handleConnection={handleConnection}
+                  expired={true}
+                />
+              )}
+              {activeCardLandNFT && (
+                <LandDetails
+                  coinbase={coinbase}
+                  isConnected={isConnected}
+                  listType={listType}
+                  chainId={chainId}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  handleConnection={handleConnection}
+                  apr={landCard.apy_percent}
+                  totalNftsLocked={landCard.total_nfts_locked}
+                  expired={true}
+
+                />
+              )}
+
               {activeCardNFT && (
                 <CawsDetails
                   coinbase={coinbase}
@@ -9481,59 +9108,60 @@ const EarnTopPicks = ({
             <>
               <div className="top-picks-container">
                 {topList === "Staking" && chain === "eth" && (
-                  <CawsCard
+                  <CawsWodCard
+                    expired={true}
                     network={chainId}
                     onShowDetailsClick={() => {
-                      setActiveCardNFT(true);
-                      setActiveCardLandNFT(false);
+                      setActiveCardCawsLand(true);
+                      setActiveCardNFT(null);
+                      setActiveCardLandNFT(null);
+                      setActiveCard(null);
+                      setActiveCard2(null);
+                      setActiveCard3(null);
+                      setActiveCard4(null);
+                      setDetails();
+                    }}
+                    onHideDetailsClick={() => {
+                      setActiveCardCawsLand(null);
+
+                      setDetails();
+                    }}
+                    cardType={topList}
+                    details={activeCardCawsLand === true ? true : false}
+                    listType={listType}
+                    tvl={"$" + getFormattedNumber(cawsLandCard.tvl_usd)}
+                    apr={cawsLandCard.apy_percent}
+                    isPremium={isPremium}
+                  />
+                )}
+
+                {topList === "Staking" && chain === "eth" && (
+                  <LandCard
+                    expired={true}
+                    network={chainId}
+                    onShowDetailsClick={() => {
+                      setActiveCardNFT();
+                      setActiveCardLandNFT(true);
                       setActiveCard(null);
                       setActiveCard2(null);
                       setActiveCard3(null);
                       setActiveCard4(null);
                       setActiveCardCawsLand(null);
-
                       setDetails();
                     }}
                     onHideDetailsClick={() => {
-                      setActiveCardNFT(false);
+                      setActiveCardLandNFT(false);
                       setDetails();
                     }}
                     cardType={topList}
-                    details={activeCardNFT === true ? true : false}
+                    details={activeCardLandNFT === true ? true : false}
                     listType={listType}
-                    tvl={"$" + getFormattedNumber(cawsCard2.tvl_usd)}
-                    expired={true}
+                    tvl={"$" + getFormattedNumber(landCard.tvl_usd)}
+                    apr={landCard.apy_percent}
                     isPremium={isPremium}
-                    isStaked={
-                      userPools.length > 0
-                        ? userPools.find(
-                            (obj) =>
-                              obj.contract_address === window.config.nft_address
-                          )
-                          ? true
-                          : false
-                        : false
-                    }
                   />
                 )}
-              </div>
-              {activeCardNFT && (
-                <CawsDetails
-                  coinbase={coinbase}
-                  isConnected={isConnected}
-                  listType={listType}
-                  chainId={chainId}
-                  handleSwitchNetwork={handleSwitchNetwork}
-                  handleConnection={handleConnection}
-                  expired={true}
-                />
-              )}
-            </>
-          </div>
-        ) : (
-          <div className="px-0">
-            <>
-              <div className="top-picks-container">
+
                 {topList === "Staking" && chain === "eth" && (
                   <CawsCard
                     network={chainId}
@@ -9571,6 +9199,168 @@ const EarnTopPicks = ({
                   />
                 )}
               </div>
+              {activeCardCawsLand && (
+                <CawsWodDetails
+                  coinbase={coinbase}
+                  isConnected={isConnected}
+                  listType={listType}
+                  chainId={chainId}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  handleConnection={handleConnection}
+                  expired={true}
+                />
+              )}
+              {activeCardLandNFT && (
+                <LandDetails
+                  coinbase={coinbase}
+                  isConnected={isConnected}
+                  listType={listType}
+                  chainId={chainId}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  handleConnection={handleConnection}
+                  apr={landCard.apy_percent}
+                  totalNftsLocked={landCard.total_nfts_locked}
+                  expired={true}
+
+                />
+              )}
+
+              {activeCardNFT && (
+                <CawsDetails
+                  coinbase={coinbase}
+                  isConnected={isConnected}
+                  listType={listType}
+                  chainId={chainId}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  handleConnection={handleConnection}
+                  expired={true}
+                />
+              )}
+            </>
+          </div>
+        ) : (
+          <div className="px-0">
+            <>
+              <div className="top-picks-container">
+                {topList === "Staking" && chain === "eth" && (
+                  <CawsWodCard
+                    expired={true}
+                    network={chainId}
+                    onShowDetailsClick={() => {
+                      setActiveCardCawsLand(true);
+                      setActiveCardNFT(null);
+                      setActiveCardLandNFT(null);
+                      setActiveCard(null);
+                      setActiveCard2(null);
+                      setActiveCard3(null);
+                      setActiveCard4(null);
+                      setDetails();
+                    }}
+                    onHideDetailsClick={() => {
+                      setActiveCardCawsLand(null);
+
+                      setDetails();
+                    }}
+                    cardType={topList}
+                    details={activeCardCawsLand === true ? true : false}
+                    listType={listType}
+                    tvl={"$" + getFormattedNumber(cawsLandCard.tvl_usd)}
+                    apr={cawsLandCard.apy_percent}
+                    isPremium={isPremium}
+                  />
+                )}
+                {activeCardCawsLand && (
+                  <CawsWodDetails
+                    coinbase={coinbase}
+                    isConnected={isConnected}
+                    listType={listType}
+                    chainId={chainId}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    handleConnection={handleConnection}
+                    expired={true}
+                  />
+                )}
+
+                {topList === "Staking" && chain === "eth" && (
+                  <LandCard
+                    expired={true}
+                    network={chainId}
+                    onShowDetailsClick={() => {
+                      setActiveCardNFT();
+                      setActiveCardLandNFT(true);
+                      setActiveCard(null);
+                      setActiveCard2(null);
+                      setActiveCard3(null);
+                      setActiveCard4(null);
+                      setActiveCardCawsLand(null);
+                      setDetails();
+                    }}
+                    onHideDetailsClick={() => {
+                      setActiveCardLandNFT(false);
+                      setDetails();
+                    }}
+                    cardType={topList}
+                    details={activeCardLandNFT === true ? true : false}
+                    listType={listType}
+                    tvl={"$" + getFormattedNumber(landCard.tvl_usd)}
+                    apr={landCard.apy_percent}
+                    isPremium={isPremium}
+                  />
+                )}
+
+                {activeCardLandNFT && (
+                  <LandDetails
+                    coinbase={coinbase}
+                    isConnected={isConnected}
+                    listType={listType}
+                    chainId={chainId}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    handleConnection={handleConnection}
+                    apr={landCard.apy_percent}
+                    totalNftsLocked={landCard.total_nfts_locked}
+                    expired={true}
+
+                  />
+                )}
+
+                {topList === "Staking" && chain === "eth" && (
+                  <CawsCard
+                    network={chainId}
+                    onShowDetailsClick={() => {
+                      setActiveCardNFT(true);
+                      setActiveCardLandNFT(false);
+                      setActiveCard(null);
+                      setActiveCard2(null);
+                      setActiveCard3(null);
+                      setActiveCard4(null);
+                      setActiveCardCawsLand(null);
+
+                      setDetails();
+                    }}
+                    onHideDetailsClick={() => {
+                      setActiveCardNFT(false);
+                      setDetails();
+                    }}
+                    cardType={topList}
+                    details={activeCardNFT === true ? true : false}
+                    listType={listType}
+                    tvl={"$" + getFormattedNumber(cawsCard2.tvl_usd)}
+                    expired={true}
+                    isPremium={isPremium}
+                    isStaked={
+                      userPools.length > 0
+                        ? userPools.find(
+                            (obj) =>
+                              obj.contract_address === window.config.nft_address
+                          )
+                          ? true
+                          : false
+                        : false
+                    }
+                  />
+                )}
+              </div>
+
               {activeCardNFT && (
                 <CawsDetails
                   coinbase={coinbase}
@@ -9593,73 +9383,141 @@ const EarnTopPicks = ({
               : "list-pools-container"
           } px-0`}
         >
-          {cawsCard &&
-            topList === "Staking" &&
-            chain === "eth" &&
-            cawsCard.map((pool, index) => (
-              <TopPoolsListCard
-                theBnbPool={theBnbPool}
-                key={index}
-                expired={true}
-                chain={chain}
-                top_pick={pool.top_pick}
-                tokenName={
-                  pool.tokenName
-                    ? pool.tokenName
-                    : pool.pair_name
-                    ? pool.pair_name
-                    : ""
-                }
-                apr={pool.apy_percent + "%"}
-                tvl={
-                  pool.tvl_usd === "--"
-                    ? pool.tvl_usd
-                    : "$" + getFormattedNumber(pool.tvl_usd)
-                }
-                lockTime={
-                  pool.lockTime
-                    ? pool.lockTime
-                    : pool.lock_time
-                    ? pool.lock_time
-                    : locktimeFarm[index]
-                }
-                cardType={topList}
-                tokenLogo={
-                  pool.icon
-                    ? pool.icon
-                    : pool.pair_name === "iDYP"
-                    ? "idypius.svg"
-                    : pool.pair_name === "DYP"
-                    ? "dyplogo.svg"
-                    : "newCawsLogo.png"
-                }
-                listType={listType}
-                onShowDetailsClick={() => {
-                  setActiveCardNFT(true);
-                  setActiveCardLandNFT(false);
-                  setActiveCard(null);
-                  setActiveCard2(null);
-                  setActiveCard3(null);
-                  setActiveCard4(null);
-                  setDetails();
-                }}
-                onHideDetailsClick={() => {
-                  setActiveCardNFT(false);
-                  setDetails();
-                }}
-                showDetails={activeCardNFT}
-                topList={topList}
-                coinbase={coinbase}
-                cardIndex={index}
-                chainId={chainId}
-                handleConnection={handleConnection}
-                handleSwitchNetwork={handleSwitchNetwork}
-              />
-            ))}
+          {cawsLandCard && topList === "Staking" && chain === "eth" && (
+            <TopPoolsListCard
+              theBnbPool={theBnbPool}
+              expired={true}
+              chain={chain}
+              top_pick={pool.top_pick}
+              tokenName={cawsLandCard.tokenName ? cawsLandCard.tokenName : ""}
+              apr={cawsLandCard.apy_percent + "%"}
+              tvl={
+                cawsLandCard.tvl_usd === "--"
+                  ? cawsLandCard.tvl_usd
+                  : "$" + getFormattedNumber(cawsLandCard.tvl_usd)
+              }
+              lockTime={cawsLandCard.lockTime ? cawsLandCard.lockTime : ""}
+              cardType={topList}
+              tokenLogo={"landcaws"}
+              listType={listType}
+              onShowDetailsClick={() => {
+                setActiveCardNFT(false);
+                setActiveCardLandNFT(true);
+                setActiveCard(null);
+                setActiveCard2(null);
+                setActiveCard3(null);
+                setActiveCard4(null);
+                setDetails();
+              }}
+              onHideDetailsClick={() => {
+                setActiveCardLandNFT(false);
+                setDetails();
+              }}
+              showDetails={activeCardCawsLand}
+              topList={topList}
+              coinbase={coinbase}
+              cardIndex={0}
+              chainId={chainId}
+              handleConnection={handleConnection}
+              handleSwitchNetwork={handleSwitchNetwork}
+            />
+          )}
+
+          {landCard && topList === "Staking" && chain === "eth" && (
+            <TopPoolsListCard
+              theBnbPool={theBnbPool}
+              expired={true}
+              chain={chain}
+              top_pick={landCard.top_pick}
+              totalNftsLocked={landCard.total_nfts_locked}
+              tokenName={"Genesis"}
+              apr={landCard.apy_percent + "%"}
+              tvl={"$" + getFormattedNumber(landCard.tvl_usd)}
+              lockTime={
+                landCard.lockTime
+                  ? landCard.lockTime
+                  : landCard.lock_time
+                  ? landCard.lock_time
+                  : locktimeFarm[0]
+              }
+              cardType={topList}
+              tokenLogo={"lanft-poolicon.png"}
+              listType={listType}
+              onShowDetailsClick={() => {
+                setShowDetails(!showDetails);
+                setActiveCardLandNFT(true);
+              }}
+              onHideDetailsClick={() => {
+                setActiveCardLandNFT(false);
+              }}
+              showDetails={activeCardLandNFT}
+              topList={topList}
+              coinbase={coinbase}
+              cardIndex={1}
+              chainId={chainId}
+              handleConnection={handleConnection}
+              handleSwitchNetwork={handleSwitchNetwork}
+              isPremium={isPremium}
+            />
+          )}
+
+          {cawsCard && topList === "Staking" && chain === "eth" && (
+            <TopPoolsListCard
+              theBnbPool={theBnbPool}
+              expired={true}
+              chain={chain}
+              top_pick={cawsCard.top_pick}
+              tokenName={
+                cawsCard.tokenName
+                  ? cawsCard.tokenName
+                  : cawsCard.pair_name
+                  ? cawsCard.pair_name
+                  : ""
+              }
+              apr={cawsCard.apy_percent + "%"}
+              tvl={
+                cawsCard.tvl_usd === "--"
+                  ? cawsCard.tvl_usd
+                  : "$" + getFormattedNumber(pool.tvl_usd)
+              }
+              lockTime={cawsCard.lockTime ? cawsCard.lockTime : 0}
+              cardType={topList}
+              tokenLogo={
+                pool.icon
+                  ? cawsCard.icon
+                  : cawsCard.pair_name === "iDYP"
+                  ? "idypius.svg"
+                  : cawsCard.pair_name === "DYP"
+                  ? "dyplogo.svg"
+                  : "newCawsLogo.png"
+              }
+              listType={listType}
+              onShowDetailsClick={() => {
+                setActiveCardNFT(true);
+                setActiveCardLandNFT(false);
+                setActiveCard(null);
+                setActiveCard2(null);
+                setActiveCard3(null);
+                setActiveCard4(null);
+                setDetails();
+              }}
+              onHideDetailsClick={() => {
+                setActiveCardNFT(false);
+                setDetails();
+              }}
+              showDetails={activeCardNFT}
+              topList={topList}
+              coinbase={coinbase}
+              cardIndex={2}
+              chainId={chainId}
+              handleConnection={handleConnection}
+              handleSwitchNetwork={handleSwitchNetwork}
+            />
+          )}
         </div>
       )}
     </div>
   );
-}; 
+};
 
 export default EarnTopPicks;

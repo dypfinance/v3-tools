@@ -5,6 +5,7 @@ import orangeArrow from "./assets/orangearrow.svg";
 import newPool from "./assets/newPool.png";
 // import staked from "./assets/staked.svg";
 // import topPick from "./assets/cawsbanner.svg";
+import purpleArrow from "./assets/purpleArrow.svg";
 
 const CawsWodCard = ({
   cardId,
@@ -16,6 +17,7 @@ const CawsWodCard = ({
   listType,
   tvl,
   network,
+  expired
   // showDetails,
 }) => {
   const [showDetails, setShowDetails] = useState(false);
@@ -35,13 +37,20 @@ const CawsWodCard = ({
     <>
       <div
         className={`poolscardwrapper cursor-pointer position-relative ${
+          expired === true
+            ? "poolscardwrapperexpired"
+            : network === "0"
+            ? "blurryCard"
+            : "poolscardwrapper"
+        } ${
           details && "pools-cardcaws-open"
+          
         }  ${
           renderedPage === "dashboard" && !details ? "pools-cardcaws-hover" : ""
         } ${network === "0" ? "blurryCard" : "poolscardwrapper"}`}
         onClick={() => handleDetails()}
       >
-        <img src={newPool} className="new-pool" alt="top pick" />
+        {/* <img src={newPool} className="new-pool" alt="top pick" /> */}
 
         <div
           className="purplediv"
@@ -72,7 +81,9 @@ const CawsWodCard = ({
               <h6 className="apr-title">APR</h6>
             </div>
           </div>
-          <div className="d-flex m-0 justify-content between gap-2 align-items-center justify-content-between bottomwrapper">
+          <div className={`d-flex m-0 justify-content between gap-2 align-items-center justify-content-between  ${
+              expired === true ? "bottomwrapperExpired" : "bottomwrapper"
+            }`}>
             {cardType !== "Vault" && (
               <div className="d-flex flex-column">
                 <h6 className="tvl-text">Total Value Locked</h6>
@@ -89,18 +100,38 @@ const CawsWodCard = ({
               <h6 className="locktime-amount">No Lock</h6>
             </div>
           </div>
-          <div
-            className="details-wrapper"
+          <div 
+            className={
+              expired === true ? "cawsdetails-wrapperexpired" : "details-wrapper"
+            }
             onClick={() => {
               handleDetails();
             }}
           >
             <h6
               className="details-text gap-1 d-flex align-items-center"
-              style={{ color: details === false ? "#75CAC2" : "#C0C9FF" }}
+              style={{
+                color:
+                  details === false && expired === false
+                    ? "#75CAC2"
+                    : details === false && expired === true
+                    ? "#C1CCF8"
+                    : "#C0C9FF",
+              }}
             >
-              {details === false ? "Deposit" : "Close"}
-              <img src={details === false ? greenArrow : orangeArrow} />
+              {details === false ? "Details" : "Close"}
+              <img
+                src={
+                  details === false && expired === false
+                    ? greenArrow
+                    : details === false && expired === true
+                    ? purpleArrow
+                    : details === true && expired === true
+                    ? orangeArrow
+                    : orangeArrow
+                }
+                alt=""
+              />
             </h6>
           </div>
         </div>
