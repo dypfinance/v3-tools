@@ -19,7 +19,13 @@ import getFormattedNumber from "../../../functions/getFormattedNumber2";
 import useWindowSize from "../../../functions/useWindowSize";
 import TopOtherPoolsCard from "../TopOtherPoolsCard";
 import TopOtherPoolsListCard from "../TopOtherPoolsListCard";
-import TopPoolsListCardInner from "../../top-pools-card/TopPoolsListCardInner";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import closeX from "../assets/closeX.svg";
+import { ClickAwayListener } from "@material-ui/core";
+import Tooltip from "@material-ui/core/Tooltip";
+import moreinfo from "../../FARMINNG/assets/more-info.svg";
+import searchIcon from "../assets/searchIcon.svg";
 
 const EarnOtherContent = ({
   coinbase,
@@ -40,6 +46,25 @@ const EarnOtherContent = ({
   networkId,
   handleSwitchNetwork,
 }) => {
+  const windowSize = useWindowSize();
+
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: windowSize.width > 1400 ? "25%" : windowSize.width > 786 ? "50%" : "95%",
+    // windowSize.width > 1400 ? "25%" : windowSize.width > 786 ? "50%" : "90%",
+    boxShadow: 24,
+    p: 4,
+    overflow: "auto",
+    minHeight: 200,
+    overflowX: "hidden",
+    borderRadius: "10px",
+    height: windowSize.width < 500 ? "480px" : "auto",
+    background: `#1A1A36`,
+  };
+
   const options = [
     {
       title: "Staking",
@@ -70,10 +95,14 @@ const EarnOtherContent = ({
     {
       lockTime: "Locked",
       chain: "Ethereum",
-      apr: "30%",
+      apr: "1%-30%",
       tokenLogo: "ethereum.svg",
       expired: false,
       top_pick: false,
+      hot: true,
+      coming_soon: true,
+      staked: false,
+      nft: true,
       tokenName: "Ethereum",
       tokenTicker: "ETH",
       pool: "ETH",
@@ -84,10 +113,15 @@ const EarnOtherContent = ({
     {
       lockTime: "Locked",
       chain: "Base",
-      apr: "15%",
+      apr: "1%-15%",
       tokenLogo: "baseActive.svg",
       expired: false,
       top_pick: false,
+      hot: true,
+      coming_soon: true,
+
+      staked: false,
+      nft: true,
       tokenName: "Base",
       tokenTicker: "ETH",
       pool: "BASE",
@@ -124,12 +158,16 @@ const EarnOtherContent = ({
     {
       lockTime: "Locked",
       chain: "BNB Chain",
-      apr: "25%",
+      apr: "1%-25%",
       tokenLogo: "bsc.svg",
       expired: false,
       top_pick: false,
+      hot: false,
+      staked: false,
+      nft: false,
       tokenName: "BNB",
       tokenTicker: "BNB",
+      coming_soon: true,
       pool: "BNB",
       new_pool: "Yes",
     },
@@ -139,10 +177,14 @@ const EarnOtherContent = ({
     {
       lockTime: "Locked",
       chain: "Avalanche",
-      apr: "10%",
+      apr: "1%-10%",
       tokenLogo: "avax.svg",
       expired: false,
       top_pick: false,
+      hot: true,
+      coming_soon: true,
+      staked: true,
+      nft: false,
       tokenName: "Avalanche",
       tokenTicker: "AVAX",
       pool: "AVAX",
@@ -154,10 +196,20 @@ const EarnOtherContent = ({
   const [option, setOption] = useState(routeOption);
   const [showDetails, setshowDetails] = useState(false);
   const [cardIndex, setcardIndex] = useState(777);
+  const [selectedTab, setselectedTab] = useState("deposit");
+  const [selectedBtn, setselectedBtn] = useState("flexible");
 
   const [listStyle, setListStyle] = useState("list");
   const [myStakes, setMyStakes] = useState(false);
   const [expiredPools, setExpiredPools] = useState(false);
+  const [poolCapTooltip, setPoolCapTooltip] = useState(false);
+  const [quotaTooltip, setQuotaTooltip] = useState(false);
+  const [maxDepositTooltip, setMaxDepositTooltip] = useState(false);
+  const [earlyWithdrawTooltip, setEarlyWithdrawTooltip] = useState(false);
+  const [poolFeeTooltip, setPoolFeeTooltip] = useState(false);
+  const [startDateTooltip, setStartDateTooltip] = useState(false);
+  const [endDateTooltip, setEndDateTooltip] = useState(false);
+
   const [tvl, setTvl] = useState();
   const [ethApr, setEthApr] = useState();
   const [bnbApr, setBnbApr] = useState();
@@ -180,6 +232,62 @@ const EarnOtherContent = ({
       .catch((err) => console.error(err));
   };
 
+  const poolCapClose = () => {
+    setPoolCapTooltip(false);
+  };
+
+  const poolCapOpen = () => {
+    setPoolCapTooltip(true);
+  };
+
+  const quotaClose = () => {
+    setQuotaTooltip(false);
+  };
+
+  const quotaOpen = () => {
+    setQuotaTooltip(true);
+  };
+
+  const maxDepositClose = () => {
+    setMaxDepositTooltip(false);
+  };
+
+  const maxDepositOpen = () => {
+    setMaxDepositTooltip(true);
+  };
+
+  const earlyWithdrawClose = () => {
+    setEarlyWithdrawTooltip(false);
+  };
+
+  const earlyWithdrawOpen = () => {
+    setEarlyWithdrawTooltip(true);
+  };
+
+  const poolFeeClose = () => {
+    setPoolFeeTooltip(false);
+  };
+
+  const poolFeeOpen = () => {
+    setPoolFeeTooltip(true);
+  };
+
+  const startDateClose = () => {
+    setStartDateTooltip(false);
+  };
+
+  const startDateOpen = () => {
+    setStartDateTooltip(true);
+  };
+
+  const endDateClose = () => {
+    setEndDateTooltip(false);
+  };
+
+  const endDateOpen = () => {
+    setEndDateTooltip(true);
+  };
+
   const toggleInactive = () => {
     setCount(count + 1);
     setExpiredPools(!expiredPools);
@@ -191,8 +299,6 @@ const EarnOtherContent = ({
 
   var tempTvl = 0;
   var farming = [];
-
-  const windowSize = useWindowSize();
 
   const fetchEthTvl = async () => {
     await axios
@@ -448,13 +554,13 @@ const EarnOtherContent = ({
 
   return (
     <>
-      <div className="row justify-content-center w-100">
+      <div className="row justify-content-center w-100 ">
         {windowSize.width > 786 ? (
           <div
             className="row justify-content-between align-items-center p-2 options-container"
-            style={{ marginTop: "30px", marginBottom: "40px" }}
+            style={{ marginTop: "30px", marginBottom: "0px" }}
           >
-            <div className="col-2 d-flex justify-content-start align-items-center gap-3">
+            {/* <div className="col-2 d-flex justify-content-start align-items-center gap-3">
               <div
                 className={`list-style ${
                   listStyle === "list" && "list-style-active"
@@ -477,14 +583,50 @@ const EarnOtherContent = ({
                   alt=""
                 />
               </div>
+            </div> */}
+            <div className="col-5">
+              <div className="d-flex position-relative">
+                <div className="position-absolute searchwrapper">
+                  <img src={searchIcon} alt="" />
+                </div>
+                <input
+                  // value={this.state.query}
+                  // onChange={(e) => this.handleQuery(e.target.value)}
+                  type="text"
+                  id="search-bar"
+                  autoComplete="off"
+                  placeholder="Search by coin..."
+                  style={{
+                    background: "transparent",
+                    border: "1px solid #8E97CD",
+                    color: "#fff",
+                    borderRadius: "8px",
+                  }}
+                />
+              </div>
+            </div>
+            <div className="col-12 col-lg-4 col-xl-3 px-0">
+              {option !== "Farming" && (
+                <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
+                  <span style={{ fontWeight: "300", fontSize: "13px" }}>
+                    Total value locked
+                  </span>
+                  <h6
+                    className="text-white"
+                    style={{ fontWeight: "600", fontSize: "17px" }}
+                  >
+                    ${getFormattedNumber("2585417", 0)}
+                  </h6>
+                </div>
+              )}
             </div>
           </div>
         ) : (
           <div
-            className="row justify-content-center align-items-center p-2 options-container"
+            className="row justify-content-center align-items-center p-2 options-container gap-3"
             style={{ marginTop: "24px", marginBottom: "24px" }}
           >
-            <div className="col-6 d-flex px-0 px-lg-2 justify-content-start align-items-center gap-3">
+            {/* <div className="col-6 d-flex px-0 px-lg-2 justify-content-start align-items-center gap-3">
               <div
                 className={`list-style ${
                   listStyle === "table" && "list-style-active"
@@ -507,17 +649,53 @@ const EarnOtherContent = ({
                   alt=""
                 />
               </div>
+            </div> */}
+            <div className="d-block p-0">
+              <div className="d-flex position-relative">
+                <div className="position-absolute searchwrapper">
+                  <img src={searchIcon} alt="" />
+                </div>
+                <input
+                  // value={this.state.query}
+                  // onChange={(e) => this.handleQuery(e.target.value)}
+                  type="text"
+                  id="search-bar"
+                  autoComplete="off"
+                  placeholder="Search by coin..."
+                  style={{
+                    background: "transparent",
+                    border: "1px solid #8E97CD",
+                    color: "#fff",
+                    borderRadius: "8px",
+                  }}
+                />
+              </div>
+            </div>
+            <div className="col-12 col-lg-4 col-xl-3 px-0">
+              {option !== "Farming" && (
+                <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
+                  <span style={{ fontWeight: "300", fontSize: "13px" }}>
+                    Total value locked
+                  </span>
+                  <h6
+                    className="text-white"
+                    style={{ fontWeight: "600", fontSize: "17px" }}
+                  >
+                    ${getFormattedNumber("2585417", 0)}
+                  </h6>
+                </div>
+              )}
             </div>
           </div>
         )}
 
         <div
           className={`row m-0 flex-column flex-xxl-row flex-lg-row flex-md-row align-items-center gap-5 gap-lg-0 justify-content-between px-0 `}
-          style={{ minHeight: "55px" }}
+          // style={{ minHeight: "55px" }}
         >
           <div className="col-12 col-lg-8 col-xl-5 d-flex flex-column flex-xxl-row flex-lg-row flex-md-row  gap-3 align-items-center justify-content-around justify-content-lg-end justify-content-xl-start px-0 px-xl-2">
             <div className="d-flex flex-column flex-xxl-row flex-lg-row flex-md-row align-items-center gap-2">
-              <div className="d-flex align-items-center gap-2 items-wrapper-other">
+              {/* <div className="d-flex align-items-center gap-2 items-wrapper-other">
                 <div
                   className={`stake-other-item ${
                     option === "Farming" &&
@@ -618,7 +796,7 @@ const EarnOtherContent = ({
                     </p>
                   </div>
                 </div>
-              </div>
+              </div> */}
               {/*  <div className="d-flex align-items-center gap-2">
                  <div
                   className={`stake-other-item ${
@@ -652,22 +830,6 @@ const EarnOtherContent = ({
               
               </div>*/}
             </div>
-          </div>
-
-          <div className="col-12 col-lg-4 col-xl-3 px-0">
-            {option !== "Farming" && (
-              <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
-                <span style={{ fontWeight: "300", fontSize: "13px" }}>
-                  Total value locked
-                </span>
-                <h6
-                  className="text-white"
-                  style={{ fontWeight: "600", fontSize: "17px" }}
-                >
-                  ${getFormattedNumber("2585417", 0)}
-                </h6>
-              </div>
-            )}
           </div>
         </div>
       </div>
@@ -788,7 +950,7 @@ const EarnOtherContent = ({
       )}
       {listStyle === "list" && (
         <>
-          <div className="row mx-0 justify-content-between align-items-center px-2 py-3 w-100">
+          <div className="row mx-0 justify-content-between align-items-center px-0 py-3 w-100">
             {windowSize.width > 768 && (
               <div
                 className="row mx-0 justify-content-between align-items-center px-2 py-3 w-100 options-container"
@@ -796,12 +958,11 @@ const EarnOtherContent = ({
               >
                 <table className="earnother-table">
                   <thead className="d-flex w-100 align-items-center justify-content-around">
-                    <th className="earnother-th">Pool Name</th>
-                    <th className="earnother-th">Reward</th>
-                    {/* <th className="earnother-th">Network</th> */}
-                    <th className="earnother-th">APR</th>
-                    <th className="earnother-th">Method</th>
-                    <th className="earnother-th">Stake</th>
+                    <th className="earnother-th col-2">Pool</th>
+                    <th className="earnother-th col-2">Est. APR</th>
+                    <th className="earnother-th col-2">Method</th>
+                    <th className="earnother-th col-2">Chain</th>
+                    <th className="earnother-th col-2">Action</th>
                   </thead>
                 </table>
               </div>
@@ -813,12 +974,16 @@ const EarnOtherContent = ({
                       // <NavLink to={`/earn/defi-staking/${item.pool}`}>
                       <TopOtherPoolsListCard
                         tokenLogo={item.tokenLogo}
-                        chain={stake}
+                        chain={item.chain}
                         tokenName={item.tokenName}
                         tokenTicker={item.tokenTicker}
                         apr={item.apr}
                         lockTime={item.lockTime}
                         isNewPool={item.new_pool === "Yes" ? true : false}
+                        isHot={item.hot}
+                        isNft={item.nft}
+                        isStaked={item.staked}
+                        isComingSoon={item.coming_soon}
                         expired={item.expired}
                         cardIndex={cardIndex}
                         showDetails={showDetails}
@@ -827,7 +992,6 @@ const EarnOtherContent = ({
                           setcardIndex(!showDetails ? index : 777);
                         }}
                         cardId={index}
-
                       />
                       // </NavLink>
                     );
@@ -839,21 +1003,24 @@ const EarnOtherContent = ({
                       <TopOtherPoolsListCard
                         key={index}
                         tokenLogo={item.tokenLogo}
-                        chain={stake}
+                        chain={item.chain}
                         tokenName={item.tokenName}
                         tokenTicker={item.tokenTicker}
                         apr={item.apr}
                         lockTime={item.lockTime}
                         expired={item.expired}
                         isNewPool={item.new_pool === "Yes" ? true : false}
+                        isHot={item.hot}
+                        isNft={item.nft}
+                        isStaked={item.staked}
+                        isComingSoon={item.coming_soon}
                         onCardClick={() => {
                           setshowDetails(!showDetails);
-                            setcardIndex(!showDetails ? index : 777);
+                          setcardIndex(!showDetails ? index : 777);
                         }}
                         cardIndex={cardIndex}
                         showDetails={showDetails}
                         cardId={index}
-
                       />
                       // </NavLink>
                     );
@@ -865,12 +1032,16 @@ const EarnOtherContent = ({
                       <TopOtherPoolsListCard
                         key={index}
                         tokenLogo={item.tokenLogo}
-                        chain={stake}
+                        chain={item.chain}
                         tokenName={item.tokenName}
                         tokenTicker={item.tokenTicker}
                         apr={item.apr}
                         lockTime={item.lockTime}
                         isNewPool={item.new_pool === "Yes" ? true : false}
+                        isHot={item.hot}
+                        isNft={item.nft}
+                        isStaked={item.staked}
+                        isComingSoon={item.coming_soon}
                         expired={item.expired}
                         onCardClick={() => {
                           setshowDetails(!showDetails);
@@ -879,7 +1050,6 @@ const EarnOtherContent = ({
                         cardIndex={cardIndex}
                         showDetails={showDetails}
                         cardId={index}
-
                       />
                       // </NavLink>
                     );
@@ -891,12 +1061,16 @@ const EarnOtherContent = ({
                       <TopOtherPoolsListCard
                         key={index}
                         tokenLogo={item.tokenLogo}
-                        chain={stake}
+                        chain={item.chain}
                         tokenName={item.tokenName}
                         tokenTicker={item.tokenTicker}
                         apr={item.apr}
                         lockTime={item.lockTime}
                         isNewPool={item.new_pool === "Yes" ? true : false}
+                        isHot={item.hot}
+                        isNft={item.nft}
+                        isStaked={item.staked}
+                        isComingSoon={item.coming_soon}
                         expired={item.expired}
                         onCardClick={() => {
                           setshowDetails(!showDetails);
@@ -905,7 +1079,6 @@ const EarnOtherContent = ({
                         cardIndex={cardIndex}
                         showDetails={showDetails}
                         cardId={index}
-
                       />
                       // </NavLink>
                     );
@@ -917,13 +1090,17 @@ const EarnOtherContent = ({
                         <TopOtherPoolsListCard
                           key={index}
                           tokenLogo={item.tokenLogo}
-                          chain={stake}
+                          chain={item.chain}
                           tokenName={item.tokenName}
                           tokenTicker={item.tokenTicker}
                           apr={item.apr}
                           lockTime={item.lockTime}
                           expired={item.expired}
                           isNewPool={item.new_pool === "Yes" ? true : false}
+                          isComingSoon={item.coming_soon}
+                          isHot={item.hot}
+                          isNft={item.nft}
+                          isStaked={item.staked}
                           onCardClick={() => {
                             setshowDetails(!showDetails);
                             setcardIndex(!showDetails ? index : 777);
@@ -939,6 +1116,576 @@ const EarnOtherContent = ({
             </div>
           </div>
         </>
+      )}
+
+      {showDetails && (
+        <Modal
+          open={showDetails}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <div className="d-flex flex-column justify-content-center position-relative">
+              <div className="d-flex flex-column gap-3 align-items-center justify-content-between">
+                <div className="d-flex gap-2 w-100 align-items-center">
+                  <div className="d-flex align-items-center gap-5 w-100">
+                    <span
+                      className={
+                        selectedTab === "deposit"
+                          ? "switchchain-txt-active"
+                          : "switchchain-txt"
+                      }
+                      onClick={() => {
+                        setselectedTab("deposit");
+                      }}
+                    >
+                      Deposit
+                    </span>
+                    <span
+                      className={
+                        selectedTab === "withdraw"
+                          ? "switchchain-txt-active"
+                          : "switchchain-txt"
+                      }
+                      onClick={() => {
+                        setselectedTab("withdraw");
+                      }}
+                    >
+                      Withdraw
+                    </span>
+                  </div>
+                  <img
+                    src={closeX}
+                    alt=""
+                    className="close-x position-relative cursor-pointer "
+                    onClick={() => {
+                      setshowDetails(false);
+                    }}
+                    style={{
+                      bottom: "17px",
+                      alignSelf: "end",
+                      width: 16,
+                      height: 16,
+                    }}
+                  />
+                </div>
+
+                <div className="d-flex align-items-center gap-2">
+                  <button
+                    className={
+                      selectedBtn === "flexible"
+                        ? "method-btn-active"
+                        : "method-btn"
+                    }
+                    onClick={() => {
+                      setselectedBtn("flexible");
+                    }}
+                  >
+                    Flexible
+                  </button>
+                  <button
+                    className={
+                      selectedBtn === "30days"
+                        ? "method-btn-active"
+                        : "method-btn"
+                    }
+                    onClick={() => {
+                      setselectedBtn("30days");
+                    }}
+                  >
+                    30 Days
+                  </button>
+                  <button
+                    className={
+                      selectedBtn === "60days"
+                        ? "method-btn-active"
+                        : "method-btn"
+                    }
+                    onClick={() => {
+                      setselectedBtn("60days");
+                    }}
+                  >
+                    60 Days
+                  </button>
+                  <button
+                    className={
+                      selectedBtn === "120days"
+                        ? "method-btn-active"
+                        : "method-btn"
+                    }
+                    onClick={() => {
+                      setselectedBtn("120days");
+                    }}
+                  >
+                    120 Days
+                  </button>
+                </div>
+                <div className="info-pool-wrapper p-3 w-100">
+                  <div className="info-pool-inner-wrapper d-flex flex-column flex-lg-row align-items-center gap-2">
+                    <div className="info-pool-item p-2">
+                      <div className="d-flex justify-content-between gap-1 align-items-center">
+                        <span className="info-pool-left-text">Apr</span>
+                        <span className="info-pool-right-text">0.90%</span>
+                      </div>
+                    </div>
+                    <div className="info-pool-item p-2">
+                      <div className="d-flex justify-content-between gap-1 align-items-center">
+                        <span className="info-pool-left-text">Chain</span>
+                        <span className="info-pool-right-text d-flex gap-1 align-items-center">
+                          Ethereum
+                        </span>
+                      </div>
+                    </div>
+                    <div className="info-pool-item p-2">
+                      <div className="d-flex justify-content-between gap-1 align-items-center">
+                        <span className="info-pool-left-text">TVL</span>
+                        <span className="info-pool-right-text">
+                          $161,696.37
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="separator my-2"></div>
+                {selectedTab === "deposit" ? (
+                  <div className="d-flex flex-column w-100 gap-2">
+                    <div className="d-flex align-items-center gap-2 justify-content-between w-100">
+                      <span className="deposit-popup-txt">Deposit</span>
+                      <div className="d-flex gap-1 align-items-baseline">
+                        <span className="bal-smallTxt">My Balance:</span>
+                        <span className="bal-bigTxt">25,250.52 ETH</span>
+                      </div>
+                    </div>
+                    <div className="d-flex flex-column w-100 gap-1">
+                      <div className="position-relative w-100 d-flex">
+                        <input
+                          className="text-input2 w-100"
+                          type="text"
+                          placeholder="Minimum 0.001 ETH"
+                        />
+                        <button className="inner-max-btn position-absolute">
+                          Max
+                        </button>
+                      </div>
+                      <div className="d-flex w-100 justify-content-between gap-1 align-items-center">
+                        <h6 className="errormsg m-0">*Error message</h6>
+                        <div className="d-flex gap-1 align-items-baseline">
+                          <span className="bal-smallTxt">Approved:</span>
+                          <span className="bal-bigTxt2">20.52 ETH</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="info-pool-wrapper p-3 w-100">
+                      <div className="d-flex w-100 justify-content-between align-items-center gap-2">
+                        <div className="d-flex flex-column">
+                          <div className="d-flex align-items-center gap-2">
+                            <span className="bal-smallTxt">Pool Cap:</span>
+                            <span className="deposit-popup-txt d-flex align-items-center gap-1">
+                              20 ETH
+                              <ClickAwayListener onClickAway={poolCapClose}>
+                                <Tooltip
+                                  open={poolCapTooltip}
+                                  disableFocusListener
+                                  disableHoverListener
+                                  disableTouchListener
+                                  placement="top"
+                                  title={
+                                    <div className="tooltip-text">
+                                      {
+                                        "The maximum amount of funds that can be staked in the pool."
+                                      }
+                                    </div>
+                                  }
+                                >
+                                  <img
+                                    src={moreinfo}
+                                    alt=""
+                                    onClick={poolCapOpen}
+                                  />
+                                </Tooltip>
+                              </ClickAwayListener>
+                            </span>
+                          </div>
+                          <div className="d-flex align-items-center gap-2">
+                            <span className="bal-smallTxt">
+                              Available Quota:
+                            </span>
+                            <span className="deposit-popup-txt d-flex align-items-center gap-1">
+                              8 ETH
+                              <ClickAwayListener onClickAway={quotaClose}>
+                                <Tooltip
+                                  open={quotaTooltip}
+                                  disableFocusListener
+                                  disableHoverListener
+                                  disableTouchListener
+                                  placement="top"
+                                  title={
+                                    <div className="tooltip-text">
+                                      {
+                                        "The remaining capacity for staking in the pool."
+                                      }
+                                    </div>
+                                  }
+                                >
+                                  <img
+                                    src={moreinfo}
+                                    alt=""
+                                    onClick={quotaOpen}
+                                  />
+                                </Tooltip>
+                              </ClickAwayListener>
+                            </span>
+                          </div>
+                          <div className="d-flex align-items-center gap-2">
+                            <span className="bal-smallTxt">
+                              Maximum deposit:
+                            </span>
+                            <span className="deposit-popup-txt d-flex align-items-center gap-1">
+                              2 ETH
+                              <ClickAwayListener onClickAway={maxDepositClose}>
+                                <Tooltip
+                                  open={maxDepositTooltip}
+                                  disableFocusListener
+                                  disableHoverListener
+                                  disableTouchListener
+                                  placement="top"
+                                  title={
+                                    <div className="tooltip-text">
+                                      {
+                                        "The highest amount that can be staked by an individual user."
+                                      }
+                                    </div>
+                                  }
+                                >
+                                  <img
+                                    src={moreinfo}
+                                    alt=""
+                                    onClick={maxDepositOpen}
+                                  />
+                                </Tooltip>
+                              </ClickAwayListener>
+                            </span>
+                          </div>
+                        </div>
+                        <div className="d-flex flex-column">
+                          <span className="bal-smallTxt">
+                            Total Est. Rewards
+                          </span>
+                          <span className="deposit-popup-txt d-flex align-items-center gap-1">
+                            0.250 ETH
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="separator my-2"></div>
+                    <div className="info-pool-wrapper p-3 w-100">
+                      <div className="d-flex w-100 flex-column flex-lg-row justify-content-between align-items-start align-items-lg-end gap-2">
+                        <div className="d-flex flex-column">
+                          <span className="deposit-popup-txt">Summary</span>
+
+                          <div className="d-flex align-items-center gap-2">
+                            <span className="bal-smallTxt">
+                              Early withdraw fee:
+                            </span>
+                            <span className="deposit-popup-txt d-flex align-items-center gap-1">
+                              10%
+                              <ClickAwayListener
+                                onClickAway={earlyWithdrawClose}
+                              >
+                                <Tooltip
+                                  open={earlyWithdrawTooltip}
+                                  disableFocusListener
+                                  disableHoverListener
+                                  disableTouchListener
+                                  placement="top"
+                                  title={
+                                    <div className="tooltip-text">
+                                      {
+                                        "The fee charged for withdrawing funds from the pool before the specified period."
+                                      }
+                                    </div>
+                                  }
+                                >
+                                  <img
+                                    src={moreinfo}
+                                    alt=""
+                                    onClick={earlyWithdrawOpen}
+                                  />
+                                </Tooltip>
+                              </ClickAwayListener>
+                            </span>
+                          </div>
+                          <div className="d-flex align-items-center gap-2">
+                            <span className="bal-smallTxt">Pool fee:</span>
+                            <span className="deposit-popup-txt d-flex align-items-center gap-1">
+                              2%
+                              <ClickAwayListener onClickAway={poolFeeClose}>
+                                <Tooltip
+                                  open={poolFeeTooltip}
+                                  disableFocusListener
+                                  disableHoverListener
+                                  disableTouchListener
+                                  placement="top"
+                                  title={
+                                    <div className="tooltip-text">
+                                      {
+                                        "The percentage of staking rewards or deposits for maintaining the pool."
+                                      }
+                                    </div>
+                                  }
+                                >
+                                  <img
+                                    src={moreinfo}
+                                    alt=""
+                                    onClick={poolFeeOpen}
+                                  />
+                                </Tooltip>
+                              </ClickAwayListener>
+                            </span>
+                          </div>
+                        </div>
+                        <div className="d-flex flex-column">
+                          <div className="d-flex align-items-center gap-1">
+                            <span className="bal-smallTxt">Start date:</span>
+                            <span className="deposit-popup-txt d-flex align-items-center gap-1">
+                              09 November 2023{" "}
+                              <ClickAwayListener onClickAway={startDateClose}>
+                                <Tooltip
+                                  open={startDateTooltip}
+                                  disableFocusListener
+                                  disableHoverListener
+                                  disableTouchListener
+                                  placement="top"
+                                  title={
+                                    <div className="tooltip-text">
+                                      {
+                                        "The date when the staking pool became available for participation."
+                                      }
+                                    </div>
+                                  }
+                                >
+                                  <img
+                                    src={moreinfo}
+                                    alt=""
+                                    onClick={startDateOpen}
+                                  />
+                                </Tooltip>
+                              </ClickAwayListener>
+                            </span>
+                          </div>
+                          <div className="d-flex align-items-center gap-1">
+                            <span className="bal-smallTxt">End date:</span>
+                            <span className="deposit-popup-txt d-flex align-items-center gap-1">
+                              08 November 2024{" "}
+                              <ClickAwayListener onClickAway={endDateClose}>
+                                <Tooltip
+                                  open={endDateTooltip}
+                                  disableFocusListener
+                                  disableHoverListener
+                                  disableTouchListener
+                                  placement="top"
+                                  title={
+                                    <div className="tooltip-text">
+                                      {
+                                        "The date when the staking pool will no longer accept new deposits."
+                                      }
+                                    </div>
+                                  }
+                                >
+                                  <img
+                                    src={moreinfo}
+                                    alt=""
+                                    onClick={endDateOpen}
+                                  />
+                                </Tooltip>
+                              </ClickAwayListener>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <button className="btn filledbtn m-auto">
+                      Deposit
+                    </button>
+                  </div>
+                ) : (
+                  <div className="d-flex flex-column w-100 gap-2">
+                    <div className="d-flex align-items-center gap-2 justify-content-between w-100">
+                      <span className="deposit-popup-txt">Withdraw</span>
+                      <div className="d-flex gap-1 align-items-baseline">
+                        <span className="bal-smallTxt">Deposited:</span>
+                        <span className="bal-bigTxt">25 ETH</span>
+                      </div>
+                    </div>
+                    <div className="d-flex flex-column w-100 gap-1">
+                      <div className="position-relative w-100 d-flex">
+                        <input
+                          className="text-input2 w-100"
+                          type="text"
+                          placeholder="Minimum 0.001 ETH"
+                        />
+                        <button className="inner-max-btn position-absolute">
+                          Max
+                        </button>
+                      </div>
+                      <div className="d-flex w-100 justify-content-between gap-1 align-items-center">
+                        <h6 className="errormsg m-0">*Error message</h6>
+                        <div className="d-flex gap-1 align-items-baseline">
+                          <span className="bal-smallTxt">Unlocks in:</span>
+                          <span className="bal-bigTxt2">~13 days</span>
+                        </div>
+                      </div>
+                      <button className="btn filledbtn w-25 d-flex align-items-center justify-content-center m-auto">
+                        Withdraw
+                      </button>
+                    </div>
+                    <div className="separator my-2"></div>
+
+                    <span className="deposit-popup-txt">Earnings</span>
+                    <div className="info-pool-wrapper p-3 w-100">
+                      <div className="d-flex w-100 justify-content-between align-items-end gap-2">
+                        <div className="d-flex flex-column align-items-baseline">
+                          <span className="bal-smallTxt">Rewards</span>
+                          <span className="bal-bigTxt2">80,200.52 DYP</span>
+                        </div>
+                        <button className="btn claim-inner-btn py-2">
+                          Claim
+                        </button>
+                      </div>
+                    </div>
+                    <div className="separator my-2"></div>
+                    <div className="info-pool-wrapper p-3 w-100">
+                      <div className="d-flex w-100 flex-column flex-lg-row justify-content-between align-items-start align-items-lg-end gap-2">
+                        <div className="d-flex flex-column">
+                          <span className="deposit-popup-txt">Summary</span>
+
+                          <div className="d-flex align-items-center gap-2">
+                            <span className="bal-smallTxt">
+                              Early withdraw fee:
+                            </span>
+                            <span className="deposit-popup-txt d-flex align-items-center gap-1">
+                              10%
+                              <ClickAwayListener
+                                onClickAway={earlyWithdrawClose}
+                              >
+                                <Tooltip
+                                  open={earlyWithdrawTooltip}
+                                  disableFocusListener
+                                  disableHoverListener
+                                  disableTouchListener
+                                  placement="top"
+                                  title={
+                                    <div className="tooltip-text">
+                                      {
+                                        "The fee charged for withdrawing funds from the pool before the specified period."
+                                      }
+                                    </div>
+                                  }
+                                >
+                                  <img
+                                    src={moreinfo}
+                                    alt=""
+                                    onClick={earlyWithdrawOpen}
+                                  />
+                                </Tooltip>
+                              </ClickAwayListener>
+                            </span>
+                          </div>
+                          <div className="d-flex align-items-center gap-2">
+                            <span className="bal-smallTxt">Pool fee:</span>
+                            <span className="deposit-popup-txt d-flex align-items-center gap-1">
+                              2%
+                              <ClickAwayListener onClickAway={poolFeeClose}>
+                                <Tooltip
+                                  open={poolFeeTooltip}
+                                  disableFocusListener
+                                  disableHoverListener
+                                  disableTouchListener
+                                  placement="top"
+                                  title={
+                                    <div className="tooltip-text">
+                                      {
+                                        "The percentage of staking rewards or deposits for maintaining the pool."
+                                      }
+                                    </div>
+                                  }
+                                >
+                                  <img
+                                    src={moreinfo}
+                                    alt=""
+                                    onClick={poolFeeOpen}
+                                  />
+                                </Tooltip>
+                              </ClickAwayListener>
+                            </span>
+                          </div>
+                        </div>
+                        <div className="d-flex flex-column">
+                          <div className="d-flex align-items-center gap-1">
+                            <span className="bal-smallTxt">Start date:</span>
+                            <span className="deposit-popup-txt d-flex align-items-center gap-1">
+                              09 November 2023{" "}
+                              <ClickAwayListener onClickAway={startDateClose}>
+                                <Tooltip
+                                  open={startDateTooltip}
+                                  disableFocusListener
+                                  disableHoverListener
+                                  disableTouchListener
+                                  placement="top"
+                                  title={
+                                    <div className="tooltip-text">
+                                      {
+                                        "The date when the staking pool became available for participation."
+                                      }
+                                    </div>
+                                  }
+                                >
+                                  <img
+                                    src={moreinfo}
+                                    alt=""
+                                    onClick={startDateOpen}
+                                  />
+                                </Tooltip>
+                              </ClickAwayListener>
+                            </span>
+                          </div>
+                          <div className="d-flex align-items-center gap-1">
+                            <span className="bal-smallTxt">End date:</span>
+                            <span className="deposit-popup-txt d-flex align-items-center gap-1">
+                              08 November 2024{" "}
+                              <ClickAwayListener onClickAway={endDateClose}>
+                                <Tooltip
+                                  open={endDateTooltip}
+                                  disableFocusListener
+                                  disableHoverListener
+                                  disableTouchListener
+                                  placement="top"
+                                  title={
+                                    <div className="tooltip-text">
+                                      {
+                                        "The date when the staking pool will no longer accept new deposits."
+                                      }
+                                    </div>
+                                  }
+                                >
+                                  <img
+                                    src={moreinfo}
+                                    alt=""
+                                    onClick={endDateOpen}
+                                  />
+                                </Tooltip>
+                              </ClickAwayListener>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </Box>
+        </Modal>
       )}
     </>
   );

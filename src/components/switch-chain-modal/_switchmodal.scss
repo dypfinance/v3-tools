@@ -1,11 +1,25 @@
 .switchchain-txt {
-  color: #c0cbf7 !important ;
-  text-align: center;
-  font-size: 22px;
+  color: #8e97cd !important ;
+  font-size: 18px;
   font-style: normal;
   font-weight: 600;
   line-height: 12px;
-  letter-spacing: -0.396px;
+  letter-spacing: -0.324px;
+  cursor: pointer;
+  padding-bottom: 10px;
+  border-bottom: 3px solid transparent;
+}
+
+.switchchain-txt-active {
+  color: #fff !important ;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 12px; /* 66.667% */
+  letter-spacing: -0.324px;
+  cursor: pointer;
+  padding-bottom: 10px;
+  border-bottom: 3px solid #4ed5d2;
 }
 
 .switchchain-desc {

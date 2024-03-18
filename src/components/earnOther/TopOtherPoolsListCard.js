@@ -2,9 +2,13 @@ import React, { useEffect, useState } from "react";
 import useWindowSize from "../../functions/useWindowSize";
 import "../top-pools-card/top-pools.css";
 import TopPoolsListCardInner from "../top-pools-card/TopPoolsListCardInner";
+import nftTag from "./assets/nftTag.svg";
+import stakeTag from "./assets/stakeTag.svg";
+import hotTag from "./assets/hotTag.svg";
+import comingSoonTag from "../top-pools-card/assets/comingSoonTag.svg";
 
 const TopOtherPoolsListCard = ({
-  tokenLogo, 
+  tokenLogo,
   tokenName,
   tokenTicker,
   apr,
@@ -37,7 +41,12 @@ const TopOtherPoolsListCard = ({
   totalNftsLocked,
   cardIndex,
   showDetails,
-  onCardClick,cardId
+  onCardClick,
+  cardId,
+  isHot,
+  isNft,
+  isStaked,
+  isComingSoon,
 }) => {
   const ethCoins = ["ethereum", "wbtc", "usdc", "usdt"];
   const bscCoins = [
@@ -136,7 +145,7 @@ const TopOtherPoolsListCard = ({
       setCoins(avaxCoins2);
     }
   }, [chain]);
-  
+
   return (
     <>
       <div
@@ -152,7 +161,7 @@ const TopOtherPoolsListCard = ({
           <table className="earnother-table">
             <tbody>
               {windowSize.width > 768 ? (
-                <tr className="d-flex w-100 align-items-center justify-content-around">
+                <tr className="d-flex w-100 align-items-center justify-content-between">
                   <td className="earnother-td col-2">
                     <div className={`col-6 d-flex align-items-center gap-2`}>
                       <img
@@ -160,66 +169,35 @@ const TopOtherPoolsListCard = ({
                           require(`../top-pools-card/assets/${tokenLogo}`)
                             .default
                         }
-                        width={28}
-                        height={28}
+                        style={{ width: 36, height: 36 }}
                         alt=""
                       />
                       <h5
                         className="text-white"
                         style={{ fontSize: "16px", fontWeight: "600" }}
                       >
-                        {tokenName}
+                        {tokenTicker}
                       </h5>
+                      {isStaked && <img src={stakeTag} alt="" />}
+                      {isHot && <img src={hotTag} alt="" />}
                     </div>
                   </td>
                   <td className="earnother-td col-2">
-                    <h5
-                      className="text-white"
-                      style={{
-                        fontSize: "18px",
-                        fontWeight: "300",
-                        color: "#F7F7FC",
-                      }}
-                    >
-                      {tokenTicker}
-                    </h5>
+                    <div className="d-flex align-items-center gap-2">
+                      <h5
+                        style={{
+                          fontSize: "16px",
+                          fontWeight: "300",
+                          color: "#F7F7FC",
+                          marginLeft: 30,
+                        }}
+                      >
+                        {apr}
+                      </h5>
+                      {isNft && <img src={nftTag} alt="" />}
+                    </div>
                   </td>
-                  {/* <td className="earnother-td col-2">
-                    <h5
-                      style={{
-                        fontSize: "15px",
-                        fontWeight: "300",
-                        color: "#F7F7FC",
-                      }}
-                      className="d-flex align-items-center gap-2"
-                    >
-                      <img
-                        src={
-                          chain === "Ethereum"
-                            ? ethStake
-                            : chain === "BNB Chain"
-                            ? bnbStakeActive : chain === 'Base' ? baseStake
-                            : avaxStake
-                        }
-                        style={{ width: 18, height: 18 }}
-                        alt=""
-                        className="pool-coins"
-                      />
-                      {chain}
-                    </h5>
-                  </td> */}
-                  <td className="earnother-td col-2">
-                    <h5
-                      style={{
-                        fontSize: "16px",
-                        fontWeight: "300",
-                        color: "#F7F7FC",
-                        marginLeft: 30,
-                      }}
-                    >
-                      {apr}
-                    </h5>
-                  </td>
+
                   <td className="earnother-td col-2">
                     <h5
                       style={{
@@ -233,9 +211,27 @@ const TopOtherPoolsListCard = ({
                     </h5>
                   </td>
                   <td className="earnother-td col-2">
-                    <h6 className="details-text2 gap-1 d-flex align-items-center cursor-pointer justify-content-end">
-                      Stake
+                    <h5
+                      className="text-white"
+                      style={{
+                        fontSize: "18px",
+                        fontWeight: "300",
+                        color: "#F7F7FC",
+                      }}
+                    >
+                      {chain}
+                    </h5>
+                  </td>
+                  <td className="earnother-td col-2">
+                    {isComingSoon ? (
+                      <h6 className="details-text2 gap-1 d-flex align-items-center cursor-pointer justify-content-end w-50">
+                      Coming Soon
                     </h6>
+                    ) : (
+                      <h6 className="details-text2 gap-1 d-flex align-items-center cursor-pointer justify-content-end">
+                        Stake
+                      </h6>
+                    )}
                   </td>
                 </tr>
               ) : (
@@ -308,7 +304,8 @@ const TopOtherPoolsListCard = ({
           </table>
         </div>
       </div>
-      {showDetails && cardId ===cardIndex &&
+      {showDetails &&
+      cardId === cardIndex &&
       ((cardIndex === 0 && chain === "base") ||
         (cardIndex === 1 && chain === "allchains")) ? (
         dummyData_base2.map((item, index) => {
@@ -327,7 +324,8 @@ const TopOtherPoolsListCard = ({
             />
           );
         })
-      ) : showDetails  && cardId ===cardIndex &&
+      ) : showDetails &&
+        cardId === cardIndex &&
         ((cardIndex === 0 && chain === "bnb") ||
           (cardIndex === 2 && chain === "allchains")) ? (
         dummyData_bnb2.map((item, index) => {
@@ -346,7 +344,8 @@ const TopOtherPoolsListCard = ({
             />
           );
         })
-      ) : showDetails && cardId ===cardIndex &&
+      ) : showDetails &&
+        cardId === cardIndex &&
         ((cardIndex === 0 && chain === "avax") ||
           (cardIndex === 0 && chain === "allchains")) ? (
         dummyData_avax2.map((item, index) => {

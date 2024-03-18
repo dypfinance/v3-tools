@@ -3,8 +3,9 @@ import greenArrow from "./assets/greenarrow.svg";
 import orangeArrow from "./assets/orangearrow.svg";
 import topPick from "./assets/toppick.svg";
 import comingSoonTag from "./assets/comingSoonTag.svg";
-
 import newPool from "./assets/newPool.png";
+ 
+
 import getFormattedNumber from "../../functions/get-formatted-number";
 import "./top-pools.css";
 import StakeBscOtherDai from "../earnOther/poolFiles/bscConstantStakeOtherDai";

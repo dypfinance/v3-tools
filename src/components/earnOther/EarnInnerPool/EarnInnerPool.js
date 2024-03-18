@@ -324,8 +324,8 @@ const EarnInnerPool = ({
             <span>{network} Offers</span>
           </div>
 
-          {/* <div className="col-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3">
-            <h5 className="text-white inactive-pools">Inactive pools</h5>
+          <div className="col-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3">
+            <h5 className="text-white inactive-pools">Past pools</h5>
             <div
               className={`pill-box ${myStakes && "pill-box-active"}`}
               onClick={() => {
@@ -337,7 +337,7 @@ const EarnInnerPool = ({
             >
               <div className="pill"></div>
             </div>
-          </div> */}
+          </div>
         </div>
         {network === "BNB Chain" &&
           dummyData_bnb2.map((pool, index) => {
