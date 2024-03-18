@@ -494,7 +494,7 @@ const EarnContent = ({
                 />
               </div>
             </div>
-            <div className="col-8 row d-flex gap-0 gap-xl-3 justify-content-center p-2">
+            <div className="col-8 row d-flex gap-0 gap-xl-3 justify-content-start p-2">
               {options.map((item, index) => (
                 <div
                   className={`earn-option col-3 col-xl-2 d-flex align-items-center justify-content-center ${
@@ -526,7 +526,7 @@ const EarnContent = ({
               ))}
             </div>
 
-            <div
+            {/* <div
               className={`col-2  justify-content-end align-items-center gap-1 gap-lg-3 d-flex `}
             >
               <h5 className="text-white inactive-pools">Inactive pools</h5>
@@ -542,7 +542,7 @@ const EarnContent = ({
               >
                 <div className="pill"></div>
               </div>
-            </div>
+            </div> */}
           </div>
         ) : (
           <div
@@ -574,7 +574,7 @@ const EarnContent = ({
               </div>
             </div>
 
-            <div className="col-6 px-0 px-lg-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3">
+            {/* <div className="col-6 px-0 px-lg-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3">
               <h5 className="text-white inactive-pools">Inactive pools</h5>
               <div
                 className={`pill-box ${myStakes && "pill-box-active"}`}
@@ -586,7 +586,7 @@ const EarnContent = ({
               >
                 <div className="pill"></div>
               </div>
-            </div>
+            </div> */}
             <div className="col-12 row d-flex gap-0 gap-xl-3 justify-content-center px-0 px-lg-22 mt-3">
               {options.map((item, index) => (
                 <div

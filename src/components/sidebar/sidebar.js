@@ -115,6 +115,20 @@ const Sidebar = (props) => {
       label: "Earn",
       icon: "earnIcon",
       link: "/earn",
+      children: [
+        {
+          title: "Dypius",
+          link: "/earn/dypius",
+        },
+        {
+          title: "DeFi Staking",
+          link: "/earn/defi-staking",
+        },
+        {
+          title: "NFT Staking",
+          link: "/earn/nft-staking",
+        },
+      ],
     },
     {
       label: "Governance",

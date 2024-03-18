@@ -15,6 +15,11 @@
   background-size: cover;
   border: 2px solid #7770df;
 }
+
+.allwrapper-active {
+  border: 2px solid #7770df !important;
+  border-top: none !important;
+}
 .available-nfts {
   font-style: normal;
   font-weight: 400;

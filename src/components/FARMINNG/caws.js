@@ -280,11 +280,10 @@ const CawsDetails = ({
   return (
     <div className="container-lg p-0">
       <div
-        className={`allwrappercaws ${windowSize.width > 786 && "my-4"}`}
-        style={{
-          border: listType !== "table" && "none",
-          borderRadius: listType !== "table" && "0px",
-        }}
+      className={`allwrappercaws allwrapper-active mb-2 `}
+      style={{
+        borderRadius: listType !== "table" && "0px",
+      }}
       >
         <div className="leftside2 w-100">
           <div className="activewrapper position-relative flex-row-reverse flex-lg-row align-items-end align-items-lg-center">

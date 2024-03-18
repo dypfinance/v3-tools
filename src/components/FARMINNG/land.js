@@ -240,9 +240,8 @@ const LandDetails = ({
   return (
     <div className="container-lg p-0">
       <div
-        className={`allwrappercaws ${windowSize.width > 786 && "my-4"}`}
+        className={`allwrappercaws allwrapper-active mb-2 `}
         style={{
-          border: listType !== "table" && "none",
           borderRadius: listType !== "table" && "0px",
         }}
       >

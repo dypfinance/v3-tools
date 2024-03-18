@@ -1,0 +1,67 @@
+.switchchain-txt {
+  color: #8e97cd !important ;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 12px;
+  letter-spacing: -0.324px;
+  cursor: pointer;
+  padding-bottom: 10px;
+  border-bottom: 3px solid transparent;
+}
+
+.switchchain-txt-active {
+  color: #fff !important ;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 12px; /* 66.667% */
+  letter-spacing: -0.324px;
+  cursor: pointer;
+  padding-bottom: 10px;
+  border-bottom: 3px solid #4ed5d2;
+}
+
+.switchchain-desc {
+  color: #c0cbf7 !important ;
+  text-align: center;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 12px;
+  letter-spacing: -0.216px;
+}
+
+.switchchain-wallettype {
+  color: #c0cbf7 !important;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 12px;
+  letter-spacing: -0.252px;
+}
+
+.switchchain-wallet {
+  color: #f7f7fc !important;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 12px;
+  letter-spacing: -0.216px;
+}
+
+.switchchain-current-chain {
+  color: #c0cbf7 !important;
+  text-align: center;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 12px;
+  letter-spacing: -0.216px;
+}
+
+.walletinfo-wrapper {
+  border-radius: 8px;
+  border: 0.2px solid #c0c9ff;
+  background: #26264f;
+}

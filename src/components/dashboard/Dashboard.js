@@ -236,7 +236,7 @@ const Dashboard = ({
     {
       title: "What is Dypius Stake?",
       option: "Staking",
-      pathName: "/earn",
+      pathName: "/earn/dypius",
       section: "earnFaq",
       pool: null,
       faqIndex: 1,
@@ -244,7 +244,7 @@ const Dashboard = ({
     {
       title: "What is the Reinvest function?",
       option: "Staking",
-      pathName: "/earn",
+      pathName: "/earn/dypius",
       section: "earnFaq",
       pool: null,
       faqIndex: 14,
@@ -252,7 +252,7 @@ const Dashboard = ({
     {
       title: "What is APR?",
       option: "Farming",
-      pathName: "/earn",
+      pathName: "/earn/dypius",
       section: "earnFaq",
       pool: null,
       faqIndex: 6,
@@ -260,7 +260,7 @@ const Dashboard = ({
     {
       title: "What is Dypius Vault?",
       option: "Vault",
-      pathName: "/earn",
+      pathName: "/earn/dypius",
       section: "earnFaq",
       pool: null,
       faqIndex: 0,
@@ -276,7 +276,7 @@ const Dashboard = ({
     {
       title: "Will my lock period reset if I deposit ad...",
       option: "Farming",
-      pathName: "/earn",
+      pathName: "/earn/dypius",
       section: "earnFaq",
       pool: null,
       faqIndex: 4,
@@ -337,7 +337,7 @@ const Dashboard = ({
             <div className="row m-0 align-items-center justify-content-between gap-2 w-100 pb-2">
               <h6 className="top-pools-title">Top Pools</h6>
               <NavLink
-                to="/earn"
+                to="/earn/dypius"
                 className="view-more-title d-flex justify-content-center align-items-center gap-1"
               >
                 View all <img src={rightarrow} alt="" />{" "}
@@ -1232,7 +1232,7 @@ const Dashboard = ({
         </div>
         <div className="right-side-wrapper d-flex flex-column flex-md-row flex-xxl-column gap-4">
           <div className="launchpad-section-wrapper d-flex flex-column gap-3 gap-xxl-1">
-            <h6 className="header">Premium</h6>
+            <h6 className="header">DeFi Staking</h6>
             <LaunchpadCard />
           </div>
           <ChainlinkCard />

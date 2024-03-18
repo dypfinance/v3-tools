@@ -817,7 +817,6 @@ const StakeBsc2 = ({
   const focusInput = (field) => {
     document.getElementById(field).focus();
   };
-  // console.log(staking)
   const checkApproval = async (amount) => {
     const result = await window
       .checkapproveStakePool(coinbase, reward_token._address, staking._address)
