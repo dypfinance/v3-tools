@@ -702,14 +702,7 @@ const StakeBscOtherDai = ({
       });
   };
 
-  const convertTimestampToDate = (timestamp) => {
-    const result = new Intl.DateTimeFormat("en-US", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    }).format(timestamp * 1000);
-    return result;
-  };
+ 
 
   const handleBnbPool = async () => {
     await handleSwitchNetworkhook("0x38")
@@ -1228,8 +1221,7 @@ const StakeBscOtherDai = ({
                     ) : depositStatus === "success" ? (
                       <>Success</>
                     ) : (
-                      <>
-                        {/* <img src={failMark} alt="" /> */}
+                      <> 
                         Failed
                       </>
                     )}
@@ -1799,7 +1791,6 @@ const StakeBscOtherDai = ({
                         </div>
                       ) : withdrawStatus === "failed" ? (
                         <>
-                          {/* <img src={failMark} alt="" /> */}
                           Failed
                         </>
                       ) : withdrawStatus === "success" ? (
