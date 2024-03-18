@@ -387,7 +387,7 @@ const LandNftStakeCheckListModal = ({
             className="d-flex justify-content-center align-items-center gap-5 pb-3"
             style={{ borderBottom: "1px solid #565891" }}
           >
-            <div
+            {/* <div
               className={showToStake ? "optionbtn-active" : "optionbtn-passive"}
               style={{ display: hideItem === "tostake" ? "none" : "block" }}
             >
@@ -404,7 +404,7 @@ const LandNftStakeCheckListModal = ({
               >
                 To Stake
               </h5>
-            </div>
+            </div> */}
             <div
               className={showStaked ? "optionbtn-active" : "optionbtn-passive"}
               style={{ display: hideItem === "staked" ? "none" : "block" }}
