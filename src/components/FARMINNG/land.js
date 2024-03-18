@@ -468,9 +468,7 @@ const LandDetails = ({
             <div
               className={`otherside-border col-12 col-md-6 ${
                 renderedPage === "dashboard" ? "col-lg-5" : "col-lg-4"
-              }    ${chainId !== "1" && "blurrypool"} ${
-                expired === true && "blurrypool"
-              }`}
+              }    ${chainId !== "1" && "blurrypool"} `}
             >
               <div className="d-flex justify-content-between gap-2 flex-column flex-lg-row">
                 <h6 className="withdraw-txt d-flex gap-2 align-items-center">
