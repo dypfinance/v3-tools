@@ -5,7 +5,7 @@ import topPick from "./assets/toppick.svg";
 import newPool from "./assets/newPool.png";
 
 import "./top-pools.css";
-import CawsDetails from "../FARMINNG/caws";
+import CawsDetails from "../FARMINNG/caws"; 
 
 import initFarmAvax from "../FARMINNG/farmAvax";
 import initBscFarming from "../FARMINNG/bscFarming";
@@ -406,7 +406,7 @@ const TopPoolsListCard = ({
             className={` d-flex align-items-center ${
               cardType === "Farming" || cardType === "Buyback" ? null : "gap-2"
             }`}
-            style={{ width: "100px" }}
+            // style={{ width: "100px" }}
           >
             {cardType === "Farming" || cardType === "Buyback" ? (
               coins.length > 0 &&
@@ -458,7 +458,7 @@ const TopPoolsListCard = ({
                   ))}
                 <h5
                   className="text-white"
-                  style={{ fontSize: "25px", fontWeight: "600" }}
+                  style={{ fontSize: "20px", fontWeight: "600" }}
                 >
                   {tokenName}
                 </h5>
@@ -773,36 +773,6 @@ const TopPoolsListCard = ({
                   : activePools[cardIndex - 1]?.lock_time?.split(" ")[0]
               }
             />
-          ) : showDetails &&
-            topList === "Staking" &&
-            cardIndex === 1 &&
-            chain === "eth" ? (
-            <LandDetails
-              coinbase={coinbase}
-              isConnected={isConnected}
-              apr={apr.slice(0, apr.length - 1)}
-              totalNftsLocked={totalNftsLocked}
-              listType={listType}
-              chainId={chainId}
-              handleSwitchNetwork={handleSwitchNetwork}
-              handleConnection={handleConnection}
-              myStakes={mystakes}
-            />
-          ) : showDetails &&
-            topList === "Staking" &&
-            cardIndex === 0 &&
-            chain === "eth" ? (
-            <CawsWodDetails
-              coinbase={coinbase}
-              isConnected={isConnected}
-              apr={apr.slice(0, apr.length - 1)}
-              totalNftsLocked={totalNftsLocked}
-              listType={listType}
-              chainId={chainId}
-              handleSwitchNetwork={handleSwitchNetwork}
-              handleConnection={handleConnection}
-              myStakes={mystakes}
-            />
           ) : showDetails && topList === "Vault" && chain === "eth" ? (
             <Vault
               vault={vaultArrayNew[cardIndex - 1]}
@@ -881,8 +851,40 @@ const TopPoolsListCard = ({
               the_graph_result={the_graph_result}
             />
           ) : showDetails &&
+          topList === "Staking" &&
+          cardIndex === 0 &&
+          chain === "eth" ? (
+          <CawsWodDetails
+            coinbase={coinbase}
+            isConnected={isConnected}
+            apr={apr.slice(0, apr.length - 1)}
+            totalNftsLocked={totalNftsLocked}
+            listType={listType}
+            chainId={chainId}
+            handleSwitchNetwork={handleSwitchNetwork}
+            handleConnection={handleConnection}
+            myStakes={mystakes}
+            expired={expired}
+          />
+        ): showDetails &&
+        topList === "Staking" &&
+        cardIndex === 1 &&
+        chain === "eth" ? (
+        <LandDetails
+          coinbase={coinbase}
+          isConnected={isConnected}
+          apr={apr.slice(0, apr.length - 1)}
+          totalNftsLocked={totalNftsLocked}
+          listType={listType}
+          chainId={chainId}
+          handleSwitchNetwork={handleSwitchNetwork}
+          handleConnection={handleConnection}
+          myStakes={mystakes}
+          expired={expired}
+        />
+      )  : showDetails &&
             topList === "Staking" &&
-            cardIndex === 0 &&
+            cardIndex === 2 &&
             chain === "eth" ? (
             <CawsDetails
               coinbase={coinbase}
