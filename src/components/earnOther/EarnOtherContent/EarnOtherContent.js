@@ -53,7 +53,7 @@ const EarnOtherContent = ({
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: windowSize.width > 1400 ? "25%" : windowSize.width > 786 ? "50%" : "95%",
+    width: windowSize.width > 1400 ? "auto" : windowSize.width > 786 ? "50%" : "95%",
     // windowSize.width > 1400 ? "25%" : windowSize.width > 786 ? "50%" : "90%",
     boxShadow: 24,
     p: 4,
@@ -95,7 +95,7 @@ const EarnOtherContent = ({
     {
       lockTime: "Locked",
       chain: "Ethereum",
-      apr: "1%-30%",
+      apr: "30%",
       tokenLogo: "ethereum.svg",
       expired: false,
       top_pick: false,
@@ -113,7 +113,7 @@ const EarnOtherContent = ({
     {
       lockTime: "Locked",
       chain: "Base",
-      apr: "1%-15%",
+      apr: "15%",
       tokenLogo: "baseActive.svg",
       expired: false,
       top_pick: false,
@@ -158,7 +158,7 @@ const EarnOtherContent = ({
     {
       lockTime: "Locked",
       chain: "BNB Chain",
-      apr: "1%-25%",
+      apr: "25%",
       tokenLogo: "bsc.svg",
       expired: false,
       top_pick: false,
@@ -177,7 +177,7 @@ const EarnOtherContent = ({
     {
       lockTime: "Locked",
       chain: "Avalanche",
-      apr: "1%-10%",
+      apr: "10%",
       tokenLogo: "avax.svg",
       expired: false,
       top_pick: false,
@@ -835,95 +835,7 @@ const EarnOtherContent = ({
       </div>
       {listStyle === "table" && (
         <div className="w-100 otherpools-wrapper">
-          {stake === "eth"
-            ? dummyData_eth.map((item, index) => {
-                return (
-                  // <NavLink to={`/earn/defi-staking/${item.pool}`}>
-                  <TopOtherPoolsCard
-                    key={index}
-                    lockTime={item.lockTime}
-                    chain={item.chain}
-                    apr={item.apr}
-                    tokenLogo={item.tokenLogo}
-                    expired={item.expired}
-                    top_pick={item.top_pick}
-                    tokenName={item.tokenName}
-                    isNewPool={item.new_pool === "Yes" ? true : false}
-                    onClick={() => {
-                      setshowDetails(true);
-                      setcardIndex(index);
-                    }}
-                  />
-                  // </NavLink>
-                );
-              })
-            : stake == "base"
-            ? dummyData_base.map((item, index) => {
-                return (
-                  // <NavLink to={`/earn/defi-staking/${item.pool}`}>
-                  <TopOtherPoolsCard
-                    key={index}
-                    lockTime={item.lockTime}
-                    chain={item.chain}
-                    apr={item.apr}
-                    tokenLogo={item.tokenLogo}
-                    expired={item.expired}
-                    top_pick={item.top_pick}
-                    tokenName={item.tokenName}
-                    isNewPool={item.new_pool === "Yes" ? true : false}
-                    onClick={() => {
-                      setshowDetails(true);
-                      setcardIndex(index);
-                    }}
-                  />
-                  // </NavLink>
-                );
-              })
-            : stake === "bnb"
-            ? dummyData_bnb.map((item, index) => {
-                return (
-                  // <NavLink to={`/earn/defi-staking/${item.pool}`}>
-                  <TopOtherPoolsCard
-                    key={index}
-                    lockTime={item.lockTime}
-                    chain={item.chain}
-                    apr={item.apr}
-                    tokenLogo={item.tokenLogo}
-                    expired={item.expired}
-                    top_pick={item.top_pick}
-                    tokenName={item.tokenName}
-                    isNewPool={item.new_pool === "Yes" ? true : false}
-                    onClick={() => {
-                      setshowDetails(true);
-                      setcardIndex(index);
-                    }}
-                  />
-                  // </NavLink>
-                );
-              })
-            : stake === "avax"
-            ? dummyData_avax.map((item, index) => {
-                return (
-                  // <NavLink to={`/earn/defi-staking/${item.pool}`}>
-                  <TopOtherPoolsCard
-                    key={index}
-                    lockTime={item.lockTime}
-                    chain={item.chain}
-                    apr={item.apr}
-                    tokenLogo={item.tokenLogo}
-                    expired={item.expired}
-                    top_pick={item.top_pick}
-                    tokenName={item.tokenName}
-                    isNewPool={item.new_pool === "Yes" ? true : false}
-                    onClick={() => {
-                      setshowDetails(true);
-                      setcardIndex(index);
-                    }}
-                  />
-                  // </NavLink>
-                );
-              })
-            : [...dummyData_avax, ...dummyData_base, ...dummyData_bnb].map(
+          {[...dummyData_avax, ...dummyData_base, ...dummyData_bnb].map(
                 (item, index) => {
                   return (
                     // <NavLink to={`/earn/defi-staking/${item.pool}`}>
@@ -968,122 +880,7 @@ const EarnOtherContent = ({
               </div>
             )}
             <div className="d-flex flex-column gap-1 px-0">
-              {stake === "eth"
-                ? dummyData_eth.map((item, index) => {
-                    return (
-                      // <NavLink to={`/earn/defi-staking/${item.pool}`}>
-                      <TopOtherPoolsListCard
-                        tokenLogo={item.tokenLogo}
-                        chain={item.chain}
-                        tokenName={item.tokenName}
-                        tokenTicker={item.tokenTicker}
-                        apr={item.apr}
-                        lockTime={item.lockTime}
-                        isNewPool={item.new_pool === "Yes" ? true : false}
-                        isHot={item.hot}
-                        isNft={item.nft}
-                        isStaked={item.staked}
-                        isComingSoon={item.coming_soon}
-                        expired={item.expired}
-                        cardIndex={cardIndex}
-                        showDetails={showDetails}
-                        onCardClick={() => {
-                          setshowDetails(!showDetails);
-                          setcardIndex(!showDetails ? index : 777);
-                        }}
-                        cardId={index}
-                      />
-                      // </NavLink>
-                    );
-                  })
-                : stake === "base"
-                ? dummyData_base.map((item, index) => {
-                    return (
-                      // <NavLink to={`/earn/defi-staking/${item.pool}`}>
-                      <TopOtherPoolsListCard
-                        key={index}
-                        tokenLogo={item.tokenLogo}
-                        chain={item.chain}
-                        tokenName={item.tokenName}
-                        tokenTicker={item.tokenTicker}
-                        apr={item.apr}
-                        lockTime={item.lockTime}
-                        expired={item.expired}
-                        isNewPool={item.new_pool === "Yes" ? true : false}
-                        isHot={item.hot}
-                        isNft={item.nft}
-                        isStaked={item.staked}
-                        isComingSoon={item.coming_soon}
-                        onCardClick={() => {
-                          setshowDetails(!showDetails);
-                          setcardIndex(!showDetails ? index : 777);
-                        }}
-                        cardIndex={cardIndex}
-                        showDetails={showDetails}
-                        cardId={index}
-                      />
-                      // </NavLink>
-                    );
-                  })
-                : stake === "bnb"
-                ? dummyData_bnb.map((item, index) => {
-                    return (
-                      // <NavLink to={`/earn/defi-staking/${item.pool}`}>
-                      <TopOtherPoolsListCard
-                        key={index}
-                        tokenLogo={item.tokenLogo}
-                        chain={item.chain}
-                        tokenName={item.tokenName}
-                        tokenTicker={item.tokenTicker}
-                        apr={item.apr}
-                        lockTime={item.lockTime}
-                        isNewPool={item.new_pool === "Yes" ? true : false}
-                        isHot={item.hot}
-                        isNft={item.nft}
-                        isStaked={item.staked}
-                        isComingSoon={item.coming_soon}
-                        expired={item.expired}
-                        onCardClick={() => {
-                          setshowDetails(!showDetails);
-                          setcardIndex(!showDetails ? index : 777);
-                        }}
-                        cardIndex={cardIndex}
-                        showDetails={showDetails}
-                        cardId={index}
-                      />
-                      // </NavLink>
-                    );
-                  })
-                : stake === "avax"
-                ? dummyData_avax.map((item, index) => {
-                    return (
-                      // <NavLink to={`/earn/defi-staking/${item.pool}`}>
-                      <TopOtherPoolsListCard
-                        key={index}
-                        tokenLogo={item.tokenLogo}
-                        chain={item.chain}
-                        tokenName={item.tokenName}
-                        tokenTicker={item.tokenTicker}
-                        apr={item.apr}
-                        lockTime={item.lockTime}
-                        isNewPool={item.new_pool === "Yes" ? true : false}
-                        isHot={item.hot}
-                        isNft={item.nft}
-                        isStaked={item.staked}
-                        isComingSoon={item.coming_soon}
-                        expired={item.expired}
-                        onCardClick={() => {
-                          setshowDetails(!showDetails);
-                          setcardIndex(!showDetails ? index : 777);
-                        }}
-                        cardIndex={cardIndex}
-                        showDetails={showDetails}
-                        cardId={index}
-                      />
-                      // </NavLink>
-                    );
-                  })
-                : [...dummyData_avax, ...dummyData_base, ...dummyData_bnb].map(
+              {[...dummyData_avax, ...dummyData_base, ...dummyData_bnb].map(
                     (item, index) => {
                       return (
                         // <NavLink to={`/earn/defi-staking/${item.pool}`}>
@@ -1160,6 +957,7 @@ const EarnOtherContent = ({
                     className="close-x position-relative cursor-pointer "
                     onClick={() => {
                       setshowDetails(false);
+                      setselectedTab('deposit')
                     }}
                     style={{
                       bottom: "17px",
@@ -1170,7 +968,7 @@ const EarnOtherContent = ({
                   />
                 </div>
 
-                <div className="d-flex align-items-center gap-2">
+                <div className="locktimewrapper align-items-center gap-2">
                   <button
                     className={
                       selectedBtn === "flexible"
@@ -1209,13 +1007,26 @@ const EarnOtherContent = ({
                   </button>
                   <button
                     className={
-                      selectedBtn === "120days"
+                      selectedBtn === "90days"
                         ? "method-btn-active"
                         : "method-btn"
                     }
                     onClick={() => {
-                      setselectedBtn("120days");
+                      setselectedBtn("90days");
                     }}
+                  >
+                    90 Days
+                  </button>
+                  <button
+                    className={
+                      'method-btn-disabled'
+                      // selectedBtn === "120days"
+                      //   ? "method-btn-active"
+                      //   : "method-btn"
+                    }
+                    // onClick={() => {
+                    //   setselectedBtn("120days");
+                    // }}
                   >
                     120 Days
                   </button>

@@ -162,9 +162,16 @@ hr {
   }
 
   .method-btn,
-  .method-btn-active {
+  .method-btn-active,.method-btn-disabled  {
     padding: 8px !important;
   }
+
+  .locktimewrapper {
+    display: grid;
+    grid-template-columns: repeat(3,1fr) !important;
+    width: 100%;
+  }
+
 }
 
 .method-btn {
@@ -179,6 +186,31 @@ hr {
   line-height: 12px;
   letter-spacing: -0.216px;
   background: transparent;
+  white-space: nowrap;
+
+}
+
+.locktimewrapper {
+  display: grid;
+  grid-template-columns: repeat(5,1fr);
+}
+
+.method-btn-disabled {
+  border-radius: 8px;
+  border: 0.2px solid #424060;
+  color: #424060;
+  text-align: center;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 12px; /* 100% */
+  letter-spacing: -0.216px;
+  background: transparent;
+  pointer-events: none;
+  padding: 8px 18px;
+  white-space: nowrap;
+
+
 }
 
 .method-btn-active {
@@ -193,6 +225,7 @@ hr {
   font-weight: 400;
   line-height: 12px;
   letter-spacing: -0.216px;
+  white-space: nowrap;
 }
 
 .info-pool-wrapper {
