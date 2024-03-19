@@ -91,14 +91,12 @@ const EarnOtherContent = ({
     },
   ];
 
-
-
   const dummyData_base = [
     {
       lockTime: "Locked",
       chain: "Base",
       apr: "15%",
-      chainLogo: 'baseActive.svg',
+      chainLogo: "baseActive.svg",
       tokenLogo: "ethereum.svg",
       expired: false,
       top_pick: false,
@@ -111,7 +109,6 @@ const EarnOtherContent = ({
       pool: "BASE",
       new_pool: "Yes",
       lockTime: "60days",
-
     },
   ];
 
@@ -133,7 +130,6 @@ const EarnOtherContent = ({
       pool: "BNB",
       new_pool: "Yes",
       lockTime: "90days",
-
     },
   ];
 
@@ -143,7 +139,7 @@ const EarnOtherContent = ({
       chain: "Avalanche",
       apr: "10%",
       tokenLogo: "avax.svg",
-      chainLogo: 'avax.svg',
+      chainLogo: "avax.svg",
       expired: false,
       top_pick: false,
       hot: true,
@@ -158,7 +154,7 @@ const EarnOtherContent = ({
     },
   ];
 
-  const allPools = [...dummyData_avax, ...dummyData_base, ...dummyData_bnb]
+  const cloneArray = [...dummyData_avax, ...dummyData_base, ...dummyData_bnb];
 
   const [stake, setStake] = useState("allchains");
   const [option, setOption] = useState(routeOption);
@@ -168,16 +164,34 @@ const EarnOtherContent = ({
   const [selectedBtn, setselectedBtn] = useState("flexible");
   const [selectedPool, setselectedPool] = useState([]);
 
-
   const [listStyle, setListStyle] = useState("list");
   const [myStakes, setMyStakes] = useState(false);
   const [expiredPools, setExpiredPools] = useState(false);
+  const [allPools, setallPools] = useState([]);
 
   const [tvl, setTvl] = useState();
   const [ethApr, setEthApr] = useState();
   const [bnbApr, setBnbApr] = useState();
   const [avaxApr, setavaxApr] = useState();
   const [count, setCount] = useState(0);
+  const [query, setQuery] = useState("");
+
+  const handleQuery = (item) => (event) => {
+    if (event.key === "Enter") {
+      const tokenSearch = item.value;
+      if (tokenSearch && tokenSearch !== "") {
+        const result = allPools.filter((item) => {
+          return item.tokenTicker
+            .toLowerCase()
+            .includes(tokenSearch.toLowerCase());
+        });
+        if (result && result.length > 0) {
+          setallPools(result);
+        }
+        console.log(result, allPools);
+      }
+    }
+  };
 
   const fetchBnbPool = async () => {
     await axios
@@ -459,12 +473,23 @@ const EarnOtherContent = ({
     }
   }, [option, expiredPools]);
 
+  useEffect(() => {
+    const finalArray = [...dummyData_avax, ...dummyData_base, ...dummyData_bnb];
+    setallPools(finalArray);
+  }, []);
+
+  useEffect(() => {
+    if (query === "") {
+      setallPools(cloneArray);
+    }
+  }, [query]);
+
   return (
     <>
       <div className="row justify-content-center w-100 ">
         {windowSize.width > 786 ? (
           <div
-            className="row justify-content-between align-items-center p-2 options-container"
+            className="row justify-content-between align-items-center p-2 options-container bg-transparent"
             style={{ marginTop: "30px", marginBottom: "0px" }}
           >
             {/* <div className="col-2 d-flex justify-content-start align-items-center gap-3">
@@ -491,14 +516,18 @@ const EarnOtherContent = ({
                 />
               </div>
             </div> */}
-            <div className="col-5">
+            <div className="col-5 px-0">
               <div className="d-flex position-relative">
                 <div className="position-absolute searchwrapper">
                   <img src={searchIcon} alt="" />
                 </div>
                 <input
-                  // value={this.state.query}
-                  // onChange={(e) => this.handleQuery(e.target.value)}
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  onKeyDown={handleQuery({
+                    type: "Search",
+                    value: query,
+                  })}
                   type="text"
                   id="search-bar"
                   autoComplete="off"
@@ -530,7 +559,7 @@ const EarnOtherContent = ({
           </div>
         ) : (
           <div
-            className="row justify-content-center align-items-center p-2 options-container gap-3"
+            className="row justify-content-center align-items-center p-2 options-container gap-3 bg-transparent"
             style={{ marginTop: "24px", marginBottom: "24px" }}
           >
             {/* <div className="col-6 d-flex px-0 px-lg-2 justify-content-start align-items-center gap-3">
@@ -563,8 +592,12 @@ const EarnOtherContent = ({
                   <img src={searchIcon} alt="" />
                 </div>
                 <input
-                  // value={this.state.query}
-                  // onChange={(e) => this.handleQuery(e.target.value)}
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  onKeyDown={handleQuery({
+                    type: "Search",
+                    value: query,
+                  })}
                   type="text"
                   id="search-bar"
                   autoComplete="off"
@@ -742,31 +775,29 @@ const EarnOtherContent = ({
       </div>
       {listStyle === "table" && (
         <div className="w-100 otherpools-wrapper">
-          {allPools.map(
-            (item, index) => {
-              return (
-                // <NavLink to={`/earn/defi-staking/${item.pool}`}>
-                <TopOtherPoolsCard
-                  key={index}
-                  lockTime={item.lockTime}
-                  chain={item.chain}
-                  apr={item.apr}
-                  tokenLogo={item.tokenLogo}
-                  expired={item.expired}
-                  top_pick={item.top_pick}
-                  tokenName={item.tokenName}
-                  isNewPool={item.new_pool === "Yes" ? true : false}
-                  onClick={() => {
-                    setshowDetails(true);
-                    setcardIndex(index);
-                    setselectedBtn(item.lockTime)
-                    setselectedPool(item)
-                  }}
-                />
-                // </NavLink>
-              );
-            }
-          )}
+          {allPools.map((item, index) => {
+            return (
+              // <NavLink to={`/earn/defi-staking/${item.pool}`}>
+              <TopOtherPoolsCard
+                key={index}
+                lockTime={item.lockTime}
+                chain={item.chain}
+                apr={item.apr}
+                tokenLogo={item.tokenLogo}
+                expired={item.expired}
+                top_pick={item.top_pick}
+                tokenName={item.tokenName}
+                isNewPool={item.new_pool === "Yes" ? true : false}
+                onClick={() => {
+                  setshowDetails(true);
+                  setcardIndex(index);
+                  setselectedBtn(item.lockTime);
+                  setselectedPool(item);
+                }}
+              />
+              // </NavLink>
+            );
+          })}
         </div>
       )}
       {listStyle === "list" && (
@@ -789,42 +820,37 @@ const EarnOtherContent = ({
               </div>
             )}
             <div className="d-flex flex-column gap-1 px-0">
-              {allPools.map(
-                (item, index) => {
-                  return (
-                    // <NavLink to={`/earn/defi-staking/${item.pool}`}>
-                    <TopOtherPoolsListCard
-                      key={index}
-                      tokenLogo={item.tokenLogo}
-                      chainLogo={item.chainLogo}
-
-                      chain={item.chain}
-                      tokenName={item.tokenName}
-                      tokenTicker={item.tokenTicker}
-                      apr={item.apr}
-                      lockTime={item.lockTime}
-                      expired={item.expired}
-                      isNewPool={item.new_pool === "Yes" ? true : false}
-                      isComingSoon={item.coming_soon}
-                      isHot={item.hot}
-                      isNft={item.nft}
-                      isStaked={item.staked}
-                      onCardClick={() => {
-                        setshowDetails(!showDetails);
-                        setcardIndex(!showDetails ? index : 777);
-                    setselectedBtn(item.lockTime)
-                    setselectedPool(item)
-
-
-                      }}
-                      cardIndex={cardIndex}
-                      showDetails={showDetails}
-                      cardId={index}
-                    />
-                    // </NavLink>
-                  );
-                }
-              )}
+              {allPools.map((item, index) => {
+                return (
+                  // <NavLink to={`/earn/defi-staking/${item.pool}`}>
+                  <TopOtherPoolsListCard
+                    key={index}
+                    tokenLogo={item.tokenLogo}
+                    chainLogo={item.chainLogo}
+                    chain={item.chain}
+                    tokenName={item.tokenName}
+                    tokenTicker={item.tokenTicker}
+                    apr={item.apr}
+                    lockTime={item.lockTime}
+                    expired={item.expired}
+                    isNewPool={item.new_pool === "Yes" ? true : false}
+                    isComingSoon={item.coming_soon}
+                    isHot={item.hot}
+                    isNft={item.nft}
+                    isStaked={item.staked}
+                    onCardClick={() => {
+                      setshowDetails(!showDetails);
+                      setcardIndex(!showDetails ? index : 777);
+                      setselectedBtn(item.lockTime);
+                      setselectedPool(item);
+                    }}
+                    cardIndex={cardIndex}
+                    showDetails={showDetails}
+                    cardId={index}
+                  />
+                  // </NavLink>
+                );
+              })}
             </div>
           </div>
         </>

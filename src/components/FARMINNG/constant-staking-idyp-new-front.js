@@ -830,7 +830,7 @@ const InitConstantStakingiDYP = ({
 
             <div
               className={`otherside-border col-12 col-md-12 col-lg-4  ${
-                chainId !== "1" || expired === true ? "blurrypool" : ""
+                chainId !== "1" || expired === true || !is_wallet_connected ? "blurrypool" : ""
               }`}
             >
               <div className="d-flex justify-content-between align-items-center gap-2">
@@ -955,7 +955,7 @@ const InitConstantStakingiDYP = ({
             </div>
             <div
               className={`otherside-border col-12 col-md-12 col-lg-4 ${
-                chainId !== "1" && "blurrypool"
+                (chainId !== "1" || !is_wallet_connected) && "blurrypool"
               }`}
             >
               <div className="d-flex justify-content-between gap-2">
@@ -1078,7 +1078,7 @@ const InitConstantStakingiDYP = ({
             </div>
             <div
               className={`otherside-border col-12 col-md-12 col-lg-2 ${
-                chainId !== "1" && "blurrypool"
+                (chainId !== "1" || !is_wallet_connected) && "blurrypool"
               }`}
             >
               <h6 className="deposit-txt d-flex align-items-center gap-2 justify-content-between">

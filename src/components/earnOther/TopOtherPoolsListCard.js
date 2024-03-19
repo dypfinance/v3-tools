@@ -5,7 +5,7 @@ import TopPoolsListCardInner from "../top-pools-card/TopPoolsListCardInner";
 import nftTag from "./assets/nftTag.svg";
 import stakeTag from "./assets/stakeTag.svg";
 import hotTag from "./assets/hotTag.svg";
-import comingSoonTag from "../top-pools-card/assets/comingSoonTag.svg";
+import watch from './assets/watch.svg'
 
 const TopOtherPoolsListCard = ({
   tokenLogo,
@@ -187,7 +187,7 @@ const TopOtherPoolsListCard = ({
                           fontSize: "16px",
                           fontWeight: "300",
                           color: "#F7F7FC",
-                          marginLeft: 30,
+                          // marginLeft: 30,
                         }}
                       >
                         {apr}
@@ -202,10 +202,11 @@ const TopOtherPoolsListCard = ({
                         fontSize: "16px",
                         fontWeight: "300",
                         color: "#F7F7FC",
-                        marginLeft: 30,
+                        // marginLeft: 30,
                       }}
                     >
-                      {lockTime}
+                      {/* {lockTime} */}
+                      Fixed
                     </h5>
                   </td>
                   <td className="earnother-td col-2">
@@ -228,8 +229,8 @@ const TopOtherPoolsListCard = ({
                   </td>
                   <td className="earnother-td col-2">
                     {isComingSoon ? (
-                      <h6 className="details-text2 gap-1 d-flex align-items-center cursor-pointer justify-content-end w-50">
-                        Coming Soon
+                      <h6 className="details-text2 gap-1 d-flex align-items-center cursor-pointer justify-content-center w-75">
+                       <img src={watch} alt='' /> Coming Soon 
                       </h6>
                     ) : (
                       <h6 className="details-text2 gap-1 d-flex align-items-center cursor-pointer justify-content-end">
@@ -245,7 +246,7 @@ const TopOtherPoolsListCard = ({
                       <div className="d-flex align-items-center w-100  justify-content-between gap-2">
                         <div className={` d-flex align-items-center gap-1`}>
                           <img
-                            src={require(`../top-pools-card/assets/${tokenLogo}`)}
+                            src={require(`../top-pools-card/assets/${chainLogo}`)}
                             width={28}
                             height={28}
                             alt=""
@@ -255,7 +256,7 @@ const TopOtherPoolsListCard = ({
                               className="text-white"
                               style={{ fontSize: "16px", fontWeight: "600" }}
                             >
-                              {tokenName}
+                         {chain}
                             </h5>
                             <h5
                               className="text-white"
@@ -294,9 +295,15 @@ const TopOtherPoolsListCard = ({
                   </tr>
                   <tr className="d-flex w-100 align-items-center justify-content-around">
                     <td className="earnother-td w-100">
-                      <h6 className="details-text2 gap-1 d-flex align-items-center cursor-pointer justify-content-center m-0 w-100">
+                    {isComingSoon ? (
+                      <h6 className="details-text2 m-0 gap-1 d-flex align-items-center cursor-pointer justify-content-center w-100">
+                       <img src={watch} alt='' /> Coming Soon 
+                      </h6>
+                    ) : (
+                      <h6 className="details-text2 m-0 gap-1 d-flex align-items-center cursor-pointer justify-content-end w-100">
                         Stake
                       </h6>
+                    )}
                     </td>
                   </tr>
                 </>

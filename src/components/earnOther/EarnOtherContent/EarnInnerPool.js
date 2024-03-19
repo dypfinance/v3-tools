@@ -781,7 +781,7 @@ const EarnInnerPool = ({
               <span className="info-pool-right-text d-flex gap-1 align-items-center">
                 <img
                   src={
-                    require(`../../top-pools-card/assets/${selectedPool.tokenLogo}`)
+                    require(`../../top-pools-card/assets/${selectedPool.chainLogo}`)
            
                   }
                   width={12}
@@ -845,7 +845,7 @@ const EarnInnerPool = ({
             </div>
           </div>
           <div className="info-pool-wrapper p-3 w-100">
-            <div className="d-flex w-100 justify-content-between align-items-center gap-2">
+            <div className="d-flex w-100 justify-content-between align-items-start align-items-lg-center gap-2 flex-column flex-lg-row">
               <div className="d-flex flex-column">
                 <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Pool Cap:</span>

@@ -948,7 +948,9 @@ const StakeDypiusEth = ({
                         ? "Connect wallet to view and interact with deposits and withdraws"
                         : "Interact with deposits and withdraws"}
                     </h6> */}
-                {coinbase === null || coinbase === undefined ? (
+                {coinbase === null ||
+                coinbase === undefined ||
+                is_wallet_connected === false ? (
                   <button className="connectbtn btn" onClick={showModal}>
                     <img src={wallet} alt="" /> Connect wallet
                   </button>
@@ -975,7 +977,7 @@ const StakeDypiusEth = ({
             </div> */}
             <div
               className={`otherside-border col-12 col-md-12 col-lg-4  ${
-                chainId !== "1" || expired === true ? "blurrypool" : ""
+                chainId !== "1" || expired === true || !is_wallet_connected ? "blurrypool" : ""
               }`}
             >
               <div className="d-flex justify-content-between align-items-center gap-2">
@@ -1144,7 +1146,7 @@ const StakeDypiusEth = ({
             </div>
             <div
               className={`otherside-border col-12 col-md-12 col-lg-4 ${
-                chainId !== "1" && "blurrypool"
+                (chainId !== "1"|| !is_wallet_connected) && "blurrypool"
               }`}
             >
               <div className="d-flex justify-content-between gap-2 ">
@@ -1299,7 +1301,7 @@ const StakeDypiusEth = ({
 
             <div
               className={`otherside-border col-12 col-md-12 col-lg-2 ${
-                chainId !== "1" && "blurrypool"
+                (chainId !== "1" || !is_wallet_connected) && "blurrypool"
               }`}
             >
               <h6 className="deposit-txt d-flex align-items-center gap-2 justify-content-between">

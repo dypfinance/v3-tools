@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ethStake from "../../assets/earnAssets/ethStakeActive.svg";
 import avaxStake from "../../assets/earnAssets/avaxStakeActive.svg";
 import baseStake from "../../assets/earnAssets/baseActive.svg";
-
+import watch from "./assets/watch.svg";
 import bnbStakeActive from "../../assets/earnAssets/bnbStakeActive.svg";
 import useWindowSize from "../../functions/useWindowSize";
 
@@ -183,7 +183,7 @@ const TopOtherPoolsNftListCard = ({
                   </td>
                   <td className="earnother-td col-2">
                     <h6 className="details-text2 gap-1 d-flex align-items-center cursor-pointer justify-content-center w-75 m-0">
-                      Coming Soon
+                      <img src={watch} alt="" /> Coming Soon
                     </h6>
                   </td>
                 </tr>
@@ -194,10 +194,7 @@ const TopOtherPoolsNftListCard = ({
                       <div className="d-flex align-items-center w-100  justify-content-between gap-2">
                         <div className={` d-flex align-items-center gap-1`}>
                           <img
-                            src={
-                              require(`../top-pools-card/assets/${tokenLogo}`)
-                                
-                            }
+                            src={require(`../top-pools-card/assets/${tokenLogo}`)}
                             width={28}
                             height={28}
                             alt=""
@@ -247,7 +244,7 @@ const TopOtherPoolsNftListCard = ({
                   <tr className="d-flex w-100 align-items-center justify-content-around">
                     <td className="earnother-td w-100">
                       <h6 className="details-text2 gap-1 d-flex align-items-center cursor-pointer justify-content-center m-0 w-100">
-                        Coming Soon
+                        <img src={watch} alt="" /> Coming Soon
                       </h6>
                     </td>
                   </tr>
