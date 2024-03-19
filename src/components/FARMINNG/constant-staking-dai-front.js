@@ -351,7 +351,7 @@ const StakeEthDai = ({
   }, []);
 
   useEffect(() => {
-    if(chainId === 1)
+    if(chainId === '1')
   {  refreshBalance();
     if (depositAmount !== "") {
       checkApproval(depositAmount);

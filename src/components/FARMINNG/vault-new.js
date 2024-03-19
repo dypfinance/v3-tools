@@ -494,7 +494,7 @@ const Vault = ({
   }, [coinbase, coinbase2, vault_contract, vault]);
 
   useEffect(() => {
-    if (chainId === 1) {
+    if (chainId === '1') {
       refreshBalance();
     }
   }, [coinbase, coinbase2, vault_contract, chainId]);

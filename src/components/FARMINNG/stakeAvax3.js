@@ -354,7 +354,7 @@ const StakeAvaxDai = ({
   }, []);
 
   useEffect(() => {
-    if(chainId === 43114)
+    if(chainId === '43114')
    { refreshBalance();
     if (depositAmount !== "") {
       checkApproval(depositAmount);

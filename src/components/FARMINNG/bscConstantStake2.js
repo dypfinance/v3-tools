@@ -406,7 +406,7 @@ const StakeBsc2 = ({
   }, [coinbase, coinbase2]);
 
   useEffect(() => {
-    if(chainId === 56)
+    if(chainId === '56')
   {  refreshBalance();
     if (depositAmount !== "") {
       checkApproval(depositAmount);
