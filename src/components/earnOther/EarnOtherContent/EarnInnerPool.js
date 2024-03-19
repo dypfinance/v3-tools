@@ -582,6 +582,14 @@ const EarnInnerPool = ({
       });
   };
 
+  const aprClose = () => {
+    setaprTooltip(false);
+  };
+
+  const aprOpen = () => {
+    setaprTooltip(true);
+  };
+
   const poolCapClose = () => {
     setPoolCapTooltip(false);
   };
@@ -771,7 +779,27 @@ const EarnInnerPool = ({
         <div className="info-pool-inner-wrapper d-flex flex-column flex-lg-row align-items-center gap-2">
           <div className="info-pool-item p-2">
             <div className="d-flex justify-content-between gap-1 align-items-center">
-              <span className="info-pool-left-text">Apr</span>
+              <span className="info-pool-left-text">
+                Apr{" "}
+                <ClickAwayListener onClickAway={aprClose}>
+                  <Tooltip
+                    open={aprTooltip}
+                    disableFocusListener
+                    disableHoverListener
+                    disableTouchListener
+                    placement="top"
+                    title={
+                      <div className="tooltip-text">
+                        {
+                          "APR reflects the interest rate of earnings on an account over the course of one year."
+                        }
+                      </div>
+                    }
+                  >
+                    <img src={moreinfo} alt="" onClick={aprOpen} />
+                  </Tooltip>
+                </ClickAwayListener>
+              </span>
               <span className="info-pool-right-text">{selectedPool.apr}</span>
             </div>
           </div>
@@ -780,10 +808,7 @@ const EarnInnerPool = ({
               <span className="info-pool-left-text">Chain</span>
               <span className="info-pool-right-text d-flex gap-1 align-items-center">
                 <img
-                  src={
-                    require(`../../top-pools-card/assets/${selectedPool.chainLogo}`)
-           
-                  }
+                  src={require(`../../top-pools-card/assets/${selectedPool.chainLogo}`)}
                   width={12}
                   height={12}
                   alt=""
@@ -807,7 +832,9 @@ const EarnInnerPool = ({
             <span className="deposit-popup-txt">Deposit</span>
             <div className="d-flex gap-1 align-items-baseline">
               <span className="bal-smallTxt">My Balance:</span>
-              <span className="bal-bigTxt">25,250.52 {selectedPool.tokenTicker}</span>
+              <span className="bal-bigTxt">
+                25,250.52 {selectedPool.tokenTicker}
+              </span>
             </div>
           </div>
           <div className="d-flex flex-column w-100 gap-1">
@@ -840,7 +867,9 @@ const EarnInnerPool = ({
 
               <div className="d-flex gap-1 align-items-baseline">
                 <span className="bal-smallTxt">Approved:</span>
-                <span className="bal-bigTxt2">20.52 {selectedPool.tokenTicker}</span>
+                <span className="bal-bigTxt2">
+                  20.52 {selectedPool.tokenTicker}
+                </span>
               </div>
             </div>
           </div>
@@ -1147,7 +1176,8 @@ const EarnInnerPool = ({
               <span className="bal-smallTxt">Deposited:</span>
               <span className="bal-bigTxt">
                 {" "}
-                {getFormattedNumber(depositedTokens, 2)} {selectedPool.tokenTicker}
+                {getFormattedNumber(depositedTokens, 2)}{" "}
+                {selectedPool.tokenTicker}
               </span>
             </div>
           </div>

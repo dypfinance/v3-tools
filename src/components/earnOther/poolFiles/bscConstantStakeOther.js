@@ -819,7 +819,7 @@ const StakeBscOther = ({
                           title={
                             <div className="tooltip-text">
                               {
-                                "APR reflects the interest rate of earnings on an account over the course of one year. "
+                                "APR reflects the interest rate of earnings on an account over the course of one year."
                               }
                             </div>
                           }
