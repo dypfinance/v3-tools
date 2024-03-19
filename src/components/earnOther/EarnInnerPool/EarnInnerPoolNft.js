@@ -63,37 +63,6 @@ const EarnInnerPoolNft = ({
       poolCap: "100",
       new_pool: "Yes",
     },
-    {
-      chain: "Ethereum",
-      apr: 50,
-      tokenLogo: ["cawslogo.svg", "lanft-poolicon.png"],
-      expired: false,
-      top_pick: true,
-      tokenName: "ETH",
-      tokenTicker: "ETH",
-      pool: "CAWS+WOD",
-      id: "",
-      coming_soon: false,
-      lockTime: "No lock",
-      poolCap: "∞",
-      new_pool: "No",
-    },
-
-    {
-      chain: "Ethereum",
-      apr: 25,
-      tokenLogo: "lanft-poolicon.png",
-      expired: false,
-      top_pick: false,
-      tokenName: "ETH",
-      tokenTicker: "ETH",
-      pool: "Land",
-      id: "",
-      coming_soon: false,
-      lockTime: "No lock",
-      poolCap: "∞",
-      new_pool: "No",
-    },
   ];
 
   const dummyData_eth_expired = [
@@ -109,6 +78,37 @@ const EarnInnerPoolNft = ({
       id: "",
       coming_soon: false,
       lockTime: "30 days",
+      poolCap: "∞",
+      new_pool: "No",
+    },
+    {
+      chain: "Ethereum",
+      apr: 50,
+      tokenLogo: ["cawslogo.svg", "lanft-poolicon.png"],
+      expired: true,
+      top_pick: true,
+      tokenName: "ETH",
+      tokenTicker: "ETH",
+      pool: "CAWS+WOD",
+      id: "",
+      coming_soon: false,
+      lockTime: "No lock",
+      poolCap: "∞",
+      new_pool: "No",
+    },
+
+    {
+      chain: "Ethereum",
+      apr: 25,
+      tokenLogo: "lanft-poolicon.png",
+      expired: true,
+      top_pick: false,
+      tokenName: "ETH",
+      tokenTicker: "ETH",
+      pool: "Land",
+      id: "",
+      coming_soon: false,
+      lockTime: "No lock",
       poolCap: "∞",
       new_pool: "No",
     },
@@ -289,18 +289,7 @@ const EarnInnerPoolNft = ({
             <span>{network} Offers</span>
           </div>
 
-          <div className="col-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3">
-            <h5 className="text-white inactive-pools">Past pools</h5>
-            <div
-              className={`pill-box ${myStakes && "pill-box-active"}`}
-              onClick={() => {
-                setMyStakes(!myStakes);
-                toggleInactive();
-              }}
-            >
-              <div className="pill"></div>
-            </div>
-          </div>
+         
         </div>
 
         {network === "Ethereum" &&

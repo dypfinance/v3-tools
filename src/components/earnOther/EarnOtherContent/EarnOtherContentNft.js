@@ -20,6 +20,7 @@ import useWindowSize from "../../../functions/useWindowSize";
 import { NavLink } from "react-router-dom";
 import TopOtherPoolsNftCard from "../TopOtherPoolsNftCard";
 import TopOtherPoolsNftListCard from "../TopOtherPoolsNftListCard";
+import TopPoolsNftListCardInner from "../../top-pools-card/TopPoolsNftListCardInner";
 
 const EarnOtherContentNft = ({
   coinbase,
@@ -68,15 +69,67 @@ const EarnOtherContentNft = ({
 
   const dummyData_eth = [
     {
-      lockTime: "Flexible",
       chain: "Ethereum",
-      apr: "25%",
-      tokenLogo: "ethereum.svg",
+      apr: 25,
+      tokenLogo: "cawslogo.svg",
       expired: false,
       top_pick: false,
-      tokenName: "Ethereum",
+      tokenName: "CAWS",
       tokenTicker: "ETH",
-      pool: "ETH",
+      pool: "CAWS",
+      id: "",
+      coming_soon: true,
+      lockTime: "No lock",
+      poolCap: "100",
+      new_pool: "Yes",
+    },
+  ];
+
+  const dummyData_eth_expired = [
+    {
+      chain: "Ethereum",
+      apr: 50,
+      tokenLogo: "cawslogo.svg",
+      expired: true,
+      top_pick: false,
+      tokenName: "ETH",
+      tokenTicker: "ETH",
+      pool: "CAWS",
+      id: "",
+      coming_soon: false,
+      lockTime: "30 days",
+      poolCap: "∞",
+      new_pool: "No",
+    },
+    {
+      chain: "Ethereum",
+      apr: 50,
+      tokenLogo: ["cawslogo.svg", "lanft-poolicon.png"],
+      expired: true,
+      top_pick: true,
+      tokenName: "ETH",
+      tokenTicker: "ETH",
+      pool: "CAWS+WOD",
+      id: "",
+      coming_soon: false,
+      lockTime: "No lock",
+      poolCap: "∞",
+      new_pool: "No",
+    },
+    {
+      chain: "Ethereum",
+      apr: 25,
+      tokenLogo: "lanft-poolicon.png",
+      expired: true,
+      top_pick: false,
+      tokenName: "ETH",
+      tokenTicker: "ETH",
+      pool: "Land",
+      id: "",
+      coming_soon: false,
+      lockTime: "No lock",
+      poolCap: "∞",
+      new_pool: "No",
     },
   ];
 
@@ -407,6 +460,18 @@ const EarnOtherContentNft = ({
                 />
               </div>
             </div>
+            <div className="col-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3">
+            <h5 className="text-white inactive-pools">Past pools</h5>
+            <div
+              className={`pill-box ${myStakes && "pill-box-active"}`}
+              onClick={() => {
+                setMyStakes(!myStakes);
+                toggleInactive();
+              }}
+            >
+              <div className="pill"></div>
+            </div>
+          </div>
           </div>
         ) : (
           <div
@@ -445,7 +510,7 @@ const EarnOtherContentNft = ({
           style={{ minHeight: "55px" }}
         >
           <div className="col-12 col-lg-8 col-xl-5 d-flex flex-column flex-xxl-row flex-lg-row flex-md-row  gap-3 align-items-center justify-content-around justify-content-lg-end justify-content-xl-start px-0 px-xl-2">
-            <div className="d-flex flex-row flex-xxl-row flex-lg-row flex-md-row align-items-center gap-3">
+            {/* <div className="d-flex flex-row flex-xxl-row flex-lg-row flex-md-row align-items-center gap-3">
               <div className="d-flex align-items-center gap-2">
                 <div
                   className={`stake-other-item  position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
@@ -495,7 +560,7 @@ const EarnOtherContentNft = ({
                   </p>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
 
           <div className="col-12 col-lg-4 col-xl-3 px-0">
@@ -544,20 +609,19 @@ const EarnOtherContentNft = ({
             >
               <table className="earnother-table">
                 <thead className="d-flex w-100 align-items-center justify-content-around">
-                  <th className="earnother-th">Pool Name</th>
-                  <th className="earnother-th">Ticker</th>
-                  <th className="earnother-th">Network</th>
-                  <th className="earnother-th">APR</th>
-                  <th className="earnother-th">Method</th>
-                  <th className="earnother-th">Stake</th>
+                  <th className="earnother-th col-2">Pool</th>
+                  <th className="earnother-th col-2">Network</th>
+                  <th className="earnother-th col-2">APR</th>
+                  <th className="earnother-th col-2">Method</th>
+                  <th className="earnother-th col-2">Action</th>
                 </thead>
               </table>
             </div>
           )}
           <div className="d-flex flex-column gap-1 px-0">
-            {dummyData_eth.map((item, index) => {
+            { expiredPools === false && dummyData_eth.map((item, index) => {
               return (
-                <NavLink to={`/earn/nft-staking/${item.pool}`}>
+                // <NavLink to={`/earn/nft-staking/${item.pool}`}>
                   <TopOtherPoolsNftListCard
                     tokenLogo={item.tokenLogo}
                     chain={item.chain}
@@ -567,7 +631,48 @@ const EarnOtherContentNft = ({
                     lockTime={item.lockTime}
                     expired={item.expired}
                   />
-                </NavLink>
+                // </NavLink>
+              );
+            })}
+            { expiredPools === true && dummyData_eth_expired.map((pool, index) => {
+              return (
+                // <NavLink to={`/earn/nft-staking/${item.pool}`}>
+                <TopPoolsNftListCardInner
+                key={index}
+                activePools={dummyData_eth_expired}
+                tokenName={pool.pool}
+                topList={"Staking"}
+                onShowDetailsClick={() => {
+                  // setShowDetails(!showDetails);
+                  // setActiveCard(topPools[index + 1]);
+                }}
+                top_pick={pool.top_pick}
+                comingSoon={pool.coming_soon}
+                expired={pool.expired}
+                tokenLogo={pool.tokenLogo}
+                apr={pool.apr}
+                lockTime={pool.lockTime}
+                poolCap={pool.poolCap}
+                chain={"eth"}
+                display={"flex"}
+                isNewPool={pool.new_pool === "Yes" ? true : false}
+                totalTvl={pool.tvl_usd}
+                // showDetails={showDetails}
+                cardIndex={index + 1}
+                chainId={chainId}
+                handleConnection={handleConnection}
+                handleSwitchNetwork={handleSwitchNetwork}
+                coinbase={coinbase}
+                referrer={referrer}
+                // lp_id={lp_id[index + 1]}
+                // the_graph_result={the_graph_result}
+                // the_graph_resultbsc={the_graph_resultbsc}
+                isConnected={isConnected}
+                // the_graph_resultavax={the_graph_resultavax}
+                // isPremium={isPremium}
+                // network={network}
+              />
+                // </NavLink>
               );
             })}
           </div>

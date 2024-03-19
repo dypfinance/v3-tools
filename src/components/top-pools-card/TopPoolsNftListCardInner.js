@@ -166,7 +166,7 @@ const TopPoolsNftListCardInner = ({
   return (
     <>
       <div
-        className={`row w-100 flex-column gap-3 gap-lg-0 flex-lg-row align-items-center justify-content-between  mx-0 cursor-pointer position-relative ${
+        className={`row mt-2 w-100 flex-column gap-3 gap-lg-0 flex-lg-row align-items-center justify-content-between  mx-0 cursor-pointer position-relative ${
           expired === true
             ? "poolscardwrapperexpired"
             : showDetails === false
@@ -291,26 +291,7 @@ const TopPoolsNftListCardInner = ({
               </div>
             </div>
           )}
-          <div className="col-lg-4 d-flex flex-column gap-2">
-            <span
-              style={{
-                fontSize: "12px",
-                fontWeight: "400",
-                color: "#C0C9FF",
-              }}
-            >
-              Pool Cap
-            </span>
-            <h5
-              style={{
-                fontSize: "20px",
-                fontWeight: "500",
-                color: "#F7F7FC",
-              }}
-            >
-              { poolCap !== '∞' ? getFormattedNumber(poolCap, 0) : '∞'} {poolCap !== '∞' && 'CAWS'}
-            </h5>
-          </div>
+     
           <div className="d-none d-xxl-flex d-xl-flex d-lg-flex d-md-flex flex-column gap-2">
             {/* <div className="d-flex align-items-center gap-2 justify-content-between">
               <span className="rewardsleft-txt">Rewards left</span>
@@ -363,7 +344,7 @@ const TopPoolsNftListCardInner = ({
           </h6>
         </div>
       </div>
-      {expired === true && showDetails ? (
+      {expired === true && showDetails && cardIndex === 1 ? (
         <>
           <CawsDetails
             coinbase={coinbase}
@@ -371,10 +352,11 @@ const TopPoolsNftListCardInner = ({
             listType={listType}
             chainId={chainId}
             handleSwitchNetwork={handleSwitchNetwork}
+            expired={true}
             handleConnection={handleConnection}
           />
         </>
-      ) : showDetails && expired === false && cardIndex === 2 ? (
+      ) : showDetails && expired === true && cardIndex === 2 ? (
         <CawsWodDetails
           coinbase={coinbase}
           isConnected={isConnected}
@@ -382,9 +364,9 @@ const TopPoolsNftListCardInner = ({
           chainId={chainId}
           handleSwitchNetwork={handleSwitchNetwork}
           handleConnection={handleConnection}
-          expired={false}
+          expired={true}
         />
-      ) : showDetails && expired === false && cardIndex === 3 ? (
+      ) : showDetails && expired === true && cardIndex === 3 ? (
         <LandDetails
           coinbase={coinbase}
           isConnected={isConnected}
@@ -392,6 +374,8 @@ const TopPoolsNftListCardInner = ({
           chainId={chainId}
           handleSwitchNetwork={handleSwitchNetwork}
           handleConnection={handleConnection}
+          expired={true}
+
           //   apr={landCard.apy_percent}
           //   totalNftsLocked={landCard.total_nfts_locked}
         />

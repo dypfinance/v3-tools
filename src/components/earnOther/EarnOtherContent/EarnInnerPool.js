@@ -8,7 +8,6 @@ import axios from "axios";
 
 const EarnInnerPool = ({
   selectedBtn,
-  onSelectButton,
   selectedTab,
   the_graph_result,
   staking,
@@ -17,6 +16,7 @@ const EarnInnerPool = ({
   lockTime,
   other_info,
   apr,
+  selectedPool,
 }) => {
   const [poolCapTooltip, setPoolCapTooltip] = useState(false);
   const [quotaTooltip, setQuotaTooltip] = useState(false);
@@ -723,54 +723,46 @@ const EarnInnerPool = ({
       <div className="locktimewrapper align-items-center gap-2">
         <button
           className={
-            selectedBtn === "flexible" ? "method-btn-active" : "method-btn"
+            selectedBtn === "flexible"
+              ? "method-btn-active"
+              : "method-btn-disabled"
           }
-          onClick={() => {
-            onSelectButton("flexible");
-          }}
         >
           Flexible
         </button>
         <button
           className={
-            selectedBtn === "30days" ? "method-btn-active" : "method-btn"
+            selectedBtn === "30days"
+              ? "method-btn-active"
+              : "method-btn-disabled"
           }
-          onClick={() => {
-            onSelectButton("30days");
-          }}
         >
           30 Days
         </button>
         <button
           className={
-            selectedBtn === "60days" ? "method-btn-active" : "method-btn"
+            selectedBtn === "60days"
+              ? "method-btn-active"
+              : "method-btn-disabled"
           }
-          onClick={() => {
-            onSelectButton("60days");
-          }}
         >
           60 Days
         </button>
         <button
           className={
-            selectedBtn === "90days" ? "method-btn-active" : "method-btn"
+            selectedBtn === "90days"
+              ? "method-btn-active"
+              : "method-btn-disabled"
           }
-          onClick={() => {
-            onSelectButton("90days");
-          }}
         >
           90 Days
         </button>
         <button
           className={
-            "method-btn-disabled"
-            // selectedBtn === "120days"
-            //   ? "method-btn-active"
-            //   : "method-btn"
+            selectedBtn === "120days"
+              ? "method-btn-active"
+              : "method-btn-disabled"
           }
-          // onClick={() => {
-          //   onSelectButton("120days");
-          // }}
         >
           120 Days
         </button>
@@ -780,14 +772,23 @@ const EarnInnerPool = ({
           <div className="info-pool-item p-2">
             <div className="d-flex justify-content-between gap-1 align-items-center">
               <span className="info-pool-left-text">Apr</span>
-              <span className="info-pool-right-text">0.90%</span>
+              <span className="info-pool-right-text">{selectedPool.apr}</span>
             </div>
           </div>
           <div className="info-pool-item p-2">
             <div className="d-flex justify-content-between gap-1 align-items-center">
               <span className="info-pool-left-text">Chain</span>
               <span className="info-pool-right-text d-flex gap-1 align-items-center">
-                Ethereum
+                <img
+                  src={
+                    require(`../../top-pools-card/assets/${selectedPool.tokenLogo}`)
+                      .default
+                  }
+                  width={12}
+                  height={12}
+                  alt=""
+                />{" "}
+                {selectedPool.chain}
               </span>
             </div>
           </div>
@@ -806,7 +807,7 @@ const EarnInnerPool = ({
             <span className="deposit-popup-txt">Deposit</span>
             <div className="d-flex gap-1 align-items-baseline">
               <span className="bal-smallTxt">My Balance:</span>
-              <span className="bal-bigTxt">25,250.52 ETH</span>
+              <span className="bal-bigTxt">25,250.52 {selectedPool.tokenTicker}</span>
             </div>
           </div>
           <div className="d-flex flex-column w-100 gap-1">
@@ -822,11 +823,10 @@ const EarnInnerPool = ({
                   setdepositAmount(e.target.value);
                   checkApproval(e.target.value);
                 }}
-                placeholder=" "
                 name="amount_deposit"
                 id="amount_deposit"
                 key="amount_deposit"
-                placeholder="Minimum 0.001 ETH"
+                placeholder={`Minimum 0.001 ${selectedPool.tokenTicker}`}
               />
               <button
                 className="inner-max-btn position-absolute"
@@ -840,7 +840,7 @@ const EarnInnerPool = ({
 
               <div className="d-flex gap-1 align-items-baseline">
                 <span className="bal-smallTxt">Approved:</span>
-                <span className="bal-bigTxt2">20.52 ETH</span>
+                <span className="bal-bigTxt2">20.52 {selectedPool.tokenTicker}</span>
               </div>
             </div>
           </div>
@@ -850,7 +850,7 @@ const EarnInnerPool = ({
                 <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Pool Cap:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    20 ETH
+                    20 {selectedPool.tokenTicker}
                     <ClickAwayListener onClickAway={poolCapClose}>
                       <Tooltip
                         open={poolCapTooltip}
@@ -874,7 +874,7 @@ const EarnInnerPool = ({
                 <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Available Quota:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    8 ETH
+                    8 {selectedPool.tokenTicker}
                     <ClickAwayListener onClickAway={quotaClose}>
                       <Tooltip
                         open={quotaTooltip}
@@ -896,7 +896,7 @@ const EarnInnerPool = ({
                 <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Maximum deposit:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    2 ETH
+                    2 {selectedPool.tokenTicker}
                     <ClickAwayListener onClickAway={maxDepositClose}>
                       <Tooltip
                         open={maxDepositTooltip}
@@ -921,7 +921,7 @@ const EarnInnerPool = ({
               <div className="d-flex flex-column">
                 <span className="bal-smallTxt">Total Est. Rewards</span>
                 <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                  0.250 ETH
+                  0.250 {selectedPool.tokenTicker}
                 </span>
               </div>
             </div>
@@ -1147,7 +1147,7 @@ const EarnInnerPool = ({
               <span className="bal-smallTxt">Deposited:</span>
               <span className="bal-bigTxt">
                 {" "}
-                {getFormattedNumber(depositedTokens, 2)} ETH
+                {getFormattedNumber(depositedTokens, 2)} {selectedPool.tokenTicker}
               </span>
             </div>
           </div>
@@ -1159,11 +1159,10 @@ const EarnInnerPool = ({
                 autoComplete="off"
                 value={withdrawAmount}
                 onChange={(e) => setwithdrawAmount(e.target.value)}
-                placeholder=" "
                 name="amount_withdraw"
                 id="amount_withdraw"
                 key="amount_withdraw"
-                placeholder="Minimum 0.001 ETH"
+                placeholder={`Minimum 0.001 ${selectedPool.tokenTicker}`}
               />
               <button
                 className="inner-max-btn position-absolute"

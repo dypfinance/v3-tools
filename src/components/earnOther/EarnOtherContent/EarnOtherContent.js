@@ -91,23 +91,7 @@ const EarnOtherContent = ({
     },
   ];
 
-  const dummyData_eth = [
-    {
-      lockTime: "Locked",
-      chain: "Ethereum",
-      apr: "30%",
-      tokenLogo: "ethereum.svg",
-      expired: false,
-      top_pick: false,
-      hot: true,
-      coming_soon: true,
-      staked: false,
-      nft: true,
-      tokenName: "Ethereum",
-      tokenTicker: "ETH",
-      pool: "ETH",
-    },
-  ];
+
 
   const dummyData_base = [
     {
@@ -119,38 +103,14 @@ const EarnOtherContent = ({
       top_pick: false,
       hot: true,
       coming_soon: true,
-
       staked: false,
       nft: true,
       tokenName: "Base",
       tokenTicker: "ETH",
       pool: "BASE",
       new_pool: "Yes",
-    },
-  ];
+      lockTime: "60days",
 
-  const dummyData_bnb2 = [
-    {
-      lockTime: "Flexible & Locked",
-      chain: "BNB Chain",
-      apr: "10%",
-      tokenLogo: "dyplogo.svg",
-      expired: false,
-      top_pick: true,
-      tokenName: "Dypius",
-      tokenTicker: "DYP",
-      pool: "DYP-BNB",
-    },
-    {
-      lockTime: "Flexible & Locked",
-      chain: "BNB Chain",
-      apr: "25%",
-      tokenLogo: "bsc.svg",
-      expired: false,
-      top_pick: true,
-      tokenName: "BNB",
-      tokenTicker: "WBNB",
-      pool: "BNB",
     },
   ];
 
@@ -170,6 +130,8 @@ const EarnOtherContent = ({
       coming_soon: true,
       pool: "BNB",
       new_pool: "Yes",
+      lockTime: "90days",
+
     },
   ];
 
@@ -189,8 +151,11 @@ const EarnOtherContent = ({
       tokenTicker: "AVAX",
       pool: "AVAX",
       new_pool: "Yes",
+      lockTime: "30days",
     },
   ];
+
+  const allPools = [...dummyData_avax, ...dummyData_base, ...dummyData_bnb]
 
   const [stake, setStake] = useState("allchains");
   const [option, setOption] = useState(routeOption);
@@ -198,6 +163,8 @@ const EarnOtherContent = ({
   const [cardIndex, setcardIndex] = useState(777);
   const [selectedTab, setselectedTab] = useState("deposit");
   const [selectedBtn, setselectedBtn] = useState("flexible");
+  const [selectedPool, setselectedPool] = useState([]);
+
 
   const [listStyle, setListStyle] = useState("list");
   const [myStakes, setMyStakes] = useState(false);
@@ -772,7 +739,7 @@ const EarnOtherContent = ({
       </div>
       {listStyle === "table" && (
         <div className="w-100 otherpools-wrapper">
-          {[...dummyData_avax, ...dummyData_base, ...dummyData_bnb].map(
+          {allPools.map(
             (item, index) => {
               return (
                 // <NavLink to={`/earn/defi-staking/${item.pool}`}>
@@ -789,6 +756,8 @@ const EarnOtherContent = ({
                   onClick={() => {
                     setshowDetails(true);
                     setcardIndex(index);
+                    setselectedBtn(item.lockTime)
+                    setselectedPool(item)
                   }}
                 />
                 // </NavLink>
@@ -817,7 +786,7 @@ const EarnOtherContent = ({
               </div>
             )}
             <div className="d-flex flex-column gap-1 px-0">
-              {[...dummyData_avax, ...dummyData_base, ...dummyData_bnb].map(
+              {allPools.map(
                 (item, index) => {
                   return (
                     // <NavLink to={`/earn/defi-staking/${item.pool}`}>
@@ -838,6 +807,10 @@ const EarnOtherContent = ({
                       onCardClick={() => {
                         setshowDetails(!showDetails);
                         setcardIndex(!showDetails ? index : 777);
+                    setselectedBtn(item.lockTime)
+                    setselectedPool(item)
+
+
                       }}
                       cardIndex={cardIndex}
                       showDetails={showDetails}
@@ -908,9 +881,7 @@ const EarnOtherContent = ({
                 <EarnInnerPool
                   selectedTab={selectedTab}
                   selectedBtn={selectedBtn}
-                  onSelectButton={(val) => {
-                    setselectedBtn(val);
-                  }}
+                  selectedPool={selectedPool}
                 />
               </div>
             </div>

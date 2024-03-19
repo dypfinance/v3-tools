@@ -122,7 +122,7 @@ const TopOtherPoolsNftListCard = ({
                       </h5>
                     </div>
                   </td>
-                  <td className="earnother-td col-2">
+                  {/* <td className="earnother-td col-2">
                     <h5
                       className="text-white"
                       style={{
@@ -133,7 +133,7 @@ const TopOtherPoolsNftListCard = ({
                     >
                       {tokenTicker}
                     </h5>
-                  </td>
+                  </td> */}
                   <td className="earnother-td col-2">
                     <h5
                       style={{
@@ -164,10 +164,10 @@ const TopOtherPoolsNftListCard = ({
                         fontSize: "16px",
                         fontWeight: "300",
                         color: "#F7F7FC",
-                        marginLeft: 30,
+                        // marginLeft: 30,
                       }}
                     >
-                      {apr}
+                      {apr}%
                     </h5>
                   </td>
                   <td className="earnother-td col-2">
@@ -176,14 +176,14 @@ const TopOtherPoolsNftListCard = ({
                         fontSize: "16px",
                         fontWeight: "300",
                         color: "#F7F7FC",
-                        marginLeft: 30,
+                        // marginLeft: 30,
                       }}
                     >
                       {lockTime}
                     </h5>
                   </td>
                   <td className="earnother-td col-2">
-                    <h6 className="details-text2 gap-1 d-flex align-items-center cursor-pointer justify-content-end">
+                    <h6 className="details-text2 gap-1 d-flex align-items-center cursor-pointer justify-content-end m-0">
                       Stake
                     </h6>
                   </td>
