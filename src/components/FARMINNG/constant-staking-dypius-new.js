@@ -1013,7 +1013,7 @@ const StakeDypiusEth = ({
                     title={
                       <div className="tooltip-text">
                         {
-                          "The initial pool size is capped at 11.5M DYP. Additional opportunities to stake DYP are planned to be introduced over time."
+                          "The initial pool size is capped at 13M DYP. Additional opportunities to stake DYP are planned to be introduced over time."
                         }
                       </div>
                     }
