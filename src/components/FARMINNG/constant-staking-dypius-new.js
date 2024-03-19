@@ -422,11 +422,12 @@ const StakeDypiusEth = ({
   }, []);
 
   useEffect(() => {
-    refreshBalance();
+    if(chainId === 1)
+   { refreshBalance();
     if (depositAmount !== "") {
       checkApproval(depositAmount);
-    }
-  }, [coinbase, coinbase2, staking, is_wallet_connected]);
+    }}
+  }, [coinbase, coinbase2, staking, is_wallet_connected,chainId]);
 
   useEffect(() => {
     setdepositAmount("");

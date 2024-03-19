@@ -517,7 +517,7 @@ const EarnContent = ({
                   <img
                     src={
                       require(`../../calculator/assets/${item.title.toLowerCase()}Icon.svg`)
-                        .default
+                       
                     }
                     alt=""
                   />
@@ -610,7 +610,7 @@ const EarnContent = ({
                   <img
                     src={
                       require(`../../calculator/assets/${item.title.toLowerCase()}Icon.svg`)
-                        .default
+                       
                     }
                     alt=""
                   />

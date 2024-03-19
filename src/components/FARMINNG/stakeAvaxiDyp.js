@@ -305,12 +305,13 @@ const StakeAvaxIDyp = ({
   }, [coinbase, coinbase2]);
 
   useEffect(() => {
-    refreshBalance();
+    if(chainId === 43114)
+   { refreshBalance();
     if (depositAmount !== "") {
       checkApproval(depositAmount);
 
-    }
-  }, [coinbase, coinbase2, staking]);
+    }}
+  }, [coinbase, coinbase2, staking,chainId]);
 
   useEffect(() => {
       setdepositAmount('');

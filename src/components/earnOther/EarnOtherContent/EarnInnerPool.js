@@ -782,7 +782,7 @@ const EarnInnerPool = ({
                 <img
                   src={
                     require(`../../top-pools-card/assets/${selectedPool.tokenLogo}`)
-                      .default
+           
                   }
                   width={12}
                   height={12}

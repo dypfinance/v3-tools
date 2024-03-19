@@ -13,6 +13,7 @@ const TopOtherPoolsListCard = ({
   tokenTicker,
   apr,
   lockTime,
+  chainLogo,
   tvl,
   onShowDetailsClick,
   theBnbPool,
@@ -165,10 +166,7 @@ const TopOtherPoolsListCard = ({
                   <td className="earnother-td col-2">
                     <div className={`col-6 d-flex align-items-center gap-2`}>
                       <img
-                        src={
-                          require(`../top-pools-card/assets/${tokenLogo}`)
-                            .default
-                        }
+                        src={require(`../top-pools-card/assets/${tokenLogo}`)}
                         style={{ width: 36, height: 36 }}
                         alt=""
                       />
@@ -212,21 +210,27 @@ const TopOtherPoolsListCard = ({
                   </td>
                   <td className="earnother-td col-2">
                     <h5
-                      className="text-white"
+                      className="text-white d-flex align-items-center gap-1"
                       style={{
-                        fontSize: "18px",
+                        fontSize: "12px",
                         fontWeight: "300",
                         color: "#F7F7FC",
                       }}
                     >
+                      <img
+                        src={require(`../top-pools-card/assets/${chainLogo}`)}
+                        width={24}
+                        height={24}
+                        alt=""
+                      />
                       {chain}
                     </h5>
                   </td>
                   <td className="earnother-td col-2">
                     {isComingSoon ? (
                       <h6 className="details-text2 gap-1 d-flex align-items-center cursor-pointer justify-content-end w-50">
-                      Coming Soon
-                    </h6>
+                        Coming Soon
+                      </h6>
                     ) : (
                       <h6 className="details-text2 gap-1 d-flex align-items-center cursor-pointer justify-content-end">
                         Stake
@@ -241,10 +245,7 @@ const TopOtherPoolsListCard = ({
                       <div className="d-flex align-items-center w-100  justify-content-between gap-2">
                         <div className={` d-flex align-items-center gap-1`}>
                           <img
-                            src={
-                              require(`../top-pools-card/assets/${tokenLogo}`)
-                                .default
-                            }
+                            src={require(`../top-pools-card/assets/${tokenLogo}`)}
                             width={28}
                             height={28}
                             alt=""

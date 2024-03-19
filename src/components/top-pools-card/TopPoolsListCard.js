@@ -414,7 +414,7 @@ const TopPoolsListCard = ({
                 <>
                   <img
                     key={index}
-                    src={require(`./assets/${coin}.svg`).default}
+                    src={require(`./assets/${coin}.svg`)}
                     alt=""
                     className="pool-coins"
                   />
@@ -433,7 +433,7 @@ const TopPoolsListCard = ({
             ) : tokenLogo !== undefined && tokenLogo !== "landcaws" ? (
               <>
                 <img
-                  src={require(`./assets/${tokenLogo}`).default}
+                  src={require(`./assets/${tokenLogo}`)}
                   width={32}
                   height={32}
                   alt=""
@@ -451,7 +451,7 @@ const TopPoolsListCard = ({
                   cawswodcoins.map((coin, index) => (
                     <img
                       key={index}
-                      src={require(`./assets/${coin}.png`).default}
+                      src={require(`./assets/${coin}.png`)}
                       alt=""
                       className="pool-coins"
                     />

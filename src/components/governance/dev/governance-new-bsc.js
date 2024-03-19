@@ -1173,13 +1173,13 @@ export default class Governance extends React.Component {
                       >
                        {expireArray[index].includes("ago") ? (
                           <img
-                            src={require("../assets/expired.png").default}
+                            src={require("../assets/expired.png")}
                             alt=""
                             className="acordionstate"
                           />
                         ) : (
                           <img
-                            src={require("../assets/new.png").default}
+                            src={require("../assets/new.png")}
                             alt=""
                             className="acordionstate"
                             style={{scale: '0.67'}}

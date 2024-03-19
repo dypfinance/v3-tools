@@ -395,13 +395,14 @@ const StakeDypiusBsc = ({
   }, [coinbase, coinbase2]);
 
   useEffect(() => {
-    refreshBalance();
+    if(chainId === 56)
+   { refreshBalance();
     if (depositAmount !== "") {
       checkApproval(depositAmount);
     } else {
       setdepositStatus("initial");
-    }
-  }, [coinbase, coinbase2, staking]);
+    }}
+  }, [coinbase, coinbase2, staking, chainId]);
 
   useEffect(() => {
     setdepositAmount("");

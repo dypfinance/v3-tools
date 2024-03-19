@@ -106,7 +106,7 @@ const TopOtherPoolsNftCard = ({
                         key={index}
                         src={
                           require(`../top-pools-card/assets/${coin}.svg`)
-                            .default
+                         
                         }
                         alt=""
                         className="pool-coins"
@@ -119,7 +119,7 @@ const TopOtherPoolsNftCard = ({
                       <img
                         src={
                           require(`../top-pools-card/assets/${tokenLogo}`)
-                            .default
+                            
                         }
                         alt=""
                         className="tokenlogo"

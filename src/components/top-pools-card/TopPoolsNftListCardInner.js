@@ -11,6 +11,12 @@ import LandDetails from "../FARMINNG/land";
 import CawsDetails from "../FARMINNG/caws";
 import CawsWodDetails from "../FARMINNG/cawsWod";
 import axios from "axios";
+import useWindowSize from "../../functions/useWindowSize";
+
+import ethStake from "../../assets/earnAssets/ethStakeActive.svg";
+import avaxStake from "../../assets/earnAssets/avaxStakeActive.svg";
+import bnbStakeActive from "../../assets/earnAssets/bnbStakeActive.svg";
+import baseStake from "../../assets/earnAssets/baseActive.svg";
 
 const TopPoolsNftListCardInner = ({
   tokenLogo,
@@ -19,6 +25,7 @@ const TopPoolsNftListCardInner = ({
   tokenName,
   apr,
   lockTime,
+  tokenTicker,
   tvl,
   onShowDetailsClick,
   theBnbPool,
@@ -75,6 +82,7 @@ const TopPoolsNftListCardInner = ({
   ];
 
   const avaxCoins2 = ["avax"];
+  const windowSize = useWindowSize();
 
   const [showDetails, setShowDetails] = useState(false);
   const [coins, setCoins] = useState(ethCoins);
@@ -162,7 +170,7 @@ const TopPoolsNftListCardInner = ({
       setCoins(avaxCoins2);
     }
   }, [chain]);
-
+ 
   return (
     <>
       <div
@@ -177,171 +185,167 @@ const TopPoolsNftListCardInner = ({
         style={{ display: display }}
       >
         {" "}
-        {isNewPool && <img src={newPool} alt="" className="new-pool2" />}
-        <div className="col-12 col-lg-4 d-flex justify-content-between align-items-center">
-          <div
-            className={` d-flex align-items-center ${
-              cardType === "Farming" || cardType === "Buyback" ? null : "gap-2"
-            }`}
-            style={{ width: "100px" }}
-          >
-            {tokenLogo !== undefined &&
-            tokenLogo !== "landcaws" &&
-            typeof tokenLogo === "string" ? (
-              <>
-                <img
-                  src={require(`./assets/${tokenLogo}`).default}
-                  width={32}
-                  height={32}
-                  alt=""
-                />
-                <h5
-                  className="text-white"
-                  style={{ fontSize: "20px", fontWeight: "600" }}
-                >
-                  {tokenName}
-                </h5>
-              </>
-            ) : tokenLogo !== undefined &&
-              tokenLogo !== "landcaws" &&
-              typeof tokenLogo !== "string" ? (
-              <>
-                {tokenLogo.length > 0 &&
-                  tokenLogo.map((coin, index) => (
-                    <img
-                      key={index}
-                      src={require(`./assets/${coin}`).default}
-                      alt=""
-                      className="pool-coins"
-                    />
-                  ))}
+        <div className="px-0 d-flex justify-content-between align-items-center">
+          <table className="earnother-table">
+            <tbody>
+              {windowSize.width > 768 ? (
+                <tr className="d-flex w-100 align-items-center justify-content-around">
+                  <td className="earnother-td col-2">
+                    <div className={`col-6 d-flex align-items-center gap-2`}>
+                      {tokenLogo &&
+                        tokenLogo.length > 0 &&
+                        tokenLogo.map((item, index) => {
+                          return (
+                            <img
+                              key={index}
+                              src={require(`./assets/${item}`)}
+                              width={28}
+                              height={28}
+                              alt=""
+                            />
+                          );
+                        })}
 
-                <h5
-                  className="text-white"
-                  style={{ fontSize: "20px", fontWeight: "600" }}
-                >
-                  {tokenName}
-                </h5>
-              </>
-            ) : (
-              <>
-                {coins.length > 0 &&
-                  cawswodcoins.map((coin, index) => (
-                    <img
-                      key={index}
-                      src={require(`./assets/${coin}.png`).default}
-                      alt=""
-                      className="pool-coins"
-                    />
-                  ))}
-                <h5
-                  className="text-white"
-                  style={{ fontSize: "20px", fontWeight: "600" }}
-                >
-                  {tokenName}
-                </h5>
-              </>
-            )}
-          </div>
-          <div className=" col-lg-4 d-flex flex-column gap-2">
-            <div className="d-flex flex-column gap-2">
-              <span
-                style={{
-                  fontSize: "12px",
-                  fontWeight: "400",
-                  color: "#C0C9FF",
-                }}
-              >
-                APR
-              </span>
-              <h5
-                style={{
-                  fontSize: "18px",
-                  fontWeight: "300",
-                  color: "#F7F7FC",
-                }}
-              >
-                {apr}%
-              </h5>
-            </div>
-          </div>
-        </div>
-        <div className="d-flex col-12 col-lg-6 align-items-center justify-content-between">
-          {cardType !== "Vault" && (
-            <div className=" col-lg-4 d-flex flex-column gap-2">
-              <div className="d-flex flex-column gap-2">
-                <span
-                  style={{
-                    fontSize: "12px",
-                    fontWeight: "400",
-                    color: "#C0C9FF",
-                  }}
-                >
-                  Lock Time
-                </span>
-                <h5
-                  style={{
-                    fontSize: "18px",
-                    fontWeight: "300",
-                    color: "#F7F7FC",
-                  }}
-                >
-                  {lockTime}
-                </h5>
-              </div>
-            </div>
-          )}
-     
-          <div className="d-none d-xxl-flex d-xl-flex d-lg-flex d-md-flex flex-column gap-2">
-            {/* <div className="d-flex align-items-center gap-2 justify-content-between">
-              <span className="rewardsleft-txt">Rewards left</span>
-              <span className="rewardsleft-value">
-                29.16{" "}
-                {network === "Ethereum"
-                  ? "WETH"
-                  : network === "BNB Chain"
-                  ? "WBNB"
-                  : network === "Avalanche"
-                  ? "WAVAX"
-                  : "BASE"}{" "}
-                (100%)
-              </span>
-            </div> */}
-
-            <div className="progress-bar-wrapper" style={{ marginBottom: 0 }}>
-              <div className="progress">
-                <div
-                  className="progress-bar"
-                  role="progressbar"
-                  style={{ width: `100%`, background: "#4ed5d2" }}
-                  aria-valuenow="100"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                ></div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          className="col-12 col-lg-2 d-flex justify-content-center justify-content-xxl-end justify-content-xl-end justify-content-lg-end justify-content-md-end gap-5"
-          style={{ width: "170px" }}
-        >
-          {top_pick && <img src={topPick} alt="" />}
-          {comingSoon && <img src={comingSoonTag} alt="" />}
-
-          <h6
-            className="details-text gap-1 d-flex align-items-center cursor-pointer justify-content-end"
-            style={{
-              color: showDetails === false ? "#75CAC2" : "#C0C9FF",
-            }}
-            onClick={() => setShowDetails(!showDetails)}
-          >
-            {showDetails === false ? "Deposit" : "Close"}
-            <img
-              src={showDetails === false ? greenArrow : orangeArrow}
-              alt=""
-            />
-          </h6>
+                      <h5
+                        className="text-white"
+                        style={{ fontSize: "16px", fontWeight: "600" }}
+                      >
+                        {tokenName}
+                      </h5>
+                    </div>
+                  </td>
+                  {/* <td className="earnother-td col-2">
+                    <h5
+                      className="text-white"
+                      style={{
+                        fontSize: "18px",
+                        fontWeight: "300",
+                        color: "#F7F7FC",
+                      }}
+                    >
+                      {tokenTicker}
+                    </h5>
+                  </td> */}
+                  <td className="earnother-td col-2">
+                    <h5
+                      style={{
+                        fontSize: "15px",
+                        fontWeight: "300",
+                        color: "#F7F7FC",
+                      }}
+                      className="d-flex align-items-center gap-2"
+                    >
+                      <img
+                        src={ ethStake }
+                        style={{ width: 18, height: 18 }}
+                        alt=""
+                        className="pool-coins"
+                      />
+                      Ethereum
+                    </h5>
+                  </td>
+                  <td className="earnother-td col-2">
+                    <h5
+                      style={{
+                        fontSize: "16px",
+                        fontWeight: "300",
+                        color: "#F7F7FC",
+                        // marginLeft: 30,
+                      }}
+                    >
+                      {apr}%
+                    </h5>
+                  </td>
+                  <td className="earnother-td col-2">
+                    <h5
+                      style={{
+                        fontSize: "16px",
+                        fontWeight: "300",
+                        color: "#F7F7FC",
+                        // marginLeft: 30,
+                      }}
+                    >
+                      {lockTime}
+                    </h5>
+                  </td>
+                  <td className="earnother-td col-2">
+                    <h6 className="details-text2 gap-1 w-50 d-flex align-items-center cursor-pointer justify-content-center m-0">
+                    Withdraw
+                    </h6>
+                  </td>
+                </tr>
+              ) : (
+                <>
+                  <tr className="d-flex w-100 align-items-center justify-content-between mb-3">
+                    <td className="earnother-td w-100">
+                      <div className="d-flex align-items-center w-100  justify-content-between gap-2">
+                        <div className={` d-flex align-items-center gap-1`}>
+                          {tokenLogo &&
+                            tokenLogo.length > 0 &&
+                            tokenLogo.map((item, index) => {
+                              return (
+                                <img
+                                  key={index}
+                                  src={require(`./assets/${item}`)}
+                                  width={28}
+                                  height={28}
+                                  alt=""
+                                />
+                              );
+                            })}
+                          <div className="d-flex flex-column gap-1">
+                            <h5
+                              className="text-white"
+                              style={{ fontSize: "16px", fontWeight: "600" }}
+                            >
+                              {tokenName}
+                            </h5>
+                            <h5
+                              className="text-white"
+                              style={{
+                                fontSize: "14px",
+                                fontWeight: "300",
+                                color: "#F7F7FC",
+                              }}
+                            >
+                              {tokenTicker}
+                            </h5>
+                          </div>
+                        </div>
+                        <div className="d-flex flex-column gap-2">
+                          <h5
+                            style={{
+                              fontSize: "16px",
+                              fontWeight: "300",
+                              color: "#F7F7FC",
+                            }}
+                          >
+                            {apr}
+                          </h5>
+                          <h5
+                            style={{
+                              fontSize: "14px",
+                              fontWeight: "300",
+                              color: "#F7F7FC",
+                            }}
+                          >
+                            APR
+                          </h5>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr className="d-flex w-100 align-items-center justify-content-around">
+                    <td className="earnother-td w-100">
+                      <h6 className="details-text2 gap-1 d-flex align-items-center cursor-pointer justify-content-center m-0 w-100">
+                        Withdraw
+                      </h6>
+                    </td>
+                  </tr>
+                </>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
       {expired === true && showDetails && cardIndex === 1 ? (
@@ -375,9 +379,8 @@ const TopPoolsNftListCardInner = ({
           handleSwitchNetwork={handleSwitchNetwork}
           handleConnection={handleConnection}
           expired={true}
-
-          //   apr={landCard.apy_percent}
-          //   totalNftsLocked={landCard.total_nfts_locked}
+            apr={25}
+            totalNftsLocked={totalNftsLocked}
         />
       ) : (
         <></>

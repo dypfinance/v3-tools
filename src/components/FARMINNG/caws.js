@@ -256,14 +256,14 @@ const CawsDetails = ({
   }, []);
 
   useEffect(() => {
-    if (isConnected) {
+    if (isConnected && chainId === 1) {
       myNft().then();
       myStakes().then();
       checkApproval().then();
       handleClaimAll();
       calculateCountdown().then();
     }
-  }, [isConnected]);
+  }, [isConnected, chainId]);
 
   const getApprovedNfts = (data) => {
     setApprovedNfts(data);

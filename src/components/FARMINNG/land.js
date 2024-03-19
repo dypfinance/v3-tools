@@ -223,7 +223,7 @@ const LandDetails = ({
   }, []);
 
   useEffect(() => {
-    if (isConnected) {
+    if (isConnected && chainId === 1) {
       myNft().then();
       myStakes().then();
       checkApproval().then();
@@ -295,7 +295,7 @@ const LandDetails = ({
               <div className="d-flex align-items-center justify-content-between gap-2">
                 <h6 className="earnrewards-text">Total NFTs staked</h6>
                 <h6 className="earnrewards-token d-flex align-items-center gap-1">
-                  {totalNftsLocked}/1000
+                  {totalStakes}/1000
                 </h6>
               </div>
             </div>

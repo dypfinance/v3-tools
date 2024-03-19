@@ -106,10 +106,7 @@ const TopOtherPoolsNftListCard = ({
                   <td className="earnother-td col-2">
                     <div className={`col-6 d-flex align-items-center gap-2`}>
                       <img
-                        src={
-                          require(`../top-pools-card/assets/${tokenLogo}`)
-                            .default
-                        }
+                        src={require(`../top-pools-card/assets/${tokenLogo}`)}
                         width={28}
                         height={28}
                         alt=""
@@ -148,7 +145,9 @@ const TopOtherPoolsNftListCard = ({
                           chain === "Ethereum"
                             ? ethStake
                             : chain === "BNB Chain"
-                            ? bnbStakeActive : chain === 'Base' ? baseStake
+                            ? bnbStakeActive
+                            : chain === "Base"
+                            ? baseStake
                             : avaxStake
                         }
                         style={{ width: 18, height: 18 }}
@@ -183,8 +182,8 @@ const TopOtherPoolsNftListCard = ({
                     </h5>
                   </td>
                   <td className="earnother-td col-2">
-                    <h6 className="details-text2 gap-1 d-flex align-items-center cursor-pointer justify-content-end m-0">
-                      Stake
+                    <h6 className="details-text2 gap-1 d-flex align-items-center cursor-pointer justify-content-center w-75 m-0">
+                      Coming Soon
                     </h6>
                   </td>
                 </tr>
@@ -197,7 +196,7 @@ const TopOtherPoolsNftListCard = ({
                           <img
                             src={
                               require(`../top-pools-card/assets/${tokenLogo}`)
-                                .default
+                                
                             }
                             width={28}
                             height={28}
@@ -248,7 +247,7 @@ const TopOtherPoolsNftListCard = ({
                   <tr className="d-flex w-100 align-items-center justify-content-around">
                     <td className="earnother-td w-100">
                       <h6 className="details-text2 gap-1 d-flex align-items-center cursor-pointer justify-content-center m-0 w-100">
-                        Stake
+                        Coming Soon
                       </h6>
                     </td>
                   </tr>

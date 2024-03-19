@@ -1682,10 +1682,11 @@ const BscFarmingFunc = ({
   };
 
   useEffect(() => {
-    refreshBalance();
+    if(chainId === 56)
+   { refreshBalance();
     if (depositAmount !== "") {
       checkApproval(depositAmount);
-    }
+    }}
   }, [coinbase, coinbase2, chainId, staking, constant]);
 
   useEffect(() => {

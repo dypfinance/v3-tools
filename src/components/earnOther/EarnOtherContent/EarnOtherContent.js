@@ -98,7 +98,8 @@ const EarnOtherContent = ({
       lockTime: "Locked",
       chain: "Base",
       apr: "15%",
-      tokenLogo: "baseActive.svg",
+      chainLogo: 'baseActive.svg',
+      tokenLogo: "ethereum.svg",
       expired: false,
       top_pick: false,
       hot: true,
@@ -119,7 +120,8 @@ const EarnOtherContent = ({
       lockTime: "Locked",
       chain: "BNB Chain",
       apr: "25%",
-      tokenLogo: "bsc.svg",
+      tokenLogo: "bnbChain.svg",
+      chainLogo: "bsc.svg",
       expired: false,
       top_pick: false,
       hot: false,
@@ -141,6 +143,7 @@ const EarnOtherContent = ({
       chain: "Avalanche",
       apr: "10%",
       tokenLogo: "avax.svg",
+      chainLogo: 'avax.svg',
       expired: false,
       top_pick: false,
       hot: true,
@@ -771,7 +774,7 @@ const EarnOtherContent = ({
           <div className="row mx-0 justify-content-between align-items-center px-0 py-3 w-100">
             {windowSize.width > 768 && (
               <div
-                className="row mx-0 justify-content-between align-items-center px-2 py-3 w-100 options-container"
+                className="row mx-0 justify-content-between align-items-center px-2 py-2 w-100 options-container"
                 style={{ marginBottom: "10px" }}
               >
                 <table className="earnother-table">
@@ -793,6 +796,8 @@ const EarnOtherContent = ({
                     <TopOtherPoolsListCard
                       key={index}
                       tokenLogo={item.tokenLogo}
+                      chainLogo={item.chainLogo}
+
                       chain={item.chain}
                       tokenName={item.tokenName}
                       tokenTicker={item.tokenTicker}

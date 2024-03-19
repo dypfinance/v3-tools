@@ -365,12 +365,13 @@ const StakeBsc = ({
   }, [coinbase, coinbase2]);
 
   useEffect(() => {
-    refreshBalance();
+    if(chainId === 56)
+{    refreshBalance();
     if (depositAmount !== "") {
       checkApproval(depositAmount);
     } else {
       setdepositStatus("initial");
-    }
+    }}
   }, [coinbase, coinbase2, staking]);
 
   useEffect(() => {

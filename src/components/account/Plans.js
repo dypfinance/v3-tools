@@ -965,7 +965,7 @@ export default class Subscription extends React.Component {
           >
             <div className="d-flex align-items-center gap-2">
               <img
-                src={require("./assets/freePlanIcon.svg").default}
+                src={require("./assets/freePlanIcon.svg")}
                 alt=""
               />
               <h6 className="free-plan-title">Free plan</h6>
@@ -979,7 +979,7 @@ export default class Subscription extends React.Component {
                   >
                     <span className="free-plain-item-text">{item}</span>
                     <img
-                      src={require("./assets/freeCheck.svg").default}
+                      src={require("./assets/freeCheck.svg")}
                       alt=""
                     />
                   </div>
@@ -1016,7 +1016,7 @@ export default class Subscription extends React.Component {
           >
             <div className="d-flex align-items-center gap-2">
               <img
-                src={require("./assets/paidPlanIcon.svg").default}
+                src={require("./assets/paidPlanIcon.svg")}
                 alt=""
               />
               <h6 className="free-plan-title">Dypian plan</h6>
@@ -1030,7 +1030,7 @@ export default class Subscription extends React.Component {
                   >
                     <span className="free-plain-item-text">{item}</span>
                     <img
-                      src={require("./assets/freeCheck.svg").default}
+                      src={require("./assets/freeCheck.svg")}
                       alt=""
                     />
                   </div>
@@ -1306,7 +1306,7 @@ export default class Subscription extends React.Component {
                   <h6 className="free-plan-title">Dypian Plan Subscription</h6>
                 </div>
                 <img
-                  src={require(`./assets/clearFieldIcon.svg`).default}
+                  src={require(`./assets/clearFieldIcon.svg`)}
                   height={28}
                   width={28}
                   className="cursor-pointer"
@@ -1357,7 +1357,7 @@ export default class Subscription extends React.Component {
                         <img
                           src={
                             require(`./assets/${this.state.dropdownIcon.toLowerCase()}Icon.svg`)
-                              .default
+                              
                           }
                           alt=""
                         />
@@ -1372,7 +1372,7 @@ export default class Subscription extends React.Component {
                     }}
                     >
                       <img
-                        src={require(`./assets/wethIcon.svg`).default}
+                        src={require(`./assets/wethIcon.svg`)}
                         alt=""
                       />
                       WETH
@@ -1383,7 +1383,7 @@ export default class Subscription extends React.Component {
                     }}
                     >
                       <img
-                        src={require(`./assets/usdtIcon.svg`).default}
+                        src={require(`./assets/usdtIcon.svg`)}
                         alt=""
                       />
                       USDT
@@ -1394,7 +1394,7 @@ export default class Subscription extends React.Component {
                     }}
                     >
                       <img
-                        src={require(`./assets/usdcIcon.svg`).default}
+                        src={require(`./assets/usdcIcon.svg`)}
                         alt=""
                       />
                       USDC
@@ -1484,22 +1484,22 @@ export default class Subscription extends React.Component {
                               this.props.networkId === 1
                                 ? require(`./assets/${window.config.subscriptioneth_tokens[
                                     t
-                                  ]?.symbol.toLowerCase()}Icon.svg`).default
+                                  ]?.symbol.toLowerCase()}Icon.svg`)
                                 : this.props.networkId === 56
                                 ? require(`./assets/${window.config.subscriptionbnb_tokens[
                                     t
-                                  ]?.symbol.toLowerCase()}Icon.svg`).default
+                                  ]?.symbol.toLowerCase()}Icon.svg`)
                                 : this.props.networkId === 1030
                                 ? require(`./assets/${window.config.subscriptioncfx_tokens[
                                     t
-                                  ]?.symbol.toLowerCase()}Icon.svg`).default
+                                  ]?.symbol.toLowerCase()}Icon.svg`)
                                 : this.props.networkId === 8453
                                 ? require(`./assets/${window.config.subscriptionbase_tokens[
                                     t
-                                  ]?.symbol.toLowerCase()}Icon.svg`).default
+                                  ]?.symbol.toLowerCase()}Icon.svg`)
                                 : require(`./assets/${window.config.subscription_tokens[
                                     t
-                                  ]?.symbol.toLowerCase()}Icon.svg`).default
+                                  ]?.symbol.toLowerCase()}Icon.svg`)
                             }
                             alt=""
                           />
@@ -1545,7 +1545,7 @@ export default class Subscription extends React.Component {
                   <img
                     src={
                       require(`./assets/${this.state.dropdownIcon.toLowerCase()}Icon.svg`)
-                        .default
+                        
                     }
                     height={24}
                     width={24}
@@ -1988,7 +1988,7 @@ export default class Subscription extends React.Component {
                     }}
                   >
                     <img
-                      src={require("../../assets/wavax.svg").default}
+                      src={require("../../assets/wavax.svg")}
                       alt=""
                       style={{ height: 20, width: 20 }}
                     ></img>

@@ -467,9 +467,7 @@ const Vault = ({
   };
 
   const fetchTvl = async () => {
-    const pools = await axios.get(
-      "https://api.dyp.finance/api/get_vault_info"
-    );
+    const pools = await axios.get("https://api.dyp.finance/api/get_vault_info");
 
     if (vault) {
       const vaultobj = pools.data.VaultTVLs.filter((obj) => {
@@ -496,8 +494,10 @@ const Vault = ({
   }, [coinbase, coinbase2, vault_contract, vault]);
 
   useEffect(() => {
-    refreshBalance();
-  }, [coinbase, coinbase2, vault_contract]);
+    if (chainId === 1) {
+      refreshBalance();
+    }
+  }, [coinbase, coinbase2, vault_contract, chainId]);
 
   useEffect(() => {
     if (vault) {
@@ -790,11 +790,11 @@ const Vault = ({
 
     const balance_formatted = new BigNumber(token_balance2)
       .div(10 ** TOKEN_DECIMALS)
-      .toString(10)
+      .toString(10);
 
     if (balance_formatted > 0) {
       setdepositAmount(balance_formatted);
-    } else setdepositAmount('0');
+    } else setdepositAmount("0");
   };
   const rhandleSetMaxDeposit = (e) => {
     // e.preventDefault();
@@ -824,7 +824,7 @@ const Vault = ({
     let result_formatted = new BigNumber(result)
       .div(10 ** UNDERLYING_DECIMALS)
       .toFixed(UNDERLYING_DECIMALS);
-console.log(Number(result_formatted),Number(amount))
+    console.log(Number(result_formatted), Number(amount));
     if (
       Number(result_formatted) >= Number(amount) &&
       Number(result_formatted) !== 0
@@ -1160,8 +1160,14 @@ console.log(Number(result_formatted),Number(amount))
                         autoComplete="off"
                         value={
                           Number(depositAmount) > 0
-                            ? depositAmount.slice(0, depositAmount.indexOf('.')+7)
-                            : depositAmount.slice(0, depositAmount.indexOf('.')+7)
+                            ? depositAmount.slice(
+                                0,
+                                depositAmount.indexOf(".") + 7
+                              )
+                            : depositAmount.slice(
+                                0,
+                                depositAmount.indexOf(".") + 7
+                              )
                         }
                         onChange={(e) => {
                           setdepositAmount(e.target.value);

@@ -1522,13 +1522,13 @@ console.log(0, amountsPendingClaim, deadline)
   }
 
   useEffect(() => {
-    
-      refreshBalance();
+    if(chainId = 43114)
+    {  refreshBalance();
      if (depositAmount !== "") {
       checkApproval(depositAmount);
 
-    }
-  }, [coinbase, coinbase2, chainId, staking, constant]);
+    }}
+  }, [coinbase, coinbase2, chainId, staking, constant,chainId]);
 
  
 

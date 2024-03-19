@@ -264,7 +264,7 @@ const CawsWodDetails = ({
   };
 
   useEffect(() => {
-    if (coinbase) {
+    if (coinbase && chainId === 1) {
       getStakesIds();
       getLandStakesIds();
       myNft();
@@ -275,7 +275,7 @@ const CawsWodDetails = ({
       calculateAllRewards();
       calculateCountdown();
     }
-  }, [isConnected, coinbase, screenName, newStakes]);
+  }, [isConnected, coinbase, screenName, newStakes, chainId]);
 
   const getApprovedNfts = (data) => {
     setApprovedNfts(data);

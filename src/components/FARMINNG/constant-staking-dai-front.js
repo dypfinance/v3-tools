@@ -351,11 +351,12 @@ const StakeEthDai = ({
   }, []);
 
   useEffect(() => {
-    refreshBalance();
+    if(chainId === 1)
+  {  refreshBalance();
     if (depositAmount !== "") {
       checkApproval(depositAmount);
 
-    }
+    }}
   }, [coinbase, coinbase2, staking]);
 
   useEffect(() => {

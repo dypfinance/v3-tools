@@ -89,7 +89,7 @@ const EarnOtherContentNft = ({
     {
       chain: "Ethereum",
       apr: 50,
-      tokenLogo: "cawslogo.svg",
+      tokenLogo: ["newCawsLogo.png"],
       expired: true,
       top_pick: false,
       tokenName: "ETH",
@@ -104,9 +104,9 @@ const EarnOtherContentNft = ({
     {
       chain: "Ethereum",
       apr: 50,
-      tokenLogo: ["cawslogo.svg", "lanft-poolicon.png"],
+      tokenLogo: ["newCawsLogo.png", "lanft-poolicon.png"],
       expired: true,
-      top_pick: true,
+      top_pick: false,
       tokenName: "ETH",
       tokenTicker: "ETH",
       pool: "CAWS+WOD",
@@ -119,7 +119,7 @@ const EarnOtherContentNft = ({
     {
       chain: "Ethereum",
       apr: 25,
-      tokenLogo: "lanft-poolicon.png",
+      tokenLogo: ["lanft-poolicon.png"],
       expired: true,
       top_pick: false,
       tokenName: "ETH",
@@ -132,7 +132,6 @@ const EarnOtherContentNft = ({
       new_pool: "No",
     },
   ];
-
 
   const [stake, setStake] = useState("allchains");
   const [option, setOption] = useState(routeOption);
@@ -434,9 +433,24 @@ const EarnOtherContentNft = ({
         {windowSize.width > 786 ? (
           <div
             className="row justify-content-between align-items-center p-2 options-container"
-            style={{ marginTop: "30px", marginBottom: "40px" }}
+            style={{ marginTop: "30px"  }}
           >
-            <div className="col-2 d-flex justify-content-start align-items-center gap-3">
+              <div className="col-12 col-lg-4 col-xl-3 px-0">
+            {option !== "Farming" && (
+              <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
+                <span style={{ fontWeight: "300", fontSize: "13px" }}>
+                  Total value locked
+                </span>
+                <h6
+                  className="text-white"
+                  style={{ fontWeight: "600", fontSize: "17px" }}
+                >
+                  ${getFormattedNumber("2585417", 0)}
+                </h6>
+              </div>
+            )}
+          </div>
+            {/* <div className="col-2 d-flex justify-content-start align-items-center gap-3">
               <div
                 className={`list-style ${
                   listStyle === "list" && "list-style-active"
@@ -459,26 +473,41 @@ const EarnOtherContentNft = ({
                   alt=""
                 />
               </div>
-            </div>
+            </div> */}
             <div className="col-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3">
-            <h5 className="text-white inactive-pools">Past pools</h5>
-            <div
-              className={`pill-box ${myStakes && "pill-box-active"}`}
-              onClick={() => {
-                setMyStakes(!myStakes);
-                toggleInactive();
-              }}
-            >
-              <div className="pill"></div>
+              <h5 className="text-white inactive-pools">Past pools</h5>
+              <div
+                className={`pill-box ${myStakes && "pill-box-active"}`}
+                onClick={() => {
+                  setMyStakes(!myStakes);
+                  toggleInactive();
+                }}
+              >
+                <div className="pill"></div>
+              </div>
             </div>
-          </div>
           </div>
         ) : (
           <div
             className="row justify-content-center align-items-center p-2 options-container"
             style={{ marginTop: "24px", marginBottom: "24px" }}
           >
-            <div className="col-6 d-flex px-0 px-lg-2 justify-content-start align-items-center gap-3">
+              <div className="col-12 col-lg-4 col-xl-3 px-0">
+            {option !== "Farming" && (
+              <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
+                <span style={{ fontWeight: "300", fontSize: "13px" }}>
+                  Total value locked
+                </span>
+                <h6
+                  className="text-white"
+                  style={{ fontWeight: "600", fontSize: "17px" }}
+                >
+                  ${getFormattedNumber("2585417", 0)}
+                </h6>
+              </div>
+            )}
+          </div>
+            {/* <div className="col-6 d-flex px-0 px-lg-2 justify-content-start align-items-center gap-3">
               <div
                 className={`list-style ${
                   listStyle === "table" && "list-style-active"
@@ -501,13 +530,13 @@ const EarnOtherContentNft = ({
                   alt=""
                 />
               </div>
-            </div>
+            </div> */}
           </div>
         )}
 
         <div
           className={`row m-0 flex-column flex-xxl-row flex-lg-row flex-md-row align-items-center gap-5 gap-lg-0 justify-content-between px-0 `}
-          style={{ minHeight: "55px" }}
+          // style={{ minHeight: "55px" }}
         >
           <div className="col-12 col-lg-8 col-xl-5 d-flex flex-column flex-xxl-row flex-lg-row flex-md-row  gap-3 align-items-center justify-content-around justify-content-lg-end justify-content-xl-start px-0 px-xl-2">
             {/* <div className="d-flex flex-row flex-xxl-row flex-lg-row flex-md-row align-items-center gap-3">
@@ -563,21 +592,7 @@ const EarnOtherContentNft = ({
             </div> */}
           </div>
 
-          <div className="col-12 col-lg-4 col-xl-3 px-0">
-            {option !== "Farming" && (
-              <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
-                <span style={{ fontWeight: "300", fontSize: "13px" }}>
-                  Total value locked
-                </span>
-                <h6
-                  className="text-white"
-                  style={{ fontWeight: "600", fontSize: "17px" }}
-                >
-                  ${getFormattedNumber("2585417", 0)}
-                </h6>
-              </div>
-            )}
-          </div>
+        
         </div>
       </div>
       {listStyle === "table" && (
@@ -604,7 +619,7 @@ const EarnOtherContentNft = ({
         <div className="row mx-0 justify-content-between align-items-center px-2 py-3 w-100">
           {windowSize.width > 768 && (
             <div
-              className="row mx-0 justify-content-between align-items-center px-2 py-3 w-100 options-container"
+              className="row mx-0 justify-content-between align-items-center px-2 py-2 w-100 options-container"
               style={{ marginBottom: "10px" }}
             >
               <table className="earnother-table">
@@ -619,9 +634,10 @@ const EarnOtherContentNft = ({
             </div>
           )}
           <div className="d-flex flex-column gap-1 px-0">
-            { expiredPools === false && dummyData_eth.map((item, index) => {
-              return (
-                // <NavLink to={`/earn/nft-staking/${item.pool}`}>
+            {expiredPools === false &&
+              dummyData_eth.map((item, index) => {
+                return (
+                  // <NavLink to={`/earn/nft-staking/${item.pool}`}>
                   <TopOtherPoolsNftListCard
                     tokenLogo={item.tokenLogo}
                     chain={item.chain}
@@ -631,50 +647,52 @@ const EarnOtherContentNft = ({
                     lockTime={item.lockTime}
                     expired={item.expired}
                   />
-                // </NavLink>
-              );
-            })}
-            { expiredPools === true && dummyData_eth_expired.map((pool, index) => {
-              return (
-                // <NavLink to={`/earn/nft-staking/${item.pool}`}>
-                <TopPoolsNftListCardInner
-                key={index}
-                activePools={dummyData_eth_expired}
-                tokenName={pool.pool}
-                topList={"Staking"}
-                onShowDetailsClick={() => {
-                  // setShowDetails(!showDetails);
-                  // setActiveCard(topPools[index + 1]);
-                }}
-                top_pick={pool.top_pick}
-                comingSoon={pool.coming_soon}
-                expired={pool.expired}
-                tokenLogo={pool.tokenLogo}
-                apr={pool.apr}
-                lockTime={pool.lockTime}
-                poolCap={pool.poolCap}
-                chain={"eth"}
-                display={"flex"}
-                isNewPool={pool.new_pool === "Yes" ? true : false}
-                totalTvl={pool.tvl_usd}
-                // showDetails={showDetails}
-                cardIndex={index + 1}
-                chainId={chainId}
-                handleConnection={handleConnection}
-                handleSwitchNetwork={handleSwitchNetwork}
-                coinbase={coinbase}
-                referrer={referrer}
-                // lp_id={lp_id[index + 1]}
-                // the_graph_result={the_graph_result}
-                // the_graph_resultbsc={the_graph_resultbsc}
-                isConnected={isConnected}
-                // the_graph_resultavax={the_graph_resultavax}
-                // isPremium={isPremium}
-                // network={network}
-              />
-                // </NavLink>
-              );
-            })}
+                  // </NavLink>
+                );
+              })}
+            {expiredPools === true &&
+              dummyData_eth_expired.map((pool, index) => {
+                return (
+                  // <NavLink to={`/earn/nft-staking/${item.pool}`}>
+                  <TopPoolsNftListCardInner
+                    key={index}
+                    activePools={dummyData_eth_expired}
+                    tokenName={pool.pool}
+                    tokenTicker={pool.tokenTicker}
+                    topList={"Staking"}
+                    onShowDetailsClick={() => {
+                      // setShowDetails(!showDetails);
+                      // setActiveCard(topPools[index + 1]);
+                    }}
+                    top_pick={pool.top_pick}
+                    comingSoon={pool.coming_soon}
+                    expired={pool.expired}
+                    tokenLogo={pool.tokenLogo}
+                    apr={pool.apr}
+                    lockTime={pool.lockTime}
+                    poolCap={pool.poolCap}
+                    chain={"eth"}
+                    display={"flex"}
+                    isNewPool={pool.new_pool === "Yes" ? true : false}
+                    totalTvl={pool.tvl_usd}
+                    // showDetails={showDetails}
+                    cardIndex={index + 1}
+                    chainId={chainId}
+                    handleConnection={handleConnection}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    coinbase={coinbase}
+                    referrer={referrer}
+                    // lp_id={lp_id[index + 1]}
+                    // the_graph_result={the_graph_result}
+                    // the_graph_resultbsc={the_graph_resultbsc}
+                    isConnected={isConnected}
+                    // the_graph_resultavax={the_graph_resultavax}
+                    // isPremium={isPremium}
+                    // network={network}
+                  />
+                  // </NavLink>
+                );
+              })}
           </div>
         </div>
       )}

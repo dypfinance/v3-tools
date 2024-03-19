@@ -266,7 +266,7 @@ const Sidebar = (props) => {
                           hover === sideItem.label
                             ? sideItem.icon + "Active.svg"
                             : sideItem.icon + ".svg"
-                        }`).default
+                        }`)
                       }
                       alt=""
                       style={{ width: 32, height: 32 }}
@@ -348,7 +348,7 @@ const Sidebar = (props) => {
                             hover === sideItem.label
                               ? sideItem.icon + "Active.svg"
                               : sideItem.icon + ".svg"
-                          }`).default
+                          }`)
                         }
                         alt=""
                         style={{ width: 32, height: 32 }}
