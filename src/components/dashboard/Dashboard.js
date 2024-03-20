@@ -347,7 +347,7 @@ const Dashboard = ({
               <div>
                 <div className="row m-0 gap-4 toppool-allwrapper">
                   {topPools.length > 0 &&
-                  (network === 1 || network === 1030 || network === 8453) &&
+                  (network === 1 || network === 1030 || network === 8453 || network === 0) &&
                   loading === false ? (
                     topPools.slice(0, 2).map((item, index) => {
                       return (
@@ -748,7 +748,7 @@ const Dashboard = ({
               <div className="d-flex flex-column gap-4">
                 <div className="row m-0 gap-4 toppool-allwrapper">
                   {topPools.length > 0 &&
-                  (network === 1 || network === 1030 || network === 8453) &&
+                  (network === 1 || network === 1030 || network === 8453 || network === 0) &&
                   loading === false ? (
                     topPools.slice(0, 2).map((item, index) => {
                       return (

@@ -510,11 +510,12 @@ const InitConstantStakingiDYP = ({
     return the_graph_result.usd_per_eth || 0;
   };
 
-  const getApproxReturn = () => {
+  const getApproxReturn = (depositAmount, days) => {
     let APY = getAPY() - fee_s;
 
-    return ((approxDeposit * APY) / 100 / 365) * approxDays;
+    return ((depositAmount * APY) / 100 / 365) * days;
   };
+
 
   const getReferralLink = () => {
     return window.location.origin + window.location.pathname + "?r=" + coinbase;
