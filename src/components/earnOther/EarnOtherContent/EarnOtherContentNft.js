@@ -24,6 +24,9 @@ import TopPoolsNftListCardInner from "../../top-pools-card/TopPoolsNftListCardIn
 
 const EarnOtherContentNft = ({
   coinbase,
+  poolClickedType,
+  poolClicked,
+  type,
   the_graph_result,
   lp_id,
   isConnected,
@@ -427,29 +430,31 @@ const EarnOtherContentNft = ({
     }
   }, [option, expiredPools]);
 
+
+
   return (
     <>
-      <div className="row justify-content-center w-100">
+      <div className="row justify-content-center w-100 mx-0">
         {windowSize.width > 786 ? (
           <div
             className="row justify-content-between align-items-center p-2 options-container"
-            style={{ marginTop: "30px"  }}
+            style={{ marginTop: "30px" }}
           >
-              <div className="col-12 col-lg-4 col-xl-3 px-0">
-            {option !== "Farming" && (
-              <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
-                <span style={{ fontWeight: "300", fontSize: "13px" }}>
-                  Total value locked
-                </span>
-                <h6
-                  className="text-white"
-                  style={{ fontWeight: "600", fontSize: "17px" }}
-                >
-                  ${getFormattedNumber("2585417", 0)}
-                </h6>
-              </div>
-            )}
-          </div>
+            <div className="col-12 col-lg-4 col-xl-3 px-0">
+              {option !== "Farming" && (
+                <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
+                  <span style={{ fontWeight: "300", fontSize: "13px" }}>
+                    Total value locked
+                  </span>
+                  <h6
+                    className="text-white"
+                    style={{ fontWeight: "600", fontSize: "17px" }}
+                  >
+                    ${getFormattedNumber("2585417", 0)}
+                  </h6>
+                </div>
+              )}
+            </div>
             {/* <div className="col-2 d-flex justify-content-start align-items-center gap-3">
               <div
                 className={`list-style ${
@@ -492,21 +497,21 @@ const EarnOtherContentNft = ({
             className="row justify-content-center align-items-center p-2 options-container"
             style={{ marginTop: "24px", marginBottom: "24px" }}
           >
-              <div className="col-12 col-lg-4 col-xl-3 px-0">
-            {option !== "Farming" && (
-              <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
-                <span style={{ fontWeight: "300", fontSize: "13px" }}>
-                  Total value locked
-                </span>
-                <h6
-                  className="text-white"
-                  style={{ fontWeight: "600", fontSize: "17px" }}
-                >
-                  ${getFormattedNumber("2585417", 0)}
-                </h6>
-              </div>
-            )}
-          </div>
+            <div className="col-12 col-lg-4 col-xl-3 px-0">
+              {option !== "Farming" && (
+                <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
+                  <span style={{ fontWeight: "300", fontSize: "13px" }}>
+                    Total value locked
+                  </span>
+                  <h6
+                    className="text-white"
+                    style={{ fontWeight: "600", fontSize: "17px" }}
+                  >
+                    ${getFormattedNumber("2585417", 0)}
+                  </h6>
+                </div>
+              )}
+            </div>
             {/* <div className="col-6 d-flex px-0 px-lg-2 justify-content-start align-items-center gap-3">
               <div
                 className={`list-style ${
@@ -591,8 +596,6 @@ const EarnOtherContentNft = ({
               </div>
             </div> */}
           </div>
-
-        
         </div>
       </div>
       {listStyle === "table" && (
@@ -616,7 +619,7 @@ const EarnOtherContentNft = ({
         </div>
       )}
       {listStyle === "list" && (
-        <div className="row mx-0 justify-content-between align-items-center px-2 py-3 w-100">
+        <div className="row mx-0 justify-content-between align-items-center px-0 py-3 w-100">
           {windowSize.width > 768 && (
             <div
               className="row mx-0 justify-content-between align-items-center px-2 py-2 w-100 options-container"

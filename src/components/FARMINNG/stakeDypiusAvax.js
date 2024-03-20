@@ -398,7 +398,7 @@ settvlUSD(tvlUSD)
         setdepositStatus("fail");
         seterrorMsg(e?.message);
         setTimeout(() => {
-          depositAmount("");
+          setdepositAmount("");
           setdepositStatus("initial");
           seterrorMsg("");
         }, 2000);
@@ -436,7 +436,7 @@ settvlUSD(tvlUSD)
         setdepositStatus("fail");
         seterrorMsg(e?.message);
         setTimeout(() => {
-          depositAmount("");
+          setdepositAmount("");
           setdepositStatus("fail");
           seterrorMsg("");
         }, 10000);

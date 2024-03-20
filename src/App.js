@@ -808,6 +808,9 @@ class App extends React.Component {
                     path="/earn/defi-staking"
                     render={() => (
                       <EarnOther
+                      type={'defi'}
+
+                      isPremium={this.state.isPremium}
                         coinbase={this.state.coinbase}
                         the_graph_result={this.state.the_graph_result_ETH_V2}
                         the_graph_resultavax={
@@ -829,6 +832,8 @@ class App extends React.Component {
                     path="/earn/nft-staking"
                     render={() => (
                       <EarnOtherNft
+                      type={'nft'}
+                      isPremium={this.state.isPremium}
                         coinbase={this.state.coinbase}
                         isConnected={this.state.isConnected}
                         network={this.state.networkId}

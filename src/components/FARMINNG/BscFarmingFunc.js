@@ -1117,12 +1117,7 @@ const BscFarmingFunc = ({
   };
 
   const refreshBalance = async () => {
-    let coinbase = coinbase;
-
-    if (window.coinbase_address) {
-      coinbase = window.coinbase_address;
-      setCoinbase2(coinbase);
-    }
+    let coinbase = coinbase2;
 
     let lp_data = the_graph_result.lp_data;
 
@@ -1529,7 +1524,7 @@ const BscFarmingFunc = ({
   };
 
   useEffect(() => {
-    if (coinbase !== coinbase2) {
+    if (coinbase !== coinbase2 && chainId === "56") {
       setCoinbase2(coinbase);
       getTotalLP();
       getLPTokens();
@@ -1539,6 +1534,11 @@ const BscFarmingFunc = ({
     fetchiDypPrice();
     getPriceDYP();
   }, []);
+  useEffect(() => {
+    if (coinbase && isConnected) {
+      setCoinbase2(coinbase);
+    }
+  }, [coinbase, isConnected]);
 
   let is_connected = is_wallet_connected;
 
@@ -1664,7 +1664,7 @@ const BscFarmingFunc = ({
   };
 
   useEffect(() => {
-    if (chainId === '56') {
+    if (chainId === "56") {
       refreshBalance();
       if (depositAmount !== "") {
         checkApproval(depositAmount);
@@ -1892,10 +1892,7 @@ const BscFarmingFunc = ({
                           style={{ position: "relative", bottom: "4px" }}
                         >
                           <img
-                            src={
-                              require(`./assets/bsc/${selectedTokenLogo.toLowerCase()}.svg`)
-                                 
-                            }
+                            src={require(`./assets/bsc/${selectedTokenLogo.toLowerCase()}.svg`)}
                             alt=""
                             style={{ width: 14, height: 14 }}
                           />
@@ -2152,10 +2149,7 @@ const BscFarmingFunc = ({
                             aria-expanded="false"
                           >
                             <img
-                              src={
-                                require(`./assets/bsc/${selectedRewardTokenLogo1.toLowerCase()}.svg`)
-                                  
-                              }
+                              src={require(`./assets/bsc/${selectedRewardTokenLogo1.toLowerCase()}.svg`)}
                               alt=""
                               style={{ width: 14, height: 14 }}
                             />
@@ -2662,10 +2656,7 @@ const BscFarmingFunc = ({
                                 aria-expanded="false"
                               >
                                 <img
-                                  src={
-                                    require(`./assets/bsc/${selectedRewardTokenLogo1.toLowerCase()}.svg`)
-                                       
-                                  }
+                                  src={require(`./assets/bsc/${selectedRewardTokenLogo1.toLowerCase()}.svg`)}
                                   alt=""
                                   style={{ width: 14, height: 14 }}
                                 />

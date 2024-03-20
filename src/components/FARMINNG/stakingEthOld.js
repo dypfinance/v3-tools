@@ -462,7 +462,7 @@ const StakeEthOld = ({
         setdepositStatus("fail");
         seterrorMsg(e?.message);
         setTimeout(() => {
-          depositAmount("");
+          setdepositAmount("");
           setdepositStatus("initial");
           seterrorMsg("");
         }, 10000);
@@ -520,7 +520,7 @@ const StakeEthOld = ({
         setdepositStatus("fail");
         seterrorMsg(e?.message);
         setTimeout(() => {
-          depositAmount("");
+          setdepositAmount("");
           setdepositStatus("fail");
           seterrorMsg("");
         }, 10000);
@@ -549,7 +549,7 @@ const StakeEthOld = ({
         setdepositStatus("fail");
         seterrorMsg(e?.message);
         setTimeout(() => {
-          depositAmount("");
+          setdepositAmount("");
           setdepositStatus("fail");
           seterrorMsg("");
         }, 10000);

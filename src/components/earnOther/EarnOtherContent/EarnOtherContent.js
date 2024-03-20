@@ -29,6 +29,9 @@ import EarnInnerPool from "./EarnInnerPool";
 const EarnOtherContent = ({
   coinbase,
   the_graph_result,
+  poolClickedType,
+  poolClicked,
+  type,
   lp_id,
   isConnected,
   chainId,
@@ -484,12 +487,25 @@ const EarnOtherContent = ({
     }
   }, [query]);
 
+  useEffect(() => {
+    if (poolClicked === true && poolClickedType !== "" && allPools.length > 0) {
+      const selectedpool = allPools.filter((item) => {
+        return item.tokenTicker.toLowerCase() === poolClickedType;
+      });
+
+      if (selectedpool) {
+        setselectedPool(...selectedpool);
+        setshowDetails(true);
+      }
+    }
+  }, [poolClicked, poolClickedType, allPools]);
+
   return (
     <>
-      <div className="row justify-content-center w-100 ">
+      <div className="row mx-0 justify-content-center w-100 ">
         {windowSize.width > 786 ? (
           <div
-            className="row justify-content-between align-items-center p-2 options-container bg-transparent"
+            className="row justify-content-between align-items-center py-2 px-0 options-container bg-transparent"
             style={{ marginTop: "30px", marginBottom: "0px" }}
           >
             {/* <div className="col-2 d-flex justify-content-start align-items-center gap-3">
@@ -913,6 +929,15 @@ const EarnOtherContent = ({
                   selectedTab={selectedTab}
                   selectedBtn={selectedBtn}
                   selectedPool={selectedPool}
+                  staking={
+                    chainId == 1
+                      ? window.constant_staking_idyp_5
+                      : chainId == 56
+                      ? window.constant_stakingidyp_7
+                      : window.constant_staking_idypavax_7
+                  }
+                  coinbase={coinbase}
+                  the_graph_result={the_graph_result}
                 />
               </div>
             </div>

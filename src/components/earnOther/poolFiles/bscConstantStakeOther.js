@@ -405,7 +405,7 @@ const StakeBscOther = ({
           setdepositStatus("fail");
           seterrorMsg(e?.message);
           setTimeout(() => {
-            depositAmount("");
+            setdepositAmount("");
             setdepositStatus("initial");
             seterrorMsg("");
           }, 10000);
@@ -451,7 +451,7 @@ const StakeBscOther = ({
             setdepositStatus("fail");
             seterrorMsg(e?.message);
             setTimeout(() => {
-              depositAmount("");
+              setdepositAmount("");
               setdepositStatus("initial");
               seterrorMsg("");
             }, 10000);
@@ -473,7 +473,7 @@ const StakeBscOther = ({
             setdepositStatus("fail");
             seterrorMsg(e?.message);
             setTimeout(() => {
-              depositAmount("");
+              setdepositAmount("");
               setdepositStatus("initial");
               seterrorMsg("");
             }, 10000);

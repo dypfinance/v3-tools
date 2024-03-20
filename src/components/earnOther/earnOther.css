@@ -5,7 +5,7 @@
 .options-container {
   background: #312f69;
   box-shadow: 0px 32px 64px rgba(17, 17, 17, 0.12);
-  border-radius: 12px;
+  border-radius: 8px;
   /* width: 98%; */
 }
 
@@ -24,12 +24,18 @@
 .earn-other-hero {
   background: #282a5c;
   background-image: url("../../assets/earnOtherAssets/earnOtherHeroBackground.webp");
-  min-height: 150px;
+  /* min-height: 150px; */
   background-size: cover;
   background-repeat: no-repeat;
   border-radius: 16px;
   background-position: center;
 }
+
+.slick-slider,
+.slick-initialized {
+  width: 100% !important;
+}
+
 .no-farms {
   font-weight: 600;
   font-size: 24px;
@@ -162,16 +168,16 @@ hr {
   }
 
   .method-btn,
-  .method-btn-active,.method-btn-disabled  {
+  .method-btn-active,
+  .method-btn-disabled {
     padding: 8px !important;
   }
 
   .locktimewrapper {
     display: grid;
-    grid-template-columns: repeat(3,1fr) !important;
+    grid-template-columns: repeat(3, 1fr) !important;
     width: 100%;
   }
-
 }
 
 .method-btn {
@@ -187,12 +193,11 @@ hr {
   letter-spacing: -0.216px;
   background: transparent;
   white-space: nowrap;
-
 }
 
 .locktimewrapper {
   display: grid;
-  grid-template-columns: repeat(5,1fr);
+  grid-template-columns: repeat(5, 1fr);
 }
 
 .method-btn-disabled {
@@ -209,8 +214,6 @@ hr {
   pointer-events: none;
   padding: 8px 18px;
   white-space: nowrap;
-
-
 }
 
 .method-btn-active {
@@ -373,6 +376,173 @@ hr {
   background: transparent;
   bottom: 13px;
   left: 10px;
+}
+
+.earn-other-hero-title {
+  color: #fff;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.earn-other-hero-desc {
+  color: #fff;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.hero-premium-btn {
+  border-radius: 8px;
+  background: linear-gradient(95deg, #d62267 0.51%, #ea1aa5 100%);
+  color: #fff;
+  text-align: center;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  padding: 6px 12px;
+  border: none;
+  width: fit-content;
+}
+
+.hero-stake-eth-btn {
+  border-radius: 8px;
+  background: linear-gradient(95deg, #00b1d2 0.51%, #00be8c 100%);
+  color: #fff;
+  text-align: center;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  padding: 6px 12px;
+  border: none;
+  width: fit-content;
+}
+
+.hero-stake-bnb-btn {
+  border-radius: 8px;
+  background: linear-gradient(95deg, #83ac40 0.51%, #008657 100%);
+  color: #fff;
+  text-align: center;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  padding: 6px 12px;
+  border: none;
+  width: fit-content;
+}
+
+.hero-stake-avax-btn {
+  border-radius: 8px;
+  background: linear-gradient(95deg, #9b61c3 0.51%, #008de2 100%);
+  color: #fff;
+  text-align: center;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  border: none;
+  width: fit-content;
+  padding: 6px 12px;
+}
+
+.premiumBgDesktop {
+  background: url(./assets/premiumBg.webp);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  min-height: 150px;
+  border-radius: 8px;
+}
+
+.avaxBgDesktop {
+  background: url(./assets/avaxBg.webp);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  min-height: 150px;
+  border-radius: 8px;
+}
+
+.ethBgDesktop {
+  background: url(./assets/ethBg.webp);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  min-height: 150px;
+  border-radius: 8px;
+}
+
+.bscBgDesktop {
+  background: url(./assets/bscBg.webp);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  min-height: 150px;
+  border-radius: 8px;
+}
+
+.cawsBgDesktop {
+  background: url(./assets/cawsBg.webp);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  min-height: 150px;
+  border-radius: 8px;
+}
+
+@media only screen and (max-width: 500px) {
+  .cawsBgDesktop {
+    background: url(./assets/cawsBgMobile.webp);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    min-height: 350px;
+    border-radius: 8px;
+  }
+
+  .bscBgDesktop {
+    background: url(./assets/bscBgMobile.webp);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    min-height: 350px;
+  }
+
+  .ethBgDesktop {
+    background: url(./assets/ethBgMobile.webp);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    min-height: 350px;
+    border-radius: 8px;
+  }
+
+  .premiumBgDesktop {
+    background: url(./assets/premiumBgMobile.webp);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    min-height: 350px;
+    border-radius: 8px;
+  }
+
+  .avaxBgDesktop {
+    background: url(./assets/avaxBgMobile.webp);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    min-height: 350px;
+    border-radius: 8px;
+  }
+}
+
+.clickable-div {
+  cursor: pointer;
 }
 
 .eth-item-active {
