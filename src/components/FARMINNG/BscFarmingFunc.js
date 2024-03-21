@@ -1913,7 +1913,7 @@ const BscFarmingFunc = ({
                                 src={
                                   require(`./assets/bsc/${buyback_activetokensbsc[
                                     t
-                                  ].symbol.toLowerCase()}.svg`).default
+                                  ].symbol.toLowerCase()}.svg`) 
                                 }
                                 alt=""
                                 style={{ width: 14, height: 14 }}

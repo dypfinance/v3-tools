@@ -117,13 +117,14 @@ const Sidebar = (props) => {
       link: "/earn",
       children: [
         {
+          title: "Staking",
+          link: "/earn/defi-staking",
+        },
+        {
           title: "Dypius",
           link: "/earn/dypius",
         },
-        {
-          title: "DeFi Staking",
-          link: "/earn/defi-staking",
-        },
+
         {
           title: "NFT Staking",
           link: "/earn/nft-staking",
@@ -260,14 +261,12 @@ const Sidebar = (props) => {
                     onMouseLeave={() => setHover(null)}
                   >
                     <img
-                      src={
-                        require(`../../assets/sidebarIcons/${
-                          activeLink === sideItem.label ||
-                          hover === sideItem.label
-                            ? sideItem.icon + "Active.svg"
-                            : sideItem.icon + ".svg"
-                        }`)
-                      }
+                      src={require(`../../assets/sidebarIcons/${
+                        activeLink === sideItem.label ||
+                        hover === sideItem.label
+                          ? sideItem.icon + "Active.svg"
+                          : sideItem.icon + ".svg"
+                      }`)}
                       alt=""
                       style={{ width: 32, height: 32 }}
                     />
@@ -342,14 +341,12 @@ const Sidebar = (props) => {
                       onMouseLeave={() => setHover(null)}
                     >
                       <img
-                        src={
-                          require(`../../assets/sidebarIcons/${
-                            activeLink === sideItem.label ||
-                            hover === sideItem.label
-                              ? sideItem.icon + "Active.svg"
-                              : sideItem.icon + ".svg"
-                          }`)
-                        }
+                        src={require(`../../assets/sidebarIcons/${
+                          activeLink === sideItem.label ||
+                          hover === sideItem.label
+                            ? sideItem.icon + "Active.svg"
+                            : sideItem.icon + ".svg"
+                        }`)}
                         alt=""
                         style={{ width: 32, height: 32 }}
                       />

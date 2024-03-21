@@ -49,6 +49,7 @@ const EarnTopPicks = ({
   networkId,
   isPremium,
   showRibbon,
+  onConnectWallet,
 }) => {
   const vault = [
     {
@@ -958,7 +959,7 @@ const EarnTopPicks = ({
   return (
     <>
       <div className={`row w-100 justify-content-center gap-4`}>
-        {listing === "table" ? (
+        {listing === "table" && topPools.length > 0 ? (
           windowSize.width > 1300 ? (
             <div className="px-0">
               <>
@@ -5439,7 +5440,6 @@ const EarnTopPicks = ({
             <div className="px-0">
               <>
                 <div className="top-picks-container">
-                
                   {activePools.slice(0, 1).map((pool, index) => (
                     <TopPoolsCard
                       network={chainId}
@@ -8288,7 +8288,7 @@ const EarnTopPicks = ({
               </>
             </div>
           )
-        ) : (
+        ) : listing !== "table" && topPools.length > 0 ? (
           <div className="list-pools-container px-0">
             {topList === "Farming" &&
               chain === "bnb" &&
@@ -8316,10 +8316,10 @@ const EarnTopPicks = ({
                     setDetails();
                   }}
                   onHideDetailsClick={() => {
-                    setActiveCardNFT(false);
+                    setActiveCard(false);
                     setDetails();
                   }}
-                  showDetails={activeCardNFT}
+                  showDetails={activeCard}
                   topList={topList}
                   coinbase={coinbase}
                   cardIndex={1}
@@ -8445,6 +8445,20 @@ const EarnTopPicks = ({
               />
             ))}
           </div>
+        ) : topPools.length === 0 ? (
+          <div
+            className="w-100 d-flex justify-content-center align-items-center mt-5"
+            style={{ minHeight: "240px" }}
+          >
+            <FadeLoader color="#7770DF" />
+          </div>
+        ) : (
+          <div
+            className="w-100 d-flex justify-content-center align-items-center mt-5"
+            style={{ minHeight: "240px" }}
+          >
+            <FadeLoader color="#7770DF" />
+          </div>
         )}
       </div>
       {showDetails && (
@@ -8501,8 +8515,7 @@ const EarnTopPicks = ({
                   />
                 </div>
 
-                {activeCard &&
-                selectedPool?.id ===
+                {selectedPool?.id ===
                   "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
@@ -8530,9 +8543,14 @@ const EarnTopPicks = ({
                         ? "No Lock"
                         : parseInt(selectedPool?.lock_time?.split(" ")[0])
                     }
+                    onConnectWallet={() => {
+                      setShowDetails(false);
+                      onConnectWallet();
+                      setselectedPool([]);
+                      setDetails(999)
+                    }}
                   />
-                ) : activeCard &&
-                  topList === "Staking" &&
+                ) : topList === "Staking" &&
                   chain === "eth" &&
                   selectedPool?.id ===
                     "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
@@ -8561,9 +8579,14 @@ const EarnTopPicks = ({
                         ? "No Lock"
                         : parseInt(selectedPool?.lock_time?.split(" ")[0])
                     }
+                    onConnectWallet={() => {
+                      setShowDetails(false);
+                      onConnectWallet();
+                      setselectedPool([]);
+                      setDetails(999)
+                    }}
                   />
-                ) : activeCard &&
-                  topList === "Staking" &&
+                ) : topList === "Staking" &&
                   chain === "avax" &&
                   selectedPool?.id ===
                     "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
@@ -8591,9 +8614,14 @@ const EarnTopPicks = ({
                         ? "No Lock"
                         : parseInt(selectedPool?.lock_time?.split(" ")[0])
                     }
+                    onConnectWallet={() => {
+                      setShowDetails(false);
+                      onConnectWallet();
+                      setselectedPool([]);
+                      setDetails(999)
+                    }}
                   />
-                ) : activeCard &&
-                  topList === "Staking" &&
+                ) : topList === "Staking" &&
                   selectedPool?.id ===
                     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603" &&
                   chain === "bnb" ? (
@@ -8621,9 +8649,14 @@ const EarnTopPicks = ({
                     handleSwitchNetwork={handleSwitchNetwork}
                     expired={false}
                     referrer={referrer}
+                    onConnectWallet={() => {
+                      setShowDetails(false);
+                      onConnectWallet();
+                      setselectedPool([]);
+                      setDetails(999)
+                    }}
                   />
-                ) : activeCard &&
-                  topList === "Staking" &&
+                ) : topList === "Staking" &&
                   selectedPool?.id ===
                     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603" &&
                   chain === "avax" ? (
@@ -8651,9 +8684,14 @@ const EarnTopPicks = ({
                     handleSwitchNetwork={handleSwitchNetwork}
                     expired={false}
                     referrer={referrer}
+                    onConnectWallet={() => {
+                      setShowDetails(false);
+                      onConnectWallet();
+                      setselectedPool([]);
+                      setDetails(999)
+                    }}
                   />
-                ) : activeCard &&
-                  topList === "Staking" &&
+                ) : topList === "Staking" &&
                   selectedPool?.id ===
                     "0xC9075092Cc46E176B1F3c0D0EB8223F1e46555B0" &&
                   chain === "eth" ? (
@@ -8681,6 +8719,12 @@ const EarnTopPicks = ({
                     handleSwitchNetwork={handleSwitchNetwork}
                     expired={false}
                     referrer={referrer}
+                    onConnectWallet={() => {
+                      setShowDetails(false);
+                      onConnectWallet();
+                      setselectedPool([]);
+                      setDetails(999)
+                    }}
                   />
                 ) : (
                   <></>

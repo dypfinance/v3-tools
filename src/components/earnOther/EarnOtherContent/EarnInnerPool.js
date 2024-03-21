@@ -5,6 +5,8 @@ import moreinfo from "../../FARMINNG/assets/more-info.svg";
 import getFormattedNumber from "../../../functions/get-formatted-number";
 import moment from "moment";
 import axios from "axios";
+import { shortAddress } from "../../../functions/shortAddress";
+import statsLinkIcon from "../../FARMINNG/assets/statsLinkIcon.svg";
 
 const EarnInnerPool = ({
   selectedBtn,
@@ -1072,6 +1074,18 @@ const EarnInnerPool = ({
                     </ClickAwayListener>
                   </span>
                 </div>
+                <div className="d-flex align-items-center gap-2">
+                  <span className="bal-smallTxt">Pool address:</span>
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={`${window.config.bscscan_baseURL}address/${staking._address}`}
+                    className="stats-link2"
+                  >
+                    {shortAddress(staking._address)}{" "}
+                    <img src={statsLinkIcon} alt="" />
+                  </a>
+                </div>
               </div>
               <div className="d-flex flex-column">
                 <div className="d-flex align-items-center gap-1">
@@ -1363,6 +1377,18 @@ const EarnInnerPool = ({
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
+                </div>
+                <div className="d-flex align-items-center gap-2">
+                  <span className="bal-smallTxt">Pool address:</span>
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={`${window.config.bscscan_baseURL}address/${staking._address}`}
+                    className="stats-link2"
+                  >
+                    {shortAddress(staking._address)}{" "}
+                    <img src={statsLinkIcon} alt="" />
+                  </a>
                 </div>
               </div>
               <div className="d-flex flex-column">

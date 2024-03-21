@@ -4,6 +4,8 @@ import avaxStake from "../../assets/earnAssets/avaxStakeActive.svg";
 import baseStake from "../../assets/earnAssets/baseActive.svg";
 import watch from "./assets/watch.svg";
 import bnbStakeActive from "../../assets/earnAssets/bnbStakeActive.svg";
+import premiumIcon from "../../assets/earnAssets/premiumIcon.svg";
+
 import useWindowSize from "../../functions/useWindowSize";
 
 import "../top-pools-card/top-pools.css";
@@ -91,13 +93,14 @@ const TopOtherPoolsNftListCard = ({
   return (
     <>
       <div
-        className={`row w-100 flex-column gap-3 gap-lg-0 flex-lg-row align-items-center justify-content-between  mx-0 cursor-pointer ${
-          expired === true ? "poolscardwrapperexpired" : "list-pool-card2"
+        className={`row w-100 flex-column gap-3 gap-lg-0 flex-lg-row align-items-center position-relative justify-content-between  mx-0 cursor-pointer ${
+          expired === true ? "poolscardwrapperexpired" : "list-pool-card-nft"
         } ${showDetails && "pools-card-hover"} `}
         onMouseEnter={() => setShowDetails(true)}
         onMouseLeave={() => setShowDetails(false)}
         style={{ display: display }}
       >
+        <img src={premiumIcon} className="position-absolute nft-premium-icon d-none d-lg-block" />
         <div className="px-0 d-flex justify-content-between align-items-center">
           <table className="earnother-table">
             <tbody>

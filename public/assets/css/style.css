@@ -4798,6 +4798,19 @@ color: #F77F5A !important;
 text-decoration: underline; 
 }
 
+
+.stats-link2{
+  font-weight: 400;
+font-size: 12px;
+line-height: 16px;
+color: #4cd0cd;
+}
+
+.stats-link2:hover{
+color: #4cd0cd !important;
+text-decoration: underline; 
+}
+
 .buyback-coin{
   background: #3A377A;
 border: 1px solid #565891;

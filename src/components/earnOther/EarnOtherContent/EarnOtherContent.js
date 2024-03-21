@@ -1,18 +1,4 @@
 import React, { useState } from "react";
-import allchain from "../../../assets/earnAssets/allchain.svg";
-import allchainActive from "../../../assets/earnAssets/allchainActive.svg";
-import ethStake from "../../../assets/earnAssets/ethStake.svg";
-import bnbStake from "../../../assets/earnAssets/bnbStake.svg";
-import avaxStake from "../../../assets/earnAssets/avaxStake.svg";
-import baseStake from "../../../assets/earnAssets/baseInactive.svg";
-import baseStakeActive from "../../../assets/earnAssets/baseActive.svg";
-import ethStakeActive from "../../../assets/earnAssets/ethStakeActive.svg";
-import bnbStakeActive from "../../../assets/earnAssets/bnbStakeActive.svg";
-import avaxStakeActive from "../../../assets/earnAssets/avaxStakeActive.svg";
-import listIcon from "../../../assets/earnAssets/listIcon.svg";
-import tableIcon from "../../../assets/earnAssets/tableIcon.svg";
-import tableIconActive from "../../../assets/earnAssets/tableIconActive.svg";
-import listIconActive from "../../../assets/earnAssets/listIconActive.svg";
 import axios from "axios";
 import { useEffect } from "react";
 import getFormattedNumber from "../../../functions/getFormattedNumber2";
@@ -22,9 +8,13 @@ import TopOtherPoolsListCard from "../TopOtherPoolsListCard";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import closeX from "../assets/closeX.svg";
-
+import { FadeLoader } from "react-spinners";
 import searchIcon from "../assets/searchIcon.svg";
 import EarnInnerPool from "./EarnInnerPool";
+import arrowUp from "../assets/arrowUp.svg";
+import arrowUpActive from "../assets/arrowUpActive.svg";
+import arrowDown from "../assets/arrowDown.svg";
+import arrowDownActive from "../assets/arrowDownActive.svg";
 
 const EarnOtherContent = ({
   coinbase,
@@ -99,6 +89,7 @@ const EarnOtherContent = ({
       lockTime: "Locked",
       chain: "Base",
       apr: "15%",
+      aprInt: 15,
       chainLogo: "baseActive.svg",
       tokenLogo: "ethereum.svg",
       expired: false,
@@ -120,6 +111,7 @@ const EarnOtherContent = ({
       lockTime: "Locked",
       chain: "BNB Chain",
       apr: "25%",
+      aprInt: 25,
       tokenLogo: "bnbChain.svg",
       chainLogo: "bsc.svg",
       expired: false,
@@ -141,6 +133,8 @@ const EarnOtherContent = ({
       lockTime: "Locked",
       chain: "Avalanche",
       apr: "10%",
+      aprInt: 10,
+
       tokenLogo: "avax.svg",
       chainLogo: "avax.svg",
       expired: false,
@@ -178,6 +172,7 @@ const EarnOtherContent = ({
   const [avaxApr, setavaxApr] = useState();
   const [count, setCount] = useState(0);
   const [query, setQuery] = useState("");
+  const [sorting, setSorting] = useState("");
 
   const handleQuery = (item) => (event) => {
     if (event.key === "Enter") {
@@ -427,6 +422,35 @@ const EarnOtherContent = ({
       });
   };
 
+  const handleSortPools = (order) => {
+    if (allPools.length > 0) {
+      if (order === "lth") {
+        const newPools = allPools.sort((a, b) => {
+          return a.aprInt - b.aprInt;
+        });
+        setallPools(newPools);
+      } else if (order === "htl") {
+        const newPools2 = allPools.sort((a, b) => {
+          return b.aprInt - a.aprInt;
+        });
+        setallPools(newPools2);
+      }
+    }
+  };
+
+  const handleSorting = () => {
+    if (sorting === "") {
+      setSorting(true);
+      handleSortPools("lth");
+    } else if (sorting === false) {
+      setSorting(true);
+      handleSortPools("lth");
+    } else if (sorting === true) {
+      setSorting(false);
+      handleSortPools("htl");
+    }
+  };
+
   useEffect(() => {
     if (option === "Staking") {
       fetchEthApr();
@@ -500,6 +524,7 @@ const EarnOtherContent = ({
     }
   }, [poolClicked, poolClickedType, allPools]);
 
+  console.log(sorting);
   return (
     <>
       <div className="row mx-0 justify-content-center w-100 ">
@@ -558,7 +583,7 @@ const EarnOtherContent = ({
               </div>
             </div>
             <div className="col-12 col-lg-4 col-xl-3 px-0">
-              {option !== "Farming" && (
+              {/* {option !== "Farming" && (
                 <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
                   <span style={{ fontWeight: "300", fontSize: "13px" }}>
                     Total value locked
@@ -570,7 +595,7 @@ const EarnOtherContent = ({
                     ${getFormattedNumber("2585417", 0)}
                   </h6>
                 </div>
-              )}
+              )} */}
             </div>
           </div>
         ) : (
@@ -628,7 +653,7 @@ const EarnOtherContent = ({
               </div>
             </div>
             <div className="col-12 col-lg-4 col-xl-3 px-0">
-              {option !== "Farming" && (
+              {/* {option !== "Farming" && (
                 <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
                   <span style={{ fontWeight: "300", fontSize: "13px" }}>
                     Total value locked
@@ -640,7 +665,7 @@ const EarnOtherContent = ({
                     ${getFormattedNumber("2585417", 0)}
                   </h6>
                 </div>
-              )}
+              )} */}
             </div>
           </div>
         )}
@@ -816,61 +841,92 @@ const EarnOtherContent = ({
           })}
         </div>
       )}
-      {listStyle === "list" && (
-        <>
-          <div className="row mx-0 justify-content-between align-items-center px-0 py-3 w-100">
-            {windowSize.width > 768 && (
-              <div
-                className="row mx-0 justify-content-between align-items-center px-2 py-2 w-100 options-container"
-                style={{ marginBottom: "10px" }}
-              >
-                <table className="earnother-table">
-                  <thead className="d-flex w-100 align-items-center justify-content-around">
-                    <th className="earnother-th col-2">Pool</th>
-                    <th className="earnother-th col-2">APR</th>
-                    <th className="earnother-th col-2">Method</th>
-                    <th className="earnother-th col-2">Chain</th>
-                    <th className="earnother-th col-2">Action</th>
-                  </thead>
-                </table>
+      {listStyle === "list" &&
+        (allPools.length > 0 ? (
+          <>
+            <div className="row mx-0 justify-content-between align-items-center px-0 py-3 w-100">
+              {windowSize.width > 768 && (
+                <div
+                  className="row mx-0 justify-content-between align-items-center px-2 py-2 w-100 options-container"
+                  style={{ marginBottom: "10px" }}
+                >
+                  <table className="earnother-table">
+                    <thead className="d-flex w-100 align-items-center justify-content-around">
+                      <th className="earnother-th col-2">Pool</th>
+                      <th
+                        className="earnother-th col-2 d-flex justify-content-center gap-1 align-items-center arrowBtns"
+                        onClick={handleSorting}
+                      >
+                        APR
+                        <div className="d-flex flex-column">
+                          <img
+                            src={sorting === true ? arrowUpActive : arrowUp}
+                            alt=""
+                            className=""
+                          />
+                          <img
+                            src={
+                              sorting === false ? arrowDownActive : arrowDown
+                            }
+                            alt=""
+                            className="arrowBtns"
+                            onClick={() => {
+                              console.log("down");
+                              setSorting("lth");
+                            }}
+                          />
+                        </div>
+                      </th>
+                      <th className="earnother-th col-2">Method</th>
+                      <th className="earnother-th col-2">Chain</th>
+                      <th className="earnother-th col-2">Action</th>
+                    </thead>
+                  </table>
+                </div>
+              )}
+              <div className="d-flex flex-column gap-1 px-0">
+                {allPools.map((item, index) => {
+                  return (
+                    // <NavLink to={`/earn/defi-staking/${item.pool}`}>
+                    <TopOtherPoolsListCard
+                      key={index}
+                      tokenLogo={item.tokenLogo}
+                      chainLogo={item.chainLogo}
+                      chain={item.chain}
+                      tokenName={item.tokenName}
+                      tokenTicker={item.tokenTicker}
+                      apr={item.apr}
+                      lockTime={item.lockTime}
+                      expired={item.expired}
+                      isNewPool={item.new_pool === "Yes" ? true : false}
+                      isComingSoon={item.coming_soon}
+                      isHot={item.hot}
+                      isNft={item.nft}
+                      isStaked={item.staked}
+                      onCardClick={() => {
+                        setshowDetails(!showDetails);
+                        setcardIndex(!showDetails ? index : 777);
+                        setselectedBtn(item.lockTime);
+                        setselectedPool(item);
+                      }}
+                      cardIndex={cardIndex}
+                      showDetails={showDetails}
+                      cardId={index}
+                    />
+                    // </NavLink>
+                  );
+                })}
               </div>
-            )}
-            <div className="d-flex flex-column gap-1 px-0">
-              {allPools.map((item, index) => {
-                return (
-                  // <NavLink to={`/earn/defi-staking/${item.pool}`}>
-                  <TopOtherPoolsListCard
-                    key={index}
-                    tokenLogo={item.tokenLogo}
-                    chainLogo={item.chainLogo}
-                    chain={item.chain}
-                    tokenName={item.tokenName}
-                    tokenTicker={item.tokenTicker}
-                    apr={item.apr}
-                    lockTime={item.lockTime}
-                    expired={item.expired}
-                    isNewPool={item.new_pool === "Yes" ? true : false}
-                    isComingSoon={item.coming_soon}
-                    isHot={item.hot}
-                    isNft={item.nft}
-                    isStaked={item.staked}
-                    onCardClick={() => {
-                      setshowDetails(!showDetails);
-                      setcardIndex(!showDetails ? index : 777);
-                      setselectedBtn(item.lockTime);
-                      setselectedPool(item);
-                    }}
-                    cardIndex={cardIndex}
-                    showDetails={showDetails}
-                    cardId={index}
-                  />
-                  // </NavLink>
-                );
-              })}
             </div>
+          </>
+        ) : (
+          <div
+            className="w-100 d-flex justify-content-center align-items-center mt-5"
+            style={{ minHeight: "240px" }}
+          >
+            <FadeLoader color="#7770DF" />
           </div>
-        </>
-      )}
+        ))}
 
       {showDetails && (
         <Modal

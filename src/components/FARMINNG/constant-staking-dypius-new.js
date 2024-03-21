@@ -46,6 +46,7 @@ const renderer = ({ days, hours, minutes, seconds }) => {
 };
 
 const StakeDypiusEth = ({
+  selectedPool,
   selectedTab,
   staking,
   is_wallet_connected,
@@ -69,6 +70,7 @@ const StakeDypiusEth = ({
   referrer,
   fee,
   renderedPage,
+  onConnectWallet,
 }) => {
   let {
     reward_token_dypius_eth,
@@ -194,9 +196,9 @@ const StakeDypiusEth = ({
   const [startDateTooltip, setStartDateTooltip] = useState(false);
   const [endDateTooltip, setEndDateTooltip] = useState(false);
   const [poolCapTooltip, setPoolCapTooltip] = useState(false);
-  const [approvedAmount, setapprovedAmount] = useState('0.00');
-
-
+  const [quotaTooltip, setQuotaTooltip] = useState(false);
+  const [maxDepositTooltip, setMaxDepositTooltip] = useState(false);
+  const [approvedAmount, setapprovedAmount] = useState("0.00");
 
   const poolCapClose = () => {
     setPoolCapTooltip(false);
@@ -206,6 +208,21 @@ const StakeDypiusEth = ({
     setPoolCapTooltip(true);
   };
 
+  const quotaClose = () => {
+    setQuotaTooltip(false);
+  };
+
+  const quotaOpen = () => {
+    setQuotaTooltip(true);
+  };
+
+  const maxDepositClose = () => {
+    setMaxDepositTooltip(false);
+  };
+
+  const maxDepositOpen = () => {
+    setMaxDepositTooltip(true);
+  };
 
   const poolFeeClose = () => {
     setPoolFeeTooltip(false);
@@ -231,7 +248,6 @@ const StakeDypiusEth = ({
     setEndDateTooltip(true);
   };
 
-
   const showModal = () => {
     setshow(true);
   };
@@ -250,15 +266,15 @@ const StakeDypiusEth = ({
 
   const getPriceDYP = async () => {
     const dypprice = await axios
-    .get(
-      "https://api.geckoterminal.com/api/v2/networks/eth/pools/0x7c81087310a228470db28c1068f0663d6bf88679"
-    )
-    .then((res) => {
-      return res.data.data.attributes.base_token_price_usd;
-    })
-    .catch((e) => {
-      console.log(e);
-    });
+      .get(
+        "https://api.geckoterminal.com/api/v2/networks/eth/pools/0x7c81087310a228470db28c1068f0663d6bf88679"
+      )
+      .then((res) => {
+        return res.data.data.attributes.base_token_price_usd;
+      })
+      .catch((e) => {
+        console.log(e);
+      });
 
     // let usdPerToken = await window.getPrice("defi-yield-protocol");
     setusdPerToken(dypprice);
@@ -398,7 +414,7 @@ const StakeDypiusEth = ({
           .plus(usdValueDYPS)
           .toFixed(18);
         settvlusd(tvlUSD);
- 
+
         let balance_formatted = new BigNumber(token_balance ?? 0)
           .div(1e18)
           .toString(10);
@@ -453,7 +469,7 @@ const StakeDypiusEth = ({
       });
     }
   };
-  
+
   useEffect(() => {
     if (coinbase !== coinbase2 && coinbase !== null && coinbase !== undefined) {
       setcoinbase(coinbase);
@@ -465,12 +481,13 @@ const StakeDypiusEth = ({
   }, []);
 
   useEffect(() => {
-    if(chainId === '1')
-   { refreshBalance();
-    if (depositAmount !== "") {
-      checkApproval(depositAmount);
-    }}
-  }, [coinbase, coinbase2, staking, is_wallet_connected,chainId]);
+    if (chainId === "1") {
+      refreshBalance();
+      if (depositAmount !== "") {
+        checkApproval(depositAmount);
+      }
+    }
+  }, [coinbase, coinbase2, staking, is_wallet_connected, chainId]);
 
   useEffect(() => {
     setdepositAmount("");
@@ -603,7 +620,7 @@ const StakeDypiusEth = ({
   const handleClaimDivs = async (e) => {
     // e.preventDefault();
     setclaimLoading(true);
- 
+
     staking
       .claim()
       .then(() => {
@@ -651,15 +668,13 @@ const StakeDypiusEth = ({
     return the_graph_result.usd_per_eth || 0;
   };
 
-
   const getApproxReturn = (depositAmount, days) => {
     let APY = getAPY() - fee_s;
 
-    console.log(apr,(((depositAmount * APY) / 100 / 365) * days))
+    console.log(apr, ((depositAmount * APY) / 100 / 365) * days);
 
     return ((depositAmount * apr) / 100 / 365) * days;
   };
-
 
   const getReferralLink = () => {
     return window.location.origin + window.location.pathname + "?r=" + coinbase;
@@ -833,151 +848,165 @@ const StakeDypiusEth = ({
 
   return (
     <div className="d-flex flex-column gap-2 w-100">
-    <div className="locktimewrapper align-items-center gap-2">
-      <button
-        className={
-          lockTime === "No Lock" ? "method-btn-active" : "method-btn-disabled"
-        }
-      >
-        Flexible
-      </button>
-      <button
-        className={
-          lockTime === 30 ? "method-btn-active" : "method-btn-disabled"
-        }
-      >
-        30 Days
-      </button>
-      <button
-        className={
-          lockTime === 60 ? "method-btn-active" : "method-btn-disabled"
-        }
-      >
-        60 Days
-      </button>
-      <button
-        className={
-          lockTime === 90 ? "method-btn-active" : "method-btn-disabled"
-        }
-      >
-        90 Days
-      </button>
-      <button
-        className={
-          lockTime === 120 ? "method-btn-active" : "method-btn-disabled"
-        }
-      >
-        120 Days
-      </button>
-    </div>
-    <div className="info-pool-wrapper p-3 w-100">
-      <div className="info-pool-inner-wrapper d-flex flex-column flex-lg-row align-items-center gap-2">
-        <div className="info-pool-item p-2">
-          <div className="d-flex justify-content-between gap-1 align-items-center">
-            <span className="info-pool-left-text">
-              Apr{" "}
-              <ClickAwayListener onClickAway={aprClose}>
-                <Tooltip
-                  open={aprTooltip}
-                  disableFocusListener
-                  disableHoverListener
-                  disableTouchListener
-                  placement="top"
-                  title={
-                    <div className="tooltip-text">
-                      {
-                        "APR reflects the interest rate of earnings on an account over the course of one year."
-                      }
-                    </div>
-                  }
-                >
-                  <img src={moreinfo} alt="" onClick={aprOpen} />
-                </Tooltip>
-              </ClickAwayListener>
-            </span>
-            <span className="info-pool-right-text">{finalApr}%</span>
-          </div>
-        </div>
-        <div className="info-pool-item p-2">
-          <div className="d-flex justify-content-between gap-1 align-items-center">
-            <span className="info-pool-left-text">Chain</span>
-            <span className="info-pool-right-text d-flex gap-1 align-items-center">
-              <img
-                src={require(`../top-pools-card/assets/ethereum.svg`).default}
-                width={12}
-                height={12}
-                alt=""
-              />{" "}
-              Ethereum
-            </span>
-          </div>
-        </div>
-        <div className="info-pool-item p-2">
-          <div className="d-flex justify-content-between gap-1 align-items-center">
-            <span className="info-pool-left-text">TVL</span>
-            <span className="info-pool-right-text">${getFormattedNumber(Number(tvl) * usdPerToken, 4)}</span>
-          </div>
-        </div>
+      <div className="locktimewrapper align-items-center gap-2">
+        <button
+          className={
+            lockTime === "No Lock" ? "method-btn-active" : "method-btn-disabled"
+          }
+        >
+          Flexible
+        </button>
+        <button
+          className={
+            lockTime === 30 ? "method-btn-active" : "method-btn-disabled"
+          }
+        >
+          30 Days
+        </button>
+        <button
+          className={
+            lockTime === 60 ? "method-btn-active" : "method-btn-disabled"
+          }
+        >
+          60 Days
+        </button>
+        <button
+          className={
+            lockTime === 90 ? "method-btn-active" : "method-btn-disabled"
+          }
+        >
+          90 Days
+        </button>
+        <button
+          className={
+            lockTime === 120 ? "method-btn-active" : "method-btn-disabled"
+          }
+        >
+          120 Days
+        </button>
       </div>
-    </div>
-    <div className="separator my-2"></div>
-    {selectedTab === "deposit" ? (
-      <div className="d-flex flex-column w-100 gap-2">
-        <div className="d-flex align-items-center gap-2 justify-content-between w-100">
-          <span className="deposit-popup-txt">Deposit</span>
-          <div className="d-flex gap-1 align-items-baseline">
-            <span className="bal-smallTxt">My Balance:</span>
-            <span className="bal-bigTxt">
-              {token_balance !== "..."
-                ? getFormattedNumber(token_balance, 6)
-                : getFormattedNumber(0, 6)}{" "}
-              {token_symbol}
-            </span>
+      <div className="info-pool-wrapper p-3 w-100">
+        <div className="info-pool-inner-wrapper d-flex flex-column flex-lg-row align-items-center gap-2">
+          <div className="info-pool-item p-2">
+            <div className="d-flex justify-content-between gap-1 align-items-center">
+              <span className="info-pool-left-text">
+                Apr{" "}
+                <ClickAwayListener onClickAway={aprClose}>
+                  <Tooltip
+                    open={aprTooltip}
+                    disableFocusListener
+                    disableHoverListener
+                    disableTouchListener
+                    placement="top"
+                    title={
+                      <div className="tooltip-text">
+                        {
+                          "APR reflects the interest rate of earnings on an account over the course of one year."
+                        }
+                      </div>
+                    }
+                  >
+                    <img src={moreinfo} alt="" onClick={aprOpen} />
+                  </Tooltip>
+                </ClickAwayListener>
+              </span>
+              <span className="info-pool-right-text">{finalApr}%</span>
+            </div>
           </div>
-        </div>
-        <div className="d-flex flex-column w-100 gap-1">
-          <div className="position-relative w-100 d-flex">
-            <input
-              className="text-input2 w-100"
-              type="number"
-              autoComplete="off"
-              value={
-                Number(depositAmount) > 0 ? depositAmount : depositAmount
-              }
-              onChange={(e) => {
-                setdepositAmount(e.target.value);
-                checkApproval(e.target.value);
-              }}
-              name="amount_deposit"
-              id="amount_deposit"
-              key="amount_deposit"
-              placeholder={`0.0`}
-            />
-            <button
-              className="inner-max-btn position-absolute"
-              onClick={handleSetMaxDeposit}
-            >
-              Max
-            </button>
+          <div className="info-pool-item p-2">
+            <div className="d-flex justify-content-between gap-1 align-items-center">
+              <span className="info-pool-left-text">Chain</span>
+              <span className="info-pool-right-text d-flex gap-1 align-items-center">
+                <img
+                  src={require(`../top-pools-card/assets/ethereum.svg`).default}
+                  width={12}
+                  height={12}
+                  alt=""
+                />{" "}
+                Ethereum
+              </span>
+            </div>
           </div>
-          <div className={`d-flex w-100 ${errorMsg ? 'justify-content-between' : 'justify-content-end'} gap-1 align-items-center`}>
-            {errorMsg && <h6 className="errormsg m-0">{errorMsg}</h6>}
-
-            <div className="d-flex gap-1 align-items-baseline">
-              <span className="bal-smallTxt">Approved:</span>
-              <span className="bal-bigTxt2">
-                {approvedAmount} DYP
+          <div className="info-pool-item p-2">
+            <div className="d-flex justify-content-between gap-1 align-items-center">
+              <span className="info-pool-left-text">TVL</span>
+              <span className="info-pool-right-text">
+                $
+                {getFormattedNumber(
+                  Number(tvl) * usdPerToken === 0
+                    ? selectedPool.tvl_usd
+                    : Number(tvl) * usdPerToken,
+                 2
+                )}
               </span>
             </div>
           </div>
         </div>
-        <div className="info-pool-wrapper p-3 w-100">
-          <div className="d-flex w-100 justify-content-between align-items-start align-items-lg-center gap-2 flex-column flex-lg-row">
-            <div className="d-flex flex-column">
-            <div className="d-flex align-items-center gap-2">
+      </div>
+      <div className="separator my-2"></div>
+      {selectedTab === "deposit" ? (
+        <div className="d-flex flex-column w-100 gap-2">
+          <div className="d-flex align-items-center gap-2 justify-content-between w-100">
+            <span className="deposit-popup-txt">Deposit</span>
+            <div className="d-flex gap-1 align-items-baseline">
+              <span className="bal-smallTxt">My Balance:</span>
+              <span className="bal-bigTxt">
+                {token_balance !== "..."
+                  ? getFormattedNumber(token_balance, 6)
+                  : getFormattedNumber(0, 6)}{" "}
+                {token_symbol}
+              </span>
+            </div>
+          </div>
+          <div
+            className={`d-flex flex-column w-100 gap-1 ${
+              (chainId !== "1" || !is_wallet_connected) && "blurrypool"
+            } `}
+          >
+            <div className="position-relative w-100 d-flex">
+              <input
+                className="text-input2 w-100"
+                type="number"
+                autoComplete="off"
+                value={
+                  Number(depositAmount) > 0 ? depositAmount : depositAmount
+                }
+                onChange={(e) => {
+                  setdepositAmount(e.target.value);
+                  checkApproval(e.target.value);
+                }}
+                name="amount_deposit"
+                id="amount_deposit"
+                key="amount_deposit"
+                placeholder={`0.0`}
+              />
+              <button
+                className="inner-max-btn position-absolute"
+                onClick={handleSetMaxDeposit}
+              >
+                Max
+              </button>
+            </div>
+            <div
+              className={`d-flex w-100 ${
+                errorMsg ? "justify-content-between" : "justify-content-end"
+              } gap-1 align-items-center`}
+            >
+              {errorMsg && <h6 className="errormsg m-0">{errorMsg}</h6>}
+
+              <div className="d-flex gap-1 align-items-baseline">
+                <span className="bal-smallTxt">Approved:</span>
+                <span className="bal-bigTxt2">{approvedAmount} DYP</span>
+              </div>
+            </div>
+          </div>
+          <div className="info-pool-wrapper p-3 w-100">
+            <div className="d-flex w-100 justify-content-between align-items-start align-items-lg-center gap-2 flex-column flex-lg-row">
+              <div className="d-flex flex-column">
+                <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Pool Cap:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                  13M DYP
+                    13M DYP
                     <ClickAwayListener onClickAway={poolCapClose}>
                       <Tooltip
                         open={poolCapTooltip}
@@ -998,28 +1027,381 @@ const StakeDypiusEth = ({
                     </ClickAwayListener>
                   </span>
                 </div>
+                <div className="d-flex align-items-center gap-2">
+                  <span className="bal-smallTxt">Available Quota:</span>
+                  <span className="deposit-popup-txt d-flex align-items-center gap-1">
+                    N/A
+                    <ClickAwayListener onClickAway={quotaClose}>
+                      <Tooltip
+                        open={quotaTooltip}
+                        disableFocusListener
+                        disableHoverListener
+                        disableTouchListener
+                        placement="top"
+                        title={
+                          <div className="tooltip-text">
+                            {"The remaining capacity for staking in the pool."}
+                          </div>
+                        }
+                      >
+                        <img src={moreinfo} alt="" onClick={quotaOpen} />
+                      </Tooltip>
+                    </ClickAwayListener>
+                  </span>
+                </div>
+                <div className="d-flex align-items-center gap-2">
+                  <span className="bal-smallTxt">Maximum deposit:</span>
+                  <span className="deposit-popup-txt d-flex align-items-center gap-1">
+                    N/A
+                    <ClickAwayListener onClickAway={maxDepositClose}>
+                      <Tooltip
+                        open={maxDepositTooltip}
+                        disableFocusListener
+                        disableHoverListener
+                        disableTouchListener
+                        placement="top"
+                        title={
+                          <div className="tooltip-text">
+                            {
+                              "The highest amount that can be staked by an individual user."
+                            }
+                          </div>
+                        }
+                      >
+                        <img src={moreinfo} alt="" onClick={maxDepositOpen} />
+                      </Tooltip>
+                    </ClickAwayListener>
+                  </span>
+                </div>
+              </div>
+              <div className="d-flex flex-column">
+                <span className="bal-smallTxt">Total Est. Rewards</span>
+                <span className="deposit-popup-txt d-flex align-items-center gap-1">
+                  <span className="deposit-popup-txt d-flex align-items-center gap-1">
+                    {getFormattedNumber(
+                      getApproxReturn(
+                        depositAmount,
+                        lockTime === "No Lock" ? 365 : lockTime
+                      ),
+                      2
+                    )}{" "}
+                    DYP
+                  </span>
+                </span>
+              </div>
             </div>
-            <div className="d-flex flex-column">
-              <span className="bal-smallTxt">Total Est. Rewards</span>
-              <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                {getFormattedNumber(
-                  getApproxReturn(
-                    depositAmount,
-                    lockTime === "No Lock" ? 1 : lockTime
-                  ),
-                  2
-                )}{" "}
-                DYP
+          </div>
+
+          {pendingDivs > 0 && (
+            <>
+              {" "}
+              <div className="separator my-2"></div>
+              <span className="deposit-popup-txt">Reinvest</span>
+              <div
+                className={`d-flex flex-column w-100 gap-1 ${
+                  (chainId !== "1" || !is_wallet_connected) && "blurrypool"
+                } `}
+              >
+                <div className="info-pool-wrapper p-3 w-100">
+                  <div className="d-flex w-100 justify-content-between align-items-end gap-2">
+                    <div className="d-flex flex-column align-items-baseline">
+                      <span className="bal-smallTxt">Rewards</span>
+                      <span className="bal-bigTxt2">
+                        {getFormattedNumber(pendingDivs)} DYP
+                      </span>
+                    </div>
+                    <button
+                      className={`btn py-2 claim-inner-btn ${
+                        (reInvestStatus === "claimed" &&
+                          reInvestStatus === "initial") ||
+                        pendingDivs <= 0
+                          ? "disabled-btn"
+                          : reInvestStatus === "failed"
+                          ? "fail-button"
+                          : reInvestStatus === "success"
+                          ? "success-button"
+                          : null
+                      } d-flex justify-content-center align-items-center gap-2`}
+                      style={{ height: "fit-content" }}
+                      onClick={handleReinvest}
+                      disabled={
+                        reInvestStatus === "claimed" ||
+                        reInvestStatus === "success" ||
+                        pendingDivs <= 0
+                          ? true
+                          : false
+                      }
+                    >
+                      {" "}
+                      {reInvestLoading ? (
+                        <div
+                          class="spinner-border spinner-border-sm text-light"
+                          role="status"
+                        >
+                          <span class="visually-hidden">Loading...</span>
+                        </div>
+                      ) : reInvestStatus === "failed" ? (
+                        <>
+                          {/* <img src={failMark} alt="" /> */}
+                          Failed
+                        </>
+                      ) : reInvestStatus === "success" ? (
+                        <>Success</>
+                      ) : (
+                        <>Reinvest</>
+                      )}
+                    </button>
+                  </div>
+                </div>
+              </div>{" "}
+            </>
+          )}
+          <div className="separator my-2"></div>
+          <div className="info-pool-wrapper p-3 w-100">
+            <div className="d-flex w-100 flex-column flex-lg-row justify-content-between align-items-start align-items-lg-end gap-2">
+              <div className="d-flex flex-column">
+                <span className="deposit-popup-txt">Summary</span>
+
+                <div className="d-flex align-items-center gap-2">
+                  <span className="bal-smallTxt">Pool fee:</span>
+                  <span className="deposit-popup-txt d-flex align-items-center gap-1">
+                    {fee}%
+                    <ClickAwayListener onClickAway={poolFeeClose}>
+                      <Tooltip
+                        open={poolFeeTooltip}
+                        disableFocusListener
+                        disableHoverListener
+                        disableTouchListener
+                        placement="top"
+                        title={
+                          <div className="tooltip-text">
+                            {
+                              "The percentage of staking rewards or deposits for maintaining the pool."
+                            }
+                          </div>
+                        }
+                      >
+                        <img src={moreinfo} alt="" onClick={poolFeeOpen} />
+                      </Tooltip>
+                    </ClickAwayListener>
+                  </span>
+                </div>
+                <div className="d-flex align-items-center gap-2">
+                  <span className="bal-smallTxt">Pool address:</span>
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={`${window.config.etherscan_baseURL}address/${staking._address}`}
+                    className="stats-link2"
+                  >
+                    {shortAddress(staking._address)}{" "}
+                    <img src={statsLinkIcon} alt="" />
+                  </a>
+                </div>
+              </div>
+              <div className="d-flex flex-column">
+                <div className="d-flex align-items-center gap-1">
+                  <span className="bal-smallTxt">Start date:</span>
+                  <span className="deposit-popup-txt d-flex align-items-center gap-1">
+                    09 November 2023{" "}
+                    <ClickAwayListener onClickAway={startDateClose}>
+                      <Tooltip
+                        open={startDateTooltip}
+                        disableFocusListener
+                        disableHoverListener
+                        disableTouchListener
+                        placement="top"
+                        title={
+                          <div className="tooltip-text">
+                            {
+                              "The date when the staking pool became available for participation."
+                            }
+                          </div>
+                        }
+                      >
+                        <img src={moreinfo} alt="" onClick={startDateOpen} />
+                      </Tooltip>
+                    </ClickAwayListener>
+                  </span>
+                </div>
+                <div className="d-flex align-items-center gap-1">
+                  <span className="bal-smallTxt">End date:</span>
+                  <span className="deposit-popup-txt d-flex align-items-center gap-1">
+                    {expiration_time}{" "}
+                    <ClickAwayListener onClickAway={endDateClose}>
+                      <Tooltip
+                        open={endDateTooltip}
+                        disableFocusListener
+                        disableHoverListener
+                        disableTouchListener
+                        placement="top"
+                        title={
+                          <div className="tooltip-text">
+                            {
+                              "The date when the staking pool will no longer accept new deposits."
+                            }
+                          </div>
+                        }
+                      >
+                        <img src={moreinfo} alt="" onClick={endDateOpen} />
+                      </Tooltip>
+                    </ClickAwayListener>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          {is_wallet_connected && chainId === "1" && (
+            <button
+              disabled={
+                depositAmount === "" || depositLoading === true ? true : false
+              }
+              className={`btn filledbtn ${
+                depositAmount === "" &&
+                depositStatus === "initial" &&
+                "disabled-btn"
+              } ${
+                depositStatus === "deposit" || depositStatus === "success"
+                  ? "success-button"
+                  : depositStatus === "fail"
+                  ? "fail-button"
+                  : null
+              } d-flex justify-content-center align-items-center gap-2 m-auto`}
+              onClick={() => {
+                depositStatus === "deposit"
+                  ? handleStake()
+                  : depositStatus === "initial" && depositAmount !== ""
+                  ? handleApprove()
+                  : console.log("");
+              }}
+              style={{ width: "fit-content" }}
+            >
+              {" "}
+              {depositLoading ? (
+                <div
+                  class="spinner-border spinner-border-sm text-light"
+                  role="status"
+                >
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              ) : depositStatus === "initial" ? (
+                <>Approve</>
+              ) : depositStatus === "deposit" ? (
+                <>Deposit</>
+              ) : depositStatus === "success" ? (
+                <>Success</>
+              ) : (
+                <>Failed</>
+              )}
+            </button>
+          )}
+        </div>
+      ) : (
+        <div className="d-flex flex-column w-100 gap-2">
+          <div className="d-flex align-items-center gap-2 justify-content-between w-100">
+            <span className="deposit-popup-txt">Withdraw</span>
+            <div className="d-flex gap-1 align-items-baseline">
+              <span className="bal-smallTxt">Deposited:</span>
+              <span className="bal-bigTxt">
+                {" "}
+                {getFormattedNumber(depositedTokens, 2)} {token_symbol}
               </span>
             </div>
           </div>
-        </div>
+          <div
+            className={`d-flex flex-column w-100 gap-1 ${
+              (chainId !== "1" || !is_wallet_connected) && "blurrypool"
+            } `}
+          >
+            <div className="position-relative w-100 d-flex">
+              <input
+                className="text-input2 w-100"
+                type="number"
+                autoComplete="off"
+                value={withdrawAmount}
+                onChange={(e) => setwithdrawAmount(e.target.value)}
+                name="amount_withdraw"
+                id="amount_withdraw"
+                key="amount_withdraw"
+                placeholder={`0.0`}
+              />
+              <button
+                className="inner-max-btn position-absolute"
+                onClick={handleSetMaxWithdraw}
+              >
+                Max
+              </button>
+            </div>
+            <div className="d-flex w-100 justify-content-between gap-1 align-items-center">
+              {errorMsg3 && <h6 className="errormsg m-0">{errorMsg3}</h6>}
+              {!moment
+                .duration(
+                  (Number(stakingTime) + Number(cliffTime)) * 1000 - Date.now()
+                )
+                .humanize(true)
+                ?.includes("ago") && (
+                <div className="d-flex gap-1 align-items-baseline">
+                  <span className="bal-smallTxt">Unlocks:</span>
+                  <span className="bal-bigTxt2">
+                    ~
+                    {moment
+                      .duration(
+                        (Number(stakingTime) + Number(cliffTime)) * 1000 -
+                          Date.now()
+                      )
+                      .humanize(true)}
+                  </span>
+                </div>
+              )}
+            </div>
+            <button
+              disabled={
+                withdrawStatus === "failed" ||
+                withdrawStatus === "success" ||
+                withdrawAmount === "" ||
+                canWithdraw === false
+                  ? true
+                  : false
+              }
+              className={`btn filledbtn ${
+                withdrawStatus === "failed"
+                  ? "fail-button"
+                  : withdrawStatus === "success"
+                  ? "success-button"
+                  : (withdrawAmount === "" && withdrawStatus === "initial") ||
+                    canWithdraw === false
+                  ? "disabled-btn"
+                  : null
+              } w-25 d-flex align-items-center justify-content-center m-auto`}
+              style={{ height: "fit-content" }}
+              onClick={() => {
+                handleWithdraw();
+              }}
+            >
+              {withdrawLoading ? (
+                <div
+                  class="spinner-border spinner-border-sm text-light"
+                  role="status"
+                >
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              ) : withdrawStatus === "failed" ? (
+                <>Failed</>
+              ) : withdrawStatus === "success" ? (
+                <>Success</>
+              ) : (
+                <>Withdraw</>
+              )}
+            </button>
+          </div>
+          <div className="separator my-2"></div>
 
-        {pendingDivs > 0 && (
-          <>
-            {" "}
-            <div className="separator my-2"></div>
-            <span className="deposit-popup-txt">Reinvest</span>
+          <span className="deposit-popup-txt">Earnings</span>
+          <div
+            className={`d-flex flex-column w-100 gap-1 ${
+              (chainId !== "1" || !is_wallet_connected) && "blurrypool"
+            } `}
+          >
             <div className="info-pool-wrapper p-3 w-100">
               <div className="d-flex w-100 justify-content-between align-items-end gap-2">
                 <div className="d-flex flex-column align-items-baseline">
@@ -1030,429 +1412,160 @@ const StakeDypiusEth = ({
                 </div>
                 <button
                   className={`btn py-2 claim-inner-btn ${
-                    (reInvestStatus === "claimed" &&
-                      reInvestStatus === "initial") ||
+                    (claimStatus === "claimed" && claimStatus === "initial") ||
                     pendingDivs <= 0
                       ? "disabled-btn"
-                      : reInvestStatus === "failed"
+                      : claimStatus === "failed"
                       ? "fail-button"
-                      : reInvestStatus === "success"
+                      : claimStatus === "success"
                       ? "success-button"
                       : null
                   } d-flex justify-content-center align-items-center gap-2`}
                   style={{ height: "fit-content" }}
-                  onClick={handleReinvest}
+                  onClick={handleClaimDivs}
                   disabled={
-                    reInvestStatus === "claimed" ||
-                    reInvestStatus === "success" ||
+                    claimStatus === "claimed" ||
+                    claimStatus === "success" ||
                     pendingDivs <= 0
                       ? true
                       : false
                   }
                 >
                   {" "}
-                  {reInvestLoading ? (
+                  {claimLoading ? (
                     <div
                       class="spinner-border spinner-border-sm text-light"
                       role="status"
                     >
                       <span class="visually-hidden">Loading...</span>
                     </div>
-                  ) : reInvestStatus === "failed" ? (
-                    <>
-                      {/* <img src={failMark} alt="" /> */}
-                      Failed
-                    </>
-                  ) : reInvestStatus === "success" ? (
+                  ) : claimStatus === "failed" ? (
+                    <>Failed</>
+                  ) : claimStatus === "success" ? (
                     <>Success</>
                   ) : (
-                    <>Reinvest</>
+                    <>Claim</>
                   )}
                 </button>
               </div>
-            </div>{" "}
-          </>
-        )}
-        <div className="separator my-2"></div>
-        <div className="info-pool-wrapper p-3 w-100">
-          <div className="d-flex w-100 flex-column flex-lg-row justify-content-between align-items-start align-items-lg-end gap-2">
-            <div className="d-flex flex-column">
-              <span className="deposit-popup-txt">Summary</span>
+            </div>
+          </div>
+          <div className="separator my-2"></div>
+          <div className="info-pool-wrapper p-3 w-100">
+            <div className="d-flex w-100 flex-column flex-lg-row justify-content-between align-items-start align-items-lg-end gap-2">
+              <div className="d-flex flex-column">
+                <span className="deposit-popup-txt">Summary</span>
 
-              <div className="d-flex align-items-center gap-2">
-                <span className="bal-smallTxt">Pool fee:</span>
-                <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                {fee}%
-                  <ClickAwayListener onClickAway={poolFeeClose}>
-                    <Tooltip
-                      open={poolFeeTooltip}
-                      disableFocusListener
-                      disableHoverListener
-                      disableTouchListener
-                      placement="top"
-                      title={
-                        <div className="tooltip-text">
-                          {
-                            "The percentage of staking rewards or deposits for maintaining the pool."
-                          }
-                        </div>
-                      }
-                    >
-                      <img src={moreinfo} alt="" onClick={poolFeeOpen} />
-                    </Tooltip>
-                  </ClickAwayListener>
-                </span>
-              </div>
-              <div className="d-flex align-items-center gap-2">
-                <span className="bal-smallTxt">Pool address:</span>
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href={`${window.config.bscscan_baseURL}address/${staking._address}`}
-                  className="stats-link"
-                >
-                  {shortAddress(staking._address)}{" "}
-                  <img src={statsLinkIcon} alt="" />
-                </a>
-              </div>
-            </div>
-            <div className="d-flex flex-column">
-              <div className="d-flex align-items-center gap-1">
-                <span className="bal-smallTxt">Start date:</span>
-                <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                  09 November 2023{" "}
-                  <ClickAwayListener onClickAway={startDateClose}>
-                    <Tooltip
-                      open={startDateTooltip}
-                      disableFocusListener
-                      disableHoverListener
-                      disableTouchListener
-                      placement="top"
-                      title={
-                        <div className="tooltip-text">
-                          {
-                            "The date when the staking pool became available for participation."
-                          }
-                        </div>
-                      }
-                    >
-                      <img src={moreinfo} alt="" onClick={startDateOpen} />
-                    </Tooltip>
-                  </ClickAwayListener>
-                </span>
-              </div>
-              <div className="d-flex align-items-center gap-1">
-                <span className="bal-smallTxt">End date:</span>
-                <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                {expiration_time}{" "}
-                  <ClickAwayListener onClickAway={endDateClose}>
-                    <Tooltip
-                      open={endDateTooltip}
-                      disableFocusListener
-                      disableHoverListener
-                      disableTouchListener
-                      placement="top"
-                      title={
-                        <div className="tooltip-text">
-                          {
-                            "The date when the staking pool will no longer accept new deposits."
-                          }
-                        </div>
-                      }
-                    >
-                      <img src={moreinfo} alt="" onClick={endDateOpen} />
-                    </Tooltip>
-                  </ClickAwayListener>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <button
-          disabled={
-            depositAmount === "" || depositLoading === true ? true : false
-          }
-          className={`btn filledbtn ${
-            depositAmount === "" &&
-            depositStatus === "initial" &&
-            "disabled-btn"
-          } ${
-            depositStatus === "deposit" || depositStatus === "success"
-              ? "success-button"
-              : depositStatus === "fail"
-              ? "fail-button"
-              : null
-          } d-flex justify-content-center align-items-center gap-2 m-auto`}
-          onClick={() => {
-            depositStatus === "deposit"
-              ? handleStake()
-              : depositStatus === "initial" && depositAmount !== ""
-              ? handleApprove()
-              : console.log("");
-          }}
-          style={{ width: "fit-content" }}
-        >
-          {" "}
-          {depositLoading ? (
-            <div
-              class="spinner-border spinner-border-sm text-light"
-              role="status"
-            >
-              <span class="visually-hidden">Loading...</span>
-            </div>
-          ) : depositStatus === "initial" ? (
-            <>Approve</>
-          ) : depositStatus === "deposit" ? (
-            <>Deposit</>
-          ) : depositStatus === "success" ? (
-            <>Success</>
-          ) : (
-            <>Failed</>
-          )}
-        </button>
-      </div>
-    ) : (
-      <div className="d-flex flex-column w-100 gap-2">
-        <div className="d-flex align-items-center gap-2 justify-content-between w-100">
-          <span className="deposit-popup-txt">Withdraw</span>
-          <div className="d-flex gap-1 align-items-baseline">
-            <span className="bal-smallTxt">Deposited:</span>
-            <span className="bal-bigTxt">
-              {" "}
-              {getFormattedNumber(depositedTokens, 2)} {token_symbol}
-            </span>
-          </div>
-        </div>
-        <div className="d-flex flex-column w-100 gap-1">
-          <div className="position-relative w-100 d-flex">
-            <input
-              className="text-input2 w-100"
-              type="number"
-              autoComplete="off"
-              value={withdrawAmount}
-              onChange={(e) => setwithdrawAmount(e.target.value)}
-              name="amount_withdraw"
-              id="amount_withdraw"
-              key="amount_withdraw"
-              placeholder={`0.0`}
-            />
-            <button
-              className="inner-max-btn position-absolute"
-              onClick={handleSetMaxWithdraw}
-            >
-              Max
-            </button>
-          </div>
-          <div className="d-flex w-100 justify-content-between gap-1 align-items-center">
-            {errorMsg3 && <h6 className="errormsg m-0">{errorMsg3}</h6>}
-            {!moment
-              .duration(
-                (Number(stakingTime) + Number(cliffTime)) * 1000 - Date.now()
-              )
-              .humanize(true)
-              ?.includes("ago") && (
-              <div className="d-flex gap-1 align-items-baseline">
-                <span className="bal-smallTxt">Unlocks:</span>
-                <span className="bal-bigTxt2">
-                  ~
-                  {moment
-                    .duration(
-                      (Number(stakingTime) + Number(cliffTime)) * 1000 -
-                        Date.now()
-                    )
-                    .humanize(true)}
-                </span>
-              </div>
-            )}
-          </div>
-          <button
-            disabled={
-              withdrawStatus === "failed" ||
-              withdrawStatus === "success" ||
-              withdrawAmount === "" ||
-              canWithdraw === false
-                ? true
-                : false
-            }
-            className={`btn filledbtn ${
-              withdrawStatus === "failed"
-                ? "fail-button"
-                : withdrawStatus === "success"
-                ? "success-button"
-                : (withdrawAmount === "" && withdrawStatus === "initial") ||
-                canWithdraw === false
-                ? "disabled-btn"
-                : null
-            } w-25 d-flex align-items-center justify-content-center m-auto`}
-            style={{ height: "fit-content" }}
-            onClick={() => {
-              handleWithdraw();
-            }}
-          >
-            {withdrawLoading ? (
-              <div
-                class="spinner-border spinner-border-sm text-light"
-                role="status"
-              >
-                <span class="visually-hidden">Loading...</span>
-              </div>
-            ) : withdrawStatus === "failed" ? (
-              <>Failed</>
-            ) : withdrawStatus === "success" ? (
-              <>Success</>
-            ) : (
-              <>Withdraw</>
-            )}
-          </button>
-        </div>
-        <div className="separator my-2"></div>
-
-        <span className="deposit-popup-txt">Earnings</span>
-        <div className="info-pool-wrapper p-3 w-100">
-          <div className="d-flex w-100 justify-content-between align-items-end gap-2">
-            <div className="d-flex flex-column align-items-baseline">
-              <span className="bal-smallTxt">Rewards</span>
-              <span className="bal-bigTxt2">
-                {getFormattedNumber(pendingDivs)} DYP
-              </span>
-            </div>
-            <button
-              className={`btn py-2 claim-inner-btn ${
-                (claimStatus === "claimed" && claimStatus === "initial") ||
-                pendingDivs <= 0
-                  ? "disabled-btn"
-                  : claimStatus === "failed"
-                  ? "fail-button"
-                  : claimStatus === "success"
-                  ? "success-button"
-                  : null
-              } d-flex justify-content-center align-items-center gap-2`}
-              style={{ height: "fit-content" }}
-              onClick={handleClaimDivs}
-              disabled={
-                claimStatus === "claimed" ||
-                claimStatus === "success" ||
-                pendingDivs <= 0
-                  ? true
-                  : false
-              }
-            >
-              {" "}
-              {claimLoading ? (
-                <div
-                  class="spinner-border spinner-border-sm text-light"
-                  role="status"
-                >
-                  <span class="visually-hidden">Loading...</span>
+                <div className="d-flex align-items-center gap-2">
+                  <span className="bal-smallTxt">Pool fee:</span>
+                  <span className="deposit-popup-txt d-flex align-items-center gap-1">
+                    {fee}%
+                    <ClickAwayListener onClickAway={poolFeeClose}>
+                      <Tooltip
+                        open={poolFeeTooltip}
+                        disableFocusListener
+                        disableHoverListener
+                        disableTouchListener
+                        placement="top"
+                        title={
+                          <div className="tooltip-text">
+                            {
+                              "The percentage of staking rewards or deposits for maintaining the pool."
+                            }
+                          </div>
+                        }
+                      >
+                        <img src={moreinfo} alt="" onClick={poolFeeOpen} />
+                      </Tooltip>
+                    </ClickAwayListener>
+                  </span>
                 </div>
-              ) : claimStatus === "failed" ? (
-                <>Failed</>
-              ) : claimStatus === "success" ? (
-                <>Success</>
-              ) : (
-                <>Claim</>
-              )}
-            </button>
-          </div>
-        </div>
-        <div className="separator my-2"></div>
-        <div className="info-pool-wrapper p-3 w-100">
-          <div className="d-flex w-100 flex-column flex-lg-row justify-content-between align-items-start align-items-lg-end gap-2">
-            <div className="d-flex flex-column">
-              <span className="deposit-popup-txt">Summary</span>
-
-              <div className="d-flex align-items-center gap-2">
-                <span className="bal-smallTxt">Pool fee:</span>
-                <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                {fee}%
-                  <ClickAwayListener onClickAway={poolFeeClose}>
-                    <Tooltip
-                      open={poolFeeTooltip}
-                      disableFocusListener
-                      disableHoverListener
-                      disableTouchListener
-                      placement="top"
-                      title={
-                        <div className="tooltip-text">
-                          {
-                            "The percentage of staking rewards or deposits for maintaining the pool."
-                          }
-                        </div>
-                      }
-                    >
-                      <img src={moreinfo} alt="" onClick={poolFeeOpen} />
-                    </Tooltip>
-                  </ClickAwayListener>
-                </span>
+                <div className="d-flex align-items-center gap-2">
+                  <span className="bal-smallTxt">Pool address:</span>
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={`${window.config.etherscan_baseURL}address/${staking._address}`}
+                    className="stats-link2"
+                  >
+                    {shortAddress(staking._address)}{" "}
+                    <img src={statsLinkIcon} alt="" />
+                  </a>
+                </div>
               </div>
-              <div className="d-flex align-items-center gap-2">
-                <span className="bal-smallTxt">Pool address:</span>
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href={`${window.config.bscscan_baseURL}address/${staking._address}`}
-                  className="stats-link"
-                >
-                  {shortAddress(staking._address)}{" "}
-                  <img src={statsLinkIcon} alt="" />
-                </a>
-              </div>
-            </div>
-            <div className="d-flex flex-column">
-              <div className="d-flex align-items-center gap-1">
-                <span className="bal-smallTxt">Start date:</span>
-                <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                  09 November 2023{" "}
-                  <ClickAwayListener onClickAway={startDateClose}>
-                    <Tooltip
-                      open={startDateTooltip}
-                      disableFocusListener
-                      disableHoverListener
-                      disableTouchListener
-                      placement="top"
-                      title={
-                        <div className="tooltip-text">
-                          {
-                            "The date when the staking pool became available for participation."
-                          }
-                        </div>
-                      }
-                    >
-                      <img src={moreinfo} alt="" onClick={startDateOpen} />
-                    </Tooltip>
-                  </ClickAwayListener>
-                </span>
-              </div>
-              <div className="d-flex align-items-center gap-1">
-                <span className="bal-smallTxt">End date:</span>
-                <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                  {expiration_time}{" "}
-                  <ClickAwayListener onClickAway={endDateClose}>
-                    <Tooltip
-                      open={endDateTooltip}
-                      disableFocusListener
-                      disableHoverListener
-                      disableTouchListener
-                      placement="top"
-                      title={
-                        <div className="tooltip-text">
-                          {
-                            "The date when the staking pool will no longer accept new deposits."
-                          }
-                        </div>
-                      }
-                    >
-                      <img src={moreinfo} alt="" onClick={endDateOpen} />
-                    </Tooltip>
-                  </ClickAwayListener>
-                </span>
+              <div className="d-flex flex-column">
+                <div className="d-flex align-items-center gap-1">
+                  <span className="bal-smallTxt">Start date:</span>
+                  <span className="deposit-popup-txt d-flex align-items-center gap-1">
+                    09 November 2023{" "}
+                    <ClickAwayListener onClickAway={startDateClose}>
+                      <Tooltip
+                        open={startDateTooltip}
+                        disableFocusListener
+                        disableHoverListener
+                        disableTouchListener
+                        placement="top"
+                        title={
+                          <div className="tooltip-text">
+                            {
+                              "The date when the staking pool became available for participation."
+                            }
+                          </div>
+                        }
+                      >
+                        <img src={moreinfo} alt="" onClick={startDateOpen} />
+                      </Tooltip>
+                    </ClickAwayListener>
+                  </span>
+                </div>
+                <div className="d-flex align-items-center gap-1">
+                  <span className="bal-smallTxt">End date:</span>
+                  <span className="deposit-popup-txt d-flex align-items-center gap-1">
+                    {expiration_time}{" "}
+                    <ClickAwayListener onClickAway={endDateClose}>
+                      <Tooltip
+                        open={endDateTooltip}
+                        disableFocusListener
+                        disableHoverListener
+                        disableTouchListener
+                        placement="top"
+                        title={
+                          <div className="tooltip-text">
+                            {
+                              "The date when the staking pool will no longer accept new deposits."
+                            }
+                          </div>
+                        }
+                      >
+                        <img src={moreinfo} alt="" onClick={endDateOpen} />
+                      </Tooltip>
+                    </ClickAwayListener>
+                  </span>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    )}
-  </div>
+      )}
+      {coinbase === null ||
+      coinbase === undefined ||
+      is_wallet_connected === false ? (
+        <button className="connectbtn btn m-auto" onClick={onConnectWallet}>
+          <img src={wallet} alt="" /> Connect wallet
+        </button>
+      ) : chainId !== "1" ? (
+        <button
+          className="connectbtn btn m-auto"
+          onClick={() => {
+            handleEthPool();
+          }}
+        >
+          Change Network
+        </button>
+      ) : (
+        <></>
+      )}
+    </div>
 
     // <div className="container-lg p-0">
     //   <div
@@ -2072,7 +2185,6 @@ const StakeDypiusEth = ({
     //                         </div>
     //                       </td>
 
-                        
     //                     </tr>
 
     //                     <tr>
@@ -2576,7 +2688,6 @@ const StakeDypiusEth = ({
     //   )}
     // </div>
   );
-
 };
 
 export default StakeDypiusEth;

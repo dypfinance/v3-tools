@@ -69,6 +69,7 @@ const StakeBscIDyp = ({
   coinbase,
   referrer,
   selectedPool,
+  onConnectWallet,
 }) => {
   let { reward_token_idyp, BigNumber, alertify, token_dypsbsc } = window;
   let token_symbol = "iDYP";
@@ -154,7 +155,7 @@ const StakeBscIDyp = ({
   const [tvl, settvl] = useState("");
   const [referralFeeEarned, setreferralFeeEarned] = useState("");
   const [stakingOwner, setstakingOwner] = useState(null);
-  const [approvedAmount, setapprovedAmount] = useState('0.00');
+  const [approvedAmount, setapprovedAmount] = useState("0.00");
   const [approxDays, setapproxDays] = useState(365);
   const [showCalculator, setshowCalculator] = useState(false);
   const [usdPerToken, setusdPerToken] = useState("");
@@ -184,6 +185,33 @@ const StakeBscIDyp = ({
   const [poolFeeTooltip, setPoolFeeTooltip] = useState(false);
   const [startDateTooltip, setStartDateTooltip] = useState(false);
   const [endDateTooltip, setEndDateTooltip] = useState(false);
+  const [poolCapTooltip, setPoolCapTooltip] = useState(false);
+  const [quotaTooltip, setQuotaTooltip] = useState(false);
+  const [maxDepositTooltip, setMaxDepositTooltip] = useState(false);
+
+  const poolCapClose = () => {
+    setPoolCapTooltip(false);
+  };
+
+  const poolCapOpen = () => {
+    setPoolCapTooltip(true);
+  };
+
+  const quotaClose = () => {
+    setQuotaTooltip(false);
+  };
+
+  const quotaOpen = () => {
+    setQuotaTooltip(true);
+  };
+
+  const maxDepositClose = () => {
+    setMaxDepositTooltip(false);
+  };
+
+  const maxDepositOpen = () => {
+    setMaxDepositTooltip(true);
+  };
 
   const aprClose = () => {
     setaprTooltip(false);
@@ -192,8 +220,6 @@ const StakeBscIDyp = ({
   const aprOpen = () => {
     setaprTooltip(true);
   };
-
-
 
   const poolFeeClose = () => {
     setPoolFeeTooltip(false);
@@ -530,7 +556,7 @@ const StakeBscIDyp = ({
     return window.location.origin + window.location.pathname + "?r=" + coinbase;
   };
 
-  const handleEthPool = async () => {
+  const handleBnbPool = async () => {
     await handleSwitchNetworkhook("0x38")
       .then(() => {
         handleSwitchNetwork("56");
@@ -659,8 +685,8 @@ const StakeBscIDyp = ({
     let result_formatted = new BigNumber(result).div(1e18).toFixed(6);
     let result_formatted2 = new BigNumber(result).div(1e18).toFixed(2);
 
-    setapprovedAmount(result_formatted2)
- 
+    setapprovedAmount(result_formatted2);
+
     if (
       Number(result_formatted) >= Number(amount) &&
       Number(result_formatted) !== 0
@@ -686,6 +712,8 @@ const StakeBscIDyp = ({
   useEffect(() => {
     getUsdPerDyp();
   }, []);
+
+  
 
   return (
     <div className="d-flex flex-column gap-2 w-100">
@@ -771,7 +799,13 @@ const StakeBscIDyp = ({
           <div className="info-pool-item p-2">
             <div className="d-flex justify-content-between gap-1 align-items-center">
               <span className="info-pool-left-text">TVL</span>
-              <span className="info-pool-right-text">${tvl_usd} USD</span>
+              <span className="info-pool-right-text">
+                $
+                {tvl_usd === "0.00"
+                  ? getFormattedNumber(selectedPool.tvl_usd)
+                  : tvl_usd}{" "}
+                
+              </span>
             </div>
           </div>
         </div>
@@ -791,7 +825,11 @@ const StakeBscIDyp = ({
               </span>
             </div>
           </div>
-          <div className="d-flex flex-column w-100 gap-1">
+          <div
+            className={`d-flex flex-column w-100 gap-1 ${
+              (chainId !== "56" || !is_wallet_connected) && "blurrypool"
+            } `}
+          >
             <div className="position-relative w-100 d-flex">
               <input
                 className="text-input2 w-100"
@@ -816,30 +854,106 @@ const StakeBscIDyp = ({
                 Max
               </button>
             </div>
-            <div className={`d-flex w-100 ${errorMsg ? 'justify-content-between' : 'justify-content-end'} gap-1 align-items-center`}>
+            <div
+              className={`d-flex w-100 ${
+                errorMsg ? "justify-content-between" : "justify-content-end"
+              } gap-1 align-items-center`}
+            >
               {errorMsg && <h6 className="errormsg m-0">{errorMsg}</h6>}
 
               <div className="d-flex gap-1 align-items-baseline">
                 <span className="bal-smallTxt">Approved:</span>
-                <span className="bal-bigTxt2">
-                  {approvedAmount} iDyp
-                </span>
+                <span className="bal-bigTxt2">{approvedAmount} iDyp</span>
               </div>
             </div>
           </div>
           <div className="info-pool-wrapper p-3 w-100">
             <div className="d-flex w-100 justify-content-between align-items-start align-items-lg-center gap-2 flex-column flex-lg-row">
               <div className="d-flex flex-column">
+                <div className="d-flex align-items-center gap-2">
+                  <span className="bal-smallTxt">Pool Cap:</span>
+                  <span className="deposit-popup-txt d-flex align-items-center gap-1">
+                    N/A
+                    <ClickAwayListener onClickAway={poolCapClose}>
+                      <Tooltip
+                        open={poolCapTooltip}
+                        disableFocusListener
+                        disableHoverListener
+                        disableTouchListener
+                        placement="top"
+                        title={
+                          <div className="tooltip-text">
+                            {
+                              "The maximum amount of funds that can be staked in the pool."
+                            }
+                          </div>
+                        }
+                      >
+                        <img src={moreinfo} alt="" onClick={poolCapOpen} />
+                      </Tooltip>
+                    </ClickAwayListener>
+                  </span>
+                </div>
+                <div className="d-flex align-items-center gap-2">
+                  <span className="bal-smallTxt">Available Quota:</span>
+                  <span className="deposit-popup-txt d-flex align-items-center gap-1">
+                    N/A
+                    <ClickAwayListener onClickAway={quotaClose}>
+                      <Tooltip
+                        open={quotaTooltip}
+                        disableFocusListener
+                        disableHoverListener
+                        disableTouchListener
+                        placement="top"
+                        title={
+                          <div className="tooltip-text">
+                            {"The remaining capacity for staking in the pool."}
+                          </div>
+                        }
+                      >
+                        <img src={moreinfo} alt="" onClick={quotaOpen} />
+                      </Tooltip>
+                    </ClickAwayListener>
+                  </span>
+                </div>
+                <div className="d-flex align-items-center gap-2">
+                  <span className="bal-smallTxt">Maximum deposit:</span>
+                  <span className="deposit-popup-txt d-flex align-items-center gap-1">
+                    N/A
+                    <ClickAwayListener onClickAway={maxDepositClose}>
+                      <Tooltip
+                        open={maxDepositTooltip}
+                        disableFocusListener
+                        disableHoverListener
+                        disableTouchListener
+                        placement="top"
+                        title={
+                          <div className="tooltip-text">
+                            {
+                              "The highest amount that can be staked by an individual user."
+                            }
+                          </div>
+                        }
+                      >
+                        <img src={moreinfo} alt="" onClick={maxDepositOpen} />
+                      </Tooltip>
+                    </ClickAwayListener>
+                  </span>
+                </div>
+              </div>
+              <div className="d-flex flex-column">
                 <span className="bal-smallTxt">Total Est. Rewards</span>
                 <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                  {getFormattedNumber(
-                    getApproxReturn(
-                      depositAmount,
-                      lockTime === "No Lock" ? 1 : lockTime
-                    ),
-                    2
-                  )}{" "}
-                  iDYP
+                  <span className="deposit-popup-txt d-flex align-items-center gap-1">
+                    {getFormattedNumber(
+                      getApproxReturn(
+                        depositAmount,
+                        lockTime === "No Lock" ? 365 : lockTime
+                      ),
+                      2
+                    )}{" "}
+                    iDYP
+                  </span>
                 </span>
               </div>
             </div>
@@ -850,55 +964,61 @@ const StakeBscIDyp = ({
               {" "}
               <div className="separator my-2"></div>
               <span className="deposit-popup-txt">Reinvest</span>
-              <div className="info-pool-wrapper p-3 w-100">
-                <div className="d-flex w-100 justify-content-between align-items-end gap-2">
-                  <div className="d-flex flex-column align-items-baseline">
-                    <span className="bal-smallTxt">Rewards</span>
-                    <span className="bal-bigTxt2">
-                      {getFormattedNumber(pendingDivs)} DYP
-                    </span>
+              <div
+                className={`d-flex flex-column w-100 gap-1 ${
+                  (chainId !== "56" || !is_wallet_connected) && "blurrypool"
+                } `}
+              >
+                <div className="info-pool-wrapper p-3 w-100">
+                  <div className="d-flex w-100 justify-content-between align-items-end gap-2">
+                    <div className="d-flex flex-column align-items-baseline">
+                      <span className="bal-smallTxt">Rewards</span>
+                      <span className="bal-bigTxt2">
+                        {getFormattedNumber(pendingDivs)} DYP
+                      </span>
+                    </div>
+                    <button
+                      className={`btn py-2 claim-inner-btn ${
+                        (reInvestStatus === "claimed" &&
+                          reInvestStatus === "initial") ||
+                        pendingDivs <= 0
+                          ? "disabled-btn"
+                          : reInvestStatus === "failed"
+                          ? "fail-button"
+                          : reInvestStatus === "success"
+                          ? "success-button"
+                          : null
+                      } d-flex justify-content-center align-items-center gap-2`}
+                      style={{ height: "fit-content" }}
+                      onClick={handleReinvest}
+                      disabled={
+                        reInvestStatus === "claimed" ||
+                        reInvestStatus === "success" ||
+                        pendingDivs <= 0
+                          ? true
+                          : false
+                      }
+                    >
+                      {" "}
+                      {reInvestLoading ? (
+                        <div
+                          class="spinner-border spinner-border-sm text-light"
+                          role="status"
+                        >
+                          <span class="visually-hidden">Loading...</span>
+                        </div>
+                      ) : reInvestStatus === "failed" ? (
+                        <>
+                          {/* <img src={failMark} alt="" /> */}
+                          Failed
+                        </>
+                      ) : reInvestStatus === "success" ? (
+                        <>Success</>
+                      ) : (
+                        <>Reinvest</>
+                      )}
+                    </button>
                   </div>
-                  <button
-                    className={`btn py-2 claim-inner-btn ${
-                      (reInvestStatus === "claimed" &&
-                        reInvestStatus === "initial") ||
-                      pendingDivs <= 0
-                        ? "disabled-btn"
-                        : reInvestStatus === "failed"
-                        ? "fail-button"
-                        : reInvestStatus === "success"
-                        ? "success-button"
-                        : null
-                    } d-flex justify-content-center align-items-center gap-2`}
-                    style={{ height: "fit-content" }}
-                    onClick={handleReinvest}
-                    disabled={
-                      reInvestStatus === "claimed" ||
-                      reInvestStatus === "success" ||
-                      pendingDivs <= 0
-                        ? true
-                        : false
-                    }
-                  >
-                    {" "}
-                    {reInvestLoading ? (
-                      <div
-                        class="spinner-border spinner-border-sm text-light"
-                        role="status"
-                      >
-                        <span class="visually-hidden">Loading...</span>
-                      </div>
-                    ) : reInvestStatus === "failed" ? (
-                      <>
-                        {/* <img src={failMark} alt="" /> */}
-                        Failed
-                      </>
-                    ) : reInvestStatus === "success" ? (
-                      <>Success</>
-                    ) : (
-                      <>Reinvest</>
-                    )}
-                  </button>
                 </div>
               </div>{" "}
             </>
@@ -912,7 +1032,7 @@ const StakeBscIDyp = ({
                 <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Pool fee:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                  {fee_s}%
+                    {fee_s}%
                     <ClickAwayListener onClickAway={poolFeeClose}>
                       <Tooltip
                         open={poolFeeTooltip}
@@ -939,7 +1059,7 @@ const StakeBscIDyp = ({
                     target="_blank"
                     rel="noopener noreferrer"
                     href={`${window.config.bscscan_baseURL}address/${staking._address}`}
-                    className="stats-link"
+                    className="stats-link2"
                   >
                     {shortAddress(staking._address)}{" "}
                     <img src={statsLinkIcon} alt="" />
@@ -974,7 +1094,7 @@ const StakeBscIDyp = ({
                 <div className="d-flex align-items-center gap-1">
                   <span className="bal-smallTxt">End date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                  {expiration_time}{" "}
+                    {expiration_time}{" "}
                     <ClickAwayListener onClickAway={endDateClose}>
                       <Tooltip
                         open={endDateTooltip}
@@ -998,48 +1118,50 @@ const StakeBscIDyp = ({
               </div>
             </div>
           </div>
-          <button
-            disabled={
-              depositAmount === "" || depositLoading === true ? true : false
-            }
-            className={`btn filledbtn ${
-              depositAmount === "" &&
-              depositStatus === "initial" &&
-              "disabled-btn"
-            } ${
-              depositStatus === "deposit" || depositStatus === "success"
-                ? "success-button"
-                : depositStatus === "fail"
-                ? "fail-button"
-                : null
-            } d-flex justify-content-center align-items-center gap-2 m-auto`}
-            onClick={() => {
-              depositStatus === "deposit"
-                ? handleStake()
-                : depositStatus === "initial" && depositAmount !== ""
-                ? handleApprove()
-                : console.log("");
-            }}
-            style={{ width: "fit-content" }}
-          >
-            {" "}
-            {depositLoading ? (
-              <div
-                class="spinner-border spinner-border-sm text-light"
-                role="status"
-              >
-                <span class="visually-hidden">Loading...</span>
-              </div>
-            ) : depositStatus === "initial" ? (
-              <>Approve</>
-            ) : depositStatus === "deposit" ? (
-              <>Deposit</>
-            ) : depositStatus === "success" ? (
-              <>Success</>
-            ) : (
-              <>Failed</>
-            )}
-          </button>
+          {is_wallet_connected && chainId === "56" && (
+            <button
+              disabled={
+                depositAmount === "" || depositLoading === true ? true : false
+              }
+              className={`btn filledbtn ${
+                depositAmount === "" &&
+                depositStatus === "initial" &&
+                "disabled-btn"
+              } ${
+                depositStatus === "deposit" || depositStatus === "success"
+                  ? "success-button"
+                  : depositStatus === "fail"
+                  ? "fail-button"
+                  : null
+              } d-flex justify-content-center align-items-center gap-2 m-auto`}
+              onClick={() => {
+                depositStatus === "deposit"
+                  ? handleStake()
+                  : depositStatus === "initial" && depositAmount !== ""
+                  ? handleApprove()
+                  : console.log("");
+              }}
+              style={{ width: "fit-content" }}
+            >
+              {" "}
+              {depositLoading ? (
+                <div
+                  class="spinner-border spinner-border-sm text-light"
+                  role="status"
+                >
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              ) : depositStatus === "initial" ? (
+                <>Approve</>
+              ) : depositStatus === "deposit" ? (
+                <>Deposit</>
+              ) : depositStatus === "success" ? (
+                <>Success</>
+              ) : (
+                <>Failed</>
+              )}
+            </button>
+          )}
         </div>
       ) : (
         <div className="d-flex flex-column w-100 gap-2">
@@ -1053,7 +1175,11 @@ const StakeBscIDyp = ({
               </span>
             </div>
           </div>
-          <div className="d-flex flex-column w-100 gap-1">
+          <div
+            className={`d-flex flex-column w-100 gap-1 ${
+              (chainId !== "56" || !is_wallet_connected) && "blurrypool"
+            } `}
+          >
             <div className="position-relative w-100 d-flex">
               <input
                 className="text-input2 w-100"
@@ -1138,51 +1264,57 @@ const StakeBscIDyp = ({
           <div className="separator my-2"></div>
 
           <span className="deposit-popup-txt">Earnings</span>
-          <div className="info-pool-wrapper p-3 w-100">
-            <div className="d-flex w-100 justify-content-between align-items-end gap-2">
-              <div className="d-flex flex-column align-items-baseline">
-                <span className="bal-smallTxt">Rewards</span>
-                <span className="bal-bigTxt2">
-                  {getFormattedNumber(pendingDivs)} DYP
-                </span>
+          <div
+            className={`d-flex flex-column w-100 gap-1 ${
+              (chainId !== "56" || !is_wallet_connected) && "blurrypool"
+            } `}
+          >
+            <div className="info-pool-wrapper p-3 w-100">
+              <div className="d-flex w-100 justify-content-between align-items-end gap-2">
+                <div className="d-flex flex-column align-items-baseline">
+                  <span className="bal-smallTxt">Rewards</span>
+                  <span className="bal-bigTxt2">
+                    {getFormattedNumber(pendingDivs)} DYP
+                  </span>
+                </div>
+                <button
+                  className={`btn py-2 claim-inner-btn ${
+                    (claimStatus === "claimed" && claimStatus === "initial") ||
+                    pendingDivs <= 0
+                      ? "disabled-btn"
+                      : claimStatus === "failed"
+                      ? "fail-button"
+                      : claimStatus === "success"
+                      ? "success-button"
+                      : null
+                  } d-flex justify-content-center align-items-center gap-2`}
+                  style={{ height: "fit-content" }}
+                  onClick={handleClaimDivs}
+                  disabled={
+                    claimStatus === "claimed" ||
+                    claimStatus === "success" ||
+                    pendingDivs <= 0
+                      ? true
+                      : false
+                  }
+                >
+                  {" "}
+                  {claimLoading ? (
+                    <div
+                      class="spinner-border spinner-border-sm text-light"
+                      role="status"
+                    >
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                  ) : claimStatus === "failed" ? (
+                    <>Failed</>
+                  ) : claimStatus === "success" ? (
+                    <>Success</>
+                  ) : (
+                    <>Claim</>
+                  )}
+                </button>
               </div>
-              <button
-                className={`btn py-2 claim-inner-btn ${
-                  (claimStatus === "claimed" && claimStatus === "initial") ||
-                  pendingDivs <= 0
-                    ? "disabled-btn"
-                    : claimStatus === "failed"
-                    ? "fail-button"
-                    : claimStatus === "success"
-                    ? "success-button"
-                    : null
-                } d-flex justify-content-center align-items-center gap-2`}
-                style={{ height: "fit-content" }}
-                onClick={handleClaimDivs}
-                disabled={
-                  claimStatus === "claimed" ||
-                  claimStatus === "success" ||
-                  pendingDivs <= 0
-                    ? true
-                    : false
-                }
-              >
-                {" "}
-                {claimLoading ? (
-                  <div
-                    class="spinner-border spinner-border-sm text-light"
-                    role="status"
-                  >
-                    <span class="visually-hidden">Loading...</span>
-                  </div>
-                ) : claimStatus === "failed" ? (
-                  <>Failed</>
-                ) : claimStatus === "success" ? (
-                  <>Success</>
-                ) : (
-                  <>Claim</>
-                )}
-              </button>
             </div>
           </div>
           <div className="separator my-2"></div>
@@ -1221,7 +1353,7 @@ const StakeBscIDyp = ({
                     target="_blank"
                     rel="noopener noreferrer"
                     href={`${window.config.bscscan_baseURL}address/${staking._address}`}
-                    className="stats-link"
+                    className="stats-link2"
                   >
                     {shortAddress(staking._address)}{" "}
                     <img src={statsLinkIcon} alt="" />
@@ -1281,6 +1413,24 @@ const StakeBscIDyp = ({
             </div>
           </div>
         </div>
+      )}
+      {coinbase === null ||
+      coinbase === undefined ||
+      is_wallet_connected === false ? (
+        <button className="connectbtn btn m-auto" onClick={onConnectWallet}>
+          <img src={wallet} alt="" /> Connect wallet
+        </button>
+      ) : chainId !== "56" ? (
+        <button
+          className="connectbtn btn m-auto"
+          onClick={() => {
+            handleBnbPool();
+          }}
+        >
+          Change Network
+        </button>
+      ) : (
+        <></>
       )}
     </div>
     // <div className="container-lg p-0">
@@ -1446,7 +1596,7 @@ const StakeBscIDyp = ({
     //               <button
     //                 className="connectbtn btn"
     //                 onClick={() => {
-    //                   handleEthPool();
+    //                   handleBnbPool();
     //                 }}
     //               >
     //                 Change Network

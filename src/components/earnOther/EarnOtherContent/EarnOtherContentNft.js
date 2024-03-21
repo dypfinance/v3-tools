@@ -437,11 +437,11 @@ const EarnOtherContentNft = ({
       <div className="row justify-content-center w-100 mx-0">
         {windowSize.width > 786 ? (
           <div
-            className="row justify-content-between align-items-center p-2 options-container"
+            className="row justify-content-end align-items-center p-2 options-container"
             style={{ marginTop: "30px" }}
           >
-            <div className="col-12 col-lg-4 col-xl-3 px-0">
-              {option !== "Farming" && (
+            <div className="col-12 col-4 px-0">
+              {/* {option !== "Farming" && (
                 <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
                   <span style={{ fontWeight: "300", fontSize: "13px" }}>
                     Total value locked
@@ -453,7 +453,7 @@ const EarnOtherContentNft = ({
                     ${getFormattedNumber("2585417", 0)}
                   </h6>
                 </div>
-              )}
+              )} */}
             </div>
             {/* <div className="col-2 d-flex justify-content-start align-items-center gap-3">
               <div
@@ -494,11 +494,23 @@ const EarnOtherContentNft = ({
           </div>
         ) : (
           <div
-            className="row justify-content-center align-items-center p-2 options-container"
+            className="row justify-content-end align-items-center p-2 options-container"
             style={{ marginTop: "24px", marginBottom: "24px" }}
           >
+                <div className="col-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3">
+              <h5 className="text-white inactive-pools">Past pools</h5>
+              <div
+                className={`pill-box ${myStakes && "pill-box-active"}`}
+                onClick={() => {
+                  setMyStakes(!myStakes);
+                  toggleInactive();
+                }}
+              >
+                <div className="pill"></div>
+              </div>
+            </div>
             <div className="col-12 col-lg-4 col-xl-3 px-0">
-              {option !== "Farming" && (
+              {/* {option !== "Farming" && (
                 <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
                   <span style={{ fontWeight: "300", fontSize: "13px" }}>
                     Total value locked
@@ -510,7 +522,7 @@ const EarnOtherContentNft = ({
                     ${getFormattedNumber("2585417", 0)}
                   </h6>
                 </div>
-              )}
+              )} */}
             </div>
             {/* <div className="col-6 d-flex px-0 px-lg-2 justify-content-start align-items-center gap-3">
               <div

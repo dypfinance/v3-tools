@@ -49,6 +49,7 @@ const StakeAvaxIDyp = ({
   staking,
   selectedBtn,
   selectedTab,
+  selectedPool,
   is_wallet_connected,
   apr,
   liquidity = "ETH",
@@ -68,6 +69,7 @@ const StakeAvaxIDyp = ({
   lp_id,
   coinbase,
   referrer,
+  onConnectWallet,
 }) => {
   let { reward_token_idyp, BigNumber, alertify, token_dypsavax } = window;
   let token_symbol = "iDYP";
@@ -181,6 +183,9 @@ const StakeAvaxIDyp = ({
   const [poolFeeTooltip, setPoolFeeTooltip] = useState(false);
   const [startDateTooltip, setStartDateTooltip] = useState(false);
   const [endDateTooltip, setEndDateTooltip] = useState(false);
+  const [poolCapTooltip, setPoolCapTooltip] = useState(false);
+  const [quotaTooltip, setQuotaTooltip] = useState(false);
+  const [maxDepositTooltip, setMaxDepositTooltip] = useState(false);
   const [approvedAmount, setapprovedAmount] = useState("0.00");
 
   const showModal = () => {
@@ -221,6 +226,30 @@ const StakeAvaxIDyp = ({
 
   const hidePopup = () => {
     setpopup(false);
+  };
+
+  const poolCapClose = () => {
+    setPoolCapTooltip(false);
+  };
+
+  const poolCapOpen = () => {
+    setPoolCapTooltip(true);
+  };
+
+  const quotaClose = () => {
+    setQuotaTooltip(false);
+  };
+
+  const quotaOpen = () => {
+    setQuotaTooltip(true);
+  };
+
+  const maxDepositClose = () => {
+    setMaxDepositTooltip(false);
+  };
+
+  const maxDepositOpen = () => {
+    setMaxDepositTooltip(true);
   };
 
   const refreshBalance = async () => {
@@ -680,6 +709,8 @@ const StakeAvaxIDyp = ({
     getUsdPerDyp();
   }, [tokendata]);
 
+
+
   return (
     <div className="d-flex flex-column gap-2 w-100">
       <div className="locktimewrapper align-items-center gap-2">
@@ -764,7 +795,12 @@ const StakeAvaxIDyp = ({
           <div className="info-pool-item p-2">
             <div className="d-flex justify-content-between gap-1 align-items-center">
               <span className="info-pool-left-text">TVL</span>
-              <span className="info-pool-right-text">${tvl_usd} USD</span>
+              <span className="info-pool-right-text">
+                $
+                {tvl_usd === "0.00"
+                  ? getFormattedNumber(selectedPool.tvl_usd)
+                  : tvl_usd}{" "}
+              </span>
             </div>
           </div>
         </div>
@@ -784,7 +820,11 @@ const StakeAvaxIDyp = ({
               </span>
             </div>
           </div>
-          <div className="d-flex flex-column w-100 gap-1">
+          <div
+            className={`d-flex flex-column w-100 gap-1 ${
+              (chainId !== "43114" || !is_wallet_connected) && "blurrypool"
+            } `}
+          >
             <div className="position-relative w-100 d-flex">
               <input
                 className="text-input2 w-100"
@@ -825,16 +865,90 @@ const StakeAvaxIDyp = ({
           <div className="info-pool-wrapper p-3 w-100">
             <div className="d-flex w-100 justify-content-between align-items-start align-items-lg-center gap-2 flex-column flex-lg-row">
               <div className="d-flex flex-column">
+                <div className="d-flex align-items-center gap-2">
+                  <span className="bal-smallTxt">Pool Cap:</span>
+                  <span className="deposit-popup-txt d-flex align-items-center gap-1">
+                    N/A
+                    <ClickAwayListener onClickAway={poolCapClose}>
+                      <Tooltip
+                        open={poolCapTooltip}
+                        disableFocusListener
+                        disableHoverListener
+                        disableTouchListener
+                        placement="top"
+                        title={
+                          <div className="tooltip-text">
+                            {
+                              "The maximum amount of funds that can be staked in the pool."
+                            }
+                          </div>
+                        }
+                      >
+                        <img src={moreinfo} alt="" onClick={poolCapOpen} />
+                      </Tooltip>
+                    </ClickAwayListener>
+                  </span>
+                </div>
+                <div className="d-flex align-items-center gap-2">
+                  <span className="bal-smallTxt">Available Quota:</span>
+                  <span className="deposit-popup-txt d-flex align-items-center gap-1">
+                    N/A
+                    <ClickAwayListener onClickAway={quotaClose}>
+                      <Tooltip
+                        open={quotaTooltip}
+                        disableFocusListener
+                        disableHoverListener
+                        disableTouchListener
+                        placement="top"
+                        title={
+                          <div className="tooltip-text">
+                            {"The remaining capacity for staking in the pool."}
+                          </div>
+                        }
+                      >
+                        <img src={moreinfo} alt="" onClick={quotaOpen} />
+                      </Tooltip>
+                    </ClickAwayListener>
+                  </span>
+                </div>
+                <div className="d-flex align-items-center gap-2">
+                  <span className="bal-smallTxt">Maximum deposit:</span>
+                  <span className="deposit-popup-txt d-flex align-items-center gap-1">
+                    N/A
+                    <ClickAwayListener onClickAway={maxDepositClose}>
+                      <Tooltip
+                        open={maxDepositTooltip}
+                        disableFocusListener
+                        disableHoverListener
+                        disableTouchListener
+                        placement="top"
+                        title={
+                          <div className="tooltip-text">
+                            {
+                              "The highest amount that can be staked by an individual user."
+                            }
+                          </div>
+                        }
+                      >
+                        <img src={moreinfo} alt="" onClick={maxDepositOpen} />
+                      </Tooltip>
+                    </ClickAwayListener>
+                  </span>
+                </div>
+              </div>
+              <div className="d-flex flex-column">
                 <span className="bal-smallTxt">Total Est. Rewards</span>
                 <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                  {getFormattedNumber(
-                    getApproxReturn(
-                      depositAmount,
-                      lockTime === "No Lock" ? 1 : lockTime
-                    ),
-                    2
-                  )}{" "}
-                  iDYP
+                  <span className="deposit-popup-txt d-flex align-items-center gap-1">
+                    {getFormattedNumber(
+                      getApproxReturn(
+                        depositAmount,
+                        lockTime === "No Lock" ? 365 : lockTime
+                      ),
+                      2
+                    )}{" "}
+                    iDYP
+                  </span>
                 </span>
               </div>
             </div>
@@ -845,55 +959,61 @@ const StakeAvaxIDyp = ({
               {" "}
               <div className="separator my-2"></div>
               <span className="deposit-popup-txt">Reinvest</span>
-              <div className="info-pool-wrapper p-3 w-100">
-                <div className="d-flex w-100 justify-content-between align-items-end gap-2">
-                  <div className="d-flex flex-column align-items-baseline">
-                    <span className="bal-smallTxt">Rewards</span>
-                    <span className="bal-bigTxt2">
-                      {getFormattedNumber(pendingDivs)} DYP
-                    </span>
+              <div
+                className={`d-flex flex-column w-100 gap-1 ${
+                  (chainId !== "43114" || !is_wallet_connected) && "blurrypool"
+                } `}
+              >
+                <div className="info-pool-wrapper p-3 w-100">
+                  <div className="d-flex w-100 justify-content-between align-items-end gap-2">
+                    <div className="d-flex flex-column align-items-baseline">
+                      <span className="bal-smallTxt">Rewards</span>
+                      <span className="bal-bigTxt2">
+                        {getFormattedNumber(pendingDivs)} DYP
+                      </span>
+                    </div>
+                    <button
+                      className={`btn py-2 claim-inner-btn ${
+                        (reInvestStatus === "claimed" &&
+                          reInvestStatus === "initial") ||
+                        pendingDivs <= 0
+                          ? "disabled-btn"
+                          : reInvestStatus === "failed"
+                          ? "fail-button"
+                          : reInvestStatus === "success"
+                          ? "success-button"
+                          : null
+                      } d-flex justify-content-center align-items-center gap-2`}
+                      style={{ height: "fit-content" }}
+                      onClick={handleReinvest}
+                      disabled={
+                        reInvestStatus === "claimed" ||
+                        reInvestStatus === "success" ||
+                        pendingDivs <= 0
+                          ? true
+                          : false
+                      }
+                    >
+                      {" "}
+                      {reInvestLoading ? (
+                        <div
+                          class="spinner-border spinner-border-sm text-light"
+                          role="status"
+                        >
+                          <span class="visually-hidden">Loading...</span>
+                        </div>
+                      ) : reInvestStatus === "failed" ? (
+                        <>
+                          {/* <img src={failMark} alt="" /> */}
+                          Failed
+                        </>
+                      ) : reInvestStatus === "success" ? (
+                        <>Success</>
+                      ) : (
+                        <>Reinvest</>
+                      )}
+                    </button>
                   </div>
-                  <button
-                    className={`btn py-2 claim-inner-btn ${
-                      (reInvestStatus === "claimed" &&
-                        reInvestStatus === "initial") ||
-                      pendingDivs <= 0
-                        ? "disabled-btn"
-                        : reInvestStatus === "failed"
-                        ? "fail-button"
-                        : reInvestStatus === "success"
-                        ? "success-button"
-                        : null
-                    } d-flex justify-content-center align-items-center gap-2`}
-                    style={{ height: "fit-content" }}
-                    onClick={handleReinvest}
-                    disabled={
-                      reInvestStatus === "claimed" ||
-                      reInvestStatus === "success" ||
-                      pendingDivs <= 0
-                        ? true
-                        : false
-                    }
-                  >
-                    {" "}
-                    {reInvestLoading ? (
-                      <div
-                        class="spinner-border spinner-border-sm text-light"
-                        role="status"
-                      >
-                        <span class="visually-hidden">Loading...</span>
-                      </div>
-                    ) : reInvestStatus === "failed" ? (
-                      <>
-                        {/* <img src={failMark} alt="" /> */}
-                        Failed
-                      </>
-                    ) : reInvestStatus === "success" ? (
-                      <>Success</>
-                    ) : (
-                      <>Reinvest</>
-                    )}
-                  </button>
                 </div>
               </div>{" "}
             </>
@@ -933,8 +1053,8 @@ const StakeAvaxIDyp = ({
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={`${window.config.bscscan_baseURL}address/${staking._address}`}
-                    className="stats-link"
+                    href={`${window.config.snowtrace_baseURL}address/${staking._address}`}
+                    className="stats-link2"
                   >
                     {shortAddress(staking._address)}{" "}
                     <img src={statsLinkIcon} alt="" />
@@ -993,48 +1113,50 @@ const StakeAvaxIDyp = ({
               </div>
             </div>
           </div>
-          <button
-            disabled={
-              depositAmount === "" || depositLoading === true ? true : false
-            }
-            className={`btn filledbtn ${
-              depositAmount === "" &&
-              depositStatus === "initial" &&
-              "disabled-btn"
-            } ${
-              depositStatus === "deposit" || depositStatus === "success"
-                ? "success-button"
-                : depositStatus === "fail"
-                ? "fail-button"
-                : null
-            } d-flex justify-content-center align-items-center gap-2 m-auto`}
-            onClick={() => {
-              depositStatus === "deposit"
-                ? handleStake()
-                : depositStatus === "initial" && depositAmount !== ""
-                ? handleApprove()
-                : console.log("");
-            }}
-            style={{ width: "fit-content" }}
-          >
-            {" "}
-            {depositLoading ? (
-              <div
-                class="spinner-border spinner-border-sm text-light"
-                role="status"
-              >
-                <span class="visually-hidden">Loading...</span>
-              </div>
-            ) : depositStatus === "initial" ? (
-              <>Approve</>
-            ) : depositStatus === "deposit" ? (
-              <>Deposit</>
-            ) : depositStatus === "success" ? (
-              <>Success</>
-            ) : (
-              <>Failed</>
-            )}
-          </button>
+          {is_wallet_connected && chainId === "43114" && (
+            <button
+              disabled={
+                depositAmount === "" || depositLoading === true ? true : false
+              }
+              className={`btn filledbtn ${
+                depositAmount === "" &&
+                depositStatus === "initial" &&
+                "disabled-btn"
+              } ${
+                depositStatus === "deposit" || depositStatus === "success"
+                  ? "success-button"
+                  : depositStatus === "fail"
+                  ? "fail-button"
+                  : null
+              } d-flex justify-content-center align-items-center gap-2 m-auto`}
+              onClick={() => {
+                depositStatus === "deposit"
+                  ? handleStake()
+                  : depositStatus === "initial" && depositAmount !== ""
+                  ? handleApprove()
+                  : console.log("");
+              }}
+              style={{ width: "fit-content" }}
+            >
+              {" "}
+              {depositLoading ? (
+                <div
+                  class="spinner-border spinner-border-sm text-light"
+                  role="status"
+                >
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              ) : depositStatus === "initial" ? (
+                <>Approve</>
+              ) : depositStatus === "deposit" ? (
+                <>Deposit</>
+              ) : depositStatus === "success" ? (
+                <>Success</>
+              ) : (
+                <>Failed</>
+              )}
+            </button>
+          )}
         </div>
       ) : (
         <div className="d-flex flex-column w-100 gap-2">
@@ -1048,7 +1170,11 @@ const StakeAvaxIDyp = ({
               </span>
             </div>
           </div>
-          <div className="d-flex flex-column w-100 gap-1">
+          <div
+            className={`d-flex flex-column w-100 gap-1 ${
+              (chainId !== "43114" || !is_wallet_connected) && "blurrypool"
+            } `}
+          >
             <div className="position-relative w-100 d-flex">
               <input
                 className="text-input2 w-100"
@@ -1133,51 +1259,57 @@ const StakeAvaxIDyp = ({
           <div className="separator my-2"></div>
 
           <span className="deposit-popup-txt">Earnings</span>
-          <div className="info-pool-wrapper p-3 w-100">
-            <div className="d-flex w-100 justify-content-between align-items-end gap-2">
-              <div className="d-flex flex-column align-items-baseline">
-                <span className="bal-smallTxt">Rewards</span>
-                <span className="bal-bigTxt2">
-                  {getFormattedNumber(pendingDivs)} DYP
-                </span>
+          <div
+            className={`d-flex flex-column w-100 gap-1 ${
+              (chainId !== "43114" || !is_wallet_connected) && "blurrypool"
+            } `}
+          >
+            <div className="info-pool-wrapper p-3 w-100">
+              <div className="d-flex w-100 justify-content-between align-items-end gap-2">
+                <div className="d-flex flex-column align-items-baseline">
+                  <span className="bal-smallTxt">Rewards</span>
+                  <span className="bal-bigTxt2">
+                    {getFormattedNumber(pendingDivs)} DYP
+                  </span>
+                </div>
+                <button
+                  className={`btn py-2 claim-inner-btn ${
+                    (claimStatus === "claimed" && claimStatus === "initial") ||
+                    pendingDivs <= 0
+                      ? "disabled-btn"
+                      : claimStatus === "failed"
+                      ? "fail-button"
+                      : claimStatus === "success"
+                      ? "success-button"
+                      : null
+                  } d-flex justify-content-center align-items-center gap-2`}
+                  style={{ height: "fit-content" }}
+                  onClick={handleClaimDivs}
+                  disabled={
+                    claimStatus === "claimed" ||
+                    claimStatus === "success" ||
+                    pendingDivs <= 0
+                      ? true
+                      : false
+                  }
+                >
+                  {" "}
+                  {claimLoading ? (
+                    <div
+                      class="spinner-border spinner-border-sm text-light"
+                      role="status"
+                    >
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                  ) : claimStatus === "failed" ? (
+                    <>Failed</>
+                  ) : claimStatus === "success" ? (
+                    <>Success</>
+                  ) : (
+                    <>Claim</>
+                  )}
+                </button>
               </div>
-              <button
-                className={`btn py-2 claim-inner-btn ${
-                  (claimStatus === "claimed" && claimStatus === "initial") ||
-                  pendingDivs <= 0
-                    ? "disabled-btn"
-                    : claimStatus === "failed"
-                    ? "fail-button"
-                    : claimStatus === "success"
-                    ? "success-button"
-                    : null
-                } d-flex justify-content-center align-items-center gap-2`}
-                style={{ height: "fit-content" }}
-                onClick={handleClaimDivs}
-                disabled={
-                  claimStatus === "claimed" ||
-                  claimStatus === "success" ||
-                  pendingDivs <= 0
-                    ? true
-                    : false
-                }
-              >
-                {" "}
-                {claimLoading ? (
-                  <div
-                    class="spinner-border spinner-border-sm text-light"
-                    role="status"
-                  >
-                    <span class="visually-hidden">Loading...</span>
-                  </div>
-                ) : claimStatus === "failed" ? (
-                  <>Failed</>
-                ) : claimStatus === "success" ? (
-                  <>Success</>
-                ) : (
-                  <>Claim</>
-                )}
-              </button>
             </div>
           </div>
           <div className="separator my-2"></div>
@@ -1215,8 +1347,8 @@ const StakeAvaxIDyp = ({
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={`${window.config.bscscan_baseURL}address/${staking._address}`}
-                    className="stats-link"
+                    href={`${window.config.snowtrace_baseURL}/address/${staking._address}`}
+                    className="stats-link2"
                   >
                     {shortAddress(staking._address)}{" "}
                     <img src={statsLinkIcon} alt="" />
@@ -1276,6 +1408,24 @@ const StakeAvaxIDyp = ({
             </div>
           </div>
         </div>
+      )}
+      {coinbase === null ||
+      coinbase === undefined ||
+      is_wallet_connected === false ? (
+        <button className="connectbtn btn m-auto" onClick={onConnectWallet}>
+          <img src={wallet} alt="" /> Connect wallet
+        </button>
+      ) : chainId !== "43114" ? (
+        <button
+          className="connectbtn btn m-auto"
+          onClick={() => {
+            handleAvaxPool();
+          }}
+        >
+          Change Network
+        </button>
+      ) : (
+        <></>
       )}
     </div>
 
@@ -2074,17 +2224,6 @@ const StakeAvaxIDyp = ({
     //         </div>
     //       </div>
     //     </Modal>
-    //   )}
-
-    //   {show === true && (
-    //     <WalletModal
-    //       show={show}
-    //       handleClose={hideModal}
-    //       handleConnection={() => {
-    //         handleConnection();
-    //         setshow(false);
-    //       }}
-    //     />
     //   )}
 
     //   {showCalculator === true && (

@@ -38,6 +38,7 @@ const EarnContent = ({
   handleSwitchNetwork,
   isPremium,
   showRibbon,
+  onConnectWallet,
 }) => {
   const options = [
     {
@@ -515,10 +516,7 @@ const EarnContent = ({
                   }}
                 >
                   <img
-                    src={
-                      require(`../../calculator/assets/${item.title.toLowerCase()}Icon.svg`)
-                       
-                    }
+                    src={require(`../../calculator/assets/${item.title.toLowerCase()}Icon.svg`)}
                     alt=""
                   />
                   {item.title}
@@ -608,10 +606,7 @@ const EarnContent = ({
                   }}
                 >
                   <img
-                    src={
-                      require(`../../calculator/assets/${item.title.toLowerCase()}Icon.svg`)
-                       
-                    }
+                    src={require(`../../calculator/assets/${item.title.toLowerCase()}Icon.svg`)}
                     alt=""
                   />
                   {/* <div
@@ -902,6 +897,7 @@ const EarnContent = ({
       </div>
       {option === "Farming" && networkId === "56" && expiredPools === false ? (
         <EarnTopPicks
+          onConnectWallet={onConnectWallet}
           topList={option}
           listType={listStyle}
           chain={stake}
@@ -989,6 +985,7 @@ const EarnContent = ({
         //     <span className="farm-soon">New pools coming soon...</span>
         //   </div>
         <EarnTopPicks
+          onConnectWallet={onConnectWallet}
           topList={option}
           listType={listStyle}
           chain={stake}
