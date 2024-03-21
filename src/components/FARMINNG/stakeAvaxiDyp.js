@@ -713,7 +713,7 @@ const StakeAvaxIDyp = ({
 
   return (
     <div className="d-flex flex-column gap-2 w-100">
-      <div className="locktimewrapper align-items-center gap-2">
+      {/* <div className="locktimewrapper align-items-center gap-2">
         <button
           className={
             lockTime === "No Lock" ? "method-btn-active" : "method-btn-disabled"
@@ -804,7 +804,7 @@ const StakeAvaxIDyp = ({
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
       <div className="separator my-2"></div>
       {selectedTab === "deposit" ? (
         <div className="d-flex flex-column w-100 gap-2">

@@ -621,7 +621,7 @@ const EarnContent = ({
         )}
 
         {((option === "Vault" && expiredPools === false) ||
-          option !== "Vault") && (
+          (option !== "Vault" )) && (
           <>
             <div
               className={`row align-items-center gap-5 gap-lg-0 justify-content-between px-0 `}
@@ -644,7 +644,7 @@ const EarnContent = ({
               </div>
 
               <div className="col-12 col-lg-8 col-xl-6 d-flex gap-3 justify-content-around justify-content-lg-end justify-content-xl-center px-0 px-xl-2">
-                {option !== "Vault" ? (
+                {option !== "Vault" && option !== "Staking" ? (
                   <>
                     <div
                       className={`stake-item ${

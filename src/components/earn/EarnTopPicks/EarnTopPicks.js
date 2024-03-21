@@ -27,6 +27,9 @@ import StakeDypiusAvax from "../../FARMINNG/stakeDypiusAvax";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import closeX from "../../earnOther/assets/closeX.svg";
+import { ClickAwayListener } from "@material-ui/core";
+import Tooltip from "@material-ui/core/Tooltip";
+import moreinfo from "../../FARMINNG/assets/more-info.svg";
 
 const EarnTopPicks = ({
   topList,
@@ -166,6 +169,8 @@ const EarnTopPicks = ({
   const [selectedTab, setselectedTab] = useState("deposit");
   const [selectedBtn, setselectedBtn] = useState("flexible");
   const [selectedPool, setselectedPool] = useState([]);
+  const [aprTooltip, setaprTooltip] = useState(false);
+  const [selectedchain, setselectedchain] = useState(chain);
 
   const windowSize = useWindowSize();
 
@@ -195,6 +200,13 @@ const EarnTopPicks = ({
         });
       setuserPools(result);
     }
+  };
+
+  const aprOpen = () => {
+    setaprTooltip(true);
+  };
+  const aprClose = () => {
+    setaprTooltip(false);
   };
 
   const fetchEthStaking = async () => {
@@ -8514,6 +8526,145 @@ const EarnTopPicks = ({
                     }}
                   />
                 </div>
+                <div className="locktimewrapper align-items-center gap-2">
+                  <button
+                    className={
+                      selectedPool?.lock_time?.split(" ")[0] === "No"
+                        ? "method-btn-active"
+                        : "method-btn-disabled"
+                    }
+                  >
+                    Flexible
+                  </button>
+                  <button
+                    className={
+                      parseInt(selectedPool?.lock_time?.split(" ")[0]) === 30
+                        ? "method-btn-active"
+                        : "method-btn-disabled"
+                    }
+                  >
+                    30 Days
+                  </button>
+                  <button
+                    className={
+                      parseInt(selectedPool?.lock_time?.split(" ")[0]) === 60
+                        ? "method-btn-active"
+                        : "method-btn-disabled"
+                    }
+                  >
+                    60 Days
+                  </button>
+                  <button
+                    className={
+                      parseInt(selectedPool?.lock_time?.split(" ")[0]) === 90
+                        ? "method-btn-active"
+                        : "method-btn-disabled"
+                    }
+                  >
+                    90 Days
+                  </button>
+                  <button
+                    className={
+                      parseInt(selectedPool?.lock_time?.split(" ")[0]) === 120
+                        ? "method-btn-active"
+                        : "method-btn-disabled"
+                    }
+                  >
+                    120 Days
+                  </button>
+                </div>
+                <div className="d-flex gap-2 align-items-center justify-content-start w-100">
+                  <div
+                    className={`position-relative ${
+                      selectedchain === "eth"
+                        ? "chain-popup-item-eth"
+                        : "chain-popup-item"
+                    }`}
+                    onClick={() => {
+                      setselectedchain("eth");
+                    }}
+                  >
+                    <h6
+                      className={`d-flex align-items-center chain-popup-text`}
+                    >
+                      Ethereum
+                    </h6>
+                  </div>
+                  <div
+                    className={`position-relative ${
+                      selectedchain === "bnb"
+                        ? "chain-popup-item-bnb"
+                        : "chain-popup-item"
+                    }`}
+                    onClick={() => {
+                      setselectedchain("bnb");
+                    }}
+                  >
+                    <h6
+                      className={`d-flex align-items-center chain-popup-text`}
+                    >
+                      BNB Chain
+                    </h6>
+                  </div>
+                  <div
+                    className={`position-relative ${
+                      selectedchain === "avax"
+                        ? "chain-popup-item-avax"
+                        : "chain-popup-item"
+                    }`}
+                    onClick={() => {
+                      setselectedchain("avax");
+                    }}
+                  >
+                    <h6
+                      className={`d-flex align-items-center chain-popup-text`}
+                    >
+                      Avalanche
+                    </h6>
+                  </div>
+                </div>
+
+                <div className="info-pool-wrapper p-3 w-100">
+                  <div className="info-pool-inner-wrapper d-flex flex-column flex-lg-row align-items-center gap-2">
+                    <div className="info-pool-item p-2">
+                      <div className="d-flex justify-content-between gap-1 align-items-center">
+                        <span className="info-pool-left-text">
+                          Apr{" "}
+                          <ClickAwayListener onClickAway={aprClose}>
+                            <Tooltip
+                              open={aprTooltip}
+                              disableFocusListener
+                              disableHoverListener
+                              disableTouchListener
+                              placement="top"
+                              title={
+                                <div className="tooltip-text">
+                                  {
+                                    "APR reflects the interest rate of earnings on an account over the course of one year."
+                                  }
+                                </div>
+                              }
+                            >
+                              <img src={moreinfo} alt="" onClick={aprOpen} />
+                            </Tooltip>
+                          </ClickAwayListener>
+                        </span>
+                        <span className="info-pool-right-text">
+                          {selectedPool?.apy_performancefee}%
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="info-pool-item p-2">
+                      <div className="d-flex justify-content-between gap-1 align-items-center">
+                        <span className="info-pool-left-text">TVL</span>
+                        <span className="info-pool-right-text">
+                          ${getFormattedNumber(selectedPool.tvl_usd, 2)}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
                 {selectedPool?.id ===
                   "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
@@ -8547,7 +8698,7 @@ const EarnTopPicks = ({
                       setShowDetails(false);
                       onConnectWallet();
                       setselectedPool([]);
-                      setDetails(999)
+                      setDetails(999);
                     }}
                   />
                 ) : topList === "Staking" &&
@@ -8583,7 +8734,7 @@ const EarnTopPicks = ({
                       setShowDetails(false);
                       onConnectWallet();
                       setselectedPool([]);
-                      setDetails(999)
+                      setDetails(999);
                     }}
                   />
                 ) : topList === "Staking" &&
@@ -8618,7 +8769,7 @@ const EarnTopPicks = ({
                       setShowDetails(false);
                       onConnectWallet();
                       setselectedPool([]);
-                      setDetails(999)
+                      setDetails(999);
                     }}
                   />
                 ) : topList === "Staking" &&
@@ -8653,7 +8804,7 @@ const EarnTopPicks = ({
                       setShowDetails(false);
                       onConnectWallet();
                       setselectedPool([]);
-                      setDetails(999)
+                      setDetails(999);
                     }}
                   />
                 ) : topList === "Staking" &&
@@ -8688,7 +8839,7 @@ const EarnTopPicks = ({
                       setShowDetails(false);
                       onConnectWallet();
                       setselectedPool([]);
-                      setDetails(999)
+                      setDetails(999);
                     }}
                   />
                 ) : topList === "Staking" &&
@@ -8723,7 +8874,7 @@ const EarnTopPicks = ({
                       setShowDetails(false);
                       onConnectWallet();
                       setselectedPool([]);
-                      setDetails(999)
+                      setDetails(999);
                     }}
                   />
                 ) : (
