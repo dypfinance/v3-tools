@@ -670,8 +670,7 @@ const StakeDypiusEth = ({
 
   const getApproxReturn = (depositAmount, days) => {
     let APY = getAPY() - fee_s;
-
-    console.log(apr, ((depositAmount * APY) / 100 / 365) * days);
+ 
 
     return ((depositAmount * apr) / 100 / 365) * days;
   };

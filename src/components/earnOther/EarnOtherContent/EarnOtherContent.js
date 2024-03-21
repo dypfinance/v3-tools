@@ -523,8 +523,7 @@ const EarnOtherContent = ({
       }
     }
   }, [poolClicked, poolClickedType, allPools]);
-
-  console.log(sorting);
+ 
   return (
     <>
       <div className="row mx-0 justify-content-center w-100 ">
