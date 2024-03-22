@@ -624,7 +624,7 @@ const EarnContent = ({
           (option !== "Vault" )) && (
           <>
             <div
-              className={`row align-items-center gap-5 gap-lg-0 justify-content-between px-0 `}
+              className={`row align-items-center gap-2 gap-lg-0 justify-content-between px-0 `}
               style={{ minHeight: "55px" }}
             >
               <div className="col-12 col-lg-4 col-xl-3 px-0">
