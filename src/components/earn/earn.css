@@ -20,6 +20,12 @@
   left: -5px;
 }
 
+@media only screen and (max-width: 500px) {
+  .popup-chains-icon { 
+    display: none;
+  }
+}
+
 .chain-popup-text {
   color: #c0c9ff;
   font-size: 12px;
