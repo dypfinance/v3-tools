@@ -16,20 +16,18 @@ const BridgeCard = () => {
       <div className="d-flex flex-column gap-2 justify-content-between">
         <div className="">
           <h6 className="bridgecard-title d-flex justify-content-between gap-2 align-items-center">
-          Yields <img src={yieldIcon} alt="" />
+            Yields <img src={yieldIcon} alt="" />
           </h6>
         </div>
         <div>
           <div>
             <h6 className="bridgecard-desc">
-            View yield farming projects running on different blockchains.
+              View yield farming projects running on different blockchains.
             </h6>
           </div>
-          <div className="">
-            <h6 className="bridgecard-btntext d-flex justify-content-end gap-2 align-items-center">
-              <img src={filledArrow} alt="" />
-            </h6>
-          </div>
+          <h6 className="bridgecard-btntext d-flex justify-content-end gap-2 align-items-center">
+            <img src={filledArrow} alt="" />
+          </h6>
         </div>
       </div>
     </NavLink>
