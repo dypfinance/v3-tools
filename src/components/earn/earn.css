@@ -24,6 +24,9 @@
   .popup-chains-icon { 
     display: none;
   }
+  .chain-popup-text {
+    font-size: 10px !important;
+  }
 }
 
 .chain-popup-text {
