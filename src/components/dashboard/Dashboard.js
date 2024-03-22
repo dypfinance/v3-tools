@@ -114,7 +114,7 @@ const Dashboard = ({
       setTopPools(sortedAprs);
     }
   };
-  console.log("toppools", topPools);
+  
   const fetchAvaxStaking = async () => {
     const result_avax = await axios
       .get(`https://api.dyp.finance/api/get_staking_info_avax`)

@@ -445,12 +445,12 @@ const StakeDypiusBsc = ({
     if (coinbase !== coinbase2 && coinbase !== null && coinbase !== undefined) {
       setcoinbase(coinbase);
     }
-    if (
-      staking &&
-      staking._address === "0x7c82513b69c1b42c23760cfc34234558119a3399"
-    ) {
-      setPassivePool(true);
-    }
+    // if (
+    //   staking &&
+    //   staking._address === "0x7c82513b69c1b42c23760cfc34234558119a3399"
+    // ) {
+    //   setPassivePool(true);
+    // }
   }, [coinbase, coinbase2]);
 
   useEffect(() => {
@@ -1142,7 +1142,7 @@ const StakeDypiusBsc = ({
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={`${window.config.bscscan_baseURL}address/${staking._address}`}
+                    href={`${window.config.bscscan_baseURL}address/${staking?._address}`}
                     className="stats-link2" 
                   >
                     {shortAddress(staking._address)}{" "}
@@ -1436,7 +1436,7 @@ const StakeDypiusBsc = ({
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={`${window.config.bscscan_baseURL}address/${staking._address}`}
+                    href={`${window.config.bscscan_baseURL}address/${staking?._address}`}
                     className="stats-link2" 
                   >
                     {shortAddress(staking._address)}{" "}

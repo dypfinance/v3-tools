@@ -1058,7 +1058,7 @@ const StakeBscIDyp = ({
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={`${window.config.bscscan_baseURL}address/${staking._address}`}
+                    href={`${window.config.bscscan_baseURL}address/${staking?._address}`}
                     className="stats-link2"
                   >
                     {shortAddress(staking._address)}{" "}
@@ -1352,7 +1352,7 @@ const StakeBscIDyp = ({
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={`${window.config.bscscan_baseURL}address/${staking._address}`}
+                    href={`${window.config.bscscan_baseURL}address/${staking?._address}`}
                     className="stats-link2"
                   >
                     {shortAddress(staking._address)}{" "}
