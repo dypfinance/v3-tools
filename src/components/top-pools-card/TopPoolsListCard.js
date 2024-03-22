@@ -2,16 +2,11 @@ import React, { useEffect, useState } from "react";
 import greenArrow from "./assets/greenarrow.svg";
 import orangeArrow from "./assets/orangearrow.svg";
 import topPick from "./assets/toppick.svg";
-import newPool from "./assets/newPool.png";
-
 import "./top-pools.css";
-import CawsDetails from "../FARMINNG/caws";
 
 import initFarmAvax from "../FARMINNG/farmAvax";
 import initBscFarming from "../FARMINNG/bscFarming";
 import initStakingNew from "../FARMINNG/staking-new-front";
-
-import stakeAvax from "../FARMINNG/stakeAvax";
 import stakeAvax30 from "../FARMINNG/stakeAvax30";
 
 import InitConstantStakingiDYP from "../FARMINNG/constant-staking-idyp-new-front";
@@ -25,15 +20,8 @@ import StakeEthDai from "../FARMINNG/constant-staking-dai-front";
 import StakeEth from "../FARMINNG/constant-staking-new-front";
 import Vault from "../FARMINNG/vault-new";
 import StakeNewEth from "../FARMINNG/stakeNewEth";
-import LandCard from "./LandCard";
-import LandDetails from "../FARMINNG/land";
 import StakeAvax from "../FARMINNG/stakeAvax";
-import CawsWodDetails from "../FARMINNG/cawsWod";
 import BscFarmingFunc from "../FARMINNG/BscFarmingFunc";
-import FarmAvaxFunc from "../FARMINNG/FarmAvaxFunc";
-import StakeDypiusEth from "../FARMINNG/constant-staking-dypius-new";
-import StakeDypiusAvax from "../FARMINNG/stakeDypiusAvax";
-import StakeDypiusBsc from "../FARMINNG/bscConstantStakeDypius";
 import StakeEthOld from "../FARMINNG/stakingEthOld";
 
 const TopPoolsListCard = ({
@@ -348,10 +336,18 @@ const TopPoolsListCard = ({
     if (showDetails === false && topList === "Farming" && chain === "bnb") {
       setShowDetails(true);
     } else if (
+      showDetails === false &&
+      topList === "Vault" &&
+      chain === "eth"
+    ) {
+      setShowDetails(true);
+    } else if (
       showDetails === true &&
       topList === "Farming" &&
       chain === "bnb"
     ) {
+      setShowDetails(false);
+    } else if (showDetails === true && topList === "Vault" && chain === "eth") {
       setShowDetails(false);
     }
     onShowDetailsClick();
@@ -397,7 +393,7 @@ const TopPoolsListCard = ({
       }
     }
   }, [cardIndex, topList, chain]);
-
+ 
 
   return (
     <>
@@ -704,8 +700,7 @@ const TopPoolsListCard = ({
               />
             ) : showDetails &&
               topList === "Farming" &&
-              chain === "avax" ? //   handleSwitchNetwork={handleSwitchNetwork} //   expired={false} //   handleConnection={handleConnection} //   chainId={chainId} //   lp_id={LP_IDAVAX_Array[cardIndex]} //   the_graph_result={the_graph_resultavax} //   coinbase={coinbase} //   is_wallet_connected={isConnected} //   <FarmAvaxFunc
-            //   liquidity={wbnb_address}
+              chain === "avax" ? //   liquidity={wbnb_address} //   handleSwitchNetwork={handleSwitchNetwork} //   expired={false} //   handleConnection={handleConnection} //   chainId={chainId} //   lp_id={LP_IDAVAX_Array[cardIndex]} //   the_graph_result={the_graph_resultavax} //   coinbase={coinbase} //   is_wallet_connected={isConnected} //   <FarmAvaxFunc
             //   constant={window.farming_activeavax_1}
             //             staking={window.constant_staking_newavaxactive1}
             //   token={window.token_newavax}
@@ -718,8 +713,7 @@ const TopPoolsListCard = ({
             //   lockTime={3}
             //   listType={listType}
             // />
-            null : //   activePools[cardIndex - 1].id === //   activePools && // : showDetails &&
-            //     "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
+            null : //     "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" && //   activePools[cardIndex - 1].id === //   activePools && // : showDetails &&
             //   topList === "Staking" &&
             //   chain === "bnb" ? (
             //   <StakeBscIDyp

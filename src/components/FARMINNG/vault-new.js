@@ -471,9 +471,10 @@ const Vault = ({
 
     if (vault) {
       const vaultobj = pools.data.VaultTVLs.filter((obj) => {
-        return obj.contract_address === vault._address;
-      });
-      if (vaultobj) {
+        return obj.contract_address.toLowerCase() === vault._address.toLowerCase();
+      }); 
+      
+      if (vaultobj && vaultobj.length>0) {
         settvl_usd(vaultobj[0].tvl);
       }
     }

@@ -918,6 +918,7 @@ const EarnContent = ({
           expiredPools={expiredPools}
           isPremium={isPremium}
           showRibbon={showRibbon}
+          onChainSelect={(val)=>{setStake(val)}}
         />
       ) : option === "Vault" && networkId !== "1" ? (
         <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
@@ -1006,6 +1007,8 @@ const EarnContent = ({
           expiredPools={expiredPools}
           isPremium={isPremium}
           showRibbon={showRibbon}
+          onChainSelect={(val)=>{setStake(val)}}
+
         />
       )}
 

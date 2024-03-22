@@ -30,6 +30,14 @@ import closeX from "../../earnOther/assets/closeX.svg";
 import { ClickAwayListener } from "@material-ui/core";
 import Tooltip from "@material-ui/core/Tooltip";
 import moreinfo from "../../FARMINNG/assets/more-info.svg";
+import eth from "../assets/eth.svg";
+import ethActive from "../assets/ethActive.svg";
+
+import bnb from "../assets/bnb.svg";
+import bnbActive from "../assets/bnbActive.svg";
+
+import avax from "../assets/avax.svg";
+import avaxActive from "../assets/avaxActive.svg";
 
 const EarnTopPicks = ({
   topList,
@@ -53,6 +61,7 @@ const EarnTopPicks = ({
   isPremium,
   showRibbon,
   onConnectWallet,
+  onChainSelect,
 }) => {
   const vault = [
     {
@@ -155,6 +164,10 @@ const EarnTopPicks = ({
   const [showDetails, setShowDetails] = useState(false);
   const [topPools, setTopPools] = useState([]);
   const [activePools, setActivePools] = useState([]);
+  const [ethPools, setEthPools] = useState([]);
+  const [bnbPools, setBnbPools] = useState([]);
+  const [avaxPools, setAvaxPools] = useState([]);
+
   const [expiredDYPPools, setExpiredPools] = useState([]);
   const [listing, setListing] = useState(listType);
   const [cawsCard, setCawsCard] = useState([]);
@@ -227,48 +240,32 @@ const EarnTopPicks = ({
       eth_result2 &&
       eth_result2.status === 200
     ) {
-      const dypIdyp = eth_result.data.stakingInfoiDYPEth.concat(
-        eth_result.data.stakingInfoDYPEth
-      );
+      const dypIdyp = eth_result.data.stakingInfoiDYPEth;
       const dypData = eth_result2.data.stakingInfoDYPEth;
       const object2 = dypData.map((item) => {
-        return { ...item, tvl_usd: item.tvl_usd };
+        return { ...item, tvl_usd: item.tvl_usd, type: "dyp", chain: "eth" };
       });
-      const expiredEth = dypIdyp.filter((item) => {
-        return item.expired !== "No";
-      });
+
       const activeEth = dypIdyp.filter((item) => {
         return item.expired !== "Yes";
       });
-
-      const expiredEth2 = object2.filter((item) => {
-        return item.expired !== "No";
+      const object2activeEth = activeEth.map((item) => {
+        return { ...item, tvl_usd: item.tvl_usd, type: "idyp", chain: "eth" };
       });
+
       const activeEth2 = object2.filter((item) => {
         return item.expired !== "Yes";
       });
 
-      const allActiveEth = [...activeEth, ...activeEth2];
-      const allExpireEth = [...expiredEth, ...expiredEth2];
+      const allActiveEth = [...object2activeEth, ...activeEth2];
 
       const sortedActive = allActiveEth.sort(function (a, b) {
         return b.tvl_usd - a.tvl_usd;
       });
-      const sortedExpired = allExpireEth.sort(function (a, b) {
-        return b.tvl_usd - a.tvl_usd;
-      });
 
-      setActivePools(sortedActive);
-      setExpiredPools(sortedExpired);
-      setTopPools([...dypIdyp, ...object2]);
-      setCawsCard(eth_result.data.stakingInfoCAWS);
-      setCawsCard2(eth_result.data.stakingInfoCAWS[0]);
-      setLandCard(eth_result.data.stakingInfoLAND[0]);
-      const land = eth_result.data.stakinginfoCAWSLAND[0];
-      setCawsLandCard(land);
+      setEthPools(sortedActive);
     }
   };
-
   const fetchBnbStaking = async () => {
     const bnb_result = await axios
       .get(`https://api.dyp.finance/api/get_staking_info_bnb`)
@@ -288,43 +285,31 @@ const EarnTopPicks = ({
       bnb_result2 &&
       bnb_result2.status === 200
     ) {
-      const dypIdypBnb = bnb_result.data.stakingInfoDYPBnb.concat(
-        bnb_result.data.stakingInfoiDYPBnb
-      );
+      const dypIdypBnb = bnb_result.data.stakingInfoiDYPBnb;
 
       const dypBnb = bnb_result2.data.stakingInfoDYPBnb;
       const object2 = dypBnb.map((item) => {
-        return { ...item, tvl_usd: item.tvl_usd };
+        return { ...item, tvl_usd: item.tvl_usd, type: "dyp", chain: "bnb" };
       });
 
-      const expiredBnb = dypIdypBnb.filter((item) => {
-        return item.expired !== "No";
-      });
       const activeBnb = dypIdypBnb.filter((item) => {
         return item.expired !== "Yes";
+      });
+
+      const object2Idyp = activeBnb.map((item) => {
+        return { ...item, tvl_usd: item.tvl_usd, type: "idyp", chain: "bnb" };
       });
 
       const activeBnb2 = object2.filter((item) => {
         return item.expired === "No";
       });
 
-      const expiredBnb2 = object2.filter((item) => {
-        return item.expired === "Yes";
-      });
-
-      const allActiveBnb = [...activeBnb, ...activeBnb2];
-      const allExpireBnb = [...expiredBnb, ...expiredBnb2];
-
+      const allActiveBnb = [...object2Idyp, ...activeBnb2];
       const sortedActive = allActiveBnb.sort(function (a, b) {
         return b.tvl_usd - a.tvl_usd;
       });
-      const sortedExpired = allExpireBnb.sort(function (a, b) {
-        return b.tvl_usd - a.tvl_usd;
-      });
 
-      setActivePools(sortedActive);
-      setExpiredPools(sortedExpired);
-      setTopPools([...dypIdypBnb, ...object2]);
+      setBnbPools(sortedActive);
     }
   };
   const fetchAvaxStaking = async () => {
@@ -346,41 +331,189 @@ const EarnTopPicks = ({
       avax_result2 &&
       avax_result2.status === 200
     ) {
-      const dypIdypAvax = avax_result.data.stakingInfoiDYPAvax.concat(
-        avax_result.data.stakingInfoDYPAvax
-      );
+      const dypIdypAvax = avax_result.data.stakingInfoiDYPAvax;
       const dypAvax = avax_result2.data.stakingInfoDYPAvax;
       const object2 = dypAvax.map((item) => {
-        return { ...item, tvl_usd: item.tvl_usd };
-      });
-      const expiredAvax = dypIdypAvax.filter((item) => {
-        return item.expired !== "No";
+        return { ...item, tvl_usd: item.tvl_usd, type: "dyp", chain: "avax" };
       });
 
       const activeAvax = dypIdypAvax.filter((item) => {
         return item.expired !== "Yes";
       });
-
-      const expiredAvax2 = object2.filter((item) => {
-        return item.expired !== "No";
+      const object2activeAvax = activeAvax.map((item) => {
+        return { ...item, tvl_usd: item.tvl_usd, type: "idyp", chain: "avax" };
       });
 
       const activeAvax2 = object2.filter((item) => {
         return item.expired !== "Yes";
       });
 
-      const allActiveAvax = [...activeAvax, ...activeAvax2];
-      const allExpireAvax = [...expiredAvax, ...expiredAvax2];
+      const allActiveAvax = [...object2activeAvax, ...activeAvax2];
 
       const sortedActive = allActiveAvax.sort(function (a, b) {
         return b.tvl_usd - a.tvl_usd;
       });
-      const sortedExpired = allExpireAvax.sort(function (a, b) {
+      setAvaxPools(sortedActive);
+    }
+  };
+
+  const fetchEthStaking2 = async () => {
+    const eth_result = await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_eth`)
+      .catch((err) => {
+        console.log(err);
+      });
+    const eth_result2 = await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_eth_new`)
+      .catch((err) => {
+        console.log(err);
+      });
+
+    if (
+      eth_result &&
+      eth_result.status === 200 &&
+      eth_result2 &&
+      eth_result2.status === 200
+    ) {
+      const dypIdyp = eth_result.data.stakingInfoiDYPEth;
+      const dypData = eth_result2.data.stakingInfoDYPEth;
+
+      const object2 = dypData.map((item) => {
+        return { ...item, tvl_usd: item.tvl_usd, type: "dyp", chain: "eth" };
+      });
+
+      const activeEth = dypIdyp.filter((item) => {
+        return item.expired !== "Yes";
+      });
+
+      const object2activeEth = activeEth.map((item) => {
+        return { ...item, tvl_usd: item.tvl_usd, type: "idyp", chain: "eth" };
+      });
+
+      const activeEth2 = object2.filter((item) => {
+        return item.expired !== "Yes";
+      });
+
+      const allActiveEth = [...object2activeEth, ...activeEth2];
+
+      const sortedActive = allActiveEth.sort(function (a, b) {
+        return b.tvl_usd - a.tvl_usd;
+      });
+
+      setActivePools(sortedActive);
+      setTopPools([...object2activeEth, ...activeEth2]);
+      setCawsCard(eth_result.data.stakingInfoCAWS);
+      setCawsCard2(eth_result.data.stakingInfoCAWS[0]);
+      setLandCard(eth_result.data.stakingInfoLAND[0]);
+      const land = eth_result.data.stakinginfoCAWSLAND[0];
+      setCawsLandCard(land);
+    }
+  };
+
+  const fetchBnbStaking2 = async () => {
+    const bnb_result = await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_bnb`)
+      .catch((err) => {
+        console.log(err);
+      });
+
+    const bnb_result2 = await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_bnb_new`)
+      .catch((err) => {
+        console.log(err);
+      });
+
+    if (
+      bnb_result &&
+      bnb_result.status === 200 &&
+      bnb_result2 &&
+      bnb_result2.status === 200
+    ) {
+      const dypIdypBnb = bnb_result.data.stakingInfoiDYPBnb;
+
+      const dypBnb = bnb_result2.data.stakingInfoDYPBnb;
+      const object2 = dypBnb.map((item) => {
+        return { ...item, tvl_usd: item.tvl_usd, type: "dyp", chain: "bnb" };
+      });
+
+      const expiredBnb = dypIdypBnb.filter((item) => {
+        return item.expired !== "No";
+      });
+      const activeBnb = dypIdypBnb.filter((item) => {
+        return item.expired !== "Yes";
+      });
+
+      const object2activeBnb = dypBnb.map((item) => {
+        return { ...item, tvl_usd: item.tvl_usd, type: "idyp", chain: "bnb" };
+      });
+
+      const activeBnb2 = object2.filter((item) => {
+        return item.expired === "No";
+      });
+
+      const expiredBnb2 = object2.filter((item) => {
+        return item.expired === "Yes";
+      });
+
+      const allActiveBnb = [...object2activeBnb, ...activeBnb2];
+      const allExpireBnb = [...expiredBnb, ...expiredBnb2];
+
+      const sortedActive = allActiveBnb.sort(function (a, b) {
+        return b.tvl_usd - a.tvl_usd;
+      });
+      const sortedExpired = allExpireBnb.sort(function (a, b) {
         return b.tvl_usd - a.tvl_usd;
       });
 
       setActivePools(sortedActive);
       setExpiredPools(sortedExpired);
+      setTopPools([...dypIdypBnb, ...object2]);
+    }
+  };
+  const fetchAvaxStaking2 = async () => {
+    const avax_result = await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_avax`)
+      .catch((err) => {
+        console.log(err);
+      });
+
+    const avax_result2 = await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_avax_new`)
+      .catch((err) => {
+        console.log(err);
+      });
+
+    if (
+      avax_result &&
+      avax_result.status === 200 &&
+      avax_result2 &&
+      avax_result2.status === 200
+    ) {
+      const dypIdypAvax = avax_result.data.stakingInfoiDYPAvax;
+      const dypAvax = avax_result2.data.stakingInfoDYPAvax;
+      const object2 = dypAvax.map((item) => {
+        return { ...item, tvl_usd: item.tvl_usd, type: "dyp", chain: "avax" };
+      });
+
+      const activeAvax = dypIdypAvax.filter((item) => {
+        return item.expired !== "Yes";
+      });
+
+      const object2activeAvax = activeAvax.map((item) => {
+        return { ...item, tvl_usd: item.tvl_usd, type: "idyp", chain: "avax" };
+      });
+
+      const activeAvax2 = object2.filter((item) => {
+        return item.expired !== "Yes";
+      });
+
+      const allActiveAvax = [...object2activeAvax, ...activeAvax2];
+
+      const sortedActive = allActiveAvax.sort(function (a, b) {
+        return b.tvl_usd - a.tvl_usd;
+      });
+
+      setActivePools(sortedActive);
       setTopPools([...dypIdypAvax, ...object2]);
     }
   };
@@ -759,24 +892,17 @@ const EarnTopPicks = ({
 
   const fetchStakingData = async () => {
     if (topList === "Staking") {
-      // setTopPools([]);
       if (chain !== "eth" && chain !== "bnb" && chain === "avax") {
-        // setTimeout(() => {
-        await fetchAvaxStaking();
-        // }, 500);
+        await fetchAvaxStaking2();
       } else if (
         chain === "eth" &&
         chain !== "bnb" &&
         chain !== "avax" &&
         topList === "Staking"
       ) {
-        // setTimeout(() => {
-        await fetchEthStaking();
-        // }, 500);
+        await fetchEthStaking2();
       } else if (chain !== "eth" && chain === "bnb" && chain !== "avax") {
-        // setTimeout(() => {
-        await fetchBnbStaking();
-        // }, 500);
+        await fetchBnbStaking2();
       }
     }
   };
@@ -888,7 +1014,7 @@ const EarnTopPicks = ({
     ) {
       fetchAvaxFarming();
     }
-    setShowDetails(false);
+
     setListing(listType);
     fetchBnbPool();
   }, [
@@ -900,6 +1026,23 @@ const EarnTopPicks = ({
     routeOption,
     chain,
   ]);
+
+  useEffect(() => {
+    if (chainId === "1") {
+      setselectedchain("eth");
+    } else if (chainId === "56") {
+      setselectedchain("bnb");
+    } else if (chainId === "43114") {
+      setselectedchain("avax");
+    } else {
+      setselectedchain("eth");
+    }
+  }, [chainId]);
+
+  // useEffect(() => {
+  //   setShowDetails(false);
+  //   setselectedPool([]);
+  // }, [topList]);
 
   useEffect(() => {
     if (topList === "Vault" && chainId === "1" && expiredPools === true) {
@@ -968,6 +1111,12 @@ const EarnTopPicks = ({
     }
   }, [topList, chain, expiredPools]);
 
+  useEffect(() => {
+    fetchAvaxStaking();
+    fetchEthStaking();
+    fetchBnbStaking();
+  }, []);
+
   return (
     <>
       <div className={`row w-100 justify-content-center gap-4`}>
@@ -1010,8 +1159,8 @@ const EarnTopPicks = ({
                         handleCardIndexStake30(index);
                         handleCardIndexStakeiDyp(index);
                         setDetails(index);
-                        setselectedPool(pool);
-                        setShowDetails(true);
+                        setselectedPool( topList !== 'Vault' && pool);
+                        setShowDetails(topList !== 'Vault' && true);
                       }}
                       onHideDetailsClick={() => {
                         setActiveCard(null);
@@ -1171,8 +1320,8 @@ const EarnTopPicks = ({
                       handleCardIndexStake30(index + 3);
                       handleCardIndexStakeiDyp(index + 3);
                       setDetails(index + 3);
-                      setselectedPool(pool);
-                      setShowDetails(true);
+                      setselectedPool( topList !== 'Vault' && pool);
+                      setShowDetails(topList !== 'Vault' && true);
                     }}
                     onHideDetailsClick={() => {
                       setActiveCard2(null);
@@ -1611,8 +1760,8 @@ const EarnTopPicks = ({
                       handleCardIndexStake30(index + 6);
                       handleCardIndexStakeiDyp(index + 6);
                       setDetails(index + 6);
-                      setselectedPool(pool);
-                      setShowDetails(true);
+                      setselectedPool( topList !== 'Vault' && pool);
+                      setShowDetails(topList !== 'Vault' && true);
                     }}
                     onHideDetailsClick={() => {
                       setActiveCard3(null);
@@ -2033,8 +2182,8 @@ const EarnTopPicks = ({
                       handleCardIndexStake30(index + 9);
                       handleCardIndexStakeiDyp(index + 9);
                       setDetails(index + 9);
-                      setselectedPool(pool);
-                      setShowDetails(true);
+                      setselectedPool( topList !== 'Vault' && pool);
+                      setShowDetails(topList !== 'Vault' && true);
                     }}
                     onHideDetailsClick={() => {
                       setActiveCard4(null);
@@ -2550,8 +2699,8 @@ const EarnTopPicks = ({
                       handleCardIndexStake30(index);
                       handleCardIndexStakeiDyp(index);
                       setDetails(index);
-                      setselectedPool(pool);
-                      setShowDetails(true);
+                      setselectedPool( topList !== 'Vault' && pool);
+                      setShowDetails(topList !== 'Vault' && true);
                     }}
                     onHideDetailsClick={() => {
                       setActiveCard(null);
@@ -3175,8 +3324,8 @@ const EarnTopPicks = ({
                       handleCardIndexStake30(index + 2);
                       handleCardIndexStakeiDyp(index + 2);
                       setDetails(index + 2);
-                      setselectedPool(pool);
-                      setShowDetails(true);
+                      setselectedPool( topList !== 'Vault' && pool);
+                      setShowDetails(topList !== 'Vault' && true);
                     }}
                     onHideDetailsClick={() => {
                       setActiveCard2(null);
@@ -3698,8 +3847,8 @@ const EarnTopPicks = ({
                       handleCardIndexStake30(index + 4);
                       handleCardIndexStakeiDyp(index + 4);
                       setDetails(index + 4);
-                      setselectedPool(pool);
-                      setShowDetails(true);
+                      setselectedPool( topList !== 'Vault' && pool);
+                      setShowDetails(topList !== 'Vault' && true);
                     }}
                     onHideDetailsClick={() => {
                       setActiveCard2(null);
@@ -4221,8 +4370,8 @@ const EarnTopPicks = ({
                       handleCardIndexStake30(index + 6);
                       handleCardIndexStakeiDyp(index + 6);
                       setDetails(index + 6);
-                      setselectedPool(pool);
-                      setShowDetails(true);
+                      setselectedPool( topList !== 'Vault' && pool);
+                      setShowDetails(topList !== 'Vault' && true);
                     }}
                     onHideDetailsClick={() => {
                       setActiveCard4(null);
@@ -4735,8 +4884,8 @@ const EarnTopPicks = ({
                       handleCardIndexStake30(index + 6);
                       handleCardIndexStakeiDyp(index + 6);
                       setDetails(index + 6);
-                      setselectedPool(pool);
-                      setShowDetails(true);
+                      setselectedPool( topList !== 'Vault' && pool);
+                      setShowDetails(topList !== 'Vault' && true);
                     }}
                     onHideDetailsClick={() => {
                       setActiveCard5(null);
@@ -5090,8 +5239,8 @@ const EarnTopPicks = ({
                         handleCardIndexStake30(index + 10);
                         handleCardIndexStakeiDyp(index + 10);
                         setDetails(index + 10);
-                        setselectedPool(pool);
-                        setShowDetails(true);
+                        setselectedPool( topList !== 'Vault' && pool);
+                        setShowDetails(topList !== 'Vault' && true);
                       }}
                       onHideDetailsClick={() => {
                         setActiveCard6(null);
@@ -5509,8 +5658,8 @@ const EarnTopPicks = ({
                         setActiveCardNFT(false);
                         setActiveCardLandNFT(false);
                         setActiveCardCawsLand(null);
-                        setselectedPool(pool);
-                        setShowDetails(true);
+                        setselectedPool( topList !== 'Vault' && pool);
+                        setShowDetails(topList !== 'Vault' && true);
                         handleCardIndexStake(index);
                         handleCardIndexStake30(index);
                         handleCardIndexStakeiDyp(index);
@@ -6149,8 +6298,8 @@ const EarnTopPicks = ({
                         handleCardIndexStake30(index + 1);
                         handleCardIndexStakeiDyp(index + 1);
                         setDetails(index + 1);
-                        setselectedPool(pool);
-                        setShowDetails(true);
+                        setselectedPool( topList !== 'Vault' && pool);
+                        setShowDetails(topList !== 'Vault' && true);
                       }}
                       onHideDetailsClick={() => {
                         setActiveCard2(null);
@@ -6617,8 +6766,8 @@ const EarnTopPicks = ({
                         handleCardIndexStake30(index + 2);
                         handleCardIndexStakeiDyp(index + 2);
                         setDetails(index + 2);
-                        setselectedPool(pool);
-                        setShowDetails(true);
+                        setselectedPool( topList !== 'Vault' && pool);
+                        setShowDetails(topList !== 'Vault' && true);
                       }}
                       onHideDetailsClick={() => {
                         setActiveCard3(null);
@@ -7084,8 +7233,8 @@ const EarnTopPicks = ({
                         handleCardIndexStake30(index + 3);
                         handleCardIndexStakeiDyp(index + 3);
                         setDetails(index + 3);
-                        setselectedPool(pool);
-                        setShowDetails(true);
+                        setselectedPool( topList !== 'Vault' && pool);
+                        setShowDetails(topList !== 'Vault' && true);
                       }}
                       onHideDetailsClick={() => {
                         setActiveCard4(null);
@@ -7595,8 +7744,8 @@ const EarnTopPicks = ({
                         handleCardIndexStake30(index + 4);
                         handleCardIndexStakeiDyp(index + 4);
                         setDetails(index + 4);
-                        setselectedPool(pool);
-                        setShowDetails(true);
+                        setselectedPool( topList !== 'Vault' && pool);
+                        setShowDetails(topList !== 'Vault' && true);
                       }}
                       onHideDetailsClick={() => {
                         setActiveCard5(null);
@@ -7889,8 +8038,8 @@ const EarnTopPicks = ({
                         handleCardIndexStake30(index + 5);
                         handleCardIndexStakeiDyp(index + 5);
                         setDetails(index + 5);
-                        setselectedPool(pool);
-                        setShowDetails(true);
+                        setselectedPool( topList !== 'Vault' && pool);
+                        setShowDetails(topList !== 'Vault' && true);
                       }}
                       onHideDetailsClick={() => {
                         setActiveCard6(null);
@@ -8274,8 +8423,8 @@ const EarnTopPicks = ({
                         handleCardIndexStake30(index + 6);
                         handleCardIndexStakeiDyp(index + 6);
                         setDetails(index + 6);
-                        setselectedPool(pool);
-                        setShowDetails(true);
+                        setselectedPool( topList !== 'Vault' && pool);
+                        setShowDetails(topList !== 'Vault' && true);
                       }}
                       onHideDetailsClick={() => {
                         setActiveCard7(null);
@@ -8473,7 +8622,7 @@ const EarnTopPicks = ({
           </div>
         )}
       </div>
-      {showDetails && (
+      {showDetails && topList !== "Vault" && (
         <Modal
           open={showDetails}
           aria-labelledby="modal-modal-title"
@@ -8573,52 +8722,98 @@ const EarnTopPicks = ({
                     120 Days
                   </button>
                 </div>
-                <div className="d-flex gap-2 align-items-center justify-content-start w-100">
+                <div className="d-flex gap-3 align-items-center justify-content-start w-100">
                   <div
-                    className={`position-relative ${
+                    className={`position-relative col-lg-3 ${
                       selectedchain === "eth"
                         ? "chain-popup-item-eth"
                         : "chain-popup-item"
                     }`}
                     onClick={() => {
                       setselectedchain("eth");
+                      onChainSelect("eth");
+                      setselectedPool(
+                        selectedPool.type === "dyp"
+                          ? ethPools.find((item) => {
+                              return item.type === "dyp";
+                            })
+                          : ethPools.find((item) => {
+                              return item.type === "idyp";
+                            })
+                      );
                     }}
                   >
                     <h6
-                      className={`d-flex align-items-center chain-popup-text`}
+                      className={`d-flex justify-content-center align-items-center chain-popup-text`}
                     >
+                      <img
+                        src={selectedchain === "eth" ? ethActive : eth}
+                        alt=""
+                        className="popup-chains-icon"
+                      />
                       Ethereum
                     </h6>
                   </div>
                   <div
-                    className={`position-relative ${
+                    className={`position-relative col-lg-3 ${
                       selectedchain === "bnb"
                         ? "chain-popup-item-bnb"
                         : "chain-popup-item"
                     }`}
                     onClick={() => {
                       setselectedchain("bnb");
+                      onChainSelect("bnb");
+
+                      setselectedPool(
+                        selectedPool.type === "dyp"
+                          ? bnbPools.find((item) => {
+                              return item.type === "dyp";
+                            })
+                          : bnbPools.find((item) => {
+                              return item.type === "idyp";
+                            })
+                      );
                     }}
                   >
                     <h6
-                      className={`d-flex align-items-center chain-popup-text`}
+                      className={`d-flex justify-content-center align-items-center chain-popup-text`}
                     >
+                      <img
+                        src={selectedchain === "bnb" ? bnbActive : bnb}
+                        alt=""
+                        className="popup-chains-icon"
+                      />
                       BNB Chain
                     </h6>
                   </div>
                   <div
-                    className={`position-relative ${
+                    className={`position-relative col-lg-3 ${
                       selectedchain === "avax"
                         ? "chain-popup-item-avax"
                         : "chain-popup-item"
                     }`}
                     onClick={() => {
                       setselectedchain("avax");
+                      onChainSelect("avax");
+                      setselectedPool(
+                        selectedPool.type === "dyp"
+                          ? avaxPools.find((item) => {
+                              return item.type === "dyp";
+                            })
+                          : avaxPools.find((item) => {
+                              return item.type === "idyp";
+                            })
+                      );
                     }}
                   >
                     <h6
-                      className={`d-flex align-items-center chain-popup-text`}
+                      className={`d-flex justify-content-center align-items-center chain-popup-text`}
                     >
+                      <img
+                        src={selectedchain === "avax" ? avaxActive : avax}
+                        alt=""
+                        className="popup-chains-icon"
+                      />
                       Avalanche
                     </h6>
                   </div>
