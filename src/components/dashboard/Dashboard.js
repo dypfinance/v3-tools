@@ -1396,6 +1396,7 @@ const Dashboard = ({
                       setShowDetails(false);
                       setActiveCard();
                       setselectedPool([])
+                      setDetails();
                     }}
                   />
                 ) : activeCard &&
@@ -1429,6 +1430,7 @@ const Dashboard = ({
                       setShowDetails(false);
                       setActiveCard();
                       setselectedPool([])
+                      setDetails();
                     }}
                   />
                 ) : activeCard &&
@@ -1463,7 +1465,8 @@ const Dashboard = ({
                       onConnectWallet();
                       setShowDetails(false);
                       setActiveCard();
-                      setselectedPool([])
+                      setselectedPool([]);
+                      setDetails();
                     }}
                   />
                 ) : activeCard &&
@@ -1497,7 +1500,8 @@ const Dashboard = ({
                       onConnectWallet();
                       setShowDetails(false);
                       setActiveCard();
-                      setselectedPool([])
+                      setselectedPool([]);
+                      setDetails();
                     }}
                   />
                 ) : activeCard &&
@@ -1531,7 +1535,8 @@ const Dashboard = ({
                       onConnectWallet();
                       setShowDetails(false);
                       setActiveCard();
-                      setselectedPool([])
+                      setselectedPool([]);
+                      setDetails();
                     }}
                   />
                 ) : (
