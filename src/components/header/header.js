@@ -100,7 +100,7 @@ const Header = ({
       setSkaleState(false)
   
     } 
-    else if (chainId === 1482601649) {
+    else if (chainId === 37084624) {
       setAvaxState(false);
       setBnbState(false);
       setEthState(false);
@@ -189,9 +189,9 @@ const Header = ({
 
   const handleSkalePool = async () => {
     if (window.ethereum) {
-    await handleSwitchNetworkhook("0x585eb4b1")
+    await handleSwitchNetworkhook("0x235ddd0")
       .then(() => {
-        handleSwitchNetwork("1482601649");
+        handleSwitchNetwork("37084624");
       })
       .catch((e) => {
         console.log(e);
@@ -272,6 +272,8 @@ const Header = ({
         const avaxWeb3 = new Web3(window.config.avax_endpoint);
         const web3cfx = new Web3(window.config.conflux_endpoint);
     const web3base = new Web3(window.config.base_endpoint);
+    const web3skale = new Web3(window.config.skale_endpoint);
+
 
         if (chainId === 1) {
           const stringBalance = infuraWeb3.utils.hexToNumberString(balance);
@@ -299,6 +301,11 @@ const Header = ({
         else if (chainId === 8453) {
           const stringBalance = web3base.utils.hexToNumberString(balance);
           const amount = web3base.utils.fromWei(stringBalance, "ether");
+          setCurrencyAmount(amount.slice(0, 7));
+        }
+        else if (chainId === 37084624) {
+          const stringBalance = web3skale.utils.hexToNumberString(balance);
+          const amount = web3skale.utils.fromWei(stringBalance, "ether");
           setCurrencyAmount(amount.slice(0, 7));
         }
       }
@@ -533,7 +540,7 @@ const Header = ({
                                     ? "CFX"
                                     : chainId === 8453
                                     ? "ETH"
-                                    : chainId === 1482601649
+                                    : chainId === 37084624
                                     ? "sFUEL"
                                     : ""}
                                 </span>

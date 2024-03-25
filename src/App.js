@@ -136,9 +136,9 @@ class App extends React.Component {
               this.setState({
                 networkId: "56",
               });
-            } else if (data === "0x585eb4b1") {
+            } else if (data === "0x235ddd0") {
               this.setState({
-                networkId: "1482601649",
+                networkId: "37084624",
               });
             } else if (data !== "undefined") {
               this.setState({
@@ -229,24 +229,32 @@ class App extends React.Component {
     let subscribedPlatformTokenAmountNewBNB;
     let subscribedPlatformTokenAmountCfx;
     let subscribedPlatformTokenAmountBase;
+    let subscribedPlatformTokenAmountSkale;
+
 
     const web3eth = window.infuraWeb3;
     const web3avax = window.avaxWeb3;
     const web3bnb = window.bscWeb3;
     const web3cfx = window.confluxWeb3;
     const web3base = window.baseWeb3;
+    const web3skale = window.skaleWeb3;
+
 
     const AvaxNewABI = window.SUBSCRIPTION_NEWAVAX_ABI;
     const EthNewABI = window.SUBSCRIPTION_NEWETH_ABI;
     const BnbNewABI = window.SUBSCRIPTION_NEWBNB_ABI;
     const CfxABI = window.SUBSCRIPTION_CFX_ABI;
     const BaseABI = window.SUBSCRIPTION_BASE_ABI;
+    const SkaleABI = window.SUBSCRIPTION_SKALE_ABI;
+
 
     const ethsubscribeNewAddress = window.config.subscription_neweth_address;
     const avaxsubscribeNewAddress = window.config.subscription_newavax_address;
     const bnbsubscribeNewAddress = window.config.subscription_newbnb_address;
     const cfxsubscribeAddress = window.config.subscription_cfx_address;
     const basesubscribeAddress = window.config.subscription_base_address;
+    const skalesubscribeAddress = window.config.subscription_skale_address;
+
 
     const ethNewcontract = new web3eth.eth.Contract(
       EthNewABI,
@@ -270,6 +278,11 @@ class App extends React.Component {
       basesubscribeAddress
     );
 
+    const skalecontract = new web3skale.eth.Contract(
+      SkaleABI,
+      skalesubscribeAddress
+    );
+
     if (coinbase) {
       subscribedPlatformTokenAmountNewETH = await ethNewcontract.methods
         .subscriptionPlatformTokenAmount(coinbase)
@@ -291,12 +304,17 @@ class App extends React.Component {
         .subscriptionPlatformTokenAmount(coinbase)
         .call().catch((e)=>{console.log(e); return 0})
 
+        subscribedPlatformTokenAmountSkale = await skalecontract.methods
+        .subscriptionPlatformTokenAmount(coinbase)
+        .call().catch((e)=>{console.log(e); return 0})
+
+
       if (
         subscribedPlatformTokenAmountNewETH === "0" &&
         subscribedPlatformTokenAmountCfx === "0" &&
         subscribedPlatformTokenAmountBase === "0" &&
         subscribedPlatformTokenAmountNewAvax === "0" &&
-        subscribedPlatformTokenAmountNewBNB === "0"
+        subscribedPlatformTokenAmountNewBNB === "0" && subscribedPlatformTokenAmountSkale === '0'
       ) {
         this.setState({ subscribedPlatformTokenAmount: "0", isPremium: false });
       } else if (
@@ -304,7 +322,7 @@ class App extends React.Component {
         subscribedPlatformTokenAmountCfx !== "0" ||
         subscribedPlatformTokenAmountBase !== "0" ||
         subscribedPlatformTokenAmountNewAvax !== "0" ||
-        subscribedPlatformTokenAmountNewBNB !== "0"
+        subscribedPlatformTokenAmountNewBNB !== "0" || subscribedPlatformTokenAmountSkale !== '0'
       ) {
         this.setState({
           // subscribedPlatformTokenAmount: subscribedPlatformTokenAmountBNB,
