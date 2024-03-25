@@ -1108,7 +1108,7 @@ const StakeDypiusEth = ({
                 <div className="d-flex align-items-center gap-1">
                   <span className="bal-smallTxt">Start date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    09 November 2023{" "}
+                    09 Nov 2023{" "}
                     <ClickAwayListener onClickAway={startDateClose}>
                       <Tooltip
                         open={startDateTooltip}
@@ -1402,7 +1402,7 @@ const StakeDypiusEth = ({
                 <div className="d-flex align-items-center gap-1">
                   <span className="bal-smallTxt">Start date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    09 November 2023{" "}
+                    09 Nov 2023{" "}
                     <ClickAwayListener onClickAway={startDateClose}>
                       <Tooltip
                         open={startDateTooltip}

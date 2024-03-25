@@ -833,6 +833,7 @@ class App extends React.Component {
                           handleConnection={this.handleConnection}
                           handleSwitchNetwork={this.handleSwitchNetwork}
                           referrer={this.state.referrer}
+                          onConnectWallet={this.showModal}
                         />
                       )}
                     />

@@ -15,6 +15,9 @@ import arrowUp from "../assets/arrowUp.svg";
 import arrowUpActive from "../assets/arrowUpActive.svg";
 import arrowDown from "../assets/arrowDown.svg";
 import arrowDownActive from "../assets/arrowDownActive.svg";
+import StakeDypiusAvaxOther from "../stakingPools/avaxStakeDypiusOther";
+import StakeDypiusBscOther from "../stakingPools/bscStakeDypiusOther";
+import StakeDypiusEthOther from "../stakingPools/ethStakeDypiusOther";
 
 const EarnOtherContent = ({
   coinbase,
@@ -37,6 +40,7 @@ const EarnOtherContent = ({
   faqIndex,
   networkId,
   handleSwitchNetwork,
+  onConnectWallet,
 }) => {
   const windowSize = useWindowSize();
 
@@ -102,7 +106,9 @@ const EarnOtherContent = ({
       tokenTicker: "ETH",
       pool: "BASE",
       new_pool: "Yes",
-      lockTime: "60days",
+      lockTime: 60,
+      apy_percent: 12.5,
+      performancefee: 12.5,
     },
   ];
 
@@ -124,7 +130,9 @@ const EarnOtherContent = ({
       coming_soon: true,
       pool: "BNB",
       new_pool: "Yes",
-      lockTime: "90days",
+      lockTime: 90,
+      apy_percent: 12.5,
+      performancefee: 0,
     },
   ];
 
@@ -147,7 +155,9 @@ const EarnOtherContent = ({
       tokenTicker: "AVAX",
       pool: "AVAX",
       new_pool: "Yes",
-      lockTime: "30days",
+      lockTime: 30,
+      apy_percent: 12.5,
+      performancefee: 12.5,
     },
   ];
 
@@ -523,7 +533,7 @@ const EarnOtherContent = ({
       }
     }
   }, [poolClicked, poolClickedType, allPools]);
- 
+
   return (
     <>
       <div className="row mx-0 justify-content-center w-100 ">
@@ -886,9 +896,7 @@ const EarnOtherContent = ({
               <div className="d-flex flex-column gap-1 px-0">
                 {allPools.map((item, index) => {
                   return (
-                    // <NavLink to={`/earn/defi-staking/${item.pool}`}>
                     <TopOtherPoolsListCard
-                      key={index}
                       tokenLogo={item.tokenLogo}
                       chainLogo={item.chainLogo}
                       chain={item.chain}
@@ -912,7 +920,6 @@ const EarnOtherContent = ({
                       showDetails={showDetails}
                       cardId={index}
                     />
-                    // </NavLink>
                   );
                 })}
               </div>
@@ -980,7 +987,72 @@ const EarnOtherContent = ({
                   />
                 </div>
 
-                <EarnInnerPool
+                {selectedPool.pool === "BNB" ? (
+                  <StakeDypiusBscOther
+                    selectedTab={selectedTab}
+                    selectedBtn={selectedBtn}
+                    selectedPool={selectedPool}
+                    staking={window.constant_staking_dypius_bsc1}
+                    coinbase={coinbase}
+                    the_graph_result={the_graph_result}
+                    expiration_time={"09 Nov 2024"}
+                    lockTime={selectedPool.lockTime}
+                    finalApr={selectedPool.aprInt}
+                    fee={selectedPool?.performancefee}
+                    apr={selectedPool?.apy_percent}
+                    chainId={chainId}
+                    onConnectWallet={() => {
+                      onConnectWallet();
+                      setshowDetails(false);
+                      setselectedPool([]);
+                    }}
+                    is_wallet_connected={isConnected}
+                  />
+                ) : selectedPool.pool === "AVAX" ? (
+                  <StakeDypiusAvaxOther
+                    selectedTab={selectedTab}
+                    selectedBtn={selectedBtn}
+                    selectedPool={selectedPool}
+                    staking={window.constant_staking_dypius_avax1}
+                    coinbase={coinbase}
+                    the_graph_result={the_graph_result}
+                    expiration_time={"09 Nov 2024"}
+                    lockTime={selectedPool.lockTime}
+                    finalApr={selectedPool.aprInt}
+                    apr={selectedPool?.apy_percent}
+                    fee_s={selectedPool?.performancefee}
+                    chainId={chainId}
+                    onConnectWallet={() => {
+                      onConnectWallet();
+                      setshowDetails(false);
+                      setselectedPool([]);
+                    }}
+                    is_wallet_connected={isConnected}
+                  />
+                ) : (
+                  <StakeDypiusEthOther
+                    selectedTab={selectedTab}
+                    selectedBtn={selectedBtn}
+                    selectedPool={selectedPool}
+                    staking={window.constant_staking_dypius_eth1}
+                    coinbase={coinbase}
+                    the_graph_result={the_graph_result}
+                    expiration_time={"09 Nov 2024"}
+                    lockTime={selectedPool.lockTime}
+                    finalApr={selectedPool.aprInt}
+                    apr={selectedPool?.apy_percent}
+                    fee={selectedPool?.performancefee}
+                    chainId={chainId}
+                    onConnectWallet={() => {
+                      onConnectWallet();
+                      setshowDetails(false);
+                      setselectedPool([]);
+                    }}
+                    is_wallet_connected={isConnected}
+                  />
+                )}
+
+                {/* <EarnInnerPool
                   selectedTab={selectedTab}
                   selectedBtn={selectedBtn}
                   selectedPool={selectedPool}
@@ -993,7 +1065,7 @@ const EarnOtherContent = ({
                   }
                   coinbase={coinbase}
                   the_graph_result={the_graph_result}
-                />
+                /> */}
               </div>
             </div>
           </Box>

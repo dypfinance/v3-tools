@@ -5,7 +5,7 @@ import TopPoolsListCardInner from "../top-pools-card/TopPoolsListCardInner";
 import nftTag from "./assets/nftTag.svg";
 import stakeTag from "./assets/stakeTag.svg";
 import hotTag from "./assets/hotTag.svg";
-import watch from './assets/watch.svg'
+import watch from "./assets/watch.svg";
 
 const TopOtherPoolsListCard = ({
   tokenLogo,
@@ -161,7 +161,7 @@ const TopOtherPoolsListCard = ({
         <div className="px-0 d-flex justify-content-between align-items-center">
           <table className="earnother-table">
             <tbody>
-              {windowSize.width > 768 ? (
+              {windowSize.width && windowSize.width > 768 ? (
                 <tr className="d-flex w-100 align-items-center justify-content-between">
                   <td className="earnother-td col-2">
                     <div className={`col-6 d-flex align-items-center gap-2`}>
@@ -230,7 +230,7 @@ const TopOtherPoolsListCard = ({
                   <td className="earnother-td col-2">
                     {isComingSoon ? (
                       <h6 className="details-text2 gap-1 d-flex align-items-center cursor-pointer justify-content-center w-75">
-                       <img src={watch} alt='' /> Coming Soon 
+                        <img src={watch} alt="" /> Coming Soon
                       </h6>
                     ) : (
                       <h6 className="details-text2 gap-1 d-flex align-items-center cursor-pointer justify-content-end">
@@ -239,7 +239,7 @@ const TopOtherPoolsListCard = ({
                     )}
                   </td>
                 </tr>
-              ) : (
+              ) : windowSize.width && windowSize.width <= 768 ? (
                 <>
                   <tr className="d-flex w-100 align-items-center justify-content-between mb-3">
                     <td className="earnother-td w-100">
@@ -256,7 +256,7 @@ const TopOtherPoolsListCard = ({
                               className="text-white"
                               style={{ fontSize: "16px", fontWeight: "600" }}
                             >
-                         {chain}
+                              {chain}
                             </h5>
                             <h5
                               className="text-white"
@@ -295,18 +295,20 @@ const TopOtherPoolsListCard = ({
                   </tr>
                   <tr className="d-flex w-100 align-items-center justify-content-around">
                     <td className="earnother-td w-100">
-                    {isComingSoon ? (
-                      <h6 className="details-text2 m-0 gap-1 d-flex align-items-center cursor-pointer justify-content-center w-100">
-                       <img src={watch} alt='' /> Coming Soon 
-                      </h6>
-                    ) : (
-                      <h6 className="details-text2 m-0 gap-1 d-flex align-items-center cursor-pointer justify-content-end w-100">
-                        Stake
-                      </h6>
-                    )}
+                      {isComingSoon ? (
+                        <h6 className="details-text2 m-0 gap-1 d-flex align-items-center cursor-pointer justify-content-center w-100">
+                          <img src={watch} alt="" /> Coming Soon
+                        </h6>
+                      ) : (
+                        <h6 className="details-text2 m-0 gap-1 d-flex align-items-center cursor-pointer justify-content-end w-100">
+                          Stake
+                        </h6>
+                      )}
                     </td>
                   </tr>
                 </>
+              ) : (
+                <></>
               )}
             </tbody>
           </table>

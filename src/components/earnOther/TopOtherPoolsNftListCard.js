@@ -89,7 +89,7 @@ const TopOtherPoolsNftListCard = ({
       setCoins(avaxCoins2);
     }
   }, [chain]);
-
+console.log(windowSize.width)
   return (
     <>
       <div
@@ -104,7 +104,7 @@ const TopOtherPoolsNftListCard = ({
         <div className="px-0 d-flex justify-content-between align-items-center">
           <table className="earnother-table">
             <tbody>
-              {windowSize.width > 768 ? (
+              {windowSize.width && windowSize.width > 768 ? (
                 <tr className="d-flex w-100 align-items-center justify-content-around">
                   <td className="earnother-td col-2">
                     <div className={`col-6 d-flex align-items-center gap-2`}>
@@ -122,18 +122,6 @@ const TopOtherPoolsNftListCard = ({
                       </h5>
                     </div>
                   </td>
-                  {/* <td className="earnother-td col-2">
-                    <h5
-                      className="text-white"
-                      style={{
-                        fontSize: "18px",
-                        fontWeight: "300",
-                        color: "#F7F7FC",
-                      }}
-                    >
-                      {tokenTicker}
-                    </h5>
-                  </td> */}
                   <td className="earnother-td col-2">
                     <h5
                       style={{
@@ -178,19 +166,18 @@ const TopOtherPoolsNftListCard = ({
                         fontSize: "16px",
                         fontWeight: "300",
                         color: "#F7F7FC",
-                        // marginLeft: 30,
                       }}
                     >
                       {lockTime}
                     </h5>
                   </td>
                   <td className="earnother-td col-2">
-                    <h6 className="details-text2 gap-1 d-flex align-items-center cursor-pointer justify-content-center w-75 m-0">
+                    <h6 className="details-text2 gap-1 d-flex align-items-center cursor-pointer justify-content-center m-0">
                       <img src={watch} alt="" /> Coming Soon
                     </h6>
                   </td>
                 </tr>
-              ) : (
+              ) : windowSize.width && windowSize.width <= 768 ? (
                 <>
                   <tr className="d-flex w-100 align-items-center justify-content-between mb-3">
                     <td className="earnother-td w-100">
@@ -252,7 +239,7 @@ const TopOtherPoolsNftListCard = ({
                     </td>
                   </tr>
                 </>
-              )}
+              ) : <></>}
             </tbody>
           </table>
         </div>

@@ -1441,7 +1441,7 @@ const Dashboard = ({
                     staking={window.constant_staking_dypius_bsc1}
                     apr={selectedPool?.apy_percent}
                     liquidity={wbsc_address}
-                    expiration_time={"09 November 2024"}
+                    expiration_time={"09 Nov 2024"}
                     finalApr={selectedPool?.apy_performancefee}
                     lockTime={
                       selectedPool?.lock_time?.split(" ")[0] === "No"
@@ -1475,7 +1475,7 @@ const Dashboard = ({
                     staking={window.constant_staking_dypius_avax1}
                     apr={selectedPool?.apy_percent}
                     liquidity={avax_address}
-                    expiration_time={"09 November 2024"}
+                    expiration_time={"09 Nov 2024"}
                     finalApr={selectedPool?.apy_performancefee}
                     lockTime={
                       selectedPool?.lock_time?.split(" ")[0] === "No"
@@ -1509,7 +1509,7 @@ const Dashboard = ({
                     staking={window.constant_staking_dypius_eth1}
                     apr={selectedPool?.apy_percent}
                     liquidity={eth_address}
-                    expiration_time={"09 November 2024"}
+                    expiration_time={"09 Nov 2024"}
                     finalApr={selectedPool?.apy_performancefee}
                     lockTime={
                       selectedPool?.lock_time?.split(" ")[0] === "No"

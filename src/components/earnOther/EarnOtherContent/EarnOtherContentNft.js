@@ -1,18 +1,4 @@
 import React, { useState } from "react";
-import allchain from "../../../assets/earnAssets/allchain.svg";
-import allchainActive from "../../../assets/earnAssets/allchainActive.svg";
-import ethStake from "../../../assets/earnAssets/ethStake.svg";
-import bnbStake from "../../../assets/earnAssets/bnbStake.svg";
-import avaxStake from "../../../assets/earnAssets/avaxStake.svg";
-import baseStake from "../../../assets/earnAssets/baseInactive.svg";
-import baseStakeActive from "../../../assets/earnAssets/baseActive.svg";
-import ethStakeActive from "../../../assets/earnAssets/ethStakeActive.svg";
-import bnbStakeActive from "../../../assets/earnAssets/bnbStakeActive.svg";
-import avaxStakeActive from "../../../assets/earnAssets/avaxStakeActive.svg";
-import listIcon from "../../../assets/earnAssets/listIcon.svg";
-import tableIcon from "../../../assets/earnAssets/tableIcon.svg";
-import tableIconActive from "../../../assets/earnAssets/tableIconActive.svg";
-import listIconActive from "../../../assets/earnAssets/listIconActive.svg";
 import axios from "axios";
 import { useEffect } from "react";
 import getFormattedNumber from "../../../functions/getFormattedNumber2";
@@ -430,8 +416,6 @@ const EarnOtherContentNft = ({
     }
   }, [option, expiredPools]);
 
-
-
   return (
     <>
       <div className="row justify-content-center w-100 mx-0">
@@ -497,7 +481,7 @@ const EarnOtherContentNft = ({
             className="row justify-content-end align-items-center p-2 options-container"
             style={{ marginTop: "24px", marginBottom: "24px" }}
           >
-                <div className="col-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3">
+            <div className="col-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3">
               <h5 className="text-white inactive-pools">Past pools</h5>
               <div
                 className={`pill-box ${myStakes && "pill-box-active"}`}
@@ -652,23 +636,22 @@ const EarnOtherContentNft = ({
             {expiredPools === false &&
               dummyData_eth.map((item, index) => {
                 return (
-                  // <NavLink to={`/earn/nft-staking/${item.pool}`}>
-                  <TopOtherPoolsNftListCard
-                    tokenLogo={item.tokenLogo}
-                    chain={item.chain}
-                    tokenName={item.tokenName}
-                    tokenTicker={item.tokenTicker}
-                    apr={item.apr}
-                    lockTime={item.lockTime}
-                    expired={item.expired}
-                  />
-                  // </NavLink>
+                  <div key={index}>
+                    <TopOtherPoolsNftListCard
+                      tokenLogo={item.tokenLogo}
+                      chain={item.chain}
+                      tokenName={item.tokenName}
+                      tokenTicker={item.tokenTicker}
+                      apr={item.apr}
+                      lockTime={item.lockTime}
+                      expired={item.expired}
+                    />
+                  </div>
                 );
               })}
             {expiredPools === true &&
               dummyData_eth_expired.map((pool, index) => {
                 return (
-                  // <NavLink to={`/earn/nft-staking/${item.pool}`}>
                   <TopPoolsNftListCardInner
                     key={index}
                     activePools={dummyData_eth_expired}
@@ -705,7 +688,6 @@ const EarnOtherContentNft = ({
                     // isPremium={isPremium}
                     // network={network}
                   />
-                  // </NavLink>
                 );
               })}
           </div>

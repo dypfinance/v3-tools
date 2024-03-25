@@ -1,51 +1,16 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment";
-import getFormattedNumber from "../../functions/getFormattedNumber2";
-import Modal from "../Modal/Modal";
-import Address from "./address";
-import WalletModal from "../WalletModal";
-import "./top-pools.css";
-import { shortAddress } from "../../functions/shortAddress";
-import ellipse from "./assets/ellipse.svg";
-import Clipboard from "react-clipboard.js";
-import failMark from "../../assets/failMark.svg";
-import ReactTooltip from "react-tooltip";
-import arrowup from "./assets/arrow-up.svg";
-import moreinfo from "./assets/more-info.svg";
-import purplestats from "./assets/purpleStat.svg";
-import referralimg from "./assets/referral.svg";
-import copy from "./assets/copy.svg";
-import wallet from "./assets/wallet.svg";
+import getFormattedNumber from "../../../functions/get-formatted-number";
+import moreinfo from "../../FARMINNG/assets/more-info.svg";
+import wallet from "../../FARMINNG/assets/wallet.svg";
 import Tooltip from "@material-ui/core/Tooltip";
-import Countdown from "react-countdown";
-import statsLinkIcon from "./assets/statsLinkIcon.svg";
-import poolsCalculatorIcon from "./assets/poolsCalculatorIcon.svg";
+import statsLinkIcon from "../../FARMINNG/assets/statsLinkIcon.svg";
+import { shortAddress } from "../../../functions/shortAddress";
 import { ClickAwayListener } from "@material-ui/core";
-import { handleSwitchNetworkhook } from "../../functions/hooks";
+import { handleSwitchNetworkhook } from "../../../functions/hooks";
 import axios from "axios";
 
-const renderer = ({ days, hours, minutes, seconds }) => {
-  return (
-    <div className="d-flex gap-3 justify-content-center align-items-center">
-      <div className="d-flex gap-1 align-items-baseline">
-        <span>{days < 10 ? "0" + days : days}</span>
-        <span style={{ fontSize: "13px" }}>days</span>
-      </div>
-      <div className="d-flex gap-1 align-items-baseline">
-        <span>{hours < 10 ? "0" + hours : hours}</span>
-        <span style={{ fontSize: "13px" }}>hours</span>
-      </div>
-      <div className="d-flex gap-1 align-items-baseline">
-        <span>{minutes < 10 ? "0" + minutes : minutes}</span>
-        <span style={{ fontSize: "13px" }}>minutes</span>
-      </div>
-      <span className="d-none">{seconds < 10 ? "0" + seconds : seconds}</span>
-      <span className="d-none">seconds</span>
-    </div>
-  );
-};
-
-const InitConstantStakingiDYP = ({
+const StakeDypiusBscOther = ({
   selectedPool,
   selectedTab,
   staking,
@@ -68,11 +33,21 @@ const InitConstantStakingiDYP = ({
   lp_id,
   coinbase,
   referrer,
+  renderedPage,
+  fee,
   onConnectWallet,
 }) => {
-  let { reward_token_idyp, BigNumber, alertify, token_dyps } = window;
-  let token_symbol = "iDYP";
-  let reward_token = reward_token_idyp;
+  let {
+    reward_token_dypius_bsc,
+    BigNumber,
+    alertify,
+    reward_token_idyp,
+    token_dypsbsc,
+    reward_token_daibsc,
+  } = window;
+
+  let token_symbol = "DYP";
+
   // token, staking
 
   const TOKEN_DECIMALS = window.config.token_decimals;
@@ -131,7 +106,7 @@ const InitConstantStakingiDYP = ({
     }
   };
 
-  const [token_balance, settoken_balance] = useState("...");
+  const [token_balance, settoken_balance] = useState(0);
   const [pendingDivs, setpendingDivs] = useState("");
   const [totalEarnedTokens, settotalEarnedTokens] = useState("");
   const [cliffTime, setcliffTime] = useState("");
@@ -164,13 +139,13 @@ const InitConstantStakingiDYP = ({
   const [contractDeployTime, setcontractDeployTime] = useState("");
   const [disburseDuration, setdisburseDuration] = useState("");
   const [tvlDyps, setsettvlDyps] = useState("");
-  const [settotal_stakers, setsettotal_stakers] = useState("");
+  const [tvlUSD, settvlUSD] = useState("");
+  const [total_stakers, settotal_stakers] = useState("");
 
   const [show, setshow] = useState(false);
   const [showWithdrawModal, setshowWithdrawModal] = useState(false);
   const [popup, setpopup] = useState(false);
-  const [apy1, setapy1] = useState(false);
-  const [apy2, setapy2] = useState(false);
+  const [apy, setapy] = useState(false);
   const [performanceTooltip, setperformanceTooltip] = useState(false);
   const [aprTooltip, setaprTooltip] = useState(false);
   const [lockTooltip, setlockTooltip] = useState(false);
@@ -178,7 +153,7 @@ const InitConstantStakingiDYP = ({
   const [rewardsTooltip, setrewardsTooltip] = useState(false);
   const [withdrawTooltip, setwithdrawTooltip] = useState(false);
   const [tokendata, settokendata] = useState();
-  const [approvedAmount, setapprovedAmount] = useState("0.00");
+  const [passivePool, setPassivePool] = useState(false);
 
   const [poolFeeTooltip, setPoolFeeTooltip] = useState(false);
   const [startDateTooltip, setStartDateTooltip] = useState(false);
@@ -186,6 +161,32 @@ const InitConstantStakingiDYP = ({
   const [poolCapTooltip, setPoolCapTooltip] = useState(false);
   const [quotaTooltip, setQuotaTooltip] = useState(false);
   const [maxDepositTooltip, setMaxDepositTooltip] = useState(false);
+  const [approvedAmount, setapprovedAmount] = useState("0.00");
+  const [earlyWithdrawTooltip, setEarlyWithdrawTooltip] = useState(false);
+
+  const showModal = () => {
+    setshow(true);
+  };
+
+  const hideModal = () => {
+    setshow(true);
+  };
+
+  const showPopup = () => {
+    setpopup(true);
+  };
+
+  const hidePopup = () => {
+    setpopup(false);
+  };
+
+  const earlyWithdrawClose = () => {
+    setEarlyWithdrawTooltip(false);
+  };
+
+  const earlyWithdrawOpen = () => {
+    setEarlyWithdrawTooltip(true);
+  };
 
   const poolCapClose = () => {
     setPoolCapTooltip(false);
@@ -235,22 +236,6 @@ const InitConstantStakingiDYP = ({
     setEndDateTooltip(true);
   };
 
-  const showModal = () => {
-    setshow(true);
-  };
-
-  const hideModal = () => {
-    setshow(true);
-  };
-
-  const showPopup = () => {
-    setpopup(true);
-  };
-
-  const hidePopup = () => {
-    setpopup(false);
-  };
-
   const refreshBalance = async () => {
     let coinbase = coinbase2;
 
@@ -258,27 +243,50 @@ const InitConstantStakingiDYP = ({
       coinbase = window.coinbase_address;
       setcoinbase(coinbase);
     }
+    let lp_data;
+    if (the_graph_result) {
+      lp_data = the_graph_result.token_data;
+    }
+    //console.log({lp_data})
 
-    // let usd_per_dyps = the_graph_result.price_DYPS ? the_graph_result.price_DYPS : 1
-    let usd_per_dyps = 0;
+    //Calculate APY
+    let usd_per_dyps;
+    if (the_graph_result) {
+      let usd_per_token = the_graph_result.token_data
+        ? the_graph_result.token_data[
+            "0x961c8c0b1aad0c0b10a51fef6a867e3091bcef17"
+          ].token_price_usd
+        : 1;
+      // let usd_per_idyp = the_graph_result.token_data ? the_graph_result.token_data["0xbd100d061e120b2c67a24453cf6368e63f1be056"].token_price_usd : 1
+      let apy2 = apr - fee;
+      setapy(apy2);
+
+      usd_per_dyps = the_graph_result.price_DYPS
+        ? the_graph_result.price_DYPS
+        : 1;
+    }
+
     try {
-      let _bal;
-      if (chainId === "1") {
-        _bal = reward_token.balanceOf(coinbase);
-      }
+      let _bal = reward_token_dypius_bsc.balanceOf(coinbase);
       if (staking) {
         let _pDivs = staking.getTotalPendingDivs(coinbase);
-
         let _tEarned = staking.totalEarnedTokens(coinbase);
         let _stakingTime = staking.stakingTime(coinbase);
         let _dTokens = staking.depositedTokens(coinbase);
         let _lClaimTime = staking.lastClaimedTime(coinbase);
-        let _tvl = reward_token.balanceOf(staking._address);
+        let _tvl = reward_token_dypius_bsc.balanceOf(staking._address);
         let _rFeeEarned = staking.totalReferralFeeEarned(coinbase);
         let tStakers = staking.getNumberOfHolders();
 
+        //Take DAI Balance on Staking
+        let _tvlConstantDAI = reward_token_daibsc.balanceOf(
+          staking._address
+        ); /* TVL of DAI on Staking */
+
         //Take DYPS Balance
-        let _tvlDYPS = token_dyps.balanceOf(staking._address); /* TVL of DYPS */
+        // let _tvlDYPS = token_dypsbsc.balanceOf(
+        //   staking._address
+        // ); /* TVL of DYPS */
 
         let [
           token_balance,
@@ -290,7 +298,8 @@ const InitConstantStakingiDYP = ({
           tvl,
           referralFeeEarned,
           total_stakers,
-          tvlDYPS,
+          tvlConstantDAI,
+          //   tvlDYPS,
         ] = await Promise.all([
           _bal,
           _pDivs,
@@ -301,13 +310,38 @@ const InitConstantStakingiDYP = ({
           _tvl,
           _rFeeEarned,
           tStakers,
-          _tvlDYPS,
+          _tvlConstantDAI,
+          //   _tvlDYPS,
         ]);
 
-        let tvlDyps = new BigNumber(tvlDYPS).times(usd_per_dyps).toFixed(18);
+        //console.log({tvl, tvlConstantiDYP, _amountOutMin})
+        const dypprice = await axios
+          .get(
+            "https://api.geckoterminal.com/api/v2/networks/eth/pools/0x7c81087310a228470db28c1068f0663d6bf88679"
+          )
+          .then((res) => {
+            return res.data.data.attributes.base_token_price_usd;
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+
+        let usdValueDAI = new BigNumber(tvlConstantDAI).toFixed(18);
+        let usd_per_lp = lp_data ? dypprice : 0;
+        let tvlUSD = new BigNumber(tvl)
+          .times(usd_per_lp)
+          .plus(usdValueDAI)
+          .toFixed(18);
+        //console.log({tvlUSD})
+
+        // let tvlDyps = new BigNumber(tvlDYPS).times(usd_per_dyps).toFixed(18);
+        // setsettvlDyps(tvlDyps);
+        let tvlDyps = 0;
+
         let balance_formatted = new BigNumber(token_balance)
           .div(1e18)
           .toString(10);
+
         settoken_balance(balance_formatted);
 
         let divs_formatted = new BigNumber(pendingDivs).div(1e18).toFixed(6);
@@ -331,12 +365,13 @@ const InitConstantStakingiDYP = ({
         let tvl_formatted = new BigNumber(tvl).div(1e18).toFixed(6);
         settvl(tvl_formatted);
 
-        setsettvlDyps(tvlDyps);
+        // setsettvlDyps(tvlDyps);
         setreferralFeeEarned(referralFeeEarned);
-        setsettotal_stakers(total_stakers);
+        settotal_stakers(total_stakers);
 
         let stakingOwner = await staking.owner();
         setstakingOwner(stakingOwner);
+        settvlUSD(tvlUSD);
       }
     } catch (e) {
       console.error(e);
@@ -346,7 +381,7 @@ const InitConstantStakingiDYP = ({
       staking
         .LOCKUP_TIME()
         .then((cliffTime) => {
-          setcliffTime(Number(cliffTime));
+          setcliffTime(cliffTime);
         })
         .catch(console.error);
 
@@ -358,24 +393,47 @@ const InitConstantStakingiDYP = ({
         setdisburseDuration(disburseDuration);
       });
     }
-    if (the_graph_result) {
-      let usdPerToken = the_graph_result.token_price_usd || 0;
-      setusdPerToken(usdPerToken);
-    }
   };
+
+  const getPriceDYP = async () => {
+    const dypprice = await axios
+      .get(
+        "https://api.geckoterminal.com/api/v2/networks/eth/pools/0x7c81087310a228470db28c1068f0663d6bf88679"
+      )
+      .then((res) => {
+        return res.data.data.attributes.base_token_price_usd;
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+
+    // let usdPerToken = await window.getPrice("defi-yield-protocol");
+    setusdPerToken(dypprice);
+  };
+
+  useEffect(() => {
+    getPriceDYP();
+  }, []);
 
   useEffect(() => {
     if (coinbase !== coinbase2 && coinbase !== null && coinbase !== undefined) {
       setcoinbase(coinbase);
     }
-    getTotalTvl();
+    // if (
+    //   staking &&
+    //   staking._address === "0x7c82513b69c1b42c23760cfc34234558119a3399"
+    // ) {
+    //   setPassivePool(true);
+    // }
   }, [coinbase, coinbase2]);
 
   useEffect(() => {
-    if (chainId === "1") {
+    if (chainId === "56") {
       refreshBalance();
       if (depositAmount !== "") {
         checkApproval(depositAmount);
+      } else {
+        setdepositStatus("initial");
       }
     }
   }, [coinbase, coinbase2, staking, chainId]);
@@ -385,101 +443,101 @@ const InitConstantStakingiDYP = ({
     setdepositStatus("initial");
   }, [staking]);
 
-  const getTotalTvl = async () => {
-    let apy1 = 15;
-    let apy2 = 30;
-    setapy1(apy1);
-    setapy2(apy2);
-  };
+  const handleApprove = (e) => {
+    //   e.preventDefault();
+    if (passivePool === false) {
+      setdepositLoading(true);
+      if (other_info) {
+        window.$.alert("This pool no longer accepts deposits!");
+        setdepositLoading(false);
+        return;
+      }
 
-  const handleApprove = async (e) => {
-    // e.preventDefault();
-    setdepositLoading(true);
-
-    if (other_info) {
+      let amount = depositAmount;
+      amount = new BigNumber(amount).times(1e18).toFixed(0);
+      reward_token_dypius_bsc
+        .approve(staking._address, amount)
+        .then(() => {
+          setdepositLoading(false);
+          setdepositStatus("deposit");
+          refreshBalance();
+        })
+        .catch((e) => {
+          setdepositLoading(false);
+          setdepositStatus("fail");
+          seterrorMsg(e?.message);
+          setTimeout(() => {
+            setdepositAmount("");
+            setdepositStatus("initial");
+            seterrorMsg("");
+          }, 10000);
+        });
+    } else if (passivePool === true) {
       window.$.alert("This pool no longer accepts deposits!");
-      setdepositLoading(false);
       return;
     }
-
-    let amount = depositAmount;
-    amount = new BigNumber(amount).times(1e18).toFixed(0);
-    await reward_token
-      .approve(staking._address, amount)
-      .then(() => {
-        setdepositLoading(false);
-        setdepositStatus("deposit");
-        refreshBalance();
-      })
-      .catch((e) => {
-        setdepositLoading(false);
-        setdepositStatus("fail");
-        seterrorMsg(e?.message);
-        setTimeout(() => {
-          setdepositAmount("");
-          setdepositStatus("initial");
-          seterrorMsg("");
-        }, 10000);
-      });
   };
 
   const handleStake = async (e) => {
-    setdepositLoading(true);
+    //   e.preventDefault();
+    if (passivePool === false) {
+      setdepositLoading(true);
 
-    if (other_info) {
+      if (other_info) {
+        window.$.alert("This pool no longer accepts deposits!");
+        setdepositLoading(false);
+        return;
+      }
+
+      let amount = depositAmount;
+      amount = new BigNumber(depositAmount).times(1e18).toFixed(0);
+
+      let referrer = window.config.ZERO_ADDRESS;
+
+      //NO REFERRER HERE
+
+      staking
+        .stake(amount, referrer)
+        .then(() => {
+          setdepositLoading(false);
+          setdepositStatus("success");
+          refreshBalance();
+          setTimeout(() => {
+            setdepositLoading(false);
+            setdepositStatus("initial");
+          }, 5000);
+        })
+        .catch((e) => {
+          setdepositLoading(false);
+          setdepositStatus("fail");
+          seterrorMsg(e?.message);
+          setTimeout(() => {
+            setdepositAmount("");
+            setdepositStatus("initial");
+            seterrorMsg("");
+          }, 10000);
+        });
+    } else if (passivePool === true) {
       window.$.alert("This pool no longer accepts deposits!");
-      setdepositLoading(false);
-
       return;
     }
-
-    let amount = depositAmount;
-    amount = new BigNumber(amount).times(1e18).toFixed(0);
-
-    if (referrer) {
-      referrer = String(referrer).trim().toLowerCase();
-    }
-
-    if (!window.web3.utils.isAddress(referrer)) {
-      referrer = window.config.ZERO_ADDRESS;
-    }
-    await staking
-      .stake(amount, referrer)
-      .then(() => {
-        setdepositLoading(false);
-        setdepositStatus("success");
-        refreshBalance();
-      })
-      .catch((e) => {
-        setdepositLoading(false);
-        setdepositStatus("fail");
-        seterrorMsg(e?.message);
-        setTimeout(() => {
-          setdepositAmount("");
-          setdepositStatus("fail");
-          seterrorMsg("");
-        }, 10000);
-      });
   };
 
   const handleWithdraw = async (e) => {
-    // e.preventDefault();
+    //   e.preventDefault();
     setwithdrawLoading(true);
-
     let amount = new BigNumber(withdrawAmount).times(1e18).toFixed(0);
-
     await staking
       .unstake(amount)
       .then(() => {
-        setwithdrawLoading(false);
         setwithdrawStatus("success");
+        setwithdrawLoading(false);
         refreshBalance();
       })
       .catch((e) => {
         setwithdrawLoading(false);
         setwithdrawStatus("failed");
         seterrorMsg3(e?.message);
-
         setTimeout(() => {
           setwithdrawStatus("initial");
           seterrorMsg3("");
@@ -488,9 +546,9 @@ const InitConstantStakingiDYP = ({
       });
   };
 
-  const handleClaimDivs = () => {
+  const handleClaimDivs = async (e) => {
     setclaimLoading(true);
-
+    //   e.preventDefault();
     staking
       .claim()
       .then(() => {
@@ -507,13 +565,14 @@ const InitConstantStakingiDYP = ({
         setTimeout(() => {
           setclaimStatus("initial");
           seterrorMsg2("");
-        }, 10000);
+          setclaimLoading(false);
+        }, 2000);
       });
   };
 
-  const handleSetMaxDeposit = () => {
+  const handleSetMaxDeposit = (e) => {
     const depositAmount = token_balance;
-    checkApproval(token_balance);
+    checkApproval(depositAmount);
     setdepositAmount(depositAmount);
   };
 
@@ -534,34 +593,42 @@ const InitConstantStakingiDYP = ({
     return apr;
   };
 
-  const getUsdPerETH = () => {
-    return the_graph_result.usd_per_eth || 0;
-  };
-
-  const getApproxReturn = (depositAmount, days) => {
-    let APY = getAPY() - fee_s;
-
-    return ((depositAmount * APY) / 100 / 365) * days;
-  };
-
-  const getReferralLink = () => {
-    return window.location.origin + window.location.pathname + "?r=" + coinbase;
-  };
-
-  const handleEthPool = async () => {
-    await handleSwitchNetworkhook("0x1")
+  const handleBnbPool = async () => {
+    await handleSwitchNetworkhook("0x38")
       .then(() => {
-        handleSwitchNetwork("1");
+        handleSwitchNetwork("56");
       })
       .catch((e) => {
         console.log(e);
       });
   };
+  const getUsdPerETH = () => {
+    return the_graph_result.usd_per_eth || 0;
+  };
 
-  const handleReinvest = () => {
+  // const getApproxReturn = () => {
+  //   let APY = apr - fee;
+
+  //   return ((approxDeposit * APY) / 100 / 365) * approxDays;
+  // };
+
+  const getApproxReturn = () => {
+    let APY = apr - fee;
+
+    return ((approxDeposit * APY) / 100 / 365) * approxDays;
+  };
+
+  const getReferralLink = () => {
+    return (
+      window.location.origin + window.location.pathname + "?r=" + coinbase2
+    );
+  };
+
+  const handleReinvest = async (e) => {
     setreInvestStatus("invest");
     setreInvestLoading(true);
 
+    //   e.preventDefault();
     staking
       .reInvest()
       .then(() => {
@@ -578,7 +645,7 @@ const InitConstantStakingiDYP = ({
         setTimeout(() => {
           setreInvestStatus("initial");
           seterrorMsg2("");
-        }, 10000);
+        }, 2000);
       });
   };
 
@@ -630,23 +697,13 @@ const InitConstantStakingiDYP = ({
     setwithdrawTooltip(false);
   };
 
-  const focusInput = (field) => {
-    document.getElementById(field).focus();
-  };
-
-  let showDeposit = true;
-
   if (!isNaN(disburseDuration) && !isNaN(contractDeployTime)) {
     let lastDay = parseInt(disburseDuration) + parseInt(contractDeployTime);
     let lockTimeExpire = parseInt(Date.now()) + parseInt(cliffTime);
     lockTimeExpire = lockTimeExpire.toString().substr(0, 10);
     //console.log("now " + lockTimeExpire)
     //console.log('last ' + lastDay)
-    if (lockTimeExpire > lastDay) {
-      showDeposit = false;
-    }
   }
-
   let cliffTimeInWords = "lockup period";
 
   let canWithdraw = true;
@@ -667,20 +724,25 @@ const InitConstantStakingiDYP = ({
 
   let tvl_usd = tvl * tokendata;
 
-  let tvlDYPS = tvlDyps / 1e18;
-
-  tvl_usd = tvl_usd + tvlDYPS;
+  //   let tvlDYPS = tvlDyps / 1e18;
 
   tvl_usd = getFormattedNumber(tvl_usd, 2);
 
+  const focusInput = (field) => {
+    document.getElementById(field).focus();
+  };
+
   const checkApproval = async (amount) => {
     const result = await window
-      .checkapproveStakePool(coinbase, reward_token._address, staking._address)
+      .checkapproveStakePool(
+        coinbase,
+        reward_token_dypius_bsc._address,
+        staking._address
+      )
       .then((data) => {
         console.log(data);
         return data;
       });
-
     let result_formatted = new BigNumber(result).div(1e18).toFixed(6);
     let result_formatted2 = new BigNumber(result).div(1e18).toFixed(2);
 
@@ -697,13 +759,13 @@ const InitConstantStakingiDYP = ({
 
   const getUsdPerDyp = async () => {
     await axios
-      .get("https://api.dyp.finance/api/the_graph_eth_v2")
+      .get("https://api.dyp.finance/api/the_graph_bsc_v2")
       .then((data) => {
-        const propertyiDyp = Object.entries(
-          data.data.the_graph_eth_v2.token_data
+        const propertyDyp = Object.entries(
+          data.data.the_graph_bsc_v2.token_data
         );
-        settokendata(propertyiDyp[1][1].token_price_usd);
-        return propertyiDyp[1][1].token_price_usd;
+        settokendata(propertyDyp[0][1].token_price_usd);
+        return propertyDyp[0][1].token_price_usd;
       });
   };
 
@@ -711,9 +773,11 @@ const InitConstantStakingiDYP = ({
     getUsdPerDyp();
   }, []);
 
+  // console.log(Number(depositedTokens))
+
   return (
     <div className="d-flex flex-column gap-2 w-100">
-      {/* <div className="locktimewrapper align-items-center gap-2">
+      <div className="locktimewrapper align-items-center gap-2">
         <button
           className={
             lockTime === "No Lock" ? "method-btn-active" : "method-btn-disabled"
@@ -783,12 +847,12 @@ const InitConstantStakingiDYP = ({
               <span className="info-pool-left-text">Chain</span>
               <span className="info-pool-right-text d-flex gap-1 align-items-center">
                 <img
-                  src={require(`../top-pools-card/assets/ethereum.svg`).default}
+                  src={require(`../../top-pools-card/assets/bsc.svg`).default}
                   width={12}
                   height={12}
                   alt=""
                 />{" "}
-                Ethereum
+                BNB Chain
               </span>
             </div>
           </div>
@@ -797,14 +861,17 @@ const InitConstantStakingiDYP = ({
               <span className="info-pool-left-text">TVL</span>
               <span className="info-pool-right-text">
                 $
-                {tvl_usd === "0.00"
-                  ? getFormattedNumber(selectedPool.tvl_usd)
-                  : tvl_usd}{" "}
+                {getFormattedNumber(
+                  Number(tvl) * usdPerToken === 0
+                    ? 161696.37
+                    : Number(tvl) * usdPerToken,
+                  2
+                )}
               </span>
             </div>
           </div>
         </div>
-      </div> */}
+      </div>
       <div className="separator my-2"></div>
       {selectedTab === "deposit" ? (
         <div className="d-flex flex-column w-100 gap-2">
@@ -822,7 +889,7 @@ const InitConstantStakingiDYP = ({
           </div>
           <div
             className={`d-flex flex-column w-100 gap-1 ${
-              (chainId !== "1" || !is_wallet_connected) && "blurrypool"
+              (chainId !== "56" || !is_wallet_connected) && "blurrypool"
             } `}
           >
             <div className="position-relative w-100 d-flex">
@@ -858,7 +925,7 @@ const InitConstantStakingiDYP = ({
 
               <div className="d-flex gap-1 align-items-baseline">
                 <span className="bal-smallTxt">Approved:</span>
-                <span className="bal-bigTxt2">{approvedAmount} iDyp</span>
+                <span className="bal-bigTxt2">{approvedAmount} DYP</span>
               </div>
             </div>
           </div>
@@ -868,7 +935,7 @@ const InitConstantStakingiDYP = ({
                 <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Pool Cap:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    N/A
+                    3.5M DYP
                     <ClickAwayListener onClickAway={poolCapClose}>
                       <Tooltip
                         open={poolCapTooltip}
@@ -892,7 +959,7 @@ const InitConstantStakingiDYP = ({
                 <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Available Quota:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    N/A
+                  8 BNB
                     <ClickAwayListener onClickAway={quotaClose}>
                       <Tooltip
                         open={quotaTooltip}
@@ -914,7 +981,7 @@ const InitConstantStakingiDYP = ({
                 <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Maximum deposit:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    N/A
+                  2 BNB
                     <ClickAwayListener onClickAway={maxDepositClose}>
                       <Tooltip
                         open={maxDepositTooltip}
@@ -947,7 +1014,7 @@ const InitConstantStakingiDYP = ({
                       ),
                       2
                     )}{" "}
-                    iDYP
+                    DYP
                   </span>
                 </span>
               </div>
@@ -961,7 +1028,7 @@ const InitConstantStakingiDYP = ({
               <span className="deposit-popup-txt">Reinvest</span>
               <div
                 className={`d-flex flex-column w-100 gap-1 ${
-                  (chainId !== "1" || !is_wallet_connected) && "blurrypool"
+                  (chainId !== "56" || !is_wallet_connected) && "blurrypool"
                 } `}
               >
                 <div className="info-pool-wrapper p-3 w-100">
@@ -1023,11 +1090,38 @@ const InitConstantStakingiDYP = ({
             <div className="d-flex w-100 flex-column flex-lg-row justify-content-between align-items-start align-items-lg-end gap-2">
               <div className="d-flex flex-column">
                 <span className="deposit-popup-txt">Summary</span>
-
+                <div className="d-flex align-items-center gap-2">
+                  <span className="bal-smallTxt">Early withdraw fee:</span>
+                  <span className="deposit-popup-txt d-flex align-items-center gap-1">
+                    10%
+                    <ClickAwayListener onClickAway={earlyWithdrawClose}>
+                      <Tooltip
+                        open={earlyWithdrawTooltip}
+                        disableFocusListener
+                        disableHoverListener
+                        disableTouchListener
+                        placement="top"
+                        title={
+                          <div className="tooltip-text">
+                            {
+                              "The fee charged for withdrawing funds from the pool before the specified period."
+                            }
+                          </div>
+                        }
+                      >
+                        <img
+                          src={moreinfo}
+                          alt=""
+                          onClick={earlyWithdrawOpen}
+                        />
+                      </Tooltip>
+                    </ClickAwayListener>
+                  </span>
+                </div>
                 <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Pool fee:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    {fee_s}%
+                    {fee ?? 0}%
                     <ClickAwayListener onClickAway={poolFeeClose}>
                       <Tooltip
                         open={poolFeeTooltip}
@@ -1053,10 +1147,10 @@ const InitConstantStakingiDYP = ({
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={`${window.config.etherscan_baseURL}address/${staking?._address}`}
+                    href={`${window.config.bscscan_baseURL}address/${staking?._address}`}
                     className="stats-link2"
                   >
-                    {shortAddress(staking?._address)}{" "}
+                    {shortAddress(staking._address)}{" "}
                     <img src={statsLinkIcon} alt="" />
                   </a>
                 </div>
@@ -1113,7 +1207,7 @@ const InitConstantStakingiDYP = ({
               </div>
             </div>
           </div>
-          {is_wallet_connected && chainId === "1" && (
+          {is_wallet_connected && chainId === "56" && (
             <button
               disabled={
                 depositAmount === "" || depositLoading === true ? true : false
@@ -1172,7 +1266,7 @@ const InitConstantStakingiDYP = ({
           </div>
           <div
             className={`d-flex flex-column w-100 gap-1 ${
-              (chainId !== "1" || !is_wallet_connected) && "blurrypool"
+              (chainId !== "56" || !is_wallet_connected) && "blurrypool"
             } `}
           >
             <div className="position-relative w-100 d-flex">
@@ -1261,7 +1355,7 @@ const InitConstantStakingiDYP = ({
           <span className="deposit-popup-txt">Earnings</span>
           <div
             className={`d-flex flex-column w-100 gap-1 ${
-              (chainId !== "1" || !is_wallet_connected) && "blurrypool"
+              (chainId !== "56" || !is_wallet_connected) && "blurrypool"
             } `}
           >
             <div className="info-pool-wrapper p-3 w-100">
@@ -1317,11 +1411,38 @@ const InitConstantStakingiDYP = ({
             <div className="d-flex w-100 flex-column flex-lg-row justify-content-between align-items-start align-items-lg-end gap-2">
               <div className="d-flex flex-column">
                 <span className="deposit-popup-txt">Summary</span>
-
+                <div className="d-flex align-items-center gap-2">
+                  <span className="bal-smallTxt">Early withdraw fee:</span>
+                  <span className="deposit-popup-txt d-flex align-items-center gap-1">
+                    10%
+                    <ClickAwayListener onClickAway={earlyWithdrawClose}>
+                      <Tooltip
+                        open={earlyWithdrawTooltip}
+                        disableFocusListener
+                        disableHoverListener
+                        disableTouchListener
+                        placement="top"
+                        title={
+                          <div className="tooltip-text">
+                            {
+                              "The fee charged for withdrawing funds from the pool before the specified period."
+                            }
+                          </div>
+                        }
+                      >
+                        <img
+                          src={moreinfo}
+                          alt=""
+                          onClick={earlyWithdrawOpen}
+                        />
+                      </Tooltip>
+                    </ClickAwayListener>
+                  </span>
+                </div>
                 <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Pool fee:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    {fee_s}%
+                    {fee ?? 0}%
                     <ClickAwayListener onClickAway={poolFeeClose}>
                       <Tooltip
                         open={poolFeeTooltip}
@@ -1347,10 +1468,10 @@ const InitConstantStakingiDYP = ({
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={`${window.config.etherscan_baseURL}address/${staking?._address}`}
+                    href={`${window.config.bscscan_baseURL}address/${staking?._address}`}
                     className="stats-link2"
                   >
-                    {shortAddress(staking?._address)}{" "}
+                    {shortAddress(staking._address)}{" "}
                     <img src={statsLinkIcon} alt="" />
                   </a>
                 </div>
@@ -1415,11 +1536,11 @@ const InitConstantStakingiDYP = ({
         <button className="connectbtn btn m-auto" onClick={onConnectWallet}>
           <img src={wallet} alt="" /> Connect wallet
         </button>
-      ) : chainId !== "1" ? (
+      ) : chainId !== "56" ? (
         <button
           className="connectbtn btn m-auto"
           onClick={() => {
-            handleEthPool();
+            handleBnbPool();
           }}
         >
           Change Network
@@ -1428,6 +1549,7 @@ const InitConstantStakingiDYP = ({
         <></>
       )}
     </div>
+
     // <div className="container-lg p-0">
     //   <div
     //     className={`allwrapper ${listType === "table" && "my-4"}`}
@@ -1438,7 +1560,13 @@ const InitConstantStakingiDYP = ({
     //   >
     //     <div className="leftside2 w-100">
     //       <div className="activewrapper">
-    //         <div className="d-flex flex-column flex-lg-row w-100 align-items-start align-items-lg-center justify-content-between gap-3 gap-lg-5">
+    //         <div
+    //           className={`d-flex flex-column flex-lg-row w-100 align-items-start align-items-lg-center justify-content-between ${
+    //             renderedPage === "dashboard"
+    //               ? "gap-3 gap-lg-4"
+    //               : "gap-3 gap-lg-5"
+    //           }`}
+    //         >
     //           {expired === true ? (
     //             <h6 className="expiredtxt caws-active-txt">Expired Pool</h6>
     //           ) : (
@@ -1452,13 +1580,18 @@ const InitConstantStakingiDYP = ({
     //               Active status
     //             </h6>
     //           )}
-
+    //           {/* <div className="d-flex align-items-center justify-content-between gap-2">
+    //                 <h6 className="earnrewards-text">Earn rewards in:</h6>
+    //                 <h6 className="earnrewards-token d-flex align-items-center gap-1">
+    //                   DYP
+    //                 </h6>
+    //               </div> */}
     //           <div className="d-flex flex-row-reverse flex-lg-row align-items-center justify-content-between earnrewards-container">
     //             <div className="d-flex flex-column flex-lg-row align-items-end align-items-lg-center gap-3 gap-lg-5">
     //               <div className="d-flex align-items-center justify-content-between gap-2">
     //                 <h6 className="earnrewards-text">Performance fee:</h6>
     //                 <h6 className="earnrewards-token d-flex align-items-center gap-1">
-    //                   {fee_s}%
+    //                   {fee}%
     //                   <ClickAwayListener onClickAway={performanceClose}>
     //                     <Tooltip
     //                       open={performanceTooltip}
@@ -1545,7 +1678,7 @@ const InitConstantStakingiDYP = ({
     //                 href={
     //                   // chainId === 1
     //                   // ?
-    //                   "https://app.uniswap.org/#/swap?use=V2&inputCurrency=0xbd100d061e120b2c67a24453cf6368e63f1be056"
+    //                   "https://pancakeswap.finance/swap?inputCurrencty=BNB&outputCurrency=0x1a3264f2e7b1cfc6220ec9348d33ccf02af7aaa4"
     //                   // : "https://app.pangolin.exchange/#/swap?outputCurrency=0x961c8c0b1aad0c0b10a51fef6a867e3091bcef17"
     //                 }
     //                 target={"_blank"}
@@ -1553,7 +1686,7 @@ const InitConstantStakingiDYP = ({
     //               >
     //                 <h6 className="bottomitems">
     //                   <img src={arrowup} alt="" />
-    //                   Get iDYP
+    //                   Get DYP
     //                 </h6>
     //               </a>
     //               <div
@@ -1571,30 +1704,43 @@ const InitConstantStakingiDYP = ({
     //         </div>
     //       </div>
     //     </div>
-    //     <div className="pools-details-wrapper d-flex m-0 container-lg border-0">
-    //       <div className="row gap-4 gap-lg-0 w-100 justify-content-between">
+    //     <div className="pools-details-wrapper d-flex m-0  container-lg border-0">
+    //       <div className="row w-100 flex-column flex-lg-row gap-4 gap-lg-0 justify-content-between">
     //         <div className="firstblockwrapper col-12 col-md-6 col-lg-2">
     //           <div
     //             className="d-flex flex-row flex-lg-column align-items-center align-items-lg-start justify-content-between gap-4"
     //             style={{ height: "100%" }}
     //           >
     //             <h6 className="start-title">Start Staking</h6>
+    //             {/* <h6 className="start-desc">
+    //                   {this.props.coinbase === null
+    //                     ? "Connect wallet to view and interact with deposits and withdraws"
+    //                     : "Interact with deposits and withdraws"}
+    //                 </h6> */}
 
     //             {coinbase === null ||
     //             coinbase === undefined ||
     //             is_wallet_connected === false ? (
-    //               <button className="connectbtn btn" onClick={showModal}>
+    //               <button
+    //                 className="connectbtn btn"
+    //                 onClick={showModal}
+    //                 style={{
+    //                   width: renderedPage === "dashboard" && "100%",
+    //                   fontSize: renderedPage === "dashboard" && "10px",
+    //                 }}
+    //               >
+    //                 {" "}
     //                 <img src={wallet} alt="" /> Connect wallet
     //               </button>
-    //             ) : chainId === "1" ? (
+    //             ) : chainId === "56" ? (
     //               <div className="addressbtn btn">
-    //                 <Address a={coinbase} chainId={1} />
+    //                 <Address a={coinbase} chainId={56} />
     //               </div>
     //             ) : (
     //               <button
     //                 className="connectbtn btn"
     //                 onClick={() => {
-    //                   handleEthPool();
+    //                   handleBnbPool();
     //                 }}
     //               >
     //                 Change Network
@@ -1602,18 +1748,32 @@ const InitConstantStakingiDYP = ({
     //             )}
     //           </div>
     //         </div>
-
+    //         {/* <div className="otherside">
+    //           <button className="btn green-btn">
+    //             TBD Claim reward 0.01 ETH
+    //           </button>
+    //         </div> */}
     //         <div
-    //           className={`otherside-border col-12 col-md-12 col-lg-4  ${
-    //             chainId !== "1" || expired === true || !is_wallet_connected
-    //               ? "blurrypool"
-    //               : ""
+    //           className={`otherside-border col-12 col-md-12 col-lg-4 ${
+    //             chainId !== "56" || expired === true ? "blurrypool" : ""
     //           }`}
     //         >
     //           <div className="d-flex justify-content-between align-items-center gap-2">
     //             <div className="d-flex justify-content-center align-items-center gap-3">
     //               <h6 className="deposit-txt">Deposit</h6>
-
+    //               {/* <div className="d-flex gap-2 align-items-center">
+    //                     <img
+    //                       src={require(`./assets/dyp.svg`).default}
+    //                       alt=""
+    //                       style={{ width: 15, height: 15 }}
+    //                     />
+    //                     <h6
+    //                       className="text-white"
+    //                       style={{ fontSize: "11px", fontWeight: "600" }}
+    //                     >
+    //                       DYP
+    //                     </h6>
+    //                   </div> */}
     //               <h6 className="mybalance-text">
     //                 Balance:
     //                 <b>
@@ -1633,9 +1793,9 @@ const InitConstantStakingiDYP = ({
     //                 placement="top"
     //                 title={
     //                   <div className="tooltip-text">
-    //                     {
-    //                       "Deposit your assets to the staking smart contract. For lock time pools, the lock time resets if you add more deposits after making one previously."
-    //                     }
+    //                     {lockTime === "No Lock"
+    //                       ? "The initial pool size is capped at 2.5M DYP. Additional opportunities to stake DYP are planned to be introduced over time."
+    //                       : "Deposit your assets to the staking smart contract. For lock time pools, the lock time resets if you add more deposits after making one previously."}
     //                   </div>
     //                 }
     //               >
@@ -1644,64 +1804,105 @@ const InitConstantStakingiDYP = ({
     //             </ClickAwayListener>
     //           </div>
     //           <div className="d-flex flex-column gap-2 justify-content-between">
-    //             <div className="d-flex align-items-center justify-content-between gap-2">
-    //               <div className="input-container px-0">
-    //                 <input
-    //                   type="number"
-    //                   autoComplete="off"
-    //                   value={
-    //                     Number(depositAmount) > 0
-    //                       ? depositAmount
-    //                       : depositAmount
-    //                   }
-    //                   onChange={(e) => {
-    //                     setdepositAmount(e.target.value);
-    //                     checkApproval(e.target.value);
-    //                   }}
-    //                   placeholder=" "
-    //                   className="text-input"
-    //                   style={{ width: "100%" }}
-    //                   name="amount_deposit"
-    //                   id="amount_deposit"
-    //                   key="amount_deposit"
-    //                 />
-    //                 <label
-    //                   className="label"
-    //                   onClick={() => {
-    //                     focusInput("amount_deposit");
-    //                   }}
-    //                 >
-    //                   Amount
-    //                 </label>
-    //               </div>
+    //             <div className="d-flex flex-column flex-lg-row align-items-center justify-content-between gap-2">
+    //               <div className="d-flex align-items-center justify-content-between justify-content-lg-start w-100 gap-2">
+    //                 <div className="input-container  px-0">
+    //                   <input
+    //                     type="number"
+    //                     autoComplete="off"
+    //                     value={
+    //                       Number(depositAmount) > 0
+    //                         ? depositAmount
+    //                         : depositAmount
+    //                     }
+    //                     onChange={(e) => {
+    //                       setdepositAmount(e.target.value);
+    //                       checkApproval(e.target.value);
+    //                     }}
+    //                     placeholder=" "
+    //                     className="text-input"
+    //                     style={{ width: "100%" }}
+    //                     name="amount_deposit"
+    //                     id="amount_deposit"
+    //                     key="amount_deposit"
+    //                   />
+    //                   <label
+    //                     htmlFor="usd"
+    //                     className="label"
+    //                     onClick={() => focusInput("amount_deposit")}
+    //                   >
+    //                     Amount
+    //                   </label>
+    //                 </div>
 
-    //               <button className="btn maxbtn" onClick={handleSetMaxDeposit}>
-    //                 Max
-    //               </button>
+    //                 {/* <div
+    //                     className="input-container px-0"
+    //                     style={{ width: "32%" }}
+    //                   >
+    //                     <input
+    //                       type="number"
+    //                       min={1}
+    //                       id="amount"
+    //                       name="amount"
+    //                       value={ Number(depositAmount) > 0
+    //                         ? depositAmount
+    //                         : depositAmount
+    //                       }
+    //                       placeholder=" "
+    //                       className="text-input"
+    //                       onChange={(e) => this.setState({depositAmount: e.target.value})}
+    //                       style={{ width: "100%" }}
+    //                     />
+    //                     <label
+    //                       htmlFor="usd"
+    //                       className="label"
+    //                       onClick={() => focusInput("amount")}
+    //                     >
+    //                       DYP Amount
+    //                     </label>
+    //                   </div> */}
+    //                 <button
+    //                   className="btn maxbtn"
+    //                   onClick={handleSetMaxDeposit}
+    //                 >
+    //                   Max
+    //                 </button>
+    //               </div>
 
     //               <button
     //                 disabled={
     //                   depositAmount === "" ||
     //                   depositLoading === true ||
-    //                   depositStatus === "success"
+    //                   depositStatus === "success" ||
+    //                   staking?._address.toLowerCase() ===
+    //                     "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487".toLowerCase()
     //                     ? true
     //                     : false
     //                 }
     //                 className={`btn filledbtn ${
-    //                   depositAmount === "" &&
-    //                   depositStatus === "initial" &&
+    //                   ((depositAmount === "" && depositStatus === "initial") ||
+    //                     staking?._address.toLowerCase() ===
+    //                       "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487".toLowerCase()) &&
     //                   "disabled-btn"
     //                 } ${
-    //                   depositStatus === "deposit" || depositStatus === "success"
+    //                   (depositStatus === "deposit" ||
+    //                     depositStatus === "success") &&
+    //                   staking?._address.toLowerCase() !==
+    //                     "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487".toLowerCase()
     //                     ? "success-button"
     //                     : depositStatus === "fail"
     //                     ? "fail-button"
     //                     : null
     //                 } d-flex justify-content-center align-items-center gap-2`}
     //                 onClick={() => {
-    //                   depositStatus === "deposit"
+    //                   depositStatus === "deposit" &&
+    //                   staking?._address.toLowerCase() !==
+    //                     "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487".toLowerCase()
     //                     ? handleStake()
-    //                     : depositStatus === "initial" && depositAmount !== ""
+    //                     : depositStatus === "initial" &&
+    //                       depositAmount !== "" &&
+    //                       staking?._address.toLowerCase() !==
+    //                         "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487".toLowerCase()
     //                     ? handleApprove()
     //                     : console.log("");
     //                 }}
@@ -1732,12 +1933,17 @@ const InitConstantStakingiDYP = ({
     //         </div>
     //         <div
     //           className={`otherside-border col-12 col-md-12 col-lg-4 ${
-    //             (chainId !== "1" || !is_wallet_connected) && "blurrypool"
+    //             chainId !== "56" && "blurrypool"
     //           }`}
     //         >
-    //           <div className="d-flex justify-content-between gap-2">
+    //           <div className="d-flex justify-content-between gap-2 ">
     //             <h6 className="withdraw-txt">Rewards</h6>
-    //             <h6 className="withdraw-littletxt d-flex align-items-center gap-2">
+    //             <h6
+    //               className="withdraw-littletxt d-flex align-items-center gap-2"
+    //               style={{
+    //                 fontSize: renderedPage === "dashboard" && "9px",
+    //               }}
+    //             >
     //               Rewards are displayed in real-time
     //               <ClickAwayListener onClickAway={rewardsClose}>
     //                 <Tooltip
@@ -1759,108 +1965,131 @@ const InitConstantStakingiDYP = ({
     //               </ClickAwayListener>
     //             </h6>
     //           </div>
-
-    //           <div className="form-row flex-column flex-lg-row d-flex gap-2 align-item-start align-items-lg-center justify-content-between">
-    //             <div className="d-flex flex-column">
-    //               <span
-    //                 style={{
-    //                   fontWeight: "500",
-    //                   fontSize: "12px",
-    //                   lineHeight: "18px",
-    //                   color: "#c0c9ff",
-    //                 }}
-    //               >
-    //                 iDYP
-    //               </span>
-    //               <span>{pendingDivs}</span>
-    //             </div>
-    //             <div className="claim-reinvest-container d-flex justify-content-between align-items-center gap-3">
-    //               <button
-    //                 disabled={
-    //                   claimStatus === "claimed" ||
-    //                   claimStatus === "success" ||
-    //                   pendingDivs <= 0
-    //                     ? //
-    //                       true
-    //                     : false
-    //                 }
-    //                 className={`btn filledbtn ${
-    //                   (claimStatus === "claimed" &&
-    //                     claimStatus === "initial") ||
-    //                   pendingDivs <= 0
-    //                     ? //
-    //                       "disabled-btn"
-    //                     : claimStatus === "failed"
-    //                     ? "fail-button"
-    //                     : claimStatus === "success"
-    //                     ? "success-button"
-    //                     : null
-    //                 } d-flex justify-content-center align-items-center gap-2`}
-    //                 style={{ height: "fit-content" }}
-    //                 // onClick={handleClaimDivs}
-    //                 onClick={() => {
-    //                   handleClaimDivs();
-    //                 }}
-    //               >
-    //                 {claimLoading ? (
-    //                   <div
-    //                     class="spinner-border spinner-border-sm text-light"
-    //                     role="status"
-    //                   >
-    //                     <span class="visually-hidden">Loading...</span>
-    //                   </div>
-    //                 ) : claimStatus === "failed" ? (
-    //                   <>
-    //                     <img src={failMark} alt="" />
-    //                     Failed
-    //                   </>
-    //                 ) : claimStatus === "success" ? (
-    //                   <>Success</>
-    //                 ) : (
-    //                   <>Claim</>
-    //                 )}
-    //               </button>
-    //               {expired === false && (
+    //           <div className="d-flex flex-column gap-2 justify-content-between">
+    //             {/* <div className="d-flex align-items-center justify-content-between gap-2"></div> */}
+    //             <div className="form-row flex-column flex-lg-row gap-2 d-flex  align-items-start align-items-lg-center justify-content-between">
+    //               <div className="position-relative d-flex flex-column">
+    //                 <span
+    //                   style={{
+    //                     fontWeight: "500",
+    //                     fontSize: "12px",
+    //                     lineHeight: "18px",
+    //                     color: "#c0c9ff",
+    //                   }}
+    //                 >
+    //                   DYP
+    //                 </span>
+    //                 <span>{pendingDivs}</span>
+    //                 {/* <input
+    //                       disabled
+    //                       value={
+    //                         Number(pendingDivs) > 0
+    //                           ? `${pendingDivs}`
+    //                           : `${pendingDivs}`
+    //                       }
+    //                       onChange={(e) =>
+    //                         this.setState({
+    //                           pendingDivs:
+    //                             Number(e.target.value) > 0
+    //                               ? e.target.value
+    //                               : e.target.value,
+    //                         })
+    //                       }
+    //                       className=" left-radius inputfarming styledinput2"
+    //                       placeholder="0"
+    //                       type="text"
+    //                       style={{ fontSize: "14px", width: renderedPage === "dashboard" && '120px', padding: 0 }}
+    //                     /> */}
+    //               </div>
+    //               <div className="claim-reinvest-container d-flex justify-content-between align-items-center gap-3">
     //                 <button
-    //                   disabled={pendingDivs > 0 ? false : true}
-    //                   className={`btn outline-btn ${
-    //                     reInvestStatus === "invest" || pendingDivs <= 0
-    //                       ? "disabled-btn"
-    //                       : reInvestStatus === "failed"
+    //                   disabled={
+    //                     claimStatus === "claimed" ||
+    //                     claimStatus === "success" ||
+    //                     pendingDivs <= 0
+    //                       ? //
+    //                         true
+    //                       : false
+    //                   }
+    //                   className={`btn filledbtn ${
+    //                     (claimStatus === "claimed" &&
+    //                       claimStatus === "initial") ||
+    //                     pendingDivs <= 0
+    //                       ? //
+    //                         "disabled-btn"
+    //                       : claimStatus === "failed"
     //                       ? "fail-button"
-    //                       : reInvestStatus === "success"
+    //                       : claimStatus === "success"
     //                       ? "success-button"
     //                       : null
     //                   } d-flex justify-content-center align-items-center gap-2`}
     //                   style={{ height: "fit-content" }}
-    //                   onClick={handleReinvest}
+    //                   // onClick={handleClaimDivs}
+    //                   onClick={() => {handleClaimDivs();
+    //                   }}
     //                 >
-    //                   {reInvestLoading ? (
+    //                   {claimLoading ? (
     //                     <div
     //                       class="spinner-border spinner-border-sm text-light"
     //                       role="status"
     //                     >
     //                       <span class="visually-hidden">Loading...</span>
     //                     </div>
-    //                   ) : reInvestStatus === "failed" ? (
+    //                   ) : claimStatus === "failed" ? (
     //                     <>
     //                       <img src={failMark} alt="" />
     //                       Failed
     //                     </>
-    //                   ) : reInvestStatus === "success" ? (
+    //                   ) : claimStatus === "success" ? (
     //                     <>Success</>
     //                   ) : (
-    //                     <>Reinvest</>
+    //                     <>Claim</>
     //                   )}
     //                 </button>
-    //               )}
+
+    //                 {expired === false && (
+    //                   <button
+    //                     disabled={pendingDivs > 0 ? false : true}
+    //                     className={`btn outline-btn ${
+    //                       reInvestStatus === "invest" || pendingDivs <= 0
+    //                         ? "disabled-btn"
+    //                         : reInvestStatus === "failed"
+    //                         ? "fail-button"
+    //                         : reInvestStatus === "success"
+    //                         ? "success-button"
+    //                         : null
+    //                     } d-flex justify-content-center align-items-center gap-2`}
+    //                     style={{ height: "fit-content" }}
+    //                     onClick={handleReinvest}
+    //                   >
+    //                     {reInvestLoading ? (
+    //                       <div
+    //                         class="spinner-border spinner-border-sm text-light"
+    //                         role="status"
+    //                       >
+    //                         <span class="visually-hidden">Loading...</span>
+    //                       </div>
+    //                     ) : reInvestStatus === "failed" ? (
+    //                       <>
+    //                         <img src={failMark} alt="" />
+    //                         Failed
+    //                       </>
+    //                     ) : reInvestStatus === "success" ? (
+    //                       <>Success</>
+    //                     ) : (
+    //                       <>Reinvest</>
+    //                     )}
+    //                   </button>
+    //                 )}
+    //               </div>
     //             </div>
+    //             {errorMsg2 && <h6 className="errormsg">{errorMsg2}</h6>}
     //           </div>
-    //           {errorMsg2 && <h6 className="errormsg">{errorMsg2}</h6>}
     //         </div>
+
     //         <div
     //           className={`otherside-border col-12 col-md-12 col-lg-2 ${
-    //             (chainId !== "1" || !is_wallet_connected) && "blurrypool"
+    //             chainId !== "56" && "blurrypool"
     //           }`}
     //         >
     //           <h6 className="deposit-txt d-flex align-items-center gap-2 justify-content-between">
@@ -1887,7 +2116,7 @@ const InitConstantStakingiDYP = ({
 
     //           <button
     //             disabled={Number(depositedTokens) > 0 ? false : true}
-    //             className="btn outline-btn"
+    //             className={"outline-btn btn"}
     //             onClick={() => {
     //               setshowWithdrawModal(true);
     //             }}
@@ -1902,7 +2131,6 @@ const InitConstantStakingiDYP = ({
     //     <Modal
     //       visible={popup}
     //       modalId="tymodal"
-    //       icon="stats"
     //       title="stats"
     //       setIsVisible={() => {
     //         setpopup(false);
@@ -1912,15 +2140,85 @@ const InitConstantStakingiDYP = ({
     //       <div className="earn-hero-content p4token-wrapper">
     //         <div className="l-box pl-3 pr-3">
     //           <div className="container px-0">
+    //             {/* <div className="row" style={{ marginLeft: "0px" }}>
+    //                 <div className="d-flex justify-content-between gap-2 align-items-center p-0">
+    //                   <h6 className="d-flex gap-2 align-items-center statstext">
+    //                     <img src={stats} alt="" />
+    //                     Stats
+    //                   </h6>
+    //                   <h6 className="d-flex gap-2 align-items-center myaddrtext">
+    //                     My address
+    //                     <a
+    //                       href={`${window.config.etherscan_baseURL}/address/${this.props.coinbase}`}
+    //                       target={"_blank"}
+    //                       rel="noreferrer"
+    //                     >
+    //                       <h6 className="addresstxt">
+    //                         {this.props.coinbase?.slice(0, 10) + "..."}
+    //                       </h6>
+    //                     </a>
+    //                     <img src={arrowup} alt="" />
+    //                   </h6>
+    //                 </div>
+    //               </div> */}
+    //             {/* <table className="table-stats table table-sm table-borderless mt-2">
+    //                 <tbody>
+    //                   <tr>
+    //                     <td className="text-right">
+    //                       <th>My DYP Deposit</th>
+    //                       <div>
+    //                         <strong>{depositedTokens}</strong>{" "}
+    //                         <small>DYP</small>
+    //                       </div>
+    //                     </td>
+
+    //                     <td className="text-right">
+    //                       <th>My DYP Balance</th>
+    //                       <div>
+    //                         <strong>{token_balance}</strong>{" "}
+    //                         <small>DYP</small>
+    //                       </div>
+    //                     </td>
+    //                     <td className="text-right">
+    //                       <th>Referral Fee Earned</th>
+    //                       <div>
+    //                         <strong>{referralFeeEarned}</strong>{" "}
+    //                         <small>DYP</small>
+    //                       </div>
+    //                     </td>
+
+    //                   </tr>
+
+    //                   <tr>
+    //                     <td className="text-right">
+    //                       <th>Total DYP Locked</th>
+    //                       <div>
+    //                         <strong>{tvl}</strong> <small>DYP</small>
+    //                       </div>
+    //                     </td>
+    //                     <td className="text-right">
+    //                       <th>TVL USD</th>
+    //                       <div>
+    //                         <strong>${tvl_usd}</strong> <small>USD</small>
+    //                       </div>
+    //                     </td>
+
+    //                     <td className="text-right">
+    //                       <th>Contract Expiration</th>
+    //                       <small>{expiration_time}</small>
+    //                     </td>
+    //                   </tr>
+    //                 </tbody>
+    //               </table> */}
     //             <div className="stats-container my-4">
     //               <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
-    //                 <span className="stats-card-title">My iDYP Deposit</span>
+    //                 <span className="stats-card-title">My DYP Deposit</span>
     //                 <h6 className="stats-card-content">
-    //                   {getFormattedNumber(depositedTokens, 6)} iDYP
+    //                   {getFormattedNumber(depositedTokens, 6)} DYP
     //                 </h6>
     //               </div>
     //               <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
-    //                 <span className="stats-card-title">My iDYP Balance</span>
+    //                 <span className="stats-card-title">My DYP Balance</span>
     //                 <h6 className="stats-card-content">
     //                   {getFormattedNumber(token_balance, 6)} {token_symbol}
     //                 </h6>
@@ -1930,18 +2228,20 @@ const InitConstantStakingiDYP = ({
     //                   Referral Fee Earned
     //                 </span>
     //                 <h6 className="stats-card-content">
-    //                   {referralFeeEarned} iDYP
+    //                   {referralFeeEarned} DYP
     //                 </h6>
     //               </div>
     //               <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
-    //                 <span className="stats-card-title">Total iDYP Locked</span>
+    //                 <span className="stats-card-title">Total DYP Locked</span>
     //                 <h6 className="stats-card-content">
-    //                   {getFormattedNumber(tvl, 6)} {token_symbol}
+    //                   {getFormattedNumber(tvl, 6)} DYP
     //                 </h6>
     //               </div>
     //               <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
     //                 <span className="stats-card-title">TVL USD</span>
-    //                 <h6 className="stats-card-content">${tvl_usd} USD</h6>
+    //                 <h6 className="stats-card-content">
+    //                   ${getFormattedNumber(Number(tvl) * usdPerToken, 4)} USD
+    //                 </h6>
     //               </div>
     //               <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
     //                 <span className="stats-card-title">
@@ -1972,7 +2272,7 @@ const InitConstantStakingiDYP = ({
     //                             data-event="click"
     //                             data-for={id}
     //                             data-tip="Copied To Clipboard!"
-    //                             data-clipboard-text={getReferralLink}
+    //                             data-clipboard-text={getReferralLink()}
     //                             className="referraltitle"
     //                           >
     //                             Referral Link:
@@ -1986,6 +2286,13 @@ const InitConstantStakingiDYP = ({
     //                           <ReactTooltip id={id} effect="solid" />
     //                         </h6>
     //                         <br />
+    //                         {/* <a
+    //                           className="text-muted small"
+    //                           href={this.getReferralLink()}
+    //                         >
+    //                           {" "}
+    //                           {this.getReferralLink()}{" "}
+    //                         </a> */}
     //                       </span>
     //                     </div>
 
@@ -2002,7 +2309,7 @@ const InitConstantStakingiDYP = ({
     //                     data-event="click"
     //                     data-for={id}
     //                     data-tip="Copied To Clipboard!"
-    //                     data-clipboard-text={getReferralLink}
+    //                     data-clipboard-text={getReferralLink()}
     //                     className=""
     //                   >
     //                     <button className="copybtn btn">
@@ -2027,7 +2334,7 @@ const InitConstantStakingiDYP = ({
     //                 <a
     //                   target="_blank"
     //                   rel="noopener noreferrer"
-    //                   href={`${window.config.etherscan_baseURL}/address/${coinbase}`}
+    //                   href={`${window.config.bscscan_baseURL}/address/${coinbase}`}
     //                   className="stats-link"
     //                 >
     //                   {shortAddress(coinbase)}{" "}
@@ -2044,13 +2351,25 @@ const InitConstantStakingiDYP = ({
     //                 <a
     //                   target="_blank"
     //                   rel="noopener noreferrer"
-    //                   href={`${window.config.etherscan_baseURL}/token/${reward_token._address}?a=${coinbase}`}
+    //                   href={`${window.config.bscscan_baseURL}/token/${reward_token_dypius_bsc._address}?a=${coinbase}`}
     //                   className="stats-link"
     //                 >
     //                   View transaction <img src={statsLinkIcon} alt="" />
     //                 </a>
     //               </div>
     //             </div>
+    //             {/* <div className="mt-4">
+    //                 <a
+    //                   target="_blank"
+    //                   rel="noopener noreferrer"
+    //                   href={`${window.config.etherscan_baseURL}/token/${reward_token._address}?a=${coinbase}`}
+    //                   className="maxbtn"
+    //                   style={{ color: "#7770e0" }}
+    //                 >
+    //                   Etherscan
+    //                   <img src={arrowup} alt="" />
+    //                 </a>
+    //               </div> */}
     //           </div>
     //         </div>
     //       </div>
@@ -2071,6 +2390,12 @@ const InitConstantStakingiDYP = ({
     //         <div className="l-box pl-3 pr-3">
     //           <div className="container px-0">
     //             <div className="row" style={{ marginLeft: "0px" }}>
+    //               {/* <div className="d-flex justify-content-between gap-2 align-items-center p-0">
+    //                   <h6 className="d-flex gap-2 align-items-center statstext">
+    //                     <img src={stats} alt="" />
+    //                     Withdraw
+    //                   </h6>
+    //                 </div> */}
     //               <h6 className="withdrawdesc mt-2 p-0">
     //                 {lockTime === "No Lock"
     //                   ? "Your deposit has no lock-in period. You can withdraw your assets anytime, or continue to earn rewards every day."
@@ -2079,7 +2404,7 @@ const InitConstantStakingiDYP = ({
     //             </div>
 
     //             <div className="d-flex flex-column mt-2">
-    //               <div className="d-flex  gap-2 justify-content-between align-items-center mt-2">
+    //               <div className="d-flex  gap-2 justify-content-between align-items-center">
     //                 <div className="d-flex flex-column gap-1">
     //                   <h6 className="withsubtitle mt-3">Timer</h6>
     //                   <h6 className="withtitle" style={{ fontWeight: 300 }}>
@@ -2121,6 +2446,7 @@ const InitConstantStakingiDYP = ({
     //                     key="amount_withdraw"
     //                   />
     //                   <label
+    //                     htmlFor="usd"
     //                     className="label"
     //                     onClick={() => focusInput("amount_withdraw")}
     //                   >
@@ -2139,28 +2465,30 @@ const InitConstantStakingiDYP = ({
     //               <div className="d-flex flex-column align-items-start justify-content-between gap-2 mt-4">
     //                 <button
     //                   disabled={
-    //                     withdrawAmount === "" ||
     //                     withdrawStatus === "failed" ||
     //                     withdrawStatus === "success" ||
+    //                     withdrawAmount === "" ||
     //                     canWithdraw === false
     //                       ? true
     //                       : false
     //                   }
     //                   className={` w-100 btn filledbtn ${
-    //                     (withdrawAmount === "" &&
-    //                       withdrawStatus === "initial") ||
-    //                     canWithdraw === false
-    //                       ? "disabled-btn"
-    //                       : withdrawStatus === "failed"
+    //                     withdrawStatus === "failed"
     //                       ? "fail-button"
     //                       : withdrawStatus === "success"
     //                       ? "success-button"
-    //                       : null
+    //                       : (withdrawAmount === "" &&
+    //                           withdrawStatus === "initial") ||
+    //                         canWithdraw === false
+    //                       ? "disabled-btn"
+    //                       : "filledbtn"
     //                   } d-flex justify-content-center align-items-center`}
     //                   style={{ height: "fit-content" }}
-    //                   onClick={() => handleWithdraw()}
+    //                   onClick={() => {
+    //                     handleWithdraw();
+    //                   }}
     //                 >
-    //                   {withdrawLoading ? (
+    //                   {withdrawLoading === true ? (
     //                     <div
     //                       class="spinner-border spinner-border-sm text-light"
     //                       role="status"
@@ -2189,6 +2517,55 @@ const InitConstantStakingiDYP = ({
     //                 >
     //                   *No withdrawal fee
     //                 </span> */}
+    //                 {/* <button
+    //                     className="btn filledbtn w-100"
+    //                     onClick={(e) => {
+    //                       // e.preventDefault();
+    //                       this.handleWithdraw();
+    //                     }}
+    //                     title={
+    //                       canWithdraw
+    //                         ? ""
+    //                         : `You recently staked, you can unstake ${cliffTimeInWords}`
+    //                     }
+    //                   >
+    //                     Withdraw
+    //                   </button> */}
+
+    //                 {/* <div className="form-row">
+    //                         <div className="col-6">
+    //                           <button
+    //                             title={
+    //                               canWithdraw
+    //                                 ? ""
+    //                                 : `You recently staked, you can unstake ${cliffTimeInWords}`
+    //                             }
+    //                             disabled={!canWithdraw || !is_connected}
+    //                             className="btn  btn-primary btn-block l-outline-btn"
+    //                             type="submit"
+    //                           >
+    //                             WITHDRAW
+    //                           </button>
+    //                         </div>
+    //                         <div className="col-6">
+    //                           <button
+    //                             onClick={(e) => {
+    //                               e.preventDefault();
+    //                               this.handleWithdrawDyp();
+    //                             }}
+    //                             title={
+    //                               canWithdraw
+    //                                 ? ""
+    //                                 : `You recently staked, you can unstake ${cliffTimeInWords}`
+    //                             }
+    //                             disabled={!canWithdraw || !is_connected}
+    //                             className="btn  btn-primary btn-block l-outline-btn"
+    //                             type="submit"
+    //                           >
+    //                             WITHDRAW
+    //                           </button>
+    //                         </div>
+    //                       </div> */}
     //               </div>
     //               {errorMsg3 && <h6 className="errormsg">{errorMsg3}</h6>}
     //             </div>
@@ -2198,7 +2575,7 @@ const InitConstantStakingiDYP = ({
     //     </Modal>
     //   )}
 
-    //   {show === true && (
+    //   {show && (
     //     <WalletModal
     //       show={show}
     //       handleClose={hideModal}
@@ -2208,8 +2585,19 @@ const InitConstantStakingiDYP = ({
     //       }}
     //     />
     //   )}
+    //   {/* <div
+    //       className="calculator-btn d-flex justify-content-center align-items-center gap-2 text-white"
+    //       onClick={() => this.setState({ showCalculator: true })}
+    //     >
+    //       <img
+    //         src={calculatorIcon}
+    //         alt=""
+    //         style={{ width: 30, height: 30 }}
+    //       />{" "}
+    //       Calculator
+    //     </div> */}
 
-    //   {showCalculator === true && (
+    //   {showCalculator && (
     //     <Modal
     //       visible={showCalculator}
     //       title="calculator"
@@ -2217,6 +2605,28 @@ const InitConstantStakingiDYP = ({
     //       setIsVisible={() => setshowCalculator(false)}
     //     >
     //       <div className="pools-calculator">
+    //         {/* <div className="d-flex align-items-center justify-content-between">
+    //             <div className="d-flex align-items-center gap-3">
+    //               <img src={calculatorIcon} alt="" />
+    //               <h5
+    //                 style={{
+    //                   fontSize: "23px",
+    //                   fontWeight: "500",
+    //                   color: "#f7f7fc",
+    //                 }}
+    //               >
+    //                 Calculator
+    //               </h5>
+    //             </div>
+    //             <img
+    //               src={xMark}
+    //               alt=""
+    //               onClick={() => {
+    //                 this.setState({ showCalculator: false });
+    //               }}
+    //               className="cursor-pointer"
+    //             />
+    //           </div> */}
     //         <hr />
     //         <div className="d-flex align-items-center justify-content-between">
     //           <div className="d-flex flex-column gap-3 w-50 me-5">
@@ -2236,7 +2646,7 @@ const InitConstantStakingiDYP = ({
     //           </div>
     //           <div className="d-flex flex-column gap-3 w-50 me-5">
     //             <span style={{ fontSize: "15px", fontWeight: "500" }}>
-    //               iDYP to Deposit
+    //               Amount to stake
     //             </span>
     //             <input
     //               style={{ height: "40px" }}
@@ -2252,7 +2662,7 @@ const InitConstantStakingiDYP = ({
     //         </div>
     //         <div className="d-flex flex-column gap-2 mt-4">
     //           <h3 style={{ fontWeight: "500", fontSize: "39px" }}>
-    //             $ {getFormattedNumber(getApproxReturn() * tokendata, 6)} USD
+    //             $ {getFormattedNumber(getApproxReturn() * usdPerToken, 3)} USD
     //           </h3>
     //           <h6
     //             style={{
@@ -2261,7 +2671,8 @@ const InitConstantStakingiDYP = ({
     //               color: "#f7f7fc",
     //             }}
     //           >
-    //             Approx {getFormattedNumber(getApproxReturn(), 2)} iDYP
+    //             Approx {getFormattedNumber(getApproxReturn(), 2)}
+    //             DYP
     //           </h6>
     //         </div>
     //         <div className="mt-4">
@@ -2283,4 +2694,4 @@ const InitConstantStakingiDYP = ({
   );
 };
 
-export default InitConstantStakingiDYP;
+export default StakeDypiusBscOther;

@@ -17,20 +17,24 @@ const EarnOther = ({
   handleSwitchNetwork,
   isPremium,
   type,
+  onConnectWallet,
 }) => {
   const routeData = useLocation();
-  const [poolClicked, setPoolClicked]=useState(false)
-  const [poolClickedType, setPoolClickedType]=useState('')
-
+  const [poolClicked, setPoolClicked] = useState(false);
+  const [poolClickedType, setPoolClickedType] = useState("");
 
   const handleSliderClick = (obj) => {
-      setPoolClicked(true)
-      setPoolClickedType(obj)
+    setPoolClicked(true);
+    setPoolClickedType(obj);
   };
 
   return (
     <div className="container-lg earn-wrapper d-flex flex-column justify-content-center align-items-center p-0 position-relative">
-      <EarnOtherHero type={type} isPremium={isPremium} onSliderClick={handleSliderClick} />
+      <EarnOtherHero
+        type={type}
+        isPremium={isPremium}
+        onSliderClick={handleSliderClick}
+      />
       <EarnOtherContent
         coinbase={coinbase}
         type={type}
@@ -51,6 +55,7 @@ const EarnOther = ({
         customChain={routeData.state ? routeData.state.customChain : "eth"}
         faqIndex={routeData.state ? routeData.state.faqIndex : -1}
         handleSwitchNetwork={handleSwitchNetwork}
+        onConnectWallet={onConnectWallet}
       />
     </div>
   );

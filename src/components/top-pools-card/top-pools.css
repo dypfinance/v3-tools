@@ -54,7 +54,7 @@
 }
 
 .pools-card-hover:hover {
-  border: 2px solid rgb(142, 151, 205);
+  border: 1px solid #8969D7;
 }
 
 .pools-card-open {
