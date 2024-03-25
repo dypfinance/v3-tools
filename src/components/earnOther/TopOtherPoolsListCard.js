@@ -166,7 +166,7 @@ const TopOtherPoolsListCard = ({
                   <td className="earnother-td col-2">
                     <div className={`col-6 d-flex align-items-center gap-2`}>
                       <img
-                        src={require(`../top-pools-card/assets/${tokenLogo}`)}
+                        src={tokenLogo}
                         style={{ width: 36, height: 36 }}
                         alt=""
                       />
@@ -218,12 +218,7 @@ const TopOtherPoolsListCard = ({
                         color: "#F7F7FC",
                       }}
                     >
-                      <img
-                        src={require(`../top-pools-card/assets/${chainLogo}`)}
-                        width={24}
-                        height={24}
-                        alt=""
-                      />
+                      <img src={chainLogo} width={24} height={24} alt="" />
                       {chain}
                     </h5>
                   </td>
@@ -245,12 +240,7 @@ const TopOtherPoolsListCard = ({
                     <td className="earnother-td w-100">
                       <div className="d-flex align-items-center w-100  justify-content-between gap-2">
                         <div className={` d-flex align-items-center gap-1`}>
-                          <img
-                            src={require(`../top-pools-card/assets/${chainLogo}`)}
-                            width={28}
-                            height={28}
-                            alt=""
-                          />
+                          <img src={chainLogo} width={28} height={28} alt="" />
                           <div className="d-flex flex-column gap-1">
                             <h5
                               className="text-white"

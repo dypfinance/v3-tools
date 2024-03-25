@@ -34,6 +34,9 @@ const StakeDypiusAvaxOther = ({
   coinbase,
   referrer,
   onConnectWallet,
+  earlyFee,
+  maximumDeposit,
+  poolCap,
 }) => {
   let {
     reward_token_dypius_bsc,
@@ -854,7 +857,7 @@ const StakeDypiusAvaxOther = ({
                 $
                 {getFormattedNumber(
                   Number(tvl) * usdPerToken === 0
-                    ? 161696.37
+                    ? selectedPool.poolList[0].tvl
                     : Number(tvl) * usdPerToken,
                   2
                 )}
@@ -926,7 +929,7 @@ const StakeDypiusAvaxOther = ({
                 <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Pool Cap:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    1.5M DYP
+                  {getFormattedNumber(poolCap,0)} DYP
                     <ClickAwayListener onClickAway={poolCapClose}>
                       <Tooltip
                         open={poolCapTooltip}
@@ -972,7 +975,7 @@ const StakeDypiusAvaxOther = ({
                 <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Maximum deposit:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    2 AVAX
+                  {getFormattedNumber(maximumDeposit,2)} AVAX
                     <ClickAwayListener onClickAway={maxDepositClose}>
                       <Tooltip
                         open={maxDepositTooltip}
@@ -1084,7 +1087,7 @@ const StakeDypiusAvaxOther = ({
                 <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Early withdraw fee:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    10%
+                  {earlyFee}%
                     <ClickAwayListener onClickAway={earlyWithdrawClose}>
                       <Tooltip
                         open={earlyWithdrawTooltip}
@@ -1138,10 +1141,10 @@ const StakeDypiusAvaxOther = ({
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={`${window.config.snowtrace_baseURL}/address/${staking?._address}`}
+                    href={`${window.config.bscscan_baseURL}address/${selectedPool?.poolList[0]?.tokenAddress}`}
                     className="stats-link2"
                   >
-                    {shortAddress(staking?._address)}{" "}
+                    {shortAddress(selectedPool?.poolList[0]?.tokenAddress)}{" "}
                     <img src={statsLinkIcon} alt="" />
                   </a>
                 </div>
@@ -1405,7 +1408,7 @@ const StakeDypiusAvaxOther = ({
                 <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Early withdraw fee:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    10%
+                  {earlyFee}%
                     <ClickAwayListener onClickAway={earlyWithdrawClose}>
                       <Tooltip
                         open={earlyWithdrawTooltip}
@@ -1459,10 +1462,10 @@ const StakeDypiusAvaxOther = ({
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={`${window.config.snowtrace_baseURL}address/${staking?._address}`}
+                    href={`${window.config.bscscan_baseURL}address/${selectedPool?.poolList[0]?.tokenAddress}`}
                     className="stats-link2"
                   >
-                    {shortAddress(staking?._address)}{" "}
+                    {shortAddress(selectedPool?.poolList[0]?.tokenAddress)}{" "}
                     <img src={statsLinkIcon} alt="" />
                   </a>
                 </div>

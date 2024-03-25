@@ -20,6 +20,7 @@ import StakeDypiusBscOther from "../stakingPools/bscStakeDypiusOther";
 import StakeDypiusEthOther from "../stakingPools/ethStakeDypiusOther";
 
 const EarnOtherContent = ({
+  aggregatorPools,
   coinbase,
   the_graph_result,
   poolClickedType,
@@ -161,7 +162,7 @@ const EarnOtherContent = ({
     },
   ];
 
-  const cloneArray = [...dummyData_avax, ...dummyData_base, ...dummyData_bnb];
+  const cloneArray = aggregatorPools;
 
   const [stake, setStake] = useState("allchains");
   const [option, setOption] = useState(routeOption);
@@ -188,8 +189,8 @@ const EarnOtherContent = ({
     if (event.key === "Enter") {
       const tokenSearch = item.value;
       if (tokenSearch && tokenSearch !== "") {
-        const result = allPools.filter((item) => {
-          return item.tokenTicker
+        const result = aggregatorPools.filter((item) => {
+          return item.name
             .toLowerCase()
             .includes(tokenSearch.toLowerCase());
         });
@@ -461,59 +462,12 @@ const EarnOtherContent = ({
     }
   };
 
+ 
+ 
   useEffect(() => {
-    if (option === "Staking") {
-      fetchEthApr();
-      fetchAvaxApr();
-      fetchBnbApr();
-      setEthApr(7.35);
-    } else if (option === "Buyback") {
-      fetchEthBuybackApr();
-      fetchBnbBuybackApr();
-      fetchAvaxBuybackApr();
-    } else if (option === "Farming" && expiredPools === false) {
-      // fetchFarmingApr();
-      fetchBnbPool();
-      setEthApr(0);
-      setavaxApr(0);
-    } else if (option === "Farming" && expiredPools === true) {
-      // fetchFarmingApr();
-      fetchFarmingApr();
-    }
-
-    if (option === "Staking" && stake === "eth") {
-      fetchEthStaking();
-    } else if (option === "Staking" && stake === "bnb") {
-      fetchBnbStaking();
-    } else if (option === "Staking" && stake === "avax") {
-      fetchAvaxStaking();
-    } else if (option === "Buyback" && stake === "eth") {
-      fetchEthBuyback();
-    } else if (option === "Buyback" && stake === "bnb") {
-      fetchBnbBuyback();
-    } else if (option === "Buyback" && stake === "avax") {
-      fetchAvaxBuyback();
-    } else if (option === "Farming" && stake === "eth") {
-      fetchEthTvl();
-    } else if (option === "Farming" && stake === "bnb") {
-      fetchBscTvl();
-    } else if (option === "Farming" && stake === "avax") {
-      fetchAvaxTvl();
-    } else {
-      fetchVaultTvl();
-    }
-  }, [option, stake, chainId]);
-
-  useEffect(() => {
-    if (option === "Farming" && expiredPools === false) {
-      setStake("bnb");
-    }
-  }, [option, expiredPools]);
-
-  useEffect(() => {
-    const finalArray = [...dummyData_avax, ...dummyData_base, ...dummyData_bnb];
+    const finalArray = aggregatorPools;
     setallPools(finalArray);
-  }, []);
+  }, [aggregatorPools]);
 
   useEffect(() => {
     if (query === "") {
@@ -522,9 +476,9 @@ const EarnOtherContent = ({
   }, [query]);
 
   useEffect(() => {
-    if (poolClicked === true && poolClickedType !== "" && allPools.length > 0) {
+    if (poolClicked === true && poolClickedType !== "" && aggregatorPools.length > 0) {
       const selectedpool = allPools.filter((item) => {
-        return item.tokenTicker.toLowerCase() === poolClickedType;
+        return item.name.toLowerCase() === poolClickedType;
       });
 
       if (selectedpool) {
@@ -823,33 +777,7 @@ const EarnOtherContent = ({
           </div>
         </div>
       </div>
-      {listStyle === "table" && (
-        <div className="w-100 otherpools-wrapper">
-          {allPools.map((item, index) => {
-            return (
-              // <NavLink to={`/earn/defi-staking/${item.pool}`}>
-              <TopOtherPoolsCard
-                key={index}
-                lockTime={item.lockTime}
-                chain={item.chain}
-                apr={item.apr}
-                tokenLogo={item.tokenLogo}
-                expired={item.expired}
-                top_pick={item.top_pick}
-                tokenName={item.tokenName}
-                isNewPool={item.new_pool === "Yes" ? true : false}
-                onClick={() => {
-                  setshowDetails(true);
-                  setcardIndex(index);
-                  setselectedBtn(item.lockTime);
-                  setselectedPool(item);
-                }}
-              />
-              // </NavLink>
-            );
-          })}
-        </div>
-      )}
+     
       {listStyle === "list" &&
         (allPools.length > 0 ? (
           <>
@@ -897,19 +825,19 @@ const EarnOtherContent = ({
                 {allPools.map((item, index) => {
                   return (
                     <TopOtherPoolsListCard
-                      tokenLogo={item.tokenLogo}
-                      chainLogo={item.chainLogo}
-                      chain={item.chain}
-                      tokenName={item.tokenName}
-                      tokenTicker={item.tokenTicker}
-                      apr={item.apr}
-                      lockTime={item.lockTime}
-                      expired={item.expired}
-                      isNewPool={item.new_pool === "Yes" ? true : false}
-                      isComingSoon={item.coming_soon}
-                      isHot={item.hot}
-                      isNft={item.nft}
-                      isStaked={item.staked}
+                      tokenLogo={item.poolList[0].iconURL}
+                      chainLogo={item.iconURL}
+                      chain={item.chains[0]}
+                      tokenName={item.name}
+                      tokenTicker={item.name}
+                      apr={item.maxAPR}
+                      lockTime={item.lockType}
+                      expired={item.no}
+                      isNewPool={true}
+                      isComingSoon={true}
+                      isHot={item.tags.find((obj)=>{return obj === 'Hot'}) ? true : false}
+                      isNft={item.tags.find((obj)=>{return obj === 'NFT'}) ? true : false}
+                      isStaked={false}
                       onCardClick={() => {
                         setshowDetails(!showDetails);
                         setcardIndex(!showDetails ? index : 777);
@@ -987,7 +915,7 @@ const EarnOtherContent = ({
                   />
                 </div>
 
-                {selectedPool.pool === "BNB" ? (
+                {selectedPool.id === "bnbChainPool" ? (
                   <StakeDypiusBscOther
                     selectedTab={selectedTab}
                     selectedBtn={selectedBtn}
@@ -996,10 +924,17 @@ const EarnOtherContent = ({
                     coinbase={coinbase}
                     the_graph_result={the_graph_result}
                     expiration_time={"09 Nov 2024"}
-                    lockTime={selectedPool.lockTime}
-                    finalApr={selectedPool.aprInt}
-                    fee={selectedPool?.performancefee}
-                    apr={selectedPool?.apy_percent}
+
+                    lockTime={parseInt(selectedPool.poolList[0].lockTime)}
+                    finalApr={selectedPool.maxAPR}
+                    fee={selectedPool.poolList[0].performancefee}
+                    apr={selectedPool?.poolList[0].aprPercent }
+                    
+                    earlyFee={selectedPool?.poolList[0].earlyFee}
+                    expired={selectedPool?.poolList[0].expired === 'No' ? false : true}
+                    maximumDeposit={selectedPool?.poolList[0].maximumDeposit}
+                    poolCap={selectedPool?.poolList[0].poolCap}
+
                     chainId={chainId}
                     onConnectWallet={() => {
                       onConnectWallet();
@@ -1008,7 +943,7 @@ const EarnOtherContent = ({
                     }}
                     is_wallet_connected={isConnected}
                   />
-                ) : selectedPool.pool === "AVAX" ? (
+                ) : selectedPool.id === "avaxChainPool" ? (
                   <StakeDypiusAvaxOther
                     selectedTab={selectedTab}
                     selectedBtn={selectedBtn}
@@ -1016,11 +951,17 @@ const EarnOtherContent = ({
                     staking={window.constant_staking_dypius_avax1}
                     coinbase={coinbase}
                     the_graph_result={the_graph_result}
+
                     expiration_time={"09 Nov 2024"}
-                    lockTime={selectedPool.lockTime}
-                    finalApr={selectedPool.aprInt}
-                    apr={selectedPool?.apy_percent}
-                    fee_s={selectedPool?.performancefee}
+                    lockTime={parseInt(selectedPool.poolList[0].lockTime)}
+                    finalApr={selectedPool.maxAPR}
+                    fee_s={selectedPool.poolList[0].performancefee}
+                    apr={selectedPool?.poolList[0].aprPercent }
+                    earlyFee={selectedPool?.poolList[0].earlyFee}
+                    expired={selectedPool?.poolList[0].expired === 'No' ? false : true}
+                    maximumDeposit={selectedPool?.poolList[0].maximumDeposit}
+                    poolCap={selectedPool?.poolList[0].poolCap}
+
                     chainId={chainId}
                     onConnectWallet={() => {
                       onConnectWallet();
@@ -1038,10 +979,16 @@ const EarnOtherContent = ({
                     coinbase={coinbase}
                     the_graph_result={the_graph_result}
                     expiration_time={"09 Nov 2024"}
-                    lockTime={selectedPool.lockTime}
-                    finalApr={selectedPool.aprInt}
-                    apr={selectedPool?.apy_percent}
-                    fee={selectedPool?.performancefee}
+
+                    lockTime={parseInt(selectedPool.poolList[0].lockTime)}
+                    finalApr={selectedPool.maxAPR}
+                    fee={selectedPool.poolList[0].performancefee}
+                    apr={selectedPool?.poolList[0].aprPercent }
+                    earlyFee={selectedPool?.poolList[0].earlyFee}
+                    expired={selectedPool?.poolList[0].expired === 'No' ? false : true}
+                    maximumDeposit={selectedPool?.poolList[0].maximumDeposit}
+                    poolCap={selectedPool?.poolList[0].poolCap}
+
                     chainId={chainId}
                     onConnectWallet={() => {
                       onConnectWallet();

@@ -36,6 +36,9 @@ const StakeDypiusEthOther = ({
   fee,
   renderedPage,
   onConnectWallet,
+  earlyFee,
+  maximumDeposit,
+  poolCap,
 }) => {
   let {
     reward_token_dypius_eth,
@@ -908,7 +911,7 @@ const StakeDypiusEthOther = ({
                 $
                 {getFormattedNumber(
                   Number(tvl) * usdPerToken === 0
-                    ? 161696.37
+                    ? selectedPool.poolList[0].tvl
                     : Number(tvl) * usdPerToken,
                   2
                 )}
@@ -1004,7 +1007,7 @@ const StakeDypiusEthOther = ({
                 <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Available Quota:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                  8 ETH
+                    8 ETH
                     <ClickAwayListener onClickAway={quotaClose}>
                       <Tooltip
                         open={quotaTooltip}
@@ -1026,7 +1029,7 @@ const StakeDypiusEthOther = ({
                 <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Maximum deposit:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                   2 ETH
+                    2 ETH
                     <ClickAwayListener onClickAway={maxDepositClose}>
                       <Tooltip
                         open={maxDepositTooltip}

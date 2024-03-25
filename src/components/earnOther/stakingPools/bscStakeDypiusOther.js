@@ -36,6 +36,9 @@ const StakeDypiusBscOther = ({
   renderedPage,
   fee,
   onConnectWallet,
+  earlyFee,
+  maximumDeposit,
+  poolCap,
 }) => {
   let {
     reward_token_dypius_bsc,
@@ -863,7 +866,7 @@ const StakeDypiusBscOther = ({
                 $
                 {getFormattedNumber(
                   Number(tvl) * usdPerToken === 0
-                    ? 161696.37
+                    ? selectedPool.poolList[0].tvl
                     : Number(tvl) * usdPerToken,
                   2
                 )}
@@ -935,7 +938,7 @@ const StakeDypiusBscOther = ({
                 <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Pool Cap:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    3.5M DYP
+                    {getFormattedNumber(poolCap,0)} DYP
                     <ClickAwayListener onClickAway={poolCapClose}>
                       <Tooltip
                         open={poolCapTooltip}
@@ -959,7 +962,7 @@ const StakeDypiusBscOther = ({
                 <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Available Quota:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                  8 BNB
+                    8 BNB
                     <ClickAwayListener onClickAway={quotaClose}>
                       <Tooltip
                         open={quotaTooltip}
@@ -981,7 +984,7 @@ const StakeDypiusBscOther = ({
                 <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Maximum deposit:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                  2 BNB
+                   {getFormattedNumber(maximumDeposit,2)} BNB
                     <ClickAwayListener onClickAway={maxDepositClose}>
                       <Tooltip
                         open={maxDepositTooltip}
@@ -1093,7 +1096,7 @@ const StakeDypiusBscOther = ({
                 <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Early withdraw fee:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    10%
+                    {earlyFee}%
                     <ClickAwayListener onClickAway={earlyWithdrawClose}>
                       <Tooltip
                         open={earlyWithdrawTooltip}
@@ -1147,10 +1150,10 @@ const StakeDypiusBscOther = ({
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={`${window.config.bscscan_baseURL}address/${staking?._address}`}
+                    href={`${window.config.bscscan_baseURL}address/${selectedPool?.poolList[0]?.tokenAddress}`}
                     className="stats-link2"
                   >
-                    {shortAddress(staking._address)}{" "}
+                    {shortAddress(selectedPool?.poolList[0]?.tokenAddress)}{" "}
                     <img src={statsLinkIcon} alt="" />
                   </a>
                 </div>
@@ -1414,7 +1417,7 @@ const StakeDypiusBscOther = ({
                 <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Early withdraw fee:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    10%
+                  {earlyFee}%
                     <ClickAwayListener onClickAway={earlyWithdrawClose}>
                       <Tooltip
                         open={earlyWithdrawTooltip}
@@ -1468,10 +1471,10 @@ const StakeDypiusBscOther = ({
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={`${window.config.bscscan_baseURL}address/${staking?._address}`}
+                    href={`${window.config.bscscan_baseURL}address/${selectedPool?.poolList[0]?.tokenAddress}`}
                     className="stats-link2"
                   >
-                    {shortAddress(staking._address)}{" "}
+                    {shortAddress(selectedPool?.poolList[0]?.tokenAddress)}{" "}
                     <img src={statsLinkIcon} alt="" />
                   </a>
                 </div>

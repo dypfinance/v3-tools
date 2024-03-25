@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import EarnOtherHero from "./EarnOtherHero/EarnOtherHero";
 import EarnOtherContent from "./EarnOtherContent/EarnOtherContent";
 import "./earnOther.css";
+import axios from "axios";
 
 const EarnOther = ({
   coinbase,
@@ -22,11 +23,32 @@ const EarnOther = ({
   const routeData = useLocation();
   const [poolClicked, setPoolClicked] = useState(false);
   const [poolClickedType, setPoolClickedType] = useState("");
+  const [aggregatorPools, setAggregatorPools] = useState([]);
+
+  const fetchAggregatorPools = async () => {
+    const result = await axios
+      .get(
+        "https://dypiusstakingaggregator.azurewebsites.net/api/GetAggregatedPools?code=2qyv7kEpn13ZZUDkaU-f7U5YjiQLVAawRITtvj34rci0AzFuZp7JWQ%3D%3D"
+      )
+      .catch((e) => {
+        console.error(e);
+      });
+
+    if (result && result.status === 200) {
+      const pools = result.data.stakingLists;
+      setAggregatorPools(pools);
+      console.log(pools);
+    }
+  };
 
   const handleSliderClick = (obj) => {
     setPoolClicked(true);
     setPoolClickedType(obj);
   };
+
+  useEffect(() => {
+    fetchAggregatorPools();
+  }, []);
 
   return (
     <div className="container-lg earn-wrapper d-flex flex-column justify-content-center align-items-center p-0 position-relative">
@@ -36,6 +58,7 @@ const EarnOther = ({
         onSliderClick={handleSliderClick}
       />
       <EarnOtherContent
+        aggregatorPools={aggregatorPools}
         coinbase={coinbase}
         type={type}
         poolClicked={poolClicked}
