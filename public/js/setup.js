@@ -2157,6 +2157,13 @@ window.config = {
     },
   },
 
+  subscriptionskale_tokens: {
+    "0xCC205196288B7A26f6D43bBD68AaA98dde97276d": {
+      symbol: "USDC",
+      decimals: 6,
+    },
+  },
+
 
   automated_trust_scores: {
     perfect_scoring: {

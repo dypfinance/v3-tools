@@ -7,6 +7,8 @@ import avax from "./assets/avax.svg";
 import bnb from "./assets/bnb.svg";
 import eth from "./assets/eth.svg";
 import base from "./assets/base.svg";
+import skale from "./assets/skale.svg";
+
 import conflux from "./assets/conflux.svg";
 import dropdown from "./assets/dropdown.svg";
 import Dropdown from "react-bootstrap/Dropdown";
@@ -25,6 +27,8 @@ import toolsLogo from "../../assets/sidebarIcons/toolsLogo.svg";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import error from "../../assets/error.svg";
+
+
 const Header = ({
   toggleMobileSidebar,
   toggleTheme,
@@ -53,6 +57,8 @@ const Header = ({
   const [avaxState, setAvaxState] = useState(false);
   const [baseState, setBaseState] = useState(false);
   const [confluxState, setConfluxState] = useState(false);
+  const [skaleState, setSkaleState] = useState(false);
+
   
   const [avatar, setAvatar] = useState("../../assets/img/person.svg");
   const routeData = useLocation();
@@ -64,19 +70,26 @@ const Header = ({
       setAvaxState(false);
       setBnbState(false);
       setEthState(true);
+      setSkaleState(false)
+
     } else if (chainId === 43114) {
       setAvaxState(true);
       setBnbState(false);
       setEthState(false);
+      setSkaleState(false)
+
     } else if (chainId === 56) {
       setAvaxState(false);
       setBnbState(true);
       setEthState(false);
+      setSkaleState(false)
+
     } else if (chainId === 8453) {
       setAvaxState(false);
       setBnbState(false);
       setEthState(false);
       setBaseState(true);
+      setSkaleState(false)
     
     }  else if (chainId === 1030) {
       setAvaxState(false);
@@ -84,11 +97,23 @@ const Header = ({
       setEthState(false);
       setBaseState(false);
       setConfluxState(true);
+      setSkaleState(false)
+  
+    } 
+    else if (chainId === 1482601649) {
+      setAvaxState(false);
+      setBnbState(false);
+      setEthState(false);
+      setBaseState(false);
+      setConfluxState(false);
+      setSkaleState(true)
   
     }  else {
       setAvaxState(false);
       setBnbState(false);
       setEthState(false);
+      setSkaleState(false)
+
     }
   };
 
@@ -153,6 +178,20 @@ const Header = ({
     await handleSwitchNetworkhook("0x406")
       .then(() => {
         handleSwitchNetwork("1030");
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    } else {
+      window.alertify.error("No web3 detected. Please install Metamask!");
+    }
+  };
+
+  const handleSkalePool = async () => {
+    if (window.ethereum) {
+    await handleSwitchNetworkhook("0x585eb4b1")
+      .then(() => {
+        handleSwitchNetwork("1482601649");
       })
       .catch((e) => {
         console.log(e);
@@ -374,6 +413,8 @@ const Header = ({
                                       ? base
                                       : confluxState === true
                                         ? conflux
+                                        : skaleState === true
+                                        ? skale
                                     : error
                                 }
                                 height={16}
@@ -391,6 +432,8 @@ const Header = ({
                                     ? "Base"
                                     : confluxState === true
                                       ? "Conflux"
+                                      : skaleState === true
+                                      ? "SKALE"
                                   : "Unsupported Chain"}
                               </span>
 
@@ -417,6 +460,10 @@ const Header = ({
                   <Dropdown.Item onClick={() => handleBasePool()}>
                     <img src={base} alt="" />
                     Base
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={() => handleSkalePool()}>
+                    <img src={skale} alt="" />
+                    SKALE
                   </Dropdown.Item>
                         </DropdownButton>
                       )}
@@ -486,6 +533,8 @@ const Header = ({
                                     ? "CFX"
                                     : chainId === 8453
                                     ? "ETH"
+                                    : chainId === 1482601649
+                                    ? "sFUEL"
                                     : ""}
                                 </span>
                               )}

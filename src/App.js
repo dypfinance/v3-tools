@@ -136,6 +136,10 @@ class App extends React.Component {
               this.setState({
                 networkId: "56",
               });
+            } else if (data === "0x585eb4b1") {
+              this.setState({
+                networkId: "1482601649",
+              });
             } else if (data !== "undefined") {
               this.setState({
                 networkId: "0",
