@@ -25,6 +25,7 @@ import toolsLogo from "../../assets/sidebarIcons/toolsLogo.svg";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import error from "../../assets/error.svg";
+
 const Header = ({
   toggleMobileSidebar,
   toggleTheme,
@@ -53,7 +54,7 @@ const Header = ({
   const [avaxState, setAvaxState] = useState(false);
   const [baseState, setBaseState] = useState(false);
   const [confluxState, setConfluxState] = useState(false);
-  
+
   const [avatar, setAvatar] = useState("../../assets/img/person.svg");
   const routeData = useLocation();
 
@@ -84,14 +85,12 @@ const Header = ({
       setBnbState(false);
       setEthState(false);
       setBaseState(true);
-    
-    }  else if (chainId === 1030) {
+    } else if (chainId === 1030) {
       setAvaxState(false);
       setBnbState(false);
       setEthState(false);
       setBaseState(false);
       setConfluxState(true);
-  
     } else {
       setAvaxState(false);
       setBnbState(false);
@@ -103,27 +102,27 @@ const Header = ({
 
   const handleEthPool = async () => {
     if (window.ethereum) {
-    await handleSwitchNetworkhook("0x1")
-      .then(() => {
-        handleSwitchNetwork("1");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-    }else {
+      await handleSwitchNetworkhook("0x1")
+        .then(() => {
+          handleSwitchNetwork("1");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    } else {
       window.alertify.error("No web3 detected. Please install Metamask!");
     }
   };
 
   const handleBnbPool = async () => {
     if (window.ethereum) {
-    await handleSwitchNetworkhook("0x38")
-      .then(() => {
-        handleSwitchNetwork("56");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+      await handleSwitchNetworkhook("0x38")
+        .then(() => {
+          handleSwitchNetwork("56");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     } else {
       window.alertify.error("No web3 detected. Please install Metamask!");
     }
@@ -131,29 +130,27 @@ const Header = ({
 
   const handleAvaxPool = async () => {
     if (window.ethereum) {
-    await handleSwitchNetworkhook("0xa86a")
-      .then(() => {
-        handleSwitchNetwork("43114");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+      await handleSwitchNetworkhook("0xa86a")
+        .then(() => {
+          handleSwitchNetwork("43114");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     } else {
       window.alertify.error("No web3 detected. Please install Metamask!");
     }
   };
 
-
-
   const handleConfluxPool = async () => {
     if (window.ethereum) {
-    await handleSwitchNetworkhook("0x406")
-      .then(() => {
-        handleSwitchNetwork("1030");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+      await handleSwitchNetworkhook("0x406")
+        .then(() => {
+          handleSwitchNetwork("1030");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     } else {
       window.alertify.error("No web3 detected. Please install Metamask!");
     }
@@ -216,7 +213,6 @@ const Header = ({
         .catch((err) => {
           console.log(err);
           setUsername("Dypian");
-
         });
     } else {
       setUsername("Dypian");
@@ -238,32 +234,25 @@ const Header = ({
         const bscWeb3 = new Web3(window.config.bsc_endpoint);
         const avaxWeb3 = new Web3(window.config.avax_endpoint);
         const web3cfx = new Web3(window.config.conflux_endpoint);
-    const web3base = new Web3(window.config.base_endpoint);
+        const web3base = new Web3(window.config.base_endpoint);
 
         if (chainId === 1) {
           const stringBalance = infuraWeb3.utils.hexToNumberString(balance);
           const amount = infuraWeb3.utils.fromWei(stringBalance, "ether");
           setCurrencyAmount(amount.slice(0, 7));
-        }
-
-        else if (chainId === 43114) {
+        } else if (chainId === 43114) {
           const stringBalance = avaxWeb3.utils.hexToNumberString(balance);
           const amount = avaxWeb3.utils.fromWei(stringBalance, "ether");
           setCurrencyAmount(amount.slice(0, 7));
-        }
-
-        else if (chainId === 56) {
+        } else if (chainId === 56) {
           const stringBalance = bscWeb3.utils.hexToNumberString(balance);
           const amount = bscWeb3.utils.fromWei(stringBalance, "ether");
           setCurrencyAmount(amount.slice(0, 7));
-        }
-        else if (chainId === 1030) {
+        } else if (chainId === 1030) {
           const stringBalance = web3cfx.utils.hexToNumberString(balance);
           const amount = web3cfx.utils.fromWei(stringBalance, "ether");
           setCurrencyAmount(amount.slice(0, 7));
-        }
-
-        else if (chainId === 8453) {
+        } else if (chainId === 8453) {
           const stringBalance = web3base.utils.hexToNumberString(balance);
           const amount = web3base.utils.fromWei(stringBalance, "ether");
           setCurrencyAmount(amount.slice(0, 7));
@@ -312,8 +301,7 @@ const Header = ({
     if (coinbase !== undefined && coinbase !== null) {
       fetchAvatar();
       fetchUsername();
-    }
-    else setUsername('Dypian')
+    } else setUsername("Dypian");
   }, [coinbase, checklogout]);
 
   return (
@@ -377,9 +365,9 @@ const Header = ({
                                     : avaxState === true
                                     ? avax
                                     : baseState === true
-                                      ? base
-                                      : confluxState === true
-                                        ? conflux
+                                    ? base
+                                    : confluxState === true
+                                    ? conflux
                                     : error
                                 }
                                 height={16}
@@ -394,9 +382,9 @@ const Header = ({
                                   : avaxState === true
                                   ? "Avalanche"
                                   : baseState === true
-                                    ? "Base"
-                                    : confluxState === true
-                                      ? "Conflux"
+                                  ? "Base"
+                                  : confluxState === true
+                                  ? "Conflux"
                                   : "Unsupported Chain"}
                               </span>
 
@@ -417,13 +405,13 @@ const Header = ({
                             Avalanche
                           </Dropdown.Item>
                           <Dropdown.Item onClick={() => handleConfluxPool()}>
-                    <img src={conflux} alt="" />
-                    Conflux
-                  </Dropdown.Item>
-                  <Dropdown.Item onClick={() => handleBasePool()}>
-                    <img src={base} alt="" />
-                    Base
-                  </Dropdown.Item>
+                            <img src={conflux} alt="" />
+                            Conflux
+                          </Dropdown.Item>
+                          <Dropdown.Item onClick={() => handleBasePool()}>
+                            <img src={base} alt="" />
+                            Base
+                          </Dropdown.Item>
                         </DropdownButton>
                       )}
                     {/* <DropdownButton

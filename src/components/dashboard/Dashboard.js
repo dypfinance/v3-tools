@@ -35,6 +35,12 @@ import InitConstantStakingiDYP from "../FARMINNG/constant-staking-idyp-new-front
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import closeX from "../earnOther/assets/closeX.svg";
+import ethereumIcon from "../top-pools-card/assets/ethereum.svg";
+import bnbIcon from "../top-pools-card/assets/bsc.svg";
+import avaxIcon from "../top-pools-card/assets/avax.svg";
+import { ClickAwayListener } from "@material-ui/core";
+import Tooltip from "@material-ui/core/Tooltip";
+import moreinfo from "../FARMINNG/assets/more-info.svg";
 
 const Dashboard = ({
   isConnected,
@@ -58,6 +64,7 @@ const Dashboard = ({
   const [selectedBtn, setselectedBtn] = useState("flexible");
   const [selectedPool, setselectedPool] = useState([]);
   const [showDetails, setShowDetails] = useState(false);
+  const [aprTooltip, setaprTooltip] = useState(false);
 
   const [userPools, setuserPools] = useState([]);
   const wbsc_address = "0x2170Ed0880ac9A755fd29B2688956BD959F933F8";
@@ -100,7 +107,7 @@ const Dashboard = ({
     if (bnb_result2 && bnb_result2.status === 200) {
       const dypBnb = bnb_result2.data.stakingInfoDYPBnb;
       const object2 = dypBnb.map((item) => {
-        return { ...item, tvl_usd: item.tvl_usd };
+        return { ...item, tvl_usd: item.tvl_usd, chain: "bnb" };
       });
 
       const cleanCards2 = object2.filter((item) => {
@@ -114,7 +121,7 @@ const Dashboard = ({
       setTopPools(sortedAprs);
     }
   };
-  
+
   const fetchAvaxStaking = async () => {
     const result_avax = await axios
       .get(`https://api.dyp.finance/api/get_staking_info_avax`)
@@ -137,17 +144,21 @@ const Dashboard = ({
       const dypIdypAvax = result_avax.data.stakingInfoiDYPAvax;
       const dypAvax = result_avax2.data.stakingInfoDYPAvax;
       const object2 = dypAvax.map((item) => {
-        return { ...item, tvl_usd: item.tvl_usd };
+        return { ...item, tvl_usd: item.tvl_usd, chain: "avax" };
       });
       const cleanCards = dypIdypAvax.filter((item) => {
         return item.expired !== "Yes";
+      });
+
+      const object2idyp = cleanCards.map((item) => {
+        return { ...item, tvl_usd: item.tvl_usd, chain: "avax" };
       });
 
       const cleanCards2 = object2.filter((item) => {
         return item.expired !== "Yes";
       });
 
-      const allActiveCards = [...cleanCards, ...cleanCards2];
+      const allActiveCards = [...object2idyp, ...cleanCards2];
 
       const sortedAprs = allActiveCards.sort(function (a, b) {
         return b.tvl_usd - a.tvl_usd;
@@ -178,14 +189,12 @@ const Dashboard = ({
       eth_result2 &&
       eth_result2.status === 200
     ) {
-      const dypIdyp = eth_result.data.stakingInfoiDYPEth.concat(
-        eth_result.data.stakingInfoDYPEth
-      );
+      const dypIdyp = eth_result.data.stakingInfoiDYPEth;
       const dypEth = eth_result2.data.stakingInfoDYPEth;
 
       const allpools = [...dypEth, ...dypIdyp];
       const object2 = allpools.map((item) => {
-        return { ...item, tvl_usd: item.tvl_usd };
+        return { ...item, tvl_usd: item.tvl_usd, chain: "eth" };
       });
 
       const cleanCards = object2.filter((item) => {
@@ -316,6 +325,13 @@ const Dashboard = ({
   }, [network, coinbase, loading]);
 
   const windowSize = useWindowSize();
+
+  const aprOpen = () => {
+    setaprTooltip(true);
+  };
+  const aprClose = () => {
+    setaprTooltip(false);
+  };
 
   const style = {
     position: "absolute",
@@ -1363,6 +1379,116 @@ const Dashboard = ({
                     }}
                   />
                 </div>
+                <div className="locktimewrapper align-items-center gap-2">
+                  <button
+                    className={
+                      selectedPool?.lock_time?.split(" ")[0] === "No"
+                        ? "method-btn-active"
+                        : "method-btn-disabled"
+                    }
+                  >
+                    Flexible
+                  </button>
+                  <button
+                    className={
+                      parseInt(selectedPool?.lock_time?.split(" ")[0]) === 30
+                        ? "method-btn-active"
+                        : "method-btn-disabled"
+                    }
+                  >
+                    30 Days
+                  </button>
+                  <button
+                    className={
+                      parseInt(selectedPool?.lock_time?.split(" ")[0]) === 60
+                        ? "method-btn-active"
+                        : "method-btn-disabled"
+                    }
+                  >
+                    60 Days
+                  </button>
+                  <button
+                    className={
+                      parseInt(selectedPool?.lock_time?.split(" ")[0]) === 90
+                        ? "method-btn-active"
+                        : "method-btn-disabled"
+                    }
+                  >
+                    90 Days
+                  </button>
+                  <button
+                    className={
+                      parseInt(selectedPool?.lock_time?.split(" ")[0]) === 120
+                        ? "method-btn-active"
+                        : "method-btn-disabled"
+                    }
+                  >
+                    120 Days
+                  </button>
+                </div>
+
+                <div className="info-pool-wrapper p-3 w-100">
+                  <div className="info-pool-inner-wrapper d-flex flex-column flex-lg-row align-items-center gap-2">
+                    <div className="info-pool-item p-2">
+                      <div className="d-flex justify-content-between gap-1 align-items-center">
+                        <span className="info-pool-left-text">
+                          Apr{" "}
+                          <ClickAwayListener onClickAway={aprClose}>
+                            <Tooltip
+                              open={aprTooltip}
+                              disableFocusListener
+                              disableHoverListener
+                              disableTouchListener
+                              placement="top"
+                              title={
+                                <div className="tooltip-text">
+                                  {
+                                    "APR reflects the interest rate of earnings on an account over the course of one year."
+                                  }
+                                </div>
+                              }
+                            >
+                              <img src={moreinfo} alt="" onClick={aprOpen} />
+                            </Tooltip>
+                          </ClickAwayListener>
+                        </span>
+                        <span className="info-pool-right-text">
+                          {selectedPool?.apy_performancefee}%
+                        </span>
+                      </div>
+                    </div>
+                    <div className={`info-pool-item d-flex gap-2 justify-content-between p-2`}>
+                      <span className="info-pool-left-text">Chain</span>
+                      <span className="info-pool-right-text d-flex gap-1 align-items-center">
+                        <img
+                          src={
+                            selectedPool?.chain === "bnb"
+                              ? bnbIcon
+                              : selectedPool.chain === "eth"
+                              ? ethereumIcon
+                              : avaxIcon
+                          }
+                          alt=""
+                          width={12}
+                          height={12}
+                        />
+                        {selectedPool?.chain === "bnb"
+                          ? "BNB Chain"
+                          : selectedPool.chain === "eth"
+                          ? "Ethereum"
+                          : "Avalanche"}
+                      </span>
+                    </div>
+                    <div className="info-pool-item p-2">
+                      <div className="d-flex justify-content-between gap-1 align-items-center">
+                        <span className="info-pool-left-text">TVL</span>
+                        <span className="info-pool-right-text">
+                          ${getFormattedNumber(selectedPool.tvl_usd, 2)}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
                 {activeCard &&
                 selectedPool?.id ===
@@ -1395,7 +1521,7 @@ const Dashboard = ({
                       onConnectWallet();
                       setShowDetails(false);
                       setActiveCard();
-                      setselectedPool([])
+                      setselectedPool([]);
                       setDetails();
                     }}
                   />
@@ -1429,7 +1555,7 @@ const Dashboard = ({
                       onConnectWallet();
                       setShowDetails(false);
                       setActiveCard();
-                      setselectedPool([])
+                      setselectedPool([]);
                       setDetails();
                     }}
                   />
