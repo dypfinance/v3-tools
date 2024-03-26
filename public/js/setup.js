@@ -889,7 +889,10 @@ class CONSTANT_STAKING_OLD {
 }
 
 class CONSTANT_STAKINGBSCOTHER_NEW {
-  constructor(ticker = "CONSTANT_STAKINGBSCOTHER_NEW", token = "REWARD_TOKENBSC") {
+  constructor(
+    ticker = "CONSTANT_STAKINGBSCOTHER_NEW",
+    token = "REWARD_TOKENBSC"
+  ) {
     this.ticker = ticker;
     this.token = token;
     let address = window.config[ticker.toLowerCase() + "_address"];
@@ -923,8 +926,7 @@ class CONSTANT_STAKINGBSCOTHER_NEW {
       "totalClaimedReferralFee",
       "totalClaimedRewards",
       "totalDeposited",
-      "totalReferralFeeEarned"
-
+      "totalReferralFeeEarned",
     ].forEach((fn_name) => {
       this[fn_name] = async function (...args) {
         let contract = await getContract({ key: this.ticker });
@@ -1989,7 +1991,6 @@ window.config = {
   reward_tokenavax_address: "0x961c8c0b1aad0c0b10a51fef6a867e3091bcef17", //REWARD TOKEN
   reward_tokenwbnb_address: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c", //REWARD TOKEN wbnb
 
-
   reward_token_dypius_eth_address: "0x39b46b212bdf15b42b166779b9d1787a68b9d0c3", //REWARD TOKEN DYPV2
   reward_token_dypius_bsc_address: "0x1a3264f2e7b1cfc6220ec9348d33ccf02af7aaa4", //REWARD TOKEN DYPV2
 
@@ -1998,7 +1999,6 @@ window.config = {
   snowtrace_baseURL: "https://snowtrace.io",
   bscscan_baseURL: "https://bscscan.com/",
   basescan_baseURL: "https://basescan.org",
-
 
   max_proposals_per_call: 4,
   // default_gasprice_gwei: 60,
@@ -2166,8 +2166,7 @@ window.config = {
 
   subscription_base_address: "0x9c13Dbc8f0fA8ceD8C1B53c4237A08445eca32fe",
 
-  subscription_skale_address: "0x8E4917c1Ba9598fBbF66934CB17AC28c3b5849Ab",
-
+  subscription_skale_address: "0xdbE31B4f2a5921Ec2d0d739E3c9bcA985C5A18b0",
 
   ZERO_ADDRESS: "0x0000000000000000000000000000000000000000",
   MAX_LOCKS_TO_LOAD_PER_CALL: 10,
@@ -2357,7 +2356,6 @@ window.config = {
       decimals: 6,
     },
   },
-
 
   automated_trust_scores: {
     perfect_scoring: {
@@ -4012,25 +4010,36 @@ async function getTokenHolderBalanceAll(holder, token_address, network) {
       { from: undefined }
     );
 
-    return await tokenContract.methods.balanceOf(holder).call().catch((e)=>{console.log(e)});
-  }
-  else if (network == 2) {
-   
+    return await tokenContract.methods
+      .balanceOf(holder)
+      .call()
+      .catch((e) => {
+        console.log(e);
+      });
+  } else if (network == 2) {
     let tokenContract = new window.avaxWeb3.eth.Contract(
       window.TOKEN_ABI,
       token_address,
       { from: undefined }
     );
-    return await tokenContract.methods.balanceOf(holder).call().catch((e)=>{console.log(e)});
-  }
-
- else if (network == 3) {
+    return await tokenContract.methods
+      .balanceOf(holder)
+      .call()
+      .catch((e) => {
+        console.log(e);
+      });
+  } else if (network == 3) {
     let tokenContract = new window.bscWeb3.eth.Contract(
       window.TOKEN_ABI,
       token_address
     );
 
-    return await tokenContract.methods.balanceOf(holder).call().catch((e)=>{console.log(e)});
+    return await tokenContract.methods
+      .balanceOf(holder)
+      .call()
+      .catch((e) => {
+        console.log(e);
+      });
   }
   return 0;
 }
@@ -15530,7 +15539,6 @@ window.SUBSCRIPTION_NEWETH_ABI = [
   },
 ];
 
-
 window.SUBSCRIPTION_SKALE_ABI = [
   { type: "constructor", stateMutability: "nonpayable", inputs: [] },
   {
@@ -15622,20 +15630,6 @@ window.SUBSCRIPTION_SKALE_ABI = [
       },
     ],
     anonymous: false,
-  },
-  {
-    type: "function",
-    stateMutability: "view",
-    outputs: [{ type: "uint256", name: "", internalType: "uint256" }],
-    name: "ONE_HUNDRED_X_100",
-    inputs: [],
-  },
-  {
-    type: "function",
-    stateMutability: "view",
-    outputs: [{ type: "uint256", name: "", internalType: "uint256" }],
-    name: "SLIPPAGE_TOLERANCE_X_100",
-    inputs: [],
   },
   {
     type: "function",
@@ -15756,15 +15750,6 @@ window.SUBSCRIPTION_SKALE_ABI = [
   },
   {
     type: "function",
-    stateMutability: "view",
-    outputs: [
-      { type: "address", name: "", internalType: "contract IUniswapV2Router" },
-    ],
-    name: "uniswapRouterV2",
-    inputs: [],
-  },
-  {
-    type: "function",
     stateMutability: "nonpayable",
     outputs: [],
     name: "unsubscribeAddress",
@@ -15772,8 +15757,7 @@ window.SUBSCRIPTION_SKALE_ABI = [
       { type: "address", name: "accountAddress", internalType: "address" },
     ],
   },
-]; 
-
+];
 
 window.SUBSCRIPTION_NEWBNB_ABI = [
   { inputs: [], stateMutability: "nonpayable", type: "constructor" },
@@ -35949,7 +35933,6 @@ async function get_the_graph_bsc_v2() {
   try {
     const res = await getData("https://api.dyp.finance/api/the_graph_bsc_v2");
     window.the_graph_result_bsc_v2 = res.the_graph_bsc_v2;
-     
   } catch (err) {
     console.log(err);
   }
@@ -36057,7 +36040,6 @@ Object.keys(window.config)
       k.startsWith("constant_stakingbsc_new11") ||
       k.startsWith("constant_stakingbsc_new111") ||
       k.startsWith("constant_stakingbscother_new1") ||
-
       k.startsWith("constant_stakingbsc_new12") ||
       k.startsWith("constant_stakingbsc_new13") ||
       k.startsWith("constant_stakingbsc_new14") ||
@@ -36794,8 +36776,6 @@ async function getEstimatedTokenSubscriptionAmountBNB(tokenAddress) {
     .call();
 }
 
-
-
 async function getEstimatedTokenSubscriptionAmountCFX(tokenAddress) {
   let subscriptionContract = await getContract({ key: "SUBSCRIPTION_CFX" });
   return await subscriptionContract.methods
@@ -36804,19 +36784,24 @@ async function getEstimatedTokenSubscriptionAmountCFX(tokenAddress) {
 }
 
 async function getEstimatedTokenSubscriptionAmountBase(tokenAddress) {
-  const baseContract = new window.baseWeb3.eth.Contract(window.SUBSCRIPTION_BASE_ABI, window.config.subscription_base_address);
+  const baseContract = new window.baseWeb3.eth.Contract(
+    window.SUBSCRIPTION_BASE_ABI,
+    window.config.subscription_base_address
+  );
   return await baseContract.methods
     .getEstimatedTokenSubscriptionAmount(tokenAddress)
     .call();
 }
 
 async function getEstimatedTokenSubscriptionAmountSkale(tokenAddress) {
-  const skaleContract = new window.skaleWeb3.eth.Contract(window.SUBSCRIPTION_SKALE_ABI, window.config.subscription_skale_address);
+  const skaleContract = new window.skaleWeb3.eth.Contract(
+    window.SUBSCRIPTION_SKALE_ABI,
+    window.config.subscription_skale_address
+  );
   return await skaleContract.methods
     .getEstimatedTokenSubscriptionAmount(tokenAddress)
     .call();
 }
-
 
 // ===================== end subscription contract functions ================================
 
@@ -37111,7 +37096,7 @@ function readAsText(file) {
 }
 
 window.sign = async function (msg, account) {
-  window.web3 = new Web3(window.ethereum)
+  window.web3 = new Web3(window.ethereum);
   let signature = await window.web3.eth.personal.sign(msg, account);
   return signature;
 };
