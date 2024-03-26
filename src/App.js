@@ -76,7 +76,6 @@ class App extends React.Component {
       referrer: "",
       showRibbon: true,
       showRibbon2: true,
-
     };
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
@@ -231,14 +230,12 @@ class App extends React.Component {
     let subscribedPlatformTokenAmountBase;
     let subscribedPlatformTokenAmountSkale;
 
-
     const web3eth = window.infuraWeb3;
     const web3avax = window.avaxWeb3;
     const web3bnb = window.bscWeb3;
     const web3cfx = window.confluxWeb3;
     const web3base = window.baseWeb3;
     const web3skale = window.skaleWeb3;
-
 
     const AvaxNewABI = window.SUBSCRIPTION_NEWAVAX_ABI;
     const EthNewABI = window.SUBSCRIPTION_NEWETH_ABI;
@@ -247,14 +244,12 @@ class App extends React.Component {
     const BaseABI = window.SUBSCRIPTION_BASE_ABI;
     const SkaleABI = window.SUBSCRIPTION_SKALE_ABI;
 
-
     const ethsubscribeNewAddress = window.config.subscription_neweth_address;
     const avaxsubscribeNewAddress = window.config.subscription_newavax_address;
     const bnbsubscribeNewAddress = window.config.subscription_newbnb_address;
     const cfxsubscribeAddress = window.config.subscription_cfx_address;
     const basesubscribeAddress = window.config.subscription_base_address;
     const skalesubscribeAddress = window.config.subscription_skale_address;
-
 
     const ethNewcontract = new web3eth.eth.Contract(
       EthNewABI,
@@ -286,43 +281,75 @@ class App extends React.Component {
     if (coinbase) {
       subscribedPlatformTokenAmountNewETH = await ethNewcontract.methods
         .subscriptionPlatformTokenAmount(coinbase)
-        .call().catch((e)=>{console.log(e); return 0})
+        .call()
+        .catch((e) => {
+          console.log(e);
+          return 0;
+        });
 
       subscribedPlatformTokenAmountNewAvax = await avaxNewcontract.methods
         .subscriptionPlatformTokenAmount(coinbase)
-        .call().catch((e)=>{console.log(e); return 0})
+        .call()
+        .catch((e) => {
+          console.log(e);
+          return 0;
+        });
 
       subscribedPlatformTokenAmountNewBNB = await bnbNewcontract.methods
         .subscriptionPlatformTokenAmount(coinbase)
-        .call().catch((e)=>{console.log(e); return 0})
+        .call()
+        .catch((e) => {
+          console.log(e);
+          return 0;
+        });
 
       subscribedPlatformTokenAmountCfx = await cfxcontract.methods
         .subscriptionPlatformTokenAmount(coinbase)
-        .call().catch((e)=>{console.log(e); return 0})
+        .call()
+        .catch((e) => {
+          console.log(e);
+          return 0;
+        });
 
       subscribedPlatformTokenAmountBase = await basecontract.methods
         .subscriptionPlatformTokenAmount(coinbase)
-        .call().catch((e)=>{console.log(e); return 0})
+        .call()
+        .catch((e) => {
+          console.log(e);
+          return 0;
+        });
 
-        subscribedPlatformTokenAmountSkale = await skalecontract.methods
+      subscribedPlatformTokenAmountSkale = await skalecontract.methods
         .subscriptionPlatformTokenAmount(coinbase)
-        .call().catch((e)=>{console.log(e); return 0})
-
-
+        .call()
+        .catch((e) => {
+          console.log(e);
+          return 0;
+        });
+      console.log(
+        subscribedPlatformTokenAmountNewETH,
+        subscribedPlatformTokenAmountCfx,
+        subscribedPlatformTokenAmountBase,
+        subscribedPlatformTokenAmountNewAvax,
+        subscribedPlatformTokenAmountNewBNB,
+        subscribedPlatformTokenAmountSkale
+      );
       if (
-        subscribedPlatformTokenAmountNewETH === "0" &&
-        subscribedPlatformTokenAmountCfx === "0" &&
-        subscribedPlatformTokenAmountBase === "0" &&
-        subscribedPlatformTokenAmountNewAvax === "0" &&
-        subscribedPlatformTokenAmountNewBNB === "0" && subscribedPlatformTokenAmountSkale === '0'
+        subscribedPlatformTokenAmountNewETH == "0" &&
+        subscribedPlatformTokenAmountCfx == "0" &&
+        subscribedPlatformTokenAmountBase == "0" &&
+        subscribedPlatformTokenAmountNewAvax == "0" &&
+        subscribedPlatformTokenAmountNewBNB == "0" &&
+        subscribedPlatformTokenAmountSkale == "0"
       ) {
         this.setState({ subscribedPlatformTokenAmount: "0", isPremium: false });
       } else if (
-        subscribedPlatformTokenAmountNewETH !== "0" ||
-        subscribedPlatformTokenAmountCfx !== "0" ||
-        subscribedPlatformTokenAmountBase !== "0" ||
-        subscribedPlatformTokenAmountNewAvax !== "0" ||
-        subscribedPlatformTokenAmountNewBNB !== "0" || subscribedPlatformTokenAmountSkale !== '0'
+        subscribedPlatformTokenAmountNewETH != "0" ||
+        subscribedPlatformTokenAmountCfx != "0" ||
+        subscribedPlatformTokenAmountBase != "0" ||
+        subscribedPlatformTokenAmountNewAvax != "0" ||
+        subscribedPlatformTokenAmountNewBNB != "0" ||
+        subscribedPlatformTokenAmountSkale != "0"
       ) {
         this.setState({
           // subscribedPlatformTokenAmount: subscribedPlatformTokenAmountBNB,

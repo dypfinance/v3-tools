@@ -1724,6 +1724,7 @@ window.config = {
   avax_endpoint: "https://api.avax.network/ext/bc/C/rpc",
   conflux_endpoint: "https://evm.confluxrpc.com/",
   base_endpoint: "https://base.publicnode.com",
+  skale_endpoint: "https://testnet.skalenodes.com/v1/lanky-ill-funny-testnet",
   goerli_endpoint: "https://ethereum-goerli.publicnode.com",
   bscTest_endpoint: "https://data-seed-prebsc-1-s1.binance.org:8545/",
   BUSD_address: "0xe9e7cea3dedca5984780bafc599bd69add087d56",
@@ -35138,7 +35139,7 @@ async function getEstimatedTokenSubscriptionAmountBase(tokenAddress) {
 }
 
 async function getEstimatedTokenSubscriptionAmountSkale(tokenAddress) {
-  const skaleContract = new window.baseWeb3.eth.Contract(window.SUBSCRIPTION_SKALE_ABI, window.config.subscription_skale_address);
+  const skaleContract = new window.skaleWeb3.eth.Contract(window.SUBSCRIPTION_SKALE_ABI, window.config.subscription_skale_address);
   return await skaleContract.methods
     .getEstimatedTokenSubscriptionAmount(tokenAddress)
     .call();

@@ -389,7 +389,7 @@ export default class Subscription extends React.Component {
         this.handleSubscriptionTokenChange(this.state.wbaseAddress);
       }
       else if (this.props.networkId === 37084624) {
-        this.handleSubscriptionTokenChange(this.state.wskaleAddress);
+        this.handleSubscriptionTokenChange(this.state.wskaleaddress);
       }
     }
 
@@ -419,6 +419,8 @@ export default class Subscription extends React.Component {
         : this.props.networkId === 37084624
         ? window.config.subscriptionskale_tokens[token]?.decimals
         : window.config.subscription_tokens[token]?.decimals;
+
+        console.log('tokenDecimals',tokenDecimals)
     this.setState({
       selectedSubscriptionToken: token,
       tokenBalance: "",
@@ -439,6 +441,7 @@ export default class Subscription extends React.Component {
         ? await window.getEstimatedTokenSubscriptionAmountSkale(token)
         : await window.getEstimatedTokenSubscriptionAmount(token);
     price = new BigNumber(price).toFixed(0);
+    console.log('price', price)
 
     let formattedPrice = getFormattedNumber(
       price / 10 ** tokenDecimals,
@@ -467,6 +470,8 @@ export default class Subscription extends React.Component {
     const skalesubscribeAddress = window.config.subscription_skale_address;
 
     this.setState({ loadspinner: true });
+
+    console.log(this.state.selectedSubscriptionToken, skalesubscribeAddress,this.props.networkId,this.state.price)
 
     await tokenContract.methods
       .approve(
@@ -1268,7 +1273,7 @@ export default class Subscription extends React.Component {
                         )
                       : this.props.networkId === 37084624
                       ? this.handleSubscriptionTokenChange(
-                          this.state.wskaleAddress
+                          this.state.wskaleaddress
                         )
                       : this.props.networkId === 8453
                       ? this.handleSubscriptionTokenChange(
