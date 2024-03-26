@@ -26,30 +26,37 @@ const EarnOtherHero = ({ type, isPremium, onSliderClick }) => {
       chain: "",
       buttonClass: "hero-premium-btn",
       bannerBgClass: "premiumBgDesktop",
+      buttonTitle: "Stake Now", 
       apr: "",
     },
     {
       title: "New ETH Staking Pool",
       desc: "Stake your assets to earn ETH rewards",
       buttonType: "popup",
-      chain: "eth",
+      chain: "weth",
       bannerBgClass: "ethBgDesktop",
+      buttonTitle: "Stake Now",
+      buttonClass: "hero-stake-eth-btn",
       apr: "ethApr.svg",
     },
     {
       title: "New BNB Staking Pool",
       desc: "Stake your assets to earn BNB rewards",
       buttonType: "popup",
-      chain: "bnb",
+      chain: "wbnb",
       bannerBgClass: "bscBgDesktop",
+      buttonTitle: "Stake Now",
+      buttonClass: "hero-stake-bnb-btn",
       apr: "bnbApr.svg",
     },
     {
       title: "New AVAX Staking Pool",
       desc: "Stake your assets to earn AVAX rewards",
       buttonType: "popup",
-      chain: "avax",
+      chain: "wavax",
       bannerBgClass: "avaxBgDesktop",
+      buttonTitle: "Stake Now",
+      buttonClass: "hero-stake-avax-btn",
       apr: "avaxApr.svg",
     },
   ];
@@ -61,7 +68,7 @@ const EarnOtherHero = ({ type, isPremium, onSliderClick }) => {
       buttonType: "link",
       buttonUrl: "/plans",
       buttonTitle: "Get Premium",
-      chain: "",
+      chain: "Get Premium",
       buttonClass: "hero-premium-btn",
       bannerBgClass: "premiumBgDesktop",
       apr: "",
@@ -72,7 +79,7 @@ const EarnOtherHero = ({ type, isPremium, onSliderClick }) => {
       buttonType: "popup",
       chain: "eth",
       buttonTitle: "Stake Now",
-      buttonClass: "hero-stake-eth-btn",
+      buttonClass: "hero-stake-caws-btn",
       bannerBgClass: "cawsBgDesktop",
       apr: "cawsApr.svg",
     },
@@ -102,9 +109,10 @@ const EarnOtherHero = ({ type, isPremium, onSliderClick }) => {
                   }}
                 >
                   <div className="d-flex align-items-center justify-content-between flex-row col-lg-6 ">
-                    <div className="d-flex flex-column">
+                    <div className="d-flex flex-column gap-2">
                       <h6 className="earn-other-hero-title">{item.title}</h6>
                       <h6 className="earn-other-hero-desc">{item.desc}</h6>
+                      <button className={item.buttonClass}>{item.buttonTitle}</button>
                     </div>
                     {item.apr && item.apr !== "" && (
                       <img
@@ -129,9 +137,10 @@ const EarnOtherHero = ({ type, isPremium, onSliderClick }) => {
                   }}
                 >
                   <div className="d-flex align-items-center justify-content-between flex-row col-lg-6 ">
-                    <div className="d-flex flex-column">
+                    <div className="d-flex flex-column gap-2">
                       <h6 className="earn-other-hero-title">{item.title}</h6>
                       <h6 className="earn-other-hero-desc">{item.desc}</h6>
+                      <button className={item.buttonClass}>{item.buttonTitle}</button>
                     </div>
                     {item.apr && item.apr !== "" && (
                       <img

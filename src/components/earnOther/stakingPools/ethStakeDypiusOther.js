@@ -894,13 +894,13 @@ const StakeDypiusEthOther = ({
               <span className="info-pool-right-text d-flex gap-1 align-items-center">
                 <img
                   src={
-                    require(`../../top-pools-card/assets/ethereum.svg`).default
+                    require(`../../top-pools-card/assets/baseActive.svg`).default
                   }
                   width={12}
                   height={12}
                   alt=""
                 />{" "}
-                Ethereum
+                Base
               </span>
             </div>
           </div>
@@ -1195,7 +1195,7 @@ const StakeDypiusEthOther = ({
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={`${window.config.etherscan_baseURL}address/${staking?._address}`}
+                    href={`${window.config.basescan_baseURL}/address/${staking?._address}`}
                     className="stats-link2"
                   >
                     {shortAddress(staking?._address)}{" "}
@@ -1516,7 +1516,7 @@ const StakeDypiusEthOther = ({
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={`${window.config.etherscan_baseURL}address/${staking?._address}`}
+                    href={`${window.config.basescan_baseURL}address/${staking?._address}`}
                     className="stats-link2"
                   >
                     {shortAddress(staking._address)}{" "}
@@ -1584,7 +1584,7 @@ const StakeDypiusEthOther = ({
         <button className="connectbtn btn m-auto" onClick={onConnectWallet}>
           <img src={wallet} alt="" /> Connect wallet
         </button>
-      ) : chainId !== "1" ? (
+      ) : chainId !== "8453" ? (
         <button
           className="connectbtn btn m-auto"
           onClick={() => {

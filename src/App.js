@@ -48,6 +48,7 @@ import EarnInnerPool from "./components/earnOther/EarnInnerPool/EarnInnerPool";
 import EarnOtherNft from "./components/earnOther/EarnOtherNft";
 import EarnInnerPoolNft from "./components/earnOther/EarnInnerPool/EarnInnerPoolNft";
 import WalletModal from "./components/WalletModal";
+import axios from "axios";
 
 class App extends React.Component {
   constructor(props) {
@@ -91,6 +92,7 @@ class App extends React.Component {
       showRibbon: true,
       showRibbon2: true,
       showWalletPopup: false,
+      aggregatorPools: []
     };
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
@@ -112,6 +114,22 @@ class App extends React.Component {
       this.setState({ explorerNetworkId: 56 });
     } else if (chainText === "avax") {
       this.setState({ explorerNetworkId: 43114 });
+    }
+  };
+
+   fetchAggregatorPools = async () => {
+    const result = await axios
+      .get(
+        "https://dypiusstakingaggregator.azurewebsites.net/api/GetAggregatedPools?code=2qyv7kEpn13ZZUDkaU-f7U5YjiQLVAawRITtvj34rci0AzFuZp7JWQ%3D%3D"
+      )
+      .catch((e) => {
+        console.error(e);
+      });
+
+    if (result && result.status === 200) {
+      const pools = result.data.stakingLists;
+      this.setState({aggregatorPools: pools})
+      console.log(pools);
     }
   };
 
@@ -468,6 +486,7 @@ class App extends React.Component {
   componentDidMount() {
     this.tvl();
     this.updateWindowDimensions();
+    this.fetchAggregatorPools();
     window.addEventListener("resize", this.updateWindowDimensions);
     if (
       window.ethereum &&
@@ -834,6 +853,7 @@ class App extends React.Component {
                           handleSwitchNetwork={this.handleSwitchNetwork}
                           referrer={this.state.referrer}
                           onConnectWallet={this.showModal}
+                          aggregatorPools={this.state.aggregatorPools}
                         />
                       )}
                     />
@@ -1012,6 +1032,7 @@ class App extends React.Component {
                           referrer={this.state.referrer}
                           isPremium={this.state.isPremium}
                           onConnectWallet={this.showModal}
+                          aggregatorPools={this.state.aggregatorPools}
                         />
                       )}
                     />

@@ -190,9 +190,7 @@ const EarnOtherContent = ({
       const tokenSearch = item.value;
       if (tokenSearch && tokenSearch !== "") {
         const result = aggregatorPools.filter((item) => {
-          return item.name
-            .toLowerCase()
-            .includes(tokenSearch.toLowerCase());
+          return item.name.toLowerCase().includes(tokenSearch.toLowerCase());
         });
         if (result && result.length > 0) {
           setallPools(result);
@@ -462,8 +460,6 @@ const EarnOtherContent = ({
     }
   };
 
- 
- 
   useEffect(() => {
     const finalArray = aggregatorPools;
     setallPools(finalArray);
@@ -476,7 +472,11 @@ const EarnOtherContent = ({
   }, [query]);
 
   useEffect(() => {
-    if (poolClicked === true && poolClickedType !== "" && aggregatorPools.length > 0) {
+    if (
+      poolClicked === true &&
+      poolClickedType !== "" &&
+      aggregatorPools.length > 0
+    ) {
       const selectedpool = allPools.filter((item) => {
         return item.name.toLowerCase() === poolClickedType;
       });
@@ -777,7 +777,7 @@ const EarnOtherContent = ({
           </div>
         </div>
       </div>
-     
+
       {listStyle === "list" &&
         (allPools.length > 0 ? (
           <>
@@ -835,8 +835,20 @@ const EarnOtherContent = ({
                       expired={item.no}
                       isNewPool={true}
                       isComingSoon={true}
-                      isHot={item.tags.find((obj)=>{return obj === 'Hot'}) ? true : false}
-                      isNft={item.tags.find((obj)=>{return obj === 'NFT'}) ? true : false}
+                      isHot={
+                        item.tags.find((obj) => {
+                          return obj === "Hot";
+                        })
+                          ? true
+                          : false
+                      }
+                      isNft={
+                        item.tags.find((obj) => {
+                          return obj === "NFT";
+                        })
+                          ? true
+                          : false
+                      }
                       isStaked={false}
                       onCardClick={() => {
                         setshowDetails(!showDetails);
@@ -924,17 +936,16 @@ const EarnOtherContent = ({
                     coinbase={coinbase}
                     the_graph_result={the_graph_result}
                     expiration_time={"09 Nov 2024"}
-
                     lockTime={parseInt(selectedPool.poolList[0].lockTime)}
                     finalApr={selectedPool.maxAPR}
                     fee={selectedPool.poolList[0].performancefee}
-                    apr={selectedPool?.poolList[0].aprPercent }
-                    
+                    apr={selectedPool?.poolList[0].aprPercent}
                     earlyFee={selectedPool?.poolList[0].earlyFee}
-                    expired={selectedPool?.poolList[0].expired === 'No' ? false : true}
+                    expired={
+                      selectedPool?.poolList[0].expired === "No" ? false : true
+                    }
                     maximumDeposit={selectedPool?.poolList[0].maximumDeposit}
                     poolCap={selectedPool?.poolList[0].poolCap}
-
                     chainId={chainId}
                     onConnectWallet={() => {
                       onConnectWallet();
@@ -951,17 +962,17 @@ const EarnOtherContent = ({
                     staking={window.constant_staking_dypius_avax1}
                     coinbase={coinbase}
                     the_graph_result={the_graph_result}
-
                     expiration_time={"09 Nov 2024"}
                     lockTime={parseInt(selectedPool.poolList[0].lockTime)}
                     finalApr={selectedPool.maxAPR}
                     fee_s={selectedPool.poolList[0].performancefee}
-                    apr={selectedPool?.poolList[0].aprPercent }
+                    apr={selectedPool?.poolList[0].aprPercent}
                     earlyFee={selectedPool?.poolList[0].earlyFee}
-                    expired={selectedPool?.poolList[0].expired === 'No' ? false : true}
+                    expired={
+                      selectedPool?.poolList[0].expired === "No" ? false : true
+                    }
                     maximumDeposit={selectedPool?.poolList[0].maximumDeposit}
                     poolCap={selectedPool?.poolList[0].poolCap}
-
                     chainId={chainId}
                     onConnectWallet={() => {
                       onConnectWallet();
@@ -979,16 +990,16 @@ const EarnOtherContent = ({
                     coinbase={coinbase}
                     the_graph_result={the_graph_result}
                     expiration_time={"09 Nov 2024"}
-
                     lockTime={parseInt(selectedPool.poolList[0].lockTime)}
                     finalApr={selectedPool.maxAPR}
                     fee={selectedPool.poolList[0].performancefee}
-                    apr={selectedPool?.poolList[0].aprPercent }
+                    apr={selectedPool?.poolList[0].aprPercent}
                     earlyFee={selectedPool?.poolList[0].earlyFee}
-                    expired={selectedPool?.poolList[0].expired === 'No' ? false : true}
+                    expired={
+                      selectedPool?.poolList[0].expired === "No" ? false : true
+                    }
                     maximumDeposit={selectedPool?.poolList[0].maximumDeposit}
                     poolCap={selectedPool?.poolList[0].poolCap}
-
                     chainId={chainId}
                     onConnectWallet={() => {
                       onConnectWallet();

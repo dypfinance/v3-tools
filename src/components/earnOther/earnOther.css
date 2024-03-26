@@ -366,7 +366,7 @@ hr {
   font-weight: 500;
   line-height: normal;
   width: 100%;
- /*  margin-left: -25px; */
+  /*  margin-left: -25px; */
 }
 .select-network-text {
   color: #f7f7fc;
@@ -443,6 +443,20 @@ hr {
 .hero-stake-avax-btn {
   border-radius: 8px;
   background: linear-gradient(95deg, #9b61c3 0.51%, #008de2 100%);
+  color: #fff;
+  text-align: center;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  border: none;
+  width: fit-content;
+  padding: 6px 12px;
+}
+
+.hero-stake-caws-btn {
+  border-radius: 8px;
+  background: linear-gradient(95deg, #007cc3 0.51%, #00a3a9 100%);
   color: #fff;
   text-align: center;
   font-size: 12px;
@@ -760,7 +774,7 @@ hr {
 
 .list-pool-card-nft {
   padding: 15px;
-  background: #34225E;
+  background: #34225e;
   margin-left: 15px;
   margin-right: 15px;
   border: 1px solid transparent;

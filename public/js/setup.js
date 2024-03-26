@@ -1996,6 +1996,8 @@ window.config = {
   etherscan_baseURL: "https://etherscan.io",
   snowtrace_baseURL: "https://snowtrace.io",
   bscscan_baseURL: "https://bscscan.com/",
+  basescan_baseURL: "https://basescan.org",
+
 
   max_proposals_per_call: 4,
   // default_gasprice_gwei: 60,

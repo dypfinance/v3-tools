@@ -55,6 +55,7 @@ const Dashboard = ({
   handleSwitchNetwork,
   isPremium,
   onConnectWallet,
+  aggregatorPools,
 }) => {
   const [topPools, setTopPools] = useState([]);
   const [cawsLandCard, setCawsLandCard] = useState([]);
@@ -1457,7 +1458,9 @@ const Dashboard = ({
                         </span>
                       </div>
                     </div>
-                    <div className={`info-pool-item d-flex gap-2 justify-content-between p-2`}>
+                    <div
+                      className={`info-pool-item d-flex gap-2 justify-content-between p-2`}
+                    >
                       <span className="info-pool-left-text">Chain</span>
                       <span className="info-pool-right-text d-flex gap-1 align-items-center">
                         <img
