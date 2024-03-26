@@ -825,8 +825,8 @@ const EarnOtherContent = ({
                 {allPools.map((item, index) => {
                   return (
                     <TopOtherPoolsListCard
-                      tokenLogo={item.poolList[0].iconURL}
-                      chainLogo={item.iconURL}
+                      chainLogo={item.poolList[0].iconURL}
+                      tokenLogo={item.iconURL}
                       chain={item.chains[0]}
                       tokenName={item.name}
                       tokenTicker={item.name}
