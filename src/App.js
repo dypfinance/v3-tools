@@ -43,6 +43,12 @@ import CawsStaking from "./components/genesisStaking/CawsStaking";
 import Plans from "./components/account/Plans";
 import DypMigration from "./components/bridge/DypMigration";
 import AlertRibbon from "./components/alert-ribbon/AlertRibbon";
+import EarnOther from "./components/earnOther/EarnOther";
+import EarnInnerPool from "./components/earnOther/EarnInnerPool/EarnInnerPool";
+import EarnOtherNft from "./components/earnOther/EarnOtherNft";
+import EarnInnerPoolNft from "./components/earnOther/EarnInnerPool/EarnInnerPoolNft";
+import WalletModal from "./components/WalletModal";
+import axios from "axios";
 
 class App extends React.Component {
   constructor(props) {
@@ -59,11 +65,20 @@ class App extends React.Component {
       the_graph_result_ETH_V2: JSON.parse(
         JSON.stringify(window.the_graph_result_eth_v2)
       ),
+      the_graph_result: JSON.parse(
+        JSON.stringify(window.the_graph_result_eth_v2)
+      ),
       the_graph_result_AVAX_V2: JSON.parse(
         JSON.stringify(window.the_graph_result_avax_v2)
       ),
       the_graph_result_BSC_V2: JSON.parse(
         JSON.stringify(window.the_graph_result_bsc_v2)
+      ),
+      the_graph_resultbsc: JSON.parse(
+        JSON.stringify(window.the_graph_result_bsc_v2)
+      ),
+      the_graph_resultavax: JSON.parse(
+        JSON.stringify(window.the_graph_result_avax_v2)
       ),
       windowWidth: 0,
       windowHeight: 0,
@@ -76,6 +91,8 @@ class App extends React.Component {
       referrer: "",
       showRibbon: true,
       showRibbon2: true,
+      showWalletPopup: false,
+      aggregatorPools: [],
     };
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
@@ -97,6 +114,22 @@ class App extends React.Component {
       this.setState({ explorerNetworkId: 56 });
     } else if (chainText === "avax") {
       this.setState({ explorerNetworkId: 43114 });
+    }
+  };
+
+  fetchAggregatorPools = async () => {
+    const result = await axios
+      .get(
+        "https://dypiusstakingaggregator.azurewebsites.net/api/GetAggregatedPools?code=2qyv7kEpn13ZZUDkaU-f7U5YjiQLVAawRITtvj34rci0AzFuZp7JWQ%3D%3D"
+      )
+      .catch((e) => {
+        console.error(e);
+      });
+
+    if (result && result.status === 200) {
+      const pools = result.data.stakingLists;
+      this.setState({ aggregatorPools: pools });
+      console.log(pools);
     }
   };
 
@@ -139,6 +172,10 @@ class App extends React.Component {
               this.setState({
                 networkId: "37084624",
               });
+            } else if (data === "0x2105") {
+              this.setState({
+                networkId: "8453",
+              });
             } else if (data !== "undefined") {
               this.setState({
                 networkId: "0",
@@ -179,6 +216,10 @@ class App extends React.Component {
         } else if (chainId === "0x38") {
           this.setState({
             networkId: "56",
+          });
+        } else if (chainId === "0x2105") {
+          this.setState({
+            networkId: "8453",
           });
         } else if (chainId !== "undefined") {
           this.setState({
@@ -326,14 +367,7 @@ class App extends React.Component {
           console.log(e);
           return 0;
         });
-      console.log(
-        subscribedPlatformTokenAmountNewETH,
-        subscribedPlatformTokenAmountCfx,
-        subscribedPlatformTokenAmountBase,
-        subscribedPlatformTokenAmountNewAvax,
-        subscribedPlatformTokenAmountNewBNB,
-        subscribedPlatformTokenAmountSkale
-      );
+
       if (
         subscribedPlatformTokenAmountNewETH == "0" &&
         subscribedPlatformTokenAmountCfx == "0" &&
@@ -463,6 +497,7 @@ class App extends React.Component {
       (ethereum.isMetaMask === true || window.ethereum.isTrust === true)
     ) {
       console.log("Ethereum successfully detected!");
+      this.tvl();
       this.checkNetworkId();
       await window.getCoinbase();
       // Access the decentralized web!
@@ -472,8 +507,9 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.tvl().then();
+    this.tvl();
     this.updateWindowDimensions();
+    this.fetchAggregatorPools();
     window.addEventListener("resize", this.updateWindowDimensions);
     if (
       window.ethereum &&
@@ -504,6 +540,7 @@ class App extends React.Component {
 
   checkConnection = async () => {
     this.refreshSubscription();
+    this.tvl();
     const logout = localStorage.getItem("logout");
 
     if (
@@ -567,6 +604,8 @@ class App extends React.Component {
     // this.setState({ network: network });
   };
 
+
+
   componentDidUpdate(prevProps, prevState) {
     if (this.props.location !== prevProps.location) {
       this.checkNetworkId();
@@ -603,7 +642,7 @@ class App extends React.Component {
   render() {
     const { LP_IDs_V2 } = window;
     const { ethereum } = window;
-
+    // console.log("the_graph_resultbsc", this.state.the_graph_resultbsc);
     const LP_ID_Array = [
       LP_IDs_V2.weth[0],
       LP_IDs_V2.weth[1],
@@ -641,57 +680,58 @@ class App extends React.Component {
             }}
           />
         )}
-        {(this.props?.location?.pathname === "/genesis" &&
-          window.innerWidth < 786) ||
-        (this.props?.location?.pathname === "/caws-staking" &&
-          window.innerWidth < 786) ? null : (
-          <Header
-            coinbase={this.state.coinbase}
-            theme={this.state.theme}
-            toggleMobileSidebar={this.toggleMobileSidebar}
-            isOpenInMobile={this.state.isOpenInMobile}
-            chainId={parseInt(this.state.networkId)}
-            logout={this.logout}
-            handleSwitchNetwork={this.handleSwitchNetwork}
-            handleConnection={this.handleConnection}
-            showModal={this.showModal}
-            hideModal={this.hideModal}
-            show={this.state.show}
-            isConnected={this.state.isConnected}
-            appState={this.state}
-          />
-        )}
-        <div className="content-wrapper container-fluid d-flex justify-content-center justify-content-lg-start">
-          <div className="row w-100">
-            <div className="col-1">
-              <Sidebar
-                appState={this.state}
-                theme={this.state.theme}
-                isConnected={this.state.isConnected}
-                toggleMobileSidebar={this.toggleMobileSidebar}
-                isOpenInMobile={this.state.isOpenInMobile}
-                showModal={this.showModal}
-                hideModal={this.hideModal}
-                show={this.state.show}
-                checkConnection={this.checkConnection}
-                isPremium={this.state.isPremium}
-                network={this.state.networkId}
-                showRibbon={this.state.showRibbon}
-              />
-            </div>
-            <div
-              className={`${
-                this.state.windowWidth < 991
-                  ? "col-12 px-1"
-                  : this.state.windowWidth < 1490
-                  ? "col-11"
-                  : "col-10"
-              }`}
-            >
-              <div className="right-content pr-0 my-4 my-lg-5">
-                <ScrollToTop />
-                <Switch>
-                  {/* <Route
+        <div>
+          {(this.props?.location?.pathname === "/genesis" &&
+            window.innerWidth < 786) ||
+          (this.props?.location?.pathname === "/caws-staking" &&
+            window.innerWidth < 786) ? null : (
+            <Header
+              coinbase={this.state.coinbase}
+              theme={this.state.theme}
+              toggleMobileSidebar={this.toggleMobileSidebar}
+              isOpenInMobile={this.state.isOpenInMobile}
+              chainId={parseInt(this.state.networkId)}
+              logout={this.logout}
+              handleSwitchNetwork={this.handleSwitchNetwork}
+              handleConnection={this.handleConnection}
+              showModal={this.showModal}
+              hideModal={this.hideModal}
+              show={this.state.show}
+              isConnected={this.state.isConnected}
+              appState={this.state}
+            />
+          )}
+          <div className="content-wrapper container-fluid d-flex justify-content-center justify-content-lg-start">
+            <div className="row w-100">
+              <div className="col-1">
+                <Sidebar
+                  appState={this.state}
+                  theme={this.state.theme}
+                  isConnected={this.state.isConnected}
+                  toggleMobileSidebar={this.toggleMobileSidebar}
+                  isOpenInMobile={this.state.isOpenInMobile}
+                  showModal={this.showModal}
+                  hideModal={this.hideModal}
+                  show={this.state.show}
+                  checkConnection={this.checkConnection}
+                  isPremium={this.state.isPremium}
+                  network={this.state.networkId}
+                  showRibbon={this.state.showRibbon}
+                />
+              </div>
+              <div
+                className={`${
+                  this.state.windowWidth < 991
+                    ? "col-12 px-1"
+                    : this.state.windowWidth < 1490
+                    ? "col-11"
+                    : "col-10"
+                }`}
+              >
+                <div className="right-content pr-0 my-4 my-lg-5">
+                  <ScrollToTop />
+                  <Switch>
+                    {/* <Route
                     exact
                     path="/pool-explorer"
                     render={() => (
@@ -706,7 +746,7 @@ class App extends React.Component {
                     )}
                   /> */}
 
-                  {/* <Route
+                    {/* <Route
                     exact
                     path="/big-swap-explorer"
                     render={() => (
@@ -719,7 +759,7 @@ class App extends React.Component {
                       />
                     )}
                   /> */}
-                  {/* <Route
+                    {/* <Route
                     exact
                     path="/pair-explorer/:pair_id?"
                     render={(props) => (
@@ -736,7 +776,7 @@ class App extends React.Component {
                     )}
                   /> */}
 
-                  {/* <Route
+                    {/* <Route
                     exact
                     path="/top-tokens"
                     render={() => (
@@ -749,71 +789,164 @@ class App extends React.Component {
                     )}
                   /> */}
 
-                  <Route
-                    exact
-                    path="/farms"
-                    render={(props) => (
-                      <Farms
-                        handleConnection={this.handleConnection}
-                        isConnected={this.state.isConnected}
-                        appState={this.state}
-                        theme={this.state.theme}
-                        {...props}
-                        networkId={parseInt(this.state.explorerNetworkId)}
-                        onSelectChain={this.onSelectChain}
-                      />
-                    )}
-                  />
+                    <Route
+                      exact
+                      path="/farms"
+                      render={(props) => (
+                        <Farms
+                          handleConnection={this.handleConnection}
+                          isConnected={this.state.isConnected}
+                          appState={this.state}
+                          theme={this.state.theme}
+                          {...props}
+                          networkId={parseInt(this.state.explorerNetworkId)}
+                          onSelectChain={this.onSelectChain}
+                        />
+                      )}
+                    />
 
-                  <Route
-                    exact
-                    path="/earn"
-                    render={() => (
-                      <Earn
-                        coinbase={this.state.coinbase}
-                        the_graph_result={this.state.the_graph_result_ETH_V2}
-                        the_graph_resultavax={
-                          this.state.the_graph_result_AVAX_V2
-                        }
-                        the_graph_resultbsc={this.state.the_graph_result_BSC_V2}
-                        lp_id={LP_ID_Array}
-                        isConnected={this.state.isConnected}
-                        network={this.state.networkId}
-                        handleConnection={this.handleConnection}
-                        handleSwitchNetwork={this.handleSwitchNetwork}
-                        referrer={this.state.referrer}
-                        isPremium={this.state.isPremium}
-                        showRibbon={this.state.showRibbon2}
-                      />
-                    )}
-                  />
+                    <Route
+                      exact
+                      path="/earn/defi-staking/:pool"
+                      render={(props) => (
+                        <EarnInnerPool
+                          coinbase={this.state.coinbase}
+                          handleSwitchNetwork={this.handleSwitchNetwork}
+                          handleConnection={this.handleConnection}
+                          isConnected={this.state.isConnected}
+                          chainId={this.state.networkId}
+                          the_graph_result={this.state.the_graph_result_ETH_V2}
+                          the_graph_resultavax={
+                            this.state.the_graph_result_AVAX_V2
+                          }
+                          the_graph_resultbsc={
+                            this.state.the_graph_result_BSC_V2
+                          }
+                          lp_id={LP_ID_Array}
+                          referrer={this.state.referrer}
+                          isPremium={this.state.isPremium}
+                        />
+                      )}
+                    />
 
-                  <Route
-                    exact
-                    path="/bridge"
-                    render={() => (
-                      <Bridge
-                        networkId={parseInt(this.state.networkId)}
-                        isConnected={this.state.isConnected}
-                        handleConnection={this.handleConnection}
-                        coinbase={this.state.coinbase}
-                      />
-                    )}
-                  />
-                  <Route
-                    exact
-                    path="/migration"
-                    render={() => (
-                      <DypMigration
-                        networkId={parseInt(this.state.networkId)}
-                        isConnected={this.state.isConnected}
-                        handleConnection={this.handleConnection}
-                        coinbase={this.state.coinbase}
-                      />
-                    )}
-                  />
+                    <Route
+                      exact
+                      path="/earn/dypius"
+                      render={() => (
+                        <Earn
+                          coinbase={this.state.coinbase}
+                          the_graph_result={this.state.the_graph_result_ETH_V2}
+                          the_graph_resultavax={
+                            this.state.the_graph_result_AVAX_V2
+                          }
+                          the_graph_resultbsc={
+                            this.state.the_graph_result_BSC_V2
+                          }
+                          lp_id={LP_ID_Array}
+                          isConnected={this.state.isConnected}
+                          network={this.state.networkId}
+                          handleConnection={this.handleConnection}
+                          handleSwitchNetwork={this.handleSwitchNetwork}
+                          referrer={this.state.referrer}
+                          isPremium={this.state.isPremium}
+                          showRibbon={this.state.showRibbon2}
+                          onConnectWallet={this.showModal}
+                        />
+                      )}
+                    />
+                    <Route
+                      exact
+                      path="/earn/defi-staking"
+                      render={() => (
+                        <EarnOther
+                          type={"defi"}
+                          isPremium={this.state.isPremium}
+                          coinbase={this.state.coinbase}
+                          the_graph_result={this.state.the_graph_result_ETH_V2}
+                          the_graph_resultavax={
+                            this.state.the_graph_result_AVAX_V2
+                          }
+                          the_graph_resultbsc={
+                            this.state.the_graph_result_BSC_V2
+                          }
+                          lp_id={LP_ID_Array}
+                          isConnected={this.state.isConnected}
+                          network={this.state.networkId}
+                          handleConnection={this.handleConnection}
+                          handleSwitchNetwork={this.handleSwitchNetwork}
+                          referrer={this.state.referrer}
+                          onConnectWallet={this.showModal}
+                          aggregatorPools={this.state.aggregatorPools}
+                        />
+                      )}
+                    />
 
-                  {/* <Route
+                    <Route
+                      exact
+                      path="/earn/nft-staking"
+                      render={() => (
+                        <EarnOtherNft
+                          type={"nft"}
+                          isPremium={this.state.isPremium}
+                          coinbase={this.state.coinbase}
+                          isConnected={this.state.isConnected}
+                          network={this.state.networkId}
+                          handleConnection={this.handleConnection}
+                          handleSwitchNetwork={this.handleSwitchNetwork}
+                        />
+                      )}
+                    />
+
+                    <Route
+                      exact
+                      path="/earn/nft-staking/:pool"
+                      render={(props) => (
+                        <EarnInnerPoolNft
+                          coinbase={this.state.coinbase}
+                          handleSwitchNetwork={this.handleSwitchNetwork}
+                          handleConnection={this.handleConnection}
+                          isConnected={this.state.isConnected}
+                          chainId={this.state.networkId}
+                          the_graph_result={this.state.the_graph_result_ETH_V2}
+                          the_graph_resultavax={
+                            this.state.the_graph_result_AVAX_V2
+                          }
+                          the_graph_resultbsc={
+                            this.state.the_graph_result_BSC_V2
+                          }
+                          lp_id={LP_ID_Array}
+                          referrer={this.state.referrer}
+                          isPremium={this.state.isPremium}
+                        />
+                      )}
+                    />
+
+                    <Route
+                      exact
+                      path="/bridge"
+                      render={() => (
+                        <Bridge
+                          networkId={parseInt(this.state.networkId)}
+                          isConnected={this.state.isConnected}
+                          handleConnection={this.handleConnection}
+                          coinbase={this.state.coinbase}
+                        />
+                      )}
+                    />
+                    <Route
+                      exact
+                      path="/migration"
+                      render={() => (
+                        <DypMigration
+                          networkId={parseInt(this.state.networkId)}
+                          isConnected={this.state.isConnected}
+                          handleConnection={this.handleConnection}
+                          coinbase={this.state.coinbase}
+                        />
+                      )}
+                    />
+
+                    {/* <Route
                     exact
                     path="/caws"
                     render={() => (
@@ -825,188 +958,196 @@ class App extends React.Component {
                     )}
                   /> */}
 
-                  {/* <Route
+                    {/* <Route
                     exact
                     path="/submit-info"
                     render={() => <SubmitInfo theme={this.state.theme} />}
                   /> */}
-                  <Route
-                    exact
-                    path="/disclaimer"
-                    render={() => <Disclaimer />}
-                  />
-                  {/* <Route exact path="/swap" component={Swap} /> */}
+                    <Route
+                      exact
+                      path="/disclaimer"
+                      render={() => <Disclaimer />}
+                    />
+                    {/* <Route exact path="/swap" component={Swap} /> */}
 
-                  {/* <Route
+                    {/* <Route
                     exact
                     path="/governance"
                     render={() => <Governance />}
                   /> */}
-                  <Route exact path="/launchpad" render={() => <Launchpad />} />
-                  <Route
-                    exact
-                    path="/launchpad/details/:id"
-                    render={() => <LaunchpadDetails />}
-                  />
-                  <Route
-                    exact
-                    path="/launchpad/form"
-                    render={() => <LaunchpadForm />}
-                  />
-                  <Route
-                    exact
-                    path="/launchpad/tiers"
-                    render={() => (
-                      <TierLevels
-                        coinbase={this.state.coinbase}
-                        chainId={this.state.networkId}
-                        handleConnection={this.handleConnection}
-                        the_graph_result={this.state.the_graph_result_ETH_V2}
-                        lp_id={LP_ID_Array}
-                        isConnected={this.state.isConnected}
-                      />
-                    )}
-                  />
-                  <Route exact path="/buydyp" render={() => <BuyDyp />} />
-
-                  <Route
-                    exact
-                    path="/governance"
-                    render={() =>
-                      this.state.networkId === "56" ? (
-                        <Governancebsc
+                    <Route
+                      exact
+                      path="/launchpad"
+                      render={() => <Launchpad />}
+                    />
+                    <Route
+                      exact
+                      path="/launchpad/details/:id"
+                      render={() => <LaunchpadDetails />}
+                    />
+                    <Route
+                      exact
+                      path="/launchpad/form"
+                      render={() => <LaunchpadForm />}
+                    />
+                    <Route
+                      exact
+                      path="/launchpad/tiers"
+                      render={() => (
+                        <TierLevels
                           coinbase={this.state.coinbase}
-                          connected={this.state.isConnected}
+                          chainId={this.state.networkId}
                           handleConnection={this.handleConnection}
-                          networkId={parseInt(this.state.networkId)}
+                          the_graph_result={this.state.the_graph_result_ETH_V2}
+                          lp_id={LP_ID_Array}
+                          isConnected={this.state.isConnected}
                         />
-                      ) : this.state.networkId === "43114" ? (
-                        <Governancedev
+                      )}
+                    />
+                    <Route exact path="/buydyp" render={() => <BuyDyp />} />
+
+                    <Route
+                      exact
+                      path="/governance"
+                      render={() =>
+                        this.state.networkId === "56" ? (
+                          <Governancebsc
+                            coinbase={this.state.coinbase}
+                            connected={this.state.isConnected}
+                            handleConnection={this.handleConnection}
+                            networkId={parseInt(this.state.networkId)}
+                          />
+                        ) : this.state.networkId === "43114" ? (
+                          <Governancedev
+                            coinbase={this.state.coinbase}
+                            connected={this.state.isConnected}
+                            handleConnection={this.handleConnection}
+                            networkId={parseInt(this.state.networkId)}
+                          />
+                        ) : (
+                          <GovernanceEth
+                            coinbase={this.state.coinbase}
+                            connected={this.state.isConnected}
+                            handleConnection={this.handleConnection}
+                            networkId={parseInt(this.state.networkId)}
+                          />
+                        )
+                      }
+                    />
+
+                    <Route
+                      exact
+                      path="/"
+                      render={() => (
+                        <Dashboard
+                          the_graph_resultavax={
+                            this.state.the_graph_result_AVAX_V2
+                          }
+                          the_graph_resultbsc={
+                            this.state.the_graph_result_BSC_V2
+                          }
                           coinbase={this.state.coinbase}
-                          connected={this.state.isConnected}
+                          the_graph_result={this.state.the_graph_result_ETH_V2}
+                          lp_id={LP_ID_Array}
+                          isConnected={this.state.isConnected}
+                          network={parseInt(this.state.networkId)}
                           handleConnection={this.handleConnection}
-                          networkId={parseInt(this.state.networkId)}
+                          referrer={this.state.referrer}
+                          isPremium={this.state.isPremium}
+                          onConnectWallet={this.showModal}
+                          aggregatorPools={this.state.aggregatorPools}
                         />
-                      ) : (
-                        <GovernanceEth
+                      )}
+                    />
+
+                    <Route
+                      exact
+                      path="/news/:news_id?"
+                      render={(props) => (
+                        <News
+                          theme={this.state.theme}
+                          isPremium={this.state.isPremium}
+                          key={props.match.params.news_id}
+                          {...props}
                           coinbase={this.state.coinbase}
-                          connected={this.state.isConnected}
-                          handleConnection={this.handleConnection}
-                          networkId={parseInt(this.state.networkId)}
                         />
-                      )
-                    }
-                  />
+                      )}
+                    />
 
-                  <Route
-                    exact
-                    path="/"
-                    render={() => (
-                      <Dashboard
-                        the_graph_resultavax={
-                          this.state.the_graph_result_AVAX_V2
-                        }
-                        the_graph_resultbsc={this.state.the_graph_result_BSC_V2}
-                        coinbase={this.state.coinbase}
-                        the_graph_result={this.state.the_graph_result_ETH_V2}
-                        lp_id={LP_ID_Array}
-                        isConnected={this.state.isConnected}
-                        network={parseInt(this.state.networkId)}
-                        handleConnection={this.handleConnection}
-                        referrer={this.state.referrer}
-                        isPremium={this.state.isPremium}
-                      />
-                    )}
-                  />
+                    <Route
+                      exact
+                      path="/account"
+                      render={() => (
+                        <Account
+                          appState={this.state}
+                          theme={this.state.theme}
+                          networkId={parseInt(this.state.networkId)}
+                          handleSwitchNetwork={this.handleSwitchNetwork}
+                          coinbase={this.state.coinbase}
+                          isConnected={this.state.isConnected}
+                          isPremium={this.state.isPremium}
+                          onSubscribe={this.refreshSubscription}
+                          showRibbon={this.state.showRibbon2}
+                        />
+                      )}
+                    />
+                    <Route
+                      exact
+                      path="/plans"
+                      render={() => (
+                        <Plans
+                          appState={this.state}
+                          theme={this.state.theme}
+                          networkId={parseInt(this.state.networkId)}
+                          handleSwitchNetwork={this.handleSwitchNetwork}
+                          coinbase={this.state.coinbase}
+                          isPremium={this.state.isPremium}
+                          isConnected={this.state.isConnected}
+                          onSubscribe={this.refreshSubscription}
+                        />
+                      )}
+                    />
+                    <Route
+                      exact
+                      path="/locker/:pair_id?"
+                      render={(props) => (
+                        <Locker
+                          handleConnection={this.handleConnection}
+                          isConnected={this.state.isConnected}
+                          key={props.match.params.pair_id}
+                          theme={this.state.theme}
+                          coinbase={this.state.coinbase}
+                          {...props}
+                        />
+                      )}
+                    />
 
-                  <Route
-                    exact
-                    path="/news/:news_id?"
-                    render={(props) => (
-                      <News
-                        theme={this.state.theme}
-                        isPremium={this.state.isPremium}
-                        key={props.match.params.news_id}
-                        {...props}
-                        coinbase={this.state.coinbase}
-                      />
-                    )}
-                  />
-
-                  <Route
-                    exact
-                    path="/account"
-                    render={() => (
-                      <Account
-                        appState={this.state}
-                        theme={this.state.theme}
-                        networkId={parseInt(this.state.networkId)}
-                        handleSwitchNetwork={this.handleSwitchNetwork}
-                        coinbase={this.state.coinbase}
-                        isConnected={this.state.isConnected}
-                        isPremium={this.state.isPremium}
-                        onSubscribe={this.refreshSubscription}
-                        showRibbon={this.state.showRibbon2}
-                      />
-                    )}
-                  />
-                  <Route
-                    exact
-                    path="/plans"
-                    render={() => (
-                      <Plans
-                        appState={this.state}
-                        theme={this.state.theme}
-                        networkId={parseInt(this.state.networkId)}
-                        handleSwitchNetwork={this.handleSwitchNetwork}
-                        coinbase={this.state.coinbase}
-                        isPremium={this.state.isPremium}
-                        isConnected={this.state.isConnected}
-                        onSubscribe={this.refreshSubscription}
-                      />
-                    )}
-                  />
-                  <Route
-                    exact
-                    path="/locker/:pair_id?"
-                    render={(props) => (
-                      <Locker
-                        handleConnection={this.handleConnection}
-                        isConnected={this.state.isConnected}
-                        key={props.match.params.pair_id}
-                        theme={this.state.theme}
-                        coinbase={this.state.coinbase}
-                        {...props}
-                      />
-                    )}
-                  />
-
-                  <Route
-                    exact
-                    path="/admin"
-                    render={(props) => (
-                      <Admin
-                        handleConnection={this.handleConnection}
-                        isConnected={this.state.isConnected}
-                        appState={this.state}
-                        {...props}
-                      />
-                    )}
-                  />
-                  <Route
-                    exact
-                    path="/genesis"
-                    render={(props) => (
-                      <GenesisStaking
-                        coinbase={this.state.coinbase}
-                        isConnected={this.state.isConnected}
-                        chainId={this.state.networkId}
-                        handleConnection={this.handleConnection}
-                        handleSwitchNetwork={this.handleSwitchNetwork}
-                      />
-                    )}
-                  />
-                  {/* <Route
+                    <Route
+                      exact
+                      path="/admin"
+                      render={(props) => (
+                        <Admin
+                          handleConnection={this.handleConnection}
+                          isConnected={this.state.isConnected}
+                          appState={this.state}
+                          {...props}
+                        />
+                      )}
+                    />
+                    <Route
+                      exact
+                      path="/genesis"
+                      render={(props) => (
+                        <GenesisStaking
+                          coinbase={this.state.coinbase}
+                          isConnected={this.state.isConnected}
+                          chainId={this.state.networkId}
+                          handleConnection={this.handleConnection}
+                          handleSwitchNetwork={this.handleSwitchNetwork}
+                        />
+                      )}
+                    />
+                    {/* <Route
                     exact
                     path="/caws-staking"
                     render={(props) => (
@@ -1020,24 +1161,35 @@ class App extends React.Component {
                     )}
                   /> */}
 
-                  <Route component={RedirectPathToHomeOnly} />
-                </Switch>
+                    <Route component={RedirectPathToHomeOnly} />
+                  </Switch>
 
-                {/* <Footer /> */}
+                  {/* <Footer /> */}
+                </div>
               </div>
+              <div className="col-1"></div>
             </div>
-            <div className="col-1"></div>
+            {this.props?.location?.pathname === "/genesis" ||
+            this.props?.location?.pathname === "/caws-staking" ? null : (
+              <MobileMenu />
+            )}
           </div>
-          {this.props?.location?.pathname === "/genesis" ||
-          this.props?.location?.pathname === "/caws-staking" ? null : (
-            <MobileMenu />
-          )}
         </div>
         {(this.props?.location?.pathname === "/genesis" &&
           window.innerWidth < 786) ||
         (this.props?.location?.pathname === "/caws-staking" &&
           window.innerWidth < 786) ? null : (
           <Footer></Footer>
+        )}
+
+        {this.showWalletPopup === true && (
+          <WalletModal
+            show={this.showWalletPopup}
+            handleClose={() => {
+              this.setState({ showWalletPopup: false });
+            }}
+            handleConnection={this.handleConnection}
+          />
         )}
       </div>
     );

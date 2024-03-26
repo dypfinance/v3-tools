@@ -28,7 +28,6 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 import error from "../../assets/error.svg";
 
-
 const Header = ({
   toggleMobileSidebar,
   toggleTheme,
@@ -114,6 +113,7 @@ const Header = ({
     }  else {
       setAvaxState(false);
       setBnbState(false);
+      setBaseState(false);
       setEthState(false);
       setSkaleState(false)
 
@@ -122,27 +122,27 @@ const Header = ({
 
   const handleEthPool = async () => {
     if (window.ethereum) {
-    await handleSwitchNetworkhook("0x1")
-      .then(() => {
-        handleSwitchNetwork("1");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-    }else {
+      await handleSwitchNetworkhook("0x1")
+        .then(() => {
+          handleSwitchNetwork("1");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    } else {
       window.alertify.error("No web3 detected. Please install Metamask!");
     }
   };
 
   const handleBnbPool = async () => {
     if (window.ethereum) {
-    await handleSwitchNetworkhook("0x38")
-      .then(() => {
-        handleSwitchNetwork("56");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+      await handleSwitchNetworkhook("0x38")
+        .then(() => {
+          handleSwitchNetwork("56");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     } else {
       window.alertify.error("No web3 detected. Please install Metamask!");
     }
@@ -150,27 +150,13 @@ const Header = ({
 
   const handleAvaxPool = async () => {
     if (window.ethereum) {
-    await handleSwitchNetworkhook("0xa86a")
-      .then(() => {
-        handleSwitchNetwork("43114");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-    } else {
-      window.alertify.error("No web3 detected. Please install Metamask!");
-    }
-  };
-
-  const handleBasePool = async () => {
-    if (window.ethereum) {
-    await handleSwitchNetworkhook("0x2105")
-      .then(() => {
-        handleSwitchNetwork("8453");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+      await handleSwitchNetworkhook("0xa86a")
+        .then(() => {
+          handleSwitchNetwork("43114");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     } else {
       window.alertify.error("No web3 detected. Please install Metamask!");
     }
@@ -178,16 +164,26 @@ const Header = ({
 
   const handleConfluxPool = async () => {
     if (window.ethereum) {
-    await handleSwitchNetworkhook("0x406")
+      await handleSwitchNetworkhook("0x406")
+        .then(() => {
+          handleSwitchNetwork("1030");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    } else {
+      window.alertify.error("No web3 detected. Please install Metamask!");
+    }
+  };
+
+  const handleBasePool = async () => {
+    await handleSwitchNetworkhook("0x2105")
       .then(() => {
-        handleSwitchNetwork("1030");
+        handleSwitchNetwork("8453");
       })
       .catch((e) => {
         console.log(e);
       });
-    } else {
-      window.alertify.error("No web3 detected. Please install Metamask!");
-    }
   };
 
   const handleSkalePool = async () => {
@@ -252,7 +248,6 @@ const Header = ({
         .catch((err) => {
           console.log(err);
           setUsername("Dypian");
-
         });
     } else {
       setUsername("Dypian");
@@ -291,26 +286,19 @@ const Header = ({
           const stringBalance = infuraWeb3.utils.hexToNumberString(balance);
           const amount = infuraWeb3.utils.fromWei(stringBalance, "ether");
           setCurrencyAmount(amount.slice(0, 7));
-        }
-
-        else if (chainId === 43114) {
+        } else if (chainId === 43114) {
           const stringBalance = avaxWeb3.utils.hexToNumberString(balance);
           const amount = avaxWeb3.utils.fromWei(stringBalance, "ether");
           setCurrencyAmount(amount.slice(0, 7));
-        }
-
-        else if (chainId === 56) {
+        } else if (chainId === 56) {
           const stringBalance = bscWeb3.utils.hexToNumberString(balance);
           const amount = bscWeb3.utils.fromWei(stringBalance, "ether");
           setCurrencyAmount(amount.slice(0, 7));
-        }
-        else if (chainId === 1030) {
+        } else if (chainId === 1030) {
           const stringBalance = web3cfx.utils.hexToNumberString(balance);
           const amount = web3cfx.utils.fromWei(stringBalance, "ether");
           setCurrencyAmount(amount.slice(0, 7));
-        }
-
-        else if (chainId === 8453) {
+        } else if (chainId === 8453) {
           const stringBalance = web3base.utils.hexToNumberString(balance);
           const amount = web3base.utils.fromWei(stringBalance, "ether");
           setCurrencyAmount(amount.slice(0, 7));
@@ -372,8 +360,7 @@ const Header = ({
     if (coinbase !== undefined && coinbase !== null) {
       fetchAvatar();
       fetchUsername();
-    }
-    else setUsername('Dypian')
+    } else setUsername("Dypian");
   }, [coinbase, checklogout]);
 
   return (

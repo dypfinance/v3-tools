@@ -66,7 +66,7 @@ const CawsWodCard = ({
                 coins.map((coin, index) => (
                   <img
                     key={index}
-                    src={require(`./assets/${coin}.png`).default}
+                    src={require(`./assets/${coin}.png`)}
                     alt=""
                     className="pool-coins"
                   />
