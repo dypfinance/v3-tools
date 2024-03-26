@@ -52,6 +52,8 @@ export default class Subscription extends React.Component {
       wbnbAddress: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
       wcfxAddress: "0x14b2D3bC65e74DAE1030EAFd8ac30c533c976A9b",
       wbaseAddress: "0x4200000000000000000000000000000000000006",
+      wskaleaddress: "0x5eaF4e5A908ba87Abf3dE768cb0dA517dB45dB48",
+
       triggerText: "See more V",
       isApproved: false,
       approveStatus: "initial",
@@ -385,6 +387,8 @@ export default class Subscription extends React.Component {
         this.handleSubscriptionTokenChange(this.state.wcfxAddress);
       } else if (this.props.networkId === 8453) {
         this.handleSubscriptionTokenChange(this.state.wbaseAddress);
+      } else if (this.props.networkId === 37084624) {
+        this.handleSubscriptionTokenChange(this.state.wskaleaddress);
       }
     }
   }
@@ -410,7 +414,11 @@ export default class Subscription extends React.Component {
         ? window.config.subscriptioncfx_tokens[token]?.decimals
         : this.props.networkId === 8453
         ? window.config.subscriptionbase_tokens[token]?.decimals
+        : this.props.networkId === 37084624
+        ? window.config.subscriptionskale_tokens[token]?.decimals
         : window.config.subscription_tokens[token]?.decimals;
+
+    console.log("tokenDecimals", tokenDecimals);
     this.setState({
       selectedSubscriptionToken: token,
       tokenBalance: "",
@@ -427,8 +435,11 @@ export default class Subscription extends React.Component {
         ? await window.getEstimatedTokenSubscriptionAmountCFX(token)
         : this.props.networkId === 8453
         ? await window.getEstimatedTokenSubscriptionAmountBase(token)
+        : this.props.networkId === 37084624
+        ? await window.getEstimatedTokenSubscriptionAmountSkale(token)
         : await window.getEstimatedTokenSubscriptionAmount(token);
     price = new BigNumber(price).toFixed(0);
+    console.log("price", price);
 
     let formattedPrice = getFormattedNumber(
       price / 10 ** tokenDecimals,
@@ -454,8 +465,16 @@ export default class Subscription extends React.Component {
     const bnbsubscribeAddress = window.config.subscription_newbnb_address;
     const cfxsubscribeAddress = window.config.subscription_cfx_address;
     const basesubscribeAddress = window.config.subscription_base_address;
+    const skalesubscribeAddress = window.config.subscription_skale_address;
 
     this.setState({ loadspinner: true });
+
+    console.log(
+      this.state.selectedSubscriptionToken,
+      skalesubscribeAddress,
+      this.props.networkId,
+      this.state.price
+    );
 
     await tokenContract.methods
       .approve(
@@ -467,6 +486,8 @@ export default class Subscription extends React.Component {
           ? cfxsubscribeAddress
           : this.props.networkId === 8453
           ? basesubscribeAddress
+          : this.props.networkId === 37084624
+          ? skalesubscribeAddress
           : avaxsubscribeAddress,
         this.state.price
       )
@@ -535,12 +556,14 @@ export default class Subscription extends React.Component {
       const avaxWeb3 = new Web3(window.config.avax_endpoint);
       const cfxWeb3 = new Web3(window.config.conflux_endpoint);
       const baseWeb3 = new Web3(window.config.base_endpoint);
+      const skaleWeb3 = new Web3(window.config.skale_endpoint);
 
       const ethsubscribeAddress = window.config.subscription_neweth_address;
       const avaxsubscribeAddress = window.config.subscription_newavax_address;
       const bnbsubscribeAddress = window.config.subscription_newbnb_address;
       const confluxsubscribeAddress = window.config.subscription_cfx_address;
       const basesubscribeAddress = window.config.subscription_base_address;
+      const skalesubscribeAddress = window.config.subscription_skale_address;
 
       const subscribeToken = token;
       const subscribeTokencontract = new web3eth.eth.Contract(
@@ -563,6 +586,11 @@ export default class Subscription extends React.Component {
         subscribeToken
       );
 
+      const subscribeTokencontractskale = new skaleWeb3.eth.Contract(
+        window.ERC20_ABI,
+        subscribeToken
+      );
+
       const subscribeTokencontractbase = new baseWeb3.eth.Contract(
         window.ERC20_ABI,
         subscribeToken
@@ -579,9 +607,9 @@ export default class Subscription extends React.Component {
           ? await window.getEstimatedTokenSubscriptionAmount(token)
           : this.props.networkId === 8453
           ? await window.getEstimatedTokenSubscriptionAmountBase(token)
+          : this.props.networkId === 37084624
+          ? await window.getEstimatedTokenSubscriptionAmountSkale(token)
           : await window.getEstimatedTokenSubscriptionAmount(token);
-
-      tokenprice = new BigNumber(tokenprice).toFixed(0);
 
       if (this.props.coinbase && this.props.coinbase.includes("0x")) {
         if (this.props.networkId === 1) {
@@ -644,6 +672,21 @@ export default class Subscription extends React.Component {
             this.setState({ loadspinner: false });
             this.setState({ isApproved: false });
           }
+        } else if (this.props.networkId === 37084624) {
+          const result = await subscribeTokencontractskale.methods
+            .allowance(this.props.coinbase, skalesubscribeAddress)
+            .call()
+            .then();
+
+          if (result != 0 && Number(result) >= Number(tokenprice)) {
+            this.setState({ lockActive: true });
+            this.setState({ loadspinner: false });
+            this.setState({ isApproved: true });
+          } else if (result == 0 || Number(result) < Number(tokenprice)) {
+            this.setState({ lockActive: false });
+            this.setState({ loadspinner: false });
+            this.setState({ isApproved: false });
+          }
         } else {
           const result = await subscribeTokencontractavax.methods
             .allowance(this.props.coinbase, avaxsubscribeAddress)
@@ -685,6 +728,8 @@ export default class Subscription extends React.Component {
           ? "SUBSCRIPTION_CFX"
           : this.props.networkId === 8453
           ? "SUBSCRIPTION_BASE"
+          : this.props.networkId === 37084624
+          ? "SUBSCRIPTION_SKALE"
           : "SUBSCRIPTION_NEWAVAX",
     });
 
@@ -873,8 +918,12 @@ export default class Subscription extends React.Component {
         ? window.config.subscriptioncfx_tokens[
             this.state.selectedSubscriptionToken
           ]?.decimals
-        : this.props.networkId === 8453
-        ? window.config.subscriptionbase_tokens[
+        : this.props.networkId === 1030
+        ? window.config.subscriptioncfx_tokens[
+            this.state.selectedSubscriptionToken
+          ]?.decimals
+        : this.props.networkId === 37084624
+        ? window.config.subscriptionskale_tokens[
             this.state.selectedSubscriptionToken
           ]?.decimals
         : window.config.subscription_tokens[
@@ -1224,6 +1273,10 @@ export default class Subscription extends React.Component {
                       ? this.handleSubscriptionTokenChange(
                           this.state.wcfxAddress
                         )
+                      : this.props.networkId === 37084624
+                      ? this.handleSubscriptionTokenChange(
+                          this.state.wskaleaddress
+                        )
                       : this.props.networkId === 8453
                       ? this.handleSubscriptionTokenChange(
                           this.state.wbaseAddress
@@ -1238,6 +1291,8 @@ export default class Subscription extends React.Component {
                         ? this.state.wbnbAddress
                         : this.props.networkId === 1030
                         ? this.state.wcfxAddress
+                        : this.props.networkId === 37084624
+                        ? this.state.wskaleaddress
                         : this.props.networkId === 8453
                         ? this.state.wbaseAddress
                         : this.state.wavaxAddress
@@ -1256,6 +1311,11 @@ export default class Subscription extends React.Component {
                       ? this.setState({
                           dropdownIcon: "wcfx",
                           dropdownTitle: "WCFX",
+                        })
+                      : this.props.networkId === 37084624
+                      ? this.setState({
+                          dropdownIcon: "usdc",
+                          dropdownTitle: "USDC",
                         })
                       : this.props.networkId === 8453
                       ? this.setState({
@@ -1407,6 +1467,8 @@ export default class Subscription extends React.Component {
                           ? window.config.subscriptioncfx_tokens
                           : this.props.networkId === 8453
                           ? window.config.subscriptionbase_tokens
+                          : this.props.networkId === 37084624
+                          ? window.config.subscriptionskale_tokens
                           : window.config.subscription_tokens
                       ).map((t, i) => (
                         // <span className="radio-wrapper" key={t}>
@@ -1454,6 +1516,9 @@ export default class Subscription extends React.Component {
                                     : this.props.networkId === 8453
                                     ? window.config.subscriptionbase_tokens[t]
                                         ?.symbol
+                                    : this.props.networkId === 37084624
+                                    ? window.config.subscriptionskale_tokens[t]
+                                        ?.symbol
                                     : window.config.subscription_tokens[t]
                                         ?.symbol,
                                 dropdownIcon:
@@ -1468,6 +1533,9 @@ export default class Subscription extends React.Component {
                                         ?.symbol
                                     : this.props.networkId === 8453
                                     ? window.config.subscriptionbase_tokens[t]
+                                        ?.symbol
+                                    : this.props.networkId === 37084624
+                                    ? window.config.subscriptionskale_tokens[t]
                                         ?.symbol
                                     : window.config.subscription_tokens[t]
                                         ?.symbol,
@@ -1495,7 +1563,11 @@ export default class Subscription extends React.Component {
                                 : this.props.networkId === 8453
                                 ? require(`./assets/${window.config.subscriptionbase_tokens[
                                     t
-                                  ]?.symbol.toLowerCase()}Icon.svg`)
+                                  ]?.symbol.toLowerCase()}Icon.svg`).default
+                                : this.props.networkId === 37084624
+                                ? require(`./assets/${window.config.subscriptionskale_tokens[
+                                    t
+                                  ]?.symbol.toLowerCase()}Icon.svg`).default
                                 : require(`./assets/${window.config.subscription_tokens[
                                     t
                                   ]?.symbol.toLowerCase()}Icon.svg`)
@@ -1510,6 +1582,8 @@ export default class Subscription extends React.Component {
                             ? window.config.subscriptioncfx_tokens[t]?.symbol
                             : this.props.networkId === 8453
                             ? window.config.subscriptionbase_tokens[t]?.symbol
+                            : this.props.networkId === 37084624
+                            ? window.config.subscriptionskale_tokens[t]?.symbol
                             : window.config.subscription_tokens[t]?.symbol}
                         </li>
                       ))}
@@ -1549,6 +1623,23 @@ export default class Subscription extends React.Component {
                   />
                 </div>
               </div>
+              {this.props.networkId === 37084624 && (
+                <div className="gotoNebula-wrapper p-3 mt-3">
+                  <div className="d-flex w-100 justify-content-between gap-2">
+                    <span className="nebula-wrapper-text">
+                      Bridge your USDC to Nebula now!
+                    </span>
+                    <a
+                      className="nebula-bridgebtn"
+                      href="https://testnet.portal.skale.space/bridge"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Nebula Bridge
+                    </a>
+                  </div>
+                </div>
+              )}
               <hr className="form-divider my-4" />
               <div
                 className={`d-flex align-items-center ${

@@ -1908,6 +1908,7 @@ window.config = {
   avax_endpoint: "https://api.avax.network/ext/bc/C/rpc",
   conflux_endpoint: "https://evm.confluxrpc.com/",
   base_endpoint: "https://base.publicnode.com",
+  skale_endpoint: "https://testnet.skalenodes.com/v1/lanky-ill-funny-testnet",
   goerli_endpoint: "https://ethereum-goerli.publicnode.com",
   bscTest_endpoint: "https://data-seed-prebsc-1-s1.binance.org:8545/",
   BUSD_address: "0xe9e7cea3dedca5984780bafc599bd69add087d56",
@@ -2165,6 +2166,9 @@ window.config = {
 
   subscription_base_address: "0x9c13Dbc8f0fA8ceD8C1B53c4237A08445eca32fe",
 
+  subscription_skale_address: "0x8E4917c1Ba9598fBbF66934CB17AC28c3b5849Ab",
+
+
   ZERO_ADDRESS: "0x0000000000000000000000000000000000000000",
   MAX_LOCKS_TO_LOAD_PER_CALL: 10,
   pangolin_router_address: "0xE54Ca86531e17Ef3616d22Ca28b0D458b6C89106",
@@ -2344,6 +2348,13 @@ window.config = {
     "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb": {
       symbol: "DAI",
       decimals: 18,
+    },
+  },
+
+  subscriptionskale_tokens: {
+    "0x5eaF4e5A908ba87Abf3dE768cb0dA517dB45dB48": {
+      symbol: "USDC",
+      decimals: 6,
     },
   },
 
@@ -2561,6 +2572,7 @@ window.goerliWeb3 = new Web3(window.config.goerli_endpoint);
 window.bscTestWeb3 = new Web3(window.config.bscTest_endpoint);
 window.confluxWeb3 = new Web3(window.config.conflux_endpoint);
 window.baseWeb3 = new Web3(window.config.base_endpoint);
+window.skaleWeb3 = new Web3(window.config.skale_endpoint);
 
 window.coinbase_address = "0x0000000000000000000000000000000000000111";
 
@@ -15517,6 +15529,251 @@ window.SUBSCRIPTION_NEWETH_ABI = [
     type: "function",
   },
 ];
+
+
+window.SUBSCRIPTION_SKALE_ABI = [
+  { type: "constructor", stateMutability: "nonpayable", inputs: [] },
+  {
+    type: "event",
+    name: "OwnershipTransferred",
+    inputs: [
+      {
+        type: "address",
+        name: "previousOwner",
+        internalType: "address",
+        indexed: true,
+      },
+      {
+        type: "address",
+        name: "newOwner",
+        internalType: "address",
+        indexed: true,
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "Subscribe",
+    inputs: [
+      {
+        type: "address",
+        name: "account",
+        internalType: "address",
+        indexed: true,
+      },
+      {
+        type: "uint256",
+        name: "platformTokenAmount",
+        internalType: "uint256",
+        indexed: false,
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "SubscriptionFeeSet",
+    inputs: [
+      {
+        type: "uint256",
+        name: "amountDai",
+        internalType: "uint256",
+        indexed: false,
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "SupportedTokenAdded",
+    inputs: [
+      {
+        type: "address",
+        name: "tokenAddress",
+        internalType: "address",
+        indexed: false,
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "SupportedTokenRemoved",
+    inputs: [
+      {
+        type: "address",
+        name: "tokenAddress",
+        internalType: "address",
+        indexed: false,
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "UnsubscribeAddress",
+    inputs: [
+      {
+        type: "address",
+        name: "accountAddress",
+        internalType: "address",
+        indexed: false,
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "function",
+    stateMutability: "view",
+    outputs: [{ type: "uint256", name: "", internalType: "uint256" }],
+    name: "ONE_HUNDRED_X_100",
+    inputs: [],
+  },
+  {
+    type: "function",
+    stateMutability: "view",
+    outputs: [{ type: "uint256", name: "", internalType: "uint256" }],
+    name: "SLIPPAGE_TOLERANCE_X_100",
+    inputs: [],
+  },
+  {
+    type: "function",
+    stateMutability: "view",
+    outputs: [{ type: "address", name: "", internalType: "address" }],
+    name: "TRUSTED_DAI_ADDRESS",
+    inputs: [],
+  },
+  {
+    type: "function",
+    stateMutability: "view",
+    outputs: [{ type: "address", name: "", internalType: "address" }],
+    name: "TRUSTED_PLATFORM_TOKEN_ADDRESS",
+    inputs: [],
+  },
+  {
+    type: "function",
+    stateMutability: "nonpayable",
+    outputs: [],
+    name: "addSupportedToken",
+    inputs: [
+      { type: "address", name: "tokenAddress", internalType: "address" },
+    ],
+  },
+  {
+    type: "function",
+    stateMutability: "view",
+    outputs: [{ type: "uint256", name: "", internalType: "uint256" }],
+    name: "getEstimatedTokenSubscriptionAmount",
+    inputs: [
+      { type: "address", name: "tokenAddress", internalType: "address" },
+    ],
+  },
+  {
+    type: "function",
+    stateMutability: "view",
+    outputs: [{ type: "bool", name: "", internalType: "bool" }],
+    name: "isTokenSupported",
+    inputs: [{ type: "address", name: "", internalType: "address" }],
+  },
+  {
+    type: "function",
+    stateMutability: "view",
+    outputs: [{ type: "address", name: "", internalType: "address" }],
+    name: "owner",
+    inputs: [],
+  },
+  {
+    type: "function",
+    stateMutability: "nonpayable",
+    outputs: [],
+    name: "removeSupportedToken",
+    inputs: [
+      { type: "address", name: "tokenAddress", internalType: "address" },
+    ],
+  },
+  {
+    type: "function",
+    stateMutability: "nonpayable",
+    outputs: [],
+    name: "renounceOwnership",
+    inputs: [],
+  },
+  {
+    type: "function",
+    stateMutability: "nonpayable",
+    outputs: [],
+    name: "setSubscriptionFee",
+    inputs: [
+      {
+        type: "uint256",
+        name: "newSubscriptionFeeInDai",
+        internalType: "uint256",
+      },
+    ],
+  },
+  {
+    type: "function",
+    stateMutability: "nonpayable",
+    outputs: [],
+    name: "subscribe",
+    inputs: [
+      { type: "address", name: "tokenAddress", internalType: "address" },
+      { type: "uint256", name: "amount", internalType: "uint256" },
+    ],
+  },
+  {
+    type: "function",
+    stateMutability: "view",
+    outputs: [{ type: "uint256", name: "", internalType: "uint256" }],
+    name: "subscriptionFeeInDai",
+    inputs: [],
+  },
+  {
+    type: "function",
+    stateMutability: "view",
+    outputs: [{ type: "uint256", name: "", internalType: "uint256" }],
+    name: "subscriptionPlatformTokenAmount",
+    inputs: [{ type: "address", name: "", internalType: "address" }],
+  },
+  {
+    type: "function",
+    stateMutability: "nonpayable",
+    outputs: [],
+    name: "transferAnyERC20Token",
+    inputs: [
+      { type: "address", name: "token", internalType: "address" },
+      { type: "address", name: "recipient", internalType: "address" },
+      { type: "uint256", name: "amount", internalType: "uint256" },
+    ],
+  },
+  {
+    type: "function",
+    stateMutability: "nonpayable",
+    outputs: [],
+    name: "transferOwnership",
+    inputs: [{ type: "address", name: "newOwner", internalType: "address" }],
+  },
+  {
+    type: "function",
+    stateMutability: "view",
+    outputs: [
+      { type: "address", name: "", internalType: "contract IUniswapV2Router" },
+    ],
+    name: "uniswapRouterV2",
+    inputs: [],
+  },
+  {
+    type: "function",
+    stateMutability: "nonpayable",
+    outputs: [],
+    name: "unsubscribeAddress",
+    inputs: [
+      { type: "address", name: "accountAddress", internalType: "address" },
+    ],
+  },
+]; 
+
 
 window.SUBSCRIPTION_NEWBNB_ABI = [
   { inputs: [], stateMutability: "nonpayable", type: "constructor" },
@@ -36553,6 +36810,12 @@ async function getEstimatedTokenSubscriptionAmountBase(tokenAddress) {
     .call();
 }
 
+async function getEstimatedTokenSubscriptionAmountSkale(tokenAddress) {
+  const skaleContract = new window.skaleWeb3.eth.Contract(window.SUBSCRIPTION_SKALE_ABI, window.config.subscription_skale_address);
+  return await skaleContract.methods
+    .getEstimatedTokenSubscriptionAmount(tokenAddress)
+    .call();
+}
 
 
 // ===================== end subscription contract functions ================================
