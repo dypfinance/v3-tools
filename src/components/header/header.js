@@ -58,12 +58,15 @@ const Header = ({
   const [baseState, setBaseState] = useState(false);
   const [confluxState, setConfluxState] = useState(false);
   const [skaleState, setSkaleState] = useState(false);
+  const [currencyAmount, setCurrencyAmount] = useState(0);
 
   
   const [avatar, setAvatar] = useState("../../assets/img/person.svg");
   const routeData = useLocation();
 
   const { ethereum } = window;
+  const checklogout = localStorage.getItem("logout");
+
 
   const setActiveChain = () => {
     if (chainId === 1) {
@@ -255,8 +258,17 @@ const Header = ({
       setUsername("Dypian");
     }
   };
-  const [currencyAmount, setCurrencyAmount] = useState(0);
-  const checklogout = localStorage.getItem("logout");
+
+  const handleSkaleRefill = async (address) => {
+    const result = await axios
+      .get(`https://api.worldofdypians.com/claim/${address}`)
+      .catch((e) => {
+        console.error(e);
+      });
+
+    console.log(result);
+  };
+  
   //  console.log(isConnected)
   const getEthBalance = async () => {
     if (checklogout === "false" && coinbase) {
@@ -306,6 +318,14 @@ const Header = ({
         else if (chainId === 37084624) {
           const stringBalance = web3skale.utils.hexToNumberString(balance);
           const amount = web3skale.utils.fromWei(stringBalance, "ether");
+          const formatted_amount = Number(amount);
+
+          if (formatted_amount <= 0.000005) {
+            handleSkaleRefill(coinbase);
+          } else {
+            console.log("formatted_amount", formatted_amount);
+          }
+
           setCurrencyAmount(amount.slice(0, 7));
         }
       }
