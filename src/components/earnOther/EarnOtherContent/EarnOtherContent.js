@@ -41,7 +41,7 @@ const EarnOtherContent = ({
   faqIndex,
   networkId,
   handleSwitchNetwork,
-  onConnectWallet,
+  onConnectWallet,userCurencyBalance
 }) => {
   const windowSize = useWindowSize();
 
@@ -430,18 +430,26 @@ const EarnOtherContent = ({
         console.log(err);
       });
   };
-
+  // console.log(allPools)
   const handleSortPools = (order) => {
     if (allPools.length > 0) {
       if (order === "lth") {
         const newPools = allPools.sort((a, b) => {
-          return a.aprInt - b.aprInt;
+          const aprA = a.maxAPR.slice(0, 2);
+          const aprB = b.maxAPR.slice(0, 2);
+
+          return Number(aprA) - Number(aprB);
         });
+
         setallPools(newPools);
       } else if (order === "htl") {
         const newPools2 = allPools.sort((a, b) => {
-          return b.aprInt - a.aprInt;
+          const aprA2 = a.maxAPR.slice(0, 2);
+          const aprB2 = b.maxAPR.slice(0, 2);
+
+          return Number(aprB2) - Number(aprA2);
         });
+
         setallPools(newPools2);
       }
     }
@@ -953,6 +961,7 @@ const EarnOtherContent = ({
                       setselectedPool([]);
                     }}
                     is_wallet_connected={isConnected}
+                    userCurencyBalance={userCurencyBalance}
                   />
                 ) : selectedPool.id === "avaxChainPool" ? (
                   <StakeDypiusAvaxOther
@@ -980,6 +989,7 @@ const EarnOtherContent = ({
                       setselectedPool([]);
                     }}
                     is_wallet_connected={isConnected}
+                    userCurencyBalance={userCurencyBalance}
                   />
                 ) : (
                   <StakeDypiusEthOther
@@ -1007,6 +1017,7 @@ const EarnOtherContent = ({
                       setselectedPool([]);
                     }}
                     is_wallet_connected={isConnected}
+                    userCurencyBalance={userCurencyBalance}
                   />
                 )}
 

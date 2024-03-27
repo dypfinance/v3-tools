@@ -385,7 +385,7 @@ const Dashboard = ({
                       network === 1030 ||
                       network === 8453 ||
                       network === 0 ||
-                      network === 37084624) &&
+                      network === 1482601649 ) &&
                     loading === false ? (
                       topPools.slice(0, 2).map((item, index) => {
                         return (
@@ -809,7 +809,7 @@ const Dashboard = ({
                       network === 1030 ||
                       network === 8453 ||
                       network === 0 ||
-                      network === 37084624) &&
+                      network === 1482601649 ) &&
                     loading === false ? (
                       topPools.slice(0, 2).map((item, index) => {
                         return (

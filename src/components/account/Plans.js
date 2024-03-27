@@ -387,7 +387,7 @@ export default class Subscription extends React.Component {
         this.handleSubscriptionTokenChange(this.state.wcfxAddress);
       } else if (this.props.networkId === 8453) {
         this.handleSubscriptionTokenChange(this.state.wbaseAddress);
-      } else if (this.props.networkId === 37084624) {
+      } else if (this.props.networkId === 1482601649 ) {
         this.handleSubscriptionTokenChange(this.state.wskaleaddress);
       }
     }
@@ -414,7 +414,7 @@ export default class Subscription extends React.Component {
         ? window.config.subscriptioncfx_tokens[token]?.decimals
         : this.props.networkId === 8453
         ? window.config.subscriptionbase_tokens[token]?.decimals
-        : this.props.networkId === 37084624
+        : this.props.networkId === 1482601649 
         ? window.config.subscriptionskale_tokens[token]?.decimals
         : window.config.subscription_tokens[token]?.decimals;
 
@@ -435,7 +435,7 @@ export default class Subscription extends React.Component {
         ? await window.getEstimatedTokenSubscriptionAmountCFX(token)
         : this.props.networkId === 8453
         ? await window.getEstimatedTokenSubscriptionAmountBase(token)
-        : this.props.networkId === 37084624
+        : this.props.networkId === 1482601649 
         ? await window.getEstimatedTokenSubscriptionAmountSkale(token)
         : await window.getEstimatedTokenSubscriptionAmount(token);
     price = new BigNumber(price).toFixed(0);
@@ -486,7 +486,7 @@ export default class Subscription extends React.Component {
           ? cfxsubscribeAddress
           : this.props.networkId === 8453
           ? basesubscribeAddress
-          : this.props.networkId === 37084624
+          : this.props.networkId === 1482601649 
           ? skalesubscribeAddress
           : avaxsubscribeAddress,
         this.state.price
@@ -607,7 +607,7 @@ export default class Subscription extends React.Component {
           ? await window.getEstimatedTokenSubscriptionAmount(token)
           : this.props.networkId === 8453
           ? await window.getEstimatedTokenSubscriptionAmountBase(token)
-          : this.props.networkId === 37084624
+          : this.props.networkId === 1482601649 
           ? await window.getEstimatedTokenSubscriptionAmountSkale(token)
           : await window.getEstimatedTokenSubscriptionAmount(token);
 
@@ -672,7 +672,7 @@ export default class Subscription extends React.Component {
             this.setState({ loadspinner: false });
             this.setState({ isApproved: false });
           }
-        } else if (this.props.networkId === 37084624) {
+        } else if (this.props.networkId === 1482601649 ) {
           const result = await subscribeTokencontractskale.methods
             .allowance(this.props.coinbase, skalesubscribeAddress)
             .call()
@@ -728,7 +728,7 @@ export default class Subscription extends React.Component {
           ? "SUBSCRIPTION_CFX"
           : this.props.networkId === 8453
           ? "SUBSCRIPTION_BASE"
-          : this.props.networkId === 37084624
+          : this.props.networkId === 1482601649 
           ? "SUBSCRIPTION_SKALE"
           : "SUBSCRIPTION_NEWAVAX",
     });
@@ -922,7 +922,7 @@ export default class Subscription extends React.Component {
         ? window.config.subscriptioncfx_tokens[
             this.state.selectedSubscriptionToken
           ]?.decimals
-        : this.props.networkId === 37084624
+        : this.props.networkId === 1482601649 
         ? window.config.subscriptionskale_tokens[
             this.state.selectedSubscriptionToken
           ]?.decimals
@@ -1273,7 +1273,7 @@ export default class Subscription extends React.Component {
                       ? this.handleSubscriptionTokenChange(
                           this.state.wcfxAddress
                         )
-                      : this.props.networkId === 37084624
+                      : this.props.networkId === 1482601649 
                       ? this.handleSubscriptionTokenChange(
                           this.state.wskaleaddress
                         )
@@ -1291,7 +1291,7 @@ export default class Subscription extends React.Component {
                         ? this.state.wbnbAddress
                         : this.props.networkId === 1030
                         ? this.state.wcfxAddress
-                        : this.props.networkId === 37084624
+                        : this.props.networkId === 1482601649 
                         ? this.state.wskaleaddress
                         : this.props.networkId === 8453
                         ? this.state.wbaseAddress
@@ -1312,7 +1312,7 @@ export default class Subscription extends React.Component {
                           dropdownIcon: "wcfx",
                           dropdownTitle: "WCFX",
                         })
-                      : this.props.networkId === 37084624
+                      : this.props.networkId === 1482601649 
                       ? this.setState({
                           dropdownIcon: "usdc",
                           dropdownTitle: "USDC",
@@ -1467,7 +1467,7 @@ export default class Subscription extends React.Component {
                           ? window.config.subscriptioncfx_tokens
                           : this.props.networkId === 8453
                           ? window.config.subscriptionbase_tokens
-                          : this.props.networkId === 37084624
+                          : this.props.networkId === 1482601649 
                           ? window.config.subscriptionskale_tokens
                           : window.config.subscription_tokens
                       ).map((t, i) => (
@@ -1516,7 +1516,7 @@ export default class Subscription extends React.Component {
                                     : this.props.networkId === 8453
                                     ? window.config.subscriptionbase_tokens[t]
                                         ?.symbol
-                                    : this.props.networkId === 37084624
+                                    : this.props.networkId === 1482601649 
                                     ? window.config.subscriptionskale_tokens[t]
                                         ?.symbol
                                     : window.config.subscription_tokens[t]
@@ -1534,7 +1534,7 @@ export default class Subscription extends React.Component {
                                     : this.props.networkId === 8453
                                     ? window.config.subscriptionbase_tokens[t]
                                         ?.symbol
-                                    : this.props.networkId === 37084624
+                                    : this.props.networkId === 1482601649 
                                     ? window.config.subscriptionskale_tokens[t]
                                         ?.symbol
                                     : window.config.subscription_tokens[t]
@@ -1564,7 +1564,7 @@ export default class Subscription extends React.Component {
                                 ? require(`./assets/${window.config.subscriptionbase_tokens[
                                     t
                                   ]?.symbol.toLowerCase()}Icon.svg`).default
-                                : this.props.networkId === 37084624
+                                : this.props.networkId === 1482601649 
                                 ? require(`./assets/${window.config.subscriptionskale_tokens[
                                     t
                                   ]?.symbol.toLowerCase()}Icon.svg`).default
@@ -1582,7 +1582,7 @@ export default class Subscription extends React.Component {
                             ? window.config.subscriptioncfx_tokens[t]?.symbol
                             : this.props.networkId === 8453
                             ? window.config.subscriptionbase_tokens[t]?.symbol
-                            : this.props.networkId === 37084624
+                            : this.props.networkId === 1482601649 
                             ? window.config.subscriptionskale_tokens[t]?.symbol
                             : window.config.subscription_tokens[t]?.symbol}
                         </li>
@@ -1623,7 +1623,7 @@ export default class Subscription extends React.Component {
                   />
                 </div>
               </div>
-              {this.props.networkId === 37084624 && (
+              {this.props.networkId === 1482601649  && (
                 <div className="gotoNebula-wrapper p-3 mt-3">
                   <div className="d-flex w-100 justify-content-between gap-2">
                     <span className="nebula-wrapper-text">

@@ -38,7 +38,7 @@ const StakeDypiusEthOther = ({
   onConnectWallet,
   earlyFee,
   maximumDeposit,
-  poolCap,
+  poolCap,userCurencyBalance
 }) => {
   let {
     reward_token_dypius_eth,
@@ -47,7 +47,7 @@ const StakeDypiusEthOther = ({
     reward_token_idyp,
     token_dyps,
   } = window;
-  let token_symbol = "DYP";
+  let token_symbol = "WETH";
 
   // token, staking
 
@@ -928,10 +928,10 @@ const StakeDypiusEthOther = ({
             <div className="d-flex gap-1 align-items-baseline">
               <span className="bal-smallTxt">My Balance:</span>
               <span className="bal-bigTxt">
-                {token_balance !== "..."
-                  ? getFormattedNumber(token_balance, 6)
+                 {chainId === '8453'
+                  ? getFormattedNumber(userCurencyBalance, 6)
                   : getFormattedNumber(0, 6)}{" "}
-                {token_symbol}
+                ETH
               </span>
             </div>
           </div>
@@ -973,7 +973,7 @@ const StakeDypiusEthOther = ({
 
               <div className="d-flex gap-1 align-items-baseline">
                 <span className="bal-smallTxt">Approved:</span>
-                <span className="bal-bigTxt2">{approvedAmount} DYP</span>
+                <span className="bal-bigTxt2">{approvedAmount} ETH</span>
               </div>
             </div>
           </div>
@@ -983,7 +983,7 @@ const StakeDypiusEthOther = ({
                 <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Pool Cap:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    13M DYP
+                    {getFormattedNumber(poolCap,0)} ETH
                     <ClickAwayListener onClickAway={poolCapClose}>
                       <Tooltip
                         open={poolCapTooltip}
@@ -1054,7 +1054,7 @@ const StakeDypiusEthOther = ({
               <div className="d-flex flex-column">
                 <span className="bal-smallTxt">Total Est. Rewards</span>
                 <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                  <span className="deposit-popup-txt d-flex align-items-center gap-1">
+                  <span className="deposit-popup-txt d-flex align-items-center gap-1" style={{fontSize: 16}}>
                     {getFormattedNumber(
                       getApproxReturn(
                         depositAmount,
@@ -1062,7 +1062,7 @@ const StakeDypiusEthOther = ({
                       ),
                       2
                     )}{" "}
-                    DYP
+                    WETH
                   </span>
                 </span>
               </div>
@@ -1084,7 +1084,7 @@ const StakeDypiusEthOther = ({
                     <div className="d-flex flex-column align-items-baseline">
                       <span className="bal-smallTxt">Rewards</span>
                       <span className="bal-bigTxt2">
-                        {getFormattedNumber(pendingDivs)} DYP
+                        {getFormattedNumber(pendingDivs)} WETH
                       </span>
                     </div>
                     <button
@@ -1141,7 +1141,7 @@ const StakeDypiusEthOther = ({
                 <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Early withdraw fee:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    10%
+                    {earlyFee}%
                     <ClickAwayListener onClickAway={earlyWithdrawClose}>
                       <Tooltip
                         open={earlyWithdrawTooltip}
@@ -1190,25 +1190,26 @@ const StakeDypiusEthOther = ({
                     </ClickAwayListener>
                   </span>
                 </div>
-                <div className="d-flex align-items-center gap-2">
+  
+              </div>
+              <div className="d-flex flex-column"> 
+                           <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Pool address:</span>
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={`${window.config.basescan_baseURL}/address/${staking?._address}`}
-                    className="stats-link2"
+                    href={`${window.config.basescan_baseURL}/address/${selectedPool?.poolList[0]?.tokenAddress}`}
+                    className="stats-link2 text-decoration-underline"
                   >
-                    {shortAddress(staking?._address)}{" "}
-                    <img src={statsLinkIcon} alt="" />
+                    {shortAddress(selectedPool?.poolList[0]?.tokenAddress)}{" "}
+                    {/* <img src={statsLinkIcon} alt="" /> */}
                   </a>
                 </div>
-              </div>
-              <div className="d-flex flex-column">
                 <div className="d-flex align-items-center gap-1">
                   <span className="bal-smallTxt">Start date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
                     09 Nov 2023{" "}
-                    <ClickAwayListener onClickAway={startDateClose}>
+                    {/* <ClickAwayListener onClickAway={startDateClose}>
                       <Tooltip
                         open={startDateTooltip}
                         disableFocusListener
@@ -1225,14 +1226,14 @@ const StakeDypiusEthOther = ({
                       >
                         <img src={moreinfo} alt="" onClick={startDateOpen} />
                       </Tooltip>
-                    </ClickAwayListener>
+                    </ClickAwayListener> */}
                   </span>
                 </div>
                 <div className="d-flex align-items-center gap-1">
                   <span className="bal-smallTxt">End date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
                     {expiration_time}{" "}
-                    <ClickAwayListener onClickAway={endDateClose}>
+                    {/* <ClickAwayListener onClickAway={endDateClose}>
                       <Tooltip
                         open={endDateTooltip}
                         disableFocusListener
@@ -1249,7 +1250,7 @@ const StakeDypiusEthOther = ({
                       >
                         <img src={moreinfo} alt="" onClick={endDateOpen} />
                       </Tooltip>
-                    </ClickAwayListener>
+                    </ClickAwayListener> */}
                   </span>
                 </div>
               </div>
@@ -1308,7 +1309,7 @@ const StakeDypiusEthOther = ({
               <span className="bal-smallTxt">Deposited:</span>
               <span className="bal-bigTxt">
                 {" "}
-                {getFormattedNumber(depositedTokens, 2)} {token_symbol}
+                {getFormattedNumber(depositedTokens, 2)} ETH
               </span>
             </div>
           </div>
@@ -1411,7 +1412,7 @@ const StakeDypiusEthOther = ({
                 <div className="d-flex flex-column align-items-baseline">
                   <span className="bal-smallTxt">Rewards</span>
                   <span className="bal-bigTxt2">
-                    {getFormattedNumber(pendingDivs)} DYP
+                    {getFormattedNumber(pendingDivs)} WETH
                   </span>
                 </div>
                 <button
@@ -1462,7 +1463,7 @@ const StakeDypiusEthOther = ({
                 <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Early withdraw fee:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    10%
+                  {earlyFee}%
                     <ClickAwayListener onClickAway={earlyWithdrawClose}>
                       <Tooltip
                         open={earlyWithdrawTooltip}
@@ -1511,20 +1512,21 @@ const StakeDypiusEthOther = ({
                     </ClickAwayListener>
                   </span>
                 </div>
-                <div className="d-flex align-items-center gap-2">
+               
+              </div>
+              <div className="d-flex flex-column">
+                 <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Pool address:</span>
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={`${window.config.basescan_baseURL}address/${staking?._address}`}
-                    className="stats-link2"
+                    href={`${window.config.basescan_baseURL}address/${selectedPool?.poolList[0]?.tokenAddress}`}
+                    className="stats-link2 text-decoration-underline"
                   >
-                    {shortAddress(staking._address)}{" "}
-                    <img src={statsLinkIcon} alt="" />
+                    {shortAddress(selectedPool?.poolList[0]?.tokenAddress)}{" "}
+                    {/* <img src={statsLinkIcon} alt="" /> */}
                   </a>
                 </div>
-              </div>
-              <div className="d-flex flex-column">
                 <div className="d-flex align-items-center gap-1">
                   <span className="bal-smallTxt">Start date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">

@@ -42,6 +42,7 @@ const Header = ({
   handleConnection,
   isConnected,
   appState,
+  onSetCurrencyAmount,
 }) => {
   const [gasPrice, setGasprice] = useState();
   const [ethPrice, setEthprice] = useState();
@@ -59,64 +60,54 @@ const Header = ({
   const [skaleState, setSkaleState] = useState(false);
   const [currencyAmount, setCurrencyAmount] = useState(0);
 
-  
   const [avatar, setAvatar] = useState("../../assets/img/person.svg");
   const routeData = useLocation();
 
   const { ethereum } = window;
   const checklogout = localStorage.getItem("logout");
 
-
   const setActiveChain = () => {
     if (chainId === 1) {
       setAvaxState(false);
       setBnbState(false);
       setEthState(true);
-      setSkaleState(false)
-
+      setSkaleState(false);
     } else if (chainId === 43114) {
       setAvaxState(true);
       setBnbState(false);
       setEthState(false);
-      setSkaleState(false)
-
+      setSkaleState(false);
     } else if (chainId === 56) {
       setAvaxState(false);
       setBnbState(true);
       setEthState(false);
-      setSkaleState(false)
-
+      setSkaleState(false);
     } else if (chainId === 8453) {
       setAvaxState(false);
       setBnbState(false);
       setEthState(false);
       setBaseState(true);
-      setSkaleState(false)
-    
-    }  else if (chainId === 1030) {
+      setSkaleState(false);
+    } else if (chainId === 1030) {
       setAvaxState(false);
       setBnbState(false);
       setEthState(false);
       setBaseState(false);
       setConfluxState(true);
-      setSkaleState(false)
-  
-    } 
-    else if (chainId === 37084624) {
+      setSkaleState(false);
+    } else if (chainId === 1482601649 ) {
       setAvaxState(false);
       setBnbState(false);
       setEthState(false);
       setBaseState(false);
       setConfluxState(false);
-      setSkaleState(true)
-  
-    }  else {
+      setSkaleState(true);
+    } else {
       setAvaxState(false);
       setBnbState(false);
       setBaseState(false);
       setEthState(false);
-      setSkaleState(false)
-
+      setSkaleState(false);
     }
   };
 
@@ -188,13 +179,13 @@ const Header = ({
 
   const handleSkalePool = async () => {
     if (window.ethereum) {
-    await handleSwitchNetworkhook("0x235ddd0")
-      .then(() => {
-        handleSwitchNetwork("37084624");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+      await handleSwitchNetworkhook("0x585eb4b1")
+        .then(() => {
+          handleSwitchNetwork("1482601649 ");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     } else {
       window.alertify.error("No web3 detected. Please install Metamask!");
     }
@@ -263,7 +254,7 @@ const Header = ({
 
     console.log(result);
   };
-  
+
   //  console.log(isConnected)
   const getEthBalance = async () => {
     if (checklogout === "false" && coinbase) {
@@ -278,32 +269,39 @@ const Header = ({
         const bscWeb3 = new Web3(window.config.bsc_endpoint);
         const avaxWeb3 = new Web3(window.config.avax_endpoint);
         const web3cfx = new Web3(window.config.conflux_endpoint);
-    const web3base = new Web3(window.config.base_endpoint);
-    const web3skale = new Web3(window.config.skale_endpoint);
-
+        const web3base = new Web3(window.config.base_endpoint);
+        const web3skale = new Web3(window.config.skale_endpoint);
 
         if (chainId === 1) {
           const stringBalance = infuraWeb3.utils.hexToNumberString(balance);
           const amount = infuraWeb3.utils.fromWei(stringBalance, "ether");
+          onSetCurrencyAmount(amount);
           setCurrencyAmount(amount.slice(0, 7));
         } else if (chainId === 43114) {
           const stringBalance = avaxWeb3.utils.hexToNumberString(balance);
           const amount = avaxWeb3.utils.fromWei(stringBalance, "ether");
+          onSetCurrencyAmount(amount);
+
           setCurrencyAmount(amount.slice(0, 7));
         } else if (chainId === 56) {
           const stringBalance = bscWeb3.utils.hexToNumberString(balance);
           const amount = bscWeb3.utils.fromWei(stringBalance, "ether");
+          onSetCurrencyAmount(amount);
+
           setCurrencyAmount(amount.slice(0, 7));
         } else if (chainId === 1030) {
           const stringBalance = web3cfx.utils.hexToNumberString(balance);
           const amount = web3cfx.utils.fromWei(stringBalance, "ether");
+          onSetCurrencyAmount(amount);
+
           setCurrencyAmount(amount.slice(0, 7));
         } else if (chainId === 8453) {
           const stringBalance = web3base.utils.hexToNumberString(balance);
           const amount = web3base.utils.fromWei(stringBalance, "ether");
+          onSetCurrencyAmount(amount);
+
           setCurrencyAmount(amount.slice(0, 7));
-        }
-        else if (chainId === 37084624) {
+        } else if (chainId === 1482601649 ) {
           const stringBalance = web3skale.utils.hexToNumberString(balance);
           const amount = web3skale.utils.fromWei(stringBalance, "ether");
           const formatted_amount = Number(amount);
@@ -313,6 +311,7 @@ const Header = ({
           } else {
             console.log("formatted_amount", formatted_amount);
           }
+          onSetCurrencyAmount(amount);
 
           setCurrencyAmount(amount.slice(0, 7));
         }
@@ -424,11 +423,11 @@ const Header = ({
                                     : avaxState === true
                                     ? avax
                                     : baseState === true
-                                      ? base
-                                      : confluxState === true
-                                        ? conflux
-                                        : skaleState === true
-                                        ? skale
+                                    ? base
+                                    : confluxState === true
+                                    ? conflux
+                                    : skaleState === true
+                                    ? skale
                                     : error
                                 }
                                 height={16}
@@ -443,11 +442,11 @@ const Header = ({
                                   : avaxState === true
                                   ? "Avalanche"
                                   : baseState === true
-                                    ? "Base"
-                                    : confluxState === true
-                                      ? "Conflux"
-                                      : skaleState === true
-                                      ? "SKALE"
+                                  ? "Base"
+                                  : confluxState === true
+                                  ? "Conflux"
+                                  : skaleState === true
+                                  ? "SKALE"
                                   : "Unsupported Chain"}
                               </span>
 
@@ -468,17 +467,17 @@ const Header = ({
                             Avalanche
                           </Dropdown.Item>
                           <Dropdown.Item onClick={() => handleConfluxPool()}>
-                    <img src={conflux} alt="" />
-                    Conflux
-                  </Dropdown.Item>
-                  <Dropdown.Item onClick={() => handleBasePool()}>
-                    <img src={base} alt="" />
-                    Base
-                  </Dropdown.Item>
-                  <Dropdown.Item onClick={() => handleSkalePool()}>
-                    <img src={skale} alt="" />
-                    SKALE
-                  </Dropdown.Item>
+                            <img src={conflux} alt="" />
+                            Conflux
+                          </Dropdown.Item>
+                          <Dropdown.Item onClick={() => handleBasePool()}>
+                            <img src={base} alt="" />
+                            Base
+                          </Dropdown.Item>
+                          <Dropdown.Item onClick={() => handleSkalePool()}>
+                            <img src={skale} alt="" />
+                            SKALE
+                          </Dropdown.Item>
                         </DropdownButton>
                       )}
                     {/* <DropdownButton
@@ -547,7 +546,7 @@ const Header = ({
                                     ? "CFX"
                                     : chainId === 8453
                                     ? "ETH"
-                                    : chainId === 37084624
+                                    : chainId === 1482601649 
                                     ? "sFUEL"
                                     : ""}
                                 </span>

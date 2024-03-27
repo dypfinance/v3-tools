@@ -18,7 +18,7 @@ const EarnOther = ({
   handleSwitchNetwork,
   isPremium,
   type,
-  onConnectWallet,aggregatorPools
+  onConnectWallet,aggregatorPools,userCurencyBalance
 }) => {
   const routeData = useLocation();
   const [poolClicked, setPoolClicked] = useState(false);
@@ -61,6 +61,7 @@ const EarnOther = ({
         faqIndex={routeData.state ? routeData.state.faqIndex : -1}
         handleSwitchNetwork={handleSwitchNetwork}
         onConnectWallet={onConnectWallet}
+        userCurencyBalance={userCurencyBalance}
       />
     </div>
   );

@@ -1910,7 +1910,7 @@ window.config = {
   avax_endpoint: "https://api.avax.network/ext/bc/C/rpc",
   conflux_endpoint: "https://evm.confluxrpc.com/",
   base_endpoint: "https://base.publicnode.com",
-  skale_endpoint: "https://testnet.skalenodes.com/v1/lanky-ill-funny-testnet",
+  skale_endpoint: "https://mainnet.skalenodes.com/v1/green-giddy-denebola",
   goerli_endpoint: "https://ethereum-goerli.publicnode.com",
   bscTest_endpoint: "https://data-seed-prebsc-1-s1.binance.org:8545/",
   BUSD_address: "0xe9e7cea3dedca5984780bafc599bd69add087d56",
@@ -2166,7 +2166,7 @@ window.config = {
 
   subscription_base_address: "0x9c13Dbc8f0fA8ceD8C1B53c4237A08445eca32fe",
 
-  subscription_skale_address: "0xdbE31B4f2a5921Ec2d0d739E3c9bcA985C5A18b0",
+  subscription_skale_address: "0x6041dC62b74e28596b4917693f6B0F5baA61A13F",
 
   ZERO_ADDRESS: "0x0000000000000000000000000000000000000000",
   MAX_LOCKS_TO_LOAD_PER_CALL: 10,

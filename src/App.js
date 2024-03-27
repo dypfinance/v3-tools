@@ -93,6 +93,8 @@ class App extends React.Component {
       showRibbon2: true,
       showWalletPopup: false,
       aggregatorPools: [],
+      userCurencyBalance: 0,
+
     };
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
@@ -168,9 +170,9 @@ class App extends React.Component {
               this.setState({
                 networkId: "56",
               });
-            } else if (data === "0x235ddd0") {
+            } else if (data === "0x585eb4b1") {
               this.setState({
-                networkId: "37084624",
+                networkId: "1482601649 ",
               });
             } else if (data === "0x2105") {
               this.setState({
@@ -699,6 +701,7 @@ class App extends React.Component {
               show={this.state.show}
               isConnected={this.state.isConnected}
               appState={this.state}
+              onSetCurrencyAmount={(value)=>{this.setState({userCurencyBalance: value})}}
             />
           )}
           <div className="content-wrapper container-fluid d-flex justify-content-center justify-content-lg-start">
@@ -877,6 +880,7 @@ class App extends React.Component {
                           referrer={this.state.referrer}
                           onConnectWallet={this.showModal}
                           aggregatorPools={this.state.aggregatorPools}
+                          userCurencyBalance={this.state.userCurencyBalance}
                         />
                       )}
                     />
