@@ -421,7 +421,7 @@ const EarnOtherContentNft = ({
       <div className="row justify-content-center w-100 mx-0">
         {windowSize.width > 786 ? (
           <div
-            className="row justify-content-end align-items-center p-2 options-container"
+            className="row justify-content-end align-items-center p-2 options-container bg-transparent"
             style={{ marginTop: "30px" }}
           >
             <div className="col-12 col-4 px-0">
@@ -463,7 +463,7 @@ const EarnOtherContentNft = ({
                 />
               </div>
             </div> */}
-            <div className="col-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3">
+            <div className="col-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3 px-0">
               <h5 className="text-white inactive-pools">Past pools</h5>
               <div
                 className={`pill-box ${myStakes && "pill-box-active"}`}

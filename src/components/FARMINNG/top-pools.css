@@ -523,6 +523,14 @@
   color: #f7f7fc;
 }
 
+.withtitle2 {
+  color: #4ED5D2;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
 .select-tokentxt {
   font-weight: 400;
   font-size: 8px;

@@ -2351,7 +2351,7 @@ window.config = {
   },
 
   subscriptionskale_tokens: {
-    "0x5eaF4e5A908ba87Abf3dE768cb0dA517dB45dB48": {
+    "0xCC205196288B7A26f6D43bBD68AaA98dde97276d": {
       symbol: "USDC",
       decimals: 6,
     },

@@ -52,7 +52,7 @@ export default class Subscription extends React.Component {
       wbnbAddress: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
       wcfxAddress: "0x14b2D3bC65e74DAE1030EAFd8ac30c533c976A9b",
       wbaseAddress: "0x4200000000000000000000000000000000000006",
-      wskaleaddress: "0x5eaF4e5A908ba87Abf3dE768cb0dA517dB45dB48",
+      wskaleaddress: "0xCC205196288B7A26f6D43bBD68AaA98dde97276d",
 
       triggerText: "See more V",
       isApproved: false,
