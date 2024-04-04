@@ -432,7 +432,7 @@ const EarnTopPicks = ({
       const dypIdypBnb = bnb_result.data.stakingInfoiDYPBnb;
 
       const dypBnb = bnb_result2.data.stakingInfoDYPBnb;
-      
+
       const object2 = dypBnb.map((item) => {
         return { ...item, tvl_usd: item.tvl_usd, type: "dyp", chain: "bnb" };
       });
@@ -8825,7 +8825,7 @@ const EarnTopPicks = ({
                     <div className="info-pool-item p-2">
                       <div className="d-flex justify-content-between gap-1 align-items-center">
                         <span className="info-pool-left-text">
-                          Apr{" "}
+                          APR{" "}
                           <ClickAwayListener onClickAway={aprClose}>
                             <Tooltip
                               open={aprTooltip}

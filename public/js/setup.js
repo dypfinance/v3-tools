@@ -2241,6 +2241,9 @@ window.config = {
   constant_staking_dypius_bsc1_address:
     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603",
 
+  constant_staking_dypius_bscother1_address:
+    "0x36fD1C03982f95c455dAb386857b1709e644cE7C",
+
   constant_staking_dypius_avax1_address:
     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603",
 
@@ -2738,6 +2741,10 @@ window.constant_stakingbsc_new14 = new CONSTANT_STAKINGBSC_NEW(
 window.constant_staking_dypius_bsc1 = new CONSTANT_STAKING_DYPIUS(
   "CONSTANT_STAKING_DYPIUS_BSC1"
 );
+
+window.constant_staking_dypius_bscother1 = new CONSTANT_STAKING_DYPIUS(
+  "CONSTANT_STAKING_DYPIUS_BSCOTHER1"
+);
 /*Staking bsc other*/
 
 window.constant_stakingbscother_new1 = new CONSTANT_STAKINGBSCOTHER_NEW(
@@ -2751,6 +2758,7 @@ window.CONSTANT_STAKINGBSC_NEW11_ABI = window.CONSTANT_STAKING_OLD_ABI;
 window.CONSTANT_STAKINGBSC_NEW111_ABI = window.CONSTANT_STAKING_OLD_ABI;
 window.CONSTANT_STAKINGBSC_NEW14_ABI = window.CONSTANT_STAKING_OLD_ABI;
 window.CONSTANT_STAKING_DYPIUS_BSC1_ABI = window.CONSTANT_STAKING_DYPIUS_ABI;
+window.CONSTANT_STAKING_DYPIUS_BSCOTHER1_ABI = window.CONSTANT_STAKING_DYPIUS_ABI;
 
 window.CONSTANT_STAKINGBSC_NEW12_ABI = window.CONSTANT_STAKINGBSC_NEW_ABI;
 window.CONSTANT_STAKINGBSC_NEW13_ABI = window.CONSTANT_STAKINGBSC_NEW_ABI;
@@ -36044,6 +36052,7 @@ Object.keys(window.config)
       k.startsWith("constant_stakingbsc_new13") ||
       k.startsWith("constant_stakingbsc_new14") ||
       k.startsWith("constant_staking_dypius_bsc1") ||
+      k.startsWith("constant_staking_dypius_bscother1") ||
       k.startsWith("constant_stakingnew_newavax2") ||
       k.startsWith("constant_stakingdaiavax") ||
       k.startsWith("constant_stakingdaieth") ||
@@ -36276,6 +36285,8 @@ Object.keys(window.config)
       : k.startsWith("constant_stakingbsc_new14")
       ? window.CONSTANT_STAKING_OLD_ABI
       : k.startsWith("constant_staking_dypius_bsc1")
+      ? window.CONSTANT_STAKING_DYPIUS_ABI
+      : k.startsWith("constant_staking_dypius_bscother1")
       ? window.CONSTANT_STAKING_DYPIUS_ABI
       : k.startsWith("constant_stakingnew_newavax2")
       ? window.CONSTANT_STAKINGNEW_ABI
