@@ -1368,7 +1368,7 @@ export default class Subscription extends React.Component {
                   <h6 className="free-plan-title">Dypian Plan Subscription</h6>
                 </div>
                 <img
-                  src={require(`./assets/clearFieldIcon.svg`)}
+                  src={require(`./assets/clearFieldIcon.svg`).default}
                   height={28}
                   width={28}
                   className="cursor-pointer"
