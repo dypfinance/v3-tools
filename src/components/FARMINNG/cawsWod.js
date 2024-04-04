@@ -264,7 +264,7 @@ const CawsWodDetails = ({
   };
 
   useEffect(() => {
-    if (coinbase) {
+    if (coinbase && chainId === 1) {
       getStakesIds();
       getLandStakesIds();
       myNft();
@@ -275,7 +275,7 @@ const CawsWodDetails = ({
       calculateAllRewards();
       calculateCountdown();
     }
-  }, [isConnected, coinbase, screenName, newStakes]);
+  }, [isConnected, coinbase, screenName, newStakes, chainId]);
 
   const getApprovedNfts = (data) => {
     setApprovedNfts(data);
@@ -304,11 +304,10 @@ const CawsWodDetails = ({
   return (
     <div className="container-lg p-0">
       <div
-        className={`allwrappercaws ${windowSize.width > 786 && "my-4"}`}
-        style={{
-          border: listType !== "table" && "none",
-          borderRadius: listType !== "table" && "0px",
-        }}
+       className={`allwrappercaws allwrapper-active mb-2 `}
+       style={{
+         borderRadius: listType !== "table" && "0px",
+       }}
       >
         <div className="leftside2 w-100">
           <div className="activewrapper position-relative flex-row-reverse flex-lg-row align-items-end align-items-lg-center">

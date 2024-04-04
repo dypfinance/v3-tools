@@ -1,14 +1,14 @@
 import React from "react";
-import launchpadbg from "./assets/launchpadbg.png";
+import defiBg from "./assets/defiBg.webp";
 import rightlogo from "./assets/filledArrow.svg";
 import "./launchpad.css";
 import { NavLink } from "react-router-dom";
 
 const LaunchpadCard = () => {
   return (
-    <NavLink to="/plans" className="launchpad-wrapper">
+    <NavLink to="/earn/defi-staking" className="launchpad-wrapper">
       <div className="d-flex flex-column gap-2 align-items-center justify-content-between">
-        <img src={launchpadbg} alt="" className="launchpadbg" />
+        <img src={defiBg} alt="" className="launchpadbg" />
         <div
           className="d-flex gap-2 align-items-center justify-content-between w-100"
           style={{ padding: "0px 10px 4px 10px" }}
@@ -21,7 +21,7 @@ const LaunchpadCard = () => {
               lineHeight: "16px",
             }}
           >
-            Unlock exclusive benefits with Premium
+            Make the most of your assets with DeFi Staking
           </h6>
           <img src={rightlogo} alt="" />
         </div>

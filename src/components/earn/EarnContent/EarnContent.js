@@ -38,6 +38,7 @@ const EarnContent = ({
   handleSwitchNetwork,
   isPremium,
   showRibbon,
+  onConnectWallet,
 }) => {
   const options = [
     {
@@ -494,7 +495,7 @@ const EarnContent = ({
                 />
               </div>
             </div>
-            <div className="col-8 row d-flex gap-0 gap-xl-3 justify-content-center p-2">
+            <div className="col-8 row d-flex gap-0 gap-xl-3 justify-content-start p-2">
               {options.map((item, index) => (
                 <div
                   className={`earn-option col-3 col-xl-2 d-flex align-items-center justify-content-center ${
@@ -515,10 +516,7 @@ const EarnContent = ({
                   }}
                 >
                   <img
-                    src={
-                      require(`../../calculator/assets/${item.title.toLowerCase()}Icon.svg`)
-                        .default
-                    }
+                    src={require(`../../calculator/assets/${item.title.toLowerCase()}Icon.svg`)}
                     alt=""
                   />
                   {item.title}
@@ -526,7 +524,7 @@ const EarnContent = ({
               ))}
             </div>
 
-            <div
+            {/* <div
               className={`col-2  justify-content-end align-items-center gap-1 gap-lg-3 d-flex `}
             >
               <h5 className="text-white inactive-pools">Inactive pools</h5>
@@ -542,7 +540,7 @@ const EarnContent = ({
               >
                 <div className="pill"></div>
               </div>
-            </div>
+            </div> */}
           </div>
         ) : (
           <div
@@ -574,7 +572,7 @@ const EarnContent = ({
               </div>
             </div>
 
-            <div className="col-6 px-0 px-lg-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3">
+            {/* <div className="col-6 px-0 px-lg-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3">
               <h5 className="text-white inactive-pools">Inactive pools</h5>
               <div
                 className={`pill-box ${myStakes && "pill-box-active"}`}
@@ -586,7 +584,7 @@ const EarnContent = ({
               >
                 <div className="pill"></div>
               </div>
-            </div>
+            </div> */}
             <div className="col-12 row d-flex gap-0 gap-xl-3 justify-content-center px-0 px-lg-22 mt-3">
               {options.map((item, index) => (
                 <div
@@ -608,10 +606,7 @@ const EarnContent = ({
                   }}
                 >
                   <img
-                    src={
-                      require(`../../calculator/assets/${item.title.toLowerCase()}Icon.svg`)
-                        .default
-                    }
+                    src={require(`../../calculator/assets/${item.title.toLowerCase()}Icon.svg`)}
                     alt=""
                   />
                   {/* <div
@@ -626,10 +621,10 @@ const EarnContent = ({
         )}
 
         {((option === "Vault" && expiredPools === false) ||
-          option !== "Vault") && (
+          (option !== "Vault" )) && (
           <>
             <div
-              className={`row align-items-center gap-5 gap-lg-0 justify-content-between px-0 `}
+              className={`row align-items-center gap-2 gap-lg-0 justify-content-between px-0 `}
               style={{ minHeight: "55px" }}
             >
               <div className="col-12 col-lg-4 col-xl-3 px-0">
@@ -649,7 +644,7 @@ const EarnContent = ({
               </div>
 
               <div className="col-12 col-lg-8 col-xl-6 d-flex gap-3 justify-content-around justify-content-lg-end justify-content-xl-center px-0 px-xl-2">
-                {option !== "Vault" ? (
+                {option !== "Vault" && option !== "Staking" ? (
                   <>
                     <div
                       className={`stake-item ${
@@ -902,6 +897,7 @@ const EarnContent = ({
       </div>
       {option === "Farming" && networkId === "56" && expiredPools === false ? (
         <EarnTopPicks
+          onConnectWallet={onConnectWallet}
           topList={option}
           listType={listStyle}
           chain={stake}
@@ -922,6 +918,7 @@ const EarnContent = ({
           expiredPools={expiredPools}
           isPremium={isPremium}
           showRibbon={showRibbon}
+          onChainSelect={(val)=>{setStake(val)}}
         />
       ) : option === "Vault" && networkId !== "1" ? (
         <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
@@ -989,6 +986,7 @@ const EarnContent = ({
         //     <span className="farm-soon">New pools coming soon...</span>
         //   </div>
         <EarnTopPicks
+          onConnectWallet={onConnectWallet}
           topList={option}
           listType={listStyle}
           chain={stake}
@@ -1009,6 +1007,8 @@ const EarnContent = ({
           expiredPools={expiredPools}
           isPremium={isPremium}
           showRibbon={showRibbon}
+          onChainSelect={(val)=>{setStake(val)}}
+
         />
       )}
 

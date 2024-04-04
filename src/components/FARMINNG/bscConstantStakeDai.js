@@ -363,12 +363,13 @@ const StakeBscDai = ({
   }, []);
 
   useEffect(() => {
-    refreshBalance();
+    if(chainId === '56')
+   { refreshBalance();
     if (depositAmount !== "") {
       checkApproval(depositAmount);
 
-    }
-  }, [coinbase, coinbase2, staking]);
+    }}
+  }, [coinbase, coinbase2, staking,chainId]);
 
   useEffect(() => {
       setdepositAmount('');
@@ -400,7 +401,7 @@ const StakeBscDai = ({
         setdepositStatus("fail");
         seterrorMsg(e?.message);
         setTimeout(() => {
-          depositAmount("");
+          setdepositAmount("");
           setdepositStatus("initial");
           seterrorMsg("");
         }, 10000);
@@ -440,7 +441,7 @@ const StakeBscDai = ({
         setdepositStatus("fail");
         seterrorMsg(e?.message);
         setTimeout(() => {
-          depositAmount("");
+          setdepositAmount("");
           setdepositStatus("initial");
           seterrorMsg("");
         }, 10000);

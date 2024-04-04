@@ -18,7 +18,7 @@ const VendorCard = ({
         {activeLink ? (
           <a href={link} target={"_blank"} className="vendor-image-wrapper">
             <img
-              src={require(`./assets/${logo}`).default}
+              src={require(`./assets/${logo}`)}
               width={64}
               height={64}
               alt=""

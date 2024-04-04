@@ -16,7 +16,7 @@ const NftPlaceHolder = ({ onMintClick, width }) => {
             style={{ border: "1px grey dashed", borderRadius: "8px" }}
           >
             <img
-              src={require("./cat_desktop.jpeg").default}
+              src={require("./cat_desktop.jpeg")}
               alt=""
               className="placeholder-content-img nft-coins"
             />

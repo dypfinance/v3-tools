@@ -1103,7 +1103,7 @@ export default function initBridgeidyp({
                             <div className="separator"></div>
                             <div className="d-flex gap-2 align-items-start">
                               <img
-                                src={require("./assets/errorinfo.svg").default}
+                                src={require("./assets/errorinfo.svg")}
                                 alt=""
                               />
                               <h6 className="bottominfotxt">

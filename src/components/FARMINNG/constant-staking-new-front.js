@@ -394,12 +394,13 @@ const StakeEth = ({
   }, []);
 
   useEffect(() => {
-    refreshBalance();
+    if(chainId === '1')
+   { refreshBalance();
     if (depositAmount !== "") {
       checkApproval(depositAmount);
 
-    }
-  }, [coinbase, coinbase2, staking]);
+    }}
+  }, [coinbase, coinbase2, staking, chainId]);
 
   useEffect(() => {
       setdepositAmount('');
@@ -460,7 +461,7 @@ const StakeEth = ({
         setdepositStatus("fail");
         seterrorMsg(e?.message);
         setTimeout(() => {
-          depositAmount("");
+          setdepositAmount("");
           setdepositStatus("initial");
           seterrorMsg("");
         }, 10000);
@@ -518,7 +519,7 @@ const StakeEth = ({
         setdepositStatus("fail");
         seterrorMsg(e?.message);
         setTimeout(() => {
-          depositAmount("");
+          setdepositAmount("");
           setdepositStatus("fail");
           seterrorMsg("");
         }, 10000);
@@ -547,7 +548,7 @@ const StakeEth = ({
         setdepositStatus("fail");
         seterrorMsg(e?.message);
         setTimeout(() => {
-          depositAmount("");
+          setdepositAmount("");
           setdepositStatus("fail");
           seterrorMsg("");
         }, 10000);
