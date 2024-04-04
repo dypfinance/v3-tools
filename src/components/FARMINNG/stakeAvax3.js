@@ -354,12 +354,13 @@ const StakeAvaxDai = ({
   }, []);
 
   useEffect(() => {
-    refreshBalance();
+    if(chainId === '43114')
+   { refreshBalance();
     if (depositAmount !== "") {
       checkApproval(depositAmount);
 
-    }
-  }, [coinbase, coinbase2, staking]);
+    }}
+  }, [coinbase, coinbase2, staking, chainId]);
 
   useEffect(() => {
       setdepositAmount('');
@@ -391,7 +392,7 @@ const StakeAvaxDai = ({
         setdepositStatus("fail");
         seterrorMsg(e?.message);
         setTimeout(() => {
-          depositAmount("");
+          setdepositAmount("");
           setdepositStatus("initial");
           seterrorMsg("");
         }, 2000);
@@ -431,7 +432,7 @@ const StakeAvaxDai = ({
         setdepositStatus("fail");
         seterrorMsg(e?.message);
         setTimeout(() => {
-          depositAmount("");
+          setdepositAmount("");
           setdepositStatus("initial");
           seterrorMsg("");
         }, 10000);

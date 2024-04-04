@@ -2020,7 +2020,7 @@ export default class Subscription extends React.Component {
                     .slice(0, this.state.ethStake.length)
                     .map((pool, index) => (
                       <NavLink
-                        to="/earn"
+                        to="/earn/dypius"
                         style={{
                           display:
                             this.state.userPools.length > 0
@@ -2107,7 +2107,7 @@ export default class Subscription extends React.Component {
                     .slice(0, this.state.bnbStake.length)
                     .map((pool, index) => (
                       <NavLink
-                        to="/earn"
+                        to="/earn/dypius"
                         style={{
                           display:
                             this.state.userPools.length > 0
@@ -2199,7 +2199,7 @@ export default class Subscription extends React.Component {
                     .slice(0, this.state.avaxStake.length)
                     .map((pool, index) => (
                       <NavLink
-                        to="/earn"
+                        to="/earn/dypius"
                         style={{
                           display:
                             this.state.userPools.length > 0
@@ -2333,7 +2333,7 @@ export default class Subscription extends React.Component {
                             key={id}
                             nft={item}
                             action={() => {
-                              window.location.assign("/earn");
+                              window.location.assign("/earn/dypius");
                             }}
                             modalId="#newNftStake"
                             coinbase={this.props.coinbase}
@@ -2395,7 +2395,7 @@ export default class Subscription extends React.Component {
                             key={id}
                             nft={item}
                             action={() => {
-                              window.location.assign("/earn");
+                              window.location.assign("/earn/dypius");
                             }}
                             modalId="#newNftStake"
                             coinbase={this.props.coinbase}

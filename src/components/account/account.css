@@ -15,6 +15,37 @@
   color: #f7f7fc;
 }
 
+.gotoNebula-wrapper {
+  border-radius: 6px;
+  background: linear-gradient(90deg, rgb(167 49 195 / 60%) 33%, rgb(98 57 195 / 60%) 100%);
+}
+
+.nebula-wrapper-text {
+  color: #f7f7fc;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 27px;
+}
+
+.nebula-bridgebtn {
+  border-radius: 6px;
+  border: 1px solid #00c899;
+  color: #fff;
+  text-align: center;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  background: transparent;
+  padding: 5px 10px;
+}
+
+.nebula-bridgebtn:hover {
+  text-decoration: underline;
+  color: #fff;
+}
+
 .cawscontaier {
   position: absolute;
   left: 30%;

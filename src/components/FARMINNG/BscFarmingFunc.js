@@ -284,12 +284,15 @@ const BscFarmingFunc = ({
 
   const getLPTokens = async () => {
     let router = await window.getPancakeswapRouterContract();
-    let WETH = await router.methods.WETH().call();
+    let WETH = await router.methods
+      .WETH()
+      .call()
+      .catch((e) => {
+        console.error(e);
+      });
     let rewardTokenAddress = "0xBD100d061E120b2c67A24453CF6368E63f1Be056"; // idyp address
 
-    let amount = await constant.depositedTokens(
-      coinbase
-    );
+    let amount = await constant.depositedTokens(coinbase);
     let PAIR_ABI = window.PAIR_ABI;
     let pair_token_address = "0x1bC61d08A300892e784eD37b2d0E63C85D1d57fb";
     let web3 = window.bscWeb3;
@@ -299,7 +302,10 @@ const BscFarmingFunc = ({
     let reserves = await pair.methods.getReserves().call();
     let amountlpContract = await pair.methods
       .balanceOf(constant._address)
-      .call();
+      .call()
+      .catch((e) => {
+        console.error(e);
+      });
 
     let maxETH = reserves[0];
     let maxToken = reserves[1];
@@ -328,7 +334,10 @@ const BscFarmingFunc = ({
 
     let totalContractUSD = await router.methods
       .getAmountsOut(maxContractToken, path1)
-      .call();
+      .call()
+      .catch((e) => {
+        console.error(e);
+      });
     totalContractUSD = totalContractUSD[totalContractUSD.length - 1];
 
     totalContractUSD = BigNumber(totalContractUSD)
@@ -340,14 +349,19 @@ const BscFarmingFunc = ({
 
     let _userWithdrawAmount = await router.methods
       .getAmountsOut(maxUserToken, path1)
-      .call();
-    _userWithdrawAmount = _userWithdrawAmount[_userWithdrawAmount.length - 1];
+      .call()
+      .catch((e) => {
+        console.error(e);
+      });
+    if (_userWithdrawAmount) {
+      _userWithdrawAmount = _userWithdrawAmount[_userWithdrawAmount.length - 1];
 
-    _userWithdrawAmount = BigNumber(_userWithdrawAmount)
-      .plus(maxUserEth)
-      .div(1e18)
-      .toFixed(18);
-    setlpTokens(_userWithdrawAmount);
+      _userWithdrawAmount = BigNumber(_userWithdrawAmount)
+        .plus(maxUserEth)
+        .div(1e18)
+        .toFixed(18);
+      setlpTokens(_userWithdrawAmount);
+    }
   };
 
   const handleListDownload = async (e) => {
@@ -540,9 +554,7 @@ const BscFarmingFunc = ({
       }
 
       let _amountOutMin_dypReceived = new BigNumber(0).toFixed(0);
-      let pendingDivs = await constant.getPendingDivsEth(
-        coinbase
-      );
+      let pendingDivs = await constant.getPendingDivsEth(coinbase);
 
       if (pendingDivs > 0) {
         _amountOutMin_dypReceived = new BigNumber(pendingDivs)
@@ -619,9 +631,7 @@ const BscFarmingFunc = ({
   };
 
   const handleWithdrawDyp = async () => {
-    let amountConstant = await staking.depositedTokens(
-      coinbase
-    );
+    let amountConstant = await staking.depositedTokens(coinbase);
     amountConstant = new BigNumber(amountConstant).toFixed(0);
     setWithdrawLoading(true);
 
@@ -659,9 +669,7 @@ const BscFarmingFunc = ({
     let selectedBuybackToken = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"; // can only be WETH
     let rewardTokenAddress = "0xBD100d061E120b2c67A24453CF6368E63f1Be056"; // idyp address
 
-    let amount = await constant.depositedTokens(
-      coinbase
-    );
+    let amount = await constant.depositedTokens(coinbase);
     let PAIR_ABI = window.PAIR_ABI;
     let pair_token_address = "0x1bC61d08A300892e784eD37b2d0E63C85D1d57fb";
     let web3 = window.bscWeb3;
@@ -751,9 +759,7 @@ const BscFarmingFunc = ({
     }
 
     let _amountOutMin_crazReceived = new BigNumber(0).toFixed(0);
-    let pendingDivs = await constant.getPendingDivsEth(
-      coinbase
-    );
+    let pendingDivs = await constant.getPendingDivsEth(coinbase);
     console.log(pendingDivs);
     if (pendingDivs > 0) {
       _amountOutMin_crazReceived = new BigNumber(pendingDivs)
@@ -1111,12 +1117,7 @@ const BscFarmingFunc = ({
   };
 
   const refreshBalance = async () => {
-    let coinbase = coinbase;
-
-    if (window.coinbase_address) {
-      coinbase = window.coinbase_address;
-      setCoinbase2(coinbase);
-    }
+    let coinbase = coinbase2;
 
     let lp_data = the_graph_result.lp_data;
 
@@ -1143,38 +1144,22 @@ const BscFarmingFunc = ({
       _amountOutMin = new BigNumber(_amountOutMin).div(1e18).toFixed(18);
 
       let _bal = token.balanceOf(coinbase);
-      let _rBal = reward_token.balanceOf(
-        coinbase
-      );
+      let _rBal = reward_token.balanceOf(coinbase);
 
-      let _pDivs = constant.getPendingDivs(
-        coinbase
-      );
+      let _pDivs = constant.getPendingDivs(coinbase);
 
-      let _pDivsEth = constant.getPendingDivsEth(
-        coinbase
-      );
+      let _pDivsEth = constant.getPendingDivsEth(coinbase);
       console.log(_pDivsEth);
 
-      let _tEarned = constant.totalEarnedTokens(
-        coinbase
-      );
+      let _tEarned = constant.totalEarnedTokens(coinbase);
 
-      let _tEarnedEth = constant.totalEarnedEth(
-        coinbase
-      );
+      let _tEarnedEth = constant.totalEarnedEth(coinbase);
 
-      let _stakingTime = constant.depositTime(
-        coinbase
-      );
+      let _stakingTime = constant.depositTime(coinbase);
 
-      let _dTokens = constant.depositedTokens(
-        coinbase
-      );
+      let _dTokens = constant.depositedTokens(coinbase);
 
-      let _lClaimTime = constant.lastClaimedTime(
-        coinbase
-      );
+      let _lClaimTime = constant.lastClaimedTime(coinbase);
 
       let _tvl = token.balanceOf(constant._address);
 
@@ -1192,12 +1177,8 @@ const BscFarmingFunc = ({
         constant._address
       ); /* TVL of iDYP on Farming */
 
-      let _dTokensDYP = staking.depositedTokens(
-        coinbase
-      );
-      let _rewardsPendingClaim = staking.getPendingDivs(
-        coinbase
-      );
+      let _dTokensDYP = staking.depositedTokens(coinbase);
+      let _rewardsPendingClaim = staking.getPendingDivs(coinbase);
 
       // let _pendingDivsStaking = constant.getTotalPendingDivs(coinbase);
 
@@ -1511,11 +1492,7 @@ const BscFarmingFunc = ({
     let selectedBuybackToken = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"; // wbnb/wavax
 
     const result = await window
-      .checkapproveStakePool(
-        coinbase,
-        selectedBuybackToken,
-        constant._address
-      )
+      .checkapproveStakePool(coinbase, selectedBuybackToken, constant._address)
       .then((data) => {
         console.log(data);
         return data;
@@ -1547,7 +1524,7 @@ const BscFarmingFunc = ({
   };
 
   useEffect(() => {
-    if (coinbase !== coinbase2) {
+    if (coinbase !== coinbase2 && chainId === "56") {
       setCoinbase2(coinbase);
       getTotalLP();
       getLPTokens();
@@ -1557,6 +1534,11 @@ const BscFarmingFunc = ({
     fetchiDypPrice();
     getPriceDYP();
   }, []);
+  useEffect(() => {
+    if (coinbase && isConnected) {
+      setCoinbase2(coinbase);
+    }
+  }, [coinbase, isConnected]);
 
   let is_connected = is_wallet_connected;
 
@@ -1609,13 +1591,13 @@ const BscFarmingFunc = ({
   }
 
   let lp_data = the_graph_result.lp_data;
-  let apy = lp_data ? lp_data[lp_id].apy : 0;
+  let apy = lp_data ? lp_data[lp_id]?.apy : 0;
 
-  let total_stakers = lp_data ? lp_data[lp_id].stakers_num : 0;
+  let total_stakers = lp_data ? lp_data[lp_id]?.stakers_num : 0;
   // let tvl_usd = lp_data ? lp_data[lp_id].tvl_usd : 0
 
-  apy = getFormattedNumber(apy, 2);
-  total_stakers = getFormattedNumber(total_stakers, 0);
+  apy = getFormattedNumber(apy ?? 0, 2);
+  total_stakers = getFormattedNumber(total_stakers ?? 0, 0);
 
   //console.log(total_stakers)
 
@@ -1682,9 +1664,11 @@ const BscFarmingFunc = ({
   };
 
   useEffect(() => {
-    refreshBalance();
-    if (depositAmount !== "") {
-      checkApproval(depositAmount);
+    if (chainId === "56") {
+      refreshBalance();
+      if (depositAmount !== "") {
+        checkApproval(depositAmount);
+      }
     }
   }, [coinbase, coinbase2, chainId, staking, constant]);
 
@@ -1908,10 +1892,7 @@ const BscFarmingFunc = ({
                           style={{ position: "relative", bottom: "4px" }}
                         >
                           <img
-                            src={
-                              require(`./assets/bsc/${selectedTokenLogo.toLowerCase()}.svg`)
-                                .default
-                            }
+                            src={require(`./assets/bsc/${selectedTokenLogo.toLowerCase()}.svg`)}
                             alt=""
                             style={{ width: 14, height: 14 }}
                           />
@@ -1932,7 +1913,7 @@ const BscFarmingFunc = ({
                                 src={
                                   require(`./assets/bsc/${buyback_activetokensbsc[
                                     t
-                                  ].symbol.toLowerCase()}.svg`).default
+                                  ].symbol.toLowerCase()}.svg`) 
                                 }
                                 alt=""
                                 style={{ width: 14, height: 14 }}
@@ -2168,10 +2149,7 @@ const BscFarmingFunc = ({
                             aria-expanded="false"
                           >
                             <img
-                              src={
-                                require(`./assets/bsc/${selectedRewardTokenLogo1.toLowerCase()}.svg`)
-                                  .default
-                              }
+                              src={require(`./assets/bsc/${selectedRewardTokenLogo1.toLowerCase()}.svg`)}
                               alt=""
                               style={{ width: 14, height: 14 }}
                             />
@@ -2678,10 +2656,7 @@ const BscFarmingFunc = ({
                                 aria-expanded="false"
                               >
                                 <img
-                                  src={
-                                    require(`./assets/bsc/${selectedRewardTokenLogo1.toLowerCase()}.svg`)
-                                      .default
-                                  }
+                                  src={require(`./assets/bsc/${selectedRewardTokenLogo1.toLowerCase()}.svg`)}
                                   alt=""
                                   style={{ width: 14, height: 14 }}
                                 />

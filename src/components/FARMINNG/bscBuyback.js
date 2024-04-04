@@ -516,7 +516,6 @@ export default function initBscBuyback({
     };
 
     getStakeWithdrawDyp = async () => {
-      console.log(staking)
       let amountBuyback = await staking.depositedTokens(this.state.coinbase);
       this.setState({ dypstakeWithdraw: amountBuyback });
     };

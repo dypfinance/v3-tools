@@ -349,12 +349,13 @@ settvlUSD(tvlUSD)
   }, [coinbase, coinbase2]);
 
   useEffect(() => {
-    refreshBalance();
+    if(chainId === '43114')
+   { refreshBalance();
     if (depositAmount !== "") {
       checkApproval(depositAmount);
-
+}
     }
-  }, [coinbase, coinbase2, staking]);
+  }, [coinbase, coinbase2, staking, chainId]);
 
   useEffect(() => {
       setdepositAmount('');
@@ -394,7 +395,7 @@ settvlUSD(tvlUSD)
         setdepositStatus("fail");
         seterrorMsg(e?.message);
         setTimeout(() => {
-          depositAmount("");
+          setdepositAmount("");
           setdepositStatus("initial");
           seterrorMsg("");
         }, 2000);
@@ -432,7 +433,7 @@ settvlUSD(tvlUSD)
         setdepositStatus("fail");
         seterrorMsg(e?.message);
         setTimeout(() => {
-          depositAmount("");
+          setdepositAmount("");
           setdepositStatus("fail");
           seterrorMsg("");
         }, 10000);

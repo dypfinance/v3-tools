@@ -4,7 +4,7 @@ const VideoCard = ({title, onSelect, thumbnail, walletName, walletImage, active}
   return (
     <div className={`video-card p-2 ${active && 'selected-video-card'}`} onClick={onSelect}>
     <div className="video-card-image-wrapper">
-        <img src={require(`./assets/vids/${thumbnail}`).default} width={140} height={80}  alt="" />
+        <img src={require(`./assets/vids/${thumbnail}`)} width={140} height={80}  alt="" />
     </div>
     <div className="d-flex flex-column gap-2 mt-2">
         <span className="video-card-title">{title.length < 15 ? title : title.slice(0,15) + "..."}</span>
