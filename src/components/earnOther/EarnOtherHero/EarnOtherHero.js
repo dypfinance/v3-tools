@@ -86,9 +86,11 @@ const EarnOtherHero = ({ type, isPremium, onSliderClick }) => {
   ];
 
   const handleSliderClick = (obj) => {
-    if (obj.buttonType === "popup") {
-      onSliderClick(obj.chain);
-    } else if (obj.buttonType === "link") {
+    // if (obj.buttonType === "popup") {
+    //   onSliderClick(obj.chain);
+    // } else 
+    
+    if (obj.buttonType === "link") {
       navigate.push("/plans");
     }
   };
@@ -104,9 +106,9 @@ const EarnOtherHero = ({ type, isPremium, onSliderClick }) => {
                 <div
                   className={`d-flex align-items-start align-items-lg-center p-4 justify-content-between position-relative ${item.bannerBgClass} `}
                   key={index}
-                  // onClick={() => {
-                  //   handleSliderClick(item);
-                  // }}
+                  onClick={() => {
+                    handleSliderClick(item);
+                  }}
                 >
                   <div className="d-flex align-items-center justify-content-between flex-row col-lg-6 ">
                     <div className="d-flex flex-column gap-2">
@@ -132,9 +134,9 @@ const EarnOtherHero = ({ type, isPremium, onSliderClick }) => {
                 <div
                   className={`d-flex align-items-start align-items-lg-center p-4 justify-content-between position-relative ${item.bannerBgClass} `}
                   key={index}
-                  // onClick={() => {
-                  //   handleSliderClick(item);
-                  // }}
+                  onClick={() => {
+                    handleSliderClick(item);
+                  }}
                 >
                   <div className="d-flex align-items-center justify-content-between flex-row col-lg-6 ">
                     <div className="d-flex flex-column gap-2">
