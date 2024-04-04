@@ -1152,48 +1152,14 @@ const StakeDypiusAvax = ({
                   <span className="bal-smallTxt">Start date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
                     09 Nov 2023{" "}
-                    <ClickAwayListener onClickAway={startDateClose}>
-                      <Tooltip
-                        open={startDateTooltip}
-                        disableFocusListener
-                        disableHoverListener
-                        disableTouchListener
-                        placement="top"
-                        title={
-                          <div className="tooltip-text">
-                            {
-                              "The date when the staking pool became available for participation."
-                            }
-                          </div>
-                        }
-                      >
-                        <img src={moreinfo} alt="" onClick={startDateOpen} />
-                      </Tooltip>
-                    </ClickAwayListener>
+                    
                   </span>
                 </div>
                 <div className="d-flex align-items-center gap-1">
                   <span className="bal-smallTxt">End date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
                     {expiration_time}{" "}
-                    <ClickAwayListener onClickAway={endDateClose}>
-                      <Tooltip
-                        open={endDateTooltip}
-                        disableFocusListener
-                        disableHoverListener
-                        disableTouchListener
-                        placement="top"
-                        title={
-                          <div className="tooltip-text">
-                            {
-                              "The date when the staking pool will no longer accept new deposits."
-                            }
-                          </div>
-                        }
-                      >
-                        <img src={moreinfo} alt="" onClick={endDateOpen} />
-                      </Tooltip>
-                    </ClickAwayListener>
+              
                   </span>
                 </div>
               </div>
@@ -1446,48 +1412,14 @@ const StakeDypiusAvax = ({
                   <span className="bal-smallTxt">Start date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
                     09 Nov 2023{" "}
-                    <ClickAwayListener onClickAway={startDateClose}>
-                      <Tooltip
-                        open={startDateTooltip}
-                        disableFocusListener
-                        disableHoverListener
-                        disableTouchListener
-                        placement="top"
-                        title={
-                          <div className="tooltip-text">
-                            {
-                              "The date when the staking pool became available for participation."
-                            }
-                          </div>
-                        }
-                      >
-                        <img src={moreinfo} alt="" onClick={startDateOpen} />
-                      </Tooltip>
-                    </ClickAwayListener>
+             
                   </span>
                 </div>
                 <div className="d-flex align-items-center gap-1">
                   <span className="bal-smallTxt">End date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
                     {expiration_time}{" "}
-                    <ClickAwayListener onClickAway={endDateClose}>
-                      <Tooltip
-                        open={endDateTooltip}
-                        disableFocusListener
-                        disableHoverListener
-                        disableTouchListener
-                        placement="top"
-                        title={
-                          <div className="tooltip-text">
-                            {
-                              "The date when the staking pool will no longer accept new deposits."
-                            }
-                          </div>
-                        }
-                      >
-                        <img src={moreinfo} alt="" onClick={endDateOpen} />
-                      </Tooltip>
-                    </ClickAwayListener>
+                  
                   </span>
                 </div>
               </div>

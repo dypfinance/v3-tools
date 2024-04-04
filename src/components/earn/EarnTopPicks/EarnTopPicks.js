@@ -432,6 +432,7 @@ const EarnTopPicks = ({
       const dypIdypBnb = bnb_result.data.stakingInfoiDYPBnb;
 
       const dypBnb = bnb_result2.data.stakingInfoDYPBnb;
+      
       const object2 = dypBnb.map((item) => {
         return { ...item, tvl_usd: item.tvl_usd, type: "dyp", chain: "bnb" };
       });
@@ -443,7 +444,7 @@ const EarnTopPicks = ({
         return item.expired !== "Yes";
       });
 
-      const object2activeBnb = dypBnb.map((item) => {
+      const object2activeBnb = activeBnb.map((item) => {
         return { ...item, tvl_usd: item.tvl_usd, type: "idyp", chain: "bnb" };
       });
 
