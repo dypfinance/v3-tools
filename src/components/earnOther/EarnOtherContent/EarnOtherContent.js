@@ -799,7 +799,7 @@ const EarnOtherContent = ({
                 >
                   <table className="earnother-table">
                     <thead className="d-flex w-100 align-items-center justify-content-around">
-                      <th className="earnother-th col-2">Pool</th>
+                      <th className="earnother-th col-2"><div className="d-flex justify-content-center w-75">Pool</div></th>
                       <th
                         className="earnother-th col-2 d-flex justify-content-center gap-1 align-items-center arrowBtns"
                         onClick={handleSorting}

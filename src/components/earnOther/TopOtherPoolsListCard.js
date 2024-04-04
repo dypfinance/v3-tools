@@ -164,7 +164,7 @@ const TopOtherPoolsListCard = ({
               {windowSize.width && windowSize.width > 768 ? (
                 <tr className="d-flex w-100 align-items-center justify-content-between">
                   <td className="earnother-td col-2">
-                    <div className={`col-6 d-flex align-items-center gap-2 justify-content-center`}>
+                    <div className={`col-6 d-flex align-items-center gap-2 justify-content-start`}>
                       <img
                         src={tokenLogo}
                         style={{ width: 36, height: 36 }}
