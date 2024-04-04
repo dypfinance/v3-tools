@@ -1433,7 +1433,7 @@ const StakeDypiusAvax = ({
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={`${window.config.snowtrace_baseURL}address/${staking?._address}`}
+                    href={`${window.config.snowtrace_baseURL}/address/${staking?._address}`}
                     className="stats-link2"
                   >
                     {shortAddress(staking?._address)}{" "}

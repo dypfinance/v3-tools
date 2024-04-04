@@ -104,15 +104,15 @@ const EarnOtherHero = ({ type, isPremium, onSliderClick }) => {
                 <div
                   className={`d-flex align-items-start align-items-lg-center p-4 justify-content-between position-relative ${item.bannerBgClass} `}
                   key={index}
-                  onClick={() => {
-                    handleSliderClick(item);
-                  }}
+                  // onClick={() => {
+                  //   handleSliderClick(item);
+                  // }}
                 >
                   <div className="d-flex align-items-center justify-content-between flex-row col-lg-6 ">
                     <div className="d-flex flex-column gap-2">
                       <h6 className="earn-other-hero-title">{item.title}</h6>
                       <h6 className="earn-other-hero-desc">{item.desc}</h6>
-                      <button className={item.buttonClass}>{item.buttonTitle}</button>
+                      {/* <button className={item.buttonClass}>{item.buttonTitle}</button> */}
                     </div>
                     {item.apr && item.apr !== "" && (
                       <img
@@ -132,15 +132,15 @@ const EarnOtherHero = ({ type, isPremium, onSliderClick }) => {
                 <div
                   className={`d-flex align-items-start align-items-lg-center p-4 justify-content-between position-relative ${item.bannerBgClass} `}
                   key={index}
-                  onClick={() => {
-                    handleSliderClick(item);
-                  }}
+                  // onClick={() => {
+                  //   handleSliderClick(item);
+                  // }}
                 >
                   <div className="d-flex align-items-center justify-content-between flex-row col-lg-6 ">
                     <div className="d-flex flex-column gap-2">
                       <h6 className="earn-other-hero-title">{item.title}</h6>
                       <h6 className="earn-other-hero-desc">{item.desc}</h6>
-                      <button className={item.buttonClass}>{item.buttonTitle}</button>
+                      {/* <button className={item.buttonClass}>{item.buttonTitle}</button> */}
                     </div>
                     {item.apr && item.apr !== "" && (
                       <img

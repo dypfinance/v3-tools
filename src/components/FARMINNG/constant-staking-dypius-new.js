@@ -1096,7 +1096,7 @@ const StakeDypiusEth = ({
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={`${window.config.etherscan_baseURL}address/${staking?._address}`}
+                    href={`${window.config.etherscan_baseURL}/address/${staking?._address}`}
                     className="stats-link2"
                   >
                     {shortAddress(staking?._address)}{" "}
@@ -1390,7 +1390,7 @@ const StakeDypiusEth = ({
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={`${window.config.etherscan_baseURL}address/${staking?._address}`}
+                    href={`${window.config.etherscan_baseURL}/address/${staking?._address}`}
                     className="stats-link2"
                   >
                     {shortAddress(staking._address)}{" "}

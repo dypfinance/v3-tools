@@ -164,7 +164,7 @@ const TopOtherPoolsListCard = ({
               {windowSize.width && windowSize.width > 768 ? (
                 <tr className="d-flex w-100 align-items-center justify-content-between">
                   <td className="earnother-td col-2">
-                    <div className={`col-6 d-flex align-items-center gap-2`}>
+                    <div className={`col-6 d-flex align-items-center gap-2 justify-content-center`}>
                       <img
                         src={tokenLogo}
                         style={{ width: 36, height: 36 }}
@@ -176,8 +176,8 @@ const TopOtherPoolsListCard = ({
                       >
                         {tokenTicker}
                       </h5>
-                      {isStaked && <img src={stakeTag} alt="" />}
-                      {isHot && <img src={hotTag} alt="" />}
+                      {/* {isStaked && <img src={stakeTag} alt="" />} */}
+                      {/* {isHot && <img src={hotTag} alt="" />} */}
                     </div>
                   </td>
                   <td className="earnother-td col-2">

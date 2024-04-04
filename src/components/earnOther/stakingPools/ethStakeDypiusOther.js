@@ -1478,7 +1478,7 @@ const StakeDypiusEthOther = ({
                     class="spinner-border spinner-border-sm text-light"
                     role="status"
                   >
-                    <span class="visually-hidden">Loading...</span>
+                    <spaokayn class="visually-hidden">Loading...</span>
                   </div>
                 ) : withdrawStatus === "failed" ? (
                   <>Failed</>

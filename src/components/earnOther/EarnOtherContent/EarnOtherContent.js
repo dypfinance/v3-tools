@@ -334,6 +334,7 @@ const EarnOtherContent = ({
         console.log(err);
       });
   };
+
   const fetchBnbBuybackApr = async () => {
     await axios
       .get(`https://api.dyp.finance/api/get_buyback_info_bnb`)
@@ -344,6 +345,7 @@ const EarnOtherContent = ({
         console.log(err);
       });
   };
+
   const fetchAvaxBuybackApr = async () => {
     await axios
       .get(`https://api.dyp.finance/api/get_buyback_info_avax`)
@@ -858,12 +860,12 @@ const EarnOtherContent = ({
                           : false
                       }
                       isStaked={false}
-                      onCardClick={() => {
-                        setshowDetails(!showDetails);
-                        setcardIndex(!showDetails ? index : 777);
-                        setselectedBtn(item.lockTime);
-                        setselectedPool(item);
-                      }}
+                      // onCardClick={() => {
+                      //   setshowDetails(!showDetails);
+                      //   setcardIndex(!showDetails ? index : 777);
+                      //   setselectedBtn(item.lockTime);
+                      //   setselectedPool(item);
+                      // }}
                       cardIndex={cardIndex}
                       showDetails={showDetails}
                       cardId={index}
