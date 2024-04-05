@@ -8,6 +8,7 @@ import PropTypes from "prop-types";
 // import X from "../../../../../assets/images/x_close.png";
 import NftPlaceHolder from "../../General/NftPlaceHolder/NftPlaceHolder";
 import NftStakingCawChecklist from "../../General/NftStakingCawChecklist/NftStakingCawChecklist";
+import CawsPremiumChecklist from "../../General/NftStakingCawChecklist/CawsPremiumChecklist";
 import { formattedNum } from "../../../../../../functions/formatUSD";
 import getFormattedNumber from "../../../../../../functions/get-formatted-number";
 // import EthLogo from "../../../../../assets/General/eth-create-nft.png";
@@ -34,7 +35,7 @@ const NftStakeCheckListPremiumModal = ({
   getApprovedNfts,
   hideItem,
   onDepositComplete,
-  showbutton,
+  showbutton,onApprovalComplete
 }) => {
   const style = {
     position: "absolute",
@@ -99,8 +100,7 @@ const NftStakeCheckListPremiumModal = ({
 
   const checkApproval = async () => {
     const address = coinbase;
-
-    const stakeApr50 = await window.config.nftstaking_address50;
+    const stakeApr50 = await window.config.nft_caws_premiumstake_address;
     if (address !== null) {
       if (apr == 50) {
         const result = await window.nft
@@ -154,7 +154,7 @@ const NftStakeCheckListPremiumModal = ({
   };
 
   const handleApprove = async () => {
-    const stakeApr50 = await window.config.nftstaking_address50;
+    const stakeApr50 = await window.config.nft_caws_premiumstake_address;
 
     setloading(true);
     setStatus("*Waiting for approval");
@@ -165,6 +165,7 @@ const NftStakeCheckListPremiumModal = ({
         setloading(false);
         setColor("#52A8A4");
         setStatus("*Now you can deposit");
+        onApprovalComplete()
       })
       .catch((err) => {
         setloading(false);
@@ -175,7 +176,9 @@ const NftStakeCheckListPremiumModal = ({
   };
 
   const handleDeposit = async (value) => {
-    let stake_contract = await window.getContractNFT("NFTSTAKING");
+    let stake_contract = await window.getContractCawsPremiumNFT(
+      "CAWSPREMIUM"
+    );
     setloadingdeposit(true);
     setStatus("*Processing deposit");
     setColor("#F13227");
@@ -282,7 +285,9 @@ const NftStakeCheckListPremiumModal = ({
   const onEmptyState = () => {};
 
   const handleUnstake = async (value) => {
-    let stake_contract = await window.getContractNFT("NFTSTAKING");
+    let stake_contract = await window.getContractCawsPremiumNFT(
+      "CAWSPREMIUM"
+    );
     setStatus("*Processing unstake");
     setColor("#F13227");
 
@@ -311,7 +316,9 @@ const NftStakeCheckListPremiumModal = ({
   };
 
   const handleClaim = async (itemId) => {
-    let staking_contract = await window.getContractNFT("NFTSTAKING");
+    let staking_contract = await window.getContractCawsPremiumNFT(
+      "CAWSPREMIUM"
+    );
 
     setloadingClaim(true);
     setActive(false);
@@ -520,7 +527,7 @@ const NftStakeCheckListPremiumModal = ({
                   }
                   return (
                     <>
-                      <NftStakingCawChecklist
+                      <CawsPremiumChecklist
                         key={id}
                         nft={item}
                         width={195}
@@ -588,7 +595,7 @@ const NftStakeCheckListPremiumModal = ({
                 }
                 return (
                   <>
-                    <NftStakingCawChecklist
+                    <CawsPremiumChecklist
                       key={id}
                       nft={item}
                       width={195}
@@ -689,7 +696,7 @@ const NftStakeCheckListPremiumModal = ({
                       ? "linear-gradient(90.74deg, #7770E0 0%, #554FD8 100%)"
                       : "#14142A",
                   pointerEvents: active && nftItem.length > 0 ? "auto" : "none",
-                  display: showApprove === true ? "block" : "none",
+                  display: 'block'
                 }}
               >
                 {loading ? (

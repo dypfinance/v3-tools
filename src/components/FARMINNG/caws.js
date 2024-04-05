@@ -121,7 +121,7 @@ const CawsDetails = ({
     let result = 0;
     let staking_contract = await window.getContractNFT("NFTSTAKING");
     if (address !== null) {
-      if (myStakes.length > 0) {
+      if (myStakes && myStakes.length > 0) {
         calculateRewards = await staking_contract.methods
           .calculateRewards(address, myStakes)
           .call()
@@ -256,7 +256,7 @@ const CawsDetails = ({
   }, []);
 
   useEffect(() => {
-    if (isConnected && chainId === 1) {
+    if (isConnected && chainId === "1") {
       myNft().then();
       myStakes().then();
       checkApproval().then();

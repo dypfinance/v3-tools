@@ -52,6 +52,10 @@ const CawsDetailsPremium = ({
   const [totalStakes, settotalStakes] = useState(0);
   const [approvedNfts, setApprovedNfts] = useState([]);
   const [cawspopup, setCawspopup] = useState(false);
+  const [count, setcount] = useState(0);
+  const [count2, setcount2] = useState(0);
+
+
 
   const [hide, setHide] = useState("");
   const windowSize = useWindowSize();
@@ -62,8 +66,8 @@ const CawsDetailsPremium = ({
     const stakeAdr = await window.config.nft_caws_premiumstake_address;
 
     if (address !== null) {
-      const result = await window.cawsPremium
-        .checkapproveStakeCawsPremium(address, stakeAdr)
+      const result = await window.nft
+        .checkapproveStake(address, stakeAdr)
         .then((data) => {
           return data;
         });
@@ -83,7 +87,7 @@ const CawsDetailsPremium = ({
     let myNft = await window.myNftListContract(coinbase);
 
     let nfts = myNft.map((nft) => window.getNft(nft));
-
+console.log(';nfts',nfts)
     nfts = await Promise.all(nfts);
 
     nfts.reverse();
@@ -128,7 +132,7 @@ const CawsDetailsPremium = ({
       "CAWSPREMIUM"
     );
     if (address !== null) {
-      if (myStakes.length > 0) {
+      if (myStakes && myStakes.length > 0) {
         calculateRewards = await staking_contract.methods
           .calculateRewards(address, myStakes)
           .call()
@@ -248,13 +252,13 @@ const CawsDetailsPremium = ({
 
   const totalStakedNft = async () => {
     let staking_contract = await new window.infuraWeb3.eth.Contract(
-      window.CAWSPREMIUM_ABI,
-      window.config.nft_caws_premiumstake_address,
+      window.NFT_ABI,
+      window.config.nft_address,
       { from: undefined }
     );
 
     await staking_contract.methods
-      .balanceOf(window.config.nftstaking_address)
+      .balanceOf(window.config.nft_caws_premiumstake_address)
       .call()
       .then((data) => {
         settotalStakes(data);
@@ -267,17 +271,23 @@ const CawsDetailsPremium = ({
 
   useEffect(() => {
     totalStakedNft().then();
-  }, []);
+  }, [count]);
 
   useEffect(() => {
-    if (isConnected && chainId === 1) {
+    if (isConnected && chainId === "1") {
       myNft().then();
       myStakes().then();
       checkApproval().then();
       handleClaimAll();
+    }
+  }, [isConnected, chainId, count]);
+
+  useEffect(() => {
+    if (isConnected && chainId === "1") {
+      checkApproval().then();
       calculateCountdown().then();
     }
-  }, [isConnected, chainId]);
+  }, [isConnected, chainId, count2]);
 
   const getApprovedNfts = (data) => {
     setApprovedNfts(data);
@@ -501,8 +511,10 @@ const CawsDetailsPremium = ({
               <div className="d-flex flex-column gap-2 justify-content-between">
                 <div className="d-flex align-items-center justify-content-between gap-2">
                   <button
-                    className="btn filledbtn"
-                    disabled={!isPremium}
+                    className={`btn ${
+                      (!isPremium || mystakes.length === 4) ? "disabled-btn" : "filledbtn"
+                    } d-flex justify-content-center align-items-center`}
+                    disabled={!isPremium || mystakes.length === 4}
                     onClick={() => {
                       setshowChecklistModal(true);
                       setOpenStakeChecklist(true);
@@ -512,10 +524,10 @@ const CawsDetailsPremium = ({
                   >
                     Select NFTs
                   </button>
-                  <div className="available-nfts">
+                  {/* <div className="available-nfts">
                     Selected NFTs:{" "}
                     <b>{isConnected === false ? 0 : approvedNfts.length}</b>
-                  </div>
+                  </div> */}
                 </div>
 
                 {/* {this.state.errorMsg && (
@@ -650,6 +662,8 @@ const CawsDetailsPremium = ({
           open={openStakeChecklist ? true : false}
           hideItem={hide}
           showbutton={true}
+          onDepositComplete={()=>{setcount(count+1)}}
+          onApprovalComplete={()=>{setcount2(count2+1)}}
         />
       )}
 

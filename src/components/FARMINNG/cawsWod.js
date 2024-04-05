@@ -177,7 +177,7 @@ const CawsWodDetails = ({
     let result = 0;
 
     if (coinbase !== null) {
-      if (myStakes.length > 0) {
+      if (myStakes && myStakes.length > 0) {
         let rewards = await window.wod_caws
           .calculateRewardsWodCaws(coinbase, myStakes)
           .then((data) => {
