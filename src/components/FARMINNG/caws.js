@@ -256,7 +256,7 @@ const CawsDetails = ({
   }, []);
 
   useEffect(() => {
-    if (isConnected && chainId === 1) {
+    if (isConnected && chainId === "1") {
       myNft().then();
       myStakes().then();
       checkApproval().then();
