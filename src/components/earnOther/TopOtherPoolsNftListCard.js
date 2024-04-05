@@ -4,6 +4,8 @@ import avaxStake from "../../assets/earnAssets/avaxStakeActive.svg";
 import baseStake from "../../assets/earnAssets/baseActive.svg";
 import bnbStakeActive from "../../assets/earnAssets/bnbStakeActive.svg";
 import premiumIcon from "../../assets/earnAssets/premiumIcon.svg";
+import premiumTag from "../../assets/earnAssets/premiumTag.svg";
+
 import useWindowSize from "../../functions/useWindowSize";
 import CawsDetailsPremium from "../FARMINNG/cawsPremium";
 
@@ -42,7 +44,10 @@ const TopOtherPoolsNftListCard = ({
   expiredPools,
   activePools,
   totalTvl,
-  totalNftsLocked,clickedCawsPool,onCloseCard,isPremium
+  totalNftsLocked,
+  clickedCawsPool,
+  onCloseCard,
+  isPremium,
 }) => {
   const ethCoins = ["ethereum", "wbtc", "usdc", "usdt"];
   const bscCoins = [
@@ -91,17 +96,21 @@ const TopOtherPoolsNftListCard = ({
     }
   }, [chain]);
 
+ 
   const handleDetails = () => {
-      if (showDetails === false) {
-        setShowDetails(true);
-        setcardIndex(cardIndex);
-        // onShowDetailsClick();
-      } else if (showDetails === true) {
-        setShowDetails(false);
-        setcardIndex();
-        onCloseCard()
-      }
-    
+    if (showDetails === false && clickedCawsPool === false) {
+      setShowDetails(true);
+      setcardIndex(cardIndex);
+      // onShowDetailsClick();
+    } else if (clickedCawsPool === true) {
+      setShowDetails(false);
+      setcardIndex();
+      onCloseCard();
+    } else if (showDetails === true && clickedCawsPool === false) {
+      setShowDetails(false);
+      setcardIndex();
+      onCloseCard();
+    }
   };
 
   return (
@@ -113,7 +122,10 @@ const TopOtherPoolsNftListCard = ({
         onClick={() => handleDetails()}
         style={{ display: display }}
       >
-        <img src={premiumIcon} className="position-absolute nft-premium-icon d-none d-lg-block" />
+        <img
+          src={premiumIcon}
+          className="position-absolute nft-premium-icon d-none d-lg-block"
+        />
         <div className="px-0 d-flex justify-content-between align-items-center">
           <table className="earnother-table">
             <tbody>
@@ -186,7 +198,7 @@ const TopOtherPoolsNftListCard = ({
                   </td>
                   <td className="earnother-td col-2">
                     <h6 className="details-text2 w-75 gap-1 d-flex align-items-center cursor-pointer justify-content-center m-0">
-                     Stake
+                      Stake
                     </h6>
                   </td>
                 </tr>
@@ -202,7 +214,7 @@ const TopOtherPoolsNftListCard = ({
                             height={28}
                             alt=""
                           />
-                          <div className="d-flex flex-column gap-1">
+                          <div className="d-flex align-items-center gap-1">
                             <h5
                               className="text-white"
                               style={{ fontSize: "16px", fontWeight: "600" }}
@@ -217,7 +229,10 @@ const TopOtherPoolsNftListCard = ({
                                 color: "#F7F7FC",
                               }}
                             >
-                              {chain}
+                              <img
+                                src={premiumTag}
+                                className="d-block d-lg-none d-md-none w-auto"
+                              />
                             </h5>
                           </div>
                         </div>
@@ -252,7 +267,9 @@ const TopOtherPoolsNftListCard = ({
                     </td>
                   </tr>
                 </>
-              ) : <></>}
+              ) : (
+                <></>
+              )}
             </tbody>
           </table>
         </div>

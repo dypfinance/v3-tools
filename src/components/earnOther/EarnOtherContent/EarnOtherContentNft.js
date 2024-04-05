@@ -426,6 +426,8 @@ const EarnOtherContentNft = ({
 
   useEffect(()=>{
     if(poolClickedType === 'details-nft' && poolClicked === true && clickedCawsPool === false) {
+      setMyStakes(false)
+      setExpiredPools(false)
       setclickedCawsPool(true)
     }
   },[poolClickedType,poolClicked,clickedCawsPool])
@@ -477,7 +479,7 @@ const EarnOtherContentNft = ({
                 />
               </div>
             </div> */}
-            <div className="col-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3 px-0">
+            <div className="col-lg-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3 px-0">
               <h5 className="text-white inactive-pools">Past pools</h5>
               <div
                 className={`pill-box ${myStakes && "pill-box-active"}`}
@@ -492,10 +494,10 @@ const EarnOtherContentNft = ({
           </div>
         ) : (
           <div
-            className="row justify-content-end align-items-center p-2 options-container"
+            className="d-flex gap-3 justify-content-between flex-row-reverse align-items-center p-2 options-container"
             style={{ marginTop: "24px", marginBottom: "24px" }}
           >
-            <div className="col-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3">
+            <div className="col-lg-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3">
               <h5 className="text-white inactive-pools">Past pools</h5>
               <div
                 className={`pill-box ${myStakes && "pill-box-active"}`}
@@ -507,7 +509,7 @@ const EarnOtherContentNft = ({
                 <div className="pill"></div>
               </div>
             </div>
-            <div className="col-12 col-lg-4 col-xl-3 px-0">
+            <div className="col-lg-4 col-xl-3 px-0">
         
                 <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
                   <span style={{ fontWeight: "300", fontSize: "13px" }}>
