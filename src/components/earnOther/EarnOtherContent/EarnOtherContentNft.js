@@ -28,7 +28,7 @@ const EarnOtherContentNft = ({
   customChain,
   faqIndex,
   networkId,
-  handleSwitchNetwork,isPremium,onCloseCard
+  handleSwitchNetwork,isPremium,onCloseCard,totalTvl
 }) => {
   const options = [
     {
@@ -450,7 +450,7 @@ const EarnOtherContentNft = ({
                     className="text-white"
                     style={{ fontWeight: "600", fontSize: "17px" }}
                   >
-                    ${getFormattedNumber("2585417", 0)}
+                    ${getFormattedNumber(totalTvl, 0)}
                   </h6>
                 </div>
             
@@ -519,7 +519,7 @@ const EarnOtherContentNft = ({
                     className="text-white"
                     style={{ fontWeight: "600", fontSize: "17px" }}
                   >
-                    ${getFormattedNumber("2585417", 0)}
+                    ${getFormattedNumber(totalTvl, 0)}
                   </h6>
                 </div>
          
