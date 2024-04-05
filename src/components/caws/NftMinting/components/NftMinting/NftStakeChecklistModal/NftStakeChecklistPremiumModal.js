@@ -116,7 +116,7 @@ const NftStakeCheckListPremiumModal = ({
         } else if (result === true && nftItem.length == 0) {
           setStatus("");
         } else if (result === false) {
-          setStatus(" *Please approve before deposit");
+          setStatus("*Please approve before deposit");
           setshowApprove(true);
         }
       }
@@ -138,6 +138,8 @@ const NftStakeCheckListPremiumModal = ({
     }
     setCheckUnstakeBtn(false);
   };
+
+  console.log(selectNftIds)
 
   const handleSelectAllToUnstake = () => {
     setCheckUnstakeBtn(!checkUnstakebtn);
@@ -535,12 +537,12 @@ const NftStakeCheckListPremiumModal = ({
                         isStake={showStaked}
                         countDownLeft={countDownLeft}
                         checked={
-                          ((showToStake === true && checkbtn === true) ||
+                          ((showToStake === true && checkbtn === true && selectNftIds.includes(nftId)) ||
                             (showStaked === true &&
-                              checkUnstakebtn === true)) &&
-                          selectNftIds.length <= 4
+                              checkUnstakebtn === true && selectNftIds.includes(nftId))) &&
+                          selectNftIds.length <= 4 
                         }
-                        checked2={selectNftIds.length <= 4 ? true : false}
+                        checked2={(selectNftIds.length <= 4 )? true : false}
                         checklistItemID={nftId}
                         onChange={(value) => {
                           selectNftIds.indexOf(value) === -1
@@ -604,8 +606,8 @@ const NftStakeCheckListPremiumModal = ({
                       isStake={showStaked}
                       countDownLeft={countDownLeft}
                       checked={
-                        ((showToStake === true && checkbtn === true) ||
-                          (showStaked === true && checkUnstakebtn === true)) &&
+                        ((showToStake === true && checkbtn === true && selectNftIds.includes(nftId)) ||
+                          (showStaked === true && checkUnstakebtn === true && selectNftIds.includes(nftId))) &&
                         selectNftIds.length <= 4
                       }
                       checked2={selectNftIds.length <= 4 ? true : false}
@@ -692,10 +694,10 @@ const NftStakeCheckListPremiumModal = ({
                 }}
                 style={{
                   background:
-                    active && nftItem.length > 0
+                    showApprove && nftItem.length > 0
                       ? "linear-gradient(90.74deg, #7770E0 0%, #554FD8 100%)"
                       : "#14142A",
-                  pointerEvents: active && nftItem.length > 0 ? "auto" : "none",
+                  pointerEvents: showApprove && nftItem.length > 0 ? "auto" : "none",
                   display: 'block'
                 }}
               >

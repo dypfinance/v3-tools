@@ -87,7 +87,7 @@ const CawsDetailsPremium = ({
     let myNft = await window.myNftListContract(coinbase);
 
     let nfts = myNft.map((nft) => window.getNft(nft));
-console.log(';nfts',nfts)
+
     nfts = await Promise.all(nfts);
 
     nfts.reverse();
