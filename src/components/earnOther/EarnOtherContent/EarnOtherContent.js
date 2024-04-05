@@ -498,6 +498,16 @@ const EarnOtherContent = ({
     }
   }, [poolClicked, poolClickedType, allPools]);
 
+  // const handleManageDetails = (obj,index)=>{
+  //   if(obj.name.toLowerCase() === 'bnb') {
+  //       setshowDetails(!showDetails);
+  //                       setcardIndex(!showDetails ? index : 777);
+  //                       setselectedBtn(obj.lockTime);
+  //                       setselectedPool(obj);
+  //   }
+  
+  // }
+
   return (
     <>
       <div className="row mx-0 justify-content-center w-100 ">

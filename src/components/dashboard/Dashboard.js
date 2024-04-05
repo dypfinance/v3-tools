@@ -1536,7 +1536,7 @@ const Dashboard = ({
                     <div className="info-pool-item p-2">
                       <div className="d-flex justify-content-between gap-1 align-items-center">
                         <span className="info-pool-left-text">
-                          Apr{" "}
+                          APR{" "}
                           <ClickAwayListener onClickAway={aprClose}>
                             <Tooltip
                               open={aprTooltip}

@@ -9,6 +9,7 @@ import getFormattedNumber from "../../functions/get-formatted-number";
 import "./top-pools.css";
 import LandDetails from "../FARMINNG/land";
 import CawsDetails from "../FARMINNG/caws";
+import CawsDetailsPremium from "../FARMINNG/cawsPremium";
 import CawsWodDetails from "../FARMINNG/cawsWod";
 import axios from "axios";
 import useWindowSize from "../../functions/useWindowSize";
@@ -170,7 +171,7 @@ const TopPoolsNftListCardInner = ({
       setCoins(avaxCoins2);
     }
   }, [chain]);
- 
+
   return (
     <>
       <div
@@ -188,7 +189,7 @@ const TopPoolsNftListCardInner = ({
         <div className="px-0 d-flex justify-content-between align-items-center">
           <table className="earnother-table">
             <tbody>
-              { windowSize.width && windowSize.width > 768 ? (
+              {windowSize.width && windowSize.width > 768 ? (
                 <tr className="d-flex w-100 align-items-center justify-content-around">
                   <td className="earnother-td col-2">
                     <div className={`col-6 d-flex align-items-center gap-2`}>
@@ -236,7 +237,7 @@ const TopPoolsNftListCardInner = ({
                       className="d-flex align-items-center gap-2"
                     >
                       <img
-                        src={ ethStake }
+                        src={ethStake}
                         style={{ width: 18, height: 18 }}
                         alt=""
                         className="pool-coins"
@@ -270,7 +271,7 @@ const TopPoolsNftListCardInner = ({
                   </td>
                   <td className="earnother-td col-2">
                     <h6 className="details-text2 gap-1 w-50 d-flex align-items-center cursor-pointer justify-content-center m-0">
-                    Withdraw
+                      Withdraw
                     </h6>
                   </td>
                 </tr>
@@ -308,7 +309,7 @@ const TopPoolsNftListCardInner = ({
                                 color: "#F7F7FC",
                               }}
                             >
-                              {tokenTicker}
+                              {chain}
                             </h5>
                           </div>
                         </div>
@@ -320,7 +321,7 @@ const TopPoolsNftListCardInner = ({
                               color: "#F7F7FC",
                             }}
                           >
-                            {apr}
+                            {apr}%
                           </h5>
                           <h5
                             style={{
@@ -343,7 +344,9 @@ const TopPoolsNftListCardInner = ({
                     </td>
                   </tr>
                 </>
-              ) : <></>}
+              ) : (
+                <></>
+              )}
             </tbody>
           </table>
         </div>
@@ -379,8 +382,8 @@ const TopPoolsNftListCardInner = ({
           handleSwitchNetwork={handleSwitchNetwork}
           handleConnection={handleConnection}
           expired={true}
-            apr={25}
-            totalNftsLocked={totalNftsLocked}
+          apr={25}
+          totalNftsLocked={totalNftsLocked}
         />
       ) : (
         <></>

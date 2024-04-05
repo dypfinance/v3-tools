@@ -34,6 +34,8 @@ const EarnOtherNft = ({
         networkId={network}
         handleConnection={handleConnection}
         handleSwitchNetwork={handleSwitchNetwork}
+        isPremium={isPremium} 
+        onCloseCard={()=>{setPoolClicked(false); setPoolClickedType('')}}
       />
     </div>
   );

@@ -33,7 +33,7 @@ const EarnOtherHero = ({ type, isPremium, onSliderClick }) => {
       title: "New ETH Staking Pool",
       desc: "Stake your assets to earn ETH rewards",
       buttonType: "popup",
-      chain: "weth",
+      chain: "eth",
       bannerBgClass: "ethBgDesktop",
       buttonTitle: "Stake Now",
       buttonClass: "hero-stake-eth-btn",
@@ -43,7 +43,7 @@ const EarnOtherHero = ({ type, isPremium, onSliderClick }) => {
       title: "New BNB Staking Pool",
       desc: "Stake your assets to earn BNB rewards",
       buttonType: "popup",
-      chain: "wbnb",
+      chain: "bnb",
       bannerBgClass: "bscBgDesktop",
       buttonTitle: "Stake Now",
       buttonClass: "hero-stake-bnb-btn",
@@ -53,7 +53,7 @@ const EarnOtherHero = ({ type, isPremium, onSliderClick }) => {
       title: "New AVAX Staking Pool",
       desc: "Stake your assets to earn AVAX rewards",
       buttonType: "popup",
-      chain: "wavax",
+      chain: "avax",
       bannerBgClass: "avaxBgDesktop",
       buttonTitle: "Stake Now",
       buttonClass: "hero-stake-avax-btn",
@@ -76,7 +76,7 @@ const EarnOtherHero = ({ type, isPremium, onSliderClick }) => {
     {
       title: "New CAWS Staking Pool",
       desc: "Stake your assets to earn ETH rewards",
-      buttonType: "popup",
+      buttonType: "details-nft",
       chain: "eth",
       buttonTitle: "Stake Now",
       buttonClass: "hero-stake-caws-btn",
@@ -92,6 +92,8 @@ const EarnOtherHero = ({ type, isPremium, onSliderClick }) => {
     
     if (obj.buttonType === "link") {
       navigate.push("/plans");
+    } else if (obj.buttonType === "details-nft") {
+      onSliderClick('details-nft')
     }
   };
 
@@ -114,7 +116,8 @@ const EarnOtherHero = ({ type, isPremium, onSliderClick }) => {
                     <div className="d-flex flex-column gap-2">
                       <h6 className="earn-other-hero-title">{item.title}</h6>
                       <h6 className="earn-other-hero-desc">{item.desc}</h6>
-                      {/* <button className={item.buttonClass}>{item.buttonTitle}</button> */}
+                      {/* {item.chain === 'bnb' && 
+                      <button className={item.buttonClass}>{item.buttonTitle}</button>} */}
                     </div>
                     {item.apr && item.apr !== "" && (
                       <img
@@ -142,7 +145,7 @@ const EarnOtherHero = ({ type, isPremium, onSliderClick }) => {
                     <div className="d-flex flex-column gap-2">
                       <h6 className="earn-other-hero-title">{item.title}</h6>
                       <h6 className="earn-other-hero-desc">{item.desc}</h6>
-                      {/* <button className={item.buttonClass}>{item.buttonTitle}</button> */}
+                      <button className={item.buttonClass}>{item.buttonTitle}</button>
                     </div>
                     {item.apr && item.apr !== "" && (
                       <img

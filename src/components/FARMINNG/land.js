@@ -315,9 +315,22 @@ const LandDetails = ({
                   >
                     <div
                       className="tooltip d-flex justify-content-center"
-                      style={{ opacity: 1, width: 100 }}
+                      style={{ opacity: 1, width: 145 }}
                     >
-                      <div className="d-flex flex-column gap-2 align-items-center">
+                      <div className="d-flex flex-column gap-2 align-items-start">
+                      <a
+                          href="https://www.worldofdypians.com/marketplace/land"
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={() => {
+                            setLandpopup(false);
+                          }}
+                        >
+                          <h6 className="bottomitems">
+                            <img src={arrowup} alt="" />
+                            WoD Marketplace
+                          </h6>
+                      </a>
                         <a
                           href="https://nft.coinbase.com/collection/worldofdypians"
                           target="_blank"
