@@ -262,9 +262,9 @@ const CawsWodDetails = ({
         console.log(e);
       });
   };
-
+ 
   useEffect(() => {
-    if (coinbase && chainId === 1) {
+    if (coinbase && chainId === "1") {
       getStakesIds();
       getLandStakesIds();
       myNft();

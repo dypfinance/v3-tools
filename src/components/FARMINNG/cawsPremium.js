@@ -59,11 +59,11 @@ const CawsDetailsPremium = ({
 
   const checkApproval = async () => {
     const address = coinbase;
-    const stakeApr50 = await window.config.nftstaking_address50;
+    const stakeAdr = await window.config.nft_caws_premiumstake_address;
 
     if (address !== null) {
-      const result = await window.nft
-        .checkapproveStake(address, stakeApr50)
+      const result = await window.cawsPremium
+        .checkapproveStakeCawsPremium(address, stakeAdr)
         .then((data) => {
           return data;
         });
@@ -93,7 +93,9 @@ const CawsDetailsPremium = ({
 
   const getStakesIds = async () => {
     const address = coinbase;
-    let staking_contract = await window.getContractNFT("NFTSTAKING");
+    let staking_contract = await window.getContractCawsPremiumNFT(
+      "CAWSPREMIUM"
+    );
     let stakenft = [];
     let myStakes = await staking_contract.methods
       .depositsOf(address)
@@ -122,7 +124,9 @@ const CawsDetailsPremium = ({
     let myStakes = await getStakesIds();
     let calculateRewards = [];
     let result = 0;
-    let staking_contract = await window.getContractNFT("NFTSTAKING");
+    let staking_contract = await window.getContractCawsPremiumNFT(
+      "CAWSPREMIUM"
+    );
     if (address !== null) {
       if (myStakes.length > 0) {
         calculateRewards = await staking_contract.methods
@@ -146,7 +150,9 @@ const CawsDetailsPremium = ({
 
   const claimRewards = async () => {
     let myStakes = await getStakesIds();
-    let staking_contract = await window.getContractNFT("NFTSTAKING");
+    let staking_contract = await window.getContractCawsPremiumNFT(
+      "CAWSPREMIUM"
+    );
     // setclaimAllStatus("Claiming all rewards, please wait...");
     await staking_contract.methods
       .claimRewards(myStakes)
@@ -178,7 +184,9 @@ const CawsDetailsPremium = ({
   const calculateCountdown = async () => {
     const address = coinbase;
 
-    let staking_contract = await window.getContractNFT("NFTSTAKING");
+    let staking_contract = await window.getContractCawsPremiumNFT(
+      "CAWSPREMIUM"
+    );
     if (address !== null) {
       let finalDay = await staking_contract.methods
         .stakingTime(address)
@@ -208,11 +216,11 @@ const CawsDetailsPremium = ({
 
   const handleUnstakeAll = async () => {
     let myStakes = await getStakesIds();
-    let stake_contract = await window.getContractNFT("NFTSTAKING");
+    let stake_contract = await window.getContractCawsPremiumNFT("CAWSPREMIUM");
     // setunstakeAllStatus("Unstaking all please wait...");
 
     await stake_contract.methods
-      .emergencyWithdraw(myStakes)
+      .withdraw(myStakes)
       .send()
       .then(() => {
         // setunstakeAllStatus("Successfully unstaked all!");
@@ -234,14 +242,14 @@ const CawsDetailsPremium = ({
       });
   };
 
- const handleNavigateToPlans = ()=>{
+  const handleNavigateToPlans = () => {
     navigate.push("/plans");
-  }
+  };
 
   const totalStakedNft = async () => {
     let staking_contract = await new window.infuraWeb3.eth.Contract(
-      window.NFT_ABI,
-      window.config.nft_address,
+      window.CAWSPREMIUM_ABI,
+      window.config.nft_caws_premiumstake_address,
       { from: undefined }
     );
 
@@ -437,11 +445,11 @@ const CawsDetailsPremium = ({
                   >
                     <img src={wallet} alt="" /> Connect wallet
                   </button>
-                ) : chainId === "1"&& isPremium ? (
+                ) : chainId === "1" && isPremium ? (
                   <div className="addressbtn btn">
                     <Address a={coinbase} chainId={1} />
                   </div>
-                ) : (chainId !=='1' && isPremium) ?  (
+                ) : chainId !== "1" && isPremium ? (
                   <button
                     className="connectbtn btn"
                     onClick={() => {
@@ -451,21 +459,24 @@ const CawsDetailsPremium = ({
                     Change Network
                   </button>
                 ) : (
-                    <button
-                      className="connectbtn btn"
-                      onClick={() => {
-                        handleNavigateToPlans();
-                      }}
-                    >
-                      Become Premium
-                    </button>
-                  )}
+                  <button
+                    className="connectbtn btn"
+                    onClick={() => {
+                      handleNavigateToPlans();
+                    }}
+                  >
+                    Become Premium
+                  </button>
+                )}
               </div>
             </div>
             <div
               className={`otherside-border col-12 col-md-6 ${
                 renderedPage === "dashboard" ? "col-lg-3" : "col-lg-4"
-              } ${(chainId !== "1" || expired === true || !isPremium) && "blurrypool"}`}
+              } ${
+                (chainId !== "1" || expired === true || !isPremium) &&
+                "blurrypool"
+              }`}
             >
               <div className="d-flex justify-content-between align-items-center gap-2">
                 <div className="d-flex align-items-center gap-3">
@@ -515,7 +526,10 @@ const CawsDetailsPremium = ({
             <div
               className={`otherside-border col-12 col-md-6 ${
                 renderedPage === "dashboard" ? "col-lg-5" : "col-lg-4"
-              }  ${(chainId !== "1" || expired === true || !isPremium) && "blurrypool"}`}
+              }  ${
+                (chainId !== "1" || expired === true || !isPremium) &&
+                "blurrypool"
+              }`}
             >
               <div className="d-flex justify-content-between gap-2 flex-column flex-lg-row">
                 <h6 className="withdraw-txt d-flex gap-2 align-items-center">
@@ -558,7 +572,7 @@ const CawsDetailsPremium = ({
                     } d-flex justify-content-center align-items-center`}
                     style={{ height: "fit-content" }}
                     onClick={claimRewards}
-                    disabled={(!isPremium || EthRewards === 0)}
+                    disabled={!isPremium || EthRewards === 0}
                   >
                     Claim
                   </button>
@@ -567,7 +581,10 @@ const CawsDetailsPremium = ({
             </div>
 
             <div
-              className={`otherside-border col-12 col-md-6 col-lg-2 ${(chainId !== "1" || expired === true || !isPremium) && "blurrypool"}`}
+              className={`otherside-border col-12 col-md-6 col-lg-2 ${
+                (chainId !== "1" || expired === true || !isPremium) &&
+                "blurrypool"
+              }`}
             >
               <h6 className="deposit-txt d-flex align-items-center gap-2 justify-content-between">
                 Unstake
