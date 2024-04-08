@@ -310,7 +310,7 @@ const CawsDetailsPremium = ({
       >
         <div className="leftside2 w-100">
           <div className="activewrapper position-relative flex-row-reverse flex-lg-row align-items-end align-items-lg-center">
-            <div className="d-flex flex-column flex-lg-row align-items-end align-items-lg-center justify-content-between gap-3 gap-lg-5">
+            <div className="d-flex flex-column flex-lg-row align-items-end align-items-lg-center justify-content-between gap-2 gap-lg-5">
               <h6 className="activetxt">
                 <img
                   src={ellipse}
