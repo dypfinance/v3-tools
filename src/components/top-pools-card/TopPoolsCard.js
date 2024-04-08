@@ -154,7 +154,7 @@ const TopPoolsCard = ({
                     <h6 className="token-name d-flex align-items-center gap-2">
                       <img
                         key={index}
-                        src={require(`./assets/${coin}.svg`).default}
+                        src={require(`./assets/${coin}.svg`)}
                         alt=""
                         className="pool-coins"
                       />
@@ -164,7 +164,7 @@ const TopPoolsCard = ({
                 : tokenLogo !== undefined && (
                     <h6 className="token-name d-flex align-items-center gap-2">
                       <img
-                        src={require(`./assets/${tokenLogo}`).default}
+                        src={require(`./assets/${tokenLogo}`)}
                         alt=""
                         className="tokenlogo"
                         width={32}

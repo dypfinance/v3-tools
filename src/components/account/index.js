@@ -131,9 +131,13 @@ export default class Subscription extends React.Component {
       const sortedExpired = allExpireEth.sort(function (a, b) {
         return b.tvl_usd - a.tvl_usd;
       });
-
-      const allEthPools = [...sortedActive, ...sortedExpired];
-      this.setState({ ethStake: allEthPools });
+      if (this.props.showRibbon === true) {
+        const allEthPools = [...sortedActive, ...sortedExpired];
+        this.setState({ ethStake: allEthPools });
+      } else if (this.props.showRibbon === false) {
+        const allEthPools = [...sortedActive];
+        this.setState({ ethStake: allEthPools });
+      }
     }
   };
 
@@ -190,8 +194,13 @@ export default class Subscription extends React.Component {
         return b.tvl_usd - a.tvl_usd;
       });
 
-      const allBnbPools = [...sortedActive, ...sortedExpired];
-      this.setState({ bnbStake: allBnbPools });
+      if (this.props.showRibbon === true) {
+        const allBnbPools = [...sortedActive, ...sortedExpired];
+        this.setState({ bnbStake: allBnbPools });
+      } else if (this.props.showRibbon === false) {
+        const allBnbPools = [...sortedActive];
+        this.setState({ bnbStake: allBnbPools });
+      }
     }
   };
 
@@ -247,8 +256,13 @@ export default class Subscription extends React.Component {
         return b.tvl_usd - a.tvl_usd;
       });
 
-      const avaxAllPools = [...sortedActive, ...sortedExpired];
-      this.setState({ avaxStake: avaxAllPools });
+      if (this.props.showRibbon === true) {
+        const avaxAllPools = [...sortedActive, ...sortedExpired];
+        this.setState({ avaxStake: avaxAllPools });
+      } else if (this.props.showRibbon === false) {
+        const avaxAllPools = [...sortedActive];
+        this.setState({ avaxStake: avaxAllPools });
+      }
     }
   };
 
@@ -276,8 +290,13 @@ export default class Subscription extends React.Component {
           return b.tvl_usd - a.tvl_usd;
         });
 
-        const ethAllPools = [...sortedActive, ...sortedExpired];
-        this.setState({ ethFarm: ethAllPools });
+        if (this.props.showRibbon === true) {
+          const ethAllPools = [...sortedActive, ...sortedExpired];
+          this.setState({ ethFarm: ethAllPools });
+        } else if (this.props.showRibbon === false) {
+          const ethAllPools = [...sortedActive];
+          this.setState({ ethFarm: ethAllPools });
+        }
       })
       .catch((err) => console.error(err));
   };
@@ -305,8 +324,13 @@ export default class Subscription extends React.Component {
           return b.tvl_usd - a.tvl_usd;
         });
 
-        const bnbAllpools = [...sortedActive, ...sortedExpired];
-        this.setState({ bscFarm: bnbAllpools });
+        if (this.props.showRibbon === true) {
+          const bnbAllpools = [...sortedActive, ...sortedExpired];
+          this.setState({ bscFarm: bnbAllpools });
+        } else if (this.props.showRibbon === false) {
+          const bnbAllpools = [...sortedActive];
+          this.setState({ bscFarm: bnbAllpools });
+        }
       })
       .catch((err) => console.error(err));
   };
@@ -533,6 +557,16 @@ export default class Subscription extends React.Component {
       } else if (this.props.networkId === 1) {
         this.handleSubscriptionTokenChange(this.state.usdtAddress);
       }
+    }
+
+    if (this.props.showRibbon !== prevProps.showRibbon) {
+      this.fetchUserPools();
+      this.fetchAvaxFarming();
+      this.fetchAvaxStaking();
+      this.fetchBnbStaking();
+      this.fetchBscFarming();
+      this.fetchEthFarming();
+      this.fetchEthStaking();
     }
   }
 
@@ -1986,7 +2020,7 @@ export default class Subscription extends React.Component {
                     .slice(0, this.state.ethStake.length)
                     .map((pool, index) => (
                       <NavLink
-                        to="/earn"
+                        to="/earn/dypius"
                         style={{
                           display:
                             this.state.userPools.length > 0
@@ -2073,7 +2107,7 @@ export default class Subscription extends React.Component {
                     .slice(0, this.state.bnbStake.length)
                     .map((pool, index) => (
                       <NavLink
-                        to="/earn"
+                        to="/earn/dypius"
                         style={{
                           display:
                             this.state.userPools.length > 0
@@ -2165,7 +2199,7 @@ export default class Subscription extends React.Component {
                     .slice(0, this.state.avaxStake.length)
                     .map((pool, index) => (
                       <NavLink
-                        to="/earn"
+                        to="/earn/dypius"
                         style={{
                           display:
                             this.state.userPools.length > 0
@@ -2299,7 +2333,7 @@ export default class Subscription extends React.Component {
                             key={id}
                             nft={item}
                             action={() => {
-                              window.location.assign("/earn");
+                              window.location.assign("/earn/dypius");
                             }}
                             modalId="#newNftStake"
                             coinbase={this.props.coinbase}
@@ -2361,7 +2395,7 @@ export default class Subscription extends React.Component {
                             key={id}
                             nft={item}
                             action={() => {
-                              window.location.assign("/earn");
+                              window.location.assign("/earn/dypius");
                             }}
                             modalId="#newNftStake"
                             coinbase={this.props.coinbase}

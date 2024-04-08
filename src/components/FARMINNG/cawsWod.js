@@ -29,7 +29,7 @@ const CawsWodDetails = ({
   handleSwitchNetwork,
   chainId,
   handleConnection,
-  renderedPage,
+  renderedPage,expired
 }) => {
   const [myNFTs, setMyNFTs] = useState([]);
   const [myLandNFTs, setMyLandNFTs] = useState([]);
@@ -264,7 +264,7 @@ const CawsWodDetails = ({
   };
 
   useEffect(() => {
-    if (coinbase) {
+    if (coinbase && chainId === "1") {
       getStakesIds();
       getLandStakesIds();
       myNft();
@@ -275,7 +275,7 @@ const CawsWodDetails = ({
       calculateAllRewards();
       calculateCountdown();
     }
-  }, [isConnected, coinbase, screenName, newStakes]);
+  }, [isConnected, coinbase, screenName, newStakes, chainId]);
 
   const getApprovedNfts = (data) => {
     setApprovedNfts(data);
@@ -304,24 +304,18 @@ const CawsWodDetails = ({
   return (
     <div className="container-lg p-0">
       <div
-        className={`allwrappercaws ${windowSize.width > 786 && "my-4"}`}
-        style={{
-          border: listType !== "table" && "none",
-          borderRadius: listType !== "table" && "0px",
-        }}
+       className={`allwrappercaws allwrapper-active mb-2 `}
+       style={{
+         borderRadius: listType !== "table" && "0px",
+       }}
       >
         <div className="leftside2 w-100">
           <div className="activewrapper position-relative flex-row-reverse flex-lg-row align-items-end align-items-lg-center">
             <div className="d-flex flex-column flex-lg-row align-items-end align-items-lg-center justify-content-between gap-3 gap-lg-5">
-              <h6 className="activetxt caws-active-txt">
-                <img
-                  src={ellipse}
-                  alt=""
-                  className="position-relative"
-                  style={{ top: "-1px" }}
-                />
-                Active Pool
-              </h6>
+            <h6 className="expiredtxt caws-active-txt">
+               
+               Expired Pool
+             </h6>
               {/* <div className="d-flex align-items-center justify-content-between gap-2">
                     <h6 className="earnrewards-text">Earn rewards in:</h6>
                     <h6 className="earnrewards-token d-flex align-items-center gap-1">
@@ -515,7 +509,7 @@ const CawsWodDetails = ({
             <div
               className={`otherside-border col-12 col-md-6 col-lg-4 ${
                 chainId !== "1" && "blurrypool"
-              }`}
+              } ${expired === true && "blurrypool"}`}
             >
               <div className="d-flex justify-content-between align-items-center gap-2">
                 <div className="d-flex align-items-center gap-3">

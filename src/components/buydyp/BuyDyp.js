@@ -95,7 +95,7 @@ const BuyDyp = () => {
       logo: "huobi.png",
       link: "https://www.htx.com/en-us/trade/dyp_usdt/",
       totalvids: "0 videos",
-      videos: "",
+      videos: [],
       active: true,
       version: "DYP v2",
     },
@@ -405,13 +405,15 @@ const BuyDyp = () => {
     slider.current.slickPrev();
   };
 
+  
+
   const [videoList, setVideoList] = useState(buyDypItems[0].videos);
   const [activeVideo, setActiveVideo] = useState(videoList[0]);
   const [activeVendor, setActiveVendor] = useState(0);
   const [activeVideoCard, setactiveVideoCard] = useState(0);
 
   const emptyVideos = ["1", "2", "3", "4"];
-
+console.log(videoList.length)
   return (
     <div className="container-lg px-0">
       <div className="d-flex flex-column gap-2">
@@ -454,7 +456,7 @@ const BuyDyp = () => {
                   <img
                     src={
                       require(`./assets/${buyDypItems[activeVendor].logo}`)
-                        .default
+                        
                     }
                     height={32}
                     width={32}
@@ -476,7 +478,7 @@ const BuyDyp = () => {
               
             </div>
             <hr className="form-divider my-3" />
-            {videoList.length <= 0 ? (
+            {videoList.length === 0 ? (
               <img src={require("./assets/commingSoon.svg").default} />
             ) : (
               <iframe

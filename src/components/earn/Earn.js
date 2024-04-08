@@ -15,7 +15,7 @@ const Earn = ({
   the_graph_resultbsc,
   referrer,
   handleSwitchNetwork,
-  isPremium
+  isPremium,showRibbon,onConnectWallet
 }) => {
   const [showCalculator, setShowCalculator] = useState(false);
   const html = document.querySelector("html");
@@ -43,6 +43,7 @@ const Earn = ({
     <div className="container-lg earn-wrapper d-flex flex-column justify-content-center align-items-center p-0 position-relative">
       <EarnHero />
       <EarnContent
+      onConnectWallet={onConnectWallet}
         coinbase={coinbase}
         the_graph_result={the_graph_result}
         lp_id={lp_id}
@@ -60,6 +61,7 @@ const Earn = ({
         faqIndex={routeData.state ? routeData.state.faqIndex : -1}
         handleSwitchNetwork={handleSwitchNetwork}
         isPremium={isPremium}
+        showRibbon={showRibbon}
       />
     </div>
   );

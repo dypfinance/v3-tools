@@ -36,7 +36,9 @@ const EarnContent = ({
   faqIndex,
   networkId,
   handleSwitchNetwork,
-  isPremium
+  isPremium,
+  showRibbon,
+  onConnectWallet,
 }) => {
   const options = [
     {
@@ -248,61 +250,78 @@ const EarnContent = ({
   };
 
   const fetchEthStaking = async () => {
-   const ethRestult =  await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_eth`).catch((err) => {
+    const ethRestult = await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_eth`)
+      .catch((err) => {
         console.log(err);
       });
 
-      const ethRestult2 =  await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_eth_new`).catch((err) => {
+    const ethRestult2 = await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_eth_new`)
+      .catch((err) => {
         console.log(err);
       });
 
-      if(ethRestult && ethRestult.status === 200 && ethRestult2 && ethRestult2.status === 200) {
-        const ethv1Tvl = ethRestult.data.totalTVL_ETH;
+    if (
+      ethRestult &&
+      ethRestult.status === 200 &&
+      ethRestult2 &&
+      ethRestult2.status === 200
+    ) {
+      const ethv1Tvl = ethRestult.data.totalTVL_ETH;
 
-        const ethv2Tvl = ethRestult2.data.stakingInfoDYPEth[0].tvl_usd
-     
-      
-        setTvl(ethv1Tvl+ethv2Tvl)
+      const ethv2Tvl = ethRestult2.data.stakingInfoDYPEth[0].tvl_usd;
 
-      }
+      setTvl(ethv1Tvl + ethv2Tvl);
+    }
   };
   const fetchBnbStaking = async () => {
- const bnbResult =   await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_bnb`) .catch((err) => {
+    const bnbResult = await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_bnb`)
+      .catch((err) => {
         console.log(err);
       });
 
-      const bnbResult2 =   await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_bnb_new`) .catch((err) => {
+    const bnbResult2 = await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_bnb_new`)
+      .catch((err) => {
         console.log(err);
       });
 
-      if(bnbResult && bnbResult.status===200 && bnbResult2 && bnbResult2.status===200) {
-        const bnbTvl1= bnbResult.data.totalTVL_BNB;
-        const bnbTvl2 = bnbResult2.data.stakingInfoDYPBnb[0].tvl_usd
-        setTvl(bnbTvl1+bnbTvl2)
-
-      }
+    if (
+      bnbResult &&
+      bnbResult.status === 200 &&
+      bnbResult2 &&
+      bnbResult2.status === 200
+    ) {
+      const bnbTvl1 = bnbResult.data.totalTVL_BNB;
+      const bnbTvl2 = bnbResult2.data.stakingInfoDYPBnb[0].tvl_usd;
+      setTvl(bnbTvl1 + bnbTvl2);
+    }
   };
   const fetchAvaxStaking = async () => {
     const avaxResult = await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_avax`).catch((err) => {
+      .get(`https://api.dyp.finance/api/get_staking_info_avax`)
+      .catch((err) => {
         console.log(err);
       });
 
-      const avaxResult2 =   await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_avax_new`) .catch((err) => {
+    const avaxResult2 = await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_avax_new`)
+      .catch((err) => {
         console.log(err);
       });
 
-
-      if(avaxResult && avaxResult.status === 200 && avaxResult2 && avaxResult2.status === 200) {
-        const avaxtvl1 = avaxResult.data.totalTVL_AVAX;
-        const avaxtvl2 = avaxResult2.data.stakingInfoDYPAvax[0].tvl_usd
-        setTvl(avaxtvl1+avaxtvl2)
-      }
+    if (
+      avaxResult &&
+      avaxResult.status === 200 &&
+      avaxResult2 &&
+      avaxResult2.status === 200
+    ) {
+      const avaxtvl1 = avaxResult.data.totalTVL_AVAX;
+      const avaxtvl2 = avaxResult2.data.stakingInfoDYPAvax[0].tvl_usd;
+      setTvl(avaxtvl1 + avaxtvl2);
+    }
   };
 
   const fetchEthBuyback = async () => {
@@ -476,7 +495,7 @@ const EarnContent = ({
                 />
               </div>
             </div>
-            <div className="col-8 row d-flex gap-0 gap-xl-3 justify-content-center p-2">
+            <div className="col-8 row d-flex gap-0 gap-xl-3 justify-content-start p-2">
               {options.map((item, index) => (
                 <div
                   className={`earn-option col-3 col-xl-2 d-flex align-items-center justify-content-center ${
@@ -497,17 +516,17 @@ const EarnContent = ({
                   }}
                 >
                   <img
-                    src={
-                      require(`../../calculator/assets/${item.title.toLowerCase()}Icon.svg`)
-                        .default
-                    }
+                    src={require(`../../calculator/assets/${item.title.toLowerCase()}Icon.svg`)}
                     alt=""
                   />
                   {item.title}
                 </div>
               ))}
             </div>
-            <div className="col-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3">
+
+            {/* <div
+              className={`col-2  justify-content-end align-items-center gap-1 gap-lg-3 d-flex `}
+            >
               <h5 className="text-white inactive-pools">Inactive pools</h5>
               <div
                 className={`pill-box ${myStakes && "pill-box-active"}`}
@@ -516,11 +535,12 @@ const EarnContent = ({
                   // setExpiredPools(!expiredPools);
                   // option === "Farming" && fetchFarmingApr();
                   toggleInactive();
+                  !showRibbon && setStake("eth");
                 }}
               >
                 <div className="pill"></div>
               </div>
-            </div>
+            </div> */}
           </div>
         ) : (
           <div
@@ -551,18 +571,20 @@ const EarnContent = ({
                 />
               </div>
             </div>
-            <div className="col-6 px-0 px-lg-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3">
+
+            {/* <div className="col-6 px-0 px-lg-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3">
               <h5 className="text-white inactive-pools">Inactive pools</h5>
               <div
                 className={`pill-box ${myStakes && "pill-box-active"}`}
                 onClick={() => {
                   setMyStakes(!myStakes);
                   setExpiredPools(!expiredPools);
+                  !showRibbon && setStake("eth");
                 }}
               >
                 <div className="pill"></div>
               </div>
-            </div>
+            </div> */}
             <div className="col-12 row d-flex gap-0 gap-xl-3 justify-content-center px-0 px-lg-22 mt-3">
               {options.map((item, index) => (
                 <div
@@ -584,10 +606,7 @@ const EarnContent = ({
                   }}
                 >
                   <img
-                    src={
-                      require(`../../calculator/assets/${item.title.toLowerCase()}Icon.svg`)
-                        .default
-                    }
+                    src={require(`../../calculator/assets/${item.title.toLowerCase()}Icon.svg`)}
                     alt=""
                   />
                   {/* <div
@@ -602,10 +621,10 @@ const EarnContent = ({
         )}
 
         {((option === "Vault" && expiredPools === false) ||
-          option !== "Vault") && (
+          (option !== "Vault" )) && (
           <>
             <div
-              className={`row align-items-center gap-5 gap-lg-0 justify-content-between px-0 `}
+              className={`row align-items-center gap-2 gap-lg-0 justify-content-between px-0 `}
               style={{ minHeight: "55px" }}
             >
               <div className="col-12 col-lg-4 col-xl-3 px-0">
@@ -623,8 +642,9 @@ const EarnContent = ({
                   </div>
                 )}
               </div>
+
               <div className="col-12 col-lg-8 col-xl-6 d-flex gap-3 justify-content-around justify-content-lg-end justify-content-xl-center px-0 px-xl-2">
-                {option !== "Vault" ? (
+                {option !== "Vault" && option !== "Staking" ? (
                   <>
                     <div
                       className={`stake-item ${
@@ -658,7 +678,7 @@ const EarnContent = ({
                             whiteSpace: "pre",
                           }}
                         >
-                           12.5% APR
+                          12.5% APR
                         </p>
                       </div>
                     </div>
@@ -868,6 +888,7 @@ const EarnContent = ({
                   </>
                 )}
               </div>
+
               <div className="col-3"></div>
             </div>
             <div className="d-flex align-items-center justify-content-center  py-0 py-lg-4 px-3"></div>
@@ -876,6 +897,7 @@ const EarnContent = ({
       </div>
       {option === "Farming" && networkId === "56" && expiredPools === false ? (
         <EarnTopPicks
+          onConnectWallet={onConnectWallet}
           topList={option}
           listType={listStyle}
           chain={stake}
@@ -895,23 +917,60 @@ const EarnContent = ({
           handleSwitchNetwork={handleSwitchNetwork}
           expiredPools={expiredPools}
           isPremium={isPremium}
+          showRibbon={showRibbon}
+          onChainSelect={(val)=>{setStake(val)}}
         />
+      ) : option === "Vault" && networkId !== "1" ? (
+        <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
+          <img
+            src={
+              require("../../../assets/earnAssets/disabledVault.svg").default
+            }
+            style={{ width: "150px", height: "150px" }}
+            alt=""
+          />
+          <h6 className="no-farms">No Vault pools available for this chain</h6>
+          <span className="farm-soon">
+            Switch back to Ethereum Chain to view pools
+          </span>
+        </div>
+      ) : option === "Vault" && expiredPools === true ? (
+        <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
+          <img
+            src={
+              require("../../../assets/earnAssets/disabledVault.svg").default
+            }
+            style={{ width: "150px", height: "150px" }}
+            alt=""
+          />
+          <h6 className="no-farms">No Vault pools available</h6>
+        </div>
+      ) : option === "Farming" && expiredPools === true ? (
+        <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
+          <img
+            src={
+              require("../../../assets/earnAssets/disabledFarming.svg").default
+            }
+            style={{ width: "150px", height: "150px" }}
+            alt=""
+          />
+          <h6 className="no-farms"> No Farming pools available</h6>
+        </div>
+      ) : option === "Staking" &&
+        expiredPools === true &&
+        stake !== "eth" &&
+        !showRibbon ? (
+        <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
+          <img
+            src={
+              require("../../../assets/earnAssets/disabledStaking.svg").default
+            }
+            style={{ width: "150px", height: "150px" }}
+            alt=""
+          />
+          <h6 className="no-farms"> No Staking pools available</h6>
+        </div>
       ) : (
-         option === "Vault" && networkId !== "1"   ? (
-          <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
-            <img
-              src={
-                require("../../../assets/earnAssets/disabledVault.svg").default
-              }
-              style={{ width: "150px", height: "150px" }}
-              alt=""
-            />
-            <h6 className="no-farms">
-              No Vault pools available for this chain
-            </h6>
-            <span className="farm-soon">Switch back to Ethereum Chain to view pools</span>
-          </div>
-        ) : 
         //option === "Farming" && stake === "avax" && expiredPools === false ? (
         //   <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
         //     <img
@@ -927,6 +986,7 @@ const EarnContent = ({
         //     <span className="farm-soon">New pools coming soon...</span>
         //   </div>
         <EarnTopPicks
+          onConnectWallet={onConnectWallet}
           topList={option}
           listType={listStyle}
           chain={stake}
@@ -946,6 +1006,9 @@ const EarnContent = ({
           handleSwitchNetwork={handleSwitchNetwork}
           expiredPools={expiredPools}
           isPremium={isPremium}
+          showRibbon={showRibbon}
+          onChainSelect={(val)=>{setStake(val)}}
+
         />
       )}
 

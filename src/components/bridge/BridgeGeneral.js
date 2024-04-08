@@ -163,7 +163,7 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
         }, 500);
       }
     }
-    if (chainText === "avax") {
+   else if (chainText === "avax") {
       window.cached_contracts = Object.create(null);
       setSourceChain(chainText);
       setTimeout(() => {
@@ -188,7 +188,7 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
         }, 500);
       }
 
-      if (chainText === "bnb") {
+     else if (chainText === "bnb") {
         window.cached_contracts = Object.create(null);
         setTimeout(() => {
           setSourceChainiDyp(chainText);
@@ -210,7 +210,7 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
         }, 500);
       }
 
-      if (chainText === "avax") {
+      else if (chainText === "avax") {
         window.cached_contracts = Object.create(null);
         setTimeout(() => {
           setSourceChainiDyp(chainText);

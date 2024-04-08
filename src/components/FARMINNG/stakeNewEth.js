@@ -335,11 +335,12 @@ const StakeNewEth = ({
   }, [coinbase, coinbase2]);
 
   useEffect(() => {
-    refreshBalance();
+    if(chainId === '1')
+    {refreshBalance();
     if (depositAmount !== "") {
       checkApproval(depositAmount);
-    }
-  }, [coinbase, coinbase2, staking]);
+    }}
+  }, [coinbase, coinbase2, staking, chainId]);
 
   useEffect(() => {
     setdepositAmount("");
@@ -672,15 +673,19 @@ const StakeNewEth = ({
                   : "gap-3 gap-lg-5"
               }`}
             >
-              <h6 className="activetxt">
-                <img
-                  src={ellipse}
-                  alt=""
-                  className="position-relative"
-                  style={{ top: "-1px" }}
-                />
-                Active status
-              </h6>
+              {expired === true ? (
+                <h6 className="expiredtxt caws-active-txt">Expired Pool</h6>
+              ) : (
+                <h6 className="activetxt">
+                  <img
+                    src={ellipse}
+                    alt=""
+                    className="position-relative"
+                    style={{ top: "-1px" }}
+                  />
+                  Active status
+                </h6>
+              )}
 
               <div className="d-flex flex-row-reverse flex-lg-row align-items-center justify-content-between earnrewards-container">
                 <div className="d-flex flex-column flex-lg-row align-items-end align-items-lg-center gap-3 gap-lg-5">

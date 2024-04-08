@@ -406,11 +406,12 @@ const StakeBsc2 = ({
   }, [coinbase, coinbase2]);
 
   useEffect(() => {
-    refreshBalance();
+    if(chainId === '56')
+  {  refreshBalance();
     if (depositAmount !== "") {
       checkApproval(depositAmount);
-    }
-  }, [coinbase, coinbase2, staking]);
+    }}
+  }, [coinbase, coinbase2, staking, chainId]);
 
   useEffect(() => {
     setdepositAmount("");
@@ -435,7 +436,7 @@ const StakeBsc2 = ({
         setdepositStatus("fail");
         seterrorMsg(e?.message);
         setTimeout(() => {
-          depositAmount("");
+          setdepositAmount("");
           setdepositStatus("initial");
           seterrorMsg("");
         }, 10000);
@@ -484,7 +485,7 @@ const StakeBsc2 = ({
         setdepositStatus("fail");
         seterrorMsg(e?.message);
         setTimeout(() => {
-          depositAmount("");
+          setdepositAmount("");
           setdepositStatus("initial");
           seterrorMsg("");
         }, 10000);
@@ -513,7 +514,7 @@ const StakeBsc2 = ({
         setdepositStatus("fail");
         seterrorMsg(e?.message);
         setTimeout(() => {
-          depositAmount("");
+          setdepositAmount("");
           setdepositStatus("initial");
           seterrorMsg("");
         }, 10000);
@@ -817,7 +818,6 @@ const StakeBsc2 = ({
   const focusInput = (field) => {
     document.getElementById(field).focus();
   };
-  // console.log(staking)
   const checkApproval = async (amount) => {
     const result = await window
       .checkapproveStakePool(coinbase, reward_token._address, staking._address)
@@ -872,15 +872,19 @@ const StakeBsc2 = ({
                   : "gap-3 gap-lg-5"
               }`}
             >
-              <h6 className="activetxt">
-                <img
-                  src={ellipse}
-                  alt=""
-                  className="position-relative"
-                  style={{ top: "-1px" }}
-                />
-                Active status
-              </h6>
+             {expired === true ? (
+                <h6 className="expiredtxt caws-active-txt">Expired Pool</h6>
+              ) : (
+                <h6 className="activetxt">
+                  <img
+                    src={ellipse}
+                    alt=""
+                    className="position-relative"
+                    style={{ top: "-1px" }}
+                  />
+                  Active status
+                </h6>
+              )}
               {/* <div className="d-flex align-items-center justify-content-between gap-2">
             <h6 className="earnrewards-text">Earn rewards in:</h6>
             <h6 className="earnrewards-token d-flex align-items-center gap-1">
