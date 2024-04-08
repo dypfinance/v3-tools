@@ -960,7 +960,7 @@ export default class Subscription extends React.Component {
     const benefits = [
       "DYP Tools administrative dashboard",
       " Exclusive access to World of Dypians metaverse platform",
-      "Priority allocation to presales of new projects through Dypius Launchpad",
+      "Priority access to dedicated DeFi pools",
       "Voting capabilities in the News section",
       "Early access to upcoming features and updates",
     ];

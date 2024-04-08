@@ -559,6 +559,11 @@ hr {
   }
 }
 
+.premium-img-tag {
+  right: 0;
+  top: -20px;
+}
+
 .clickable-div {
   cursor: pointer;
 }

@@ -249,7 +249,7 @@ const EarnContent = ({
     });
   };
 
-  const fetchEthStaking = async () => {
+  const fetchStakingTVL = async () => {
     const ethRestult = await axios
       .get(`https://api.dyp.finance/api/get_staking_info_eth`)
       .catch((err) => {
@@ -262,21 +262,7 @@ const EarnContent = ({
         console.log(err);
       });
 
-    if (
-      ethRestult &&
-      ethRestult.status === 200 &&
-      ethRestult2 &&
-      ethRestult2.status === 200
-    ) {
-      const ethv1Tvl = ethRestult.data.totalTVL_ETH;
-
-      const ethv2Tvl = ethRestult2.data.stakingInfoDYPEth[0].tvl_usd;
-
-      setTvl(ethv1Tvl + ethv2Tvl);
-    }
-  };
-  const fetchBnbStaking = async () => {
-    const bnbResult = await axios
+      const bnbResult = await axios
       .get(`https://api.dyp.finance/api/get_staking_info_bnb`)
       .catch((err) => {
         console.log(err);
@@ -288,19 +274,7 @@ const EarnContent = ({
         console.log(err);
       });
 
-    if (
-      bnbResult &&
-      bnbResult.status === 200 &&
-      bnbResult2 &&
-      bnbResult2.status === 200
-    ) {
-      const bnbTvl1 = bnbResult.data.totalTVL_BNB;
-      const bnbTvl2 = bnbResult2.data.stakingInfoDYPBnb[0].tvl_usd;
-      setTvl(bnbTvl1 + bnbTvl2);
-    }
-  };
-  const fetchAvaxStaking = async () => {
-    const avaxResult = await axios
+      const avaxResult = await axios
       .get(`https://api.dyp.finance/api/get_staking_info_avax`)
       .catch((err) => {
         console.log(err);
@@ -313,16 +287,33 @@ const EarnContent = ({
       });
 
     if (
-      avaxResult &&
+      ethRestult &&
+      ethRestult.status === 200 &&
+      ethRestult2 &&
+      ethRestult2.status === 200 &&  bnbResult &&
+      bnbResult.status === 200 &&
+      bnbResult2 &&
+      bnbResult2.status === 200 && avaxResult &&
       avaxResult.status === 200 &&
       avaxResult2 &&
       avaxResult2.status === 200
     ) {
+      const ethv1Tvl = ethRestult.data.totalTVL_ETH;
+
+      const ethv2Tvl = ethRestult2.data.stakingInfoDYPEth[0].tvl_usd;
+
       const avaxtvl1 = avaxResult.data.totalTVL_AVAX;
+
       const avaxtvl2 = avaxResult2.data.stakingInfoDYPAvax[0].tvl_usd;
-      setTvl(avaxtvl1 + avaxtvl2);
+
+      const bnbTvl1 = bnbResult.data.totalTVL_BNB;
+
+      const bnbTvl2 = bnbResult2.data.stakingInfoDYPBnb[0].tvl_usd;
+
+      setTvl(ethv1Tvl + ethv2Tvl + bnbTvl1 + bnbTvl2 + avaxtvl1 + avaxtvl2);
     }
   };
+ 
 
   const fetchEthBuyback = async () => {
     await axios
@@ -375,12 +366,8 @@ const EarnContent = ({
       fetchFarmingApr();
     }
 
-    if (option === "Staking" && stake === "eth") {
-      fetchEthStaking();
-    } else if (option === "Staking" && stake === "bnb") {
-      fetchBnbStaking();
-    } else if (option === "Staking" && stake === "avax") {
-      fetchAvaxStaking();
+    if (option === "Staking") {
+      fetchStakingTVL();
     } else if (option === "Buyback" && stake === "eth") {
       fetchEthBuyback();
     } else if (option === "Buyback" && stake === "bnb") {

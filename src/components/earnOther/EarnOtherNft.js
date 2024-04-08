@@ -1,6 +1,7 @@
-import React, { useState} from "react";
+import React, { useEffect, useState} from "react";
 import EarnOtherHero from "./EarnOtherHero/EarnOtherHero";
 import EarnOtherContentNft from "./EarnOtherContent/EarnOtherContentNft";
+import axios from "axios";
 
 const EarnOtherNft = ({
   coinbase,
@@ -14,6 +15,26 @@ const EarnOtherNft = ({
 
   const [poolClicked, setPoolClicked]=useState(false)
   const [poolClickedType, setPoolClickedType]=useState('')
+  const [totalTvl, settotalTvl]=useState('')
+
+  const getTotalTvl = async()=>{
+    const eth_result2 = await axios
+    .get(`https://api.dyp.finance/api/get_staking_info_eth`)
+    .catch((err) => {
+      console.log(err);
+    });
+
+    if(eth_result2 && eth_result2.status === 200) {
+     const result = eth_result2.data.stakingInfoCAWS.find((obj)=>{return obj.id === '0x097bB1679AC734E90907Ff4173bA966c694428Fc'})
+     if(result){
+      settotalTvl(result.tvl_usd)
+     }
+    }
+  }
+
+  useEffect(()=>{
+    getTotalTvl()
+  },[])
 
 
   const handleSliderClick = (obj) => {
@@ -34,6 +55,9 @@ const EarnOtherNft = ({
         networkId={network}
         handleConnection={handleConnection}
         handleSwitchNetwork={handleSwitchNetwork}
+        isPremium={isPremium} 
+        onCloseCard={()=>{setPoolClicked(false); setPoolClickedType('')}}
+        totalTvl={totalTvl}
       />
     </div>
   );

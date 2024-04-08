@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import ethStake from "../../assets/earnAssets/ethStakeActive.svg";
 import avaxStake from "../../assets/earnAssets/avaxStakeActive.svg";
 import baseStake from "../../assets/earnAssets/baseActive.svg";
-import watch from "./assets/watch.svg";
 import bnbStakeActive from "../../assets/earnAssets/bnbStakeActive.svg";
 import premiumIcon from "../../assets/earnAssets/premiumIcon.svg";
+import premiumTag from "../../assets/earnAssets/premiumTag.svg";
 
 import useWindowSize from "../../functions/useWindowSize";
+import CawsDetailsPremium from "../FARMINNG/cawsPremium";
 
 import "../top-pools-card/top-pools.css";
 
@@ -44,6 +45,9 @@ const TopOtherPoolsNftListCard = ({
   activePools,
   totalTvl,
   totalNftsLocked,
+  clickedCawsPool,
+  onCloseCard,
+  isPremium,
 }) => {
   const ethCoins = ["ethereum", "wbtc", "usdc", "usdt"];
   const bscCoins = [
@@ -73,6 +77,8 @@ const TopOtherPoolsNftListCard = ({
   const avaxCoins2 = ["avax"];
 
   const [showDetails, setShowDetails] = useState(false);
+  const [cardIndexDyp, setcardIndex] = useState();
+
   const [coins, setCoins] = useState(ethCoins);
   const windowSize = useWindowSize();
 
@@ -89,18 +95,37 @@ const TopOtherPoolsNftListCard = ({
       setCoins(avaxCoins2);
     }
   }, [chain]);
-console.log(windowSize.width)
+
+ 
+  const handleDetails = () => {
+    if (showDetails === false && clickedCawsPool === false) {
+      setShowDetails(true);
+      setcardIndex(cardIndex);
+      // onShowDetailsClick();
+    } else if (clickedCawsPool === true) {
+      setShowDetails(false);
+      setcardIndex();
+      onCloseCard();
+    } else if (showDetails === true && clickedCawsPool === false) {
+      setShowDetails(false);
+      setcardIndex();
+      onCloseCard();
+    }
+  };
+
   return (
     <>
       <div
         className={`row w-100 flex-column gap-3 gap-lg-0 flex-lg-row align-items-center position-relative justify-content-between  mx-0 cursor-pointer ${
           expired === true ? "poolscardwrapperexpired" : "list-pool-card-nft"
         } ${showDetails && "pools-card-hover"} `}
-        onMouseEnter={() => setShowDetails(true)}
-        onMouseLeave={() => setShowDetails(false)}
+        onClick={() => handleDetails()}
         style={{ display: display }}
       >
-        <img src={premiumIcon} className="position-absolute nft-premium-icon d-none d-lg-block" />
+        <img
+          src={premiumIcon}
+          className="position-absolute nft-premium-icon d-none d-lg-block"
+        />
         <div className="px-0 d-flex justify-content-between align-items-center">
           <table className="earnother-table">
             <tbody>
@@ -172,8 +197,8 @@ console.log(windowSize.width)
                     </h5>
                   </td>
                   <td className="earnother-td col-2">
-                    <h6 className="details-text2 gap-1 d-flex align-items-center cursor-pointer justify-content-center m-0">
-                      <img src={watch} alt="" /> Coming Soon
+                    <h6 className="details-text2 w-75 gap-1 d-flex align-items-center cursor-pointer justify-content-center m-0">
+                      Stake
                     </h6>
                   </td>
                 </tr>
@@ -189,7 +214,7 @@ console.log(windowSize.width)
                             height={28}
                             alt=""
                           />
-                          <div className="d-flex flex-column gap-1">
+                          <div className="d-flex align-items-center gap-1">
                             <h5
                               className="text-white"
                               style={{ fontSize: "16px", fontWeight: "600" }}
@@ -204,7 +229,10 @@ console.log(windowSize.width)
                                 color: "#F7F7FC",
                               }}
                             >
-                              {tokenTicker}
+                              <img
+                                src={premiumTag}
+                                className="d-block d-lg-none d-md-none w-auto"
+                              />
                             </h5>
                           </div>
                         </div>
@@ -216,7 +244,7 @@ console.log(windowSize.width)
                               color: "#F7F7FC",
                             }}
                           >
-                            {apr}
+                            {apr}%
                           </h5>
                           <h5
                             style={{
@@ -234,16 +262,31 @@ console.log(windowSize.width)
                   <tr className="d-flex w-100 align-items-center justify-content-around">
                     <td className="earnother-td w-100">
                       <h6 className="details-text2 gap-1 d-flex align-items-center cursor-pointer justify-content-center m-0 w-100">
-                        <img src={watch} alt="" /> Coming Soon
+                        Stake
                       </h6>
                     </td>
                   </tr>
                 </>
-              ) : <></>}
+              ) : (
+                <></>
+              )}
             </tbody>
           </table>
         </div>
       </div>
+      {(showDetails || clickedCawsPool) && expired === false && (
+        <CawsDetailsPremium
+          coinbase={coinbase}
+          isConnected={isConnected}
+          listType={listType}
+          chainId={chainId}
+          handleSwitchNetwork={handleSwitchNetwork}
+          handleConnection={handleConnection}
+          expired={false}
+          apr={25}
+          isPremium={isPremium}
+        />
+      )}
     </>
   );
 };

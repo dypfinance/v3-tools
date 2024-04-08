@@ -228,7 +228,7 @@ const TopOtherPoolsListCard = ({
                         <img src={watch} alt="" /> Coming Soon
                       </h6>
                     ) : (
-                      <h6 className="details-text2 gap-1 d-flex align-items-center cursor-pointer justify-content-end">
+                      <h6 className="details-text2 gap-1 d-flex align-items-center w-75 cursor-pointer justify-content-center">
                         Stake
                       </h6>
                     )}
@@ -290,7 +290,7 @@ const TopOtherPoolsListCard = ({
                           <img src={watch} alt="" /> Coming Soon
                         </h6>
                       ) : (
-                        <h6 className="details-text2 m-0 gap-1 d-flex align-items-center cursor-pointer justify-content-end w-100">
+                        <h6 className="details-text2 m-0 gap-1 d-flex align-items-center cursor-pointer justify-content-center w-100">
                           Stake
                         </h6>
                       )}
