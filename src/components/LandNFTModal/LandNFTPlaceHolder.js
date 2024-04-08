@@ -5,7 +5,7 @@ const NftPlaceHolder = ({ onMintClick }) => {
   return (
     <div className="placeholder-wrapper nft-caw-card" style={{ width: 155 }}>
       <a
-        href="https://opensea.io/collection/worldofdypians"
+        href="https://www.worldofdypians.com/marketplace/land"
         target="_blank"
         className="placeholder-button"
         rel="noreferrer"
@@ -19,16 +19,14 @@ const NftPlaceHolder = ({ onMintClick }) => {
               src={require("./landplaceholder.svg").default}
               alt=""
               className="placeholder-content-img"
-              style={{width: 135,
-                height: 110, scale: '0.8'
-            }}
+              style={{ width: 135, height: 110, scale: "0.8" }}
             />
           </div>
           <p className="placeholder-content-text">
             You can view all your NFTs to manage them
           </p>
           <a
-            href="https://opensea.io/collection/worldofdypians"
+            href="https://www.worldofdypians.com/marketplace/land"
             target="_blank"
             className="placeholder-button"
             rel="noreferrer"

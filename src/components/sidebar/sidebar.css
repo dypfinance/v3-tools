@@ -15,6 +15,26 @@
 
 }
 
+.new-beta-sidebar {
+    border-radius: 10px;
+    background: linear-gradient(
+      158deg,
+      rgba(38, 59, 162, 0.4) 0%,
+      rgba(54, 194, 207, 0.4) 100%
+    );
+    padding-left: 8px;
+    padding-right: 8px;
+    width: fit-content;
+  }
+  
+  .new-beta-text {
+    color: #36c2cf;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+  }
+
 .testbar::-webkit-scrollbar{
     width: 0 !important;
 }

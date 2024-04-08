@@ -638,11 +638,11 @@ const StakeDypiusBsc = ({
   //   return ((approxDeposit * APY) / 100 / 365) * approxDays;
   // };
 
-  const getApproxReturn = () => {
-    let APY = apr - fee;
+  const getApproxReturn = (depositAmount, days) => {
 
-    return ((approxDeposit * APY) / 100 / 365) * approxDays;
+    return ((depositAmount * apr) / 100 / 365) * days;
   };
+
 
   const getReferralLink = () => {
     return (

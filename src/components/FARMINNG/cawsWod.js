@@ -177,7 +177,7 @@ const CawsWodDetails = ({
     let result = 0;
 
     if (coinbase !== null) {
-      if (myStakes.length > 0) {
+      if (myStakes && myStakes.length > 0) {
         let rewards = await window.wod_caws
           .calculateRewardsWodCaws(coinbase, myStakes)
           .then((data) => {
@@ -262,7 +262,7 @@ const CawsWodDetails = ({
         console.log(e);
       });
   };
-
+ 
   useEffect(() => {
     if (coinbase && chainId === "1") {
       getStakesIds();
@@ -382,9 +382,22 @@ const CawsWodDetails = ({
                   >
                     <div
                       className="tooltip d-flex justify-content-center"
-                      style={{ opacity: 1, width: 100 }}
+                      style={{ opacity: 1, width: 145 }}
                     >
-                      <div className="d-flex flex-column gap-2 align-items-center">
+                      <div className="d-flex flex-column gap-2 align-items-start">
+                      <a
+                          href="https://www.worldofdypians.com/marketplace/caws"
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={() => {
+                            setCawspopup(false);
+                          }}
+                        >
+                          <h6 className="bottomitems">
+                            <img src={arrowup} alt="" />
+                            WoD Marketplace
+                          </h6>
+                      </a>
                         <a
                           href="https://nft.coinbase.com/collection/catsandwatches"
                           target="_blank"
@@ -432,9 +445,22 @@ const CawsWodDetails = ({
                   >
                     <div
                       className="tooltip d-flex justify-content-center"
-                      style={{ opacity: 1, width: 100, left: 90 }}
+                      style={{ opacity: 1, width: 145, left: 90 }}
                     >
-                      <div className="d-flex flex-column gap-2 align-items-center">
+                      <div className="d-flex flex-column gap-2 align-items-start">
+                      <a
+                          href="https://www.worldofdypians.com/marketplace/land"
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={() => {
+                            setLandpopup(false);
+                          }}
+                        >
+                          <h6 className="bottomitems">
+                            <img src={arrowup} alt="" />
+                            WoD Marketplace
+                          </h6>
+                      </a>
                         <a
                           href="https://nft.coinbase.com/collection/worldofdypians"
                           target="_blank"

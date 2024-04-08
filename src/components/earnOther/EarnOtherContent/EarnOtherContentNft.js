@@ -28,7 +28,7 @@ const EarnOtherContentNft = ({
   customChain,
   faqIndex,
   networkId,
-  handleSwitchNetwork,
+  handleSwitchNetwork,isPremium,onCloseCard,totalTvl
 }) => {
   const options = [
     {
@@ -133,6 +133,8 @@ const EarnOtherContentNft = ({
   const [bnbApr, setBnbApr] = useState();
   const [avaxApr, setavaxApr] = useState();
   const [count, setCount] = useState(0);
+  const [clickedCawsPool, setclickedCawsPool] = useState(false);
+
 
   const fetchBnbPool = async () => {
     await axios
@@ -270,6 +272,7 @@ const EarnOtherContentNft = ({
         console.log(err);
       });
   };
+
   const fetchBnbBuybackApr = async () => {
     await axios
       .get(`https://api.dyp.finance/api/get_buyback_info_bnb`)
@@ -280,6 +283,7 @@ const EarnOtherContentNft = ({
         console.log(err);
       });
   };
+  
   const fetchAvaxBuybackApr = async () => {
     await axios
       .get(`https://api.dyp.finance/api/get_buyback_info_avax`)
@@ -315,6 +319,7 @@ const EarnOtherContentNft = ({
         console.log(err);
       });
   };
+
   const fetchBnbStaking = async () => {
     await axios
       .get(`https://api.dyp.finance/api/get_staking_info_bnb`)
@@ -325,6 +330,7 @@ const EarnOtherContentNft = ({
         console.log(err);
       });
   };
+
   const fetchAvaxStaking = async () => {
     await axios
       .get(`https://api.dyp.finance/api/get_staking_info_avax`)
@@ -346,6 +352,7 @@ const EarnOtherContentNft = ({
         console.log(err);
       });
   };
+
   const fetchBnbBuyback = async () => {
     await axios
       .get(`https://api.dyp.finance/api/get_buyback_info_bnb`)
@@ -356,6 +363,7 @@ const EarnOtherContentNft = ({
         console.log(err);
       });
   };
+
   const fetchAvaxBuyback = async () => {
     await axios
       .get(`https://api.dyp.finance/api/get_buyback_info_avax`)
@@ -416,16 +424,24 @@ const EarnOtherContentNft = ({
     }
   }, [option, expiredPools]);
 
+  useEffect(()=>{
+    if(poolClickedType === 'details-nft' && poolClicked === true && clickedCawsPool === false) {
+      setMyStakes(false)
+      setExpiredPools(false)
+      setclickedCawsPool(true)
+    }
+  },[poolClickedType,poolClicked,clickedCawsPool])
+
   return (
     <>
       <div className="row justify-content-center w-100 mx-0">
         {windowSize.width > 786 ? (
           <div
-            className="row justify-content-end align-items-center p-2 options-container bg-transparent"
+            className="row justify-content-between align-items-center p-2 options-container bg-transparent"
             style={{ marginTop: "30px" }}
           >
-            <div className="col-12 col-4 px-0">
-              {/* {option !== "Farming" && (
+            <div className="col-12 col-lg-3 px-0">
+      
                 <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
                   <span style={{ fontWeight: "300", fontSize: "13px" }}>
                     Total value locked
@@ -434,10 +450,10 @@ const EarnOtherContentNft = ({
                     className="text-white"
                     style={{ fontWeight: "600", fontSize: "17px" }}
                   >
-                    ${getFormattedNumber("2585417", 0)}
+                    ${getFormattedNumber(totalTvl, 0)}
                   </h6>
                 </div>
-              )} */}
+            
             </div>
             {/* <div className="col-2 d-flex justify-content-start align-items-center gap-3">
               <div
@@ -463,7 +479,7 @@ const EarnOtherContentNft = ({
                 />
               </div>
             </div> */}
-            <div className="col-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3 px-0">
+            <div className="col-lg-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3 px-0">
               <h5 className="text-white inactive-pools">Past pools</h5>
               <div
                 className={`pill-box ${myStakes && "pill-box-active"}`}
@@ -478,10 +494,10 @@ const EarnOtherContentNft = ({
           </div>
         ) : (
           <div
-            className="row justify-content-end align-items-center p-2 options-container"
+            className="d-flex gap-3 justify-content-between flex-row-reverse align-items-center p-2 options-container"
             style={{ marginTop: "24px", marginBottom: "24px" }}
           >
-            <div className="col-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3">
+            <div className="col-lg-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3">
               <h5 className="text-white inactive-pools">Past pools</h5>
               <div
                 className={`pill-box ${myStakes && "pill-box-active"}`}
@@ -493,8 +509,8 @@ const EarnOtherContentNft = ({
                 <div className="pill"></div>
               </div>
             </div>
-            <div className="col-12 col-lg-4 col-xl-3 px-0">
-              {/* {option !== "Farming" && (
+            <div className="col-lg-4 col-xl-3 px-0">
+        
                 <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
                   <span style={{ fontWeight: "300", fontSize: "13px" }}>
                     Total value locked
@@ -503,10 +519,10 @@ const EarnOtherContentNft = ({
                     className="text-white"
                     style={{ fontWeight: "600", fontSize: "17px" }}
                   >
-                    ${getFormattedNumber("2585417", 0)}
+                    ${getFormattedNumber(totalTvl, 0)}
                   </h6>
                 </div>
-              )} */}
+         
             </div>
             {/* <div className="col-6 d-flex px-0 px-lg-2 justify-content-start align-items-center gap-3">
               <div
@@ -645,6 +661,15 @@ const EarnOtherContentNft = ({
                       apr={item.apr}
                       lockTime={item.lockTime}
                       expired={item.expired}
+                      chainId={chainId}
+                    handleConnection={handleConnection}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    isConnected={isConnected}
+                    coinbase={coinbase}
+                    isNewPool={item.new_pool === "Yes" ? true : false}
+                    isPremium ={isPremium}
+                    clickedCawsPool={clickedCawsPool}
+                    onCloseCard={()=>{onCloseCard(); setclickedCawsPool(false)}}
                     />
                   </div>
                 );
@@ -669,7 +694,7 @@ const EarnOtherContentNft = ({
                     apr={pool.apr}
                     lockTime={pool.lockTime}
                     poolCap={pool.poolCap}
-                    chain={"eth"}
+                    chain={pool.chain}
                     display={"flex"}
                     isNewPool={pool.new_pool === "Yes" ? true : false}
                     totalTvl={pool.tvl_usd}
