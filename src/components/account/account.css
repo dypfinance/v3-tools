@@ -34,26 +34,26 @@
   border-radius: 8px;
   border: 0.5px solid #5B75DA;
   background: linear-gradient(95deg, #1E1C40 0%, #5B75DA 100%);
-width: 106px;
-height: 24px;
-transform: translateX(-50%);
-position: absolute;
-top: -15px;
-left: 33%;
+  width: 90px;
+  height: 24px;
+  transform: translateX(-50%);
+  position: absolute;
+  top: -15px;
+  left: 33%;
 }
 
 .bnbTagwrapper {
   border-radius: 8px;
   border: 0.5px solid #FFD632;
   background: linear-gradient(95deg, #1E1C40 0%, #FFD632 100%);
-z-index: 1;
-transform: translateX(-50%);
-position: absolute;
-top: -15px;
-left: 33%;
-width: 115px;
-height: 24px;
-gap: 5px;
+  z-index: 1;
+  transform: translateX(-50%);
+  position: absolute;
+  top: -15px;
+  left: 33%;
+  width: 90px;
+  height: 24px;
+  gap: 5px;
 
 }
 
@@ -65,10 +65,10 @@ gap: 5px;
   z-index: 1;
   transform: translateX(-50%);
   position: absolute;
-top: -15px;
-left: 33%;
-width: 115px;
-height: 24px;
+  top: -15px;
+  left: 33%;
+  width: 90px;
+  height: 24px;
 }
 
 .nebula-bridgebtn {

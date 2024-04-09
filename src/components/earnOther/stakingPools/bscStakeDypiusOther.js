@@ -151,6 +151,7 @@ const StakeDypiusBscOther = ({
   const [tvlDyps, setsettvlDyps] = useState("");
   const [tvlUSD, settvlUSD] = useState("");
   const [total_stakers, settotal_stakers] = useState("");
+  const [wbnbPrice, setWbnbPrice] = useState(0);
 
   const [show, setshow] = useState(false);
   const [showWithdrawModal, setshowWithdrawModal] = useState(false);
@@ -245,6 +246,15 @@ const StakeDypiusBscOther = ({
   const endDateOpen = () => {
     setEndDateTooltip(true);
   };
+
+  const getBSCPrice = async () => {
+    await axios
+      .get("https://api.dyp.finance/api/the_graph_bsc_v2")
+      .then((data) => {
+        setWbnbPrice(data.data.the_graph_bsc_v2.usd_per_eth);
+      });
+  };
+
 
   const refreshBalance = async () => {
     let coinbase = coinbase2;
@@ -372,7 +382,7 @@ const StakeDypiusBscOther = ({
 
         setlastClaimedTime(lastClaimedTime);
 
-        let tvl_formatted = new BigNumber(tvl).div(1e18).toFixed(6);
+        let tvl_formatted = new BigNumber(tvl).div(1e18).toFixed(0);
         settvl(tvl_formatted);
 
         // setsettvlDyps(tvlDyps);
@@ -447,6 +457,7 @@ const StakeDypiusBscOther = ({
 
   useEffect(() => {
     getPriceDYP();
+    getBSCPrice()
   }, []);
 
   useEffect(() => {
@@ -545,6 +556,7 @@ const StakeDypiusBscOther = ({
           setdepositLoading(false);
           setdepositStatus("success");
           refreshBalance();
+          getBalance();
           setTimeout(() => {
             setdepositLoading(false);
             setdepositStatus("initial");
@@ -820,7 +832,7 @@ const StakeDypiusBscOther = ({
     }
   }
 
-  let tvl_usd = tvl * tokendata;
+  let tvl_usd = tvl * wbnbPrice;
 
   //   let tvlDYPS = tvlDyps / 1e18;
 
@@ -940,7 +952,7 @@ const StakeDypiusBscOther = ({
                     </Tooltip>
                   </ClickAwayListener>
                 </span>
-                <span className="info-pool-right-text">{finalApr}%</span>
+                <span className="info-pool-right-text">{finalApr}</span>
               </div>
             </div>
             <div className="info-pool-item p-2">
@@ -965,7 +977,7 @@ const StakeDypiusBscOther = ({
                   {getFormattedNumber(
                     Number(tvl) * usdPerToken === 0
                       ? selectedPool.poolList[0].tvl
-                      : Number(tvl) * usdPerToken,
+                      : Number(tvl) * wbnbPrice,
                     2
                   )}
                 </span>
@@ -1064,7 +1076,7 @@ const StakeDypiusBscOther = ({
                   <div className="d-flex align-items-center gap-2">
                     <span className="bal-smallTxt">Available Quota:</span>
                     <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                      8 WBNB
+                      {getFormattedNumber(poolCap - tvl)} WBNB
                       <ClickAwayListener onClickAway={quotaClose}>
                         <Tooltip
                           open={quotaTooltip}

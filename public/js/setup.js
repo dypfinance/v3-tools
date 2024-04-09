@@ -2354,7 +2354,7 @@ window.config = {
     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603",
 
   constant_staking_dypius_bscother1_address:
-    "0x8b09C611bc07266Ea330e08855B288A74BAcb4a9",
+    "0x8f6A888B5ef55633907c862e1718B3b4dDB2BB7D",
 
   constant_staking_dypius_avax1_address:
     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603",
