@@ -133,8 +133,7 @@ const Dashboard = ({
       });
       setTheBnbPool(bnbpool);
       const testbnbFarming = bnbpool[0];
-      const finalBnbFarmingpool = testbnbFarming[1]
- 
+      const finalBnbFarmingpool = testbnbFarming[1];
 
       const dypBnb = bnbStakingPool.data.stakingInfoDYPBnb;
       const avaxIdyp = avaxStakingPool.data.stakingInfoiDYPAvax;
@@ -212,13 +211,13 @@ const Dashboard = ({
         ...sortedAprsEthereum,
         ...sortedAprsAvax,
         ...sortedAprsBnb,
-        finalBnbFarmingpool
+        finalBnbFarmingpool,
       ].sort(function (a, b) {
         return b.tvl_usd - a.tvl_usd;
       });
       console.log(allPools);
 
-      setTopPools(allPools.slice(0,2))
+      setTopPools(allPools.slice(0, 2));
     }
   };
 
@@ -446,8 +445,6 @@ const Dashboard = ({
     return result;
   };
 
-
-
   useEffect(() => {
     fetchUserPools();
   }, [network, coinbase]);
@@ -485,7 +482,7 @@ const Dashboard = ({
     height: windowSize.width < 500 ? "480px" : "auto",
     background: `#1A1A36`,
   };
-
+  console.log(topPools);
   return (
     <>
       <div className="container-lg dashboardwrapper px-0">
@@ -515,221 +512,267 @@ const Dashboard = ({
               {windowSize.width > 786 ? (
                 <div>
                   <div className="row m-0 gap-4 toppool-allwrapper">
-                    {topPools.length > 0
+                    {topPools.length > 0 &&
                     //  && (network === 1 ||
                     //   network === 1030 ||
                     //   network === 8453 ||
                     //   network === 0 ||
-                    //   network === 1482601649) 
-                      && loading === false
-                     ? (
+                    //   network === 1482601649)
+                    loading === false ? (
                       topPools.slice(0, 2).map((item, index) => {
                         return (
-                          <TopPoolsCard
-                            key={index}
-                            network={network.toString()}
-                            isNewPool={item.new_pool === "Yes" ? true : false}
-                            isStaked={
-                              userPools.length > 0
-                                ? userPools.find(
-                                    (obj) => obj.contract_address === item.id
-                                  )
-                                  ? true
+                          <div key={index} className="position-relative">
+                            {item.chain === "bnb" && (
+                              <div className="d-flex justify-content-center align-items-center bnbTagwrapper">
+                                <img
+                                  src={require("./assets/bnblogo.svg").default}
+                                  alt=""
+                                  style={{ height: 20, width: 20 }}
+                                  className="popup-chains-icon"
+                                ></img>
+                                <h6
+                                  className={`d-flex justify-content-center align-items-center chain-popup-text-active`}
+                                >
+                                  BNB Chain
+                                </h6>
+                              </div>
+                            )}
+                            {item.chain === "eth" && (
+                              <div className="d-flex justify-content-center align-items-center ethereumTagwrapper">
+                                <img
+                                  src={require("./assets/ethereum.svg").default}
+                                  alt=""
+                                  style={{ height: 20, width: 20 }}
+                                  className="popup-chains-icon"
+                                ></img>
+                                <h6
+                                  className={`d-flex justify-content-center align-items-center chain-popup-text-active`}
+                                >
+                                  Ethereum
+                                </h6>
+                              </div>
+                            )}
+
+                            {item.chain === "avax" && (
+                              <div className="d-flex justify-content-center align-items-center avaxTagWrapper">
+                                <img
+                                  src={require("./assets/avaxlogo.svg").default}
+                                  alt=""
+                                  style={{ height: 20, width: 20 }}
+                                  className="popup-chains-icon"
+                                ></img>
+                                <h6
+                                  className={`d-flex justify-content-center align-items-center chain-popup-text-active`}
+                                >
+                                  Avalanche
+                                </h6>
+                              </div>
+                            )}
+
+                            <TopPoolsCard
+                              network={network.toString()}
+                              isNewPool={item.new_pool === "Yes" ? true : false}
+                              isStaked={
+                                userPools.length > 0
+                                  ? userPools.find(
+                                      (obj) => obj.contract_address === item.id
+                                    )
+                                    ? true
+                                    : false
                                   : false
-                                : false
-                            }
-                            chain={network}
-                            top_pick={item.top_pick}
-                            tokenName={item.pair_name}
-                            apr={item.apy_percent + "%"}
-                            tvl={
-                              item.tvl_usd === "--"
-                                ? item.tvl_usd
-                                : "$" + getFormattedNumber(item.tvl_usd)
-                            }
-                            lockTime={item.lock_time ? item.lock_time : 30}
-                            tokenLogo={
-                              item.icon
-                                ? item.icon
-                                : item.pair_name === "iDYP"
-                                ? "idypius.svg"
-                                : item.pair_name === "DYP"
-                                ? "dyplogo.svg"
-                                : "newCawsLogo.png"
-                            }
-                            onShowDetailsClick={() => {
-                              setActiveCard(topPools[index]);
-                              setcardIndex(index);
-                              setDetails(index);
-                              setselectedPool(item);
-                              setShowDetails(true);
-                            }}
-                            onHideDetailsClick={() => {
-                              setActiveCard(null);
-                              setDetails();
-                            }}
-                            cardType={"table"}
-                            details={details === index ? true : false}
-                            expired={false}
-                            isPremium={isPremium}
-                          />
+                              }
+                              chain={network}
+                              top_pick={item.top_pick}
+                              tokenName={item.pair_name}
+                              apr={item.apy_percent + "%"}
+                              tvl={
+                                item.tvl_usd === "--"
+                                  ? item.tvl_usd
+                                  : "$" + getFormattedNumber(item.tvl_usd)
+                              }
+                              lockTime={item.lock_time ? item.lock_time : 30}
+                              tokenLogo={
+                                item.icon
+                                  ? item.icon
+                                  : item.pair_name === "iDYP"
+                                  ? "idypius.svg"
+                                  : item.pair_name === "DYP"
+                                  ? "dyplogo.svg"
+                                  : "newCawsLogo.png"
+                              }
+                              onShowDetailsClick={() => {
+                                setActiveCard(topPools[index]);
+                                setcardIndex(index);
+                                setDetails(index);
+                                setselectedPool(item);
+                                setShowDetails(true);
+                              }}
+                              onHideDetailsClick={() => {
+                                setActiveCard(null);
+                                setDetails();
+                              }}
+                              cardType={"table"}
+                              details={details === index ? true : false}
+                              expired={false}
+                              isPremium={isPremium}
+                            />
+                          </div>
                         );
                       })
-                    )
-                    // : topPools.length > 0 &&
-                    //   network === 43114 &&
-                    //   loading === false ? (
-                    //   topPools.slice(0, 2).map((item, index) => {
-                    //     return (
-                    //       <TopPoolsCard
-                    //         key={index}
-                    //         network={network.toString()}
-                    //         isNewPool={item.new_pool === "Yes" ? true : false}
-                    //         isStaked={
-                    //           userPools.length > 0
-                    //             ? userPools.find(
-                    //                 (obj) => obj.contract_address === item.id
-                    //               )
-                    //               ? true
-                    //               : false
-                    //             : false
-                    //         }
-                    //         chain={network}
-                    //         top_pick={item.top_pick}
-                    //         tokenName={item.pair_name}
-                    //         apr={item.apy_percent + "%"}
-                    //         tvl={
-                    //           item.tvl_usd === "--"
-                    //             ? item.tvl_usd
-                    //             : "$" + getFormattedNumber(item.tvl_usd)
-                    //         }
-                    //         lockTime={item.lock_time ? item.lock_time : 30}
-                    //         tokenLogo={
-                    //           item.icon
-                    //             ? item.icon
-                    //             : item.pair_name === "iDYP"
-                    //             ? "idypius.svg"
-                    //             : item.pair_name === "DYP"
-                    //             ? "dyplogo.svg"
-                    //             : "newCawsLogo.png"
-                    //         }
-                    //         onShowDetailsClick={() => {
-                    //           setActiveCard(
-                    //             item.tvl_usd !== "--" ? topPools[index] : null
-                    //           );
-                    //           setcardIndex(
-                    //             item.tvl_usd !== "--" ? index : null
-                    //           );
-                    //           setDetails(item.tvl_usd !== "--" ? index : null);
-                    //           setselectedPool(item);
-                    //           setShowDetails(true);
-                    //         }}
-                    //         onHideDetailsClick={() => {
-                    //           setActiveCard(null);
-                    //           setDetails();
-                    //         }}
-                    //         cardType={"table"}
-                    //         details={details === index ? true : false}
-                    //         expired={false}
-                    //         isPremium={isPremium}
-                    //       />
-                    //     );
-                    //   })
-                    // )
-                    // : topPools.length > 0 &&
-                    //   network === 56 &&
-                    //   loading === false ? (
-                    //   topPools.slice(0, 1).map((item, index) => {
-                    //     return (
-                    //       <>
-                    //         <TopPoolsCard
-                    //           chain={"bnb"}
-                    //           top_pick={false}
-                    //           tokenName={"WBNB"}
-                    //           apr={`${getFormattedNumber(
-                    //             item.apy_percent,
-                    //             0
-                    //           )}%`}
-                    //           tvl={`$${getFormattedNumber(
-                    //             item.tvl_usd,
-                    //             2
-                    //           )}`}
-                    //           lockTime={"3 Days"}
-                    //           tokenLogo={"bnb.svg"}
-                    //           onShowDetailsClick={() => {
-                    //             setActiveCard(null);
-                    //             setDetails(1);
-                    //             setActiveCardFarm(1);
-                    //             // setselectedPool(item);
-                    //             setShowDetails(false);
-                    //           }}
-                    //           onHideDetailsClick={() => {
-                    //             setActiveCard(null);
-                    //             setDetails();
-                    //             setActiveCardFarm();
-                    //           }}
-                    //           cardType={"Farming"}
-                    //           details={details === 1 ? true : false}
-                    //           isNewPool={true}
-                    //           isStaked={false}
-                    //           expired={false}
-                    //           network={network.toString()}
-                    //           isPremium={isPremium}
-                    //         />
+                    ) : (
+                      // : topPools.length > 0 &&
+                      //   network === 43114 &&
+                      //   loading === false ? (
+                      //   topPools.slice(0, 2).map((item, index) => {
+                      //     return (
+                      //       <TopPoolsCard
+                      //         key={index}
+                      //         network={network.toString()}
+                      //         isNewPool={item.new_pool === "Yes" ? true : false}
+                      //         isStaked={
+                      //           userPools.length > 0
+                      //             ? userPools.find(
+                      //                 (obj) => obj.contract_address === item.id
+                      //               )
+                      //               ? true
+                      //               : false
+                      //             : false
+                      //         }
+                      //         chain={network}
+                      //         top_pick={item.top_pick}
+                      //         tokenName={item.pair_name}
+                      //         apr={item.apy_percent + "%"}
+                      //         tvl={
+                      //           item.tvl_usd === "--"
+                      //             ? item.tvl_usd
+                      //             : "$" + getFormattedNumber(item.tvl_usd)
+                      //         }
+                      //         lockTime={item.lock_time ? item.lock_time : 30}
+                      //         tokenLogo={
+                      //           item.icon
+                      //             ? item.icon
+                      //             : item.pair_name === "iDYP"
+                      //             ? "idypius.svg"
+                      //             : item.pair_name === "DYP"
+                      //             ? "dyplogo.svg"
+                      //             : "newCawsLogo.png"
+                      //         }
+                      //         onShowDetailsClick={() => {
+                      //           setActiveCard(
+                      //             item.tvl_usd !== "--" ? topPools[index] : null
+                      //           );
+                      //           setcardIndex(
+                      //             item.tvl_usd !== "--" ? index : null
+                      //           );
+                      //           setDetails(item.tvl_usd !== "--" ? index : null);
+                      //           setselectedPool(item);
+                      //           setShowDetails(true);
+                      //         }}
+                      //         onHideDetailsClick={() => {
+                      //           setActiveCard(null);
+                      //           setDetails();
+                      //         }}
+                      //         cardType={"table"}
+                      //         details={details === index ? true : false}
+                      //         expired={false}
+                      //         isPremium={isPremium}
+                      //       />
+                      //     );
+                      //   })
+                      // )
+                      // : topPools.length > 0 &&
+                      //   network === 56 &&
+                      //   loading === false ? (
+                      //   topPools.slice(0, 1).map((item, index) => {
+                      //     return (
+                      //       <>
+                      //         <TopPoolsCard
+                      //           chain={"bnb"}
+                      //           top_pick={false}
+                      //           tokenName={"WBNB"}
+                      //           apr={`${getFormattedNumber(
+                      //             item.apy_percent,
+                      //             0
+                      //           )}%`}
+                      //           tvl={`$${getFormattedNumber(
+                      //             item.tvl_usd,
+                      //             2
+                      //           )}`}
+                      //           lockTime={"3 Days"}
+                      //           tokenLogo={"bnb.svg"}
+                      //           onShowDetailsClick={() => {
+                      //             setActiveCard(null);
+                      //             setDetails(1);
+                      //             setActiveCardFarm(1);
+                      //             // setselectedPool(item);
+                      //             setShowDetails(false);
+                      //           }}
+                      //           onHideDetailsClick={() => {
+                      //             setActiveCard(null);
+                      //             setDetails();
+                      //             setActiveCardFarm();
+                      //           }}
+                      //           cardType={"Farming"}
+                      //           details={details === 1 ? true : false}
+                      //           isNewPool={true}
+                      //           isStaked={false}
+                      //           expired={false}
+                      //           network={network.toString()}
+                      //           isPremium={isPremium}
+                      //         />
 
-                    //         <TopPoolsCard
-                    //           key={index}
-                    //           network={network.toString()}
-                    //           isNewPool={item.new_pool === "Yes" ? true : false}
-                    //           isStaked={
-                    //             userPools.length > 0
-                    //               ? userPools.find(
-                    //                   (obj) => obj.contract_address === item.id
-                    //                 )
-                    //                 ? true
-                    //                 : false
-                    //               : false
-                    //           }
-                    //           chain={network}
-                    //           top_pick={item.top_pick}
-                    //           tokenName={item.pair_name}
-                    //           apr={item.apy_percent + "%"}
-                    //           tvl={
-                    //             item.tvl_usd === "--"
-                    //               ? item.tvl_usd
-                    //               : "$" + getFormattedNumber(item.tvl_usd)
-                    //           }
-                    //           lockTime={item.lock_time ? item.lock_time : 30}
-                    //           tokenLogo={
-                    //             item.icon
-                    //               ? item.icon
-                    //               : item.pair_name === "iDYP"
-                    //               ? "idypius.svg"
-                    //               : item.pair_name === "DYP"
-                    //               ? "dyplogo.svg"
-                    //               : "newCawsLogo.png"
-                    //           }
-                    //           onShowDetailsClick={() => {
-                    //             setActiveCard(topPools[index]);
-                    //             setcardIndex(index);
-                    //             setDetails(index);
-                    //             setselectedPool(item);
-                    //             setShowDetails(true);
-                    //           }}
-                    //           onHideDetailsClick={() => {
-                    //             setActiveCard(null);
-                    //             setDetails();
-                    //           }}
-                    //           cardType={"table"}
-                    //           details={details === index ? true : false}
-                    //           expired={false}
-                    //           isPremium={isPremium}
-                    //         />
-                    //       </>
-                    //     );
-                    //   })
-                    // ) 
-                    : (
+                      //         <TopPoolsCard
+                      //           key={index}
+                      //           network={network.toString()}
+                      //           isNewPool={item.new_pool === "Yes" ? true : false}
+                      //           isStaked={
+                      //             userPools.length > 0
+                      //               ? userPools.find(
+                      //                   (obj) => obj.contract_address === item.id
+                      //                 )
+                      //                 ? true
+                      //                 : false
+                      //               : false
+                      //           }
+                      //           chain={network}
+                      //           top_pick={item.top_pick}
+                      //           tokenName={item.pair_name}
+                      //           apr={item.apy_percent + "%"}
+                      //           tvl={
+                      //             item.tvl_usd === "--"
+                      //               ? item.tvl_usd
+                      //               : "$" + getFormattedNumber(item.tvl_usd)
+                      //           }
+                      //           lockTime={item.lock_time ? item.lock_time : 30}
+                      //           tokenLogo={
+                      //             item.icon
+                      //               ? item.icon
+                      //               : item.pair_name === "iDYP"
+                      //               ? "idypius.svg"
+                      //               : item.pair_name === "DYP"
+                      //               ? "dyplogo.svg"
+                      //               : "newCawsLogo.png"
+                      //           }
+                      //           onShowDetailsClick={() => {
+                      //             setActiveCard(topPools[index]);
+                      //             setcardIndex(index);
+                      //             setDetails(index);
+                      //             setselectedPool(item);
+                      //             setShowDetails(true);
+                      //           }}
+                      //           onHideDetailsClick={() => {
+                      //             setActiveCard(null);
+                      //             setDetails();
+                      //           }}
+                      //           cardType={"table"}
+                      //           details={details === index ? true : false}
+                      //           expired={false}
+                      //           isPremium={isPremium}
+                      //         />
+                      //       </>
+                      //     );
+                      //   })
+                      // )
                       <div
                         className="w-100 d-flex justify-content-center align-items-center mt-5"
                         style={{ gridColumn: "1 / 3" }}
@@ -949,7 +992,7 @@ const Dashboard = ({
                     //   network === 8453 ||
                     //   network === 0 ||
                     //   network === 1482601649)&&
-                        loading === false ? (
+                    loading === false ? (
                       topPools.slice(0, 2).map((item, index) => {
                         return (
                           <>
@@ -1004,223 +1047,222 @@ const Dashboard = ({
                           </>
                         );
                       })
-                    )
-                    //  : topPools.length > 0 &&
-                    //   network === 43114 &&
-                    //   loading === false ? (
-                    //   topPools.slice(0, 2).map((item, index) => {
-                    //     return (
-                    //       <>
-                    //         <TopPoolsCard
-                    //           key={index}
-                    //           network={network.toString()}
-                    //           isNewPool={item.new_pool === "Yes" ? true : false}
-                    //           isStaked={
-                    //             userPools.length > 0
-                    //               ? userPools.find(
-                    //                   (obj) => obj.contract_address === item.id
-                    //                 )
-                    //                 ? true
-                    //                 : false
-                    //               : false
-                    //           }
-                    //           chain={network}
-                    //           top_pick={item.top_pick}
-                    //           tokenName={item.pair_name}
-                    //           apr={item.apy_percent + "%"}
-                    //           tvl={
-                    //             item.tvl_usd === "--"
-                    //               ? item.tvl_usd
-                    //               : "$" + getFormattedNumber(item.tvl_usd)
-                    //           }
-                    //           lockTime={item.lock_time ? item.lock_time : 30}
-                    //           tokenLogo={
-                    //             item.icon
-                    //               ? item.icon
-                    //               : item.pair_name === "iDYP"
-                    //               ? "idypius.svg"
-                    //               : item.pair_name === "DYP"
-                    //               ? "dyplogo.svg"
-                    //               : "newCawsLogo.png"
-                    //           }
-                    //           onShowDetailsClick={() => {
-                    //             setActiveCard(
-                    //               item.tvl_usd !== "--" ? topPools[index] : null
-                    //             );
-                    //             setcardIndex(
-                    //               item.tvl_usd !== "--" ? index : null
-                    //             );
-                    //             setDetails(
-                    //               item.tvl_usd !== "--" ? index : null
-                    //             );
-                    //             setselectedPool(item);
-                    //             setShowDetails(true);
-                    //           }}
-                    //           onHideDetailsClick={() => {
-                    //             setActiveCard(null);
-                    //             setDetails();
-                    //           }}
-                    //           cardType={"table"}
-                    //           details={details === index ? true : false}
-                    //           expired={false}
-                    //           isPremium={isPremium}
-                    //         />
-                    //         {/* {activeCard &&
-                    //           network === 43114 &&
-                    //           topPools[cardIndex].id ===
-                    //             "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603" && (
-                    //             <StakeDypiusAvax
-                    //               is_wallet_connected={isConnected}
-                    //               coinbase={coinbase}
-                    //               the_graph_result={the_graph_resultavax}
-                    //               chainId={network.toString()}
-                    //               handleConnection={handleConnection}
-                    //               handleSwitchNetwork={handleSwitchNetwork}
-                    //               expired={false}
-                    //               staking={window.constant_staking_dypius_avax1}
-                    //               listType={"table"}
-                    //               finalApr={
-                    //                 topPools[cardIndex]?.apy_performancefee
-                    //                   ? topPools[cardIndex]?.apy_performancefee
-                    //                   : 30
-                    //               }
-                    //               apr={
-                    //                 topPools[cardIndex]?.apy_percent
-                    //                   ? topPools[cardIndex]?.apy_percent
-                    //                   : 30
-                    //               }
-                    //               liquidity={avax_address}
-                    //               expiration_time={"09 November 2024"}
-                    //               other_info={false}
-                    //               fee_s={topPools[cardIndex]?.performancefee}
-                    //               fee_u={topPools[cardIndex]?.performancefee}
-                    //               lockTime={"No Lock"}
-                    //             />
-                    //           )} */}
-                    //       </>
-                    //     );
-                    //   })
-                    // ) : topPools.length > 0 &&
-                    //   loading === false &&
-                    //   network === 56 ? (
-                    //   topPools.slice(0, 1).map((item, index) => {
-                    //     return (
-                    //       <>
-                    //         <TopPoolsCard
-                    //           chain={"bnb"}
-                    //           top_pick={false}
-                    //           tokenName={"WBNB"}
-                    //           apr={`${getFormattedNumber(
-                    //             theBnbPool[0][1].apy_percent,
-                    //             0
-                    //           )}%`}
-                    //           tvl={`$${getFormattedNumber(
-                    //             theBnbPool[0][1].tvl_usd,
-                    //             2
-                    //           )}`}
-                    //           lockTime={"3 Days"}
-                    //           tokenLogo={"bnb.svg"}
-                    //           onShowDetailsClick={() => {
-                    //             setActiveCard(null);
-                    //             setDetails(1);
-                    //             setActiveCardFarm(1);
-                    //             // setselectedPool(item);
-                    //             // setShowDetails(true);
-                    //           }}
-                    //           onHideDetailsClick={() => {
-                    //             setActiveCard(null);
-                    //             setDetails();
-                    //             setActiveCardFarm();
-                    //           }}
-                    //           cardType={"Farming"}
-                    //           details={details === 1 ? true : false}
-                    //           isNewPool={true}
-                    //           isStaked={false}
-                    //           expired={false}
-                    //           network={network.toString()}
-                    //           isPremium={isPremium}
-                    //         />
-                    //         {activeCardFarm && network === 56 && (
-                    //           <BscFarmingFunc
-                    //             is_wallet_connected={isConnected}
-                    //             wbnbPrice={wbnbPrice}
-                    //             coinbase={coinbase}
-                    //             latestTvl={theBnbPool[0][1].tvl_usd}
-                    //             the_graph_result={the_graph_resultbsc}
-                    //             lp_id={LP_IDBNB_Array[cardIndex]}
-                    //             chainId={network.toString()}
-                    //             handleConnection={handleConnection}
-                    //             expired={false}
-                    //             handleSwitchNetwork={handleSwitchNetwork}
-                    //             latestApr={theBnbPool[0][1].apy_percent}
-                    //             liquidity={wbsc_address}
-                    //             constant={window.farming_activebsc_1}
-                    //             staking={window.constant_staking_newbscactive1}
-                    //             token={window.token_newbsc}
-                    //             lp_symbol={"USD"}
-                    //             lock="3 Days"
-                    //             rebase_factor={1}
-                    //             expiration_time={"18 July 2024"}
-                    //             fee="0.4"
-                    //             finalApr={theBnbPool[0][1].apy_percent}
-                    //             lockTime={3}
-                    //             listType={"table"}
-                    //           />
-                    //         )}
+                    ) : (
+                      //  : topPools.length > 0 &&
+                      //   network === 43114 &&
+                      //   loading === false ? (
+                      //   topPools.slice(0, 2).map((item, index) => {
+                      //     return (
+                      //       <>
+                      //         <TopPoolsCard
+                      //           key={index}
+                      //           network={network.toString()}
+                      //           isNewPool={item.new_pool === "Yes" ? true : false}
+                      //           isStaked={
+                      //             userPools.length > 0
+                      //               ? userPools.find(
+                      //                   (obj) => obj.contract_address === item.id
+                      //                 )
+                      //                 ? true
+                      //                 : false
+                      //               : false
+                      //           }
+                      //           chain={network}
+                      //           top_pick={item.top_pick}
+                      //           tokenName={item.pair_name}
+                      //           apr={item.apy_percent + "%"}
+                      //           tvl={
+                      //             item.tvl_usd === "--"
+                      //               ? item.tvl_usd
+                      //               : "$" + getFormattedNumber(item.tvl_usd)
+                      //           }
+                      //           lockTime={item.lock_time ? item.lock_time : 30}
+                      //           tokenLogo={
+                      //             item.icon
+                      //               ? item.icon
+                      //               : item.pair_name === "iDYP"
+                      //               ? "idypius.svg"
+                      //               : item.pair_name === "DYP"
+                      //               ? "dyplogo.svg"
+                      //               : "newCawsLogo.png"
+                      //           }
+                      //           onShowDetailsClick={() => {
+                      //             setActiveCard(
+                      //               item.tvl_usd !== "--" ? topPools[index] : null
+                      //             );
+                      //             setcardIndex(
+                      //               item.tvl_usd !== "--" ? index : null
+                      //             );
+                      //             setDetails(
+                      //               item.tvl_usd !== "--" ? index : null
+                      //             );
+                      //             setselectedPool(item);
+                      //             setShowDetails(true);
+                      //           }}
+                      //           onHideDetailsClick={() => {
+                      //             setActiveCard(null);
+                      //             setDetails();
+                      //           }}
+                      //           cardType={"table"}
+                      //           details={details === index ? true : false}
+                      //           expired={false}
+                      //           isPremium={isPremium}
+                      //         />
+                      //         {/* {activeCard &&
+                      //           network === 43114 &&
+                      //           topPools[cardIndex].id ===
+                      //             "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603" && (
+                      //             <StakeDypiusAvax
+                      //               is_wallet_connected={isConnected}
+                      //               coinbase={coinbase}
+                      //               the_graph_result={the_graph_resultavax}
+                      //               chainId={network.toString()}
+                      //               handleConnection={handleConnection}
+                      //               handleSwitchNetwork={handleSwitchNetwork}
+                      //               expired={false}
+                      //               staking={window.constant_staking_dypius_avax1}
+                      //               listType={"table"}
+                      //               finalApr={
+                      //                 topPools[cardIndex]?.apy_performancefee
+                      //                   ? topPools[cardIndex]?.apy_performancefee
+                      //                   : 30
+                      //               }
+                      //               apr={
+                      //                 topPools[cardIndex]?.apy_percent
+                      //                   ? topPools[cardIndex]?.apy_percent
+                      //                   : 30
+                      //               }
+                      //               liquidity={avax_address}
+                      //               expiration_time={"09 November 2024"}
+                      //               other_info={false}
+                      //               fee_s={topPools[cardIndex]?.performancefee}
+                      //               fee_u={topPools[cardIndex]?.performancefee}
+                      //               lockTime={"No Lock"}
+                      //             />
+                      //           )} */}
+                      //       </>
+                      //     );
+                      //   })
+                      // ) : topPools.length > 0 &&
+                      //   loading === false &&
+                      //   network === 56 ? (
+                      //   topPools.slice(0, 1).map((item, index) => {
+                      //     return (
+                      //       <>
+                      //         <TopPoolsCard
+                      //           chain={"bnb"}
+                      //           top_pick={false}
+                      //           tokenName={"WBNB"}
+                      //           apr={`${getFormattedNumber(
+                      //             theBnbPool[0][1].apy_percent,
+                      //             0
+                      //           )}%`}
+                      //           tvl={`$${getFormattedNumber(
+                      //             theBnbPool[0][1].tvl_usd,
+                      //             2
+                      //           )}`}
+                      //           lockTime={"3 Days"}
+                      //           tokenLogo={"bnb.svg"}
+                      //           onShowDetailsClick={() => {
+                      //             setActiveCard(null);
+                      //             setDetails(1);
+                      //             setActiveCardFarm(1);
+                      //             // setselectedPool(item);
+                      //             // setShowDetails(true);
+                      //           }}
+                      //           onHideDetailsClick={() => {
+                      //             setActiveCard(null);
+                      //             setDetails();
+                      //             setActiveCardFarm();
+                      //           }}
+                      //           cardType={"Farming"}
+                      //           details={details === 1 ? true : false}
+                      //           isNewPool={true}
+                      //           isStaked={false}
+                      //           expired={false}
+                      //           network={network.toString()}
+                      //           isPremium={isPremium}
+                      //         />
+                      //         {activeCardFarm && network === 56 && (
+                      //           <BscFarmingFunc
+                      //             is_wallet_connected={isConnected}
+                      //             wbnbPrice={wbnbPrice}
+                      //             coinbase={coinbase}
+                      //             latestTvl={theBnbPool[0][1].tvl_usd}
+                      //             the_graph_result={the_graph_resultbsc}
+                      //             lp_id={LP_IDBNB_Array[cardIndex]}
+                      //             chainId={network.toString()}
+                      //             handleConnection={handleConnection}
+                      //             expired={false}
+                      //             handleSwitchNetwork={handleSwitchNetwork}
+                      //             latestApr={theBnbPool[0][1].apy_percent}
+                      //             liquidity={wbsc_address}
+                      //             constant={window.farming_activebsc_1}
+                      //             staking={window.constant_staking_newbscactive1}
+                      //             token={window.token_newbsc}
+                      //             lp_symbol={"USD"}
+                      //             lock="3 Days"
+                      //             rebase_factor={1}
+                      //             expiration_time={"18 July 2024"}
+                      //             fee="0.4"
+                      //             finalApr={theBnbPool[0][1].apy_percent}
+                      //             lockTime={3}
+                      //             listType={"table"}
+                      //           />
+                      //         )}
 
-                    //         <TopPoolsCard
-                    //           key={index}
-                    //           network={network.toString()}
-                    //           isNewPool={item.new_pool === "Yes" ? true : false}
-                    //           isStaked={
-                    //             userPools.length > 0
-                    //               ? userPools.find(
-                    //                   (obj) => obj.contract_address === item.id
-                    //                 )
-                    //                 ? true
-                    //                 : false
-                    //               : false
-                    //           }
-                    //           chain={network}
-                    //           top_pick={item.top_pick}
-                    //           tokenName={item.pair_name}
-                    //           apr={item.apy_percent + "%"}
-                    //           tvl={
-                    //             item.tvl_usd === "--"
-                    //               ? item.tvl_usd
-                    //               : "$" + getFormattedNumber(item.tvl_usd)
-                    //           }
-                    //           lockTime={item.lock_time ? item.lock_time : 30}
-                    //           tokenLogo={
-                    //             item.icon
-                    //               ? item.icon
-                    //               : item.pair_name === "iDYP"
-                    //               ? "idypius.svg"
-                    //               : item.pair_name === "DYP"
-                    //               ? "dyplogo.svg"
-                    //               : "newCawsLogo.png"
-                    //           }
-                    //           onShowDetailsClick={() => {
-                    //             setActiveCard(topPools[index]);
-                    //             setcardIndex(index);
-                    //             setDetails(index);
-                    //             setselectedPool(item);
-                    //             setShowDetails(true);
-                    //           }}
-                    //           onHideDetailsClick={() => {
-                    //             setActiveCard(null);
-                    //             setDetails();
-                    //           }}
-                    //           cardType={"table"}
-                    //           details={details === index ? true : false}
-                    //           expired={false}
-                    //           isPremium={isPremium}
-                    //         />
-                    //       </>
-                    //     );
-                    //   })
-                    // ) 
-                    : (
+                      //         <TopPoolsCard
+                      //           key={index}
+                      //           network={network.toString()}
+                      //           isNewPool={item.new_pool === "Yes" ? true : false}
+                      //           isStaked={
+                      //             userPools.length > 0
+                      //               ? userPools.find(
+                      //                   (obj) => obj.contract_address === item.id
+                      //                 )
+                      //                 ? true
+                      //                 : false
+                      //               : false
+                      //           }
+                      //           chain={network}
+                      //           top_pick={item.top_pick}
+                      //           tokenName={item.pair_name}
+                      //           apr={item.apy_percent + "%"}
+                      //           tvl={
+                      //             item.tvl_usd === "--"
+                      //               ? item.tvl_usd
+                      //               : "$" + getFormattedNumber(item.tvl_usd)
+                      //           }
+                      //           lockTime={item.lock_time ? item.lock_time : 30}
+                      //           tokenLogo={
+                      //             item.icon
+                      //               ? item.icon
+                      //               : item.pair_name === "iDYP"
+                      //               ? "idypius.svg"
+                      //               : item.pair_name === "DYP"
+                      //               ? "dyplogo.svg"
+                      //               : "newCawsLogo.png"
+                      //           }
+                      //           onShowDetailsClick={() => {
+                      //             setActiveCard(topPools[index]);
+                      //             setcardIndex(index);
+                      //             setDetails(index);
+                      //             setselectedPool(item);
+                      //             setShowDetails(true);
+                      //           }}
+                      //           onHideDetailsClick={() => {
+                      //             setActiveCard(null);
+                      //             setDetails();
+                      //           }}
+                      //           cardType={"table"}
+                      //           details={details === index ? true : false}
+                      //           expired={false}
+                      //           isPremium={isPremium}
+                      //         />
+                      //       </>
+                      //     );
+                      //   })
+                      // )
                       <div
                         className="w-100 d-flex justify-content-center align-items-center mt-5"
                         style={{ gridColumn: "1 / 3" }}
@@ -1666,7 +1708,7 @@ const Dashboard = ({
                     }}
                   />
                 ) : activeCard &&
-                selectedPool?.chain === 'bnb' &&
+                  selectedPool?.chain === "bnb" &&
                   selectedPool?.id ===
                     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603" ? (
                   <StakeDypiusBsc
@@ -1701,7 +1743,8 @@ const Dashboard = ({
                       setDetails();
                     }}
                   />
-                ) : activeCard &&  selectedPool?.chain === 'avax' &&
+                ) : activeCard &&
+                  selectedPool?.chain === "avax" &&
                   selectedPool?.id ===
                     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603" ? (
                   <StakeDypiusAvax
