@@ -138,7 +138,7 @@ const TopOtherPoolsListCard = ({
   const windowSize = useWindowSize();
   const [livePremiumOnly, setlivePremiumOnly] = useState(true);
 
-  let premiumDay = new Date("2024-04-11T23:59:59.000+00:00");
+  let premiumDay = new Date("2024-04-11T11:00:00.000+02:00");
 
   useEffect(() => {
     if (chain === "eth") {
