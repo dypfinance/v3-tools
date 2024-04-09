@@ -419,7 +419,7 @@ const Dashboard = ({
                     loading === false ? (
                       topPools.slice(0, 2).map((item, index) => {
                         return (
-                          <div key={index} className="position-relative">
+                          <div key={index} className="poolscardwrapper cursor-pointer position-relative p-0 position-relative">
                             {item.chain === "bnb" && (
                               <div className="d-flex justify-content-end align-items-center bnbTagwrapper pe-2">
                                 <img
@@ -450,7 +450,6 @@ const Dashboard = ({
                                 </h6>
                               </div>
                             )}
-
                             {item.chain === "avax" && (
                               <div className="d-flex justify-content-end align-items-center pe-2 avaxTagWrapper">
                                 <img
@@ -895,7 +894,7 @@ const Dashboard = ({
                     loading === false ? (
                       topPools.slice(0, 2).map((item, index) => {
                         return (
-                          <div className="position-relative">
+                          <div className="poolscardwrapper cursor-pointer position-relative p-0 position-relative">
                               {item.chain === "bnb" && (
                               <div className="d-flex justify-content-end align-items-center bnbTagwrapper pe-2">
                                 <img
