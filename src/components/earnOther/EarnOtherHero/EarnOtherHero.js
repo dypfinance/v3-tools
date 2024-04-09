@@ -86,11 +86,9 @@ const EarnOtherHero = ({ type, isPremium, onSliderClick }) => {
   ];
 
   const handleSliderClick = (obj) => {
-    // if (obj.buttonType === "popup") {
-    //   onSliderClick(obj.chain);
-    // } else
-
-    if (obj.buttonType === "link") {
+    if (obj.chain === "bnb") {
+      onSliderClick(obj.chain);
+    } else if (obj.buttonType === "link") {
       navigate.push("/plans");
     } else if (obj.buttonType === "details-nft") {
       onSliderClick("details-nft");
@@ -116,11 +114,17 @@ const EarnOtherHero = ({ type, isPremium, onSliderClick }) => {
                     <div className="d-flex flex-column gap-2">
                       <h6 className="earn-other-hero-title">{item.title}</h6>
                       <h6 className="earn-other-hero-desc">{item.desc}</h6>
-                      {item.buttonType === "link" && (
-                        <button className={item.buttonClass}>
-                          {item.buttonTitle}
-                        </button>
-                      )}
+                      {item.buttonType === "link" ||
+                        (item.chain === "bnb" && (
+                          <button
+                            className={item.buttonClass}
+                            onClick={() => {
+                              handleSliderClick(item);
+                            }}
+                          >
+                            {item.buttonTitle}
+                          </button>
+                        ))}
                     </div>
                     {item.apr && item.apr !== "" && (
                       <img

@@ -58,6 +58,9 @@ function getTokenContract(address) {
   return getContract({ key: "token", address, ABI: window.TOKEN_ABI });
 }
 
+ 
+
+
 function getVaultContract(address) {
   return getContract({ key: null, address, ABI: window.VAULT_ABI });
 }
@@ -726,7 +729,7 @@ class CONSTANT_STAKING_DYPIUS {
       "REWARD_INTERVAL",
       "rewardsPendingClaim",
       "getPendingDivs",
-      "ADMIN_CAN_CLAIM_AFTER",
+      "ADMIN_CAN_CLAIM_AFTER"
     ].forEach((fn_name) => {
       this[fn_name] = async function (...args) {
         window.web3 = new Web3(window.ethereum);
@@ -801,6 +804,113 @@ class CONSTANT_STAKING_DYPIUS {
     return batch.execute();
   }
 }
+
+
+class CONSTANT_STAKING_DEFI {
+  constructor(
+    ticker = "CONSTANT_STAKING_DEFI",
+    token = "REWARD_TOKEN_DYPIUS_ETH"
+  ) {
+    this.ticker = ticker;
+    this.token = token;
+    let address = window.config[ticker.toLowerCase() + "_address"];
+    this._address = address;
+    [
+      "owner",
+      "depositedTokens",
+      "stakingTime",
+      "LOCKUP_TIME",
+      "lastClaimedTime",
+      "totalEarnedTokens",
+      "getPendingDivs",
+      "totalReferralFeeEarned",
+      "getNumberOfHolders",
+      "getStakersList",
+      "getTotalPendingDivs",
+      "getNumberOfReferredStakers",
+      "getReferredStaker",
+      "getActiveReferredStaker",
+      "contractStartTime",
+      "REWARD_INTERVAL",
+      "rewardsPendingClaim",
+      "getPendingDivs",
+      "ADMIN_CAN_CLAIM_AFTER",
+      "MAX_DEPOSIT"
+    ].forEach((fn_name) => {
+      this[fn_name] = async function (...args) {
+        window.web3 = new Web3(window.ethereum);
+        let contract = new window.web3.eth.Contract(
+          window.CONSTANT_STAKING_DEFI_ABI,
+          address
+        );
+        // getContract({ key: this.ticker });
+        return await contract.methods[fn_name](...args).call();
+      };
+    });
+
+    ["stake", "unstake", "claim", "reInvest", "stakeExternal"].forEach(
+      (fn_name) => {
+        this[fn_name] = async function (...args) {
+          // let contract = await getContract({ key: this.ticker });
+          let contract = new window.web3.eth.Contract(
+            window.CONSTANT_STAKING_DEFI_ABI,
+            address
+          );
+
+          let value = 0;
+          let { latestGasPrice, maxPriorityFeePerGas } = await getMaxFee();
+          console.log({ latestGasPrice, maxPriorityFeePerGas });
+
+          let gas = window.config.default_gas_amount;
+
+          try {
+            let estimatedGas = await contract.methods[fn_name](
+              ...args
+            ).estimateGas({ from: await getCoinbase(), gas });
+            if (estimatedGas) {
+              gas = Math.min(estimatedGas, gas);
+              console.log("estimatedgas" + gas);
+            }
+          } catch (e) {
+            console.log(e);
+          }
+
+          return await contract.methods[fn_name](...args).send({
+            value,
+            gas,
+            from: await getCoinbase(),
+
+            gasPrice: window.config.default_gasprice_gwei * 1e9,
+          });
+        };
+      }
+    );
+  }
+
+  async depositTOKEN(amount, referrer) {
+    let token_contract = await getContract({ key: this.token });
+    let staking_contract = await getContract({ key: this.ticker });
+    let batch = new window.web3.eth.BatchRequest();
+    batch.add(
+      token_contract.methods
+        .approve(staking_contract._address, amount)
+        .send.request({
+          gas: window.config.default_gas_amount,
+          from: await getCoinbase(),
+          gasPrice: window.config.default_gasprice_gwei * 1e9,
+        })
+    );
+    batch.add(
+      staking_contract.methods.deposit(amount, referrer).send.request({
+        gas: window.config.default_gas_amount,
+        from: await getCoinbase(),
+        gasPrice: window.config.default_gasprice_gwei * 1e9,
+      })
+    );
+    return batch.execute();
+  }
+}
+
 
 class CONSTANT_STAKING_OLD {
   constructor(ticker = "CONSTANT_STAKINGOLD_30", token = "REWARD_TOKEN") {
@@ -1993,6 +2103,8 @@ window.config = {
 
   reward_token_dypius_eth_address: "0x39b46b212bdf15b42b166779b9d1787a68b9d0c3", //REWARD TOKEN DYPV2
   reward_token_dypius_bsc_address: "0x1a3264f2e7b1cfc6220ec9348d33ccf02af7aaa4", //REWARD TOKEN DYPV2
+  reward_token_wbnb_address: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c", //REWARD TOKEN DYPV2
+
 
   weth_address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
   etherscan_baseURL: "https://etherscan.io",
@@ -2606,6 +2718,8 @@ window.TOKEN_OLD_AVAX_ABI = window.TOKENAVAX_ABI;
 window.REWARD_TOKEN_ABI = window.TOKEN_ABI;
 window.REWARD_TOKEN_DYPIUS_ETH_ABI = window.TOKEN_ABI;
 window.REWARD_TOKEN_DYPIUS_BSC_ABI = window.TOKEN_ABI;
+window.REWARD_TOKEN_WBNB_ABI = window.TOKEN_ABI;
+
 
 window.REWARD_TOKENAVAX_ABI = window.TOKENAVAX_ABI;
 window.REWARD_TOKENWBNB_ABI = window.TOKENBSC_ABI;
@@ -2613,6 +2727,8 @@ window.REWARD_TOKENWBNB_ABI = window.TOKENBSC_ABI;
 window.reward_token = new TOKEN("REWARD_TOKEN");
 window.reward_token_dypius_eth = new TOKEN("REWARD_TOKEN_DYPIUS_ETH");
 window.reward_token_dypius_bsc = new TOKENBSC("REWARD_TOKEN_DYPIUS_BSC");
+window.reward_token_wbnb = new TOKENBSC("REWARD_TOKEN_WBNB");
+
 
 window.reward_tokenavax = new TOKENAVAX("REWARD_TOKENAVAX");
 window.reward_tokenwbnb = new TOKENBSC("REWARD_TOKENWBNB");
@@ -2745,7 +2861,7 @@ window.constant_staking_dypius_bsc1 = new CONSTANT_STAKING_DYPIUS(
   "CONSTANT_STAKING_DYPIUS_BSC1"
 );
 
-window.constant_staking_dypius_bscother1 = new CONSTANT_STAKING_DYPIUS(
+window.constant_staking_dypius_bscother1 = new CONSTANT_STAKING_DEFI(
   "CONSTANT_STAKING_DYPIUS_BSCOTHER1"
 );
 /*Staking bsc other*/
@@ -36635,6 +36751,7 @@ async function getContract({ key, address = null, ABI = null }) {
   return window.cached_contracts[key];
 }
 
+
 function wait(ms) {
   console.log("Waiting " + ms + "ms");
   return new Promise((r) =>
@@ -36982,6 +37099,8 @@ Object.keys(window.config)
       k.startsWith("reward_tokenavax") ||
       k.startsWith("reward_token_dypius_eth") ||
       k.startsWith("reward_token_dypius_bsc") ||
+      k.startsWith("reward_token_wbnb") ||
+
       k.startsWith("token_dyp_new") ||
       k.startsWith("token_dypius_new") ||
       k.startsWith("token_dypius_new_avax") ||
@@ -37092,6 +37211,8 @@ Object.keys(window.config)
       : k.startsWith("reward_token_dypius_eth")
       ? window.TOKEN_ABI
       : k.startsWith("reward_token_dypius_bsc")
+      ? window.TOKEN_ABI
+      : k.startsWith("reward_token_wbnb")
       ? window.TOKEN_ABI
       : k.startsWith("token_dyp_new")
       ? window.TOKEN_ABI
@@ -37651,6 +37772,9 @@ async function approveToken(token, spender, amount) {
   let tokenContract = await getContract({ address: token, ABI: ERC20_ABI });
   return await tokenContract.methods.approve(spender, amount).send();
 }
+
+ 
+
 async function createLock(pair, baseToken, amount, unlockTimestamp) {
   let lockerContract = await getContract({ key: "LOCKER" });
 
