@@ -315,7 +315,7 @@ const StakeDypiusBscOther = ({
           stakingTime,
           depositedTokens,
           lastClaimedTime,
-          tvl,
+          tvl2,
           referralFeeEarned,
           total_stakers,
           tvlConstantDAI,
@@ -334,21 +334,10 @@ const StakeDypiusBscOther = ({
           //   _tvlDYPS,
         ]);
 
-        //console.log({tvl, tvlConstantiDYP, _amountOutMin})
-        const dypprice = await axios
-          .get(
-            "https://api.geckoterminal.com/api/v2/networks/eth/pools/0x7c81087310a228470db28c1068f0663d6bf88679"
-          )
-          .then((res) => {
-            return res.data.data.attributes.base_token_price_usd;
-          })
-          .catch((e) => {
-            console.log(e);
-          });
 
         let usdValueDAI = new BigNumber(tvlConstantDAI).toFixed(18);
-        let usd_per_lp = lp_data ? dypprice : 0;
-        let tvlUSD = new BigNumber(tvl)
+        let usd_per_lp = lp_data ? wbnbPrice : 0;
+        let tvlUSD = new BigNumber(tvl2)
           .times(usd_per_lp)
           .plus(usdValueDAI)
           .toFixed(18);
@@ -382,7 +371,7 @@ const StakeDypiusBscOther = ({
 
         setlastClaimedTime(lastClaimedTime);
 
-        let tvl_formatted = new BigNumber(tvl).div(1e18).toFixed(0);
+        let tvl_formatted = new BigNumber(tvl2).div(1e18).toFixed(4);
         settvl(tvl_formatted);
 
         // setsettvlDyps(tvlDyps);

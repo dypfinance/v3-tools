@@ -576,7 +576,7 @@ const EarnOtherContent = ({
                   className="text-white"
                   style={{ fontWeight: "600", fontSize: "17px" }}
                 >
-                  ${getFormattedNumber(totalTvl, 0)}
+                  ${getFormattedNumber(totalTvl, 2)}
                 </h6>
               </div>
             </div>
@@ -644,7 +644,7 @@ const EarnOtherContent = ({
                   className="text-white"
                   style={{ fontWeight: "600", fontSize: "17px" }}
                 >
-                  ${getFormattedNumber(totalTvl, 0)}
+                  ${getFormattedNumber(totalTvl, 2)}
                 </h6>
               </div>
             </div>
