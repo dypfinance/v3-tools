@@ -1076,7 +1076,7 @@ const StakeDypiusBscOther = ({
                   <div className="d-flex align-items-center gap-2">
                     <span className="bal-smallTxt">Available Quota:</span>
                     <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                      {getFormattedNumber(poolCap - tvl)} WBNB
+                      {getFormattedNumber(poolCap - tvl,0)} WBNB
                       <ClickAwayListener onClickAway={quotaClose}>
                         <Tooltip
                           open={quotaTooltip}
@@ -1100,7 +1100,7 @@ const StakeDypiusBscOther = ({
                   <div className="d-flex align-items-center gap-2">
                     <span className="bal-smallTxt">Maximum deposit:</span>
                     <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                      {getFormattedNumber(maxDepositAllowed, 2)} WBNB
+                      {getFormattedNumber(maxDepositAllowed, 0)} WBNB
                       <ClickAwayListener onClickAway={maxDepositClose}>
                         <Tooltip
                           open={maxDepositTooltip}
@@ -1284,10 +1284,10 @@ const StakeDypiusBscOther = ({
                   <div className="d-flex align-items-center gap-1">
                     <span className="bal-smallTxt">Start date:</span>
                     <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                      {/* 09 Nov 2023 */}
-                      {new Date(
+                      11 Apr 2024
+                      {/* {new Date(
                         selectedPool?.poolList[0].startDate * 1000
-                      ).toDateString()}
+                      ).toDateString()} */}
                     </span>
                   </div>
                   <div className="d-flex align-items-center gap-1">
@@ -1587,9 +1587,10 @@ const StakeDypiusBscOther = ({
                   <div className="d-flex align-items-center gap-1">
                     <span className="bal-smallTxt">Start date:</span>
                     <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                      {new Date(
+                    11 Apr 2024
+                      {/* {new Date(
                         selectedPool?.poolList[0].startDate * 1000
-                      ).toDateString()}
+                      ).toDateString()} */}
                       {/* <ClickAwayListener onClickAway={startDateClose}>
                       <Tooltip
                         open={startDateTooltip}
