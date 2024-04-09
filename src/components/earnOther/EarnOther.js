@@ -26,28 +26,44 @@ const EarnOther = ({
   const [poolClicked, setPoolClicked] = useState(false);
   const [poolClickedType, setPoolClickedType] = useState("");
   const [totalTvl, settotalTvl] = useState(0);
+  const [wbnbPrice, setWbnbPrice] = useState(0);
+
+  const { BigNumber } = window;
 
   const handleSliderClick = (obj) => {
     setPoolClicked(true);
     setPoolClickedType(obj);
   };
 
-  const fetchTotalTvl = () => {
-    if (aggregatorPools && aggregatorPools.length > 0) {
-      const bnbPool = aggregatorPools.find((item) => {
-        return item.name.toLowerCase() === "bnb";
+  const getBSCPrice = async () => {
+    await axios
+      .get("https://api.dyp.finance/api/the_graph_bsc_v2")
+      .then((data) => {
+        setWbnbPrice(data.data.the_graph_bsc_v2.usd_per_eth);
       });
+  };
 
-      if (bnbPool) {
-        const bnbTvl = bnbPool.poolList[0].tvl;
-        settotalTvl(bnbTvl);
-      }
-    }
+  const fetchTotalTvl = async () => {
+    const staking = window.constant_staking_dypius_bscother1;
+ 
+    const wbnbContract = new window.bscWeb3.eth.Contract(window.TOKEN_ABI, window.config.reward_token_wbnb_address)
+
+    const tvl = await wbnbContract.methods.balanceOf(staking._address).call().catch((e)=>{ console.log(e); return 0});
+
+    const tvlFormatted = new BigNumber(tvl).div(1e18).toFixed(4);
+
+    const finalTvl = tvlFormatted * wbnbPrice;
+
+    settotalTvl(finalTvl);
   };
 
   useEffect(() => {
     fetchTotalTvl();
-  }, [aggregatorPools]);
+  }, [wbnbPrice]);
+
+  useEffect(() => {
+    getBSCPrice();
+  }, []);
 
   return (
     <div className="container-lg earn-wrapper d-flex flex-column justify-content-center align-items-center p-0 position-relative">
@@ -85,7 +101,6 @@ const EarnOther = ({
         }}
         totalTvl={totalTvl}
         isPremium={isPremium}
-
       />
     </div>
   );
