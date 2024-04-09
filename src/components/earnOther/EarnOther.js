@@ -18,19 +18,36 @@ const EarnOther = ({
   handleSwitchNetwork,
   isPremium,
   type,
-  onConnectWallet,aggregatorPools,userCurencyBalance
+  onConnectWallet,
+  aggregatorPools,
+  userCurencyBalance,
 }) => {
   const routeData = useLocation();
   const [poolClicked, setPoolClicked] = useState(false);
   const [poolClickedType, setPoolClickedType] = useState("");
- 
+  const [totalTvl, settotalTvl] = useState(0);
 
- 
   const handleSliderClick = (obj) => {
     setPoolClicked(true);
     setPoolClickedType(obj);
   };
- 
+
+  const fetchTotalTvl = () => {
+    if (aggregatorPools && aggregatorPools.length > 0) {
+      const bnbPool = aggregatorPools.find((item) => {
+        return item.name.toLowerCase() === "bnb";
+      });
+
+      if (bnbPool) {
+        const bnbTvl = bnbPool.poolList[0].tvl;
+        settotalTvl(bnbTvl);
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchTotalTvl();
+  }, [aggregatorPools]);
 
   return (
     <div className="container-lg earn-wrapper d-flex flex-column justify-content-center align-items-center p-0 position-relative">
@@ -62,6 +79,13 @@ const EarnOther = ({
         handleSwitchNetwork={handleSwitchNetwork}
         onConnectWallet={onConnectWallet}
         userCurencyBalance={userCurencyBalance}
+        onCloseCard={() => {
+          setPoolClicked(false);
+          setPoolClickedType("");
+        }}
+        totalTvl={totalTvl}
+        isPremium={isPremium}
+
       />
     </div>
   );

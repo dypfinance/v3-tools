@@ -187,7 +187,6 @@ class App extends React.Component {
               });
             }
 
-            this.refreshSubscription().then();
           })
           .catch(console.error);
       } else if (
@@ -232,7 +231,8 @@ class App extends React.Component {
           });
         }
 
-        this.refreshSubscription().then();
+        
+
       } else if (window.ethereum && window.coin98) {
         window.ethereum
           .request({ method: "net_version" })
@@ -247,7 +247,7 @@ class App extends React.Component {
               });
             }
 
-            this.refreshSubscription().then();
+            
           })
           .catch(console.error);
       } else {
@@ -319,10 +319,11 @@ class App extends React.Component {
       SkaleABI,
       skalesubscribeAddress
     );
-
-    if (this.state.coinbase) {
+const userAddr = await window.getCoinbase()
+ 
+    if (userAddr) {
       subscribedPlatformTokenAmountNewETH = await ethNewcontract.methods
-        .subscriptionPlatformTokenAmount(this.state.coinbase)
+        .subscriptionPlatformTokenAmount(userAddr)
         .call()
         .catch((e) => {
           console.log(e);
@@ -330,7 +331,7 @@ class App extends React.Component {
         });
 
       subscribedPlatformTokenAmountNewAvax = await avaxNewcontract.methods
-        .subscriptionPlatformTokenAmount(this.state.coinbase)
+        .subscriptionPlatformTokenAmount(userAddr)
         .call()
         .catch((e) => {
           console.log(e);
@@ -338,7 +339,7 @@ class App extends React.Component {
         });
 
       subscribedPlatformTokenAmountNewBNB = await bnbNewcontract.methods
-        .subscriptionPlatformTokenAmount(this.state.coinbase)
+        .subscriptionPlatformTokenAmount(userAddr)
         .call()
         .catch((e) => {
           console.log(e);
@@ -346,7 +347,7 @@ class App extends React.Component {
         });
 
       subscribedPlatformTokenAmountCfx = await cfxcontract.methods
-        .subscriptionPlatformTokenAmount(this.state.coinbase)
+        .subscriptionPlatformTokenAmount(userAddr)
         .call()
         .catch((e) => {
           console.log(e);
@@ -354,7 +355,7 @@ class App extends React.Component {
         });
 
       subscribedPlatformTokenAmountBase = await basecontract.methods
-        .subscriptionPlatformTokenAmount(this.state.coinbase)
+        .subscriptionPlatformTokenAmount(userAddr)
         .call()
         .catch((e) => {
           console.log(e);
@@ -362,7 +363,7 @@ class App extends React.Component {
         });
 
       subscribedPlatformTokenAmountSkale = await skalecontract.methods
-        .subscriptionPlatformTokenAmount(this.state.coinbase)
+        .subscriptionPlatformTokenAmount(userAddr)
         .call()
         .catch((e) => {
           console.log(e);
@@ -390,7 +391,6 @@ class App extends React.Component {
     
 
         this.setState({
-          // subscribedPlatformTokenAmount: subscribedPlatformTokenAmountBNB,
           isPremium: true,
         });
       }
@@ -543,7 +543,7 @@ class App extends React.Component {
   }
 
   checkConnection = async () => {
-    this.refreshSubscription();
+    
     this.tvl();
     const logout = localStorage.getItem("logout");
 
@@ -659,6 +659,8 @@ class App extends React.Component {
     ) {
       ethereum?.on("chainChanged", this.checkNetworkId);
       ethereum?.on("accountsChanged", this.checkConnection);
+      ethereum?.on("accountsChanged", this.refreshSubscription);
+
     }
 
     document.addEventListener("touchstart", { passive: true });
