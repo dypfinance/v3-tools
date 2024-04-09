@@ -1100,7 +1100,7 @@ const StakeDypiusBscOther = ({
                   <div className="d-flex align-items-center gap-2">
                     <span className="bal-smallTxt">Maximum deposit:</span>
                     <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                      {getFormattedNumber(maximumDeposit, 2)} WBNB
+                      {getFormattedNumber(maxDepositAllowed, 2)} WBNB
                       <ClickAwayListener onClickAway={maxDepositClose}>
                         <Tooltip
                           open={maxDepositTooltip}
