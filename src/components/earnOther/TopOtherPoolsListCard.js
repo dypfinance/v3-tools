@@ -260,13 +260,13 @@ const TopOtherPoolsListCard = ({
                     <td className="earnother-td w-100">
                       <div className="d-flex align-items-center w-100  justify-content-between gap-2">
                         <div className={` d-flex align-items-center gap-1`}>
-                          <img src={chainLogo} width={28} height={28} alt="" />
-                          <div className="d-flex flex-column gap-1">
+                          <img src={tokenLogo} width={28} height={28} alt="" />
+                          <div className="d-flex flex-column align-items-start">
                             <h5
                               className="text-white"
                               style={{ fontSize: "16px", fontWeight: "600" }}
                             >
-                              {chain}
+                              {tokenTicker}
                             </h5>
                             <h5
                               className="text-white"
@@ -276,7 +276,7 @@ const TopOtherPoolsListCard = ({
                                 color: "#F7F7FC",
                               }}
                             >
-                              {tokenTicker}
+                              {chain}
                             </h5>
                             
                           </div>{livePremiumOnly && tokenTicker === "BNB" && (
