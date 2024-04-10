@@ -1282,9 +1282,10 @@ const StakeDypiusBscOther = ({
                   <div className="d-flex align-items-center gap-1">
                     <span className="bal-smallTxt">End date:</span>
                     <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                      {new Date(
+                      {/* {new Date(
                         selectedPool?.poolList[0].endDate * 1000
-                      ).toDateString()}
+                      ).toDateString()} */}
+                      Jul 09 2024
                     </span>
                   </div>
                 </div>
@@ -1603,9 +1604,10 @@ const StakeDypiusBscOther = ({
                   <div className="d-flex align-items-center gap-1">
                     <span className="bal-smallTxt">End date:</span>
                     <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                      {new Date(
+                    Jul 09 2024
+                      {/* {new Date(
                         selectedPool?.poolList[0].endDate * 1000
-                      ).toDateString()}
+                      ).toDateString()} */}
                       {/* <ClickAwayListener onClickAway={endDateClose}>
                       <Tooltip
                         open={endDateTooltip}
