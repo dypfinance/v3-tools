@@ -2046,24 +2046,16 @@ export default class Subscription extends React.Component {
                             position: "relative",
                           }}
                         >
-                          <div
-                            className="d-flex justify-content-center align-items-center"
-                            style={{
-                              position: "absolute",
-                              top: "-23px",
-                              left: "33%",
-                              width: "106px",
-                              height: "34px",
-                              transform: "translateX(-50%)",
-                              borderRadius: "50px",
-                              background:
-                                "linear-gradient(93.99deg, #4ED5CD 0%, #524FD8 100%)",
-                              gap: "5px",
-                              zIndex: 1,
-                            }}
-                          >
-                            <img src="/assets/img/ethereum.svg"></img>
-                            <div style={{ color: "#F7F7FC" }}>Ethereum</div>
+                          <div className="d-flex justify-content-center align-items-center ethereumTagwrapper">
+                            <img
+                              src="/assets/img/ethereum.svg"
+                              className="popup-chains-icon"
+                            />
+                            <h6
+                              className={`d-flex justify-content-center align-items-center chain-popup-text-active`}
+                            >
+                              Ethereum
+                            </h6>
                           </div>
                           <TopPoolsCard
                             key={index}
@@ -2133,28 +2125,18 @@ export default class Subscription extends React.Component {
                             position: "relative",
                           }}
                         >
-                          <div
-                            className="d-flex justify-content-center align-items-center"
-                            style={{
-                              position: "absolute",
-                              top: "-23px",
-                              left: "33%",
-                              width: "115px",
-                              height: "34px",
-                              transform: "translateX(-50%)",
-                              borderRadius: "50px",
-                              background:
-                                "linear-gradient(93.99deg, #DAAA0A 0%, #EDB90B 100%)",
-                              gap: "5px",
-                              zIndex: 1,
-                            }}
-                          >
+                          <div className="d-flex justify-content-center align-items-center bnbTagwrapper">
                             <img
                               src={require("../../assets/bnblogo.svg").default}
                               alt=""
                               style={{ height: 20, width: 20 }}
+                              className="popup-chains-icon"
                             ></img>
-                            <div style={{ color: "#F7F7FC" }}>BNB Chain</div>
+                            <h6
+                              className={`d-flex justify-content-center align-items-center chain-popup-text-active`}
+                            >
+                              BNB Chain
+                            </h6>
                           </div>
 
                           <TopPoolsCard
@@ -2225,28 +2207,18 @@ export default class Subscription extends React.Component {
                             position: "relative",
                           }}
                         >
-                          <div
-                            className="d-flex justify-content-center align-items-center"
-                            style={{
-                              position: "absolute",
-                              top: "-23px",
-                              left: "33%",
-                              width: "115px",
-                              height: "34px",
-                              transform: "translateX(-50%)",
-                              borderRadius: "50px",
-                              background:
-                                "linear-gradient(93.99deg, #DF2C2D 0%, #F86465 100%)",
-                              gap: "5px",
-                              zIndex: 1,
-                            }}
-                          >
+                          <div className="d-flex justify-content-center align-items-center avaxTagWrapper">
                             <img
                               src={require("../../assets/wavax.svg").default}
                               alt=""
                               style={{ height: 20, width: 20 }}
+                              className="popup-chains-icon"
                             ></img>
-                            <div style={{ color: "#F7F7FC" }}>Avalanche</div>
+                            <h6
+                              className={`d-flex justify-content-center align-items-center chain-popup-text-active`}
+                            >
+                              Avalanche
+                            </h6>
                           </div>
 
                           <TopPoolsCard

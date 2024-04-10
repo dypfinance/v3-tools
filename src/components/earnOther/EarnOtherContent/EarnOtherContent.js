@@ -41,7 +41,9 @@ const EarnOtherContent = ({
   faqIndex,
   networkId,
   handleSwitchNetwork,
-  onConnectWallet,userCurencyBalance
+  onConnectWallet,
+  userCurencyBalance,
+  onCloseCard,totalTvl,isPremium
 }) => {
   const windowSize = useWindowSize();
 
@@ -184,6 +186,7 @@ const EarnOtherContent = ({
   const [count, setCount] = useState(0);
   const [query, setQuery] = useState("");
   const [sorting, setSorting] = useState("");
+  const [livePremiumOnly, setlivePremiumOnly] = useState(true);
 
   const handleQuery = (item) => (event) => {
     if (event.key === "Enter") {
@@ -498,15 +501,14 @@ const EarnOtherContent = ({
     }
   }, [poolClicked, poolClickedType, allPools]);
 
-  // const handleManageDetails = (obj,index)=>{
-  //   if(obj.name.toLowerCase() === 'bnb') {
-  //       setshowDetails(!showDetails);
-  //                       setcardIndex(!showDetails ? index : 777);
-  //                       setselectedBtn(obj.lockTime);
-  //                       setselectedPool(obj);
-  //   }
-  
-  // }
+  const handleManageDetails = (obj, index) => {
+    if (obj.name.toLowerCase() === "bnb") {
+      setshowDetails(!showDetails);
+      setcardIndex(!showDetails ? index : 777);
+      setselectedBtn(obj.lockTime);
+      setselectedPool(obj);
+    }
+  };
 
   return (
     <>
@@ -566,19 +568,17 @@ const EarnOtherContent = ({
               </div>
             </div>
             <div className="col-12 col-lg-4 col-xl-3 px-0">
-              {/* {option !== "Farming" && (
-                <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
-                  <span style={{ fontWeight: "300", fontSize: "13px" }}>
-                    Total value locked
-                  </span>
-                  <h6
-                    className="text-white"
-                    style={{ fontWeight: "600", fontSize: "17px" }}
-                  >
-                    ${getFormattedNumber("2585417", 0)}
-                  </h6>
-                </div>
-              )} */}
+              <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
+                <span style={{ fontWeight: "300", fontSize: "13px" }}>
+                  Total value locked
+                </span>
+                <h6
+                  className="text-white"
+                  style={{ fontWeight: "600", fontSize: "17px" }}
+                >
+                  ${getFormattedNumber(totalTvl, 2)}
+                </h6>
+              </div>
             </div>
           </div>
         ) : (
@@ -636,19 +636,17 @@ const EarnOtherContent = ({
               </div>
             </div>
             <div className="col-12 col-lg-4 col-xl-3 px-0">
-              {/* {option !== "Farming" && (
-                <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
-                  <span style={{ fontWeight: "300", fontSize: "13px" }}>
-                    Total value locked
-                  </span>
-                  <h6
-                    className="text-white"
-                    style={{ fontWeight: "600", fontSize: "17px" }}
-                  >
-                    ${getFormattedNumber("2585417", 0)}
-                  </h6>
-                </div>
-              )} */}
+              <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
+                <span style={{ fontWeight: "300", fontSize: "13px" }}>
+                  Total value locked
+                </span>
+                <h6
+                  className="text-white"
+                  style={{ fontWeight: "600", fontSize: "17px" }}
+                >
+                  ${getFormattedNumber(totalTvl, 2)}
+                </h6>
+              </div>
             </div>
           </div>
         )}
@@ -809,7 +807,11 @@ const EarnOtherContent = ({
                 >
                   <table className="earnother-table">
                     <thead className="d-flex w-100 align-items-center justify-content-around">
-                      <th className="earnother-th col-2"><div className="d-flex justify-content-center w-75">Pool</div></th>
+                      <th className="earnother-th col-2">
+                        <div className="d-flex justify-content-center w-75">
+                          Pool
+                        </div>
+                      </th>
                       <th
                         className="earnother-th col-2 d-flex justify-content-center gap-1 align-items-center arrowBtns"
                         onClick={handleSorting}
@@ -854,7 +856,7 @@ const EarnOtherContent = ({
                       lockTime={item.lockType}
                       expired={item.no}
                       isNewPool={true}
-                      isComingSoon={true}
+                      isComingSoon={item.name.toLowerCase() === 'bnb' ? false : true}
                       isHot={
                         item.tags.find((obj) => {
                           return obj === "Hot";
@@ -870,15 +872,18 @@ const EarnOtherContent = ({
                           : false
                       }
                       isStaked={false}
-                      // onCardClick={() => {
-                      //   setshowDetails(!showDetails);
-                      //   setcardIndex(!showDetails ? index : 777);
-                      //   setselectedBtn(item.lockTime);
-                      //   setselectedPool(item);
-                      // }}
+                      onCardClick={() => {
+                        // setshowDetails(!showDetails);
+                        // setcardIndex(!showDetails ? index : 777);
+                        // setselectedBtn(item.lockTime);
+                        // setselectedPool(item);
+                        handleManageDetails(item);
+                      }}
                       cardIndex={cardIndex}
                       showDetails={showDetails}
                       cardId={index}
+                      onCountDownComplete={(value)=>{setlivePremiumOnly(value)}}
+                      isPremium={isPremium}
                     />
                   );
                 })}
@@ -937,6 +942,8 @@ const EarnOtherContent = ({
                     onClick={() => {
                       setshowDetails(false);
                       setselectedTab("deposit");
+                      onCloseCard();
+                      setshowDetails(false);
                     }}
                     style={{
                       bottom: "17px",
@@ -974,6 +981,8 @@ const EarnOtherContent = ({
                     }}
                     is_wallet_connected={isConnected}
                     userCurencyBalance={userCurencyBalance}
+                    livePremiumOnly={livePremiumOnly}
+                    isPremium={isPremium}
                   />
                 ) : selectedPool.id === "avaxChainPool" ? (
                   <StakeDypiusAvaxOther
