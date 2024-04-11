@@ -27,6 +27,7 @@ const EarnOther = ({
   const [poolClickedType, setPoolClickedType] = useState("");
   const [totalTvl, settotalTvl] = useState(0);
   const [wbnbPrice, setWbnbPrice] = useState(0);
+  const [ethPrice, setEthPrice] = useState(0);
 
   const { BigNumber } = window;
 
@@ -43,18 +44,49 @@ const EarnOther = ({
       });
   };
 
+  const getETHPrice = async () => {
+    await axios
+      .get("https://api.dyp.finance/api/the_graph_eth_v2")
+      .then((data) => {
+        setEthPrice(data.data.the_graph_eth_v2.usd_per_eth);
+      });
+  };
+
   const fetchTotalTvl = async () => {
     const staking = window.constant_staking_dypius_bscother1;
- 
-    const wbnbContract = new window.bscWeb3.eth.Contract(window.TOKEN_ABI, window.config.reward_token_wbnb_address)
+    const staking_eth = window.constant_staking_dypius_ethother1;
 
-    const tvl = await wbnbContract.methods.balanceOf(staking._address).call().catch((e)=>{ console.log(e); return 0});
+    const wbnbContract = new window.bscWeb3.eth.Contract(
+      window.TOKEN_ABI,
+      window.config.reward_token_wbnb_address
+    );
+    const baseContract = new window.baseWeb3.eth.Contract(
+      window.TOKEN_ABI,
+      window.config.reward_token_dypius_base_address
+    );
+
+    const tvl = await wbnbContract.methods
+      .balanceOf(staking._address)
+      .call()
+      .catch((e) => {
+        console.log(e);
+        return 0;
+      });
+    const tvl_eth = await baseContract.methods
+      .balanceOf(staking_eth._address)
+      .call()
+      .catch((e) => {
+        console.log(e);
+        return 0;
+      });
 
     const tvlFormatted = new BigNumber(tvl).div(1e18).toFixed(4);
+    const tvlEthFormatted = new BigNumber(tvl_eth).div(1e18).toFixed(4);
 
     const finalTvl = tvlFormatted * wbnbPrice;
+    const finalEthTvl = tvlEthFormatted * ethPrice;
 
-    settotalTvl(finalTvl);
+    settotalTvl(Number(finalTvl) + Number(finalEthTvl));
   };
 
   useEffect(() => {
@@ -63,6 +95,7 @@ const EarnOther = ({
 
   useEffect(() => {
     getBSCPrice();
+    getETHPrice();
   }, []);
 
   return (

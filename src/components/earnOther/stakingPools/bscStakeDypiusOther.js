@@ -174,7 +174,10 @@ const StakeDypiusBscOther = ({
   const [maxDepositTooltip, setMaxDepositTooltip] = useState(false);
   const [approvedAmount, setapprovedAmount] = useState("0.00");
   const [earlyWithdrawTooltip, setEarlyWithdrawTooltip] = useState(false);
+
+
   const navigate = useHistory();
+
   const showModal = () => {
     setshow(true);
   };
@@ -599,9 +602,9 @@ const StakeDypiusBscOther = ({
         });
     } else if (
       !moment
-        .duration((Number(stakingTime) + 86400 * 90) * 1000 - Date.now())
-        .humanize(true)
-        ?.includes("ago")
+      .duration((Number(stakingTime) + 86400 * 60) * 1000 - Date.now())
+      .humanize(true)
+      ?.includes("ago")
     ) {
       setshowWithdrawModal(true);
     }
@@ -964,7 +967,7 @@ const StakeDypiusBscOther = ({
                 <span className="info-pool-right-text">
                   $
                   {getFormattedNumber(
-                    Number(tvl) * usdPerToken === 0
+                    Number(tvl) * wbnbPrice === 0
                       ? selectedPool.poolList[0].tvl
                       : Number(tvl) * wbnbPrice,
                     2
