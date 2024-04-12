@@ -183,7 +183,7 @@ const Dashboard = ({
           type: "staking",
           tvl_usd: item.poolList[0].tvl,
           id: item.poolList[0].contractAddress,
-          apy_percent: item.name.toLowerCase() === "eth" ? 10 : item.poolList[0].aprPercent,
+          apy_percent: item.poolList[0].aprPercent,
           lock_time: item.poolList[0].lockTime + " days",
           pair_name: item.name,
         };
@@ -1199,7 +1199,7 @@ const Dashboard = ({
                     the_graph_result={the_graph_result}
                     expiration_time={"09 Nov 2024"}
                     lockTime={parseInt(selectedPool.poolList[0].lockTime)}
-                    finalApr={selectedPool.name.toLowerCase() === "eth" ? '10%' : selectedPool.name.toLowerCase() === "avax" ? '15%' : selectedPool.maxAPR}
+                    finalApr={selectedPool.maxAPR}
                     fee={selectedPool.poolList[0].performancefee}
                     apr={selectedPool?.poolList[0].aprPercent}
                     earlyFee={selectedPool?.poolList[0].earlyFee}

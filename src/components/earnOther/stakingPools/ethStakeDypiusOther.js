@@ -639,7 +639,7 @@ const StakeDypiusEthOther = ({
   };
 
   const getApproxReturn = (depositAmount, days) => {
-    return ((depositAmount * 10) / 100 / 365) * days;
+    return ((depositAmount * apr) / 100 / 365) * days;
   };
 
   const getReferralLink = () => {
