@@ -13,6 +13,7 @@ import Modal from "../../Modal/Modal";
 import { useHistory } from "react-router-dom";
 
 const StakeDypiusEthOther = ({
+  totalTvl,
   selectedPool,
   selectedTab,
   staking,
@@ -934,9 +935,7 @@ const StakeDypiusEthOther = ({
                 <span className="info-pool-right-text">
                   $
                   {getFormattedNumber(
-                    Number(tvl) * ethPrice === 0
-                      ? selectedPool.poolList[0].tvl
-                      : Number(tvl) * ethPrice,
+                    totalTvl,
                     2
                   )}
                 </span>
