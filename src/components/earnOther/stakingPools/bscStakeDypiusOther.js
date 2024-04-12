@@ -491,6 +491,7 @@ const StakeDypiusBscOther = ({
   const handleApprove = async (e) => {
     //   e.preventDefault();
     let selectedBuybackToken2 = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c";
+    window.cached_contracts = Object.create(null);
     if (passivePool === false) {
       setdepositLoading(true);
       if (other_info) {
@@ -671,7 +672,7 @@ const StakeDypiusBscOther = ({
 
   const handleSetMaxDeposit = (e) => {
     const depositAmount = wbnb_balance;
-    const maxAllowed = maxDepositAllowed;
+    const maxAllowed = 9;
     if (Number(depositAmount) > maxAllowed) {
       setdepositAmount(maxAllowed);
       checkApproval(maxAllowed);
@@ -1288,7 +1289,7 @@ const StakeDypiusBscOther = ({
                       {/* {new Date(
                         selectedPool?.poolList[0].endDate * 1000
                       ).toDateString()} */}
-                      Jul 09 2024
+                      09 Jul 2024
                     </span>
                   </div>
                 </div>
@@ -1603,7 +1604,7 @@ const StakeDypiusBscOther = ({
                   <div className="d-flex align-items-center gap-1">
                     <span className="bal-smallTxt">End date:</span>
                     <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    Jul 09 2024
+                   09 Jul 2024
                       {/* {new Date(
                         selectedPool?.poolList[0].endDate * 1000
                       ).toDateString()} */}
