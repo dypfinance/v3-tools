@@ -1240,7 +1240,7 @@ const StakeDypiusBscOther = ({
                   <div className="d-flex align-items-center gap-2">
                     <span className="bal-smallTxt">Pool fee:</span>
                     <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                      {fee ?? 0}%
+                      0%
                       <ClickAwayListener onClickAway={poolFeeClose}>
                         <Tooltip
                           open={poolFeeTooltip}
@@ -1544,7 +1544,7 @@ const StakeDypiusBscOther = ({
                   <div className="d-flex align-items-center gap-2">
                     <span className="bal-smallTxt">Pool fee:</span>
                     <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                      {fee ?? 0}%
+                    0%
                       <ClickAwayListener onClickAway={poolFeeClose}>
                         <Tooltip
                           open={poolFeeTooltip}

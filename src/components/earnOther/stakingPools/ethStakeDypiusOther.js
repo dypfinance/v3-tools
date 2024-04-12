@@ -865,7 +865,7 @@ const StakeDypiusEthOther = ({
             <div className="info-pool-item p-2">
               <div className="d-flex justify-content-between gap-1 align-items-center">
                 <span className="info-pool-left-text">
-                  Apr{" "}
+                  APR{" "}
                   <ClickAwayListener onClickAway={aprClose}>
                     <Tooltip
                       open={aprTooltip}
@@ -885,7 +885,7 @@ const StakeDypiusEthOther = ({
                     </Tooltip>
                   </ClickAwayListener>
                 </span>
-                <span className="info-pool-right-text">{finalApr}%</span>
+                <span className="info-pool-right-text">{finalApr}</span>
               </div>
             </div>
             <div className="info-pool-item p-2">
@@ -1182,7 +1182,7 @@ const StakeDypiusEthOther = ({
                   <div className="d-flex align-items-center gap-2">
                     <span className="bal-smallTxt">Pool fee:</span>
                     <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                      {fee ?? 0}%
+                    0%
                       <ClickAwayListener onClickAway={poolFeeClose}>
                         <Tooltip
                           open={poolFeeTooltip}
@@ -1482,7 +1482,7 @@ const StakeDypiusEthOther = ({
                   <div className="d-flex align-items-center gap-2">
                     <span className="bal-smallTxt">Pool fee:</span>
                     <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                      {fee ?? 0}%
+                    0%
                       <ClickAwayListener onClickAway={poolFeeClose}>
                         <Tooltip
                           open={poolFeeTooltip}
