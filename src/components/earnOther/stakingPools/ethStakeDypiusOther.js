@@ -606,13 +606,12 @@ const StakeDypiusEthOther = ({
 
   const handleSetMaxDeposit = (e) => {
     const depositAmount = wethBalance;
-    const maxAllowed = maxDepositAllowed;
+    const maxAllowed = 3;
 
     if (Number(depositAmount) > maxAllowed) {
       setdepositAmount(maxAllowed);
       checkApproval(maxAllowed);
-      seterrorMsg(`Maximum Deposit is ${maxDepositAllowed
-      } WETH!`);
+      seterrorMsg(`Maximum Deposit is 3 WETH!`);
     } else if (Number(depositAmount) <= maxAllowed) {
       setdepositAmount(depositAmount);
       checkApproval(depositAmount);
@@ -950,11 +949,10 @@ const StakeDypiusEthOther = ({
                     Number(depositAmount) > 0 ? depositAmount : depositAmount
                   }
                   onChange={(e) => {
-                    setdepositAmount(e.target.value > maxDepositAllowed ? maxDepositAllowed : e.target.value);
-                    e.target.value > maxDepositAllowed &&
-                      seterrorMsg(`Maximum Deposit is ${maxDepositAllowed
-                      } WETH!`);
-                    e.target.value <= maxDepositAllowed && seterrorMsg("");
+                    setdepositAmount(e.target.value > 3 ? 3 : e.target.value);
+                    e.target.value > 3 &&
+                      seterrorMsg(`Maximum Deposit is 3 WETH!`);
+                    e.target.value <= 3 && seterrorMsg("");
                     checkApproval(e.target.value);
                   }}
                   name="amount_deposit"

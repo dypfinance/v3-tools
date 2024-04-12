@@ -671,7 +671,7 @@ const StakeDypiusBscOther = ({
 
   const handleSetMaxDeposit = (e) => {
     const depositAmount = wbnb_balance;
-    const maxAllowed = maxDepositAllowed;
+    const maxAllowed = 9;
     if (Number(depositAmount) > maxAllowed) {
       setdepositAmount(maxAllowed);
       checkApproval(maxAllowed);
