@@ -994,8 +994,7 @@ const StakeDypiusBscOther = ({
             <div
               className={`d-flex flex-column w-100 gap-1 ${
                 (chainId !== "56" ||
-                  !is_wallet_connected ||
-                  (!isPremium && livePremiumOnly)) &&
+                  !is_wallet_connected) &&
                 "blurrypool"
               } `}
             >
@@ -1145,8 +1144,7 @@ const StakeDypiusBscOther = ({
                 <div
                   className={`d-flex flex-column w-100 gap-1 ${
                     (chainId !== "56" ||
-                      !is_wallet_connected ||
-                      (!isPremium && livePremiumOnly)) &&
+                      !is_wallet_connected ) &&
                     "blurrypool"
                   } `}
                 >
@@ -1297,9 +1295,7 @@ const StakeDypiusBscOther = ({
               </div>
             </div>
             {is_wallet_connected &&
-              chainId === "56" &&
-              ((isPremium && livePremiumOnly) ||
-                (!isPremium && !livePremiumOnly)) && (
+              chainId === "56" && (
                 <button
                   disabled={
                     depositAmount === "" || depositLoading === true
@@ -1361,8 +1357,7 @@ const StakeDypiusBscOther = ({
             <div
               className={`d-flex flex-column w-100 gap-1 ${
                 (chainId !== "56" ||
-                  !is_wallet_connected ||
-                  (!isPremium && livePremiumOnly)) &&
+                  !is_wallet_connected ) &&
                 "blurrypool"
               } `}
             >
@@ -1454,8 +1449,7 @@ const StakeDypiusBscOther = ({
             <div
               className={`d-flex flex-column w-100 gap-1 ${
                 (chainId !== "56" ||
-                  !is_wallet_connected ||
-                  (!isPremium && livePremiumOnly)) &&
+                  !is_wallet_connected) &&
                 "blurrypool"
               } `}
             >
@@ -1652,15 +1646,6 @@ const StakeDypiusBscOther = ({
             }}
           >
             Change Network
-          </button>
-        ) : !isPremium && livePremiumOnly ? (
-          <button
-            className="connectbtn btn m-auto"
-            onClick={() => {
-              handleNavigateToPlans();
-            }}
-          >
-            Become Premium
           </button>
         ) : (
           <></>
