@@ -430,8 +430,8 @@ const StakeDypiusEthOther = ({
   }, [staking]);
 
   const handleApprove = async (e) => {
+    window.cached_contracts = Object.create(null);
     let selectedBuybackToken2 = "0x4200000000000000000000000000000000000006";
-
     setdepositLoading(true);
 
     let amount = depositAmount;
@@ -1227,7 +1227,7 @@ const StakeDypiusEthOther = ({
                       {/* {new Date(
                         selectedPool?.poolList[0].endDate * 1000
                       ).toDateString()} */}
-                      Jun 09 2024
+                     09 Jun 2024
                     </span>
                   </div>
                 </div>
@@ -1527,7 +1527,7 @@ const StakeDypiusEthOther = ({
                       {/* {new Date(
                         selectedPool?.poolList[0].endDate * 1000
                       ).toDateString()} */}
-                      Jun 09 2024
+                      09 Jun 2024
                     </span>
                   </div>
                 </div>
