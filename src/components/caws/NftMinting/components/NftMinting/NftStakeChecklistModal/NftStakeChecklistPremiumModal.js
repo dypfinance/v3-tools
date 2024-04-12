@@ -35,7 +35,7 @@ const NftStakeCheckListPremiumModal = ({
   getApprovedNfts,
   hideItem,
   onDepositComplete,
-  showbutton,onApprovalComplete
+  showbutton,onApprovalComplete,mystakes
 }) => {
   const style = {
     position: "absolute",
