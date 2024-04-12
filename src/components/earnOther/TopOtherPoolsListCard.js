@@ -80,65 +80,11 @@ const TopOtherPoolsListCard = ({
 
   const avaxCoins2 = ["avax"];
 
-  const dummyData_avax2 = [
-    {
-      chain: "Avalanche",
-      apr: 10,
-      tokenLogo: "avax.svg",
-      expired: false,
-      top_pick: false,
-      tokenName: "AVAX",
-      tokenTicker: "AVAX",
-      pool: "AVAX",
-      id: "0x8652d1817f5a95172001685a28facb1d57e78a11",
-      coming_soon: true,
-      lockTime: "30 days",
-      poolCap: "7413",
-      new_pool: "Yes",
-    },
-  ];
-
-  const dummyData_base2 = [
-    {
-      chain: "Base",
-      apr: 15,
-      tokenLogo: "baseActive.svg",
-      expired: false,
-      top_pick: false,
-      tokenName: "ETH",
-      tokenTicker: "ETH",
-      pool: "ETH",
-      id: "",
-      lockTime: "60 days",
-      poolCap: "234",
-      coming_soon: true,
-      new_pool: "Yes",
-    },
-  ];
-
-  const dummyData_bnb2 = [
-    {
-      chain: "BNB Chain",
-      apr: 25,
-      tokenLogo: "bsc.svg",
-      expired: false,
-      top_pick: false,
-      tokenName: "BNB",
-      tokenTicker: "WBNB",
-      pool: "BNB",
-      id: "0x8652d1817f5a95172001685a28facb1d57e78a11",
-      lockTime: "90 days",
-      poolCap: "467",
-      coming_soon: true,
-      new_pool: "Yes",
-    },
-  ];
-
   const [coins, setCoins] = useState(ethCoins);
   const windowSize = useWindowSize();
   const [livePremiumOnly, setlivePremiumOnly] = useState(true);
 
-  let premiumDay = new Date("2024-04-11T11:00:00.000+02:00");
+  let premiumDayBase = new Date("2024-04-13T11:00:00.000+02:00");
 
   useEffect(() => {
     if (chain === "eth") {
@@ -165,15 +111,17 @@ const TopOtherPoolsListCard = ({
         style={{ display: display }}
         onClick={onCardClick}
       >
-        <div className="d-none">
-          <CountDown
-            date={premiumDay}
-            onComplete={() => {
-              setlivePremiumOnly(false);
-              onCountDownComplete(false);
-            }}
-          />
-        </div>
+        {tokenTicker === "ETH" && (
+          <div className="d-none">
+            <CountDown
+              date={premiumDayBase}
+              onComplete={() => {
+                setlivePremiumOnly(false);
+                onCountDownComplete(false);
+              }}
+            />
+          </div>
+        )}
         <div className="px-0 d-flex justify-content-between align-items-center">
           <table className="earnother-table">
             <tbody>
@@ -194,7 +142,7 @@ const TopOtherPoolsListCard = ({
                       >
                         {tokenTicker}
                       </h5>
-                      {livePremiumOnly && tokenTicker === "BNB" && (
+                      {livePremiumOnly && tokenTicker === "ETH" && (
                         <img src={premium24hrstag} alt="" />
                       )}
                       {/* {isHot && <img src={hotTag} alt="" />} */}
@@ -278,10 +226,10 @@ const TopOtherPoolsListCard = ({
                             >
                               {chain}
                             </h5>
-                            
-                          </div>{livePremiumOnly && tokenTicker === "BNB" && (
-                        <img src={premium24hrstag} alt="" />
-                      )}
+                          </div>
+                          {livePremiumOnly && tokenTicker === "ETH" && (
+                            <img src={premium24hrstag} alt="" />
+                          )}
                         </div>
                         <div className="d-flex flex-column gap-2">
                           <h5

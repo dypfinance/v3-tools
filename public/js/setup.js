@@ -2019,7 +2019,7 @@ window.config = {
   bsc_endpoint: "https://bsc-dataseed.bnbchain.org",
   avax_endpoint: "https://api.avax.network/ext/bc/C/rpc",
   conflux_endpoint: "https://evm.confluxrpc.com/",
-  base_endpoint: "https://base.publicnode.com",
+  base_endpoint: "https://base-mainnet.public.blastapi.io",
   skale_endpoint: "https://mainnet.skalenodes.com/v1/green-giddy-denebola",
   goerli_endpoint: "https://ethereum-goerli.publicnode.com",
   bscTest_endpoint: "https://data-seed-prebsc-1-s1.binance.org:8545/",
@@ -2102,6 +2102,8 @@ window.config = {
   reward_tokenwbnb_address: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c", //REWARD TOKEN wbnb
 
   reward_token_dypius_eth_address: "0x39b46b212bdf15b42b166779b9d1787a68b9d0c3", //REWARD TOKEN DYPV2
+  reward_token_dypius_base_address: "0x4200000000000000000000000000000000000006", //REWARD TOKEN DYPV2
+
   reward_token_dypius_bsc_address: "0x1a3264f2e7b1cfc6220ec9348d33ccf02af7aaa4", //REWARD TOKEN DYPV2
   reward_token_wbnb_address: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c", //REWARD TOKEN DYPV2
 
@@ -2355,6 +2357,9 @@ window.config = {
 
   constant_staking_dypius_bscother1_address:
     "0x8f6A888B5ef55633907c862e1718B3b4dDB2BB7D",
+
+  constant_staking_dypius_ethother1_address:
+    "0xfaed2b9b537444c7a0160e4081683500d77cbedc",
 
   constant_staking_dypius_avax1_address:
     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603",
@@ -2717,6 +2722,8 @@ window.TOKEN_OLD_AVAX_ABI = window.TOKENAVAX_ABI;
 
 window.REWARD_TOKEN_ABI = window.TOKEN_ABI;
 window.REWARD_TOKEN_DYPIUS_ETH_ABI = window.TOKEN_ABI;
+window.REWARD_TOKEN_DYPIUS_BASE_ABI = window.TOKEN_ABI;
+
 window.REWARD_TOKEN_DYPIUS_BSC_ABI = window.TOKEN_ABI;
 window.REWARD_TOKEN_WBNB_ABI = window.TOKEN_ABI;
 
@@ -2726,6 +2733,8 @@ window.REWARD_TOKENWBNB_ABI = window.TOKENBSC_ABI;
 
 window.reward_token = new TOKEN("REWARD_TOKEN");
 window.reward_token_dypius_eth = new TOKEN("REWARD_TOKEN_DYPIUS_ETH");
+window.reward_token_dypius_base = new TOKEN("REWARD_TOKEN_DYPIUS_BASE");
+
 window.reward_token_dypius_bsc = new TOKENBSC("REWARD_TOKEN_DYPIUS_BSC");
 window.reward_token_wbnb = new TOKENBSC("REWARD_TOKEN_WBNB");
 
@@ -2864,6 +2873,10 @@ window.constant_staking_dypius_bsc1 = new CONSTANT_STAKING_DYPIUS(
 window.constant_staking_dypius_bscother1 = new CONSTANT_STAKING_DEFI(
   "CONSTANT_STAKING_DYPIUS_BSCOTHER1"
 );
+
+window.constant_staking_dypius_ethother1 = new CONSTANT_STAKING_DEFI(
+  "CONSTANT_STAKING_DYPIUS_ETHOTHER1"
+);
 /*Staking bsc other*/
 
 window.constant_stakingbscother_new1 = new CONSTANT_STAKINGBSCOTHER_NEW(
@@ -2878,6 +2891,8 @@ window.CONSTANT_STAKINGBSC_NEW111_ABI = window.CONSTANT_STAKING_OLD_ABI;
 window.CONSTANT_STAKINGBSC_NEW14_ABI = window.CONSTANT_STAKING_OLD_ABI;
 window.CONSTANT_STAKING_DYPIUS_BSC1_ABI = window.CONSTANT_STAKING_DYPIUS_ABI;
 window.CONSTANT_STAKING_DYPIUS_BSCOTHER1_ABI = window.CONSTANT_STAKING_DEFI_ABI;
+window.CONSTANT_STAKING_DYPIUS_ETHOTHER1_ABI = window.CONSTANT_STAKING_DEFI_ABI;
+
 
 window.CONSTANT_STAKINGBSC_NEW12_ABI = window.CONSTANT_STAKINGBSC_NEW_ABI;
 window.CONSTANT_STAKINGBSC_NEW13_ABI = window.CONSTANT_STAKINGBSC_NEW_ABI;
@@ -37098,6 +37113,8 @@ Object.keys(window.config)
       k.startsWith("stakingavax_") ||
       k.startsWith("reward_tokenavax") ||
       k.startsWith("reward_token_dypius_eth") ||
+      k.startsWith("reward_token_dypius_base") ||
+
       k.startsWith("reward_token_dypius_bsc") ||
       k.startsWith("reward_token_wbnb") ||
 
@@ -37149,6 +37166,7 @@ Object.keys(window.config)
       k.startsWith("constant_stakingbsc_new14") ||
       k.startsWith("constant_staking_dypius_bsc1") ||
       k.startsWith("constant_staking_dypius_bscother1") ||
+      k.startsWith("constant_staking_dypius_ethother1") ||
       k.startsWith("constant_stakingnew_newavax2") ||
       k.startsWith("constant_stakingdaiavax") ||
       k.startsWith("constant_stakingdaieth") ||
@@ -37209,6 +37227,8 @@ Object.keys(window.config)
       : k.startsWith("reward_token_idyp")
       ? window.TOKEN_ABI
       : k.startsWith("reward_token_dypius_eth")
+      ? window.TOKEN_ABI
+      : k.startsWith("reward_token_dypius_base")
       ? window.TOKEN_ABI
       : k.startsWith("reward_token_dypius_bsc")
       ? window.TOKEN_ABI
@@ -37385,6 +37405,8 @@ Object.keys(window.config)
       : k.startsWith("constant_staking_dypius_bsc1")
       ? window.CONSTANT_STAKING_DYPIUS_ABI
       : k.startsWith("constant_staking_dypius_bscother1")
+      ? window.CONSTANT_STAKING_DEFI_ABI
+      : k.startsWith("constant_staking_dypius_ethother1")
       ? window.CONSTANT_STAKING_DEFI_ABI
       : k.startsWith("constant_stakingnew_newavax2")
       ? window.CONSTANT_STAKINGNEW_ABI
@@ -37762,7 +37784,7 @@ async function getLockedAmountETH(pair) {
 
 async function getTokenHolderBalance(token, holder) {
   let tokenContract = await getContract({ address: token, ABI: ERC20_ABI });
-  return await tokenContract.methods.balanceOf(holder).call();
+  return await tokenContract.methods.balanceOf(holder).call().catch((e)=>{console.error(e); return 0});
 }
 async function getTokenTotalSupply(token) {
   let tokenContract = await getContract({ address: token, ABI: ERC20_ABI });
@@ -37871,28 +37893,28 @@ async function getEstimatedTokenSubscriptionAmount(tokenAddress) {
   let subscriptionContract = await getContract({ key: "SUBSCRIPTION_NEWAVAX" });
   return await subscriptionContract.methods
     .getEstimatedTokenSubscriptionAmount(tokenAddress)
-    .call();
+    .call().catch((e)=>{console.error(e); return 0});
 }
 
 async function getEstimatedTokenSubscriptionAmountETH(tokenAddress) {
   let subscriptionContract = await getContract({ key: "SUBSCRIPTION_NEWETH" });
   return await subscriptionContract.methods
     .getEstimatedTokenSubscriptionAmount(tokenAddress)
-    .call();
+    .call().catch((e)=>{console.error(e); return 0});
 }
 
 async function getEstimatedTokenSubscriptionAmountBNB(tokenAddress) {
   let subscriptionContract = await getContract({ key: "SUBSCRIPTION_NEWBNB" });
   return await subscriptionContract.methods
     .getEstimatedTokenSubscriptionAmount(tokenAddress)
-    .call();
+    .call().catch((e)=>{console.error(e); return 0});
 }
 
 async function getEstimatedTokenSubscriptionAmountCFX(tokenAddress) {
   let subscriptionContract = await getContract({ key: "SUBSCRIPTION_CFX" });
   return await subscriptionContract.methods
     .getEstimatedTokenSubscriptionAmount(tokenAddress)
-    .call();
+    .call().catch((e)=>{console.error(e); return 0});
 }
 
 async function getEstimatedTokenSubscriptionAmountBase(tokenAddress) {
@@ -37902,7 +37924,7 @@ async function getEstimatedTokenSubscriptionAmountBase(tokenAddress) {
   );
   return await baseContract.methods
     .getEstimatedTokenSubscriptionAmount(tokenAddress)
-    .call();
+    .call().catch((e)=>{console.error(e); return 0});
 }
 
 async function getEstimatedTokenSubscriptionAmountSkale(tokenAddress) {
@@ -37912,7 +37934,7 @@ async function getEstimatedTokenSubscriptionAmountSkale(tokenAddress) {
   );
   return await skaleContract.methods
     .getEstimatedTokenSubscriptionAmount(tokenAddress)
-    .call();
+    .call().catch((e)=>{console.error(e); return 0});
 }
 
 // ===================== end subscription contract functions ================================

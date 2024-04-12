@@ -43,7 +43,9 @@ const EarnOtherContent = ({
   handleSwitchNetwork,
   onConnectWallet,
   userCurencyBalance,
-  onCloseCard,totalTvl,isPremium
+  onCloseCard,
+  totalTvl,
+  isPremium,
 }) => {
   const windowSize = useWindowSize();
 
@@ -88,79 +90,6 @@ const EarnOtherContent = ({
       title: "Farming",
       content:
         "Farming ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ut ipsum quis ligula commodo sollicitudin ut dictum augue. Curabitur massa justo",
-    },
-  ];
-
-  const dummyData_base = [
-    {
-      lockTime: "Locked",
-      chain: "Base",
-      apr: "15%",
-      aprInt: 15,
-      chainLogo: "baseActive.svg",
-      tokenLogo: "ethereum.svg",
-      expired: false,
-      top_pick: false,
-      hot: true,
-      coming_soon: true,
-      staked: false,
-      nft: true,
-      tokenName: "Base",
-      tokenTicker: "ETH",
-      pool: "BASE",
-      new_pool: "Yes",
-      lockTime: 60,
-      apy_percent: 12.5,
-      performancefee: 12.5,
-    },
-  ];
-
-  const dummyData_bnb = [
-    {
-      lockTime: "Locked",
-      chain: "BNB Chain",
-      apr: "25%",
-      aprInt: 25,
-      tokenLogo: "bnbChain.svg",
-      chainLogo: "bsc.svg",
-      expired: false,
-      top_pick: false,
-      hot: false,
-      staked: false,
-      nft: false,
-      tokenName: "BNB",
-      tokenTicker: "BNB",
-      coming_soon: true,
-      pool: "BNB",
-      new_pool: "Yes",
-      lockTime: 90,
-      apy_percent: 12.5,
-      performancefee: 0,
-    },
-  ];
-
-  const dummyData_avax = [
-    {
-      lockTime: "Locked",
-      chain: "Avalanche",
-      apr: "10%",
-      aprInt: 10,
-
-      tokenLogo: "avax.svg",
-      chainLogo: "avax.svg",
-      expired: false,
-      top_pick: false,
-      hot: true,
-      coming_soon: true,
-      staked: true,
-      nft: false,
-      tokenName: "Avalanche",
-      tokenTicker: "AVAX",
-      pool: "AVAX",
-      new_pool: "Yes",
-      lockTime: 30,
-      apy_percent: 12.5,
-      performancefee: 12.5,
     },
   ];
 
@@ -219,222 +148,6 @@ const EarnOtherContent = ({
       .catch((err) => console.error(err));
   };
 
-  const toggleInactive = () => {
-    setCount(count + 1);
-    setExpiredPools(!expiredPools);
-    if (option === "Farming" && count % 2 === 0) {
-      fetchFarmingApr();
-      setBnbApr(138);
-    } else if (option === "Farming" && count % 2 !== 0) fetchBnbPool();
-  };
-
-  var tempTvl = 0;
-  var farming = [];
-
-  const fetchEthTvl = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/the_graph_eth_v2`)
-      .then((res) => {
-        let temparray = Object.entries(res.data.the_graph_eth_v2.lp_data);
-        temparray.map((item) => {
-          farming.push(item[1]);
-        });
-        farming.map((item) => {
-          tempTvl += item.tvl_usd;
-        });
-
-        setTvl(tempTvl);
-        tempTvl = 0;
-      })
-      .catch((err) => console.error(err));
-  };
-
-  const fetchBscTvl = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/the_graph_bsc_v2`)
-      .then((res) => {
-        let temparray = Object.entries(res.data.the_graph_bsc_v2.lp_data);
-        temparray.map((item) => {
-          farming.push(item[1]);
-        });
-        farming.map((item) => {
-          tempTvl += item.tvl_usd;
-        });
-
-        setTvl(tempTvl);
-        tempTvl = 0;
-      })
-      .catch((err) => console.error(err));
-  };
-
-  const fetchAvaxTvl = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/the_graph_avax_v2`)
-      .then((res) => {
-        let temparray = Object.entries(res.data.the_graph_avax_v2.lp_data);
-        temparray.map((item) => {
-          farming.push(item[1]);
-        });
-        farming.map((item) => {
-          tempTvl += item.tvl_usd;
-        });
-
-        setTvl(tempTvl);
-        tempTvl = 0;
-      })
-      .catch((err) => console.error(err));
-  };
-
-  const fetchVaultTvl = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_vault_info`)
-      .then((res) => {
-        setTvl(res.data.VaultTotalTVL[0].tvl);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const fetchEthApr = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_eth`)
-      .then((res) => {
-        setEthApr(res.data.highestAPY_ETH[0].highest_apy);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  const fetchBnbApr = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_bnb`)
-      .then((res) => {
-        setBnbApr(res.data.highestAPY_BNB[0].highest_apy);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  const fetchAvaxApr = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_avax`)
-      .then((res) => {
-        setavaxApr(res.data.highestAPY_AVAX[0].highest_apy);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const fetchEthBuybackApr = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_buyback_info_eth`)
-      .then((res) => {
-        setEthApr(res.data.BuybackHighestApy[0].highest_apy);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const fetchBnbBuybackApr = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_buyback_info_bnb`)
-      .then((res) => {
-        setBnbApr(res.data.BuybackHighestApyBNB[0].highest_apy);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const fetchAvaxBuybackApr = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_buyback_info_avax`)
-      .then((res) => {
-        setavaxApr(res.data.BuybackHighestApyAVAX[0].highest_apy);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const fetchFarmingApr = async () => {
-    await axios.get(`https://api.dyp.finance/api/highest-apy`).then((res) => {
-      setEthApr(res.data.highestAPY.highestAPY_ETH_V2);
-      // setBnbApr(res.data.highestAPY.highestAPY_BSC_V2);
-      // if(expiredPools === true){
-
-      //   setBnbApr(138.44)
-      // }else{
-      //   fetchBnbPool();
-      // }
-      setavaxApr(res.data.highestAPY.highestAPY_AVAX_V2);
-    });
-  };
-
-  const fetchEthStaking = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_eth`)
-      .then((res) => {
-        setTvl(res.data.totalTVL_ETH);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  const fetchBnbStaking = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_bnb`)
-      .then((res) => {
-        setTvl(res.data.totalTVL_BNB);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  const fetchAvaxStaking = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_avax`)
-      .then((res) => {
-        setTvl(res.data.totalTVL_AVAX);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const fetchEthBuyback = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_buyback_info_eth`)
-      .then((res) => {
-        setTvl(res.data.totalTVL_BUYBACK_ETH);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  const fetchBnbBuyback = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_buyback_info_bnb`)
-      .then((res) => {
-        setTvl(res.data.totalTVL_BUYBACK_BNB);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  const fetchAvaxBuyback = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_buyback_info_avax`)
-      .then((res) => {
-        setTvl(res.data.totalTVL_BUYBACK_AVAX);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
   // console.log(allPools)
   const handleSortPools = (order) => {
     if (allPools.length > 0) {
@@ -502,7 +215,7 @@ const EarnOtherContent = ({
   }, [poolClicked, poolClickedType, allPools]);
 
   const handleManageDetails = (obj, index) => {
-    if (obj.name.toLowerCase() === "bnb") {
+    if (obj.name.toLowerCase() === "bnb" || obj.name.toLowerCase() === "eth") {
       setshowDetails(!showDetails);
       setcardIndex(!showDetails ? index : 777);
       setselectedBtn(obj.lockTime);
@@ -852,11 +565,13 @@ const EarnOtherContent = ({
                       chain={item.chains[0]}
                       tokenName={item.name}
                       tokenTicker={item.name}
-                      apr={item.maxAPR}
+                      apr={item.name.toLowerCase() === "eth" ? '10%' : item.name.toLowerCase() === "avax" ? '15%' : item.maxAPR}
                       lockTime={item.lockType}
                       expired={item.no}
                       isNewPool={true}
-                      isComingSoon={item.name.toLowerCase() === 'bnb' ? false : true}
+                      isComingSoon={
+                        (item.name.toLowerCase() === "eth" || item.name.toLowerCase() === "bnb") ? false : true
+                      }
                       isHot={
                         item.tags.find((obj) => {
                           return obj === "Hot";
@@ -882,7 +597,9 @@ const EarnOtherContent = ({
                       cardIndex={cardIndex}
                       showDetails={showDetails}
                       cardId={index}
-                      onCountDownComplete={(value)=>{setlivePremiumOnly(value)}}
+                      onCountDownComplete={(value) => {
+                        setlivePremiumOnly(value);
+                      }}
                       isPremium={isPremium}
                     />
                   );
@@ -981,7 +698,7 @@ const EarnOtherContent = ({
                     }}
                     is_wallet_connected={isConnected}
                     userCurencyBalance={userCurencyBalance}
-                    livePremiumOnly={livePremiumOnly}
+                    livePremiumOnly={false}
                     isPremium={isPremium}
                   />
                 ) : selectedPool.id === "avaxChainPool" ? (
@@ -1017,12 +734,12 @@ const EarnOtherContent = ({
                     selectedTab={selectedTab}
                     selectedBtn={selectedBtn}
                     selectedPool={selectedPool}
-                    staking={window.constant_staking_dypius_eth1}
+                    staking={window.constant_staking_dypius_ethother1}
                     coinbase={coinbase}
                     the_graph_result={the_graph_result}
                     expiration_time={"09 Nov 2024"}
                     lockTime={parseInt(selectedPool.poolList[0].lockTime)}
-                    finalApr={selectedPool.maxAPR}
+                    finalApr={selectedPool.name.toLowerCase() === "eth" ? '10%' : selectedPool.name.toLowerCase() === "avax" ? '15%' : selectedPool.maxAPR}
                     fee={selectedPool.poolList[0].performancefee}
                     apr={selectedPool?.poolList[0].aprPercent}
                     earlyFee={selectedPool?.poolList[0].earlyFee}
@@ -1030,7 +747,7 @@ const EarnOtherContent = ({
                       selectedPool?.poolList[0].expired === "No" ? false : true
                     }
                     maximumDeposit={selectedPool?.poolList[0].maximumDeposit}
-                    poolCap={selectedPool?.poolList[0].poolCap}
+                    poolCap={113}
                     chainId={chainId}
                     onConnectWallet={() => {
                       onConnectWallet();
@@ -1038,7 +755,8 @@ const EarnOtherContent = ({
                       setselectedPool([]);
                     }}
                     is_wallet_connected={isConnected}
-                    userCurencyBalance={userCurencyBalance}
+                    livePremiumOnly={livePremiumOnly}
+                    isPremium={isPremium}
                   />
                 )}
 
