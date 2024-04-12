@@ -514,7 +514,7 @@ const CawsDetailsPremium = ({
                     className={`btn ${
                       (!isPremium || mystakes.length === 4) ? "disabled-btn" : "filledbtn"
                     } d-flex justify-content-center align-items-center`}
-                    disabled={!isPremium || mystakes.length === 4}
+                    disabled={!isPremium || mystakes.length === 4 || totalStakes === 200}
                     onClick={() => {
                       setshowChecklistModal(true);
                       setOpenStakeChecklist(true);
@@ -664,6 +664,7 @@ const CawsDetailsPremium = ({
           showbutton={true}
           onDepositComplete={()=>{setcount(count+1)}}
           onApprovalComplete={()=>{setcount2(count2+1)}}
+          mystakes={mystakes}
         />
       )}
 
