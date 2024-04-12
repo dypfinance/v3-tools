@@ -120,6 +120,9 @@ const StakeDypiusBscOther = ({
   const [cliffTime, setcliffTime] = useState("");
   const [stakingTime, setstakingTime] = useState("");
   const [depositedTokens, setdepositedTokens] = useState("");
+  const [canStake, setCanStake] = useState(true);
+  const [amountLeft, setamountLeft] = useState(9);
+
   const [lastClaimedTime, setlastClaimedTime] = useState("");
   const [reInvestLoading, setreInvestLoading] = useState(false);
   const [reInvestStatus, setreInvestStatus] = useState("initial");
@@ -174,7 +177,6 @@ const StakeDypiusBscOther = ({
   const [maxDepositTooltip, setMaxDepositTooltip] = useState(false);
   const [approvedAmount, setapprovedAmount] = useState("0.00");
   const [earlyWithdrawTooltip, setEarlyWithdrawTooltip] = useState(false);
-
 
   const navigate = useHistory();
 
@@ -258,7 +260,6 @@ const StakeDypiusBscOther = ({
       });
   };
 
-
   const refreshBalance = async () => {
     let coinbase = coinbase2;
 
@@ -337,7 +338,6 @@ const StakeDypiusBscOther = ({
           //   _tvlDYPS,
         ]);
 
-
         let usdValueDAI = new BigNumber(tvlConstantDAI).toFixed(18);
         let usd_per_lp = lp_data ? wbnbPrice : 0;
         let tvlUSD = new BigNumber(tvl2)
@@ -369,7 +369,12 @@ const StakeDypiusBscOther = ({
         let depositedTokens_formatted = new BigNumber(depositedTokens)
           .div(1e18)
           .toString(10);
-
+        const amountLeftToStake = 9 - Number(depositedTokens_formatted);
+        setamountLeft(amountLeftToStake);
+        if (Number(depositedTokens_formatted) ===9) {
+          setCanStake(false);
+          seterrorMsg("Maximum deposit per wallet reached!");
+        }
         setdepositedTokens(depositedTokens_formatted);
 
         setlastClaimedTime(lastClaimedTime);
@@ -449,7 +454,7 @@ const StakeDypiusBscOther = ({
 
   useEffect(() => {
     getPriceDYP();
-    getBSCPrice()
+    getBSCPrice();
   }, []);
 
   useEffect(() => {
@@ -467,7 +472,6 @@ const StakeDypiusBscOther = ({
   useEffect(() => {
     if (chainId === "56") {
       refreshBalance();
-  
 
       if (depositAmount !== "") {
         checkApproval(depositAmount);
@@ -603,9 +607,9 @@ const StakeDypiusBscOther = ({
         });
     } else if (
       !moment
-      .duration((Number(stakingTime) + 86400 * 60) * 1000 - Date.now())
-      .humanize(true)
-      ?.includes("ago")
+        .duration((Number(stakingTime) + 86400 * 60) * 1000 - Date.now())
+        .humanize(true)
+        ?.includes("ago")
     ) {
       setshowWithdrawModal(true);
     }
@@ -664,8 +668,17 @@ const StakeDypiusBscOther = ({
   };
 
   const getMaxDepositAllowed = async () => {
-    const stakingContract = new window.bscWeb3.eth.Contract(window.CONSTANT_STAKING_DEFI_ABI, staking?._address);
-    const result = await stakingContract.methods.MAX_DEPOSIT().call().catch((e)=>{console.error(e); return 0});
+    const stakingContract = new window.bscWeb3.eth.Contract(
+      window.CONSTANT_STAKING_DEFI_ABI,
+      staking?._address
+    );
+    const result = await stakingContract.methods
+      .MAX_DEPOSIT()
+      .call()
+      .catch((e) => {
+        console.error(e);
+        return 0;
+      });
     const result_formatted = new BigNumber(result).div(1e18).toFixed(0);
     setmaxDepositAllowed(Number(result_formatted));
   };
@@ -871,6 +884,17 @@ const StakeDypiusBscOther = ({
       });
   };
 
+  const handleCheckAmount = (amount)=>{
+    if(Number(amount) > Number(amountLeft)) {
+      seterrorMsg("Please add a smaller amount");
+      setdepositAmount(amountLeft)
+    } else if(Number(amount) <= Number(amountLeft)) {
+      seterrorMsg("");
+      setdepositAmount(amount)
+    }
+    checkApproval(amount);
+  }
+
   useEffect(() => {
     getUsdPerDyp();
     getMaxDepositAllowed();
@@ -994,9 +1018,7 @@ const StakeDypiusBscOther = ({
             </div>
             <div
               className={`d-flex flex-column w-100 gap-1 ${
-                (chainId !== "56" ||
-                  !is_wallet_connected) &&
-                "blurrypool"
+                (chainId !== "56" || !is_wallet_connected) && "blurrypool"
               } `}
             >
               <div className="position-relative w-100 d-flex">
@@ -1008,12 +1030,7 @@ const StakeDypiusBscOther = ({
                     Number(depositAmount) > 0 ? depositAmount : depositAmount
                   }
                   onChange={(e) => {
-                    setdepositAmount(e.target.value > 9 ? 9 : e.target.value);
-                    e.target.value > 9 &&
-                      seterrorMsg("Maximum Deposit is 9 WBNB!");
-                    e.target.value <= 9 && seterrorMsg("");
-
-                    checkApproval(e.target.value);
+                   handleCheckAmount(e.target.value)
                   }}
                   name="amount_deposit"
                   id="amount_deposit"
@@ -1033,10 +1050,15 @@ const StakeDypiusBscOther = ({
                 } gap-1 align-items-center`}
               >
                 {errorMsg && <h6 className="errormsg m-0">{errorMsg}</h6>}
-
+<div className="d-flex flex-column">
                 <div className="d-flex gap-1 align-items-baseline">
                   <span className="bal-smallTxt">Approved:</span>
                   <span className="bal-bigTxt2">{approvedAmount} WBNB</span>
+                </div>
+                <div className="d-flex gap-1 align-items-baseline">
+                  <span className="bal-smallTxt">Allowance Left:</span>
+                  <span className="bal-bigTxt2">{amountLeft} WBNB</span>
+                </div>
                 </div>
               </div>
             </div>
@@ -1070,7 +1092,7 @@ const StakeDypiusBscOther = ({
                   <div className="d-flex align-items-center gap-2">
                     <span className="bal-smallTxt">Available Quota:</span>
                     <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                      {getFormattedNumber(poolCap - tvl,0)} WBNB
+                      {getFormattedNumber(poolCap - tvl, 0)} WBNB
                       <ClickAwayListener onClickAway={quotaClose}>
                         <Tooltip
                           open={quotaTooltip}
@@ -1144,9 +1166,7 @@ const StakeDypiusBscOther = ({
                 <span className="deposit-popup-txt">Reinvest</span>
                 <div
                   className={`d-flex flex-column w-100 gap-1 ${
-                    (chainId !== "56" ||
-                      !is_wallet_connected ) &&
-                    "blurrypool"
+                    (chainId !== "56" || !is_wallet_connected) && "blurrypool"
                   } `}
                 >
                   <div className="info-pool-wrapper p-3 w-100">
@@ -1295,53 +1315,50 @@ const StakeDypiusBscOther = ({
                 </div>
               </div>
             </div>
-            {is_wallet_connected &&
-              chainId === "56" && (
-                <button
-                  disabled={
-                    depositAmount === "" || depositLoading === true
-                      ? true
-                      : false
-                  }
-                  className={`btn filledbtn ${
-                    depositAmount === "" &&
-                    depositStatus === "initial" &&
-                    "disabled-btn"
-                  } ${
-                    depositStatus === "deposit" || depositStatus === "success"
-                      ? "success-button"
-                      : depositStatus === "fail"
-                      ? "fail-button"
-                      : null
-                  } d-flex justify-content-center align-items-center gap-2 m-auto`}
-                  onClick={() => {
-                    depositStatus === "deposit"
-                      ? handleStake()
-                      : depositStatus === "initial" && depositAmount !== ""
-                      ? handleApprove()
-                      : console.log("");
-                  }}
-                  style={{ width: "fit-content" }}
-                >
-                  {" "}
-                  {depositLoading ? (
-                    <div
-                      class="spinner-border spinner-border-sm text-light"
-                      role="status"
-                    >
-                      <span class="visually-hidden">Loading...</span>
-                    </div>
-                  ) : depositStatus === "initial" ? (
-                    <>Approve</>
-                  ) : depositStatus === "deposit" ? (
-                    <>Deposit</>
-                  ) : depositStatus === "success" ? (
-                    <>Success</>
-                  ) : (
-                    <>Failed</>
-                  )}
-                </button>
-              )}
+            {is_wallet_connected && chainId === "56" && (
+              <button
+                disabled={
+                  (depositAmount === "" || depositLoading === true || canStake === false) ? true : false
+                }
+                className={`btn filledbtn ${
+                  depositAmount === "" &&
+                  depositStatus === "initial" &&
+                  "disabled-btn"
+                } ${
+                  depositStatus === "deposit" || depositStatus === "success"
+                    ? "success-button"
+                    : depositStatus === "fail"
+                    ? "fail-button"
+                    : null
+                } d-flex justify-content-center align-items-center gap-2 m-auto`}
+                onClick={() => {
+                  depositStatus === "deposit"
+                    ? handleStake()
+                    : depositStatus === "initial" && depositAmount !== ""
+                    ? handleApprove()
+                    : console.log("");
+                }}
+                style={{ width: "fit-content" }}
+              >
+                {" "}
+                {depositLoading ? (
+                  <div
+                    class="spinner-border spinner-border-sm text-light"
+                    role="status"
+                  >
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                ) : depositStatus === "initial" ? (
+                  <>Approve</>
+                ) : depositStatus === "deposit" ? (
+                  <>Deposit</>
+                ) : depositStatus === "success" ? (
+                  <>Success</>
+                ) : (
+                  <>Failed</>
+                )}
+              </button>
+            )}
           </div>
         ) : (
           <div className="d-flex flex-column w-100 gap-2">
@@ -1357,9 +1374,7 @@ const StakeDypiusBscOther = ({
             </div>
             <div
               className={`d-flex flex-column w-100 gap-1 ${
-                (chainId !== "56" ||
-                  !is_wallet_connected ) &&
-                "blurrypool"
+                (chainId !== "56" || !is_wallet_connected) && "blurrypool"
               } `}
             >
               <div className="position-relative w-100 d-flex">
@@ -1449,9 +1464,7 @@ const StakeDypiusBscOther = ({
             <span className="deposit-popup-txt">Earnings</span>
             <div
               className={`d-flex flex-column w-100 gap-1 ${
-                (chainId !== "56" ||
-                  !is_wallet_connected) &&
-                "blurrypool"
+                (chainId !== "56" || !is_wallet_connected) && "blurrypool"
               } `}
             >
               <div className="info-pool-wrapper p-3 w-100">
@@ -1539,7 +1552,7 @@ const StakeDypiusBscOther = ({
                   <div className="d-flex align-items-center gap-2">
                     <span className="bal-smallTxt">Pool fee:</span>
                     <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    0%
+                      0%
                       <ClickAwayListener onClickAway={poolFeeClose}>
                         <Tooltip
                           open={poolFeeTooltip}
@@ -1577,7 +1590,7 @@ const StakeDypiusBscOther = ({
                   <div className="d-flex align-items-center gap-1">
                     <span className="bal-smallTxt">Start date:</span>
                     <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    11 Apr 2024
+                      11 Apr 2024
                       {/* {new Date(
                         selectedPool?.poolList[0].startDate * 1000
                       ).toDateString()} */}
@@ -1604,7 +1617,7 @@ const StakeDypiusBscOther = ({
                   <div className="d-flex align-items-center gap-1">
                     <span className="bal-smallTxt">End date:</span>
                     <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                   09 Jul 2024
+                      09 Jul 2024
                       {/* {new Date(
                         selectedPool?.poolList[0].endDate * 1000
                       ).toDateString()} */}

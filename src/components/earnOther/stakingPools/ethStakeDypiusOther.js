@@ -120,6 +120,9 @@ const StakeDypiusEthOther = ({
   const [cliffTime, setcliffTime] = useState("");
   const [stakingTime, setstakingTime] = useState("");
   const [depositedTokens, setdepositedTokens] = useState("");
+  const [canStake, setCanStake] = useState(true);
+  const [amountLeft, setamountLeft] = useState(3);
+
   const [lastClaimedTime, setlastClaimedTime] = useState("");
   const [reInvestLoading, setreInvestLoading] = useState(false);
   const [reInvestStatus, setreInvestStatus] = useState("initial");
@@ -362,6 +365,13 @@ const StakeDypiusEthOther = ({
         let depositedTokens_formatted = new BigNumber(depositedTokens)
           .div(1e18)
           .toString(10);
+
+          const amountLeftToStake = 3 - Number(depositedTokens_formatted);
+          setamountLeft(amountLeftToStake);
+          if (Number(depositedTokens_formatted) ===3) {
+            setCanStake(false);
+            seterrorMsg("Maximum deposit per wallet reached!");
+          }
 
         setdepositedTokens(depositedTokens_formatted);
 
@@ -606,14 +616,14 @@ const StakeDypiusEthOther = ({
 
   const handleSetMaxDeposit = (e) => {
     const depositAmount = wethBalance;
-    const maxAllowed = 3;
 
-    if (Number(depositAmount) > maxAllowed) {
-      setdepositAmount(maxAllowed);
-      checkApproval(maxAllowed);
-      seterrorMsg(`Maximum Deposit is 3 WETH!`);
-    } else if (Number(depositAmount) <= maxAllowed) {
-      setdepositAmount(depositAmount);
+    if(Number(depositAmount) > Number(amountLeft)) {
+      seterrorMsg("Please add a smaller amount");
+      setdepositAmount(amountLeft)
+      checkApproval(amountLeft);
+    } else if(Number(depositAmount) <= Number(amountLeft)) {
+      seterrorMsg("");
+      setdepositAmount(depositAmount)
       checkApproval(depositAmount);
     }
   };
@@ -725,6 +735,20 @@ const StakeDypiusEthOther = ({
   const withdrawClose = () => {
     setwithdrawTooltip(false);
   };
+
+
+  const handleCheckAmount = (amount)=>{
+    if(Number(amount) > Number(amountLeft)) {
+      seterrorMsg("Please add a smaller amount");
+      setdepositAmount(amountLeft)
+    } else if(Number(amount) <= Number(amountLeft)) {
+      seterrorMsg("");
+      setdepositAmount(amount)
+    }
+    checkApproval(amount);
+  }
+
+  
 
   let showDeposit = true;
 
@@ -949,11 +973,7 @@ const StakeDypiusEthOther = ({
                     Number(depositAmount) > 0 ? depositAmount : depositAmount
                   }
                   onChange={(e) => {
-                    setdepositAmount(e.target.value > 3 ? 3 : e.target.value);
-                    e.target.value > 3 &&
-                      seterrorMsg(`Maximum Deposit is 3 WETH!`);
-                    e.target.value <= 3 && seterrorMsg("");
-                    checkApproval(e.target.value);
+                    handleCheckAmount(e.target.value)
                   }}
                   name="amount_deposit"
                   id="amount_deposit"
@@ -974,9 +994,15 @@ const StakeDypiusEthOther = ({
               >
                 {errorMsg && <h6 className="errormsg m-0">{errorMsg}</h6>}
 
+                <div className="d-flex flex-column">
                 <div className="d-flex gap-1 align-items-baseline">
                   <span className="bal-smallTxt">Approved:</span>
                   <span className="bal-bigTxt2">{approvedAmount} WETH</span>
+                </div>
+                <div className="d-flex gap-1 align-items-baseline">
+                  <span className="bal-smallTxt">Allowance Left:</span>
+                  <span className="bal-bigTxt2">{amountLeft} WETH</span>
+                </div>
                 </div>
               </div>
             </div>
@@ -1239,7 +1265,7 @@ const StakeDypiusEthOther = ({
                 (!isPremium && !livePremiumOnly)) && (
                 <button
                   disabled={
-                    depositAmount === "" || depositLoading === true
+                    (depositAmount === "" || depositLoading === true || canStake === false)
                       ? true
                       : false
                   }
