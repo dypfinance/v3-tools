@@ -565,7 +565,7 @@ const EarnOtherContent = ({
                       chain={item.chains[0]}
                       tokenName={item.name}
                       tokenTicker={item.name}
-                      apr={item.maxAPR}
+                      apr={item.name.toLowerCase() === "eth" ? '10%' : item.name.toLowerCase() === "avax" ? '15%' : item.maxAPR}
                       lockTime={item.lockType}
                       expired={item.no}
                       isNewPool={true}
@@ -739,7 +739,7 @@ const EarnOtherContent = ({
                     the_graph_result={the_graph_result}
                     expiration_time={"09 Nov 2024"}
                     lockTime={parseInt(selectedPool.poolList[0].lockTime)}
-                    finalApr={selectedPool.maxAPR}
+                    finalApr={selectedPool.name.toLowerCase() === "eth" ? '10%' : selectedPool.name.toLowerCase() === "avax" ? '15%' : selectedPool.maxAPR}
                     fee={selectedPool.poolList[0].performancefee}
                     apr={selectedPool?.poolList[0].aprPercent}
                     earlyFee={selectedPool?.poolList[0].earlyFee}
