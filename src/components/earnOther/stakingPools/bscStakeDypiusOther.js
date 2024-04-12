@@ -174,7 +174,10 @@ const StakeDypiusBscOther = ({
   const [maxDepositTooltip, setMaxDepositTooltip] = useState(false);
   const [approvedAmount, setapprovedAmount] = useState("0.00");
   const [earlyWithdrawTooltip, setEarlyWithdrawTooltip] = useState(false);
+
+
   const navigate = useHistory();
+
   const showModal = () => {
     setshow(true);
   };
@@ -464,7 +467,7 @@ const StakeDypiusBscOther = ({
   useEffect(() => {
     if (chainId === "56") {
       refreshBalance();
-      getMaxDepositAllowed();
+  
 
       if (depositAmount !== "") {
         checkApproval(depositAmount);
@@ -599,9 +602,9 @@ const StakeDypiusBscOther = ({
         });
     } else if (
       !moment
-        .duration((Number(stakingTime) + 86400 * 90) * 1000 - Date.now())
-        .humanize(true)
-        ?.includes("ago")
+      .duration((Number(stakingTime) + 86400 * 60) * 1000 - Date.now())
+      .humanize(true)
+      ?.includes("ago")
     ) {
       setshowWithdrawModal(true);
     }
@@ -660,7 +663,8 @@ const StakeDypiusBscOther = ({
   };
 
   const getMaxDepositAllowed = async () => {
-    const result = await staking.MAX_DEPOSIT();
+    const stakingContract = new window.bscWeb3.eth.Contract(window.CONSTANT_STAKING_DEFI_ABI, staking?._address);
+    const result = await stakingContract.methods.MAX_DEPOSIT().call().catch((e)=>{console.error(e); return 0});
     const result_formatted = new BigNumber(result).div(1e18).toFixed(0);
     setmaxDepositAllowed(Number(result_formatted));
   };
@@ -868,6 +872,7 @@ const StakeDypiusBscOther = ({
 
   useEffect(() => {
     getUsdPerDyp();
+    getMaxDepositAllowed();
   }, []);
 
   const handleNavigateToPlans = () => {
@@ -964,7 +969,7 @@ const StakeDypiusBscOther = ({
                 <span className="info-pool-right-text">
                   $
                   {getFormattedNumber(
-                    Number(tvl) * usdPerToken === 0
+                    Number(tvl) * wbnbPrice === 0
                       ? selectedPool.poolList[0].tvl
                       : Number(tvl) * wbnbPrice,
                     2
@@ -1235,7 +1240,7 @@ const StakeDypiusBscOther = ({
                   <div className="d-flex align-items-center gap-2">
                     <span className="bal-smallTxt">Pool fee:</span>
                     <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                      {fee ?? 0}%
+                      0%
                       <ClickAwayListener onClickAway={poolFeeClose}>
                         <Tooltip
                           open={poolFeeTooltip}
@@ -1539,7 +1544,7 @@ const StakeDypiusBscOther = ({
                   <div className="d-flex align-items-center gap-2">
                     <span className="bal-smallTxt">Pool fee:</span>
                     <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                      {fee ?? 0}%
+                    0%
                       <ClickAwayListener onClickAway={poolFeeClose}>
                         <Tooltip
                           open={poolFeeTooltip}
