@@ -73,7 +73,7 @@ const Dashboard = ({
   const [loading, setLoading] = useState(true);
   const [userPools, setuserPools] = useState([]);
   const wbsc_address = "0x2170Ed0880ac9A755fd29B2688956BD959F933F8";
-  let premiumDay = new Date("2024-04-13T11:00:00.000+02:00");
+  let premiumDay = new Date("2024-04-13T17:00:00.000+02:00");
 
   const fetchUserPools = async () => {
     if (coinbase && coinbase.includes("0x")) {
