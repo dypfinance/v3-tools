@@ -467,7 +467,7 @@ const StakeDypiusBscOther = ({
   useEffect(() => {
     if (chainId === "56") {
       refreshBalance();
-      getMaxDepositAllowed();
+  
 
       if (depositAmount !== "") {
         checkApproval(depositAmount);
@@ -663,7 +663,8 @@ const StakeDypiusBscOther = ({
   };
 
   const getMaxDepositAllowed = async () => {
-    const result = await staking.MAX_DEPOSIT();
+    const stakingContract = new window.bscWeb3.eth.Contract(window.CONSTANT_STAKING_DEFI_ABI, staking?._address);
+    const result = await stakingContract.methods.MAX_DEPOSIT().call().catch((e)=>{console.error(e); return 0});
     const result_formatted = new BigNumber(result).div(1e18).toFixed(0);
     setmaxDepositAllowed(Number(result_formatted));
   };
@@ -871,6 +872,7 @@ const StakeDypiusBscOther = ({
 
   useEffect(() => {
     getUsdPerDyp();
+    getMaxDepositAllowed();
   }, []);
 
   const handleNavigateToPlans = () => {

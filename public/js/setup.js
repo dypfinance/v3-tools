@@ -2019,7 +2019,7 @@ window.config = {
   bsc_endpoint: "https://bsc-dataseed.bnbchain.org",
   avax_endpoint: "https://api.avax.network/ext/bc/C/rpc",
   conflux_endpoint: "https://evm.confluxrpc.com/",
-  base_endpoint: "https://mainnet.base.org",
+  base_endpoint: "https://base-mainnet.public.blastapi.io",
   skale_endpoint: "https://mainnet.skalenodes.com/v1/green-giddy-denebola",
   goerli_endpoint: "https://ethereum-goerli.publicnode.com",
   bscTest_endpoint: "https://data-seed-prebsc-1-s1.binance.org:8545/",
@@ -2359,7 +2359,7 @@ window.config = {
     "0x8f6A888B5ef55633907c862e1718B3b4dDB2BB7D",
 
   constant_staking_dypius_ethother1_address:
-    "0x8f6A888B5ef55633907c862e1718B3b4dDB2BB7D",
+    "0xfaed2b9b537444c7a0160e4081683500d77cbedc",
 
   constant_staking_dypius_avax1_address:
     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603",

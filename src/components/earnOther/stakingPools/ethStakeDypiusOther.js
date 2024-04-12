@@ -412,7 +412,6 @@ const StakeDypiusEthOther = ({
   useEffect(() => {
     if (chainId === "8453") {
       refreshBalance();
-      getMaxDepositAllowed();
       if (depositAmount !== "") {
         checkApproval(depositAmount);
       }
@@ -482,6 +481,12 @@ const StakeDypiusEthOther = ({
         setdepositLoading(false);
         setdepositStatus("success");
         refreshBalance();
+        getBalance()
+        setTimeout(() => {
+          setdepositAmount("");
+          setdepositStatus("initial");
+          seterrorMsg("");
+        }, 5000);
       })
       .catch((e) => {
         setdepositLoading(false);
@@ -489,7 +494,7 @@ const StakeDypiusEthOther = ({
         seterrorMsg(e?.message);
         setTimeout(() => {
           setdepositAmount("");
-          setdepositStatus("fail");
+          setdepositStatus("initial");
           seterrorMsg("");
         }, 10000);
       });
@@ -593,7 +598,8 @@ const StakeDypiusEthOther = ({
   };
 
   const getMaxDepositAllowed = async () => {
-    const result = await staking.MAX_DEPOSIT();
+    const stakingContract = new window.baseWeb3.eth.Contract(window.CONSTANT_STAKING_DEFI_ABI, staking?._address);
+    const result = await stakingContract.methods.MAX_DEPOSIT().call().catch((e)=>{console.error(e); return 0});
     const result_formatted = new BigNumber(result).div(1e18).toFixed(0);
     setmaxDepositAllowed(Number(result_formatted));
   };
@@ -605,7 +611,8 @@ const StakeDypiusEthOther = ({
     if (Number(depositAmount) > maxAllowed) {
       setdepositAmount(maxAllowed);
       checkApproval(maxAllowed);
-      seterrorMsg("Maximum Deposit is 9 WETH!");
+      seterrorMsg(`Maximum Deposit is ${maxDepositAllowed
+      } WETH!`);
     } else if (Number(depositAmount) <= maxAllowed) {
       setdepositAmount(depositAmount);
       checkApproval(depositAmount);
@@ -808,6 +815,7 @@ const StakeDypiusEthOther = ({
   useEffect(() => {
     getUsdPerDyp();
     getETHPrice();
+    getMaxDepositAllowed()
   }, []);
 
   return (
@@ -942,10 +950,11 @@ const StakeDypiusEthOther = ({
                     Number(depositAmount) > 0 ? depositAmount : depositAmount
                   }
                   onChange={(e) => {
-                    setdepositAmount(e.target.value > 9 ? 9 : e.target.value);
-                    e.target.value > 9 &&
-                      seterrorMsg("Maximum Deposit is 9 WETH!");
-                    e.target.value <= 9 && seterrorMsg("");
+                    setdepositAmount(e.target.value > maxDepositAllowed ? maxDepositAllowed : e.target.value);
+                    e.target.value > maxDepositAllowed &&
+                      seterrorMsg(`Maximum Deposit is ${maxDepositAllowed
+                      } WETH!`);
+                    e.target.value <= maxDepositAllowed && seterrorMsg("");
                     checkApproval(e.target.value);
                   }}
                   name="amount_deposit"
@@ -1284,7 +1293,7 @@ const StakeDypiusEthOther = ({
                 <span className="bal-smallTxt">Deposited:</span>
                 <span className="bal-bigTxt">
                   {" "}
-                  {getFormattedNumber(depositedTokens, 2)} WETH
+                  {getFormattedNumber(depositedTokens, 6)} WETH
                 </span>
               </div>
             </div>
