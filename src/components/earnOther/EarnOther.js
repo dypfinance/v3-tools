@@ -26,6 +26,9 @@ const EarnOther = ({
   const [poolClicked, setPoolClicked] = useState(false);
   const [poolClickedType, setPoolClickedType] = useState("");
   const [totalTvl, settotalTvl] = useState(0);
+  const [totalTvlETH, settotalTvlETH] = useState(0);
+  const [totalTvlBNB, settotalTvlBNB] = useState(0);
+
   const [wbnbPrice, setWbnbPrice] = useState(0);
   const [ethPrice, setEthPrice] = useState(0);
 
@@ -85,13 +88,14 @@ const EarnOther = ({
 
     const finalTvl = tvlFormatted * wbnbPrice;
     const finalEthTvl = tvlEthFormatted * ethPrice;
-
+    settotalTvlETH(finalEthTvl)
+    settotalTvlBNB(finalTvl)
     settotalTvl(Number(finalTvl) + Number(finalEthTvl));
   };
 
   useEffect(() => {
     fetchTotalTvl();
-  }, [wbnbPrice]);
+  }, [wbnbPrice, ethPrice]);
 
   useEffect(() => {
     getBSCPrice();
@@ -134,6 +138,8 @@ const EarnOther = ({
         }}
         totalTvl={totalTvl}
         isPremium={isPremium}
+        totalTvlBNB={totalTvlBNB}
+        totalTvlETH={totalTvlETH}
       />
     </div>
   );
