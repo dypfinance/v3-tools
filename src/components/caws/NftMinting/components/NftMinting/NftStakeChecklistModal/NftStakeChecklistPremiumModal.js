@@ -35,7 +35,7 @@ const NftStakeCheckListPremiumModal = ({
   getApprovedNfts,
   hideItem,
   onDepositComplete,
-  showbutton,onApprovalComplete
+  showbutton,onApprovalComplete,mystakes
 }) => {
   const style = {
     position: "absolute",
@@ -129,17 +129,15 @@ const NftStakeCheckListPremiumModal = ({
     setCheckBtn(!checkbtn);
     if (checkbtn === false) {
       if (nftIds.length > 4) {
-        setSelectedNftIds(nftIds.slice(0, 4));
+        setSelectedNftIds(nftIds.slice(0, 4 - mystakes.length));
       } else if (nftIds.length <= 4) {
-        setSelectedNftIds(nftIds);
+        setSelectedNftIds(nftIds.slice(0, 4 - mystakes.length));
       }
     } else if (checkbtn === true) {
       setSelectedNftIds([]);
     }
     setCheckUnstakeBtn(false);
   };
-
-  console.log(selectNftIds)
 
   const handleSelectAllToUnstake = () => {
     setCheckUnstakeBtn(!checkUnstakebtn);

@@ -263,7 +263,7 @@ export default function initMigration({
 
       amount = new BigNumber(amount).times(10 ** TOKEN_DECIMALS).toFixed(0);
       let bridge =
-        this.props.sourceChain === "bsc"
+        this.props.sourceChain === "bnb"
           ? window.config.bridge_bsc_new_address
           : window.config.bridge_avax_new_address;
       let chainId = this.props.networkId;

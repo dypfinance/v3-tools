@@ -20,6 +20,7 @@ import StakeDypiusBscOther from "../stakingPools/bscStakeDypiusOther";
 import StakeDypiusEthOther from "../stakingPools/ethStakeDypiusOther";
 
 const EarnOtherContent = ({
+  totalTvlBNB,totalTvlETH,
   aggregatorPools,
   coinbase,
   the_graph_result,
@@ -700,6 +701,7 @@ const EarnOtherContent = ({
                     userCurencyBalance={userCurencyBalance}
                     livePremiumOnly={false}
                     isPremium={isPremium}
+                    totalTvl={totalTvlBNB}
                   />
                 ) : selectedPool.id === "avaxChainPool" ? (
                   <StakeDypiusAvaxOther
@@ -757,6 +759,8 @@ const EarnOtherContent = ({
                     is_wallet_connected={isConnected}
                     livePremiumOnly={livePremiumOnly}
                     isPremium={isPremium}
+                    totalTvl={totalTvlETH}
+
                   />
                 )}
 
