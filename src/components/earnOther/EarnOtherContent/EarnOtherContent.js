@@ -747,7 +747,7 @@ const EarnOtherContent = ({
                       selectedPool?.poolList[0].expired === "No" ? false : true
                     }
                     maximumDeposit={selectedPool?.poolList[0].maximumDeposit}
-                    poolCap={selectedPool?.poolList[0].poolCap}
+                    poolCap={113}
                     chainId={chainId}
                     onConnectWallet={() => {
                       onConnectWallet();
