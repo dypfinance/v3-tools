@@ -141,7 +141,7 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
         }, 500);
       }
 
-      if (chainText === "bnb") {
+      else if (chainText === "bnb") {
         window.cached_contracts = Object.create(null);
         setSourceChain(chainText);
         setTimeout(() => {
@@ -162,17 +162,18 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
           setDestinationToken(window.token_dypius_new_avax);
         }, 500);
       }
+      else if (chainText === "avax") {
+        window.cached_contracts = Object.create(null);
+        setSourceChain(chainText);
+        setTimeout(() => {
+          setSourceBridge(window.new_dypius_bridge_avax);
+          setDestinationBridge(window.new_dypius_bridge_ethavax);
+          setDestinationToken(window.token_dypius_new);
+          setSourceToken(window.token_dypius_new_avax);
+        }, 500);
+      }
     }
-   else if (chainText === "avax") {
-      window.cached_contracts = Object.create(null);
-      setSourceChain(chainText);
-      setTimeout(() => {
-        setSourceBridge(window.new_dypius_bridge_avax);
-        setDestinationBridge(window.new_dypius_bridge_ethavax);
-        setDestinationToken(window.token_dypius_new);
-        setSourceToken(window.token_dypius_new_avax);
-      }, 500);
-    }
+ 
   };
 
   const handleSourceChainiDyp = async (chainText) => {
@@ -209,7 +210,6 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
           setDestinationTokeniDyp(window.token_idyp_bsc);
         }, 500);
       }
-
       else if (chainText === "avax") {
         window.cached_contracts = Object.create(null);
         setTimeout(() => {
