@@ -85,12 +85,13 @@ const EarnOther = ({
 
     const tvlFormatted = new BigNumber(tvl).div(1e18).toFixed(4);
     const tvlEthFormatted = new BigNumber(tvl_eth).div(1e18).toFixed(4);
-
-    const finalTvl = tvlFormatted * wbnbPrice;
-    const finalEthTvl = tvlEthFormatted * ethPrice;
-    settotalTvlETH(finalEthTvl)
-    settotalTvlBNB(finalTvl)
-    settotalTvl(Number(finalTvl) + Number(finalEthTvl));
+    if (wbnbPrice !== 0 && ethPrice !== 0) {
+      const finalTvl = tvlFormatted * wbnbPrice;
+      const finalEthTvl = tvlEthFormatted * ethPrice;
+      settotalTvlETH(finalEthTvl);
+      settotalTvlBNB(finalTvl);
+      settotalTvl(Number(finalTvl) + Number(finalEthTvl));
+    }
   };
 
   useEffect(() => {
