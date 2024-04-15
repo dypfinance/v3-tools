@@ -633,7 +633,7 @@ export default class Governance extends React.Component {
     if (
       this.props.connected === true &&
       _proposalId &&
-      this.props.networkId === 56
+      this.props.networkId === 43114
     ) {
       let p = await governance.getProposal(_proposalId);
       p.vault = getPoolForProposal(p);
@@ -645,7 +645,7 @@ export default class Governance extends React.Component {
     if (
       this.props.connected === true &&
       _proposalId &&
-      this.props.networkId === 56
+      this.props.networkId === 43114
     ) {
       let p = await governancedypv2.getProposal(_proposalId);
       p.vault = getPoolForProposal(p);
@@ -1295,7 +1295,7 @@ class ProposalDetails extends React.Component {
   };
 
   getProposal = async (_proposalId) => {
-    if (_proposalId && this.props.networkId === 56) {
+    if (_proposalId && this.props.networkId === 43114) {
       let p = await governance.getProposal(_proposalId);
       p.vault = getPoolForProposal(p);
       return p;
@@ -1303,7 +1303,7 @@ class ProposalDetails extends React.Component {
   };
 
   getProposaldypv2 = async (_proposalId) => {
-    if (_proposalId && this.props.networkId === 56) {
+    if (_proposalId && this.props.networkId === 43114) {
       let p = await governancedypv2.getProposal(_proposalId);
       p.vault = getPoolForProposal(p);
       return p;
