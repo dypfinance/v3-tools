@@ -2524,7 +2524,7 @@ window.config = {
     new_governanceavaxdypv2_address: "0xCE27eCD1114336477CbE0a628f3749b733056626",
 
     //governance bsc dypv2
-    new_governancebscdypv2_address: "0x8e6bd27C77f07163CC5CEe7DB367d8fe203da4cE",
+    new_governancebscdypv2_address: "0xa1d6178f3d96b9da85802b6abd553e2b854c7382",
 
   //bridge eth-avax
 
