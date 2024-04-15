@@ -134,12 +134,12 @@ const AddProposal = (props) => {
                 Select Action
               </label>
               <div className="d-flex justify-content-between gap-3 align-items-center">
-                <div className={"optionbtn-passive"}>
+                {/* <div className={"optionbtn-passive"}>
                   <label for="disburseburn" className="optiontext">
                     <img src={disburselogoPassive} alt="" />
                     Disburse or Burn
                   </label>
-                </div>
+                </div> */}
                 <div
                   className={
                     formState.action === "3"
@@ -744,9 +744,9 @@ export default class Governance extends React.Component {
 
       try {
         let _totalDeposited = governance.totalDepositedTokens(coinbase);
-
         let _totalDepositedDypv2 =
           governancedypv2.totalDepositedTokens(coinbase);
+
         let _lvsTime = governancedypv2.lastVotedProposalStartTime(coinbase);
         let _q = governancedypv2.QUORUM();
         let _m = governancedypv2.MIN_BALANCE_TO_INIT_PROPOSAL();
@@ -754,7 +754,6 @@ export default class Governance extends React.Component {
         let [
           totalDeposited,
           totalDepositedDypv2,
-
           lastVotedProposalStartTime,
           QUORUM,
           MIN_BALANCE_TO_INIT_PROPOSAL,
@@ -857,7 +856,6 @@ export default class Governance extends React.Component {
   handleProposalSubmit = (formState) => (e) => {
     e.preventDefault();
     const min = this.state.MIN_BALANCE_TO_INIT_PROPOSAL / 1e18;
-    console.log(formState);
     if (Number(this.state.token_balance) < parseInt(min)) {
       window.alertify.error("Insufficient Governance Token Balance!");
       return;
@@ -1052,8 +1050,8 @@ export default class Governance extends React.Component {
                   <h6 className="govcard-number">1</h6>
                 </div>
                 <h6 className="govcard-desc">
-                  Dypius Governance runs on Ethereum, BNB Chain, and Avalanche.
-                  Connect your wallet to get started
+                Dypius Governance is available on Ethereum, BNB Chain and
+                  Avalanche. Connect your wallet to get started.
                 </h6>
               </div>
             </div>
@@ -1815,6 +1813,8 @@ class ProposalDetails extends React.Component {
         });
     }
   };
+
+
   handleAddVote = (e) => {
     this.setState({ depositLoading: true });
     if (this.props.is_v2 === true) {
@@ -1931,6 +1931,8 @@ class ProposalDetails extends React.Component {
       });
     }
   };
+
+
   handleSetMaxWithdraw = (e) => {
     e.preventDefault();
     if (this.props.is_v2 === true) {
@@ -2130,7 +2132,7 @@ class ProposalDetails extends React.Component {
       window.config.vote_duration_in_seconds * 1e3;
     if (Date.now() > canWithdrawAllAfter) {
       canWithdrawAll = true;
-    } else if (canWithdrawAllAfter) {
+    } else if (canWithdrawAllAfter > Date.now()) {
       withdrawableTitleText =
         `You'll be able to withdraw ` +
         moment.duration(canWithdrawAllAfter - Date.now()).humanize(true);
@@ -2512,7 +2514,7 @@ class ProposalDetails extends React.Component {
                   {this.props.is_v2 === true
                     ? token_balance
                     : token_balance_old}{" "}
-                  DYP
+                  {this.props.is_v2 === true ? "DYPv2" : "DYP"}
                 </h6>
               </div>
               <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
