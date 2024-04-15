@@ -33,7 +33,13 @@ import totalVotesIcon from "../assets/totalVotesIcon.svg";
 import { shortAddress } from "../../../functions/shortAddress";
 import axios from "axios";
 
-const { new_governancebsc: governance, reward_token, BigNumber } = window;
+const {
+  new_governancebsc: governance,
+  new_governancebscdypv2: governancedypv2,
+  reward_token,
+  reward_token_dypius_bsc,
+  BigNumber,
+} = window;
 const LP_AMPLIFY_FACTOR = 1;
 
 let PoolGroupName = Object.freeze({
@@ -63,7 +69,7 @@ const stakingPools = [
 
 const AddProposal = (props) => {
   let [formState, setFormState] = useState({
-    action: "0", // 0 - disburse or burn, 1 - upgrade governance
+    action: "3", // 0 - disburse or burn, 1 - upgrade governance
     stakingPool: stakingPools[0].pools,
     newGovernance: "",
     newQuorum: "",
@@ -73,7 +79,7 @@ const AddProposal = (props) => {
   const [showModal, setShowModal] = useState(false);
 
   const setState = (obj) => setFormState({ ...formState, ...obj });
-  let { isOwner, connected } = props;
+  let { isOwner, connected, isOpenModal } = props;
   return (
     <div className="col-12 col-lg-7">
       <div className="d-flex flex-column justify-content-between h-100 w-100">
@@ -112,7 +118,7 @@ const AddProposal = (props) => {
           </div>
         </form>
       </div>
-      {showModal === true && (
+      {showModal === true && isOpenModal === true && (
         <Modal
           visible={showModal}
           modalId="proposal"
@@ -128,32 +134,12 @@ const AddProposal = (props) => {
                 Select Action
               </label>
               <div className="d-flex justify-content-between gap-3 align-items-center">
-                <div
-                  className={
-                    formState.action === "0"
-                      ? "optionbtn-active"
-                      : "optionbtn-passive"
-                  }
-                >
-                  <input
-                    type="checkbox"
-                    value="0"
-                    onChange={(e) => setState({ action: e.target.value })}
-                    id="disburseburn"
-                    className="d-none"
-                  />
+                {/* <div className={"optionbtn-passive"}>
                   <label for="disburseburn" className="optiontext">
-                    <img
-                      src={
-                        formState.action === "0"
-                          ? disburselogoActive
-                          : disburselogoPassive
-                      }
-                      alt=""
-                    />
+                    <img src={disburselogoPassive} alt="" />
                     Disburse or Burn
                   </label>
-                </div>
+                </div> */}
                 <div
                   className={
                     formState.action === "3"
@@ -164,7 +150,7 @@ const AddProposal = (props) => {
                   <input
                     type="checkbox"
                     value="3"
-                    onChange={(e) => setState({ action: e.target.value })}
+                    onChange={(e) => setState({ action: "3" })}
                     id="freetext"
                     className="d-none"
                   />
@@ -256,7 +242,10 @@ const AddProposal = (props) => {
                 Submitting a proposal requires a minimum of
                 <br />{" "}
                 <b>
-                  {(props.MIN_BALANCE_TO_INIT_PROPOSAL / 1e18).toFixed(2)} DYP{" "}
+                  {getFormattedNumber(
+                    props.MIN_BALANCE_TO_INIT_PROPOSAL / 1e18
+                  )}{" "}
+                  DYP{" "}
                 </b>
                 Governance Token Balance.
               </h6>
@@ -631,11 +620,14 @@ export default class Governance extends React.Component {
     super(props);
     this.state = {
       proposals: [],
+      step: 3,
       total_proposals: 0,
       isLoading: false,
       is_wallet_connected: false,
       token_balance: "",
+      token_balanceDypv2: "",
       totalDeposited: "",
+      totalDepositedDypv2: "",
       lastVotedProposalStartTime: "",
       QUORUM: "",
       coinbase: "0x0000000000000000000000000000000000000111",
@@ -647,6 +639,7 @@ export default class Governance extends React.Component {
       proposalData: "",
       submitStatius: "initial",
       showTYModal: false,
+      isOpenModal: true,
     };
   }
 
@@ -662,19 +655,25 @@ export default class Governance extends React.Component {
   };
 
   refreshProposals = async () => {
-    if (this.state.isLoading && this.state.proposals && this.state.proposals?.length > 0 && this.props.networkId === 56) return;
+    if (
+      this.state.isLoading &&
+      this.state.proposals &&
+      this.state.proposals?.length > 0 &&
+      this.props.networkId === 56
+    )
+      return;
     this.setState({ isLoading: true });
     try {
       let total_proposals = Number(await governance?.lastIndex());
+      let total_proposalsdypv2 = Number(await governancedypv2?.lastIndex());
+
       let proposals = this.state.proposals;
       let newProposals = [];
+      let newProposalsDypv2 = [];
+
       let newProposals2 = [];
-      let step = window.config.max_proposals_per_call;
-      for (
-        let i = total_proposals - proposals?.length;
-        i >= Math.max(1, total_proposals - proposals?.length - step + 2);
-        i--
-      ) {
+
+      for (let i = total_proposals; i >= 1; i--) {
         const checkproposal = await this.getProposal(i).then();
         if (checkproposal != undefined) {
           newProposals.push(this.getProposal(i));
@@ -682,16 +681,43 @@ export default class Governance extends React.Component {
           this.refreshProposals();
         }
       }
+
+      for (let i = total_proposalsdypv2; i >= 1; i--) {
+        const checkproposal2 = await this.getProposaldypv2(i).then();
+        if (checkproposal2 != undefined) {
+          newProposalsDypv2.push(this.getProposaldypv2(i));
+        } else {
+          this.refreshProposals();
+        }
+      }
+
       newProposals = await Promise.all(newProposals);
+
+      const newnewProposalsFinal = newProposals.map((item) => {
+        return { ...item, is_v2: false };
+      });
+
+      newProposalsDypv2 = await Promise.all(newProposalsDypv2);
+
+      const newProposalsDypv2Final = newProposalsDypv2.map((item) => {
+        return { ...item, is_v2: true };
+      });
 
       // newProposals = newProposals.map(p => {
       //     p.vault = getVaultByAddress(p._stakingPool)
       //     return p
       // })
-      newProposals2 = proposals.concat(newProposals);
+      newProposals2 = proposals.concat(newnewProposalsFinal);
 
-      this.setState({ total_proposals, isLoading: false });
-      this.setState({ proposals: newProposals2 });
+      const final_proposals = newProposalsDypv2Final.concat(newProposals2);
+
+      this.setState({
+        total_proposals: total_proposals + total_proposalsdypv2,
+        isLoading: false,
+      });
+      this.setState({
+        proposals: final_proposals,
+      });
     } finally {
       this.setState({ isLoading: false });
     }
@@ -701,7 +727,7 @@ export default class Governance extends React.Component {
     if (this.props.connected === true && this.props.networkId === 56) {
       try {
         let coinbase = this.props.coinbase;
-        await reward_token.balanceOf(coinbase).then((data) => {
+        await reward_token_dypius_bsc.balanceOf(coinbase).then((data) => {
           this.setState({
             token_balance: window.web3.utils.fromWei(data, "ether"),
           });
@@ -718,19 +744,30 @@ export default class Governance extends React.Component {
 
       try {
         let _totalDeposited = governance.totalDepositedTokens(coinbase);
-        let _lvsTime = governance.lastVotedProposalStartTime(coinbase);
-        let _q = governance.QUORUM();
-        let _m = governance.MIN_BALANCE_TO_INIT_PROPOSAL();
+        let _totalDepositedDypv2 =
+          governancedypv2.totalDepositedTokens(coinbase);
+
+        let _lvsTime = governancedypv2.lastVotedProposalStartTime(coinbase);
+        let _q = governancedypv2.QUORUM();
+        let _m = governancedypv2.MIN_BALANCE_TO_INIT_PROPOSAL();
 
         let [
           totalDeposited,
+          totalDepositedDypv2,
           lastVotedProposalStartTime,
           QUORUM,
           MIN_BALANCE_TO_INIT_PROPOSAL,
-        ] = await Promise.all([_totalDeposited, _lvsTime, _q, _m]);
+        ] = await Promise.all([
+          _totalDeposited,
+          _totalDepositedDypv2,
+          _lvsTime,
+          _q,
+          _m,
+        ]);
 
         this.setState({
           totalDeposited,
+          totalDepositedDypv2,
           lastVotedProposalStartTime,
           QUORUM,
           MIN_BALANCE_TO_INIT_PROPOSAL,
@@ -742,14 +779,30 @@ export default class Governance extends React.Component {
   };
 
   getProposal = async (_proposalId) => {
-    if (this.props.connected === true && _proposalId && this.props.networkId === 56) {
+    if (
+      this.props.connected === true &&
+      _proposalId &&
+      this.props.networkId === 56
+    ) {
       let p = await governance.getProposal(_proposalId);
       p.vault = getPoolForProposal(p);
       return p;
     }
   };
+
+  getProposaldypv2 = async (_proposalId) => {
+    if (
+      this.props.connected === true &&
+      _proposalId &&
+      this.props.networkId === 56
+    ) {
+      let p = await governancedypv2.getProposal(_proposalId);
+      p.vault = getPoolForProposal(p);
+      return p;
+    }
+  };
+
   checkConnection = async () => {
-  
     if (this.props.connected === true && this.props.networkId === 56) {
       this.setState({ is_wallet_connected: true });
       let coinbase = this.props.coinbase;
@@ -762,19 +815,26 @@ export default class Governance extends React.Component {
   componentDidMount() {
     this.refreshBalance();
     this.refreshDYPBalance();
- 
- this.fetchProposals();
-    if (this.state.proposals && this.state.proposals?.length == 0 && this.props.connected === true && this.props.networkId === 56) {
+
+    this.fetchProposals();
+    if (
+      this.state.proposals &&
+      this.state.proposals?.length == 0 &&
+      this.props.connected === true &&
+      this.props.networkId === 56
+    ) {
       this.refreshProposals();
-    this.getProposal();
-   
-    // window._refreshBalInterval2 = setInterval(this.getProposal, 3000);
+      this.getProposal();
+      this.getProposaldypv2();
+
+      // window._refreshBalInterval2 = setInterval(this.getProposal, 3000);
     }
     this.checkConnection();
     this.getProposal();
+    this.getProposaldypv2();
+
     window._refreshBalInterval = setInterval(this.checkConnection, 1000);
- 
-   
+
     window.gRefBalInterval = setInterval(this.refreshBalance, 7e3);
     window.gRefDYPBalInterval = setInterval(this.refreshDYPBalance, 3000);
   }
@@ -795,7 +855,7 @@ export default class Governance extends React.Component {
 
   handleProposalSubmit = (formState) => (e) => {
     e.preventDefault();
-    const min = this.state.MIN_BALANCE_TO_INIT_PROPOSAL.slice(0, 4);
+    const min = this.state.MIN_BALANCE_TO_INIT_PROPOSAL / 1e18;
     if (Number(this.state.token_balance) < parseInt(min)) {
       window.alertify.error("Insufficient Governance Token Balance!");
       return;
@@ -817,13 +877,13 @@ export default class Governance extends React.Component {
     }
 
     if (formState.action == "0") {
-      governance.proposeDisburseOrBurn(poolGroupName);
+      governancedypv2.proposeDisburseOrBurn(poolGroupName);
     } else if (formState.action == "1") {
       if (!window.web3.utils.isAddress(formState.newGovernance)) {
         window.alertify.error("Invalid Address!");
         return;
       }
-      governance.proposeUpgradeGovernance(
+      governancedypv2.proposeUpgradeGovernance(
         poolGroupName,
         formState.newGovernance
       );
@@ -834,9 +894,19 @@ export default class Governance extends React.Component {
         return;
       }
       newQuorum = new BigNumber(newQuorum).times(1e18).toFixed(0);
-      governance.proposeNewQuorum(newQuorum);
+      governancedypv2.proposeNewQuorum(newQuorum);
     } else if (formState.action == "3") {
-      governance.proposeText(formState.text);
+      governancedypv2
+        .proposeText(formState.text)
+        .then(() => {
+          this.setState({ isOpenModal: false });
+          setTimeout(() => {
+            this.setState({ showTYModal: true });
+          }, 1000);
+        })
+        .catch((e) => {
+          console.error(e);
+        });
     } else if (formState.action == "4") {
       let newMinBalance = formState.newMinBalance;
       if (isNaN(newMinBalance * 1)) {
@@ -844,13 +914,13 @@ export default class Governance extends React.Component {
         return;
       }
       newMinBalance = new BigNumber(newMinBalance).times(1e18).toFixed(0);
-      governance.proposeNewMinBalanceToInitProposal(newMinBalance);
+      governancedypv2.proposeNewMinBalanceToInitProposal(newMinBalance);
     }
   };
 
   handleClaim = (e) => {
     e.preventDefault();
-    governance.withdrawAllTokens();
+    governancedypv2.withdrawAllTokens();
   };
 
   handleProposals = async (e) => {
@@ -859,17 +929,19 @@ export default class Governance extends React.Component {
   };
 
   render() {
-
-    let { totalDeposited } = this.state;
+    let { totalDeposited, totalDepositedDypv2 } = this.state;
     totalDeposited = getFormattedNumber(totalDeposited / 1e18, 3);
+    totalDepositedDypv2 = getFormattedNumber(totalDepositedDypv2 / 1e18, 3);
+
     let canWithdrawAll = false;
     let withdrawableTitleText = "";
     let canWithdrawAllAfter =
       this.state.lastVotedProposalStartTime * 1e3 +
       window.config.vote_duration_in_seconds * 1e3;
+
     if (Date.now() > canWithdrawAllAfter) {
       canWithdrawAll = true;
-    } else if (canWithdrawAllAfter) {
+    } else if (Date.now() < canWithdrawAllAfter) {
       withdrawableTitleText =
         `You'll be able to withdraw ` +
         moment.duration(canWithdrawAllAfter - Date.now()).humanize(true);
@@ -882,16 +954,16 @@ export default class Governance extends React.Component {
       window.config.admin_address.toLowerCase();
     const deviceWidth = window.innerWidth;
 
+    let expireArray = [];
+    let expires;
+    for (let i = 0; i <= this.state.proposals?.length - 1; i++) {
+      let endsOn =
+        this.state.proposals[i]?._proposalStartTime * 1e3 +
+        window.config.vote_duration_in_seconds * 1e3;
 
-    
-    let expireArray=[]; let expires ;
-    for(let i = 0; i<= this.state.proposals?.length-1; i++) {
-     let endsOn =  this.state.proposals[i]?._proposalStartTime * 1e3 + window.config.vote_duration_in_seconds * 1e3;
-
-      expires= moment.duration(endsOn - Date.now()).humanize(true);
-      expireArray[i] = expires
+      expires = moment.duration(endsOn - Date.now()).humanize(true);
+      expireArray[i] = expires;
     }
-    
 
     return (
       <div>
@@ -978,8 +1050,8 @@ export default class Governance extends React.Component {
                   <h6 className="govcard-number">1</h6>
                 </div>
                 <h6 className="govcard-desc">
-                  Dypius Governance runs on Ethereum, BNB Chain, and Avalanche.
-                  Connect your wallet to get started
+                Dypius Governance is available on Ethereum, BNB Chain and
+                  Avalanche. Connect your wallet to get started.
                 </h6>
               </div>
             </div>
@@ -992,7 +1064,7 @@ export default class Governance extends React.Component {
                   <h6 className="govcard-number">2</h6>
                 </div>
                 <h6 className="govcard-desc">
-                Proposals can be for the disbursement or burning of tokens and other user suggestions.
+                Propose new pools, allocate DYP for grants, partnerships, initiatives, and more.
                 </h6>
               </div>
             </div>
@@ -1005,7 +1077,11 @@ export default class Governance extends React.Component {
                   <h6 className="govcard-number">3</h6>
                 </div>
                 <h6 className="govcard-desc">
-                Submitting a Governance proposal requires a minimum of 5000 DYP token balance
+                  Submitting a Governance proposal requires a minimum of{" "}
+                  {getFormattedNumber(
+                    this.state.MIN_BALANCE_TO_INIT_PROPOSAL / 1e18
+                  )}
+                  DYP token balance
                 </h6>
               </div>
             </div>
@@ -1021,6 +1097,7 @@ export default class Governance extends React.Component {
               >
                 <AddProposal
                   isOwner={isOwner}
+                  isOpenModal={this.state.isOpenModal}
                   connected={this.state.is_wallet_connected}
                   MIN_BALANCE_TO_INIT_PROPOSAL={
                     this.state.MIN_BALANCE_TO_INIT_PROPOSAL
@@ -1078,10 +1155,10 @@ export default class Governance extends React.Component {
                             src={require("../assets/wallet2.svg").default}
                             alt=""
                           />{" "}
-                          My DYP Balance
+                          My DYPv2 Balance
                         </span>
                         <span className="whitetext">
-                        {getFormattedNumber(this.state.token_balance)} DYP
+                          {getFormattedNumber(this.state.token_balance)} DYP
                         </span>
                       </div>
                       <div className="colored-container">
@@ -1106,23 +1183,32 @@ export default class Governance extends React.Component {
                         >
                           Total in voting
                         </label>
-                        <div className="d-flex justify-content-between align-items-center gap-5">
-                          <div className="form-row totalVotingButton">
-                            <div>
-                              <span className="dypamounttext">
-                                {totalDeposited} DYP
-                              </span>
+                        <div className="d-flex flex-column align-items-start w-100">
+                          <div className="d-flex justify-content-between align-items-center gap-5 w-100">
+                            <div className="form-row totalVotingButton">
+                              <div>
+                                <span className="dypamounttext">
+                                  {totalDepositedDypv2} DYP
+                                </span>
+                              </div>
                             </div>
-                          </div>
 
-                          <button
-                            title={withdrawableTitleText}
-                            disabled={!canWithdrawAll|| totalDeposited === '0.000'}
-                            className={`btn filledbtn ${!canWithdrawAll || totalDeposited === '0.000' && 'disabled-btn'} `}
-                            type="submit"
-                          >
-                            Withdraw all 
-                          </button>
+                            <button
+                              title={withdrawableTitleText}
+                              disabled={
+                                !canWithdrawAll || totalDepositedDypv2 === "0.000"
+                              }
+                              className={`btn filledbtn ${
+                                (!canWithdrawAll ||
+                                  totalDepositedDypv2 === "0.000") &&
+                                "disabled-btn"
+                              } `}
+                              type="submit"
+                            >
+                              Withdraw all
+                            </button>
+                          </div>
+                          <h6 className="errormsg">{withdrawableTitleText}</h6>
                         </div>
                       </div>
                     </form>
@@ -1165,71 +1251,79 @@ export default class Governance extends React.Component {
                     className="accordion  governanceWrapper"
                     id="accordionExample"
                   >
-                    {this.state.proposals.map((props, index) => (
-                      <div
-                        className="accordion-item position-relative"
-                        key={index}
-                        style={{ border: "none" }}
-                      >
-                       {expireArray[index].includes("ago") ? (
-                          <img
-                            src={require("../assets/expired.png")}
-                            alt=""
-                            className="acordionstate"
-                          />
-                        ) : (
-                          <img
-                            src={require("../assets/new.png")}
-                            alt=""
-                            className="acordionstate"
-                            style={{scale: '0.67'}}
-                          />
-                        )}
-                        <div className="accordion-header" id="headingOne">
-                          <button
-                            className="accordion-button collapsed d-flex flex-column position-relative "
-                            type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target={`#${"collapse" + index}`}
-                            aria-expanded="true"
-                            aria-controls={"collapse" + index}
-                            onClick={() => {
-                              this.setState({
-                                proposalId: this.state.total_proposals - index,
-                              });
-                            }}
-                            style={{
-                              margin: "auto",
-                              paddingLeft: 10,
-                              paddingRight: 10,
-                            }}
+                    {this.state.proposals && this.state.proposals.length > 0 ? (
+                      this.state.proposals
+                        .slice(0, this.state.step)
+                        .map((props, index) => (
+                          <div
+                            className="accordion-item position-relative"
+                            key={index}
+                            style={{ border: "none" }}
                           >
-                            <div className="purplediv"></div>
-                            <ProposalCard {...props} />
-                          </button>
-                        </div>
+                            {expireArray[index].includes("ago") ? (
+                              <img
+                                src={require("../assets/expired.png")}
+                                alt=""
+                                className="acordionstate"
+                              />
+                            ) : (
+                              <img
+                                src={require("../assets/new.png")}
+                                alt=""
+                                className="acordionstate"
+                                style={{ scale: "0.67" }}
+                              />
+                            )}
+                            <div className="accordion-header" id="headingOne">
+                              <button
+                                className="accordion-button collapsed d-flex flex-column position-relative "
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target={`#${"collapse" + index}`}
+                                aria-expanded="true"
+                                aria-controls={"collapse" + index}
+                                onClick={() => {
+                                  this.setState({
+                                    proposalId: props?._proposalId,
+                                  });
+                                }}
+                                style={{
+                                  margin: "auto",
+                                  paddingLeft: 10,
+                                  paddingRight: 10,
+                                }}
+                              >
+                                <div className="purplediv"></div>
+                                <ProposalCard {...props} />
+                              </button>
+                            </div>
 
-                        <div
-                          id={"collapse" + index}
-                          className="accordion-collapse collapse"
-                          aria-labelledby={"collapsed" + index}
-                          data-bs-parent="#accordionExample"
-                        >
-                          <div className="accordion-body">
-                            <ProposalDetails
-                              refreshBalance={this.refreshBalance}
-                              proposalId={
-                                this.state.total_proposals - index
-                              }
-                              connected={this.props.connected}
-                              coinbase ={this.props.coinbase}
-                              networkId ={this.props.networkId}
-
-                            />
+                            <div
+                              id={"collapse" + index}
+                              className="accordion-collapse collapse"
+                              aria-labelledby={"collapsed" + index}
+                              data-bs-parent="#accordionExample"
+                            >
+                              <div className="accordion-body px-2">
+                                <ProposalDetails
+                                  refreshBalance={this.refreshBalance}
+                                  proposalId={props?._proposalId}
+                                  connected={this.props.connected}
+                                  coinbase={this.props.coinbase}
+                                  networkId={this.props.networkId}
+                                  is_v2={props.is_v2}
+                                />
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                    ))}
+                        ))
+                    ) : (
+                      <>
+                        <div className="emptycard"></div>
+                        <div className="emptycard"></div>
+                        <div className="emptycard"></div>
+                      </>
+                    )}
                   </div>
                 </div>
               ) : (
@@ -1241,7 +1335,8 @@ export default class Governance extends React.Component {
               )}
 
               <div className="text-center">
-                {this.state.proposals?.length < this.state.total_proposals &&
+                {this.state.proposals.slice(0, this.state.step)?.length <
+                  this.state.total_proposals &&
                   this.state.is_wallet_connected === true && (
                     <button
                       className="btn loadmore-btn"
@@ -1252,7 +1347,8 @@ export default class Governance extends React.Component {
                       href="#"
                       onClick={(e) => {
                         e.preventDefault();
-                        this.refreshProposals();
+                        this.setState({ step: this.state.step + 3 });
+                        // this.refreshProposals()
                       }}
                     >
                       {this.state.isLoading ? "Loading..." : "Load more"}
@@ -1597,18 +1693,26 @@ class ProposalDetails extends React.Component {
       depositAmount: "",
       withdrawAmount: "",
       depositedTokens: "",
+      depositedTokens_old: "",
+
       token_balance: "",
+      token_balance_old: "",
+
       coinbase: "",
       totalDeposited: "",
+      totalDeposited_old: "",
       option: "1", // 0, 1.  0 = yes/disburse, 1 = no/burn
       lastVotedProposalStartTime: "",
       QUORUM: "",
       MIN_BALANCE_TO_INIT_PROPOSAL: "",
+      MIN_BALANCE_TO_INIT_PROPOSAL_OLD: "",
+
       is_wallet_connected: false,
       is_proposal_executible: false,
       open: false,
       z: false,
       proposal: {},
+
       depositLoading: false,
       depositStatus: "initial",
       removeLoading: false,
@@ -1626,7 +1730,7 @@ class ProposalDetails extends React.Component {
     window._refreshBalInterval = setInterval(this.checkConnection, 3000);
     // window._refreshBalInterval2 = setInterval(this.getProposal, 3000);
 
-    window._refreshVoteBalInterval = setInterval(this.refreshProposal, 3000);
+    // window._refreshVoteBalInterval = setInterval(this.refreshProposal, 3000);
   }
 
   componentWillUnmount() {
@@ -1636,114 +1740,216 @@ class ProposalDetails extends React.Component {
   }
 
   refreshProposal = () => {
-    if(this.props.proposalId && this.props.networkId === 56)
-   { this.getProposal(this.props.proposalId)
-      .then((proposal) => this.setState({ proposal }))
-      .catch(console.error);}
+    if (this.props.proposalId && this.props.networkId === 56) {
+      if (this.props.is_v2 === true) {
+        this.getProposaldypv2(this.props.proposalId)
+          .then((proposal) => this.setState({ proposal }))
+          .catch(console.error);
+      } else if (this.props.is_v2 === false) {
+        this.getProposal(this.props.proposalId)
+          .then((proposal) => this.setState({ proposal }))
+          .catch(console.error);
+      }
+    }
   };
 
   getProposal = async (_proposalId) => {
-    if(_proposalId && this.props.networkId === 56)
-   { let p = await governance.getProposal(_proposalId);
-    p.vault = getPoolForProposal(p);
-    return p;}
+    if (_proposalId && this.props.networkId === 56) {
+      let p = await governance.getProposal(_proposalId);
+      p.vault = getPoolForProposal(p);
+      return p;
+    }
+  };
+
+  getProposaldypv2 = async (_proposalId) => {
+    if (_proposalId && this.props.networkId === 56) {
+      let p = await governancedypv2.getProposal(_proposalId);
+      p.vault = getPoolForProposal(p);
+      return p;
+    }
   };
 
   handleApprove = (e) => {
     // e.preventDefault();
     this.setState({ depositLoading: true });
-
-    let amount = this.state.depositAmount;
-    amount = new BigNumber(amount).times(1e18).toFixed(0);
-    reward_token
-      .approve(governance._address, amount)
-      .then(() => {
-        this.setState({ depositLoading: false, depositStatus: "deposit" });
-      })
-      .catch((e) => {
-        this.setState({ depositLoading: false, depositStatus: "fail" });
-        this.setState({ errorMsg: e?.message });
-        setTimeout(() => {
-          this.setState({
-            depositStatus: "initial",
-            depositAmount: "",
-            errorMsg: "",
-          });
-        }, 8000);
-      });
+    if (this.props.is_v2 === true) {
+      let amount = this.state.depositAmount;
+      amount = new BigNumber(amount).times(1e18).toFixed(0);
+      reward_token_dypius_bsc
+        .approve(governancedypv2._address, amount)
+        .then(() => {
+          this.setState({ depositLoading: false, depositStatus: "deposit" });
+        })
+        .catch((e) => {
+          this.setState({ depositLoading: false, depositStatus: "fail" });
+          this.setState({ errorMsg: e?.message });
+          setTimeout(() => {
+            this.setState({
+              depositStatus: "initial",
+              depositAmount: "",
+              errorMsg: "",
+            });
+          }, 8000);
+        });
+    } else if (this.props.is_v2 === false) {
+      let amount = this.state.depositAmount;
+      amount = new BigNumber(amount).times(1e18).toFixed(0);
+      reward_token
+        .approve(governance._address, amount)
+        .then(() => {
+          this.setState({ depositLoading: false, depositStatus: "deposit" });
+        })
+        .catch((e) => {
+          this.setState({ depositLoading: false, depositStatus: "fail" });
+          this.setState({ errorMsg: e?.message });
+          setTimeout(() => {
+            this.setState({
+              depositStatus: "initial",
+              depositAmount: "",
+              errorMsg: "",
+            });
+          }, 8000);
+        });
+    }
   };
+
+
   handleAddVote = (e) => {
     this.setState({ depositLoading: true });
-
-    let amount = this.state.depositAmount;
-    amount = new BigNumber(amount).times(1e18).toFixed(0);
-    governance
-      .addVotes(this.props.proposalId, this.state.option, amount)
-      .then(() => {
-        this.setState({ depositLoading: false, depositStatus: "success" });
-      })
-      .catch((e) => {
-        this.setState({ depositLoading: false, depositStatus: "fail" });
-        this.setState({ errorMsg: e?.message });
-        setTimeout(() => {
-          this.setState({
-            depositStatus: "initial",
-            depositAmount: "",
-            errorMsg: "",
-          });
-        }, 8000);
-      });
+    if (this.props.is_v2 === true) {
+      let amount = this.state.depositAmount;
+      amount = new BigNumber(amount).times(1e18).toFixed(0);
+      governancedypv2
+        .addVotes(this.props.proposalId, this.state.option, amount)
+        .then(() => {
+          this.setState({ depositLoading: false, depositStatus: "success" });
+          this.refreshBalance();
+        })
+        .catch((e) => {
+          this.setState({ depositLoading: false, depositStatus: "fail" });
+          this.setState({ errorMsg: e?.message });
+          setTimeout(() => {
+            this.setState({
+              depositStatus: "initial",
+              depositAmount: "",
+              errorMsg: "",
+            });
+          }, 8000);
+        });
+    } else if (this.props.is_v2 === false) {
+      let amount = this.state.depositAmount;
+      amount = new BigNumber(amount).times(1e18).toFixed(0);
+      governance
+        .addVotes(this.props.proposalId, this.state.option, amount)
+        .then(() => {
+          this.setState({ depositLoading: false, depositStatus: "success" });
+        })
+        .catch((e) => {
+          this.setState({ depositLoading: false, depositStatus: "fail" });
+          this.setState({ errorMsg: e?.message });
+          setTimeout(() => {
+            this.setState({
+              depositStatus: "initial",
+              depositAmount: "",
+              errorMsg: "",
+            });
+          }, 8000);
+        });
+    }
   };
 
   handleRemoveVote = (e) => {
     // e.preventDefault();
     this.setState({ removeLoading: true });
-
-    let amount = this.state.withdrawAmount;
-    amount = new BigNumber(amount).times(1e18).toFixed(0);
-    governance
-      .removeVotes(this.props.proposalId, amount)
-      .then(() => {
-        this.setState({ removeLoading: false, removeStatus: "success" });
-      })
-      .catch((e) => {
-        this.setState({ removeLoading: false, removeStatus: "fail" });
-        this.setState({ errorMsg2: e?.message });
-        setTimeout(() => {
-          this.setState({
-            removeStatus: "initial",
-            withdrawAmount: "",
-            errorMsg2: "",
-          });
-        }, 8000);
-      });
+    if (this.props.is_v2 === true) {
+      let amount = this.state.withdrawAmount;
+      amount = new BigNumber(amount).times(1e18).toFixed(0);
+      governancedypv2
+        .removeVotes(this.props.proposalId, amount)
+        .then(() => {
+          this.setState({ removeLoading: false, removeStatus: "success" });
+          this.refreshBalance();
+        })
+        .catch((e) => {
+          this.setState({ removeLoading: false, removeStatus: "fail" });
+          this.setState({ errorMsg2: e?.message });
+          setTimeout(() => {
+            this.setState({
+              removeStatus: "initial",
+              withdrawAmount: "",
+              errorMsg2: "",
+            });
+          }, 8000);
+        });
+    } else if (this.props.is_v2 === false) {
+      let amount = this.state.withdrawAmount;
+      amount = new BigNumber(amount).times(1e18).toFixed(0);
+      governance
+        .removeVotes(this.props.proposalId, amount)
+        .then(() => {
+          this.setState({ removeLoading: false, removeStatus: "success" });
+        })
+        .catch((e) => {
+          this.setState({ removeLoading: false, removeStatus: "fail" });
+          this.setState({ errorMsg2: e?.message });
+          setTimeout(() => {
+            this.setState({
+              removeStatus: "initial",
+              withdrawAmount: "",
+              errorMsg2: "",
+            });
+          }, 8000);
+        });
+    }
   };
 
   handleClaim = (e) => {
     e.preventDefault();
-    governance.withdrawAllTokens();
+    if (this.props.is_v2 === true) {
+      governancedypv2.withdrawAllTokens();
+      this.refreshBalance();
+    } else if (this.props.is_v2 === false) {
+      governance.withdrawAllTokens();
+      this.refreshBalance();
+    }
   };
 
   handleSetMaxDeposit = (e) => {
     e.preventDefault();
-    this.setState({
-      depositAmount: new BigNumber(this.state.token_balance)
-        .div(1e18)
-        .toFixed(18),
-    });
+    if (this.props.is_v2 === true) {
+      this.setState({
+        depositAmount: new BigNumber(this.state.token_balance)
+          .div(1e18)
+          .toFixed(18),
+      });
+    } else if (this.props.is_v2 === false) {
+      this.setState({
+        depositAmount: new BigNumber(this.state.token_balance_old)
+          .div(1e18)
+          .toFixed(18),
+      });
+    }
   };
+
+
   handleSetMaxWithdraw = (e) => {
     e.preventDefault();
-    this.setState({
-      withdrawAmount: new BigNumber(this.state.depositedTokens)
-        .div(1e18)
-        .toFixed(18),
-    });
+    if (this.props.is_v2 === true) {
+      this.setState({
+        withdrawAmount: new BigNumber(this.state.depositedTokens)
+          .div(1e18)
+          .toFixed(18),
+      });
+    } else if (this.props.is_v2 === false) {
+      this.setState({
+        withdrawAmount: new BigNumber(this.state.depositedTokens_old)
+          .div(1e18)
+          .toFixed(18),
+      });
+    }
   };
 
   checkConnection = async () => {
-   
-    
     if (this.props.connected === true && this.props.networkId === 56) {
       this.setState({ is_wallet_connected: true });
       let coinbase = this.props.coinbase;
@@ -1754,67 +1960,92 @@ class ProposalDetails extends React.Component {
     }
   };
 
-
   refreshBalance = async () => {
     if (this.props.connected === true && this.props.networkId === 56) {
       this.refreshProposal();
       let coinbase = this.props.coinbase;
-      if(coinbase && this.props.networkId === 56)
-    {  try {
-        let _rBal = reward_token.balanceOf(coinbase);
-        let _myVotes = governance.votesForProposalByAddress(
-          coinbase,
-          this.props.proposalId
-        );
-        let _totalDeposited = governance.totalDepositedTokens(coinbase);
-        let _option = governance.votedForOption(
-          coinbase,
-          this.props.proposalId
-        );
-        let _lvsTime = governance.lastVotedProposalStartTime(coinbase);
-        let _isExecutible = governance.isProposalExecutible(
-          this.props.proposalId
-        );
-        let _q = governance.QUORUM();
-        let _m = governance.MIN_BALANCE_TO_INIT_PROPOSAL();
+      if (coinbase && this.props.networkId === 56) {
+        try {
+          let _rBal = reward_token_dypius_bsc.balanceOf(coinbase);
+          let _rBal_old = reward_token.balanceOf(coinbase);
 
-        let [
-          token_balance,
-          depositedTokens,
-          totalDeposited,
-          option,
-          lastVotedProposalStartTime,
-          is_proposal_executible,
-          QUORUM,
-          MIN_BALANCE_TO_INIT_PROPOSAL,
-        ] = await Promise.all([
-          _rBal,
-          _myVotes,
-          _totalDeposited,
-          _option,
-          _lvsTime,
-          _isExecutible,
-          _q,
-          _m,
-        ]);
+          let _myVotes = governancedypv2.votesForProposalByAddress(
+            coinbase,
+            this.props.proposalId
+          );
 
-        this.setState({
-          token_balance,
-          depositedTokens,
-          totalDeposited,
-          lastVotedProposalStartTime,
-          QUORUM,
-          MIN_BALANCE_TO_INIT_PROPOSAL,
-          is_proposal_executible:
-            is_proposal_executible &&
-            ["0", "1", "2", "4"].includes(this.state.proposal._proposalAction),
-        });
+          let _myVotes_old = governance.votesForProposalByAddress(
+            coinbase,
+            this.props.proposalId
+          );
 
-        if (this.state.option == "" || Number(depositedTokens) > 0)
-          this.setState({ option });
-      } catch (e) {
-        console.error(e);
-      }}
+          let _totalDeposited = governancedypv2.totalDepositedTokens(coinbase);
+          let _totalDeposited_old = governance.totalDepositedTokens(coinbase);
+
+          let _option = governancedypv2.votedForOption(
+            coinbase,
+            this.props.proposalId
+          );
+          let _lvsTime = governancedypv2.lastVotedProposalStartTime(coinbase);
+          let _isExecutible = governancedypv2.isProposalExecutible(
+            this.props.proposalId
+          );
+          let _q = governancedypv2.QUORUM();
+          let _m = governancedypv2.MIN_BALANCE_TO_INIT_PROPOSAL();
+          let _m_old = governance.MIN_BALANCE_TO_INIT_PROPOSAL();
+
+          let [
+            token_balance,
+            token_balance_old,
+            depositedTokens,
+            depositedTokens_old,
+            totalDeposited,
+            totalDeposited_old,
+            option,
+            lastVotedProposalStartTime,
+            is_proposal_executible,
+            QUORUM,
+            MIN_BALANCE_TO_INIT_PROPOSAL,
+            MIN_BALANCE_TO_INIT_PROPOSAL_OLD,
+          ] = await Promise.all([
+            _rBal,
+            _rBal_old,
+            _myVotes,
+            _myVotes_old,
+            _totalDeposited,
+            _totalDeposited_old,
+            _option,
+            _lvsTime,
+            _isExecutible,
+            _q,
+            _m,
+            _m_old,
+          ]);
+
+          this.setState({
+            token_balance,
+            token_balance_old,
+            depositedTokens,
+            depositedTokens_old,
+            totalDeposited,
+            totalDeposited_old,
+            lastVotedProposalStartTime,
+            QUORUM,
+            MIN_BALANCE_TO_INIT_PROPOSAL,
+            MIN_BALANCE_TO_INIT_PROPOSAL_OLD,
+            is_proposal_executible:
+              is_proposal_executible &&
+              ["0", "1", "2", "4"].includes(
+                this.state.proposal._proposalAction
+              ),
+          });
+
+          if (this.state.option == "" || Number(depositedTokens) > 0)
+            this.setState({ option });
+        } catch (e) {
+          console.error(e);
+        }
+      }
     }
   };
 
@@ -1835,22 +2066,35 @@ class ProposalDetails extends React.Component {
   };
 
   handleExecute = () => {
-    governance.executeProposal(this.props.proposalId);
+    governancedypv2.executeProposal(this.props.proposalId);
   };
-
-  
 
   render() {
     ////
     // let id = this.props.match.params.id;
 
-    let { coinbase, token_balance, proposal, totalDeposited, depositedTokens } =
-      this.state;
+    let {
+      coinbase,
+      token_balance,
+      token_balance_old,
+      proposal,
+      totalDeposited,
+      totalDeposited_old,
+      depositedTokens,
+      depositedTokens_old,
+    } = this.state;
 
-    if (!proposal._proposalId) return "";
+    if (!proposal._proposalId && this.props.is_v2 === false) return "";
+    if (!proposal._proposalId && this.props.is_v2 === true) return "";
 
     token_balance = getFormattedNumber(token_balance / 1e18, 6);
+    token_balance_old = getFormattedNumber(token_balance_old / 1e18, 6);
+
     totalDeposited = getFormattedNumber(totalDeposited / 1e18, 3);
+    totalDeposited_old = getFormattedNumber(totalDeposited_old / 1e18, 3);
+
+    depositedTokens = getFormattedNumber(depositedTokens / 1e18, 6);
+    depositedTokens_old = getFormattedNumber(depositedTokens_old / 1e18, 6);
 
     let optionOneVotes = proposal._optionOneVotes;
     let optionTwoVotes = proposal._optionTwoVotes;
@@ -1867,7 +2111,6 @@ class ProposalDetails extends React.Component {
 
     optionOneVotes = getFormattedNumber(optionOneVotes / 1e18, 6);
     optionTwoVotes = getFormattedNumber(optionTwoVotes / 1e18, 6);
-    depositedTokens = getFormattedNumber(depositedTokens / 1e18, 6);
 
     let endsOn =
       proposal._proposalStartTime * 1e3 +
@@ -1888,7 +2131,7 @@ class ProposalDetails extends React.Component {
       window.config.vote_duration_in_seconds * 1e3;
     if (Date.now() > canWithdrawAllAfter) {
       canWithdrawAll = true;
-    } else if (canWithdrawAllAfter) {
+    } else if (canWithdrawAllAfter > Date.now()) {
       withdrawableTitleText =
         `You'll be able to withdraw ` +
         moment.duration(canWithdrawAllAfter - Date.now()).humanize(true);
@@ -1902,9 +2145,19 @@ class ProposalDetails extends React.Component {
               <div className="col-12">
                 <div className="activewrapper">
                   <div className="d-flex align-items-center justify-co ntent-between gap-5">
-                  <h6 className={expires.includes('ago') ? "expiredtxt" : "activetxt position-relative activetxt-vault"}>
-                    <img src={expires.includes('ago') ?  ellipse : ellipsegreen} alt="" className="position-relative" />
-                     {expires.includes('ago') ? 'Expired' : 'Active'} 
+                    <h6
+                      className={
+                        expires.includes("ago")
+                          ? "expiredtxt"
+                          : "activetxt position-relative activetxt-vault"
+                      }
+                    >
+                      <img
+                        src={expires.includes("ago") ? ellipse : ellipsegreen}
+                        alt=""
+                        className="position-relative"
+                      />
+                      {expires.includes("ago") ? "Expired" : "Active"}
                     </h6>
                   </div>
                   <div className="d-flex align-items-center justify-content-between gap-3">
@@ -1956,7 +2209,12 @@ class ProposalDetails extends React.Component {
                         </label>
                         <h6 className="mybalance-text">
                           Balance:
-                          <b>{token_balance} DYP</b>
+                          <b>
+                            {this.props.is_v2 === true
+                              ? token_balance
+                              : token_balance_old}{" "}
+                            DYP
+                          </b>
                         </h6>
                       </div>
                       <Tooltip
@@ -2232,7 +2490,12 @@ class ProposalDetails extends React.Component {
                 <span className="stats-card-title">{`My ${this.getOptionText(
                   this.state.option
                 )} Votes`}</span>
-                <h6 className="stats-card-content">{depositedTokens} DYP</h6>
+                <h6 className="stats-card-content">
+                  {this.props.is_v2 === true
+                    ? depositedTokens
+                    : depositedTokens_old}{" "}
+                  DYP
+                </h6>
               </div>
               <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                 <span className="stats-card-title">Proposal Action</span>
@@ -2243,8 +2506,15 @@ class ProposalDetails extends React.Component {
                 <h6 className="stats-card-content">{expires}</h6>
               </div>
               <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
-                <span className="stats-card-title">My DYP Balance</span>
-                <h6 className="stats-card-content">{token_balance} DYP</h6>
+                <span className="stats-card-title">
+                  My {this.props.is_v2 === true ? "DYPv2" : "DYP"} Balance
+                </span>
+                <h6 className="stats-card-content">
+                  {this.props.is_v2 === true
+                    ? token_balance
+                    : token_balance_old}{" "}
+                  {this.props.is_v2 === true ? "DYPv2" : "DYP"}
+                </h6>
               </div>
               <div className="stats-card p-4 d-flex flex-column mx-auto w-100">
                 <span className="stats-card-title">
@@ -2284,10 +2554,18 @@ class ProposalDetails extends React.Component {
                 <a
                   target="_blank"
                   rel="noopener noreferrer"
-                  href={`${window.config.bscscan_baseURL}address/${governance._address}`}
+                  href={`${window.config.bscscan_baseURL}address/${
+                    this.props.is_v2 === true
+                      ? governancedypv2._address
+                      : governance._address
+                  }`}
                   className="stats-link"
                 >
-                  {shortAddress(governance._address)}{" "}
+                  {shortAddress(
+                    this.props.is_v2 === true
+                      ? governancedypv2._address
+                      : governance._address
+                  )}{" "}
                   <img src={statsLinkIcon} alt="" />
                 </a>
               </div>
@@ -2317,10 +2595,18 @@ class ProposalDetails extends React.Component {
             <div className="separator"></div>
             <h6 className="footertext">
               Proposals may be executed within <b>3 days</b> after voting ends.
-              Quorum requirement is a minimum of <b>25000.00 DYP</b>, proposals
-              with winning votes less than QUORUM will not be executed. Disburse
-              proposals will disburse a maximum amount of DYP with a{" "}
-              <b>-2.5% Price Impact</b>.
+              Quorum requirement is a minimum of{" "}
+              <b>
+                {getFormattedNumber(
+                  this.props.is_v2 === true
+                    ? this.state.MIN_BALANCE_TO_INIT_PROPOSAL / 1e18
+                    : this.state.MIN_BALANCE_TO_INIT_PROPOSAL_OLD / 1e18
+                )}{" "}
+                DYP
+              </b>
+              , proposals with winning votes less than QUORUM will not be
+              executed. Disburse proposals will disburse a maximum amount of DYP
+              with a <b>-2.5% Price Impact</b>.
             </h6>
           </Modal>
         )}
