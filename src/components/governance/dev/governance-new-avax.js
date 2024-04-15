@@ -958,28 +958,32 @@ export default class Governance extends React.Component {
                         >
                           Total in voting
                         </label>
-                        <div className="d-flex justify-content-between align-items-center gap-5">
-                          <div className="form-row totalVotingButton">
-                            <div>
-                              <span className="dypamounttext">
-                                {totalDeposited} DYP
-                              </span>
+                        <div className="d-flex flex-column align-items-start w-100">
+                          <div className="d-flex justify-content-between align-items-center gap-5 w-100">
+                            <div className="form-row totalVotingButton">
+                              <div>
+                                <span className="dypamounttext">
+                                  {totalDeposited} DYP
+                                </span>
+                              </div>
                             </div>
-                          </div>
 
-                          <button
-                            title={withdrawableTitleText}
-                            disabled={
-                              !canWithdrawAll || totalDeposited === "0.000"
-                            }
-                            className={`btn filledbtn ${
-                              !canWithdrawAll ||
-                              (totalDeposited === "0.000" && "disabled-btn")
-                            } `}
-                            type="submit"
-                          >
-                            Withdraw all
-                          </button>
+                            <button
+                              title={withdrawableTitleText}
+                              disabled={
+                                !canWithdrawAll || totalDeposited === "0.000"
+                              }
+                              className={`btn filledbtn ${
+                                (!canWithdrawAll ||
+                                  totalDeposited === "0.000") &&
+                                "disabled-btn"
+                              } `}
+                              type="submit"
+                            >
+                              Withdraw all
+                            </button>
+                          </div>
+                          <h6 className="errormsg">{withdrawableTitleText}</h6>
                         </div>
                       </div>
                     </form>

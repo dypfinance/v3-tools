@@ -1199,11 +1199,11 @@ export default class Governance extends React.Component {
                             <button
                               title={withdrawableTitleText}
                               disabled={
-                                !canWithdrawAll || totalDeposited === "0.000"
+                                !canWithdrawAll || totalDepositedDypv2 === "0.000"
                               }
                               className={`btn filledbtn ${
                                 (!canWithdrawAll ||
-                                  totalDeposited === "0.000") &&
+                                  totalDepositedDypv2 === "0.000") &&
                                 "disabled-btn"
                               } `}
                               type="submit"
