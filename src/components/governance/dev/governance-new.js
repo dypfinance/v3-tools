@@ -1110,8 +1110,7 @@ export default class Governance extends React.Component {
                   <h6 className="govcard-number">2</h6>
                 </div>
                 <h6 className="govcard-desc">
-                  Proposals can be for the disbursement or burning of tokens and
-                  other user suggestions.
+                Propose new pools, allocate DYP for grants, partnerships, initiatives, and more.
                 </h6>
               </div>
             </div>
