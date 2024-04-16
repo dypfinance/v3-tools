@@ -43,7 +43,7 @@ const StakeDypiusBscOther = ({
   maximumDeposit,
   poolCap,
   livePremiumOnly,
-  isPremium,
+  isPremium,onRefreshTvl
 }) => {
   let {
     reward_token_wbnb,
@@ -555,6 +555,7 @@ const StakeDypiusBscOther = ({
           setdepositStatus("success");
           refreshBalance();
           getBalance();
+          onRefreshTvl();
           setTimeout(() => {
             setdepositLoading(false);
             setdepositStatus("initial");
@@ -591,6 +592,7 @@ const StakeDypiusBscOther = ({
           setwithdrawStatus("success");
           setwithdrawLoading(false);
           refreshBalance();
+          onRefreshTvl();
           setTimeout(() => {
             setwithdrawStatus("initial");
             setwithdrawAmount("");
@@ -625,6 +627,7 @@ const StakeDypiusBscOther = ({
         setwithdrawStatus("success");
         setwithdrawLoading(false);
         refreshBalance();
+        onRefreshTvl();
 
         setTimeout(() => {
           setwithdrawStatus("initial");
@@ -901,9 +904,7 @@ const StakeDypiusBscOther = ({
     getMaxDepositAllowed();
   }, []);
 
-  const handleNavigateToPlans = () => {
-    navigate.push("/plans");
-  };
+
 
   return (
     <>
@@ -1056,7 +1057,7 @@ const StakeDypiusBscOther = ({
                 </div>
                 <div className="d-flex gap-1 align-items-baseline">
                   <span className="bal-smallTxt">Allowance Left:</span>
-                  <span className="bal-bigTxt2">{amountLeft} WBNB</span>
+                  <span className="bal-bigTxt2">{getFormattedNumber(amountLeft)} WBNB</span>
                 </div>
                 </div>
               </div>
@@ -1173,7 +1174,7 @@ const StakeDypiusBscOther = ({
                       <div className="d-flex flex-column align-items-baseline">
                         <span className="bal-smallTxt">Rewards</span>
                         <span className="bal-bigTxt2">
-                          {getFormattedNumber(pendingDivs)} WBNB
+                          {getFormattedNumber(pendingDivs,6)} WBNB
                         </span>
                       </div>
                       <button
@@ -1471,7 +1472,7 @@ const StakeDypiusBscOther = ({
                   <div className="d-flex flex-column align-items-baseline">
                     <span className="bal-smallTxt">Rewards</span>
                     <span className="bal-bigTxt2">
-                      {getFormattedNumber(pendingDivs)} WBNB
+                      {getFormattedNumber(pendingDivs,6)} WBNB
                     </span>
                   </div>
                   <button

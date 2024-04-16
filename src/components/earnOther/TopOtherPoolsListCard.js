@@ -84,7 +84,7 @@ const TopOtherPoolsListCard = ({
   const windowSize = useWindowSize();
   const [livePremiumOnly, setlivePremiumOnly] = useState(true);
 
-  let premiumDayBase = new Date("2024-04-13T17:00:00.000+02:00");
+  let premiumDayBase = new Date("2024-04-17T12:00:00.000+02:00");
 
   useEffect(() => {
     if (chain === "eth") {
@@ -111,7 +111,7 @@ const TopOtherPoolsListCard = ({
         style={{ display: display }}
         onClick={onCardClick}
       >
-        {tokenTicker === "ETH" && (
+        {tokenTicker === "AVAX" && (
           <div className="d-none">
             <CountDown
               date={premiumDayBase}
@@ -142,7 +142,7 @@ const TopOtherPoolsListCard = ({
                       >
                         {tokenTicker}
                       </h5>
-                      {livePremiumOnly && tokenTicker === "ETH" && (
+                      {livePremiumOnly && tokenTicker === "AVAX" && (
                         <img src={premium24hrstag} alt="" />
                       )}
                       {/* {isHot && <img src={hotTag} alt="" />} */}

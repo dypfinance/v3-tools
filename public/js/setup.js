@@ -2004,6 +2004,9 @@ window.config = {
   admin_address: "0x910090Ea889B64B4e722ea4b8fF6D5e734dFb38F",
   vote_duration_in_seconds: 259200, // 5 minutes for test
   weth_address: "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7", // LOWERCASE! avax
+
+  wavax_address: "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7", // LOWERCASE! avax
+
   weth2_address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2", // ethereum
   default_gas_amount: 1200000,
 
@@ -2106,6 +2109,8 @@ window.config = {
 
   reward_token_dypius_bsc_address: "0x1a3264f2e7b1cfc6220ec9348d33ccf02af7aaa4", //REWARD TOKEN DYPV2
   reward_token_wbnb_address: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c", //REWARD TOKEN DYPV2
+  reward_token_wavax_address: "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7", //REWARD TOKEN DYPV2
+
 
 
   weth_address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
@@ -2360,6 +2365,9 @@ window.config = {
 
   constant_staking_dypius_ethother1_address:
     "0xfaed2b9b537444c7a0160e4081683500d77cbedc",
+
+    constant_staking_dypius_avaxother1_address:
+    "0x1B0cEEBEEc1E39D7CFf2Bf8E2BdC59b60A59D7dF",
 
   constant_staking_dypius_avax1_address:
     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603",
@@ -2736,6 +2744,8 @@ window.REWARD_TOKEN_DYPIUS_BASE_ABI = window.TOKEN_ABI;
 
 window.REWARD_TOKEN_DYPIUS_BSC_ABI = window.TOKEN_ABI;
 window.REWARD_TOKEN_WBNB_ABI = window.TOKEN_ABI;
+window.REWARD_TOKEN_WAVAX_ABI = window.TOKEN_ABI;
+
 
 
 window.REWARD_TOKENAVAX_ABI = window.TOKENAVAX_ABI;
@@ -2747,6 +2757,8 @@ window.reward_token_dypius_base = new TOKEN("REWARD_TOKEN_DYPIUS_BASE");
 
 window.reward_token_dypius_bsc = new TOKENBSC("REWARD_TOKEN_DYPIUS_BSC");
 window.reward_token_wbnb = new TOKENBSC("REWARD_TOKEN_WBNB");
+window.reward_token_wavax = new TOKENBSC("REWARD_TOKEN_WAVAX");
+
 
 
 window.reward_tokenavax = new TOKENAVAX("REWARD_TOKENAVAX");
@@ -2887,6 +2899,13 @@ window.constant_staking_dypius_bscother1 = new CONSTANT_STAKING_DEFI(
 window.constant_staking_dypius_ethother1 = new CONSTANT_STAKING_DEFI(
   "CONSTANT_STAKING_DYPIUS_ETHOTHER1"
 );
+
+
+window.constant_staking_dypius_avaxother1 = new CONSTANT_STAKING_DEFI(
+  "CONSTANT_STAKING_DYPIUS_AVAXOTHER1"
+);
+
+
 /*Staking bsc other*/
 
 window.constant_stakingbscother_new1 = new CONSTANT_STAKINGBSCOTHER_NEW(
@@ -2902,6 +2921,8 @@ window.CONSTANT_STAKINGBSC_NEW14_ABI = window.CONSTANT_STAKING_OLD_ABI;
 window.CONSTANT_STAKING_DYPIUS_BSC1_ABI = window.CONSTANT_STAKING_DYPIUS_ABI;
 window.CONSTANT_STAKING_DYPIUS_BSCOTHER1_ABI = window.CONSTANT_STAKING_DEFI_ABI;
 window.CONSTANT_STAKING_DYPIUS_ETHOTHER1_ABI = window.CONSTANT_STAKING_DEFI_ABI;
+window.CONSTANT_STAKING_DYPIUS_AVAXOTHER1_ABI = window.CONSTANT_STAKING_DEFI_ABI;
+
 
 
 window.CONSTANT_STAKINGBSC_NEW12_ABI = window.CONSTANT_STAKINGBSC_NEW_ABI;
@@ -37133,6 +37154,7 @@ Object.keys(window.config)
 
       k.startsWith("reward_token_dypius_bsc") ||
       k.startsWith("reward_token_wbnb") ||
+      k.startsWith("reward_token_wavax") ||
 
       k.startsWith("token_dyp_new") ||
       k.startsWith("token_dypius_new") ||
@@ -37183,6 +37205,7 @@ Object.keys(window.config)
       k.startsWith("constant_staking_dypius_bsc1") ||
       k.startsWith("constant_staking_dypius_bscother1") ||
       k.startsWith("constant_staking_dypius_ethother1") ||
+      k.startsWith("constant_staking_dypius_avaxother1") ||
       k.startsWith("constant_stakingnew_newavax2") ||
       k.startsWith("constant_stakingdaiavax") ||
       k.startsWith("constant_stakingdaieth") ||
@@ -37253,6 +37276,8 @@ Object.keys(window.config)
       : k.startsWith("reward_token_dypius_bsc")
       ? window.TOKEN_ABI
       : k.startsWith("reward_token_wbnb")
+      ? window.TOKEN_ABI
+      : k.startsWith("reward_token_wavax")
       ? window.TOKEN_ABI
       : k.startsWith("token_dyp_new")
       ? window.TOKEN_ABI
@@ -37427,6 +37452,8 @@ Object.keys(window.config)
       : k.startsWith("constant_staking_dypius_bscother1")
       ? window.CONSTANT_STAKING_DEFI_ABI
       : k.startsWith("constant_staking_dypius_ethother1")
+      ? window.CONSTANT_STAKING_DEFI_ABI
+      : k.startsWith("constant_staking_dypius_avaxother1")
       ? window.CONSTANT_STAKING_DEFI_ABI
       : k.startsWith("constant_stakingnew_newavax2")
       ? window.CONSTANT_STAKINGNEW_ABI

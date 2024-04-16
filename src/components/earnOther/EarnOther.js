@@ -28,9 +28,15 @@ const EarnOther = ({
   const [totalTvl, settotalTvl] = useState(0);
   const [totalTvlETH, settotalTvlETH] = useState(0);
   const [totalTvlBNB, settotalTvlBNB] = useState(0);
+  const [totalTvlAVAX, settotalTvlAVAX] = useState(0);
+  const [count, setCount] = useState(0);
+
+
 
   const [wbnbPrice, setWbnbPrice] = useState(0);
   const [ethPrice, setEthPrice] = useState(0);
+  const [avaxPrice, setAvaxPrice] = useState(0);
+
 
   const { BigNumber } = window;
 
@@ -55,9 +61,19 @@ const EarnOther = ({
       });
   };
 
+  const getAvaxPrice = async () => {
+    await axios
+      .get("https://api.dyp.finance/api/the_graph_avax_v2")
+      .then((data) => {
+        setAvaxPrice(data.data.the_graph_avax_v2.usd_per_eth);
+      });
+  };
+
   const fetchTotalTvl = async () => {
     const staking = window.constant_staking_dypius_bscother1;
     const staking_eth = window.constant_staking_dypius_ethother1;
+    const staking_avax = window.constant_staking_dypius_avaxother1;
+
 
     const wbnbContract = new window.bscWeb3.eth.Contract(
       window.TOKEN_ABI,
@@ -68,6 +84,11 @@ const EarnOther = ({
       window.config.reward_token_dypius_base_address
     );
 
+    const wavaxContract = new window.avaxWeb3.eth.Contract(
+      window.TOKEN_ABI,
+      window.config.wavax_address
+    );
+
     const tvl = await wbnbContract.methods
       .balanceOf(staking._address)
       .call()
@@ -75,6 +96,7 @@ const EarnOther = ({
         console.log(e);
         return 0;
       });
+
     const tvl_eth = await baseContract.methods
       .balanceOf(staking_eth._address)
       .call()
@@ -83,24 +105,40 @@ const EarnOther = ({
         return 0;
       });
 
+      const tvl_avax = await wavaxContract.methods
+      .balanceOf(staking_avax._address)
+      .call()
+      .catch((e) => {
+        console.log(e);
+        return 0;
+      });
+
+
     const tvlFormatted = new BigNumber(tvl).div(1e18).toFixed(4);
     const tvlEthFormatted = new BigNumber(tvl_eth).div(1e18).toFixed(4);
-    if (wbnbPrice !== 0 && ethPrice !== 0) {
+    const tvlAvaxFormatted = new BigNumber(tvl_avax).div(1e18).toFixed(4);
+
+    if (wbnbPrice !== 0 && ethPrice !== 0 && avaxPrice!==0) {
       const finalTvl = tvlFormatted * wbnbPrice;
       const finalEthTvl = tvlEthFormatted * ethPrice;
+      const finalAvaxTvl = tvlAvaxFormatted * avaxPrice;
+
       settotalTvlETH(finalEthTvl);
       settotalTvlBNB(finalTvl);
-      settotalTvl(Number(finalTvl) + Number(finalEthTvl));
+      settotalTvlAVAX(finalAvaxTvl);
+
+      settotalTvl(Number(finalTvl) + Number(finalEthTvl)+ Number(finalAvaxTvl));
     }
   };
 
   useEffect(() => {
     fetchTotalTvl();
-  }, [wbnbPrice, ethPrice]);
+  }, [wbnbPrice, ethPrice, avaxPrice,count]);
 
   useEffect(() => {
     getBSCPrice();
     getETHPrice();
+    getAvaxPrice()
   }, []);
 
   return (
@@ -141,6 +179,8 @@ const EarnOther = ({
         isPremium={isPremium}
         totalTvlBNB={totalTvlBNB}
         totalTvlETH={totalTvlETH}
+        totalTvlAVAX={totalTvlAVAX}
+        onRefreshTvl={()=>{setCount(count+1)}}
       />
     </div>
   );
