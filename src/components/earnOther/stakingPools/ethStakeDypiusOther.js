@@ -43,7 +43,7 @@ const StakeDypiusEthOther = ({
   maximumDeposit,
   poolCap,
   livePremiumOnly,
-  isPremium,
+  isPremium,onRefreshTvl
 }) => {
   let {
     reward_token_dypius_base,
@@ -492,7 +492,9 @@ const StakeDypiusEthOther = ({
         setdepositLoading(false);
         setdepositStatus("success");
         refreshBalance();
-        getBalance()
+        getBalance();
+        onRefreshTvl();
+
         setTimeout(() => {
           setdepositAmount("");
           setdepositStatus("initial");
@@ -528,6 +530,8 @@ const StakeDypiusEthOther = ({
           setwithdrawLoading(false);
           setwithdrawStatus("success");
           refreshBalance();
+          onRefreshTvl();
+
           setTimeout(() => {
             setwithdrawStatus("initial");
             setwithdrawAmount("");
@@ -565,6 +569,8 @@ const StakeDypiusEthOther = ({
         setwithdrawLoading(false);
         setwithdrawStatus("success");
         refreshBalance();
+        onRefreshTvl();
+
         setTimeout(() => {
           setwithdrawStatus("initial");
           setwithdrawAmount("");
@@ -958,8 +964,7 @@ const StakeDypiusEthOther = ({
             <div
               className={`d-flex flex-column w-100 gap-1 ${
                 (chainId !== "8453" ||
-                  !is_wallet_connected ||
-                  (!isPremium && livePremiumOnly)) &&
+                  !is_wallet_connected) &&
                 "blurrypool"
               } `}
             >
@@ -1000,7 +1005,7 @@ const StakeDypiusEthOther = ({
                 </div>
                 <div className="d-flex gap-1 align-items-baseline">
                   <span className="bal-smallTxt">Allowance Left:</span>
-                  <span className="bal-bigTxt2">{amountLeft} WETH</span>
+                  <span className="bal-bigTxt2">{getFormattedNumber(amountLeft)} WETH</span>
                 </div>
                 </div>
               </div>
@@ -1110,8 +1115,7 @@ const StakeDypiusEthOther = ({
                 <div
                   className={`d-flex flex-column w-100 gap-1 ${
                     (chainId !== "8453" ||
-                      !is_wallet_connected ||
-                      (!isPremium && livePremiumOnly)) &&
+                      !is_wallet_connected ) &&
                     "blurrypool"
                   } `}
                 >
@@ -1120,7 +1124,7 @@ const StakeDypiusEthOther = ({
                       <div className="d-flex flex-column align-items-baseline">
                         <span className="bal-smallTxt">Rewards</span>
                         <span className="bal-bigTxt2">
-                          {getFormattedNumber(pendingDivs)} WETH
+                          {getFormattedNumber(pendingDivs,6)} WETH
                         </span>
                       </div>
                       <button
@@ -1259,9 +1263,7 @@ const StakeDypiusEthOther = ({
               </div>
             </div>
             {is_wallet_connected &&
-              chainId === "8453" &&
-              ((isPremium && livePremiumOnly) ||
-                (!isPremium && !livePremiumOnly)) && (
+              chainId === "8453"  && (
                 <button
                   disabled={
                     (depositAmount === "" || depositLoading === true || canStake === false)
@@ -1323,8 +1325,7 @@ const StakeDypiusEthOther = ({
             <div
               className={`d-flex flex-column w-100 gap-1 ${
                 (chainId !== "8453" ||
-                  !is_wallet_connected ||
-                  (!isPremium && livePremiumOnly)) &&
+                  !is_wallet_connected) &&
                 "blurrypool"
               } `}
             >
@@ -1415,8 +1416,7 @@ const StakeDypiusEthOther = ({
             <div
               className={`d-flex flex-column w-100 gap-1 ${
                 (chainId !== "8453" ||
-                  !is_wallet_connected ||
-                  (!isPremium && livePremiumOnly)) &&
+                  !is_wallet_connected ) &&
                 "blurrypool"
               } `}
             >
@@ -1425,7 +1425,7 @@ const StakeDypiusEthOther = ({
                   <div className="d-flex flex-column align-items-baseline">
                     <span className="bal-smallTxt">Rewards</span>
                     <span className="bal-bigTxt2">
-                      {getFormattedNumber(pendingDivs)} WETH
+                      {getFormattedNumber(pendingDivs,6)} WETH
                     </span>
                   </div>
                   <button
@@ -1575,16 +1575,7 @@ const StakeDypiusEthOther = ({
           >
             Change Network
           </button>
-        ) : !isPremium && livePremiumOnly ? (
-          <button
-            className="connectbtn btn m-auto"
-            onClick={() => {
-              handleNavigateToPlans();
-            }}
-          >
-            Become Premium
-          </button>
-        ) : (
+        )  : (
           <></>
         )}
       </div>

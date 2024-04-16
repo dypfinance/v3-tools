@@ -10,6 +10,7 @@ import { ClickAwayListener } from "@material-ui/core";
 import { handleSwitchNetworkhook } from "../../../functions/hooks";
 import axios from "axios";
 import Modal from "../../Modal/Modal";
+import { useHistory } from "react-router-dom";
 
 const StakeDypiusAvaxOther = ({
   selectedPool,
@@ -38,10 +39,12 @@ const StakeDypiusAvaxOther = ({
   earlyFee,
   maximumDeposit,
   poolCap,
-  userCurencyBalance,
+  totalTvl,
+  livePremiumOnly,
+  isPremium,onRefreshTvl
 }) => {
   let {
-    reward_token_dypius_bsc,
+    reward_token_wavax,
     BigNumber,
     alertify,
     reward_token_idyp,
@@ -115,6 +118,9 @@ const StakeDypiusAvaxOther = ({
   const [cliffTime, setcliffTime] = useState("");
   const [stakingTime, setstakingTime] = useState("");
   const [depositedTokens, setdepositedTokens] = useState("");
+  const [canStake, setCanStake] = useState(true);
+  const [amountLeft, setamountLeft] = useState(500);
+
   const [lastClaimedTime, setlastClaimedTime] = useState("");
   const [reInvestLoading, setreInvestLoading] = useState(false);
   const [reInvestStatus, setreInvestStatus] = useState("initial");
@@ -129,6 +135,8 @@ const StakeDypiusAvaxOther = ({
   const [coinbase2, setcoinbase] = useState(
     "0x0000000000000000000000000000000000000111"
   );
+  const [maxDepositAllowed, setmaxDepositAllowed] = useState(0);
+
   const [tvl, settvl] = useState("");
   const [referralFeeEarned, setreferralFeeEarned] = useState("");
   const [stakingOwner, setstakingOwner] = useState(null);
@@ -143,6 +151,7 @@ const StakeDypiusAvaxOther = ({
   const [disburseDuration, setdisburseDuration] = useState("");
   const [tvlDyps, setsettvlDyps] = useState(0);
   const [settotal_stakers, setsettotal_stakers] = useState("");
+  const [wavaxPrice, setWavaxPrice] = useState(0);
 
   const [show, setshow] = useState(false);
   const [showWithdrawModal, setshowWithdrawModal] = useState(false);
@@ -167,6 +176,7 @@ const StakeDypiusAvaxOther = ({
   const [maxDepositTooltip, setMaxDepositTooltip] = useState(false);
   const [approvedAmount, setapprovedAmount] = useState("0.00");
   const [earlyWithdrawTooltip, setEarlyWithdrawTooltip] = useState(false);
+  const navigate = useHistory();
 
   const poolCapClose = () => {
     setPoolCapTooltip(false);
@@ -240,6 +250,14 @@ const StakeDypiusAvaxOther = ({
     setpopup(false);
   };
 
+  const getAvaxPrice = async () => {
+    await axios
+      .get("https://api.dyp.finance/api/the_graph_avax_v2")
+      .then((data) => {
+        setWavaxPrice(data.data.the_graph_avax_v2.usd_per_eth);
+      });
+  };
+
   const getBalance = async () => {
     try {
       let TOKEN_ABI = window.ERC20_ABI;
@@ -278,7 +296,7 @@ const StakeDypiusAvaxOther = ({
     //Calculate APY
 
     try {
-      let _bal = reward_token_dypius_bsc.balanceOf(coinbase);
+      let _bal = reward_token_wavax.balanceOf(coinbase);
       let _pDivs = staking.getTotalPendingDivs(coinbase);
 
       let _tEarned = staking.totalEarnedTokens(coinbase);
@@ -289,7 +307,7 @@ const StakeDypiusAvaxOther = ({
 
       let _lClaimTime = staking.lastClaimedTime(coinbase);
 
-      let _tvl = reward_token_dypius_bsc.balanceOf(staking._address);
+      let _tvl = reward_token_wavax.balanceOf(staking._address);
 
       let _rFeeEarned = staking.totalReferralFeeEarned(coinbase);
 
@@ -374,9 +392,17 @@ const StakeDypiusAvaxOther = ({
         .div(1e18)
         .toString(10);
 
+      const amountLeftToStake = 500 - Number(depositedTokens_formatted);
+      setamountLeft(amountLeftToStake);
+      if (Number(depositedTokens_formatted) === 500) {
+        setCanStake(false);
+        seterrorMsg("Maximum deposit per wallet reached!");
+      }
+
       setdepositedTokens(depositedTokens_formatted);
 
       setlastClaimedTime(lastClaimedTime);
+
       let tvl_formatted = new BigNumber(tvl2).div(1e18).toString(10);
 
       settvl(tvl_formatted);
@@ -405,6 +431,17 @@ const StakeDypiusAvaxOther = ({
       setdisburseDuration(disburseDuration);
     });
   };
+
+  const handleCheckAmount = (amount)=>{
+    if(Number(amount) > Number(amountLeft)) {
+      seterrorMsg("Please add a smaller amount");
+      setdepositAmount(amountLeft)
+    } else if(Number(amount) <= Number(amountLeft)) {
+      seterrorMsg("");
+      setdepositAmount(amount)
+    }
+    checkApproval(amount);
+  }
 
   useEffect(() => {
     if (coinbase !== coinbase2 && coinbase !== null && coinbase !== undefined) {
@@ -449,7 +486,7 @@ const StakeDypiusAvaxOther = ({
 
   const handleApprove = async (e) => {
     let selectedBuybackToken2 = "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7";
-
+    window.cached_contracts = Object.create(null);
     if (passivePool === false) {
       setdepositLoading(true);
 
@@ -504,6 +541,7 @@ const StakeDypiusAvaxOther = ({
           setdepositLoading(false);
           setdepositStatus("success");
           refreshBalance();
+          onRefreshTvl()
         })
         .catch((e) => {
           setdepositLoading(false);
@@ -511,7 +549,7 @@ const StakeDypiusAvaxOther = ({
           seterrorMsg(e?.message);
           setTimeout(() => {
             setdepositAmount("");
-            setdepositStatus("fail");
+            setdepositStatus("initial");
             seterrorMsg("");
           }, 10000);
         });
@@ -524,7 +562,7 @@ const StakeDypiusAvaxOther = ({
   const handleWithdraw = async (e) => {
     if (
       moment
-        .duration((Number(stakingTime) + Number(cliffTime)) * 1000 - Date.now())
+        .duration((Number(stakingTime) + 86400 * 30) * 1000 - Date.now())
         .humanize(true)
         ?.includes("ago")
     ) {
@@ -538,10 +576,11 @@ const StakeDypiusAvaxOther = ({
           setwithdrawLoading(false);
           setwithdrawStatus("success");
           refreshBalance();
+          onRefreshTvl();
           setTimeout(() => {
-            setwithdrawStatus('initial');
-            setwithdrawAmount('');
-            }, 3000);
+            setwithdrawStatus("initial");
+            setwithdrawAmount("");
+          }, 3000);
         })
         .catch((e) => {
           setwithdrawLoading(false);
@@ -556,7 +595,7 @@ const StakeDypiusAvaxOther = ({
         });
     } else if (
       !moment
-        .duration((Number(stakingTime) + Number(cliffTime)) * 1000 - Date.now())
+        .duration((Number(stakingTime) + 86400 * 30) * 1000 - Date.now())
         .humanize(true)
         ?.includes("ago")
     ) {
@@ -573,15 +612,15 @@ const StakeDypiusAvaxOther = ({
     await staking
       .unstake(amount)
       .then(() => {
-        setwithdrawLoading(false);
         setwithdrawStatus("success");
+        setwithdrawLoading(false);
         refreshBalance();
+        onRefreshTvl()
         setTimeout(() => {
-          setwithdrawStatus('initial');
-          setwithdrawAmount('');
-          setshowWithdrawModal(false)
-          }, 3000);
-
+          setwithdrawStatus("initial");
+          setwithdrawAmount("");
+          setshowWithdrawModal(false);
+        }, 3000);
       })
       .catch((e) => {
         setwithdrawLoading(false);
@@ -623,10 +662,33 @@ const StakeDypiusAvaxOther = ({
       });
   };
 
+  const getMaxDepositAllowed = async () => {
+    const stakingContract = new window.avaxWeb3.eth.Contract(
+      window.CONSTANT_STAKING_DEFI_ABI,
+      staking?._address
+    );
+    const result = await stakingContract.methods
+      .MAX_DEPOSIT()
+      .call()
+      .catch((e) => {
+        console.error(e);
+        return 0;
+      });
+    const result_formatted = new BigNumber(result).div(1e18).toFixed(0);
+    setmaxDepositAllowed(Number(result_formatted));
+  };
+
   const handleSetMaxDeposit = () => {
     const depositAmount = wavaxBalance;
-    checkApproval(depositAmount);
-    setdepositAmount(depositAmount);
+    const maxAllowed = 500;
+    if (Number(depositAmount) > maxAllowed) {
+      setdepositAmount(maxAllowed);
+      checkApproval(maxAllowed);
+      seterrorMsg("Maximum Deposit is 500 WAVAX!");
+    } else if (Number(depositAmount) <= maxAllowed) {
+      setdepositAmount(depositAmount);
+      checkApproval(depositAmount);
+    }
   };
 
   const handleSetMaxWithdraw = async (e) => {
@@ -650,9 +712,7 @@ const StakeDypiusAvaxOther = ({
   };
 
   const getApproxReturn = (depositAmount, days) => {
-    let APY = getAPY() - fee_s;
-
-    return ((depositAmount * APY) / 100 / 365) * days;
+    return ((depositAmount * apr) / 100 / 365) * days;
   };
 
   const getReferralLink = () => {
@@ -850,7 +910,13 @@ const StakeDypiusAvaxOther = ({
   useEffect(() => {
     getUsdPerDyp();
     getPriceDYP();
+    getAvaxPrice();
+    getMaxDepositAllowed();
   }, [coinbase, popup, show]);
+
+  const handleNavigateToPlans = () => {
+    navigate.push("/plans");
+  };
 
   return (
     <>
@@ -899,7 +965,7 @@ const StakeDypiusAvaxOther = ({
             <div className="info-pool-item p-2">
               <div className="d-flex justify-content-between gap-1 align-items-center">
                 <span className="info-pool-left-text">
-                  Apr{" "}
+                  APR{" "}
                   <ClickAwayListener onClickAway={aprClose}>
                     <Tooltip
                       open={aprTooltip}
@@ -919,7 +985,7 @@ const StakeDypiusAvaxOther = ({
                     </Tooltip>
                   </ClickAwayListener>
                 </span>
-                <span className="info-pool-right-text">{finalApr}%</span>
+                <span className="info-pool-right-text">{finalApr}</span>
               </div>
             </div>
             <div className="info-pool-item p-2">
@@ -942,13 +1008,7 @@ const StakeDypiusAvaxOther = ({
               <div className="d-flex justify-content-between gap-1 align-items-center">
                 <span className="info-pool-left-text">TVL</span>
                 <span className="info-pool-right-text">
-                  $
-                  {getFormattedNumber(
-                    Number(tvl) * usdPerToken === 0
-                      ? selectedPool.poolList[0].tvl
-                      : Number(tvl) * usdPerToken,
-                    2
-                  )}
+                  ${getFormattedNumber(totalTvl, 2)}
                 </span>
               </div>
             </div>
@@ -962,14 +1022,17 @@ const StakeDypiusAvaxOther = ({
               <div className="d-flex gap-1 align-items-baseline">
                 <span className="bal-smallTxt">My Balance:</span>
                 <span className="bal-bigTxt">
-                  {getFormattedNumber(wavaxBalance, 6)}
+                  {getFormattedNumber(wavaxBalance, 6)} {" "}
                   WAVAX
                 </span>
               </div>
             </div>
             <div
               className={`d-flex flex-column w-100 gap-1 ${
-                (chainId !== "43114" || !is_wallet_connected) && "blurrypool"
+                (chainId !== "43114" ||
+                  !is_wallet_connected ||
+                  (!isPremium && livePremiumOnly)) &&
+                "blurrypool"
               } `}
             >
               <div className="position-relative w-100 d-flex">
@@ -981,9 +1044,8 @@ const StakeDypiusAvaxOther = ({
                     Number(depositAmount) > 0 ? depositAmount : depositAmount
                   }
                   onChange={(e) => {
-                    setdepositAmount(e.target.value);
-                    checkApproval(e.target.value);
-                  }}
+                    handleCheckAmount(e.target.value)
+                   }}
                   name="amount_deposit"
                   id="amount_deposit"
                   key="amount_deposit"
@@ -1003,9 +1065,15 @@ const StakeDypiusAvaxOther = ({
               >
                 {errorMsg && <h6 className="errormsg m-0">{errorMsg}</h6>}
 
-                <div className="d-flex gap-1 align-items-baseline">
-                  <span className="bal-smallTxt">Approved:</span>
-                  <span className="bal-bigTxt2">{approvedAmount} WAVAX</span>
+                <div className="d-flex flex-column">
+                  <div className="d-flex gap-1 align-items-baseline">
+                    <span className="bal-smallTxt">Approved:</span>
+                    <span className="bal-bigTxt2">{approvedAmount} WAVAX</span>
+                  </div>
+                  <div className="d-flex gap-1 align-items-baseline">
+                    <span className="bal-smallTxt">Allowance Left:</span>
+                    <span className="bal-bigTxt2">{ getFormattedNumber(amountLeft) } WAVAX</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1039,7 +1107,7 @@ const StakeDypiusAvaxOther = ({
                   <div className="d-flex align-items-center gap-2">
                     <span className="bal-smallTxt">Available Quota:</span>
                     <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                      8 AVAX
+                      {getFormattedNumber(poolCap - tvl, 0)} WAVAX
                       <ClickAwayListener onClickAway={quotaClose}>
                         <Tooltip
                           open={quotaTooltip}
@@ -1063,7 +1131,7 @@ const StakeDypiusAvaxOther = ({
                   <div className="d-flex align-items-center gap-2">
                     <span className="bal-smallTxt">Maximum deposit:</span>
                     <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                      {getFormattedNumber(maximumDeposit, 2)} WAVAX
+                      {getFormattedNumber(maxDepositAllowed, 2)} WAVAX
                       <ClickAwayListener onClickAway={maxDepositClose}>
                         <Tooltip
                           open={maxDepositTooltip}
@@ -1113,7 +1181,9 @@ const StakeDypiusAvaxOther = ({
                 <span className="deposit-popup-txt">Reinvest</span>
                 <div
                   className={`d-flex flex-column w-100 gap-1 ${
-                    (chainId !== "43114" || !is_wallet_connected) &&
+                    (chainId !== "43114" ||
+                      !is_wallet_connected ||
+                      (!isPremium && livePremiumOnly)) &&
                     "blurrypool"
                   } `}
                 >
@@ -1122,7 +1192,7 @@ const StakeDypiusAvaxOther = ({
                       <div className="d-flex flex-column align-items-baseline">
                         <span className="bal-smallTxt">Rewards</span>
                         <span className="bal-bigTxt2">
-                          {getFormattedNumber(pendingDivs)} WAVAX
+                          {getFormattedNumber(pendingDivs,6)} WAVAX
                         </span>
                       </div>
                       <button
@@ -1207,7 +1277,7 @@ const StakeDypiusAvaxOther = ({
                   <div className="d-flex align-items-center gap-2">
                     <span className="bal-smallTxt">Pool fee:</span>
                     <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                      {fee_s ?? 0}%
+                      0%
                       <ClickAwayListener onClickAway={poolFeeClose}>
                         <Tooltip
                           open={poolFeeTooltip}
@@ -1235,108 +1305,77 @@ const StakeDypiusAvaxOther = ({
                     <a
                       target="_blank"
                       rel="noopener noreferrer"
-                      href={`${window.config.bscscan_baseURL}address/${selectedPool?.poolList[0]?.tokenAddress}`}
+                      href={`${window.config.bscscan_baseURL}address/${staking?._address}`}
                       className="stats-link2 text-decoration-underline"
                     >
-                      {shortAddress(selectedPool?.poolList[0]?.tokenAddress)}{" "}
+                      {shortAddress(staking?._address)}{" "}
                       {/* <img src={statsLinkIcon} alt="" /> */}
                     </a>
                   </div>
                   <div className="d-flex align-items-center gap-1">
                     <span className="bal-smallTxt">Start date:</span>
                     <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                      09 Nov 2023{" "}
-                      {/* <ClickAwayListener onClickAway={startDateClose}>
-                      <Tooltip
-                        open={startDateTooltip}
-                        disableFocusListener
-                        disableHoverListener
-                        disableTouchListener
-                        placement="top"
-                        title={
-                          <div className="tooltip-text">
-                            {
-                              "The date when the staking pool became available for participation."
-                            }
-                          </div>
-                        }
-                      >
-                        <img src={moreinfo} alt="" onClick={startDateOpen} />
-                      </Tooltip>
-                    </ClickAwayListener> */}
+                      16 Apr 2024{" "}
                     </span>
                   </div>
                   <div className="d-flex align-items-center gap-1">
                     <span className="bal-smallTxt">End date:</span>
                     <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                      {expiration_time}{" "}
-                      {/* <ClickAwayListener onClickAway={endDateClose}>
-                      <Tooltip
-                        open={endDateTooltip}
-                        disableFocusListener
-                        disableHoverListener
-                        disableTouchListener
-                        placement="top"
-                        title={
-                          <div className="tooltip-text">
-                            {
-                              "The date when the staking pool will no longer accept new deposits."
-                            }
-                          </div>
-                        }
-                      >
-                        <img src={moreinfo} alt="" onClick={endDateOpen} />
-                      </Tooltip>
-                    </ClickAwayListener> */}
+                      16 May 2024
                     </span>
                   </div>
                 </div>
               </div>
             </div>
-            {is_wallet_connected && chainId === "43114" && (
-              <button
-                disabled={
-                  depositAmount === "" || depositLoading === true ? true : false
-                }
-                className={`btn filledbtn ${
-                  depositAmount === "" &&
-                  depositStatus === "initial" &&
-                  "disabled-btn"
-                } ${
-                  depositStatus === "deposit" || depositStatus === "success"
-                    ? "success-button"
-                    : depositStatus === "fail"
-                    ? "fail-button"
-                    : null
-                } d-flex justify-content-center align-items-center gap-2 m-auto`}
-                onClick={() => {
-                  depositStatus === "deposit"
-                    ? handleStake()
-                    : depositStatus === "initial" && depositAmount !== ""
-                    ? handleApprove()
-                    : console.log("");
-                }}
-                style={{ width: "fit-content" }}
-              >
-                {" "}
-                {depositLoading ? (
-                  <div
-                    class="spinner-border spinner-border-sm text-light"
-                    role="status"
-                  >
-                    <span class="visually-hidden">Loading...</span>
-                  </div>
-                ) : depositStatus === "initial" ? (
-                  <>Approve</>
-                ) : depositStatus === "deposit" ? (
-                  <>Deposit</>
-                ) : depositStatus === "success" ? (
-                  <>Success</>
-                ) : (
-                  <>Failed</>
-                )}
-              </button>
-            )}
+            {is_wallet_connected &&
+              chainId === "43114" &&
+              ((isPremium && livePremiumOnly) ||
+                (!isPremium && !livePremiumOnly)) && (
+                <button
+                  disabled={
+                    depositAmount === "" || depositLoading === true
+                      ? true
+                      : false
+                  }
+                  className={`btn filledbtn ${
+                    depositAmount === "" &&
+                    depositStatus === "initial" &&
+                    "disabled-btn"
+                  } ${
+                    depositStatus === "deposit" || depositStatus === "success"
+                      ? "success-button"
+                      : depositStatus === "fail"
+                      ? "fail-button"
+                      : null
+                  } d-flex justify-content-center align-items-center gap-2 m-auto`}
+                  onClick={() => {
+                    depositStatus === "deposit"
+                      ? handleStake()
+                      : depositStatus === "initial" && depositAmount !== ""
+                      ? handleApprove()
+                      : console.log("");
+                  }}
+                  style={{ width: "fit-content" }}
+                >
+                  {" "}
+                  {depositLoading ? (
+                    <div
+                      class="spinner-border spinner-border-sm text-light"
+                      role="status"
+                    >
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                  ) : depositStatus === "initial" ? (
+                    <>Approve</>
+                  ) : depositStatus === "deposit" ? (
+                    <>Deposit</>
+                  ) : depositStatus === "success" ? (
+                    <>Success</>
+                  ) : (
+                    <>Failed</>
+                  )}
+                </button>
+              )}
           </div>
         ) : (
           <div className="d-flex flex-column w-100 gap-2">
@@ -1352,7 +1391,10 @@ const StakeDypiusAvaxOther = ({
             </div>
             <div
               className={`d-flex flex-column w-100 gap-1 ${
-                (chainId !== "43114" || !is_wallet_connected) && "blurrypool"
+                (chainId !== "43114" ||
+                  !is_wallet_connected ||
+                  (!isPremium && livePremiumOnly)) &&
+                "blurrypool"
               } `}
             >
               <div className="position-relative w-100 d-flex">
@@ -1378,24 +1420,24 @@ const StakeDypiusAvaxOther = ({
                 {errorMsg3 && <h6 className="errormsg m-0">{errorMsg3}</h6>}
                 {!moment
                   .duration(
-                    (Number(stakingTime) + Number(cliffTime)) * 1000 -
-                      Date.now()
+                    (Number(stakingTime) + 86400 * 30) * 1000 - Date.now()
                   )
                   .humanize(true)
-                  ?.includes("ago") && (
-                  <div className="d-flex gap-1 align-items-baseline">
-                    <span className="bal-smallTxt">Unlocks:</span>
-                    <span className="bal-bigTxt2">
-                      ~
-                      {moment
-                        .duration(
-                          (Number(stakingTime) + Number(cliffTime)) * 1000 -
-                            Date.now()
-                        )
-                        .humanize(true)}
-                    </span>
-                  </div>
-                )}
+                  ?.includes("ago") &&
+                  depositedTokens != "" && (
+                    <div className="d-flex gap-1 align-items-baseline">
+                      <span className="bal-smallTxt">Unlocks:</span>
+                      <span className="bal-bigTxt2">
+                        ~
+                        {moment
+                          .duration(
+                            (Number(stakingTime) + 86400 * 30) * 1000 -
+                              Date.now()
+                          )
+                          .humanize(true)}
+                      </span>
+                    </div>
+                  )}
               </div>
               <button
                 disabled={
@@ -1410,8 +1452,8 @@ const StakeDypiusAvaxOther = ({
                   //   ? "fail-button"
                   //   : withdrawStatus === "success"
                   //   ? "success-button"
-                    // :
-                     (withdrawAmount === "" && withdrawStatus === "initial") 
+                  // :
+                  withdrawAmount === "" && withdrawStatus === "initial"
                     ? "disabled-btn"
                     : null
                 } w-50 d-flex align-items-center justify-content-center m-auto`}
@@ -1433,7 +1475,8 @@ const StakeDypiusAvaxOther = ({
                   <>Success</>
                 ) : (
                   <>Withdraw</>
-                )} */} Withdraw
+                )} */}{" "}
+                Withdraw
               </button>
             </div>
             <div className="separator my-2"></div>
@@ -1441,7 +1484,10 @@ const StakeDypiusAvaxOther = ({
             <span className="deposit-popup-txt">Earnings</span>
             <div
               className={`d-flex flex-column w-100 gap-1 ${
-                (chainId !== "43114" || !is_wallet_connected) && "blurrypool"
+                (chainId !== "43114" ||
+                  !is_wallet_connected ||
+                  (!isPremium && livePremiumOnly)) &&
+                "blurrypool"
               } `}
             >
               <div className="info-pool-wrapper p-3 w-100">
@@ -1449,7 +1495,7 @@ const StakeDypiusAvaxOther = ({
                   <div className="d-flex flex-column align-items-baseline">
                     <span className="bal-smallTxt">Rewards</span>
                     <span className="bal-bigTxt2">
-                      {getFormattedNumber(pendingDivs)} WAVAX
+                      {getFormattedNumber(pendingDivs,6)} WAVAX
                     </span>
                   </div>
                   <button
@@ -1529,7 +1575,7 @@ const StakeDypiusAvaxOther = ({
                   <div className="d-flex align-items-center gap-2">
                     <span className="bal-smallTxt">Pool fee:</span>
                     <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                      {fee_s ?? 0}%
+                      0%
                       <ClickAwayListener onClickAway={poolFeeClose}>
                         <Tooltip
                           open={poolFeeTooltip}
@@ -1557,25 +1603,23 @@ const StakeDypiusAvaxOther = ({
                     <a
                       target="_blank"
                       rel="noopener noreferrer"
-                      href={`${window.config.bscscan_baseURL}address/${selectedPool?.poolList[0]?.tokenAddress}`}
+                      href={`${window.config.bscscan_baseURL}address/${staking?._address}`}
                       className="stats-link2 text-decoration-underline"
                     >
-                      {shortAddress(selectedPool?.poolList[0]?.tokenAddress)}{" "}
+                      {shortAddress(staking?._address)}{" "}
                       {/* <img src={statsLinkIcon} alt="" /> */}
                     </a>
                   </div>
                   <div className="d-flex align-items-center gap-1">
                     <span className="bal-smallTxt">Start date:</span>
                     <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                      09 Nov 2023{" "}
-                    
+                      16 Apr 2024{" "}
                     </span>
                   </div>
                   <div className="d-flex align-items-center gap-1">
                     <span className="bal-smallTxt">End date:</span>
                     <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                      {expiration_time}{" "}
-                   
+                      16 May 2024
                     </span>
                   </div>
                 </div>
@@ -1597,6 +1641,15 @@ const StakeDypiusAvaxOther = ({
             }}
           >
             Change Network
+          </button>
+        ) : !isPremium && livePremiumOnly ? (
+          <button
+            className="connectbtn btn m-auto"
+            onClick={() => {
+              handleNavigateToPlans();
+            }}
+          >
+            Become Premium
           </button>
         ) : (
           <></>
@@ -1634,7 +1687,11 @@ const StakeDypiusAvaxOther = ({
                     <div className="d-flex flex-column gap-1">
                       <h6 className="withsubtitle">Withdraw</h6>
                       <h6 className="withtitle2">
-                        {getFormattedNumber(withdrawAmount, 6)} WAVAX
+                        {getFormattedNumber(
+                          withdrawAmount - withdrawAmount * 0.1,
+                          6
+                        )}{" "}
+                        WAVAX
                       </h6>
                     </div>
                   </div>
