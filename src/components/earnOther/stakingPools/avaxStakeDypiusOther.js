@@ -486,7 +486,7 @@ const StakeDypiusAvaxOther = ({
 
   const handleApprove = async (e) => {
     let selectedBuybackToken2 = "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7";
-
+    window.cached_contracts = Object.create(null);
     if (passivePool === false) {
       setdepositLoading(true);
 
