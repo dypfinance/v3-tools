@@ -1107,7 +1107,7 @@ const StakeDypiusAvaxOther = ({
                   <div className="d-flex align-items-center gap-2">
                     <span className="bal-smallTxt">Available Quota:</span>
                     <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                      {getFormattedNumber(poolCap - tvl, 0)} AVAX
+                      {getFormattedNumber(poolCap - tvl, 0)} WAVAX
                       <ClickAwayListener onClickAway={quotaClose}>
                         <Tooltip
                           open={quotaTooltip}
