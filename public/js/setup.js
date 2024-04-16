@@ -2516,6 +2516,16 @@ window.config = {
   new_governanceavax_address: "0x4d3deb73df067d6466facad196b22411422909ab",
   new_governancebsc_address: "0x2cf8b55a6a492c2f8e750ad1fa4e4a858044deea",
 
+
+    //governance eth dypv2
+    new_governancedypv2_address: "0x6334a38b5df75638f005859fe642765e09488981",
+
+    //governance avax dypv2
+    new_governanceavaxdypv2_address: "0xCE27eCD1114336477CbE0a628f3749b733056626",
+
+    //governance bsc dypv2
+    new_governancebscdypv2_address: "0xa1d6178f3d96b9da85802b6abd553e2b854c7382",
+
   //bridge eth-avax
 
   token_dyp_eth_address: "0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17",
@@ -3331,6 +3341,8 @@ class NEW_GOVERNANCE {
 }
 
 window.new_governance = new NEW_GOVERNANCE();
+window.new_governancedypv2 = new NEW_GOVERNANCE("NEW_GOVERNANCEDYPV2");
+
 
 //governance avax
 
@@ -3434,6 +3446,8 @@ class NEW_GOVERNANCEAVAX {
 }
 
 window.new_governanceavax = new NEW_GOVERNANCEAVAX();
+window.new_governanceavaxdypv2 = new NEW_GOVERNANCEAVAX("NEW_GOVERNANCEAVAXDYPV2");
+
 
 class NEW_GOVERNANCEBSC {
   constructor(ticker = "NEW_GOVERNANCEBSC", token = "REWARD_TOKEN") {
@@ -3535,6 +3549,8 @@ class NEW_GOVERNANCEBSC {
 }
 
 window.new_governancebsc = new NEW_GOVERNANCEBSC();
+window.new_governancebscdypv2 = new NEW_GOVERNANCEBSC('NEW_GOVERNANCEBSCDYPV2');
+
 
 window.CONSTANT_STAKINGIDYPAVAX_1_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYPAVAX_2_ABI = window.CONSTANT_STAKING_IDYP_ABI;
@@ -37214,6 +37230,10 @@ Object.keys(window.config)
       k.startsWith("new_governance") ||
       k.startsWith("new_governanceavax") ||
       k.startsWith("new_governancebsc") ||
+
+      k.startsWith("new_governancedypv2") ||
+      k.startsWith("new_governanceavaxdypv2") ||
+      k.startsWith("new_governancebscdypv2") ||
       k.startsWith("constant_stakingold_130") ||
       k.startsWith("constant_stakingold_140") ||
       k.startsWith("buyback_stakingbsc1_1") ||
@@ -37440,6 +37460,15 @@ Object.keys(window.config)
       ? window.NEW_GOVERNANCEAVAX_ABI
       : k.startsWith("new_governancebsc")
       ? window.NEW_GOVERNANCEBSC_ABI
+
+      : k.startsWith("new_governancedypv2")
+      ? window.NEW_GOVERNANCE_ABI
+      : k.startsWith("new_governanceavaxdypv2")
+      ? window.NEW_GOVERNANCEAVAX_ABI
+      : k.startsWith("new_governancebscdypv2")
+      ? window.NEW_GOVERNANCEBSC_ABI
+
+
       : window.STAKING_ABI;
   });
 
