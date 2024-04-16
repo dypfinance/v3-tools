@@ -20,7 +20,8 @@ import StakeDypiusBscOther from "../stakingPools/bscStakeDypiusOther";
 import StakeDypiusEthOther from "../stakingPools/ethStakeDypiusOther";
 
 const EarnOtherContent = ({
-  totalTvlBNB,totalTvlETH,
+  totalTvlBNB,
+  totalTvlETH,
   aggregatorPools,
   coinbase,
   the_graph_result,
@@ -47,6 +48,7 @@ const EarnOtherContent = ({
   onCloseCard,
   totalTvl,
   isPremium,
+  totalTvlAVAX,onRefreshTvl
 }) => {
   const windowSize = useWindowSize();
 
@@ -68,52 +70,16 @@ const EarnOtherContent = ({
     background: `#1A1A36`,
   };
 
-  const options = [
-    {
-      title: "Staking",
-      content:
-        "Staking ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ut ipsum quis ligula commodo sollicitudin ut dictum augue. Curabitur massa justo",
-      tvl: 244533.54234234,
-    },
-    // {
-    //   title: "Buyback",
-    //   content:
-    //     "Buyback ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ut ipsum quis ligula commodo sollicitudin ut dictum augue. Curabitur massa justo",
-    //   tvl: 53312.422334,
-    // },
-    {
-      title: "Vault",
-      content:
-        "Vault ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ut ipsum quis ligula commodo sollicitudin ut dictum augue. Curabitur massa justo",
-      tvl: 1122553.74424,
-    },
-    {
-      title: "Farming",
-      content:
-        "Farming ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ut ipsum quis ligula commodo sollicitudin ut dictum augue. Curabitur massa justo",
-    },
-  ];
-
   const cloneArray = aggregatorPools;
 
-  const [stake, setStake] = useState("allchains");
-  const [option, setOption] = useState(routeOption);
   const [showDetails, setshowDetails] = useState(false);
   const [cardIndex, setcardIndex] = useState(777);
   const [selectedTab, setselectedTab] = useState("deposit");
   const [selectedBtn, setselectedBtn] = useState("flexible");
   const [selectedPool, setselectedPool] = useState([]);
-
   const [listStyle, setListStyle] = useState("list");
-  const [myStakes, setMyStakes] = useState(false);
-  const [expiredPools, setExpiredPools] = useState(false);
   const [allPools, setallPools] = useState([]);
-
-  const [tvl, setTvl] = useState();
-  const [ethApr, setEthApr] = useState();
   const [bnbApr, setBnbApr] = useState();
-  const [avaxApr, setavaxApr] = useState();
-  const [count, setCount] = useState(0);
   const [query, setQuery] = useState("");
   const [sorting, setSorting] = useState("");
   const [livePremiumOnly, setlivePremiumOnly] = useState(true);
@@ -131,22 +97,6 @@ const EarnOtherContent = ({
         console.log(result, allPools);
       }
     }
-  };
-
-  const fetchBnbPool = async () => {
-    await axios
-      .get("https://api.dyp.finance/api/the_graph_bsc_v2")
-      .then((res) => {
-        let temparray = Object.entries(res.data.the_graph_bsc_v2.lp_data);
-        let bnbpool = temparray.find((item) => {
-          return (
-            item[0] ===
-            "0x1bc61d08a300892e784ed37b2d0e63c85d1d57fb-0x5bc3a80a1f2c4fb693d9dddcebbb5a1b5bb15d65"
-          );
-        });
-        setBnbApr(bnbpool[1].apy_percent);
-      })
-      .catch((err) => console.error(err));
   };
 
   // console.log(allPools)
@@ -216,12 +166,10 @@ const EarnOtherContent = ({
   }, [poolClicked, poolClickedType, allPools]);
 
   const handleManageDetails = (obj, index) => {
-    if (obj.name.toLowerCase() === "bnb" || obj.name.toLowerCase() === "eth") {
-      setshowDetails(!showDetails);
-      setcardIndex(!showDetails ? index : 777);
-      setselectedBtn(obj.lockTime);
-      setselectedPool(obj);
-    }
+    setshowDetails(!showDetails);
+    setcardIndex(!showDetails ? index : 777);
+    setselectedBtn(obj.lockTime);
+    setselectedPool(obj);
   };
 
   return (
@@ -570,9 +518,7 @@ const EarnOtherContent = ({
                       lockTime={item.lockType}
                       expired={item.no}
                       isNewPool={true}
-                      isComingSoon={
-                        (item.name.toLowerCase() === "eth" || item.name.toLowerCase() === "bnb") ? false : true
-                      }
+                      isComingSoon={false}
                       isHot={
                         item.tags.find((obj) => {
                           return obj === "Hot";
@@ -702,13 +648,14 @@ const EarnOtherContent = ({
                     livePremiumOnly={false}
                     isPremium={isPremium}
                     totalTvl={totalTvlBNB}
+                    onRefreshTvl={onRefreshTvl}
                   />
                 ) : selectedPool.id === "avaxChainPool" ? (
                   <StakeDypiusAvaxOther
                     selectedTab={selectedTab}
                     selectedBtn={selectedBtn}
                     selectedPool={selectedPool}
-                    staking={window.constant_staking_dypius_avax1}
+                    staking={window.constant_staking_dypius_avaxother1}
                     coinbase={coinbase}
                     the_graph_result={the_graph_result}
                     expiration_time={"09 Nov 2024"}
@@ -730,6 +677,10 @@ const EarnOtherContent = ({
                     }}
                     is_wallet_connected={isConnected}
                     userCurencyBalance={userCurencyBalance}
+                    isPremium={isPremium}
+                    totalTvl={totalTvlAVAX}
+                    livePremiumOnly={livePremiumOnly}
+                    onRefreshTvl={onRefreshTvl}
                   />
                 ) : (
                   <StakeDypiusEthOther
@@ -760,7 +711,7 @@ const EarnOtherContent = ({
                     livePremiumOnly={livePremiumOnly}
                     isPremium={isPremium}
                     totalTvl={totalTvlETH}
-
+                    onRefreshTvl={onRefreshTvl}
                   />
                 )}
 

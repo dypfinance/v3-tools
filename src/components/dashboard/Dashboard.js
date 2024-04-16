@@ -34,6 +34,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import moreinfo from "../FARMINNG/assets/more-info.svg";
 import StakeDypiusBscOther from "../earnOther/stakingPools/bscStakeDypiusOther";
 import StakeDypiusEthOther from "../earnOther/stakingPools/ethStakeDypiusOther";
+import StakeDypiusAvaxOther from "../earnOther/stakingPools/avaxStakeDypiusOther";
 import CountDown from "react-countdown";
 
 const Dashboard = ({
@@ -54,7 +55,16 @@ const Dashboard = ({
   const [topPools, setTopPools] = useState([]);
   const [cawsLandCard, setCawsLandCard] = useState([]);
   const [theBnbPool, setTheBnbPool] = useState({});
-  const [wbnbPrice, setWbnbPrice] = useState();
+  const [totalTvl, settotalTvl] = useState(0);
+  const [totalTvlETH, settotalTvlETH] = useState(0);
+  const [totalTvlBNB, settotalTvlBNB] = useState(0);
+  const [totalTvlAVAX, settotalTvlAVAX] = useState(0);
+  const [count, setCount] = useState(0);
+
+  const [wbnbPrice, setWbnbPrice] = useState(0);
+  const [ethPrice, setEthPrice] = useState(0);
+  const [avaxPrice, setAvaxPrice] = useState(0);
+
   const [selectedTab, setselectedTab] = useState("deposit");
   const [selectedBtn, setselectedBtn] = useState("flexible");
   const [selectedPool, setselectedPool] = useState([]);
@@ -73,7 +83,9 @@ const Dashboard = ({
   const [loading, setLoading] = useState(true);
   const [userPools, setuserPools] = useState([]);
   const wbsc_address = "0x2170Ed0880ac9A755fd29B2688956BD959F933F8";
-  let premiumDay = new Date("2024-04-13T17:00:00.000+02:00");
+  let premiumDay = new Date("2024-04-17T15:00:00.000+02:00");
+
+  const { BigNumber } = window;
 
   const fetchUserPools = async () => {
     if (coinbase && coinbase.includes("0x")) {
@@ -83,6 +95,92 @@ const Dashboard = ({
           return data.data.PoolsUserIn;
         });
       setuserPools(result);
+    }
+  };
+
+  const getBSCPrice = async () => {
+    await axios
+      .get("https://api.dyp.finance/api/the_graph_bsc_v2")
+      .then((data) => {
+        setWbnbPrice(data.data.the_graph_bsc_v2.usd_per_eth);
+      });
+  };
+
+  const getETHPrice = async () => {
+    await axios
+      .get("https://api.dyp.finance/api/the_graph_eth_v2")
+      .then((data) => {
+        setEthPrice(data.data.the_graph_eth_v2.usd_per_eth);
+      });
+  };
+
+  const getAvaxPrice = async () => {
+    await axios
+      .get("https://api.dyp.finance/api/the_graph_avax_v2")
+      .then((data) => {
+        setAvaxPrice(data.data.the_graph_avax_v2.usd_per_eth);
+      });
+  };
+
+  const fetchTotalTvl = async () => {
+    const staking = window.constant_staking_dypius_bscother1;
+    const staking_eth = window.constant_staking_dypius_ethother1;
+    const staking_avax = window.constant_staking_dypius_avaxother1;
+
+    const wbnbContract = new window.bscWeb3.eth.Contract(
+      window.TOKEN_ABI,
+      window.config.reward_token_wbnb_address
+    );
+    const baseContract = new window.baseWeb3.eth.Contract(
+      window.TOKEN_ABI,
+      window.config.reward_token_dypius_base_address
+    );
+
+    const wavaxContract = new window.avaxWeb3.eth.Contract(
+      window.TOKEN_ABI,
+      window.config.wavax_address
+    );
+
+    const tvl = await wbnbContract.methods
+      .balanceOf(staking._address)
+      .call()
+      .catch((e) => {
+        console.log(e);
+        return 0;
+      });
+
+    const tvl_eth = await baseContract.methods
+      .balanceOf(staking_eth._address)
+      .call()
+      .catch((e) => {
+        console.log(e);
+        return 0;
+      });
+
+    const tvl_avax = await wavaxContract.methods
+      .balanceOf(staking_avax._address)
+      .call()
+      .catch((e) => {
+        console.log(e);
+        return 0;
+      });
+
+    const tvlFormatted = new BigNumber(tvl).div(1e18).toFixed(4);
+    const tvlEthFormatted = new BigNumber(tvl_eth).div(1e18).toFixed(4);
+    const tvlAvaxFormatted = new BigNumber(tvl_avax).div(1e18).toFixed(4);
+
+    if (wbnbPrice !== 0 && ethPrice !== 0 && avaxPrice !== 0) {
+      const finalTvl = tvlFormatted * wbnbPrice;
+      const finalEthTvl = tvlEthFormatted * ethPrice;
+      const finalAvaxTvl = tvlAvaxFormatted * avaxPrice;
+
+      settotalTvlETH(finalEthTvl);
+      settotalTvlBNB(finalTvl);
+      settotalTvlAVAX(finalAvaxTvl);
+
+      // settotalTvl(
+      //   Number(finalTvl) + Number(finalEthTvl) + Number(finalAvaxTvl)
+      // );
     }
   };
 
@@ -176,6 +274,23 @@ const Dashboard = ({
         return item.name.toLowerCase() === "eth";
       });
 
+      const avaxAggregatorPool = aggregatorPools.find((item) => {
+        return item.name.toLowerCase() === "avax";
+      });
+
+      const avaxAggregatorPool_formatted = [avaxAggregatorPool].map((item) => {
+        return {
+          ...item,
+          chain: "avax",
+          type: "staking",
+          tvl_usd: item.poolList[0].tvl,
+          id: item.poolList[0].contractAddress,
+          apy_percent: item.poolList[0].aprPercent,
+          lock_time: item.poolList[0].lockTime + " days",
+          pair_name: item.name,
+        };
+      });
+
       const ethAggregatorPool_formatted = [ethAggregatorPool].map((item) => {
         return {
           ...item,
@@ -261,6 +376,7 @@ const Dashboard = ({
         ...sortedAprsBnb,
         ...bnbAggregatorPool_formatted,
         ...ethAggregatorPool_formatted,
+        ...avaxAggregatorPool_formatted,
         finalBnbFarmingpool,
       ].sort(function (a, b) {
         return b.tvl_usd - a.tvl_usd;
@@ -389,6 +505,15 @@ const Dashboard = ({
     height: windowSize.width < 500 ? "480px" : "auto",
     background: `#1A1A36`,
   };
+  useEffect(() => {
+    fetchTotalTvl();
+  }, [wbnbPrice, ethPrice, avaxPrice, count]);
+
+  useEffect(() => {
+    getBSCPrice();
+    getETHPrice();
+    getAvaxPrice();
+  }, []);
 
   return (
     <>
@@ -518,7 +643,16 @@ const Dashboard = ({
                               tokenName={item.pair_name}
                               apr={item.apy_percent + "%"}
                               tvl={
-                                item.tvl_usd === "--"
+                                item.type === "staking" &&
+                                item.pair_name === "ETH"
+                                  ? "$" +getFormattedNumber(totalTvlETH)
+                                  : item.type === "staking" &&
+                                    item.pair_name === "BNB"
+                                  ? "$" +getFormattedNumber(totalTvlBNB)
+                                  : item.pair_name === "AVAX" &&
+                                    item.type === "staking"
+                                  ? "$" +getFormattedNumber(totalTvlAVAX)
+                                  : item.tvl_usd === "--"
                                   ? item.tvl_usd
                                   : "$" + getFormattedNumber(item.tvl_usd)
                               }
@@ -534,6 +668,8 @@ const Dashboard = ({
                                   ? "bnbChain.svg"
                                   : item.pair_name === "ETH"
                                   ? "ethereum.svg"
+                                  : item.pair_name === "AVAX"
+                                  ? "avax.svg"
                                   : "newCawsLogo.png"
                               }
                               onShowDetailsClick={() => {
@@ -556,7 +692,6 @@ const Dashboard = ({
                         );
                       })
                     ) : (
-                    
                       <div
                         className="w-100 d-flex justify-content-center align-items-center mt-5"
                         style={{ gridColumn: "1 / 3" }}
@@ -565,36 +700,35 @@ const Dashboard = ({
                       </div>
                     )}
                   </div>
-                  { activeCardFarm && network === 56 ? (
-                      <BscFarmingFunc
-                        is_wallet_connected={isConnected}
-                        wbnbPrice={wbnbPrice}
-                        coinbase={coinbase}
-                        latestTvl={theBnbPool[0][1].tvl_usd}
-                        the_graph_result={the_graph_resultbsc}
-                        lp_id={LP_IDBNB_Array[cardIndex]}
-                        chainId={network.toString()}
-                        handleConnection={handleConnection}
-                        expired={false}
-                        handleSwitchNetwork={handleSwitchNetwork}
-                        latestApr={theBnbPool[0][1].apy_percent}
-                        liquidity={wbsc_address}
-                        constant={window.farming_activebsc_1}
-                        staking={window.constant_staking_newbscactive1}
-                        token={window.token_newbsc}
-                        lp_symbol={"USD"}
-                        lock="3 Days"
-                        rebase_factor={1}
-                        expiration_time={"18 July 2024"}
-                        fee="0.4"
-                        finalApr={theBnbPool[0][1].apy_percent}
-                        lockTime={3}
-                        listType={"table"}
-                      />
-                    ) : (
-                      <></>
-                    )
-                  }
+                  {activeCardFarm && network === 56 ? (
+                    <BscFarmingFunc
+                      is_wallet_connected={isConnected}
+                      wbnbPrice={wbnbPrice}
+                      coinbase={coinbase}
+                      latestTvl={theBnbPool[0][1].tvl_usd}
+                      the_graph_result={the_graph_resultbsc}
+                      lp_id={LP_IDBNB_Array[cardIndex]}
+                      chainId={network.toString()}
+                      handleConnection={handleConnection}
+                      expired={false}
+                      handleSwitchNetwork={handleSwitchNetwork}
+                      latestApr={theBnbPool[0][1].apy_percent}
+                      liquidity={wbsc_address}
+                      constant={window.farming_activebsc_1}
+                      staking={window.constant_staking_newbscactive1}
+                      token={window.token_newbsc}
+                      lp_symbol={"USD"}
+                      lock="3 Days"
+                      rebase_factor={1}
+                      expiration_time={"18 July 2024"}
+                      fee="0.4"
+                      finalApr={theBnbPool[0][1].apy_percent}
+                      lockTime={3}
+                      listType={"table"}
+                    />
+                  ) : (
+                    <></>
+                  )}
                 </div>
               ) : (
                 <div className="d-flex flex-column gap-4">
@@ -687,7 +821,16 @@ const Dashboard = ({
                               tokenName={item.pair_name}
                               apr={item.apy_percent + "%"}
                               tvl={
-                                item.tvl_usd === "--"
+                                item.type === "staking" &&
+                                item.pair_name === "ETH"
+                                  ? "$" +getFormattedNumber(totalTvlETH)
+                                  : item.type === "staking" &&
+                                    item.pair_name === "BNB"
+                                  ? "$" +getFormattedNumber(totalTvlBNB)
+                                  : item.pair_name === "AVAX" &&
+                                    item.type === "staking"
+                                  ? "$" +getFormattedNumber(totalTvlAVAX)
+                                  : item.tvl_usd === "--"
                                   ? item.tvl_usd
                                   : "$" + getFormattedNumber(item.tvl_usd)
                               }
@@ -703,6 +846,8 @@ const Dashboard = ({
                                   ? "bnbChain.svg"
                                   : item.pair_name === "ETH"
                                   ? "ethereum.svg"
+                                  : item.pair_name === "AVAX"
+                                  ? "avax.svg"
                                   : "newCawsLogo.png"
                               }
                               onShowDetailsClick={() => {
@@ -725,7 +870,6 @@ const Dashboard = ({
                         );
                       })
                     ) : (
-                    
                       <div
                         className="w-100 d-flex justify-content-center align-items-center mt-5"
                         style={{ gridColumn: "1 / 3" }}
@@ -734,7 +878,6 @@ const Dashboard = ({
                       </div>
                     )}
                   </div>
-
                 </div>
               )}
             </div>
@@ -857,7 +1000,8 @@ const Dashboard = ({
                   />
                 </div>
                 {selectedPool?.name !== "BNB" &&
-                  selectedPool?.name !== "ETH" && (
+                  selectedPool?.name !== "ETH" &&
+                  selectedPool?.name !== "AVAX" && (
                     <div className="locktimewrapper align-items-center gap-2">
                       <button
                         className={
@@ -911,7 +1055,8 @@ const Dashboard = ({
                     </div>
                   )}
                 {selectedPool?.name !== "BNB" &&
-                  selectedPool?.name !== "ETH" && (
+                  selectedPool?.name !== "ETH" &&
+                  selectedPool?.name !== "AVAX" && (
                     <div className="info-pool-wrapper p-3 w-100">
                       <div className="info-pool-inner-wrapper d-flex flex-column flex-lg-row align-items-center gap-2">
                         <div className="info-pool-item p-2">
@@ -1125,7 +1270,8 @@ const Dashboard = ({
                   />
                 ) : activeCard &&
                   selectedPool?.id ===
-                    "0xC9075092Cc46E176B1F3c0D0EB8223F1e46555B0" ? (
+                    "0xC9075092Cc46E176B1F3c0D0EB8223F1e46555B0" &&
+                  selectedPool.name !== "AVAX" ? (
                   <StakeDypiusEth
                     selectedPool={selectedPool}
                     selectedTab={selectedTab}
@@ -1188,6 +1334,10 @@ const Dashboard = ({
                     is_wallet_connected={isConnected}
                     livePremiumOnly={false}
                     isPremium={isPremium}
+                    totalTvl={totalTvlBNB}
+                    onRefreshTvl={() => {
+                      setCount(count + 1);
+                    }}
                   />
                 ) : activeCard && selectedPool.name === "ETH" ? (
                   <StakeDypiusEthOther
@@ -1219,6 +1369,45 @@ const Dashboard = ({
                     is_wallet_connected={isConnected}
                     livePremiumOnly={livePremiumOnly}
                     isPremium={isPremium}
+                    totalTvl={totalTvlETH}
+                    onRefreshTvl={() => {
+                      setCount(count + 1);
+                    }}
+                  />
+                ) : activeCard && selectedPool.name === "AVAX" ? (
+                  <StakeDypiusAvaxOther
+                    selectedTab={selectedTab}
+                    selectedBtn={selectedBtn}
+                    selectedPool={selectedPool}
+                    staking={window.constant_staking_dypius_avaxother1}
+                    coinbase={coinbase}
+                    the_graph_result={the_graph_result}
+                    expiration_time={"09 Nov 2024"}
+                    lockTime={parseInt(selectedPool.poolList[0].lockTime)}
+                    finalApr={selectedPool.maxAPR}
+                    fee_s={selectedPool.poolList[0].performancefee}
+                    apr={selectedPool?.poolList[0].aprPercent}
+                    earlyFee={selectedPool?.poolList[0].earlyFee}
+                    expired={
+                      selectedPool?.poolList[0].expired === "No" ? false : true
+                    }
+                    maximumDeposit={selectedPool?.poolList[0].maximumDeposit}
+                    poolCap={selectedPool?.poolList[0].poolCap}
+                    chainId={network.toString()}
+                    onConnectWallet={() => {
+                      onConnectWallet();
+                      setShowDetails(false);
+                      setActiveCard();
+                      setselectedPool([]);
+                      setDetails();
+                    }}
+                    is_wallet_connected={isConnected}
+                    isPremium={isPremium}
+                    livePremiumOnly={livePremiumOnly}
+                    totalTvl={totalTvlAVAX}
+                    onRefreshTvl={() => {
+                      setCount(count + 1);
+                    }}
                   />
                 ) : (
                   <></>
