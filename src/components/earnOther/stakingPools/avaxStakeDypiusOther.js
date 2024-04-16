@@ -1022,7 +1022,7 @@ const StakeDypiusAvaxOther = ({
               <div className="d-flex gap-1 align-items-baseline">
                 <span className="bal-smallTxt">My Balance:</span>
                 <span className="bal-bigTxt">
-                  {getFormattedNumber(wavaxBalance, 6)}
+                  {getFormattedNumber(wavaxBalance, 6)} {" "}
                   WAVAX
                 </span>
               </div>
