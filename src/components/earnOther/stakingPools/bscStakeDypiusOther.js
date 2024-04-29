@@ -11,6 +11,7 @@ import { handleSwitchNetworkhook } from "../../../functions/hooks";
 import axios from "axios";
 import Modal from "../../Modal/Modal";
 import { useHistory } from "react-router-dom";
+import Web3 from "web3";
 
 const StakeDypiusBscOther = ({
   totalTvl,
@@ -43,7 +44,8 @@ const StakeDypiusBscOther = ({
   maximumDeposit,
   poolCap,
   livePremiumOnly,
-  isPremium,onRefreshTvl
+  isPremium,
+  onRefreshTvl,
 }) => {
   let {
     reward_token_wbnb,
@@ -372,7 +374,7 @@ const StakeDypiusBscOther = ({
           .toString(10);
         const amountLeftToStake = 9 - Number(depositedTokens_formatted);
         setamountLeft(amountLeftToStake);
-        if (Number(depositedTokens_formatted) ===9) {
+        if (Number(depositedTokens_formatted) === 9) {
           setCanStake(false);
           seterrorMsg("Maximum deposit per wallet reached!");
         }
@@ -504,11 +506,12 @@ const StakeDypiusBscOther = ({
         setdepositLoading(false);
         return;
       }
+      const web3 = new Web3(window.ethereum)
+      let tokenContract = new web3.eth.Contract(window.ERC20_ABI,selectedBuybackToken2);
 
       let amount = depositAmount;
       amount = new BigNumber(amount).times(1e18).toFixed(0);
-      await window
-        .approveToken(selectedBuybackToken2, staking._address, amount)
+      await tokenContract.methods.approve(staking._address, amount).send({from: await window.getCoinbase()})
         .then(() => {
           setdepositLoading(false);
           setdepositStatus("deposit");
@@ -534,6 +537,11 @@ const StakeDypiusBscOther = ({
     //   e.preventDefault();
     if (passivePool === false) {
       setdepositLoading(true);
+      const web3 = new Web3(window.ethereum);
+      const stakingSc = new web3.eth.Contract(
+        window.CONSTANT_STAKING_DEFI_ABI,
+        staking._address
+      );
 
       if (other_info) {
         window.$.alert("This pool no longer accepts deposits!");
@@ -548,8 +556,9 @@ const StakeDypiusBscOther = ({
 
       //NO REFERRER HERE
 
-      staking
+      await stakingSc.methods
         .stake(amount, referrer)
+        .send({ from: await window.getCoinbase() })
         .then(() => {
           setdepositLoading(false);
           setdepositStatus("success");
@@ -586,8 +595,15 @@ const StakeDypiusBscOther = ({
     ) {
       setwithdrawLoading(true);
       let amount = new BigNumber(withdrawAmount).times(1e18).toFixed(0);
-      await staking
+      const web3 = new Web3(window.ethereum);
+      const stakingSc = new web3.eth.Contract(
+        window.CONSTANT_STAKING_DEFI_ABI,
+        staking._address
+      );
+
+      await stakingSc.methods
         .unstake(amount)
+        .send({ from: await window.getCoinbase() })
         .then(() => {
           setwithdrawStatus("success");
           setwithdrawLoading(false);
@@ -621,8 +637,15 @@ const StakeDypiusBscOther = ({
   const handleWithdraw2 = async (e) => {
     setwithdrawLoading(true);
     let amount = new BigNumber(withdrawAmount).times(1e18).toFixed(0);
-    await staking
+    const web3 = new Web3(window.ethereum);
+    const stakingSc = new web3.eth.Contract(
+      window.CONSTANT_STAKING_DEFI_ABI,
+      staking._address
+    );
+
+    await stakingSc.methods
       .unstake(amount)
+      .send({ from: await window.getCoinbase() })
       .then(() => {
         setwithdrawStatus("success");
         setwithdrawLoading(false);
@@ -649,9 +672,15 @@ const StakeDypiusBscOther = ({
 
   const handleClaimDivs = async (e) => {
     setclaimLoading(true);
-    //   e.preventDefault();
-    staking
+    const web3 = new Web3(window.ethereum);
+    const stakingSc = new web3.eth.Contract(
+      window.CONSTANT_STAKING_DEFI_ABI,
+      staking._address
+    );
+
+    await stakingSc.methods
       .claim()
+      .send({ from: await window.getCoinbase() })
       .then(() => {
         setclaimStatus("success");
         setclaimLoading(false);
@@ -748,10 +777,17 @@ const StakeDypiusBscOther = ({
   const handleReinvest = async (e) => {
     setreInvestStatus("invest");
     setreInvestLoading(true);
-
+    
+    const web3 = new Web3(window.ethereum);
+    const stakingSc = new web3.eth.Contract(
+      window.CONSTANT_STAKING_DEFI_ABI,
+      staking._address
+    );
+    
     //   e.preventDefault();
-    staking
+    await stakingSc.methods
       .reInvest()
+      .send({ from: await window.getCoinbase() })
       .then(() => {
         setreInvestStatus("success");
         setreInvestLoading(false);
@@ -888,23 +924,21 @@ const StakeDypiusBscOther = ({
       });
   };
 
-  const handleCheckAmount = (amount)=>{
-    if(Number(amount) > Number(amountLeft)) {
+  const handleCheckAmount = (amount) => {
+    if (Number(amount) > Number(amountLeft)) {
       seterrorMsg("Please add a smaller amount");
-      setdepositAmount(amountLeft)
-    } else if(Number(amount) <= Number(amountLeft)) {
+      setdepositAmount(amountLeft);
+    } else if (Number(amount) <= Number(amountLeft)) {
       seterrorMsg("");
-      setdepositAmount(amount)
+      setdepositAmount(amount);
     }
     checkApproval(amount);
-  }
+  };
 
   useEffect(() => {
     getUsdPerDyp();
     getMaxDepositAllowed();
   }, []);
-
-
 
   return (
     <>
@@ -994,11 +1028,7 @@ const StakeDypiusBscOther = ({
               <div className="d-flex justify-content-between gap-1 align-items-center">
                 <span className="info-pool-left-text">TVL</span>
                 <span className="info-pool-right-text">
-                  $
-                  {getFormattedNumber(
-                    totalTvl,
-                    2
-                  )}
+                  ${getFormattedNumber(totalTvl, 2)}
                 </span>
               </div>
             </div>
@@ -1030,7 +1060,7 @@ const StakeDypiusBscOther = ({
                     Number(depositAmount) > 0 ? depositAmount : depositAmount
                   }
                   onChange={(e) => {
-                   handleCheckAmount(e.target.value)
+                    handleCheckAmount(e.target.value);
                   }}
                   name="amount_deposit"
                   id="amount_deposit"
@@ -1050,15 +1080,17 @@ const StakeDypiusBscOther = ({
                 } gap-1 align-items-center`}
               >
                 {errorMsg && <h6 className="errormsg m-0">{errorMsg}</h6>}
-<div className="d-flex flex-column">
-                <div className="d-flex gap-1 align-items-baseline">
-                  <span className="bal-smallTxt">Approved:</span>
-                  <span className="bal-bigTxt2">{approvedAmount} WBNB</span>
-                </div>
-                <div className="d-flex gap-1 align-items-baseline">
-                  <span className="bal-smallTxt">Allowance Left:</span>
-                  <span className="bal-bigTxt2">{getFormattedNumber(amountLeft)} WBNB</span>
-                </div>
+                <div className="d-flex flex-column">
+                  <div className="d-flex gap-1 align-items-baseline">
+                    <span className="bal-smallTxt">Approved:</span>
+                    <span className="bal-bigTxt2">{approvedAmount} WBNB</span>
+                  </div>
+                  <div className="d-flex gap-1 align-items-baseline">
+                    <span className="bal-smallTxt">Allowance Left:</span>
+                    <span className="bal-bigTxt2">
+                      {getFormattedNumber(amountLeft)} WBNB
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1174,7 +1206,7 @@ const StakeDypiusBscOther = ({
                       <div className="d-flex flex-column align-items-baseline">
                         <span className="bal-smallTxt">Rewards</span>
                         <span className="bal-bigTxt2">
-                          {getFormattedNumber(pendingDivs,6)} WBNB
+                          {getFormattedNumber(pendingDivs, 6)} WBNB
                         </span>
                       </div>
                       <button
@@ -1318,7 +1350,11 @@ const StakeDypiusBscOther = ({
             {is_wallet_connected && chainId === "56" && (
               <button
                 disabled={
-                  (depositAmount === "" || depositLoading === true || canStake === false) ? true : false
+                  depositAmount === "" ||
+                  depositLoading === true ||
+                  canStake === false
+                    ? true
+                    : false
                 }
                 className={`btn filledbtn ${
                   depositAmount === "" &&
@@ -1472,7 +1508,7 @@ const StakeDypiusBscOther = ({
                   <div className="d-flex flex-column align-items-baseline">
                     <span className="bal-smallTxt">Rewards</span>
                     <span className="bal-bigTxt2">
-                      {getFormattedNumber(pendingDivs,6)} WBNB
+                      {getFormattedNumber(pendingDivs, 6)} WBNB
                     </span>
                   </div>
                   <button

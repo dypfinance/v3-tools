@@ -11,6 +11,7 @@ import { handleSwitchNetworkhook } from "../../../functions/hooks";
 import axios from "axios";
 import Modal from "../../Modal/Modal";
 import { useHistory } from "react-router-dom";
+import Web3 from "web3";
 
 const StakeDypiusAvaxOther = ({
   selectedPool,
@@ -496,10 +497,12 @@ const StakeDypiusAvaxOther = ({
         return;
       }
 
+      const web3 = new Web3(window.ethereum)
+    let tokenContract = new web3.eth.Contract(window.ERC20_ABI,selectedBuybackToken2);
+
       let amount = depositAmount;
       amount = new BigNumber(amount).times(1e18).toFixed(0);
-      await window
-        .approveToken(selectedBuybackToken2, staking._address, amount)
+      await tokenContract.methods.approve(staking._address, amount).send({from: await window.getCoinbase()})
         .then(() => {
           setdepositLoading(false);
           setdepositStatus("deposit");
@@ -530,13 +533,15 @@ const StakeDypiusAvaxOther = ({
 
         return;
       }
+      const web3 = new Web3(window.ethereum)
+      const stakingSc = new web3.eth.Contract(window.CONSTANT_STAKING_DEFI_ABI, staking._address);
 
       let amount = depositAmount;
       amount = new BigNumber(amount).times(1e18).toFixed(0);
       let referrer = window.config.ZERO_ADDRESS;
 
-      await staking
-        .stake(amount, referrer)
+      await stakingSc.methods
+        .stake(amount, referrer).send({from: await window.getCoinbase()})
         .then(() => {
           setdepositLoading(false);
           setdepositStatus("success");
@@ -567,11 +572,13 @@ const StakeDypiusAvaxOther = ({
         ?.includes("ago")
     ) {
       setwithdrawLoading(true);
+      const web3 = new Web3(window.ethereum)
+      const stakingSc = new web3.eth.Contract(window.CONSTANT_STAKING_DEFI_ABI, staking._address);
 
       let amount = new BigNumber(withdrawAmount).times(1e18).toFixed(0);
 
-      await staking
-        .unstake(amount)
+      await stakingSc.methods
+        .unstake(amount).send({from: await window.getCoinbase()})
         .then(() => {
           setwithdrawLoading(false);
           setwithdrawStatus("success");
@@ -609,8 +616,11 @@ const StakeDypiusAvaxOther = ({
 
     let amount = new BigNumber(withdrawAmount).times(1e18).toFixed(0);
 
-    await staking
-      .unstake(amount)
+    const web3 = new Web3(window.ethereum)
+    const stakingSc = new web3.eth.Contract(window.CONSTANT_STAKING_DEFI_ABI, staking._address);
+
+    await stakingSc.methods
+      .unstake(amount).send({from: await window.getCoinbase()})
       .then(() => {
         setwithdrawStatus("success");
         setwithdrawLoading(false);
@@ -635,11 +645,13 @@ const StakeDypiusAvaxOther = ({
       });
   };
 
-  const handleClaimDivs = () => {
+  const handleClaimDivs = async() => {
     setclaimLoading(true);
+    const web3 = new Web3(window.ethereum)
+    const stakingSc = new web3.eth.Contract(window.CONSTANT_STAKING_DEFI_ABI, staking._address);
 
-    staking
-      .claim()
+   await stakingSc.methods
+      .claim().send({from: await window.getCoinbase()})
       .then(() => {
         setclaimStatus("success");
         setclaimLoading(false);
@@ -729,12 +741,14 @@ const StakeDypiusAvaxOther = ({
       });
   };
 
-  const handleReinvest = () => {
+  const handleReinvest = async() => {
     setreInvestStatus("invest");
     setreInvestLoading(true);
+    const web3 = new Web3(window.ethereum)
+    const stakingSc = new web3.eth.Contract(window.CONSTANT_STAKING_DEFI_ABI, staking._address);
 
-    staking
-      .reInvest()
+    await stakingSc.methods
+      .reInvest().send({from: await window.getCoinbase()})
       .then(() => {
         setreInvestStatus("success");
         setreInvestLoading(false);
@@ -1030,8 +1044,7 @@ const StakeDypiusAvaxOther = ({
             <div
               className={`d-flex flex-column w-100 gap-1 ${
                 (chainId !== "43114" ||
-                  !is_wallet_connected ||
-                  (!isPremium && livePremiumOnly)) &&
+                  !is_wallet_connected ) &&
                 "blurrypool"
               } `}
             >
@@ -1328,9 +1341,7 @@ const StakeDypiusAvaxOther = ({
               </div>
             </div>
             {is_wallet_connected &&
-              chainId === "43114" &&
-              ((isPremium && livePremiumOnly) ||
-                (!isPremium && !livePremiumOnly)) && (
+              chainId === "43114" && (
                 <button
                   disabled={
                     depositAmount === "" || depositLoading === true
@@ -1392,8 +1403,7 @@ const StakeDypiusAvaxOther = ({
             <div
               className={`d-flex flex-column w-100 gap-1 ${
                 (chainId !== "43114" ||
-                  !is_wallet_connected ||
-                  (!isPremium && livePremiumOnly)) &&
+                  !is_wallet_connected ) &&
                 "blurrypool"
               } `}
             >
@@ -1485,8 +1495,7 @@ const StakeDypiusAvaxOther = ({
             <div
               className={`d-flex flex-column w-100 gap-1 ${
                 (chainId !== "43114" ||
-                  !is_wallet_connected ||
-                  (!isPremium && livePremiumOnly)) &&
+                  !is_wallet_connected) &&
                 "blurrypool"
               } `}
             >
@@ -1642,16 +1651,7 @@ const StakeDypiusAvaxOther = ({
           >
             Change Network
           </button>
-        ) : !isPremium && livePremiumOnly ? (
-          <button
-            className="connectbtn btn m-auto"
-            onClick={() => {
-              handleNavigateToPlans();
-            }}
-          >
-            Become Premium
-          </button>
-        ) : (
+        )  : (
           <></>
         )}
       </div>

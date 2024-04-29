@@ -879,7 +879,6 @@ class CONSTANT_STAKING_DEFI {
             value,
             gas,
             from: await getCoinbase(),
-
             gasPrice: window.config.default_gasprice_gwei * 1e9,
           });
         };
