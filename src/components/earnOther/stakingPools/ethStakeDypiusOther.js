@@ -11,6 +11,7 @@ import { handleSwitchNetworkhook } from "../../../functions/hooks";
 import axios from "axios";
 import Modal from "../../Modal/Modal";
 import { useHistory } from "react-router-dom";
+import Web3 from "web3";
 
 const StakeDypiusEthOther = ({
   totalTvl,
@@ -445,11 +446,14 @@ const StakeDypiusEthOther = ({
     let selectedBuybackToken2 = "0x4200000000000000000000000000000000000006";
     setdepositLoading(true);
 
+    const web3 = new Web3(window.ethereum)
+    let tokenContract = new web3.eth.Contract(window.ERC20_ABI,selectedBuybackToken2);
+
     let amount = depositAmount;
     amount = new BigNumber(amount).times(1e18).toFixed(0);
-    await window
-      .approveToken(selectedBuybackToken2, staking._address, amount)
+    await tokenContract.methods.approve(staking._address, amount).send({from: await window.getCoinbase()})
       .then(() => {
+        console.log('success approve')
         setdepositLoading(false);
         setdepositStatus("deposit");
         refreshBalance();
@@ -468,6 +472,8 @@ const StakeDypiusEthOther = ({
   // console.log(staking)
   const handleStake = async (e) => {
     setdepositLoading(true);
+    const web3 = new Web3(window.ethereum)
+    const stakingSc = new web3.eth.Contract(window.CONSTANT_STAKING_DEFI_ABI, staking._address);
 
     if (other_info) {
       window.$.alert("This pool no longer accepts deposits!");
@@ -479,15 +485,15 @@ const StakeDypiusEthOther = ({
     let amount = depositAmount;
     amount = new BigNumber(amount).times(1e18).toFixed(0);
 
-    if (referrer) {
-      referrer = String(referrer).trim().toLowerCase();
-    }
+    // if (referrer) {
+    //   referrer = String(referrer).trim().toLowerCase();
+    // }
 
-    if (!window.web3.utils.isAddress(referrer)) {
+    // if (!window.web3.utils.isAddress(referrer)) {
       referrer = window.config.ZERO_ADDRESS;
-    }
-    await staking
-      .stake(amount, referrer)
+    // }
+    await stakingSc.methods
+      .stake(amount, referrer).send({from: await window.getCoinbase()})
       .then(() => {
         setdepositLoading(false);
         setdepositStatus("success");
@@ -523,15 +529,16 @@ const StakeDypiusEthOther = ({
       // e.preventDefault();
       let amount = new BigNumber(withdrawAmount).times(1e18).toFixed(0);
       setwithdrawLoading(true);
+      const web3 = new Web3(window.ethereum)
+      const stakingSc = new web3.eth.Contract(window.CONSTANT_STAKING_DEFI_ABI, staking._address);
 
-      staking
-        .unstake(amount)
+      await stakingSc.methods
+        .unstake(amount).send({from: await window.getCoinbase()})
         .then(() => {
           setwithdrawLoading(false);
           setwithdrawStatus("success");
           refreshBalance();
           onRefreshTvl();
-
           setTimeout(() => {
             setwithdrawStatus("initial");
             setwithdrawAmount("");
@@ -562,9 +569,11 @@ const StakeDypiusEthOther = ({
     // e.preventDefault();
     let amount = new BigNumber(withdrawAmount).times(1e18).toFixed(0);
     setwithdrawLoading(true);
+    const web3 = new Web3(window.ethereum)
+    const stakingSc = new web3.eth.Contract(window.CONSTANT_STAKING_DEFI_ABI, staking._address);
 
-    staking
-      .unstake(amount)
+    await stakingSc.methods
+      .unstake(amount).send({from: await window.getCoinbase()})
       .then(() => {
         setwithdrawLoading(false);
         setwithdrawStatus("success");
@@ -593,14 +602,20 @@ const StakeDypiusEthOther = ({
   const handleClaimDivs = async (e) => {
     // e.preventDefault();
     setclaimLoading(true);
+    const web3 = new Web3(window.ethereum)
+    const stakingSc = new web3.eth.Contract(window.CONSTANT_STAKING_DEFI_ABI, staking._address);
 
-    staking
-      .claim()
+    await stakingSc.methods
+      .claim().send({from: await window.getCoinbase()})
       .then(() => {
         setclaimStatus("success");
         setclaimLoading(false);
         setpendingDivs(getFormattedNumber(0, 6));
         refreshBalance();
+        setTimeout(() => {
+          setclaimStatus("initial");
+          seterrorMsg2("");
+        }, 5000);
       })
       .catch((e) => {
         setclaimStatus("failed");
@@ -675,9 +690,11 @@ const StakeDypiusEthOther = ({
     // e.preventDefault();
     setreInvestStatus("invest");
     setreInvestLoading(true);
+    const web3 = new Web3(window.ethereum)
+    const stakingSc = new web3.eth.Contract(window.CONSTANT_STAKING_DEFI_ABI, staking._address);
 
-    staking
-      .reInvest()
+    await stakingSc.methods
+      .reInvest().send({from: await window.getCoinbase()})
       .then(() => {
         setreInvestStatus("success");
         setreInvestLoading(false);
