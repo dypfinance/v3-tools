@@ -20,6 +20,8 @@ import StakeDypiusBscOther from "../stakingPools/bscStakeDypiusOther";
 import StakeDypiusEthOther from "../stakingPools/ethStakeDypiusOther";
 
 const EarnOtherContent = ({
+  totalTvlBNB,
+  totalTvlETH,
   aggregatorPools,
   coinbase,
   the_graph_result,
@@ -41,7 +43,12 @@ const EarnOtherContent = ({
   faqIndex,
   networkId,
   handleSwitchNetwork,
-  onConnectWallet,userCurencyBalance
+  onConnectWallet,
+  userCurencyBalance,
+  onCloseCard,
+  totalTvl,
+  isPremium,
+  totalTvlAVAX,onRefreshTvl
 }) => {
   const windowSize = useWindowSize();
 
@@ -63,127 +70,19 @@ const EarnOtherContent = ({
     background: `#1A1A36`,
   };
 
-  const options = [
-    {
-      title: "Staking",
-      content:
-        "Staking ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ut ipsum quis ligula commodo sollicitudin ut dictum augue. Curabitur massa justo",
-      tvl: 244533.54234234,
-    },
-    // {
-    //   title: "Buyback",
-    //   content:
-    //     "Buyback ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ut ipsum quis ligula commodo sollicitudin ut dictum augue. Curabitur massa justo",
-    //   tvl: 53312.422334,
-    // },
-    {
-      title: "Vault",
-      content:
-        "Vault ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ut ipsum quis ligula commodo sollicitudin ut dictum augue. Curabitur massa justo",
-      tvl: 1122553.74424,
-    },
-    {
-      title: "Farming",
-      content:
-        "Farming ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ut ipsum quis ligula commodo sollicitudin ut dictum augue. Curabitur massa justo",
-    },
-  ];
-
-  const dummyData_base = [
-    {
-      lockTime: "Locked",
-      chain: "Base",
-      apr: "15%",
-      aprInt: 15,
-      chainLogo: "baseActive.svg",
-      tokenLogo: "ethereum.svg",
-      expired: false,
-      top_pick: false,
-      hot: true,
-      coming_soon: true,
-      staked: false,
-      nft: true,
-      tokenName: "Base",
-      tokenTicker: "ETH",
-      pool: "BASE",
-      new_pool: "Yes",
-      lockTime: 60,
-      apy_percent: 12.5,
-      performancefee: 12.5,
-    },
-  ];
-
-  const dummyData_bnb = [
-    {
-      lockTime: "Locked",
-      chain: "BNB Chain",
-      apr: "25%",
-      aprInt: 25,
-      tokenLogo: "bnbChain.svg",
-      chainLogo: "bsc.svg",
-      expired: false,
-      top_pick: false,
-      hot: false,
-      staked: false,
-      nft: false,
-      tokenName: "BNB",
-      tokenTicker: "BNB",
-      coming_soon: true,
-      pool: "BNB",
-      new_pool: "Yes",
-      lockTime: 90,
-      apy_percent: 12.5,
-      performancefee: 0,
-    },
-  ];
-
-  const dummyData_avax = [
-    {
-      lockTime: "Locked",
-      chain: "Avalanche",
-      apr: "10%",
-      aprInt: 10,
-
-      tokenLogo: "avax.svg",
-      chainLogo: "avax.svg",
-      expired: false,
-      top_pick: false,
-      hot: true,
-      coming_soon: true,
-      staked: true,
-      nft: false,
-      tokenName: "Avalanche",
-      tokenTicker: "AVAX",
-      pool: "AVAX",
-      new_pool: "Yes",
-      lockTime: 30,
-      apy_percent: 12.5,
-      performancefee: 12.5,
-    },
-  ];
-
   const cloneArray = aggregatorPools;
 
-  const [stake, setStake] = useState("allchains");
-  const [option, setOption] = useState(routeOption);
   const [showDetails, setshowDetails] = useState(false);
   const [cardIndex, setcardIndex] = useState(777);
   const [selectedTab, setselectedTab] = useState("deposit");
   const [selectedBtn, setselectedBtn] = useState("flexible");
   const [selectedPool, setselectedPool] = useState([]);
-
   const [listStyle, setListStyle] = useState("list");
-  const [myStakes, setMyStakes] = useState(false);
-  const [expiredPools, setExpiredPools] = useState(false);
   const [allPools, setallPools] = useState([]);
-
-  const [tvl, setTvl] = useState();
-  const [ethApr, setEthApr] = useState();
   const [bnbApr, setBnbApr] = useState();
-  const [avaxApr, setavaxApr] = useState();
-  const [count, setCount] = useState(0);
   const [query, setQuery] = useState("");
   const [sorting, setSorting] = useState("");
+  const [livePremiumOnly, setlivePremiumOnly] = useState(true);
 
   const handleQuery = (item) => (event) => {
     if (event.key === "Enter") {
@@ -200,238 +99,6 @@ const EarnOtherContent = ({
     }
   };
 
-  const fetchBnbPool = async () => {
-    await axios
-      .get("https://api.dyp.finance/api/the_graph_bsc_v2")
-      .then((res) => {
-        let temparray = Object.entries(res.data.the_graph_bsc_v2.lp_data);
-        let bnbpool = temparray.find((item) => {
-          return (
-            item[0] ===
-            "0x1bc61d08a300892e784ed37b2d0e63c85d1d57fb-0x5bc3a80a1f2c4fb693d9dddcebbb5a1b5bb15d65"
-          );
-        });
-        setBnbApr(bnbpool[1].apy_percent);
-      })
-      .catch((err) => console.error(err));
-  };
-
-  const toggleInactive = () => {
-    setCount(count + 1);
-    setExpiredPools(!expiredPools);
-    if (option === "Farming" && count % 2 === 0) {
-      fetchFarmingApr();
-      setBnbApr(138);
-    } else if (option === "Farming" && count % 2 !== 0) fetchBnbPool();
-  };
-
-  var tempTvl = 0;
-  var farming = [];
-
-  const fetchEthTvl = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/the_graph_eth_v2`)
-      .then((res) => {
-        let temparray = Object.entries(res.data.the_graph_eth_v2.lp_data);
-        temparray.map((item) => {
-          farming.push(item[1]);
-        });
-        farming.map((item) => {
-          tempTvl += item.tvl_usd;
-        });
-
-        setTvl(tempTvl);
-        tempTvl = 0;
-      })
-      .catch((err) => console.error(err));
-  };
-
-  const fetchBscTvl = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/the_graph_bsc_v2`)
-      .then((res) => {
-        let temparray = Object.entries(res.data.the_graph_bsc_v2.lp_data);
-        temparray.map((item) => {
-          farming.push(item[1]);
-        });
-        farming.map((item) => {
-          tempTvl += item.tvl_usd;
-        });
-
-        setTvl(tempTvl);
-        tempTvl = 0;
-      })
-      .catch((err) => console.error(err));
-  };
-
-  const fetchAvaxTvl = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/the_graph_avax_v2`)
-      .then((res) => {
-        let temparray = Object.entries(res.data.the_graph_avax_v2.lp_data);
-        temparray.map((item) => {
-          farming.push(item[1]);
-        });
-        farming.map((item) => {
-          tempTvl += item.tvl_usd;
-        });
-
-        setTvl(tempTvl);
-        tempTvl = 0;
-      })
-      .catch((err) => console.error(err));
-  };
-
-  const fetchVaultTvl = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_vault_info`)
-      .then((res) => {
-        setTvl(res.data.VaultTotalTVL[0].tvl);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const fetchEthApr = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_eth`)
-      .then((res) => {
-        setEthApr(res.data.highestAPY_ETH[0].highest_apy);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  const fetchBnbApr = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_bnb`)
-      .then((res) => {
-        setBnbApr(res.data.highestAPY_BNB[0].highest_apy);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  const fetchAvaxApr = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_avax`)
-      .then((res) => {
-        setavaxApr(res.data.highestAPY_AVAX[0].highest_apy);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const fetchEthBuybackApr = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_buyback_info_eth`)
-      .then((res) => {
-        setEthApr(res.data.BuybackHighestApy[0].highest_apy);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const fetchBnbBuybackApr = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_buyback_info_bnb`)
-      .then((res) => {
-        setBnbApr(res.data.BuybackHighestApyBNB[0].highest_apy);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const fetchAvaxBuybackApr = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_buyback_info_avax`)
-      .then((res) => {
-        setavaxApr(res.data.BuybackHighestApyAVAX[0].highest_apy);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const fetchFarmingApr = async () => {
-    await axios.get(`https://api.dyp.finance/api/highest-apy`).then((res) => {
-      setEthApr(res.data.highestAPY.highestAPY_ETH_V2);
-      // setBnbApr(res.data.highestAPY.highestAPY_BSC_V2);
-      // if(expiredPools === true){
-
-      //   setBnbApr(138.44)
-      // }else{
-      //   fetchBnbPool();
-      // }
-      setavaxApr(res.data.highestAPY.highestAPY_AVAX_V2);
-    });
-  };
-
-  const fetchEthStaking = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_eth`)
-      .then((res) => {
-        setTvl(res.data.totalTVL_ETH);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  const fetchBnbStaking = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_bnb`)
-      .then((res) => {
-        setTvl(res.data.totalTVL_BNB);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  const fetchAvaxStaking = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_avax`)
-      .then((res) => {
-        setTvl(res.data.totalTVL_AVAX);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const fetchEthBuyback = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_buyback_info_eth`)
-      .then((res) => {
-        setTvl(res.data.totalTVL_BUYBACK_ETH);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  const fetchBnbBuyback = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_buyback_info_bnb`)
-      .then((res) => {
-        setTvl(res.data.totalTVL_BUYBACK_BNB);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  const fetchAvaxBuyback = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_buyback_info_avax`)
-      .then((res) => {
-        setTvl(res.data.totalTVL_BUYBACK_AVAX);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
   // console.log(allPools)
   const handleSortPools = (order) => {
     if (allPools.length > 0) {
@@ -498,6 +165,13 @@ const EarnOtherContent = ({
     }
   }, [poolClicked, poolClickedType, allPools]);
 
+  const handleManageDetails = (obj, index) => {
+    setshowDetails(!showDetails);
+    setcardIndex(!showDetails ? index : 777);
+    setselectedBtn(obj.lockTime);
+    setselectedPool(obj);
+  };
+
   return (
     <>
       <div className="row mx-0 justify-content-center w-100 ">
@@ -556,19 +230,17 @@ const EarnOtherContent = ({
               </div>
             </div>
             <div className="col-12 col-lg-4 col-xl-3 px-0">
-              {/* {option !== "Farming" && (
-                <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
-                  <span style={{ fontWeight: "300", fontSize: "13px" }}>
-                    Total value locked
-                  </span>
-                  <h6
-                    className="text-white"
-                    style={{ fontWeight: "600", fontSize: "17px" }}
-                  >
-                    ${getFormattedNumber("2585417", 0)}
-                  </h6>
-                </div>
-              )} */}
+              <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
+                <span style={{ fontWeight: "300", fontSize: "13px" }}>
+                  Total value locked
+                </span>
+                <h6
+                  className="text-white"
+                  style={{ fontWeight: "600", fontSize: "17px" }}
+                >
+                  ${getFormattedNumber(totalTvl, 2)}
+                </h6>
+              </div>
             </div>
           </div>
         ) : (
@@ -626,19 +298,17 @@ const EarnOtherContent = ({
               </div>
             </div>
             <div className="col-12 col-lg-4 col-xl-3 px-0">
-              {/* {option !== "Farming" && (
-                <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
-                  <span style={{ fontWeight: "300", fontSize: "13px" }}>
-                    Total value locked
-                  </span>
-                  <h6
-                    className="text-white"
-                    style={{ fontWeight: "600", fontSize: "17px" }}
-                  >
-                    ${getFormattedNumber("2585417", 0)}
-                  </h6>
-                </div>
-              )} */}
+              <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
+                <span style={{ fontWeight: "300", fontSize: "13px" }}>
+                  Total value locked
+                </span>
+                <h6
+                  className="text-white"
+                  style={{ fontWeight: "600", fontSize: "17px" }}
+                >
+                  ${getFormattedNumber(totalTvl, 2)}
+                </h6>
+              </div>
             </div>
           </div>
         )}
@@ -799,7 +469,11 @@ const EarnOtherContent = ({
                 >
                   <table className="earnother-table">
                     <thead className="d-flex w-100 align-items-center justify-content-around">
-                      <th className="earnother-th col-2"><div className="d-flex justify-content-center w-75">Pool</div></th>
+                      <th className="earnother-th col-2">
+                        <div className="d-flex justify-content-center w-75">
+                          Pool
+                        </div>
+                      </th>
                       <th
                         className="earnother-th col-2 d-flex justify-content-center gap-1 align-items-center arrowBtns"
                         onClick={handleSorting}
@@ -844,7 +518,7 @@ const EarnOtherContent = ({
                       lockTime={item.lockType}
                       expired={item.no}
                       isNewPool={true}
-                      isComingSoon={true}
+                      isComingSoon={false}
                       isHot={
                         item.tags.find((obj) => {
                           return obj === "Hot";
@@ -860,15 +534,20 @@ const EarnOtherContent = ({
                           : false
                       }
                       isStaked={false}
-                      // onCardClick={() => {
-                      //   setshowDetails(!showDetails);
-                      //   setcardIndex(!showDetails ? index : 777);
-                      //   setselectedBtn(item.lockTime);
-                      //   setselectedPool(item);
-                      // }}
+                      onCardClick={() => {
+                        // setshowDetails(!showDetails);
+                        // setcardIndex(!showDetails ? index : 777);
+                        // setselectedBtn(item.lockTime);
+                        // setselectedPool(item);
+                        handleManageDetails(item);
+                      }}
                       cardIndex={cardIndex}
                       showDetails={showDetails}
                       cardId={index}
+                      onCountDownComplete={(value) => {
+                        setlivePremiumOnly(value);
+                      }}
+                      isPremium={isPremium}
                     />
                   );
                 })}
@@ -927,6 +606,8 @@ const EarnOtherContent = ({
                     onClick={() => {
                       setshowDetails(false);
                       setselectedTab("deposit");
+                      onCloseCard();
+                      setshowDetails(false);
                     }}
                     style={{
                       bottom: "17px",
@@ -964,17 +645,21 @@ const EarnOtherContent = ({
                     }}
                     is_wallet_connected={isConnected}
                     userCurencyBalance={userCurencyBalance}
+                    livePremiumOnly={false}
+                    isPremium={isPremium}
+                    totalTvl={totalTvlBNB}
+                    onRefreshTvl={onRefreshTvl}
                   />
                 ) : selectedPool.id === "avaxChainPool" ? (
                   <StakeDypiusAvaxOther
                     selectedTab={selectedTab}
                     selectedBtn={selectedBtn}
                     selectedPool={selectedPool}
-                    staking={window.constant_staking_dypius_avax1}
+                    staking={window.constant_staking_dypius_avaxother1}
                     coinbase={coinbase}
                     the_graph_result={the_graph_result}
                     expiration_time={"09 Nov 2024"}
-                    lockTime={parseInt(selectedPool.poolList[0].lockTime)}
+                    lockTime={30}
                     finalApr={selectedPool.maxAPR}
                     fee_s={selectedPool.poolList[0].performancefee}
                     apr={selectedPool?.poolList[0].aprPercent}
@@ -992,13 +677,17 @@ const EarnOtherContent = ({
                     }}
                     is_wallet_connected={isConnected}
                     userCurencyBalance={userCurencyBalance}
+                    isPremium={isPremium}
+                    totalTvl={totalTvlAVAX}
+                    livePremiumOnly={livePremiumOnly}
+                    onRefreshTvl={onRefreshTvl}
                   />
                 ) : (
                   <StakeDypiusEthOther
                     selectedTab={selectedTab}
                     selectedBtn={selectedBtn}
                     selectedPool={selectedPool}
-                    staking={window.constant_staking_dypius_eth1}
+                    staking={window.constant_staking_dypius_ethother1}
                     coinbase={coinbase}
                     the_graph_result={the_graph_result}
                     expiration_time={"09 Nov 2024"}
@@ -1011,7 +700,7 @@ const EarnOtherContent = ({
                       selectedPool?.poolList[0].expired === "No" ? false : true
                     }
                     maximumDeposit={selectedPool?.poolList[0].maximumDeposit}
-                    poolCap={selectedPool?.poolList[0].poolCap}
+                    poolCap={113}
                     chainId={chainId}
                     onConnectWallet={() => {
                       onConnectWallet();
@@ -1019,7 +708,10 @@ const EarnOtherContent = ({
                       setselectedPool([]);
                     }}
                     is_wallet_connected={isConnected}
-                    userCurencyBalance={userCurencyBalance}
+                    livePremiumOnly={livePremiumOnly}
+                    isPremium={isPremium}
+                    totalTvl={totalTvlETH}
+                    onRefreshTvl={onRefreshTvl}
                   />
                 )}
 

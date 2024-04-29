@@ -121,7 +121,7 @@ const CawsDetails = ({
     let result = 0;
     let staking_contract = await window.getContractNFT("NFTSTAKING");
     if (address !== null) {
-      if (myStakes.length > 0) {
+      if (myStakes && myStakes.length > 0) {
         calculateRewards = await staking_contract.methods
           .calculateRewards(address, myStakes)
           .call()
@@ -357,39 +357,52 @@ const CawsDetails = ({
                   }}
                 >
                   <div
-                    className="tooltip d-flex justify-content-center"
-                    style={{ opacity: 1, width: 100 }}
-                  >
-                    <div className="d-flex flex-column gap-2 align-items-center">
+                      className="tooltip d-flex justify-content-center"
+                      style={{ opacity: 1, width: 145 }}
+                    >
+                      <div className="d-flex flex-column gap-2 align-items-start">
                       <a
-                        href="https://nft.coinbase.com/collection/catsandwatches"
-                        target="_blank"
-                        rel="noreferrer"
-                        onClick={() => {
-                          setCawspopup(false);
-                        }}
-                      >
-                        <h6 className="bottomitems">
-                          <img src={arrowup} alt="" />
-                          Coinbase
-                        </h6>
+                          href="https://www.worldofdypians.com/marketplace/caws"
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={() => {
+                            setCawspopup(false);
+                          }}
+                        >
+                          <h6 className="bottomitems">
+                            <img src={arrowup} alt="" />
+                            WoD Marketplace
+                          </h6>
                       </a>
+                        <a
+                          href="https://nft.coinbase.com/collection/catsandwatches"
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={() => {
+                            setCawspopup(false);
+                          }}
+                        >
+                          <h6 className="bottomitems">
+                            <img src={arrowup} alt="" />
+                            Coinbase
+                          </h6>
+                        </a>
 
-                      <a
-                        href="https://opensea.io/collection/catsandwatchessocietycaws"
-                        target="_blank"
-                        rel="noreferrer"
-                        onClick={() => {
-                          setCawspopup(false);
-                        }}
-                      >
-                        <h6 className="bottomitems">
-                          <img src={arrowup} alt="" />
-                          OpenSea
-                        </h6>
-                      </a>
+                        <a
+                          href="https://opensea.io/collection/catsandwatchessocietycaws"
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={() => {
+                            setCawspopup(false);
+                          }}
+                        >
+                          <h6 className="bottomitems">
+                            <img src={arrowup} alt="" />
+                            OpenSea
+                          </h6>
+                        </a>
+                      </div>
                     </div>
-                  </div>
                 </OutsideClickHandler>
                 </div>
               )}

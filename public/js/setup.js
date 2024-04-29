@@ -58,6 +58,9 @@ function getTokenContract(address) {
   return getContract({ key: "token", address, ABI: window.TOKEN_ABI });
 }
 
+ 
+
+
 function getVaultContract(address) {
   return getContract({ key: null, address, ABI: window.VAULT_ABI });
 }
@@ -726,7 +729,7 @@ class CONSTANT_STAKING_DYPIUS {
       "REWARD_INTERVAL",
       "rewardsPendingClaim",
       "getPendingDivs",
-      "ADMIN_CAN_CLAIM_AFTER",
+      "ADMIN_CAN_CLAIM_AFTER"
     ].forEach((fn_name) => {
       this[fn_name] = async function (...args) {
         window.web3 = new Web3(window.ethereum);
@@ -801,6 +804,112 @@ class CONSTANT_STAKING_DYPIUS {
     return batch.execute();
   }
 }
+
+
+class CONSTANT_STAKING_DEFI {
+  constructor(
+    ticker = "CONSTANT_STAKING_DEFI",
+    token = "REWARD_TOKEN_DYPIUS_ETH"
+  ) {
+    this.ticker = ticker;
+    this.token = token;
+    let address = window.config[ticker.toLowerCase() + "_address"];
+    this._address = address;
+    [
+      "owner",
+      "depositedTokens",
+      "stakingTime",
+      "LOCKUP_TIME",
+      "lastClaimedTime",
+      "totalEarnedTokens",
+      "getPendingDivs",
+      "totalReferralFeeEarned",
+      "getNumberOfHolders",
+      "getStakersList",
+      "getTotalPendingDivs",
+      "getNumberOfReferredStakers",
+      "getReferredStaker",
+      "getActiveReferredStaker",
+      "contractStartTime",
+      "REWARD_INTERVAL",
+      "rewardsPendingClaim",
+      "getPendingDivs",
+      "ADMIN_CAN_CLAIM_AFTER",
+      "MAX_DEPOSIT"
+    ].forEach((fn_name) => {
+      this[fn_name] = async function (...args) {
+        window.web3 = new Web3(window.ethereum);
+        let contract = new window.web3.eth.Contract(
+          window.CONSTANT_STAKING_DEFI_ABI,
+          address
+        );
+        // getContract({ key: this.ticker });
+        return await contract.methods[fn_name](...args).call();
+      };
+    });
+
+    ["stake", "unstake", "claim", "reInvest", "stakeExternal"].forEach(
+      (fn_name) => {
+        this[fn_name] = async function (...args) {
+          // let contract = await getContract({ key: this.ticker });
+          let contract = new window.web3.eth.Contract(
+            window.CONSTANT_STAKING_DEFI_ABI,
+            address
+          );
+
+          let value = 0;
+          let { latestGasPrice, maxPriorityFeePerGas } = await getMaxFee();
+          console.log({ latestGasPrice, maxPriorityFeePerGas });
+
+          let gas = window.config.default_gas_amount;
+
+          try {
+            let estimatedGas = await contract.methods[fn_name](
+              ...args
+            ).estimateGas({ from: await getCoinbase(), gas });
+            if (estimatedGas) {
+              gas = Math.min(estimatedGas, gas);
+              console.log("estimatedgas" + gas);
+            }
+          } catch (e) {
+            console.log(e);
+          }
+
+          return await contract.methods[fn_name](...args).send({
+            value,
+            gas,
+            from: await getCoinbase(),
+            gasPrice: window.config.default_gasprice_gwei * 1e9,
+          });
+        };
+      }
+    );
+  }
+
+  async depositTOKEN(amount, referrer) {
+    let token_contract = await getContract({ key: this.token });
+    let staking_contract = await getContract({ key: this.ticker });
+    let batch = new window.web3.eth.BatchRequest();
+    batch.add(
+      token_contract.methods
+        .approve(staking_contract._address, amount)
+        .send.request({
+          gas: window.config.default_gas_amount,
+          from: await getCoinbase(),
+          gasPrice: window.config.default_gasprice_gwei * 1e9,
+        })
+    );
+    batch.add(
+      staking_contract.methods.deposit(amount, referrer).send.request({
+        gas: window.config.default_gas_amount,
+        from: await getCoinbase(),
+        gasPrice: window.config.default_gasprice_gwei * 1e9,
+      })
+    );
+    return batch.execute();
+  }
+}
+
 
 class CONSTANT_STAKING_OLD {
   constructor(ticker = "CONSTANT_STAKINGOLD_30", token = "REWARD_TOKEN") {
@@ -1894,6 +2003,9 @@ window.config = {
   admin_address: "0x910090Ea889B64B4e722ea4b8fF6D5e734dFb38F",
   vote_duration_in_seconds: 259200, // 5 minutes for test
   weth_address: "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7", // LOWERCASE! avax
+
+  wavax_address: "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7", // LOWERCASE! avax
+
   weth2_address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2", // ethereum
   default_gas_amount: 1200000,
 
@@ -1909,7 +2021,7 @@ window.config = {
   bsc_endpoint: "https://bsc-dataseed.bnbchain.org",
   avax_endpoint: "https://api.avax.network/ext/bc/C/rpc",
   conflux_endpoint: "https://evm.confluxrpc.com/",
-  base_endpoint: "https://base.publicnode.com",
+  base_endpoint: "https://base-mainnet.public.blastapi.io",
   skale_endpoint: "https://mainnet.skalenodes.com/v1/green-giddy-denebola",
   goerli_endpoint: "https://ethereum-goerli.publicnode.com",
   bscTest_endpoint: "https://data-seed-prebsc-1-s1.binance.org:8545/",
@@ -1992,7 +2104,13 @@ window.config = {
   reward_tokenwbnb_address: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c", //REWARD TOKEN wbnb
 
   reward_token_dypius_eth_address: "0x39b46b212bdf15b42b166779b9d1787a68b9d0c3", //REWARD TOKEN DYPV2
+  reward_token_dypius_base_address: "0x4200000000000000000000000000000000000006", //REWARD TOKEN DYPV2
+
   reward_token_dypius_bsc_address: "0x1a3264f2e7b1cfc6220ec9348d33ccf02af7aaa4", //REWARD TOKEN DYPV2
+  reward_token_wbnb_address: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c", //REWARD TOKEN DYPV2
+  reward_token_wavax_address: "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7", //REWARD TOKEN DYPV2
+
+
 
   weth_address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
   etherscan_baseURL: "https://etherscan.io",
@@ -2242,7 +2360,13 @@ window.config = {
     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603",
 
   constant_staking_dypius_bscother1_address:
-    "0x8b09C611bc07266Ea330e08855B288A74BAcb4a9",
+    "0x8f6A888B5ef55633907c862e1718B3b4dDB2BB7D",
+
+  constant_staking_dypius_ethother1_address:
+    "0xfaed2b9b537444c7a0160e4081683500d77cbedc",
+
+    constant_staking_dypius_avaxother1_address:
+    "0x1B0cEEBEEc1E39D7CFf2Bf8E2BdC59b60A59D7dF",
 
   constant_staking_dypius_avax1_address:
     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603",
@@ -2399,6 +2523,16 @@ window.config = {
   new_governanceavax_address: "0x4d3deb73df067d6466facad196b22411422909ab",
   new_governancebsc_address: "0x2cf8b55a6a492c2f8e750ad1fa4e4a858044deea",
 
+
+    //governance eth dypv2
+    new_governancedypv2_address: "0x6334a38b5df75638f005859fe642765e09488981",
+
+    //governance avax dypv2
+    new_governanceavaxdypv2_address: "0xCE27eCD1114336477CbE0a628f3749b733056626",
+
+    //governance bsc dypv2
+    new_governancebscdypv2_address: "0xa1d6178f3d96b9da85802b6abd553e2b854c7382",
+
   //bridge eth-avax
 
   token_dyp_eth_address: "0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17",
@@ -2465,6 +2599,9 @@ window.config = {
   nft_address: "0xd06cf9e1189feab09c844c597abc3767bc12608c",
   nftstaking_address: "0xEe425BbbEC5e9Bf4a59a1c19eFff522AD8b7A47A",
   nftstaking_address50: "0xEe425BbbEC5e9Bf4a59a1c19eFff522AD8b7A47A",
+
+  /*CAWS PREMIUM STAKING*/
+  nft_caws_premiumstake_address: "0x097bB1679AC734E90907Ff4173bA966c694428Fc",
 
   /* MINT LANDNFT */
   landnft_address: "0xcd60d912655281908ee557ce1add61e983385a03",
@@ -2602,14 +2739,26 @@ window.TOKEN_OLD_AVAX_ABI = window.TOKENAVAX_ABI;
 
 window.REWARD_TOKEN_ABI = window.TOKEN_ABI;
 window.REWARD_TOKEN_DYPIUS_ETH_ABI = window.TOKEN_ABI;
+window.REWARD_TOKEN_DYPIUS_BASE_ABI = window.TOKEN_ABI;
+
 window.REWARD_TOKEN_DYPIUS_BSC_ABI = window.TOKEN_ABI;
+window.REWARD_TOKEN_WBNB_ABI = window.TOKEN_ABI;
+window.REWARD_TOKEN_WAVAX_ABI = window.TOKEN_ABI;
+
+
 
 window.REWARD_TOKENAVAX_ABI = window.TOKENAVAX_ABI;
 window.REWARD_TOKENWBNB_ABI = window.TOKENBSC_ABI;
 
 window.reward_token = new TOKEN("REWARD_TOKEN");
 window.reward_token_dypius_eth = new TOKEN("REWARD_TOKEN_DYPIUS_ETH");
+window.reward_token_dypius_base = new TOKEN("REWARD_TOKEN_DYPIUS_BASE");
+
 window.reward_token_dypius_bsc = new TOKENBSC("REWARD_TOKEN_DYPIUS_BSC");
+window.reward_token_wbnb = new TOKENBSC("REWARD_TOKEN_WBNB");
+window.reward_token_wavax = new TOKENBSC("REWARD_TOKEN_WAVAX");
+
+
 
 window.reward_tokenavax = new TOKENAVAX("REWARD_TOKENAVAX");
 window.reward_tokenwbnb = new TOKENBSC("REWARD_TOKENWBNB");
@@ -2742,9 +2891,20 @@ window.constant_staking_dypius_bsc1 = new CONSTANT_STAKING_DYPIUS(
   "CONSTANT_STAKING_DYPIUS_BSC1"
 );
 
-window.constant_staking_dypius_bscother1 = new CONSTANT_STAKING_DYPIUS(
+window.constant_staking_dypius_bscother1 = new CONSTANT_STAKING_DEFI(
   "CONSTANT_STAKING_DYPIUS_BSCOTHER1"
 );
+
+window.constant_staking_dypius_ethother1 = new CONSTANT_STAKING_DEFI(
+  "CONSTANT_STAKING_DYPIUS_ETHOTHER1"
+);
+
+
+window.constant_staking_dypius_avaxother1 = new CONSTANT_STAKING_DEFI(
+  "CONSTANT_STAKING_DYPIUS_AVAXOTHER1"
+);
+
+
 /*Staking bsc other*/
 
 window.constant_stakingbscother_new1 = new CONSTANT_STAKINGBSCOTHER_NEW(
@@ -2758,8 +2918,11 @@ window.CONSTANT_STAKINGBSC_NEW11_ABI = window.CONSTANT_STAKING_OLD_ABI;
 window.CONSTANT_STAKINGBSC_NEW111_ABI = window.CONSTANT_STAKING_OLD_ABI;
 window.CONSTANT_STAKINGBSC_NEW14_ABI = window.CONSTANT_STAKING_OLD_ABI;
 window.CONSTANT_STAKING_DYPIUS_BSC1_ABI = window.CONSTANT_STAKING_DYPIUS_ABI;
-window.CONSTANT_STAKING_DYPIUS_BSCOTHER1_ABI =
-  window.CONSTANT_STAKING_DEFI_ABI;
+window.CONSTANT_STAKING_DYPIUS_BSCOTHER1_ABI = window.CONSTANT_STAKING_DEFI_ABI;
+window.CONSTANT_STAKING_DYPIUS_ETHOTHER1_ABI = window.CONSTANT_STAKING_DEFI_ABI;
+window.CONSTANT_STAKING_DYPIUS_AVAXOTHER1_ABI = window.CONSTANT_STAKING_DEFI_ABI;
+
+
 
 window.CONSTANT_STAKINGBSC_NEW12_ABI = window.CONSTANT_STAKINGBSC_NEW_ABI;
 window.CONSTANT_STAKINGBSC_NEW13_ABI = window.CONSTANT_STAKINGBSC_NEW_ABI;
@@ -3198,6 +3361,8 @@ class NEW_GOVERNANCE {
 }
 
 window.new_governance = new NEW_GOVERNANCE();
+window.new_governancedypv2 = new NEW_GOVERNANCE("NEW_GOVERNANCEDYPV2");
+
 
 //governance avax
 
@@ -3301,6 +3466,8 @@ class NEW_GOVERNANCEAVAX {
 }
 
 window.new_governanceavax = new NEW_GOVERNANCEAVAX();
+window.new_governanceavaxdypv2 = new NEW_GOVERNANCEAVAX("NEW_GOVERNANCEAVAXDYPV2");
+
 
 class NEW_GOVERNANCEBSC {
   constructor(ticker = "NEW_GOVERNANCEBSC", token = "REWARD_TOKEN") {
@@ -3402,6 +3569,8 @@ class NEW_GOVERNANCEBSC {
 }
 
 window.new_governancebsc = new NEW_GOVERNANCEBSC();
+window.new_governancebscdypv2 = new NEW_GOVERNANCEBSC('NEW_GOVERNANCEBSCDYPV2');
+
 
 window.CONSTANT_STAKINGIDYPAVAX_1_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYPAVAX_2_ABI = window.CONSTANT_STAKING_IDYP_ABI;
@@ -3735,6 +3904,71 @@ class LANDNFT {
   }
 }
 
+/*===========================CAWS PREMIUM STAKING POOL===============================*/
+
+/**
+ *
+ * @param {"TOKEN" | "CAWSPREMIUM" } key
+ */
+async function getContractCawsPremiumNFT(key) {
+ 
+  let address = window.config.nft_caws_premiumstake_address;
+ 
+    window.web3 = new Web3(window.ethereum);
+    window.cached_contracts[key] = new window.web3.eth.Contract(
+      window.CAWSPREMIUM_ABI,
+      address,
+      {
+        from: await getCoinbase(),
+      }
+    );
+ 
+
+  return window.cached_contracts[key];
+}
+
+class CAWSPREMIUM {
+  constructor(key = "CAWSPREMIUM") {
+    this.key = key;
+    [
+      "LOCKUP_TIME",
+      "MAX_DEPOSIT",
+      "MAX_POOL",
+      "depositsOf",
+      "expiration",
+      "stakingTime",
+      
+    ].forEach((fn_name) => {
+      this[fn_name] = async function (...args) {
+        let contract = await getContractCawsPremiumNFT(this.key);
+        return await contract.methods[fn_name](...args).call();
+      };
+    });
+
+  }
+
+  async approveStakeCawsPremium(addr) {
+    let nft_contract = await getContractCawsPremiumNFT("CAWSPREMIUM");
+    return await nft_contract.methods.setApprovalForAll(addr, true).send();
+  }
+
+  async checkapproveStakeCawsPremium(useraddr, addr) {
+    let nft_contract = await getContractCawsPremiumNFT("CAWSPREMIUM");
+    return await nft_contract.methods.isApprovedForAll(useraddr, addr).call();
+  }
+
+  async depositStakeCawsPremium() {
+    let nft_contract = await getContractCawsPremiumNFT("CAWSPREMIUM");
+    return await nft_contract.methods.deposit([]).send();
+  }
+
+  async checkLockoutTimeCawsPremium() {
+    let nft_contract = await getContractCawsPremiumNFT("CAWSPREMIUM");
+    const time = await nft_contract.methods.LOCKUP_TIME().call();
+    return time;
+  }
+}
+
 /**
  *
  * @param {"TOKEN" | "WOD_CAWS" } key
@@ -3876,6 +4110,7 @@ class WOD_CAWS {
   }
 }
 
+window.cawsPremium = new CAWSPREMIUM();
 window.wod_caws = new WOD_CAWS();
 
 window.landnft = new LANDNFT();
@@ -4117,6 +4352,7 @@ async function myNftListContract(address) {
 
   return nftList;
 }
+
 
 async function myNftList(address) {
   return await window.$.get(
@@ -8492,6 +8728,334 @@ window.LANDSTAKING_ABI = [
   {
     inputs: [{ internalType: "uint256", name: "_lockTime", type: "uint256" }],
     name: "setLockTime",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "_rate", type: "uint256" }],
+    name: "setRate",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "stakingDestinationAddress",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "stakingTime",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "unpause",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256[]", name: "tokenIds", type: "uint256[]" },
+    ],
+    name: "withdraw",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "withdrawTokens",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+];
+
+window.CAWSPREMIUM_ABI = [
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_stakingDestinationAddress",
+        type: "address",
+      },
+      { internalType: "uint256", name: "_rate", type: "uint256" },
+      { internalType: "uint256", name: "_expiration", type: "uint256" },
+      { internalType: "address", name: "_erc20Address", type: "address" },
+    ],
+    stateMutability: "nonpayable",
+    type: "constructor",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "newExpiration",
+        type: "uint256",
+      },
+    ],
+    name: "ExpirationChanged",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "newLockTime",
+        type: "uint256",
+      },
+    ],
+    name: "LockTimeChanged",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "previousOwner",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "OwnershipTransferred",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "Paused",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "newRate",
+        type: "uint256",
+      },
+    ],
+    name: "RateChanged",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "Unpaused",
+    type: "event",
+  },
+  {
+    inputs: [],
+    name: "LOCKUP_TIME",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "MAX_DEPOSIT",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "MAX_POOL",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "uint256", name: "", type: "uint256" },
+    ],
+    name: "_depositBlocks",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "account", type: "address" },
+      { internalType: "uint256", name: "tokenId", type: "uint256" },
+    ],
+    name: "calculateReward",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "account", type: "address" },
+      { internalType: "uint256[]", name: "tokenIds", type: "uint256[]" },
+    ],
+    name: "calculateRewards",
+    outputs: [
+      { internalType: "uint256[]", name: "rewards", type: "uint256[]" },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256[]", name: "tokenIds", type: "uint256[]" },
+    ],
+    name: "claimRewards",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256[]", name: "tokenIds", type: "uint256[]" },
+    ],
+    name: "deposit",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "account", type: "address" }],
+    name: "depositsOf",
+    outputs: [{ internalType: "uint256[]", name: "", type: "uint256[]" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256[]", name: "tokenIds", type: "uint256[]" },
+    ],
+    name: "emergencyWithdraw",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "erc20Address",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "expiration",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "uint256", name: "", type: "uint256" },
+      { internalType: "bytes", name: "", type: "bytes" },
+    ],
+    name: "onERC721Received",
+    outputs: [{ internalType: "bytes4", name: "", type: "bytes4" }],
+    stateMutability: "pure",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "owner",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "pause",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "paused",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "rate",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "_expiration", type: "uint256" }],
+    name: "setExpiration",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "_lockTime", type: "uint256" }],
+    name: "setLockTime",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "_maxDeposit", type: "uint256" }],
+    name: "setMaxDeposit",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "_maxPool", type: "uint256" }],
+    name: "setPoolCap",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -36238,6 +36802,7 @@ async function getContract({ key, address = null, ABI = null }) {
   return window.cached_contracts[key];
 }
 
+
 function wait(ms) {
   console.log("Waiting " + ms + "ms");
   return new Promise((r) =>
@@ -36584,7 +37149,12 @@ Object.keys(window.config)
       k.startsWith("stakingavax_") ||
       k.startsWith("reward_tokenavax") ||
       k.startsWith("reward_token_dypius_eth") ||
+      k.startsWith("reward_token_dypius_base") ||
+
       k.startsWith("reward_token_dypius_bsc") ||
+      k.startsWith("reward_token_wbnb") ||
+      k.startsWith("reward_token_wavax") ||
+
       k.startsWith("token_dyp_new") ||
       k.startsWith("token_dypius_new") ||
       k.startsWith("token_dypius_new_avax") ||
@@ -36633,6 +37203,8 @@ Object.keys(window.config)
       k.startsWith("constant_stakingbsc_new14") ||
       k.startsWith("constant_staking_dypius_bsc1") ||
       k.startsWith("constant_staking_dypius_bscother1") ||
+      k.startsWith("constant_staking_dypius_ethother1") ||
+      k.startsWith("constant_staking_dypius_avaxother1") ||
       k.startsWith("constant_stakingnew_newavax2") ||
       k.startsWith("constant_stakingdaiavax") ||
       k.startsWith("constant_stakingdaieth") ||
@@ -36680,6 +37252,10 @@ Object.keys(window.config)
       k.startsWith("new_governance") ||
       k.startsWith("new_governanceavax") ||
       k.startsWith("new_governancebsc") ||
+
+      k.startsWith("new_governancedypv2") ||
+      k.startsWith("new_governanceavaxdypv2") ||
+      k.startsWith("new_governancebscdypv2") ||
       k.startsWith("constant_stakingold_130") ||
       k.startsWith("constant_stakingold_140") ||
       k.startsWith("buyback_stakingbsc1_1") ||
@@ -36694,7 +37270,13 @@ Object.keys(window.config)
       ? window.TOKEN_ABI
       : k.startsWith("reward_token_dypius_eth")
       ? window.TOKEN_ABI
+      : k.startsWith("reward_token_dypius_base")
+      ? window.TOKEN_ABI
       : k.startsWith("reward_token_dypius_bsc")
+      ? window.TOKEN_ABI
+      : k.startsWith("reward_token_wbnb")
+      ? window.TOKEN_ABI
+      : k.startsWith("reward_token_wavax")
       ? window.TOKEN_ABI
       : k.startsWith("token_dyp_new")
       ? window.TOKEN_ABI
@@ -36868,6 +37450,10 @@ Object.keys(window.config)
       ? window.CONSTANT_STAKING_DYPIUS_ABI
       : k.startsWith("constant_staking_dypius_bscother1")
       ? window.CONSTANT_STAKING_DEFI_ABI
+      : k.startsWith("constant_staking_dypius_ethother1")
+      ? window.CONSTANT_STAKING_DEFI_ABI
+      : k.startsWith("constant_staking_dypius_avaxother1")
+      ? window.CONSTANT_STAKING_DEFI_ABI
       : k.startsWith("constant_stakingnew_newavax2")
       ? window.CONSTANT_STAKINGNEW_ABI
       : k.startsWith("constant_stakingdaieth")
@@ -36900,6 +37486,15 @@ Object.keys(window.config)
       ? window.NEW_GOVERNANCEAVAX_ABI
       : k.startsWith("new_governancebsc")
       ? window.NEW_GOVERNANCEBSC_ABI
+
+      : k.startsWith("new_governancedypv2")
+      ? window.NEW_GOVERNANCE_ABI
+      : k.startsWith("new_governanceavaxdypv2")
+      ? window.NEW_GOVERNANCEAVAX_ABI
+      : k.startsWith("new_governancebscdypv2")
+      ? window.NEW_GOVERNANCEBSC_ABI
+
+
       : window.STAKING_ABI;
   });
 
@@ -37244,7 +37839,7 @@ async function getLockedAmountETH(pair) {
 
 async function getTokenHolderBalance(token, holder) {
   let tokenContract = await getContract({ address: token, ABI: ERC20_ABI });
-  return await tokenContract.methods.balanceOf(holder).call();
+  return await tokenContract.methods.balanceOf(holder).call().catch((e)=>{console.error(e); return 0});
 }
 async function getTokenTotalSupply(token) {
   let tokenContract = await getContract({ address: token, ABI: ERC20_ABI });
@@ -37254,6 +37849,9 @@ async function approveToken(token, spender, amount) {
   let tokenContract = await getContract({ address: token, ABI: ERC20_ABI });
   return await tokenContract.methods.approve(spender, amount).send();
 }
+
+ 
+
 async function createLock(pair, baseToken, amount, unlockTimestamp) {
   let lockerContract = await getContract({ key: "LOCKER" });
 
@@ -37350,28 +37948,28 @@ async function getEstimatedTokenSubscriptionAmount(tokenAddress) {
   let subscriptionContract = await getContract({ key: "SUBSCRIPTION_NEWAVAX" });
   return await subscriptionContract.methods
     .getEstimatedTokenSubscriptionAmount(tokenAddress)
-    .call();
+    .call().catch((e)=>{console.error(e); return 0});
 }
 
 async function getEstimatedTokenSubscriptionAmountETH(tokenAddress) {
   let subscriptionContract = await getContract({ key: "SUBSCRIPTION_NEWETH" });
   return await subscriptionContract.methods
     .getEstimatedTokenSubscriptionAmount(tokenAddress)
-    .call();
+    .call().catch((e)=>{console.error(e); return 0});
 }
 
 async function getEstimatedTokenSubscriptionAmountBNB(tokenAddress) {
   let subscriptionContract = await getContract({ key: "SUBSCRIPTION_NEWBNB" });
   return await subscriptionContract.methods
     .getEstimatedTokenSubscriptionAmount(tokenAddress)
-    .call();
+    .call().catch((e)=>{console.error(e); return 0});
 }
 
 async function getEstimatedTokenSubscriptionAmountCFX(tokenAddress) {
   let subscriptionContract = await getContract({ key: "SUBSCRIPTION_CFX" });
   return await subscriptionContract.methods
     .getEstimatedTokenSubscriptionAmount(tokenAddress)
-    .call();
+    .call().catch((e)=>{console.error(e); return 0});
 }
 
 async function getEstimatedTokenSubscriptionAmountBase(tokenAddress) {
@@ -37381,7 +37979,7 @@ async function getEstimatedTokenSubscriptionAmountBase(tokenAddress) {
   );
   return await baseContract.methods
     .getEstimatedTokenSubscriptionAmount(tokenAddress)
-    .call();
+    .call().catch((e)=>{console.error(e); return 0});
 }
 
 async function getEstimatedTokenSubscriptionAmountSkale(tokenAddress) {
@@ -37391,7 +37989,7 @@ async function getEstimatedTokenSubscriptionAmountSkale(tokenAddress) {
   );
   return await skaleContract.methods
     .getEstimatedTokenSubscriptionAmount(tokenAddress)
-    .call();
+    .call().catch((e)=>{console.error(e); return 0});
 }
 
 // ===================== end subscription contract functions ================================

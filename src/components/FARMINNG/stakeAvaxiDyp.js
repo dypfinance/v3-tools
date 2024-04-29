@@ -969,7 +969,7 @@ const StakeAvaxIDyp = ({
                     <div className="d-flex flex-column align-items-baseline">
                       <span className="bal-smallTxt">Rewards</span>
                       <span className="bal-bigTxt2">
-                        {getFormattedNumber(pendingDivs)} DYP
+                        {getFormattedNumber(pendingDivs)} iDYP
                       </span>
                     </div>
                     <button
@@ -1235,7 +1235,7 @@ const StakeAvaxIDyp = ({
                 <div className="d-flex flex-column align-items-baseline">
                   <span className="bal-smallTxt">Rewards</span>
                   <span className="bal-bigTxt2">
-                    {getFormattedNumber(pendingDivs)} DYP
+                    {getFormattedNumber(pendingDivs)} iDYP
                   </span>
                 </div>
                 <button

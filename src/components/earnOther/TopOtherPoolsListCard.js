@@ -6,6 +6,8 @@ import nftTag from "./assets/nftTag.svg";
 import stakeTag from "./assets/stakeTag.svg";
 import hotTag from "./assets/hotTag.svg";
 import watch from "./assets/watch.svg";
+import premium24hrstag from "../top-pools-card/assets/24hrsPremiumTag.svg";
+import CountDown from "react-countdown";
 
 const TopOtherPoolsListCard = ({
   tokenLogo,
@@ -48,6 +50,8 @@ const TopOtherPoolsListCard = ({
   isNft,
   isStaked,
   isComingSoon,
+  onCountDownComplete,
+  isPremium,
 }) => {
   const ethCoins = ["ethereum", "wbtc", "usdc", "usdt"];
   const bscCoins = [
@@ -76,62 +80,11 @@ const TopOtherPoolsListCard = ({
 
   const avaxCoins2 = ["avax"];
 
-  const dummyData_avax2 = [
-    {
-      chain: "Avalanche",
-      apr: 10,
-      tokenLogo: "avax.svg",
-      expired: false,
-      top_pick: false,
-      tokenName: "AVAX",
-      tokenTicker: "AVAX",
-      pool: "AVAX",
-      id: "0x8652d1817f5a95172001685a28facb1d57e78a11",
-      coming_soon: true,
-      lockTime: "30 days",
-      poolCap: "7413",
-      new_pool: "Yes",
-    },
-  ];
-
-  const dummyData_base2 = [
-    {
-      chain: "Base",
-      apr: 15,
-      tokenLogo: "baseActive.svg",
-      expired: false,
-      top_pick: false,
-      tokenName: "ETH",
-      tokenTicker: "ETH",
-      pool: "ETH",
-      id: "",
-      lockTime: "60 days",
-      poolCap: "234",
-      coming_soon: true,
-      new_pool: "Yes",
-    },
-  ];
-
-  const dummyData_bnb2 = [
-    {
-      chain: "BNB Chain",
-      apr: 25,
-      tokenLogo: "bsc.svg",
-      expired: false,
-      top_pick: false,
-      tokenName: "BNB",
-      tokenTicker: "WBNB",
-      pool: "BNB",
-      id: "0x8652d1817f5a95172001685a28facb1d57e78a11",
-      lockTime: "90 days",
-      poolCap: "467",
-      coming_soon: true,
-      new_pool: "Yes",
-    },
-  ];
-
   const [coins, setCoins] = useState(ethCoins);
   const windowSize = useWindowSize();
+  const [livePremiumOnly, setlivePremiumOnly] = useState(true);
+
+  let premiumDayBase = new Date("2024-04-17T15:00:00.000+02:00");
 
   useEffect(() => {
     if (chain === "eth") {
@@ -158,13 +111,26 @@ const TopOtherPoolsListCard = ({
         style={{ display: display }}
         onClick={onCardClick}
       >
+        {tokenTicker === "AVAX" && (
+          <div className="d-none">
+            <CountDown
+              date={premiumDayBase}
+              onComplete={() => {
+                setlivePremiumOnly(false);
+                onCountDownComplete(false);
+              }}
+            />
+          </div>
+        )}
         <div className="px-0 d-flex justify-content-between align-items-center">
           <table className="earnother-table">
             <tbody>
               {windowSize.width && windowSize.width > 768 ? (
                 <tr className="d-flex w-100 align-items-center justify-content-between">
                   <td className="earnother-td col-2">
-                    <div className={`col-6 d-flex align-items-center gap-2 justify-content-start`}>
+                    <div
+                      className={`col-6 d-flex align-items-center gap-2 justify-content-start`}
+                    >
                       <img
                         src={tokenLogo}
                         style={{ width: 36, height: 36 }}
@@ -176,7 +142,9 @@ const TopOtherPoolsListCard = ({
                       >
                         {tokenTicker}
                       </h5>
-                      {/* {isStaked && <img src={stakeTag} alt="" />} */}
+                      {livePremiumOnly && tokenTicker === "AVAX" && (
+                        <img src={premium24hrstag} alt="" />
+                      )}
                       {/* {isHot && <img src={hotTag} alt="" />} */}
                     </div>
                   </td>
@@ -228,7 +196,7 @@ const TopOtherPoolsListCard = ({
                         <img src={watch} alt="" /> Coming Soon
                       </h6>
                     ) : (
-                      <h6 className="details-text2 gap-1 d-flex align-items-center cursor-pointer justify-content-end">
+                      <h6 className="details-text2 gap-1 d-flex align-items-center w-75 cursor-pointer justify-content-center">
                         Stake
                       </h6>
                     )}
@@ -240,13 +208,13 @@ const TopOtherPoolsListCard = ({
                     <td className="earnother-td w-100">
                       <div className="d-flex align-items-center w-100  justify-content-between gap-2">
                         <div className={` d-flex align-items-center gap-1`}>
-                          <img src={chainLogo} width={28} height={28} alt="" />
-                          <div className="d-flex flex-column gap-1">
+                          <img src={tokenLogo} width={28} height={28} alt="" />
+                          <div className="d-flex flex-column align-items-start">
                             <h5
                               className="text-white"
                               style={{ fontSize: "16px", fontWeight: "600" }}
                             >
-                              {chain}
+                              {tokenTicker}
                             </h5>
                             <h5
                               className="text-white"
@@ -256,9 +224,12 @@ const TopOtherPoolsListCard = ({
                                 color: "#F7F7FC",
                               }}
                             >
-                              {tokenTicker}
+                              {chain}
                             </h5>
                           </div>
+                          {livePremiumOnly && tokenTicker === "AVAX" && (
+                            <img src={premium24hrstag} alt="" />
+                          )}
                         </div>
                         <div className="d-flex flex-column gap-2">
                           <h5
@@ -290,7 +261,7 @@ const TopOtherPoolsListCard = ({
                           <img src={watch} alt="" /> Coming Soon
                         </h6>
                       ) : (
-                        <h6 className="details-text2 m-0 gap-1 d-flex align-items-center cursor-pointer justify-content-end w-100">
+                        <h6 className="details-text2 m-0 gap-1 d-flex align-items-center cursor-pointer justify-content-center w-100">
                           Stake
                         </h6>
                       )}
@@ -304,69 +275,6 @@ const TopOtherPoolsListCard = ({
           </table>
         </div>
       </div>
-      {showDetails &&
-      cardId === cardIndex &&
-      ((cardIndex === 0 && chain === "base") ||
-        (cardIndex === 1 && chain === "allchains")) ? (
-        dummyData_base2.map((item, index) => {
-          return (
-            <TopPoolsListCardInner
-              key={index}
-              expired={item.expired}
-              tokenLogo={item.tokenLogo}
-              tokenName={item.tokenName}
-              top_pick={item.top_pick}
-              comingSoon={item.coming_soon}
-              chain={chain}
-              apr={item.apr}
-              lockTime={item.lockTime}
-              poolCap={item.poolCap}
-            />
-          );
-        })
-      ) : showDetails &&
-        cardId === cardIndex &&
-        ((cardIndex === 0 && chain === "bnb") ||
-          (cardIndex === 2 && chain === "allchains")) ? (
-        dummyData_bnb2.map((item, index) => {
-          return (
-            <TopPoolsListCardInner
-              key={index}
-              expired={item.expired}
-              tokenLogo={item.tokenLogo}
-              tokenName={item.tokenName}
-              top_pick={item.top_pick}
-              comingSoon={item.coming_soon}
-              chain={chain}
-              apr={item.apr}
-              lockTime={item.lockTime}
-              poolCap={item.poolCap}
-            />
-          );
-        })
-      ) : showDetails &&
-        cardId === cardIndex &&
-        ((cardIndex === 0 && chain === "avax") ||
-          (cardIndex === 0 && chain === "allchains")) ? (
-        dummyData_avax2.map((item, index) => {
-          return (
-            <TopPoolsListCardInner
-              key={index}
-              expired={item.expired}
-              tokenLogo={item.tokenLogo}
-              tokenName={item.tokenName}
-              top_pick={item.top_pick}
-              comingSoon={item.coming_soon}
-              chain={chain}
-              apr={item.apr}
-              lockTime={item.lockTime}
-              poolCap={item.poolCap}
-            />
-          );
-        })
-      ) : (
-        <></>
-      )}
     </>
   );
 };

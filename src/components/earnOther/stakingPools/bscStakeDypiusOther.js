@@ -10,8 +10,11 @@ import { ClickAwayListener } from "@material-ui/core";
 import { handleSwitchNetworkhook } from "../../../functions/hooks";
 import axios from "axios";
 import Modal from "../../Modal/Modal";
+import { useHistory } from "react-router-dom";
+import Web3 from "web3";
 
 const StakeDypiusBscOther = ({
+  totalTvl,
   selectedPool,
   selectedTab,
   staking,
@@ -40,9 +43,12 @@ const StakeDypiusBscOther = ({
   earlyFee,
   maximumDeposit,
   poolCap,
+  livePremiumOnly,
+  isPremium,
+  onRefreshTvl,
 }) => {
   let {
-    reward_token_dypius_bsc,
+    reward_token_wbnb,
     BigNumber,
     alertify,
     reward_token_idyp,
@@ -117,6 +123,9 @@ const StakeDypiusBscOther = ({
   const [cliffTime, setcliffTime] = useState("");
   const [stakingTime, setstakingTime] = useState("");
   const [depositedTokens, setdepositedTokens] = useState("");
+  const [canStake, setCanStake] = useState(true);
+  const [amountLeft, setamountLeft] = useState(9);
+
   const [lastClaimedTime, setlastClaimedTime] = useState("");
   const [reInvestLoading, setreInvestLoading] = useState(false);
   const [reInvestStatus, setreInvestStatus] = useState("initial");
@@ -125,6 +134,8 @@ const StakeDypiusBscOther = ({
   const [depositLoading, setdepositLoading] = useState(false);
   const [depositStatus, setdepositStatus] = useState("initial");
   const [claimLoading, setclaimLoading] = useState(false);
+  const [maxDepositAllowed, setmaxDepositAllowed] = useState(0);
+
   const [claimStatus, setclaimStatus] = useState("initial");
   const [withdrawLoading, setwithdrawLoading] = useState(false);
   const [withdrawStatus, setwithdrawStatus] = useState("initial");
@@ -146,6 +157,7 @@ const StakeDypiusBscOther = ({
   const [tvlDyps, setsettvlDyps] = useState("");
   const [tvlUSD, settvlUSD] = useState("");
   const [total_stakers, settotal_stakers] = useState("");
+  const [wbnbPrice, setWbnbPrice] = useState(0);
 
   const [show, setshow] = useState(false);
   const [showWithdrawModal, setshowWithdrawModal] = useState(false);
@@ -168,6 +180,8 @@ const StakeDypiusBscOther = ({
   const [maxDepositTooltip, setMaxDepositTooltip] = useState(false);
   const [approvedAmount, setapprovedAmount] = useState("0.00");
   const [earlyWithdrawTooltip, setEarlyWithdrawTooltip] = useState(false);
+
+  const navigate = useHistory();
 
   const showModal = () => {
     setshow(true);
@@ -241,6 +255,14 @@ const StakeDypiusBscOther = ({
     setEndDateTooltip(true);
   };
 
+  const getBSCPrice = async () => {
+    await axios
+      .get("https://api.dyp.finance/api/the_graph_bsc_v2")
+      .then((data) => {
+        setWbnbPrice(data.data.the_graph_bsc_v2.usd_per_eth);
+      });
+  };
+
   const refreshBalance = async () => {
     let coinbase = coinbase2;
 
@@ -272,14 +294,14 @@ const StakeDypiusBscOther = ({
     }
 
     try {
-      let _bal = reward_token_dypius_bsc.balanceOf(coinbase);
+      let _bal = reward_token_wbnb.balanceOf(coinbase);
       if (staking) {
         let _pDivs = staking.getTotalPendingDivs(coinbase);
         let _tEarned = staking.totalEarnedTokens(coinbase);
         let _stakingTime = staking.stakingTime(coinbase);
         let _dTokens = staking.depositedTokens(coinbase);
         let _lClaimTime = staking.lastClaimedTime(coinbase);
-        let _tvl = reward_token_dypius_bsc.balanceOf(staking._address);
+        let _tvl = reward_token_wbnb.balanceOf(staking._address);
         let _rFeeEarned = staking.totalReferralFeeEarned(coinbase);
         let tStakers = staking.getNumberOfHolders();
 
@@ -300,7 +322,7 @@ const StakeDypiusBscOther = ({
           stakingTime,
           depositedTokens,
           lastClaimedTime,
-          tvl,
+          tvl2,
           referralFeeEarned,
           total_stakers,
           tvlConstantDAI,
@@ -319,21 +341,9 @@ const StakeDypiusBscOther = ({
           //   _tvlDYPS,
         ]);
 
-        //console.log({tvl, tvlConstantiDYP, _amountOutMin})
-        const dypprice = await axios
-          .get(
-            "https://api.geckoterminal.com/api/v2/networks/eth/pools/0x7c81087310a228470db28c1068f0663d6bf88679"
-          )
-          .then((res) => {
-            return res.data.data.attributes.base_token_price_usd;
-          })
-          .catch((e) => {
-            console.log(e);
-          });
-
         let usdValueDAI = new BigNumber(tvlConstantDAI).toFixed(18);
-        let usd_per_lp = lp_data ? dypprice : 0;
-        let tvlUSD = new BigNumber(tvl)
+        let usd_per_lp = lp_data ? wbnbPrice : 0;
+        let tvlUSD = new BigNumber(tvl2)
           .times(usd_per_lp)
           .plus(usdValueDAI)
           .toFixed(18);
@@ -362,12 +372,17 @@ const StakeDypiusBscOther = ({
         let depositedTokens_formatted = new BigNumber(depositedTokens)
           .div(1e18)
           .toString(10);
-
+        const amountLeftToStake = 9 - Number(depositedTokens_formatted);
+        setamountLeft(amountLeftToStake);
+        if (Number(depositedTokens_formatted) === 9) {
+          setCanStake(false);
+          seterrorMsg("Maximum deposit per wallet reached!");
+        }
         setdepositedTokens(depositedTokens_formatted);
 
         setlastClaimedTime(lastClaimedTime);
 
-        let tvl_formatted = new BigNumber(tvl).div(1e18).toFixed(6);
+        let tvl_formatted = new BigNumber(tvl2).div(1e18).toFixed(4);
         settvl(tvl_formatted);
 
         // setsettvlDyps(tvlDyps);
@@ -442,6 +457,7 @@ const StakeDypiusBscOther = ({
 
   useEffect(() => {
     getPriceDYP();
+    getBSCPrice();
   }, []);
 
   useEffect(() => {
@@ -459,6 +475,7 @@ const StakeDypiusBscOther = ({
   useEffect(() => {
     if (chainId === "56") {
       refreshBalance();
+
       if (depositAmount !== "") {
         checkApproval(depositAmount);
       } else {
@@ -481,6 +498,7 @@ const StakeDypiusBscOther = ({
   const handleApprove = async (e) => {
     //   e.preventDefault();
     let selectedBuybackToken2 = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c";
+    window.cached_contracts = Object.create(null);
     if (passivePool === false) {
       setdepositLoading(true);
       if (other_info) {
@@ -488,11 +506,12 @@ const StakeDypiusBscOther = ({
         setdepositLoading(false);
         return;
       }
+      const web3 = new Web3(window.ethereum)
+      let tokenContract = new web3.eth.Contract(window.ERC20_ABI,selectedBuybackToken2);
 
       let amount = depositAmount;
       amount = new BigNumber(amount).times(1e18).toFixed(0);
-      await window
-        .approveToken(selectedBuybackToken2, staking._address, amount)
+      await tokenContract.methods.approve(staking._address, amount).send({from: await window.getCoinbase()})
         .then(() => {
           setdepositLoading(false);
           setdepositStatus("deposit");
@@ -518,6 +537,11 @@ const StakeDypiusBscOther = ({
     //   e.preventDefault();
     if (passivePool === false) {
       setdepositLoading(true);
+      const web3 = new Web3(window.ethereum);
+      const stakingSc = new web3.eth.Contract(
+        window.CONSTANT_STAKING_DEFI_ABI,
+        staking._address
+      );
 
       if (other_info) {
         window.$.alert("This pool no longer accepts deposits!");
@@ -532,12 +556,15 @@ const StakeDypiusBscOther = ({
 
       //NO REFERRER HERE
 
-      staking
+      await stakingSc.methods
         .stake(amount, referrer)
+        .send({ from: await window.getCoinbase() })
         .then(() => {
           setdepositLoading(false);
           setdepositStatus("success");
           refreshBalance();
+          getBalance();
+          onRefreshTvl();
           setTimeout(() => {
             setdepositLoading(false);
             setdepositStatus("initial");
@@ -562,22 +589,30 @@ const StakeDypiusBscOther = ({
   const handleWithdraw = async (e) => {
     if (
       moment
-        .duration((Number(stakingTime) + Number(cliffTime)) * 1000 - Date.now())
+        .duration((Number(stakingTime) + 86400 * 90) * 1000 - Date.now())
         .humanize(true)
         ?.includes("ago")
     ) {
       setwithdrawLoading(true);
       let amount = new BigNumber(withdrawAmount).times(1e18).toFixed(0);
-      await staking
+      const web3 = new Web3(window.ethereum);
+      const stakingSc = new web3.eth.Contract(
+        window.CONSTANT_STAKING_DEFI_ABI,
+        staking._address
+      );
+
+      await stakingSc.methods
         .unstake(amount)
+        .send({ from: await window.getCoinbase() })
         .then(() => {
           setwithdrawStatus("success");
           setwithdrawLoading(false);
           refreshBalance();
+          onRefreshTvl();
           setTimeout(() => {
-            setwithdrawStatus('initial');
-            setwithdrawAmount('');
-            }, 3000);
+            setwithdrawStatus("initial");
+            setwithdrawAmount("");
+          }, 3000);
         })
         .catch((e) => {
           setwithdrawLoading(false);
@@ -591,7 +626,7 @@ const StakeDypiusBscOther = ({
         });
     } else if (
       !moment
-        .duration((Number(stakingTime) + Number(cliffTime)) * 1000 - Date.now())
+        .duration((Number(stakingTime) + 86400 * 60) * 1000 - Date.now())
         .humanize(true)
         ?.includes("ago")
     ) {
@@ -602,18 +637,25 @@ const StakeDypiusBscOther = ({
   const handleWithdraw2 = async (e) => {
     setwithdrawLoading(true);
     let amount = new BigNumber(withdrawAmount).times(1e18).toFixed(0);
-    await staking
+    const web3 = new Web3(window.ethereum);
+    const stakingSc = new web3.eth.Contract(
+      window.CONSTANT_STAKING_DEFI_ABI,
+      staking._address
+    );
+
+    await stakingSc.methods
       .unstake(amount)
+      .send({ from: await window.getCoinbase() })
       .then(() => {
         setwithdrawStatus("success");
         setwithdrawLoading(false);
         refreshBalance();
-
+        onRefreshTvl();
 
         setTimeout(() => {
-        setwithdrawStatus('initial');
-        setwithdrawAmount('');
-        setshowWithdrawModal(false)
+          setwithdrawStatus("initial");
+          setwithdrawAmount("");
+          setshowWithdrawModal(false);
         }, 3000);
       })
       .catch((e) => {
@@ -630,9 +672,15 @@ const StakeDypiusBscOther = ({
 
   const handleClaimDivs = async (e) => {
     setclaimLoading(true);
-    //   e.preventDefault();
-    staking
+    const web3 = new Web3(window.ethereum);
+    const stakingSc = new web3.eth.Contract(
+      window.CONSTANT_STAKING_DEFI_ABI,
+      staking._address
+    );
+
+    await stakingSc.methods
       .claim()
+      .send({ from: await window.getCoinbase() })
       .then(() => {
         setclaimStatus("success");
         setclaimLoading(false);
@@ -652,10 +700,33 @@ const StakeDypiusBscOther = ({
       });
   };
 
+  const getMaxDepositAllowed = async () => {
+    const stakingContract = new window.bscWeb3.eth.Contract(
+      window.CONSTANT_STAKING_DEFI_ABI,
+      staking?._address
+    );
+    const result = await stakingContract.methods
+      .MAX_DEPOSIT()
+      .call()
+      .catch((e) => {
+        console.error(e);
+        return 0;
+      });
+    const result_formatted = new BigNumber(result).div(1e18).toFixed(0);
+    setmaxDepositAllowed(Number(result_formatted));
+  };
+
   const handleSetMaxDeposit = (e) => {
     const depositAmount = wbnb_balance;
-    checkApproval(depositAmount);
-    setdepositAmount(depositAmount);
+    const maxAllowed = 9;
+    if (Number(depositAmount) > maxAllowed) {
+      setdepositAmount(maxAllowed);
+      checkApproval(maxAllowed);
+      seterrorMsg("Maximum Deposit is 9 WBNB!");
+    } else if (Number(depositAmount) <= maxAllowed) {
+      setdepositAmount(depositAmount);
+      checkApproval(depositAmount);
+    }
   };
 
   const handleSetMaxWithdraw = async (e) => {
@@ -693,11 +764,8 @@ const StakeDypiusBscOther = ({
 
   //   return ((approxDeposit * APY) / 100 / 365) * approxDays;
   // };
-
-  const getApproxReturn = () => {
-    let APY = apr - fee;
-
-    return ((approxDeposit * APY) / 100 / 365) * approxDays;
+  const getApproxReturn = (depositAmount, days) => {
+    return ((depositAmount * apr) / 100 / 365) * days;
   };
 
   const getReferralLink = () => {
@@ -709,10 +777,17 @@ const StakeDypiusBscOther = ({
   const handleReinvest = async (e) => {
     setreInvestStatus("invest");
     setreInvestLoading(true);
-
+    
+    const web3 = new Web3(window.ethereum);
+    const stakingSc = new web3.eth.Contract(
+      window.CONSTANT_STAKING_DEFI_ABI,
+      staking._address
+    );
+    
     //   e.preventDefault();
-    staking
+    await stakingSc.methods
       .reInvest()
+      .send({ from: await window.getCoinbase() })
       .then(() => {
         setreInvestStatus("success");
         setreInvestLoading(false);
@@ -804,7 +879,7 @@ const StakeDypiusBscOther = ({
     }
   }
 
-  let tvl_usd = tvl * tokendata;
+  let tvl_usd = tvl * wbnbPrice;
 
   //   let tvlDYPS = tvlDyps / 1e18;
 
@@ -849,11 +924,21 @@ const StakeDypiusBscOther = ({
       });
   };
 
+  const handleCheckAmount = (amount) => {
+    if (Number(amount) > Number(amountLeft)) {
+      seterrorMsg("Please add a smaller amount");
+      setdepositAmount(amountLeft);
+    } else if (Number(amount) <= Number(amountLeft)) {
+      seterrorMsg("");
+      setdepositAmount(amount);
+    }
+    checkApproval(amount);
+  };
+
   useEffect(() => {
     getUsdPerDyp();
+    getMaxDepositAllowed();
   }, []);
-
-  // console.log(Number(depositedTokens))
 
   return (
     <>
@@ -902,7 +987,7 @@ const StakeDypiusBscOther = ({
             <div className="info-pool-item p-2">
               <div className="d-flex justify-content-between gap-1 align-items-center">
                 <span className="info-pool-left-text">
-                  Apr{" "}
+                  APR{" "}
                   <ClickAwayListener onClickAway={aprClose}>
                     <Tooltip
                       open={aprTooltip}
@@ -922,7 +1007,7 @@ const StakeDypiusBscOther = ({
                     </Tooltip>
                   </ClickAwayListener>
                 </span>
-                <span className="info-pool-right-text">{finalApr}%</span>
+                <span className="info-pool-right-text">{finalApr}</span>
               </div>
             </div>
             <div className="info-pool-item p-2">
@@ -943,13 +1028,7 @@ const StakeDypiusBscOther = ({
               <div className="d-flex justify-content-between gap-1 align-items-center">
                 <span className="info-pool-left-text">TVL</span>
                 <span className="info-pool-right-text">
-                  $
-                  {getFormattedNumber(
-                    Number(tvl) * usdPerToken === 0
-                      ? selectedPool.poolList[0].tvl
-                      : Number(tvl) * usdPerToken,
-                    2
-                  )}
+                  ${getFormattedNumber(totalTvl, 2)}
                 </span>
               </div>
             </div>
@@ -981,8 +1060,7 @@ const StakeDypiusBscOther = ({
                     Number(depositAmount) > 0 ? depositAmount : depositAmount
                   }
                   onChange={(e) => {
-                    setdepositAmount(e.target.value);
-                    checkApproval(e.target.value);
+                    handleCheckAmount(e.target.value);
                   }}
                   name="amount_deposit"
                   id="amount_deposit"
@@ -1002,10 +1080,17 @@ const StakeDypiusBscOther = ({
                 } gap-1 align-items-center`}
               >
                 {errorMsg && <h6 className="errormsg m-0">{errorMsg}</h6>}
-
-                <div className="d-flex gap-1 align-items-baseline">
-                  <span className="bal-smallTxt">Approved:</span>
-                  <span className="bal-bigTxt2">{approvedAmount} WBNB</span>
+                <div className="d-flex flex-column">
+                  <div className="d-flex gap-1 align-items-baseline">
+                    <span className="bal-smallTxt">Approved:</span>
+                    <span className="bal-bigTxt2">{approvedAmount} WBNB</span>
+                  </div>
+                  <div className="d-flex gap-1 align-items-baseline">
+                    <span className="bal-smallTxt">Allowance Left:</span>
+                    <span className="bal-bigTxt2">
+                      {getFormattedNumber(amountLeft)} WBNB
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1039,7 +1124,7 @@ const StakeDypiusBscOther = ({
                   <div className="d-flex align-items-center gap-2">
                     <span className="bal-smallTxt">Available Quota:</span>
                     <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                      8 WBNB
+                      {getFormattedNumber(poolCap - tvl, 0)} WBNB
                       <ClickAwayListener onClickAway={quotaClose}>
                         <Tooltip
                           open={quotaTooltip}
@@ -1063,7 +1148,7 @@ const StakeDypiusBscOther = ({
                   <div className="d-flex align-items-center gap-2">
                     <span className="bal-smallTxt">Maximum deposit:</span>
                     <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                      {getFormattedNumber(maximumDeposit, 2)} WBNB
+                      {getFormattedNumber(maxDepositAllowed, 0)} WBNB
                       <ClickAwayListener onClickAway={maxDepositClose}>
                         <Tooltip
                           open={maxDepositTooltip}
@@ -1121,7 +1206,7 @@ const StakeDypiusBscOther = ({
                       <div className="d-flex flex-column align-items-baseline">
                         <span className="bal-smallTxt">Rewards</span>
                         <span className="bal-bigTxt2">
-                          {getFormattedNumber(pendingDivs)} WBNB
+                          {getFormattedNumber(pendingDivs, 6)} WBNB
                         </span>
                       </div>
                       <button
@@ -1206,7 +1291,7 @@ const StakeDypiusBscOther = ({
                   <div className="d-flex align-items-center gap-2">
                     <span className="bal-smallTxt">Pool fee:</span>
                     <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                      {fee ?? 0}%
+                      0%
                       <ClickAwayListener onClickAway={poolFeeClose}>
                         <Tooltip
                           open={poolFeeTooltip}
@@ -1234,59 +1319,29 @@ const StakeDypiusBscOther = ({
                     <a
                       target="_blank"
                       rel="noopener noreferrer"
-                      href={`${window.config.bscscan_baseURL}address/${selectedPool?.poolList[0]?.tokenAddress}`}
+                      href={`${window.config.bscscan_baseURL}address/${staking?._address}`}
                       className="stats-link2 text-decoration-underline"
                     >
-                      {shortAddress(selectedPool?.poolList[0]?.tokenAddress)}{" "}
+                      {shortAddress(staking?._address)}{" "}
                       {/* <img src={statsLinkIcon} alt="" /> */}
                     </a>
                   </div>
                   <div className="d-flex align-items-center gap-1">
                     <span className="bal-smallTxt">Start date:</span>
                     <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                      09 Nov 2023{" "}
-                      <ClickAwayListener onClickAway={startDateClose}>
-                        <Tooltip
-                          open={startDateTooltip}
-                          disableFocusListener
-                          disableHoverListener
-                          disableTouchListener
-                          placement="top"
-                          title={
-                            <div className="tooltip-text">
-                              {
-                                "The date when the staking pool became available for participation."
-                              }
-                            </div>
-                          }
-                        >
-                          <img src={moreinfo} alt="" onClick={startDateOpen} />
-                        </Tooltip>
-                      </ClickAwayListener>
+                      11 Apr 2024
+                      {/* {new Date(
+                        selectedPool?.poolList[0].startDate * 1000
+                      ).toDateString()} */}
                     </span>
                   </div>
                   <div className="d-flex align-items-center gap-1">
                     <span className="bal-smallTxt">End date:</span>
                     <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                      {expiration_time}{" "}
-                      <ClickAwayListener onClickAway={endDateClose}>
-                        <Tooltip
-                          open={endDateTooltip}
-                          disableFocusListener
-                          disableHoverListener
-                          disableTouchListener
-                          placement="top"
-                          title={
-                            <div className="tooltip-text">
-                              {
-                                "The date when the staking pool will no longer accept new deposits."
-                              }
-                            </div>
-                          }
-                        >
-                          <img src={moreinfo} alt="" onClick={endDateOpen} />
-                        </Tooltip>
-                      </ClickAwayListener>
+                      {/* {new Date(
+                        selectedPool?.poolList[0].endDate * 1000
+                      ).toDateString()} */}
+                      09 Jul 2024
                     </span>
                   </div>
                 </div>
@@ -1295,7 +1350,11 @@ const StakeDypiusBscOther = ({
             {is_wallet_connected && chainId === "56" && (
               <button
                 disabled={
-                  depositAmount === "" || depositLoading === true ? true : false
+                  depositAmount === "" ||
+                  depositLoading === true ||
+                  canStake === false
+                    ? true
+                    : false
                 }
                 className={`btn filledbtn ${
                   depositAmount === "" &&
@@ -1345,7 +1404,7 @@ const StakeDypiusBscOther = ({
                 <span className="bal-smallTxt">Deposited:</span>
                 <span className="bal-bigTxt">
                   {" "}
-                  {getFormattedNumber(depositedTokens, 2)} WBNB
+                  {getFormattedNumber(depositedTokens, 4)} WBNB
                 </span>
               </div>
             </div>
@@ -1377,39 +1436,39 @@ const StakeDypiusBscOther = ({
                 {errorMsg3 && <h6 className="errormsg m-0">{errorMsg3}</h6>}
                 {!moment
                   .duration(
-                    (Number(stakingTime) + Number(cliffTime)) * 1000 -
-                      Date.now()
+                    (Number(stakingTime) + 86400 * 90) * 1000 - Date.now()
                   )
                   .humanize(true)
-                  ?.includes("ago") && (
-                  <div className="d-flex gap-1 align-items-baseline">
-                    <span className="bal-smallTxt">Unlocks:</span>
-                    <span className="bal-bigTxt2">
-                      ~
-                      {moment
-                        .duration(
-                          (Number(stakingTime) + Number(cliffTime)) * 1000 -
-                            Date.now()
-                        )
-                        .humanize(true)}
-                    </span>
-                  </div>
-                )}
+                  ?.includes("ago") &&
+                  depositedTokens != "" && (
+                    <div className="d-flex gap-1 align-items-baseline">
+                      <span className="bal-smallTxt">Unlocks:</span>
+                      <span className="bal-bigTxt2">
+                        ~
+                        {moment
+                          .duration(
+                            (Number(stakingTime) + 86400 * 90) * 1000 -
+                              Date.now()
+                          )
+                          .humanize(true)}
+                      </span>
+                    </div>
+                  )}
               </div>
               <button
                 disabled={
                   withdrawStatus === "failed" ||
                   withdrawStatus === "success" ||
-                  withdrawAmount === "" 
+                  withdrawAmount === ""
                     ? true
                     : false
                 }
                 className={`btn filledbtn ${
                   // withdrawStatus === "failed"
                   //   ? "fail-button"
-                    // : withdrawStatus === "success"
-                    // ? "success-button"
-                     (withdrawAmount === "" && withdrawStatus === "initial") 
+                  // : withdrawStatus === "success"
+                  // ? "success-button"
+                  withdrawAmount === "" && withdrawStatus === "initial"
                     ? "disabled-btn"
                     : null
                 } w-50 d-flex align-items-center justify-content-center m-auto`}
@@ -1419,20 +1478,20 @@ const StakeDypiusBscOther = ({
                 }}
               >
                 {
-                // withdrawLoading ? (
-                //   <div
-                //     class="spinner-border spinner-border-sm text-light"
-                //     role="status"
-                //   >
-                //     <span class="visually-hidden">Loading...</span>
-                //   </div>
-                // ) : withdrawStatus === "failed" ? (
-                //   <>Failed</>
-                // ) : withdrawStatus === "success" ? (
-                //   <>Success</>
-                // ) : (
-                  'Withdraw'
-                // )
+                  // withdrawLoading ? (
+                  //   <div
+                  //     class="spinner-border spinner-border-sm text-light"
+                  //     role="status"
+                  //   >
+                  //     <span class="visually-hidden">Loading...</span>
+                  //   </div>
+                  // ) : withdrawStatus === "failed" ? (
+                  //   <>Failed</>
+                  // ) : withdrawStatus === "success" ? (
+                  //   <>Success</>
+                  // ) : (
+                  "Withdraw"
+                  // )
                 }
               </button>
             </div>
@@ -1449,7 +1508,7 @@ const StakeDypiusBscOther = ({
                   <div className="d-flex flex-column align-items-baseline">
                     <span className="bal-smallTxt">Rewards</span>
                     <span className="bal-bigTxt2">
-                      {getFormattedNumber(pendingDivs)} WBNB
+                      {getFormattedNumber(pendingDivs, 6)} WBNB
                     </span>
                   </div>
                   <button
@@ -1529,7 +1588,7 @@ const StakeDypiusBscOther = ({
                   <div className="d-flex align-items-center gap-2">
                     <span className="bal-smallTxt">Pool fee:</span>
                     <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                      {fee ?? 0}%
+                      0%
                       <ClickAwayListener onClickAway={poolFeeClose}>
                         <Tooltip
                           open={poolFeeTooltip}
@@ -1557,17 +1616,20 @@ const StakeDypiusBscOther = ({
                     <a
                       target="_blank"
                       rel="noopener noreferrer"
-                      href={`${window.config.bscscan_baseURL}address/${selectedPool?.poolList[0]?.tokenAddress}`}
+                      href={`${window.config.bscscan_baseURL}address/${staking?._address}`}
                       className="stats-link2 text-decoration-underline"
                     >
-                      {shortAddress(selectedPool?.poolList[0]?.tokenAddress)}{" "}
+                      {shortAddress(staking?._address)}{" "}
                       {/* <img src={statsLinkIcon} alt="" /> */}
                     </a>
                   </div>
                   <div className="d-flex align-items-center gap-1">
                     <span className="bal-smallTxt">Start date:</span>
                     <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                      09 Nov 2023{" "}
+                      11 Apr 2024
+                      {/* {new Date(
+                        selectedPool?.poolList[0].startDate * 1000
+                      ).toDateString()} */}
                       {/* <ClickAwayListener onClickAway={startDateClose}>
                       <Tooltip
                         open={startDateTooltip}
@@ -1591,7 +1653,10 @@ const StakeDypiusBscOther = ({
                   <div className="d-flex align-items-center gap-1">
                     <span className="bal-smallTxt">End date:</span>
                     <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                      {expiration_time}{" "}
+                      09 Jul 2024
+                      {/* {new Date(
+                        selectedPool?.poolList[0].endDate * 1000
+                      ).toDateString()} */}
                       {/* <ClickAwayListener onClickAway={endDateClose}>
                       <Tooltip
                         open={endDateTooltip}
@@ -1652,9 +1717,8 @@ const StakeDypiusBscOther = ({
               <div className="container px-0">
                 <div className="row" style={{ marginLeft: "0px" }}>
                   <h6 className="withdrawdesc mt-2 p-0">
-                    {lockTime === "No Lock"
-                      ? "Your deposit has no lock-in period. You can withdraw your assets anytime, or continue to earn rewards every day."
-                      : `The pool has a lock time. You can withdraw your deposited assets after the lock time expires.`}
+                    There is a 10% early withdrawal fee for this pool. Do you
+                    want to proceed?
                   </h6>
                 </div>
 
@@ -1669,7 +1733,11 @@ const StakeDypiusBscOther = ({
                     <div className="d-flex flex-column gap-1">
                       <h6 className="withsubtitle">Withdraw</h6>
                       <h6 className="withtitle2">
-                        {getFormattedNumber(withdrawAmount, 6)} WBNB
+                        {getFormattedNumber(
+                          withdrawAmount - withdrawAmount * 0.1,
+                          6
+                        )}{" "}
+                        WBNB
                       </h6>
                     </div>
                   </div>

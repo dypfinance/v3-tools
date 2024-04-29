@@ -310,11 +310,14 @@ const Sidebar = (props) => {
                             to={child.link}
                             className={(isActive) =>
                               isActive
-                                ? "accordion-child accordion-child-active"
-                                : "accordion-child"
+                                ? "accordion-child accordion-child-active d-flex align-items-center gap-1"
+                                : "accordion-child d-flex align-items-center gap-1"
                             }
                           >
                             {child.title}
+                            {(child.title === 'NFT Staking' || child.title === 'Staking')&&   <div className="new-beta-sidebar">
+                          <span className="new-beta-text">New</span>
+                        </div>}
                           </NavLink>
                         ))}
                       </div>

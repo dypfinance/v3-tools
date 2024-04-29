@@ -252,12 +252,7 @@ const InitConstantStakingiDYP = ({
   };
 
   const refreshBalance = async () => {
-    let coinbase = coinbase2;
 
-    if (window.coinbase_address) {
-      coinbase = window.coinbase_address;
-      setcoinbase(coinbase);
-    }
 
     // let usd_per_dyps = the_graph_result.price_DYPS ? the_graph_result.price_DYPS : 1
     let usd_per_dyps = 0;
@@ -365,11 +360,8 @@ const InitConstantStakingiDYP = ({
   };
 
   useEffect(() => {
-    if (coinbase !== coinbase2 && coinbase !== null && coinbase !== undefined) {
-      setcoinbase(coinbase);
-    }
     getTotalTvl();
-  }, [coinbase, coinbase2]);
+  }, [coinbase]);
 
   useEffect(() => {
     if (chainId === "1") {
@@ -378,7 +370,9 @@ const InitConstantStakingiDYP = ({
         checkApproval(depositAmount);
       }
     }
-  }, [coinbase, coinbase2, staking, chainId]);
+  }, [coinbase, staking, chainId]);
+
+  
 
   useEffect(() => {
     setdepositAmount("");
@@ -969,7 +963,7 @@ const InitConstantStakingiDYP = ({
                     <div className="d-flex flex-column align-items-baseline">
                       <span className="bal-smallTxt">Rewards</span>
                       <span className="bal-bigTxt2">
-                        {getFormattedNumber(pendingDivs)} DYP
+                        {getFormattedNumber(pendingDivs)} iDYP
                       </span>
                     </div>
                     <button
@@ -1235,7 +1229,7 @@ const InitConstantStakingiDYP = ({
                 <div className="d-flex flex-column align-items-baseline">
                   <span className="bal-smallTxt">Rewards</span>
                   <span className="bal-bigTxt2">
-                    {getFormattedNumber(pendingDivs)} DYP
+                    {getFormattedNumber(pendingDivs)} iDYP
                   </span>
                 </div>
                 <button

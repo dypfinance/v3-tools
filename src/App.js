@@ -94,7 +94,6 @@ class App extends React.Component {
       showWalletPopup: false,
       aggregatorPools: [],
       userCurencyBalance: 0,
-
     };
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
@@ -188,7 +187,6 @@ class App extends React.Component {
               });
             }
 
-            this.refreshSubscription().then();
           })
           .catch(console.error);
       } else if (
@@ -233,7 +231,8 @@ class App extends React.Component {
           });
         }
 
-        this.refreshSubscription().then();
+        
+
       } else if (window.ethereum && window.coin98) {
         window.ethereum
           .request({ method: "net_version" })
@@ -248,7 +247,7 @@ class App extends React.Component {
               });
             }
 
-            this.refreshSubscription().then();
+            
           })
           .catch(console.error);
       } else {
@@ -264,7 +263,7 @@ class App extends React.Component {
   };
 
   refreshSubscription = async () => {
-    let coinbase = this.state.coinbase;
+    
 
     let subscribedPlatformTokenAmountNewETH;
     let subscribedPlatformTokenAmountNewAvax;
@@ -320,10 +319,11 @@ class App extends React.Component {
       SkaleABI,
       skalesubscribeAddress
     );
-
-    if (coinbase) {
+const userAddr = await window.getCoinbase()
+ 
+    if (userAddr) {
       subscribedPlatformTokenAmountNewETH = await ethNewcontract.methods
-        .subscriptionPlatformTokenAmount(coinbase)
+        .subscriptionPlatformTokenAmount(userAddr)
         .call()
         .catch((e) => {
           console.log(e);
@@ -331,7 +331,7 @@ class App extends React.Component {
         });
 
       subscribedPlatformTokenAmountNewAvax = await avaxNewcontract.methods
-        .subscriptionPlatformTokenAmount(coinbase)
+        .subscriptionPlatformTokenAmount(userAddr)
         .call()
         .catch((e) => {
           console.log(e);
@@ -339,7 +339,7 @@ class App extends React.Component {
         });
 
       subscribedPlatformTokenAmountNewBNB = await bnbNewcontract.methods
-        .subscriptionPlatformTokenAmount(coinbase)
+        .subscriptionPlatformTokenAmount(userAddr)
         .call()
         .catch((e) => {
           console.log(e);
@@ -347,7 +347,7 @@ class App extends React.Component {
         });
 
       subscribedPlatformTokenAmountCfx = await cfxcontract.methods
-        .subscriptionPlatformTokenAmount(coinbase)
+        .subscriptionPlatformTokenAmount(userAddr)
         .call()
         .catch((e) => {
           console.log(e);
@@ -355,7 +355,7 @@ class App extends React.Component {
         });
 
       subscribedPlatformTokenAmountBase = await basecontract.methods
-        .subscriptionPlatformTokenAmount(coinbase)
+        .subscriptionPlatformTokenAmount(userAddr)
         .call()
         .catch((e) => {
           console.log(e);
@@ -363,7 +363,7 @@ class App extends React.Component {
         });
 
       subscribedPlatformTokenAmountSkale = await skalecontract.methods
-        .subscriptionPlatformTokenAmount(coinbase)
+        .subscriptionPlatformTokenAmount(userAddr)
         .call()
         .catch((e) => {
           console.log(e);
@@ -378,6 +378,7 @@ class App extends React.Component {
         subscribedPlatformTokenAmountNewBNB == "0" &&
         subscribedPlatformTokenAmountSkale == "0"
       ) {
+  
         this.setState({ subscribedPlatformTokenAmount: "0", isPremium: false });
       } else if (
         subscribedPlatformTokenAmountNewETH != "0" ||
@@ -387,8 +388,9 @@ class App extends React.Component {
         subscribedPlatformTokenAmountNewBNB != "0" ||
         subscribedPlatformTokenAmountSkale != "0"
       ) {
+    
+
         this.setState({
-          // subscribedPlatformTokenAmount: subscribedPlatformTokenAmountBNB,
           isPremium: true,
         });
       }
@@ -541,7 +543,7 @@ class App extends React.Component {
   }
 
   checkConnection = async () => {
-    this.refreshSubscription();
+    
     this.tvl();
     const logout = localStorage.getItem("logout");
 
@@ -606,8 +608,6 @@ class App extends React.Component {
     // this.setState({ network: network });
   };
 
-
-
   componentDidUpdate(prevProps, prevState) {
     if (this.props.location !== prevProps.location) {
       this.checkNetworkId();
@@ -659,6 +659,8 @@ class App extends React.Component {
     ) {
       ethereum?.on("chainChanged", this.checkNetworkId);
       ethereum?.on("accountsChanged", this.checkConnection);
+      ethereum?.on("accountsChanged", this.refreshSubscription);
+
     }
 
     document.addEventListener("touchstart", { passive: true });
@@ -701,7 +703,9 @@ class App extends React.Component {
               show={this.state.show}
               isConnected={this.state.isConnected}
               appState={this.state}
-              onSetCurrencyAmount={(value)=>{this.setState({userCurencyBalance: value})}}
+              onSetCurrencyAmount={(value) => {
+                this.setState({ userCurencyBalance: value });
+              }}
             />
           )}
           <div className="content-wrapper container-fluid d-flex justify-content-center justify-content-lg-start">
