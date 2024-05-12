@@ -2563,7 +2563,7 @@ class ProposalDetails extends React.Component {
                 <h6 className="stats-card-content">{optionTwoVotes} DYP</h6>
               </div>
             </div>
-            <div className="d-flex align-items-center justify-content-between gap-1 mb-3">
+            <div className="d-flex flex-column flex-lg-row flex-md-row align-items-start align-items-lg-center align-items-md-center justify-content-between gap-1 mb-3">
               <div className="d-flex flex-column gap-1">
                 <a
                   target="_blank"
@@ -2588,7 +2588,7 @@ class ProposalDetails extends React.Component {
                 <a
                   target="_blank"
                   rel="noopener noreferrer"
-                  href={`${window.config.etherscan_baseURL}address/${  this.props.is_v2 === true
+                  href={`${window.config.etherscan_baseURL}/address/${  this.props.is_v2 === true
                     ? governancedypv2._address
                     : governance._address}`}
                   className="stats-link"
@@ -2614,7 +2614,7 @@ class ProposalDetails extends React.Component {
                 <a
                   target="_blank"
                   rel="noopener noreferrer"
-                  href={`${window.config.etherscan_baseURL}address/${this.state.coinbase}`}
+                  href={`${window.config.etherscan_baseURL}/address/${this.state.coinbase}`}
                   className="stats-link"
                 >
                   {shortAddress(this.state.coinbase)}{" "}
