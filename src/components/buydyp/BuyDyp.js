@@ -173,7 +173,7 @@ const BuyDyp = () => {
     {
       title: "Coinbase",
       logo: "coinbase.png",
-      link: "https://pro.coinbase.com/trade/DYP-USD",
+      link: "https://www.coinbase.com/advanced-trade/spot/DYP-USD",
       totalvids: "1 video",
       active: true,
       version: "DYP v1",
