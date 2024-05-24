@@ -646,6 +646,10 @@ const BscFarmingFunc = ({
           setWithdrawStatus("success");
           setWithdrawLoading(false);
           refreshBalance();
+          setTimeout(() => {
+            setWithdrawStatus("initial");
+            setSelectedPool("");
+          }, 10000);
         })
         .catch((e) => {
           setWithdrawStatus("failed");
@@ -783,12 +787,20 @@ const BscFarmingFunc = ({
         setWithdrawLoading(false);
         setWithdrawStatus("success");
         refreshBalance();
-        // getBalance();
+        setTimeout(() => {
+          setWithdrawStatus("initial");
+          setSelectedPool("");
+        }, 5000);
       })
       .catch((e) => {
         setWithdrawLoading(false);
         setWithdrawStatus("fail");
         setErrorMsg3(e?.message);
+        setTimeout(() => {
+        setWithdrawStatus("initial");
+        setErrorMsg3('');
+        setSelectedPool("");
+        }, 5000);
       });
   };
 
@@ -902,6 +914,9 @@ const BscFarmingFunc = ({
           setClaimLoading(false);
           setPendingDivs(getFormattedNumber(0, 6));
           refreshBalance();
+          setTimeout(() => {
+            setClaimStatus("initial");
+          }, 5000);
         })
         .catch((e) => {
           setClaimStatus("fail");
@@ -955,6 +970,9 @@ const BscFarmingFunc = ({
           setClaimLoading(false);
           setPendingDivs(getFormattedNumber(0, 6));
           refreshBalance();
+          setTimeout(() => {
+            setClaimStatus("initial");
+          }, 5000);
         })
         .catch((e) => {
           setClaimStatus("fail");
