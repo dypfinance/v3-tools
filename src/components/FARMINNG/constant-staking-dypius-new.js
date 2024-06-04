@@ -897,7 +897,9 @@ const StakeDypiusEth = ({
                 errorMsg ? "justify-content-between" : "justify-content-end"
               } gap-1 align-items-center`}
             >
-              {errorMsg && <h6 className="errormsg m-0">{errorMsg}</h6>}
+              {/* {errorMsg && <h6 className="errormsg m-0">{errorMsg}</h6>} */}
+              <h6 className="errormsg m-0">*Max pool size reached</h6>
+
 
               <div className="d-flex gap-1 align-items-baseline">
                 <span className="bal-smallTxt">Approved:</span>
@@ -1125,30 +1127,32 @@ const StakeDypiusEth = ({
           {is_wallet_connected && chainId === "1" && (
             <button
               disabled={
-                depositAmount === "" || depositLoading === true ? true : false
+                true
+                // depositAmount === "" || depositLoading === true ? true : false
               }
-              className={`btn filledbtn ${
-                depositAmount === "" &&
-                depositStatus === "initial" &&
-                "disabled-btn"
-              } ${
-                depositStatus === "deposit" || depositStatus === "success"
-                  ? "success-button"
-                  : depositStatus === "fail"
-                  ? "fail-button"
-                  : null
-              } d-flex justify-content-center align-items-center gap-2 m-auto`}
-              onClick={() => {
-                depositStatus === "deposit"
-                  ? handleStake()
-                  : depositStatus === "initial" && depositAmount !== ""
-                  ? handleApprove()
-                  : console.log("");
-              }}
+              // className={`btn filledbtn ${
+              //   depositAmount === "" &&
+              //   depositStatus === "initial" &&
+              //   "disabled-btn"
+              // } ${
+              //   depositStatus === "deposit" || depositStatus === "success"
+              //     ? "success-button"
+              //     : depositStatus === "fail"
+              //     ? "fail-button"
+              //     : null
+              // } d-flex justify-content-center align-items-center gap-2 m-auto`}
+              className="btn disabled-btn d-flex justify-content-center align-items-center gap-2 m-auto"
+              // onClick={() => {
+              //   depositStatus === "deposit"
+              //     ? handleStake()
+              //     : depositStatus === "initial" && depositAmount !== ""
+              //     ? handleApprove()
+              //     : console.log("");
+              // }}
               style={{ width: "fit-content" }}
             >
               {" "}
-              {depositLoading ? (
+              {/* {depositLoading ? (
                 <div
                   class="spinner-border spinner-border-sm text-light"
                   role="status"
@@ -1163,7 +1167,8 @@ const StakeDypiusEth = ({
                 <>Success</>
               ) : (
                 <>Failed</>
-              )}
+              )} */}
+              Deposit
             </button>
           )}
         </div>
