@@ -18,6 +18,9 @@ import StakeAvaxIDyp from "../../FARMINNG/stakeAvaxiDyp";
 import StakeBscIDyp from "../../FARMINNG/bscConstantStakeiDyp";
 import StakeBsc from "../../FARMINNG/bscConstantStake";
 import StakeDypiusEth from "../../FARMINNG/constant-staking-dypius-new";
+import StakeDypiusEth1Phase2 from "../../FARMINNG/stakingDypiusEth1Phase2";
+import StakeDypiusEth2Phase2 from "../../FARMINNG/stakingDypiusEth1Phase2";
+import StakeDypiusEth3Phase2 from "../../FARMINNG/stakingDypiusEth1Phase2";
 import Vault from "../../FARMINNG/vault-new";
 import StakeNewEth from "../../FARMINNG/stakeNewEth";
 import BscFarmingFunc from "../../FARMINNG/BscFarmingFunc";
@@ -184,6 +187,14 @@ const EarnTopPicks = ({
   const [selectedPool, setselectedPool] = useState([]);
   const [aprTooltip, setaprTooltip] = useState(false);
   const [selectedchain, setselectedchain] = useState(chain);
+  const [selectedpoolType, setselectedpoolType] = useState("");
+
+  const [ethPoolsDyp, setethPoolsDyp] = useState([]);
+  const [ethPoolsiDyp, setethPoolsiDyp] = useState([]);
+  const [bnbPoolsDyp, setbnbPoolsDyp] = useState([]);
+  const [bnbPoolsiDyp, setbnbPoolsiDyp] = useState([]);
+  const [avaxPoolsDyp, setavaxPoolsDyp] = useState([]);
+  const [avaxPoolsiDyp, setavaxPoolsiDyp] = useState([]);
 
   const windowSize = useWindowSize();
 
@@ -253,7 +264,7 @@ const EarnTopPicks = ({
         return { ...item, tvl_usd: item.tvl_usd, type: "idyp", chain: "eth" };
       });
 
-      const activeEth2 = object2.filter((item) => {
+      const activeEth2 = [...object2, ...phase2_pools].filter((item) => {
         return item.expired !== "Yes";
       });
 
@@ -262,7 +273,8 @@ const EarnTopPicks = ({
       const sortedActive = allActiveEth.sort(function (a, b) {
         return b.tvl_usd - a.tvl_usd;
       });
-
+      setethPoolsDyp(activeEth2);
+      setethPoolsiDyp(object2activeEth);
       setEthPools(sortedActive);
     }
   };
@@ -303,6 +315,9 @@ const EarnTopPicks = ({
       const activeBnb2 = object2.filter((item) => {
         return item.expired === "No";
       });
+
+      setbnbPoolsDyp(activeBnb2);
+      setbnbPoolsiDyp(object2Idyp);
 
       const allActiveBnb = [...object2Idyp, ...activeBnb2];
       const sortedActive = allActiveBnb.sort(function (a, b) {
@@ -350,12 +365,69 @@ const EarnTopPicks = ({
 
       const allActiveAvax = [...object2activeAvax, ...activeAvax2];
 
+      setavaxPoolsDyp(activeAvax2);
+      setavaxPoolsiDyp(object2activeAvax);
+
       const sortedActive = allActiveAvax.sort(function (a, b) {
         return b.tvl_usd - a.tvl_usd;
       });
       setAvaxPools(sortedActive);
     }
   };
+
+  const phase2_pools = [
+    {
+      id: "0xC8075092Cc46E176B1F3c0D0EB8223F1e46555B0",
+      apy_percent: 8,
+      tvl_usd: 46682.3565666875,
+      link_logo: "https://www.dypius.com/logo192.png",
+      link_pair: "https://app.dyp.finance/constant-staking-3",
+      pool_name: "DYP Constant Staking ETH",
+      pair_name: "DYP",
+      return_types: "DYP",
+      lock_time: "30 days",
+      expired: "No",
+      new_pool: "Yes",
+      apy_performancefee: 8,
+      performancefee: 0,
+      type: "dyp",
+      chain: "eth",
+    },
+    {
+      id: "0xC7075092Cc46E176B1F3c0D0EB8223F1e46555B0",
+      apy_percent: 20,
+      tvl_usd: 462.3565666875,
+      link_logo: "https://www.dypius.com/logo192.png",
+      link_pair: "https://app.dyp.finance/constant-staking-3",
+      pool_name: "DYP Constant Staking ETH",
+      pair_name: "DYP",
+      return_types: "DYP",
+      lock_time: "120 days",
+      expired: "No",
+      new_pool: "Yes",
+      apy_performancefee: 20,
+      performancefee: 0,
+      type: "dyp",
+      chain: "eth",
+    },
+    {
+      id: "0xC6075092Cc46E176B1F3c0D0EB8223F1e46555B0",
+      apy_percent: 25,
+      tvl_usd: 4682.3565666875,
+      link_logo: "https://www.dypius.com/logo192.png",
+      link_pair: "https://app.dyp.finance/constant-staking-3",
+      pool_name: "DYP Constant Staking ETH",
+      pair_name: "DYP",
+      return_types: "iDYP",
+      lock_time: "90 days",
+      expired: "No",
+      new_pool: "Yes",
+      apy_performancefee: 25,
+      performancefee: 0,
+      type: "dyp",
+      chain: "eth",
+    },
+  ];
 
   const fetchEthStaking2 = async () => {
     const eth_result = await axios
@@ -390,7 +462,7 @@ const EarnTopPicks = ({
         return { ...item, tvl_usd: item.tvl_usd, type: "idyp", chain: "eth" };
       });
 
-      const activeEth2 = object2.filter((item) => {
+      const activeEth2 = [...object2, ...phase2_pools].filter((item) => {
         return item.expired !== "Yes";
       });
 
@@ -400,7 +472,18 @@ const EarnTopPicks = ({
         return b.tvl_usd - a.tvl_usd;
       });
 
-      setActivePools(sortedActive);
+      const sortedActiveDYP = activeEth2.sort(function (a, b) {
+        return b.tvl_usd - a.tvl_usd && a.type === "dyp" && b.type === "dyp";
+      });
+
+      const sortedActiveiDYP = object2activeEth.sort(function (a, b) {
+        return b.tvl_usd - a.tvl_usd && a.type === "idyp" && b.type === "idyp";
+      });
+      // console.log(sortedActive);
+      // console.log([sortedActiveDYP[0], ...sortedActiveiDYP]);
+      // console.log(sortedActiveiDYP);
+
+      setActivePools([sortedActiveDYP[0], ...sortedActiveiDYP]);
       setTopPools([...object2activeEth, ...activeEth2]);
       setCawsCard(eth_result.data.stakingInfoCAWS);
       setCawsCard2(eth_result.data.stakingInfoCAWS[0]);
@@ -640,26 +723,26 @@ const EarnTopPicks = ({
   const wbsc_address = "0x2170Ed0880ac9A755fd29B2688956BD959F933F8";
 
   const avax_address = "AVAX";
+ 
 
-  const { rebase_factors, rebase_factorsavax, rebase_factorsbsc } = window;
+  const getClassName = (chain, poolType, lockTime, poolsDyp, poolsiDyp, dynamicLockTime) => {
+    if (lockTime === dynamicLockTime) return 'method-btn-active';
+  
+    const poolHasDynamicLock = poolsDyp?.some(obj => obj.lock_time === dynamicLockTime);
+    const pooliDypHasDynamicLock = poolsiDyp?.some(obj => obj.lock_time === dynamicLockTime);
+  
+    if (lockTime !== dynamicLockTime) {
+      if (poolType === 'dyp') {
+        return poolHasDynamicLock ? 'method-btn' : 'method-btn-disabled';
+      } else if (poolType === 'idyp') {
+        return pooliDypHasDynamicLock ? 'method-btn' : 'method-btn-disabled';
+      }
+    }
+  
+    return 'method-btn-disabled';
+  };
 
-  const stakeArray = [
-    window.farming_new_1,
-    window.farming_new_2,
-    window.farming_new_3,
-    window.farming_new_4,
-    window.farming_new_5,
-  ];
-
-  const constantArray = [
-    window.constant_staking_new5,
-    window.constant_staking_new6,
-    window.constant_staking_new7,
-    window.constant_staking_new8,
-    window.constant_staking_new9,
-  ];
-
-  const feeArray = [0.8, 0.4, 0.3, 0.3, 1.2];
+ 
 
   const stakeArrayiDYPActive = [
     window.constant_staking_idyp_3,
@@ -667,92 +750,12 @@ const EarnTopPicks = ({
   ];
 
   const withdrawFeeiDyp = [1, 0, 0, 0];
-
-  const lockarrayFarm = ["No Lock", 3, 30, 60, 90];
-
-  const StakingNew1 = initStakingNew({
-    token: window.token_new,
-    finalApr: expiredDYPPools[cardIndex]?.apy_percent,
-    staking: stakeArray[cardIndex],
-    chainId: chainId,
-    constant: constantArray[cardIndex],
-    liquidity: eth_address,
-    lp_symbol: "USD",
-    reward: "30,000",
-    lock: "3 Days",
-    rebase_factor: rebase_factors[0],
-    expiration_time: "14 December 2022",
-    fee: feeArray[cardIndex],
-    handleConnection: handleConnection,
-    lockTime: lockarrayFarm[cardIndex],
-    listType: listType,
-    handleSwitchNetwork: handleSwitchNetwork,
-  });
-
-  const bscFarmArrayStake = [
-    window.farming_newbsc_1,
-    window.farming_newbsc_2,
-    window.farming_newbsc_3,
-    window.farming_newbsc_4,
-    window.farming_newbsc_5,
-  ];
-  const bscFarmArrayConst = [
-    window.constant_stakingnewbsc_new5,
-    window.constant_stakingnewbsc_new6,
-    window.constant_stakingnewbsc_new7,
-    window.constant_stakingnewbsc_new8,
-    window.constant_stakingnewbsc_new9,
-  ];
-  const bscFarmArrayFee = [0.3, 1.2, 0.3, 0.8, 0.4];
-  const lockarrayFarmbsc = ["No Lock", 3, 30, 60, 90];
-
-  const BscFarming = initBscFarming({
-    staking: bscFarmArrayStake[cardIndex],
-    token: window.token_newbsc,
-    chainId: chainId,
-    constant: bscFarmArrayConst[cardIndex],
-    liquidity: wbsc_address,
-    lp_symbol: "USD",
-    reward: "30,000",
-    lock: "3 Days",
-    rebase_factor: rebase_factorsbsc[0],
-    expiration_time: "19 November 2022",
-    fee: bscFarmArrayFee[cardIndex],
-    handleConnection: handleConnection,
-    finalApr: expiredDYPPools[cardIndex]?.apy_percent,
-    lockTime: lockarrayFarmbsc[cardIndex],
-    listType: listType,
-    handleSwitchNetwork: handleSwitchNetwork,
-  });
-
-  const lockarrayFarmAvax = ["No Lock", 3, 30, 60, 90];
-  const feearrayFarmAvax = [0.3, 0.3, 1.2, 0.4, 0.8];
-
-  const constantArrayFarmAvax = [
-    window.constant_staking_newavax5,
-    window.constant_staking_newavax6,
-    window.constant_staking_newavax7,
-    window.constant_staking_newavax8,
-    window.constant_staking_newavax9,
-  ];
-
-  const stakeArrayFarmAvax = [
-    window.farming_newavax_1,
-    window.farming_newavax_2,
-    window.farming_newavax_3,
-    window.farming_newavax_4,
-    window.farming_newavax_5,
-  ];
+ 
+  
 
   const { LP_IDs_V2Avax, LP_IDs_V2BNB } = window;
 
-  const LP_IDAVAX_Array = [
-    LP_IDs_V2Avax.wavax[0],
-    LP_IDs_V2Avax.wavax[1],
-    LP_IDs_V2Avax.wavax[2],
-    LP_IDs_V2Avax.wavax[3],
-    LP_IDs_V2Avax.wavax[4],
-  ];
+ 
 
   const LP_IDBNB_Array = [
     LP_IDs_V2BNB.wbnb[0],
@@ -762,33 +765,9 @@ const EarnTopPicks = ({
     LP_IDs_V2BNB.wbnb[4],
   ];
 
-  const FarmAvax = initFarmAvax({
-    token: window.token_newavax,
-    staking: stakeArrayFarmAvax[cardIndex],
-    constant: constantArrayFarmAvax[cardIndex],
-    liquidity: wbnb_address,
-    lp_symbol: "USD",
-    reward: "30,000",
-    lock: lockarrayFarmAvax[cardIndex],
-    rebase_factor: rebase_factorsavax[0],
-    expiration_time: "6 December 2022",
-    fee: feearrayFarmAvax[cardIndex],
-    coinbase: coinbase,
-    lockTime: lockarrayFarmAvax[cardIndex],
-    chainId: chainId,
-    listType: listType,
-    finalApr: expiredDYPPools[cardIndex]?.apy_percent,
-    handleSwitchNetwork: handleSwitchNetwork,
-  });
-
+ 
   //Buyback New
-
-  const expirearrayStakeBscExpired = ["17 November 2022", "17 November 2022"];
-
-  const stakearrayStakeBscExpired = [
-    window.constant_stakingbsc_new13,
-    window.constant_stakingbsc_new12,
-  ];
+ 
 
   const stakearrayStakeBsciDyp2 = [
     window.constant_stakingidyp_6,
@@ -806,31 +785,9 @@ const EarnTopPicks = ({
     "28 February 2023",
   ];
 
-  const stakingarrayStakeAvax30 = [
-    window.constant_staking_newavax2,
-    window.constant_staking_newavax1,
-  ];
+ 
 
-  const StakeAvax30 = stakeAvax30({
-    staking:
-      expiredDYPPools[cardIndex]?.id ===
-      "0x5566B51a1B7D5E6CAC57a68182C63Cb615cAf3f9"
-        ? window.constant_staking_newavax2
-        : window.constant_staking_newavax1,
-    apr: expiredDYPPools[cardIndex]?.apy_percent,
-    liquidity: avax_address,
-    expiration_time: "6 December 2022",
-    finalApr: expiredDYPPools[cardIndex]?.apy_performancefee,
-    fee: expiredDYPPools[cardIndex]?.performancefee,
-    coinbase: coinbase,
-    chainId: chainId,
-    lockTime:
-      expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0] === "No"
-        ? "No Lock"
-        : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0],
-    listType: listType,
-    handleSwitchNetwork: handleSwitchNetwork,
-  });
+ 
 
   const feeUarrayStakeAvaxiDyp = [0, 0.25, 0, 0.25];
 
@@ -852,16 +809,7 @@ const EarnTopPicks = ({
     window.constant_staking_idypavax_1,
   ];
 
-  const stakeArrayStakeNew = [
-    window.constant_staking_new2,
-    window.constant_staking_new1,
-  ];
-
-  const stakeArrayiDYP = [
-    window.constant_staking_idyp_2,
-    window.constant_staking_idyp_1,
-  ];
-
+ 
   const expirationArray = [
     "28 February 2023",
     "28 February 2023",
@@ -1118,6 +1066,7 @@ const EarnTopPicks = ({
     fetchBnbStaking();
   }, []);
 
+ 
   return (
     <>
       <div className={`row w-100 justify-content-center gap-4`}>
@@ -1160,12 +1109,14 @@ const EarnTopPicks = ({
                         handleCardIndexStake30(index);
                         handleCardIndexStakeiDyp(index);
                         setDetails(index);
-                        setselectedPool( topList !== 'Vault' && pool);
-                        setShowDetails(topList !== 'Vault' && true);
+                        setselectedPool(topList !== "Vault" && pool);
+                        setShowDetails(topList !== "Vault" && true);
+                        setselectedpoolType(pool.type);
                       }}
                       onHideDetailsClick={() => {
                         setActiveCard(null);
                         setDetails();
+                        setselectedpoolType("");
                       }}
                       cardType={topList}
                       details={details === index ? true : false}
@@ -1312,6 +1263,8 @@ const EarnTopPicks = ({
                         : "idypius.svg"
                     }
                     onShowDetailsClick={() => {
+                      setselectedpoolType(pool.type);
+
                       setActiveCard(null);
                       setActiveCard2(topPools[index + 3]);
                       setActiveCard3(null);
@@ -1321,11 +1274,13 @@ const EarnTopPicks = ({
                       handleCardIndexStake30(index + 3);
                       handleCardIndexStakeiDyp(index + 3);
                       setDetails(index + 3);
-                      setselectedPool( topList !== 'Vault' && pool);
-                      setShowDetails(topList !== 'Vault' && true);
+                      setselectedPool(topList !== "Vault" && pool);
+                      setShowDetails(topList !== "Vault" && true);
                     }}
                     onHideDetailsClick={() => {
                       setActiveCard2(null);
+                      setselectedpoolType("");
+
                       setDetails();
                     }}
                     cardType={topList}
@@ -1346,375 +1301,90 @@ const EarnTopPicks = ({
                   />
                 ))}
               </div>
-              {
-                // activeCard2 &&
-                // topList === "Staking" &&
-                // chain === "avax" &&
-                // activePools[cardIndex]?.id ===
-                //   "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
-                //   <StakeAvaxIDyp
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_resultavax}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     staking={window.constant_staking_idypavax_7}
-                //     listType={listType}
-                //     finalApr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_performancefee
-                //         : expiredDYPPools[cardIndex]?.apy_performancefee
-                //     }
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={avax_address}
-                //     expiration_time={"18 July 2024"}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee_s={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     fee_u={feeUarrayStakeAvaxiDyp[cardIndexavaxiDyp - 3]}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //   />
-                // ) :
-                // activeCard2 &&
-                // topList === "Staking" &&
-                // activePools[cardIndex]?.id ===
-                //   "0xC9075092Cc46E176B1F3c0D0EB8223F1e46555B0" &&
-                // chain === "eth" ? (
-                //   <StakeDypiusEth
-                //     staking={window.constant_staking_dypius_eth1}
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={eth_address}
-                //     expiration_time={"09 November 2024"}
-                //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //     listType={listType}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_result}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     referrer={referrer}
-                //   />
-                // )
-                // : activeCard2 &&
-                //   topList === "Staking" &&
-                //   activePools[cardIndex]?.id ===
-                //     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603" &&
-                //   chain === "bnb" ? (
-                //   <StakeDypiusBsc
-                //     staking={window.constant_staking_dypius_bsc1}
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={wbsc_address}
-                //     expiration_time={"09 November 2024"}
-                //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //     listType={listType}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_resultbsc}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     referrer={referrer}
-                //   />
-                // )
-                // : activeCard2 &&
-                //   topList === "Staking" &&
-                //   activePools[cardIndex]?.id ===
-                //     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603" &&
-                //   chain === "avax" ? (
-                //   <StakeDypiusAvax
-                //     staking={window.constant_staking_dypius_avax1}
-                //     apr={activePools[cardIndex]?.apy_percent}
-                //     liquidity={avax_address}
-                //     expiration_time={"09 November 2024"}
-                //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //     listType={listType}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_resultavax}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     referrer={referrer}
-                //   />
-                // )
-                activeCard2 &&
-                activePools[cardIndex]?.id ===
-                  "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
-                topList === "Staking" &&
-                chain === "bnb" ? (
-                  <StakeBscIDyp
-                    is_wallet_connected={isConnected}
-                    coinbase={coinbase}
-                    the_graph_result={the_graph_resultbsc}
-                    chainId={chainId}
-                    handleConnection={handleConnection}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
-                    staking={window.constant_stakingidyp_7}
-                    listType={listType}
-                    finalApr={
-                      expiredPools === false
-                        ? activePools[cardIndex]?.apy_performancefee
-                        : expiredDYPPools[cardIndex]?.apy_performancefee
-                    }
-                    apr={
-                      expiredPools === false
-                        ? activePools[cardIndex]?.apy_percent
-                        : expiredDYPPools[cardIndex]?.apy_percent
-                    }
-                    liquidity={wbsc_address}
-                    expiration_time={"18 July 2024"}
-                    other_info={
-                      cardIndex !== undefined
-                        ? expiredPools === false
-                          ? activePools[cardIndex]?.expired === "Yes"
-                            ? true
-                            : false
-                          : expiredDYPPools[cardIndex]?.expired === "Yes"
+              {activeCard2 &&
+              activePools[cardIndex]?.id ===
+                "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
+              topList === "Staking" &&
+              chain === "bnb" ? (
+                <StakeBscIDyp
+                  is_wallet_connected={isConnected}
+                  coinbase={coinbase}
+                  the_graph_result={the_graph_resultbsc}
+                  chainId={chainId}
+                  handleConnection={handleConnection}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  expired={false}
+                  staking={window.constant_stakingidyp_7}
+                  listType={listType}
+                  finalApr={
+                    expiredPools === false
+                      ? activePools[cardIndex]?.apy_performancefee
+                      : expiredDYPPools[cardIndex]?.apy_performancefee
+                  }
+                  apr={
+                    expiredPools === false
+                      ? activePools[cardIndex]?.apy_percent
+                      : expiredDYPPools[cardIndex]?.apy_percent
+                  }
+                  liquidity={wbsc_address}
+                  expiration_time={"18 July 2024"}
+                  other_info={
+                    cardIndex !== undefined
+                      ? expiredPools === false
+                        ? activePools[cardIndex]?.expired === "Yes"
                           ? true
                           : false
+                        : expiredDYPPools[cardIndex]?.expired === "Yes"
+                        ? true
                         : false
-                    }
-                    fee_s={
-                      expiredPools === false
-                        ? activePools[cardIndex]?.performancefee
-                        : expiredDYPPools[cardIndex]?.performancefee
-                    }
-                    fee_u={0}
-                    lockTime={
-                      cardIndex !== undefined
-                        ? expiredPools === false
-                          ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                            "No"
-                            ? "No Lock"
-                            : parseInt(
-                                activePools[cardIndex]?.lock_time?.split(" ")[0]
-                              )
-                          : expiredDYPPools[cardIndex]?.lock_time?.split(
-                              " "
-                            )[0] === "No"
+                      : false
+                  }
+                  fee_s={
+                    expiredPools === false
+                      ? activePools[cardIndex]?.performancefee
+                      : expiredDYPPools[cardIndex]?.performancefee
+                  }
+                  fee_u={0}
+                  lockTime={
+                    cardIndex !== undefined
+                      ? expiredPools === false
+                        ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
+                          "No"
                           ? "No Lock"
                           : parseInt(
-                              expiredDYPPools[cardIndex]?.lock_time?.split(
-                                " "
-                              )[0]
+                              activePools[cardIndex]?.lock_time?.split(" ")[0]
                             )
-                        : "No Lock"
-                    }
-                  />
-                ) : //  : activeCard2 &&
-                //   topList === "Staking" &&
-                //   chain === "eth" &&
-                //   activePools[cardIndex]?.id ===
-                //     "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
-                //   <InitConstantStakingiDYP
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_result}
-                //     lp_id={lp_id[cardIndex]}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     staking={window.constant_staking_idyp_5}
-                //     listType={listType}
-                //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={eth_address}
-                //     expiration_time={"18 July 2024"}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee_s={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     fee_u={withdrawFeeiDyp[cardIndex]}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //   />
-                // )
-                activeCard2 && topList === "Vault" && chain === "eth" ? (
-                  <Vault
-                    vault={vaultArrayNew[cardIndex]}
-                    token={tokenvaultArrayNew[cardIndex]}
-                    platformTokenApyPercent={vaultplatformArrayNew[cardIndex]}
-                    UNDERLYING_DECIMALS={vaultdecimalsArrayNew[cardIndex]}
-                    UNDERLYING_SYMBOL={vaultsymbolArrayNew[cardIndex]}
-                    expiration_time={"1 August 2024"}
-                    coinbase={coinbase}
-                    lockTime={"No Lock"}
-                    handleConnection={handleConnection}
-                    chainId={chainId}
-                    listType={listType}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
-                    isConnected={isConnected}
-                    the_graph_result={the_graph_result}
-                  />
-                ) : (
-                  <></>
-                )
-              }
+                        : expiredDYPPools[cardIndex]?.lock_time?.split(
+                            " "
+                          )[0] === "No"
+                        ? "No Lock"
+                        : parseInt(
+                            expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
+                          )
+                      : "No Lock"
+                  }
+                />
+              ) : activeCard2 && topList === "Vault" && chain === "eth" ? (
+                <Vault
+                  vault={vaultArrayNew[cardIndex]}
+                  token={tokenvaultArrayNew[cardIndex]}
+                  platformTokenApyPercent={vaultplatformArrayNew[cardIndex]}
+                  UNDERLYING_DECIMALS={vaultdecimalsArrayNew[cardIndex]}
+                  UNDERLYING_SYMBOL={vaultsymbolArrayNew[cardIndex]}
+                  expiration_time={"1 August 2024"}
+                  coinbase={coinbase}
+                  lockTime={"No Lock"}
+                  handleConnection={handleConnection}
+                  chainId={chainId}
+                  listType={listType}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  expired={false}
+                  isConnected={isConnected}
+                  the_graph_result={the_graph_result}
+                />
+              ) : (
+                <></>
+              )}
               <div
                 className="top-picks-container"
                 style={{ marginTop: "25px" }}
@@ -1754,6 +1424,8 @@ const EarnTopPicks = ({
                     onShowDetailsClick={() => {
                       setActiveCard(null);
                       setActiveCard2(null);
+                      setselectedpoolType(pool.type);
+
                       setActiveCard3(topPools[index + 6]);
                       setActiveCardNFT(false);
                       setActiveCardLandNFT(false);
@@ -1761,11 +1433,13 @@ const EarnTopPicks = ({
                       handleCardIndexStake30(index + 6);
                       handleCardIndexStakeiDyp(index + 6);
                       setDetails(index + 6);
-                      setselectedPool( topList !== 'Vault' && pool);
-                      setShowDetails(topList !== 'Vault' && true);
+                      setselectedPool(topList !== "Vault" && pool);
+                      setShowDetails(topList !== "Vault" && true);
                     }}
                     onHideDetailsClick={() => {
                       setActiveCard3(null);
+                      setselectedpoolType("");
+
                       setDetails();
                     }}
                     cardType={topList}
@@ -1785,357 +1459,72 @@ const EarnTopPicks = ({
                   />
                 ))}
               </div>
-              {
-                // activeCard3 &&
-                // topList === "Staking" &&
-                // chain === "avax" &&
-                // activePools[cardIndex]?.id ===
-                //   "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
-                //   <StakeAvaxIDyp
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_resultavax}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     staking={window.constant_staking_idypavax_7}
-                //     listType={listType}
-                //     finalApr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_performancefee
-                //         : expiredDYPPools[cardIndex]?.apy_performancefee
-                //     }
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={avax_address}
-                //     expiration_time={"18 July 2024"}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee_s={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     fee_u={feeUarrayStakeAvaxiDyp[cardIndexavaxiDyp - 3]}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //   />
-                // ) :
-                // activeCard3 &&
-                // topList === "Staking" &&
-                // activePools[cardIndex]?.id ===
-                //   "0xC9075092Cc46E176B1F3c0D0EB8223F1e46555B0" &&
-                // chain === "eth" ? (
-                //   <StakeDypiusEth
-                //     staking={window.constant_staking_dypius_eth1}
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={eth_address}
-                //     expiration_time={"09 November 2024"}
-                //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //     listType={listType}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_result}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     referrer={referrer}
-                //   />
-                // )
-                // : activeCard3 &&
-                //   topList === "Staking" &&
-                //   activePools[cardIndex]?.id ===
-                //     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603" &&
-                //   chain === "bnb" ? (
-                //   <StakeDypiusBsc
-                //     staking={window.constant_staking_dypius_bsc1}
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={wbsc_address}
-                //     expiration_time={"09 November 2024"}
-                //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //     listType={listType}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_resultbsc}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     referrer={referrer}
-                //   />
-                // )
-                //  : activeCard3 &&
-                //   topList === "Staking" &&
-                //   activePools[cardIndex]?.id ===
-                //     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603" &&
-                //   chain === "avax" ? (
-                //   <StakeDypiusAvax
-                //     staking={window.constant_staking_dypius_avax1}
-                //     apr={activePools[cardIndex]?.apy_percent}
-                //     liquidity={avax_address}
-                //     expiration_time={"09 November 2024"}
-                //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //     listType={listType}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee_s={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_resultavax}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     referrer={referrer}
-                //   />
-                // )
-                activeCard3 &&
-                activePools[cardIndex]?.id ===
-                  "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
-                topList === "Staking" &&
-                chain === "bnb" ? (
-                  <StakeBscIDyp
-                    is_wallet_connected={isConnected}
-                    coinbase={coinbase}
-                    the_graph_result={the_graph_resultbsc}
-                    chainId={chainId}
-                    handleConnection={handleConnection}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
-                    staking={window.constant_stakingidyp_7}
-                    listType={listType}
-                    finalApr={
-                      expiredPools === false
-                        ? activePools[cardIndex]?.apy_performancefee
-                        : expiredDYPPools[cardIndex]?.apy_performancefee
-                    }
-                    apr={
-                      expiredPools === false
-                        ? activePools[cardIndex]?.apy_percent
-                        : expiredDYPPools[cardIndex]?.apy_percent
-                    }
-                    liquidity={wbsc_address}
-                    expiration_time={"18 July 2024"}
-                    other_info={
-                      cardIndex !== undefined
-                        ? expiredPools === false
-                          ? activePools[cardIndex]?.expired === "Yes"
-                            ? true
-                            : false
-                          : expiredDYPPools[cardIndex]?.expired === "Yes"
+              {activeCard3 &&
+              activePools[cardIndex]?.id ===
+                "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
+              topList === "Staking" &&
+              chain === "bnb" ? (
+                <StakeBscIDyp
+                  is_wallet_connected={isConnected}
+                  coinbase={coinbase}
+                  the_graph_result={the_graph_resultbsc}
+                  chainId={chainId}
+                  handleConnection={handleConnection}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  expired={false}
+                  staking={window.constant_stakingidyp_7}
+                  listType={listType}
+                  finalApr={
+                    expiredPools === false
+                      ? activePools[cardIndex]?.apy_performancefee
+                      : expiredDYPPools[cardIndex]?.apy_performancefee
+                  }
+                  apr={
+                    expiredPools === false
+                      ? activePools[cardIndex]?.apy_percent
+                      : expiredDYPPools[cardIndex]?.apy_percent
+                  }
+                  liquidity={wbsc_address}
+                  expiration_time={"18 July 2024"}
+                  other_info={
+                    cardIndex !== undefined
+                      ? expiredPools === false
+                        ? activePools[cardIndex]?.expired === "Yes"
                           ? true
                           : false
+                        : expiredDYPPools[cardIndex]?.expired === "Yes"
+                        ? true
                         : false
-                    }
-                    fee_s={
-                      expiredPools === false
-                        ? activePools[cardIndex]?.performancefee
-                        : expiredDYPPools[cardIndex]?.performancefee
-                    }
-                    fee_u={0}
-                    lockTime={
-                      cardIndex !== undefined
-                        ? expiredPools === false
-                          ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                            "No"
-                            ? "No Lock"
-                            : parseInt(
-                                activePools[cardIndex]?.lock_time?.split(" ")[0]
-                              )
-                          : expiredDYPPools[cardIndex]?.lock_time?.split(
-                              " "
-                            )[0] === "No"
+                      : false
+                  }
+                  fee_s={
+                    expiredPools === false
+                      ? activePools[cardIndex]?.performancefee
+                      : expiredDYPPools[cardIndex]?.performancefee
+                  }
+                  fee_u={0}
+                  lockTime={
+                    cardIndex !== undefined
+                      ? expiredPools === false
+                        ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
+                          "No"
                           ? "No Lock"
                           : parseInt(
-                              expiredDYPPools[cardIndex]?.lock_time?.split(
-                                " "
-                              )[0]
+                              activePools[cardIndex]?.lock_time?.split(" ")[0]
                             )
-                        : "No Lock"
-                    }
-                  />
-                ) : (
-                  //  : activeCard3 &&
-                  //   topList === "Staking" &&
-                  //   chain === "eth" &&
-                  //   activePools[cardIndex]?.id ===
-                  //     "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
-                  //   <InitConstantStakingiDYP
-                  //     is_wallet_connected={isConnected}
-                  //     coinbase={coinbase}
-                  //     the_graph_result={the_graph_result}
-                  //     lp_id={lp_id[cardIndex]}
-                  //     chainId={chainId}
-                  //     handleConnection={handleConnection}
-                  //     handleSwitchNetwork={handleSwitchNetwork}
-                  //     expired={false}
-                  //     staking={window.constant_staking_idyp_5}
-                  //     listType={listType}
-                  //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                  //     apr={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.apy_percent
-                  //         : expiredDYPPools[cardIndex]?.apy_percent
-                  //     }
-                  //     liquidity={eth_address}
-                  //     expiration_time={"18 July 2024"}
-                  //     other_info={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.expired === "Yes"
-                  //             ? true
-                  //             : false
-                  //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                  //           ? true
-                  //           : false
-                  //         : false
-                  //     }
-                  //     fee_s={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.performancefee
-                  //         : expiredDYPPools[cardIndex]?.performancefee
-                  //     }
-                  //     fee_u={withdrawFeeiDyp[cardIndex]}
-                  //     lockTime={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                  //             "No"
-                  //             ? "No Lock"
-                  //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0] === "No"
-                  //           ? "No Lock"
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                  //         : "No Lock"
-                  //     }
-                  //   />
-                  // )
-                  <></>
-                )
-              }
+                        : expiredDYPPools[cardIndex]?.lock_time?.split(
+                            " "
+                          )[0] === "No"
+                        ? "No Lock"
+                        : parseInt(
+                            expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
+                          )
+                      : "No Lock"
+                  }
+                />
+              ) : (
+                <></>
+              )}
               <div
                 className="top-picks-container"
                 style={{ marginTop: activePools.length > 9 && "25px" }}
@@ -2174,6 +1563,8 @@ const EarnTopPicks = ({
                     }
                     onShowDetailsClick={() => {
                       setActiveCard(null);
+                      setselectedpoolType("");
+
                       setActiveCard2(null);
                       setActiveCard3(null);
                       setActiveCard4(topPools[index + 9]);
@@ -2183,8 +1574,8 @@ const EarnTopPicks = ({
                       handleCardIndexStake30(index + 9);
                       handleCardIndexStakeiDyp(index + 9);
                       setDetails(index + 9);
-                      setselectedPool( topList !== 'Vault' && pool);
-                      setShowDetails(topList !== 'Vault' && true);
+                      setselectedPool(topList !== "Vault" && pool);
+                      setShowDetails(topList !== "Vault" && true);
                     }}
                     onHideDetailsClick={() => {
                       setActiveCard4(null);
@@ -2207,444 +1598,156 @@ const EarnTopPicks = ({
                   />
                 ))}
               </div>
-              {
-                // activeCard4 &&
-                // topList === "Staking" &&
-                // chain === "avax" &&
-                // activePools[cardIndex]?.id ===
-                //   "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
-                //   <StakeAvaxIDyp
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_resultavax}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     staking={window.constant_staking_idypavax_7}
-                //     listType={listType}
-                //     finalApr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_performancefee
-                //         : expiredDYPPools[cardIndex]?.apy_performancefee
-                //     }
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={avax_address}
-                //     expiration_time={"18 July 2024"}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee_s={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     fee_u={feeUarrayStakeAvaxiDyp[cardIndexavaxiDyp - 3]}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //   />
-                // ) :
-                // activeCard4 &&
-                // topList === "Staking" &&
-                // activePools[cardIndex]?.id ===
-                //   "0xC9075092Cc46E176B1F3c0D0EB8223F1e46555B0" &&
-                // chain === "eth" ? (
-                //   <StakeDypiusEth
-                //     staking={window.constant_staking_dypius_eth1}
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={eth_address}
-                //     expiration_time={"09 November 2024"}
-                //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //     listType={listType}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_result}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     referrer={referrer}
-                //   />
-                // )
-                // : activeCard4 &&
-                //   topList === "Staking" &&
-                //   activePools[cardIndex]?.id ===
-                //     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603" &&
-                //   chain === "bnb" ? (
-                //   <StakeDypiusBsc
-                //     staking={window.constant_staking_dypius_bsc1}
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={wbsc_address}
-                //     expiration_time={"09 November 2024"}
-                //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //     listType={listType}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_resultbsc}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     referrer={referrer}
-                //   />
-                // )
-
-                // : activeCard4 &&
-                //   topList === "Staking" &&
-                //   activePools[cardIndex]?.id ===
-                //     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603" &&
-                //   chain === "avax" ? (
-                //   <StakeDypiusAvax
-                //     staking={window.constant_staking_dypius_avax1}
-                //     apr={activePools[cardIndex]?.apy_percent}
-                //     liquidity={avax_address}
-                //     expiration_time={"09 November 2024"}
-                //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //     listType={listType}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee_s={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_resultavax}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     referrer={referrer}
-                //   />
-                // )
-                activeCard4 &&
-                activePools[cardIndex]?.id ===
-                  "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
+              {activeCard4 &&
+              activePools[cardIndex]?.id ===
+                "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
+              topList === "Staking" &&
+              chain === "bnb" ? (
+                <StakeBscIDyp
+                  is_wallet_connected={isConnected}
+                  coinbase={coinbase}
+                  the_graph_result={the_graph_resultbsc}
+                  chainId={chainId}
+                  handleConnection={handleConnection}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  expired={false}
+                  staking={window.constant_stakingidyp_7}
+                  listType={listType}
+                  finalApr={
+                    expiredPools === false
+                      ? activePools[cardIndex]?.apy_performancefee
+                      : expiredDYPPools[cardIndex]?.apy_performancefee
+                  }
+                  apr={
+                    expiredPools === false
+                      ? activePools[cardIndex]?.apy_percent
+                      : expiredDYPPools[cardIndex]?.apy_percent
+                  }
+                  liquidity={wbsc_address}
+                  expiration_time={"18 July 2024"}
+                  other_info={
+                    cardIndex !== undefined
+                      ? expiredPools === false
+                        ? activePools[cardIndex]?.expired === "Yes"
+                          ? true
+                          : false
+                        : expiredDYPPools[cardIndex]?.expired === "Yes"
+                        ? true
+                        : false
+                      : false
+                  }
+                  fee_s={
+                    expiredPools === false
+                      ? activePools[cardIndex]?.performancefee
+                      : expiredDYPPools[cardIndex]?.performancefee
+                  }
+                  fee_u={0}
+                  lockTime={
+                    cardIndex !== undefined
+                      ? expiredPools === false
+                        ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
+                          "No"
+                          ? "No Lock"
+                          : parseInt(
+                              activePools[cardIndex]?.lock_time?.split(" ")[0]
+                            )
+                        : expiredDYPPools[cardIndex]?.lock_time?.split(
+                            " "
+                          )[0] === "No"
+                        ? "No Lock"
+                        : parseInt(
+                            expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
+                          )
+                      : "No Lock"
+                  }
+                />
+              ) : activeCard4 &&
+                cardIndex >= 0 &&
+                topList === "Staking" &&
+                chain === "eth" ? (
+                <InitConstantStakingiDYP
+                  is_wallet_connected={isConnected}
+                  coinbase={coinbase}
+                  the_graph_result={the_graph_result}
+                  lp_id={lp_id[cardIndex]}
+                  chainId={chainId}
+                  handleConnection={handleConnection}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  expired={false}
+                />
+              ) : activeCard4 &&
+                cardIndex >= 5 &&
                 topList === "Staking" &&
                 chain === "bnb" ? (
-                  <StakeBscIDyp
-                    is_wallet_connected={isConnected}
-                    coinbase={coinbase}
-                    the_graph_result={the_graph_resultbsc}
-                    chainId={chainId}
-                    handleConnection={handleConnection}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
-                    staking={window.constant_stakingidyp_7}
-                    listType={listType}
-                    finalApr={
-                      expiredPools === false
-                        ? activePools[cardIndex]?.apy_performancefee
-                        : expiredDYPPools[cardIndex]?.apy_performancefee
-                    }
-                    apr={
-                      expiredPools === false
-                        ? activePools[cardIndex]?.apy_percent
-                        : expiredDYPPools[cardIndex]?.apy_percent
-                    }
-                    liquidity={wbsc_address}
-                    expiration_time={"18 July 2024"}
-                    other_info={
-                      cardIndex !== undefined
-                        ? expiredPools === false
-                          ? activePools[cardIndex]?.expired === "Yes"
-                            ? true
-                            : false
-                          : expiredDYPPools[cardIndex]?.expired === "Yes"
+                <StakeBscIDyp
+                  is_wallet_connected={isConnected}
+                  coinbase={coinbase}
+                  the_graph_result={the_graph_resultbsc}
+                  chainId={chainId}
+                  handleConnection={handleConnection}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  expired={false}
+                  staking={
+                    expiredPools === false
+                      ? stakearrayStakeBsciDyp2[cardIndex - 2]
+                      : stakearrayStakeBsciDyp2Expired[cardIndex - 3]
+                  }
+                  listType={listType}
+                  finalApr={
+                    expiredPools === false
+                      ? activePools[cardIndex]?.apy_performancefee
+                      : expiredDYPPools[cardIndex]?.apy_performancefee
+                  }
+                  apr={
+                    expiredPools === false
+                      ? activePools[cardIndex]?.apy_percent
+                      : expiredDYPPools[cardIndex]?.apy_percent
+                  }
+                  liquidity={wbsc_address}
+                  expiration_time={
+                    expiredPools === false
+                      ? expirearrayStakeBsciDyp2[cardIndex - 2]
+                      : expirearrayStakeBsciDyp2Expired[cardIndex - 3]
+                  }
+                  other_info={
+                    cardIndex !== undefined
+                      ? expiredPools === false
+                        ? activePools[cardIndex]?.expired === "Yes"
                           ? true
                           : false
+                        : expiredDYPPools[cardIndex]?.expired === "Yes"
+                        ? true
                         : false
-                    }
-                    fee_s={
-                      expiredPools === false
-                        ? activePools[cardIndex]?.performancefee
-                        : expiredDYPPools[cardIndex]?.performancefee
-                    }
-                    fee_u={0}
-                    lockTime={
-                      cardIndex !== undefined
-                        ? expiredPools === false
-                          ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                            "No"
-                            ? "No Lock"
-                            : parseInt(
-                                activePools[cardIndex]?.lock_time?.split(" ")[0]
-                              )
-                          : expiredDYPPools[cardIndex]?.lock_time?.split(
-                              " "
-                            )[0] === "No"
+                      : false
+                  }
+                  fee_s={
+                    expiredPools === false
+                      ? activePools[cardIndex]?.performancefee
+                      : expiredDYPPools[cardIndex]?.performancefee
+                  }
+                  fee_u={0}
+                  lockTime={
+                    cardIndex !== undefined
+                      ? expiredPools === false
+                        ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
+                          "No"
                           ? "No Lock"
                           : parseInt(
-                              expiredDYPPools[cardIndex]?.lock_time?.split(
-                                " "
-                              )[0]
+                              activePools[cardIndex]?.lock_time?.split(" ")[0]
                             )
-                        : "No Lock"
-                    }
-                  />
-                ) : //  : activeCard4 &&
-                //   topList === "Staking" &&
-                //   chain === "eth" &&
-                //   activePools[cardIndex]?.id ===
-                //     "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
-                //   <InitConstantStakingiDYP
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_result}
-                //     lp_id={lp_id[cardIndex]}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     staking={window.constant_staking_idyp_5}
-                //     listType={listType}
-                //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={eth_address}
-                //     expiration_time={"18 July 2024"}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee_s={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     fee_u={withdrawFeeiDyp[cardIndex]}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //   />
-                // )
-                activeCard4 &&
-                  cardIndex >= 0 &&
-                  topList === "Staking" &&
-                  chain === "eth" ? (
-                  <InitConstantStakingiDYP
-                    is_wallet_connected={isConnected}
-                    coinbase={coinbase}
-                    the_graph_result={the_graph_result}
-                    lp_id={lp_id[cardIndex]}
-                    chainId={chainId}
-                    handleConnection={handleConnection}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
-                  />
-                ) : activeCard4 &&
-                  cardIndex >= 5 &&
-                  topList === "Staking" &&
-                  chain === "bnb" ? (
-                  <StakeBscIDyp
-                    is_wallet_connected={isConnected}
-                    coinbase={coinbase}
-                    the_graph_result={the_graph_resultbsc}
-                    chainId={chainId}
-                    handleConnection={handleConnection}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
-                    staking={
-                      expiredPools === false
-                        ? stakearrayStakeBsciDyp2[cardIndex - 2]
-                        : stakearrayStakeBsciDyp2Expired[cardIndex - 3]
-                    }
-                    listType={listType}
-                    finalApr={
-                      expiredPools === false
-                        ? activePools[cardIndex]?.apy_performancefee
-                        : expiredDYPPools[cardIndex]?.apy_performancefee
-                    }
-                    apr={
-                      expiredPools === false
-                        ? activePools[cardIndex]?.apy_percent
-                        : expiredDYPPools[cardIndex]?.apy_percent
-                    }
-                    liquidity={wbsc_address}
-                    expiration_time={
-                      expiredPools === false
-                        ? expirearrayStakeBsciDyp2[cardIndex - 2]
-                        : expirearrayStakeBsciDyp2Expired[cardIndex - 3]
-                    }
-                    other_info={
-                      cardIndex !== undefined
-                        ? expiredPools === false
-                          ? activePools[cardIndex]?.expired === "Yes"
-                            ? true
-                            : false
-                          : expiredDYPPools[cardIndex]?.expired === "Yes"
-                          ? true
-                          : false
-                        : false
-                    }
-                    fee_s={
-                      expiredPools === false
-                        ? activePools[cardIndex]?.performancefee
-                        : expiredDYPPools[cardIndex]?.performancefee
-                    }
-                    fee_u={0}
-                    lockTime={
-                      cardIndex !== undefined
-                        ? expiredPools === false
-                          ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                            "No"
-                            ? "No Lock"
-                            : parseInt(
-                                activePools[cardIndex]?.lock_time?.split(" ")[0]
-                              )
-                          : expiredDYPPools[cardIndex]?.lock_time?.split(
-                              " "
-                            )[0] === "No"
-                          ? "No Lock"
-                          : parseInt(
-                              expiredDYPPools[cardIndex]?.lock_time?.split(
-                                " "
-                              )[0]
-                            )
-                        : "No Lock"
-                    }
-                  />
-                ) : (
-                  <></>
-                )
-              }
+                        : expiredDYPPools[cardIndex]?.lock_time?.split(
+                            " "
+                          )[0] === "No"
+                        ? "No Lock"
+                        : parseInt(
+                            expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
+                          )
+                      : "No Lock"
+                  }
+                />
+              ) : (
+                <></>
+              )}
             </div>
           ) : windowSize.width > 786 ? (
             <div className="px-0">
@@ -2686,6 +1789,8 @@ const EarnTopPicks = ({
                         : "dyplogo.svg"
                     }
                     onShowDetailsClick={() => {
+                      setselectedpoolType(pool.type);
+
                       setActiveCard(topPools[index]);
                       setActiveCard2(null);
                       setActiveCard3(null);
@@ -2700,11 +1805,13 @@ const EarnTopPicks = ({
                       handleCardIndexStake30(index);
                       handleCardIndexStakeiDyp(index);
                       setDetails(index);
-                      setselectedPool( topList !== 'Vault' && pool);
-                      setShowDetails(topList !== 'Vault' && true);
+                      setselectedPool(topList !== "Vault" && pool);
+                      setShowDetails(topList !== "Vault" && true);
                     }}
                     onHideDetailsClick={() => {
                       setActiveCard(null);
+                      setselectedpoolType("");
+
                       setDetails();
                     }}
                     cardType={topList}
@@ -2852,352 +1959,7 @@ const EarnTopPicks = ({
                   referrer={referrer}
                   totalTvl={activePools[cardIndex].tvl_usd}
                 />
-              ) : //  : activeCard &&
-              //   topList === "Staking" &&
-              //   activePools[cardIndex]?.id ===
-              //     "0xC9075092Cc46E176B1F3c0D0EB8223F1e46555B0" &&
-              //   chain === "eth" ? (
-              //   <StakeDypiusEth
-              //     staking={window.constant_staking_dypius_eth1}
-              //     apr={
-              //       expiredPools === false
-              //         ? activePools[cardIndex]?.apy_percent
-              //         : expiredDYPPools[cardIndex]?.apy_percent
-              //     }
-              //     liquidity={eth_address}
-              //     expiration_time={"09 November 2024"}
-              //     finalApr={activePools[cardIndex]?.apy_performancefee}
-              //     lockTime={
-              //       cardIndex !== undefined
-              //         ? expiredPools === false
-              //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-              //             "No"
-              //             ? "No Lock"
-              //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-              //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-              //               " "
-              //             )[0] === "No"
-              //           ? "No Lock"
-              //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-              //         : "No Lock"
-              //     }
-              //     listType={listType}
-              //     other_info={
-              //       cardIndex !== undefined
-              //         ? expiredPools === false
-              //           ? activePools[cardIndex]?.expired === "Yes"
-              //             ? true
-              //             : false
-              //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-              //           ? true
-              //           : false
-              //         : false
-              //     }
-              //     fee={
-              //       expiredPools === false
-              //         ? activePools[cardIndex]?.performancefee
-              //         : expiredDYPPools[cardIndex]?.performancefee
-              //     }
-              //     is_wallet_connected={isConnected}
-              //     coinbase={coinbase}
-              //     the_graph_result={the_graph_result}
-              //     chainId={chainId}
-              //     handleConnection={handleConnection}
-              //     handleSwitchNetwork={handleSwitchNetwork}
-              //     expired={false}
-              //     referrer={referrer}
-              //   />
-              // )
-              // : activeCard &&
-              //   topList === "Staking" &&
-              //   activePools[cardIndex]?.id ===
-              //     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603" &&
-              //   chain === "bnb" ? (
-              //   <StakeDypiusBsc
-              //     staking={window.constant_staking_dypius_bsc1}
-              //     apr={
-              //       expiredPools === false
-              //         ? activePools[cardIndex]?.apy_percent
-              //         : expiredDYPPools[cardIndex]?.apy_percent
-              //     }
-              //     liquidity={wbsc_address}
-              //     expiration_time={"09 November 2024"}
-              //     finalApr={activePools[cardIndex]?.apy_performancefee}
-              //     lockTime={
-              //       cardIndex !== undefined
-              //         ? expiredPools === false
-              //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-              //             "No"
-              //             ? "No Lock"
-              //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-              //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-              //               " "
-              //             )[0] === "No"
-              //           ? "No Lock"
-              //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-              //         : "No Lock"
-              //     }
-              //     listType={listType}
-              //     other_info={
-              //       cardIndex !== undefined
-              //         ? expiredPools === false
-              //           ? activePools[cardIndex]?.expired === "Yes"
-              //             ? true
-              //             : false
-              //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-              //           ? true
-              //           : false
-              //         : false
-              //     }
-              //     fee={
-              //       expiredPools === false
-              //         ? activePools[cardIndex]?.performancefee
-              //         : expiredDYPPools[cardIndex]?.performancefee
-              //     }
-              //     is_wallet_connected={isConnected}
-              //     coinbase={coinbase}
-              //     the_graph_result={the_graph_resultbsc}
-              //     chainId={chainId}
-              //     handleConnection={handleConnection}
-              //     handleSwitchNetwork={handleSwitchNetwork}
-              //     expired={false}
-              //     referrer={referrer}
-              //   />
-              // )
-              // : activeCard &&
-              //   topList === "Staking" &&
-              //   activePools[cardIndex]?.id ===
-              //     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603" &&
-              //   chain === "avax" ? (
-              //   <StakeDypiusAvax
-              //     staking={window.constant_staking_dypius_avax1}
-              //     apr={activePools[cardIndex]?.apy_percent}
-              //     liquidity={avax_address}
-              //     expiration_time={"09 November 2024"}
-              //     finalApr={activePools[cardIndex]?.apy_performancefee}
-              //     lockTime={
-              //       cardIndex !== undefined
-              //         ? expiredPools === false
-              //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-              //             "No"
-              //             ? "No Lock"
-              //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-              //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-              //               " "
-              //             )[0] === "No"
-              //           ? "No Lock"
-              //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-              //         : "No Lock"
-              //     }
-              //     listType={listType}
-              //     other_info={
-              //       cardIndex !== undefined
-              //         ? expiredPools === false
-              //           ? activePools[cardIndex]?.expired === "Yes"
-              //             ? true
-              //             : false
-              //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-              //           ? true
-              //           : false
-              //         : false
-              //     }
-              //     fee_s={
-              //       expiredPools === false
-              //         ? activePools[cardIndex]?.performancefee
-              //         : expiredDYPPools[cardIndex]?.performancefee
-              //     }
-              //     is_wallet_connected={isConnected}
-              //     coinbase={coinbase}
-              //     the_graph_result={the_graph_resultavax}
-              //     chainId={chainId}
-              //     handleConnection={handleConnection}
-              //     handleSwitchNetwork={handleSwitchNetwork}
-              //     expired={false}
-              //     referrer={referrer}
-              //   />
-              // )
-              // : activeCard &&
-              //   topList === "Staking" &&
-              //   chain === "avax" &&
-              //   activePools[cardIndex]?.id ===
-              //     "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
-              //   <StakeAvaxIDyp
-              //     is_wallet_connected={isConnected}
-              //     coinbase={coinbase}
-              //     the_graph_result={the_graph_resultavax}
-              //     chainId={chainId}
-              //     handleConnection={handleConnection}
-              //     handleSwitchNetwork={handleSwitchNetwork}
-              //     expired={false}
-              //     staking={window.constant_staking_idypavax_7}
-              //     listType={listType}
-              //     finalApr={
-              //       expiredPools === false
-              //         ? activePools[cardIndex]?.apy_performancefee
-              //         : expiredDYPPools[cardIndex]?.apy_performancefee
-              //     }
-              //     apr={
-              //       expiredPools === false
-              //         ? activePools[cardIndex]?.apy_percent
-              //         : expiredDYPPools[cardIndex]?.apy_percent
-              //     }
-              //     liquidity={avax_address}
-              //     expiration_time={"18 July 2024"}
-              //     other_info={
-              //       cardIndex !== undefined
-              //         ? expiredPools === false
-              //           ? activePools[cardIndex]?.expired === "Yes"
-              //             ? true
-              //             : false
-              //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-              //           ? true
-              //           : false
-              //         : false
-              //     }
-              //     fee_s={
-              //       expiredPools === false
-              //         ? activePools[cardIndex]?.performancefee
-              //         : expiredDYPPools[cardIndex]?.performancefee
-              //     }
-              //     fee_u={feeUarrayStakeAvaxiDyp[cardIndexavaxiDyp - 3]}
-              //     lockTime={
-              //       cardIndex !== undefined
-              //         ? expiredPools === false
-              //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-              //             "No"
-              //             ? "No Lock"
-              //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-              //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-              //               " "
-              //             )[0] === "No"
-              //           ? "No Lock"
-              //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-              //         : "No Lock"
-              //     }
-              //   />
-              // )
-              //  : activeCard &&
-              //   activePools[cardIndex]?.id ===
-              //     "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
-              //   topList === "Staking" &&
-              //   chain === "bnb" ? (
-              //   <StakeBscIDyp
-              //     is_wallet_connected={isConnected}
-              //     coinbase={coinbase}
-              //     the_graph_result={the_graph_resultbsc}
-              //     chainId={chainId}
-              //     handleConnection={handleConnection}
-              //     handleSwitchNetwork={handleSwitchNetwork}
-              //     expired={false}
-              //     staking={window.constant_stakingidyp_7}
-              //     listType={listType}
-              //     finalApr={
-              //       expiredPools === false
-              //         ? activePools[cardIndex]?.apy_performancefee
-              //         : expiredDYPPools[cardIndex]?.apy_performancefee
-              //     }
-              //     apr={
-              //       expiredPools === false
-              //         ? activePools[cardIndex]?.apy_percent
-              //         : expiredDYPPools[cardIndex]?.apy_percent
-              //     }
-              //     liquidity={wbsc_address}
-              //     expiration_time={"18 July 2024"}
-              //     other_info={
-              //       cardIndex !== undefined
-              //         ? expiredPools === false
-              //           ? activePools[cardIndex]?.expired === "Yes"
-              //             ? true
-              //             : false
-              //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-              //           ? true
-              //           : false
-              //         : false
-              //     }
-              //     fee_s={
-              //       expiredPools === false
-              //         ? activePools[cardIndex]?.performancefee
-              //         : expiredDYPPools[cardIndex]?.performancefee
-              //     }
-              //     fee_u={0}
-              //     lockTime={
-              //       cardIndex !== undefined
-              //         ? expiredPools === false
-              //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-              //             "No"
-              //             ? "No Lock"
-              //             : parseInt(
-              //                 activePools[cardIndex]?.lock_time?.split(" ")[0]
-              //               )
-              //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0] ===
-              //             "No"
-              //           ? "No Lock"
-              //           : parseInt(
-              //               expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-              //             )
-              //         : "No Lock"
-              //     }
-              //   />
-              // )
-
-              // activeCard &&
-              //   topList === "Staking" &&
-              //   chain === "eth" &&
-              //   activePools[cardIndex]?.id ===
-              //     "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
-              //   <InitConstantStakingiDYP
-              //     is_wallet_connected={isConnected}
-              //     coinbase={coinbase}
-              //     the_graph_result={the_graph_result}
-              //     lp_id={lp_id[cardIndex]}
-              //     chainId={chainId}
-              //     handleConnection={handleConnection}
-              //     handleSwitchNetwork={handleSwitchNetwork}
-              //     expired={false}
-              //     staking={window.constant_staking_idyp_5}
-              //     listType={listType}
-              //     finalApr={activePools[cardIndex]?.apy_performancefee}
-              //     apr={
-              //       expiredPools === false
-              //         ? activePools[cardIndex]?.apy_percent
-              //         : expiredDYPPools[cardIndex]?.apy_percent
-              //     }
-              //     liquidity={eth_address}
-              //     expiration_time={"18 July 2024"}
-              //     other_info={
-              //       cardIndex !== undefined
-              //         ? expiredPools === false
-              //           ? activePools[cardIndex]?.expired === "Yes"
-              //             ? true
-              //             : false
-              //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-              //           ? true
-              //           : false
-              //         : false
-              //     }
-              //     fee_s={
-              //       expiredPools === false
-              //         ? activePools[cardIndex]?.performancefee
-              //         : expiredDYPPools[cardIndex]?.performancefee
-              //     }
-              //     fee_u={withdrawFeeiDyp[cardIndex]}
-              //     lockTime={
-              //       cardIndex !== undefined
-              //         ? expiredPools === false
-              //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-              //             "No"
-              //             ? "No Lock"
-              //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-              //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-              //               " "
-              //             )[0] === "No"
-              //           ? "No Lock"
-              //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-              //         : "No Lock"
-              //     }
-              //   />
-              // )
-              activeCard && topList === "Farming" && chain === "bnb" ? (
+              ) : activeCard && topList === "Farming" && chain === "bnb" ? (
                 <BscFarmingFunc
                   is_wallet_connected={isConnected}
                   wbnbPrice={wbnbPrice}
@@ -3252,29 +2014,6 @@ const EarnTopPicks = ({
                 className="top-picks-container"
                 style={{ marginTop: "26px" }}
               >
-                {/* {topList === "Staking" && chain === "eth" && (
-                    <CawsCard
-                      onShowDetailsClick={() => {
-                        setActiveCardNFT(true);
-                        setActiveCardLandNFT(false);
-                        setActiveCard(null);
-                        setActiveCard2(null);
-                        setActiveCard3(null);
-                        setActiveCard4(null);
-                        setActiveCardCawsLand(null)
-                        setDetails();
-                      }}
-                      onHideDetailsClick={() => {
-                        setActiveCardNFT(false);
-                        setDetails();
-                      }}
-                      cardType={topList}
-                      details={activeCardNFT === true ? true : false}
-                      listType={listType}
-                      tvl={"$" + getFormattedNumber(cawsCard2.tvl_usd)}
-                      network={chainId}
-                    />
-                  )} */}
                 {activePools.slice(2, 4).map((pool, index) => (
                   <TopPoolsCard
                     network={chainId}
@@ -3314,6 +2053,8 @@ const EarnTopPicks = ({
                     }
                     onShowDetailsClick={() => {
                       setActiveCard(null);
+                      setselectedpoolType(pool.type);
+
                       setActiveCard2(topPools[index + 2]);
                       setActiveCard3(null);
                       setActiveCard4(null);
@@ -3325,11 +2066,13 @@ const EarnTopPicks = ({
                       handleCardIndexStake30(index + 2);
                       handleCardIndexStakeiDyp(index + 2);
                       setDetails(index + 2);
-                      setselectedPool( topList !== 'Vault' && pool);
-                      setShowDetails(topList !== 'Vault' && true);
+                      setselectedPool(topList !== "Vault" && pool);
+                      setShowDetails(topList !== "Vault" && true);
                     }}
                     onHideDetailsClick={() => {
                       setActiveCard2(null);
+                      setselectedpoolType("");
+
                       setDetails();
                     }}
                     cardType={topList}
@@ -3349,455 +2092,31 @@ const EarnTopPicks = ({
                 ))}
               </div>
 
-              {
-                // activeCard2 &&
-                // topList === "Staking" &&
-                // chain === "avax" &&
-                // activePools[cardIndex]?.id ===
-                //   "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
-                //   <StakeAvaxIDyp
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_resultavax}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     staking={window.constant_staking_idypavax_7}
-                //     listType={listType}
-                //     finalApr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_performancefee
-                //         : expiredDYPPools[cardIndex]?.apy_performancefee
-                //     }
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={avax_address}
-                //     expiration_time={"18 July 2024"}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee_s={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     fee_u={feeUarrayStakeAvaxiDyp[cardIndexavaxiDyp - 3]}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //   />
-                // )
-                // :
-                //  : activeCard2 &&
-                //   activePools[cardIndex]?.id ===
-                //     "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
-                //   topList === "Staking" &&
-                //   chain === "bnb" ? (
-                //   <StakeBscIDyp
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_resultbsc}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     staking={window.constant_stakingidyp_7}
-                //     listType={listType}
-                //     finalApr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_performancefee
-                //         : expiredDYPPools[cardIndex]?.apy_performancefee
-                //     }
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={wbsc_address}
-                //     expiration_time={"18 July 2024"}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee_s={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     fee_u={0}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : parseInt(
-                //                 activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //               )
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //           ? "No Lock"
-                //           : parseInt(
-                //               expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //             )
-                //         : "No Lock"
-                //     }
-                //   />
-                // )
-                // activeCard2 &&
-                // topList === "Staking" &&
-                // activePools[cardIndex]?.id ===
-                //   "0xC9075092Cc46E176B1F3c0D0EB8223F1e46555B0" &&
-                // chain === "eth" ? (
-                //   <StakeDypiusEth
-                //     staking={window.constant_staking_dypius_eth1}
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={eth_address}
-                //     expiration_time={"09 November 2024"}
-                //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //     listType={listType}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_result}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     referrer={referrer}
-                //   />
-                // )
-                // : activeCard2 &&
-                //   topList === "Staking" &&
-                //   activePools[cardIndex]?.id ===
-                //     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603" &&
-                //   chain === "bnb" ? (
-                //   <StakeDypiusBsc
-                //     staking={window.constant_staking_dypius_bsc1}
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={wbsc_address}
-                //     expiration_time={"09 November 2024"}
-                //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //     listType={listType}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_resultbsc}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     referrer={referrer}
-                //   />
-                // )
-                // : activeCard2 &&
-                //   topList === "Staking" &&
-                //   activePools[cardIndex]?.id ===
-                //     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603" &&
-                //   chain === "avax" ? (
-                //   <StakeDypiusAvax
-                //     staking={window.constant_staking_dypius_avax1}
-                //     apr={activePools[cardIndex]?.apy_percent}
-                //     liquidity={avax_address}
-                //     expiration_time={"09 November 2024"}
-                //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //     listType={listType}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee_s={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_resultavax}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     referrer={referrer}
-                //   />
-                // )
-                // : activeCard2 &&
-                //   topList === "Staking" &&
-                //   chain === "eth" &&
-                //   activePools[cardIndex]?.id ===
-                //     "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
-                //   <InitConstantStakingiDYP
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_result}
-                //     lp_id={lp_id[cardIndex]}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     staking={window.constant_staking_idyp_5}
-                //     listType={listType}
-                //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={eth_address}
-                //     expiration_time={"18 July 2024"}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee_s={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     fee_u={withdrawFeeiDyp[cardIndex]}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //   />
-                // )
-                activeCard2 && topList === "Vault" && chain === "eth" ? (
-                  <Vault
-                    vault={vaultArrayNew[cardIndex]}
-                    token={tokenvaultArrayNew[cardIndex]}
-                    platformTokenApyPercent={vaultplatformArrayNew[cardIndex]}
-                    UNDERLYING_DECIMALS={vaultdecimalsArrayNew[cardIndex]}
-                    UNDERLYING_SYMBOL={vaultsymbolArrayNew[cardIndex]}
-                    expiration_time={"1 August 2024"}
-                    coinbase={coinbase}
-                    lockTime={"No Lock"}
-                    handleConnection={handleConnection}
-                    chainId={chainId}
-                    listType={listType}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
-                    isConnected={isConnected}
-                    the_graph_result={the_graph_result}
-                  />
-                ) : (
-                  <></>
-                )
-              }
+              {activeCard2 && topList === "Vault" && chain === "eth" ? (
+                <Vault
+                  vault={vaultArrayNew[cardIndex]}
+                  token={tokenvaultArrayNew[cardIndex]}
+                  platformTokenApyPercent={vaultplatformArrayNew[cardIndex]}
+                  UNDERLYING_DECIMALS={vaultdecimalsArrayNew[cardIndex]}
+                  UNDERLYING_SYMBOL={vaultsymbolArrayNew[cardIndex]}
+                  expiration_time={"1 August 2024"}
+                  coinbase={coinbase}
+                  lockTime={"No Lock"}
+                  handleConnection={handleConnection}
+                  chainId={chainId}
+                  listType={listType}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  expired={false}
+                  isConnected={isConnected}
+                  the_graph_result={the_graph_result}
+                />
+              ) : (
+                <></>
+              )}
               <div
                 className="top-picks-container"
                 style={{ marginTop: "25px" }}
               >
-                {/* {topList === "Staking" && chain === "eth" && (
-                    <>
-                      {activePools.slice(2, 3).map((pool, index) => (
-                        <TopPoolsCard
-                          network={chainId}
-                          display={
-                            pool.expired
-                              ? pool.expired === "Yes"
-                                ? "none"
-                                : ""
-                              : ""
-                          }
-                          expired={false}
-                          key={index}
-                          chain={chain}
-                          top_pick={pool.top_pick}
-                          tokenName={
-                            pool.tokenName
-                              ? pool.tokenName
-                              : pool.pair_name
-                              ? pool.pair_name
-                              : ""
-                          }
-                          apr={pool.apy_percent + "%"}
-                          tvl={
-                            pool.tvl_usd === "--"
-                              ? pool.tvl_usd
-                              : "$" + getFormattedNumber(pool.tvl_usd)
-                          }
-                          lockTime={
-                            pool.lockTime
-                              ? pool.lockTime
-                              : pool.lock_time
-                              ? pool.lock_time
-                              : locktimeFarm[index]
-                          }
-                          tokenLogo={
-                            pool.icon
-                              ? pool.icon
-                              : pool.pair_name === "iDYP"
-                              ? "idypius.svg"
-                              : "dyplogo.svg"
-                          }
-                          onShowDetailsClick={() => {
-                            setActiveCard(null);
-                            setActiveCard2(null);
-                            setActiveCard3(true);
-                            setActiveCard4(null);
-                            setActiveCard5(null);
-                            setActiveCard6(null);
-                            setActiveCardNFT(false);
-                            setActiveCardLandNFT(false);
-                            handleCardIndexStake(index + 2);
-                            handleCardIndexStake30(index + 2);
-                            handleCardIndexStakeiDyp(index + 2);
-                            setDetails(index + 2);
-                          }}
-                          onHideDetailsClick={() => {
-                            setActiveCard3(null);
-                            setDetails();
-                          }}
-                          cardType={topList}
-                          details={details === index + 2 ? true : false}
-                          isNewPool={pool.new_pool === "Yes" ? true : false}
-                          isStaked={
-                            userPools.length > 0
-                              ? userPools.find(
-                                  (obj) => obj.contract_address === pool.id
-                                )
-                                ? true
-                                : false
-                              : false
-                          }
-                        />
-                      ))}
-                    </>
-                  )} */}
                 {activePools.slice(4, 6).map((pool, index) => (
                   <TopPoolsCard
                     network={chainId}
@@ -3837,6 +2156,8 @@ const EarnTopPicks = ({
                     }
                     onShowDetailsClick={() => {
                       setActiveCard(null);
+                      setselectedpoolType(pool.type);
+
                       setActiveCard3(topPools[index + 4]);
                       setActiveCard2(null);
                       setActiveCard4(null);
@@ -3848,12 +2169,13 @@ const EarnTopPicks = ({
                       handleCardIndexStake30(index + 4);
                       handleCardIndexStakeiDyp(index + 4);
                       setDetails(index + 4);
-                      setselectedPool( topList !== 'Vault' && pool);
-                      setShowDetails(topList !== 'Vault' && true);
+                      setselectedPool(topList !== "Vault" && pool);
+                      setShowDetails(topList !== "Vault" && true);
                     }}
                     onHideDetailsClick={() => {
                       setActiveCard2(null);
                       setActiveCard3(null);
+                      setselectedpoolType("");
 
                       setDetails();
                     }}
@@ -3873,450 +2195,41 @@ const EarnTopPicks = ({
                   />
                 ))}
               </div>
-              {
-                // activeCard3 &&
-                // topList === "Staking" &&
-                // chain === "avax" &&
-                // activePools[cardIndex]?.id ===
-                //   "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
-                //   <StakeAvaxIDyp
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_resultavax}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     staking={window.constant_staking_idypavax_7}
-                //     listType={listType}
-                //     finalApr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_performancefee
-                //         : expiredDYPPools[cardIndex]?.apy_performancefee
-                //     }
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={avax_address}
-                //     expiration_time={"18 July 2024"}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee_s={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     fee_u={feeUarrayStakeAvaxiDyp[cardIndexavaxiDyp - 3]}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //   />
-                // ) :
-                // activeCard3 &&
-                // topList === "Staking" &&
-                // activePools[cardIndex]?.id ===
-                //   "0xC9075092Cc46E176B1F3c0D0EB8223F1e46555B0" &&
-                // chain === "eth" ? (
-                //   <StakeDypiusEth
-                //     staking={window.constant_staking_dypius_eth1}
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={eth_address}
-                //     expiration_time={"09 November 2024"}
-                //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //     listType={listType}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_result}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     referrer={referrer}
-                //   />
-                // )
-                //  : activeCard3 &&
-                //   topList === "Staking" &&
-                //   activePools[cardIndex]?.id ===
-                //     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603" &&
-                //   chain === "bnb" ? (
-                //   <StakeDypiusBsc
-                //     staking={window.constant_staking_dypius_bsc1}
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={wbsc_address}
-                //     expiration_time={"09 November 2024"}
-                //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //     listType={listType}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_resultbsc}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     referrer={referrer}
-                //   />
-                // )
-                //  : activeCard3 &&
-                //   topList === "Staking" &&
-                //   activePools[cardIndex]?.id ===
-                //     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603" &&
-                //   chain === "avax" ? (
-                //   <StakeDypiusAvax
-                //     staking={window.constant_staking_dypius_avax1}
-                //     apr={activePools[cardIndex]?.apy_percent}
-                //     liquidity={avax_address}
-                //     expiration_time={"09 November 2024"}
-                //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //     listType={listType}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee_s={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_resultavax}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     referrer={referrer}
-                //   />
-                // )
-                //  : activeCard3 &&
-                //   activePools[cardIndex]?.id ===
-                //     "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
-                //   topList === "Staking" &&
-                //   chain === "bnb" ? (
-                //   <StakeBscIDyp
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_resultbsc}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     staking={window.constant_stakingidyp_7}
-                //     listType={listType}
-                //     finalApr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_performancefee
-                //         : expiredDYPPools[cardIndex]?.apy_performancefee
-                //     }
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={wbsc_address}
-                //     expiration_time={"18 July 2024"}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee_s={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     fee_u={0}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : parseInt(
-                //                 activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //               )
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //           ? "No Lock"
-                //           : parseInt(
-                //               expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //             )
-                //         : "No Lock"
-                //     }
-                //   />
-                // )
-                // activeCard3 &&
-                //   topList === "Staking" &&
-                //   chain === "eth" &&
-                //   activePools[cardIndex]?.id ===
-                //     "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
-                //   <InitConstantStakingiDYP
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_result}
-                //     lp_id={lp_id[cardIndex]}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     staking={window.constant_staking_idyp_5}
-                //     listType={listType}
-                //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={eth_address}
-                //     expiration_time={"18 July 2024"}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee_s={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     fee_u={withdrawFeeiDyp[cardIndex]}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //   />
-                // ) :
-                activeCard3 &&
-                cardIndex >= 0 &&
-                topList === "Staking" &&
-                chain === "eth" ? (
-                  <InitConstantStakingiDYP
-                    is_wallet_connected={isConnected}
-                    coinbase={coinbase}
-                    the_graph_result={the_graph_result}
-                    lp_id={lp_id[cardIndex]}
-                    chainId={chainId}
-                    handleConnection={handleConnection}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
-                  />
-                ) : //  : activeCard3 &&
-                //   activePools[cardIndex]?.id ===
-                //     "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
-                //   topList === "Staking" &&
-                //   chain === "bnb" ? (
-                //   <StakeBscIDyp
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_resultbsc}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     staking={window.constant_stakingidyp_7}
-                //     listType={listType}
-                //     finalApr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_performancefee
-                //         : expiredDYPPools[cardIndex]?.apy_performancefee
-                //     }
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={wbsc_address}
-                //     expiration_time={"18 July 2024"}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee_s={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     fee_u={0}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : parseInt(
-                //                 activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //               )
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //           ? "No Lock"
-                //           : parseInt(
-                //               expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //             )
-                //         : "No Lock"
-                //     }
-                //   />
-                // )
-                activeCard3 && topList === "Vault" && chain === "eth" ? (
-                  <Vault
-                    vault={vaultArrayNew[cardIndex]}
-                    token={tokenvaultArrayNew[cardIndex]}
-                    platformTokenApyPercent={vaultplatformArrayNew[cardIndex]}
-                    UNDERLYING_DECIMALS={vaultdecimalsArrayNew[cardIndex]}
-                    UNDERLYING_SYMBOL={vaultsymbolArrayNew[cardIndex]}
-                    expiration_time={"1 August 2024"}
-                    coinbase={coinbase}
-                    lockTime={"No Lock"}
-                    handleConnection={handleConnection}
-                    chainId={chainId}
-                    listType={listType}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
-                    isConnected={isConnected}
-                    the_graph_result={the_graph_result}
-                  />
-                ) : (
-                  <></>
-                )
-              }
+              {activeCard3 &&
+              cardIndex >= 0 &&
+              topList === "Staking" &&
+              chain === "eth" ? (
+                <InitConstantStakingiDYP
+                  is_wallet_connected={isConnected}
+                  coinbase={coinbase}
+                  the_graph_result={the_graph_result}
+                  lp_id={lp_id[cardIndex]}
+                  chainId={chainId}
+                  handleConnection={handleConnection}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  expired={false}
+                />
+              ) : activeCard3 && topList === "Vault" && chain === "eth" ? (
+                <Vault
+                  vault={vaultArrayNew[cardIndex]}
+                  token={tokenvaultArrayNew[cardIndex]}
+                  platformTokenApyPercent={vaultplatformArrayNew[cardIndex]}
+                  UNDERLYING_DECIMALS={vaultdecimalsArrayNew[cardIndex]}
+                  UNDERLYING_SYMBOL={vaultsymbolArrayNew[cardIndex]}
+                  expiration_time={"1 August 2024"}
+                  coinbase={coinbase}
+                  lockTime={"No Lock"}
+                  handleConnection={handleConnection}
+                  chainId={chainId}
+                  listType={listType}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  expired={false}
+                  isConnected={isConnected}
+                  the_graph_result={the_graph_result}
+                />
+              ) : (
+                <></>
+              )}
               <div
                 className="top-picks-container"
                 style={{ marginTop: "25px" }}
@@ -4371,12 +2284,14 @@ const EarnTopPicks = ({
                       handleCardIndexStake30(index + 6);
                       handleCardIndexStakeiDyp(index + 6);
                       setDetails(index + 6);
-                      setselectedPool( topList !== 'Vault' && pool);
-                      setShowDetails(topList !== 'Vault' && true);
+                      setselectedPool(topList !== "Vault" && pool);
+                      setShowDetails(topList !== "Vault" && true);
+                      setselectedpoolType(pool.type);
                     }}
                     onHideDetailsClick={() => {
                       setActiveCard4(null);
                       setDetails();
+                      setselectedpoolType("");
                     }}
                     cardType={topList}
                     details={details === index + 6 ? true : false}
@@ -4394,443 +2309,93 @@ const EarnTopPicks = ({
                   />
                 ))}
               </div>
-              {
-                // activeCard4 &&
-                // topList === "Staking" &&
-                // chain === "avax" &&
-                // activePools[cardIndex]?.id ===
-                //   "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
-                //   <StakeAvaxIDyp
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_resultavax}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     staking={window.constant_staking_idypavax_7}
-                //     listType={listType}
-                //     finalApr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_performancefee
-                //         : expiredDYPPools[cardIndex]?.apy_performancefee
-                //     }
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={avax_address}
-                //     expiration_time={"18 July 2024"}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee_s={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     fee_u={feeUarrayStakeAvaxiDyp[cardIndexavaxiDyp - 3]}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //   />
-                // ) :
-
-                // activeCard4 &&
-                // topList === "Staking" &&
-                // activePools[cardIndex]?.id ===
-                //   "0xC9075092Cc46E176B1F3c0D0EB8223F1e46555B0" &&
-                // chain === "eth" ? (
-                //   <StakeDypiusEth
-                //     staking={window.constant_staking_dypius_eth1}
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={eth_address}
-                //     expiration_time={"09 November 2024"}
-                //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //     listType={listType}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_result}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     referrer={referrer}
-                //   />
-                // )
-                // : activeCard4 &&
-                //   topList === "Staking" &&
-                //   activePools[cardIndex]?.id ===
-                //     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603" &&
-                //   chain === "bnb" ? (
-                //   <StakeDypiusBsc
-                //     staking={window.constant_staking_dypius_bsc1}
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={wbsc_address}
-                //     expiration_time={"09 November 2024"}
-                //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //     listType={listType}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_resultbsc}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     referrer={referrer}
-                //   />
-                // )
-
-                //  : activeCard4 &&
-                //   topList === "Staking" &&
-                //   activePools[cardIndex]?.id ===
-                //     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603" &&
-                //   chain === "avax" ? (
-                //   <StakeDypiusAvax
-                //     staking={window.constant_staking_dypius_avax1}
-                //     apr={activePools[cardIndex]?.apy_percent}
-                //     liquidity={avax_address}
-                //     expiration_time={"09 November 2024"}
-                //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //     listType={listType}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee_s={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_resultavax}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     referrer={referrer}
-                //   />
-                // )
-                //  : activeCard4 &&
-                //   activePools[cardIndex]?.id ===
-                //     "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
-                //   topList === "Staking" &&
-                //   chain === "bnb" ? (
-                //   <StakeBscIDyp
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_resultbsc}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     staking={window.constant_stakingidyp_7}
-                //     listType={listType}
-                //     finalApr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_performancefee
-                //         : expiredDYPPools[cardIndex]?.apy_performancefee
-                //     }
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={wbsc_address}
-                //     expiration_time={"18 July 2024"}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee_s={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     fee_u={0}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : parseInt(
-                //                 activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //               )
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //           ? "No Lock"
-                //           : parseInt(
-                //               expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //             )
-                //         : "No Lock"
-                //     }
-                //   />
-                // )
-                // activeCard4 &&
-                //   topList === "Staking" &&
-                //   chain === "eth" &&
-                //   activePools[cardIndex]?.id ===
-                //     "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
-                //   <InitConstantStakingiDYP
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_result}
-                //     lp_id={lp_id[cardIndex]}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     staking={window.constant_staking_idyp_5}
-                //     listType={listType}
-                //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={eth_address}
-                //     expiration_time={"18 July 2024"}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee_s={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     fee_u={withdrawFeeiDyp[cardIndex]}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //   />
-                // ) :
-                activeCard4 &&
-                cardIndex >= 0 &&
+              {activeCard4 &&
+              cardIndex >= 0 &&
+              topList === "Staking" &&
+              chain === "eth" ? (
+                <InitConstantStakingiDYP
+                  is_wallet_connected={isConnected}
+                  coinbase={coinbase}
+                  the_graph_result={the_graph_result}
+                  lp_id={lp_id[cardIndex]}
+                  chainId={chainId}
+                  handleConnection={handleConnection}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  expired={false}
+                />
+              ) : activeCard4 &&
+                cardIndex >= 2 &&
                 topList === "Staking" &&
-                chain === "eth" ? (
-                  <InitConstantStakingiDYP
-                    is_wallet_connected={isConnected}
-                    coinbase={coinbase}
-                    the_graph_result={the_graph_result}
-                    lp_id={lp_id[cardIndex]}
-                    chainId={chainId}
-                    handleConnection={handleConnection}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
-                  />
-                ) : activeCard4 &&
-                  cardIndex >= 2 &&
-                  topList === "Staking" &&
-                  chain === "bnb" ? (
-                  <StakeBscIDyp
-                    is_wallet_connected={isConnected}
-                    coinbase={coinbase}
-                    the_graph_result={the_graph_resultbsc}
-                    chainId={chainId}
-                    handleConnection={handleConnection}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
-                    staking={
-                      expiredPools === false
-                        ? stakearrayStakeBsciDyp2[cardIndex - 2]
-                        : stakearrayStakeBsciDyp2Expired[cardIndex - 3]
-                    }
-                    listType={listType}
-                    finalApr={
-                      expiredPools === false
-                        ? activePools[cardIndex]?.apy_performancefee
-                        : expiredDYPPools[cardIndex]?.apy_performancefee
-                    }
-                    apr={
-                      expiredPools === false
-                        ? activePools[cardIndex]?.apy_percent
-                        : expiredDYPPools[cardIndex]?.apy_percent
-                    }
-                    liquidity={wbsc_address}
-                    expiration_time={
-                      expiredPools === false
-                        ? expirearrayStakeBsciDyp2[cardIndex - 2]
-                        : expirearrayStakeBsciDyp2Expired[cardIndex - 3]
-                    }
-                    other_info={
-                      cardIndex !== undefined
-                        ? expiredPools === false
-                          ? activePools[cardIndex]?.expired === "Yes"
-                            ? true
-                            : false
-                          : expiredDYPPools[cardIndex]?.expired === "Yes"
+                chain === "bnb" ? (
+                <StakeBscIDyp
+                  is_wallet_connected={isConnected}
+                  coinbase={coinbase}
+                  the_graph_result={the_graph_resultbsc}
+                  chainId={chainId}
+                  handleConnection={handleConnection}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  expired={false}
+                  staking={
+                    expiredPools === false
+                      ? stakearrayStakeBsciDyp2[cardIndex - 2]
+                      : stakearrayStakeBsciDyp2Expired[cardIndex - 3]
+                  }
+                  listType={listType}
+                  finalApr={
+                    expiredPools === false
+                      ? activePools[cardIndex]?.apy_performancefee
+                      : expiredDYPPools[cardIndex]?.apy_performancefee
+                  }
+                  apr={
+                    expiredPools === false
+                      ? activePools[cardIndex]?.apy_percent
+                      : expiredDYPPools[cardIndex]?.apy_percent
+                  }
+                  liquidity={wbsc_address}
+                  expiration_time={
+                    expiredPools === false
+                      ? expirearrayStakeBsciDyp2[cardIndex - 2]
+                      : expirearrayStakeBsciDyp2Expired[cardIndex - 3]
+                  }
+                  other_info={
+                    cardIndex !== undefined
+                      ? expiredPools === false
+                        ? activePools[cardIndex]?.expired === "Yes"
                           ? true
                           : false
+                        : expiredDYPPools[cardIndex]?.expired === "Yes"
+                        ? true
                         : false
-                    }
-                    fee_s={
-                      expiredPools === false
-                        ? activePools[cardIndex]?.performancefee
-                        : expiredDYPPools[cardIndex]?.performancefee
-                    }
-                    fee_u={0}
-                    lockTime={
-                      cardIndex !== undefined
-                        ? expiredPools === false
-                          ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                            "No"
-                            ? "No Lock"
-                            : parseInt(
-                                activePools[cardIndex]?.lock_time?.split(" ")[0]
-                              )
-                          : expiredDYPPools[cardIndex]?.lock_time?.split(
-                              " "
-                            )[0] === "No"
+                      : false
+                  }
+                  fee_s={
+                    expiredPools === false
+                      ? activePools[cardIndex]?.performancefee
+                      : expiredDYPPools[cardIndex]?.performancefee
+                  }
+                  fee_u={0}
+                  lockTime={
+                    cardIndex !== undefined
+                      ? expiredPools === false
+                        ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
+                          "No"
                           ? "No Lock"
                           : parseInt(
-                              expiredDYPPools[cardIndex]?.lock_time?.split(
-                                " "
-                              )[0]
+                              activePools[cardIndex]?.lock_time?.split(" ")[0]
                             )
-                        : "No Lock"
-                    }
-                  />
-                ) : (
-                  <></>
-                )
-              }
+                        : expiredDYPPools[cardIndex]?.lock_time?.split(
+                            " "
+                          )[0] === "No"
+                        ? "No Lock"
+                        : parseInt(
+                            expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
+                          )
+                      : "No Lock"
+                  }
+                />
+              ) : (
+                <></>
+              )}
               <div
                 className="top-picks-container"
                 style={{ marginTop: activePools.length > 8 && "25px" }}
@@ -4885,12 +2450,14 @@ const EarnTopPicks = ({
                       handleCardIndexStake30(index + 6);
                       handleCardIndexStakeiDyp(index + 6);
                       setDetails(index + 6);
-                      setselectedPool( topList !== 'Vault' && pool);
-                      setShowDetails(topList !== 'Vault' && true);
+                      setselectedPool(topList !== "Vault" && pool);
+                      setShowDetails(topList !== "Vault" && true);
+                      setselectedpoolType(pool.type);
                     }}
                     onHideDetailsClick={() => {
                       setActiveCard5(null);
                       setDetails();
+                      setselectedpoolType("");
                     }}
                     cardType={topList}
                     details={details === index + 6 ? true : false}
@@ -4908,278 +2475,93 @@ const EarnTopPicks = ({
                   />
                 ))}
               </div>
-              {
-                // activeCard5 &&
-                // topList === "Staking" &&
-                // chain === "avax" &&
-                // activePools[cardIndex]?.id ===
-                //   "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
-                //   <StakeAvaxIDyp
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_resultavax}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     staking={window.constant_staking_idypavax_7}
-                //     listType={listType}
-                //     finalApr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_performancefee
-                //         : expiredDYPPools[cardIndex]?.apy_performancefee
-                //     }
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={avax_address}
-                //     expiration_time={"18 July 2024"}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee_s={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     fee_u={feeUarrayStakeAvaxiDyp[cardIndexavaxiDyp - 3]}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //   />
-                // ) :
-
-                //  : activeCard5 &&
-                //   activePools[cardIndex]?.id ===
-                //     "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
-                //   topList === "Staking" &&
-                //   chain === "bnb" ? (
-                //   <StakeBscIDyp
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_resultbsc}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     staking={window.constant_stakingidyp_7}
-                //     listType={listType}
-                //     finalApr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_performancefee
-                //         : expiredDYPPools[cardIndex]?.apy_performancefee
-                //     }
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={wbsc_address}
-                //     expiration_time={"18 July 2024"}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee_s={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     fee_u={0}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : parseInt(
-                //                 activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //               )
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //           ? "No Lock"
-                //           : parseInt(
-                //               expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //             )
-                //         : "No Lock"
-                //     }
-                //   />
-                // )
-                // activeCard5 &&
-                //   topList === "Staking" &&
-                //   chain === "eth" &&
-                //   activePools[cardIndex]?.id ===
-                //     "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
-                //   <InitConstantStakingiDYP
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_result}
-                //     lp_id={lp_id[cardIndex]}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     staking={window.constant_staking_idyp_5}
-                //     listType={listType}
-                //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={eth_address}
-                //     expiration_time={"18 July 2024"}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee_s={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     fee_u={withdrawFeeiDyp[cardIndex]}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //   />
-                // ) :
-                activeCard5 &&
-                cardIndex >= 0 &&
+              {activeCard5 &&
+              cardIndex >= 0 &&
+              topList === "Staking" &&
+              chain === "eth" ? (
+                <InitConstantStakingiDYP
+                  is_wallet_connected={isConnected}
+                  coinbase={coinbase}
+                  the_graph_result={the_graph_result}
+                  lp_id={lp_id[cardIndex]}
+                  chainId={chainId}
+                  handleConnection={handleConnection}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  expired={false}
+                />
+              ) : activeCard5 &&
+                cardIndex >= 2 &&
                 topList === "Staking" &&
-                chain === "eth" ? (
-                  <InitConstantStakingiDYP
-                    is_wallet_connected={isConnected}
-                    coinbase={coinbase}
-                    the_graph_result={the_graph_result}
-                    lp_id={lp_id[cardIndex]}
-                    chainId={chainId}
-                    handleConnection={handleConnection}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
-                  />
-                ) : activeCard5 &&
-                  cardIndex >= 2 &&
-                  topList === "Staking" &&
-                  chain === "bnb" ? (
-                  <StakeBscIDyp
-                    is_wallet_connected={isConnected}
-                    coinbase={coinbase}
-                    the_graph_result={the_graph_resultbsc}
-                    chainId={chainId}
-                    handleConnection={handleConnection}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
-                    staking={
-                      expiredPools === false
-                        ? stakearrayStakeBsciDyp2[cardIndex - 2]
-                        : stakearrayStakeBsciDyp2Expired[cardIndex - 3]
-                    }
-                    listType={listType}
-                    finalApr={
-                      expiredPools === false
-                        ? activePools[cardIndex]?.apy_performancefee
-                        : expiredDYPPools[cardIndex]?.apy_performancefee
-                    }
-                    apr={
-                      expiredPools === false
-                        ? activePools[cardIndex]?.apy_percent
-                        : expiredDYPPools[cardIndex]?.apy_percent
-                    }
-                    liquidity={wbsc_address}
-                    expiration_time={
-                      expiredPools === false
-                        ? expirearrayStakeBsciDyp2[cardIndex - 2]
-                        : expirearrayStakeBsciDyp2Expired[cardIndex - 3]
-                    }
-                    other_info={
-                      cardIndex !== undefined
-                        ? expiredPools === false
-                          ? activePools[cardIndex]?.expired === "Yes"
-                            ? true
-                            : false
-                          : expiredDYPPools[cardIndex]?.expired === "Yes"
+                chain === "bnb" ? (
+                <StakeBscIDyp
+                  is_wallet_connected={isConnected}
+                  coinbase={coinbase}
+                  the_graph_result={the_graph_resultbsc}
+                  chainId={chainId}
+                  handleConnection={handleConnection}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  expired={false}
+                  staking={
+                    expiredPools === false
+                      ? stakearrayStakeBsciDyp2[cardIndex - 2]
+                      : stakearrayStakeBsciDyp2Expired[cardIndex - 3]
+                  }
+                  listType={listType}
+                  finalApr={
+                    expiredPools === false
+                      ? activePools[cardIndex]?.apy_performancefee
+                      : expiredDYPPools[cardIndex]?.apy_performancefee
+                  }
+                  apr={
+                    expiredPools === false
+                      ? activePools[cardIndex]?.apy_percent
+                      : expiredDYPPools[cardIndex]?.apy_percent
+                  }
+                  liquidity={wbsc_address}
+                  expiration_time={
+                    expiredPools === false
+                      ? expirearrayStakeBsciDyp2[cardIndex - 2]
+                      : expirearrayStakeBsciDyp2Expired[cardIndex - 3]
+                  }
+                  other_info={
+                    cardIndex !== undefined
+                      ? expiredPools === false
+                        ? activePools[cardIndex]?.expired === "Yes"
                           ? true
                           : false
+                        : expiredDYPPools[cardIndex]?.expired === "Yes"
+                        ? true
                         : false
-                    }
-                    fee_s={
-                      expiredPools === false
-                        ? activePools[cardIndex]?.performancefee
-                        : expiredDYPPools[cardIndex]?.performancefee
-                    }
-                    fee_u={0}
-                    lockTime={
-                      cardIndex !== undefined
-                        ? expiredPools === false
-                          ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                            "No"
-                            ? "No Lock"
-                            : parseInt(
-                                activePools[cardIndex]?.lock_time?.split(" ")[0]
-                              )
-                          : expiredDYPPools[cardIndex]?.lock_time?.split(
-                              " "
-                            )[0] === "No"
+                      : false
+                  }
+                  fee_s={
+                    expiredPools === false
+                      ? activePools[cardIndex]?.performancefee
+                      : expiredDYPPools[cardIndex]?.performancefee
+                  }
+                  fee_u={0}
+                  lockTime={
+                    cardIndex !== undefined
+                      ? expiredPools === false
+                        ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
+                          "No"
                           ? "No Lock"
                           : parseInt(
-                              expiredDYPPools[cardIndex]?.lock_time?.split(
-                                " "
-                              )[0]
+                              activePools[cardIndex]?.lock_time?.split(" ")[0]
                             )
-                        : "No Lock"
-                    }
-                  />
-                ) : (
-                  <></>
-                )
-              }
+                        : expiredDYPPools[cardIndex]?.lock_time?.split(
+                            " "
+                          )[0] === "No"
+                        ? "No Lock"
+                        : parseInt(
+                            expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
+                          )
+                      : "No Lock"
+                  }
+                />
+              ) : (
+                <></>
+              )}
               <div
                 className="top-picks-container"
                 style={{ marginTop: activePools.length > 9 && "25px" }}
@@ -5230,6 +2612,8 @@ const EarnTopPicks = ({
                       onShowDetailsClick={() => {
                         setActiveCard(null);
                         setActiveCard2(null);
+                        setselectedpoolType(pool.type);
+
                         setActiveCard3(null);
                         setActiveCard4(null);
                         setActiveCard5(null);
@@ -5240,12 +2624,13 @@ const EarnTopPicks = ({
                         handleCardIndexStake30(index + 10);
                         handleCardIndexStakeiDyp(index + 10);
                         setDetails(index + 10);
-                        setselectedPool( topList !== 'Vault' && pool);
-                        setShowDetails(topList !== 'Vault' && true);
+                        setselectedPool(topList !== "Vault" && pool);
+                        setShowDetails(topList !== "Vault" && true);
                       }}
                       onHideDetailsClick={() => {
                         setActiveCard6(null);
                         setDetails();
+                        setselectedpoolType("");
                       }}
                       cardType={topList}
                       details={details === index + 10 ? true : false}
@@ -5263,340 +2648,155 @@ const EarnTopPicks = ({
                     />
                   ))}
               </div>
-              {
-                // activeCard6 &&
-                // topList === "Staking" &&
-                // chain === "avax" &&
-                // activePools[cardIndex]?.id ===
-                //   "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
-                //   <StakeAvaxIDyp
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_resultavax}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     staking={window.constant_staking_idypavax_7}
-                //     listType={listType}
-                //     finalApr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_performancefee
-                //         : expiredDYPPools[cardIndex]?.apy_performancefee
-                //     }
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={avax_address}
-                //     expiration_time={"18 July 2024"}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee_s={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     fee_u={feeUarrayStakeAvaxiDyp[cardIndexavaxiDyp - 3]}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //   />
-                // ) :
-
-                // : activeCard6 &&
-                //   activePools[cardIndex]?.id ===
-                //     "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
-                //   topList === "Staking" &&
-                //   chain === "bnb" ? (
-                //   <StakeBscIDyp
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_resultbsc}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     staking={window.constant_stakingidyp_7}
-                //     listType={listType}
-                //     finalApr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_performancefee
-                //         : expiredDYPPools[cardIndex]?.apy_performancefee
-                //     }
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={wbsc_address}
-                //     expiration_time={"18 July 2024"}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee_s={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     fee_u={0}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : parseInt(
-                //                 activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //               )
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //           ? "No Lock"
-                //           : parseInt(
-                //               expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //             )
-                //         : "No Lock"
-                //     }
-                //   />
-                // )
-                // activeCard6 &&
-                //   topList === "Staking" &&
-                //   chain === "eth" &&
-                //   activePools[cardIndex]?.id ===
-                //     "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
-                //   <InitConstantStakingiDYP
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_result}
-                //     lp_id={lp_id[cardIndex]}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     staking={window.constant_staking_idyp_5}
-                //     listType={listType}
-                //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={eth_address}
-                //     expiration_time={"18 July 2024"}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee_s={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     fee_u={withdrawFeeiDyp[cardIndex]}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //   />
-                // ) :
-                activeCard6 &&
-                cardIndex >= 0 &&
+              {activeCard6 &&
+              cardIndex >= 0 &&
+              topList === "Staking" &&
+              chain === "eth" ? (
+                <InitConstantStakingiDYP
+                  is_wallet_connected={isConnected}
+                  coinbase={coinbase}
+                  the_graph_result={the_graph_result}
+                  lp_id={lp_id[cardIndex]}
+                  chainId={chainId}
+                  handleConnection={handleConnection}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  expired={false}
+                />
+              ) : activeCard6 &&
+                cardIndex >= 2 &&
                 topList === "Staking" &&
-                chain === "eth" ? (
-                  <InitConstantStakingiDYP
-                    is_wallet_connected={isConnected}
-                    coinbase={coinbase}
-                    the_graph_result={the_graph_result}
-                    lp_id={lp_id[cardIndex]}
-                    chainId={chainId}
-                    handleConnection={handleConnection}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
-                  />
-                ) : activeCard6 &&
-                  cardIndex >= 2 &&
-                  topList === "Staking" &&
-                  chain === "bnb" ? (
-                  <StakeBscIDyp
-                    is_wallet_connected={isConnected}
-                    coinbase={coinbase}
-                    the_graph_result={the_graph_resultbsc}
-                    chainId={chainId}
-                    handleConnection={handleConnection}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
-                    staking={
-                      expiredPools === false
-                        ? stakearrayStakeBsciDyp2[cardIndex - 2]
-                        : stakearrayStakeBsciDyp2Expired[cardIndex - 3]
-                    }
-                    listType={listType}
-                    finalApr={
-                      expiredPools === false
-                        ? activePools[cardIndex]?.apy_performancefee
-                        : expiredDYPPools[cardIndex]?.apy_performancefee
-                    }
-                    apr={
-                      expiredPools === false
-                        ? activePools[cardIndex]?.apy_percent
-                        : expiredDYPPools[cardIndex]?.apy_percent
-                    }
-                    liquidity={wbsc_address}
-                    expiration_time={
-                      expiredPools === false
-                        ? expirearrayStakeBsciDyp2[cardIndex - 2]
-                        : expirearrayStakeBsciDyp2Expired[cardIndex - 3]
-                    }
-                    other_info={
-                      cardIndex !== undefined
-                        ? expiredPools === false
-                          ? activePools[cardIndex]?.expired === "Yes"
-                            ? true
-                            : false
-                          : expiredDYPPools[cardIndex]?.expired === "Yes"
+                chain === "bnb" ? (
+                <StakeBscIDyp
+                  is_wallet_connected={isConnected}
+                  coinbase={coinbase}
+                  the_graph_result={the_graph_resultbsc}
+                  chainId={chainId}
+                  handleConnection={handleConnection}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  expired={false}
+                  staking={
+                    expiredPools === false
+                      ? stakearrayStakeBsciDyp2[cardIndex - 2]
+                      : stakearrayStakeBsciDyp2Expired[cardIndex - 3]
+                  }
+                  listType={listType}
+                  finalApr={
+                    expiredPools === false
+                      ? activePools[cardIndex]?.apy_performancefee
+                      : expiredDYPPools[cardIndex]?.apy_performancefee
+                  }
+                  apr={
+                    expiredPools === false
+                      ? activePools[cardIndex]?.apy_percent
+                      : expiredDYPPools[cardIndex]?.apy_percent
+                  }
+                  liquidity={wbsc_address}
+                  expiration_time={
+                    expiredPools === false
+                      ? expirearrayStakeBsciDyp2[cardIndex - 2]
+                      : expirearrayStakeBsciDyp2Expired[cardIndex - 3]
+                  }
+                  other_info={
+                    cardIndex !== undefined
+                      ? expiredPools === false
+                        ? activePools[cardIndex]?.expired === "Yes"
                           ? true
                           : false
+                        : expiredDYPPools[cardIndex]?.expired === "Yes"
+                        ? true
                         : false
-                    }
-                    fee_s={
-                      expiredPools === false
-                        ? activePools[cardIndex]?.performancefee
-                        : expiredDYPPools[cardIndex]?.performancefee
-                    }
-                    fee_u={0}
-                    lockTime={
-                      cardIndex !== undefined
-                        ? expiredPools === false
-                          ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                            "No"
-                            ? "No Lock"
-                            : parseInt(
-                                activePools[cardIndex]?.lock_time?.split(" ")[0]
-                              )
-                          : expiredDYPPools[cardIndex]?.lock_time?.split(
-                              " "
-                            )[0] === "No"
+                      : false
+                  }
+                  fee_s={
+                    expiredPools === false
+                      ? activePools[cardIndex]?.performancefee
+                      : expiredDYPPools[cardIndex]?.performancefee
+                  }
+                  fee_u={0}
+                  lockTime={
+                    cardIndex !== undefined
+                      ? expiredPools === false
+                        ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
+                          "No"
                           ? "No Lock"
                           : parseInt(
-                              expiredDYPPools[cardIndex]?.lock_time?.split(
-                                " "
-                              )[0]
+                              activePools[cardIndex]?.lock_time?.split(" ")[0]
                             )
-                        : "No Lock"
-                    }
-                  />
-                ) : activeCard6 &&
-                  topList === "Staking" &&
-                  chain === "avax" &&
-                  cardIndex >= 2 ? (
-                  <StakeAvaxIDyp
-                    is_wallet_connected={isConnected}
-                    coinbase={coinbase}
-                    the_graph_result={the_graph_resultavax}
-                    chainId={chainId}
-                    handleConnection={handleConnection}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
-                    staking={
-                      expiredPools === false
-                        ? stakingarrayStakeAvaxiDypActive[cardIndex - 2]
-                        : stakingarrayStakeAvaxiDypExpired[cardIndex - 3]
-                    }
-                    listType={listType}
-                    finalApr={
-                      expiredPools === false
-                        ? activePools[cardIndex]?.apy_performancefee
-                        : expiredDYPPools[cardIndex]?.apy_performancefee
-                    }
-                    apr={
-                      expiredPools === false
-                        ? activePools[cardIndex]?.apy_percent
-                        : expiredDYPPools[cardIndex]?.apy_percent
-                    }
-                    liquidity={avax_address}
-                    expiration_time={expirearrayStakeAvaxiDyp[cardIndex]}
-                    other_info={
-                      cardIndex !== undefined
-                        ? expiredPools === false
-                          ? activePools[cardIndex]?.expired === "Yes"
-                            ? true
-                            : false
-                          : expiredDYPPools[cardIndex]?.expired === "Yes"
+                        : expiredDYPPools[cardIndex]?.lock_time?.split(
+                            " "
+                          )[0] === "No"
+                        ? "No Lock"
+                        : parseInt(
+                            expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
+                          )
+                      : "No Lock"
+                  }
+                />
+              ) : activeCard6 &&
+                topList === "Staking" &&
+                chain === "avax" &&
+                cardIndex >= 2 ? (
+                <StakeAvaxIDyp
+                  is_wallet_connected={isConnected}
+                  coinbase={coinbase}
+                  the_graph_result={the_graph_resultavax}
+                  chainId={chainId}
+                  handleConnection={handleConnection}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  expired={false}
+                  staking={
+                    expiredPools === false
+                      ? stakingarrayStakeAvaxiDypActive[cardIndex - 2]
+                      : stakingarrayStakeAvaxiDypExpired[cardIndex - 3]
+                  }
+                  listType={listType}
+                  finalApr={
+                    expiredPools === false
+                      ? activePools[cardIndex]?.apy_performancefee
+                      : expiredDYPPools[cardIndex]?.apy_performancefee
+                  }
+                  apr={
+                    expiredPools === false
+                      ? activePools[cardIndex]?.apy_percent
+                      : expiredDYPPools[cardIndex]?.apy_percent
+                  }
+                  liquidity={avax_address}
+                  expiration_time={expirearrayStakeAvaxiDyp[cardIndex]}
+                  other_info={
+                    cardIndex !== undefined
+                      ? expiredPools === false
+                        ? activePools[cardIndex]?.expired === "Yes"
                           ? true
                           : false
+                        : expiredDYPPools[cardIndex]?.expired === "Yes"
+                        ? true
                         : false
-                    }
-                    fee_s={
-                      expiredPools === false
-                        ? activePools[cardIndex]?.performancefee
-                        : expiredDYPPools[cardIndex]?.performancefee
-                    }
-                    fee_u={feeUarrayStakeAvaxiDyp[cardIndexavaxiDyp - 3]}
-                    lockTime={
-                      cardIndex !== undefined
-                        ? expiredPools === false
-                          ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                            "No"
-                            ? "No Lock"
-                            : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                          : expiredDYPPools[cardIndex]?.lock_time?.split(
-                              " "
-                            )[0] === "No"
+                      : false
+                  }
+                  fee_s={
+                    expiredPools === false
+                      ? activePools[cardIndex]?.performancefee
+                      : expiredDYPPools[cardIndex]?.performancefee
+                  }
+                  fee_u={feeUarrayStakeAvaxiDyp[cardIndexavaxiDyp - 3]}
+                  lockTime={
+                    cardIndex !== undefined
+                      ? expiredPools === false
+                        ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
+                          "No"
                           ? "No Lock"
-                          : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                        : "No Lock"
-                    }
-                  />
-                ) : (
-                  <></>
-                )
-              }
+                          : activePools[cardIndex]?.lock_time?.split(" ")[0]
+                        : expiredDYPPools[cardIndex]?.lock_time?.split(
+                            " "
+                          )[0] === "No"
+                        ? "No Lock"
+                        : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
+                      : "No Lock"
+                  }
+                />
+              ) : (
+                <></>
+              )}
             </div>
           ) : (
             <div className="px-0">
@@ -5645,6 +2845,8 @@ const EarnTopPicks = ({
                       }
                       onShowDetailsClick={() => {
                         setActiveCard(topPools[index]);
+                        setselectedpoolType(pool.type);
+
                         setActiveCard2(null);
                         setActiveCard3(null);
                         setActiveCard4(null);
@@ -5659,8 +2861,8 @@ const EarnTopPicks = ({
                         setActiveCardNFT(false);
                         setActiveCardLandNFT(false);
                         setActiveCardCawsLand(null);
-                        setselectedPool( topList !== 'Vault' && pool);
-                        setShowDetails(topList !== 'Vault' && true);
+                        setselectedPool(topList !== "Vault" && pool);
+                        setShowDetails(topList !== "Vault" && true);
                         handleCardIndexStake(index);
                         handleCardIndexStake30(index);
                         handleCardIndexStakeiDyp(index);
@@ -5669,6 +2871,7 @@ const EarnTopPicks = ({
                       onHideDetailsClick={() => {
                         setActiveCard(null);
                         setDetails();
+                        setselectedpoolType("");
                       }}
                       cardType={topList}
                       details={details === index ? true : false}
@@ -5756,483 +2959,122 @@ const EarnTopPicks = ({
                     />
                   )}
                 </div>
-                {
-                  // activeCard &&
-                  // topList === "Staking" &&
-                  // chain === "avax" &&
-                  // activePools[cardIndex]?.id ===
-                  //   "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
-                  //   <StakeAvaxIDyp
-                  //     is_wallet_connected={isConnected}
-                  //     coinbase={coinbase}
-                  //     the_graph_result={the_graph_resultavax}
-                  //     chainId={chainId}
-                  //     handleConnection={handleConnection}
-                  //     handleSwitchNetwork={handleSwitchNetwork}
-                  //     expired={false}
-                  //     staking={window.constant_staking_idypavax_7}
-                  //     listType={listType}
-                  //     finalApr={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.apy_performancefee
-                  //         : expiredDYPPools[cardIndex]?.apy_performancefee
-                  //     }
-                  //     apr={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.apy_percent
-                  //         : expiredDYPPools[cardIndex]?.apy_percent
-                  //     }
-                  //     liquidity={avax_address}
-                  //     expiration_time={"18 July 2024"}
-                  //     other_info={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.expired === "Yes"
-                  //             ? true
-                  //             : false
-                  //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                  //           ? true
-                  //           : false
-                  //         : false
-                  //     }
-                  //     fee_s={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.performancefee
-                  //         : expiredDYPPools[cardIndex]?.performancefee
-                  //     }
-                  //     fee_u={feeUarrayStakeAvaxiDyp[cardIndexavaxiDyp - 3]}
-                  //     lockTime={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                  //             "No"
-                  //             ? "No Lock"
-                  //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0] === "No"
-                  //           ? "No Lock"
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                  //         : "No Lock"
-                  //     }
-                  //   />
-                  // ) :
-
-                  // activeCard &&
-                  // topList === "Staking" &&
-                  // activePools[cardIndex]?.id ===
-                  //   "0xC9075092Cc46E176B1F3c0D0EB8223F1e46555B0" &&
-                  // chain === "eth" ? (
-                  //   <StakeDypiusEth
-                  //     staking={window.constant_staking_dypius_eth1}
-                  //     apr={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.apy_percent
-                  //         : expiredDYPPools[cardIndex]?.apy_percent
-                  //     }
-                  //     liquidity={eth_address}
-                  //     expiration_time={"09 November 2024"}
-                  //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                  //     lockTime={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0] === "No"
-                  //             ? "No Lock"
-                  //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0] === "No"
-                  //           ? "No Lock"
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0]
-                  //         : "No Lock"
-                  //     }
-                  //     listType={listType}
-                  //     other_info={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.expired === "Yes"
-                  //             ? true
-                  //             : false
-                  //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                  //           ? true
-                  //           : false
-                  //         : false
-                  //     }
-                  //     fee={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.performancefee
-                  //         : expiredDYPPools[cardIndex]?.performancefee
-                  //     }
-                  //     is_wallet_connected={isConnected}
-                  //     coinbase={coinbase}
-                  //     the_graph_result={the_graph_result}
-                  //     chainId={chainId}
-                  //     handleConnection={handleConnection}
-                  //     handleSwitchNetwork={handleSwitchNetwork}
-                  //     expired={false}
-                  //     referrer={referrer}
-                  //   />
-                  // )
-                  // : activeCard &&
-                  //   topList === "Staking" &&
-                  //   activePools[cardIndex]?.id ===
-                  //     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603" &&
-                  //   chain === "bnb" ? (
-                  //   <StakeDypiusBsc
-                  //     staking={window.constant_staking_dypius_bsc1}
-                  //     apr={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.apy_percent
-                  //         : expiredDYPPools[cardIndex]?.apy_percent
-                  //     }
-                  //     liquidity={wbsc_address}
-                  //     expiration_time={"09 November 2024"}
-                  //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                  //     lockTime={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0] === "No"
-                  //             ? "No Lock"
-                  //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0] === "No"
-                  //           ? "No Lock"
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0]
-                  //         : "No Lock"
-                  //     }
-                  //     listType={listType}
-                  //     other_info={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.expired === "Yes"
-                  //             ? true
-                  //             : false
-                  //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                  //           ? true
-                  //           : false
-                  //         : false
-                  //     }
-                  //     fee={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.performancefee
-                  //         : expiredDYPPools[cardIndex]?.performancefee
-                  //     }
-                  //     is_wallet_connected={isConnected}
-                  //     coinbase={coinbase}
-                  //     the_graph_result={the_graph_resultbsc}
-                  //     chainId={chainId}
-                  //     handleConnection={handleConnection}
-                  //     handleSwitchNetwork={handleSwitchNetwork}
-                  //     expired={false}
-                  //     referrer={referrer}
-                  //   />
-                  // )
-
-                  // : activeCard &&
-                  //   topList === "Staking" &&
-                  //   activePools[cardIndex]?.id ===
-                  //     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603" &&
-                  //   chain === "avax" ? (
-                  //   <StakeDypiusAvax
-                  //     staking={window.constant_staking_dypius_avax1}
-                  //     apr={activePools[cardIndex]?.apy_percent}
-                  //     liquidity={avax_address}
-                  //     expiration_time={"09 November 2024"}
-                  //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                  //     lockTime={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0] === "No"
-                  //             ? "No Lock"
-                  //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0] === "No"
-                  //           ? "No Lock"
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0]
-                  //         : "No Lock"
-                  //     }
-                  //     listType={listType}
-                  //     other_info={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.expired === "Yes"
-                  //             ? true
-                  //             : false
-                  //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                  //           ? true
-                  //           : false
-                  //         : false
-                  //     }
-                  //     fee_s={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.performancefee
-                  //         : expiredDYPPools[cardIndex]?.performancefee
-                  //     }
-                  //     is_wallet_connected={isConnected}
-                  //     coinbase={coinbase}
-                  //     the_graph_result={the_graph_resultavax}
-                  //     chainId={chainId}
-                  //     handleConnection={handleConnection}
-                  //     handleSwitchNetwork={handleSwitchNetwork}
-                  //     expired={false}
-                  //     referrer={referrer}
-                  //   />
-                  // )
-                  //  : activeCard &&
-                  //   activePools[cardIndex]?.id ===
-                  //     "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
-                  //   topList === "Staking" &&
-                  //   chain === "bnb" ? (
-                  //   <StakeBscIDyp
-                  //     is_wallet_connected={isConnected}
-                  //     coinbase={coinbase}
-                  //     the_graph_result={the_graph_resultbsc}
-                  //     chainId={chainId}
-                  //     handleConnection={handleConnection}
-                  //     handleSwitchNetwork={handleSwitchNetwork}
-                  //     expired={false}
-                  //     staking={window.constant_stakingidyp_7}
-                  //     listType={listType}
-                  //     finalApr={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.apy_performancefee
-                  //         : expiredDYPPools[cardIndex]?.apy_performancefee
-                  //     }
-                  //     apr={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.apy_percent
-                  //         : expiredDYPPools[cardIndex]?.apy_percent
-                  //     }
-                  //     liquidity={wbsc_address}
-                  //     expiration_time={"18 July 2024"}
-                  //     other_info={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.expired === "Yes"
-                  //             ? true
-                  //             : false
-                  //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                  //           ? true
-                  //           : false
-                  //         : false
-                  //     }
-                  //     fee_s={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.performancefee
-                  //         : expiredDYPPools[cardIndex]?.performancefee
-                  //     }
-                  //     fee_u={0}
-                  //     lockTime={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                  //             "No"
-                  //             ? "No Lock"
-                  //             : parseInt(
-                  //                 activePools[cardIndex]?.lock_time?.split(" ")[0]
-                  //               )
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0] === "No"
-                  //           ? "No Lock"
-                  //           : parseInt(
-                  //               expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                  //             )
-                  //         : "No Lock"
-                  //     }
-                  //   />
-                  // )
-                  // activeCard &&
-                  //   topList === "Staking" &&
-                  //   chain === "eth" &&
-                  //   activePools[cardIndex]?.id ===
-                  //     "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
-                  //   <InitConstantStakingiDYP
-                  //     is_wallet_connected={isConnected}
-                  //     coinbase={coinbase}
-                  //     the_graph_result={the_graph_result}
-                  //     lp_id={lp_id[cardIndex]}
-                  //     chainId={chainId}
-                  //     handleConnection={handleConnection}
-                  //     handleSwitchNetwork={handleSwitchNetwork}
-                  //     expired={false}
-                  //     staking={window.constant_staking_idyp_5}
-                  //     listType={listType}
-                  //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                  //     apr={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.apy_percent
-                  //         : expiredDYPPools[cardIndex]?.apy_percent
-                  //     }
-                  //     liquidity={eth_address}
-                  //     expiration_time={"18 July 2024"}
-                  //     other_info={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.expired === "Yes"
-                  //             ? true
-                  //             : false
-                  //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                  //           ? true
-                  //           : false
-                  //         : false
-                  //     }
-                  //     fee_s={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.performancefee
-                  //         : expiredDYPPools[cardIndex]?.performancefee
-                  //     }
-                  //     fee_u={withdrawFeeiDyp[cardIndex]}
-                  //     lockTime={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                  //             "No"
-                  //             ? "No Lock"
-                  //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0] === "No"
-                  //           ? "No Lock"
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                  //         : "No Lock"
-                  //     }
-                  //   />
-                  // ) :
-                  activeCard &&
-                  topList === "Staking" &&
-                  activePools[cardIndex]?.id === "testId" &&
-                  chain === "bnb" ? (
-                    <StakeBsc
-                      lp_id={LP_IDBNB_Array[cardIndex]}
-                      staking={window.constant_stakingbsc_new14}
-                      apr={
-                        expiredPools === false
-                          ? activePools[cardIndex]?.apy_percent
-                          : expiredDYPPools[cardIndex]?.apy_percent
-                      }
-                      liquidity={wbsc_address}
-                      expiration_time={"5 August 2023"}
-                      finalApr={
-                        expiredPools === false
-                          ? activePools[cardIndex]?.apy_performancefee
-                          : expiredDYPPools[cardIndex]?.apy_performancefee
-                      }
-                      fee={
-                        expiredPools === false
-                          ? activePools[cardIndex]?.performancefee
-                          : expiredDYPPools[cardIndex]?.performancefee
-                      }
-                      lockTime={
-                        cardIndex !== undefined
-                          ? expiredPools === false
-                            ? activePools[cardIndex]?.lock_time?.split(
-                                " "
-                              )[0] === "No"
-                              ? "No Lock"
-                              : parseInt(
-                                  activePools[cardIndex]?.lock_time?.split(
-                                    " "
-                                  )[0]
-                                )
-                            : expiredDYPPools[cardIndex]?.lock_time?.split(
-                                " "
-                              )[0] === "No"
+                {activeCard &&
+                topList === "Staking" &&
+                activePools[cardIndex]?.id === "testId" &&
+                chain === "bnb" ? (
+                  <StakeBsc
+                    lp_id={LP_IDBNB_Array[cardIndex]}
+                    staking={window.constant_stakingbsc_new14}
+                    apr={
+                      expiredPools === false
+                        ? activePools[cardIndex]?.apy_percent
+                        : expiredDYPPools[cardIndex]?.apy_percent
+                    }
+                    liquidity={wbsc_address}
+                    expiration_time={"5 August 2023"}
+                    finalApr={
+                      expiredPools === false
+                        ? activePools[cardIndex]?.apy_performancefee
+                        : expiredDYPPools[cardIndex]?.apy_performancefee
+                    }
+                    fee={
+                      expiredPools === false
+                        ? activePools[cardIndex]?.performancefee
+                        : expiredDYPPools[cardIndex]?.performancefee
+                    }
+                    lockTime={
+                      cardIndex !== undefined
+                        ? expiredPools === false
+                          ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
+                            "No"
                             ? "No Lock"
                             : parseInt(
-                                expiredDYPPools[cardIndex]?.lock_time?.split(
-                                  " "
-                                )[0]
+                                activePools[cardIndex]?.lock_time?.split(" ")[0]
                               )
-                          : "No Lock"
-                      }
-                      listType={listType}
-                      other_info={
-                        cardIndex !== undefined
-                          ? expiredPools === false
-                            ? activePools[cardIndex]?.expired === "Yes"
-                              ? true
-                              : false
-                            : expiredDYPPools[cardIndex]?.expired === "Yes"
+                          : expiredDYPPools[cardIndex]?.lock_time?.split(
+                              " "
+                            )[0] === "No"
+                          ? "No Lock"
+                          : parseInt(
+                              expiredDYPPools[cardIndex]?.lock_time?.split(
+                                " "
+                              )[0]
+                            )
+                        : "No Lock"
+                    }
+                    listType={listType}
+                    other_info={
+                      cardIndex !== undefined
+                        ? expiredPools === false
+                          ? activePools[cardIndex]?.expired === "Yes"
                             ? true
                             : false
+                          : expiredDYPPools[cardIndex]?.expired === "Yes"
+                          ? true
                           : false
-                      }
-                      is_wallet_connected={isConnected}
-                      coinbase={coinbase}
-                      the_graph_result={the_graph_resultbsc}
-                      chainId={chainId}
-                      handleConnection={handleConnection}
-                      handleSwitchNetwork={handleSwitchNetwork}
-                      expired={false}
-                      referrer={referrer}
-                    />
-                  ) : activeCard && topList === "Farming" && chain === "bnb" ? (
-                    <BscFarmingFunc
-                      is_wallet_connected={isConnected}
-                      latestApr={theBnbPool.apy_percent}
-                      wbnbPrice={wbnbPrice}
-                      coinbase={coinbase}
-                      latestTvl={theBnbPool.tvl_usd}
-                      the_graph_result={the_graph_resultbsc}
-                      lp_id={LP_IDBNB_Array[cardIndex]}
-                      chainId={chainId}
-                      handleConnection={handleConnection}
-                      expired={false}
-                      handleSwitchNetwork={handleSwitchNetwork}
-                      liquidity={wbsc_address}
-                      constant={window.farming_activebsc_1}
-                      staking={window.constant_staking_newbscactive1}
-                      token={window.token_newbsc}
-                      lp_symbol={"USD"}
-                      lock="3 Days"
-                      rebase_factor={1}
-                      expiration_time={"18 July 2024"}
-                      fee="0.4"
-                      finalApr={activePools[cardIndex]?.apy_percent}
-                      lockTime={3}
-                      listType={listType}
-                    />
-                  ) : activeCard &&
-                    topList === "Farming" &&
-                    chain === "avax" ? null : activeCard && // /> //   listType={listType} //   lockTime={3} //   finalApr={activePools[cardIndex]?.apy_percent} //   fee="0.4" //   expiration_time="7 June 2024" //   rebase_factor={1} //   lock="3 Days" //   lp_symbol={"USD"} //   token={window.token_newavax} //   staking={window.constant_staking_newavaxactive1} //   constant={window.farming_activeavax_1} //   liquidity={wbnb_address} //   handleSwitchNetwork={handleSwitchNetwork} //   expired={false} //   handleConnection={handleConnection} //   chainId={chainId} //   lp_id={LP_IDAVAX_Array[cardIndex]} //   the_graph_result={the_graph_resultavax} //   coinbase={coinbase} //   is_wallet_connected={isConnected} //   <FarmAvaxFunc
-                    topList === "Vault" &&
-                    chain === "eth" ? (
-                    <Vault
-                      vault={vaultArrayNew[cardIndex]}
-                      token={tokenvaultArrayNew[cardIndex]}
-                      platformTokenApyPercent={vaultplatformArrayNew[cardIndex]}
-                      UNDERLYING_DECIMALS={vaultdecimalsArrayNew[cardIndex]}
-                      UNDERLYING_SYMBOL={vaultsymbolArrayNew[cardIndex]}
-                      expiration_time={"1 August 2024"}
-                      coinbase={coinbase}
-                      lockTime={"No Lock"}
-                      handleConnection={handleConnection}
-                      chainId={chainId}
-                      listType={listType}
-                      handleSwitchNetwork={handleSwitchNetwork}
-                      expired={false}
-                      isConnected={isConnected}
-                      the_graph_result={the_graph_result}
-                    />
-                  ) : (
-                    <></>
-                  )
-                }
+                        : false
+                    }
+                    is_wallet_connected={isConnected}
+                    coinbase={coinbase}
+                    the_graph_result={the_graph_resultbsc}
+                    chainId={chainId}
+                    handleConnection={handleConnection}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    expired={false}
+                    referrer={referrer}
+                  />
+                ) : activeCard && topList === "Farming" && chain === "bnb" ? (
+                  <BscFarmingFunc
+                    is_wallet_connected={isConnected}
+                    latestApr={theBnbPool.apy_percent}
+                    wbnbPrice={wbnbPrice}
+                    coinbase={coinbase}
+                    latestTvl={theBnbPool.tvl_usd}
+                    the_graph_result={the_graph_resultbsc}
+                    lp_id={LP_IDBNB_Array[cardIndex]}
+                    chainId={chainId}
+                    handleConnection={handleConnection}
+                    expired={false}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    liquidity={wbsc_address}
+                    constant={window.farming_activebsc_1}
+                    staking={window.constant_staking_newbscactive1}
+                    token={window.token_newbsc}
+                    lp_symbol={"USD"}
+                    lock="3 Days"
+                    rebase_factor={1}
+                    expiration_time={"18 July 2024"}
+                    fee="0.4"
+                    finalApr={activePools[cardIndex]?.apy_percent}
+                    lockTime={3}
+                    listType={listType}
+                  />
+                ) : activeCard &&
+                  topList === "Farming" &&
+                  chain === "avax" ? null : activeCard && // /> //   listType={listType} //   lockTime={3} //   finalApr={activePools[cardIndex]?.apy_percent} //   fee="0.4" //   expiration_time="7 June 2024" //   rebase_factor={1} //   lock="3 Days" //   lp_symbol={"USD"} //   token={window.token_newavax} //   staking={window.constant_staking_newavaxactive1} //   constant={window.farming_activeavax_1} //   liquidity={wbnb_address} //   handleSwitchNetwork={handleSwitchNetwork} //   expired={false} //   handleConnection={handleConnection} //   chainId={chainId} //   lp_id={LP_IDAVAX_Array[cardIndex]} //   the_graph_result={the_graph_resultavax} //   coinbase={coinbase} //   is_wallet_connected={isConnected} //   <FarmAvaxFunc
+                  topList === "Vault" &&
+                  chain === "eth" ? (
+                  <Vault
+                    vault={vaultArrayNew[cardIndex]}
+                    token={tokenvaultArrayNew[cardIndex]}
+                    platformTokenApyPercent={vaultplatformArrayNew[cardIndex]}
+                    UNDERLYING_DECIMALS={vaultdecimalsArrayNew[cardIndex]}
+                    UNDERLYING_SYMBOL={vaultsymbolArrayNew[cardIndex]}
+                    expiration_time={"1 August 2024"}
+                    coinbase={coinbase}
+                    lockTime={"No Lock"}
+                    handleConnection={handleConnection}
+                    chainId={chainId}
+                    listType={listType}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    expired={false}
+                    isConnected={isConnected}
+                    the_graph_result={the_graph_result}
+                  />
+                ) : (
+                  <></>
+                )}
               </>
               <>
                 <div
@@ -6283,6 +3125,8 @@ const EarnTopPicks = ({
                       onShowDetailsClick={() => {
                         setActiveCard(null);
                         setActiveCard2(topPools[index + 1]);
+                        setselectedpoolType(pool.type);
+
                         setActiveCard3(null);
                         setActiveCard4(null);
                         setActiveCard5(null);
@@ -6299,12 +3143,13 @@ const EarnTopPicks = ({
                         handleCardIndexStake30(index + 1);
                         handleCardIndexStakeiDyp(index + 1);
                         setDetails(index + 1);
-                        setselectedPool( topList !== 'Vault' && pool);
-                        setShowDetails(topList !== 'Vault' && true);
+                        setselectedPool(topList !== "Vault" && pool);
+                        setShowDetails(topList !== "Vault" && true);
                       }}
                       onHideDetailsClick={() => {
                         setActiveCard2(null);
                         setDetails();
+                        setselectedpoolType("");
                       }}
                       cardType={topList}
                       details={details === index + 1 ? true : false}
@@ -6323,384 +3168,27 @@ const EarnTopPicks = ({
                   ))}
                 </div>
 
-                {
-                  // activeCard2 &&
-                  // topList === "Staking" &&
-                  // chain === "avax" &&
-                  // activePools[cardIndex]?.id ===
-                  //   "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
-                  //   <StakeAvaxIDyp
-                  //     is_wallet_connected={isConnected}
-                  //     coinbase={coinbase}
-                  //     the_graph_result={the_graph_resultavax}
-                  //     chainId={chainId}
-                  //     handleConnection={handleConnection}
-                  //     handleSwitchNetwork={handleSwitchNetwork}
-                  //     expired={false}
-                  //     staking={window.constant_staking_idypavax_7}
-                  //     listType={listType}
-                  //     finalApr={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.apy_performancefee
-                  //         : expiredDYPPools[cardIndex]?.apy_performancefee
-                  //     }
-                  //     apr={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.apy_percent
-                  //         : expiredDYPPools[cardIndex]?.apy_percent
-                  //     }
-                  //     liquidity={avax_address}
-                  //     expiration_time={"18 July 2024"}
-                  //     other_info={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.expired === "Yes"
-                  //             ? true
-                  //             : false
-                  //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                  //           ? true
-                  //           : false
-                  //         : false
-                  //     }
-                  //     fee_s={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.performancefee
-                  //         : expiredDYPPools[cardIndex]?.performancefee
-                  //     }
-                  //     fee_u={feeUarrayStakeAvaxiDyp[cardIndexavaxiDyp - 3]}
-                  //     lockTime={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                  //             "No"
-                  //             ? "No Lock"
-                  //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0] === "No"
-                  //           ? "No Lock"
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                  //         : "No Lock"
-                  //     }
-                  //   />
-                  // ) :
-
-                  // activeCard2 &&
-                  // topList === "Staking" &&
-                  // activePools[cardIndex]?.id ===
-                  //   "0xC9075092Cc46E176B1F3c0D0EB8223F1e46555B0" &&
-                  // chain === "eth" ? (
-                  //   <StakeDypiusEth
-                  //     staking={window.constant_staking_dypius_eth1}
-                  //     apr={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.apy_percent
-                  //         : expiredDYPPools[cardIndex]?.apy_percent
-                  //     }
-                  //     liquidity={eth_address}
-                  //     expiration_time={"09 November 2024"}
-                  //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                  //     lockTime={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0] === "No"
-                  //             ? "No Lock"
-                  //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0] === "No"
-                  //           ? "No Lock"
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0]
-                  //         : "No Lock"
-                  //     }
-                  //     listType={listType}
-                  //     other_info={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.expired === "Yes"
-                  //             ? true
-                  //             : false
-                  //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                  //           ? true
-                  //           : false
-                  //         : false
-                  //     }
-                  //     fee={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.performancefee
-                  //         : expiredDYPPools[cardIndex]?.performancefee
-                  //     }
-                  //     is_wallet_connected={isConnected}
-                  //     coinbase={coinbase}
-                  //     the_graph_result={the_graph_result}
-                  //     chainId={chainId}
-                  //     handleConnection={handleConnection}
-                  //     handleSwitchNetwork={handleSwitchNetwork}
-                  //     expired={false}
-                  //     referrer={referrer}
-                  //   />
-                  // )
-                  // : activeCard2 &&
-                  //   topList === "Staking" &&
-                  //   activePools[cardIndex]?.id ===
-                  //     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603" &&
-                  //   chain === "bnb" ? (
-                  //   <StakeDypiusBsc
-                  //     staking={window.constant_staking_dypius_bsc1}
-                  //     apr={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.apy_percent
-                  //         : expiredDYPPools[cardIndex]?.apy_percent
-                  //     }
-                  //     liquidity={wbsc_address}
-                  //     expiration_time={"09 November 2024"}
-                  //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                  //     lockTime={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0] === "No"
-                  //             ? "No Lock"
-                  //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0] === "No"
-                  //           ? "No Lock"
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0]
-                  //         : "No Lock"
-                  //     }
-                  //     listType={listType}
-                  //     other_info={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.expired === "Yes"
-                  //             ? true
-                  //             : false
-                  //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                  //           ? true
-                  //           : false
-                  //         : false
-                  //     }
-                  //     fee={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.performancefee
-                  //         : expiredDYPPools[cardIndex]?.performancefee
-                  //     }
-                  //     is_wallet_connected={isConnected}
-                  //     coinbase={coinbase}
-                  //     the_graph_result={the_graph_resultbsc}
-                  //     chainId={chainId}
-                  //     handleConnection={handleConnection}
-                  //     handleSwitchNetwork={handleSwitchNetwork}
-                  //     expired={false}
-                  //     referrer={referrer}
-                  //   />
-                  // )
-                  // : activeCard2 &&
-                  //   topList === "Staking" &&
-                  //   activePools[cardIndex]?.id ===
-                  //     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603" &&
-                  //   chain === "avax" ? (
-                  //   <StakeDypiusAvax
-                  //     staking={window.constant_staking_dypius_avax1}
-                  //     apr={activePools[cardIndex]?.apy_percent}
-                  //     liquidity={avax_address}
-                  //     expiration_time={"09 November 2024"}
-                  //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                  //     lockTime={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0] === "No"
-                  //             ? "No Lock"
-                  //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0] === "No"
-                  //           ? "No Lock"
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0]
-                  //         : "No Lock"
-                  //     }
-                  //     listType={listType}
-                  //     other_info={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.expired === "Yes"
-                  //             ? true
-                  //             : false
-                  //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                  //           ? true
-                  //           : false
-                  //         : false
-                  //     }
-                  //     fee_s={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.performancefee
-                  //         : expiredDYPPools[cardIndex]?.performancefee
-                  //     }
-                  //     is_wallet_connected={isConnected}
-                  //     coinbase={coinbase}
-                  //     the_graph_result={the_graph_resultavax}
-                  //     chainId={chainId}
-                  //     handleConnection={handleConnection}
-                  //     handleSwitchNetwork={handleSwitchNetwork}
-                  //     expired={false}
-                  //     referrer={referrer}
-                  //   />
-                  // )
-                  // : activeCard2 &&
-                  //   activePools[cardIndex]?.id ===
-                  //     "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
-                  //   topList === "Staking" &&
-                  //   chain === "bnb" ? (
-                  //   <StakeBscIDyp
-                  //     is_wallet_connected={isConnected}
-                  //     coinbase={coinbase}
-                  //     the_graph_result={the_graph_resultbsc}
-                  //     chainId={chainId}
-                  //     handleConnection={handleConnection}
-                  //     handleSwitchNetwork={handleSwitchNetwork}
-                  //     expired={false}
-                  //     staking={window.constant_stakingidyp_7}
-                  //     listType={listType}
-                  //     finalApr={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.apy_performancefee
-                  //         : expiredDYPPools[cardIndex]?.apy_performancefee
-                  //     }
-                  //     apr={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.apy_percent
-                  //         : expiredDYPPools[cardIndex]?.apy_percent
-                  //     }
-                  //     liquidity={wbsc_address}
-                  //     expiration_time={"18 July 2024"}
-                  //     other_info={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.expired === "Yes"
-                  //             ? true
-                  //             : false
-                  //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                  //           ? true
-                  //           : false
-                  //         : false
-                  //     }
-                  //     fee_s={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.performancefee
-                  //         : expiredDYPPools[cardIndex]?.performancefee
-                  //     }
-                  //     fee_u={0}
-                  //     lockTime={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                  //             "No"
-                  //             ? "No Lock"
-                  //             : parseInt(
-                  //                 activePools[cardIndex]?.lock_time?.split(" ")[0]
-                  //               )
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0] === "No"
-                  //           ? "No Lock"
-                  //           : parseInt(
-                  //               expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                  //             )
-                  //         : "No Lock"
-                  //     }
-                  //   />
-                  // )
-                  // activeCard2 &&
-                  //   topList === "Staking" &&
-                  //   chain === "eth" &&
-                  //   activePools[cardIndex]?.id ===
-                  //     "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
-                  //   <InitConstantStakingiDYP
-                  //     is_wallet_connected={isConnected}
-                  //     coinbase={coinbase}
-                  //     the_graph_result={the_graph_result}
-                  //     lp_id={lp_id[cardIndex]}
-                  //     chainId={chainId}
-                  //     handleConnection={handleConnection}
-                  //     handleSwitchNetwork={handleSwitchNetwork}
-                  //     expired={false}
-                  //     staking={window.constant_staking_idyp_5}
-                  //     listType={listType}
-                  //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                  //     apr={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.apy_percent
-                  //         : expiredDYPPools[cardIndex]?.apy_percent
-                  //     }
-                  //     liquidity={eth_address}
-                  //     expiration_time={"18 July 2024"}
-                  //     other_info={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.expired === "Yes"
-                  //             ? true
-                  //             : false
-                  //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                  //           ? true
-                  //           : false
-                  //         : false
-                  //     }
-                  //     fee_s={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.performancefee
-                  //         : expiredDYPPools[cardIndex]?.performancefee
-                  //     }
-                  //     fee_u={withdrawFeeiDyp[cardIndex]}
-                  //     lockTime={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                  //             "No"
-                  //             ? "No Lock"
-                  //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0] === "No"
-                  //           ? "No Lock"
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                  //         : "No Lock"
-                  //     }
-                  //   />
-                  // ) :
-                  activeCard2 && topList === "Vault" && chain === "eth" ? (
-                    <Vault
-                      vault={vaultArrayNew[cardIndex]}
-                      token={tokenvaultArrayNew[cardIndex]}
-                      platformTokenApyPercent={vaultplatformArrayNew[cardIndex]}
-                      UNDERLYING_DECIMALS={vaultdecimalsArrayNew[cardIndex]}
-                      UNDERLYING_SYMBOL={vaultsymbolArrayNew[cardIndex]}
-                      expiration_time={"1 August 2024"}
-                      coinbase={coinbase}
-                      lockTime={"No Lock"}
-                      handleConnection={handleConnection}
-                      chainId={chainId}
-                      listType={listType}
-                      handleSwitchNetwork={handleSwitchNetwork}
-                      expired={false}
-                      isConnected={isConnected}
-                      the_graph_result={the_graph_result}
-                    />
-                  ) : (
-                    <></>
-                  )
-                }
+                {activeCard2 && topList === "Vault" && chain === "eth" ? (
+                  <Vault
+                    vault={vaultArrayNew[cardIndex]}
+                    token={tokenvaultArrayNew[cardIndex]}
+                    platformTokenApyPercent={vaultplatformArrayNew[cardIndex]}
+                    UNDERLYING_DECIMALS={vaultdecimalsArrayNew[cardIndex]}
+                    UNDERLYING_SYMBOL={vaultsymbolArrayNew[cardIndex]}
+                    expiration_time={"1 August 2024"}
+                    coinbase={coinbase}
+                    lockTime={"No Lock"}
+                    handleConnection={handleConnection}
+                    chainId={chainId}
+                    listType={listType}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    expired={false}
+                    isConnected={isConnected}
+                    the_graph_result={the_graph_result}
+                  />
+                ) : (
+                  <></>
+                )}
               </>
               <>
                 <div
@@ -6751,6 +3239,8 @@ const EarnTopPicks = ({
                       onShowDetailsClick={() => {
                         setActiveCard(null);
                         setActiveCard2(null);
+                        setselectedpoolType(pool.type);
+
                         setActiveCard3(topPools[index + 2]);
                         setActiveCard4(null);
                         setActiveCard5(null);
@@ -6767,12 +3257,13 @@ const EarnTopPicks = ({
                         handleCardIndexStake30(index + 2);
                         handleCardIndexStakeiDyp(index + 2);
                         setDetails(index + 2);
-                        setselectedPool( topList !== 'Vault' && pool);
-                        setShowDetails(topList !== 'Vault' && true);
+                        setselectedPool(topList !== "Vault" && pool);
+                        setShowDetails(topList !== "Vault" && true);
                       }}
                       onHideDetailsClick={() => {
                         setActiveCard3(null);
                         setDetails();
+                        setselectedpoolType("");
                       }}
                       cardType={topList}
                       details={details === index + 2 ? true : false}
@@ -6790,384 +3281,27 @@ const EarnTopPicks = ({
                     />
                   ))}
                 </div>
-                {
-                  // activeCard3 &&
-                  // topList === "Staking" &&
-                  // chain === "avax" &&
-                  // activePools[cardIndex]?.id ===
-                  //   "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
-                  //   <StakeAvaxIDyp
-                  //     is_wallet_connected={isConnected}
-                  //     coinbase={coinbase}
-                  //     the_graph_result={the_graph_resultavax}
-                  //     chainId={chainId}
-                  //     handleConnection={handleConnection}
-                  //     handleSwitchNetwork={handleSwitchNetwork}
-                  //     expired={false}
-                  //     staking={window.constant_staking_idypavax_7}
-                  //     listType={listType}
-                  //     finalApr={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.apy_performancefee
-                  //         : expiredDYPPools[cardIndex]?.apy_performancefee
-                  //     }
-                  //     apr={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.apy_percent
-                  //         : expiredDYPPools[cardIndex]?.apy_percent
-                  //     }
-                  //     liquidity={avax_address}
-                  //     expiration_time={"18 July 2024"}
-                  //     other_info={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.expired === "Yes"
-                  //             ? true
-                  //             : false
-                  //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                  //           ? true
-                  //           : false
-                  //         : false
-                  //     }
-                  //     fee_s={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.performancefee
-                  //         : expiredDYPPools[cardIndex]?.performancefee
-                  //     }
-                  //     fee_u={feeUarrayStakeAvaxiDyp[cardIndexavaxiDyp - 3]}
-                  //     lockTime={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                  //             "No"
-                  //             ? "No Lock"
-                  //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0] === "No"
-                  //           ? "No Lock"
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                  //         : "No Lock"
-                  //     }
-                  //   />
-                  // ) :
-
-                  // activeCard3 &&
-                  // topList === "Staking" &&
-                  // activePools[cardIndex]?.id ===
-                  //   "0xC9075092Cc46E176B1F3c0D0EB8223F1e46555B0" &&
-                  // chain === "eth" ? (
-                  //   <StakeDypiusEth
-                  //     staking={window.constant_staking_dypius_eth1}
-                  //     apr={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.apy_percent
-                  //         : expiredDYPPools[cardIndex]?.apy_percent
-                  //     }
-                  //     liquidity={eth_address}
-                  //     expiration_time={"09 November 2024"}
-                  //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                  //     lockTime={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0] === "No"
-                  //             ? "No Lock"
-                  //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0] === "No"
-                  //           ? "No Lock"
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0]
-                  //         : "No Lock"
-                  //     }
-                  //     listType={listType}
-                  //     other_info={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.expired === "Yes"
-                  //             ? true
-                  //             : false
-                  //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                  //           ? true
-                  //           : false
-                  //         : false
-                  //     }
-                  //     fee={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.performancefee
-                  //         : expiredDYPPools[cardIndex]?.performancefee
-                  //     }
-                  //     is_wallet_connected={isConnected}
-                  //     coinbase={coinbase}
-                  //     the_graph_result={the_graph_result}
-                  //     chainId={chainId}
-                  //     handleConnection={handleConnection}
-                  //     handleSwitchNetwork={handleSwitchNetwork}
-                  //     expired={false}
-                  //     referrer={referrer}
-                  //   />
-                  // )
-                  //  : activeCard3 &&
-                  //   topList === "Staking" &&
-                  //   activePools[cardIndex]?.id ===
-                  //     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603" &&
-                  //   chain === "bnb" ? (
-                  //   <StakeDypiusBsc
-                  //     staking={window.constant_staking_dypius_bsc1}
-                  //     apr={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.apy_percent
-                  //         : expiredDYPPools[cardIndex]?.apy_percent
-                  //     }
-                  //     liquidity={wbsc_address}
-                  //     expiration_time={"09 November 2024"}
-                  //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                  //     lockTime={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0] === "No"
-                  //             ? "No Lock"
-                  //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0] === "No"
-                  //           ? "No Lock"
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0]
-                  //         : "No Lock"
-                  //     }
-                  //     listType={listType}
-                  //     other_info={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.expired === "Yes"
-                  //             ? true
-                  //             : false
-                  //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                  //           ? true
-                  //           : false
-                  //         : false
-                  //     }
-                  //     fee={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.performancefee
-                  //         : expiredDYPPools[cardIndex]?.performancefee
-                  //     }
-                  //     is_wallet_connected={isConnected}
-                  //     coinbase={coinbase}
-                  //     the_graph_result={the_graph_resultbsc}
-                  //     chainId={chainId}
-                  //     handleConnection={handleConnection}
-                  //     handleSwitchNetwork={handleSwitchNetwork}
-                  //     expired={false}
-                  //     referrer={referrer}
-                  //   />
-                  // )
-                  //  : activeCard3 &&
-                  //   topList === "Staking" &&
-                  //   activePools[cardIndex]?.id ===
-                  //     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603" &&
-                  //   chain === "avax" ? (
-                  //   <StakeDypiusAvax
-                  //     staking={window.constant_staking_dypius_avax1}
-                  //     apr={activePools[cardIndex]?.apy_percent}
-                  //     liquidity={avax_address}
-                  //     expiration_time={"09 November 2024"}
-                  //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                  //     lockTime={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0] === "No"
-                  //             ? "No Lock"
-                  //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0] === "No"
-                  //           ? "No Lock"
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0]
-                  //         : "No Lock"
-                  //     }
-                  //     listType={listType}
-                  //     other_info={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.expired === "Yes"
-                  //             ? true
-                  //             : false
-                  //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                  //           ? true
-                  //           : false
-                  //         : false
-                  //     }
-                  //     fee_s={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.performancefee
-                  //         : expiredDYPPools[cardIndex]?.performancefee
-                  //     }
-                  //     is_wallet_connected={isConnected}
-                  //     coinbase={coinbase}
-                  //     the_graph_result={the_graph_resultavax}
-                  //     chainId={chainId}
-                  //     handleConnection={handleConnection}
-                  //     handleSwitchNetwork={handleSwitchNetwork}
-                  //     expired={false}
-                  //     referrer={referrer}
-                  //   />
-                  // )
-                  // : activeCard3 &&
-                  //   activePools[cardIndex]?.id ===
-                  //     "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
-                  //   topList === "Staking" &&
-                  //   chain === "bnb" ? (
-                  //   <StakeBscIDyp
-                  //     is_wallet_connected={isConnected}
-                  //     coinbase={coinbase}
-                  //     the_graph_result={the_graph_resultbsc}
-                  //     chainId={chainId}
-                  //     handleConnection={handleConnection}
-                  //     handleSwitchNetwork={handleSwitchNetwork}
-                  //     expired={false}
-                  //     staking={window.constant_stakingidyp_7}
-                  //     listType={listType}
-                  //     finalApr={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.apy_performancefee
-                  //         : expiredDYPPools[cardIndex]?.apy_performancefee
-                  //     }
-                  //     apr={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.apy_percent
-                  //         : expiredDYPPools[cardIndex]?.apy_percent
-                  //     }
-                  //     liquidity={wbsc_address}
-                  //     expiration_time={"18 July 2024"}
-                  //     other_info={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.expired === "Yes"
-                  //             ? true
-                  //             : false
-                  //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                  //           ? true
-                  //           : false
-                  //         : false
-                  //     }
-                  //     fee_s={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.performancefee
-                  //         : expiredDYPPools[cardIndex]?.performancefee
-                  //     }
-                  //     fee_u={0}
-                  //     lockTime={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                  //             "No"
-                  //             ? "No Lock"
-                  //             : parseInt(
-                  //                 activePools[cardIndex]?.lock_time?.split(" ")[0]
-                  //               )
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0] === "No"
-                  //           ? "No Lock"
-                  //           : parseInt(
-                  //               expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                  //             )
-                  //         : "No Lock"
-                  //     }
-                  //   />
-                  // )
-                  // activeCard3 &&
-                  //   topList === "Staking" &&
-                  //   chain === "eth" &&
-                  //   activePools[cardIndex]?.id ===
-                  //     "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
-                  //   <InitConstantStakingiDYP
-                  //     is_wallet_connected={isConnected}
-                  //     coinbase={coinbase}
-                  //     the_graph_result={the_graph_result}
-                  //     lp_id={lp_id[cardIndex]}
-                  //     chainId={chainId}
-                  //     handleConnection={handleConnection}
-                  //     handleSwitchNetwork={handleSwitchNetwork}
-                  //     expired={false}
-                  //     staking={window.constant_staking_idyp_5}
-                  //     listType={listType}
-                  //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                  //     apr={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.apy_percent
-                  //         : expiredDYPPools[cardIndex]?.apy_percent
-                  //     }
-                  //     liquidity={eth_address}
-                  //     expiration_time={"18 July 2024"}
-                  //     other_info={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.expired === "Yes"
-                  //             ? true
-                  //             : false
-                  //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                  //           ? true
-                  //           : false
-                  //         : false
-                  //     }
-                  //     fee_s={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.performancefee
-                  //         : expiredDYPPools[cardIndex]?.performancefee
-                  //     }
-                  //     fee_u={withdrawFeeiDyp[cardIndex]}
-                  //     lockTime={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                  //             "No"
-                  //             ? "No Lock"
-                  //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0] === "No"
-                  //           ? "No Lock"
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                  //         : "No Lock"
-                  //     }
-                  //   />
-                  // ) :
-                  activeCard3 && topList === "Vault" && chain === "eth" ? (
-                    <Vault
-                      vault={vaultArrayNew[cardIndex]}
-                      token={tokenvaultArrayNew[cardIndex]}
-                      platformTokenApyPercent={vaultplatformArrayNew[cardIndex]}
-                      UNDERLYING_DECIMALS={vaultdecimalsArrayNew[cardIndex]}
-                      UNDERLYING_SYMBOL={vaultsymbolArrayNew[cardIndex]}
-                      expiration_time={"1 August 2024"}
-                      coinbase={coinbase}
-                      lockTime={"No Lock"}
-                      handleConnection={handleConnection}
-                      chainId={chainId}
-                      listType={listType}
-                      handleSwitchNetwork={handleSwitchNetwork}
-                      expired={false}
-                      isConnected={isConnected}
-                      the_graph_result={the_graph_result}
-                    />
-                  ) : (
-                    <></>
-                  )
-                }
+                {activeCard3 && topList === "Vault" && chain === "eth" ? (
+                  <Vault
+                    vault={vaultArrayNew[cardIndex]}
+                    token={tokenvaultArrayNew[cardIndex]}
+                    platformTokenApyPercent={vaultplatformArrayNew[cardIndex]}
+                    UNDERLYING_DECIMALS={vaultdecimalsArrayNew[cardIndex]}
+                    UNDERLYING_SYMBOL={vaultsymbolArrayNew[cardIndex]}
+                    expiration_time={"1 August 2024"}
+                    coinbase={coinbase}
+                    lockTime={"No Lock"}
+                    handleConnection={handleConnection}
+                    chainId={chainId}
+                    listType={listType}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    expired={false}
+                    isConnected={isConnected}
+                    the_graph_result={the_graph_result}
+                  />
+                ) : (
+                  <></>
+                )}
               </>
               <>
                 <div
@@ -7234,12 +3368,14 @@ const EarnTopPicks = ({
                         handleCardIndexStake30(index + 3);
                         handleCardIndexStakeiDyp(index + 3);
                         setDetails(index + 3);
-                        setselectedPool( topList !== 'Vault' && pool);
-                        setShowDetails(topList !== 'Vault' && true);
+                        setselectedPool(topList !== "Vault" && pool);
+                        setShowDetails(topList !== "Vault" && true);
+                        setselectedpoolType(pool.type);
                       }}
                       onHideDetailsClick={() => {
                         setActiveCard4(null);
                         setDetails();
+                        setselectedpoolType("");
                       }}
                       cardType={topList}
                       details={details === index + 3 ? true : false}
@@ -7313,352 +3449,7 @@ const EarnTopPicks = ({
                         : "No Lock"
                     }
                   />
-                ) : // : activeCard4 &&
-                //   topList === "Staking" &&
-                //   activePools[cardIndex]?.id ===
-                //     "0xC9075092Cc46E176B1F3c0D0EB8223F1e46555B0" &&
-                //   chain === "eth" ? (
-                //   <StakeDypiusEth
-                //     staking={window.constant_staking_dypius_eth1}
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={eth_address}
-                //     expiration_time={"09 November 2024"}
-                //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //     listType={listType}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_result}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     referrer={referrer}
-                //   />
-                // )
-                //  : activeCard4 &&
-                //   topList === "Staking" &&
-                //   activePools[cardIndex]?.id ===
-                //     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603" &&
-                //   chain === "bnb" ? (
-                //   <StakeDypiusBsc
-                //     staking={window.constant_staking_dypius_bsc1}
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={wbsc_address}
-                //     expiration_time={"09 November 2024"}
-                //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //     listType={listType}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_resultbsc}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     referrer={referrer}
-                //   />
-                // )
-                //  : activeCard4 &&
-                //   topList === "Staking" &&
-                //   activePools[cardIndex]?.id ===
-                //     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603" &&
-                //   chain === "avax" ? (
-                //   <StakeDypiusAvax
-                //     staking={window.constant_staking_dypius_avax1}
-                //     apr={activePools[cardIndex]?.apy_percent}
-                //     liquidity={avax_address}
-                //     expiration_time={"09 November 2024"}
-                //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //     listType={listType}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee_s={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_resultavax}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     referrer={referrer}
-                //   />
-                // )
-                // : activeCard4 &&
-                //   topList === "Staking" &&
-                //   chain === "avax" &&
-                //   activePools[cardIndex]?.id ===
-                //     "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
-                //   <StakeAvaxIDyp
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_resultavax}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     staking={window.constant_staking_idypavax_7}
-                //     listType={listType}
-                //     finalApr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_performancefee
-                //         : expiredDYPPools[cardIndex]?.apy_performancefee
-                //     }
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={avax_address}
-                //     expiration_time={"18 July 2024"}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee_s={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     fee_u={feeUarrayStakeAvaxiDyp[cardIndexavaxiDyp - 3]}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //   />
-                // )
-                //  : activeCard4 &&
-                //   activePools[cardIndex]?.id ===
-                //     "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
-                //   topList === "Staking" &&
-                //   chain === "bnb" ? (
-                //   <StakeBscIDyp
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_resultbsc}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     staking={window.constant_stakingidyp_7}
-                //     listType={listType}
-                //     finalApr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_performancefee
-                //         : expiredDYPPools[cardIndex]?.apy_performancefee
-                //     }
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={wbsc_address}
-                //     expiration_time={"18 July 2024"}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee_s={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     fee_u={0}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : parseInt(
-                //                 activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //               )
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : parseInt(
-                //               expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //             )
-                //         : "No Lock"
-                //     }
-                //   />
-                // )
-                // activeCard4 &&
-                //   topList === "Staking" &&
-                //   chain === "eth" &&
-                //   activePools[cardIndex]?.id ===
-                //     "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
-                //   <InitConstantStakingiDYP
-                //     is_wallet_connected={isConnected}
-                //     coinbase={coinbase}
-                //     the_graph_result={the_graph_result}
-                //     lp_id={lp_id[cardIndex]}
-                //     chainId={chainId}
-                //     handleConnection={handleConnection}
-                //     handleSwitchNetwork={handleSwitchNetwork}
-                //     expired={false}
-                //     staking={window.constant_staking_idyp_5}
-                //     listType={listType}
-                //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                //     apr={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.apy_percent
-                //         : expiredDYPPools[cardIndex]?.apy_percent
-                //     }
-                //     liquidity={eth_address}
-                //     expiration_time={"18 July 2024"}
-                //     other_info={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.expired === "Yes"
-                //             ? true
-                //             : false
-                //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                //           ? true
-                //           : false
-                //         : false
-                //     }
-                //     fee_s={
-                //       expiredPools === false
-                //         ? activePools[cardIndex]?.performancefee
-                //         : expiredDYPPools[cardIndex]?.performancefee
-                //     }
-                //     fee_u={withdrawFeeiDyp[cardIndex]}
-                //     lockTime={
-                //       cardIndex !== undefined
-                //         ? expiredPools === false
-                //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                //             "No"
-                //             ? "No Lock"
-                //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                //               " "
-                //             )[0] === "No"
-                //           ? "No Lock"
-                //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                //         : "No Lock"
-                //     }
-                //   />
-                // ) :
-                activeCard4 && topList === "Vault" && chain === "eth" ? (
+                ) : activeCard4 && topList === "Vault" && chain === "eth" ? (
                   <Vault
                     vault={vaultArrayNew[cardIndex]}
                     token={tokenvaultArrayNew[cardIndex]}
@@ -7745,12 +3536,14 @@ const EarnTopPicks = ({
                         handleCardIndexStake30(index + 4);
                         handleCardIndexStakeiDyp(index + 4);
                         setDetails(index + 4);
-                        setselectedPool( topList !== 'Vault' && pool);
-                        setShowDetails(topList !== 'Vault' && true);
+                        setselectedPool(topList !== "Vault" && pool);
+                        setShowDetails(topList !== "Vault" && true);
+                        setselectedpoolType(pool.type);
                       }}
                       onHideDetailsClick={() => {
                         setActiveCard5(null);
                         setDetails();
+                        setselectedpoolType("");
                       }}
                       cardType={topList}
                       details={details === index + 4 ? true : false}
@@ -7768,211 +3561,27 @@ const EarnTopPicks = ({
                     />
                   ))}
                 </div>
-                {
-                  // activeCard5 &&
-                  // topList === "Staking" &&
-                  // chain === "avax" &&
-                  // activePools[cardIndex]?.id ===
-                  //   "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
-                  //   <StakeAvaxIDyp
-                  //     is_wallet_connected={isConnected}
-                  //     coinbase={coinbase}
-                  //     the_graph_result={the_graph_resultavax}
-                  //     chainId={chainId}
-                  //     handleConnection={handleConnection}
-                  //     handleSwitchNetwork={handleSwitchNetwork}
-                  //     expired={false}
-                  //     staking={window.constant_staking_idypavax_7}
-                  //     listType={listType}
-                  //     finalApr={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.apy_performancefee
-                  //         : expiredDYPPools[cardIndex]?.apy_performancefee
-                  //     }
-                  //     apr={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.apy_percent
-                  //         : expiredDYPPools[cardIndex]?.apy_percent
-                  //     }
-                  //     liquidity={avax_address}
-                  //     expiration_time={"18 July 2024"}
-                  //     other_info={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.expired === "Yes"
-                  //             ? true
-                  //             : false
-                  //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                  //           ? true
-                  //           : false
-                  //         : false
-                  //     }
-                  //     fee_s={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.performancefee
-                  //         : expiredDYPPools[cardIndex]?.performancefee
-                  //     }
-                  //     fee_u={feeUarrayStakeAvaxiDyp[cardIndexavaxiDyp - 3]}
-                  //     lockTime={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                  //             "No"
-                  //             ? "No Lock"
-                  //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0] === "No"
-                  //           ? "No Lock"
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                  //         : "No Lock"
-                  //     }
-                  //   />
-                  // ) :
-
-                  //  : activeCard5 &&
-                  //   activePools[cardIndex]?.id ===
-                  //     "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
-                  //   topList === "Staking" &&
-                  //   chain === "bnb" ? (
-                  //   <StakeBscIDyp
-                  //     is_wallet_connected={isConnected}
-                  //     coinbase={coinbase}
-                  //     the_graph_result={the_graph_resultbsc}
-                  //     chainId={chainId}
-                  //     handleConnection={handleConnection}
-                  //     handleSwitchNetwork={handleSwitchNetwork}
-                  //     expired={false}
-                  //     staking={window.constant_stakingidyp_7}
-                  //     listType={listType}
-                  //     finalApr={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.apy_performancefee
-                  //         : expiredDYPPools[cardIndex]?.apy_performancefee
-                  //     }
-                  //     apr={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.apy_percent
-                  //         : expiredDYPPools[cardIndex]?.apy_percent
-                  //     }
-                  //     liquidity={wbsc_address}
-                  //     expiration_time={"18 July 2024"}
-                  //     other_info={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.expired === "Yes"
-                  //             ? true
-                  //             : false
-                  //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                  //           ? true
-                  //           : false
-                  //         : false
-                  //     }
-                  //     fee_s={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.performancefee
-                  //         : expiredDYPPools[cardIndex]?.performancefee
-                  //     }
-                  //     fee_u={0}
-                  //     lockTime={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                  //             "No"
-                  //             ? "No Lock"
-                  //             : parseInt(
-                  //                 activePools[cardIndex]?.lock_time?.split(" ")[0]
-                  //               )
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0] === "No"
-                  //           ? "No Lock"
-                  //           : parseInt(
-                  //               expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                  //             )
-                  //         : "No Lock"
-                  //     }
-                  //   />
-                  // )
-                  // activeCard5 &&
-                  //   topList === "Staking" &&
-                  //   chain === "eth" &&
-                  //   activePools[cardIndex]?.id ===
-                  //     "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
-                  //   <InitConstantStakingiDYP
-                  //     is_wallet_connected={isConnected}
-                  //     coinbase={coinbase}
-                  //     the_graph_result={the_graph_result}
-                  //     lp_id={lp_id[cardIndex]}
-                  //     chainId={chainId}
-                  //     handleConnection={handleConnection}
-                  //     handleSwitchNetwork={handleSwitchNetwork}
-                  //     expired={false}
-                  //     staking={window.constant_staking_idyp_5}
-                  //     listType={listType}
-                  //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                  //     apr={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.apy_percent
-                  //         : expiredDYPPools[cardIndex]?.apy_percent
-                  //     }
-                  //     liquidity={eth_address}
-                  //     expiration_time={"18 July 2024"}
-                  //     other_info={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.expired === "Yes"
-                  //             ? true
-                  //             : false
-                  //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                  //           ? true
-                  //           : false
-                  //         : false
-                  //     }
-                  //     fee_s={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.performancefee
-                  //         : expiredDYPPools[cardIndex]?.performancefee
-                  //     }
-                  //     fee_u={withdrawFeeiDyp[cardIndex]}
-                  //     lockTime={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                  //             "No"
-                  //             ? "No Lock"
-                  //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0] === "No"
-                  //           ? "No Lock"
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                  //         : "No Lock"
-                  //     }
-                  //   />
-                  // ) :
-                  activeCard5 && topList === "Vault" && chain === "eth" ? (
-                    <Vault
-                      vault={vaultArrayNew[cardIndex]}
-                      token={tokenvaultArrayNew[cardIndex]}
-                      platformTokenApyPercent={vaultplatformArrayNew[cardIndex]}
-                      UNDERLYING_DECIMALS={vaultdecimalsArrayNew[cardIndex]}
-                      UNDERLYING_SYMBOL={vaultsymbolArrayNew[cardIndex]}
-                      expiration_time={"1 August 2024"}
-                      coinbase={coinbase}
-                      lockTime={"No Lock"}
-                      handleConnection={handleConnection}
-                      chainId={chainId}
-                      listType={listType}
-                      handleSwitchNetwork={handleSwitchNetwork}
-                      expired={false}
-                      isConnected={isConnected}
-                      the_graph_result={the_graph_result}
-                    />
-                  ) : (
-                    <></>
-                  )
-                }
+                {activeCard5 && topList === "Vault" && chain === "eth" ? (
+                  <Vault
+                    vault={vaultArrayNew[cardIndex]}
+                    token={tokenvaultArrayNew[cardIndex]}
+                    platformTokenApyPercent={vaultplatformArrayNew[cardIndex]}
+                    UNDERLYING_DECIMALS={vaultdecimalsArrayNew[cardIndex]}
+                    UNDERLYING_SYMBOL={vaultsymbolArrayNew[cardIndex]}
+                    expiration_time={"1 August 2024"}
+                    coinbase={coinbase}
+                    lockTime={"No Lock"}
+                    handleConnection={handleConnection}
+                    chainId={chainId}
+                    listType={listType}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    expired={false}
+                    isConnected={isConnected}
+                    the_graph_result={the_graph_result}
+                  />
+                ) : (
+                  <></>
+                )}
               </>
               <>
                 <div
@@ -8038,13 +3647,16 @@ const EarnTopPicks = ({
                         handleCardIndexStake(index + 5);
                         handleCardIndexStake30(index + 5);
                         handleCardIndexStakeiDyp(index + 5);
+                        setselectedpoolType(pool.type);
+
                         setDetails(index + 5);
-                        setselectedPool( topList !== 'Vault' && pool);
-                        setShowDetails(topList !== 'Vault' && true);
+                        setselectedPool(topList !== "Vault" && pool);
+                        setShowDetails(topList !== "Vault" && true);
                       }}
                       onHideDetailsClick={() => {
                         setActiveCard6(null);
                         setDetails();
+                        setselectedpoolType("");
                       }}
                       cardType={topList}
                       details={details === index + 5 ? true : false}
@@ -8062,302 +3674,115 @@ const EarnTopPicks = ({
                     />
                   ))}
                 </div>
-                {
-                  // activeCard6 &&
-                  // topList === "Staking" &&
-                  // chain === "avax" &&
-                  // activePools[cardIndex]?.id ===
-                  //   "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
-                  //   <StakeAvaxIDyp
-                  //     is_wallet_connected={isConnected}
-                  //     coinbase={coinbase}
-                  //     the_graph_result={the_graph_resultavax}
-                  //     chainId={chainId}
-                  //     handleConnection={handleConnection}
-                  //     handleSwitchNetwork={handleSwitchNetwork}
-                  //     expired={false}
-                  //     staking={window.constant_staking_idypavax_7}
-                  //     listType={listType}
-                  //     finalApr={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.apy_performancefee
-                  //         : expiredDYPPools[cardIndex]?.apy_performancefee
-                  //     }
-                  //     apr={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.apy_percent
-                  //         : expiredDYPPools[cardIndex]?.apy_percent
-                  //     }
-                  //     liquidity={avax_address}
-                  //     expiration_time={"18 July 2024"}
-                  //     other_info={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.expired === "Yes"
-                  //             ? true
-                  //             : false
-                  //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                  //           ? true
-                  //           : false
-                  //         : false
-                  //     }
-                  //     fee_s={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.performancefee
-                  //         : expiredDYPPools[cardIndex]?.performancefee
-                  //     }
-                  //     fee_u={feeUarrayStakeAvaxiDyp[cardIndexavaxiDyp - 3]}
-                  //     lockTime={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                  //             "No"
-                  //             ? "No Lock"
-                  //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0] === "No"
-                  //           ? "No Lock"
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                  //         : "No Lock"
-                  //     }
-                  //   />
-                  // ) :
-
-                  // : activeCard6 &&
-                  //   activePools[cardIndex]?.id ===
-                  //     "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
-                  //   topList === "Staking" &&
-                  //   chain === "bnb" ? (
-                  //   <StakeBscIDyp
-                  //     is_wallet_connected={isConnected}
-                  //     coinbase={coinbase}
-                  //     the_graph_result={the_graph_resultbsc}
-                  //     chainId={chainId}
-                  //     handleConnection={handleConnection}
-                  //     handleSwitchNetwork={handleSwitchNetwork}
-                  //     expired={false}
-                  //     staking={window.constant_stakingidyp_7}
-                  //     listType={listType}
-                  //     finalApr={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.apy_performancefee
-                  //         : expiredDYPPools[cardIndex]?.apy_performancefee
-                  //     }
-                  //     apr={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.apy_percent
-                  //         : expiredDYPPools[cardIndex]?.apy_percent
-                  //     }
-                  //     liquidity={wbsc_address}
-                  //     expiration_time={"18 July 2024"}
-                  //     other_info={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.expired === "Yes"
-                  //             ? true
-                  //             : false
-                  //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                  //           ? true
-                  //           : false
-                  //         : false
-                  //     }
-                  //     fee_s={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.performancefee
-                  //         : expiredDYPPools[cardIndex]?.performancefee
-                  //     }
-                  //     fee_u={0}
-                  //     lockTime={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                  //             "No"
-                  //             ? "No Lock"
-                  //             : parseInt(
-                  //                 activePools[cardIndex]?.lock_time?.split(" ")[0]
-                  //               )
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0] === "No"
-                  //           ? "No Lock"
-                  //           : parseInt(
-                  //               expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                  //             )
-                  //         : "No Lock"
-                  //     }
-                  //   />
-                  // )
-                  // activeCard6 &&
-                  //   topList === "Staking" &&
-                  //   chain === "eth" &&
-                  //   activePools[cardIndex]?.id ===
-                  //     "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
-                  //   <InitConstantStakingiDYP
-                  //     is_wallet_connected={isConnected}
-                  //     coinbase={coinbase}
-                  //     the_graph_result={the_graph_result}
-                  //     lp_id={lp_id[cardIndex]}
-                  //     chainId={chainId}
-                  //     handleConnection={handleConnection}
-                  //     handleSwitchNetwork={handleSwitchNetwork}
-                  //     expired={false}
-                  //     staking={window.constant_staking_idyp_5}
-                  //     listType={listType}
-                  //     finalApr={activePools[cardIndex]?.apy_performancefee}
-                  //     apr={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.apy_percent
-                  //         : expiredDYPPools[cardIndex]?.apy_percent
-                  //     }
-                  //     liquidity={eth_address}
-                  //     expiration_time={"18 July 2024"}
-                  //     other_info={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.expired === "Yes"
-                  //             ? true
-                  //             : false
-                  //           : expiredDYPPools[cardIndex]?.expired === "Yes"
-                  //           ? true
-                  //           : false
-                  //         : false
-                  //     }
-                  //     fee_s={
-                  //       expiredPools === false
-                  //         ? activePools[cardIndex]?.performancefee
-                  //         : expiredDYPPools[cardIndex]?.performancefee
-                  //     }
-                  //     fee_u={withdrawFeeiDyp[cardIndex]}
-                  //     lockTime={
-                  //       cardIndex !== undefined
-                  //         ? expiredPools === false
-                  //           ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
-                  //             "No"
-                  //             ? "No Lock"
-                  //             : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(
-                  //               " "
-                  //             )[0] === "No"
-                  //           ? "No Lock"
-                  //           : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
-                  //         : "No Lock"
-                  //     }
-                  //   />
-                  // ) :
-                  activeCard6 &&
-                  cardIndex >= 0 &&
+                {activeCard6 &&
+                cardIndex >= 0 &&
+                topList === "Staking" &&
+                chain === "eth" ? (
+                  <InitConstantStakingiDYP
+                    is_wallet_connected={isConnected}
+                    coinbase={coinbase}
+                    the_graph_result={the_graph_result}
+                    lp_id={lp_id[cardIndex]}
+                    chainId={chainId}
+                    handleConnection={handleConnection}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    expired={false}
+                    staking={stakeArrayiDYPActive[cardIndex]}
+                    finalApr={
+                      expiredPools === false
+                        ? activePools[cardIndex]?.apy_performancefee
+                        : expiredDYPPools[cardIndex]?.apy_performancefee
+                    }
+                    apr={
+                      expiredPools === false
+                        ? activePools[cardIndex]?.apy_percent
+                        : expiredDYPPools[cardIndex]?.apy_percent
+                    }
+                    liquidity={eth_address}
+                    expiration_time={expirationArray[cardIndex]}
+                    other_info={
+                      cardIndex !== undefined
+                        ? expiredPools === false
+                          ? activePools[cardIndex]?.expired === "Yes"
+                            ? true
+                            : false
+                          : expiredDYPPools[cardIndex]?.expired === "Yes"
+                          ? true
+                          : false
+                        : false
+                    }
+                    fee_s={
+                      expiredPools === false
+                        ? activePools[cardIndex]?.performancefee
+                        : expiredDYPPools[cardIndex]?.performancefee
+                    }
+                    fee_u={withdrawFeeiDyp[cardIndex]}
+                  />
+                ) : activeCard6 &&
                   topList === "Staking" &&
-                  chain === "eth" ? (
-                    <InitConstantStakingiDYP
-                      is_wallet_connected={isConnected}
-                      coinbase={coinbase}
-                      the_graph_result={the_graph_result}
-                      lp_id={lp_id[cardIndex]}
-                      chainId={chainId}
-                      handleConnection={handleConnection}
-                      handleSwitchNetwork={handleSwitchNetwork}
-                      expired={false}
-                      staking={stakeArrayiDYPActive[cardIndex]}
-                      finalApr={
-                        expiredPools === false
-                          ? activePools[cardIndex]?.apy_performancefee
-                          : expiredDYPPools[cardIndex]?.apy_performancefee
-                      }
-                      apr={
-                        expiredPools === false
-                          ? activePools[cardIndex]?.apy_percent
-                          : expiredDYPPools[cardIndex]?.apy_percent
-                      }
-                      liquidity={eth_address}
-                      expiration_time={expirationArray[cardIndex]}
-                      other_info={
-                        cardIndex !== undefined
-                          ? expiredPools === false
-                            ? activePools[cardIndex]?.expired === "Yes"
-                              ? true
-                              : false
-                            : expiredDYPPools[cardIndex]?.expired === "Yes"
+                  chain === "avax" &&
+                  cardIndex >= 5 ? (
+                  <StakeAvaxIDyp
+                    is_wallet_connected={isConnected}
+                    coinbase={coinbase}
+                    the_graph_result={the_graph_resultavax}
+                    chainId={chainId}
+                    handleConnection={handleConnection}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    expired={false}
+                    staking={
+                      expiredPools === false
+                        ? stakingarrayStakeAvaxiDypActive[cardIndex - 2]
+                        : stakingarrayStakeAvaxiDypExpired[cardIndex - 3]
+                    }
+                    listType={listType}
+                    finalApr={
+                      expiredPools === false
+                        ? activePools[cardIndex]?.apy_performancefee
+                        : expiredDYPPools[cardIndex]?.apy_performancefee
+                    }
+                    apr={
+                      expiredPools === false
+                        ? activePools[cardIndex]?.apy_percent
+                        : expiredDYPPools[cardIndex]?.apy_percent
+                    }
+                    liquidity={avax_address}
+                    expiration_time={expirearrayStakeAvaxiDyp[cardIndex]}
+                    other_info={
+                      cardIndex !== undefined
+                        ? expiredPools === false
+                          ? activePools[cardIndex]?.expired === "Yes"
                             ? true
                             : false
+                          : expiredDYPPools[cardIndex]?.expired === "Yes"
+                          ? true
                           : false
-                      }
-                      fee_s={
-                        expiredPools === false
-                          ? activePools[cardIndex]?.performancefee
-                          : expiredDYPPools[cardIndex]?.performancefee
-                      }
-                      fee_u={withdrawFeeiDyp[cardIndex]}
-                    />
-                  ) : activeCard6 &&
-                    topList === "Staking" &&
-                    chain === "avax" &&
-                    cardIndex >= 5 ? (
-                    <StakeAvaxIDyp
-                      is_wallet_connected={isConnected}
-                      coinbase={coinbase}
-                      the_graph_result={the_graph_resultavax}
-                      chainId={chainId}
-                      handleConnection={handleConnection}
-                      handleSwitchNetwork={handleSwitchNetwork}
-                      expired={false}
-                      staking={
-                        expiredPools === false
-                          ? stakingarrayStakeAvaxiDypActive[cardIndex - 2]
-                          : stakingarrayStakeAvaxiDypExpired[cardIndex - 3]
-                      }
-                      listType={listType}
-                      finalApr={
-                        expiredPools === false
-                          ? activePools[cardIndex]?.apy_performancefee
-                          : expiredDYPPools[cardIndex]?.apy_performancefee
-                      }
-                      apr={
-                        expiredPools === false
-                          ? activePools[cardIndex]?.apy_percent
-                          : expiredDYPPools[cardIndex]?.apy_percent
-                      }
-                      liquidity={avax_address}
-                      expiration_time={expirearrayStakeAvaxiDyp[cardIndex]}
-                      other_info={
-                        cardIndex !== undefined
-                          ? expiredPools === false
-                            ? activePools[cardIndex]?.expired === "Yes"
-                              ? true
-                              : false
-                            : expiredDYPPools[cardIndex]?.expired === "Yes"
-                            ? true
-                            : false
-                          : false
-                      }
-                      fee_s={
-                        expiredPools === false
-                          ? activePools[cardIndex]?.performancefee
-                          : expiredDYPPools[cardIndex]?.performancefee
-                      }
-                      fee_u={feeUarrayStakeAvaxiDyp[cardIndexavaxiDyp - 3]}
-                      lockTime={
-                        cardIndex !== undefined
-                          ? expiredPools === false
-                            ? activePools[cardIndex]?.lock_time?.split(
-                                " "
-                              )[0] === "No"
-                              ? "No Lock"
-                              : activePools[cardIndex]?.lock_time?.split(" ")[0]
-                            : expiredDYPPools[cardIndex]?.lock_time?.split(
-                                " "
-                              )[0] === "No"
+                        : false
+                    }
+                    fee_s={
+                      expiredPools === false
+                        ? activePools[cardIndex]?.performancefee
+                        : expiredDYPPools[cardIndex]?.performancefee
+                    }
+                    fee_u={feeUarrayStakeAvaxiDyp[cardIndexavaxiDyp - 3]}
+                    lockTime={
+                      cardIndex !== undefined
+                        ? expiredPools === false
+                          ? activePools[cardIndex]?.lock_time?.split(" ")[0] ===
+                            "No"
                             ? "No Lock"
-                            : expiredDYPPools[cardIndex]?.lock_time?.split(
-                                " "
-                              )[0]
-                          : "No Lock"
-                      }
-                    />
-                  ) : (
-                    <></>
-                  )
-                }
+                            : activePools[cardIndex]?.lock_time?.split(" ")[0]
+                          : expiredDYPPools[cardIndex]?.lock_time?.split(
+                              " "
+                            )[0] === "No"
+                          ? "No Lock"
+                          : expiredDYPPools[cardIndex]?.lock_time?.split(" ")[0]
+                        : "No Lock"
+                    }
+                  />
+                ) : (
+                  <></>
+                )}
               </>
               <>
                 <div
@@ -8423,13 +3848,16 @@ const EarnTopPicks = ({
                         handleCardIndexStake(index + 6);
                         handleCardIndexStake30(index + 6);
                         handleCardIndexStakeiDyp(index + 6);
+                        setselectedpoolType(pool.type);
+
                         setDetails(index + 6);
-                        setselectedPool( topList !== 'Vault' && pool);
-                        setShowDetails(topList !== 'Vault' && true);
+                        setselectedPool(topList !== "Vault" && pool);
+                        setShowDetails(topList !== "Vault" && true);
                       }}
                       onHideDetailsClick={() => {
                         setActiveCard7(null);
                         setDetails();
+                        setselectedpoolType("");
                       }}
                       cardType={topList}
                       details={details === index + 6 ? true : false}
@@ -8476,10 +3904,12 @@ const EarnTopPicks = ({
                     setActiveCard3(null);
                     setActiveCard4(null);
                     setDetails();
+                    setselectedpoolType(pool.type);
                   }}
                   onHideDetailsClick={() => {
                     setActiveCard(false);
                     setDetails();
+                    setselectedpoolType("");
                   }}
                   showDetails={activeCard}
                   topList={topList}
@@ -8577,9 +4007,11 @@ const EarnTopPicks = ({
                   handleCardIndexStakeiDyp(index);
                   setselectedPool(pool);
                   setShowDetails(true);
+                  setselectedpoolType(pool.type);
                 }}
                 onHideDetailsClick={() => {
                   setActiveCard(null);
+                  setselectedpoolType("");
                 }}
                 showDetails={showDetails}
                 topList={topList}
@@ -8679,7 +4111,20 @@ const EarnTopPicks = ({
                 <div className="locktimewrapper align-items-center gap-2">
                   <button
                     className={
-                      selectedPool?.lock_time?.split(" ")[0] === "No"
+                      selectedchain === "eth" &&
+                      ethPools?.find((obj) => {
+                        return obj.lock_time === "No lock";
+                      })
+                        ? "method-btn-active"
+                        : selectedchain === "bnb" &&
+                          bnbPools?.find((obj) => {
+                            return obj.lock_time === "No lock";
+                          })
+                        ? "method-btn-active"
+                        : selectedchain === "avax" &&
+                          avaxPools?.find((obj) => {
+                            return obj.lock_time === "No lock";
+                          })
                         ? "method-btn-active"
                         : "method-btn-disabled"
                     }
@@ -8687,38 +4132,265 @@ const EarnTopPicks = ({
                     Flexible
                   </button>
                   <button
+                    // className={
+                    //   selectedchain === "eth" &&
+                    //   ethPools?.find((obj) => {
+                    //     return obj.lock_time === "30 days";
+                    //   })
+                    //     ? "method-btn-active"
+                    //     : selectedchain === "bnb" &&
+                    //       bnbPools?.find((obj) => {
+                    //         return obj.lock_time === "30 days";
+                    //       })
+                    //     ? "method-btn-active"
+                    //     : selectedchain === "avax" &&
+                    //       avaxPools?.find((obj) => {
+                    //         return obj.lock_time === "30 days";
+                    //       })
+                    //     ? "method-btn-active"
+                    //     : "method-btn-disabled"
+                    // }
                     className={
-                      parseInt(selectedPool?.lock_time?.split(" ")[0]) === 30
-                        ? "method-btn-active"
-                        : "method-btn-disabled"
+                      selectedchain === 'eth' && selectedpoolType === 'dyp' && selectedPool.lock_time === "30 days" ? 'method-btn-active'
+                      : selectedchain === 'eth' && selectedpoolType === 'idyp' && selectedPool.lock_time === "30 days" ? 'method-btn-active'
+                      : selectedchain === 'eth' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "30 days" &&  ethPoolsDyp?.find((obj) => {
+                        return obj.lock_time === "30 days";
+                      }) ? 'method-btn'
+                      : selectedchain === 'eth' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "30 days" &&  !ethPoolsDyp?.find((obj) => {
+                        return obj.lock_time === "30 days";
+                      }) ? 'method-btn-disabled'
+                      : selectedchain === 'eth' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "30 days" &&  ethPoolsiDyp?.find((obj) => {
+                        return obj.lock_time === "30 days";
+                      }) ? 'method-btn'
+                      : selectedchain === 'eth' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "30 days" &&  !ethPoolsiDyp?.find((obj) => {
+                        return obj.lock_time === "30 days";
+                      }) ? 'method-btn-disabled'
+                      
+                      : selectedchain === 'bnb' && selectedpoolType === 'dyp' && selectedPool.lock_time === "30 days" ? 'method-btn-active'
+                      : selectedchain === 'bnb' && selectedpoolType === 'idyp' && selectedPool.lock_time === "30 days" ? 'method-btn-active'
+                      : selectedchain === 'bnb' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "30 days" &&  bnbPoolsDyp?.find((obj) => {
+                        return obj.lock_time === "30 days";
+                      }) ? 'method-btn'
+                      : selectedchain === 'bnb' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "30 days" &&  !bnbPoolsDyp?.find((obj) => {
+                        return obj.lock_time === "30 days";
+                      }) ? 'method-btn-disabled'
+                      : selectedchain === 'bnb' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "30 days" &&  bnbPoolsiDyp?.find((obj) => {
+                        return obj.lock_time === "30 days";
+                      }) ? 'method-btn'
+                      : selectedchain === 'bnb' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "30 days" &&  !bnbPoolsiDyp?.find((obj) => {
+                        return obj.lock_time === "30 days";
+                      }) ? 'method-btn-disabled'
+
+                      : selectedchain === 'avax' && selectedpoolType === 'dyp' && selectedPool.lock_time === "30 days" ? 'method-btn-active'
+                      : selectedchain === 'avax' && selectedpoolType === 'idyp' && selectedPool.lock_time === "30 days" ? 'method-btn-active'
+                      : selectedchain === 'avax' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "30 days" &&  avaxPoolsDyp?.find((obj) => {
+                        return obj.lock_time === "30 days";
+                      }) ? 'method-btn'
+                      : selectedchain === 'avax' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "30 days" &&  !avaxPoolsDyp?.find((obj) => {
+                        return obj.lock_time === "30 days";
+                      }) ? 'method-btn-disabled'
+                      : selectedchain === 'avax' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "30 days" &&  avaxPoolsiDyp?.find((obj) => {
+                        return obj.lock_time === "30 days";
+                      }) ? 'method-btn'
+                      : selectedchain === 'avax' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "30 days" &&  !avaxPoolsiDyp?.find((obj) => {
+                        return obj.lock_time === "30 days";
+                      }) ? 'method-btn-disabled'
+                       : 'method-btn-disabled'
                     }
+
                   >
                     30 Days
                   </button>
                   <button
                     className={
-                      parseInt(selectedPool?.lock_time?.split(" ")[0]) === 60
-                        ? "method-btn-active"
-                        : "method-btn-disabled"
+                      selectedchain === 'eth' && selectedpoolType === 'dyp' && selectedPool.lock_time === "60 days" ? 'method-btn-active'
+                      : selectedchain === 'eth' && selectedpoolType === 'idyp' && selectedPool.lock_time === "60 days" ? 'method-btn-active'
+                      : selectedchain === 'eth' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "60 days" &&  ethPoolsDyp?.find((obj) => {
+                        return obj.lock_time === "60 days";
+                      }) ? 'method-btn'
+                      : selectedchain === 'eth' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "60 days" &&  !ethPoolsDyp?.find((obj) => {
+                        return obj.lock_time === "60 days";
+                      }) ? 'method-btn-disabled'
+                      : selectedchain === 'eth' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "60 days" &&  ethPoolsiDyp?.find((obj) => {
+                        return obj.lock_time === "60 days";
+                      }) ? 'method-btn'
+                      : selectedchain === 'eth' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "60 days" &&  !ethPoolsiDyp?.find((obj) => {
+                        return obj.lock_time === "60 days";
+                      }) ? 'method-btn-disabled'
+                      
+                      : selectedchain === 'bnb' && selectedpoolType === 'dyp' && selectedPool.lock_time === "60 days" ? 'method-btn-active'
+                      : selectedchain === 'bnb' && selectedpoolType === 'idyp' && selectedPool.lock_time === "60 days" ? 'method-btn-active'
+                      : selectedchain === 'bnb' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "60 days" &&  bnbPoolsDyp?.find((obj) => {
+                        return obj.lock_time === "60 days";
+                      }) ? 'method-btn'
+                      : selectedchain === 'bnb' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "60 days" &&  !bnbPoolsDyp?.find((obj) => {
+                        return obj.lock_time === "60 days";
+                      }) ? 'method-btn-disabled'
+                      : selectedchain === 'bnb' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "60 days" &&  bnbPoolsiDyp?.find((obj) => {
+                        return obj.lock_time === "60 days";
+                      }) ? 'method-btn'
+                      : selectedchain === 'bnb' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "60 days" &&  !bnbPoolsiDyp?.find((obj) => {
+                        return obj.lock_time === "60 days";
+                      }) ? 'method-btn-disabled'
+
+                      : selectedchain === 'avax' && selectedpoolType === 'dyp' && selectedPool.lock_time === "60 days" ? 'method-btn-active'
+                      : selectedchain === 'avax' && selectedpoolType === 'idyp' && selectedPool.lock_time === "60 days" ? 'method-btn-active'
+                      : selectedchain === 'avax' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "60 days" &&  avaxPoolsDyp?.find((obj) => {
+                        return obj.lock_time === "60 days";
+                      }) ? 'method-btn'
+                      : selectedchain === 'avax' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "60 days" &&  !avaxPoolsDyp?.find((obj) => {
+                        return obj.lock_time === "60 days";
+                      }) ? 'method-btn-disabled'
+                      : selectedchain === 'avax' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "60 days" &&  avaxPoolsiDyp?.find((obj) => {
+                        return obj.lock_time === "60 days";
+                      }) ? 'method-btn'
+                      : selectedchain === 'avax' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "60 days" &&  !avaxPoolsiDyp?.find((obj) => {
+                        return obj.lock_time === "60 days";
+                      }) ? 'method-btn-disabled'
+                       : 'method-btn-disabled'
                     }
                   >
                     60 Days
                   </button>
                   <button
+                    // className={
+                    //   selectedchain === "eth" &&
+                    //   ethPools?.find((obj) => {
+                    //     return obj.lock_time === "90 days";
+                    //   })
+                    //     ? "method-btn-active"
+                    //     : selectedchain === "bnb" &&
+                    //       bnbPools?.find((obj) => {
+                    //         return obj.lock_time === "90 days";
+                    //       })
+                    //     ? "method-btn-active"
+                    //     : selectedchain === "avax" &&
+                    //       avaxPools?.find((obj) => {
+                    //         return obj.lock_time === "90 days";
+                    //       })
+                    //     ? "method-btn-active"
+                    //     : "method-btn-disabled"
+                    // }
+
                     className={
-                      parseInt(selectedPool?.lock_time?.split(" ")[0]) === 90
-                        ? "method-btn-active"
-                        : "method-btn-disabled"
+                      selectedchain === 'eth' && selectedpoolType === 'dyp' && selectedPool.lock_time === "90 days" ? 'method-btn-active'
+                      : selectedchain === 'eth' && selectedpoolType === 'idyp' && selectedPool.lock_time === "90 days" ? 'method-btn-active'
+                      : selectedchain === 'eth' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "90 days" &&  ethPoolsDyp?.find((obj) => {
+                        return obj.lock_time === "90 days";
+                      }) ? 'method-btn'
+                      : selectedchain === 'eth' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "90 days" &&  !ethPoolsDyp?.find((obj) => {
+                        return obj.lock_time === "90 days";
+                      }) ? 'method-btn-disabled'
+                      : selectedchain === 'eth' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "90 days" &&  ethPoolsiDyp?.find((obj) => {
+                        return obj.lock_time === "90 days";
+                      }) ? 'method-btn'
+                      : selectedchain === 'eth' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "90 days" &&  !ethPoolsiDyp?.find((obj) => {
+                        return obj.lock_time === "90 days";
+                      }) ? 'method-btn-disabled'
+                      
+                      : selectedchain === 'bnb' && selectedpoolType === 'dyp' && selectedPool.lock_time === "90 days" ? 'method-btn-active'
+                      : selectedchain === 'bnb' && selectedpoolType === 'idyp' && selectedPool.lock_time === "90 days" ? 'method-btn-active'
+                      : selectedchain === 'bnb' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "90 days" &&  bnbPoolsDyp?.find((obj) => {
+                        return obj.lock_time === "90 days";
+                      }) ? 'method-btn'
+                      : selectedchain === 'bnb' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "90 days" &&  !bnbPoolsDyp?.find((obj) => {
+                        return obj.lock_time === "90 days";
+                      }) ? 'method-btn-disabled'
+                      : selectedchain === 'bnb' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "90 days" &&  bnbPoolsiDyp?.find((obj) => {
+                        return obj.lock_time === "90 days";
+                      }) ? 'method-btn'
+                      : selectedchain === 'bnb' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "90 days" &&  !bnbPoolsiDyp?.find((obj) => {
+                        return obj.lock_time === "90 days";
+                      }) ? 'method-btn-disabled'
+
+                      : selectedchain === 'avax' && selectedpoolType === 'dyp' && selectedPool.lock_time === "90 days" ? 'method-btn-active'
+                      : selectedchain === 'avax' && selectedpoolType === 'idyp' && selectedPool.lock_time === "90 days" ? 'method-btn-active'
+                      : selectedchain === 'avax' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "90 days" &&  avaxPoolsDyp?.find((obj) => {
+                        return obj.lock_time === "90 days";
+                      }) ? 'method-btn'
+                      : selectedchain === 'avax' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "90 days" &&  !avaxPoolsDyp?.find((obj) => {
+                        return obj.lock_time === "90 days";
+                      }) ? 'method-btn-disabled'
+                      : selectedchain === 'avax' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "90 days" &&  avaxPoolsiDyp?.find((obj) => {
+                        return obj.lock_time === "90 days";
+                      }) ? 'method-btn'
+                      : selectedchain === 'avax' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "90 days" &&  !avaxPoolsiDyp?.find((obj) => {
+                        return obj.lock_time === "90 days";
+                      }) ? 'method-btn-disabled'
+                       : 'method-btn-disabled'
                     }
                   >
                     90 Days
                   </button>
                   <button
+                    // className={
+                    //   selectedchain === "eth" &&
+                    //   ethPools?.find((obj) => {
+                    //     return obj.lock_time === "120 days";
+                    //   })
+                    //     ? "method-btn-active"
+                    //     : selectedchain === "bnb" &&
+                    //       bnbPools?.find((obj) => {
+                    //         return obj.lock_time === "120 days";
+                    //       })
+                    //     ? "method-btn-active"
+                    //     : selectedchain === "avax" &&
+                    //       avaxPools?.find((obj) => {
+                    //         return obj.lock_time === "120 days";
+                    //       })
+                    //     ? "method-btn-active"
+                    //     : "method-btn-disabled"
+                    // }
+
                     className={
-                      parseInt(selectedPool?.lock_time?.split(" ")[0]) === 120
-                        ? "method-btn-active"
-                        : "method-btn-disabled"
+                      selectedchain === 'eth' && selectedpoolType === 'dyp' && selectedPool.lock_time === "120 days" ? 'method-btn-active'
+                      : selectedchain === 'eth' && selectedpoolType === 'idyp' && selectedPool.lock_time === "120 days" ? 'method-btn-active'
+                      : selectedchain === 'eth' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "120 days" &&  ethPoolsDyp?.find((obj) => {
+                        return obj.lock_time === "120 days";
+                      }) ? 'method-btn'
+                      : selectedchain === 'eth' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "120 days" &&  !ethPoolsDyp?.find((obj) => {
+                        return obj.lock_time === "120 days";
+                      }) ? 'method-btn-disabled'
+                      : selectedchain === 'eth' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "120 days" &&  ethPoolsiDyp?.find((obj) => {
+                        return obj.lock_time === "120 days";
+                      }) ? 'method-btn'
+                      : selectedchain === 'eth' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "120 days" &&  !ethPoolsiDyp?.find((obj) => {
+                        return obj.lock_time === "120 days";
+                      }) ? 'method-btn-disabled'
+                      
+                      : selectedchain === 'bnb' && selectedpoolType === 'dyp' && selectedPool.lock_time === "120 days" ? 'method-btn-active'
+                      : selectedchain === 'bnb' && selectedpoolType === 'idyp' && selectedPool.lock_time === "120 days" ? 'method-btn-active'
+                      : selectedchain === 'bnb' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "120 days" &&  bnbPoolsDyp?.find((obj) => {
+                        return obj.lock_time === "120 days";
+                      }) ? 'method-btn'
+                      : selectedchain === 'bnb' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "120 days" &&  !bnbPoolsDyp?.find((obj) => {
+                        return obj.lock_time === "120 days";
+                      }) ? 'method-btn-disabled'
+                      : selectedchain === 'bnb' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "120 days" &&  bnbPoolsiDyp?.find((obj) => {
+                        return obj.lock_time === "120 days";
+                      }) ? 'method-btn'
+                      : selectedchain === 'bnb' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "120 days" &&  !bnbPoolsiDyp?.find((obj) => {
+                        return obj.lock_time === "120 days";
+                      }) ? 'method-btn-disabled'
+
+                      : selectedchain === 'avax' && selectedpoolType === 'dyp' && selectedPool.lock_time === "120 days" ? 'method-btn-active'
+                      : selectedchain === 'avax' && selectedpoolType === 'idyp' && selectedPool.lock_time === "120 days" ? 'method-btn-active'
+                      : selectedchain === 'avax' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "120 days" &&  avaxPoolsDyp?.find((obj) => {
+                        return obj.lock_time === "120 days";
+                      }) ? 'method-btn'
+                      : selectedchain === 'avax' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "120 days" &&  !avaxPoolsDyp?.find((obj) => {
+                        return obj.lock_time === "120 days";
+                      }) ? 'method-btn-disabled'
+                      : selectedchain === 'avax' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "120 days" &&  avaxPoolsiDyp?.find((obj) => {
+                        return obj.lock_time === "120 days";
+                      }) ? 'method-btn'
+                      : selectedchain === 'avax' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "120 days" &&  !avaxPoolsiDyp?.find((obj) => {
+                        return obj.lock_time === "120 days";
+                      }) ? 'method-btn-disabled'
+                       : 'method-btn-disabled'
                     }
+
+
                   >
                     120 Days
                   </button>
