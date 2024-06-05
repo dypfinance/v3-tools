@@ -19,8 +19,8 @@ import StakeBscIDyp from "../../FARMINNG/bscConstantStakeiDyp";
 import StakeBsc from "../../FARMINNG/bscConstantStake";
 import StakeDypiusEth from "../../FARMINNG/constant-staking-dypius-new";
 import StakeDypiusEth1Phase2 from "../../FARMINNG/stakingDypiusEth1Phase2";
-import StakeDypiusEth2Phase2 from "../../FARMINNG/stakingDypiusEth1Phase2";
-import StakeDypiusEth3Phase2 from "../../FARMINNG/stakingDypiusEth1Phase2";
+import StakeDypiusEth2Phase2 from "../../FARMINNG/stakingDypiusEth2Phase2";
+import StakeDypiusEth3Phase2 from "../../FARMINNG/stakingDypiusEth3Phase2";
 import Vault from "../../FARMINNG/vault-new";
 import StakeNewEth from "../../FARMINNG/stakeNewEth";
 import BscFarmingFunc from "../../FARMINNG/BscFarmingFunc";
@@ -479,10 +479,7 @@ const EarnTopPicks = ({
       const sortedActiveiDYP = object2activeEth.sort(function (a, b) {
         return b.tvl_usd - a.tvl_usd && a.type === "idyp" && b.type === "idyp";
       });
-      // console.log(sortedActive);
-      // console.log([sortedActiveDYP[0], ...sortedActiveiDYP]);
-      // console.log(sortedActiveiDYP);
-
+   
       setActivePools([sortedActiveDYP[0], ...sortedActiveiDYP]);
       setTopPools([...object2activeEth, ...activeEth2]);
       setCawsCard(eth_result.data.stakingInfoCAWS);
@@ -723,26 +720,213 @@ const EarnTopPicks = ({
   const wbsc_address = "0x2170Ed0880ac9A755fd29B2688956BD959F933F8";
 
   const avax_address = "AVAX";
- 
 
-  const getClassName = (chain, poolType, lockTime, poolsDyp, poolsiDyp, dynamicLockTime) => {
-    if (lockTime === dynamicLockTime) return 'method-btn-active';
-  
-    const poolHasDynamicLock = poolsDyp?.some(obj => obj.lock_time === dynamicLockTime);
-    const pooliDypHasDynamicLock = poolsiDyp?.some(obj => obj.lock_time === dynamicLockTime);
-  
-    if (lockTime !== dynamicLockTime) {
-      if (poolType === 'dyp') {
-        return poolHasDynamicLock ? 'method-btn' : 'method-btn-disabled';
-      } else if (poolType === 'idyp') {
-        return pooliDypHasDynamicLock ? 'method-btn' : 'method-btn-disabled';
+  const getClassName = (
+    chain,
+    locktimeToCheck,
+    tokentype,
+    selectedPool,
+    ethDypPool,
+    ethiDypPool,
+    bnbDypPool,
+    bnbIdypPool,
+    avaxDyppool,
+    avaxiDypPool
+  ) => {
+    if (chain === "eth") {
+      if (tokentype === "dyp") {
+        if (locktimeToCheck === selectedPool.lock_time) {
+          return "method-btn-active";
+        } else if (
+          locktimeToCheck !== selectedPool.lock_time &&
+          ethDypPool?.find((obj) => {
+            return obj.lock_time === locktimeToCheck;
+          })
+        ) {
+          return "method-btn";
+        } else if (
+          locktimeToCheck !== selectedPool.lock_time &&
+          !ethDypPool?.find((obj) => {
+            return obj.lock_time === locktimeToCheck;
+          })
+        ) {
+          return "method-btn-disabled";
+        }
+      } else if (tokentype === "idyp") {
+        if (locktimeToCheck === selectedPool.lock_time) {
+          return "method-btn-active";
+        } else if (
+          locktimeToCheck !== selectedPool.lock_time &&
+          ethiDypPool?.find((obj) => {
+            return obj.lock_time === locktimeToCheck;
+          })
+        ) {
+          return "method-btn";
+        } else if (
+          locktimeToCheck !== selectedPool.lock_time &&
+          !ethiDypPool?.find((obj) => {
+            return obj.lock_time === locktimeToCheck;
+          })
+        ) {
+          return "method-btn-disabled";
+        }
+      }
+    } else if (chain === "bnb") {
+      if (tokentype === "dyp") {
+        if (locktimeToCheck === selectedPool.lock_time) {
+          return "method-btn-active";
+        } else if (
+          locktimeToCheck !== selectedPool.lock_time &&
+          bnbDypPool?.find((obj) => {
+            return obj.lock_time === locktimeToCheck;
+          })
+        ) {
+          return "method-btn";
+        } else if (
+          locktimeToCheck !== selectedPool.lock_time &&
+          !bnbDypPool?.find((obj) => {
+            return obj.lock_time === locktimeToCheck;
+          })
+        ) {
+          return "method-btn-disabled";
+        }
+      } else if (tokentype === "idyp") {
+        if (locktimeToCheck === selectedPool.lock_time) {
+          return "method-btn-active";
+        } else if (
+          locktimeToCheck !== selectedPool.lock_time &&
+          bnbIdypPool?.find((obj) => {
+            return obj.lock_time === locktimeToCheck;
+          })
+        ) {
+          return "method-btn";
+        } else if (
+          locktimeToCheck !== selectedPool.lock_time &&
+          !bnbIdypPool?.find((obj) => {
+            return obj.lock_time === locktimeToCheck;
+          })
+        ) {
+          return "method-btn-disabled";
+        }
+      }
+    } else if (chain === "avax") {
+      if (tokentype === "dyp") {
+        if (locktimeToCheck === selectedPool.lock_time) {
+          return "method-btn-active";
+        } else if (
+          locktimeToCheck !== selectedPool.lock_time &&
+          avaxDyppool?.find((obj) => {
+            return obj.lock_time === locktimeToCheck;
+          })
+        ) {
+          return "method-btn";
+        } else if (
+          locktimeToCheck !== selectedPool.lock_time &&
+          !avaxDyppool?.find((obj) => {
+            return obj.lock_time === locktimeToCheck;
+          })
+        ) {
+          return "method-btn-disabled";
+        }
+      } else if (tokentype === "idyp") {
+        if (locktimeToCheck === selectedPool.lock_time) {
+          return "method-btn-active";
+        } else if (
+          locktimeToCheck !== selectedPool.lock_time &&
+          avaxiDypPool?.find((obj) => {
+            return obj.lock_time === locktimeToCheck;
+          })
+        ) {
+          return "method-btn";
+        } else if (
+          locktimeToCheck !== selectedPool.lock_time &&
+          !avaxiDypPool?.find((obj) => {
+            return obj.lock_time === locktimeToCheck;
+          })
+        ) {
+          return "method-btn-disabled";
+        }
       }
     }
-  
-    return 'method-btn-disabled';
+
+    // if (lockTime === dynamicLockTime) return 'method-btn-active';
+
+    // const poolHasDynamicLock = poolsDyp?.some(obj => obj.lock_time === dynamicLockTime);
+    // const pooliDypHasDynamicLock = poolsiDyp?.some(obj => obj.lock_time === dynamicLockTime);
+
+    // if (lockTime !== dynamicLockTime) {
+    //   if (poolType === 'dyp') {
+    //     return poolHasDynamicLock ? 'method-btn' : 'method-btn-disabled';
+    //   } else if (poolType === 'idyp') {
+    //     return pooliDypHasDynamicLock ? 'method-btn' : 'method-btn-disabled';
+    //   }
+    // }
+
+    // return 'method-btn-disabled';
   };
 
- 
+  const handleSelectPool = (
+    selectedchain,
+    locktime,
+    selectedpoolType,
+    ethPoolsDyp,
+    ethPoolsiDyp,
+    bnbPoolsDyp,
+    bnbPoolsiDyp,
+    avaxPoolsDyp,
+    avaxPoolsiDyp
+  ) => {
+    if (selectedchain === "eth") {
+      if (selectedpoolType === "dyp") {
+        const result = ethPoolsDyp.filter((item) => {
+          return item.lock_time === locktime;
+        });
+     
+        if (result) {
+          setselectedPool(...result);
+        }
+      } else if (selectedpoolType === "idyp") {
+        const result = ethPoolsiDyp.filter((item) => {
+          return item.lock_time === locktime;
+        });
+        if (result) {
+          setselectedPool(...result);
+        }
+      }
+    } else if (selectedchain === "bnb") {
+      if (selectedpoolType === "dyp") {
+        const result = bnbPoolsDyp.filter((item) => {
+          return item.lock_time === locktime;
+        });
+        if (result) {
+          setselectedPool(...result);
+        }
+      } else if (selectedpoolType === "idyp") {
+        const result = bnbPoolsiDyp.filter((item) => {
+          return item.lock_time === locktime;
+        });
+        if (result) {
+          setselectedPool(...result);
+        }
+      }
+    } else if (selectedchain === "avax") {
+      if (selectedpoolType === "dyp") {
+        const result = avaxPoolsDyp.filter((item) => {
+          return item.lock_time === locktime;
+        });
+        if (result) {
+          setselectedPool(...result);
+        }
+      } else if (selectedpoolType === "idyp") {
+        const result = avaxPoolsiDyp.filter((item) => {
+          return item.lock_time === locktime;
+        });
+        if (result) {
+          setselectedPool(...result);
+        }
+      }
+    }
+  };
 
   const stakeArrayiDYPActive = [
     window.constant_staking_idyp_3,
@@ -750,13 +934,9 @@ const EarnTopPicks = ({
   ];
 
   const withdrawFeeiDyp = [1, 0, 0, 0];
- 
-  
 
   const { LP_IDs_V2Avax, LP_IDs_V2BNB } = window;
-
- 
-
+  
   const LP_IDBNB_Array = [
     LP_IDs_V2BNB.wbnb[0],
     LP_IDs_V2BNB.wbnb[1],
@@ -765,9 +945,7 @@ const EarnTopPicks = ({
     LP_IDs_V2BNB.wbnb[4],
   ];
 
- 
   //Buyback New
- 
 
   const stakearrayStakeBsciDyp2 = [
     window.constant_stakingidyp_6,
@@ -784,10 +962,6 @@ const EarnTopPicks = ({
     "28 February 2023",
     "28 February 2023",
   ];
-
- 
-
- 
 
   const feeUarrayStakeAvaxiDyp = [0, 0.25, 0, 0.25];
 
@@ -809,7 +983,6 @@ const EarnTopPicks = ({
     window.constant_staking_idypavax_1,
   ];
 
- 
   const expirationArray = [
     "28 February 2023",
     "28 February 2023",
@@ -1013,13 +1186,7 @@ const EarnTopPicks = ({
     fetchStakingData();
   }, [topList, chain, coinbase, networkId, chainId, expiredPools, listType]);
 
-  // useEffect(() => {
-  //   console.log("Helloooo");
-  //   setActiveCard(null)
-
-  //  setDetails(null)
-  // }, [topList]);
-
+ 
   const handleCardIndexStake = (index) => {
     if (topList === "Staking") {
       if (index >= 3) {
@@ -1066,7 +1233,6 @@ const EarnTopPicks = ({
     fetchBnbStaking();
   }, []);
 
- 
   return (
     <>
       <div className={`row w-100 justify-content-center gap-4`}>
@@ -4110,287 +4276,147 @@ const EarnTopPicks = ({
                 </div>
                 <div className="locktimewrapper align-items-center gap-2">
                   <button
-                    className={
-                      selectedchain === "eth" &&
-                      ethPools?.find((obj) => {
-                        return obj.lock_time === "No lock";
-                      })
-                        ? "method-btn-active"
-                        : selectedchain === "bnb" &&
-                          bnbPools?.find((obj) => {
-                            return obj.lock_time === "No lock";
-                          })
-                        ? "method-btn-active"
-                        : selectedchain === "avax" &&
-                          avaxPools?.find((obj) => {
-                            return obj.lock_time === "No lock";
-                          })
-                        ? "method-btn-active"
-                        : "method-btn-disabled"
-                    }
+                    className={getClassName(
+                      selectedchain,
+                      "No lock",
+                      selectedpoolType,
+                      selectedPool,
+                      ethPoolsDyp,
+                      ethPoolsiDyp,
+                      bnbPoolsDyp,
+                      bnbPoolsiDyp,
+                      avaxPoolsDyp,
+                      avaxPoolsiDyp
+                    )}
+                    onClick={() => [
+                      handleSelectPool(
+                        selectedchain,
+                        "No lock",
+                        selectedpoolType,
+                        ethPoolsDyp,
+                        ethPoolsiDyp,
+                        bnbPoolsDyp,
+                        bnbPoolsiDyp,
+                        avaxPoolsDyp,
+                        avaxPoolsiDyp
+                      ),
+                    ]}
                   >
                     Flexible
                   </button>
                   <button
-                    // className={
-                    //   selectedchain === "eth" &&
-                    //   ethPools?.find((obj) => {
-                    //     return obj.lock_time === "30 days";
-                    //   })
-                    //     ? "method-btn-active"
-                    //     : selectedchain === "bnb" &&
-                    //       bnbPools?.find((obj) => {
-                    //         return obj.lock_time === "30 days";
-                    //       })
-                    //     ? "method-btn-active"
-                    //     : selectedchain === "avax" &&
-                    //       avaxPools?.find((obj) => {
-                    //         return obj.lock_time === "30 days";
-                    //       })
-                    //     ? "method-btn-active"
-                    //     : "method-btn-disabled"
-                    // }
-                    className={
-                      selectedchain === 'eth' && selectedpoolType === 'dyp' && selectedPool.lock_time === "30 days" ? 'method-btn-active'
-                      : selectedchain === 'eth' && selectedpoolType === 'idyp' && selectedPool.lock_time === "30 days" ? 'method-btn-active'
-                      : selectedchain === 'eth' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "30 days" &&  ethPoolsDyp?.find((obj) => {
-                        return obj.lock_time === "30 days";
-                      }) ? 'method-btn'
-                      : selectedchain === 'eth' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "30 days" &&  !ethPoolsDyp?.find((obj) => {
-                        return obj.lock_time === "30 days";
-                      }) ? 'method-btn-disabled'
-                      : selectedchain === 'eth' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "30 days" &&  ethPoolsiDyp?.find((obj) => {
-                        return obj.lock_time === "30 days";
-                      }) ? 'method-btn'
-                      : selectedchain === 'eth' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "30 days" &&  !ethPoolsiDyp?.find((obj) => {
-                        return obj.lock_time === "30 days";
-                      }) ? 'method-btn-disabled'
-                      
-                      : selectedchain === 'bnb' && selectedpoolType === 'dyp' && selectedPool.lock_time === "30 days" ? 'method-btn-active'
-                      : selectedchain === 'bnb' && selectedpoolType === 'idyp' && selectedPool.lock_time === "30 days" ? 'method-btn-active'
-                      : selectedchain === 'bnb' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "30 days" &&  bnbPoolsDyp?.find((obj) => {
-                        return obj.lock_time === "30 days";
-                      }) ? 'method-btn'
-                      : selectedchain === 'bnb' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "30 days" &&  !bnbPoolsDyp?.find((obj) => {
-                        return obj.lock_time === "30 days";
-                      }) ? 'method-btn-disabled'
-                      : selectedchain === 'bnb' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "30 days" &&  bnbPoolsiDyp?.find((obj) => {
-                        return obj.lock_time === "30 days";
-                      }) ? 'method-btn'
-                      : selectedchain === 'bnb' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "30 days" &&  !bnbPoolsiDyp?.find((obj) => {
-                        return obj.lock_time === "30 days";
-                      }) ? 'method-btn-disabled'
-
-                      : selectedchain === 'avax' && selectedpoolType === 'dyp' && selectedPool.lock_time === "30 days" ? 'method-btn-active'
-                      : selectedchain === 'avax' && selectedpoolType === 'idyp' && selectedPool.lock_time === "30 days" ? 'method-btn-active'
-                      : selectedchain === 'avax' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "30 days" &&  avaxPoolsDyp?.find((obj) => {
-                        return obj.lock_time === "30 days";
-                      }) ? 'method-btn'
-                      : selectedchain === 'avax' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "30 days" &&  !avaxPoolsDyp?.find((obj) => {
-                        return obj.lock_time === "30 days";
-                      }) ? 'method-btn-disabled'
-                      : selectedchain === 'avax' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "30 days" &&  avaxPoolsiDyp?.find((obj) => {
-                        return obj.lock_time === "30 days";
-                      }) ? 'method-btn'
-                      : selectedchain === 'avax' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "30 days" &&  !avaxPoolsiDyp?.find((obj) => {
-                        return obj.lock_time === "30 days";
-                      }) ? 'method-btn-disabled'
-                       : 'method-btn-disabled'
-                    }
-
+                    className={getClassName(
+                      selectedchain,
+                      "30 days",
+                      selectedpoolType,
+                      selectedPool,
+                      ethPoolsDyp,
+                      ethPoolsiDyp,
+                      bnbPoolsDyp,
+                      bnbPoolsiDyp,
+                      avaxPoolsDyp,
+                      avaxPoolsiDyp
+                    )}
+                    onClick={() => [
+                      handleSelectPool(
+                        selectedchain,
+                        "30 days",
+                        selectedpoolType,
+                        ethPoolsDyp,
+                        ethPoolsiDyp,
+                        bnbPoolsDyp,
+                        bnbPoolsiDyp,
+                        avaxPoolsDyp,
+                        avaxPoolsiDyp
+                      ),
+                    ]}
                   >
                     30 Days
                   </button>
                   <button
-                    className={
-                      selectedchain === 'eth' && selectedpoolType === 'dyp' && selectedPool.lock_time === "60 days" ? 'method-btn-active'
-                      : selectedchain === 'eth' && selectedpoolType === 'idyp' && selectedPool.lock_time === "60 days" ? 'method-btn-active'
-                      : selectedchain === 'eth' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "60 days" &&  ethPoolsDyp?.find((obj) => {
-                        return obj.lock_time === "60 days";
-                      }) ? 'method-btn'
-                      : selectedchain === 'eth' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "60 days" &&  !ethPoolsDyp?.find((obj) => {
-                        return obj.lock_time === "60 days";
-                      }) ? 'method-btn-disabled'
-                      : selectedchain === 'eth' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "60 days" &&  ethPoolsiDyp?.find((obj) => {
-                        return obj.lock_time === "60 days";
-                      }) ? 'method-btn'
-                      : selectedchain === 'eth' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "60 days" &&  !ethPoolsiDyp?.find((obj) => {
-                        return obj.lock_time === "60 days";
-                      }) ? 'method-btn-disabled'
-                      
-                      : selectedchain === 'bnb' && selectedpoolType === 'dyp' && selectedPool.lock_time === "60 days" ? 'method-btn-active'
-                      : selectedchain === 'bnb' && selectedpoolType === 'idyp' && selectedPool.lock_time === "60 days" ? 'method-btn-active'
-                      : selectedchain === 'bnb' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "60 days" &&  bnbPoolsDyp?.find((obj) => {
-                        return obj.lock_time === "60 days";
-                      }) ? 'method-btn'
-                      : selectedchain === 'bnb' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "60 days" &&  !bnbPoolsDyp?.find((obj) => {
-                        return obj.lock_time === "60 days";
-                      }) ? 'method-btn-disabled'
-                      : selectedchain === 'bnb' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "60 days" &&  bnbPoolsiDyp?.find((obj) => {
-                        return obj.lock_time === "60 days";
-                      }) ? 'method-btn'
-                      : selectedchain === 'bnb' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "60 days" &&  !bnbPoolsiDyp?.find((obj) => {
-                        return obj.lock_time === "60 days";
-                      }) ? 'method-btn-disabled'
-
-                      : selectedchain === 'avax' && selectedpoolType === 'dyp' && selectedPool.lock_time === "60 days" ? 'method-btn-active'
-                      : selectedchain === 'avax' && selectedpoolType === 'idyp' && selectedPool.lock_time === "60 days" ? 'method-btn-active'
-                      : selectedchain === 'avax' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "60 days" &&  avaxPoolsDyp?.find((obj) => {
-                        return obj.lock_time === "60 days";
-                      }) ? 'method-btn'
-                      : selectedchain === 'avax' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "60 days" &&  !avaxPoolsDyp?.find((obj) => {
-                        return obj.lock_time === "60 days";
-                      }) ? 'method-btn-disabled'
-                      : selectedchain === 'avax' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "60 days" &&  avaxPoolsiDyp?.find((obj) => {
-                        return obj.lock_time === "60 days";
-                      }) ? 'method-btn'
-                      : selectedchain === 'avax' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "60 days" &&  !avaxPoolsiDyp?.find((obj) => {
-                        return obj.lock_time === "60 days";
-                      }) ? 'method-btn-disabled'
-                       : 'method-btn-disabled'
-                    }
+                    className={getClassName(
+                      selectedchain,
+                      "60 days",
+                      selectedpoolType,
+                      selectedPool,
+                      ethPoolsDyp,
+                      ethPoolsiDyp,
+                      bnbPoolsDyp,
+                      bnbPoolsiDyp,
+                      avaxPoolsDyp,
+                      avaxPoolsiDyp
+                    )}
+                    onClick={() => [
+                      handleSelectPool(
+                        selectedchain,
+                        "60 days",
+                        selectedpoolType,
+                        ethPoolsDyp,
+                        ethPoolsiDyp,
+                        bnbPoolsDyp,
+                        bnbPoolsiDyp,
+                        avaxPoolsDyp,
+                        avaxPoolsiDyp
+                      ),
+                    ]}
                   >
                     60 Days
                   </button>
                   <button
-                    // className={
-                    //   selectedchain === "eth" &&
-                    //   ethPools?.find((obj) => {
-                    //     return obj.lock_time === "90 days";
-                    //   })
-                    //     ? "method-btn-active"
-                    //     : selectedchain === "bnb" &&
-                    //       bnbPools?.find((obj) => {
-                    //         return obj.lock_time === "90 days";
-                    //       })
-                    //     ? "method-btn-active"
-                    //     : selectedchain === "avax" &&
-                    //       avaxPools?.find((obj) => {
-                    //         return obj.lock_time === "90 days";
-                    //       })
-                    //     ? "method-btn-active"
-                    //     : "method-btn-disabled"
-                    // }
-
-                    className={
-                      selectedchain === 'eth' && selectedpoolType === 'dyp' && selectedPool.lock_time === "90 days" ? 'method-btn-active'
-                      : selectedchain === 'eth' && selectedpoolType === 'idyp' && selectedPool.lock_time === "90 days" ? 'method-btn-active'
-                      : selectedchain === 'eth' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "90 days" &&  ethPoolsDyp?.find((obj) => {
-                        return obj.lock_time === "90 days";
-                      }) ? 'method-btn'
-                      : selectedchain === 'eth' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "90 days" &&  !ethPoolsDyp?.find((obj) => {
-                        return obj.lock_time === "90 days";
-                      }) ? 'method-btn-disabled'
-                      : selectedchain === 'eth' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "90 days" &&  ethPoolsiDyp?.find((obj) => {
-                        return obj.lock_time === "90 days";
-                      }) ? 'method-btn'
-                      : selectedchain === 'eth' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "90 days" &&  !ethPoolsiDyp?.find((obj) => {
-                        return obj.lock_time === "90 days";
-                      }) ? 'method-btn-disabled'
-                      
-                      : selectedchain === 'bnb' && selectedpoolType === 'dyp' && selectedPool.lock_time === "90 days" ? 'method-btn-active'
-                      : selectedchain === 'bnb' && selectedpoolType === 'idyp' && selectedPool.lock_time === "90 days" ? 'method-btn-active'
-                      : selectedchain === 'bnb' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "90 days" &&  bnbPoolsDyp?.find((obj) => {
-                        return obj.lock_time === "90 days";
-                      }) ? 'method-btn'
-                      : selectedchain === 'bnb' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "90 days" &&  !bnbPoolsDyp?.find((obj) => {
-                        return obj.lock_time === "90 days";
-                      }) ? 'method-btn-disabled'
-                      : selectedchain === 'bnb' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "90 days" &&  bnbPoolsiDyp?.find((obj) => {
-                        return obj.lock_time === "90 days";
-                      }) ? 'method-btn'
-                      : selectedchain === 'bnb' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "90 days" &&  !bnbPoolsiDyp?.find((obj) => {
-                        return obj.lock_time === "90 days";
-                      }) ? 'method-btn-disabled'
-
-                      : selectedchain === 'avax' && selectedpoolType === 'dyp' && selectedPool.lock_time === "90 days" ? 'method-btn-active'
-                      : selectedchain === 'avax' && selectedpoolType === 'idyp' && selectedPool.lock_time === "90 days" ? 'method-btn-active'
-                      : selectedchain === 'avax' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "90 days" &&  avaxPoolsDyp?.find((obj) => {
-                        return obj.lock_time === "90 days";
-                      }) ? 'method-btn'
-                      : selectedchain === 'avax' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "90 days" &&  !avaxPoolsDyp?.find((obj) => {
-                        return obj.lock_time === "90 days";
-                      }) ? 'method-btn-disabled'
-                      : selectedchain === 'avax' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "90 days" &&  avaxPoolsiDyp?.find((obj) => {
-                        return obj.lock_time === "90 days";
-                      }) ? 'method-btn'
-                      : selectedchain === 'avax' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "90 days" &&  !avaxPoolsiDyp?.find((obj) => {
-                        return obj.lock_time === "90 days";
-                      }) ? 'method-btn-disabled'
-                       : 'method-btn-disabled'
-                    }
+                    className={getClassName(
+                      selectedchain,
+                      "90 days",
+                      selectedpoolType,
+                      selectedPool,
+                      ethPoolsDyp,
+                      ethPoolsiDyp,
+                      bnbPoolsDyp,
+                      bnbPoolsiDyp,
+                      avaxPoolsDyp,
+                      avaxPoolsiDyp
+                    )}
+                    onClick={() => [
+                      handleSelectPool(
+                        selectedchain,
+                        "90 days",
+                        selectedpoolType,
+                        ethPoolsDyp,
+                        ethPoolsiDyp,
+                        bnbPoolsDyp,
+                        bnbPoolsiDyp,
+                        avaxPoolsDyp,
+                        avaxPoolsiDyp
+                      ),
+                    ]}
                   >
                     90 Days
                   </button>
                   <button
-                    // className={
-                    //   selectedchain === "eth" &&
-                    //   ethPools?.find((obj) => {
-                    //     return obj.lock_time === "120 days";
-                    //   })
-                    //     ? "method-btn-active"
-                    //     : selectedchain === "bnb" &&
-                    //       bnbPools?.find((obj) => {
-                    //         return obj.lock_time === "120 days";
-                    //       })
-                    //     ? "method-btn-active"
-                    //     : selectedchain === "avax" &&
-                    //       avaxPools?.find((obj) => {
-                    //         return obj.lock_time === "120 days";
-                    //       })
-                    //     ? "method-btn-active"
-                    //     : "method-btn-disabled"
-                    // }
-
-                    className={
-                      selectedchain === 'eth' && selectedpoolType === 'dyp' && selectedPool.lock_time === "120 days" ? 'method-btn-active'
-                      : selectedchain === 'eth' && selectedpoolType === 'idyp' && selectedPool.lock_time === "120 days" ? 'method-btn-active'
-                      : selectedchain === 'eth' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "120 days" &&  ethPoolsDyp?.find((obj) => {
-                        return obj.lock_time === "120 days";
-                      }) ? 'method-btn'
-                      : selectedchain === 'eth' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "120 days" &&  !ethPoolsDyp?.find((obj) => {
-                        return obj.lock_time === "120 days";
-                      }) ? 'method-btn-disabled'
-                      : selectedchain === 'eth' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "120 days" &&  ethPoolsiDyp?.find((obj) => {
-                        return obj.lock_time === "120 days";
-                      }) ? 'method-btn'
-                      : selectedchain === 'eth' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "120 days" &&  !ethPoolsiDyp?.find((obj) => {
-                        return obj.lock_time === "120 days";
-                      }) ? 'method-btn-disabled'
-                      
-                      : selectedchain === 'bnb' && selectedpoolType === 'dyp' && selectedPool.lock_time === "120 days" ? 'method-btn-active'
-                      : selectedchain === 'bnb' && selectedpoolType === 'idyp' && selectedPool.lock_time === "120 days" ? 'method-btn-active'
-                      : selectedchain === 'bnb' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "120 days" &&  bnbPoolsDyp?.find((obj) => {
-                        return obj.lock_time === "120 days";
-                      }) ? 'method-btn'
-                      : selectedchain === 'bnb' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "120 days" &&  !bnbPoolsDyp?.find((obj) => {
-                        return obj.lock_time === "120 days";
-                      }) ? 'method-btn-disabled'
-                      : selectedchain === 'bnb' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "120 days" &&  bnbPoolsiDyp?.find((obj) => {
-                        return obj.lock_time === "120 days";
-                      }) ? 'method-btn'
-                      : selectedchain === 'bnb' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "120 days" &&  !bnbPoolsiDyp?.find((obj) => {
-                        return obj.lock_time === "120 days";
-                      }) ? 'method-btn-disabled'
-
-                      : selectedchain === 'avax' && selectedpoolType === 'dyp' && selectedPool.lock_time === "120 days" ? 'method-btn-active'
-                      : selectedchain === 'avax' && selectedpoolType === 'idyp' && selectedPool.lock_time === "120 days" ? 'method-btn-active'
-                      : selectedchain === 'avax' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "120 days" &&  avaxPoolsDyp?.find((obj) => {
-                        return obj.lock_time === "120 days";
-                      }) ? 'method-btn'
-                      : selectedchain === 'avax' && selectedpoolType === 'dyp' && selectedPool.lock_time !== "120 days" &&  !avaxPoolsDyp?.find((obj) => {
-                        return obj.lock_time === "120 days";
-                      }) ? 'method-btn-disabled'
-                      : selectedchain === 'avax' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "120 days" &&  avaxPoolsiDyp?.find((obj) => {
-                        return obj.lock_time === "120 days";
-                      }) ? 'method-btn'
-                      : selectedchain === 'avax' && selectedpoolType === 'idyp' && selectedPool.lock_time !== "120 days" &&  !avaxPoolsiDyp?.find((obj) => {
-                        return obj.lock_time === "120 days";
-                      }) ? 'method-btn-disabled'
-                       : 'method-btn-disabled'
-                    }
-
-
+                    className={getClassName(
+                      selectedchain,
+                      "120 days",
+                      selectedpoolType,
+                      selectedPool,
+                      ethPoolsDyp,
+                      ethPoolsiDyp,
+                      bnbPoolsDyp,
+                      bnbPoolsiDyp,
+                      avaxPoolsDyp,
+                      avaxPoolsiDyp
+                    )}
+                    onClick={() => [
+                      handleSelectPool(
+                        selectedchain,
+                        "120 days",
+                        selectedpoolType,
+                        ethPoolsDyp,
+                        ethPoolsiDyp,
+                        bnbPoolsDyp,
+                        bnbPoolsiDyp,
+                        avaxPoolsDyp,
+                        avaxPoolsiDyp
+                      ),
+                    ]}
                   >
                     120 Days
                   </button>
@@ -4745,7 +4771,112 @@ const EarnTopPicks = ({
                       setDetails(999);
                     }}
                   />
-                ) : (
+                )  : topList === "Staking" &&
+                selectedPool?.id ===
+                  "0xC8075092Cc46E176B1F3c0D0EB8223F1e46555B0" &&
+                chain === "eth" ? (
+                <StakeDypiusEth1Phase2
+                  selectedPool={selectedPool}
+                  selectedTab={selectedTab}
+                  staking={window.constant_staking_dypius_eth1}
+                  apr={selectedPool?.apy_percent}
+                  liquidity={eth_address}
+                  expiration_time={"09 Nov 2024"}
+                  finalApr={selectedPool?.apy_performancefee}
+                  lockTime={
+                    selectedPool?.lock_time?.split(" ")[0] === "No"
+                      ? "No Lock"
+                      : parseInt(selectedPool?.lock_time?.split(" ")[0])
+                  }
+                  listType={listType}
+                  other_info={false}
+                  fee={selectedPool?.performancefee}
+                  is_wallet_connected={isConnected}
+                  coinbase={coinbase}
+                  the_graph_result={the_graph_result}
+                  chainId={chainId}
+                  handleConnection={handleConnection}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  expired={false}
+                  referrer={referrer}
+                  onConnectWallet={() => {
+                    setShowDetails(false);
+                    onConnectWallet();
+                    setselectedPool([]);
+                    setDetails(999);
+                  }}
+                />
+              )  : topList === "Staking" &&
+              selectedPool?.id ===
+                "0xC7075092Cc46E176B1F3c0D0EB8223F1e46555B0" &&
+              chain === "eth" ? (
+              <StakeDypiusEth2Phase2
+                selectedPool={selectedPool}
+                selectedTab={selectedTab}
+                staking={window.constant_staking_dypius_eth1}
+                apr={selectedPool?.apy_percent}
+                liquidity={eth_address}
+                expiration_time={"09 Nov 2024"}
+                finalApr={selectedPool?.apy_performancefee}
+                lockTime={
+                  selectedPool?.lock_time?.split(" ")[0] === "No"
+                    ? "No Lock"
+                    : parseInt(selectedPool?.lock_time?.split(" ")[0])
+                }
+                listType={listType}
+                other_info={false}
+                fee={selectedPool?.performancefee}
+                is_wallet_connected={isConnected}
+                coinbase={coinbase}
+                the_graph_result={the_graph_result}
+                chainId={chainId}
+                handleConnection={handleConnection}
+                handleSwitchNetwork={handleSwitchNetwork}
+                expired={false}
+                referrer={referrer}
+                onConnectWallet={() => {
+                  setShowDetails(false);
+                  onConnectWallet();
+                  setselectedPool([]);
+                  setDetails(999);
+                }}
+              />
+            )   : topList === "Staking" &&
+            selectedPool?.id ===
+              "0xC6075092Cc46E176B1F3c0D0EB8223F1e46555B0" &&
+            chain === "eth" ? (
+            <StakeDypiusEth3Phase2
+              selectedPool={selectedPool}
+              selectedTab={selectedTab}
+              staking={window.constant_staking_dypius_eth1}
+              apr={selectedPool?.apy_percent}
+              liquidity={eth_address}
+              expiration_time={"09 Nov 2024"}
+              finalApr={selectedPool?.apy_performancefee}
+              lockTime={
+                selectedPool?.lock_time?.split(" ")[0] === "No"
+                  ? "No Lock"
+                  : parseInt(selectedPool?.lock_time?.split(" ")[0])
+              }
+              listType={listType}
+              other_info={false}
+              fee={selectedPool?.performancefee}
+              is_wallet_connected={isConnected}
+              coinbase={coinbase}
+              the_graph_result={the_graph_result}
+              chainId={chainId}
+              handleConnection={handleConnection}
+              handleSwitchNetwork={handleSwitchNetwork}
+              expired={false}
+              referrer={referrer}
+              onConnectWallet={() => {
+                setShowDetails(false);
+                onConnectWallet();
+                setselectedPool([]);
+                setDetails(999);
+              }}
+            />
+          ) : (
                   <></>
                 )}
               </div>
