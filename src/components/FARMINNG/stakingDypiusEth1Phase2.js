@@ -24,7 +24,6 @@ import { ClickAwayListener } from "@material-ui/core";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
 import axios from "axios";
 
- 
 const StakeDypiusEth1Phase2 = ({
   selectedPool,
   selectedTab,
@@ -650,7 +649,6 @@ const StakeDypiusEth1Phase2 = ({
 
   const getApproxReturn = (depositAmount, days) => {
     let APY = getAPY() - fee_s;
- 
 
     return ((depositAmount * apr) / 100 / 365) * days;
   };
@@ -827,7 +825,6 @@ const StakeDypiusEth1Phase2 = ({
 
   return (
     <div className="d-flex flex-column gap-2 w-100">
-
       <div className="separator my-2"></div>
       {selectedTab === "deposit" ? (
         <div className="d-flex flex-column w-100 gap-2">
@@ -1087,15 +1084,13 @@ const StakeDypiusEth1Phase2 = ({
                 <div className="d-flex align-items-center gap-1">
                   <span className="bal-smallTxt">Start date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    09 Nov 2023{" "}
-                 
+                    07 Jun 2024{" "}
                   </span>
                 </div>
                 <div className="d-flex align-items-center gap-1">
                   <span className="bal-smallTxt">End date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
                     {expiration_time}{" "}
-              
                   </span>
                 </div>
               </div>
@@ -1127,7 +1122,7 @@ const StakeDypiusEth1Phase2 = ({
               style={{ width: "fit-content" }}
             >
               {" "}
-             {depositLoading ? (
+              {depositLoading ? (
                 <div
                   class="spinner-border spinner-border-sm text-light"
                   role="status"
@@ -1142,7 +1137,7 @@ const StakeDypiusEth1Phase2 = ({
                 <>Success</>
               ) : (
                 <>Failed</>
-              )}  
+              )}
             </button>
           )}
         </div>
@@ -1347,15 +1342,13 @@ const StakeDypiusEth1Phase2 = ({
                 <div className="d-flex align-items-center gap-1">
                   <span className="bal-smallTxt">Start date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    09 Nov 2023{" "}
-                  
+                    07 Jun 2024{" "}
                   </span>
                 </div>
                 <div className="d-flex align-items-center gap-1">
                   <span className="bal-smallTxt">End date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
                     {expiration_time}{" "}
-                
                   </span>
                 </div>
               </div>

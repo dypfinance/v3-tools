@@ -4781,7 +4781,7 @@ const EarnTopPicks = ({
                   staking={window.constant_staking_dypius_eth1}
                   apr={selectedPool?.apy_percent}
                   liquidity={eth_address}
-                  expiration_time={"09 Nov 2024"}
+                  expiration_time={"07 Jun 2025"}
                   finalApr={selectedPool?.apy_performancefee}
                   lockTime={
                     selectedPool?.lock_time?.split(" ")[0] === "No"
@@ -4816,7 +4816,7 @@ const EarnTopPicks = ({
                 staking={window.constant_staking_dypius_eth1}
                 apr={selectedPool?.apy_percent}
                 liquidity={eth_address}
-                expiration_time={"09 Nov 2024"}
+                expiration_time={"07 Jun 2025"}
                 finalApr={selectedPool?.apy_performancefee}
                 lockTime={
                   selectedPool?.lock_time?.split(" ")[0] === "No"
@@ -4851,7 +4851,7 @@ const EarnTopPicks = ({
               staking={window.constant_staking_dypius_eth1}
               apr={selectedPool?.apy_percent}
               liquidity={eth_address}
-              expiration_time={"09 Nov 2024"}
+              expiration_time={"07 Jun 2025"}
               finalApr={selectedPool?.apy_performancefee}
               lockTime={
                 selectedPool?.lock_time?.split(" ")[0] === "No"

@@ -1088,7 +1088,7 @@ const StakeDypiusEth2Phase2 = ({
                 <div className="d-flex align-items-center gap-1">
                   <span className="bal-smallTxt">Start date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    09 Nov 2023{" "}
+                  07 Jun 2024{" "}
                  
                   </span>
                 </div>
@@ -1348,7 +1348,7 @@ const StakeDypiusEth2Phase2 = ({
                 <div className="d-flex align-items-center gap-1">
                   <span className="bal-smallTxt">Start date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    09 Nov 2023{" "}
+                  07 Jun 2024{" "}
                   
                   </span>
                 </div>

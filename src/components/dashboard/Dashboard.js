@@ -22,6 +22,7 @@ import StakeAvaxIDyp from "../FARMINNG/stakeAvaxiDyp";
 import StakeDypiusEth from "../FARMINNG/constant-staking-dypius-new";
 import StakeDypiusAvax from "../FARMINNG/stakeDypiusAvax";
 import StakeDypiusBsc from "../FARMINNG/bscConstantStakeDypius";
+import StakeDypiusEth3Phase2 from "../FARMINNG/stakingDypiusEth3Phase2";
 import InitConstantStakingiDYP from "../FARMINNG/constant-staking-idyp-new-front";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
@@ -86,6 +87,26 @@ const Dashboard = ({
   let premiumDay = new Date("2024-04-17T15:00:00.000+02:00");
 
   const { BigNumber } = window;
+
+  const phase2_pools = [
+    {
+      id: "0xC6075092Cc46E176B1F3c0D0EB8223F1e46555B0",
+      apy_percent: 25,
+      tvl_usd: 4888682.3565666875,
+      link_logo: "https://www.dypius.com/logo192.png",
+      link_pair: "https://app.dyp.finance/constant-staking-3",
+      pool_name: "DYP Constant Staking ETH",
+      pair_name: "DYP",
+      return_types: "iDYP",
+      lock_time: "90 days",
+      expired: "No",
+      new_pool: "Yes",
+      apy_performancefee: 25,
+      performancefee: 0,
+      type: "dyp",
+      chain: "eth",
+    },
+  ];
 
   const fetchUserPools = async () => {
     if (coinbase && coinbase.includes("0x")) {
@@ -304,7 +325,11 @@ const Dashboard = ({
         };
       });
 
-      const allpoolsEthereum = [...ethereumDyp, ...ethereumIdyp];
+      const allpoolsEthereum = [
+        // ...ethereumDyp,
+        ...ethereumIdyp,
+        ...phase2_pools,
+      ];
       const object2Ethereum = allpoolsEthereum.map((item) => {
         return {
           ...item,
@@ -645,13 +670,13 @@ const Dashboard = ({
                               tvl={
                                 item.type === "staking" &&
                                 item.pair_name === "ETH"
-                                  ? "$" +getFormattedNumber(totalTvlETH)
+                                  ? "$" + getFormattedNumber(totalTvlETH)
                                   : item.type === "staking" &&
                                     item.pair_name === "BNB"
-                                  ? "$" +getFormattedNumber(totalTvlBNB)
+                                  ? "$" + getFormattedNumber(totalTvlBNB)
                                   : item.pair_name === "AVAX" &&
                                     item.type === "staking"
-                                  ? "$" +getFormattedNumber(totalTvlAVAX)
+                                  ? "$" + getFormattedNumber(totalTvlAVAX)
                                   : item.tvl_usd === "--"
                                   ? item.tvl_usd
                                   : "$" + getFormattedNumber(item.tvl_usd)
@@ -823,13 +848,13 @@ const Dashboard = ({
                               tvl={
                                 item.type === "staking" &&
                                 item.pair_name === "ETH"
-                                  ? "$" +getFormattedNumber(totalTvlETH)
+                                  ? "$" + getFormattedNumber(totalTvlETH)
                                   : item.type === "staking" &&
                                     item.pair_name === "BNB"
-                                  ? "$" +getFormattedNumber(totalTvlBNB)
+                                  ? "$" + getFormattedNumber(totalTvlBNB)
                                   : item.pair_name === "AVAX" &&
                                     item.type === "staking"
-                                  ? "$" +getFormattedNumber(totalTvlAVAX)
+                                  ? "$" + getFormattedNumber(totalTvlAVAX)
                                   : item.tvl_usd === "--"
                                   ? item.tvl_usd
                                   : "$" + getFormattedNumber(item.tvl_usd)
@@ -1270,15 +1295,15 @@ const Dashboard = ({
                   />
                 ) : activeCard &&
                   selectedPool?.id ===
-                    "0xC9075092Cc46E176B1F3c0D0EB8223F1e46555B0" &&
+                    "0xC6075092Cc46E176B1F3c0D0EB8223F1e46555B0" &&
                   selectedPool.name !== "AVAX" ? (
-                  <StakeDypiusEth
+                  <StakeDypiusEth3Phase2
                     selectedPool={selectedPool}
                     selectedTab={selectedTab}
                     staking={window.constant_staking_dypius_eth1}
                     apr={selectedPool?.apy_percent}
                     liquidity={eth_address}
-                    expiration_time={"09 Nov 2024"}
+                    expiration_time={"07 Jun 2025"}
                     finalApr={selectedPool?.apy_performancefee}
                     lockTime={
                       selectedPool?.lock_time?.split(" ")[0] === "No"
