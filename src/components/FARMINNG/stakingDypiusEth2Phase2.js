@@ -560,7 +560,14 @@ const StakeDypiusEth2Phase2 = ({
         setdepositLoading(false);
         setdepositStatus("success");
         refreshBalance();
+
+        setTimeout(() => {
+          setdepositStatus("initial");
+        setdepositAmount("");
+      }, 5000);
+
       })
+    
       .catch((e) => {
         setdepositLoading(false);
         setdepositStatus("fail");
@@ -584,6 +591,10 @@ const StakeDypiusEth2Phase2 = ({
         setwithdrawLoading(false);
         setwithdrawStatus("success");
         refreshBalance();
+        setTimeout(() => {
+          setwithdrawStatus("initial"); 
+          setwithdrawAmount("");
+        }, 5000);
       })
       .catch((e) => {
         setwithdrawLoading(false);
@@ -609,6 +620,9 @@ const StakeDypiusEth2Phase2 = ({
         setclaimLoading(false);
         setpendingDivs(getFormattedNumber(0, 6));
         refreshBalance();
+        setTimeout(() => {
+          setclaimStatus("initial");
+        }, 5000);
       })
       .catch((e) => {
         setclaimStatus("failed");
@@ -681,6 +695,9 @@ const StakeDypiusEth2Phase2 = ({
         setreInvestLoading(false);
         setpendingDivs(getFormattedNumber(0, 6));
         refreshBalance();
+        setTimeout(() => {
+          setreInvestStatus("initial");
+        }, 10000);
       })
       .catch((e) => {
         setreInvestStatus("failed");
@@ -992,7 +1009,7 @@ const StakeDypiusEth2Phase2 = ({
                     <div className="d-flex flex-column align-items-baseline">
                       <span className="bal-smallTxt">Rewards</span>
                       <span className="bal-bigTxt2">
-                        {getFormattedNumber(pendingDivs)} DYP
+                        {getFormattedNumber(pendingDivs,5)} DYP
                       </span>
                     </div>
                     <button
@@ -1258,7 +1275,7 @@ const StakeDypiusEth2Phase2 = ({
                 <div className="d-flex flex-column align-items-baseline">
                   <span className="bal-smallTxt">Rewards</span>
                   <span className="bal-bigTxt2">
-                    {getFormattedNumber(pendingDivs)} DYP
+                    {getFormattedNumber(pendingDivs,5)} DYP
                   </span>
                 </div>
                 <button

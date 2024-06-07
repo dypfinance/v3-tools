@@ -560,6 +560,10 @@ const StakeDypiusEth3Phase2 = ({
         setdepositLoading(false);
         setdepositStatus("success");
         refreshBalance();
+        setTimeout(() => {
+          setdepositStatus("initial");
+          setdepositAmount("");
+        }, 5000);
       })
       .catch((e) => {
         setdepositLoading(false);
@@ -567,7 +571,7 @@ const StakeDypiusEth3Phase2 = ({
         seterrorMsg(e?.message);
         setTimeout(() => {
           setdepositAmount("");
-          setdepositStatus("fail");
+          setdepositStatus("initial");
           seterrorMsg("");
         }, 10000);
       });
@@ -609,6 +613,9 @@ const StakeDypiusEth3Phase2 = ({
         setclaimLoading(false);
         setpendingDivs(getFormattedNumber(0, 6));
         refreshBalance();
+        setTimeout(() => {
+          setclaimStatus("initial");
+        }, 5000);
       })
       .catch((e) => {
         setclaimStatus("failed");
@@ -681,6 +688,9 @@ const StakeDypiusEth3Phase2 = ({
         setreInvestLoading(false);
         setpendingDivs(getFormattedNumber(0, 6));
         refreshBalance();
+        setTimeout(() => {
+          setreInvestStatus("initial");
+        }, 10000);
       })
       .catch((e) => {
         setreInvestStatus("failed");
@@ -979,7 +989,7 @@ const StakeDypiusEth3Phase2 = ({
             </div>
           </div>
 
-          {pendingDivs > 0 && (
+          {/* {pendingDivs > 0 && (
             <>
               {" "}
               <div className="separator my-2"></div>
@@ -994,7 +1004,7 @@ const StakeDypiusEth3Phase2 = ({
                     <div className="d-flex flex-column align-items-baseline">
                       <span className="bal-smallTxt">Rewards</span>
                       <span className="bal-bigTxt2">
-                        {getFormattedNumber(pendingDivs)} iDYP
+                        {getFormattedNumber(pendingDivs,5)} iDYP
                       </span>
                     </div>
                     <button
@@ -1029,7 +1039,7 @@ const StakeDypiusEth3Phase2 = ({
                         </div>
                       ) : reInvestStatus === "failed" ? (
                         <>
-                          {/* <img src={failMark} alt="" /> */}
+                           
                           Failed
                         </>
                       ) : reInvestStatus === "success" ? (
@@ -1042,7 +1052,7 @@ const StakeDypiusEth3Phase2 = ({
                 </div>
               </div>{" "}
             </>
-          )}
+          )} */}
           <div className="separator my-2"></div>
           <div className="info-pool-wrapper p-3 w-100">
             <div className="d-flex w-100 flex-column flex-lg-row justify-content-between align-items-start align-items-lg-end gap-2">
@@ -1260,7 +1270,7 @@ const StakeDypiusEth3Phase2 = ({
                 <div className="d-flex flex-column align-items-baseline">
                   <span className="bal-smallTxt">Rewards</span>
                   <span className="bal-bigTxt2">
-                    {getFormattedNumber(pendingDivs)} iDYP
+                    {getFormattedNumber(pendingDivs,5)} iDYP
                   </span>
                 </div>
                 <button

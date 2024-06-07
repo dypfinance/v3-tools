@@ -271,7 +271,7 @@ const EarnTopPicks = ({
       const allActiveEth = [...object2activeEth, ...activeEth2];
 
       const sortedActive = allActiveEth.sort(function (a, b) {
-        return b.tvl_usd - a.tvl_usd;
+        return b.apy_percent - a.apy_percent;
       });
       setethPoolsDyp(activeEth2);
       setethPoolsiDyp(object2activeEth);
@@ -321,7 +321,7 @@ const EarnTopPicks = ({
 
       const allActiveBnb = [...object2Idyp, ...activeBnb2];
       const sortedActive = allActiveBnb.sort(function (a, b) {
-        return b.tvl_usd - a.tvl_usd;
+        return b.apy_percent - a.apy_percent;
       });
 
       setBnbPools(sortedActive);
@@ -369,7 +369,7 @@ const EarnTopPicks = ({
       setavaxPoolsiDyp(object2activeAvax);
 
       const sortedActive = allActiveAvax.sort(function (a, b) {
-        return b.tvl_usd - a.tvl_usd;
+        return b.apy_percent - a.apy_percent;
       });
       setAvaxPools(sortedActive);
     }
@@ -377,7 +377,7 @@ const EarnTopPicks = ({
 
   const phase2_pools = [
     {
-      id: "0xC8075092Cc46E176B1F3c0D0EB8223F1e46555B0",
+      id: "0x998A9F0DF7DAF20c2B0Bb379Dcae394636926a96",
       apy_percent: 8,
       tvl_usd: 46682.3565666875,
       link_logo: "https://www.dypius.com/logo192.png",
@@ -394,7 +394,7 @@ const EarnTopPicks = ({
       chain: "eth",
     },
     {
-      id: "0xC7075092Cc46E176B1F3c0D0EB8223F1e46555B0",
+      id: "0xbE030A667d9ee75a9FCdF2162A2C14ccCAB573dD",
       apy_percent: 20,
       tvl_usd: 462.3565666875,
       link_logo: "https://www.dypius.com/logo192.png",
@@ -411,7 +411,7 @@ const EarnTopPicks = ({
       chain: "eth",
     },
     {
-      id: "0xC6075092Cc46E176B1F3c0D0EB8223F1e46555B0",
+      id: "0x92A84052Fe6945949A295AF14a7506e3dc085492",
       apy_percent: 25,
       tvl_usd: 4682.3565666875,
       link_logo: "https://www.dypius.com/logo192.png",
@@ -473,11 +473,11 @@ const EarnTopPicks = ({
       });
 
       const sortedActiveDYP = activeEth2.sort(function (a, b) {
-        return b.tvl_usd - a.tvl_usd && a.type === "dyp" && b.type === "dyp";
+        return (b.apy_percent - a.apy_percent);
       });
-
+      
       const sortedActiveiDYP = object2activeEth.sort(function (a, b) {
-        return b.tvl_usd - a.tvl_usd && a.type === "idyp" && b.type === "idyp";
+        return b.apy_percent - a.apy_percent;
       });
    
       setActivePools([sortedActiveDYP[0], ...sortedActiveiDYP]);
@@ -540,10 +540,10 @@ const EarnTopPicks = ({
       const allExpireBnb = [...expiredBnb, ...expiredBnb2];
 
       const sortedActive = allActiveBnb.sort(function (a, b) {
-        return b.tvl_usd - a.tvl_usd;
+        return b.apy_percent - a.apy_percent;
       });
       const sortedExpired = allExpireBnb.sort(function (a, b) {
-        return b.tvl_usd - a.tvl_usd;
+        return b.apy_percent - a.apy_percent;
       });
 
       setActivePools(sortedActive);
@@ -591,7 +591,7 @@ const EarnTopPicks = ({
       const allActiveAvax = [...object2activeAvax, ...activeAvax2];
 
       const sortedActive = allActiveAvax.sort(function (a, b) {
-        return b.tvl_usd - a.tvl_usd;
+        return b.apy_percent - a.apy_percent;
       });
 
       setActivePools(sortedActive);
@@ -4773,12 +4773,12 @@ const EarnTopPicks = ({
                   />
                 )  : topList === "Staking" &&
                 selectedPool?.id ===
-                  "0xC8075092Cc46E176B1F3c0D0EB8223F1e46555B0" &&
+                  "0x998A9F0DF7DAF20c2B0Bb379Dcae394636926a96" &&
                 chain === "eth" ? (
                 <StakeDypiusEth1Phase2
                   selectedPool={selectedPool}
                   selectedTab={selectedTab}
-                  staking={window.constant_staking_dypius_eth1}
+                  staking={window.constant_staking_dypius_phase2_eth1}
                   apr={selectedPool?.apy_percent}
                   liquidity={eth_address}
                   expiration_time={"07 Jun 2025"}
@@ -4808,12 +4808,12 @@ const EarnTopPicks = ({
                 />
               )  : topList === "Staking" &&
               selectedPool?.id ===
-                "0xC7075092Cc46E176B1F3c0D0EB8223F1e46555B0" &&
+                "0xbE030A667d9ee75a9FCdF2162A2C14ccCAB573dD" &&
               chain === "eth" ? (
               <StakeDypiusEth2Phase2
                 selectedPool={selectedPool}
                 selectedTab={selectedTab}
-                staking={window.constant_staking_dypius_eth1}
+                staking={window.constant_staking_dypius_phase2_eth2}
                 apr={selectedPool?.apy_percent}
                 liquidity={eth_address}
                 expiration_time={"07 Jun 2025"}
@@ -4843,12 +4843,12 @@ const EarnTopPicks = ({
               />
             )   : topList === "Staking" &&
             selectedPool?.id ===
-              "0xC6075092Cc46E176B1F3c0D0EB8223F1e46555B0" &&
+              "0x92A84052Fe6945949A295AF14a7506e3dc085492" &&
             chain === "eth" ? (
             <StakeDypiusEth3Phase2
               selectedPool={selectedPool}
               selectedTab={selectedTab}
-              staking={window.constant_staking_dypius_eth1}
+              staking={window.constant_staking_dypius_phase2_eth3}
               apr={selectedPool?.apy_percent}
               liquidity={eth_address}
               expiration_time={"07 Jun 2025"}

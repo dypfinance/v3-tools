@@ -90,7 +90,7 @@ const Dashboard = ({
 
   const phase2_pools = [
     {
-      id: "0xC6075092Cc46E176B1F3c0D0EB8223F1e46555B0",
+      id: "0x92A84052Fe6945949A295AF14a7506e3dc085492",
       apy_percent: 25,
       tvl_usd: 4888682.3565666875,
       link_logo: "https://www.dypius.com/logo192.png",
@@ -273,7 +273,7 @@ const Dashboard = ({
       const avaxIdyp = avaxStakingPool.data.stakingInfoiDYPAvax;
       const avaxDyp = avaxStakingPoolNew.data.stakingInfoDYPAvax;
       const ethereumIdyp = eth_result.data.stakingInfoiDYPEth;
-      const ethereumDyp = eth_result2.data.stakingInfoDYPEth;
+      const ethereumDyp = eth_result2.data.stakingInfoDYPEth.filter((item)=>{return item.id === "0x92A84052Fe6945949A295AF14a7506e3dc085492"});
 
       const bnbAggregatorPool = aggregatorPools.find((item) => {
         return item.name.toLowerCase() === "bnb";
@@ -326,9 +326,9 @@ const Dashboard = ({
       });
 
       const allpoolsEthereum = [
-        // ...ethereumDyp,
+        ...ethereumDyp,
         ...ethereumIdyp,
-        ...phase2_pools,
+        // ...phase2_pools,
       ];
       const object2Ethereum = allpoolsEthereum.map((item) => {
         return {
@@ -344,7 +344,7 @@ const Dashboard = ({
       });
 
       const sortedAprsEthereum = cleanCardsEthereum.sort(function (a, b) {
-        return b.tvl_usd - a.tvl_usd;
+        return b.apy_percent - a.apy_percent;
       });
 
       const object2Avax = avaxDyp.map((item) => {
@@ -1295,12 +1295,12 @@ const Dashboard = ({
                   />
                 ) : activeCard &&
                   selectedPool?.id ===
-                    "0xC6075092Cc46E176B1F3c0D0EB8223F1e46555B0" &&
+                    "0x92A84052Fe6945949A295AF14a7506e3dc085492" &&
                   selectedPool.name !== "AVAX" ? (
                   <StakeDypiusEth3Phase2
                     selectedPool={selectedPool}
                     selectedTab={selectedTab}
-                    staking={window.constant_staking_dypius_eth1}
+                    staking={window.constant_staking_dypius_phase2_eth3}
                     apr={selectedPool?.apy_percent}
                     liquidity={eth_address}
                     expiration_time={"07 Jun 2025"}
