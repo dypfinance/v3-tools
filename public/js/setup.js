@@ -2351,6 +2351,15 @@ window.config = {
   constant_staking_dypius_eth1_address:
     "0xC9075092Cc46E176B1F3c0D0EB8223F1e46555B0",
 
+  constant_staking_dypius_phase2_eth1_address:
+    "0x998A9F0DF7DAF20c2B0Bb379Dcae394636926a96",
+
+    constant_staking_dypius_phase2_eth2_address:
+    "0xbE030A667d9ee75a9FCdF2162A2C14ccCAB573dD",
+
+    constant_staking_dypius_phase2_eth3_address:
+    "0x92A84052Fe6945949A295AF14a7506e3dc085492",
+
   constant_staking_dypius_bsc1_address:
     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603",
 
@@ -3049,6 +3058,18 @@ window.constant_staking_dypius_eth1 = new CONSTANT_STAKING_DYPIUS(
   "CONSTANT_STAKING_DYPIUS_ETH1"
 );
 
+window.constant_staking_dypius_phase2_eth1 = new CONSTANT_STAKING_DYPIUS(
+  "CONSTANT_STAKING_DYPIUS_PHASE2_ETH1"
+);
+
+window.constant_staking_dypius_phase2_eth2 = new CONSTANT_STAKING_DYPIUS(
+  "CONSTANT_STAKING_DYPIUS_PHASE2_ETH2"
+);
+
+window.constant_staking_dypius_phase2_eth3 = new CONSTANT_STAKING_DYPIUS(
+  "CONSTANT_STAKING_DYPIUS_PHASE2_ETH3"
+);
+
 window.constant_staking_newi3 = new CONSTANT_STAKING_OLD(
   "CONSTANT_STAKING_NEWI3"
 );
@@ -3084,6 +3105,10 @@ window.CONSTANT_STAKING_DYPIUS_AVAX1_ABI = window.CONSTANT_STAKING_DYPIUS_ABI;
 window.CONSTANT_STAKINGNEW_NEW1_ABI = window.CONSTANT_STAKINGNEW_ABI;
 window.CONSTANT_STAKINGNEW_NEW2_ABI = window.CONSTANT_STAKINGNEW_ABI;
 window.CONSTANT_STAKING_DYPIUS_ETH1_ABI = window.CONSTANT_STAKING_DYPIUS_ABI;
+window.CONSTANT_STAKING_DYPIUS_PHASE2_ETH1_ABI = window.CONSTANT_STAKING_DYPIUS_ABI;
+window.CONSTANT_STAKING_DYPIUS_PHASE2_ETH2_ABI = window.CONSTANT_STAKING_DYPIUS_ABI;
+window.CONSTANT_STAKING_DYPIUS_PHASE2_ETH3_ABI = window.CONSTANT_STAKING_DYPIUS_ABI;
+
 
 window.CONSTANT_STAKINGNEW_NEW3_ABI = window.CONSTANT_STAKINGNEW_ABI;
 window.CONSTANT_STAKING_NEWI3 = window.CONSTANT_STAKING_OLD_ABI;
@@ -37477,6 +37502,10 @@ Object.keys(window.config)
       k.startsWith("constant_stakingidyp_1") ||
       k.startsWith("constant_stakingnew_new2") ||
       k.startsWith("constant_staking_dypius_eth1") ||
+      k.startsWith("constant_staking_dypius_phase2_eth1") ||
+      k.startsWith("constant_staking_dypius_phase2_eth2") ||
+      k.startsWith("constant_staking_dypius_phase2_eth3") ||
+
       k.startsWith("constant_stakingidypavax_3") ||
       k.startsWith("constant_stakingidypavax_4") ||
       k.startsWith("constant_stakingidypavax_40") ||
@@ -37699,6 +37728,13 @@ Object.keys(window.config)
       ? window.CONSTANT_STAKINGNEW_ABI
       : k.startsWith("constant_staking_dypius_eth1")
       ? window.CONSTANT_STAKING_DYPIUS_ABI
+      : k.startsWith("constant_staking_dypius_phase2_eth1")
+      ? window.CONSTANT_STAKING_DYPIUS_ABI
+      : k.startsWith("constant_staking_dypius_phase2_eth2")
+      ? window.CONSTANT_STAKING_DYPIUS_ABI
+      : k.startsWith("constant_staking_dypius_phase2_eth3")
+      ? window.CONSTANT_STAKING_DYPIUS_ABI
+
       : k.startsWith("constant_stakingidypavax_4")
       ? window.CONSTANT_STAKING_IDYP_ABI
       : k.startsWith("constant_stakingidypavax_40")
