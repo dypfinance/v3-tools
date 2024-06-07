@@ -2273,7 +2273,7 @@ window.config = {
 
   subscriptionbnb_address: "0x0ec59a2d18e1e83ab393b3ac9d7d6d28cbff0d35",
   subscription_newbnb_address: "0xc8adbef45b75ee4f3b5c9d4da2e1a1af408378a2",
-  subscription_newbnb2_address: "0xc200FAecd0cd5Ae83ECf3F490B6552984b60f2E7",
+  subscription_newbnb2_address: "0x0C41A7Dd013B9062Ef38B48E905a985c262B248b",
 
   subscription_cfx_address: "0x56c83c9308b066627866bba9cd2322f3e01b16bf",
 
