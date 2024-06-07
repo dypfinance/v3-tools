@@ -264,11 +264,11 @@ const EarnTopPicks = ({
         return { ...item, tvl_usd: item.tvl_usd, type: "idyp", chain: "eth" };
       });
 
-      const activeEth2 = [...object2, ...phase2_pools].filter((item) => {
+      const activeEth2 = object2.filter((item) => {
         return item.expired !== "Yes";
       });
 
-      const allActiveEth = [...object2activeEth, ...activeEth2];
+      const allActiveEth = [...activeEth2,...object2activeEth ];
 
       const sortedActive = allActiveEth.sort(function (a, b) {
         return b.apy_percent - a.apy_percent;
@@ -462,11 +462,11 @@ const EarnTopPicks = ({
         return { ...item, tvl_usd: item.tvl_usd, type: "idyp", chain: "eth" };
       });
 
-      const activeEth2 = [...object2, ...phase2_pools].filter((item) => {
+      const activeEth2 = object2.filter((item) => {
         return item.expired !== "Yes";
       });
 
-      const allActiveEth = [...object2activeEth, ...activeEth2];
+      const allActiveEth = [ ...activeEth2,...object2activeEth];
 
       const sortedActive = allActiveEth.sort(function (a, b) {
         return b.tvl_usd - a.tvl_usd;

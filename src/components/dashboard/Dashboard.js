@@ -273,7 +273,7 @@ const Dashboard = ({
       const avaxIdyp = avaxStakingPool.data.stakingInfoiDYPAvax;
       const avaxDyp = avaxStakingPoolNew.data.stakingInfoDYPAvax;
       const ethereumIdyp = eth_result.data.stakingInfoiDYPEth;
-      const ethereumDyp = eth_result2.data.stakingInfoDYPEth.filter((item)=>{return item.id === "0x92A84052Fe6945949A295AF14a7506e3dc085492"});
+      const ethereumDyp = eth_result2.data.stakingInfoDYPEth;
 
       const bnbAggregatorPool = aggregatorPools.find((item) => {
         return item.name.toLowerCase() === "bnb";
@@ -406,8 +406,9 @@ const Dashboard = ({
       ].sort(function (a, b) {
         return b.tvl_usd - a.tvl_usd;
       });
-
-      setTopPools(allPools.slice(0, 2));
+const finalPools = [sortedAprsEthereum[0], allPools[1]]
+ 
+      setTopPools(finalPools);
     }
   };
 
