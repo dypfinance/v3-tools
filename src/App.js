@@ -268,6 +268,7 @@ class App extends React.Component {
     let subscribedPlatformTokenAmountNewETH;
     let subscribedPlatformTokenAmountNewAvax;
     let subscribedPlatformTokenAmountNewBNB;
+    let subscribedPlatformTokenAmountNewBNB2;
     let subscribedPlatformTokenAmountCfx;
     let subscribedPlatformTokenAmountBase;
     let subscribedPlatformTokenAmountSkale;
@@ -282,6 +283,8 @@ class App extends React.Component {
     const AvaxNewABI = window.SUBSCRIPTION_NEWAVAX_ABI;
     const EthNewABI = window.SUBSCRIPTION_NEWETH_ABI;
     const BnbNewABI = window.SUBSCRIPTION_NEWBNB_ABI;
+    const BnbNew2ABI = window.SUBSCRIPTION_NEWBNB2_ABI;
+
     const CfxABI = window.SUBSCRIPTION_CFX_ABI;
     const BaseABI = window.SUBSCRIPTION_BASE_ABI;
     const SkaleABI = window.SUBSCRIPTION_SKALE_ABI;
@@ -289,6 +292,8 @@ class App extends React.Component {
     const ethsubscribeNewAddress = window.config.subscription_neweth_address;
     const avaxsubscribeNewAddress = window.config.subscription_newavax_address;
     const bnbsubscribeNewAddress = window.config.subscription_newbnb_address;
+    const bnbsubscribeNewAddress2 = window.config.subscription_newbnb2_address;
+
     const cfxsubscribeAddress = window.config.subscription_cfx_address;
     const basesubscribeAddress = window.config.subscription_base_address;
     const skalesubscribeAddress = window.config.subscription_skale_address;
@@ -306,6 +311,10 @@ class App extends React.Component {
     const bnbNewcontract = new web3bnb.eth.Contract(
       BnbNewABI,
       bnbsubscribeNewAddress
+    );
+    const bnbNewcontract2 = new web3bnb.eth.Contract(
+      BnbNew2ABI,
+      bnbsubscribeNewAddress2
     );
 
     const cfxcontract = new web3cfx.eth.Contract(CfxABI, cfxsubscribeAddress);
@@ -346,6 +355,14 @@ const userAddr = await window.getCoinbase()
           return 0;
         });
 
+        subscribedPlatformTokenAmountNewBNB2 = await bnbNewcontract2.methods
+        .subscriptionPlatformTokenAmount(userAddr)
+        .call()
+        .catch((e) => {
+          console.log(e);
+          return 0;
+        });
+
       subscribedPlatformTokenAmountCfx = await cfxcontract.methods
         .subscriptionPlatformTokenAmount(userAddr)
         .call()
@@ -375,7 +392,7 @@ const userAddr = await window.getCoinbase()
         subscribedPlatformTokenAmountCfx == "0" &&
         subscribedPlatformTokenAmountBase == "0" &&
         subscribedPlatformTokenAmountNewAvax == "0" &&
-        subscribedPlatformTokenAmountNewBNB == "0" &&
+        subscribedPlatformTokenAmountNewBNB == "0" && subscribedPlatformTokenAmountNewBNB2 === "0" &&
         subscribedPlatformTokenAmountSkale == "0"
       ) {
   
@@ -385,7 +402,8 @@ const userAddr = await window.getCoinbase()
         subscribedPlatformTokenAmountCfx != "0" ||
         subscribedPlatformTokenAmountBase != "0" ||
         subscribedPlatformTokenAmountNewAvax != "0" ||
-        subscribedPlatformTokenAmountNewBNB != "0" ||
+        subscribedPlatformTokenAmountNewBNB != "0"  ||
+        subscribedPlatformTokenAmountNewBNB2 != "0" ||
         subscribedPlatformTokenAmountSkale != "0"
       ) {
     
