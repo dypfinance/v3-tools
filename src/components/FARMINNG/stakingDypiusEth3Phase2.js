@@ -24,7 +24,6 @@ import { ClickAwayListener } from "@material-ui/core";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
 import axios from "axios";
 
-
 const StakeDypiusEth3Phase2 = ({
   selectedPool,
   selectedTab,
@@ -62,7 +61,6 @@ const StakeDypiusEth3Phase2 = ({
   let token_symbol = "DYP";
 
   // 25% apr 625K Cap in DYP, locktime 90days, dyp deposit & idyp rewards
-
 
   const TOKEN_DECIMALS = window.config.token_decimals;
 
@@ -158,7 +156,7 @@ const StakeDypiusEth3Phase2 = ({
   const [settotal_stakers, setsettotal_stakers] = useState("");
 
   const [show, setshow] = useState(false);
-  const [showWithdrawModal, setshowWithdrawModal] = useState(false);
+  const [canDeposit, setCanDeposit] = useState(true);
   const [popup, setpopup] = useState(false);
 
   const [apy1, setapy1] = useState(false);
@@ -180,6 +178,8 @@ const StakeDypiusEth3Phase2 = ({
   const [quotaTooltip, setQuotaTooltip] = useState(false);
   const [maxDepositTooltip, setMaxDepositTooltip] = useState(false);
   const [approvedAmount, setapprovedAmount] = useState("0.00");
+  const [availableQuota, setavailableQuota] = useState(0);
+  const [totalDeposited, settotalDeposited] = useState(0);
 
   const poolCapClose = () => {
     setPoolCapTooltip(false);
@@ -658,7 +658,6 @@ const StakeDypiusEth3Phase2 = ({
 
   const getApproxReturn = (depositAmount, days) => {
     let APY = getAPY() - fee_s;
- 
 
     return ((depositAmount * apr) / 100 / 365) * days;
   };
@@ -832,13 +831,47 @@ const StakeDypiusEth3Phase2 = ({
       });
   };
 
+  const getAvailableQuota = async () => {
+    const poolCap = 625000;
+    if (staking && staking._address) {
+      const stakingSc = new window.infuraWeb3.eth.Contract(
+        window.CONSTANT_STAKING_DYPIUS_ABI,
+        staking._address
+      );
+      const totalDeposited = await stakingSc.methods
+        .totalDeposited()
+        .call()
+        .catch((e) => {
+          console.error(e);
+        });
+
+      const totalDeposited_formatted = new BigNumber(totalDeposited)
+        .div(1e18)
+        .toFixed(6);
+      const quotaLeft = poolCap - totalDeposited_formatted;
+      setavailableQuota(quotaLeft);
+      settotalDeposited(totalDeposited_formatted);
+    }
+  };
+
+  useEffect(()=>{
+    const result = Number(depositAmount) + Number(totalDeposited);
+    if(result>625000) {
+      seterrorMsg('Deposit amount is greater than available quota. Please add another amount.')
+      setCanDeposit(false)
+    } else {
+      seterrorMsg('')
+      setCanDeposit(true)
+    }
+  },[depositAmount, totalDeposited])
+
   useEffect(() => {
     getUsdPerDyp();
-  }, []);
+    getAvailableQuota();
+  }, [staking]);
 
   return (
     <div className="d-flex flex-column gap-2 w-100">
-
       <div className="separator my-2"></div>
       {selectedTab === "deposit" ? (
         <div className="d-flex flex-column w-100 gap-2">
@@ -888,8 +921,7 @@ const StakeDypiusEth3Phase2 = ({
                 errorMsg ? "justify-content-between" : "justify-content-end"
               } gap-1 align-items-center`}
             >
-              {errorMsg && <h6 className="errormsg m-0">{errorMsg}</h6>} 
-
+              {errorMsg && <h6 className="errormsg m-0">{errorMsg}</h6>}
 
               <div className="d-flex gap-1 align-items-baseline">
                 <span className="bal-smallTxt">Approved:</span>
@@ -927,7 +959,7 @@ const StakeDypiusEth3Phase2 = ({
                 <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Available Quota:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    N/A
+                    {getFormattedNumber(availableQuota, 2)} DYP
                     <ClickAwayListener onClickAway={quotaClose}>
                       <Tooltip
                         open={quotaTooltip}
@@ -1100,15 +1132,13 @@ const StakeDypiusEth3Phase2 = ({
                 <div className="d-flex align-items-center gap-1">
                   <span className="bal-smallTxt">Start date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                  07 Jun 2024{" "}
-                 
+                    07 Jun 2024{" "}
                   </span>
                 </div>
                 <div className="d-flex align-items-center gap-1">
                   <span className="bal-smallTxt">End date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
                     {expiration_time}{" "}
-              
                   </span>
                 </div>
               </div>
@@ -1116,12 +1146,12 @@ const StakeDypiusEth3Phase2 = ({
           </div>
           {is_wallet_connected && chainId === "1" && (
             <button
-              disabled={ 
-                depositAmount === "" || depositLoading === true ? true : false
+              disabled={
+                depositAmount === "" || depositLoading === true || canDeposit === false ? true : false
               }
               className={`btn filledbtn ${
-                depositAmount === "" &&
-                depositStatus === "initial" &&
+                ((depositAmount === "" &&
+                depositStatus === "initial" )|| (canDeposit === false)) &&
                 "disabled-btn"
               } ${
                 depositStatus === "deposit" || depositStatus === "success"
@@ -1270,7 +1300,7 @@ const StakeDypiusEth3Phase2 = ({
                 <div className="d-flex flex-column align-items-baseline">
                   <span className="bal-smallTxt">Rewards</span>
                   <span className="bal-bigTxt2">
-                    {getFormattedNumber(pendingDivs,5)} iDYP
+                    {getFormattedNumber(pendingDivs, 5)} iDYP
                   </span>
                 </div>
                 <button
@@ -1360,15 +1390,13 @@ const StakeDypiusEth3Phase2 = ({
                 <div className="d-flex align-items-center gap-1">
                   <span className="bal-smallTxt">Start date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                  07 Jun 2024{" "}
-                  
+                    07 Jun 2024{" "}
                   </span>
                 </div>
                 <div className="d-flex align-items-center gap-1">
                   <span className="bal-smallTxt">End date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
                     {expiration_time}{" "}
-                
                   </span>
                 </div>
               </div>

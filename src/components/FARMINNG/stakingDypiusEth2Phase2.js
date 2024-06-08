@@ -142,6 +142,7 @@ const StakeDypiusEth2Phase2 = ({
   );
   const [tvl, settvl] = useState("");
   const [tvlusd, settvlusd] = useState("");
+  const [canDeposit, setCanDeposit] = useState(true);
 
   const [referralFeeEarned, setreferralFeeEarned] = useState("");
   const [stakingOwner, setstakingOwner] = useState(null);
@@ -180,6 +181,8 @@ const StakeDypiusEth2Phase2 = ({
   const [quotaTooltip, setQuotaTooltip] = useState(false);
   const [maxDepositTooltip, setMaxDepositTooltip] = useState(false);
   const [approvedAmount, setapprovedAmount] = useState("0.00");
+  const [availableQuota, setavailableQuota] = useState(0);
+  const [totalDeposited, settotalDeposited] = useState(0);
 
   const poolCapClose = () => {
     setPoolCapTooltip(false);
@@ -839,9 +842,37 @@ const StakeDypiusEth2Phase2 = ({
       });
   };
 
+  const getAvailableQuota = async()=>{
+    const poolCap = 500000
+    if(staking && staking._address){
+    const stakingSc = new window.infuraWeb3.eth.Contract(window.CONSTANT_STAKING_DYPIUS_ABI, staking._address)
+    const totalDeposited = await stakingSc.methods.totalDeposited().call().catch((e)=>{console.error(e)})
+  
+    const totalDeposited_formatted = new BigNumber(totalDeposited).div(1e18).toFixed(6);
+    const quotaLeft = poolCap - totalDeposited_formatted;
+    setavailableQuota(quotaLeft)
+    settotalDeposited(totalDeposited_formatted)
+  }
+  }
+
+
+  useEffect(()=>{
+    const result = Number(depositAmount) + Number(totalDeposited);
+    if(result>500000) {
+      seterrorMsg('Deposit amount is greater than available quota. Please add another amount.')
+      setCanDeposit(false)
+    } else {
+      seterrorMsg('')
+      setCanDeposit(true)
+    }
+  },[depositAmount, totalDeposited])
+
+
+
   useEffect(() => {
     getUsdPerDyp();
-  }, []);
+    getAvailableQuota()
+  }, [staking]);
 
   return (
     <div className="d-flex flex-column gap-2 w-100">
@@ -932,7 +963,7 @@ const StakeDypiusEth2Phase2 = ({
                 <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Available Quota:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    N/A
+                    {getFormattedNumber(availableQuota, 2)} DYP
                     <ClickAwayListener onClickAway={quotaClose}>
                       <Tooltip
                         open={quotaTooltip}
@@ -1121,14 +1152,14 @@ const StakeDypiusEth2Phase2 = ({
           </div>
           {is_wallet_connected && chainId === "1" && (
             <button
-              disabled={
-                depositAmount === "" || depositLoading === true ? true : false
-              }
-              className={`btn filledbtn ${
-                depositAmount === "" &&
-                depositStatus === "initial" &&
-                "disabled-btn"
-              } ${
+            disabled={
+              depositAmount === "" || depositLoading === true || canDeposit === false ? true : false
+            }
+            className={`btn filledbtn ${
+              ((depositAmount === "" &&
+              depositStatus === "initial" )|| (canDeposit === false)) &&
+              "disabled-btn"
+            } ${
                 depositStatus === "deposit" || depositStatus === "success"
                   ? "success-button"
                   : depositStatus === "fail"
