@@ -663,9 +663,13 @@ const StakeDypiusEth1Phase2 = ({
   };
 
   const getApproxReturn = (depositAmount, days) => {
-    let APY = getAPY() - fee_s;
-
-    return ((depositAmount * apr) / 100 / 365) * days;
+    const expirationDate = new Date("2025-06-07 23:11:00 GMT+02:00")
+    const currentDate = new Date();
+    const timeDifference = expirationDate - currentDate; 
+    const millisecondsInADay = 1000 * 60 * 60 * 24;
+    const daysUntilExpiration = Math.floor(timeDifference / millisecondsInADay);
+    
+    return ((depositAmount * apr) / 100 / 365) * daysUntilExpiration;
   };
 
   const getReferralLink = () => {
