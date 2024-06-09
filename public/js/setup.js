@@ -58,9 +58,6 @@ function getTokenContract(address) {
   return getContract({ key: "token", address, ABI: window.TOKEN_ABI });
 }
 
- 
-
-
 function getVaultContract(address) {
   return getContract({ key: null, address, ABI: window.VAULT_ABI });
 }
@@ -729,7 +726,7 @@ class CONSTANT_STAKING_DYPIUS {
       "REWARD_INTERVAL",
       "rewardsPendingClaim",
       "getPendingDivs",
-      "ADMIN_CAN_CLAIM_AFTER"
+      "ADMIN_CAN_CLAIM_AFTER",
     ].forEach((fn_name) => {
       this[fn_name] = async function (...args) {
         window.web3 = new Web3(window.ethereum);
@@ -805,7 +802,6 @@ class CONSTANT_STAKING_DYPIUS {
   }
 }
 
-
 class CONSTANT_STAKING_DEFI {
   constructor(
     ticker = "CONSTANT_STAKING_DEFI",
@@ -835,7 +831,7 @@ class CONSTANT_STAKING_DEFI {
       "rewardsPendingClaim",
       "getPendingDivs",
       "ADMIN_CAN_CLAIM_AFTER",
-      "MAX_DEPOSIT"
+      "MAX_DEPOSIT",
     ].forEach((fn_name) => {
       this[fn_name] = async function (...args) {
         window.web3 = new Web3(window.ethereum);
@@ -909,7 +905,6 @@ class CONSTANT_STAKING_DEFI {
     return batch.execute();
   }
 }
-
 
 class CONSTANT_STAKING_OLD {
   constructor(ticker = "CONSTANT_STAKINGOLD_30", token = "REWARD_TOKEN") {
@@ -2104,13 +2099,12 @@ window.config = {
   reward_tokenwbnb_address: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c", //REWARD TOKEN wbnb
 
   reward_token_dypius_eth_address: "0x39b46b212bdf15b42b166779b9d1787a68b9d0c3", //REWARD TOKEN DYPV2
-  reward_token_dypius_base_address: "0x4200000000000000000000000000000000000006", //REWARD TOKEN DYPV2
+  reward_token_dypius_base_address:
+    "0x4200000000000000000000000000000000000006", //REWARD TOKEN DYPV2
 
   reward_token_dypius_bsc_address: "0x1a3264f2e7b1cfc6220ec9348d33ccf02af7aaa4", //REWARD TOKEN DYPV2
   reward_token_wbnb_address: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c", //REWARD TOKEN DYPV2
   reward_token_wavax_address: "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7", //REWARD TOKEN DYPV2
-
-
 
   weth_address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
   etherscan_baseURL: "https://etherscan.io",
@@ -2279,6 +2273,7 @@ window.config = {
 
   subscriptionbnb_address: "0x0ec59a2d18e1e83ab393b3ac9d7d6d28cbff0d35",
   subscription_newbnb_address: "0xc8adbef45b75ee4f3b5c9d4da2e1a1af408378a2",
+  subscription_newbnb2_address: "0x0C41A7Dd013B9062Ef38B48E905a985c262B248b",
 
   subscription_cfx_address: "0x56c83c9308b066627866bba9cd2322f3e01b16bf",
 
@@ -2374,7 +2369,7 @@ window.config = {
   constant_staking_dypius_ethother1_address:
     "0xfaed2b9b537444c7a0160e4081683500d77cbedc",
 
-    constant_staking_dypius_avaxother1_address:
+  constant_staking_dypius_avaxother1_address:
     "0x1B0cEEBEEc1E39D7CFf2Bf8E2BdC59b60A59D7dF",
 
   constant_staking_dypius_avax1_address:
@@ -2532,15 +2527,14 @@ window.config = {
   new_governanceavax_address: "0x4d3deb73df067d6466facad196b22411422909ab",
   new_governancebsc_address: "0x2cf8b55a6a492c2f8e750ad1fa4e4a858044deea",
 
+  //governance eth dypv2
+  new_governancedypv2_address: "0x6334a38b5df75638f005859fe642765e09488981",
 
-    //governance eth dypv2
-    new_governancedypv2_address: "0x6334a38b5df75638f005859fe642765e09488981",
+  //governance avax dypv2
+  new_governanceavaxdypv2_address: "0xCE27eCD1114336477CbE0a628f3749b733056626",
 
-    //governance avax dypv2
-    new_governanceavaxdypv2_address: "0xCE27eCD1114336477CbE0a628f3749b733056626",
-
-    //governance bsc dypv2
-    new_governancebscdypv2_address: "0xa1d6178f3d96b9da85802b6abd553e2b854c7382",
+  //governance bsc dypv2
+  new_governancebscdypv2_address: "0xa1d6178f3d96b9da85802b6abd553e2b854c7382",
 
   //bridge eth-avax
 
@@ -2754,8 +2748,6 @@ window.REWARD_TOKEN_DYPIUS_BSC_ABI = window.TOKEN_ABI;
 window.REWARD_TOKEN_WBNB_ABI = window.TOKEN_ABI;
 window.REWARD_TOKEN_WAVAX_ABI = window.TOKEN_ABI;
 
-
-
 window.REWARD_TOKENAVAX_ABI = window.TOKENAVAX_ABI;
 window.REWARD_TOKENWBNB_ABI = window.TOKENBSC_ABI;
 
@@ -2766,8 +2758,6 @@ window.reward_token_dypius_base = new TOKEN("REWARD_TOKEN_DYPIUS_BASE");
 window.reward_token_dypius_bsc = new TOKENBSC("REWARD_TOKEN_DYPIUS_BSC");
 window.reward_token_wbnb = new TOKENBSC("REWARD_TOKEN_WBNB");
 window.reward_token_wavax = new TOKENBSC("REWARD_TOKEN_WAVAX");
-
-
 
 window.reward_tokenavax = new TOKENAVAX("REWARD_TOKENAVAX");
 window.reward_tokenwbnb = new TOKENBSC("REWARD_TOKENWBNB");
@@ -2908,11 +2898,9 @@ window.constant_staking_dypius_ethother1 = new CONSTANT_STAKING_DEFI(
   "CONSTANT_STAKING_DYPIUS_ETHOTHER1"
 );
 
-
 window.constant_staking_dypius_avaxother1 = new CONSTANT_STAKING_DEFI(
   "CONSTANT_STAKING_DYPIUS_AVAXOTHER1"
 );
-
 
 /*Staking bsc other*/
 
@@ -2929,9 +2917,8 @@ window.CONSTANT_STAKINGBSC_NEW14_ABI = window.CONSTANT_STAKING_OLD_ABI;
 window.CONSTANT_STAKING_DYPIUS_BSC1_ABI = window.CONSTANT_STAKING_DYPIUS_ABI;
 window.CONSTANT_STAKING_DYPIUS_BSCOTHER1_ABI = window.CONSTANT_STAKING_DEFI_ABI;
 window.CONSTANT_STAKING_DYPIUS_ETHOTHER1_ABI = window.CONSTANT_STAKING_DEFI_ABI;
-window.CONSTANT_STAKING_DYPIUS_AVAXOTHER1_ABI = window.CONSTANT_STAKING_DEFI_ABI;
-
-
+window.CONSTANT_STAKING_DYPIUS_AVAXOTHER1_ABI =
+  window.CONSTANT_STAKING_DEFI_ABI;
 
 window.CONSTANT_STAKINGBSC_NEW12_ABI = window.CONSTANT_STAKINGBSC_NEW_ABI;
 window.CONSTANT_STAKINGBSC_NEW13_ABI = window.CONSTANT_STAKINGBSC_NEW_ABI;
@@ -3388,7 +3375,6 @@ class NEW_GOVERNANCE {
 window.new_governance = new NEW_GOVERNANCE();
 window.new_governancedypv2 = new NEW_GOVERNANCE("NEW_GOVERNANCEDYPV2");
 
-
 //governance avax
 
 class NEW_GOVERNANCEAVAX {
@@ -3491,8 +3477,9 @@ class NEW_GOVERNANCEAVAX {
 }
 
 window.new_governanceavax = new NEW_GOVERNANCEAVAX();
-window.new_governanceavaxdypv2 = new NEW_GOVERNANCEAVAX("NEW_GOVERNANCEAVAXDYPV2");
-
+window.new_governanceavaxdypv2 = new NEW_GOVERNANCEAVAX(
+  "NEW_GOVERNANCEAVAXDYPV2"
+);
 
 class NEW_GOVERNANCEBSC {
   constructor(ticker = "NEW_GOVERNANCEBSC", token = "REWARD_TOKEN") {
@@ -3594,8 +3581,7 @@ class NEW_GOVERNANCEBSC {
 }
 
 window.new_governancebsc = new NEW_GOVERNANCEBSC();
-window.new_governancebscdypv2 = new NEW_GOVERNANCEBSC('NEW_GOVERNANCEBSCDYPV2');
-
+window.new_governancebscdypv2 = new NEW_GOVERNANCEBSC("NEW_GOVERNANCEBSCDYPV2");
 
 window.CONSTANT_STAKINGIDYPAVAX_1_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYPAVAX_2_ABI = window.CONSTANT_STAKING_IDYP_ABI;
@@ -3936,18 +3922,16 @@ class LANDNFT {
  * @param {"TOKEN" | "CAWSPREMIUM" } key
  */
 async function getContractCawsPremiumNFT(key) {
- 
   let address = window.config.nft_caws_premiumstake_address;
- 
-    window.web3 = new Web3(window.ethereum);
-    window.cached_contracts[key] = new window.web3.eth.Contract(
-      window.CAWSPREMIUM_ABI,
-      address,
-      {
-        from: await getCoinbase(),
-      }
-    );
- 
+
+  window.web3 = new Web3(window.ethereum);
+  window.cached_contracts[key] = new window.web3.eth.Contract(
+    window.CAWSPREMIUM_ABI,
+    address,
+    {
+      from: await getCoinbase(),
+    }
+  );
 
   return window.cached_contracts[key];
 }
@@ -3962,14 +3946,12 @@ class CAWSPREMIUM {
       "depositsOf",
       "expiration",
       "stakingTime",
-      
     ].forEach((fn_name) => {
       this[fn_name] = async function (...args) {
         let contract = await getContractCawsPremiumNFT(this.key);
         return await contract.methods[fn_name](...args).call();
       };
     });
-
   }
 
   async approveStakeCawsPremium(addr) {
@@ -4377,7 +4359,6 @@ async function myNftListContract(address) {
 
   return nftList;
 }
-
 
 async function myNftList(address) {
   return await window.$.get(
@@ -16598,6 +16579,324 @@ window.SUBSCRIPTION_NEWBNB_ABI = [
     stateMutability: "nonpayable",
     type: "function",
   },
+];
+
+window.SUBSCRIPTION_NEWBNB2_ABI = [
+  { inputs: [], stateMutability: "nonpayable", type: "constructor" },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "previousOwner",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "OwnershipTransferred",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "platformTokenAmount",
+        type: "uint256",
+      },
+    ],
+    name: "Subscribe",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amountDai",
+        type: "uint256",
+      },
+    ],
+    name: "SubscriptionFeeSet",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "tokenAddress",
+        type: "address",
+      },
+    ],
+    name: "SupportedTokenAdded",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "tokenAddress",
+        type: "address",
+      },
+    ],
+    name: "SupportedTokenRemoved",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "accountAddress",
+        type: "address",
+      },
+    ],
+    name: "UnsubscribeAddress",
+    type: "event",
+  },
+  {
+    inputs: [],
+    name: "ONE_HUNDRED_X_100",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "SLIPPAGE_TOLERANCE_X_100",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "TRUSTED_DAI_ADDRESS",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "WBNB_ADDRESS",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "nftAddress", type: "address" },
+      { internalType: "uint256", name: "discountPercentage", type: "uint256" },
+      { internalType: "uint256", name: "durationInDays", type: "uint256" },
+    ],
+    name: "addOrUpdateNFTDiscount",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address[]", name: "subscribers", type: "address[]" },
+    ],
+    name: "addSubscribersInBulk",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "tokenAddress", type: "address" },
+    ],
+    name: "addSupportedToken",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "discountPercentageGlobal",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "tokenAddress", type: "address" },
+      { internalType: "uint256", name: "discountPercentage", type: "uint256" },
+    ],
+    name: "getEstimatedTokenSubscriptionAmount",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "isTokenSupported",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "nftDiscounts",
+    outputs: [
+      { internalType: "address", name: "nftAddress", type: "address" },
+      { internalType: "uint256", name: "discountPercentage", type: "uint256" },
+      { internalType: "uint256", name: "expiration", type: "uint256" },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "owner",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "nftAddress", type: "address" }],
+    name: "removeNFTDiscount",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "tokenAddress", type: "address" },
+    ],
+    name: "removeSupportedToken",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256", name: "_newDiscount", type: "uint256" },
+    ],
+    name: "setDiscountPercentage",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "newSubscriptionFeeInDai",
+        type: "uint256",
+      },
+    ],
+    name: "setSubscriptionFee",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "tokenAddress", type: "address" },
+      { internalType: "uint256", name: "amount", type: "uint256" },
+    ],
+    name: "subscribe",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "nftAddress", type: "address" },
+      { internalType: "uint256", name: "tokenID", type: "uint256" },
+      { internalType: "address", name: "tokenAddress", type: "address" },
+      { internalType: "uint256", name: "tokenAmount", type: "uint256" },
+    ],
+    name: "subscribeNFT",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "subscribeWithBNB",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "subscriptionFeeInDai",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "subscriptionPlatformTokenAmount",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "token", type: "address" },
+      { internalType: "address", name: "recipient", type: "address" },
+      { internalType: "uint256", name: "amount", type: "uint256" },
+    ],
+    name: "transferAnyERC20Token",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "uniswapRouterV2",
+    outputs: [
+      { internalType: "contract IUniswapV2Router", name: "", type: "address" },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "accountAddress", type: "address" },
+    ],
+    name: "unsubscribeAddress",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  { stateMutability: "payable", type: "receive" },
 ];
 
 window.SUBSCRIPTION_CFX_ABI = [
@@ -36827,7 +37126,6 @@ async function getContract({ key, address = null, ABI = null }) {
   return window.cached_contracts[key];
 }
 
-
 function wait(ms) {
   console.log("Waiting " + ms + "ms");
   return new Promise((r) =>
@@ -37175,11 +37473,9 @@ Object.keys(window.config)
       k.startsWith("reward_tokenavax") ||
       k.startsWith("reward_token_dypius_eth") ||
       k.startsWith("reward_token_dypius_base") ||
-
       k.startsWith("reward_token_dypius_bsc") ||
       k.startsWith("reward_token_wbnb") ||
       k.startsWith("reward_token_wavax") ||
-
       k.startsWith("token_dyp_new") ||
       k.startsWith("token_dypius_new") ||
       k.startsWith("token_dypius_new_avax") ||
@@ -37281,7 +37577,6 @@ Object.keys(window.config)
       k.startsWith("new_governance") ||
       k.startsWith("new_governanceavax") ||
       k.startsWith("new_governancebsc") ||
-
       k.startsWith("new_governancedypv2") ||
       k.startsWith("new_governanceavaxdypv2") ||
       k.startsWith("new_governancebscdypv2") ||
@@ -37522,15 +37817,12 @@ Object.keys(window.config)
       ? window.NEW_GOVERNANCEAVAX_ABI
       : k.startsWith("new_governancebsc")
       ? window.NEW_GOVERNANCEBSC_ABI
-
       : k.startsWith("new_governancedypv2")
       ? window.NEW_GOVERNANCE_ABI
       : k.startsWith("new_governanceavaxdypv2")
       ? window.NEW_GOVERNANCEAVAX_ABI
       : k.startsWith("new_governancebscdypv2")
       ? window.NEW_GOVERNANCEBSC_ABI
-
-
       : window.STAKING_ABI;
   });
 
@@ -37875,7 +38167,13 @@ async function getLockedAmountETH(pair) {
 
 async function getTokenHolderBalance(token, holder) {
   let tokenContract = await getContract({ address: token, ABI: ERC20_ABI });
-  return await tokenContract.methods.balanceOf(holder).call().catch((e)=>{console.error(e); return 0});
+  return await tokenContract.methods
+    .balanceOf(holder)
+    .call()
+    .catch((e) => {
+      console.error(e);
+      return 0;
+    });
 }
 async function getTokenTotalSupply(token) {
   let tokenContract = await getContract({ address: token, ABI: ERC20_ABI });
@@ -37885,8 +38183,6 @@ async function approveToken(token, spender, amount) {
   let tokenContract = await getContract({ address: token, ABI: ERC20_ABI });
   return await tokenContract.methods.approve(spender, amount).send();
 }
-
- 
 
 async function createLock(pair, baseToken, amount, unlockTimestamp) {
   let lockerContract = await getContract({ key: "LOCKER" });
@@ -37984,28 +38280,44 @@ async function getEstimatedTokenSubscriptionAmount(tokenAddress) {
   let subscriptionContract = await getContract({ key: "SUBSCRIPTION_NEWAVAX" });
   return await subscriptionContract.methods
     .getEstimatedTokenSubscriptionAmount(tokenAddress)
-    .call().catch((e)=>{console.error(e); return 0});
+    .call()
+    .catch((e) => {
+      console.error(e);
+      return 0;
+    });
 }
 
 async function getEstimatedTokenSubscriptionAmountETH(tokenAddress) {
   let subscriptionContract = await getContract({ key: "SUBSCRIPTION_NEWETH" });
   return await subscriptionContract.methods
     .getEstimatedTokenSubscriptionAmount(tokenAddress)
-    .call().catch((e)=>{console.error(e); return 0});
+    .call()
+    .catch((e) => {
+      console.error(e);
+      return 0;
+    });
 }
 
 async function getEstimatedTokenSubscriptionAmountBNB(tokenAddress) {
   let subscriptionContract = await getContract({ key: "SUBSCRIPTION_NEWBNB" });
   return await subscriptionContract.methods
     .getEstimatedTokenSubscriptionAmount(tokenAddress)
-    .call().catch((e)=>{console.error(e); return 0});
+    .call()
+    .catch((e) => {
+      console.error(e);
+      return 0;
+    });
 }
 
 async function getEstimatedTokenSubscriptionAmountCFX(tokenAddress) {
   let subscriptionContract = await getContract({ key: "SUBSCRIPTION_CFX" });
   return await subscriptionContract.methods
     .getEstimatedTokenSubscriptionAmount(tokenAddress)
-    .call().catch((e)=>{console.error(e); return 0});
+    .call()
+    .catch((e) => {
+      console.error(e);
+      return 0;
+    });
 }
 
 async function getEstimatedTokenSubscriptionAmountBase(tokenAddress) {
@@ -38015,7 +38327,11 @@ async function getEstimatedTokenSubscriptionAmountBase(tokenAddress) {
   );
   return await baseContract.methods
     .getEstimatedTokenSubscriptionAmount(tokenAddress)
-    .call().catch((e)=>{console.error(e); return 0});
+    .call()
+    .catch((e) => {
+      console.error(e);
+      return 0;
+    });
 }
 
 async function getEstimatedTokenSubscriptionAmountSkale(tokenAddress) {
@@ -38025,7 +38341,11 @@ async function getEstimatedTokenSubscriptionAmountSkale(tokenAddress) {
   );
   return await skaleContract.methods
     .getEstimatedTokenSubscriptionAmount(tokenAddress)
-    .call().catch((e)=>{console.error(e); return 0});
+    .call()
+    .catch((e) => {
+      console.error(e);
+      return 0;
+    });
 }
 
 // ===================== end subscription contract functions ================================

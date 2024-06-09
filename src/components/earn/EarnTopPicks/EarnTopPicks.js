@@ -33,6 +33,8 @@ import closeX from "../../earnOther/assets/closeX.svg";
 import { ClickAwayListener } from "@material-ui/core";
 import Tooltip from "@material-ui/core/Tooltip";
 import moreinfo from "../../FARMINNG/assets/more-info.svg";
+import warning from "../../FARMINNG/assets/warning.svg";
+
 import eth from "../assets/eth.svg";
 import ethActive from "../assets/ethActive.svg";
 
@@ -4534,12 +4536,12 @@ const EarnTopPicks = ({
                               title={
                                 <div className="tooltip-text">
                                   {
-                                    "APR reflects the interest rate of earnings on an account over the course of one year."
+                                   selectedPool?.id === '0x92A84052Fe6945949A295AF14a7506e3dc085492' ? 'APR reflects the interest rate of earnings on an account over the course of one year. In order to get to the 25% APR for a pool with DYP deposits and iDYP rewards, there was a snapshot for both $DYP and $iDYP, at the prices of 0.048$ respectively 0.0015$, therefore for a 25% APR, the ratio for 1 $DYP staked will be 8 $iDYP received.' : "APR reflects the interest rate of earnings on an account over the course of one year."
                                   }
                                 </div>
                               }
                             >
-                              <img src={moreinfo} alt="" onClick={aprOpen} />
+                              <img src={selectedPool?.id === '0x92A84052Fe6945949A295AF14a7506e3dc085492' ? warning : moreinfo} alt="" onClick={aprOpen} style={{width: 16, height:16}}/>
                             </Tooltip>
                           </ClickAwayListener>
                         </span>
