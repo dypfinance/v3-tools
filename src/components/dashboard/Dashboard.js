@@ -115,25 +115,7 @@ const Dashboard = ({
   const [avaxPoolsiDyp, setavaxPoolsiDyp] = useState([]);
   const [selectedchain, setselectedchain] = useState("");
 
-  const phase2_pools = [
-    {
-      id: "0x92A84052Fe6945949A295AF14a7506e3dc085492",
-      apy_percent: 25,
-      tvl_usd: 4888682.3565666875,
-      link_logo: "https://www.dypius.com/logo192.png",
-      link_pair: "https://app.dyp.finance/constant-staking-3",
-      pool_name: "DYP Constant Staking ETH",
-      pair_name: "DYP",
-      return_types: "iDYP",
-      lock_time: "90 days",
-      expired: "No",
-      new_pool: "Yes",
-      apy_performancefee: 25,
-      performancefee: 0,
-      type: "dyp",
-      chain: "eth",
-    },
-  ];
+ 
 
   const fetchUserPools = async () => {
     if (coinbase && coinbase.includes("0x")) {
@@ -850,16 +832,10 @@ const Dashboard = ({
   }, []);
 
   useEffect(() => {
-    if (network.toString() === "1") {
-      setselectedchain("eth");
-    } else if (network.toString() === "56") {
-      setselectedchain("bnb");
-    } else if (network.toString() === "43114") {
-      setselectedchain("avax");
-    } else {
-      setselectedchain("eth");
-    }
-  }, [network]);
+    if (selectedPool && selectedPool.chain) {
+      setselectedchain(selectedPool?.chain);
+    }  
+  }, [selectedPool]);
 
   
   return (
