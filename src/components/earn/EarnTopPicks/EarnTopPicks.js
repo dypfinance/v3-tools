@@ -4290,8 +4290,8 @@ const EarnTopPicks = ({
                       avaxPoolsDyp,
                       avaxPoolsiDyp
                     )}
-                    onClick={() => [
-                      handleSelectPool(
+                    onClick={() => 
+                     { handleSelectPool(
                         selectedchain,
                         "No lock",
                         selectedpoolType,
@@ -4301,8 +4301,8 @@ const EarnTopPicks = ({
                         bnbPoolsiDyp,
                         avaxPoolsDyp,
                         avaxPoolsiDyp
-                      ),
-                    ]}
+                      )}
+                    }
                   >
                     Flexible
                   </button>
@@ -4319,8 +4319,8 @@ const EarnTopPicks = ({
                       avaxPoolsDyp,
                       avaxPoolsiDyp
                     )}
-                    onClick={() => [
-                      handleSelectPool(
+                    onClick={() => 
+                      {handleSelectPool(
                         selectedchain,
                         "30 days",
                         selectedpoolType,
@@ -4330,8 +4330,8 @@ const EarnTopPicks = ({
                         bnbPoolsiDyp,
                         avaxPoolsDyp,
                         avaxPoolsiDyp
-                      ),
-                    ]}
+                      )}
+                    }
                   >
                     30 Days
                   </button>
@@ -4348,7 +4348,7 @@ const EarnTopPicks = ({
                       avaxPoolsDyp,
                       avaxPoolsiDyp
                     )}
-                    onClick={() => [
+                    onClick={() => {
                       handleSelectPool(
                         selectedchain,
                         "60 days",
@@ -4359,8 +4359,8 @@ const EarnTopPicks = ({
                         bnbPoolsiDyp,
                         avaxPoolsDyp,
                         avaxPoolsiDyp
-                      ),
-                    ]}
+                      )
+                    }}
                   >
                     60 Days
                   </button>
@@ -4377,8 +4377,8 @@ const EarnTopPicks = ({
                       avaxPoolsDyp,
                       avaxPoolsiDyp
                     )}
-                    onClick={() => [
-                      handleSelectPool(
+                    onClick={() => 
+                     { handleSelectPool(
                         selectedchain,
                         "90 days",
                         selectedpoolType,
@@ -4388,8 +4388,8 @@ const EarnTopPicks = ({
                         bnbPoolsiDyp,
                         avaxPoolsDyp,
                         avaxPoolsiDyp
-                      ),
-                    ]}
+                      )}
+                    }
                   >
                     90 Days
                   </button>
@@ -4406,8 +4406,8 @@ const EarnTopPicks = ({
                       avaxPoolsDyp,
                       avaxPoolsiDyp
                     )}
-                    onClick={() => [
-                      handleSelectPool(
+                    onClick={() => 
+                     { handleSelectPool(
                         selectedchain,
                         "120 days",
                         selectedpoolType,
@@ -4417,8 +4417,8 @@ const EarnTopPicks = ({
                         bnbPoolsiDyp,
                         avaxPoolsDyp,
                         avaxPoolsiDyp
-                      ),
-                    ]}
+                      )}
+                    }
                   >
                     120 Days
                   </button>
