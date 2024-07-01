@@ -114,8 +114,7 @@ const Dashboard = ({
   const [avaxPoolsDyp, setavaxPoolsDyp] = useState([]);
   const [avaxPoolsiDyp, setavaxPoolsiDyp] = useState([]);
   const [selectedchain, setselectedchain] = useState("");
-
- 
+  const [showMobilePopup, setshowMobilePopup] = useState(false);
 
   const fetchUserPools = async () => {
     if (coinbase && coinbase.includes("0x")) {
@@ -821,6 +820,24 @@ const Dashboard = ({
     height: windowSize.width < 500 ? "480px" : "auto",
     background: `#1A1A36`,
   };
+
+  const style2 = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width:
+      windowSize.width > 1400 ? "540px" : windowSize.width > 786 ? "50%" : "95%",
+    boxShadow: 24,
+    p: 4,
+    overflow: "auto",
+    minHeight: 200,
+    overflowX: "hidden",
+    borderRadius: "10px",
+    height: windowSize.width < 500 ? "480px" : "auto",
+    background: `#1A1A36`,
+  };
+
   useEffect(() => {
     fetchTotalTvl();
   }, [wbnbPrice, ethPrice, avaxPrice, count]);
@@ -834,10 +851,9 @@ const Dashboard = ({
   useEffect(() => {
     if (selectedPool && selectedPool.chain) {
       setselectedchain(selectedPool?.chain);
-    }  
+    }
   }, [selectedPool]);
 
-  
   return (
     <>
       <div className="d-none">
@@ -857,8 +873,12 @@ const Dashboard = ({
               <div className="d-flex flex-column gap-3 gap-lg-4 justify-content-between dashboard-cards-wrapper">
                 <ExplorerCard />
                 <div className="d-flex flex-column flex-md-row justify-content-between gap-3">
+                  <BridgeCard
+                    onMobileClick={() => {
+                      setshowMobilePopup(true);
+                    }}
+                  />{" "}
                   <GovCard />
-                  <BridgeCard />
                 </div>
               </div>
             </div>
@@ -888,7 +908,7 @@ const Dashboard = ({
                             key={index}
                             className="poolscardwrapper cursor-pointer position-relative p-0 position-relative"
                           >
-                             {item.chain === "bnb" && (
+                            {item.chain === "bnb" && (
                               <div className="d-flex justify-content-end align-items-center bnbTagwrapper pe-2">
                                 <img
                                   src={require("./assets/bnblogo.svg").default}
@@ -1864,40 +1884,40 @@ const Dashboard = ({
                     }}
                   />
                 ) : activeCard &&
-                selectedPool?.id ===
-                  "0xC9075092Cc46E176B1F3c0D0EB8223F1e46555B0"  ? (
-                <StakeDypiusEth
-                  selectedPool={selectedPool}
-                  selectedTab={selectedTab}
-                  staking={window.constant_staking_dypius_eth1}
-                  apr={selectedPool?.apy_percent}
-                  liquidity={eth_address}
-                  expiration_time={"09 Nov 2024"}
-                  finalApr={selectedPool?.apy_performancefee}
-                  lockTime={
-                    selectedPool?.lock_time?.split(" ")[0] === "No"
-                      ? "No Lock"
-                      : parseInt(selectedPool?.lock_time?.split(" ")[0])
-                  }
-                  listType={"table"}
-                  other_info={false}
-                  fee={selectedPool?.performancefee}
-                  is_wallet_connected={isConnected}
-                  coinbase={coinbase}
-                  the_graph_result={the_graph_result}
-                  chainId={network.toString()}
-                  handleConnection={handleConnection}
-                  handleSwitchNetwork={handleSwitchNetwork}
-                  expired={false}
-                  referrer={referrer}
-                  onConnectWallet={() => {
-                    setShowDetails(false);
-                    onConnectWallet();
-                    setselectedPool([]);
-                    setDetails(999);
-                  }}
-                />
-              ): activeCard &&
+                  selectedPool?.id ===
+                    "0xC9075092Cc46E176B1F3c0D0EB8223F1e46555B0" ? (
+                  <StakeDypiusEth
+                    selectedPool={selectedPool}
+                    selectedTab={selectedTab}
+                    staking={window.constant_staking_dypius_eth1}
+                    apr={selectedPool?.apy_percent}
+                    liquidity={eth_address}
+                    expiration_time={"09 Nov 2024"}
+                    finalApr={selectedPool?.apy_performancefee}
+                    lockTime={
+                      selectedPool?.lock_time?.split(" ")[0] === "No"
+                        ? "No Lock"
+                        : parseInt(selectedPool?.lock_time?.split(" ")[0])
+                    }
+                    listType={"table"}
+                    other_info={false}
+                    fee={selectedPool?.performancefee}
+                    is_wallet_connected={isConnected}
+                    coinbase={coinbase}
+                    the_graph_result={the_graph_result}
+                    chainId={network.toString()}
+                    handleConnection={handleConnection}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    expired={false}
+                    referrer={referrer}
+                    onConnectWallet={() => {
+                      setShowDetails(false);
+                      onConnectWallet();
+                      setselectedPool([]);
+                      setDetails(999);
+                    }}
+                  />
+                ) : activeCard &&
                   selectedPool?.id ===
                     "0xbE030A667d9ee75a9FCdF2162A2C14ccCAB573dD" ? (
                   <StakeDypiusEth2Phase2
@@ -2039,6 +2059,70 @@ const Dashboard = ({
                 ) : (
                   <></>
                 )}
+              </div>
+            </div>
+          </Box>
+        </Modal>
+      )}
+
+      {showMobilePopup && (
+        <Modal
+          open={showMobilePopup}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style2}>
+            <div className="d-flex flex-column justify-content-center position-relative">
+              <div className="d-flex flex-column gap-3 align-items-center justify-content-between">
+                <div className="d-flex align-items-center  justify-content-between gap-5 w-100">
+                  <h4 className="mobile-popup-title">Dypius Mobile App</h4>
+
+                  <img
+                    src={closeX}
+                    alt=""
+                    className="close-x position-relative cursor-pointer "
+                    onClick={() => {
+                      setshowMobilePopup(false);
+                       
+                    }}
+                    style={{
+                      bottom: "17px",
+                      alignSelf: "end",
+                      width: 16,
+                      height: 16,
+                    }}
+                  />
+                </div>
+                <div className="mobile-popup-content-wrapper p-3">
+                  <div className="d-flex flex-column gap-3">
+                    <p className="mobile-content-text">
+                      We're happy to introduce the Dypius mobile app! Please
+                      note that the app is currently available exclusively in
+                      APK format, meaning it can only be installed on Android
+                      devices. At this time, there is no desktop version
+                      available; the app is specifically designed for mobile use
+                      to provide the best on-the-go experience.
+                    </p>
+                    <p className="mobile-content-text">
+                      {" "}
+                      In this early release, you'll find that some features are
+                      fully functional, allowing you to engage with various
+                      aspects of the Dypius ecosystem. However, please note that
+                      other features are in a view-only mode as we diligently
+                      work on further updates to enhance your experience.
+                    </p>
+                    <p className="mobile-content-text">
+                      Your feedback is incredibly valuable to us as we continue
+                      to develop and improve the app. We appreciate your
+                      understanding and patience as we work to bring you the
+                      best possible mobile experience.
+                    </p>
+                  </div>
+                </div>
+                <div className="separator my-2"></div>
+                <div className="d-flex align-items-center justify-content-center">
+                  <button className="btn filledbtn">Download</button>
+                </div>
               </div>
             </div>
           </Box>
