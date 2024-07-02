@@ -2134,9 +2134,9 @@ const Dashboard = ({
                     </button>
                   </BrowserView>
                   <MobileView>
-                    <button className={`btn filledbtn `}>
+                    <a  href="https://drive.google.com/file/d/1EvPyW0YWYcMc_x6sWViGYJxMStbg13D5/view" target="_blank" rel="noreferrer"  className={`btn filledbtn `}>
                       Download on mobile
-                    </button>
+                    </a>
                   </MobileView>
                 </div>
               </div>
