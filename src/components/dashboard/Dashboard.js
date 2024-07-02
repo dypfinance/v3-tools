@@ -840,7 +840,7 @@ const Dashboard = ({
     minHeight: 200,
     overflowX: "hidden",
     borderRadius: "10px",
-    height: windowSize.width < 500 ? "480px" : "auto",
+    height: "auto",
     background: `#1A1A36`,
   };
 

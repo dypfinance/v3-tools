@@ -20,7 +20,7 @@
 
 .mobile-content-list {
   padding: 10px 20px;
-  gap: 15px;
+  gap: 10px;
   display: flex;
   flex-direction: column;
 }
@@ -46,6 +46,7 @@
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+  list-style-type: disc;
 }
 
 .view-more-title {
