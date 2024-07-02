@@ -50,6 +50,7 @@ import bnbActive from "../earn/assets/bnbActive.svg";
 
 import avax from "../earn/assets/avax.svg";
 import avaxActive from "../earn/assets/avaxActive.svg";
+import { isMobile, MobileView, BrowserView } from "react-device-detect";
 
 const Dashboard = ({
   isConnected,
@@ -65,6 +66,7 @@ const Dashboard = ({
   isPremium,
   onConnectWallet,
   aggregatorPools,
+  downloadClick,onDownloadClose
 }) => {
   const [topPools, setTopPools] = useState([]);
   const [cawsLandCard, setCawsLandCard] = useState([]);
@@ -504,7 +506,7 @@ const Dashboard = ({
         return b.apy_percent - a.apy_percent;
       });
       const finalPools = [sortedAprsEthereum[0], allPools[1]];
-      console.log(allPools, "allPools");
+     
       setTopPools(allPools);
     }
   };
@@ -827,7 +829,11 @@ const Dashboard = ({
     left: "50%",
     transform: "translate(-50%, -50%)",
     width:
-      windowSize.width > 1400 ? "540px" : windowSize.width > 786 ? "50%" : "95%",
+      windowSize.width > 1400
+        ? "540px"
+        : windowSize.width > 786
+        ? "50%"
+        : "95%",
     boxShadow: 24,
     p: 4,
     overflow: "auto",
@@ -853,7 +859,7 @@ const Dashboard = ({
       setselectedchain(selectedPool?.chain);
     }
   }, [selectedPool]);
-
+  
   return (
     <>
       <div className="d-none">
@@ -2065,9 +2071,9 @@ const Dashboard = ({
         </Modal>
       )}
 
-      {showMobilePopup && (
+      {(showMobilePopup === true || downloadClick === true) && (
         <Modal
-          open={showMobilePopup}
+          open={showMobilePopup || downloadClick}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
@@ -2083,7 +2089,7 @@ const Dashboard = ({
                     className="close-x position-relative cursor-pointer "
                     onClick={() => {
                       setshowMobilePopup(false);
-                       
+                      onDownloadClose()
                     }}
                     style={{
                       bottom: "17px",
@@ -2095,33 +2101,43 @@ const Dashboard = ({
                 </div>
                 <div className="mobile-popup-content-wrapper p-3">
                   <div className="d-flex flex-column gap-3">
-                    <p className="mobile-content-text">
-                      We're happy to introduce the Dypius mobile app! Please
-                      note that the app is currently available exclusively in
-                      APK format, meaning it can only be installed on Android
-                      devices. At this time, there is no desktop version
-                      available; the app is specifically designed for mobile use
-                      to provide the best on-the-go experience.
-                    </p>
-                    <p className="mobile-content-text">
-                      {" "}
-                      In this early release, you'll find that some features are
-                      fully functional, allowing you to engage with various
-                      aspects of the Dypius ecosystem. However, please note that
-                      other features are in a view-only mode as we diligently
-                      work on further updates to enhance your experience.
-                    </p>
-                    <p className="mobile-content-text">
-                      Your feedback is incredibly valuable to us as we continue
-                      to develop and improve the app. We appreciate your
-                      understanding and patience as we work to bring you the
-                      best possible mobile experience.
-                    </p>
+                    <ul className="mobile-content-list">
+                      <li className="mobile-content-text">
+                        Available exclusively in APK format for Android devices.
+                      </li>
+                      <li className="mobile-content-text">
+                        Early release with some fully functional features.
+                      </li>
+                      <li className="mobile-content-text">
+                        Other features are in view-only mode, relying on the
+                        MetaMask Unity SDK.
+                      </li>
+                      <li className="mobile-content-text">
+                        MetaMask-related issues are beyond our control; we're
+                        seeking support to resolve them.
+                      </li>
+                      <li className="mobile-content-text">
+                        Your feedback is valuable as we continue to improve the
+                        app.
+                      </li>
+                      <li className="mobile-content-text">
+                        Thank you for your understanding and patience.
+                      </li>
+                    </ul>
                   </div>
                 </div>
                 <div className="separator my-2"></div>
                 <div className="d-flex align-items-center justify-content-center">
-                  <button className="btn filledbtn">Download</button>
+                  <BrowserView>
+                    <button className={`btn disabled-btn `} disabled={true}>
+                      Download on mobile
+                    </button>
+                  </BrowserView>
+                  <MobileView>
+                    <button className={`btn filledbtn `}>
+                      Download on mobile
+                    </button>
+                  </MobileView>
                 </div>
               </div>
             </div>

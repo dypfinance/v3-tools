@@ -1,0 +1,26 @@
+.mobile-flyout-wrapper {
+  background: linear-gradient(91deg, #b936f5 0%, #c64c85 100%);
+  position: fixed;
+  z-index: 3;
+  top: 0px;
+}
+
+.mobile-flyout-text {
+  color: #fff;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.download-button {
+  border-radius: 30px;
+  background: #fff;
+  color: #b936f5;
+  text-align: center;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  border: none;
+}
