@@ -133,7 +133,6 @@ class App extends React.Component {
     if (result && result.status === 200) {
       const pools = result.data.stakingLists;
       this.setState({ aggregatorPools: pools });
- 
     }
   };
 
@@ -526,6 +525,10 @@ class App extends React.Component {
     this.updateWindowDimensions();
     this.fetchAggregatorPools();
     window.addEventListener("resize", this.updateWindowDimensions);
+
+    if (window.location.hash === "#mobile-app") {
+      this.setState({ downloadClick: true });
+    }
     if (
       window.ethereum &&
       !window.coin98 &&
@@ -1088,6 +1091,7 @@ class App extends React.Component {
                           downloadClick={this.state.downloadClick}
                           onDownloadClose={() => {
                             this.setState({ downloadClick: false });
+                            window.location.hash = ''
                           }}
                         />
                       )}
