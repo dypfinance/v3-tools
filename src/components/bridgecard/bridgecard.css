@@ -54,6 +54,14 @@
   @media screen and (max-width: 786px) {
     .bridgecard-wrapper{
       width: 100%;
+      background-position: right;
+      background-repeat: no-repeat;
+      background-size: contain;
+      position: relative;
+      transition: all .25s;
+      cursor: pointer;
+      background-color: rgba(49, 47, 105, 1);
+
     }
   }
   
