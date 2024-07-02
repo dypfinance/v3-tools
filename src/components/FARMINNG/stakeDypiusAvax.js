@@ -589,8 +589,14 @@ const StakeDypiusAvax = ({
 
   const getApproxReturn = (depositAmount, days) => {
     let APY = getAPY() - fee_s;
+    const expirationDate = new Date("2024-11-09 23:11:00 GMT+02:00")
+    const currentDate = new Date();
+    const timeDifference = expirationDate - currentDate; 
+    const millisecondsInADay = 1000 * 60 * 60 * 24;
+    const daysUntilExpiration = Math.floor(timeDifference / millisecondsInADay);
 
-    return ((depositAmount * APY) / 100 / 365) * days;
+
+    return ((depositAmount * APY) / 100 / 365) * daysUntilExpiration;
   };
 
   const getReferralLink = () => {

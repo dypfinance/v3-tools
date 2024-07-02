@@ -18,6 +18,29 @@
   width: 49%;
 }
 
+.mobile-popup-title {
+  color: #FFF;
+font-family: Poppins;
+font-size: 18px;
+font-style: normal;
+font-weight: 600;
+line-height: 18px;
+letter-spacing: -0.324px;
+}
+
+.mobile-popup-content-wrapper  {
+  border-radius: 8px;
+background: #211F45;
+}
+
+.mobile-content-text {
+  color: #FFF; 
+font-size: 12px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+}
+
 .view-more-title {
   width: fit-content;
   font-style: normal;

@@ -1,6 +1,6 @@
 .bridgecard-wrapper {
     padding: 18px;
-    background-color: #312F69;
+    background: url('./assets/mobileApp.webp');
     border-radius: 12px;
   border: 2px solid #312F69;
     /* background-image: url("./assets/bridgebg.png"); */
@@ -41,7 +41,7 @@
     font-size: 12px;
     line-height: 21px;
     color: #D6D8E7;
-    /* width: 80%; */
+    width: 70%;
   }
   
   .bridgecard-btntext {
@@ -54,6 +54,14 @@
   @media screen and (max-width: 786px) {
     .bridgecard-wrapper{
       width: 100%;
+      background-position: right;
+      background-repeat: no-repeat;
+      background-size: contain;
+      position: relative;
+      transition: all .25s;
+      cursor: pointer;
+      background-color: rgba(49, 47, 105, 1);
+
     }
   }
   

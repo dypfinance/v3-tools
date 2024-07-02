@@ -24,28 +24,8 @@ import { ClickAwayListener } from "@material-ui/core";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
 import axios from "axios";
 
-const renderer = ({ days, hours, minutes, seconds }) => {
-  return (
-    <div className="d-flex gap-3 justify-content-center align-items-center">
-      <div className="d-flex gap-1 align-items-baseline">
-        <span>{days < 10 ? "0" + days : days}</span>
-        <span style={{ fontSize: "13px" }}>days</span>
-      </div>
-      <div className="d-flex gap-1 align-items-baseline">
-        <span>{hours < 10 ? "0" + hours : hours}</span>
-        <span style={{ fontSize: "13px" }}>hours</span>
-      </div>
-      <div className="d-flex gap-1 align-items-baseline">
-        <span>{minutes < 10 ? "0" + minutes : minutes}</span>
-        <span style={{ fontSize: "13px" }}>minutes</span>
-      </div>
-      <span className="d-none">{seconds < 10 ? "0" + seconds : seconds}</span>
-      <span className="d-none">seconds</span>
-    </div>
-  );
-};
 
-const StakeDypiusEth = ({
+const StakeDypiusEth2Phase2 = ({
   selectedPool,
   selectedTab,
   staking,
@@ -81,7 +61,8 @@ const StakeDypiusEth = ({
   } = window;
   let token_symbol = "DYP";
 
-  // token, staking
+  // 20% apr 500K Cap in DYP, locktime 120days, dyp deposit & dyp rewards
+
 
   const TOKEN_DECIMALS = window.config.token_decimals;
 
@@ -161,6 +142,7 @@ const StakeDypiusEth = ({
   );
   const [tvl, settvl] = useState("");
   const [tvlusd, settvlusd] = useState("");
+  const [canDeposit, setCanDeposit] = useState(true);
 
   const [referralFeeEarned, setreferralFeeEarned] = useState("");
   const [stakingOwner, setstakingOwner] = useState(null);
@@ -199,6 +181,8 @@ const StakeDypiusEth = ({
   const [quotaTooltip, setQuotaTooltip] = useState(false);
   const [maxDepositTooltip, setMaxDepositTooltip] = useState(false);
   const [approvedAmount, setapprovedAmount] = useState("0.00");
+  const [availableQuota, setavailableQuota] = useState(0);
+  const [totalDeposited, settotalDeposited] = useState(0);
 
   const poolCapClose = () => {
     setPoolCapTooltip(false);
@@ -579,7 +563,14 @@ const StakeDypiusEth = ({
         setdepositLoading(false);
         setdepositStatus("success");
         refreshBalance();
+
+        setTimeout(() => {
+          setdepositStatus("initial");
+        setdepositAmount("");
+      }, 5000);
+
       })
+    
       .catch((e) => {
         setdepositLoading(false);
         setdepositStatus("fail");
@@ -603,6 +594,10 @@ const StakeDypiusEth = ({
         setwithdrawLoading(false);
         setwithdrawStatus("success");
         refreshBalance();
+        setTimeout(() => {
+          setwithdrawStatus("initial"); 
+          setwithdrawAmount("");
+        }, 5000);
       })
       .catch((e) => {
         setwithdrawLoading(false);
@@ -628,6 +623,9 @@ const StakeDypiusEth = ({
         setclaimLoading(false);
         setpendingDivs(getFormattedNumber(0, 6));
         refreshBalance();
+        setTimeout(() => {
+          setclaimStatus("initial");
+        }, 5000);
       })
       .catch((e) => {
         setclaimStatus("failed");
@@ -669,8 +667,7 @@ const StakeDypiusEth = ({
   };
 
   const getApproxReturn = (depositAmount, days) => {
-    
-    const expirationDate = new Date("2024-11-09 23:11:00 GMT+02:00")
+    const expirationDate = new Date("2025-06-07 23:11:00 GMT+02:00")
     const currentDate = new Date();
     const timeDifference = expirationDate - currentDate; 
     const millisecondsInADay = 1000 * 60 * 60 * 24;
@@ -704,6 +701,9 @@ const StakeDypiusEth = ({
         setreInvestLoading(false);
         setpendingDivs(getFormattedNumber(0, 6));
         refreshBalance();
+        setTimeout(() => {
+          setreInvestStatus("initial");
+        }, 10000);
       })
       .catch((e) => {
         setreInvestStatus("failed");
@@ -845,9 +845,37 @@ const StakeDypiusEth = ({
       });
   };
 
+  const getAvailableQuota = async()=>{
+    const poolCap = 500000
+    if(staking && staking._address){
+    const stakingSc = new window.infuraWeb3.eth.Contract(window.CONSTANT_STAKING_DYPIUS_ABI, staking._address)
+    const totalDeposited = await stakingSc.methods.totalDeposited().call().catch((e)=>{console.error(e)})
+  
+    const totalDeposited_formatted = new BigNumber(totalDeposited).div(1e18).toFixed(6);
+    const quotaLeft = poolCap - totalDeposited_formatted;
+    setavailableQuota(quotaLeft)
+    settotalDeposited(totalDeposited_formatted)
+  }
+  }
+
+
+  useEffect(()=>{
+    const result = Number(depositAmount) + Number(totalDeposited);
+    if(result>500000) {
+      seterrorMsg('Deposit amount is greater than available quota. Please add another amount.')
+      setCanDeposit(false)
+    } else {
+      seterrorMsg('')
+      setCanDeposit(true)
+    }
+  },[depositAmount, totalDeposited])
+
+
+
   useEffect(() => {
     getUsdPerDyp();
-  }, []);
+    getAvailableQuota()
+  }, [staking]);
 
   return (
     <div className="d-flex flex-column gap-2 w-100">
@@ -901,10 +929,7 @@ const StakeDypiusEth = ({
                 errorMsg ? "justify-content-between" : "justify-content-end"
               } gap-1 align-items-center`}
             >
-              {/* {errorMsg && <h6 className="errormsg m-0">{errorMsg}</h6>} */}
-              <h6 className="errormsg m-0">*Max pool size reached</h6>
-
-
+              {errorMsg && <h6 className="errormsg m-0">{errorMsg}</h6>} 
               <div className="d-flex gap-1 align-items-baseline">
                 <span className="bal-smallTxt">Approved:</span>
                 <span className="bal-bigTxt2">{approvedAmount} DYP</span>
@@ -917,7 +942,7 @@ const StakeDypiusEth = ({
                 <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Pool Cap:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    13M DYP
+                    500K DYP
                     <ClickAwayListener onClickAway={poolCapClose}>
                       <Tooltip
                         open={poolCapTooltip}
@@ -941,7 +966,7 @@ const StakeDypiusEth = ({
                 <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Available Quota:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    N/A
+                    {getFormattedNumber(availableQuota, 2)} DYP
                     <ClickAwayListener onClickAway={quotaClose}>
                       <Tooltip
                         open={quotaTooltip}
@@ -1018,7 +1043,7 @@ const StakeDypiusEth = ({
                     <div className="d-flex flex-column align-items-baseline">
                       <span className="bal-smallTxt">Rewards</span>
                       <span className="bal-bigTxt2">
-                        {getFormattedNumber(pendingDivs)} DYP
+                        {getFormattedNumber(pendingDivs,5)} DYP
                       </span>
                     </div>
                     <button
@@ -1114,7 +1139,7 @@ const StakeDypiusEth = ({
                 <div className="d-flex align-items-center gap-1">
                   <span className="bal-smallTxt">Start date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    09 Nov 2023{" "}
+                  07 Jun 2024{" "}
                  
                   </span>
                 </div>
@@ -1130,33 +1155,31 @@ const StakeDypiusEth = ({
           </div>
           {is_wallet_connected && chainId === "1" && (
             <button
-              disabled={
-                true
-                // depositAmount === "" || depositLoading === true ? true : false
-              }
-              // className={`btn filledbtn ${
-              //   depositAmount === "" &&
-              //   depositStatus === "initial" &&
-              //   "disabled-btn"
-              // } ${
-              //   depositStatus === "deposit" || depositStatus === "success"
-              //     ? "success-button"
-              //     : depositStatus === "fail"
-              //     ? "fail-button"
-              //     : null
-              // } d-flex justify-content-center align-items-center gap-2 m-auto`}
-              className="btn disabled-btn d-flex justify-content-center align-items-center gap-2 m-auto"
-              // onClick={() => {
-              //   depositStatus === "deposit"
-              //     ? handleStake()
-              //     : depositStatus === "initial" && depositAmount !== ""
-              //     ? handleApprove()
-              //     : console.log("");
-              // }}
+            disabled={
+              depositAmount === "" || depositLoading === true || canDeposit === false ? true : false
+            }
+            className={`btn filledbtn ${
+              ((depositAmount === "" &&
+              depositStatus === "initial" )|| (canDeposit === false)) &&
+              "disabled-btn"
+            } ${
+                depositStatus === "deposit" || depositStatus === "success"
+                  ? "success-button"
+                  : depositStatus === "fail"
+                  ? "fail-button"
+                  : null
+              } d-flex justify-content-center align-items-center gap-2 m-auto`}
+              onClick={() => {
+                depositStatus === "deposit"
+                  ? handleStake()
+                  : depositStatus === "initial" && depositAmount !== ""
+                  ? handleApprove()
+                  : console.log("");
+              }}
               style={{ width: "fit-content" }}
             >
               {" "}
-              {/* {depositLoading ? (
+            {depositLoading ? (
                 <div
                   class="spinner-border spinner-border-sm text-light"
                   role="status"
@@ -1171,8 +1194,7 @@ const StakeDypiusEth = ({
                 <>Success</>
               ) : (
                 <>Failed</>
-              )} */}
-              Deposit
+              )}
             </button>
           )}
         </div>
@@ -1287,7 +1309,7 @@ const StakeDypiusEth = ({
                 <div className="d-flex flex-column align-items-baseline">
                   <span className="bal-smallTxt">Rewards</span>
                   <span className="bal-bigTxt2">
-                    {getFormattedNumber(pendingDivs)} DYP
+                    {getFormattedNumber(pendingDivs,5)} DYP
                   </span>
                 </div>
                 <button
@@ -1377,7 +1399,7 @@ const StakeDypiusEth = ({
                 <div className="d-flex align-items-center gap-1">
                   <span className="bal-smallTxt">Start date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    09 Nov 2023{" "}
+                  07 Jun 2024{" "}
                   
                   </span>
                 </div>
@@ -2536,4 +2558,4 @@ const StakeDypiusEth = ({
   );
 };
 
-export default StakeDypiusEth;
+export default StakeDypiusEth2Phase2;
