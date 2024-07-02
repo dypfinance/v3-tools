@@ -49,6 +49,7 @@ import EarnOtherNft from "./components/earnOther/EarnOtherNft";
 import EarnInnerPoolNft from "./components/earnOther/EarnInnerPool/EarnInnerPoolNft";
 import WalletModal from "./components/WalletModal";
 import axios from "axios";
+import MobileFlyout from "./components/mobileFlyout/MobileFlyout";
 
 class App extends React.Component {
   constructor(props) {
@@ -91,6 +92,8 @@ class App extends React.Component {
       referrer: "",
       showRibbon: true,
       showRibbon2: true,
+      showFlyout: true,
+      downloadClick: false,
       showWalletPopup: false,
       aggregatorPools: [],
       userCurencyBalance: 0,
@@ -130,7 +133,6 @@ class App extends React.Component {
     if (result && result.status === 200) {
       const pools = result.data.stakingLists;
       this.setState({ aggregatorPools: pools });
-      console.log(pools);
     }
   };
 
@@ -186,7 +188,6 @@ class App extends React.Component {
                 networkId: "1",
               });
             }
-
           })
           .catch(console.error);
       } else if (
@@ -230,9 +231,6 @@ class App extends React.Component {
             networkId: "1",
           });
         }
-
-        
-
       } else if (window.ethereum && window.coin98) {
         window.ethereum
           .request({ method: "net_version" })
@@ -246,8 +244,6 @@ class App extends React.Component {
                 networkId: "0",
               });
             }
-
-            
           })
           .catch(console.error);
       } else {
@@ -263,8 +259,6 @@ class App extends React.Component {
   };
 
   refreshSubscription = async () => {
-    
-
     let subscribedPlatformTokenAmountNewETH;
     let subscribedPlatformTokenAmountNewAvax;
     let subscribedPlatformTokenAmountNewBNB;
@@ -328,8 +322,8 @@ class App extends React.Component {
       SkaleABI,
       skalesubscribeAddress
     );
-const userAddr = await window.getCoinbase()
- 
+    const userAddr = await window.getCoinbase();
+
     if (userAddr) {
       subscribedPlatformTokenAmountNewETH = await ethNewcontract.methods
         .subscriptionPlatformTokenAmount(userAddr)
@@ -355,7 +349,7 @@ const userAddr = await window.getCoinbase()
           return 0;
         });
 
-        subscribedPlatformTokenAmountNewBNB2 = await bnbNewcontract2.methods
+      subscribedPlatformTokenAmountNewBNB2 = await bnbNewcontract2.methods
         .subscriptionPlatformTokenAmount(userAddr)
         .call()
         .catch((e) => {
@@ -392,22 +386,20 @@ const userAddr = await window.getCoinbase()
         subscribedPlatformTokenAmountCfx == "0" &&
         subscribedPlatformTokenAmountBase == "0" &&
         subscribedPlatformTokenAmountNewAvax == "0" &&
-        subscribedPlatformTokenAmountNewBNB == "0" && subscribedPlatformTokenAmountNewBNB2 === "0" &&
+        subscribedPlatformTokenAmountNewBNB == "0" &&
+        subscribedPlatformTokenAmountNewBNB2 === "0" &&
         subscribedPlatformTokenAmountSkale == "0"
       ) {
-  
         this.setState({ subscribedPlatformTokenAmount: "0", isPremium: false });
       } else if (
         subscribedPlatformTokenAmountNewETH != "0" ||
         subscribedPlatformTokenAmountCfx != "0" ||
         subscribedPlatformTokenAmountBase != "0" ||
         subscribedPlatformTokenAmountNewAvax != "0" ||
-        subscribedPlatformTokenAmountNewBNB != "0"  ||
+        subscribedPlatformTokenAmountNewBNB != "0" ||
         subscribedPlatformTokenAmountNewBNB2 != "0" ||
         subscribedPlatformTokenAmountSkale != "0"
       ) {
-    
-
         this.setState({
           isPremium: true,
         });
@@ -533,6 +525,10 @@ const userAddr = await window.getCoinbase()
     this.updateWindowDimensions();
     this.fetchAggregatorPools();
     window.addEventListener("resize", this.updateWindowDimensions);
+
+    if (window.location.hash === "#mobile-app") {
+      this.setState({ downloadClick: true });
+    }
     if (
       window.ethereum &&
       !window.coin98 &&
@@ -561,7 +557,6 @@ const userAddr = await window.getCoinbase()
   }
 
   checkConnection = async () => {
-    
     this.tvl();
     const logout = localStorage.getItem("logout");
 
@@ -678,7 +673,6 @@ const userAddr = await window.getCoinbase()
       ethereum?.on("chainChanged", this.checkNetworkId);
       ethereum?.on("accountsChanged", this.checkConnection);
       ethereum?.on("accountsChanged", this.refreshSubscription);
-
     }
 
     document.addEventListener("touchstart", { passive: true });
@@ -699,6 +693,17 @@ const userAddr = await window.getCoinbase()
             onComplete={() => {
               this.setState({ showRibbon: false });
               this.setState({ showRibbon2: false });
+            }}
+          />
+        )}
+
+        {this.state.showFlyout && (
+          <MobileFlyout
+            onClose={() => {
+              this.setState({ showFlyout: false });
+            }}
+            onDownloadClick={() => {
+              this.setState({ downloadClick: true });
             }}
           />
         )}
@@ -724,6 +729,7 @@ const userAddr = await window.getCoinbase()
               onSetCurrencyAmount={(value) => {
                 this.setState({ userCurencyBalance: value });
               }}
+              showFlyout={this.state.showFlyout}
             />
           )}
           <div className="content-wrapper container-fluid d-flex justify-content-center justify-content-lg-start">
@@ -1082,6 +1088,11 @@ const userAddr = await window.getCoinbase()
                           isPremium={this.state.isPremium}
                           onConnectWallet={this.showModal}
                           aggregatorPools={this.state.aggregatorPools}
+                          downloadClick={this.state.downloadClick}
+                          onDownloadClose={() => {
+                            this.setState({ downloadClick: false });
+                            window.location.hash = ''
+                          }}
                         />
                       )}
                     />

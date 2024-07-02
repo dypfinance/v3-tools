@@ -43,6 +43,7 @@ const Header = ({
   isConnected,
   appState,
   onSetCurrencyAmount,
+  showFlyout,
 }) => {
   const [gasPrice, setGasprice] = useState();
   const [ethPrice, setEthprice] = useState();
@@ -95,7 +96,7 @@ const Header = ({
       setBaseState(false);
       setConfluxState(true);
       setSkaleState(false);
-    } else if (chainId === 1482601649 ) {
+    } else if (chainId === 1482601649) {
       setAvaxState(false);
       setBnbState(false);
       setEthState(false);
@@ -301,7 +302,7 @@ const Header = ({
           onSetCurrencyAmount(amount);
 
           setCurrencyAmount(amount.slice(0, 7));
-        } else if (chainId === 1482601649 ) {
+        } else if (chainId === 1482601649) {
           const stringBalance = web3skale.utils.hexToNumberString(balance);
           const amount = web3skale.utils.fromWei(stringBalance, "ether");
           const formatted_amount = Number(amount);
@@ -364,7 +365,7 @@ const Header = ({
 
   return (
     <>
-      <header className="header-wrap" style={{ zIndex: 5 }}>
+      <header className="header-wrap" style={{ zIndex: 5, top: windowSize.width <991 && showFlyout === true ? '40px' : windowSize.width <991 && showFlyout === false ? 0 : 0  }}>
         <div className="container-fluid d-flex justify-content-center justify-content-lg-start">
           <div className="row w-100">
             <div className="col-1"></div>
@@ -546,7 +547,7 @@ const Header = ({
                                     ? "CFX"
                                     : chainId === 8453
                                     ? "ETH"
-                                    : chainId === 1482601649 
+                                    : chainId === 1482601649
                                     ? "sFUEL"
                                     : ""}
                                 </span>
