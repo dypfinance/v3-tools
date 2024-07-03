@@ -50,7 +50,7 @@ import bnbActive from "../earn/assets/bnbActive.svg";
 
 import avax from "../earn/assets/avax.svg";
 import avaxActive from "../earn/assets/avaxActive.svg";
-import { isMobile, MobileView, BrowserView } from "react-device-detect";
+
 
 const Dashboard = ({
   isConnected,
@@ -66,7 +66,7 @@ const Dashboard = ({
   isPremium,
   onConnectWallet,
   aggregatorPools,
-  downloadClick,onDownloadClose
+  onMobileClick
 }) => {
   const [topPools, setTopPools] = useState([]);
   const [cawsLandCard, setCawsLandCard] = useState([]);
@@ -823,26 +823,7 @@ const Dashboard = ({
     background: `#1A1A36`,
   };
 
-  const style2 = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width:
-      windowSize.width > 1400
-        ? "540px"
-        : windowSize.width > 786
-        ? "50%"
-        : "95%",
-    boxShadow: 24,
-    p: 4,
-    overflow: "auto",
-    minHeight: 200,
-    overflowX: "hidden",
-    borderRadius: "10px",
-    height: "auto",
-    background: `#1A1A36`,
-  };
+
 
   useEffect(() => {
     fetchTotalTvl();
@@ -881,7 +862,7 @@ const Dashboard = ({
                 <div className="d-flex flex-column flex-md-row justify-content-between gap-3">
                   <BridgeCard
                     onMobileClick={() => {
-                      setshowMobilePopup(true);
+                      onMobileClick()
                     }}
                   />{" "}
                   <GovCard />
@@ -2071,79 +2052,7 @@ const Dashboard = ({
         </Modal>
       )}
 
-      {(showMobilePopup === true || downloadClick === true) && (
-        <Modal
-          open={showMobilePopup || downloadClick}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style2}>
-            <div className="d-flex flex-column justify-content-center position-relative">
-              <div className="d-flex flex-column gap-3 align-items-center justify-content-between">
-                <div className="d-flex align-items-center  justify-content-between gap-5 w-100">
-                  <h4 className="mobile-popup-title">Dypius Mobile App</h4>
 
-                  <img
-                    src={closeX}
-                    alt=""
-                    className="close-x position-relative cursor-pointer "
-                    onClick={() => {
-                      setshowMobilePopup(false);
-                      onDownloadClose()
-                    }}
-                    style={{
-                      bottom: "17px",
-                      alignSelf: "end",
-                      width: 16,
-                      height: 16,
-                    }}
-                  />
-                </div>
-                <div className="mobile-popup-content-wrapper p-3">
-                  <div className="d-flex flex-column gap-3">
-                    <ul className="mobile-content-list">
-                      <li className="mobile-content-text">
-                        Available exclusively in APK format for <b style={{color: '#4ED5D2'}}>Android</b> devices.
-                      </li>
-                      <li className="mobile-content-text">
-                        Early release with some fully functional features.
-                      </li>
-                      <li className="mobile-content-text">
-                        Other features are in view-only mode, relying on the
-                        MetaMask Unity SDK.
-                      </li>
-                      <li className="mobile-content-text">
-                        MetaMask-related issues are beyond our control; we're
-                        seeking support to resolve them.
-                      </li>
-                      <li className="mobile-content-text">
-                        Your feedback is valuable as we continue to improve the
-                        app.
-                      </li>
-                      <li className="mobile-content-text">
-                        Thank you for your understanding and patience.
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div className="separator my-2"></div>
-                <div className="d-flex align-items-center justify-content-center">
-                  <BrowserView>
-                    <button className={`btn disabled-btn `} disabled={true}>
-                      Download on mobile
-                    </button>
-                  </BrowserView>
-                  <MobileView>
-                    <a  href="https://drive.google.com/file/d/1EvPyW0YWYcMc_x6sWViGYJxMStbg13D5/view" target="_blank" rel="noreferrer"  className={`btn filledbtn `}>
-                      Download on mobile
-                    </a>
-                  </MobileView>
-                </div>
-              </div>
-            </div>
-          </Box>
-        </Modal>
-      )}
     </>
   );
 };
