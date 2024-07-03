@@ -50,6 +50,10 @@ import EarnInnerPoolNft from "./components/earnOther/EarnInnerPool/EarnInnerPool
 import WalletModal from "./components/WalletModal";
 import axios from "axios";
 import MobileFlyout from "./components/mobileFlyout/MobileFlyout";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import { isMobile, MobileView, BrowserView } from "react-device-detect";
+import closeX from "./components/earnOther/assets/closeX.svg";
 
 class App extends React.Component {
   constructor(props) {
@@ -94,6 +98,7 @@ class App extends React.Component {
       showRibbon2: true,
       showFlyout: true,
       downloadClick: false,
+      showMobilePopup: false,
       showWalletPopup: false,
       aggregatorPools: [],
       userCurencyBalance: 0,
@@ -655,6 +660,23 @@ class App extends React.Component {
   };
 
   render() {
+    const style2 = {
+      position: "absolute",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      maxWidth: 540,
+      width: '100%',
+      boxShadow: 24,
+      p: 4,
+      overflow: "auto",
+      minHeight: 200,
+      overflowX: "hidden",
+      borderRadius: "10px",
+      height: "auto",
+      background: `#1A1A36`,
+    };
+
     const { LP_IDs_V2 } = window;
     const { ethereum } = window;
     // console.log("the_graph_resultbsc", this.state.the_graph_resultbsc);
@@ -1088,10 +1110,8 @@ class App extends React.Component {
                           isPremium={this.state.isPremium}
                           onConnectWallet={this.showModal}
                           aggregatorPools={this.state.aggregatorPools}
-                          downloadClick={this.state.downloadClick}
-                          onDownloadClose={() => {
-                            this.setState({ downloadClick: false });
-                            window.location.hash = ''
+                          onMobileClick={() => {
+                            this.setState({ showMobilePopup: true });
                           }}
                         />
                       )}
@@ -1217,6 +1237,87 @@ class App extends React.Component {
         (this.props?.location?.pathname === "/caws-staking" &&
           window.innerWidth < 786) ? null : (
           <Footer></Footer>
+        )}
+
+        {(this.state.showMobilePopup === true ||
+          this.state.downloadClick === true) && (
+          <Modal
+            open={this.state.showMobilePopup || this.state.downloadClick}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style2}>
+              <div className="d-flex flex-column justify-content-center position-relative">
+                <div className="d-flex flex-column gap-3 align-items-center justify-content-between">
+                  <div className="d-flex align-items-center  justify-content-between gap-5 w-100">
+                    <h4 className="mobile-popup-title">Dypius Mobile App</h4>
+
+                    <img
+                      src={closeX}
+                      alt=""
+                      className="close-x position-relative cursor-pointer "
+                      onClick={() => {
+                        this.setState({ downloadClick: false });
+                        this.setState({ showMobilePopup: false });
+                      }}
+                      style={{
+                        bottom: "17px",
+                        alignSelf: "end",
+                        width: 16,
+                        height: 16,
+                      }}
+                    />
+                  </div>
+                  <div className="mobile-popup-content-wrapper p-3">
+                    <div className="d-flex flex-column gap-3">
+                      <ul className="mobile-content-list">
+                        <li className="mobile-content-text">
+                          Available exclusively in APK format for{" "}
+                          <b style={{ color: "#4ED5D2" }}>Android</b> devices.
+                        </li>
+                        <li className="mobile-content-text">
+                          Early release with some fully functional features.
+                        </li>
+                        <li className="mobile-content-text">
+                          Other features are in view-only mode, relying on the
+                          MetaMask Unity SDK.
+                        </li>
+                        <li className="mobile-content-text">
+                          MetaMask-related issues are beyond our control; we're
+                          seeking support to resolve them.
+                        </li>
+                        <li className="mobile-content-text">
+                          Your feedback is valuable as we continue to improve
+                          the app.
+                        </li>
+                        <li className="mobile-content-text">
+                          Thank you for your understanding and patience.
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div className="separator my-2"></div>
+                  <div className="d-flex align-items-center justify-content-center">
+                    <BrowserView>
+                      <button className={`btn disabled-btn `} disabled={true}>
+                        Download on mobile
+                      </button>
+                    </BrowserView>
+                    <MobileView>
+                      <a
+                        href="https://drive.google.com/file/d/1EvPyW0YWYcMc_x6sWViGYJxMStbg13D5/view"
+                        target="_blank"
+                        rel="noreferrer"
+                        className={`btn filledbtn `}
+                      >
+                        Download on mobile
+                      </a>
+                    </MobileView>
+                  </div>
+                </div>
+              </div>
+            </Box>
+          </Modal>
         )}
 
         {this.showWalletPopup === true && (
