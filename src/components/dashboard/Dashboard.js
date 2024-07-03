@@ -2103,7 +2103,7 @@ const Dashboard = ({
                   <div className="d-flex flex-column gap-3">
                     <ul className="mobile-content-list">
                       <li className="mobile-content-text">
-                        Available exclusively in APK format for Android devices.
+                        Available exclusively in APK format for <b style={{color: '#4ED5D2'}}>Android</b> devices.
                       </li>
                       <li className="mobile-content-text">
                         Early release with some fully functional features.
