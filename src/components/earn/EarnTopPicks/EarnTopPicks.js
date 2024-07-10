@@ -217,6 +217,43 @@ const EarnTopPicks = ({
     background: `#1A1A36`,
   };
 
+  const phase2_pools = [
+    {
+      id: "0x998A9F0DF7DAF20c2B0Bb379Dcae394636926a95",
+      apy_percent: 15,
+      tvl_usd: 46682.3565666875,
+      link_logo: "https://www.dypius.com/logo192.png",
+      link_pair: "https://app.dyp.finance/constant-staking-3",
+      pool_name: "DYP Constant Staking ETH",
+      pair_name: "DYP",
+      return_types: "DYP",
+      lock_time: "60 days",
+      expired: "No",
+      new_pool: "Yes",
+      apy_performancefee: 15,
+      performancefee: 0,
+      type: "dyp",
+      chain: "eth",
+    },
+    {
+      id: "0xbE030A667d9ee75a9FCdF2162A2C14ccCAB573de",
+      apy_percent: 25,
+      tvl_usd: 462.3565666875,
+      link_logo: "https://www.dypius.com/logo192.png",
+      link_pair: "https://app.dyp.finance/constant-staking-3",
+      pool_name: "iDYP Constant Staking ETH",
+      pair_name: "iDYP",
+      return_types: "DYP",
+      lock_time: "90 days",
+      expired: "No",
+      new_pool: "Yes",
+      apy_performancefee: 25,
+      performancefee: 0,
+      type: "idyp",
+      chain: "eth",
+    },
+    
+  ];
   const fetchUserPools = async () => {
     if (coinbase && coinbase.includes("0x")) {
       const result = await axios
@@ -255,21 +292,25 @@ const EarnTopPicks = ({
     ) {
       const dypIdyp = eth_result.data.stakingInfoiDYPEth;
       const dypData = eth_result2.data.stakingInfoDYPEth;
-      const object2 = dypData.map((item) => {
+
+      const object2_phase2 = phase2_pools.filter((pools)=>{return pools.type === 'dyp'})
+      const object2_phase2_idyp = phase2_pools.filter((pools)=>{return pools.type === 'idyp'})
+
+      const object2 = [...dypData, ...object2_phase2].map((item) => {
         return { ...item, tvl_usd: item.tvl_usd, type: "dyp", chain: "eth" };
       });
 
       const activeEth = dypIdyp.filter((item) => {
         return item.expired !== "Yes";
       });
-      const object2activeEth = activeEth.map((item) => {
+      const object2activeEth = [...activeEth, ...object2_phase2_idyp].map((item) => {
         return { ...item, tvl_usd: item.tvl_usd, type: "idyp", chain: "eth" };
       });
 
       const activeEth2 = object2.filter((item) => {
         return item.expired !== "Yes";
       });
-
+      
       const allActiveEth = [...activeEth2,...object2activeEth ];
 
       const sortedActive = allActiveEth.sort(function (a, b) {
@@ -377,59 +418,6 @@ const EarnTopPicks = ({
     }
   };
 
-  const phase2_pools = [
-    {
-      id: "0x998A9F0DF7DAF20c2B0Bb379Dcae394636926a96",
-      apy_percent: 8,
-      tvl_usd: 46682.3565666875,
-      link_logo: "https://www.dypius.com/logo192.png",
-      link_pair: "https://app.dyp.finance/constant-staking-3",
-      pool_name: "DYP Constant Staking ETH",
-      pair_name: "DYP",
-      return_types: "DYP",
-      lock_time: "30 days",
-      expired: "No",
-      new_pool: "Yes",
-      apy_performancefee: 8,
-      performancefee: 0,
-      type: "dyp",
-      chain: "eth",
-    },
-    {
-      id: "0xbE030A667d9ee75a9FCdF2162A2C14ccCAB573dD",
-      apy_percent: 20,
-      tvl_usd: 462.3565666875,
-      link_logo: "https://www.dypius.com/logo192.png",
-      link_pair: "https://app.dyp.finance/constant-staking-3",
-      pool_name: "DYP Constant Staking ETH",
-      pair_name: "DYP",
-      return_types: "DYP",
-      lock_time: "120 days",
-      expired: "No",
-      new_pool: "Yes",
-      apy_performancefee: 20,
-      performancefee: 0,
-      type: "dyp",
-      chain: "eth",
-    },
-    {
-      id: "0x92A84052Fe6945949A295AF14a7506e3dc085492",
-      apy_percent: 25,
-      tvl_usd: 4682.3565666875,
-      link_logo: "https://www.dypius.com/logo192.png",
-      link_pair: "https://app.dyp.finance/constant-staking-3",
-      pool_name: "DYP Constant Staking ETH",
-      pair_name: "DYP",
-      return_types: "iDYP",
-      lock_time: "90 days",
-      expired: "No",
-      new_pool: "Yes",
-      apy_performancefee: 25,
-      performancefee: 0,
-      type: "dyp",
-      chain: "eth",
-    },
-  ];
 
   const fetchEthStaking2 = async () => {
     const eth_result = await axios
@@ -452,11 +440,15 @@ const EarnTopPicks = ({
       const dypIdyp = eth_result.data.stakingInfoiDYPEth;
       const dypData = eth_result2.data.stakingInfoDYPEth;
 
-      const object2 = dypData.map((item) => {
+      const object2_phase2 = phase2_pools.filter((pools)=>{return pools.type === 'dyp'})
+      const object2_phase2_idyp = phase2_pools.filter((pools)=>{return pools.type === 'idyp'})
+
+
+      const object2 = [...dypData, ...object2_phase2].map((item) => {
         return { ...item, tvl_usd: item.tvl_usd, type: "dyp", chain: "eth" };
       });
 
-      const activeEth = dypIdyp.filter((item) => {
+      const activeEth = [...dypIdyp, ...object2_phase2_idyp].filter((item) => {
         return item.expired !== "Yes";
       });
 
@@ -480,9 +472,8 @@ const EarnTopPicks = ({
       
       const sortedActiveiDYP = object2activeEth.sort(function (a, b) {
         return b.apy_percent - a.apy_percent;
-      });
-   
-      setActivePools([sortedActiveDYP[0], ...sortedActiveiDYP]);
+      }); 
+      setActivePools([sortedActiveDYP[0], sortedActiveiDYP[0]]);
       setTopPools([...object2activeEth, ...activeEth2]);
       setCawsCard(eth_result.data.stakingInfoCAWS);
       setCawsCard2(eth_result.data.stakingInfoCAWS[0]);
@@ -722,6 +713,8 @@ const EarnTopPicks = ({
   const wbsc_address = "0x2170Ed0880ac9A755fd29B2688956BD959F933F8";
 
   const avax_address = "AVAX";
+
+
 
   const getClassName = (
     chain,
@@ -4808,7 +4801,42 @@ const EarnTopPicks = ({
                     setDetails(999);
                   }}
                 />
-              )  : topList === "Staking" &&
+              ) : topList === "Staking" &&
+              selectedPool?.id ===
+                "0x998A9F0DF7DAF20c2B0Bb379Dcae394636926a95" &&
+              chain === "eth" ? (
+              <StakeDypiusEth1Phase2
+                selectedPool={selectedPool}
+                selectedTab={selectedTab}
+                staking={window.constant_staking_dypius_phase2_eth1}
+                apr={selectedPool?.apy_percent}
+                liquidity={eth_address}
+                expiration_time={"07 Jun 2025"}
+                finalApr={selectedPool?.apy_performancefee}
+                lockTime={
+                  selectedPool?.lock_time?.split(" ")[0] === "No"
+                    ? "No Lock"
+                    : parseInt(selectedPool?.lock_time?.split(" ")[0])
+                }
+                listType={listType}
+                other_info={false}
+                fee={selectedPool?.performancefee}
+                is_wallet_connected={isConnected}
+                coinbase={coinbase}
+                the_graph_result={the_graph_result}
+                chainId={chainId}
+                handleConnection={handleConnection}
+                handleSwitchNetwork={handleSwitchNetwork}
+                expired={false}
+                referrer={referrer}
+                onConnectWallet={() => {
+                  setShowDetails(false);
+                  onConnectWallet();
+                  setselectedPool([]);
+                  setDetails(999);
+                }}
+              />
+            )  : topList === "Staking" &&
               selectedPool?.id ===
                 "0xbE030A667d9ee75a9FCdF2162A2C14ccCAB573dD" &&
               chain === "eth" ? (
@@ -4843,7 +4871,42 @@ const EarnTopPicks = ({
                   setDetails(999);
                 }}
               />
-            )   : topList === "Staking" &&
+            ): topList === "Staking" &&
+            selectedPool?.id ===
+              "0xbE030A667d9ee75a9FCdF2162A2C14ccCAB573de" &&
+            chain === "eth" ? (
+            <StakeDypiusEth2Phase2
+              selectedPool={selectedPool}
+              selectedTab={selectedTab}
+              staking={window.constant_staking_dypius_phase2_eth2}
+              apr={selectedPool?.apy_percent}
+              liquidity={eth_address}
+              expiration_time={"07 Jun 2025"}
+              finalApr={selectedPool?.apy_performancefee}
+              lockTime={
+                selectedPool?.lock_time?.split(" ")[0] === "No"
+                  ? "No Lock"
+                  : parseInt(selectedPool?.lock_time?.split(" ")[0])
+              }
+              listType={listType}
+              other_info={false}
+              fee={selectedPool?.performancefee}
+              is_wallet_connected={isConnected}
+              coinbase={coinbase}
+              the_graph_result={the_graph_result}
+              chainId={chainId}
+              handleConnection={handleConnection}
+              handleSwitchNetwork={handleSwitchNetwork}
+              expired={false}
+              referrer={referrer}
+              onConnectWallet={() => {
+                setShowDetails(false);
+                onConnectWallet();
+                setselectedPool([]);
+                setDetails(999);
+              }}
+            />
+          )   : topList === "Staking" &&
             selectedPool?.id ===
               "0x92A84052Fe6945949A295AF14a7506e3dc085492" &&
             chain === "eth" ? (
