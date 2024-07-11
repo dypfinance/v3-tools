@@ -25,6 +25,7 @@ import StakeDypiusBsc from "../FARMINNG/bscConstantStakeDypius";
 import StakeDypiusEth3Phase2 from "../FARMINNG/stakingDypiusEth3Phase2";
 import StakeDypiusEth1Phase2 from "../FARMINNG/stakingDypiusEth1Phase2";
 import StakeDypiusEth2Phase2 from "../FARMINNG/stakingDypiusEth2Phase2";
+import StakingiDypPhase2 from "../FARMINNG/stakingiDypPhase2";
 
 import InitConstantStakingiDYP from "../FARMINNG/constant-staking-idyp-new-front";
 import Modal from "@mui/material/Modal";
@@ -117,6 +118,43 @@ const Dashboard = ({
   const [avaxPoolsiDyp, setavaxPoolsiDyp] = useState([]);
   const [selectedchain, setselectedchain] = useState("");
   const [showMobilePopup, setshowMobilePopup] = useState(false);
+
+  const phase2_pools = [
+    {
+      id: "0x998A9F0DF7DAF20c2B0Bb379Dcae394636926a95",
+      apy_percent: 15,
+      tvl_usd: 46682.3565666875,
+      link_logo: "https://www.dypius.com/logo192.png",
+      link_pair: "https://app.dyp.finance/constant-staking-3",
+      pool_name: "DYP Constant Staking ETH",
+      pair_name: "DYP",
+      return_types: "DYP",
+      lock_time: "60 days",
+      expired: "No",
+      new_pool: "Yes",
+      apy_performancefee: 15,
+      performancefee: 0,
+      type: "dyp",
+      chain: "eth",
+    },
+    {
+      id: "0xbE030A667d9ee75a9FCdF2162A2C14ccCAB573de",
+      apy_percent: 25,
+      tvl_usd: 462.3565666875,
+      link_logo: "https://www.dypius.com/logo192.png",
+      link_pair: "https://app.dyp.finance/constant-staking-3",
+      pool_name: "iDYP Constant Staking ETH",
+      pair_name: "iDYP",
+      return_types: "DYP",
+      lock_time: "90 days",
+      expired: "No",
+      new_pool: "Yes",
+      apy_performancefee: 25,
+      performancefee: 0,
+      type: "idyp",
+      chain: "eth",
+    },
+  ];
 
   const fetchUserPools = async () => {
     if (coinbase && coinbase.includes("0x")) {
@@ -285,6 +323,13 @@ const Dashboard = ({
       const ethereumIdyp = eth_result.data.stakingInfoiDYPEth;
       const ethereumDyp = eth_result2.data.stakingInfoDYPEth;
 
+      const object2_phase2_eth = phase2_pools.filter((pools) => {
+        return pools.type === "dyp";
+      });
+      const object2_phase2_idyp_eth = phase2_pools.filter((pools) => {
+        return pools.type === "idyp";
+      });
+
       const object2Avax2 = avaxDyp.map((item) => {
         return {
           ...item,
@@ -392,7 +437,9 @@ const Dashboard = ({
 
       const allpoolsEthereum = [
         ...ethereumDyp,
+        ...object2_phase2_eth,
         ...ethereumIdyp,
+        ...object2_phase2_idyp_eth
         // ...phase2_pools,
       ];
 
