@@ -324,9 +324,9 @@ const Dashboard = ({
       const ethereumIdyp = eth_result.data.stakingInfoiDYPEth;
       const ethereumDyp = eth_result2.data.stakingInfoDYPEth;
 
-      const object2_phase2_eth = phase2_pools.filter((pools) => {
-        return pools.type === "dyp";
-      });
+      // const object2_phase2_eth = phase2_pools.filter((pools) => {
+      //   return pools.type === "dyp";
+      // });
 
       const object2Avax2 = avaxDyp.map((item) => {
         return {
@@ -435,12 +435,13 @@ const Dashboard = ({
 
       const allpoolsEthereum = [
         ...ethereumDyp,
-        ...object2_phase2_eth,
-        ...ethereumIdyp,
-        // ...phase2_pools,
+        // ...object2_phase2_eth,
+        ...ethereumIdyp
       ];
 
-      const object2 = [...ethereumDyp, ...object2_phase2_eth].map((item) => {
+      const object2 = [...ethereumDyp,
+        //  ...object2_phase2_eth
+        ].map((item) => {
         return {
           ...item,
           tvl_usd: item.tvl_usd,
