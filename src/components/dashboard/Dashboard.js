@@ -440,7 +440,7 @@ const Dashboard = ({
         // ...phase2_pools,
       ];
 
-      const object2 = [...ethereumDyp,...object2_phase2_eth].map((item) => {
+      const object2 = [...ethereumDyp, ...object2_phase2_eth].map((item) => {
         return {
           ...item,
           tvl_usd: item.tvl_usd,
@@ -792,6 +792,8 @@ const Dashboard = ({
           return item.lock_time === locktime;
         });
         if (result) {
+          setresultFilteredPool(result);
+
           setselectedPool(...result);
         }
       }
@@ -801,6 +803,8 @@ const Dashboard = ({
           return item.lock_time === locktime;
         });
         if (result) {
+          setresultFilteredPool(result);
+
           setselectedPool(...result);
         }
       } else if (selectedpoolType === "idyp") {
@@ -808,6 +812,8 @@ const Dashboard = ({
           return item.lock_time === locktime;
         });
         if (result) {
+          setresultFilteredPool(result);
+
           setselectedPool(...result);
         }
       }
@@ -817,6 +823,8 @@ const Dashboard = ({
           return item.lock_time === locktime;
         });
         if (result) {
+          setresultFilteredPool(result);
+
           setselectedPool(...result);
         }
       } else if (selectedpoolType === "idyp") {
@@ -824,6 +832,8 @@ const Dashboard = ({
           return item.lock_time === locktime;
         });
         if (result) {
+          setresultFilteredPool(result);
+
           setselectedPool(...result);
         }
       }
@@ -883,7 +893,7 @@ const Dashboard = ({
       setselectedchain(selectedPool?.chain);
     }
   }, [selectedPool]);
-console.log(resultFilteredPool,ethPools, ethPoolsDyp, ethPoolsiDyp)
+  
   return (
     <>
       <div className="d-none">
@@ -1514,8 +1524,7 @@ console.log(resultFilteredPool,ethPools, ethPoolsDyp, ethPoolsiDyp)
                             avaxPoolsDyp,
                             avaxPoolsiDyp
                           );
-                      setselectedIndex(0)
-
+                          setselectedIndex(0);
                         }}
                       >
                         90 Days
@@ -1730,33 +1739,32 @@ console.log(resultFilteredPool,ethPools, ethPoolsDyp, ethPoolsiDyp)
                     </h6>
                   </div>
                 </div>
-             
-                  {resultFilteredPool &&
-                    resultFilteredPool.length > 1 &&
-                    <>
-                       <div className="separator my-1"></div>
-                <div className="d-flex align-items-center gap-2 w-100">
-                  { resultFilteredPool.map((obj, index) => {
-                      return (
-                        <button
-                          className={` w-100 ${
-                            selectedIndex === index
-                              ? "method-btn-active"
-                              : "method-btn"
-                          }`}
-                          onClick={() => {
-                            setselectedIndex(index);
-                            setselectedPool(obj);
-                          }}
-                        >
-                          Pool {index + 1}
-                        </button>
-                      );
-                    })}
+
+                {resultFilteredPool && resultFilteredPool.length > 1 && (
+                  <>
+                    <div className="separator my-1"></div>
+                    <div className="d-flex align-items-center gap-2 w-100">
+                      {resultFilteredPool.map((obj, index) => {
+                        return (
+                          <button
+                            className={` w-100 ${
+                              selectedIndex === index
+                                ? "method-btn-active"
+                                : "method-btn"
+                            }`}
+                            onClick={() => {
+                              setselectedIndex(index);
+                              setselectedPool(obj);
+                            }}
+                          >
+                            Pool {index + 1}
+                          </button>
+                        );
+                      })}
                     </div>
-                    </>
-                   }
-              
+                  </>
+                )}
+
                 {activeCard &&
                 selectedPool?.id ===
                   "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
@@ -1910,7 +1918,6 @@ console.log(resultFilteredPool,ethPools, ethPoolsDyp, ethPoolsiDyp)
                     liquidity={eth_address}
                     expiration_time={"07 Jun 2025"}
                     start_date={"07 Jun 2024"}
-
                     finalApr={selectedPool?.apy_performancefee}
                     lockTime={
                       selectedPool?.lock_time?.split(" ")[0] === "No"
@@ -1936,7 +1943,6 @@ console.log(resultFilteredPool,ethPools, ethPoolsDyp, ethPoolsiDyp)
                       setDetails();
                     }}
                     poolCap={625000}
-
                   />
                 ) : activeCard &&
                   selectedPool?.id ===
@@ -1975,7 +1981,6 @@ console.log(resultFilteredPool,ethPools, ethPoolsDyp, ethPoolsiDyp)
                     }}
                     poolCap={1500000}
                     start_date={"12 Jul 2024"}
-
                   />
                 ) : activeCard &&
                   selectedPool?.id ===

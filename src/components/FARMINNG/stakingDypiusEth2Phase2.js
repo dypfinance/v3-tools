@@ -327,7 +327,7 @@ const StakeDypiusEth2Phase2 = ({
       let _bal;
       if (chainId === "1" && coinbase && is_wallet_connected) {
         _bal = reward_token_dypius_eth.balanceOf(coinbase);
-        console.log(_bal);
+     
       }
       if (staking && coinbase !== undefined && coinbase !== null) {
         let _pDivs = staking.getTotalPendingDivs(coinbase);

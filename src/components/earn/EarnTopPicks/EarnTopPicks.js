@@ -886,6 +886,8 @@ const EarnTopPicks = ({
           return item.lock_time === locktime;
         });
         if (result) {
+          setresultFilteredPool(result);
+
           setselectedPool(...result);
         }
       }
@@ -895,6 +897,8 @@ const EarnTopPicks = ({
           return item.lock_time === locktime;
         });
         if (result) {
+          setresultFilteredPool(result);
+
           setselectedPool(...result);
         }
       } else if (selectedpoolType === "idyp") {
@@ -902,6 +906,8 @@ const EarnTopPicks = ({
           return item.lock_time === locktime;
         });
         if (result) {
+          setresultFilteredPool(result);
+
           setselectedPool(...result);
         }
       }
@@ -911,6 +917,8 @@ const EarnTopPicks = ({
           return item.lock_time === locktime;
         });
         if (result) {
+          setresultFilteredPool(result);
+
           setselectedPool(...result);
         }
       } else if (selectedpoolType === "idyp") {
@@ -918,6 +926,8 @@ const EarnTopPicks = ({
           return item.lock_time === locktime;
         });
         if (result) {
+          setresultFilteredPool(result);
+
           setselectedPool(...result);
         }
       }
