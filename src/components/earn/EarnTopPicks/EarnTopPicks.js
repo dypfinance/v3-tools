@@ -5,7 +5,6 @@ import TopPoolsListCard from "../../top-pools-card/TopPoolsListCard";
 import axios from "axios";
 import getFormattedNumber from "../../../functions/getFormattedNumber2";
 import initStakingNew from "../../FARMINNG/staking-new-front";
-import initConstantStakingiDYP from "../../FARMINNG/constant-staking-idyp-new-front";
 import initFarmAvax from "../../FARMINNG/farmAvax";
 import stakeAvax from "../../FARMINNG/stakeAvax";
 import stakeAvax30 from "../../FARMINNG/stakeAvax30";
@@ -14,6 +13,7 @@ import { FadeLoader } from "react-spinners";
 import useWindowSize from "../../../functions/useWindowSize";
 import initBscFarming from "../../FARMINNG/bscFarming";
 import InitConstantStakingiDYP from "../../FARMINNG/constant-staking-idyp-new-front";
+import StakingiDypPhase2 from "../../FARMINNG/stakingiDypPhase2";
 import StakeAvaxIDyp from "../../FARMINNG/stakeAvaxiDyp";
 import StakeBscIDyp from "../../FARMINNG/bscConstantStakeiDyp";
 import StakeBsc from "../../FARMINNG/bscConstantStake";
@@ -187,6 +187,9 @@ const EarnTopPicks = ({
   const [selectedTab, setselectedTab] = useState("deposit");
   const [selectedBtn, setselectedBtn] = useState("flexible");
   const [selectedPool, setselectedPool] = useState([]);
+  const [resultFilteredPool, setresultFilteredPool] = useState([]);
+  const [selectedIndex, setselectedIndex] = useState();
+
   const [aprTooltip, setaprTooltip] = useState(false);
   const [selectedchain, setselectedchain] = useState(chain);
   const [selectedpoolType, setselectedpoolType] = useState("");
@@ -217,6 +220,42 @@ const EarnTopPicks = ({
     background: `#1A1A36`,
   };
 
+  const phase2_pools = [
+    {
+      id: "0x0fafe78e471b52bc4003984a337948ed55284573",
+      apy_percent: 15,
+      tvl_usd: 46682.3565666875,
+      link_logo: "https://www.dypius.com/logo192.png",
+      link_pair: "https://app.dyp.finance/constant-staking-3",
+      pool_name: "DYP Constant Staking ETH",
+      pair_name: "DYP",
+      return_types: "DYP",
+      lock_time: "60 days",
+      expired: "No",
+      new_pool: "Yes",
+      apy_performancefee: 15,
+      performancefee: 0,
+      type: "dyp",
+      chain: "eth",
+    },
+    {
+      id: "0xFdD3CFF22CF846208E3B37b47Bc36b2c61D2cA8b",
+      apy_percent: 25,
+      tvl_usd: 462.3565666875,
+      link_logo: "https://www.dypius.com/logo192.png",
+      link_pair: "https://app.dyp.finance/constant-staking-3",
+      pool_name: "DYP Constant Staking ETH",
+      pair_name: "DYP",
+      return_types: "iDYP",
+      lock_time: "90 days",
+      expired: "No",
+      new_pool: "Yes",
+      apy_performancefee: 25,
+      performancefee: 0,
+      type: "dyp",
+      chain: "eth",
+    },
+  ];
   const fetchUserPools = async () => {
     if (coinbase && coinbase.includes("0x")) {
       const result = await axios
@@ -255,7 +294,12 @@ const EarnTopPicks = ({
     ) {
       const dypIdyp = eth_result.data.stakingInfoiDYPEth;
       const dypData = eth_result2.data.stakingInfoDYPEth;
-      const object2 = dypData.map((item) => {
+
+      const object2_phase2 = phase2_pools.filter((pools) => {
+        return pools.type === "dyp";
+      });
+
+      const object2 = [...dypData, ...object2_phase2].map((item) => {
         return { ...item, tvl_usd: item.tvl_usd, type: "dyp", chain: "eth" };
       });
 
@@ -270,7 +314,7 @@ const EarnTopPicks = ({
         return item.expired !== "Yes";
       });
 
-      const allActiveEth = [...activeEth2,...object2activeEth ];
+      const allActiveEth = [...activeEth2, ...object2activeEth];
 
       const sortedActive = allActiveEth.sort(function (a, b) {
         return b.apy_percent - a.apy_percent;
@@ -377,60 +421,6 @@ const EarnTopPicks = ({
     }
   };
 
-  const phase2_pools = [
-    {
-      id: "0x998A9F0DF7DAF20c2B0Bb379Dcae394636926a96",
-      apy_percent: 8,
-      tvl_usd: 46682.3565666875,
-      link_logo: "https://www.dypius.com/logo192.png",
-      link_pair: "https://app.dyp.finance/constant-staking-3",
-      pool_name: "DYP Constant Staking ETH",
-      pair_name: "DYP",
-      return_types: "DYP",
-      lock_time: "30 days",
-      expired: "No",
-      new_pool: "Yes",
-      apy_performancefee: 8,
-      performancefee: 0,
-      type: "dyp",
-      chain: "eth",
-    },
-    {
-      id: "0xbE030A667d9ee75a9FCdF2162A2C14ccCAB573dD",
-      apy_percent: 20,
-      tvl_usd: 462.3565666875,
-      link_logo: "https://www.dypius.com/logo192.png",
-      link_pair: "https://app.dyp.finance/constant-staking-3",
-      pool_name: "DYP Constant Staking ETH",
-      pair_name: "DYP",
-      return_types: "DYP",
-      lock_time: "120 days",
-      expired: "No",
-      new_pool: "Yes",
-      apy_performancefee: 20,
-      performancefee: 0,
-      type: "dyp",
-      chain: "eth",
-    },
-    {
-      id: "0x92A84052Fe6945949A295AF14a7506e3dc085492",
-      apy_percent: 25,
-      tvl_usd: 4682.3565666875,
-      link_logo: "https://www.dypius.com/logo192.png",
-      link_pair: "https://app.dyp.finance/constant-staking-3",
-      pool_name: "DYP Constant Staking ETH",
-      pair_name: "DYP",
-      return_types: "iDYP",
-      lock_time: "90 days",
-      expired: "No",
-      new_pool: "Yes",
-      apy_performancefee: 25,
-      performancefee: 0,
-      type: "dyp",
-      chain: "eth",
-    },
-  ];
-
   const fetchEthStaking2 = async () => {
     const eth_result = await axios
       .get(`https://api.dyp.finance/api/get_staking_info_eth`)
@@ -452,7 +442,11 @@ const EarnTopPicks = ({
       const dypIdyp = eth_result.data.stakingInfoiDYPEth;
       const dypData = eth_result2.data.stakingInfoDYPEth;
 
-      const object2 = dypData.map((item) => {
+      const object2_phase2 = phase2_pools.filter((pools) => {
+        return pools.type === "dyp";
+      });
+
+      const object2 = [...dypData, ...object2_phase2].map((item) => {
         return { ...item, tvl_usd: item.tvl_usd, type: "dyp", chain: "eth" };
       });
 
@@ -468,21 +462,20 @@ const EarnTopPicks = ({
         return item.expired !== "Yes";
       });
 
-      const allActiveEth = [ ...activeEth2,...object2activeEth];
+      const allActiveEth = activeEth2;
 
       const sortedActive = allActiveEth.sort(function (a, b) {
         return b.tvl_usd - a.tvl_usd;
       });
 
       const sortedActiveDYP = activeEth2.sort(function (a, b) {
-        return (b.apy_percent - a.apy_percent);
+        return b.apy_percent - a.apy_percent;
       });
-      
+
       const sortedActiveiDYP = object2activeEth.sort(function (a, b) {
         return b.apy_percent - a.apy_percent;
       });
-   
-      setActivePools([sortedActiveDYP[0], ...sortedActiveiDYP]);
+      setActivePools([sortedActiveDYP[0], sortedActiveiDYP[0]]);
       setTopPools([...object2activeEth, ...activeEth2]);
       setCawsCard(eth_result.data.stakingInfoCAWS);
       setCawsCard2(eth_result.data.stakingInfoCAWS[0]);
@@ -883,8 +876,9 @@ const EarnTopPicks = ({
         const result = ethPoolsDyp.filter((item) => {
           return item.lock_time === locktime;
         });
-     
+
         if (result) {
+          setresultFilteredPool(result);
           setselectedPool(...result);
         }
       } else if (selectedpoolType === "idyp") {
@@ -892,6 +886,8 @@ const EarnTopPicks = ({
           return item.lock_time === locktime;
         });
         if (result) {
+          setresultFilteredPool(result);
+
           setselectedPool(...result);
         }
       }
@@ -901,6 +897,8 @@ const EarnTopPicks = ({
           return item.lock_time === locktime;
         });
         if (result) {
+          setresultFilteredPool(result);
+
           setselectedPool(...result);
         }
       } else if (selectedpoolType === "idyp") {
@@ -908,6 +906,8 @@ const EarnTopPicks = ({
           return item.lock_time === locktime;
         });
         if (result) {
+          setresultFilteredPool(result);
+
           setselectedPool(...result);
         }
       }
@@ -917,6 +917,8 @@ const EarnTopPicks = ({
           return item.lock_time === locktime;
         });
         if (result) {
+          setresultFilteredPool(result);
+
           setselectedPool(...result);
         }
       } else if (selectedpoolType === "idyp") {
@@ -924,6 +926,8 @@ const EarnTopPicks = ({
           return item.lock_time === locktime;
         });
         if (result) {
+          setresultFilteredPool(result);
+
           setselectedPool(...result);
         }
       }
@@ -938,7 +942,7 @@ const EarnTopPicks = ({
   const withdrawFeeiDyp = [1, 0, 0, 0];
 
   const { LP_IDs_V2Avax, LP_IDs_V2BNB } = window;
-  
+
   const LP_IDBNB_Array = [
     LP_IDs_V2BNB.wbnb[0],
     LP_IDs_V2BNB.wbnb[1],
@@ -1188,7 +1192,6 @@ const EarnTopPicks = ({
     fetchStakingData();
   }, [topList, chain, coinbase, networkId, chainId, expiredPools, listType]);
 
- 
   const handleCardIndexStake = (index) => {
     if (topList === "Staking") {
       if (index >= 3) {
@@ -1280,6 +1283,18 @@ const EarnTopPicks = ({
                         setselectedPool(topList !== "Vault" && pool);
                         setShowDetails(topList !== "Vault" && true);
                         setselectedpoolType(pool.type);
+                        setselectedIndex(index);
+                        handleSelectPool(
+                          pool.chain,
+                          pool.lock_time,
+                          pool.type,
+                          ethPoolsDyp,
+                          ethPoolsiDyp,
+                          bnbPoolsDyp,
+                          bnbPoolsiDyp,
+                          avaxPoolsDyp,
+                          avaxPoolsiDyp
+                        );
                       }}
                       onHideDetailsClick={() => {
                         setActiveCard(null);
@@ -4290,8 +4305,8 @@ const EarnTopPicks = ({
                       avaxPoolsDyp,
                       avaxPoolsiDyp
                     )}
-                    onClick={() => 
-                     { handleSelectPool(
+                    onClick={() => {
+                      handleSelectPool(
                         selectedchain,
                         "No lock",
                         selectedpoolType,
@@ -4301,8 +4316,8 @@ const EarnTopPicks = ({
                         bnbPoolsiDyp,
                         avaxPoolsDyp,
                         avaxPoolsiDyp
-                      )}
-                    }
+                      );
+                    }}
                   >
                     Flexible
                   </button>
@@ -4319,8 +4334,8 @@ const EarnTopPicks = ({
                       avaxPoolsDyp,
                       avaxPoolsiDyp
                     )}
-                    onClick={() => 
-                      {handleSelectPool(
+                    onClick={() => {
+                      handleSelectPool(
                         selectedchain,
                         "30 days",
                         selectedpoolType,
@@ -4330,8 +4345,8 @@ const EarnTopPicks = ({
                         bnbPoolsiDyp,
                         avaxPoolsDyp,
                         avaxPoolsiDyp
-                      )}
-                    }
+                      );
+                    }}
                   >
                     30 Days
                   </button>
@@ -4359,7 +4374,7 @@ const EarnTopPicks = ({
                         bnbPoolsiDyp,
                         avaxPoolsDyp,
                         avaxPoolsiDyp
-                      )
+                      );
                     }}
                   >
                     60 Days
@@ -4377,8 +4392,8 @@ const EarnTopPicks = ({
                       avaxPoolsDyp,
                       avaxPoolsiDyp
                     )}
-                    onClick={() => 
-                     { handleSelectPool(
+                    onClick={() => {
+                      handleSelectPool(
                         selectedchain,
                         "90 days",
                         selectedpoolType,
@@ -4388,8 +4403,9 @@ const EarnTopPicks = ({
                         bnbPoolsiDyp,
                         avaxPoolsDyp,
                         avaxPoolsiDyp
-                      )}
-                    }
+                      );
+                      setselectedIndex(0);
+                    }}
                   >
                     90 Days
                   </button>
@@ -4406,8 +4422,8 @@ const EarnTopPicks = ({
                       avaxPoolsDyp,
                       avaxPoolsiDyp
                     )}
-                    onClick={() => 
-                     { handleSelectPool(
+                    onClick={() => {
+                      handleSelectPool(
                         selectedchain,
                         "120 days",
                         selectedpoolType,
@@ -4417,8 +4433,8 @@ const EarnTopPicks = ({
                         bnbPoolsiDyp,
                         avaxPoolsDyp,
                         avaxPoolsiDyp
-                      )}
-                    }
+                      );
+                    }}
                   >
                     120 Days
                   </button>
@@ -4519,7 +4535,30 @@ const EarnTopPicks = ({
                     </h6>
                   </div>
                 </div>
-
+                {resultFilteredPool && resultFilteredPool.length > 1 && (
+                  <>
+                    <div className="separator my-1"></div>
+                    <div className="d-flex align-items-center gap-2 w-100">
+                      {resultFilteredPool.map((obj, index) => {
+                        return (
+                          <button
+                            className={` w-100 ${
+                              selectedIndex === index
+                                ? "method-btn-active"
+                                : "method-btn"
+                            }`}
+                            onClick={() => {
+                              setselectedIndex(index);
+                              setselectedPool(obj);
+                            }}
+                          >
+                            Pool {index + 1}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </>
+                )}
                 <div className="info-pool-wrapper p-3 w-100">
                   <div className="info-pool-inner-wrapper d-flex flex-column flex-lg-row align-items-center gap-2">
                     <div className="info-pool-item p-2">
@@ -4535,13 +4574,28 @@ const EarnTopPicks = ({
                               placement="top"
                               title={
                                 <div className="tooltip-text">
-                                  {
-                                   selectedPool?.id === '0x92A84052Fe6945949A295AF14a7506e3dc085492' ? 'APR reflects the interest rate of earnings on an account over the course of one year. In order to get to the 25% APR for a pool with DYP deposits and iDYP rewards, there was a snapshot for both $DYP and $iDYP, at the prices of 0.048$ respectively 0.0015$, therefore for a 25% APR, the ratio for 1 $DYP staked will be 8 $iDYP received.' : "APR reflects the interest rate of earnings on an account over the course of one year."
-                                  }
+                                  {selectedPool?.id ===
+                                    "0x92A84052Fe6945949A295AF14a7506e3dc085492" ||
+                                  selectedPool?.id ===
+                                    "0xFdD3CFF22CF846208E3B37b47Bc36b2c61D2cA8b"
+                                    ? "APR reflects the interest rate of earnings on an account over the course of one year. In order to get to the 25% APR for a pool with DYP deposits and iDYP rewards, there was a snapshot for both $DYP and $iDYP, at the prices of 0.048$ respectively 0.0015$, therefore for a 25% APR, the ratio for 1 $DYP staked will be 8 $iDYP received."
+                                    : "APR reflects the interest rate of earnings on an account over the course of one year."}
                                 </div>
                               }
                             >
-                              <img src={selectedPool?.id === '0x92A84052Fe6945949A295AF14a7506e3dc085492' ? warning : moreinfo} alt="" onClick={aprOpen} style={{width: 16, height:16}}/>
+                              <img
+                                src={
+                                  selectedPool?.id ===
+                                    "0x92A84052Fe6945949A295AF14a7506e3dc085492" ||
+                                  selectedPool?.id ===
+                                    "0xFdD3CFF22CF846208E3B37b47Bc36b2c61D2cA8b"
+                                    ? warning
+                                    : moreinfo
+                                }
+                                alt=""
+                                onClick={aprOpen}
+                                style={{ width: 16, height: 16 }}
+                              />
                             </Tooltip>
                           </ClickAwayListener>
                         </span>
@@ -4773,112 +4827,190 @@ const EarnTopPicks = ({
                       setDetails(999);
                     }}
                   />
-                )  : topList === "Staking" &&
-                selectedPool?.id ===
-                  "0x998A9F0DF7DAF20c2B0Bb379Dcae394636926a96" &&
-                chain === "eth" ? (
-                <StakeDypiusEth1Phase2
-                  selectedPool={selectedPool}
-                  selectedTab={selectedTab}
-                  staking={window.constant_staking_dypius_phase2_eth1}
-                  apr={selectedPool?.apy_percent}
-                  liquidity={eth_address}
-                  expiration_time={"07 Jun 2025"}
-                  finalApr={selectedPool?.apy_performancefee}
-                  lockTime={
-                    selectedPool?.lock_time?.split(" ")[0] === "No"
-                      ? "No Lock"
-                      : parseInt(selectedPool?.lock_time?.split(" ")[0])
-                  }
-                  listType={listType}
-                  other_info={false}
-                  fee={selectedPool?.performancefee}
-                  is_wallet_connected={isConnected}
-                  coinbase={coinbase}
-                  the_graph_result={the_graph_result}
-                  chainId={chainId}
-                  handleConnection={handleConnection}
-                  handleSwitchNetwork={handleSwitchNetwork}
-                  expired={false}
-                  referrer={referrer}
-                  onConnectWallet={() => {
-                    setShowDetails(false);
-                    onConnectWallet();
-                    setselectedPool([]);
-                    setDetails(999);
-                  }}
-                />
-              )  : topList === "Staking" &&
-              selectedPool?.id ===
-                "0xbE030A667d9ee75a9FCdF2162A2C14ccCAB573dD" &&
-              chain === "eth" ? (
-              <StakeDypiusEth2Phase2
-                selectedPool={selectedPool}
-                selectedTab={selectedTab}
-                staking={window.constant_staking_dypius_phase2_eth2}
-                apr={selectedPool?.apy_percent}
-                liquidity={eth_address}
-                expiration_time={"07 Jun 2025"}
-                finalApr={selectedPool?.apy_performancefee}
-                lockTime={
-                  selectedPool?.lock_time?.split(" ")[0] === "No"
-                    ? "No Lock"
-                    : parseInt(selectedPool?.lock_time?.split(" ")[0])
-                }
-                listType={listType}
-                other_info={false}
-                fee={selectedPool?.performancefee}
-                is_wallet_connected={isConnected}
-                coinbase={coinbase}
-                the_graph_result={the_graph_result}
-                chainId={chainId}
-                handleConnection={handleConnection}
-                handleSwitchNetwork={handleSwitchNetwork}
-                expired={false}
-                referrer={referrer}
-                onConnectWallet={() => {
-                  setShowDetails(false);
-                  onConnectWallet();
-                  setselectedPool([]);
-                  setDetails(999);
-                }}
-              />
-            )   : topList === "Staking" &&
-            selectedPool?.id ===
-              "0x92A84052Fe6945949A295AF14a7506e3dc085492" &&
-            chain === "eth" ? (
-            <StakeDypiusEth3Phase2
-              selectedPool={selectedPool}
-              selectedTab={selectedTab}
-              staking={window.constant_staking_dypius_phase2_eth3}
-              apr={selectedPool?.apy_percent}
-              liquidity={eth_address}
-              expiration_time={"07 Jun 2025"}
-              finalApr={selectedPool?.apy_performancefee}
-              lockTime={
-                selectedPool?.lock_time?.split(" ")[0] === "No"
-                  ? "No Lock"
-                  : parseInt(selectedPool?.lock_time?.split(" ")[0])
-              }
-              listType={listType}
-              other_info={false}
-              fee={selectedPool?.performancefee}
-              is_wallet_connected={isConnected}
-              coinbase={coinbase}
-              the_graph_result={the_graph_result}
-              chainId={chainId}
-              handleConnection={handleConnection}
-              handleSwitchNetwork={handleSwitchNetwork}
-              expired={false}
-              referrer={referrer}
-              onConnectWallet={() => {
-                setShowDetails(false);
-                onConnectWallet();
-                setselectedPool([]);
-                setDetails(999);
-              }}
-            />
-          ) : (
+                ) : topList === "Staking" &&
+                  selectedPool?.id ===
+                    "0x998A9F0DF7DAF20c2B0Bb379Dcae394636926a96" &&
+                  chain === "eth" ? (
+                  <StakeDypiusEth1Phase2
+                    selectedPool={selectedPool}
+                    selectedTab={selectedTab}
+                    staking={window.constant_staking_dypius_phase2_eth1}
+                    apr={selectedPool?.apy_percent}
+                    liquidity={eth_address}
+                    expiration_time={"07 Jun 2025"}
+                    finalApr={selectedPool?.apy_performancefee}
+                    lockTime={
+                      selectedPool?.lock_time?.split(" ")[0] === "No"
+                        ? "No Lock"
+                        : parseInt(selectedPool?.lock_time?.split(" ")[0])
+                    }
+                    listType={listType}
+                    other_info={false}
+                    fee={selectedPool?.performancefee}
+                    is_wallet_connected={isConnected}
+                    coinbase={coinbase}
+                    the_graph_result={the_graph_result}
+                    chainId={chainId}
+                    handleConnection={handleConnection}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    expired={false}
+                    referrer={referrer}
+                    onConnectWallet={() => {
+                      setShowDetails(false);
+                      onConnectWallet();
+                      setselectedPool([]);
+                      setDetails(999);
+                    }}
+                    poolCap={1000000}
+                    start_date={"07 Jun 2024"}
+                  />
+                ) : topList === "Staking" &&
+                  selectedPool?.id ===
+                    "0x0fafe78e471b52bc4003984a337948ed55284573" &&
+                  chain === "eth" ? (
+                  <StakeDypiusEth1Phase2
+                    selectedPool={selectedPool}
+                    selectedTab={selectedTab}
+                    staking={window.constant_staking_dypius_phase2_eth4}
+                    apr={selectedPool?.apy_percent}
+                    liquidity={eth_address}
+                    expiration_time={"12 Jul 2025"}
+                    finalApr={selectedPool?.apy_performancefee}
+                    lockTime={
+                      selectedPool?.lock_time?.split(" ")[0] === "No"
+                        ? "No Lock"
+                        : parseInt(selectedPool?.lock_time?.split(" ")[0])
+                    }
+                    listType={listType}
+                    other_info={false}
+                    fee={selectedPool?.performancefee}
+                    is_wallet_connected={isConnected}
+                    coinbase={coinbase}
+                    the_graph_result={the_graph_result}
+                    chainId={chainId}
+                    handleConnection={handleConnection}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    expired={false}
+                    referrer={referrer}
+                    onConnectWallet={() => {
+                      setShowDetails(false);
+                      onConnectWallet();
+                      setselectedPool([]);
+                      setDetails(999);
+                    }}
+                    poolCap={3700000}
+                    start_date={"12 Jul 2024"}
+                  />
+                ) : topList === "Staking" &&
+                  selectedPool?.id ===
+                    "0xbE030A667d9ee75a9FCdF2162A2C14ccCAB573dD" &&
+                  chain === "eth" ? (
+                  <StakeDypiusEth2Phase2
+                    selectedPool={selectedPool}
+                    selectedTab={selectedTab}
+                    staking={window.constant_staking_dypius_phase2_eth2}
+                    apr={selectedPool?.apy_percent}
+                    liquidity={eth_address}
+                    expiration_time={"07 Jun 2025"}
+                    finalApr={selectedPool?.apy_performancefee}
+                    lockTime={
+                      selectedPool?.lock_time?.split(" ")[0] === "No"
+                        ? "No Lock"
+                        : parseInt(selectedPool?.lock_time?.split(" ")[0])
+                    }
+                    listType={listType}
+                    other_info={false}
+                    fee={selectedPool?.performancefee}
+                    is_wallet_connected={isConnected}
+                    coinbase={coinbase}
+                    the_graph_result={the_graph_result}
+                    chainId={chainId}
+                    handleConnection={handleConnection}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    expired={false}
+                    referrer={referrer}
+                    onConnectWallet={() => {
+                      setShowDetails(false);
+                      onConnectWallet();
+                      setselectedPool([]);
+                      setDetails(999);
+                    }}
+                  />
+                ) : topList === "Staking" &&
+                  selectedPool?.id ===
+                    "0xFdD3CFF22CF846208E3B37b47Bc36b2c61D2cA8b" &&
+                  chain === "eth" ? (
+                  <StakeDypiusEth3Phase2
+                    selectedPool={selectedPool}
+                    selectedTab={selectedTab}
+                    staking={window.constant_staking_dypius_phase2_eth5}
+                    apr={selectedPool?.apy_percent}
+                    liquidity={eth_address}
+                    expiration_time={"12 Jul 2025"}
+                    finalApr={selectedPool?.apy_performancefee}
+                    lockTime={
+                      selectedPool?.lock_time?.split(" ")[0] === "No"
+                        ? "No Lock"
+                        : parseInt(selectedPool?.lock_time?.split(" ")[0])
+                    }
+                    listType={listType}
+                    other_info={false}
+                    fee={selectedPool?.performancefee}
+                    is_wallet_connected={isConnected}
+                    coinbase={coinbase}
+                    the_graph_result={the_graph_result}
+                    chainId={chainId}
+                    handleConnection={handleConnection}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    expired={false}
+                    referrer={referrer}
+                    onConnectWallet={() => {
+                      setShowDetails(false);
+                      onConnectWallet();
+                      setselectedPool([]);
+                      setDetails(999);
+                    }}
+                    poolCap={1500000}
+                    start_date={"12 Jul 2024"}
+                  />
+                ) : topList === "Staking" &&
+                  selectedPool?.id ===
+                    "0x92A84052Fe6945949A295AF14a7506e3dc085492" &&
+                  chain === "eth" ? (
+                  <StakeDypiusEth3Phase2
+                    selectedPool={selectedPool}
+                    selectedTab={selectedTab}
+                    staking={window.constant_staking_dypius_phase2_eth3}
+                    apr={selectedPool?.apy_percent}
+                    liquidity={eth_address}
+                    expiration_time={"07 Jun 2025"}
+                    start_date={"07 Jun 2024"}
+                    finalApr={selectedPool?.apy_performancefee}
+                    lockTime={
+                      selectedPool?.lock_time?.split(" ")[0] === "No"
+                        ? "No Lock"
+                        : parseInt(selectedPool?.lock_time?.split(" ")[0])
+                    }
+                    listType={listType}
+                    other_info={false}
+                    fee={selectedPool?.performancefee}
+                    is_wallet_connected={isConnected}
+                    coinbase={coinbase}
+                    the_graph_result={the_graph_result}
+                    chainId={chainId}
+                    handleConnection={handleConnection}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    expired={false}
+                    referrer={referrer}
+                    onConnectWallet={() => {
+                      setShowDetails(false);
+                      onConnectWallet();
+                      setselectedPool([]);
+                      setDetails(999);
+                    }}
+                    poolCap={625000}
+                  />
+                ) : (
                   <></>
                 )}
               </div>

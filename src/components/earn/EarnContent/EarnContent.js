@@ -773,7 +773,7 @@ const EarnContent = ({
                       }`}
                       onClick={() => {
                         setStake("eth");
-                        fetchEthTvl();
+                        // fetchEthTvl();
                       }}
                     >
                       <img
