@@ -295,11 +295,11 @@ const EarnTopPicks = ({
       const dypIdyp = eth_result.data.stakingInfoiDYPEth;
       const dypData = eth_result2.data.stakingInfoDYPEth;
 
-      const object2_phase2 = phase2_pools.filter((pools) => {
-        return pools.type === "dyp";
-      });
+      // const object2_phase2 = phase2_pools.filter((pools) => {
+      //   return pools.type === "dyp";
+      // });
 
-      const object2 = [...dypData, ...object2_phase2].map((item) => {
+      const object2 = [...dypData].map((item) => {
         return { ...item, tvl_usd: item.tvl_usd, type: "dyp", chain: "eth" };
       });
 
@@ -442,11 +442,11 @@ const EarnTopPicks = ({
       const dypIdyp = eth_result.data.stakingInfoiDYPEth;
       const dypData = eth_result2.data.stakingInfoDYPEth;
 
-      const object2_phase2 = phase2_pools.filter((pools) => {
-        return pools.type === "dyp";
-      });
+      // const object2_phase2 = phase2_pools.filter((pools) => {
+      //   return pools.type === "dyp";
+      // });
 
-      const object2 = [...dypData, ...object2_phase2].map((item) => {
+      const object2 = [...dypData].map((item) => {
         return { ...item, tvl_usd: item.tvl_usd, type: "dyp", chain: "eth" };
       });
 
