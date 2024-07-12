@@ -1472,7 +1472,7 @@ const Dashboard = ({
                         30 Days
                       </button>
                       <button
-                        className={getClassName(
+                        className={` position-relative ${getClassName(
                           selectedchain,
                           "60 days",
                           selectedpoolType,
@@ -1483,7 +1483,7 @@ const Dashboard = ({
                           bnbPoolsiDyp,
                           avaxPoolsDyp,
                           avaxPoolsiDyp
-                        )}
+                        )}`}
                         onClick={() => {
                           handleSelectPool(
                             selectedchain,
@@ -1498,10 +1498,14 @@ const Dashboard = ({
                           );
                         }}
                       >
+                         {selectedpoolType === 'dyp' &&
+                         <div className="new-beta-sidebar2 position-absolute">
+                          <span className="new-beta-text2">New</span>
+                        </div> }
                         60 Days
                       </button>
                       <button
-                        className={getClassName(
+                        className={` position-relative ${getClassName(
                           selectedchain,
                           "90 days",
                           selectedpoolType,
@@ -1512,7 +1516,7 @@ const Dashboard = ({
                           bnbPoolsiDyp,
                           avaxPoolsDyp,
                           avaxPoolsiDyp
-                        )}
+                        )}`}
                         onClick={() => {
                           handleSelectPool(
                             selectedchain,
@@ -1528,6 +1532,10 @@ const Dashboard = ({
                           setselectedIndex(0);
                         }}
                       >
+                        {selectedpoolType === 'dyp' &&
+                         <div className="new-beta-sidebar2 position-absolute">
+                          <span className="new-beta-text2">New</span>
+                        </div> }
                         90 Days
                       </button>
                       <button
