@@ -23,6 +23,7 @@ import { shortAddress } from "../../functions/shortAddress";
 import { ClickAwayListener } from "@material-ui/core";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
 import axios from "axios";
+import { abbreviateNumber } from "js-abbreviation-number";
 
 const StakeDypiusEth1Phase2 = ({
   selectedPool,
@@ -49,7 +50,7 @@ const StakeDypiusEth1Phase2 = ({
   referrer,
   fee,
   renderedPage,
-  onConnectWallet,
+  onConnectWallet,poolCap,start_date
 }) => {
   let {
     reward_token_dypius_eth,
@@ -842,7 +843,7 @@ const StakeDypiusEth1Phase2 = ({
   };
 
   const getAvailableQuota = async()=>{
-    const poolCap = 1000000
+     
     if(staking && staking._address){
     const stakingSc = new window.infuraWeb3.eth.Contract(window.CONSTANT_STAKING_DYPIUS_ABI, staking._address)
     const totalDeposited = await stakingSc.methods.totalDeposited().call().catch((e)=>{console.error(e)})
@@ -870,7 +871,7 @@ const StakeDypiusEth1Phase2 = ({
   useEffect(() => {
     getUsdPerDyp();
     getAvailableQuota()
-  }, [staking]);
+  }, [staking, poolCap]);
 
   return (
     <div className="d-flex flex-column gap-2 w-100">
@@ -936,7 +937,7 @@ const StakeDypiusEth1Phase2 = ({
                 <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Pool Cap:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    1M DYP
+                    {abbreviateNumber(poolCap,1)} DYP
                     <ClickAwayListener onClickAway={poolCapClose}>
                       <Tooltip
                         open={poolCapTooltip}
@@ -1133,7 +1134,7 @@ const StakeDypiusEth1Phase2 = ({
                 <div className="d-flex align-items-center gap-1">
                   <span className="bal-smallTxt">Start date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    07 Jun 2024{" "}
+                   {start_date}
                   </span>
                 </div>
                 <div className="d-flex align-items-center gap-1">
@@ -1391,7 +1392,7 @@ const StakeDypiusEth1Phase2 = ({
                 <div className="d-flex align-items-center gap-1">
                   <span className="bal-smallTxt">Start date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    07 Jun 2024{" "}
+                    {start_date}
                   </span>
                 </div>
                 <div className="d-flex align-items-center gap-1">
