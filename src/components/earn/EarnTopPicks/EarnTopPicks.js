@@ -4351,7 +4351,7 @@ const EarnTopPicks = ({
                     30 Days
                   </button>
                   <button
-                    className={getClassName(
+                    className={` position-relative ${getClassName(
                       selectedchain,
                       "60 days",
                       selectedpoolType,
@@ -4362,7 +4362,7 @@ const EarnTopPicks = ({
                       bnbPoolsiDyp,
                       avaxPoolsDyp,
                       avaxPoolsiDyp
-                    )}
+                    )}`}
                     onClick={() => {
                       handleSelectPool(
                         selectedchain,
@@ -4377,10 +4377,14 @@ const EarnTopPicks = ({
                       );
                     }}
                   >
+                  {selectedpoolType === 'dyp' &&
+                         <div className="new-beta-sidebar2 position-absolute">
+                          <span className="new-beta-text2">New</span>
+                        </div> }
                     60 Days
                   </button>
                   <button
-                    className={getClassName(
+                    className={` position-relative ${getClassName(
                       selectedchain,
                       "90 days",
                       selectedpoolType,
@@ -4391,7 +4395,7 @@ const EarnTopPicks = ({
                       bnbPoolsiDyp,
                       avaxPoolsDyp,
                       avaxPoolsiDyp
-                    )}
+                    )}`}
                     onClick={() => {
                       handleSelectPool(
                         selectedchain,
@@ -4407,6 +4411,10 @@ const EarnTopPicks = ({
                       setselectedIndex(0);
                     }}
                   >
+                    {selectedpoolType === 'dyp' &&
+                         <div className="new-beta-sidebar2 position-absolute">
+                          <span className="new-beta-text2">New</span>
+                        </div> }
                     90 Days
                   </button>
                   <button
