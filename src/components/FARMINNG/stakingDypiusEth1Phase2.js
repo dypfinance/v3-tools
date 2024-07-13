@@ -857,14 +857,14 @@ const StakeDypiusEth1Phase2 = ({
 
   useEffect(()=>{
     const result = Number(depositAmount) + Number(totalDeposited);
-    if(result>1000000) {
+    if(result>poolCap) {
       seterrorMsg('Deposit amount is greater than available quota. Please add another amount.')
       setCanDeposit(false)
     } else {
       seterrorMsg('')
       setCanDeposit(true)
     }
-  },[depositAmount, totalDeposited])
+  },[depositAmount, totalDeposited,poolCap])
 
 
 
