@@ -4550,7 +4550,7 @@ const EarnTopPicks = ({
                       {resultFilteredPool.map((obj, index) => {
                         return (
                           <button
-                            className={` w-100 ${
+                            className={` w-100 position-relative ${
                               selectedIndex === index
                                 ? "method-btn-active"
                                 : "method-btn"
@@ -4560,6 +4560,10 @@ const EarnTopPicks = ({
                               setselectedPool(obj);
                             }}
                           >
+                            {selectedpoolType === 'dyp' && index == 1 &&
+                         <div className="new-beta-sidebar2 position-absolute">
+                          <span className="new-beta-text2">New</span>
+                        </div> }
                             Pool {index + 1}
                           </button>
                         );
