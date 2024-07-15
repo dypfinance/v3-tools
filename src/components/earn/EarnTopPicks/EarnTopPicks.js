@@ -4377,10 +4377,12 @@ const EarnTopPicks = ({
                       );
                     }}
                   >
-                  {selectedpoolType === 'dyp' &&
+                  {selectedpoolType === 'dyp' && selectedchain === "eth" ?
                          <div className="new-beta-sidebar2 position-absolute">
                           <span className="new-beta-text2">New</span>
-                        </div> }
+                        </div> 
+                      : <></>  
+                      }
                     60 Days
                   </button>
                   <button
@@ -4411,10 +4413,12 @@ const EarnTopPicks = ({
                       setselectedIndex(0);
                     }}
                   >
-                    {selectedpoolType === 'dyp' &&
+                    {selectedpoolType === 'dyp' && selectedchain === "eth" ? 
                          <div className="new-beta-sidebar2 position-absolute">
                           <span className="new-beta-text2">New</span>
-                        </div> }
+                        </div>  
+                      : <></>  
+                      }
                     90 Days
                   </button>
                   <button
@@ -4543,7 +4547,7 @@ const EarnTopPicks = ({
                     </h6>
                   </div>
                 </div>
-                {resultFilteredPool && resultFilteredPool.length > 1 && (
+                {resultFilteredPool && resultFilteredPool.length > 1 && selectedchain === "eth" && (
                   <>
                     <div className="separator my-1"></div>
                     <div className="d-flex align-items-center gap-2 w-100">
