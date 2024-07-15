@@ -315,7 +315,7 @@ const Sidebar = (props) => {
                             }
                           >
                             {child.title}
-                            {(child.title === 'NFT Staking' || child.title === 'Staking')&&   <div className="new-beta-sidebar">
+                            {child.title === 'Dypius' &&   <div className="new-beta-sidebar">
                           <span className="new-beta-text">New</span>
                         </div>}
                           </NavLink>
