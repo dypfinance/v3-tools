@@ -1305,7 +1305,7 @@ class App extends React.Component {
                     </BrowserView>
                     <MobileView>
                       <a
-                        href="https://drive.google.com/file/d/1EvPyW0YWYcMc_x6sWViGYJxMStbg13D5/view"
+                        href="https://drive.google.com/file/d/1EArSD0-cSIx4M48fFaOflFHMGoKIguR9/view?usp=sharing"
                         target="_blank"
                         rel="noreferrer"
                         className={`btn filledbtn `}
