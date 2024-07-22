@@ -2344,6 +2344,9 @@ window.config = {
   constant_stakingidyp_5_address: "0x7e766f7005c7a9e74123b156697b582eecb8d2d7",
   constant_stakingidyp_6_address: "0x4c04e53f9aaa17fc2c914694b4aae57a9d1be445",
   constant_stakingidyp_7_address: "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d",
+  constant_stakingidyp_8_address: "0xFBe84Af34CdC22455f82e18B76Ca50D21d3aBF84",
+  constant_stakingidyp_9_address: "0xf6DC9E51D4E0FCc19ca6426fB5422f1E9a24F2eE",
+
 
   submission_form_link: "https://forms.gle/SFX1DyUh8TcNeysz6",
 
@@ -3048,11 +3051,22 @@ window.constant_stakingidyp_7 = new CONSTANT_STAKINGBSC_NEW(
   "CONSTANT_STAKINGIDYP_7"
 );
 
+window.constant_stakingidyp_8 = new CONSTANT_STAKINGBSC_NEW(
+  "CONSTANT_STAKINGIDYP_8"
+);
+
+window.constant_stakingidyp_9 = new CONSTANT_STAKINGBSC_NEW(
+  "CONSTANT_STAKINGIDYP_9"
+);
+
 window.CONSTANT_STAKINGIDYP_1_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYP_2_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYP_5_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYP_6_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYP_7_ABI = window.CONSTANT_STAKING_IDYP_ABI;
+window.CONSTANT_STAKINGIDYP_8_ABI = window.CONSTANT_STAKING_IDYP_ABI;
+window.CONSTANT_STAKINGIDYP_9_ABI = window.CONSTANT_STAKING_IDYP_ABI;
+
 
 window.constant_staking_new1 = new CONSTANT_STAKING_NEW(
   "CONSTANT_STAKINGNEW_NEW1"
@@ -37520,6 +37534,9 @@ Object.keys(window.config)
       k.startsWith("constant_stakingnew_new1") ||
       k.startsWith("constant_stakingidyp_6") ||
       k.startsWith("constant_stakingidyp_7") ||
+      k.startsWith("constant_stakingidyp_8") ||
+      k.startsWith("constant_stakingidyp_9") ||
+
       k.startsWith("constant_stakingidyp_5") ||
       k.startsWith("constant_stakingidyp_2") ||
       k.startsWith("constant_stakingidyp_1") ||
@@ -37744,6 +37761,9 @@ Object.keys(window.config)
       : k.startsWith("constant_stakingidyp_6")
       ? window.CONSTANT_STAKING_IDYP_ABI
       : k.startsWith("constant_stakingidyp_7")
+      ? window.CONSTANT_STAKING_IDYP_ABI
+      : k.startsWith("constant_stakingidyp_8")
+      ? window.CONSTANT_STAKING_IDYP_ABI: k.startsWith("constant_stakingidyp_9")
       ? window.CONSTANT_STAKING_IDYP_ABI
       : k.startsWith("constant_stakingidyp_5")
       ? window.CONSTANT_STAKING_IDYP_ABI

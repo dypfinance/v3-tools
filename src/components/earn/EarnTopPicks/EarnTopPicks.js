@@ -222,38 +222,38 @@ const EarnTopPicks = ({
 
   const phase2_pools = [
     {
-      id: "0x0fafe78e471b52bc4003984a337948ed55284573",
-      apy_percent: 15,
+      id: "0xFBe84Af34CdC22455f82e18B76Ca50D21d3aBF84",
+      apy_percent: 20,
       tvl_usd: 46682.3565666875,
       link_logo: "https://www.dypius.com/logo192.png",
       link_pair: "https://app.dyp.finance/constant-staking-3",
-      pool_name: "DYP Constant Staking ETH",
-      pair_name: "DYP",
-      return_types: "DYP",
-      lock_time: "60 days",
-      expired: "No",
-      new_pool: "Yes",
-      apy_performancefee: 15,
-      performancefee: 0,
-      type: "dyp",
-      chain: "eth",
-    },
-    {
-      id: "0xFdD3CFF22CF846208E3B37b47Bc36b2c61D2cA8b",
-      apy_percent: 25,
-      tvl_usd: 462.3565666875,
-      link_logo: "https://www.dypius.com/logo192.png",
-      link_pair: "https://app.dyp.finance/constant-staking-3",
-      pool_name: "DYP Constant Staking ETH",
-      pair_name: "DYP",
+      pool_name: "iDYP Constant Staking ETH",
+      pair_name: "iDYP",
       return_types: "iDYP",
       lock_time: "90 days",
       expired: "No",
       new_pool: "Yes",
+      apy_performancefee: 20,
+      performancefee: 0,
+      type: "idyp",
+      chain: "bnb",
+    },
+    {
+      id: "0xf6DC9E51D4E0FCc19ca6426fB5422f1E9a24F2eE",
+      apy_percent: 25,
+      tvl_usd: 462.3565666875,
+      link_logo: "https://www.dypius.com/logo192.png",
+      link_pair: "https://app.dyp.finance/constant-staking-3",
+      pool_name: "iDYP Constant Staking ETH",
+      pair_name: "iDYP",
+      return_types: "iDYP",
+      lock_time: "120 days",
+      expired: "No",
+      new_pool: "Yes",
       apy_performancefee: 25,
       performancefee: 0,
-      type: "dyp",
-      chain: "eth",
+      type: "idyp",
+      chain: "bnb",
     },
   ];
   const fetchUserPools = async () => {
@@ -306,7 +306,7 @@ const EarnTopPicks = ({
       const activeEth = dypIdyp.filter((item) => {
         return item.expired !== "Yes";
       });
-      const object2activeEth = activeEth.map((item) => {
+      const object2activeEth = [...activeEth].map((item) => {
         return { ...item, tvl_usd: item.tvl_usd, type: "idyp", chain: "eth" };
       });
 
@@ -354,7 +354,7 @@ const EarnTopPicks = ({
         return item.expired !== "Yes";
       });
 
-      const object2Idyp = activeBnb.map((item) => {
+      const object2Idyp = [...activeBnb,...phase2_pools].map((item) => {
         return { ...item, tvl_usd: item.tvl_usd, type: "idyp", chain: "bnb" };
       });
 
@@ -362,14 +362,15 @@ const EarnTopPicks = ({
         return item.expired === "No";
       });
 
-      setbnbPoolsDyp(activeBnb2);
-      setbnbPoolsiDyp(object2Idyp);
+
 
       const allActiveBnb = [...object2Idyp, ...activeBnb2];
       const sortedActive = allActiveBnb.sort(function (a, b) {
         return b.apy_percent - a.apy_percent;
       });
 
+      setbnbPoolsDyp(activeBnb2);
+      setbnbPoolsiDyp(object2Idyp);
       setBnbPools(sortedActive);
     }
   };
@@ -454,7 +455,7 @@ const EarnTopPicks = ({
         return item.expired !== "Yes";
       });
 
-      const object2activeEth = activeEth.map((item) => {
+      const object2activeEth = [...activeEth].map((item) => {
         return { ...item, tvl_usd: item.tvl_usd, type: "idyp", chain: "eth" };
       });
 
@@ -519,7 +520,7 @@ const EarnTopPicks = ({
         return item.expired !== "Yes";
       });
 
-      const object2activeBnb = activeBnb.map((item) => {
+      const object2activeBnb = [...activeBnb,...phase2_pools].map((item) => {
         return { ...item, tvl_usd: item.tvl_usd, type: "idyp", chain: "bnb" };
       });
 
@@ -541,7 +542,17 @@ const EarnTopPicks = ({
         return b.apy_percent - a.apy_percent;
       });
 
+      const sortedActiveDYP = activeBnb2.sort(function (a, b) {
+        return b.apy_percent - a.apy_percent;
+      });
+
+      const sortedActiveiDYP = object2activeBnb.sort(function (a, b) {
+        return b.apy_percent - a.apy_percent;
+      });
+
+
       setActivePools(sortedActive);
+      setActivePools([sortedActiveDYP[0], sortedActiveiDYP[0]]);
       setExpiredPools(sortedExpired);
       setTopPools([...dypIdypBnb, ...object2]);
     }
@@ -1238,6 +1249,7 @@ const EarnTopPicks = ({
     fetchBnbStaking();
   }, []);
 
+ 
   return (
     <>
       <div className={`row w-100 justify-content-center gap-4`}>
@@ -4377,12 +4389,13 @@ const EarnTopPicks = ({
                       );
                     }}
                   >
-                  {selectedpoolType === 'dyp' && selectedchain === "eth" ?
-                         <div className="new-beta-sidebar2 position-absolute">
-                          <span className="new-beta-text2">New</span>
-                        </div> 
-                      : <></>  
-                      }
+                    {selectedpoolType === "dyp" && selectedchain === "eth" ? (
+                      <div className="new-beta-sidebar2 position-absolute">
+                        <span className="new-beta-text2">New</span>
+                      </div>
+                    ) : (
+                      <></>
+                    )}
                     60 Days
                   </button>
                   <button
@@ -4413,16 +4426,17 @@ const EarnTopPicks = ({
                       setselectedIndex(0);
                     }}
                   >
-                    {selectedpoolType === 'dyp' && selectedchain === "eth" ? 
-                         <div className="new-beta-sidebar2 position-absolute">
-                          <span className="new-beta-text2">New</span>
-                        </div>  
-                      : <></>  
-                      }
+                    {(selectedchain === "eth" &&  selectedpoolType === "dyp") || (selectedchain === "bnb" &&  selectedpoolType === "idyp")  ? (
+                      <div className="new-beta-sidebar2 position-absolute">
+                        <span className="new-beta-text2">New</span>
+                      </div>
+                    ) : (
+                      <></>
+                    )}
                     90 Days
                   </button>
                   <button
-                    className={getClassName(
+                    className={`position-relative ${getClassName(
                       selectedchain,
                       "120 days",
                       selectedpoolType,
@@ -4433,7 +4447,7 @@ const EarnTopPicks = ({
                       bnbPoolsiDyp,
                       avaxPoolsDyp,
                       avaxPoolsiDyp
-                    )}
+                    )}`}
                     onClick={() => {
                       handleSelectPool(
                         selectedchain,
@@ -4448,6 +4462,13 @@ const EarnTopPicks = ({
                       );
                     }}
                   >
+                    {selectedpoolType === "idyp" && selectedchain === "bnb" ? (
+                      <div className="new-beta-sidebar2 position-absolute">
+                        <span className="new-beta-text2">New</span>
+                      </div>
+                    ) : (
+                      <></>
+                    )}
                     120 Days
                   </button>
                 </div>
@@ -4547,34 +4568,37 @@ const EarnTopPicks = ({
                     </h6>
                   </div>
                 </div>
-                {resultFilteredPool && resultFilteredPool.length > 1 && selectedchain === "eth" && (
-                  <>
-                    <div className="separator my-1"></div>
-                    <div className="d-flex align-items-center gap-2 w-100">
-                      {resultFilteredPool.map((obj, index) => {
-                        return (
-                          <button
-                            className={` w-100 position-relative ${
-                              selectedIndex === index
-                                ? "method-btn-active"
-                                : "method-btn"
-                            }`}
-                            onClick={() => {
-                              setselectedIndex(index);
-                              setselectedPool(obj);
-                            }}
-                          >
-                            {selectedpoolType === 'dyp' && index == 1 &&
-                         <div className="new-beta-sidebar2 position-absolute">
-                          <span className="new-beta-text2">New</span>
-                        </div> }
-                            Pool {index + 1}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </>
-                )}
+                {resultFilteredPool &&
+                  resultFilteredPool.length > 1 &&
+                  selectedchain === "eth" && (
+                    <>
+                      <div className="separator my-1"></div>
+                      <div className="d-flex align-items-center gap-2 w-100">
+                        {resultFilteredPool.map((obj, index) => {
+                          return (
+                            <button
+                              className={` w-100 position-relative ${
+                                selectedIndex === index
+                                  ? "method-btn-active"
+                                  : "method-btn"
+                              }`}
+                              onClick={() => {
+                                setselectedIndex(index);
+                                setselectedPool(obj);
+                              }}
+                            >
+                              {selectedpoolType === "dyp" && index == 1 && (
+                                <div className="new-beta-sidebar2 position-absolute">
+                                  <span className="new-beta-text2">New</span>
+                                </div>
+                              )}
+                              Pool {index + 1}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </>
+                  )}
                 <div className="info-pool-wrapper p-3 w-100">
                   <div className="info-pool-inner-wrapper d-flex flex-column flex-lg-row align-items-center gap-2">
                     <div className="info-pool-item p-2">
@@ -4652,6 +4676,8 @@ const EarnTopPicks = ({
                     apr={selectedPool?.apy_percent}
                     liquidity={wbsc_address}
                     expiration_time={"18 July 2024"}
+                    poolCap={0}
+                start_date={"18 July 2023"}
                     other_info={false}
                     fee_s={selectedPool?.performancefee}
                     fee_u={0}
@@ -4667,7 +4693,81 @@ const EarnTopPicks = ({
                       setDetails(999);
                     }}
                   />
-                ) : topList === "Staking" &&
+                ) : selectedPool?.id ===
+                "0xFBe84Af34CdC22455f82e18B76Ca50D21d3aBF84" &&
+              topList === "Staking" &&
+              chain === "bnb" ? (
+                <StakeBscIDyp
+                  selectedPool={selectedPool}
+                  selectedTab={selectedTab}
+                  is_wallet_connected={isConnected}
+                  coinbase={coinbase}
+                  the_graph_result={the_graph_resultbsc}
+                  chainId={chainId}
+                  handleConnection={handleConnection}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  expired={false}
+                  staking={window.constant_stakingidyp_8}
+                  listType={listType}
+                  finalApr={selectedPool?.apy_performancefee}
+                  apr={selectedPool?.apy_percent}
+                  liquidity={wbsc_address}
+                  expiration_time={"22 July 2025"}
+                poolCap={20000000}
+                start_date={"22 Jul 2024"}
+                  other_info={false}
+                  fee_s={selectedPool?.performancefee}
+                  fee_u={0}
+                  lockTime={
+                    selectedPool?.lock_time?.split(" ")[0] === "No"
+                      ? "No Lock"
+                      : parseInt(selectedPool?.lock_time?.split(" ")[0])
+                  }
+                  onConnectWallet={() => {
+                    setShowDetails(false);
+                    onConnectWallet();
+                    setselectedPool([]);
+                    setDetails(999);
+                  }}
+                />
+              ) : selectedPool?.id ===
+              "0xf6DC9E51D4E0FCc19ca6426fB5422f1E9a24F2eE" &&
+            topList === "Staking" &&
+            chain === "bnb" ? (
+              <StakeBscIDyp
+                selectedPool={selectedPool}
+                selectedTab={selectedTab}
+                is_wallet_connected={isConnected}
+                coinbase={coinbase}
+                the_graph_result={the_graph_resultbsc}
+                chainId={chainId}
+                handleConnection={handleConnection}
+                handleSwitchNetwork={handleSwitchNetwork}
+                expired={false}
+                staking={window.constant_stakingidyp_9}
+                listType={listType}
+                finalApr={selectedPool?.apy_performancefee}
+                apr={selectedPool?.apy_percent}
+                liquidity={wbsc_address}
+                expiration_time={"22 July 2025"}
+                poolCap={25000000}
+                start_date={"22 Jul 2024"}
+                other_info={false}
+                fee_s={selectedPool?.performancefee}
+                fee_u={0}
+                lockTime={
+                  selectedPool?.lock_time?.split(" ")[0] === "No"
+                    ? "No Lock"
+                    : parseInt(selectedPool?.lock_time?.split(" ")[0])
+                }
+                onConnectWallet={() => {
+                  setShowDetails(false);
+                  onConnectWallet();
+                  setselectedPool([]);
+                  setDetails(999);
+                }}
+              />
+            ) : topList === "Staking" &&
                   chain === "eth" &&
                   selectedPool?.id ===
                     "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
