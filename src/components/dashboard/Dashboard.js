@@ -383,7 +383,7 @@ const Dashboard = ({
       const activeBnb2 = object2bnb.filter((item) => {
         return item.expired === "No";
       });
-      const object2idypbnb = [...idypBnb, ...phase2_pools].map((item) => {
+      const object2idypbnb = idypBnb.map((item) => {
         return {
           ...item,
           tvl_usd: item.tvl_usd,
@@ -1687,9 +1687,10 @@ const Dashboard = ({
                   )}
                 <div className="d-flex gap-3 align-items-center justify-content-start w-100">
                   <div
-                    className={`position-relative col-lg-3 ${selectedchain === "eth"
-                        ? "chain-popup-item-eth"
-                        : "chain-popup-item"
+                    className={`position-relative col-lg-3 ${ selectedchain === "eth"
+                      ? "chain-popup-item-eth" :
+                      selectedpoolType === 'idyp' ? 'chain-popup-item-disabled' 
+                      : "chain-popup-item"
                       }`}
                     onClick={() => {
                       setselectedchain("eth");
@@ -1750,6 +1751,7 @@ const Dashboard = ({
                   <div
                     className={`position-relative col-lg-3 ${selectedchain === "avax"
                         ? "chain-popup-item-avax"
+                       :  selectedpoolType === 'idyp' ? 'chain-popup-item-disabled' 
                         : "chain-popup-item"
                       }`}
                     onClick={() => {

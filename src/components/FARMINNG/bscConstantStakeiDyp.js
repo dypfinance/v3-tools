@@ -1019,7 +1019,7 @@ const StakeBscIDyp = ({
             </div>
           </div>
 
-          {pendingDivs > 0 && (
+          {pendingDivs > 0 && expired === false && (
             <>
               {" "}
               <div className="separator my-2"></div>
@@ -1145,11 +1145,11 @@ const StakeBscIDyp = ({
           {is_wallet_connected && chainId === "56" && (
             <button
               disabled={
-                depositAmount === "" || depositLoading === true || canDeposit === false ? true : false
+                depositAmount === "" || depositLoading === true || canDeposit === false || expired === true ? true : false
               }
               className={`btn filledbtn ${
                 ((depositAmount === "" &&
-                  depositStatus === "initial" )|| (canDeposit === false)) &&
+                  depositStatus === "initial" )|| (canDeposit === false || expired === true)) &&
                   "disabled-btn"
               } ${
                 depositStatus === "deposit" || depositStatus === "success"
