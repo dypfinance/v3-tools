@@ -959,7 +959,7 @@ const StakeAvaxIDyp = ({
             </div>
           </div>
 
-          {pendingDivs > 0 && (
+          {pendingDivs > 0 && expired === false && (
             <>
               {" "}
               <div className="separator my-2"></div>
@@ -1087,11 +1087,11 @@ const StakeAvaxIDyp = ({
           {is_wallet_connected && chainId === "43114" && (
             <button
               disabled={
-                depositAmount === "" || depositLoading === true ? true : false
+                depositAmount === "" || depositLoading === true || expired === true ? true : false
               }
               className={`btn filledbtn ${
-                depositAmount === "" &&
-                depositStatus === "initial" &&
+                ((depositAmount === "" &&
+                depositStatus === "initial")|| expired === true) &&
                 "disabled-btn"
               } ${
                 depositStatus === "deposit" || depositStatus === "success"
