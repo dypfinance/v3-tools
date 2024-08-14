@@ -150,7 +150,6 @@ class App extends React.Component {
         window.ethereum &&
         !window.coin98 &&
         (window.ethereum.isMetaMask === true ||
-          window.ethereum.isTrust === true ||
           window.ethereum.isCoinbaseWallet === true)
       ) {
         window.ethereum
@@ -193,6 +192,19 @@ class App extends React.Component {
                 networkId: "1",
               });
             }
+          })
+          .catch(console.error);
+      } else  if (
+        window.ethereum &&
+        !window.coin98 &&
+        (window.ethereum.isTrust === true)
+      ) {
+        window.ethereum
+          .request({ method: "net_version" })
+          .then((data) => {
+              this.setState({
+                networkId: data.toString(),
+              });
           })
           .catch(console.error);
       } else if (
