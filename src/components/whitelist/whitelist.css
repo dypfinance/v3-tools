@@ -1,0 +1,63 @@
+.commiting-wrapper {
+  border-radius: 12px;
+  background: #28285a;
+}
+
+.commiting-amount {
+  color: #4ed5d2;
+  text-align: center;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 17px;
+}
+
+.whitelist-details-wrapper {
+    border-radius: 12px;
+    border: 1px solid #3b3c68;
+    background: #26264f;
+    box-shadow: 0px 32px 64px 0px rgba(17, 17, 17, 0.08);
+    width: 30%;
+  }
+
+  @media screen and (max-width: 991px) {
+    .whitelist-details-wrapper {
+      width: 100%;
+    }
+  }
+  
+
+.whitelist-banner {
+  position: relative;
+  background: #282a5c;
+  border-radius: 20px;
+}
+
+.whitelist-banner::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  margin: auto;
+  background-image: url("./assets/whitelistBanner.webp");
+  background-repeat: no-repeat;
+  background-position: right;
+  border-radius: 20px;
+}
+
+@media screen and (max-width: 786px) {
+  .whitelist-banner::before {
+    background-image: none;
+  }
+}
+
+.whitelist-item-title {
+  color: #f09c3a;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.216px;
+}

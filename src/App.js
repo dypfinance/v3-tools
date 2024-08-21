@@ -54,6 +54,7 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import { isMobile, MobileView, BrowserView } from "react-device-detect";
 import closeX from "./components/earnOther/assets/closeX.svg";
+import Whitelist from "./components/whitelist/Whitelist";
 
 class App extends React.Component {
   constructor(props) {
@@ -992,6 +993,20 @@ class App extends React.Component {
                       path="/bridge"
                       render={() => (
                         <Bridge
+                          networkId={parseInt(this.state.networkId)}
+                          isConnected={this.state.isConnected}
+                          handleConnection={this.handleConnection}
+                          coinbase={this.state.coinbase}
+                        />
+                      )}
+                    />
+
+                    
+<Route
+                      exact
+                      path="/wod-whitelist"
+                      render={() => (
+                        <Whitelist
                           networkId={parseInt(this.state.networkId)}
                           isConnected={this.state.isConnected}
                           handleConnection={this.handleConnection}
