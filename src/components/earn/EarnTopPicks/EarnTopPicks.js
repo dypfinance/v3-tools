@@ -1315,7 +1315,7 @@ const EarnTopPicks = ({
           <div className="px-0">
             <>
               <div className="top-picks-container">
-                {expiredPools === false && activePools && activePools.length>0
+                {expiredPools === false && activePools && activePools.length>0 && topList === 'Staking'
                   ?   activePools.slice(0, 3).map((pool, index) => (
                       <TopPoolsCard
                         key={index}
@@ -1388,7 +1388,7 @@ const EarnTopPicks = ({
                         isPremium={isPremium}
                       />
                     ))
-                  : expiredDYPPools.slice(0, 1).map((pool, index) => (
+                  :  expiredPools === true && expiredDYPPools && expiredDYPPools.length>0 && expiredDYPPools.slice(0, 1).map((pool, index) => (
                       <TopPoolsCard
                         key={index}
                         chain={chain}
