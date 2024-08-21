@@ -49,6 +49,11 @@ import EarnOtherNft from "./components/earnOther/EarnOtherNft";
 import EarnInnerPoolNft from "./components/earnOther/EarnInnerPool/EarnInnerPoolNft";
 import WalletModal from "./components/WalletModal";
 import axios from "axios";
+import MobileFlyout from "./components/mobileFlyout/MobileFlyout";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import { isMobile, MobileView, BrowserView } from "react-device-detect";
+import closeX from "./components/earnOther/assets/closeX.svg";
 
 class App extends React.Component {
   constructor(props) {
@@ -91,6 +96,9 @@ class App extends React.Component {
       referrer: "",
       showRibbon: true,
       showRibbon2: true,
+      showFlyout: true,
+      downloadClick: false,
+      showMobilePopup: false,
       showWalletPopup: false,
       aggregatorPools: [],
       userCurencyBalance: 0,
@@ -130,7 +138,6 @@ class App extends React.Component {
     if (result && result.status === 200) {
       const pools = result.data.stakingLists;
       this.setState({ aggregatorPools: pools });
-      console.log(pools);
     }
   };
 
@@ -143,7 +150,6 @@ class App extends React.Component {
         window.ethereum &&
         !window.coin98 &&
         (window.ethereum.isMetaMask === true ||
-          window.ethereum.isTrust === true ||
           window.ethereum.isCoinbaseWallet === true)
       ) {
         window.ethereum
@@ -186,7 +192,19 @@ class App extends React.Component {
                 networkId: "1",
               });
             }
-
+          })
+          .catch(console.error);
+      } else  if (
+        window.ethereum &&
+        !window.coin98 &&
+        (window.ethereum.isTrust === true)
+      ) {
+        window.ethereum
+          .request({ method: "net_version" })
+          .then((data) => {
+              this.setState({
+                networkId: data.toString(),
+              });
           })
           .catch(console.error);
       } else if (
@@ -230,9 +248,6 @@ class App extends React.Component {
             networkId: "1",
           });
         }
-
-        
-
       } else if (window.ethereum && window.coin98) {
         window.ethereum
           .request({ method: "net_version" })
@@ -246,8 +261,6 @@ class App extends React.Component {
                 networkId: "0",
               });
             }
-
-            
           })
           .catch(console.error);
       } else {
@@ -263,8 +276,6 @@ class App extends React.Component {
   };
 
   refreshSubscription = async () => {
-    
-
     let subscribedPlatformTokenAmountNewETH;
     let subscribedPlatformTokenAmountNewAvax;
     let subscribedPlatformTokenAmountNewBNB;
@@ -328,8 +339,8 @@ class App extends React.Component {
       SkaleABI,
       skalesubscribeAddress
     );
-const userAddr = await window.getCoinbase()
- 
+    const userAddr = await window.getCoinbase();
+
     if (userAddr) {
       subscribedPlatformTokenAmountNewETH = await ethNewcontract.methods
         .subscriptionPlatformTokenAmount(userAddr)
@@ -355,7 +366,7 @@ const userAddr = await window.getCoinbase()
           return 0;
         });
 
-        subscribedPlatformTokenAmountNewBNB2 = await bnbNewcontract2.methods
+      subscribedPlatformTokenAmountNewBNB2 = await bnbNewcontract2.methods
         .subscriptionPlatformTokenAmount(userAddr)
         .call()
         .catch((e) => {
@@ -392,22 +403,20 @@ const userAddr = await window.getCoinbase()
         subscribedPlatformTokenAmountCfx == "0" &&
         subscribedPlatformTokenAmountBase == "0" &&
         subscribedPlatformTokenAmountNewAvax == "0" &&
-        subscribedPlatformTokenAmountNewBNB == "0" && subscribedPlatformTokenAmountNewBNB2 === "0" &&
+        subscribedPlatformTokenAmountNewBNB == "0" &&
+        subscribedPlatformTokenAmountNewBNB2 === "0" &&
         subscribedPlatformTokenAmountSkale == "0"
       ) {
-  
         this.setState({ subscribedPlatformTokenAmount: "0", isPremium: false });
       } else if (
         subscribedPlatformTokenAmountNewETH != "0" ||
         subscribedPlatformTokenAmountCfx != "0" ||
         subscribedPlatformTokenAmountBase != "0" ||
         subscribedPlatformTokenAmountNewAvax != "0" ||
-        subscribedPlatformTokenAmountNewBNB != "0"  ||
+        subscribedPlatformTokenAmountNewBNB != "0" ||
         subscribedPlatformTokenAmountNewBNB2 != "0" ||
         subscribedPlatformTokenAmountSkale != "0"
       ) {
-    
-
         this.setState({
           isPremium: true,
         });
@@ -533,6 +542,10 @@ const userAddr = await window.getCoinbase()
     this.updateWindowDimensions();
     this.fetchAggregatorPools();
     window.addEventListener("resize", this.updateWindowDimensions);
+
+    if (window.location.hash === "#mobile-app") {
+      this.setState({ downloadClick: true });
+    }
     if (
       window.ethereum &&
       !window.coin98 &&
@@ -561,7 +574,6 @@ const userAddr = await window.getCoinbase()
   }
 
   checkConnection = async () => {
-    
     this.tvl();
     const logout = localStorage.getItem("logout");
 
@@ -660,6 +672,23 @@ const userAddr = await window.getCoinbase()
   };
 
   render() {
+    const style2 = {
+      position: "absolute",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      maxWidth: 540,
+      width: '100%',
+      boxShadow: 24,
+      p: 4,
+      overflow: "auto",
+      minHeight: 200,
+      overflowX: "hidden",
+      borderRadius: "10px",
+      height: "auto",
+      background: `#1A1A36`,
+    };
+
     const { LP_IDs_V2 } = window;
     const { ethereum } = window;
     // console.log("the_graph_resultbsc", this.state.the_graph_resultbsc);
@@ -678,7 +707,6 @@ const userAddr = await window.getCoinbase()
       ethereum?.on("chainChanged", this.checkNetworkId);
       ethereum?.on("accountsChanged", this.checkConnection);
       ethereum?.on("accountsChanged", this.refreshSubscription);
-
     }
 
     document.addEventListener("touchstart", { passive: true });
@@ -699,6 +727,17 @@ const userAddr = await window.getCoinbase()
             onComplete={() => {
               this.setState({ showRibbon: false });
               this.setState({ showRibbon2: false });
+            }}
+          />
+        )}
+
+        {this.state.showFlyout && (
+          <MobileFlyout
+            onClose={() => {
+              this.setState({ showFlyout: false });
+            }}
+            onDownloadClick={() => {
+              this.setState({ downloadClick: true });
             }}
           />
         )}
@@ -724,6 +763,7 @@ const userAddr = await window.getCoinbase()
               onSetCurrencyAmount={(value) => {
                 this.setState({ userCurencyBalance: value });
               }}
+              showFlyout={this.state.showFlyout}
             />
           )}
           <div className="content-wrapper container-fluid d-flex justify-content-center justify-content-lg-start">
@@ -1082,6 +1122,9 @@ const userAddr = await window.getCoinbase()
                           isPremium={this.state.isPremium}
                           onConnectWallet={this.showModal}
                           aggregatorPools={this.state.aggregatorPools}
+                          onMobileClick={() => {
+                            this.setState({ showMobilePopup: true });
+                          }}
                         />
                       )}
                     />
@@ -1206,6 +1249,87 @@ const userAddr = await window.getCoinbase()
         (this.props?.location?.pathname === "/caws-staking" &&
           window.innerWidth < 786) ? null : (
           <Footer></Footer>
+        )}
+
+        {(this.state.showMobilePopup === true ||
+          this.state.downloadClick === true) && (
+          <Modal
+            open={this.state.showMobilePopup || this.state.downloadClick}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style2}>
+              <div className="d-flex flex-column justify-content-center position-relative">
+                <div className="d-flex flex-column gap-3 align-items-center justify-content-between">
+                  <div className="d-flex align-items-center  justify-content-between gap-5 w-100">
+                    <h4 className="mobile-popup-title">Dypius Mobile App</h4>
+
+                    <img
+                      src={closeX}
+                      alt=""
+                      className="close-x position-relative cursor-pointer "
+                      onClick={() => {
+                        this.setState({ downloadClick: false });
+                        this.setState({ showMobilePopup: false });
+                      }}
+                      style={{
+                        bottom: "17px",
+                        alignSelf: "end",
+                        width: 16,
+                        height: 16,
+                      }}
+                    />
+                  </div>
+                  <div className="mobile-popup-content-wrapper p-3">
+                    <div className="d-flex flex-column gap-3">
+                      <ul className="mobile-content-list">
+                        <li className="mobile-content-text">
+                          Available exclusively in APK format for{" "}
+                          <b style={{ color: "#4ED5D2" }}>Android</b> devices.
+                        </li>
+                        <li className="mobile-content-text">
+                          Early release with some fully functional features.
+                        </li>
+                        <li className="mobile-content-text">
+                          Other features are in view-only mode, relying on the
+                          MetaMask Unity SDK.
+                        </li>
+                        <li className="mobile-content-text">
+                          MetaMask-related issues are beyond our control; we're
+                          seeking support to resolve them.
+                        </li>
+                        <li className="mobile-content-text">
+                          Your feedback is valuable as we continue to improve
+                          the app.
+                        </li>
+                        <li className="mobile-content-text">
+                          Thank you for your understanding and patience.
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div className="separator my-2"></div>
+                  <div className="d-flex align-items-center justify-content-center">
+                    <BrowserView>
+                      <button className={`btn disabled-btn `} disabled={true}>
+                        Download on mobile
+                      </button>
+                    </BrowserView>
+                    <MobileView>
+                      <a
+                        href="https://drive.google.com/file/d/1EArSD0-cSIx4M48fFaOflFHMGoKIguR9/view?usp=sharing"
+                        target="_blank"
+                        rel="noreferrer"
+                        className={`btn filledbtn `}
+                      >
+                        Download on mobile
+                      </a>
+                    </MobileView>
+                  </div>
+                </div>
+              </div>
+            </Box>
+          </Modal>
         )}
 
         {this.showWalletPopup === true && (

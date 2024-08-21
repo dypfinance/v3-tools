@@ -55,6 +55,8 @@ const StakeBscIDyp = ({
   lock,
   expiration_time,
   other_info,
+  poolCap,
+  start_date,
   fee_s,
   fee_u,
   chainId,
@@ -188,6 +190,9 @@ const StakeBscIDyp = ({
   const [poolCapTooltip, setPoolCapTooltip] = useState(false);
   const [quotaTooltip, setQuotaTooltip] = useState(false);
   const [maxDepositTooltip, setMaxDepositTooltip] = useState(false);
+  const [availableQuota, setavailableQuota] = useState(0);
+  const [totalDeposited, settotalDeposited] = useState(0);
+  const [canDeposit, setCanDeposit] = useState(true);
 
   const poolCapClose = () => {
     setPoolCapTooltip(false);
@@ -457,6 +462,11 @@ const StakeBscIDyp = ({
         setdepositLoading(false);
         setdepositStatus("success");
         refreshBalance();
+
+        setTimeout(() => {
+          setdepositAmount("");
+          setdepositStatus("initial");
+        }, 5000);
       })
       .catch((e) => {
         setdepositLoading(false);
@@ -481,6 +491,10 @@ const StakeBscIDyp = ({
         setwithdrawLoading(false);
         setwithdrawStatus("success");
         refreshBalance();
+        setTimeout(() => {
+          setwithdrawStatus("initial");
+          setwithdrawAmount("");
+        }, 5000);
       })
       .catch((e) => {
         setwithdrawLoading(false);
@@ -505,6 +519,9 @@ const StakeBscIDyp = ({
         setclaimLoading(false);
         setpendingDivs(getFormattedNumber(0, 6));
         refreshBalance();
+        setTimeout(() => {
+          setclaimStatus("initial");
+        }, 2000);
       })
       .catch((e) => {
         setclaimStatus("failed");
@@ -548,14 +565,16 @@ const StakeBscIDyp = ({
 
   const getApproxReturn = (depositAmount, days) => {
     let APY = getAPY() - fee_s;
-    const expirationDate = new Date("2024-07-18 23:11:00 GMT+02:00")
+    const expirationDate = new Date("2024-07-18 23:11:00 GMT+02:00");
+    const expirationDate2 = new Date("2025-07-22 23:11:00 GMT+02:00");
+
     const currentDate = new Date();
-    const timeDifference = expirationDate - currentDate; 
+    const finalExpDate = expired === true ? expirationDate : expirationDate2
+    const timeDifference = finalExpDate - currentDate;
     const millisecondsInADay = 1000 * 60 * 60 * 24;
     const daysUntilExpiration = Math.floor(timeDifference / millisecondsInADay);
 
-
-    return ((depositAmount * APY) / 100 / 365) * daysUntilExpiration;
+    return ((depositAmount * APY) / 100 / 365) * (expired === true ? 60 : daysUntilExpiration);
   };
 
   const getReferralLink = () => {
@@ -583,6 +602,9 @@ const StakeBscIDyp = ({
         setreInvestLoading(false);
         setpendingDivs(getFormattedNumber(0, 6));
         refreshBalance();
+        setTimeout(() => {
+          setreInvestStatus("initial");
+        }, 5000);
       })
       .catch((e) => {
         setreInvestStatus("failed");
@@ -715,11 +737,45 @@ const StakeBscIDyp = ({
       });
   };
 
+  const getAvailableQuota = async () => {
+    if (staking && staking._address && poolCap !== 0) {
+      const stakingSc = new window.bscWeb3.eth.Contract(
+        window.CONSTANT_STAKING_DYPIUS_ABI,
+        staking._address
+      );
+      const totalDeposited = await stakingSc.methods
+        .totalDeposited()
+        .call()
+        .catch((e) => {
+          console.error(e);
+        });
+
+      const totalDeposited_formatted = new BigNumber(totalDeposited)
+        .div(1e18)
+        .toFixed(6);
+      const quotaLeft = poolCap - totalDeposited_formatted;
+      setavailableQuota(quotaLeft);
+      settotalDeposited(totalDeposited_formatted);
+    }
+  };
+
+  useEffect(() => {
+    const result = Number(depositAmount) + Number(totalDeposited);
+    if (result > poolCap) {
+      seterrorMsg(
+        "Deposit amount is greater than available quota. Please add another amount."
+      );
+      setCanDeposit(false);
+    } else {
+      seterrorMsg("");
+      setCanDeposit(true);
+    }
+  }, [depositAmount, totalDeposited, poolCap]);
+
   useEffect(() => {
     getUsdPerDyp();
-  }, []);
-
-  
+    getAvailableQuota();
+  }, [poolCap]);
 
   return (
     <div className="d-flex flex-column gap-2 w-100">
@@ -879,7 +935,8 @@ const StakeBscIDyp = ({
                 <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Pool Cap:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    N/A
+                    {poolCap === 0 ? "N/A" : poolCap}{" "}
+                    {poolCap === 0 ? "" : "iDYP"}
                     <ClickAwayListener onClickAway={poolCapClose}>
                       <Tooltip
                         open={poolCapTooltip}
@@ -903,7 +960,7 @@ const StakeBscIDyp = ({
                 <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Available Quota:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    N/A
+                  {poolCap === 0 ? 'N/A' : getFormattedNumber(availableQuota, 2)} {poolCap === 0 ? '' : 'iDYP'}
                     <ClickAwayListener onClickAway={quotaClose}>
                       <Tooltip
                         open={quotaTooltip}
@@ -965,7 +1022,7 @@ const StakeBscIDyp = ({
             </div>
           </div>
 
-          {pendingDivs > 0 && (
+          {pendingDivs > 0 && expired === false && (
             <>
               {" "}
               <div className="separator my-2"></div>
@@ -1076,15 +1133,13 @@ const StakeBscIDyp = ({
                 <div className="d-flex align-items-center gap-1">
                   <span className="bal-smallTxt">Start date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    09 Nov 2023{" "}
-             
+                    {start_date}
                   </span>
                 </div>
                 <div className="d-flex align-items-center gap-1">
                   <span className="bal-smallTxt">End date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
                     {expiration_time}{" "}
-                 
                   </span>
                 </div>
               </div>
@@ -1093,12 +1148,12 @@ const StakeBscIDyp = ({
           {is_wallet_connected && chainId === "56" && (
             <button
               disabled={
-                depositAmount === "" || depositLoading === true ? true : false
+                depositAmount === "" || depositLoading === true || canDeposit === false || expired === true ? true : false
               }
               className={`btn filledbtn ${
-                depositAmount === "" &&
-                depositStatus === "initial" &&
-                "disabled-btn"
+                ((depositAmount === "" &&
+                  depositStatus === "initial" )|| (canDeposit === false || expired === true)) &&
+                  "disabled-btn"
               } ${
                 depositStatus === "deposit" || depositStatus === "success"
                   ? "success-button"
@@ -1336,15 +1391,13 @@ const StakeBscIDyp = ({
                 <div className="d-flex align-items-center gap-1">
                   <span className="bal-smallTxt">Start date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    09 Nov 2023{" "}
-                   
+                    {start_date}
                   </span>
                 </div>
                 <div className="d-flex align-items-center gap-1">
                   <span className="bal-smallTxt">End date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
                     {expiration_time}{" "}
-               
                   </span>
                 </div>
               </div>

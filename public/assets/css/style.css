@@ -568,6 +568,12 @@ a:hover {
   /* transition: 0.3s; */
 }
 
+@media only screen and (max-width: 767px) {
+  .header-wrap {
+    position: fixed !important;
+  }
+}
+
 /*sticky START CSS*/
 
 .header-wrap.sticky {
@@ -760,6 +766,12 @@ a:hover {
   flex-wrap: wrap;
   /* margin-left: 268px; */
   background-image: url("../../../src/assets/bodyBg.png");
+}
+
+@media only screen and (max-width: 767px) {
+  .content-wrapper  {
+    margin-top: 7rem !important;
+  }
 }
 
 /*---------------------------------

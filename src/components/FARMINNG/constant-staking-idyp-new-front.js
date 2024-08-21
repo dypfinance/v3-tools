@@ -534,13 +534,16 @@ const InitConstantStakingiDYP = ({
 
   const getApproxReturn = (depositAmount, days) => {
     let APY = getAPY() - fee_s;
-    const expirationDate = new Date("2024-07-18 23:11:00 GMT+02:00")
+    const expirationDate = new Date("2024-07-18 23:11:00 GMT+02:00");
+    const expirationDate2 = new Date("2025-07-22 23:11:00 GMT+02:00");
+
     const currentDate = new Date();
-    const timeDifference = expirationDate - currentDate; 
+    const finalExpDate = expired === true ? expirationDate : expirationDate2
+    const timeDifference = finalExpDate - currentDate;
     const millisecondsInADay = 1000 * 60 * 60 * 24;
     const daysUntilExpiration = Math.floor(timeDifference / millisecondsInADay);
 
-    return ((depositAmount * APY) / 100 / 365) * daysUntilExpiration;
+    return ((depositAmount * APY) / 100 / 365) * (expired === true ? 60 : daysUntilExpiration);
   };
 
   const getReferralLink = () => {
@@ -953,7 +956,7 @@ const InitConstantStakingiDYP = ({
             </div>
           </div>
 
-          {pendingDivs > 0 && (
+          {pendingDivs > 0 &&  expired === false && (
             <>
               {" "}
               <div className="separator my-2"></div>
@@ -1081,11 +1084,11 @@ const InitConstantStakingiDYP = ({
           {is_wallet_connected && chainId === "1" && (
             <button
               disabled={
-                depositAmount === "" || depositLoading === true ? true : false
+                depositAmount === "" || depositLoading === true|| expired === true ? true : false
               }
               className={`btn filledbtn ${
-                depositAmount === "" &&
-                depositStatus === "initial" &&
+                ((depositAmount === "" &&
+                depositStatus === "initial")|| expired === true) &&
                 "disabled-btn"
               } ${
                 depositStatus === "deposit" || depositStatus === "success"
