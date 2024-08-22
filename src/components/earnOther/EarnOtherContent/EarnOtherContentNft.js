@@ -67,6 +67,21 @@ const EarnOtherContentNft = ({
       tokenTicker: "ETH",
       pool: "CAWS",
       id: "",
+      coming_soon: false,
+      lockTime: "No lock",
+      poolCap: "100",
+      new_pool: "Yes",
+    },
+    {
+      chain: "Ethereum",
+      apr: 25,
+      tokenLogo: "lanft-poolicon.png",
+      expired: false,
+      top_pick: false,
+      tokenName: "WOD",
+      tokenTicker: "ETH",
+      pool: "WOD",
+      id: "",
       coming_soon: true,
       lockTime: "No lock",
       poolCap: "100",
@@ -624,6 +639,7 @@ const EarnOtherContentNft = ({
                   expired={item.expired}
                   top_pick={item.top_pick}
                   tokenName={item.tokenName}
+                  coming_soon={item.coming_soon}
                 />
               </NavLink>
             );
@@ -659,6 +675,7 @@ const EarnOtherContentNft = ({
                       tokenName={item.tokenName}
                       tokenTicker={item.tokenTicker}
                       apr={item.apr}
+                      coming_soon={item.coming_soon}
                       lockTime={item.lockTime}
                       expired={item.expired}
                       chainId={chainId}

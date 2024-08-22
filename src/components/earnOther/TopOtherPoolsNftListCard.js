@@ -26,6 +26,7 @@ const TopOtherPoolsNftListCard = ({
   isNewPool,
   cardType,
   chain,
+  coming_soon,
   topList,
   cardIndex,
   chainId,
@@ -120,7 +121,7 @@ const TopOtherPoolsNftListCard = ({
           expired === true ? "poolscardwrapperexpired" : "list-pool-card-nft"
         } ${showDetails && "pools-card-hover"} `}
         onClick={() => handleDetails()}
-        style={{ display: display }}
+        style={{ display: display, pointerEvents: coming_soon ? "none" : "auto" }}
       >
         <img
           src={premiumIcon}
@@ -196,11 +197,19 @@ const TopOtherPoolsNftListCard = ({
                       {lockTime}
                     </h5>
                   </td>
-                  <td className="earnother-td col-2">
-                    <h6 className="details-text2 w-75 gap-1 d-flex align-items-center cursor-pointer justify-content-center m-0">
-                      Stake
-                    </h6>
-                  </td>
+                 {!coming_soon ? 
+                 <td className="earnother-td col-2">
+                 <h6 className="details-text2 w-75 gap-1 d-flex align-items-center cursor-pointer justify-content-center m-0">
+                   Stake
+                 </h6>
+               </td>
+               :
+               <td className="earnother-td col-2">
+               <h6 className="details-text3 w-75 gap-1 d-flex align-items-center cursor-pointer justify-content-center m-0">
+                 Coming Soon
+               </h6>
+             </td> 
+                }
                 </tr>
               ) : windowSize.width && windowSize.width <= 768 ? (
                 <>
@@ -259,13 +268,23 @@ const TopOtherPoolsNftListCard = ({
                       </div>
                     </td>
                   </tr>
-                  <tr className="d-flex w-100 align-items-center justify-content-around">
+                  {!coming_soon ? 
+                <tr className="d-flex w-100 align-items-center justify-content-around">
+                <td className="earnother-td w-100">
+                  <h6 className="details-text2 gap-1 d-flex align-items-center cursor-pointer justify-content-center m-0 w-100">
+                    Stake
+                  </h6>
+                </td>
+              </tr>
+              :
+              <tr className="d-flex w-100 align-items-center justify-content-around">
                     <td className="earnother-td w-100">
-                      <h6 className="details-text2 gap-1 d-flex align-items-center cursor-pointer justify-content-center m-0 w-100">
-                        Stake
+                      <h6 className="details-text3 gap-1 d-flex align-items-center cursor-pointer justify-content-center m-0 w-100">
+                        Coming Soon
                       </h6>
                     </td>
-                  </tr>
+                  </tr>  
+                }
                 </>
               ) : (
                 <></>
