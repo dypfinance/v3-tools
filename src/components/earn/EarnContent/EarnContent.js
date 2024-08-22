@@ -387,48 +387,17 @@ const EarnContent = ({
 
   const checkNetworkId = () => {
     if (
-      window.ethereum &&
-      (window.ethereum.isMetaMask === true ||
-        window.coin98 === true ||
-        window.trustwallet ||
-        window.ethereum.isCoinbaseWallet === true)
+    chainId
     ) {
-      window.ethereum
-        .request({ method: "eth_chainId" })
-        .then((data) => {
-          if (data === "0x1") {
-            setStake("eth");
-          } else if (data === "0xa86a") {
-            setStake("avax");
-          } else if (data === "0x38") {
-            setStake("bnb");
-          } else if (data !== "undefined") {
-            setStake("eth");
-          } else {
-            setStake("eth");
-          }
-        })
-        .catch(console.error);
-    } else if (
-      window.ethereum &&
-      window.ethereum.overrideIsMetaMask === true &&
-      !window.ethereum.isCoinbaseWallet
-    ) {
-      const chainId = window.ethereum.selectedProvider.chainId;
-
-      if (chainId === "0x1") {
-        setStake("eth");
-      } else if (chainId === "0xa86a") {
-        setStake("avax");
-      } else if (chainId === "0x38") {
-        setStake("bnb");
-      } else if (chainId !== "undefined") {
-        setStake("eth");
+      if(chainId === '1') {
+        setStake('eth')
+      } else if(chainId === '56') {
+        setStake('bnb')
+      } else if(chainId === '43114') {
+        setStake('avax')
       } else {
-        setStake("eth");
+        setStake('eth')
       }
-    } else {
-      setStake("eth");
     }
   };
 
