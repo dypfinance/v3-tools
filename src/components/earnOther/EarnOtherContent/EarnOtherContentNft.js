@@ -664,7 +664,7 @@ const EarnOtherContentNft = ({
               </table>
             </div>
           )}
-          <div className="d-flex flex-column gap-1 px-0">
+          <div className="d-flex flex-column gap-3 px-0">
             {expiredPools === false &&
               dummyData_eth.map((item, index) => {
                 return (
@@ -685,7 +685,7 @@ const EarnOtherContentNft = ({
                     coinbase={coinbase}
                     isNewPool={item.new_pool === "Yes" ? true : false}
                     isPremium ={isPremium}
-                    clickedCawsPool={clickedCawsPool}
+                    clickedCawsPool={item.tokenName !=='WOD' && clickedCawsPool}
                     onCloseCard={()=>{onCloseCard(); setclickedCawsPool(false)}}
                     />
                   </div>
