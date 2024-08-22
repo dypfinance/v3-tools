@@ -140,7 +140,6 @@ class App extends React.Component {
       this.setState({ aggregatorPools: pools });
     }
   };
-
   checkNetworkId = () => {
     if (
       !this.props.history.location.pathname.includes("bridge") &&
@@ -197,7 +196,7 @@ class App extends React.Component {
       } else  if (
         window.ethereum &&
         !window.coin98 &&
-        (window.ethereum.isTrust === true)
+        (window.ethereum.isTrust === true || window.ethereum?.isTrustWallet)
       ) {
         window.ethereum
           .request({ method: "net_version" })
@@ -525,7 +524,7 @@ class App extends React.Component {
     const { ethereum } = window;
     if (
       ethereum &&
-      (ethereum.isMetaMask === true || window.ethereum.isTrust === true)
+      (ethereum.isMetaMask === true || window.ethereum.isTrust === true || window.ethereum?.isTrustWallet)
     ) {
       console.log("Ethereum successfully detected!");
       this.tvl();
@@ -549,7 +548,7 @@ class App extends React.Component {
     if (
       window.ethereum &&
       !window.coin98 &&
-      (window.ethereum.isMetaMask === true || window.ethereum.isTrust === true)
+      (window.ethereum.isMetaMask === true || window.ethereum.isTrust === true || window.ethereum?.isTrustWallet)
     ) {
       this.checkConnection();
     }
@@ -581,7 +580,7 @@ class App extends React.Component {
       logout !== "true" &&
       window.ethereum &&
       (window.ethereum.isMetaMask === true ||
-        window.ethereum.isTrust === true ||
+        window.ethereum.isTrust === true  || window.ethereum?.isTrustWallet ||
         !window.ethereum.isCoin98 ||
         !window.ethereum.overrideIsMetaMask ||
         !window.ethereum.isCoinbaseWallet)

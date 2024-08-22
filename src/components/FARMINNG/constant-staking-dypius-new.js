@@ -670,7 +670,7 @@ const StakeDypiusEth = ({
 
   const getApproxReturn = (depositAmount, days) => {
     
-    const expirationDate = new Date("2024-11-09 23:11:00 GMT+02:00")
+    const expirationDate = new Date("2024-11-09T23:11:00.000+02:00")
     const currentDate = new Date();
     const timeDifference = expirationDate - currentDate; 
     const millisecondsInADay = 1000 * 60 * 60 * 24;
