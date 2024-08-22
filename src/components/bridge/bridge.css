@@ -274,6 +274,14 @@
   text-align: center;
   display: flex;
 }
+.migration-status-text-2 {
+  color: #C0C9FF !important;
+  text-align: center;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
 
 .migration-text-wrapper {
   width: 0;
