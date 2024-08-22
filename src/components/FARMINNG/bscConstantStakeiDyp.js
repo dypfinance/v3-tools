@@ -573,8 +573,7 @@ const StakeBscIDyp = ({
     const timeDifference = finalExpDate - currentDate;
     const millisecondsInADay = 1000 * 60 * 60 * 24;
     const daysUntilExpiration = Math.floor(timeDifference / millisecondsInADay);
-    const amount = depositAmount ==="" ? 1 : depositAmount
-    return ((amount * APY) / 100 / 365) * (expired === true ? 60 : daysUntilExpiration);
+    return ((depositAmount * APY) / 100 / 365) * (expired === true ? 60 : daysUntilExpiration);
   };
 
   const getReferralLink = () => {
