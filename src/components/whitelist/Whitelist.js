@@ -326,7 +326,7 @@ const Whitelist = ({ networkId, isConnected, handleConnection, coinbase }) => {
                       </div>
                     </div>
                   </div>
-                  <div className="commitment-chain-wrapper d-flex flex-column gap-1 ms-2">
+                  <div className="commitment-chain-wrapper d-flex flex-column gap-1 ms-0 ms-lg-2">
                     <span className="commitment-input-span">
                       Select Network
                     </span>
