@@ -422,6 +422,8 @@ const Whitelist = ({ networkId, isConnected, handleConnection, coinbase }) => {
                       </div>
                     </>
                   }
+                  enterDelay={0}
+                  leaveDelay={2000}
                 >
                   <img src={tooltipIcon} alt="" />
                 </Tooltip>
@@ -491,6 +493,8 @@ const Whitelist = ({ networkId, isConnected, handleConnection, coinbase }) => {
                     </div>
                   </>
                 }
+                enterDelay={0}
+                  leaveDelay={2000}
               >
                 <img src={tooltipIcon} alt="" />
               </Tooltip>
