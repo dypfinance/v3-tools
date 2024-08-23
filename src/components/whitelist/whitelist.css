@@ -443,7 +443,7 @@ background: rgba(142, 151, 205, 0.20) !important;
     width: 65%;
     }
     .outer-table-wrapper{
-      overflow: scroll;
+      overflow-x: scroll;
     }
 
   }

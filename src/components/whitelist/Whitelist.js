@@ -404,7 +404,7 @@ const Whitelist = ({ networkId, isConnected, handleConnection, coinbase }) => {
             </div>
           </div>
         </div>
-        <div className="col-12 col-lg-5">
+        <div className="col-12 col-lg-5 mt-2 mt-lg-0">
           <div className="d-flex flex-column gap-2">
             <div className="my-commitment-wrapper py-4 w-100 d-flex flex-column align-items-center gap-2">
               <h6 className="mb-0 my-commitment-value">$22,435</h6>
