@@ -3,12 +3,16 @@ import defiBg from "./assets/defiBg.webp";
 import rightlogo from "./assets/filledArrow.svg";
 import "./launchpad.css";
 import { NavLink } from "react-router-dom";
+import whitelistHomeBg from './assets/whitelistHomeBg.png'
 
 const LaunchpadCard = () => {
   return (
-    <NavLink to="/earn/defi-staking" className="launchpad-wrapper">
-      <div className="d-flex flex-column gap-2 align-items-center justify-content-between">
-        <img src={defiBg} alt="" className="launchpadbg" />
+    <NavLink to="/wod-whitelist" className="launchpad-wrapper">
+      <div className="d-flex flex-column gap-2 align-items-center justify-content-between position-relative">
+        <div className="whitelist-days-left">
+          <span className="whitelist-days-left-span">9 days left</span>
+        </div>
+        <img src={whitelistHomeBg} alt="" className="launchpadbg"  />
         <div
           className="d-flex gap-2 align-items-center justify-content-between w-100"
           style={{ padding: "0px 10px 4px 10px" }}
@@ -21,7 +25,7 @@ const LaunchpadCard = () => {
               lineHeight: "16px",
             }}
           >
-            Make the most of your assets with DeFi Staking
+            Join now to secure your spot as early investor
           </h6>
           <img src={rightlogo} alt="" />
         </div>
