@@ -134,7 +134,7 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
     }
   };
 
-  const handleSourceChain = async (chainText) => {
+  const handleSourceChain = async (chainText, activebtn) => {
     if (activebtn === "1") {
       if (chainText === "eth") {
         window.cached_contracts = Object.create(null);
@@ -178,7 +178,8 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
     }
   };
 
-  const handleSourceChainiDyp = async (chainText) => {
+  const handleSourceChainiDyp = async (chainText, activebtn) => {
+ 
     if (activebtn === "5") {
       if (chainText === "eth") {
         window.cached_contracts = Object.create(null);
@@ -296,10 +297,11 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
               setSourceChain("eth");
               setDestinationChain("bnb");
               setTimeout(() => {
-                setSourceBridge(window.new_dypius_bridge_ethbsc);
-                setDestinationBridge(window.new_dypius_bridge_bsc);
-                setSourceToken(window.token_dypius_new);
-                setDestinationToken(window.token_dypius_new_bsc);
+                handleSourceChain("eth", "1");
+                // setSourceBridge(window.new_dypius_bridge_ethbsc);
+                // setDestinationBridge(window.new_dypius_bridge_bsc);
+                // setSourceToken(window.token_dypius_new);
+                // setDestinationToken(window.token_dypius_new_bsc);
               }, 500);
             }}
           >
@@ -320,10 +322,12 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
               setSourceChain("eth");
               setDestinationChain("avax");
               setTimeout(() => {
-                setSourceBridge(window.new_dypius_bridge_ethavax);
-                setDestinationBridge(window.new_dypius_bridge_avax);
-                setSourceToken(window.token_dypius_new);
-                setDestinationToken(window.token_dypius_new_avax);
+                handleSourceChain("eth", "2");
+
+                // setSourceBridge(window.new_dypius_bridge_ethavax);
+                // setDestinationBridge(window.new_dypius_bridge_avax);
+                // setSourceToken(window.token_dypius_new);
+                // setDestinationToken(window.token_dypius_new_avax);
               }, 500);
             }}
           >
@@ -353,7 +357,7 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
             setDestinationChain(value);
           }}
           onSelectSourceChain={(value) => {
-            handleSourceChain(value);
+            handleSourceChain(value, activebtn);
           }}
           coinbase={coinbase}
           sourceChain={sourceChain}
@@ -380,10 +384,12 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
               setSourceChainiDyp("eth");
               setDestinationChainiDyp("bnb");
               setTimeout(() => {
-                setSourceBridgeiDyp(window.bridge_idypbsceth);
-                setDestinationBridgeiDyp(window.bridge_idypbscbsc);
-                setSourceTokeniDyp(window.token_idyp_bsceth);
-                setDestinationTokeniDyp(window.token_idyp_bscbsc);
+                handleSourceChainiDyp("eth", "5");
+
+                // setSourceBridgeiDyp(window.bridge_idypbsceth);
+                // setDestinationBridgeiDyp(window.bridge_idypbscbsc);
+                // setSourceTokeniDyp(window.token_idyp_bsceth);
+                // setDestinationTokeniDyp(window.token_idyp_bscbsc);
               }, 500);
             }}
           >
@@ -405,10 +411,11 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
               setDestinationChainiDyp("avax");
               setActiveBtn("7");
               setTimeout(() => {
-                setSourceBridgeiDyp(window.bridge_idypeth);
-                setDestinationBridgeiDyp(window.bridge_idypbsc);
-                setSourceTokeniDyp(window.token_idyp_eth);
-                setDestinationTokeniDyp(window.token_idyp_bsc);
+                handleSourceChainiDyp("eth", "7");
+                // setSourceBridgeiDyp(window.bridge_idypeth);
+                // setDestinationBridgeiDyp(window.bridge_idypbsc);
+                // setSourceTokeniDyp(window.token_idyp_eth);
+                // setDestinationTokeniDyp(window.token_idyp_bsc);
               }, 500);
             }}
           >
@@ -427,7 +434,7 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
             setDestinationChainiDyp(value);
           }}
           onSelectSourceChain={(value) => {
-            handleSourceChainiDyp(value);
+            handleSourceChainiDyp(value, activebtn);
           }}
           sourceChain={sourceChainiDyp}
           coinbase={coinbase}
