@@ -258,7 +258,7 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
 
   return (
     <div className="container-lg p-0">
-      <div className="general-bridge-wrapper px-4 py-5 mb-4">
+      <div className="general-bridge-wrapper d-flex flex-column justify-content-start justify-content-lg-center px-4 pt-4 pt-lg-0 mb-4">
         <div className="col-12 col-lg-5 d-flex flex-column justify-content-center gap-3">
           <h3 className="text-white">Dypius Bridge</h3>
           <p className="text-white">
@@ -281,7 +281,7 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
       </div></a>
       <div>
         <h3 className="text-white mb-4">
-          <img src={dyp} alt="" /> DYP Bridge
+          <img src={dyp} alt="" /> DYP
         </h3>
         <h5 className="text-white mb-2">Choose route</h5>
         <div className="d-flex gap-3 mb-2">
@@ -364,11 +364,11 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
           activebtn={activebtn}
         />
       </div>
-      <div className="bigseparator mt-5 mb-5 col-6 col-xxl-5"></div>
+      <div className="bigseparator mt-5 mb-5"></div>
       <div>
         <h3 className="text-white mb-4">
           <img src={idyp} alt="" style={{ width: 32, height: 32 }} /> iDYP
-          Bridge
+          
         </h3>
         <h5 className="text-white mb-2">Choose route</h5>
         <div className="d-flex gap-3 mb-2">
@@ -445,7 +445,7 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
         />
       </div>
 
-      <div className="bigseparator mt-5 mb-5 col-6 col-xxl-5"></div>
+      <div className="bigseparator mt-5 mb-5"></div>
       <div className="swiftwrapper p-3">
         <div className="d-flex flex-column gap-3">
           <h4>Bridge DYP on SWFT</h4>

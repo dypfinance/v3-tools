@@ -293,7 +293,8 @@
   background: url('./assets/dypbridgeBg.webp');
   background-repeat: no-repeat;
   background-position: center;
-  background-size: cover;
+  background-size: 100% 100%;
+  min-height: 167px;
 }
 
 .base-bridge-wrapper {
