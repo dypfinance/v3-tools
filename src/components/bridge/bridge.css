@@ -300,6 +300,7 @@
 .base-bridge-wrapper {
   border-radius: 12px;
   background: radial-gradient(50% 50% at 50% 50%, #008dfc 0%, #1b63ff 100%);
+  min-height: 58%;
 }
 
 .base-bridge-text {
@@ -322,6 +323,10 @@
     background-position: center;
     background-size: 100% 100%;
     min-height: 300px;
+  }
+
+  .base-bridge-wrapper {
+    
   }
 }
 

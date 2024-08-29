@@ -13,8 +13,6 @@ import whiteArrow from "./assets/whiteArrow.svg";
 import whiteBase from "./assets/white-base.svg";
 import superBridge from "./assets/superbridge.svg";
 
-
-
 import "./bridge.css";
 import { useLocation } from "react-router-dom";
 import Web3 from "web3";
@@ -179,7 +177,6 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
   };
 
   const handleSourceChainiDyp = async (chainText, activebtn) => {
- 
     if (activebtn === "5") {
       if (chainText === "eth") {
         window.cached_contracts = Object.create(null);
@@ -269,83 +266,97 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
           </p>
         </div>
       </div>
-      <a href="https://superbridge.app/base" target="_blank" rel="noreferrer">
-      <div className="base-bridge-wrapper px-3 py-2 mb-4">
-        <div className="d-flex flex-column flex-lg-row align-items-center gap-2 justify-content-between">
-          <div className="d-flex align-items-center gap-1">
-          <img src={whiteBase} alt='' />
-          <span className="base-bridge-text">Seamlessly swap DYP to Base via the official Base Super Bridge</span></div>
-          <img src={superBridge} alt='' />
 
-        </div>
-      </div></a>
       <div>
-        <h3 className="text-white mb-4">
-          <img src={dyp} alt="" /> DYP
-        </h3>
-        <h5 className="text-white mb-2">Choose route</h5>
-        <div className="d-flex gap-3 mb-2">
-          <div
-            className={
-              activebtn === "1"
-                ? "optionbtn-active activeethbnb"
-                : "optionbtn-passive bridge-passive"
-            }
-            onClick={() => {
-              window.cached_contracts = Object.create(null);
-              setActiveBtn("1");
-              setSourceChain("eth");
-              setDestinationChain("bnb");
-              setTimeout(() => {
-                handleSourceChain("eth", "1");
-                // setSourceBridge(window.new_dypius_bridge_ethbsc);
-                // setDestinationBridge(window.new_dypius_bridge_bsc);
-                // setSourceToken(window.token_dypius_new);
-                // setDestinationToken(window.token_dypius_new_bsc);
-              }, 500);
-            }}
-          >
-            <h6 className="optiontext d-flex align-items-center gap-2">
-              <img src={eth} alt="" /> <img src={bnb} alt="" />
-              <p className=" mb-0 optiontext d-none d-lg-flex">ETH/BSC</p>
-            </h6>
-          </div>
-          <div
-            className={
-              activebtn === "2"
-                ? "optionbtn-active activeethavax"
-                : "optionbtn-passive bridge-passive"
-            }
-            onClick={() => {
-              window.cached_contracts = Object.create(null);
-              setActiveBtn("2");
-              setSourceChain("eth");
-              setDestinationChain("avax");
-              setTimeout(() => {
-                handleSourceChain("eth", "2");
+        <div className="d-flex flex-lg-row flex-column-reverse justify-content-between gap-3 mb-4">
+          <div className="d-flex flex-column">
+            <h3 className="text-white mb-4">
+              <img src={dyp} alt="" /> DYP
+            </h3>
+            <h5 className="text-white mb-2">Choose route</h5>
+            <div className="d-flex gap-3 mb-2">
+              <div
+                className={
+                  activebtn === "1"
+                    ? "optionbtn-active activeethbnb"
+                    : "optionbtn-passive bridge-passive"
+                }
+                onClick={() => {
+                  window.cached_contracts = Object.create(null);
+                  setActiveBtn("1");
+                  setSourceChain("eth");
+                  setDestinationChain("bnb");
+                  setTimeout(() => {
+                    handleSourceChain("eth", "1");
+                    // setSourceBridge(window.new_dypius_bridge_ethbsc);
+                    // setDestinationBridge(window.new_dypius_bridge_bsc);
+                    // setSourceToken(window.token_dypius_new);
+                    // setDestinationToken(window.token_dypius_new_bsc);
+                  }, 500);
+                }}
+              >
+                <h6 className="optiontext d-flex align-items-center gap-2">
+                  <img src={eth} alt="" /> <img src={bnb} alt="" />
+                  <p className=" mb-0 optiontext d-none d-lg-flex">ETH/BSC</p>
+                </h6>
+              </div>
+              <div
+                className={
+                  activebtn === "2"
+                    ? "optionbtn-active activeethavax"
+                    : "optionbtn-passive bridge-passive"
+                }
+                onClick={() => {
+                  window.cached_contracts = Object.create(null);
+                  setActiveBtn("2");
+                  setSourceChain("eth");
+                  setDestinationChain("avax");
+                  setTimeout(() => {
+                    handleSourceChain("eth", "2");
 
-                // setSourceBridge(window.new_dypius_bridge_ethavax);
-                // setDestinationBridge(window.new_dypius_bridge_avax);
-                // setSourceToken(window.token_dypius_new);
-                // setDestinationToken(window.token_dypius_new_avax);
-              }, 500);
-            }}
-          >
-            <h6 className="optiontext d-flex align-items-center gap-2">
-              <img src={eth} alt="" /> <img src={avax} alt="" />
-              <p className=" mb-0 optiontext d-none d-lg-flex">ETH/AVAX</p>
-            </h6>
+                    // setSourceBridge(window.new_dypius_bridge_ethavax);
+                    // setDestinationBridge(window.new_dypius_bridge_avax);
+                    // setSourceToken(window.token_dypius_new);
+                    // setDestinationToken(window.token_dypius_new_avax);
+                  }, 500);
+                }}
+              >
+                <h6 className="optiontext d-flex align-items-center gap-2">
+                  <img src={eth} alt="" /> <img src={avax} alt="" />
+                  <p className=" mb-0 optiontext d-none d-lg-flex">ETH/AVAX</p>
+                </h6>
+              </div>
+              <a
+                className={"optionbtn-passive bridge-passive"}
+                href="https://superbridge.app/base"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <h6 className="optiontext d-flex align-items-center gap-2">
+                  <img src={eth} alt="" /> <img src={base} alt="" />
+                  <p className=" mb-0 optiontext d-none d-lg-flex">ETH/BASE</p>
+                </h6>
+              </a>
+            </div>
           </div>
           <a
-            className={"optionbtn-passive bridge-passive"}
             href="https://superbridge.app/base"
             target="_blank"
             rel="noreferrer"
+            className="col-lg-6 d-flex flex-column justify-content-end"
           >
-            <h6 className="optiontext d-flex align-items-center gap-2">
-              <img src={eth} alt="" /> <img src={base} alt="" />
-              <p className=" mb-0 optiontext d-none d-lg-flex">ETH/BASE</p>
-            </h6>
+            <div className="base-bridge-wrapper d-flex flex-column justify-content-center px-3 py-2">
+              <div className="d-flex flex-column flex-lg-row align-items-center gap-2 justify-content-between">
+                <div className="d-flex align-items-center gap-1">
+                  <img src={whiteBase} alt="" />
+                  <span className="base-bridge-text">
+                    Seamlessly swap DYP to Base via the official Base Super
+                    Bridge
+                  </span>
+                </div>
+                <img src={superBridge} alt="" />
+              </div>
+            </div>
           </a>
         </div>
         <BridgeModal
@@ -368,7 +379,6 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
       <div>
         <h3 className="text-white mb-4">
           <img src={idyp} alt="" style={{ width: 32, height: 32 }} /> iDYP
-          
         </h3>
         <h5 className="text-white mb-2">Choose route</h5>
         <div className="d-flex gap-3 mb-2">
