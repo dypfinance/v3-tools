@@ -410,7 +410,7 @@ export default function initBridgeidyp({
             this.refreshBalance();
             this.getAllBalanceiDyp();
             window.alertify.message(
-              "Congratulations on successfully withdrawing your new DYP tokens!"
+              "Congratulations on successfully withdrawing your iDYP tokens!"
             );
           })
           .catch((e) => {
