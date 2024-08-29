@@ -847,7 +847,7 @@ export default function initBridge({
                       cursor: "pointer",
                     }}
                   />
-                  <div className="col-12 position-relative">
+                  <div className="col-12">
                     <div className="purplediv"></div>
                     <div className="l-box">
                       <div className="pb-0">

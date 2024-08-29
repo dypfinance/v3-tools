@@ -7,7 +7,13 @@ import idyp from "./assets/idyp.svg";
 import eth from "./assets/eth.svg";
 import bnb from "./assets/bnb.svg";
 import avax from "./assets/avax.svg";
+import base from "./assets/base.svg";
+
 import whiteArrow from "./assets/whiteArrow.svg";
+import whiteBase from "./assets/white-base.svg";
+import superBridge from "./assets/superbridge.svg";
+
+
 
 import "./bridge.css";
 import { useLocation } from "react-router-dom";
@@ -139,9 +145,7 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
           setSourceToken(window.token_dypius_new);
           setDestinationToken(window.token_dypius_new_bsc);
         }, 500);
-      }
-
-      else if (chainText === "bnb") {
+      } else if (chainText === "bnb") {
         window.cached_contracts = Object.create(null);
         setSourceChain(chainText);
         setTimeout(() => {
@@ -161,8 +165,7 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
           setSourceToken(window.token_dypius_new);
           setDestinationToken(window.token_dypius_new_avax);
         }, 500);
-      }
-      else if (chainText === "avax") {
+      } else if (chainText === "avax") {
         window.cached_contracts = Object.create(null);
         setSourceChain(chainText);
         setTimeout(() => {
@@ -173,7 +176,6 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
         }, 500);
       }
     }
- 
   };
 
   const handleSourceChainiDyp = async (chainText) => {
@@ -187,9 +189,7 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
           setSourceTokeniDyp(window.token_idyp_bsceth);
           setDestinationTokeniDyp(window.token_idyp_bscbsc);
         }, 500);
-      }
-
-     else if (chainText === "bnb") {
+      } else if (chainText === "bnb") {
         window.cached_contracts = Object.create(null);
         setTimeout(() => {
           setSourceChainiDyp(chainText);
@@ -209,8 +209,7 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
           setSourceTokeniDyp(window.token_idyp_eth);
           setDestinationTokeniDyp(window.token_idyp_bsc);
         }, 500);
-      }
-      else if (chainText === "avax") {
+      } else if (chainText === "avax") {
         window.cached_contracts = Object.create(null);
         setTimeout(() => {
           setSourceChainiDyp(chainText);
@@ -258,15 +257,27 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
 
   return (
     <div className="container-lg p-0">
-      <div className="col-12 col-lg-5 d-flex flex-column justify-content-center gap-3 mb-4">
-        <h3 className="text-white">Dypius Bridge</h3>
-        <p className="text-white">
-          Bridge tokens between Ethereum to BNB Chain, Avalanche and many more
-          to come.
-          <br />
-          Instant and secure transactions.
-        </p>
+      <div className="general-bridge-wrapper px-4 py-5 mb-4">
+        <div className="col-12 col-lg-5 d-flex flex-column justify-content-center gap-3">
+          <h3 className="text-white">Dypius Bridge</h3>
+          <p className="text-white">
+            Send tokens from Ethereum to BNB Chain, Base and Avalanche chains
+            with ease.
+            <br />
+            Every transaction is instant and secure.
+          </p>
+        </div>
       </div>
+      <a href="https://superbridge.app/base" target="_blank" rel="noreferrer">
+      <div className="base-bridge-wrapper px-3 py-2 mb-4">
+        <div className="d-flex flex-column flex-lg-row align-items-center gap-2 justify-content-between">
+          <div className="d-flex align-items-center gap-1">
+          <img src={whiteBase} alt='' />
+          <span className="base-bridge-text">Seamlessly swap DYP to Base via the official Base Super Bridge</span></div>
+          <img src={superBridge} alt='' />
+
+        </div>
+      </div></a>
       <div>
         <h3 className="text-white mb-4">
           <img src={dyp} alt="" /> DYP Bridge
@@ -321,6 +332,17 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
               <p className=" mb-0 optiontext d-none d-lg-flex">ETH/AVAX</p>
             </h6>
           </div>
+          <a
+            className={"optionbtn-passive bridge-passive"}
+            href="https://superbridge.app/base"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <h6 className="optiontext d-flex align-items-center gap-2">
+              <img src={eth} alt="" /> <img src={base} alt="" />
+              <p className=" mb-0 optiontext d-none d-lg-flex">ETH/BASE</p>
+            </h6>
+          </a>
         </div>
         <BridgeModal
           isConnected={isConnected}

@@ -1358,7 +1358,7 @@ const Dashboard = ({
           </div>
           <div className="right-side-wrapper d-flex flex-column flex-md-row flex-xxl-column gap-4">
             <div className="launchpad-section-wrapper d-flex flex-column gap-3 gap-xxl-1">
-              <h6 className="header">DeFi Staking</h6>
+              <h6 className="header">What's new?</h6>
               <LaunchpadCard />
             </div>
             <ChainlinkCard />
