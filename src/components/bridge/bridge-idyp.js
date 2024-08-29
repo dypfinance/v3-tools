@@ -410,7 +410,7 @@ export default function initBridgeidyp({
             this.refreshBalance();
             this.getAllBalanceiDyp();
             window.alertify.message(
-              "Congratulations on successfully withdrawing your new DYP tokens!"
+              "Congratulations on successfully withdrawing your iDYP tokens!"
             );
           })
           .catch((e) => {
@@ -846,7 +846,7 @@ export default function initBridgeidyp({
                       cursor: "pointer",
                     }}
                   />
-                  <div className="col-12 position-relative">
+                  <div className="col-12">
                     <div className="purplediv"></div>
                     <div className="l-box">
                       <div className="pb-0">

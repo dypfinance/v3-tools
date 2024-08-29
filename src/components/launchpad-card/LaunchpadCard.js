@@ -6,7 +6,7 @@ import { NavLink } from "react-router-dom";
 
 const LaunchpadCard = () => {
   return (
-    <NavLink to="/earn/defi-staking" className="launchpad-wrapper">
+    <a href="https://dypius.medium.com/dypius-expands-to-base-unlocking-new-opportunities-110cfed318c3" className="launchpad-wrapper" rel="noreferrer" target="_blank">
       <div className="d-flex flex-column gap-2 align-items-center justify-content-between">
         <img src={defiBg} alt="" className="launchpadbg" />
         <div
@@ -21,12 +21,12 @@ const LaunchpadCard = () => {
               lineHeight: "16px",
             }}
           >
-            Make the most of your assets with DeFi Staking
+            Dypius Expands to Base Ecosystem
           </h6>
           <img src={rightlogo} alt="" />
         </div>
       </div>
-    </NavLink>
+    </a>
   );
 };
 
