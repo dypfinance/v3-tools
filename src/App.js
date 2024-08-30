@@ -55,7 +55,6 @@ import Box from "@mui/material/Box";
 import { isMobile, MobileView, BrowserView } from "react-device-detect";
 import closeX from "./components/earnOther/assets/closeX.svg";
 import Whitelist from "./components/whitelist/Whitelist";
-import WhitelistPopup from "./components/whitelistPopup/WhitelistPopup";
 
 class App extends React.Component {
   constructor(props) {
@@ -102,7 +101,6 @@ class App extends React.Component {
       downloadClick: false,
       showMobilePopup: false,
       showWalletPopup: false,
-      whitelistPopup: true,
       aggregatorPools: [],
       userCurencyBalance: 0,
     };
@@ -1352,14 +1350,6 @@ class App extends React.Component {
           </Modal>
         )}
 
-        {this.state.whitelistPopup === true && (
-          <WhitelistPopup
-            open={this.state.whitelistPopup}
-            onClose={() => {
-              this.setState({ whitelistPopup: false });
-            }}
-          />
-        )}
 
         {this.showWalletPopup === true && (
           <WalletModal

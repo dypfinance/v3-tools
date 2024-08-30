@@ -20,7 +20,7 @@ const GovCard = () => {
         <div className="d-flex flex-column h-100 justify-content-between">
           <div>
             <h6 className="governancecard-desc">
-            Seamlessly swap DYP to Base via the official Base Super Bridge
+            Seamlessly bridge DYP to Base via the official Base Super Bridge
             </h6>
           </div>
 

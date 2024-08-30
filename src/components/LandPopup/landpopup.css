@@ -16,6 +16,10 @@
 
 }
 
+.test-modal {
+    transition: all .25s ease-in-out !important;  
+}
+
 .popup-active{
     box-shadow:0 0 0 10000px rgba(0,0,0,.50);
     top: 0% !important;
@@ -24,11 +28,23 @@
 
 .popup-title{
     font-weight: 600;
-font-size: 20px;
+font-size: 26px;
 line-height: 28px;
 letter-spacing: -0.018em;
 color: #F7F7FC !important;
 text-align: center;
+}
+
+@media only screen and (max-width: 600px) {
+    .popup-title{
+        font-weight: 600;
+    font-size: 20px;
+    line-height: 28px;
+    letter-spacing: -0.018em;
+    color: #F7F7FC !important;
+    text-align: center;
+    }
+    
 }
 
 .popup-content{
