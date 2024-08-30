@@ -6,21 +6,21 @@ import "./govcard.css";
 
 const GovCard = () => {
   return (
-    <NavLink to="/governance" className="govcard-wrapper">
+    <a href="https://superbridge.app/base" className="govcard-wrapper" target="_blank" rel="noreferrer">
       <div
         className="purplediv"
         style={{ background: "#8890C4", top: "23px" }}
       ></div>
-      <div className="d-flex flex-column gap-2 justify-content-between">
+      <div className="d-flex flex-column gap-2 justify-content-between h-100">
         <div className="">
           <h6 className="governancecard-title d-flex justify-content-between gap-2 align-items-center">
-            Governance <img src={govLogo} alt="" />
+          Bridge on Base <img src={govLogo} alt="" style={{height:39, width:39}}/>
           </h6>
         </div>
-        <div>
+        <div className="d-flex flex-column h-100 justify-content-between">
           <div>
             <h6 className="governancecard-desc">
-              DYP token holders can participate in Dypius governance proposals.
+            Seamlessly swap DYP to Base via the official Base Super Bridge
             </h6>
           </div>
 
@@ -29,7 +29,7 @@ const GovCard = () => {
           </h6>
         </div>
       </div>
-    </NavLink>
+    </a>
   );
 };
 

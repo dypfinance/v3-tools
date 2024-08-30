@@ -7,7 +7,7 @@ import whitelistHomeBg from './assets/whitelistHomeBg.png'
 
 const LaunchpadCard = () => {
   return (
-    <a href="https://dypius.medium.com/dypius-expands-to-base-unlocking-new-opportunities-110cfed318c3" className="launchpad-wrapper" rel="noreferrer" target="_blank">
+    <a href="https://www.worldofdypians.com/" className="launchpad-wrapper" rel="noreferrer" target="_blank">
       <div className="d-flex flex-column gap-2 align-items-center justify-content-between">
         <img src={defiBg} alt="" className="launchpadbg" />
         <div
@@ -22,7 +22,7 @@ const LaunchpadCard = () => {
               lineHeight: "16px",
             }}
           >
-            Dypius Expands to Base Ecosystem
+            Discover excitement like never before!
           </h6>
           <img src={rightlogo} alt="" />
         </div>

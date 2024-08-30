@@ -1003,7 +1003,7 @@ class App extends React.Component {
                     
 <Route
                       exact
-                      path="/wod-whitelist"
+                      path="/launchpad"
                       render={() => (
                         <Whitelist
                           networkId={parseInt(this.state.networkId)}
@@ -1055,7 +1055,7 @@ class App extends React.Component {
                     path="/governance"
                     render={() => <Governance />}
                   /> */}
-                    <Route
+                    {/* <Route
                       exact
                       path="/launchpad"
                       render={() => <Launchpad />}
@@ -1083,7 +1083,7 @@ class App extends React.Component {
                           isConnected={this.state.isConnected}
                         />
                       )}
-                    />
+                    /> */}
                     <Route exact path="/buydyp" render={() => <BuyDyp />} />
 
                     <Route
