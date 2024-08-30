@@ -562,6 +562,10 @@ hr {
     background-image: url("../../assets/earnAssets/earnHeroMobileBg.png");
   }
 
+  .chain-popup-item, .chain-popup-item-avax, .chain-popup-item-base, .chain-popup-item-bnb, .chain-popup-item-eth, .chain-popup-item-disabled {
+    padding: 6px;
+   }
+
   .top-picks-container {
     grid-template-columns: auto;
   }

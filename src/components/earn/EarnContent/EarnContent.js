@@ -602,7 +602,7 @@ const EarnContent = ({
                 )}
               </div>
 
-              <div className="col-12 col-lg-8 col-xl-7 d-flex flex-wrap gap-3 justify-content-center justify-content-lg-end justify-content-xl-center px-0 px-xl-2">
+              <div className="col-12 col-lg-8 col-xl-7 my-3 my-lg-0 d-flex flex-wrap gap-3 justify-content-center justify-content-lg-end justify-content-xl-center px-0 px-xl-2">
                 {option !== "Vault" && option !=='Staking'  ? (
                   <>
                     <div
@@ -667,7 +667,7 @@ const EarnContent = ({
                         src={stake === "bnb" ? bnbStakeActive : bnbStake}
                         alt=""
                       />
-                      <div className="d-flex flex-column align-items-center align-items-lg-start">
+                      <div className="d-lg-flex d-md-flex d-none flex-column align-items-center align-items-lg-start">
                         <p
                           className="text-white"
                           style={{ fontSize: "12px", fontWeight: "300" }}
@@ -752,7 +752,7 @@ const EarnContent = ({
                         src={stake === "eth" ? ethStakeActive : ethStake}
                         alt=""
                       />
-                      <div className="d-flex flex-column">
+                      <div className="d-lg-flex d-md-flex d-none flex-column">
                         <p
                           className="text-white"
                           style={{ fontSize: "12px", fontWeight: "300" }}
@@ -766,7 +766,7 @@ const EarnContent = ({
                             color: "#f7f7fc",
                           }}
                         >
-                          12.5% APR
+                          25% APR
                         </p>
                       </div>
                     </div>
@@ -783,7 +783,7 @@ const EarnContent = ({
                         src={stake === "bnb" ? bnbStakeActive : bnbStake}
                         alt=""
                       />
-                      <div className="d-flex flex-column">
+                      <div className="d-lg-flex d-md-flex d-none flex-column">
                         <p
                           className="text-white"
                           style={{ fontSize: "12px", fontWeight: "300" }}
@@ -816,7 +816,7 @@ const EarnContent = ({
                         src={stake === "base" ? baseStakeActive : baseStake}
                         alt=""
                       />
-                      <div className="d-flex flex-column">
+                      <div className="d-lg-flex d-md-flex d-none flex-column">
                         <p
                           className="text-white"
                           style={{ fontSize: "12px", fontWeight: "300" }}
@@ -857,7 +857,7 @@ const EarnContent = ({
                         src={stake === "avax" ? avaxStakeActive : avaxStake}
                         alt=""
                       />
-                      <div className="d-flex flex-column">
+                      <div className="d-lg-flex d-md-flex d-none flex-column">
                         <p
                           className="text-white"
                           style={{ fontSize: "12px", fontWeight: "300" }}

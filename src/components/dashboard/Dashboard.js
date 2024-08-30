@@ -1807,7 +1807,7 @@ setbasePoolsDyp(sortedActivebase)
                       </div>
                     </div>
                   )}
-                <div className="d-flex gap-3 align-items-center justify-content-start w-100">
+                <div className="d-flex gap-1 gap-lg-3 align-items-center justify-content-start w-100">
                   <div
                     className={`position-relative w-100 ${
                       selectedchain === "eth"
