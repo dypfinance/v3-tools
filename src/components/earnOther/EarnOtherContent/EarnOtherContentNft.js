@@ -67,6 +67,21 @@ const EarnOtherContentNft = ({
       tokenTicker: "ETH",
       pool: "CAWS",
       id: "",
+      coming_soon: false,
+      lockTime: "No lock",
+      poolCap: "100",
+      new_pool: "Yes",
+    },
+    {
+      chain: "Ethereum",
+      apr: 25,
+      tokenLogo: "lanft-poolicon.png",
+      expired: false,
+      top_pick: false,
+      tokenName: "WOD",
+      tokenTicker: "ETH",
+      pool: "WOD",
+      id: "",
       coming_soon: true,
       lockTime: "No lock",
       poolCap: "100",
@@ -624,6 +639,7 @@ const EarnOtherContentNft = ({
                   expired={item.expired}
                   top_pick={item.top_pick}
                   tokenName={item.tokenName}
+                  coming_soon={item.coming_soon}
                 />
               </NavLink>
             );
@@ -648,7 +664,7 @@ const EarnOtherContentNft = ({
               </table>
             </div>
           )}
-          <div className="d-flex flex-column gap-1 px-0">
+          <div className="d-flex flex-column gap-3 px-0">
             {expiredPools === false &&
               dummyData_eth.map((item, index) => {
                 return (
@@ -659,6 +675,7 @@ const EarnOtherContentNft = ({
                       tokenName={item.tokenName}
                       tokenTicker={item.tokenTicker}
                       apr={item.apr}
+                      coming_soon={item.coming_soon}
                       lockTime={item.lockTime}
                       expired={item.expired}
                       chainId={chainId}
@@ -668,7 +685,7 @@ const EarnOtherContentNft = ({
                     coinbase={coinbase}
                     isNewPool={item.new_pool === "Yes" ? true : false}
                     isPremium ={isPremium}
-                    clickedCawsPool={clickedCawsPool}
+                    clickedCawsPool={item.tokenName !=='WOD' && clickedCawsPool}
                     onCloseCard={()=>{onCloseCard(); setclickedCawsPool(false)}}
                     />
                   </div>

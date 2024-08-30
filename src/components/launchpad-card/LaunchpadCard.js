@@ -7,12 +7,9 @@ import whitelistHomeBg from './assets/whitelistHomeBg.png'
 
 const LaunchpadCard = () => {
   return (
-    <NavLink to="/wod-whitelist" className="launchpad-wrapper">
-      <div className="d-flex flex-column gap-2 align-items-center justify-content-between position-relative">
-        <div className="whitelist-days-left">
-          <span className="whitelist-days-left-span">9 days left</span>
-        </div>
-        <img src={whitelistHomeBg} alt="" className="launchpadbg"  />
+    <a href="https://dypius.medium.com/dypius-expands-to-base-unlocking-new-opportunities-110cfed318c3" className="launchpad-wrapper" rel="noreferrer" target="_blank">
+      <div className="d-flex flex-column gap-2 align-items-center justify-content-between">
+        <img src={defiBg} alt="" className="launchpadbg" />
         <div
           className="d-flex gap-2 align-items-center justify-content-between w-100"
           style={{ padding: "0px 10px 4px 10px" }}
@@ -25,12 +22,12 @@ const LaunchpadCard = () => {
               lineHeight: "16px",
             }}
           >
-            Join now to secure your spot as early investor
+            Dypius Expands to Base Ecosystem
           </h6>
           <img src={rightlogo} alt="" />
         </div>
       </div>
-    </NavLink>
+    </a>
   );
 };
 

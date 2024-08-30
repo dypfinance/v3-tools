@@ -467,7 +467,7 @@ console.log(videoList.length)
                   {buyDypItems[activeVendor].title} videos
                 </h6>
               </div>
-            
+            <div className="d-flex flex-column gap-2">
                 <a
                   href={buyDypItems[activeVendor].link}
                   target="_blank"
@@ -475,7 +475,7 @@ console.log(videoList.length)
                 >
                   <button className="btn filled-btn px-5">Buy {buyDypItems[activeVendor].version}</button>
                 </a>
-              
+              </div>
             </div>
             <hr className="form-divider my-3" />
             {videoList.length === 0 ? (

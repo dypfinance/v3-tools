@@ -363,8 +363,11 @@ const Sidebar = (props) => {
                           }
                         >
                           {sideItem.label}
+                         
                         </h3>
-                      )}
+                      )} {sideItem.label === 'Bridge' && activeSidebar &&   <div className="new-beta-sidebar">
+                          <span className="new-beta-text">New</span>
+                        </div>}
                     </div>
                   </NavLink>
                 )
