@@ -350,7 +350,7 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
                 <div className="d-flex align-items-center gap-1">
                   <img src={whiteBase} alt="" />
                   <span className="base-bridge-text">
-                    Seamlessly swap DYP to Base via the official Base Super
+                    Seamlessly bridge DYP to Base via the official Base Super
                     Bridge
                   </span>
                 </div>
