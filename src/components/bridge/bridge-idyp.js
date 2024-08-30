@@ -397,9 +397,13 @@ export default function initBridgeidyp({
               : "BSC"
           }&txHash=${this.state.txHash}`;
         console.log({ url });
-        let args = await window.jQuery.get(url);
-        console.log({ args });
-
+        // let args = await window.jQuery.get(url);
+        // console.log({ args });
+        // window.alertify.message(args.toString())
+        let args = await fetch(url)
+        .then(response => response.json())
+        .then(data => {return data})
+        .catch(error => console.error('Error:', error));
         bridgeBSC
           .withdraw(args)
           .then(() => {
@@ -1103,7 +1107,7 @@ export default function initBridgeidyp({
                             <div className="separator"></div>
                             <div className="d-flex gap-2 align-items-start">
                               <img
-                                src={require("./assets/errorinfo.svg")}
+                                src={require("./assets/errorinfo.svg").default}
                                 alt=""
                               />
                               <h6 className="bottominfotxt">

@@ -306,7 +306,11 @@ export default function initBridge({
               : "BSC"
           }&txHash=${this.state.txHash}`;
         console.log({ url });
-        let args = await window.jQuery.get(url);
+        // let args = await window.jQuery.get(url);
+        let args = await fetch(url)
+        .then(response => response.json())
+        .then(data => {return data})
+        .catch(error => console.error('Error:', error));
         console.log({ args });
         let bridge = bridgeBSC;
         bridge
