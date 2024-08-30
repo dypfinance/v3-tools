@@ -4,6 +4,9 @@ import bnbStake from "../../../assets/earnAssets/bnbStake.svg";
 import avaxStake from "../../../assets/earnAssets/avaxStake.svg";
 import ethStakeActive from "../../../assets/earnAssets/ethStakeActive.svg";
 import bnbStakeActive from "../../../assets/earnAssets/bnbStakeActive.svg";
+import baseStakeActive from "../../../assets/earnAssets/baseStakeActive.svg";
+import baseStake from "../../../assets/earnAssets/baseStake.svg";
+
 import avaxStakeActive from "../../../assets/earnAssets/avaxStakeActive.svg";
 import addNewPools from "../../../assets/earnAssets/addNewPools.svg";
 import listIcon from "../../../assets/earnAssets/listIcon.svg";
@@ -300,7 +303,7 @@ const EarnContent = ({
     ) {
       const ethv1Tvl = ethRestult.data.totalTVL_ETH;
 
-      const ethv2Tvl = ethRestult2.data.stakingInfoDYPEth[0].tvl_usd;
+      const ethv2Tvl = ethRestult2.data.stakingInfoDYPEth[0]?.tvl_usd;
 
       const avaxtvl1 = avaxResult.data.totalTVL_AVAX;
 
@@ -599,8 +602,8 @@ const EarnContent = ({
                 )}
               </div>
 
-              <div className="col-12 col-lg-8 col-xl-6 d-flex gap-3 justify-content-around justify-content-lg-end justify-content-xl-center px-0 px-xl-2">
-                {option !== "Vault" && option !== "Staking" ? (
+              <div className="col-12 col-lg-8 col-xl-7 d-flex flex-wrap gap-3 justify-content-center justify-content-lg-end justify-content-xl-center px-0 px-xl-2">
+                {option !== "Vault" && option !=='Staking'  ? (
                   <>
                     <div
                       className={`stake-item ${
@@ -734,10 +737,10 @@ const EarnContent = ({
                       </div>
                     </div>
                   </>
-                ) : (
+                ) : option ==='Staking' ? (
                   <>
                     <div
-                      className={`stake-item d-none position-relative d-flex align-items-center gap-2 ${
+                      className={`stake-item position-relative d-flex align-items-center gap-2 ${
                         stake === "eth" ? "eth-item-active" : null
                       }`}
                       onClick={() => {
@@ -768,14 +771,13 @@ const EarnContent = ({
                       </div>
                     </div>
                     <div
-                      className={`stake-item d-none position-relative d-flex align-items-center gap-2 ${
+                      className={`stake-item  position-relative d-flex align-items-center gap-2 ${
                         stake === "bnb" ? "bsc-item-active" : null
                       }`}
                       onClick={() => {
                         setStake("bnb");
                         // fetchBscTvl();
                       }}
-                      style={{ opacity: "0.5" }}
                     >
                       <img
                         src={stake === "bnb" ? bnbStakeActive : bnbStake}
@@ -799,15 +801,47 @@ const EarnContent = ({
                         </p>
                       </div>
                     </div>
+
+
                     <div
-                      className={`stake-item d-none position-relative d-flex align-items-center gap-2 ${
+                      className={`stake-item position-relative d-flex align-items-center gap-2 ${
+                        stake === "base" ? "base-item-active" : null
+                      }`}
+                      onClick={() => {
+                        setStake("base");
+                        // fetchBscTvl();
+                      }}
+                    >
+                      <img
+                        src={stake === "base" ? baseStakeActive : baseStake}
+                        alt=""
+                      />
+                      <div className="d-flex flex-column">
+                        <p
+                          className="text-white"
+                          style={{ fontSize: "12px", fontWeight: "300" }}
+                        >
+                          BASE
+                        </p>
+                        <p
+                          style={{
+                            fontSize: "12px",
+                            fontWeight: "500",
+                            color: "#f7f7fc",
+                          }}
+                        >
+                          27.5% APR
+                        </p>
+                      </div>
+                    </div>
+                    <div
+                      className={`stake-item position-relative d-flex align-items-center gap-2 ${
                         stake === "avax" ? "avax-item-active" : null
                       }`}
                       onClick={() => {
                         setStake("avax");
                         // fetchAvaxTvl();
                       }}
-                      style={{ opacity: "0.5" }}
                     >
                       {/* <div className="new-pools d-flex justify-content-start align-items-center gap-2 position-absolute">
                     <img
@@ -842,10 +876,10 @@ const EarnContent = ({
                       </div>
                     </div>
                   </>
-                )}
+                ) : null}
               </div>
 
-              <div className="col-3"></div>
+              <div className="col-2"></div>
             </div>
             <div className="d-flex align-items-center justify-content-center  py-0 py-lg-4 px-3"></div>
           </>
