@@ -3,6 +3,7 @@ import defiBg from "./assets/defiBg.webp";
 import rightlogo from "./assets/filledArrow.svg";
 import "./launchpad.css";
 import { NavLink } from "react-router-dom";
+import whitelistHomeBg from './assets/whitelistHomeBg.png'
 
 const LaunchpadCard = () => {
   return (

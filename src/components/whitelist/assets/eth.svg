@@ -1,0 +1,19 @@
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Group 1261156220">
+<rect id="Rectangle 1366" width="16" height="16" rx="8" fill="url(#paint0_linear_738_1304)"/>
+<g id="Ethereum">
+<path id="Vector" d="M8.11055 3.19995L8.04688 3.41091V9.53194L8.11055 9.5939L11.0236 7.91441L8.11055 3.19995Z" fill="#C1CCF8"/>
+<path id="Vector_2" d="M8.1084 3.20004L5.19531 7.9145L8.1084 9.594V6.62302V3.20004Z" fill="white"/>
+<path id="Vector_3" d="M8.11401 10.1317L8.07812 10.1744V12.3548L8.11401 12.457L11.0288 8.45312L8.11401 10.1317Z" fill="#C1CCF8"/>
+<path id="Vector_4" d="M8.1084 12.457V10.1317L5.19531 8.45312L8.1084 12.457Z" fill="white"/>
+<path id="Vector_5" d="M8.10938 9.59354L11.0224 7.91405L8.10938 6.62256V9.59354Z" fill="#8197EE"/>
+<path id="Vector_6" d="M5.19531 7.91405L8.1084 9.59354V6.62256L5.19531 7.91405Z" fill="#C1CCF8"/>
+</g>
+</g>
+<defs>
+<linearGradient id="paint0_linear_738_1304" x1="16" y1="16" x2="0" y2="0" gradientUnits="userSpaceOnUse">
+<stop stop-color="#556ECC"/>
+<stop offset="1" stop-color="#627EEA"/>
+</linearGradient>
+</defs>
+</svg>
