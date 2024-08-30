@@ -153,13 +153,13 @@ const Whitelist = ({ networkId, isConnected, handleConnection, coinbase }) => {
       icon: idyp,
       coin: "iDYP Token",
       value: "Holder/Staker",
-      active: true,
+      active: false,
     },
     {
       icon: premium,
       coin: "Premium",
       value: "Subscriber",
-      active: true,
+      active: false,
     },
   ];
 
@@ -192,7 +192,7 @@ const Whitelist = ({ networkId, isConnected, handleConnection, coinbase }) => {
           <div className="position-relative d-flex align-items-center flex-column">
             <div className="commiting-wrapper p-3">
               <div className="d-flex flex-column gap-2">
-                <span className="commiting-amount">$123k</span>
+                <span className="commiting-amount">--</span>
                 <span className="migration-status-text-2">
                   Total Committed Value
                 </span>
@@ -241,7 +241,7 @@ const Whitelist = ({ networkId, isConnected, handleConnection, coinbase }) => {
                 <span className="commitment-text">Commitment</span>
                 <div className="d-flex align-items-center gap-1">
                   <span className="whitelist-my-balance">My Balance</span>
-                  <span className="whitelist-my-balance-value">2500 WOD</span>
+                  <span className="whitelist-my-balance-value">--- USDT</span>
                 </div>
               </div>
               <div className="d-flex flex-column gap-2 w-100 p-3">
@@ -392,14 +392,14 @@ const Whitelist = ({ networkId, isConnected, handleConnection, coinbase }) => {
                 </div>
                 <div className="d-flex align-items-center mt-2 gap-1">
                   <span className="commitment-input-span">Estimation:</span>
-                  <span className="wod-tokens-commited">200,000 WOD</span>
+                  <span className="wod-tokens-commited">-- WOD</span>
                   <span className="commitment-input-span">
                     (distributed on BNB Chain)
                   </span>
                 </div>
               </div>
               <div className="d-flex w-100 justify-content-center mb-3">
-                <button className="btn filledbtn">Deposit</button>
+                <button className="btn filledbtn">Coming Soon</button>
               </div>
             </div>
           </div>
@@ -407,7 +407,7 @@ const Whitelist = ({ networkId, isConnected, handleConnection, coinbase }) => {
         <div className="col-12 col-lg-5 mt-2 mt-lg-0">
           <div className="d-flex flex-column gap-2">
             <div className="my-commitment-wrapper py-4 w-100 d-flex flex-column align-items-center gap-2">
-              <h6 className="mb-0 my-commitment-value">$22,435</h6>
+              <h6 className="mb-0 my-commitment-value">$0</h6>
               <span className="my-commitment-span">My Commitment</span>
             </div>
             <div className="whitelist-info-item d-flex flex-column w-100 p-3">
@@ -459,7 +459,7 @@ const Whitelist = ({ networkId, isConnected, handleConnection, coinbase }) => {
           </div>
         </div>
       </div>
-      <div className="row mt-4">
+      {/* <div className="row mt-4">
         <div className="col-12">
           <div className="whitelist-info-item-2 d-flex flex-column">
             <div className="d-flex align-items-center p-3 justify-content-between">
@@ -568,7 +568,7 @@ const Whitelist = ({ networkId, isConnected, handleConnection, coinbase }) => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

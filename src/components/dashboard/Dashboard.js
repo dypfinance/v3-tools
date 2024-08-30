@@ -51,8 +51,6 @@ import bnbActive from "../earn/assets/bnbActive.svg";
 
 import avax from "../earn/assets/avax.svg";
 import avaxActive from "../earn/assets/avaxActive.svg";
-import WhitelistPopup from "../whitelistPopup/WhitelistPopup";
-
 const Dashboard = ({
   isConnected,
   coinbase,
@@ -120,7 +118,7 @@ const Dashboard = ({
   const [showMobilePopup, setshowMobilePopup] = useState(false);
   const [resultFilteredPool, setresultFilteredPool] = useState([]);
   const [selectedIndex, setselectedIndex] = useState();
-  const [whitelistPopup, setwhitelistPopup] = useState(true);
+  
 
   const phase2_pools = [
     {
@@ -2406,14 +2404,7 @@ const Dashboard = ({
         </Modal>
       )}
 
-      {whitelistPopup === true && (
-        <WhitelistPopup
-          open={whitelistPopup}
-          onClose={() => {
-            setwhitelistPopup(false);
-          }}
-        />
-      )}
+      
     </>
   );
 };
