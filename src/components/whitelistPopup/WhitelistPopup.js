@@ -59,8 +59,7 @@ const WhitelistPopup = ({ open, onClose }) => {
                     <h6 className="popup-title metaverse mb-0">Base</h6>
                   </div>
                   <span className="popup-span mb-0">
-                    Seamlessly bridge DYP to Base via the official Base Super
-                    Bridge
+                    Seamlessly bridge DYP to Base via the official Base SuperBridge
                   </span>
                 </div>
                 <img
