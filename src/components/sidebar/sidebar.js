@@ -110,8 +110,8 @@ const Sidebar = (props) => {
       label: "Migration",
       icon: "swapIcon",
       link: "/migration",
-    },
-    {
+    }, 
+     {
       label: "Earn",
       icon: "earnIcon",
       link: "/earn",
@@ -131,6 +131,13 @@ const Sidebar = (props) => {
         },
       ],
     },
+    {
+      label: "Launchpad",
+      icon: "launchpadIcon",
+      link: "/launchpad",
+    },
+  
+    
     {
       label: "Governance",
       icon: "governanceIcon",
@@ -174,19 +181,24 @@ const Sidebar = (props) => {
       // ],
     },
     {
-      label: "Projects",
-      icon: "projectsIcon",
-      children: [
-        {
-          title: "Launchpad",
-          link: "/launchpad",
-        },
-        {
-          title: "DYP Locker",
-          link: "/locker",
-        },
-      ],
+      label: "DYP Locker",
+      icon: "lockerIcon",
+      link: "/locker",
     },
+    // {
+    //   label: "Projects",
+    //   icon: "projectsIcon",
+    //   children: [
+    //     {
+    //       title: "Launchpad",
+    //       link: "/launchpad",
+    //     },
+    //     {
+    //       title: "DYP Locker",
+    //       link: "/locker",
+    //     },
+    //   ],
+    // },
     // {
     //   label: "Swap",
     //   icon: "swapIcon",

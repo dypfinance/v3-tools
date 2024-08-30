@@ -18,6 +18,21 @@
 .bridgecard-wrapper:active{
   border: 2px solid rgb(142, 151, 205);
 }
+
+.coming-soon-wrapper {
+  border-radius: 5px;
+  background: rgba(20, 20, 42,0.8); 
+}
+
+.coming-soon-text {
+  color: #4ED5D2 !important;
+text-align: center;
+font-size: 10px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+}
+
   
   .orangediv {
     width: 4px;
@@ -31,8 +46,8 @@
   .bridgecard-title {
     font-style: normal;
     font-weight: 500;
-    font-size: 20px;
-    line-height: 27px;
+    font-size: 17px;
+    line-height: 38px;
     color: #f7f7fc;
   }
   .bridgecard-desc {
@@ -50,6 +65,7 @@
     line-height: 18px;
     color: #7770e0;
   }
+
 
   @media screen and (max-width: 786px) {
     .bridgecard-wrapper{
