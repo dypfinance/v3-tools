@@ -1,6 +1,5 @@
 .popup-wrapper{
     position: fixed;
-    width: fit-content;
     height: fit-content;
     top: -10000px;
     left: 0%;
@@ -12,13 +11,12 @@
     border-radius: 24px;
     pointer-events: auto  !important;
     transition: all .25s ease-in-out;
-    width: 50%;
+    max-width: 540px;
+    width: 100%;
 
 }
 
-.test-modal {
-    transition: all .25s ease-in-out !important;  
-}
+
 
 .popup-active{
     box-shadow:0 0 0 10000px rgba(0,0,0,.50);

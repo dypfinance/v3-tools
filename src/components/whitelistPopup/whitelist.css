@@ -1,5 +1,5 @@
 .land-nft-image{
-    width: 450px;
+    width: 350px !important;
   
   }
   
@@ -21,7 +21,7 @@
   }
 
   .metaverse {
-    background: linear-gradient(360deg, #554fd8 1.07%, #7770e0 88.8%);
+    background: #4ed5d2;
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
