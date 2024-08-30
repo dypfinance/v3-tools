@@ -1353,14 +1353,14 @@ class App extends React.Component {
           </Modal>
         )}
 
-        {this.state.whitelistPopup === true && (
+        {/* {this.state.whitelistPopup === true && (
           <WhitelistPopup
             open={this.state.whitelistPopup === true}
             onClose={() => {
               this.setState({ whitelistPopup: false });
             }}
           />
-        )}
+        )} */}
 
         {this.showWalletPopup === true && (
           <WalletModal
