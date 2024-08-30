@@ -21,7 +21,7 @@ const BridgeCard = ({onMobileClick}) => {
         <div className="d-flex flex-column gap-3">
           <div>
             <h6 className="bridgecard-desc">
-            Enjoy the ultimate gaming on Base experience.
+            Enjoy the ultimate gaming experience on Base.
             </h6>
           </div>
           <div>
