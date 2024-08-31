@@ -49,9 +49,13 @@ import ethActive from "../earn/assets/ethActive.svg";
 import bnb from "../earn/assets/bnb.svg";
 import bnbActive from "../earn/assets/bnbActive.svg";
 
+import base from "../earn/assets/base.svg";
+import baseActive from "../earn/assets/baseActive.svg";
+
 import avax from "../earn/assets/avax.svg";
 import avaxActive from "../earn/assets/avaxActive.svg";
 import WhitelistPopup from "../whitelistPopup/WhitelistPopup";
+import StakingDypiusBase1 from "../FARMINNG/stakingDypiusBase1";
 
 const Dashboard = ({
   isConnected,
@@ -102,6 +106,8 @@ const Dashboard = ({
   const [ethPools, setEthPools] = useState([]);
   const [bnbPools, setBnbPools] = useState([]);
   const [avaxPools, setAvaxPools] = useState([]);
+  const [basePools, setBasePools] = useState([]);
+
 
   const wbsc_address = "0x2170Ed0880ac9A755fd29B2688956BD959F933F8";
   let premiumDay = new Date("2024-04-17T15:00:00.000+02:00");
@@ -111,6 +117,8 @@ const Dashboard = ({
   const [selectedpoolType, setselectedpoolType] = useState("");
 
   const [ethPoolsDyp, setethPoolsDyp] = useState([]);
+  const [basePoolsDyp, setbasePoolsDyp] = useState([]);
+
   const [ethPoolsiDyp, setethPoolsiDyp] = useState([]);
   const [bnbPoolsDyp, setbnbPoolsDyp] = useState([]);
   const [bnbPoolsiDyp, setbnbPoolsiDyp] = useState([]);
@@ -261,6 +269,10 @@ const Dashboard = ({
       .get("https://api.dyp.finance/api/the_graph_bsc_v2")
       .catch((err) => console.error(err));
 
+      const basePool = await axios
+      .get("https://api.dyp.finance/api/get_staking_info_base_new")
+      .catch((err) => console.error(err));
+
     const bnbStakingPool = await axios
       .get(`https://api.dyp.finance/api/get_staking_info_bnb_new`)
       .catch((err) => {
@@ -300,6 +312,8 @@ const Dashboard = ({
     if (
       bnbStakingPool &&
       bnbStakingPool.status === 200 &&
+      basePool &&
+      basePool.status === 200 &&
       bnbStakingPool_old &&
       bnbStakingPool_old.status === 200 &&
       avaxStakingPool &&
@@ -327,6 +341,9 @@ const Dashboard = ({
       setTheBnbPool(bnbpool);
       const testbnbFarming = bnbpool[0];
       const finalBnbFarmingpool = testbnbFarming[1];
+
+
+      const dypBase = basePool.data.stakingInfoDYPBASE;
 
       const dypBnb = bnbStakingPool.data.stakingInfoDYPBnb;
       const idypBnb = bnbStakingPool_old.data.stakingInfoiDYPBnb;
@@ -373,6 +390,27 @@ const Dashboard = ({
 
       setavaxPoolsDyp(activeAvax2);
       setavaxPoolsiDyp(object2activeAvax);
+
+
+      
+      const object2base = dypBase.map((item) => {
+        return {
+          ...item,
+          tvl_usd: item.tvl_usd,
+          tokenType: "dyp",
+          chain: "base",
+        };
+      });
+
+      const activeBase2 = object2base.filter((item) => {
+        return item.expired === "No";
+      });
+      const allActivebase = [...activeBase2];
+      const sortedActivebase = allActivebase.sort(function (a, b) {
+        return b.apy_percent - a.apy_percent;
+      });
+      setBasePools(sortedActivebase);
+setbasePoolsDyp(sortedActivebase)
 
       const object2bnb = dypBnb.map((item) => {
         return {
@@ -582,7 +620,7 @@ const Dashboard = ({
         return b.apy_percent - a.apy_percent;
       });
 
-      const finalPools = [sortedActiveeth[0], sortedActive_idypbnb[0]];
+      const finalPools = [sortedActiveeth[0], sortedActivebase[0]];
 
       setTopPools(finalPools);
     }
@@ -676,6 +714,7 @@ const Dashboard = ({
     tokentype,
     selectedPool,
     ethDypPool,
+    baseDypPool,
     ethiDypPool,
     bnbDypPool,
     bnbIdypPool,
@@ -714,6 +753,44 @@ const Dashboard = ({
         } else if (
           locktimeToCheck !== selectedPool.lock_time &&
           !ethiDypPool?.find((obj) => {
+            return obj.lock_time === locktimeToCheck;
+          })
+        ) {
+          return "method-btn-disabled";
+        }
+      }
+    } if (chain === "base") {
+      if (tokentype === "dyp") {
+        if (locktimeToCheck === selectedPool.lock_time) {
+          return "method-btn-active";
+        } else if (
+          locktimeToCheck !== selectedPool.lock_time &&
+          baseDypPool?.find((obj) => {
+            return obj.lock_time === locktimeToCheck;
+          })
+        ) {
+          return "method-btn";
+        } else if (
+          locktimeToCheck !== selectedPool.lock_time &&
+          !baseDypPool?.find((obj) => {
+            return obj.lock_time === locktimeToCheck;
+          })
+        ) {
+          return "method-btn-disabled";
+        }
+      } else if (tokentype === "idyp") {
+        if (locktimeToCheck === selectedPool.lock_time) {
+          return "method-btn-active";
+        } else if (
+          locktimeToCheck !== selectedPool.lock_time &&
+          baseDypPool?.find((obj) => {
+            return obj.lock_time === locktimeToCheck;
+          })
+        ) {
+          return "method-btn";
+        } else if (
+          locktimeToCheck !== selectedPool.lock_time &&
+          !baseDypPool?.find((obj) => {
             return obj.lock_time === locktimeToCheck;
           })
         ) {
@@ -804,6 +881,7 @@ const Dashboard = ({
     locktime,
     selectedpoolType,
     ethPoolsDyp,
+    basePoolsDyp,
     ethPoolsiDyp,
     bnbPoolsDyp,
     bnbPoolsiDyp,
@@ -822,6 +900,26 @@ const Dashboard = ({
         }
       } else if (selectedpoolType === "idyp") {
         const result = ethPoolsiDyp.filter((item) => {
+          return item.lock_time === locktime;
+        });
+        if (result) {
+          setresultFilteredPool(result);
+
+          setselectedPool(...result);
+        }
+      }
+    }  if (selectedchain === "nsdr") {
+      if (selectedpoolType === "dyp") {
+        const result = basePoolsDyp.filter((item) => {
+          return item.lock_time === locktime;
+        });
+
+        if (result) {
+          setresultFilteredPool(result);
+          setselectedPool(...result);
+        }
+      } else if (selectedpoolType === "idyp") {
+        const result = basePoolsDyp.filter((item) => {
           return item.lock_time === locktime;
         });
         if (result) {
@@ -987,7 +1085,7 @@ const Dashboard = ({
                                   src={require("./assets/bnblogo.svg").default}
                                   alt=""
                                   style={{ height: 20, width: 20 }}
-                                  className="popup-chains-icon"
+                                  className="popup-chains-icon d-block"
                                 ></img>
                                 <h6
                                   className={`d-flex justify-content-center align-items-center chain-popup-text-active`}
@@ -1002,7 +1100,7 @@ const Dashboard = ({
                                   src={require("./assets/ethereum.svg").default}
                                   alt=""
                                   style={{ height: 20, width: 20 }}
-                                  className="popup-chains-icon"
+                                  className="popup-chains-icon d-block"
                                 ></img>
                                 <h6
                                   className={`d-flex justify-content-center align-items-center chain-popup-text-active`}
@@ -1017,7 +1115,7 @@ const Dashboard = ({
                                   src={require("./assets/base.svg").default}
                                   alt=""
                                   style={{ height: 20, width: 20 }}
-                                  className="popup-chains-icon"
+                                  className="popup-chains-icon d-block"
                                 ></img>
                                 <h6
                                   className={`d-flex justify-content-center align-items-center chain-popup-text-active`}
@@ -1032,7 +1130,7 @@ const Dashboard = ({
                                   src={require("./assets/avaxlogo.svg").default}
                                   alt=""
                                   style={{ height: 20, width: 20 }}
-                                  className="popup-chains-icon"
+                                  className="popup-chains-icon d-block"
                                 ></img>
                                 <h6
                                   className={`d-flex justify-content-center align-items-center chain-popup-text-active`}
@@ -1101,6 +1199,7 @@ const Dashboard = ({
                                   item.lock_time,
                                   item.tokenType,
                                   ethPoolsDyp,
+                                  basePoolsDyp,
                                   ethPoolsiDyp,
                                   bnbPoolsDyp,
                                   bnbPoolsiDyp,
@@ -1178,7 +1277,7 @@ const Dashboard = ({
                                   src={require("./assets/bnblogo.svg").default}
                                   alt=""
                                   style={{ height: 20, width: 20 }}
-                                  className="popup-chains-icon"
+                                  className="popup-chains-icon d-block"
                                 ></img>
                                 <h6
                                   className={`d-flex justify-content-center align-items-center chain-popup-text-active`}
@@ -1193,7 +1292,7 @@ const Dashboard = ({
                                   src={require("./assets/ethereum.svg").default}
                                   alt=""
                                   style={{ height: 20, width: 20 }}
-                                  className="popup-chains-icon"
+                                  className="popup-chains-icon d-block"
                                 ></img>
                                 <h6
                                   className={`d-flex justify-content-center align-items-center chain-popup-text-active`}
@@ -1208,7 +1307,7 @@ const Dashboard = ({
                                   src={require("./assets/base.svg").default}
                                   alt=""
                                   style={{ height: 20, width: 20 }}
-                                  className="popup-chains-icon"
+                                  className="popup-chains-icon d-block"
                                 ></img>
                                 <h6
                                   className={`d-flex justify-content-center align-items-center chain-popup-text-active`}
@@ -1223,7 +1322,7 @@ const Dashboard = ({
                                   src={require("./assets/avaxlogo.svg").default}
                                   alt=""
                                   style={{ height: 20, width: 20 }}
-                                  className="popup-chains-icon"
+                                  className="popup-chains-icon d-block"
                                 ></img>
                                 <h6
                                   className={`d-flex justify-content-center align-items-center chain-popup-text-active`}
@@ -1292,6 +1391,7 @@ const Dashboard = ({
                                   item.lock_time,
                                   item.tokenType,
                                   ethPoolsDyp,
+                                  basePoolsDyp,
                                   ethPoolsiDyp,
                                   bnbPoolsDyp,
                                   bnbPoolsiDyp,
@@ -1452,6 +1552,7 @@ const Dashboard = ({
                           selectedpoolType,
                           selectedPool,
                           ethPoolsDyp,
+                          basePoolsDyp,
                           ethPoolsiDyp,
                           bnbPoolsDyp,
                           bnbPoolsiDyp,
@@ -1464,6 +1565,7 @@ const Dashboard = ({
                             "No lock",
                             selectedpoolType,
                             ethPoolsDyp,
+                            basePoolsDyp,
                             ethPoolsiDyp,
                             bnbPoolsDyp,
                             bnbPoolsiDyp,
@@ -1481,6 +1583,7 @@ const Dashboard = ({
                           selectedpoolType,
                           selectedPool,
                           ethPoolsDyp,
+                          basePoolsDyp,
                           ethPoolsiDyp,
                           bnbPoolsDyp,
                           bnbPoolsiDyp,
@@ -1493,6 +1596,7 @@ const Dashboard = ({
                             "30 days",
                             selectedpoolType,
                             ethPoolsDyp,
+                            basePoolsDyp,
                             ethPoolsiDyp,
                             bnbPoolsDyp,
                             bnbPoolsiDyp,
@@ -1510,6 +1614,7 @@ const Dashboard = ({
                           selectedpoolType,
                           selectedPool,
                           ethPoolsDyp,
+                          basePoolsDyp,
                           ethPoolsiDyp,
                           bnbPoolsDyp,
                           bnbPoolsiDyp,
@@ -1522,6 +1627,7 @@ const Dashboard = ({
                             "60 days",
                             selectedpoolType,
                             ethPoolsDyp,
+                            basePoolsDyp,
                             ethPoolsiDyp,
                             bnbPoolsDyp,
                             bnbPoolsiDyp,
@@ -1545,6 +1651,7 @@ const Dashboard = ({
                           selectedpoolType,
                           selectedPool,
                           ethPoolsDyp,
+                          basePoolsDyp,
                           ethPoolsiDyp,
                           bnbPoolsDyp,
                           bnbPoolsiDyp,
@@ -1557,6 +1664,7 @@ const Dashboard = ({
                             "90 days",
                             selectedpoolType,
                             ethPoolsDyp,
+                            basePoolsDyp,
                             ethPoolsiDyp,
                             bnbPoolsDyp,
                             bnbPoolsiDyp,
@@ -1583,6 +1691,8 @@ const Dashboard = ({
                           selectedpoolType,
                           selectedPool,
                           ethPoolsDyp,
+                          basePoolsDyp,
+                          basePoolsDyp,
                           ethPoolsiDyp,
                           bnbPoolsDyp,
                           bnbPoolsiDyp,
@@ -1595,6 +1705,7 @@ const Dashboard = ({
                             "120 days",
                             selectedpoolType,
                             ethPoolsDyp,
+                            basePoolsDyp,
                             ethPoolsiDyp,
                             bnbPoolsDyp,
                             bnbPoolsiDyp,
@@ -1696,9 +1807,9 @@ const Dashboard = ({
                       </div>
                     </div>
                   )}
-                <div className="d-flex gap-3 align-items-center justify-content-start w-100">
+                <div className="d-flex gap-1 gap-lg-3 align-items-center justify-content-start w-100">
                   <div
-                    className={`position-relative col-lg-3 ${
+                    className={`position-relative w-100 ${
                       selectedchain === "eth"
                         ? "chain-popup-item-eth"
                         : selectedpoolType === "idyp"
@@ -1731,7 +1842,7 @@ const Dashboard = ({
                     </h6>
                   </div>
                   <div
-                    className={`position-relative col-lg-3 ${
+                    className={`position-relative w-100 ${
                       selectedchain === "bnb"
                         ? "chain-popup-item-bnb"
                         : "chain-popup-item"
@@ -1763,7 +1874,39 @@ const Dashboard = ({
                     </h6>
                   </div>
                   <div
-                    className={`position-relative col-lg-3 ${
+                    className={`position-relative w-100 ${
+                      selectedchain === "base"
+                        ? "chain-popup-item-base"
+                        : "chain-popup-item"
+                    }`}
+                    onClick={() => {
+                      setselectedchain("base");
+                      // onChainSelect("bnb");
+
+                      setselectedPool(
+                        selectedPool.tokenType === "dyp"
+                          ? bnbPools.find((item) => {
+                              return item.tokenType === "dyp";
+                            })
+                          : bnbPools.find((item) => {
+                              return item.tokenType === "idyp";
+                            })
+                      );
+                    }}
+                  >
+                    <h6
+                      className={`d-flex justify-content-center align-items-center chain-popup-text`}
+                    >
+                      <img
+                        src={selectedchain === "base" ? baseActive : base}
+                        alt=""
+                        className="popup-chains-icon"
+                      />
+                      BASE
+                    </h6>
+                  </div>
+                  <div
+                    className={`position-relative w-100 ${
                       selectedchain === "avax"
                         ? "chain-popup-item-avax"
                         : selectedpoolType === "idyp"
@@ -2080,7 +2223,44 @@ const Dashboard = ({
                     poolCap={1000000}
                     start_date={"07 Jun 2024"}
                   />
-                ) : activeCard &&
+                ): activeCard &&
+                selectedPool?.id ===
+                "0x13a3EA792db25d6E239f4b785bA17FB5B9faf84e" || selectedPool?.id ===
+                "0x9845a667b1A603FF21596FDdec51968a2bccAc11" ? (
+                <StakingDypiusBase1
+                  selectedPool={selectedPool}
+                  selectedTab={selectedTab}
+                  staking={window.constant_staking_dypius_base1}
+                  apr={selectedPool?.apy_percent}
+                  liquidity={eth_address}
+                  expiration_time={"01 Sep 2025"}
+                  finalApr={selectedPool?.apy_performancefee}
+                  lockTime={
+                    selectedPool?.lock_time?.split(" ")[0] === "No"
+                      ? "No Lock"
+                      : parseInt(selectedPool?.lock_time?.split(" ")[0])
+                  }
+                  listType={"table"}
+                  other_info={false}
+                  fee={selectedPool?.performancefee}
+                  is_wallet_connected={isConnected}
+                  coinbase={coinbase}
+                  the_graph_result={the_graph_result}
+                  chainId={network.toString()}
+                  handleConnection={handleConnection}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  expired={false}
+                  referrer={referrer}
+                  onConnectWallet={() => {
+                    setShowDetails(false);
+                    onConnectWallet();
+                    setselectedPool([]);
+                    setDetails(999);
+                  }}
+                  poolCap={2000000}
+                  start_date={"01 Sep 2024"}
+                />
+              ) : activeCard &&
                   selectedPool?.id ===
                     "0x0fafe78e471b52bc4003984a337948ed55284573" ? (
                   <StakeDypiusEth1Phase2

@@ -83,7 +83,7 @@ const EarnHero = () => {
       bscFarming &&
       bscFarming.status === 200
     ) {
-      const ethv2Tvl = ethRestult2.data.stakingInfoDYPEth[0].tvl_usd;
+      const ethv2Tvl = ethRestult2.data.stakingInfoDYPEth[0]?.tvl_usd;
       const ethv1Tvl = ethRestult.data.totalTVL_ETH;
 
       const bnbTvl2 = bnbResult2.data.stakingInfoDYPBnb[0].tvl_usd;
