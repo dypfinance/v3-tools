@@ -752,7 +752,7 @@ const EarnContent = ({
                         src={stake === "eth" ? ethStakeActive : ethStake}
                         alt=""
                       />
-                      <div className="d-lg-flex d-md-flex d-none flex-column">
+                      <div className="d-flex flex-column">
                         <p
                           className="text-white"
                           style={{ fontSize: "12px", fontWeight: "300" }}
@@ -783,7 +783,7 @@ const EarnContent = ({
                         src={stake === "bnb" ? bnbStakeActive : bnbStake}
                         alt=""
                       />
-                      <div className="d-lg-flex d-md-flex d-none flex-column">
+                      <div className="d-flex flex-column">
                         <p
                           className="text-white"
                           style={{ fontSize: "12px", fontWeight: "300" }}
@@ -816,7 +816,7 @@ const EarnContent = ({
                         src={stake === "base" ? baseStakeActive : baseStake}
                         alt=""
                       />
-                      <div className="d-lg-flex d-md-flex d-none flex-column">
+                      <div className="d-flex flex-column">
                         <p
                           className="text-white"
                           style={{ fontSize: "12px", fontWeight: "300" }}
@@ -857,7 +857,7 @@ const EarnContent = ({
                         src={stake === "avax" ? avaxStakeActive : avaxStake}
                         alt=""
                       />
-                      <div className="d-lg-flex d-md-flex d-none flex-column">
+                      <div className="d-flex flex-column">
                         <p
                           className="text-white"
                           style={{ fontSize: "12px", fontWeight: "300" }}
