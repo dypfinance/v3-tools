@@ -342,9 +342,10 @@ const StakingDypiusBase1 = ({
         let tStakers = staking.getNumberOfHolders();
 
         //Take iDYP Balance on Staking
-        let _tvlConstantiDYP = reward_token_idyp.balanceOf(
-          staking._address
-        ); /* TVL of iDYP on Staking */
+        // let _tvlConstantiDYP = reward_token_idyp.balanceOf(
+        //   staking._address
+        // );
+         /* TVL of iDYP on Staking */
 
         //Take DYPS Balance
         // let _tvlDYPS = token_dyps.balanceOf(staking._address); /* TVL of DYPS */
@@ -359,7 +360,7 @@ const StakingDypiusBase1 = ({
           tvl,
           referralFeeEarned,
           total_stakers,
-          tvlConstantiDYP,
+          // tvlConstantiDYP,
           //   tvlDYPS,
         ] = await Promise.all([
           _bal,
@@ -371,7 +372,7 @@ const StakingDypiusBase1 = ({
           _tvl,
           _rFeeEarned,
           tStakers,
-          _tvlConstantiDYP,
+          // _tvlConstantiDYP,
           //   _tvlDYPS,
         ]);
 
@@ -387,18 +388,17 @@ const StakingDypiusBase1 = ({
             console.log(e);
           });
 
-        let usdValueiDYP = new BigNumber(tvlConstantiDYP)
-          .times(_amountOutMin)
-          .toFixed(18);
+        // let usdValueiDYP = new BigNumber(tvlConstantiDYP)
+        //   .times(_amountOutMin)
+        //   .toFixed(18);
         let usdValueDYPS = 0;
         let usd_per_lp = lp_data ? dypprice : 0;
         let tvlUSD = new BigNumber(tvl)
           .times(usd_per_lp)
-          .plus(usdValueiDYP)
           .plus(usdValueDYPS)
           .toFixed(18);
         settvlusd(tvlUSD);
-
+        
         let balance_formatted = new BigNumber(token_balance ?? 0)
           .div(1e18)
           .toString(10);
