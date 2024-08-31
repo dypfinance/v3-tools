@@ -448,13 +448,14 @@ const Whitelist = ({ networkId, isConnected, handleConnection, coinbase }) => {
                 ))}
               </div>
               <div className="requirements-divider mt-3"></div>
-              <span className="eligible-span mt-3">
+              {/* <span className="eligible-span mt-3">
                 You are eligible for the whitelist.
-              </span>
-              {/* <div className="req-buy-dyp-wrapper mt-2 d-flex align-items-center justify-content-between w-100 p-2">
+              </span> */}
+               
+              <a className="req-buy-dyp-wrapper mt-2 d-flex align-items-center justify-content-between w-100 p-2" href='https://app.uniswap.org/swap?use=V2&inputCurrency=0x39b46B212bDF15b42B166779b9d1787A68b9D0c3' target={'_blank'} rel='noreferrer' >
                 <span className="req-buy-dyp">Buy DYP tokens to become eligible for the whitelist</span>
                 <img src={buyToken} alt="" />
-              </div> */}
+              </a>
             </div>
           </div>
         </div>

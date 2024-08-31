@@ -78,6 +78,14 @@
   cursor: pointer;
 }
 
+.chain-popup-item-base {
+  padding: 6px 15px;
+  border-radius: 8px;
+  border: 0.5px solid #0052FF;
+  background: linear-gradient(95deg, #1E1C40 0%, #0052FF 100%);
+  cursor: pointer;
+}
+
 .chain-popup-item-avax {
   padding: 6px 15px;
   border-radius: 8px;
@@ -216,6 +224,12 @@ hr {
   background: linear-gradient(277.84deg, #ddad0c 0.89%, #1e1c40 92.83%);
   border: 2px solid #dcad0c;
   box-shadow: 0px 2px 12px rgba(220, 173, 12, 0.22);
+}
+
+.base-item-active {
+  background: linear-gradient(95deg, #1E1C40 0%, #0052FF 100%);
+  border: 2px solid #0052FF;
+  box-shadow: 0px 2px 12px rgba(78, 73, 197, 0.22);
 }
 .avax-item-active {
   background: linear-gradient(277.84deg, #ea4546 0.89%, #1e1c40 92.83%);
@@ -547,6 +561,10 @@ hr {
   .earn-hero {
     background-image: url("../../assets/earnAssets/earnHeroMobileBg.png");
   }
+
+  .chain-popup-item, .chain-popup-item-avax, .chain-popup-item-base, .chain-popup-item-bnb, .chain-popup-item-eth, .chain-popup-item-disabled {
+    padding: 6px;
+   }
 
   .top-picks-container {
     grid-template-columns: auto;
