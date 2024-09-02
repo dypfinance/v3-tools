@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./whitelist.css";
 import dyp from "./assets/dyp.svg";
 import idyp from "./assets/idyp.svg";
@@ -15,8 +15,17 @@ import usdc from "./assets/usdc.svg";
 import checkIcon from "./assets/checkIcon.svg";
 import OutsideClickHandler from "react-outside-click-handler";
 import buyToken from "./assets/buyToken.svg";
+import { handleSwitchNetworkhook } from "../../functions/hooks";
+import Web3 from "web3";
+import axios from "axios";
 
-const Whitelist = ({ networkId, isConnected, handleConnection, coinbase }) => {
+const Whitelist = ({
+  networkId,
+  isConnected,
+  handleConnection,
+  coinbase,
+  handleSwitchNetwork,
+}) => {
   const dummyTable = [
     {
       date: "25 Aug 2024",
@@ -133,6 +142,7 @@ const Whitelist = ({ networkId, isConnected, handleConnection, coinbase }) => {
   const [selectedCoin, setSelectedCoin] = useState({
     coin: "USDT",
     icon: usdt,
+    address: "",
   });
   const [selectedChain, setSelectedChain] = useState({
     chain: "BNB Chain",
@@ -141,6 +151,20 @@ const Whitelist = ({ networkId, isConnected, handleConnection, coinbase }) => {
 
   const [slice, setSlice] = useState(5);
   const [loading, setLoading] = useState(false);
+  const [tokenBalance, setTokenBalance] = useState(0);
+  const [depositAmount, setDepositAmount] = useState();
+  const [canDeposit, setCanDeposit] = useState(true);
+  const [errorMsg, seterrorMsg] = useState("");
+  const [totalDeposited, setTotalDeposited] = useState(0);
+  const [depositLoading, setdepositLoading] = useState(false);
+  const [depositStatus, setdepositStatus] = useState("initial");
+  const [selectedToken, setselectedToken] = useState();
+  const [allCommitments, setAllCommitments] = useState([]);
+  const [allUserCommitments, setAllUserCommitments] = useState([]);
+
+
+
+  const poolCap = 25000;
 
   const requirements = [
     {
@@ -174,6 +198,256 @@ const Whitelist = ({ networkId, isConnected, handleConnection, coinbase }) => {
       }
     }, 2000);
   };
+
+  const handleChangeChain = async (hexChain, chain) => {
+    await handleSwitchNetworkhook(hexChain)
+      .then(() => {
+        handleSwitchNetwork(chain);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const getUserBalanceForToken = async (token) => {
+    if (coinbase) {
+      //1 is for eth chain, 2 for avax and 3 for bnb chain
+      let tokenBalance = await window.getTokenHolderBalanceAll(
+        coinbase,
+        token.address,
+        networkId === 1 ? 1 : networkId === 56 ? 3 : 1
+      );
+
+      const balance_formatted = new window.BigNumber(tokenBalance)
+        .div(10 ** token.decimals)
+        .toString(10);
+      setTokenBalance(balance_formatted);
+    } else setTokenBalance(0);
+  };
+
+  const getAllCommitments = async()=>{
+        // window.web3 = new Web3(window.ethereum);
+    // let commitment_contract = new window.web3.eth.Contract(
+    //   window.COMMITMENT_ABI,
+    //   window.config.commitment_address
+    // );
+    const result = await axios.get(`https://api.bscscan.com/api?module=account&action=txlist&address=0x6902dC3Fcaf44f7Beef45ec63Bafab3cAE04D4Df&startblock=0&endblock=99999999&sort=desc&apikey=4WC29K99XWH85RBVC5KAFRQXTZJ6AVMXZK`)
+    if(result && result.status === 200) {
+      setAllCommitments(result.data.result.filter((item)=>{return item.functionName === 'commit(address, uint256)'}))
+    }
+  }
+
+  const getUserCommitment = async()=>{
+
+    // window.web3 = new Web3(window.ethereum);
+    // let commitment_contract = new window.web3.eth.Contract(
+    //   window.COMMITMENT_ABI,
+    //   window.config.commitment_address
+    // );
+
+
+    // const sc_commitments = await commitment_contract.getPastEvents('Committed').catch((e)=>{console.error(e)})
+
+    // console.log(sc_commitments)
+  
+    if(allCommitments && allCommitments.length > 0) {
+      const userCommitmets = allCommitments.filter((item)=>{return item.from.toLowerCase() === coinbase.toLowerCase()})
+      if(userCommitmets && userCommitmets.length>0) {
+        const commitment_array = userCommitmets.map((item)=>{
+        return {...item, chain: 'bnb', }
+        })
+      }
+      setAllUserCommitments(userCommitmets)
+    }
+  }
+
+
+  const checkApproval = async (amount) => {
+    const result = await window
+      .checkapproveStakePool(
+        coinbase,
+        selectedCoin.address,
+        window.config.commitment_address
+      )
+      .then((data) => {
+        console.log(data);
+        return data;
+      });
+
+    let result_formatted = new window.BigNumber(result).div(1e18).toFixed(6);
+ 
+    if (
+      Number(result_formatted) >= Number(amount) &&
+      Number(result_formatted) !== 0 && Number(amount) >= 100
+    ) {
+      setdepositStatus("deposit");
+    } else {
+      setdepositStatus("initial");
+    }
+  };
+
+  const handleUserMaxDeposit = () => {
+    const depositAmount = tokenBalance;
+    if (depositAmount >= poolCap) {
+      setDepositAmount(poolCap);
+      checkApproval(poolCap);
+
+      seterrorMsg(
+        "Maximum amount allowed to commit is" + poolCap + selectedCoin.coin
+      );
+      setCanDeposit(true);
+    } else if (depositAmount < poolCap && depositAmount >= 100) {
+      setDepositAmount(tokenBalance);
+      checkApproval(tokenBalance);
+      setCanDeposit(true);
+    } else if (depositAmount < 100 && depositAmount >= 0) {
+      checkApproval(tokenBalance);
+      setDepositAmount(tokenBalance);
+      seterrorMsg("Deposit amount is lower than minimum amount required.");
+      setCanDeposit(false);
+    }
+  };
+
+  const handleStake = async () => {
+    setdepositLoading(true);
+
+    let amount = depositAmount;
+    amount = new window.BigNumber(amount).times(1e18).toFixed(0);
+
+    window.web3 = new Web3(window.ethereum);
+    let commitment_contract = new window.web3.eth.Contract(
+      window.COMMITMENT_ABI,
+      window.config.commitment_address
+    );
+
+    await commitment_contract.methods
+      .commit(selectedToken.address, amount)
+      .send({ from: coinbase })
+      .then(() => {
+        setdepositLoading(false);
+        setdepositStatus("success");
+        getUserBalanceForToken(selectedToken);
+        setTimeout(() => {
+          setdepositStatus("initial");
+          setDepositAmount("");
+        }, 5000);
+      })
+      .catch((e) => {
+        setdepositLoading(false);
+        setdepositStatus("fail");
+        seterrorMsg(e?.message);
+        setTimeout(() => {
+          setDepositAmount("");
+          setdepositStatus("initial");
+          seterrorMsg("");
+        }, 10000);
+      });
+  };
+
+  const handleApprove = async () => {
+    setdepositLoading(true);
+    window.web3 = new Web3(window.ethereum);
+    let token_contract = new window.web3.eth.Contract(
+      window.TOKEN_ABI,
+      selectedCoin.address
+    );
+
+    let amount = depositAmount;
+    amount = new window.BigNumber(amount).times(1e18).toFixed(0);
+    await token_contract.methods
+      .approve(window.config.commitment_address, amount)
+      .send({ from: coinbase })
+      .then(() => {
+        setdepositLoading(false);
+        setdepositStatus("deposit");
+      })
+      .catch((e) => {
+        setdepositLoading(false);
+        setdepositStatus("fail");
+        seterrorMsg(e?.message);
+        setTimeout(() => {
+          setDepositAmount("");
+          setdepositStatus("initial");
+          seterrorMsg("");
+        }, 10000);
+      });
+  };
+
+  useEffect(() => {
+    if (depositAmount > 0) {
+      const result = Number(depositAmount) + Number(totalDeposited);
+      if (result > poolCap) {
+        seterrorMsg(
+          "Deposit amount is greater than available quota. Please add another amount."
+        );
+        setCanDeposit(false);
+      } else if(depositAmount < 100) {
+        setCanDeposit(false);
+        seterrorMsg(
+          "Minimum deposit amount is 100" + " " + selectedCoin.coin
+        );
+      }
+      
+      else {
+        seterrorMsg("");
+        setCanDeposit(true);
+      }
+    } else if (depositAmount === 0) {
+      setCanDeposit(false);
+    }
+  }, [depositAmount, totalDeposited, poolCap]);
+
+  useEffect(() => {
+    if (networkId === 1) {
+      setSelectedChain({
+        icon: eth,
+        chain: "Ethereum",
+      });
+      setSelectedCoin({
+        icon: require(`./assets/${window.config.commitmenteth_tokens[0].symbol.toLowerCase()}.svg`),
+        coin: window.config.commitmenteth_tokens[0].symbol,
+        address: window.config.commitmenteth_tokens[0].address,
+      });
+      getUserBalanceForToken(window.config.commitmenteth_tokens[0]);
+      setselectedToken(window.config.commitmenteth_tokens[0]);
+    } else if (networkId === 56) {
+      setSelectedChain({
+        icon: bnb,
+        chain: "BNB Chain",
+      });
+
+      setSelectedCoin({
+        icon: require(`./assets/${window.config.commitmentbnb_tokens[0].symbol.toLowerCase()}.svg`),
+        coin: window.config.commitmentbnb_tokens[0].symbol,
+        address: window.config.commitmentbnb_tokens[0].address,
+      });
+      getUserBalanceForToken(window.config.commitmentbnb_tokens[0]);
+      setselectedToken(window.config.commitmentbnb_tokens[0]);
+    } else {
+      setSelectedChain({
+        icon: eth,
+        chain: "Ethereum",
+      });
+
+      setSelectedCoin({
+        icon: require(`./assets/${window.config.commitmenteth_tokens[0].symbol.toLowerCase()}.svg`),
+        coin: window.config.commitmenteth_tokens[0].symbol,
+        address: window.config.commitmenteth_tokens[0].address,
+      });
+      getUserBalanceForToken(window.config.commitmenteth_tokens[0]);
+      setselectedToken(window.config.commitmenteth_tokens[0]);
+    }
+  }, [isConnected, networkId, coinbase]);
+
+  useEffect(()=>{
+    getAllCommitments()
+  },[])
+
+  useEffect(()=>{
+    if(isConnected && coinbase) {
+      getUserCommitment()
+    }
+  },[isConnected, coinbase])
 
   return (
     <div className="container-lg p-0">
@@ -211,7 +485,7 @@ const Whitelist = ({ networkId, isConnected, handleConnection, coinbase }) => {
           <h6 className="mb-0 whitelist-info-title">$0.0325</h6>
         </div>
         <div className="whitelist-info-item p-3 d-flex flex-column gap-1 align-items-start">
-          <span className="whitelist-info-span">Fully Market Cap</span>
+          <span className="whitelist-info-span">Fully Diluted Valuation</span>
           <h6 className="mb-0 whitelist-info-title">$42,500,000</h6>
         </div>
         <div className="whitelist-info-item p-3 d-flex flex-column gap-1 align-items-start">
@@ -241,7 +515,9 @@ const Whitelist = ({ networkId, isConnected, handleConnection, coinbase }) => {
                 <span className="commitment-text">Commitment</span>
                 <div className="d-flex align-items-center gap-1">
                   <span className="whitelist-my-balance">My Balance</span>
-                  <span className="whitelist-my-balance-value">--- USDT</span>
+                  <span className="whitelist-my-balance-value">
+                    {getFormattedNumber(tokenBalance, 4)} {selectedCoin.coin}
+                  </span>
                 </div>
               </div>
               <div className="d-flex flex-column gap-2 w-100 p-3">
@@ -255,36 +531,39 @@ const Whitelist = ({ networkId, isConnected, handleConnection, coinbase }) => {
                             onOutsideClick={() => setCoinDropdown(false)}
                           >
                             <div className="coins-dropdown-list d-flex flex-column ">
-                              <div
-                                className="d-flex align-items-center gap-2 coin-dropdown-item p-2"
-                                onClick={() => {
-                                  setSelectedCoin({
-                                    icon: usdt,
-                                    coin: "USDT",
-                                  });
-                                  setCoinDropdown(false);
-                                }}
-                              >
-                                <img src={usdt} width={20} height={20} alt="" />
-                                <span className="whitelist-token-text">
-                                  USDT
-                                </span>
-                              </div>
-                              <div
-                                className="d-flex align-items-center gap-2 coin-dropdown-item p-2"
-                                onClick={() => {
-                                  setSelectedCoin({
-                                    icon: usdc,
-                                    coin: "USDC",
-                                  });
-                                  setCoinDropdown(false);
-                                }}
-                              >
-                                <img src={usdc} width={20} height={20} alt="" />
-                                <span className="whitelist-token-text">
-                                  USDC
-                                </span>
-                              </div>
+                              {(networkId === 1
+                                ? window.config.commitmenteth_tokens
+                                : networkId === 56
+                                ? window.config.commitmentbnb_tokens
+                                : window.config.commitmenteth_tokens
+                              ).map((item, index) => {
+                                return (
+                                  <div
+                                    className="d-flex align-items-center gap-2 coin-dropdown-item p-2"
+                                    key={index}
+                                    onClick={() => {
+                                      setSelectedCoin({
+                                        icon: require(`./assets/${item.symbol.toLowerCase()}.svg`),
+                                        coin: item.symbol,
+                                        address: item.address,
+                                      });
+                                      setCoinDropdown(false);
+                                      getUserBalanceForToken(item);
+                                      setselectedToken(item);
+                                    }}
+                                  >
+                                    <img
+                                      src={require(`./assets/${item.symbol.toLowerCase()}.svg`)}
+                                      width={20}
+                                      height={20}
+                                      alt=""
+                                    />
+                                    <span className="whitelist-token-text">
+                                      {item.symbol}
+                                    </span>
+                                  </div>
+                                );
+                              })}
                             </div>
                           </OutsideClickHandler>
                         )}
@@ -318,9 +597,18 @@ const Whitelist = ({ networkId, isConnected, handleConnection, coinbase }) => {
                           name="amount_deposit"
                           id="amount_deposit"
                           key="amount_deposit"
-                          placeholder={`100 USDT`}
+                          placeholder={`Min 100 USDT`}
+                          value={depositAmount}
+                          onChange={(e) => {
+                            setDepositAmount(e.target.value);
+                            checkApproval(e.target.value);
+                          }}
+                          min={100}
                         />
-                        <button className="inner-max-btn position-absolute">
+                        <button
+                          className="inner-max-btn position-absolute"
+                          onClick={handleUserMaxDeposit}
+                        >
                           Max
                         </button>
                       </div>
@@ -339,11 +627,8 @@ const Whitelist = ({ networkId, isConnected, handleConnection, coinbase }) => {
                             <div
                               className="d-flex align-items-center gap-2 coin-dropdown-item p-2"
                               onClick={() => {
-                                setSelectedChain({
-                                  icon: bnb,
-                                  chain: "BNB Chain",
-                                });
                                 setChainDropdown(false);
+                                handleChangeChain("0x38", "56");
                               }}
                             >
                               <img src={bnb} width={20} height={20} alt="" />
@@ -354,11 +639,8 @@ const Whitelist = ({ networkId, isConnected, handleConnection, coinbase }) => {
                             <div
                               className="d-flex align-items-center gap-2 coin-dropdown-item p-2"
                               onClick={() => {
-                                setSelectedChain({
-                                  icon: eth,
-                                  chain: "Ethereum",
-                                });
                                 setChainDropdown(false);
+                                handleChangeChain("0x1", "1");
                               }}
                             >
                               <img src={eth} width={20} height={20} alt="" />
@@ -390,16 +672,64 @@ const Whitelist = ({ networkId, isConnected, handleConnection, coinbase }) => {
                     </div>
                   </div>
                 </div>
+                {errorMsg && (
+                  <h6 className="errormsg m-0 justify-content-start">
+                    {errorMsg}
+                  </h6>
+                )}
                 <div className="d-flex align-items-center mt-2 gap-1">
                   <span className="commitment-input-span">Estimation:</span>
-                  <span className="wod-tokens-commited">-- WOD</span>
+                  <span className="wod-tokens-commited">{getFormattedNumber((depositAmount ?? 0)/0.0325, 4)} WOD</span>
                   <span className="commitment-input-span">
                     (distributed on BNB Chain)
                   </span>
                 </div>
               </div>
               <div className="d-flex w-100 justify-content-center mb-3">
-                <button className="btn filledbtn">Coming Soon</button>
+                <button
+                  disabled={
+                    depositAmount === "" ||
+                    depositLoading === true ||
+                    canDeposit === false
+                      ? true
+                      : false
+                  }
+                  className={`btn filledbtn ${
+                    ((depositAmount === "" && depositStatus === "initial") ||
+                      canDeposit === false) &&
+                    "disabled-btn"
+                  }  ${
+                    depositStatus === "deposit" || depositStatus === "success"
+                      ? "success-button"
+                      : depositStatus === "fail"
+                      ? "fail-button"
+                      : null
+                  } d-flex justify-content-center align-items-center gap-2 m-auto`}
+                  onClick={() => {
+                    depositStatus === "deposit"
+                      ? handleStake()
+                      : depositStatus === "initial" && depositAmount !== ""
+                      ? handleApprove()
+                      : console.log("");
+                  }}
+                >
+                  {depositLoading ? (
+                    <div
+                      class="spinner-border spinner-border-sm text-light"
+                      role="status"
+                    >
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                  ) : depositStatus === "initial" ? (
+                    <>Approve</>
+                  ) : depositStatus === "deposit" ? (
+                    <>Deposit</>
+                  ) : depositStatus === "success" ? (
+                    <>Success</>
+                  ) : (
+                    <>Failed</>
+                  )}
+                </button>
               </div>
             </div>
           </div>
@@ -459,7 +789,7 @@ const Whitelist = ({ networkId, isConnected, handleConnection, coinbase }) => {
           </div>
         </div>
       </div>
-      {/* <div className="row mt-4">
+      <div className="row mt-4">
         <div className="col-12">
           <div className="whitelist-info-item-2 d-flex flex-column">
             <div className="d-flex align-items-center p-3 justify-content-between">
@@ -568,7 +898,7 @@ const Whitelist = ({ networkId, isConnected, handleConnection, coinbase }) => {
             </div>
           </div>
         </div>
-      </div> */}
+      </div>
     </div>
   );
 };
