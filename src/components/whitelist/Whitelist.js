@@ -28,7 +28,7 @@ const Whitelist = ({
   isPremium,
   userPools,
   hasDypBalance,
-  hasiDypBalance, 
+  hasiDypBalance,
 }) => {
   const [coinDropdown, setCoinDropdown] = useState(false);
   const [chainDropdown, setChainDropdown] = useState(false);
@@ -126,7 +126,6 @@ const Whitelist = ({
     }, 2000);
   };
 
-  
   const handleChangeChain = async (hexChain, chain) => {
     await handleSwitchNetworkhook(hexChain)
       .then(() => {
@@ -373,7 +372,7 @@ const Whitelist = ({
         coin: window.config.commitmenteth_tokens[0].symbol,
         address: window.config.commitmenteth_tokens[0].address,
       });
-      setTokenBalance(0)
+      setTokenBalance(0);
       setselectedToken(window.config.commitmenteth_tokens[0]);
     }
   }, [isConnected, networkId, coinbase]);
@@ -382,7 +381,7 @@ const Whitelist = ({
     if (isConnected && coinbase) {
       getUserCommitment();
     } else {
-      setAllUserCommitments([])
+      setAllUserCommitments([]);
     }
   }, [isConnected, coinbase]);
 
@@ -845,9 +844,9 @@ const Whitelist = ({
                             #{index + 1}
                           </td>
                           <td className="item-history-table-td text-center">
-                            {new Intl.DateTimeFormat("en-US", {
+                            {new Intl.DateTimeFormat("en-GB", {
                               year: "numeric",
-                              month: "2-digit",
+                              month: "short",
                               day: "2-digit",
                             }).format(item.commitment_list.timestamp * 1000)}
                           </td>
@@ -861,7 +860,14 @@ const Whitelist = ({
                             </div>
                           </td>
                           <td className="item-history-table-td table-greentext text-center">
-                            <a className="table-greentext" href={`https://bscscan.com/address/${coinbase}`} target="_blank" rel="noreferrer">{shortAddress(coinbase)}</a>
+                            <a
+                              className="table-greentext"
+                              href={`https://bscscan.com/address/${coinbase}`}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              {shortAddress(coinbase)}
+                            </a>
                           </td>
                           <td className="item-history-table-td text-center">
                             {getFormattedNumber(

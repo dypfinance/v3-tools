@@ -564,7 +564,7 @@ class App extends React.Component {
     const walletAddress = this.state.coinbase;
     const TokenABI = window.ERC20_ABI;
 
-    if (this.state.coinbase && this.state.coinbase != undefined) {
+    if (this.state.coinbase && this.state.coinbase != undefined && this.state.isConnected) {
       const contract1 = new window.infuraWeb3.eth.Contract(
         TokenABI,
         tokenAddress
@@ -695,6 +695,10 @@ class App extends React.Component {
       } else {
         this.setState({ hasiDypBalance: false });
       }
+    } else {
+      this.setState({ hasiDypBalance: false });
+      this.setState({ hasDypBalance: false });
+
     }
   };
 
