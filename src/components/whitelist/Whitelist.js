@@ -11,7 +11,6 @@ import dropArrow from "./assets/dropArrow.svg";
 import { shortAddress } from "../../functions/shortAddress";
 import getFormattedNumber from "../../functions/get-formatted-number";
 import { Tooltip } from "@material-ui/core";
-import usdc from "./assets/usdc.svg";
 import checkIcon from "./assets/checkIcon.svg";
 import OutsideClickHandler from "react-outside-click-handler";
 import buyToken from "./assets/buyToken.svg";
@@ -183,11 +182,14 @@ const Whitelist = ({
               console.error(e);
               return [];
             });
-          totalTokenDeposited += commitment_list.amount / 1e18;
-          return {
-            commitment_list,
-            network: "BNB Chain",
-          };
+          if (commitment_list) {
+            totalTokenDeposited += commitment_list.amount / 1e18;
+            return {
+              commitment_list,
+              network: "BNB Chain",
+              token: "USDT"
+            };
+          }
         })
       );
       setTotalDeposited(totalTokenDeposited);
@@ -208,7 +210,6 @@ const Whitelist = ({
         window.config.commitment_address
       )
       .then((data) => {
-        console.log(data);
         return data;
       });
 
@@ -393,7 +394,7 @@ const Whitelist = ({
       sethasiDypStaked(false);
     }
   }, [userPools]);
-
+  
   return (
     <div className="container-lg p-0">
       <div className="whitelist-banner d-flex flex-column flex-lg-row p-4 gap-3 gap-lg-0 align-items-center mb-4">
@@ -840,7 +841,7 @@ const Whitelist = ({
                     {allUserCommitments.map((item, index) => {
                       return (
                         <tr key={index}>
-                          <td className="item-history-table-td first-td left-border">
+                          <td className="item-history-table-td first-td left-border text-center">
                             #{index + 1}
                           </td>
                           <td className="item-history-table-td text-center">
@@ -874,7 +875,7 @@ const Whitelist = ({
                               item.commitment_list.amount / 1e18,
                               0
                             )}{" "}
-                            USDT
+                            {item.token}
                           </td>
                           <td className="item-history-table-td right-border text-center">
                             {getFormattedNumber(
