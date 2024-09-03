@@ -2281,7 +2281,7 @@ window.config = {
 
   subscription_skale_address: "0x6041dC62b74e28596b4917693f6B0F5baA61A13F",
 
-  commitment_address: "0x6902dC3Fcaf44f7Beef45ec63Bafab3cAE04D4Df",
+  commitment_address: "0xE133E0734E1600a2074db2F07311D43c63493A3A",
 
   ZERO_ADDRESS: "0x0000000000000000000000000000000000000000",
   MAX_LOCKS_TO_LOAD_PER_CALL: 10,
@@ -4561,6 +4561,12 @@ window.COMMITMENT_ABI = [
         name: "amount",
         type: "uint256",
       },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "timestamp",
+        type: "uint256",
+      },
     ],
     name: "Committed",
     type: "event",
@@ -4637,9 +4643,17 @@ window.COMMITMENT_ABI = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "MINIMUM_COMMITMENT",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
       { internalType: "address", name: "user", type: "address" },
       { internalType: "address", name: "tokenAddress", type: "address" },
+      { internalType: "uint256", name: "index", type: "uint256" },
     ],
     name: "accept",
     outputs: [],
@@ -4657,6 +4671,18 @@ window.COMMITMENT_ABI = [
   },
   {
     inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    name: "allCommitments",
+    outputs: [
+      { internalType: "uint256", name: "amount", type: "uint256" },
+      { internalType: "bool", name: "accepted", type: "bool" },
+      { internalType: "bool", name: "refunded", type: "bool" },
+      { internalType: "uint256", name: "timestamp", type: "uint256" },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
     name: "allowedTokens",
     outputs: [{ internalType: "address", name: "", type: "address" }],
     stateMutability: "view",
@@ -4666,6 +4692,7 @@ window.COMMITMENT_ABI = [
     inputs: [
       { internalType: "address[]", name: "users", type: "address[]" },
       { internalType: "address", name: "tokenAddress", type: "address" },
+      { internalType: "uint256[]", name: "indexes", type: "uint256[]" },
     ],
     name: "batchAccept",
     outputs: [],
@@ -4676,6 +4703,7 @@ window.COMMITMENT_ABI = [
     inputs: [
       { internalType: "address[]", name: "users", type: "address[]" },
       { internalType: "address", name: "tokenAddress", type: "address" },
+      { internalType: "uint256[]", name: "indexes", type: "uint256[]" },
     ],
     name: "batchRefund",
     outputs: [],
@@ -4694,14 +4722,26 @@ window.COMMITMENT_ABI = [
   },
   {
     inputs: [
+      { internalType: "address", name: "user", type: "address" },
+      { internalType: "address", name: "tokenAddress", type: "address" },
+    ],
+    name: "commitmentCountForUser",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
       { internalType: "address", name: "", type: "address" },
       { internalType: "address", name: "", type: "address" },
+      { internalType: "uint256", name: "", type: "uint256" },
     ],
     name: "commitments",
     outputs: [
       { internalType: "uint256", name: "amount", type: "uint256" },
       { internalType: "bool", name: "accepted", type: "bool" },
       { internalType: "bool", name: "refunded", type: "bool" },
+      { internalType: "uint256", name: "timestamp", type: "uint256" },
     ],
     stateMutability: "view",
     type: "function",
@@ -4733,6 +4773,7 @@ window.COMMITMENT_ABI = [
     inputs: [
       { internalType: "address", name: "user", type: "address" },
       { internalType: "address", name: "tokenAddress", type: "address" },
+      { internalType: "uint256", name: "index", type: "uint256" },
     ],
     name: "refund",
     outputs: [],
@@ -4763,6 +4804,25 @@ window.COMMITMENT_ABI = [
     outputs: [
       { internalType: "address[]", name: "", type: "address[]" },
       { internalType: "uint256[]", name: "", type: "uint256[]" },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "limit", type: "uint256" }],
+    name: "viewLatestCommitments",
+    outputs: [
+      {
+        components: [
+          { internalType: "uint256", name: "amount", type: "uint256" },
+          { internalType: "bool", name: "accepted", type: "bool" },
+          { internalType: "bool", name: "refunded", type: "bool" },
+          { internalType: "uint256", name: "timestamp", type: "uint256" },
+        ],
+        internalType: "struct CommitmentContract.Commitment[]",
+        name: "",
+        type: "tuple[]",
+      },
     ],
     stateMutability: "view",
     type: "function",

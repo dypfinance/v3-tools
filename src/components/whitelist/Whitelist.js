@@ -17,7 +17,7 @@ import OutsideClickHandler from "react-outside-click-handler";
 import buyToken from "./assets/buyToken.svg";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
 import Web3 from "web3";
-import axios from "axios";
+import wallet from "../FARMINNG/assets/wallet.svg";
 
 const Whitelist = ({
   networkId,
@@ -25,118 +25,11 @@ const Whitelist = ({
   handleConnection,
   coinbase,
   handleSwitchNetwork,
+  isPremium,
+  userPools,
+  hasDypBalance,
+  hasiDypBalance, 
 }) => {
-  const dummyTable = [
-    {
-      date: "25 Aug 2024",
-      network: "BNB Chain",
-      networkIcon: bnb,
-      wallet: "0x7FB568db21Af9B9adab8b9bDb5a4dD05a3283c6C",
-      commited: 22500,
-      amount: 22500000,
-      status: "Successful",
-    },
-    {
-      date: "25 Aug 2024",
-      network: "Ethereum",
-      networkIcon: eth,
-      wallet: "0x7FB568db21Af9B9adab8b9bDb5a4dD05a3283c6C",
-      commited: 22500,
-      amount: 22500000,
-      status: "Approved",
-    },
-    {
-      date: "25 Aug 2024",
-      network: "BNB Chain",
-      networkIcon: bnb,
-      wallet: "0x7FB568db21Af9B9adab8b9bDb5a4dD05a3283c6C",
-      commited: 22500,
-      amount: 22500000,
-      status: "Refund",
-    },
-    {
-      date: "25 Aug 2024",
-      network: "BNB Chain",
-      networkIcon: bnb,
-      wallet: "0x7FB568db21Af9B9adab8b9bDb5a4dD05a3283c6C",
-      commited: 22500,
-      amount: 22500000,
-      status: "Successful",
-    },
-    {
-      date: "25 Aug 2024",
-      network: "BNB Chain",
-      networkIcon: bnb,
-      wallet: "0x7FB568db21Af9B9adab8b9bDb5a4dD05a3283c6C",
-      commited: 22500,
-      amount: 22500000,
-      status: "Successful",
-    },
-    {
-      date: "25 Aug 2024",
-      network: "BNB Chain",
-      networkIcon: bnb,
-      wallet: "0x7FB568db21Af9B9adab8b9bDb5a4dD05a3283c6C",
-      commited: 22500,
-      amount: 22500000,
-      status: "Successful",
-    },
-    {
-      date: "25 Aug 2024",
-      network: "BNB Chain",
-      networkIcon: bnb,
-      wallet: "0x7FB568db21Af9B9adab8b9bDb5a4dD05a3283c6C",
-      commited: 22500,
-      amount: 22500000,
-      status: "Successful",
-    },
-    {
-      date: "25 Aug 2024",
-      network: "BNB Chain",
-      networkIcon: bnb,
-      wallet: "0x7FB568db21Af9B9adab8b9bDb5a4dD05a3283c6C",
-      commited: 22500,
-      amount: 22500000,
-      status: "Successful",
-    },
-    {
-      date: "25 Aug 2024",
-      network: "BNB Chain",
-      networkIcon: bnb,
-      wallet: "0x7FB568db21Af9B9adab8b9bDb5a4dD05a3283c6C",
-      commited: 22500,
-      amount: 22500000,
-      status: "Successful",
-    },
-    {
-      date: "25 Aug 2024",
-      network: "BNB Chain",
-      networkIcon: bnb,
-      wallet: "0x7FB568db21Af9B9adab8b9bDb5a4dD05a3283c6C",
-      commited: 22500,
-      amount: 22500000,
-      status: "Successful",
-    },
-    {
-      date: "25 Aug 2024",
-      network: "BNB Chain",
-      networkIcon: bnb,
-      wallet: "0x7FB568db21Af9B9adab8b9bDb5a4dD05a3283c6C",
-      commited: 22500,
-      amount: 22500000,
-      status: "Successful",
-    },
-    {
-      date: "25 Aug 2024",
-      network: "BNB Chain",
-      networkIcon: bnb,
-      wallet: "0x7FB568db21Af9B9adab8b9bDb5a4dD05a3283c6C",
-      commited: 22500,
-      amount: 22500000,
-      status: "Successful",
-    },
-  ];
-
   const [coinDropdown, setCoinDropdown] = useState(false);
   const [chainDropdown, setChainDropdown] = useState(false);
   const [selectedCoin, setSelectedCoin] = useState({
@@ -154,36 +47,70 @@ const Whitelist = ({
   const [tokenBalance, setTokenBalance] = useState(0);
   const [depositAmount, setDepositAmount] = useState();
   const [canDeposit, setCanDeposit] = useState(true);
+  const [hasDypStaked, sethasDypStaked] = useState(false);
+  const [hasiDypStaked, sethasiDypStaked] = useState(false);
   const [errorMsg, seterrorMsg] = useState("");
   const [totalDeposited, setTotalDeposited] = useState(0);
   const [depositLoading, setdepositLoading] = useState(false);
   const [depositStatus, setdepositStatus] = useState("initial");
   const [selectedToken, setselectedToken] = useState();
-  const [allCommitments, setAllCommitments] = useState([]);
   const [allUserCommitments, setAllUserCommitments] = useState([]);
 
-
-
   const poolCap = 25000;
+
+  const idyp_pools = [
+    "0x41b8a58f4307ea722ad0a964966caa18a6011d93",
+    "0xf6DC9E51D4E0FCc19ca6426fB5422f1E9a24F2eE",
+    "0xFBe84Af34CdC22455f82e18B76Ca50D21d3aBF84",
+    "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d",
+    "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603",
+    "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d",
+  ];
+
+  const dyp_pools = [
+    "0x92A84052Fe6945949A295AF14a7506e3dc085492",
+    "0xbE030A667d9ee75a9FCdF2162A2C14ccCAB573dD",
+    "0x0fafe78e471b52bc4003984a337948ed55284573",
+    "0xC9075092Cc46E176B1F3c0D0EB8223F1e46555B0",
+    "0x998A9F0DF7DAF20c2B0Bb379Dcae394636926a96",
+    "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603",
+    "0x9845a667b1A603FF21596FDdec51968a2bccAc11",
+    "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603",
+  ];
+
+  const checkStakedPools = () => {
+    const dypResult = userPools.filter((item) => {
+      return dyp_pools.includes(item.contract_address.toLowerCase());
+    });
+    const idypResult = userPools.filter((item) => {
+      return idyp_pools.includes(item.contract_address.toLowerCase());
+    });
+    if (idypResult.length > 0) {
+      sethasiDypStaked(true);
+    }
+    if (dypResult.length > 0) {
+      sethasDypStaked(true);
+    }
+  };
 
   const requirements = [
     {
       icon: dyp,
       coin: "DYP Token",
       value: "Holder/Staker",
-      active: false,
+      active: hasDypStaked || hasDypBalance,
     },
     {
       icon: idyp,
       coin: "iDYP Token",
       value: "Holder/Staker",
-      active: false,
+      active: hasiDypStaked || hasiDypBalance,
     },
     {
       icon: premium,
       coin: "Premium",
       value: "Subscriber",
-      active: false,
+      active: isPremium,
     },
   ];
 
@@ -191,7 +118,7 @@ const Whitelist = ({
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      if (slice >= dummyTable.length) {
+      if (slice >= allUserCommitments.length) {
         setSlice(5);
       } else {
         setSlice(slice + 3);
@@ -199,6 +126,7 @@ const Whitelist = ({
     }, 2000);
   };
 
+  
   const handleChangeChain = async (hexChain, chain) => {
     await handleSwitchNetworkhook(hexChain)
       .then(() => {
@@ -225,43 +153,54 @@ const Whitelist = ({
     } else setTokenBalance(0);
   };
 
-  const getAllCommitments = async()=>{
-        // window.web3 = new Web3(window.ethereum);
-    // let commitment_contract = new window.web3.eth.Contract(
-    //   window.COMMITMENT_ABI,
-    //   window.config.commitment_address
-    // );
-    const result = await axios.get(`https://api.bscscan.com/api?module=account&action=txlist&address=0x6902dC3Fcaf44f7Beef45ec63Bafab3cAE04D4Df&startblock=0&endblock=99999999&sort=desc&apikey=4WC29K99XWH85RBVC5KAFRQXTZJ6AVMXZK`)
-    if(result && result.status === 200) {
-      setAllCommitments(result.data.result.filter((item)=>{return item.functionName === 'commit(address, uint256)'}))
-    }
-  }
+  const getUserCommitment = async () => {
+    let commitment_contract = new window.bscWeb3.eth.Contract(
+      window.COMMITMENT_ABI,
+      window.config.commitment_address
+    );
 
-  const getUserCommitment = async()=>{
-
-    // window.web3 = new Web3(window.ethereum);
-    // let commitment_contract = new window.web3.eth.Contract(
-    //   window.COMMITMENT_ABI,
-    //   window.config.commitment_address
-    // );
-
-
-    // const sc_commitments = await commitment_contract.getPastEvents('Committed').catch((e)=>{console.error(e)})
-
-    // console.log(sc_commitments)
-  
-    if(allCommitments && allCommitments.length > 0) {
-      const userCommitmets = allCommitments.filter((item)=>{return item.from.toLowerCase() === coinbase.toLowerCase()})
-      if(userCommitmets && userCommitmets.length>0) {
-        const commitment_array = userCommitmets.map((item)=>{
-        return {...item, chain: 'bnb', }
+    const total_commitments = await commitment_contract.methods
+      .commitmentCountForUser(
+        coinbase,
+        window.config.commitmentbnb_tokens[0].address
+      )
+      .call()
+      .catch((e) => {
+        console.error(e);
+        return [];
+      });
+    let totalTokenDeposited = 0;
+    if (total_commitments && total_commitments > 0) {
+      const finalResult = await Promise.all(
+        window.range(0, total_commitments - 1).map(async (i) => {
+          const commitment_list = await commitment_contract.methods
+            .commitments(
+              coinbase,
+              window.config.commitmentbnb_tokens[0].address,
+              i
+            )
+            .call()
+            .catch((e) => {
+              console.error(e);
+              return [];
+            });
+          totalTokenDeposited += commitment_list.amount / 1e18;
+          return {
+            commitment_list,
+            network: "BNB Chain",
+          };
         })
-      }
-      setAllUserCommitments(userCommitmets)
+      );
+      setTotalDeposited(totalTokenDeposited);
+      setAllUserCommitments(finalResult);
+    } else {
+      setAllUserCommitments([]);
+      setTotalDeposited(0);
     }
-  }
 
-
+    // console.log(commitment_list);
+  };
+  // console.log("userPools", userPools);
   const checkApproval = async (amount) => {
     const result = await window
       .checkapproveStakePool(
@@ -275,10 +214,11 @@ const Whitelist = ({
       });
 
     let result_formatted = new window.BigNumber(result).div(1e18).toFixed(6);
- 
+
     if (
       Number(result_formatted) >= Number(amount) &&
-      Number(result_formatted) !== 0 && Number(amount) >= 100
+      Number(result_formatted) !== 0
+      // && Number(amount) >= 100
     ) {
       setdepositStatus("deposit");
     } else {
@@ -327,6 +267,7 @@ const Whitelist = ({
         setdepositLoading(false);
         setdepositStatus("success");
         getUserBalanceForToken(selectedToken);
+        getUserCommitment();
         setTimeout(() => {
           setdepositStatus("initial");
           setDepositAmount("");
@@ -381,13 +322,11 @@ const Whitelist = ({
           "Deposit amount is greater than available quota. Please add another amount."
         );
         setCanDeposit(false);
-      } else if(depositAmount < 100) {
-        setCanDeposit(false);
-        seterrorMsg(
-          "Minimum deposit amount is 100" + " " + selectedCoin.coin
-        );
       }
-      
+      //  else if (depositAmount < 100) {
+      //   setCanDeposit(false);
+      //   seterrorMsg("Minimum deposit amount is 100" + " " + selectedCoin.coin);
+      // }
       else {
         seterrorMsg("");
         setCanDeposit(true);
@@ -434,20 +373,27 @@ const Whitelist = ({
         coin: window.config.commitmenteth_tokens[0].symbol,
         address: window.config.commitmenteth_tokens[0].address,
       });
-      getUserBalanceForToken(window.config.commitmenteth_tokens[0]);
+      setTokenBalance(0)
       setselectedToken(window.config.commitmenteth_tokens[0]);
     }
   }, [isConnected, networkId, coinbase]);
 
-  useEffect(()=>{
-    getAllCommitments()
-  },[])
-
-  useEffect(()=>{
-    if(isConnected && coinbase) {
-      getUserCommitment()
+  useEffect(() => {
+    if (isConnected && coinbase) {
+      getUserCommitment();
+    } else {
+      setAllUserCommitments([])
     }
-  },[isConnected, coinbase])
+  }, [isConnected, coinbase]);
+
+  useEffect(() => {
+    if (userPools && userPools.length > 0) {
+      checkStakedPools();
+    } else {
+      sethasDypStaked(false);
+      sethasiDypStaked(false);
+    }
+  }, [userPools]);
 
   return (
     <div className="container-lg p-0">
@@ -679,57 +625,81 @@ const Whitelist = ({
                 )}
                 <div className="d-flex align-items-center mt-2 gap-1">
                   <span className="commitment-input-span">Estimation:</span>
-                  <span className="wod-tokens-commited">{getFormattedNumber((depositAmount ?? 0)/0.0325, 4)} WOD</span>
+                  <span className="wod-tokens-commited">
+                    {getFormattedNumber((depositAmount ?? 0) / 0.0325, 4)} WOD
+                  </span>
                   <span className="commitment-input-span">
                     (distributed on BNB Chain)
                   </span>
                 </div>
               </div>
               <div className="d-flex w-100 justify-content-center mb-3">
-                <button
-                  disabled={
-                    depositAmount === "" ||
-                    depositLoading === true ||
-                    canDeposit === false
-                      ? true
-                      : false
-                  }
-                  className={`btn filledbtn ${
-                    ((depositAmount === "" && depositStatus === "initial") ||
-                      canDeposit === false) &&
-                    "disabled-btn"
-                  }  ${
-                    depositStatus === "deposit" || depositStatus === "success"
-                      ? "success-button"
-                      : depositStatus === "fail"
-                      ? "fail-button"
-                      : null
-                  } d-flex justify-content-center align-items-center gap-2 m-auto`}
-                  onClick={() => {
-                    depositStatus === "deposit"
-                      ? handleStake()
-                      : depositStatus === "initial" && depositAmount !== ""
-                      ? handleApprove()
-                      : console.log("");
-                  }}
-                >
-                  {depositLoading ? (
-                    <div
-                      class="spinner-border spinner-border-sm text-light"
-                      role="status"
-                    >
-                      <span class="visually-hidden">Loading...</span>
-                    </div>
-                  ) : depositStatus === "initial" ? (
-                    <>Approve</>
-                  ) : depositStatus === "deposit" ? (
-                    <>Deposit</>
-                  ) : depositStatus === "success" ? (
-                    <>Success</>
-                  ) : (
-                    <>Failed</>
-                  )}
-                </button>
+                {isConnected && (networkId === 1 || networkId === 56) ? (
+                  <button
+                    disabled={
+                      depositAmount === "" ||
+                      depositLoading === true ||
+                      canDeposit === false ||
+                      !isConnected ||
+                      !depositAmount
+                        ? true
+                        : false
+                    }
+                    className={`btn filledbtn ${
+                      ((depositAmount === "" && depositStatus === "initial") ||
+                        canDeposit === false ||
+                        !isConnected ||
+                        !depositAmount) &&
+                      "disabled-btn"
+                    }  ${
+                      depositStatus === "deposit" || depositStatus === "success"
+                        ? "success-button"
+                        : depositStatus === "fail"
+                        ? "fail-button"
+                        : null
+                    } d-flex justify-content-center align-items-center gap-2 m-auto`}
+                    onClick={() => {
+                      depositStatus === "deposit"
+                        ? handleStake()
+                        : depositStatus === "initial" && depositAmount !== ""
+                        ? handleApprove()
+                        : console.log("");
+                    }}
+                  >
+                    {depositLoading ? (
+                      <div
+                        class="spinner-border spinner-border-sm text-light"
+                        role="status"
+                      >
+                        <span class="visually-hidden">Loading...</span>
+                      </div>
+                    ) : depositStatus === "initial" ? (
+                      <>Approve</>
+                    ) : depositStatus === "deposit" ? (
+                      <>Deposit</>
+                    ) : depositStatus === "success" ? (
+                      <>Success</>
+                    ) : (
+                      <>Failed</>
+                    )}
+                  </button>
+                ) : !isConnected ? (
+                  <button
+                    className="connectbtn btn m-auto"
+                    onClick={handleConnection}
+                  >
+                    <img src={wallet} alt="" /> Connect wallet
+                  </button>
+                ) : (
+                  <button
+                    className="connectbtn btn m-auto"
+                    onClick={() => {
+                      handleChangeChain("0x38", "56");
+                    }}
+                  >
+                    Change Network
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -737,7 +707,9 @@ const Whitelist = ({
         <div className="col-12 col-lg-5 mt-2 mt-lg-0">
           <div className="d-flex flex-column gap-2">
             <div className="my-commitment-wrapper py-4 w-100 d-flex flex-column align-items-center gap-2">
-              <h6 className="mb-0 my-commitment-value">$0</h6>
+              <h6 className="mb-0 my-commitment-value">
+                ${getFormattedNumber(totalDeposited)}
+              </h6>
               <span className="my-commitment-span">My Commitment</span>
             </div>
             <div className="whitelist-info-item d-flex flex-column w-100 p-3">
@@ -778,127 +750,175 @@ const Whitelist = ({
                 ))}
               </div>
               <div className="requirements-divider mt-3"></div>
-              <span className="eligible-span mt-3">
-                You are eligible for the whitelist.
-              </span>
-              {/* <div className="req-buy-dyp-wrapper mt-2 d-flex align-items-center justify-content-between w-100 p-2">
-                <span className="req-buy-dyp">Buy DYP tokens to become eligible for the whitelist</span>
-                <img src={buyToken} alt="" />
-              </div> */}
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="row mt-4">
-        <div className="col-12">
-          <div className="whitelist-info-item-2 d-flex flex-column">
-            <div className="d-flex align-items-center p-3 justify-content-between">
-              <div className="d-flex align-items-center gap-2">
-                <h6 className="mb-0 whitelist-deposit-title">
-                  Commitment History
-                </h6>
-              </div>
-              <Tooltip
-                title={
-                  <>
-                    <div className="d-flex flex-column gap-2">
-                      <span className="whitelist-tooltip-content-text">
-                        After making a commitment, your status will initially be
-                        set to <b>Successful.</b>
-                      </span>
-                      <span className="whitelist-tooltip-content-text">
-                        Once the team reviews your commitment, there are two
-                        possible outcomes:
-                      </span>
-                      <ul>
-                        <li className="whitelist-tooltip-content-text mb-2">
-                          <b>Approved:</b> You are eligible to receive the WOD
-                          token.
-                        </li>
-                        <li className="whitelist-tooltip-content-text mb-2">
-                          <b>Refund:</b> You can withdraw your initial
-                          commitment.
-                        </li>
-                      </ul>
-                    </div>
-                  </>
-                }
-                enterDelay={0}
-                  leaveDelay={2000}
-              >
-                <img src={tooltipIcon} alt="" />
-              </Tooltip>
-            </div>
-            <div className="outer-table-wrapper p-3">
-              <table
-                border={0}
-                className="table item-history-table"
-                style={{ borderSpacing: "10px" }}
-              >
-                <thead className="item-history-table-thead">
-                  <th className="item-history-table-th text-center">No.</th>
-                  <th className="item-history-table-th text-center">Date</th>
-                  <th className="item-history-table-th text-center">Network</th>
-                  <th className="item-history-table-th text-center">Wallet</th>
-                  <th className="item-history-table-th text-center">
-                    Commited
-                  </th>
-                  <th className="item-history-table-th text-center">
-                    WOD Amount
-                  </th>
-                  <th className="item-history-table-th text-center">Status</th>
-                </thead>
-                <tbody>
-                  {dummyTable.slice(0, slice).map((item, index) => (
-                    <tr key={index}>
-                      <td className="item-history-table-td first-td left-border">
-                        #{index + 1}
-                      </td>
-                      <td className="item-history-table-td text-center">
-                        {item.date}
-                      </td>
-                      <td className="item-history-table-td text-center">
-                        <div className="d-flex align-items-center justify-content-center gap-2">
-                          <img src={item.networkIcon} alt="" />
-                          {item.network}
-                        </div>
-                      </td>
-                      <td className="item-history-table-td table-greentext text-center">
-                        {shortAddress(item.wallet)}
-                      </td>
-                      <td className="item-history-table-td text-center">
-                        {getFormattedNumber(item.commited, 0)} USDT
-                      </td>
-                      <td className="item-history-table-td right-border text-center">
-                        {getFormattedNumber(item.amount, 0)} WOD
-                      </td>
-                      <td className="item-history-table-td last-td table-greentext right-border text-center">
-                        {item.status === "Refund" ? (
-                          <button className="refund-btn">{item.status}</button>
-                        ) : (
-                          <>{item.status}</>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            {loading && (
-              <div className="d-flex w-100 justify-content-center">
-                <div class="spinner-border text-info" role="status">
-                  <span class="sr-only">Loading...</span>
+              {isConnected &&
+              (isPremium ||
+                hasDypBalance ||
+                hasiDypBalance ||
+                hasDypStaked ||
+                hasiDypStaked) ? (
+                <span className="eligible-span mt-3">
+                  You are eligible for the whitelist.
+                </span>
+              ) : (
+                <div className="req-buy-dyp-wrapper mt-2 d-flex align-items-center justify-content-between w-100 p-2">
+                  <span className="req-buy-dyp">
+                    Buy DYP tokens to become eligible for the whitelist
+                  </span>
+                  <img src={buyToken} alt="" />
                 </div>
-              </div>
-            )}
-            <div className="d-flex my-3 w-100 align-items-center justify-content-center">
-              <button className="btn filledbtn" onClick={handleViewMore}>
-                {slice >= dummyTable.length ? "View Less" : "View More"}
-              </button>
+              )}
             </div>
           </div>
         </div>
       </div>
+      {allUserCommitments && allUserCommitments.length > 0 && (
+        <div className="row mt-4">
+          <div className="col-12">
+            <div className="whitelist-info-item-2 d-flex flex-column">
+              <div className="d-flex align-items-center p-3 justify-content-between">
+                <div className="d-flex align-items-center gap-2">
+                  <h6 className="mb-0 whitelist-deposit-title">
+                    Commitment History
+                  </h6>
+                </div>
+                <Tooltip
+                  title={
+                    <>
+                      <div className="d-flex flex-column gap-2">
+                        <span className="whitelist-tooltip-content-text">
+                          After making a commitment, your status will initially
+                          be set to <b>Successful.</b>
+                        </span>
+                        <span className="whitelist-tooltip-content-text">
+                          Once the team reviews your commitment, there are two
+                          possible outcomes:
+                        </span>
+                        <ul>
+                          <li className="whitelist-tooltip-content-text mb-2">
+                            <b>Approved:</b> You are eligible to receive the WOD
+                            token.
+                          </li>
+                          <li className="whitelist-tooltip-content-text mb-2">
+                            <b>Refund:</b> You can withdraw your initial
+                            commitment.
+                          </li>
+                        </ul>
+                      </div>
+                    </>
+                  }
+                  enterDelay={0}
+                  leaveDelay={2000}
+                >
+                  <img src={tooltipIcon} alt="" />
+                </Tooltip>
+              </div>
+              <div className="outer-table-wrapper p-3">
+                <table
+                  border={0}
+                  className="table item-history-table"
+                  style={{ borderSpacing: "10px" }}
+                >
+                  <thead className="item-history-table-thead">
+                    <th className="item-history-table-th text-center">No.</th>
+                    <th className="item-history-table-th text-center">Date</th>
+                    <th className="item-history-table-th text-center">
+                      Network
+                    </th>
+                    <th className="item-history-table-th text-center">
+                      Wallet
+                    </th>
+                    <th className="item-history-table-th text-center">
+                      Commited
+                    </th>
+                    <th className="item-history-table-th text-center">
+                      WOD Amount
+                    </th>
+                    <th className="item-history-table-th text-center">
+                      Status
+                    </th>
+                  </thead>
+                  <tbody>
+                    {allUserCommitments.map((item, index) => {
+                      return (
+                        <tr key={index}>
+                          <td className="item-history-table-td first-td left-border">
+                            #{index + 1}
+                          </td>
+                          <td className="item-history-table-td text-center">
+                            {new Intl.DateTimeFormat("en-US", {
+                              year: "numeric",
+                              month: "2-digit",
+                              day: "2-digit",
+                            }).format(item.commitment_list.timestamp * 1000)}
+                          </td>
+                          <td className="item-history-table-td text-center">
+                            <div className="d-flex align-items-center justify-content-center gap-2">
+                              <img
+                                src={item.network === "BNB Chain" ? bnb : eth}
+                                alt=""
+                              />
+                              {item.network}
+                            </div>
+                          </td>
+                          <td className="item-history-table-td table-greentext text-center">
+                            <a className="table-greentext" href={`https://bscscan.com/address/${coinbase}`} target="_blank" rel="noreferrer">{shortAddress(coinbase)}</a>
+                          </td>
+                          <td className="item-history-table-td text-center">
+                            {getFormattedNumber(
+                              item.commitment_list.amount / 1e18,
+                              0
+                            )}{" "}
+                            USDT
+                          </td>
+                          <td className="item-history-table-td right-border text-center">
+                            {getFormattedNumber(
+                              item.commitment_list.amount / 1e18 / 0.0325,
+                              0
+                            )}{" "}
+                            WOD
+                          </td>
+                          <td className="item-history-table-td last-td table-greentext right-border text-center">
+                            {item.commitment_list.refunded === true ? (
+                              <button className="refund-btn">
+                                {item.status}
+                              </button>
+                            ) : (
+                              <>
+                                {item.commitment_list.accepted === false &&
+                                item.commitment_list.refunded === false
+                                  ? "Successful"
+                                  : item.commitment_list.accepted === true
+                                  ? "Approved"
+                                  : "Refund"}
+                              </>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+              {loading && (
+                <div className="d-flex w-100 justify-content-center">
+                  <div class="spinner-border text-info" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                </div>
+              )}
+              {allUserCommitments && allUserCommitments.length > 5 && (
+                <div className="d-flex my-3 w-100 align-items-center justify-content-center">
+                  <button className="btn filledbtn" onClick={handleViewMore}>
+                    {slice >= allUserCommitments.length
+                      ? "View Less"
+                      : "View More"}
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
