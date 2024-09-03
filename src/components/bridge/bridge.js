@@ -306,7 +306,11 @@ export default function initBridge({
               : "BSC"
           }&txHash=${this.state.txHash}`;
         console.log({ url });
-        let args = await window.jQuery.get(url);
+        // let args = await window.jQuery.get(url);
+        let args = await fetch(url)
+        .then(response => response.json())
+        .then(data => {return data})
+        .catch(error => console.error('Error:', error));
         console.log({ args });
         let bridge = bridgeBSC;
         bridge
@@ -847,7 +851,7 @@ export default function initBridge({
                       cursor: "pointer",
                     }}
                   />
-                  <div className="col-12 position-relative">
+                  <div className="col-12">
                     <div className="purplediv"></div>
                     <div className="l-box">
                       <div className="pb-0">

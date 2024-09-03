@@ -9,7 +9,7 @@ const VideoCard = ({title, onSelect, thumbnail, walletName, walletImage, active}
     <div className="d-flex flex-column gap-2 mt-2">
         <span className="video-card-title">{title.length < 15 ? title : title.slice(0,15) + "..."}</span>
         <div className="d-flex align-items-center gap-2">
-            <img src={require(`./assets/buydypItems/${walletImage}`).default} height={15} width={15} alt="" className="" />
+            <img src={require(`./assets/buydypItems/${walletImage}`)} height={15} width={15} alt="" className="" />
             <span className="video-card-time">{walletName}</span>
         </div>
     </div>

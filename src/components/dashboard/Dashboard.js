@@ -49,8 +49,13 @@ import ethActive from "../earn/assets/ethActive.svg";
 import bnb from "../earn/assets/bnb.svg";
 import bnbActive from "../earn/assets/bnbActive.svg";
 
+import base from "../earn/assets/base.svg";
+import baseActive from "../earn/assets/baseActive.svg";
+
 import avax from "../earn/assets/avax.svg";
 import avaxActive from "../earn/assets/avaxActive.svg";
+import WhitelistPopup from "../whitelistPopup/WhitelistPopup";
+import StakingDypiusBase1 from "../FARMINNG/stakingDypiusBase1";
 
 const Dashboard = ({
   isConnected,
@@ -101,6 +106,8 @@ const Dashboard = ({
   const [ethPools, setEthPools] = useState([]);
   const [bnbPools, setBnbPools] = useState([]);
   const [avaxPools, setAvaxPools] = useState([]);
+  const [basePools, setBasePools] = useState([]);
+
 
   const wbsc_address = "0x2170Ed0880ac9A755fd29B2688956BD959F933F8";
   let premiumDay = new Date("2024-04-17T15:00:00.000+02:00");
@@ -110,6 +117,8 @@ const Dashboard = ({
   const [selectedpoolType, setselectedpoolType] = useState("");
 
   const [ethPoolsDyp, setethPoolsDyp] = useState([]);
+  const [basePoolsDyp, setbasePoolsDyp] = useState([]);
+
   const [ethPoolsiDyp, setethPoolsiDyp] = useState([]);
   const [bnbPoolsDyp, setbnbPoolsDyp] = useState([]);
   const [bnbPoolsiDyp, setbnbPoolsiDyp] = useState([]);
@@ -119,6 +128,7 @@ const Dashboard = ({
   const [showMobilePopup, setshowMobilePopup] = useState(false);
   const [resultFilteredPool, setresultFilteredPool] = useState([]);
   const [selectedIndex, setselectedIndex] = useState();
+  const [whitelistPopup, setwhitelistPopup] = useState(true);
 
   const phase2_pools = [
     {
@@ -259,6 +269,10 @@ const Dashboard = ({
       .get("https://api.dyp.finance/api/the_graph_bsc_v2")
       .catch((err) => console.error(err));
 
+      const basePool = await axios
+      .get("https://api.dyp.finance/api/get_staking_info_base_new")
+      .catch((err) => console.error(err));
+
     const bnbStakingPool = await axios
       .get(`https://api.dyp.finance/api/get_staking_info_bnb_new`)
       .catch((err) => {
@@ -270,7 +284,6 @@ const Dashboard = ({
       .catch((err) => {
         console.log(err);
       });
-
 
     const avaxStakingPool = await axios
       .get(`https://api.dyp.finance/api/get_staking_info_avax`)
@@ -298,7 +311,11 @@ const Dashboard = ({
 
     if (
       bnbStakingPool &&
-      bnbStakingPool.status === 200 && bnbStakingPool_old && bnbStakingPool_old.status === 200 &&
+      bnbStakingPool.status === 200 &&
+      basePool &&
+      basePool.status === 200 &&
+      bnbStakingPool_old &&
+      bnbStakingPool_old.status === 200 &&
       avaxStakingPool &&
       avaxStakingPool.status === 200 &&
       avaxStakingPoolNew &&
@@ -324,6 +341,9 @@ const Dashboard = ({
       setTheBnbPool(bnbpool);
       const testbnbFarming = bnbpool[0];
       const finalBnbFarmingpool = testbnbFarming[1];
+
+
+      const dypBase = basePool.data.stakingInfoDYPBASE;
 
       const dypBnb = bnbStakingPool.data.stakingInfoDYPBnb;
       const idypBnb = bnbStakingPool_old.data.stakingInfoiDYPBnb;
@@ -371,6 +391,27 @@ const Dashboard = ({
       setavaxPoolsDyp(activeAvax2);
       setavaxPoolsiDyp(object2activeAvax);
 
+
+      
+      const object2base = dypBase.map((item) => {
+        return {
+          ...item,
+          tvl_usd: item.tvl_usd,
+          tokenType: "dyp",
+          chain: "base",
+        };
+      });
+
+      const activeBase2 = object2base.filter((item) => {
+        return item.expired === "No";
+      });
+      const allActivebase = [...activeBase2];
+      const sortedActivebase = allActivebase.sort(function (a, b) {
+        return b.apy_percent - a.apy_percent;
+      });
+      setBasePools(sortedActivebase);
+setbasePoolsDyp(sortedActivebase)
+
       const object2bnb = dypBnb.map((item) => {
         return {
           ...item,
@@ -404,10 +445,10 @@ const Dashboard = ({
       const sortedActive_idypbnb = activeidypBnb2.sort(function (a, b) {
         return b.apy_percent - a.apy_percent;
       });
-      
+
       setBnbPools(sortedActive);
       setbnbPoolsDyp(activeBnb2);
-      setbnbPoolsiDyp(activeidypBnb2)
+      setbnbPoolsiDyp(activeidypBnb2);
       const bnbAggregatorPool = aggregatorPools.find((item) => {
         return item.name.toLowerCase() === "bnb";
       });
@@ -462,10 +503,11 @@ const Dashboard = ({
       const allpoolsEthereum = [
         ...ethereumDyp,
         // ...object2_phase2_eth,
-        ...ethereumIdyp
+        ...ethereumIdyp,
       ];
 
-      const object2 = [...ethereumDyp,
+      const object2 = [
+        ...ethereumDyp,
         //  ...object2_phase2_eth
       ].map((item) => {
         return {
@@ -566,7 +608,8 @@ const Dashboard = ({
       });
 
       const allPools = [
-        ...sortedActiveeth, ...sortedActive,
+        ...sortedActiveeth,
+        ...sortedActive,
         ...sortedActiveAvax,
 
         // ...bnbAggregatorPool_formatted,
@@ -576,9 +619,8 @@ const Dashboard = ({
       ].sort(function (a, b) {
         return b.apy_percent - a.apy_percent;
       });
-      
 
-      const finalPools = [sortedActiveeth[0], sortedActive_idypbnb[0]];
+      const finalPools = [sortedActiveeth[0], sortedActivebase[0]];
 
       setTopPools(finalPools);
     }
@@ -672,6 +714,7 @@ const Dashboard = ({
     tokentype,
     selectedPool,
     ethDypPool,
+    baseDypPool,
     ethiDypPool,
     bnbDypPool,
     bnbIdypPool,
@@ -710,6 +753,44 @@ const Dashboard = ({
         } else if (
           locktimeToCheck !== selectedPool.lock_time &&
           !ethiDypPool?.find((obj) => {
+            return obj.lock_time === locktimeToCheck;
+          })
+        ) {
+          return "method-btn-disabled";
+        }
+      }
+    } if (chain === "base") {
+      if (tokentype === "dyp") {
+        if (locktimeToCheck === selectedPool.lock_time) {
+          return "method-btn-active";
+        } else if (
+          locktimeToCheck !== selectedPool.lock_time &&
+          baseDypPool?.find((obj) => {
+            return obj.lock_time === locktimeToCheck;
+          })
+        ) {
+          return "method-btn";
+        } else if (
+          locktimeToCheck !== selectedPool.lock_time &&
+          !baseDypPool?.find((obj) => {
+            return obj.lock_time === locktimeToCheck;
+          })
+        ) {
+          return "method-btn-disabled";
+        }
+      } else if (tokentype === "idyp") {
+        if (locktimeToCheck === selectedPool.lock_time) {
+          return "method-btn-active";
+        } else if (
+          locktimeToCheck !== selectedPool.lock_time &&
+          baseDypPool?.find((obj) => {
+            return obj.lock_time === locktimeToCheck;
+          })
+        ) {
+          return "method-btn";
+        } else if (
+          locktimeToCheck !== selectedPool.lock_time &&
+          !baseDypPool?.find((obj) => {
             return obj.lock_time === locktimeToCheck;
           })
         ) {
@@ -800,6 +881,7 @@ const Dashboard = ({
     locktime,
     selectedpoolType,
     ethPoolsDyp,
+    basePoolsDyp,
     ethPoolsiDyp,
     bnbPoolsDyp,
     bnbPoolsiDyp,
@@ -818,6 +900,26 @@ const Dashboard = ({
         }
       } else if (selectedpoolType === "idyp") {
         const result = ethPoolsiDyp.filter((item) => {
+          return item.lock_time === locktime;
+        });
+        if (result) {
+          setresultFilteredPool(result);
+
+          setselectedPool(...result);
+        }
+      }
+    }  if (selectedchain === "nsdr") {
+      if (selectedpoolType === "dyp") {
+        const result = basePoolsDyp.filter((item) => {
+          return item.lock_time === locktime;
+        });
+
+        if (result) {
+          setresultFilteredPool(result);
+          setselectedPool(...result);
+        }
+      } else if (selectedpoolType === "idyp") {
+        const result = basePoolsDyp.filter((item) => {
           return item.lock_time === locktime;
         });
         if (result) {
@@ -965,12 +1067,12 @@ const Dashboard = ({
                 <div>
                   <div className="row m-0 gap-4 toppool-allwrapper">
                     {topPools.length > 0 &&
-                      //  && (network === 1 ||
-                      //   network === 1030 ||
-                      //   network === 8453 ||
-                      //   network === 0 ||
-                      //   network === 1482601649)
-                      loading === false ? (
+                    //  && (network === 1 ||
+                    //   network === 1030 ||
+                    //   network === 8453 ||
+                    //   network === 0 ||
+                    //   network === 1482601649)
+                    loading === false ? (
                       topPools.slice(0, 2).map((item, index) => {
                         return (
                           <div
@@ -983,7 +1085,7 @@ const Dashboard = ({
                                   src={require("./assets/bnblogo.svg").default}
                                   alt=""
                                   style={{ height: 20, width: 20 }}
-                                  className="popup-chains-icon"
+                                  className="popup-chains-icon d-block"
                                 ></img>
                                 <h6
                                   className={`d-flex justify-content-center align-items-center chain-popup-text-active`}
@@ -998,7 +1100,7 @@ const Dashboard = ({
                                   src={require("./assets/ethereum.svg").default}
                                   alt=""
                                   style={{ height: 20, width: 20 }}
-                                  className="popup-chains-icon"
+                                  className="popup-chains-icon d-block"
                                 ></img>
                                 <h6
                                   className={`d-flex justify-content-center align-items-center chain-popup-text-active`}
@@ -1013,7 +1115,7 @@ const Dashboard = ({
                                   src={require("./assets/base.svg").default}
                                   alt=""
                                   style={{ height: 20, width: 20 }}
-                                  className="popup-chains-icon"
+                                  className="popup-chains-icon d-block"
                                 ></img>
                                 <h6
                                   className={`d-flex justify-content-center align-items-center chain-popup-text-active`}
@@ -1028,7 +1130,7 @@ const Dashboard = ({
                                   src={require("./assets/avaxlogo.svg").default}
                                   alt=""
                                   style={{ height: 20, width: 20 }}
-                                  className="popup-chains-icon"
+                                  className="popup-chains-icon d-block"
                                 ></img>
                                 <h6
                                   className={`d-flex justify-content-center align-items-center chain-popup-text-active`}
@@ -1044,8 +1146,8 @@ const Dashboard = ({
                               isStaked={
                                 userPools.length > 0
                                   ? userPools.find(
-                                    (obj) => obj.contract_address === item.id
-                                  )
+                                      (obj) => obj.contract_address === item.id
+                                    )
                                     ? true
                                     : false
                                   : false
@@ -1056,33 +1158,33 @@ const Dashboard = ({
                               apr={item.apy_percent + "%"}
                               tvl={
                                 item.type === "staking" &&
-                                  item.pair_name === "ETH"
+                                item.pair_name === "ETH"
                                   ? "$" + getFormattedNumber(totalTvlETH)
                                   : item.type === "staking" &&
                                     item.pair_name === "BNB"
-                                    ? "$" + getFormattedNumber(totalTvlBNB)
-                                    : item.pair_name === "AVAX" &&
-                                      item.type === "staking"
-                                      ? "$" + getFormattedNumber(totalTvlAVAX)
-                                      : item.tvl_usd === "--"
-                                        ? item.tvl_usd
-                                        : "$" + getFormattedNumber(item.tvl_usd)
+                                  ? "$" + getFormattedNumber(totalTvlBNB)
+                                  : item.pair_name === "AVAX" &&
+                                    item.type === "staking"
+                                  ? "$" + getFormattedNumber(totalTvlAVAX)
+                                  : item.tvl_usd === "--"
+                                  ? item.tvl_usd
+                                  : "$" + getFormattedNumber(item.tvl_usd)
                               }
                               lockTime={item.lock_time ? item.lock_time : 30}
                               tokenLogo={
                                 item.icon
                                   ? item.icon
                                   : item.pair_name === "iDYP"
-                                    ? "idypius.svg"
-                                    : item.pair_name === "DYP"
-                                      ? "dyplogo.svg"
-                                      : item.pair_name === "BNB"
-                                        ? "bnbChain.svg"
-                                        : item.pair_name === "ETH"
-                                          ? "ethereum.svg"
-                                          : item.pair_name === "AVAX"
-                                            ? "avax.svg"
-                                            : "newCawsLogo.png"
+                                  ? "idypius.svg"
+                                  : item.pair_name === "DYP"
+                                  ? "dyplogo.svg"
+                                  : item.pair_name === "BNB"
+                                  ? "bnbChain.svg"
+                                  : item.pair_name === "ETH"
+                                  ? "ethereum.svg"
+                                  : item.pair_name === "AVAX"
+                                  ? "avax.svg"
+                                  : "newCawsLogo.png"
                               }
                               onShowDetailsClick={() => {
                                 setActiveCard(topPools[index]);
@@ -1097,6 +1199,7 @@ const Dashboard = ({
                                   item.lock_time,
                                   item.tokenType,
                                   ethPoolsDyp,
+                                  basePoolsDyp,
                                   ethPoolsiDyp,
                                   bnbPoolsDyp,
                                   bnbPoolsiDyp,
@@ -1159,12 +1262,12 @@ const Dashboard = ({
                 <div className="d-flex flex-column gap-4">
                   <div className="row m-0 gap-4 toppool-allwrapper">
                     {topPools.length > 0 &&
-                      // (network === 1 ||
-                      //   network === 1030 ||
-                      //   network === 8453 ||
-                      //   network === 0 ||
-                      //   network === 1482601649)&&
-                      loading === false ? (
+                    // (network === 1 ||
+                    //   network === 1030 ||
+                    //   network === 8453 ||
+                    //   network === 0 ||
+                    //   network === 1482601649)&&
+                    loading === false ? (
                       topPools.slice(0, 2).map((item, index) => {
                         return (
                           <div className="poolscardwrapper cursor-pointer position-relative p-0 position-relative">
@@ -1174,7 +1277,7 @@ const Dashboard = ({
                                   src={require("./assets/bnblogo.svg").default}
                                   alt=""
                                   style={{ height: 20, width: 20 }}
-                                  className="popup-chains-icon"
+                                  className="popup-chains-icon d-block"
                                 ></img>
                                 <h6
                                   className={`d-flex justify-content-center align-items-center chain-popup-text-active`}
@@ -1189,7 +1292,7 @@ const Dashboard = ({
                                   src={require("./assets/ethereum.svg").default}
                                   alt=""
                                   style={{ height: 20, width: 20 }}
-                                  className="popup-chains-icon"
+                                  className="popup-chains-icon d-block"
                                 ></img>
                                 <h6
                                   className={`d-flex justify-content-center align-items-center chain-popup-text-active`}
@@ -1204,7 +1307,7 @@ const Dashboard = ({
                                   src={require("./assets/base.svg").default}
                                   alt=""
                                   style={{ height: 20, width: 20 }}
-                                  className="popup-chains-icon"
+                                  className="popup-chains-icon d-block"
                                 ></img>
                                 <h6
                                   className={`d-flex justify-content-center align-items-center chain-popup-text-active`}
@@ -1219,7 +1322,7 @@ const Dashboard = ({
                                   src={require("./assets/avaxlogo.svg").default}
                                   alt=""
                                   style={{ height: 20, width: 20 }}
-                                  className="popup-chains-icon"
+                                  className="popup-chains-icon d-block"
                                 ></img>
                                 <h6
                                   className={`d-flex justify-content-center align-items-center chain-popup-text-active`}
@@ -1235,8 +1338,8 @@ const Dashboard = ({
                               isStaked={
                                 userPools.length > 0
                                   ? userPools.find(
-                                    (obj) => obj.contract_address === item.id
-                                  )
+                                      (obj) => obj.contract_address === item.id
+                                    )
                                     ? true
                                     : false
                                   : false
@@ -1247,33 +1350,33 @@ const Dashboard = ({
                               apr={item.apy_percent + "%"}
                               tvl={
                                 item.type === "staking" &&
-                                  item.pair_name === "ETH"
+                                item.pair_name === "ETH"
                                   ? "$" + getFormattedNumber(totalTvlETH)
                                   : item.type === "staking" &&
                                     item.pair_name === "BNB"
-                                    ? "$" + getFormattedNumber(totalTvlBNB)
-                                    : item.pair_name === "AVAX" &&
-                                      item.type === "staking"
-                                      ? "$" + getFormattedNumber(totalTvlAVAX)
-                                      : item.tvl_usd === "--"
-                                        ? item.tvl_usd
-                                        : "$" + getFormattedNumber(item.tvl_usd)
+                                  ? "$" + getFormattedNumber(totalTvlBNB)
+                                  : item.pair_name === "AVAX" &&
+                                    item.type === "staking"
+                                  ? "$" + getFormattedNumber(totalTvlAVAX)
+                                  : item.tvl_usd === "--"
+                                  ? item.tvl_usd
+                                  : "$" + getFormattedNumber(item.tvl_usd)
                               }
                               lockTime={item.lock_time ? item.lock_time : 30}
                               tokenLogo={
                                 item.icon
                                   ? item.icon
                                   : item.pair_name === "iDYP"
-                                    ? "idypius.svg"
-                                    : item.pair_name === "DYP"
-                                      ? "dyplogo.svg"
-                                      : item.pair_name === "BNB"
-                                        ? "bnbChain.svg"
-                                        : item.pair_name === "ETH"
-                                          ? "ethereum.svg"
-                                          : item.pair_name === "AVAX"
-                                            ? "avax.svg"
-                                            : "newCawsLogo.png"
+                                  ? "idypius.svg"
+                                  : item.pair_name === "DYP"
+                                  ? "dyplogo.svg"
+                                  : item.pair_name === "BNB"
+                                  ? "bnbChain.svg"
+                                  : item.pair_name === "ETH"
+                                  ? "ethereum.svg"
+                                  : item.pair_name === "AVAX"
+                                  ? "avax.svg"
+                                  : "newCawsLogo.png"
                               }
                               onShowDetailsClick={() => {
                                 setActiveCard(topPools[index]);
@@ -1288,6 +1391,7 @@ const Dashboard = ({
                                   item.lock_time,
                                   item.tokenType,
                                   ethPoolsDyp,
+                                  basePoolsDyp,
                                   ethPoolsiDyp,
                                   bnbPoolsDyp,
                                   bnbPoolsiDyp,
@@ -1358,7 +1462,7 @@ const Dashboard = ({
           </div>
           <div className="right-side-wrapper d-flex flex-column flex-md-row flex-xxl-column gap-4">
             <div className="launchpad-section-wrapper d-flex flex-column gap-3 gap-xxl-1">
-              <h6 className="header">DeFi Staking</h6>
+              <h6 className="header">World of Dypians</h6>
               <LaunchpadCard />
             </div>
             <ChainlinkCard />
@@ -1448,6 +1552,7 @@ const Dashboard = ({
                           selectedpoolType,
                           selectedPool,
                           ethPoolsDyp,
+                          basePoolsDyp,
                           ethPoolsiDyp,
                           bnbPoolsDyp,
                           bnbPoolsiDyp,
@@ -1460,6 +1565,7 @@ const Dashboard = ({
                             "No lock",
                             selectedpoolType,
                             ethPoolsDyp,
+                            basePoolsDyp,
                             ethPoolsiDyp,
                             bnbPoolsDyp,
                             bnbPoolsiDyp,
@@ -1477,6 +1583,7 @@ const Dashboard = ({
                           selectedpoolType,
                           selectedPool,
                           ethPoolsDyp,
+                          basePoolsDyp,
                           ethPoolsiDyp,
                           bnbPoolsDyp,
                           bnbPoolsiDyp,
@@ -1489,6 +1596,7 @@ const Dashboard = ({
                             "30 days",
                             selectedpoolType,
                             ethPoolsDyp,
+                            basePoolsDyp,
                             ethPoolsiDyp,
                             bnbPoolsDyp,
                             bnbPoolsiDyp,
@@ -1506,6 +1614,7 @@ const Dashboard = ({
                           selectedpoolType,
                           selectedPool,
                           ethPoolsDyp,
+                          basePoolsDyp,
                           ethPoolsiDyp,
                           bnbPoolsDyp,
                           bnbPoolsiDyp,
@@ -1518,6 +1627,7 @@ const Dashboard = ({
                             "60 days",
                             selectedpoolType,
                             ethPoolsDyp,
+                            basePoolsDyp,
                             ethPoolsiDyp,
                             bnbPoolsDyp,
                             bnbPoolsiDyp,
@@ -1526,10 +1636,12 @@ const Dashboard = ({
                           );
                         }}
                       >
-                        {selectedpoolType === "dyp" && selectedchain === "eth" &&
-                          <div className="new-beta-sidebar2 position-absolute">
-                            <span className="new-beta-text2">New</span>
-                          </div>}
+                        {selectedpoolType === "dyp" &&
+                          selectedchain === "eth" && (
+                            <div className="new-beta-sidebar2 position-absolute">
+                              <span className="new-beta-text2">New</span>
+                            </div>
+                          )}
                         60 Days
                       </button>
                       <button
@@ -1539,6 +1651,7 @@ const Dashboard = ({
                           selectedpoolType,
                           selectedPool,
                           ethPoolsDyp,
+                          basePoolsDyp,
                           ethPoolsiDyp,
                           bnbPoolsDyp,
                           bnbPoolsiDyp,
@@ -1551,6 +1664,7 @@ const Dashboard = ({
                             "90 days",
                             selectedpoolType,
                             ethPoolsDyp,
+                            basePoolsDyp,
                             ethPoolsiDyp,
                             bnbPoolsDyp,
                             bnbPoolsiDyp,
@@ -1560,11 +1674,14 @@ const Dashboard = ({
                           setselectedIndex(0);
                         }}
                       >
-                         {(selectedchain === "eth" &&  selectedpoolType === "dyp") || (selectedchain === "bnb" &&  selectedpoolType === "idyp") && (
-                      <div className="new-beta-sidebar2 position-absolute">
-                        <span className="new-beta-text2">New</span>
-                      </div>
-                    ) }
+                        {(selectedchain === "eth" &&
+                          selectedpoolType === "dyp") ||
+                          (selectedchain === "bnb" &&
+                            selectedpoolType === "idyp" && (
+                              <div className="new-beta-sidebar2 position-absolute">
+                                <span className="new-beta-text2">New</span>
+                              </div>
+                            ))}
                         90 Days
                       </button>
                       <button
@@ -1574,6 +1691,8 @@ const Dashboard = ({
                           selectedpoolType,
                           selectedPool,
                           ethPoolsDyp,
+                          basePoolsDyp,
+                          basePoolsDyp,
                           ethPoolsiDyp,
                           bnbPoolsDyp,
                           bnbPoolsiDyp,
@@ -1586,6 +1705,7 @@ const Dashboard = ({
                             "120 days",
                             selectedpoolType,
                             ethPoolsDyp,
+                            basePoolsDyp,
                             ethPoolsiDyp,
                             bnbPoolsDyp,
                             bnbPoolsiDyp,
@@ -1593,11 +1713,13 @@ const Dashboard = ({
                             avaxPoolsiDyp
                           );
                         }}
-                      >{selectedpoolType === "idyp" && selectedchain === "bnb" && (
-                        <div className="new-beta-sidebar2 position-absolute">
-                          <span className="new-beta-text2">New</span>
-                        </div>
-                      ) }
+                      >
+                        {selectedpoolType === "idyp" &&
+                          selectedchain === "bnb" && (
+                            <div className="new-beta-sidebar2 position-absolute">
+                              <span className="new-beta-text2">New</span>
+                            </div>
+                          )}
                         120 Days
                       </button>
                     </div>
@@ -1622,7 +1744,7 @@ const Dashboard = ({
                                     <div className="tooltip-text">
                                       {selectedPool?.id ===
                                         "0x92A84052Fe6945949A295AF14a7506e3dc085492" ||
-                                        selectedPool?.id ===
+                                      selectedPool?.id ===
                                         "0xFdD3CFF22CF846208E3B37b47Bc36b2c61D2cA8b"
                                         ? "APR reflects the interest rate of earnings on an account over the course of one year. In order to get to the 25% APR for a pool with DYP deposits and iDYP rewards, there was a snapshot for both $DYP and $iDYP, at the prices of 0.048$ respectively 0.0015$, therefore for a 25% APR, the ratio for 1 $DYP staked will be 8 $iDYP received."
                                         : "APR reflects the interest rate of earnings on an account over the course of one year."}
@@ -1633,7 +1755,7 @@ const Dashboard = ({
                                     src={
                                       selectedPool?.id ===
                                         "0x92A84052Fe6945949A295AF14a7506e3dc085492" ||
-                                        selectedPool?.id ===
+                                      selectedPool?.id ===
                                         "0xFdD3CFF22CF846208E3B37b47Bc36b2c61D2cA8b"
                                         ? warning
                                         : moreinfo
@@ -1685,24 +1807,26 @@ const Dashboard = ({
                       </div>
                     </div>
                   )}
-                <div className="d-flex gap-3 align-items-center justify-content-start w-100">
+                <div className="d-flex gap-1 gap-lg-3 align-items-center justify-content-start w-100">
                   <div
-                    className={`position-relative col-lg-3 ${ selectedchain === "eth"
-                      ? "chain-popup-item-eth" :
-                      selectedpoolType === 'idyp' ? 'chain-popup-item-disabled' 
-                      : "chain-popup-item"
-                      }`}
+                    className={`position-relative w-100 ${
+                      selectedchain === "eth"
+                        ? "chain-popup-item-eth"
+                        : selectedpoolType === "idyp"
+                        ? "chain-popup-item-disabled"
+                        : "chain-popup-item"
+                    }`}
                     onClick={() => {
                       setselectedchain("eth");
                       // onChainSelect("eth");
                       setselectedPool(
                         selectedPool.tokenType === "dyp"
                           ? ethPools.find((item) => {
-                            return item.tokenType === "dyp";
-                          })
+                              return item.tokenType === "dyp";
+                            })
                           : ethPools.find((item) => {
-                            return item.tokenType === "idyp";
-                          })
+                              return item.tokenType === "idyp";
+                            })
                       );
                     }}
                   >
@@ -1718,10 +1842,11 @@ const Dashboard = ({
                     </h6>
                   </div>
                   <div
-                    className={`position-relative col-lg-3 ${selectedchain === "bnb"
+                    className={`position-relative w-100 ${
+                      selectedchain === "bnb"
                         ? "chain-popup-item-bnb"
                         : "chain-popup-item"
-                      }`}
+                    }`}
                     onClick={() => {
                       setselectedchain("bnb");
                       // onChainSelect("bnb");
@@ -1729,11 +1854,11 @@ const Dashboard = ({
                       setselectedPool(
                         selectedPool.tokenType === "dyp"
                           ? bnbPools.find((item) => {
-                            return item.tokenType === "dyp";
-                          })
+                              return item.tokenType === "dyp";
+                            })
                           : bnbPools.find((item) => {
-                            return item.tokenType === "idyp";
-                          })
+                              return item.tokenType === "idyp";
+                            })
                       );
                     }}
                   >
@@ -1749,22 +1874,56 @@ const Dashboard = ({
                     </h6>
                   </div>
                   <div
-                    className={`position-relative col-lg-3 ${selectedchain === "avax"
-                        ? "chain-popup-item-avax"
-                       :  selectedpoolType === 'idyp' ? 'chain-popup-item-disabled' 
+                    className={`position-relative w-100 ${
+                      selectedchain === "base"
+                        ? "chain-popup-item-base"
                         : "chain-popup-item"
-                      }`}
+                    }`}
+                    onClick={() => {
+                      setselectedchain("base");
+                      // onChainSelect("bnb");
+
+                      setselectedPool(
+                        selectedPool.tokenType === "dyp"
+                          ? bnbPools.find((item) => {
+                              return item.tokenType === "dyp";
+                            })
+                          : bnbPools.find((item) => {
+                              return item.tokenType === "idyp";
+                            })
+                      );
+                    }}
+                  >
+                    <h6
+                      className={`d-flex justify-content-center align-items-center chain-popup-text`}
+                    >
+                      <img
+                        src={selectedchain === "base" ? baseActive : base}
+                        alt=""
+                        className="popup-chains-icon"
+                      />
+                      BASE
+                    </h6>
+                  </div>
+                  <div
+                    className={`position-relative w-100 ${
+                      selectedchain === "avax"
+                        ? "chain-popup-item-avax"
+                        : selectedpoolType === "idyp"
+                        ? "chain-popup-item-disabled"
+                        : "chain-popup-item"
+                    }`}
                     onClick={() => {
                       setselectedchain("avax");
                       // onChainSelect("avax");
                       setselectedPool(
                         selectedPool.tokenType === "dyp"
                           ? avaxPools.find((item) => {
-                            return item.tokenType === "dyp";
-                          })
+                              return item.tokenType === "dyp";
+                            })
                           : avaxPools.find((item) => {
-                            return item.tokenType === "idyp";
-                          })
+                              return item.tokenType === "idyp";
+                            })
                       );
                     }}
                   >
@@ -1788,19 +1947,21 @@ const Dashboard = ({
                       {resultFilteredPool.map((obj, index) => {
                         return (
                           <button
-                            className={` w-100 position-relative ${selectedIndex === index
+                            className={` w-100 position-relative ${
+                              selectedIndex === index
                                 ? "method-btn-active"
                                 : "method-btn"
-                              }`}
+                            }`}
                             onClick={() => {
                               setselectedIndex(index);
                               setselectedPool(obj);
                             }}
                           >
-                            {selectedpoolType === 'dyp' && index == 1 &&
+                            {selectedpoolType === "dyp" && index == 1 && (
                               <div className="new-beta-sidebar2 position-absolute">
                                 <span className="new-beta-text2">New</span>
-                              </div>}
+                              </div>
+                            )}
                             Pool {index + 1}
                           </button>
                         );
@@ -1810,7 +1971,7 @@ const Dashboard = ({
                 )}
 
                 {activeCard &&
-                  selectedPool?.id ===
+                selectedPool?.id ===
                   "0x41b8a58f4307ea722ad0a964966caa18a6011d93" ? (
                   <InitConstantStakingiDYP
                     selectedPool={selectedPool}
@@ -1846,7 +2007,7 @@ const Dashboard = ({
                   />
                 ) : activeCard &&
                   selectedPool?.id ===
-                  "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
+                    "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d" ? (
                   <StakeAvaxIDyp
                     selectedPool={selectedPool}
                     selectedTab={selectedTab}
@@ -1881,7 +2042,7 @@ const Dashboard = ({
                 ) : activeCard &&
                   selectedPool?.chain === "bnb" &&
                   selectedPool?.id ===
-                  "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603" ? (
+                    "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603" ? (
                   <StakeDypiusBsc
                     selectedPool={selectedPool}
                     selectedTab={selectedTab}
@@ -1917,7 +2078,7 @@ const Dashboard = ({
                 ) : activeCard &&
                   selectedPool?.chain === "avax" &&
                   selectedPool?.id ===
-                  "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603" ? (
+                    "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603" ? (
                   <StakeDypiusAvax
                     selectedPool={selectedPool}
                     selectedTab={selectedTab}
@@ -1952,7 +2113,7 @@ const Dashboard = ({
                   />
                 ) : activeCard &&
                   selectedPool?.id ===
-                  "0x92A84052Fe6945949A295AF14a7506e3dc085492" &&
+                    "0x92A84052Fe6945949A295AF14a7506e3dc085492" &&
                   selectedPool.name !== "AVAX" ? (
                   <StakeDypiusEth3Phase2
                     selectedPool={selectedPool}
@@ -1990,7 +2151,7 @@ const Dashboard = ({
                   />
                 ) : activeCard &&
                   selectedPool?.id ===
-                  "0xFdD3CFF22CF846208E3B37b47Bc36b2c61D2cA8b" &&
+                    "0xFdD3CFF22CF846208E3B37b47Bc36b2c61D2cA8b" &&
                   selectedPool.name !== "AVAX" ? (
                   <StakeDypiusEth3Phase2
                     selectedPool={selectedPool}
@@ -2028,7 +2189,7 @@ const Dashboard = ({
                   />
                 ) : activeCard &&
                   selectedPool?.id ===
-                  "0x998A9F0DF7DAF20c2B0Bb379Dcae394636926a96" ? (
+                    "0x998A9F0DF7DAF20c2B0Bb379Dcae394636926a96" ? (
                   <StakeDypiusEth1Phase2
                     selectedPool={selectedPool}
                     selectedTab={selectedTab}
@@ -2062,9 +2223,46 @@ const Dashboard = ({
                     poolCap={1000000}
                     start_date={"07 Jun 2024"}
                   />
-                ) : activeCard &&
+                ): activeCard &&
+                selectedPool?.id ===
+                "0x13a3EA792db25d6E239f4b785bA17FB5B9faf84e" || selectedPool?.id ===
+                "0x9845a667b1A603FF21596FDdec51968a2bccAc11" ? (
+                <StakingDypiusBase1
+                  selectedPool={selectedPool}
+                  selectedTab={selectedTab}
+                  staking={window.constant_staking_dypius_base1}
+                  apr={selectedPool?.apy_percent}
+                  liquidity={eth_address}
+                  expiration_time={"01 Sep 2025"}
+                  finalApr={selectedPool?.apy_performancefee}
+                  lockTime={
+                    selectedPool?.lock_time?.split(" ")[0] === "No"
+                      ? "No Lock"
+                      : parseInt(selectedPool?.lock_time?.split(" ")[0])
+                  }
+                  listType={"table"}
+                  other_info={false}
+                  fee={selectedPool?.performancefee}
+                  is_wallet_connected={isConnected}
+                  coinbase={coinbase}
+                  the_graph_result={the_graph_result}
+                  chainId={network.toString()}
+                  handleConnection={handleConnection}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  expired={false}
+                  referrer={referrer}
+                  onConnectWallet={() => {
+                    setShowDetails(false);
+                    onConnectWallet();
+                    setselectedPool([]);
+                    setDetails(999);
+                  }}
+                  poolCap={2000000}
+                  start_date={"01 Sep 2024"}
+                />
+              ) : activeCard &&
                   selectedPool?.id ===
-                  "0x0fafe78e471b52bc4003984a337948ed55284573" ? (
+                    "0x0fafe78e471b52bc4003984a337948ed55284573" ? (
                   <StakeDypiusEth1Phase2
                     selectedPool={selectedPool}
                     selectedTab={selectedTab}
@@ -2100,7 +2298,7 @@ const Dashboard = ({
                   />
                 ) : activeCard &&
                   selectedPool?.id ===
-                  "0xC9075092Cc46E176B1F3c0D0EB8223F1e46555B0" ? (
+                    "0xC9075092Cc46E176B1F3c0D0EB8223F1e46555B0" ? (
                   <StakeDypiusEth
                     selectedPool={selectedPool}
                     selectedTab={selectedTab}
@@ -2134,7 +2332,7 @@ const Dashboard = ({
                   />
                 ) : activeCard &&
                   selectedPool?.id ===
-                  "0xbE030A667d9ee75a9FCdF2162A2C14ccCAB573dD" ? (
+                    "0xbE030A667d9ee75a9FCdF2162A2C14ccCAB573dD" ? (
                   <StakeDypiusEth2Phase2
                     selectedPool={selectedPool}
                     selectedTab={selectedTab}
@@ -2167,114 +2365,114 @@ const Dashboard = ({
                     }}
                   />
                 ) : selectedPool?.id ===
-                "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
-              activeCard ? (
-                <StakeBscIDyp
-                  selectedPool={selectedPool}
-                  selectedTab={selectedTab}
-                  is_wallet_connected={isConnected}
-                  coinbase={coinbase}
-                  the_graph_result={the_graph_resultbsc}
-                  chainId={network.toString()}
-                  handleConnection={handleConnection}
-                  handleSwitchNetwork={handleSwitchNetwork}
-                  expired={false}
-                  staking={window.constant_stakingidyp_7}
-                  listType={"table"}
-                  finalApr={selectedPool?.apy_performancefee}
-                  apr={selectedPool?.apy_percent}
-                  liquidity={wbsc_address}
-                  expiration_time={"18 July 2024"}
-                  poolCap={0}
-              start_date={"18 July 2023"}
-                  other_info={false}
-                  fee_s={selectedPool?.performancefee}
-                  fee_u={0}
-                  lockTime={
-                    selectedPool?.lock_time?.split(" ")[0] === "No"
-                      ? "No Lock"
-                      : parseInt(selectedPool?.lock_time?.split(" ")[0])
-                  }
-                  onConnectWallet={() => {
-                    setShowDetails(false);
-                    onConnectWallet();
-                    setselectedPool([]);
-                    setDetails(999);
-                  }}
-                />
-              ) : selectedPool?.id ===
-              "0xFBe84Af34CdC22455f82e18B76Ca50D21d3aBF84" &&
-            activeCard ? (
-              <StakeBscIDyp
-                selectedPool={selectedPool}
-                selectedTab={selectedTab}
-                is_wallet_connected={isConnected}
-                coinbase={coinbase}
-                the_graph_result={the_graph_resultbsc}
-                chainId={network.toString()}
-                handleConnection={handleConnection}
-                handleSwitchNetwork={handleSwitchNetwork}
-                expired={false}
-                staking={window.constant_stakingidyp_8}
-                listType={"table"}
-                finalApr={selectedPool?.apy_performancefee}
-                apr={selectedPool?.apy_percent}
-                liquidity={wbsc_address}
-                expiration_time={"22 July 2025"}
-              poolCap={20000000}
-              start_date={"22 Jul 2024"}
-                other_info={false}
-                fee_s={selectedPool?.performancefee}
-                fee_u={0}
-                lockTime={
-                  selectedPool?.lock_time?.split(" ")[0] === "No"
-                    ? "No Lock"
-                    : parseInt(selectedPool?.lock_time?.split(" ")[0])
-                }
-                onConnectWallet={() => {
-                  setShowDetails(false);
-                  onConnectWallet();
-                  setselectedPool([]);
-                  setDetails(999);
-                }}
-              />
-            ) : selectedPool?.id ===
-            "0xf6DC9E51D4E0FCc19ca6426fB5422f1E9a24F2eE" &&
-            activeCard ? (
-            <StakeBscIDyp
-              selectedPool={selectedPool}
-              selectedTab={selectedTab}
-              is_wallet_connected={isConnected}
-              coinbase={coinbase}
-              the_graph_result={the_graph_resultbsc}
-              chainId={network.toString()}
-              handleConnection={handleConnection}
-              handleSwitchNetwork={handleSwitchNetwork}
-              expired={false}
-              staking={window.constant_stakingidyp_9}
-              listType={"table"}
-              finalApr={selectedPool?.apy_performancefee}
-              apr={selectedPool?.apy_percent}
-              liquidity={wbsc_address}
-              expiration_time={"22 July 2025"}
-              poolCap={25000000}
-              start_date={"22 Jul 2024"}
-              other_info={false}
-              fee_s={selectedPool?.performancefee}
-              fee_u={0}
-              lockTime={
-                selectedPool?.lock_time?.split(" ")[0] === "No"
-                  ? "No Lock"
-                  : parseInt(selectedPool?.lock_time?.split(" ")[0])
-              }
-              onConnectWallet={() => {
-                setShowDetails(false);
-                onConnectWallet();
-                setselectedPool([]);
-                setDetails(999);
-              }}
-            />
-          )  : activeCard && selectedPool.name === "BNB" ? (
+                    "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
+                  activeCard ? (
+                  <StakeBscIDyp
+                    selectedPool={selectedPool}
+                    selectedTab={selectedTab}
+                    is_wallet_connected={isConnected}
+                    coinbase={coinbase}
+                    the_graph_result={the_graph_resultbsc}
+                    chainId={network.toString()}
+                    handleConnection={handleConnection}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    expired={false}
+                    staking={window.constant_stakingidyp_7}
+                    listType={"table"}
+                    finalApr={selectedPool?.apy_performancefee}
+                    apr={selectedPool?.apy_percent}
+                    liquidity={wbsc_address}
+                    expiration_time={"18 July 2024"}
+                    poolCap={0}
+                    start_date={"18 July 2023"}
+                    other_info={false}
+                    fee_s={selectedPool?.performancefee}
+                    fee_u={0}
+                    lockTime={
+                      selectedPool?.lock_time?.split(" ")[0] === "No"
+                        ? "No Lock"
+                        : parseInt(selectedPool?.lock_time?.split(" ")[0])
+                    }
+                    onConnectWallet={() => {
+                      setShowDetails(false);
+                      onConnectWallet();
+                      setselectedPool([]);
+                      setDetails(999);
+                    }}
+                  />
+                ) : selectedPool?.id ===
+                    "0xFBe84Af34CdC22455f82e18B76Ca50D21d3aBF84" &&
+                  activeCard ? (
+                  <StakeBscIDyp
+                    selectedPool={selectedPool}
+                    selectedTab={selectedTab}
+                    is_wallet_connected={isConnected}
+                    coinbase={coinbase}
+                    the_graph_result={the_graph_resultbsc}
+                    chainId={network.toString()}
+                    handleConnection={handleConnection}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    expired={false}
+                    staking={window.constant_stakingidyp_8}
+                    listType={"table"}
+                    finalApr={selectedPool?.apy_performancefee}
+                    apr={selectedPool?.apy_percent}
+                    liquidity={wbsc_address}
+                    expiration_time={"22 July 2025"}
+                    poolCap={20000000}
+                    start_date={"22 Jul 2024"}
+                    other_info={false}
+                    fee_s={selectedPool?.performancefee}
+                    fee_u={0}
+                    lockTime={
+                      selectedPool?.lock_time?.split(" ")[0] === "No"
+                        ? "No Lock"
+                        : parseInt(selectedPool?.lock_time?.split(" ")[0])
+                    }
+                    onConnectWallet={() => {
+                      setShowDetails(false);
+                      onConnectWallet();
+                      setselectedPool([]);
+                      setDetails(999);
+                    }}
+                  />
+                ) : selectedPool?.id ===
+                    "0xf6DC9E51D4E0FCc19ca6426fB5422f1E9a24F2eE" &&
+                  activeCard ? (
+                  <StakeBscIDyp
+                    selectedPool={selectedPool}
+                    selectedTab={selectedTab}
+                    is_wallet_connected={isConnected}
+                    coinbase={coinbase}
+                    the_graph_result={the_graph_resultbsc}
+                    chainId={network.toString()}
+                    handleConnection={handleConnection}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    expired={false}
+                    staking={window.constant_stakingidyp_9}
+                    listType={"table"}
+                    finalApr={selectedPool?.apy_performancefee}
+                    apr={selectedPool?.apy_percent}
+                    liquidity={wbsc_address}
+                    expiration_time={"22 July 2025"}
+                    poolCap={25000000}
+                    start_date={"22 Jul 2024"}
+                    other_info={false}
+                    fee_s={selectedPool?.performancefee}
+                    fee_u={0}
+                    lockTime={
+                      selectedPool?.lock_time?.split(" ")[0] === "No"
+                        ? "No Lock"
+                        : parseInt(selectedPool?.lock_time?.split(" ")[0])
+                    }
+                    onConnectWallet={() => {
+                      setShowDetails(false);
+                      onConnectWallet();
+                      setselectedPool([]);
+                      setDetails(999);
+                    }}
+                  />
+                ) : activeCard && selectedPool.name === "BNB" ? (
                   <StakeDypiusBscOther
                     selectedTab={selectedTab}
                     selectedBtn={selectedBtn}
@@ -2386,6 +2584,15 @@ const Dashboard = ({
             </div>
           </Box>
         </Modal>
+      )}
+
+      {whitelistPopup === true && (
+        <WhitelistPopup
+          open={whitelistPopup}
+          onClose={() => {
+            setwhitelistPopup(false);
+          }}
+        />
       )}
     </>
   );

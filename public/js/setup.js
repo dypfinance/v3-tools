@@ -2099,6 +2099,8 @@ window.config = {
   reward_tokenwbnb_address: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c", //REWARD TOKEN wbnb
 
   reward_token_dypius_eth_address: "0x39b46b212bdf15b42b166779b9d1787a68b9d0c3", //REWARD TOKEN DYPV2
+  reward_token_dypiusv2_base_address: "0x5b2124D427fAc9C80c902cbDD74b03Dd85d7d3FE", //REWARD TOKEN DYPV2
+
   reward_token_dypius_base_address:
     "0x4200000000000000000000000000000000000006", //REWARD TOKEN DYPV2
 
@@ -2351,6 +2353,10 @@ window.config = {
   submission_form_link: "https://forms.gle/SFX1DyUh8TcNeysz6",
 
   //new dypv2 staking contracts
+
+  constant_staking_dypius_base1_address:
+  "0x9845a667b1A603FF21596FDdec51968a2bccAc11",
+
 
   constant_staking_dypius_eth1_address:
     "0xC9075092Cc46E176B1F3c0D0EB8223F1e46555B0",
@@ -2753,6 +2759,8 @@ window.TOKEN_OLD_AVAX_ABI = window.TOKENAVAX_ABI;
 window.REWARD_TOKEN_ABI = window.TOKEN_ABI;
 window.REWARD_TOKEN_DYPIUS_ETH_ABI = window.TOKEN_ABI;
 window.REWARD_TOKEN_DYPIUS_BASE_ABI = window.TOKEN_ABI;
+window.REWARD_TOKEN_DYPIUSV2_BASE_ABI = window.TOKEN_ABI;
+
 
 window.REWARD_TOKEN_DYPIUS_BSC_ABI = window.TOKEN_ABI;
 window.REWARD_TOKEN_WBNB_ABI = window.TOKEN_ABI;
@@ -2764,6 +2772,8 @@ window.REWARD_TOKENWBNB_ABI = window.TOKENBSC_ABI;
 window.reward_token = new TOKEN("REWARD_TOKEN");
 window.reward_token_dypius_eth = new TOKEN("REWARD_TOKEN_DYPIUS_ETH");
 window.reward_token_dypius_base = new TOKEN("REWARD_TOKEN_DYPIUS_BASE");
+window.reward_token_dypiusv2_base = new TOKEN("REWARD_TOKEN_DYPIUSV2_BASE");
+
 
 window.reward_token_dypius_bsc = new TOKENBSC("REWARD_TOKEN_DYPIUS_BSC");
 window.reward_token_wbnb = new TOKENBSC("REWARD_TOKEN_WBNB");
@@ -2904,9 +2914,12 @@ window.constant_staking_dypius_bscother1 = new CONSTANT_STAKING_DEFI(
   "CONSTANT_STAKING_DYPIUS_BSCOTHER1"
 );
 
+
 window.constant_staking_dypius_ethother1 = new CONSTANT_STAKING_DEFI(
   "CONSTANT_STAKING_DYPIUS_ETHOTHER1"
 );
+
+
 
 window.constant_staking_dypius_avaxother1 = new CONSTANT_STAKING_DEFI(
   "CONSTANT_STAKING_DYPIUS_AVAXOTHER1"
@@ -2927,6 +2940,7 @@ window.CONSTANT_STAKINGBSC_NEW14_ABI = window.CONSTANT_STAKING_OLD_ABI;
 window.CONSTANT_STAKING_DYPIUS_BSC1_ABI = window.CONSTANT_STAKING_DYPIUS_ABI;
 window.CONSTANT_STAKING_DYPIUS_BSCOTHER1_ABI = window.CONSTANT_STAKING_DEFI_ABI;
 window.CONSTANT_STAKING_DYPIUS_ETHOTHER1_ABI = window.CONSTANT_STAKING_DEFI_ABI;
+
 window.CONSTANT_STAKING_DYPIUS_AVAXOTHER1_ABI =
   window.CONSTANT_STAKING_DEFI_ABI;
 
@@ -3079,6 +3093,10 @@ window.constant_staking_dypius_eth1 = new CONSTANT_STAKING_DYPIUS(
   "CONSTANT_STAKING_DYPIUS_ETH1"
 );
 
+window.constant_staking_dypius_base1 = new CONSTANT_STAKING_DYPIUS(
+  "CONSTANT_STAKING_DYPIUS_BASE1"
+);
+
 window.constant_staking_dypius_phase2_eth1 = new CONSTANT_STAKING_DYPIUS(
   "CONSTANT_STAKING_DYPIUS_PHASE2_ETH1"
 );
@@ -3137,6 +3155,8 @@ window.CONSTANT_STAKINGNEW_NEW1_ABI = window.CONSTANT_STAKINGNEW_ABI;
 window.CONSTANT_STAKINGNEW_NEW2_ABI = window.CONSTANT_STAKINGNEW_ABI;
 window.CONSTANT_STAKING_DYPIUS_ETH1_ABI = window.CONSTANT_STAKING_DYPIUS_ABI;
 window.CONSTANT_STAKING_DYPIUS_PHASE2_ETH1_ABI = window.CONSTANT_STAKING_DYPIUS_ABI;
+window.CONSTANT_STAKING_DYPIUS_BASE1_ABI = window.CONSTANT_STAKING_DYPIUS_ABI;
+
 window.CONSTANT_STAKING_DYPIUS_PHASE2_ETH2_ABI = window.CONSTANT_STAKING_DYPIUS_ABI;
 window.CONSTANT_STAKING_DYPIUS_PHASE2_ETH3_ABI = window.CONSTANT_STAKING_DYPIUS_ABI;
 window.CONSTANT_STAKING_DYPIUS_PHASE2_ETH4_ABI = window.CONSTANT_STAKING_DYPIUS_ABI;
@@ -37510,6 +37530,8 @@ Object.keys(window.config)
       k.startsWith("reward_tokenavax") ||
       k.startsWith("reward_token_dypius_eth") ||
       k.startsWith("reward_token_dypius_base") ||
+      k.startsWith("reward_token_dypiusv2_base") ||
+
       k.startsWith("reward_token_dypius_bsc") ||
       k.startsWith("reward_token_wbnb") ||
       k.startsWith("reward_token_wavax") ||
@@ -37542,6 +37564,8 @@ Object.keys(window.config)
       k.startsWith("constant_stakingidyp_1") ||
       k.startsWith("constant_stakingnew_new2") ||
       k.startsWith("constant_staking_dypius_eth1") ||
+      k.startsWith("constant_staking_dypius_base1") ||
+
       k.startsWith("constant_staking_dypius_phase2_eth1") ||
       k.startsWith("constant_staking_dypius_phase2_eth2") ||
       k.startsWith("constant_staking_dypius_phase2_eth3") ||
@@ -37573,6 +37597,7 @@ Object.keys(window.config)
       k.startsWith("constant_staking_dypius_bsc1") ||
       k.startsWith("constant_staking_dypius_bscother1") ||
       k.startsWith("constant_staking_dypius_ethother1") ||
+
       k.startsWith("constant_staking_dypius_avaxother1") ||
       k.startsWith("constant_stakingnew_newavax2") ||
       k.startsWith("constant_stakingdaiavax") ||
@@ -37639,6 +37664,8 @@ Object.keys(window.config)
       : k.startsWith("reward_token_dypius_eth")
       ? window.TOKEN_ABI
       : k.startsWith("reward_token_dypius_base")
+      ? window.TOKEN_ABI
+      : k.startsWith("reward_token_dypiusv2_base")
       ? window.TOKEN_ABI
       : k.startsWith("reward_token_dypius_bsc")
       ? window.TOKEN_ABI
@@ -37777,7 +37804,8 @@ Object.keys(window.config)
       ? window.CONSTANT_STAKING_DYPIUS_ABI
       : k.startsWith("constant_staking_dypius_phase2_eth1")
       ? window.CONSTANT_STAKING_DYPIUS_ABI
-      
+      : k.startsWith("constant_staking_dypius_base1")
+      ? window.CONSTANT_STAKING_DYPIUS_ABI
       : k.startsWith("constant_staking_dypius_phase2_eth2")
       ? window.CONSTANT_STAKING_DYPIUS_ABI
       : k.startsWith("constant_staking_dypius_phase2_eth3")

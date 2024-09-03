@@ -54,6 +54,8 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import { isMobile, MobileView, BrowserView } from "react-device-detect";
 import closeX from "./components/earnOther/assets/closeX.svg";
+import Whitelist from "./components/whitelist/Whitelist";
+import WhitelistPopup from "./components/whitelistPopup/WhitelistPopup";
 
 class App extends React.Component {
   constructor(props) {
@@ -100,6 +102,7 @@ class App extends React.Component {
       downloadClick: false,
       showMobilePopup: false,
       showWalletPopup: false,
+      whitelistPopup: true,
       aggregatorPools: [],
       userCurencyBalance: 0,
     };
@@ -193,7 +196,7 @@ class App extends React.Component {
             }
           })
           .catch(console.error);
-      } else  if (
+      } else if (
         window.ethereum &&
         !window.coin98 &&
         (window.ethereum.isTrust === true || window.ethereum?.isTrustWallet)
@@ -201,9 +204,9 @@ class App extends React.Component {
         window.ethereum
           .request({ method: "net_version" })
           .then((data) => {
-              this.setState({
-                networkId: data.toString(),
-              });
+            this.setState({
+              networkId: data.toString(),
+            });
           })
           .catch(console.error);
       } else if (
@@ -524,7 +527,9 @@ class App extends React.Component {
     const { ethereum } = window;
     if (
       ethereum &&
-      (ethereum.isMetaMask === true || window.ethereum.isTrust === true || window.ethereum?.isTrustWallet)
+      (ethereum.isMetaMask === true ||
+        window.ethereum.isTrust === true ||
+        window.ethereum?.isTrustWallet)
     ) {
       console.log("Ethereum successfully detected!");
       this.tvl();
@@ -541,6 +546,7 @@ class App extends React.Component {
     this.updateWindowDimensions();
     this.fetchAggregatorPools();
     window.addEventListener("resize", this.updateWindowDimensions);
+    this.setState({whitelistPopup: true})
 
     if (window.location.hash === "#mobile-app") {
       this.setState({ downloadClick: true });
@@ -548,7 +554,9 @@ class App extends React.Component {
     if (
       window.ethereum &&
       !window.coin98 &&
-      (window.ethereum.isMetaMask === true || window.ethereum.isTrust === true || window.ethereum?.isTrustWallet)
+      (window.ethereum.isMetaMask === true ||
+        window.ethereum.isTrust === true ||
+        window.ethereum?.isTrustWallet)
     ) {
       this.checkConnection();
     }
@@ -580,7 +588,8 @@ class App extends React.Component {
       logout !== "true" &&
       window.ethereum &&
       (window.ethereum.isMetaMask === true ||
-        window.ethereum.isTrust === true  || window.ethereum?.isTrustWallet ||
+        window.ethereum.isTrust === true ||
+        window.ethereum?.isTrustWallet ||
         !window.ethereum.isCoin98 ||
         !window.ethereum.overrideIsMetaMask ||
         !window.ethereum.isCoinbaseWallet)
@@ -677,7 +686,7 @@ class App extends React.Component {
       left: "50%",
       transform: "translate(-50%, -50%)",
       maxWidth: 540,
-      width: '100%',
+      width: "100%",
       boxShadow: 24,
       p: 4,
       overflow: "auto",
@@ -998,6 +1007,19 @@ class App extends React.Component {
                         />
                       )}
                     />
+
+                    <Route
+                      exact
+                      path="/launchpad"
+                      render={() => (
+                        <Whitelist
+                          networkId={parseInt(this.state.networkId)}
+                          isConnected={this.state.isConnected}
+                          handleConnection={this.handleConnection}
+                          coinbase={this.state.coinbase}
+                        />
+                      )}
+                    />
                     <Route
                       exact
                       path="/migration"
@@ -1040,7 +1062,7 @@ class App extends React.Component {
                     path="/governance"
                     render={() => <Governance />}
                   /> */}
-                    <Route
+                    {/* <Route
                       exact
                       path="/launchpad"
                       render={() => <Launchpad />}
@@ -1068,7 +1090,7 @@ class App extends React.Component {
                           isConnected={this.state.isConnected}
                         />
                       )}
-                    />
+                    /> */}
                     <Route exact path="/buydyp" render={() => <BuyDyp />} />
 
                     <Route
@@ -1330,6 +1352,15 @@ class App extends React.Component {
             </Box>
           </Modal>
         )}
+
+        {/* {this.state.whitelistPopup === true && (
+          <WhitelistPopup
+            open={this.state.whitelistPopup === true}
+            onClose={() => {
+              this.setState({ whitelistPopup: false });
+            }}
+          />
+        )} */}
 
         {this.showWalletPopup === true && (
           <WalletModal
