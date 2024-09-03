@@ -641,12 +641,12 @@ const Whitelist = ({
                       depositLoading === true ||
                       canDeposit === false ||
                       !isConnected ||
-                      !depositAmount
+                      !depositAmount || (!hasDypBalance && !hasiDypBalance && !hasDypStaked && !hasiDypStaked && !isPremium)
                         ? true
                         : false
                     }
                     className={`btn filledbtn ${
-                      ((depositAmount === "" && depositStatus === "initial") ||
+                      ((depositAmount === "" && depositStatus === "initial") || (!hasDypBalance && !hasiDypBalance && !hasDypStaked && !hasiDypStaked && !isPremium) ||
                         canDeposit === false ||
                         !isConnected ||
                         !depositAmount) &&
@@ -659,7 +659,7 @@ const Whitelist = ({
                         : null
                     } d-flex justify-content-center align-items-center gap-2 m-auto`}
                     onClick={() => {
-                      depositStatus === "deposit"
+                      depositStatus === "deposit" 
                         ? handleStake()
                         : depositStatus === "initial" && depositAmount !== ""
                         ? handleApprove()
@@ -760,12 +760,10 @@ const Whitelist = ({
                   You are eligible for the whitelist.
                 </span>
               ) : (
-                <div className="req-buy-dyp-wrapper mt-2 d-flex align-items-center justify-content-between w-100 p-2">
-                  <span className="req-buy-dyp">
-                    Buy DYP tokens to become eligible for the whitelist
-                  </span>
-                  <img src={buyToken} alt="" />
-                </div>
+                <a className="req-buy-dyp-wrapper mt-2 d-flex align-items-center justify-content-between w-100 p-2" href='https://app.uniswap.org/swap?use=V2&inputCurrency=0x39b46B212bDF15b42B166779b9d1787A68b9D0c3' target={'_blank'} rel='noreferrer' >
+                <span className="req-buy-dyp">Buy DYP tokens to become eligible for the whitelist</span>
+                <img src={buyToken} alt="" />
+              </a>
               )}
             </div>
           </div>
