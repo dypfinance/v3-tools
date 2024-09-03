@@ -105,6 +105,9 @@ class App extends React.Component {
       whitelistPopup: true,
       aggregatorPools: [],
       userCurencyBalance: 0,
+      userPools: [],
+      hasDypBalance: false,
+      hasiDypBalance: false,
     };
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
@@ -143,6 +146,19 @@ class App extends React.Component {
       this.setState({ aggregatorPools: pools });
     }
   };
+
+  fetchUserPools = async () => {
+    if (this.state.coinbase && this.state.coinbase.includes("0x")) {
+      const result = await axios
+        .get(`https://api.dyp.finance/api/user_pools/${this.state.coinbase}`)
+        .then((data) => {
+          return data.data.PoolsUserIn;
+        });
+      this.setState({ userPools: result });
+      // console.log(result)
+    }
+  };
+
   checkNetworkId = () => {
     if (
       !this.props.history.location.pathname.includes("bridge") &&
@@ -341,7 +357,8 @@ class App extends React.Component {
       SkaleABI,
       skalesubscribeAddress
     );
-    const userAddr = await window.getCoinbase();
+    const userAddr =
+      this.state.isConnected === true ? await window.getCoinbase() : undefined;
 
     if (userAddr) {
       subscribedPlatformTokenAmountNewETH = await ethNewcontract.methods
@@ -541,12 +558,156 @@ class App extends React.Component {
     }
   }
 
+  getAllBalance = async () => {
+    const tokenAddress = window.config.token_dypius_new_address;
+    const tokenAddress_bsc = window.config.token_dypius_new_bsc_address;
+    const walletAddress = this.state.coinbase;
+    const TokenABI = window.ERC20_ABI;
+
+    if (this.state.coinbase && this.state.coinbase != undefined && this.state.isConnected) {
+      const contract1 = new window.infuraWeb3.eth.Contract(
+        TokenABI,
+        tokenAddress
+      );
+      const contract2 = new window.avaxWeb3.eth.Contract(
+        TokenABI,
+        tokenAddress_bsc
+      );
+      const contract3 = new window.bscWeb3.eth.Contract(
+        TokenABI,
+        tokenAddress_bsc
+      );
+
+      const contract1_idyp = new window.infuraWeb3.eth.Contract(
+        TokenABI,
+        window.config.reward_token_idyp_address
+      );
+      const contract2_idyp = new window.avaxWeb3.eth.Contract(
+        TokenABI,
+        window.config.reward_token_idyp_address
+      );
+      const contract3_idyp = new window.bscWeb3.eth.Contract(
+        TokenABI,
+        window.config.reward_token_idyp_address
+      );
+
+      let ethBalance = await contract1.methods
+        .balanceOf(walletAddress)
+        .call()
+        .then((data) => {
+          let depositedTokens = new window.BigNumber(data)
+            .div(1e18)
+            .toString(10);
+          return depositedTokens;
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+
+      let ethBalance_idyp = await contract1_idyp.methods
+        .balanceOf(walletAddress)
+        .call()
+        .then((data) => {
+          let depositedTokens = new window.BigNumber(data)
+            .div(1e18)
+            .toString(10);
+          return depositedTokens;
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+
+      let avaxBalance = await contract2.methods
+        .balanceOf(walletAddress)
+        .call()
+        .then((data) => {
+          let depositedTokens = new window.BigNumber(data)
+            .div(1e18)
+            .toString(10);
+          return depositedTokens;
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+
+      let avaxBalance_idyp = await contract2_idyp.methods
+        .balanceOf(walletAddress)
+        .call()
+        .then((data) => {
+          let depositedTokens = new window.BigNumber(data)
+            .div(1e18)
+            .toString(10);
+          return depositedTokens;
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+
+      let bnbBalance = await contract3.methods
+        .balanceOf(walletAddress)
+        .call()
+        .then((data) => {
+          let depositedTokens = new window.BigNumber(data)
+            .div(1e18)
+            .toString(10);
+
+          return depositedTokens;
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+
+      let bnbBalance_idyp = await contract3_idyp.methods
+        .balanceOf(walletAddress)
+        .call()
+        .then((data) => {
+          let depositedTokens = new window.BigNumber(data)
+            .div(1e18)
+            .toString(10);
+
+          return depositedTokens;
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+
+      if (
+        (ethBalance !== undefined && ethBalance > 0) ||
+        (bnbBalance !== undefined && bnbBalance > 0) ||
+        (avaxBalance !== undefined && avaxBalance > 0)
+      ) {
+        this.setState({ hasDypBalance: true });
+      } else {
+        this.setState({ hasDypBalance: false });
+      }
+      if (
+        (ethBalance_idyp !== undefined && ethBalance_idyp > 0) ||
+        (bnbBalance_idyp !== undefined && bnbBalance_idyp > 0) ||
+        (avaxBalance_idyp !== undefined && avaxBalance_idyp > 0)
+      ) {
+        this.setState({ hasiDypBalance: true });
+      } else {
+        this.setState({ hasiDypBalance: false });
+      }
+    } else {
+      this.setState({ hasiDypBalance: false });
+      this.setState({ hasDypBalance: false });
+
+    }
+  };
+
   componentDidMount() {
     this.tvl();
     this.updateWindowDimensions();
     this.fetchAggregatorPools();
     window.addEventListener("resize", this.updateWindowDimensions);
-    this.setState({whitelistPopup: true})
+    this.setState({ whitelistPopup: true });
 
     if (window.location.hash === "#mobile-app") {
       this.setState({ downloadClick: true });
@@ -617,6 +778,10 @@ class App extends React.Component {
     localStorage.setItem("logout", "true");
     this.setState({ isConnected: false });
     this.checkConnection();
+    this.setState({ userPools: [] });
+    this.setState({ isPremium: false });
+    this.setState({ hasDypBalance: false });
+    this.setState({ hasiDypBalance: false });
   };
   componentWillUnmount() {
     // clearInterval(this.subscriptionInterval);
@@ -649,7 +814,7 @@ class App extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     if (this.props.location !== prevProps.location) {
       this.checkNetworkId();
-      this.refreshSubscription();
+      this.getAllBalance();
     }
     if (this.state.networkId !== prevState.networkId) {
       this.checkNetworkId();
@@ -659,11 +824,15 @@ class App extends React.Component {
       this.refreshSubscription();
       this.checkNetworkId();
       this.checkConnection();
+      this.fetchUserPools();
+      this.getAllBalance();
     }
 
     if (this.state.isConnected !== prevState.isConnected) {
       this.checkNetworkId();
       this.checkConnection();
+      this.refreshSubscription();
+      this.fetchUserPools();
     }
   }
 
@@ -1015,8 +1184,12 @@ class App extends React.Component {
                         <Whitelist
                           networkId={parseInt(this.state.networkId)}
                           isConnected={this.state.isConnected}
-                          handleConnection={this.handleConnection}
+                          handleConnection={this.showModal}
                           coinbase={this.state.coinbase}
+                          isPremium={this.state.isPremium}
+                          userPools={this.state.userPools}
+                          hasDypBalance={this.state.hasDypBalance}
+                          hasiDypBalance={this.state.hasiDypBalance}
                         />
                       )}
                     />
