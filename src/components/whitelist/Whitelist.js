@@ -195,7 +195,7 @@ const Whitelist = ({
         })
       );
       const finalResult_sorted = finalResult.sort(function (a, b) {
-        return b.commitment_list.timestamp - a.commitment_list.timestamp;
+        return a.commitment_list.timestamp - b.commitment_list.timestamp;
       });
       setTotalDeposited(totalTokenDeposited);
       setAllUserCommitments(finalResult_sorted);
