@@ -17,6 +17,7 @@ import buyToken from "./assets/buyToken.svg";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
 import Web3 from "web3";
 import wallet from "../FARMINNG/assets/wallet.svg";
+import moment from "moment";
 
 const Whitelist = ({
   networkId,
@@ -54,6 +55,7 @@ const Whitelist = ({
   const [depositStatus, setdepositStatus] = useState("initial");
   const [selectedToken, setselectedToken] = useState();
   const [allUserCommitments, setAllUserCommitments] = useState([]);
+  let expireDay = new Date("2024-09-18T14:00:00.000+02:00");
 
   const poolCap = 25000;
 
@@ -187,13 +189,16 @@ const Whitelist = ({
             return {
               commitment_list,
               network: "BNB Chain",
-              token: "USDT"
+              token: "USDT",
             };
           }
         })
       );
+      const finalResult_sorted = finalResult.sort(function (a, b) {
+        return b.commitment_list.timestamp - a.commitment_list.timestamp;
+      });
       setTotalDeposited(totalTokenDeposited);
-      setAllUserCommitments(finalResult);
+      setAllUserCommitments(finalResult_sorted);
     } else {
       setAllUserCommitments([]);
       setTotalDeposited(0);
@@ -260,9 +265,28 @@ const Whitelist = ({
       window.config.commitment_address
     );
 
+    const gasPrice = await window.web3.eth.getGasPrice();
+    console.log("gasPrice", gasPrice);
+    const currentGwei = window.web3.utils.fromWei(gasPrice, "gwei");
+
+    const transactionParameters = {
+      gasPrice: window.web3.utils.toWei(currentGwei.toString(), "gwei"),
+    };
+
     await commitment_contract.methods
       .commit(selectedToken.address, amount)
-      .send({ from: coinbase })
+      .estimateGas({ from: coinbase })
+      .then((gas) => {
+        transactionParameters.gas = window.web3.utils.toHex(gas);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    console.log(transactionParameters);
+
+    await commitment_contract.methods
+      .commit(selectedToken.address, amount)
+      .send({ from: coinbase, ...transactionParameters })
       .then(() => {
         setdepositLoading(false);
         setdepositStatus("success");
@@ -394,7 +418,7 @@ const Whitelist = ({
       sethasiDypStaked(false);
     }
   }, [userPools]);
-  
+
   return (
     <div className="container-lg p-0">
       <div className="whitelist-banner d-flex flex-column flex-lg-row p-4 gap-3 gap-lg-0 align-items-center mb-4">
@@ -452,7 +476,18 @@ const Whitelist = ({
             <div className="d-flex align-items-center justify-content-between">
               <div className="d-flex align-items-center gap-2">
                 <h6 className="mb-0 whitelist-deposit-title">Whitelist</h6>
-                <span className="whitelist-days-left">9 days left</span>
+                <span className="whitelist-days-left">
+                  {moment
+                    .duration(expireDay.getTime() - Date.now())
+                    .humanize(true)
+                    .slice(
+                      3,
+                      moment
+                        .duration(expireDay.getTime() - Date.now())
+                        .humanize(true).length
+                    )}{" "}
+                  left
+                </span>
               </div>
               <img src={tooltipIcon} alt="" />
             </div>
@@ -641,12 +676,22 @@ const Whitelist = ({
                       depositLoading === true ||
                       canDeposit === false ||
                       !isConnected ||
-                      !depositAmount || (!hasDypBalance && !hasiDypBalance && !hasDypStaked && !hasiDypStaked && !isPremium)
+                      !depositAmount ||
+                      (!hasDypBalance &&
+                        !hasiDypBalance &&
+                        !hasDypStaked &&
+                        !hasiDypStaked &&
+                        !isPremium)
                         ? true
                         : false
                     }
                     className={`btn filledbtn ${
-                      ((depositAmount === "" && depositStatus === "initial") || (!hasDypBalance && !hasiDypBalance && !hasDypStaked && !hasiDypStaked && !isPremium) ||
+                      ((depositAmount === "" && depositStatus === "initial") ||
+                        (!hasDypBalance &&
+                          !hasiDypBalance &&
+                          !hasDypStaked &&
+                          !hasiDypStaked &&
+                          !isPremium) ||
                         canDeposit === false ||
                         !isConnected ||
                         !depositAmount) &&
@@ -659,7 +704,7 @@ const Whitelist = ({
                         : null
                     } d-flex justify-content-center align-items-center gap-2 m-auto`}
                     onClick={() => {
-                      depositStatus === "deposit" 
+                      depositStatus === "deposit"
                         ? handleStake()
                         : depositStatus === "initial" && depositAmount !== ""
                         ? handleApprove()
@@ -760,10 +805,17 @@ const Whitelist = ({
                   You are eligible for the whitelist.
                 </span>
               ) : (
-                <a className="req-buy-dyp-wrapper mt-2 d-flex align-items-center justify-content-between w-100 p-2" href='https://app.uniswap.org/swap?use=V2&inputCurrency=0x39b46B212bDF15b42B166779b9d1787A68b9D0c3' target={'_blank'} rel='noreferrer' >
-                <span className="req-buy-dyp">Buy DYP tokens to become eligible for the whitelist</span>
-                <img src={buyToken} alt="" />
-              </a>
+                <a
+                  className="req-buy-dyp-wrapper mt-2 d-flex align-items-center justify-content-between w-100 p-2"
+                  href="https://app.uniswap.org/swap?use=V2&inputCurrency=0x39b46B212bDF15b42B166779b9d1787A68b9D0c3"
+                  target={"_blank"}
+                  rel="noreferrer"
+                >
+                  <span className="req-buy-dyp">
+                    Buy DYP tokens to become eligible for the whitelist
+                  </span>
+                  <img src={buyToken} alt="" />
+                </a>
               )}
             </div>
           </div>
@@ -836,7 +888,7 @@ const Whitelist = ({
                     </th>
                   </thead>
                   <tbody>
-                    {allUserCommitments.map((item, index) => {
+                    {allUserCommitments.slice(0, slice).map((item, index) => {
                       return (
                         <tr key={index}>
                           <td className="item-history-table-td first-td left-border text-center">
@@ -871,7 +923,7 @@ const Whitelist = ({
                           <td className="item-history-table-td text-center">
                             {getFormattedNumber(
                               item.commitment_list.amount / 1e18,
-                              0
+                              2
                             )}{" "}
                             {item.token}
                           </td>
@@ -883,20 +935,20 @@ const Whitelist = ({
                             WOD
                           </td>
                           <td className="item-history-table-td last-td table-greentext right-border text-center">
-                            {item.commitment_list.refunded === true ? (
+                            {/* {item.commitment_list.refunded === true ? (
                               <button className="refund-btn">
                                 {item.status}
                               </button>
                             ) : (
-                              <>
+                              <> */}
                                 {item.commitment_list.accepted === false &&
                                 item.commitment_list.refunded === false
                                   ? "Successful"
                                   : item.commitment_list.accepted === true
                                   ? "Approved"
                                   : "Refund"}
-                              </>
-                            )}
+                              {/* </> */}
+                            {/* )} */}
                           </td>
                         </tr>
                       );

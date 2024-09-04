@@ -1,10 +1,10 @@
-import Web3 from "web3";
+// import Web3 from "web3";
 import React from "react";
 import GoogleAnalyticsReporter from "./functions/analytics";
-import PoolExplorer from "./components/pool-explorer";
-import PairExplorer from "./components/pair-explorer";
-import BigSwapExplorer from "./components/big-swap-explorer";
-import TopTokens from "./components/top-tokens";
+// import PoolExplorer from "./components/pool-explorer";
+// import PairExplorer from "./components/pair-explorer";
+// import BigSwapExplorer from "./components/big-swap-explorer";
+// import TopTokens from "./components/top-tokens";
 import Locker from "./components/locker";
 import Account from "./components/account";
 import Admin from "./components/admin";
@@ -13,22 +13,22 @@ import News from "./components/news/news";
 import Sidebar from "./components/sidebar/sidebar";
 import Header from "./components/header/header";
 import { Route } from "react-router-dom";
-import SubmitInfo from "./components/submit-info/SubmitInfo";
+// import SubmitInfo from "./components/submit-info/SubmitInfo";
 import { Switch } from "react-router-dom";
 import { RedirectPathToHomeOnly } from "./functions/redirects";
 import Earn from "./components/earn/Earn";
 import Dashboard from "./components/dashboard/Dashboard";
-import Governance from "./components/governance/Governance";
-import navRadius from "./assets/navRadius.svg";
+// import Governance from "./components/governance/Governance";
+// import navRadius from "./assets/navRadius.svg";
 import Governancedev from "./components/governance/dev/governance-new-avax";
 import Governancebsc from "./components/governance/dev/governance-new-bsc";
 import GovernanceEth from "./components/governance/dev/governance-new";
-import LandFlyout from "./components/LandFlyout/LandFlyout";
-import Launchpad from "./components/launchpad/Launchpad";
-import LaunchpadForm from "./components/launchpad/launchpadform/LaunchpadForm";
-import LaunchpadDetails from "./components/launchpad/launchpaddetails/LaunchpadDetails";
-import TierLevels from "./components/launchpad/tierlevels/TierLevels";
-import NftMinting from "./components/caws/NftMinting/index";
+// import LandFlyout from "./components/LandFlyout/LandFlyout";
+// import Launchpad from "./components/launchpad/Launchpad";
+// import LaunchpadForm from "./components/launchpad/launchpadform/LaunchpadForm";
+// import LaunchpadDetails from "./components/launchpad/launchpaddetails/LaunchpadDetails";
+// import TierLevels from "./components/launchpad/tierlevels/TierLevels";
+// import NftMinting from "./components/caws/NftMinting/index";
 import Bridge from "./components/bridge/BridgeGeneral";
 import Footer from "./components/Footer/footer";
 import BuyDyp from "./components/buydyp/BuyDyp";
@@ -36,10 +36,10 @@ import BuyDyp from "./components/buydyp/BuyDyp";
 import MobileMenu from "./components/sidebar/MobileMenu";
 import Disclaimer from "./components/disclaimer/Disclaimer";
 import ScrollToTop from "./functions/ScrollToTop";
-import LandPopup from "./components/LandPopup/LandPopup";
+// import LandPopup from "./components/LandPopup/LandPopup";
 import { withRouter } from "react-router-dom";
 import GenesisStaking from "./components/genesisStaking/GenesisStaking";
-import CawsStaking from "./components/genesisStaking/CawsStaking";
+// import CawsStaking from "./components/genesisStaking/CawsStaking";
 import Plans from "./components/account/Plans";
 import DypMigration from "./components/bridge/DypMigration";
 import AlertRibbon from "./components/alert-ribbon/AlertRibbon";
@@ -52,10 +52,10 @@ import axios from "axios";
 import MobileFlyout from "./components/mobileFlyout/MobileFlyout";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
-import { isMobile, MobileView, BrowserView } from "react-device-detect";
+import {  MobileView, BrowserView } from "react-device-detect";
 import closeX from "./components/earnOther/assets/closeX.svg";
 import Whitelist from "./components/whitelist/Whitelist";
-import WhitelistPopup from "./components/whitelistPopup/WhitelistPopup";
+// import WhitelistPopup from "./components/whitelistPopup/WhitelistPopup";
 
 class App extends React.Component {
   constructor(props) {
@@ -148,7 +148,7 @@ class App extends React.Component {
   };
 
   fetchUserPools = async () => {
-    if (this.state.coinbase && this.state.coinbase.includes("0x")) {
+    if (this.state.coinbase && this.state.coinbase.includes("0x") && this.state.isConnected === true) {
       const result = await axios
         .get(`https://api.dyp.finance/api/user_pools/${this.state.coinbase}`)
         .then((data) => {
