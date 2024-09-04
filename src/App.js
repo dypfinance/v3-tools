@@ -56,6 +56,7 @@ import { isMobile, MobileView, BrowserView } from "react-device-detect";
 import closeX from "./components/earnOther/assets/closeX.svg";
 import Whitelist from "./components/whitelist/Whitelist";
 import WhitelistPopup from "./components/whitelistPopup/WhitelistPopup";
+import Games from "./components/games/Games";
 
 class App extends React.Component {
   constructor(props) {
@@ -546,7 +547,7 @@ class App extends React.Component {
     this.updateWindowDimensions();
     this.fetchAggregatorPools();
     window.addEventListener("resize", this.updateWindowDimensions);
-    this.setState({whitelistPopup: true})
+    this.setState({ whitelistPopup: true });
 
     if (window.location.hash === "#mobile-app") {
       this.setState({ downloadClick: true });
@@ -696,6 +697,73 @@ class App extends React.Component {
       height: "auto",
       background: `#1A1A36`,
     };
+
+    const dummyPremiums = [
+      {
+        chestTitle: "Jewel Coffer",
+        closedImg: "greenCrystal",
+        chestId: 1,
+      },
+      {
+        chestTitle: "Gold Hoard",
+        closedImg: "blueCrystal",
+        chestId: 2,
+      },
+      {
+        chestTitle: "Pirate's Bounty",
+        closedImg: "yellowCrystal",
+        chestId: 3,
+      },
+      {
+        chestTitle: "Gem Trove",
+        closedImg: "purpleCrystal",
+        chestId: 4,
+      },
+      {
+        chestTitle: "Coin Chest",
+        closedImg: "cyanCrystal",
+        chestId: 5,
+      },
+      {
+        chestTitle: "Silver Cache",
+        closedImg: "greenCrystal",
+        chestId: 6,
+      },
+      {
+        chestTitle: "Ruby Stash",
+        closedImg: "blueCrystal",
+        chestId: 7,
+      },
+      {
+        chestTitle: "Mystic Reliquary",
+        closedImg: "yellowCrystal",
+        chestId: 8,
+      },
+      {
+        chestTitle: "Ancient Relics",
+        closedImg: "purpleCrystal",
+        chestId: 9,
+      },
+      {
+        chestTitle: "Emerald Trove",
+        closedImg: "cyanCrystal",
+        chestId: 10,
+      },
+    ];
+
+    const chestImagesBnb = [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+    ];
 
     const { LP_IDs_V2 } = window;
     const { ethereum } = window;
@@ -873,7 +941,27 @@ class App extends React.Component {
                           theme={this.state.theme}
                           {...props}
                           networkId={parseInt(this.state.explorerNetworkId)}
+                          handleSwitchNetwork={this.handleSwitchNetwork}
+                        />
+                      )}
+                    />
+
+                    <Route
+                      exact
+                      path="/games"
+                      render={(props) => (
+                        <Games
+                          handleConnection={this.handleConnection}
+                          isConnected={this.state.isConnected}
+                          appState={this.state}
+                          theme={this.state.theme}
+                          {...props}
+                          networkId={parseInt(this.state.explorerNetworkId)}
                           onSelectChain={this.onSelectChain}
+                          coinbase={this.state.coinbase}
+                          dummypremiumChests={dummyPremiums}
+                          isPremium={this.state.isPremium}
+                          bnbImages={chestImagesBnb}
                         />
                       )}
                     />

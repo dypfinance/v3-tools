@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 // import Avax from "../assets/avalanche.svg";
 // import Logo from "../assets/logo.svg";
 // import LogoWhite from "../assets/logo-white.svg";
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect} from "react";
 import { useWeb3React } from "@web3-react/core";
 // import { handleSwitchNetwork } from "../functions/hooks";
 // import { injected } from "../../functions/connectors";
@@ -19,7 +19,7 @@ import { useEagerConnect, useInactiveListener } from "../../functions/hooks";
 import toolsLogo from "../../assets/sidebarIcons/toolsLogo.svg";
 import toolsLogoActive from "../../assets/sidebarIcons/toolsLogoActive.svg";
 import accordionIndicator from "../../assets/sidebarIcons/accordionIndicator.svg";
-import sidebarDypius from "../../assets/sidebarDypius.svg";
+// import sidebarDypius from "../../assets/sidebarDypius.svg";
 import "./sidebar.css";
 import navRadius from "../../assets/navRadius.svg";
 import useWindowSize from "../../functions/useWindowSize";
@@ -136,7 +136,11 @@ const Sidebar = (props) => {
       icon: "launchpadIcon",
       link: "/launchpad",
     },
-  
+    {
+      label: "Games",
+      icon: "gamesIcon",
+      link: "/games",
+    },
     
     {
       label: "Governance",
