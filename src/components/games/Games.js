@@ -27,12 +27,14 @@ const Games = ({
   const [chain, setChain] = useState("bnb");
   const [message, setMessage] = useState("");
   const [rewardData, setRewardData] = useState([]);
+  const [rockData, setRockData] = useState([]);
+
   const [isActive, setIsActive] = useState();
   const [isActiveIndex, setIsActiveIndex] = useState();
   const [claimingChest, setClaimingChest] = useState(false);
   const [selectedChest, setSelectedChest] = useState(null);
   const [disable, setDisable] = useState(false);
-
+  var rocksArray=[];
   const handleBasePool = async () => {
     await handleSwitchNetworkhook("0x2105")
       .then(() => {
@@ -81,6 +83,10 @@ const Games = ({
       max: 30,
     },
   ];
+const handleAddNewRock=(rock)=>{ 
+  rocksArray=[...rockData, rock]
+  setRockData(rocksArray) 
+} 
 
   return (
     <div className="container-lg p-0">
@@ -102,22 +108,22 @@ const Games = ({
               <div className="d-flex align-items-center justify-content-center position-relative">
                 <img src={stoneCrackBanner} alt="" />
                 <div className="d-flex flex-column position-absolute rankwrapper">
-                    <h6 className="rank-text-stone text-center">Rank</h6>
-                    <h6 className="rank-value-stone text-center">1,250</h6>
+                  <h6 className="rank-text-stone text-center">Rank</h6>
+                  <h6 className="rank-value-stone text-center">1,250</h6>
                 </div>
               </div>
               <div className="d-flex align-items-center justify-content-center position-relative">
                 <img src={kittyDash} alt="" />
                 <div className="d-flex flex-column position-absolute rankwrapper">
-                    <h6 className="rank-text-dash text-center">Rank</h6>
-                    <h6 className="rank-value-dash text-center">250</h6>
+                  <h6 className="rank-text-dash text-center">Rank</h6>
+                  <h6 className="rank-value-dash text-center">250</h6>
                 </div>
               </div>
               <div className="d-flex align-items-center justify-content-center position-relative">
                 <img src={cawsAdventures} alt="" />
                 <div className="d-flex flex-column position-absolute rankwrapper">
-                    <h6 className="rank-text-caws text-center">Rank</h6>
-                    <h6 className="rank-value-caws text-center">50</h6>
+                  <h6 className="rank-text-caws text-center">Rank</h6>
+                  <h6 className="rank-value-caws text-center">50</h6>
                 </div>
               </div>
             </div>
@@ -144,13 +150,16 @@ const Games = ({
                       // openChest={openChest}
                       selectedChest={selectedChest}
                       isPremium={isPremium}
-                      //   onClaimRewards={(value) => {
-                      //     setLiveRewardData(value);
-                      //     onChestClaimed();
-                      //     showLiveRewardData(value);
-                      //     setIsActive(item.chestId);
-                      //     setIsActiveIndex(index + 1);
-                      //   }}
+                        onClaimRewards={(value) => {
+                          console.log(value)
+                          handleAddNewRock(value)
+                          // setLiveRewardData(value);
+                          // onChestClaimed();
+                          // showLiveRewardData(value);
+                          // setIsActive(item.chestId);
+                          // setIsActiveIndex(index + 1);
+                          
+                        }}
                       //   handleShowRewards={(value, value2) => {
                       //     showSingleRewardData(value, value2);
                       //     setIsActive(value);
@@ -158,6 +167,7 @@ const Games = ({
                       //   }}
                       onLoadingChest={(value) => {
                         setDisable(value);
+                        // setSelectedChest(index + 1) 
                       }}
                       onChestStatus={(val) => {
                         setMessage(val);
@@ -521,7 +531,7 @@ const Games = ({
           </div>
           <div className="left-games-banner p-2">
             <div className="d-flex flex-column gap-3 h-100">
-              <div className="main-image-game h-100 position-relative">
+              <div className="main-image-game h-100 position-relative overflow-hidden">
                 <div className="position-absolute w-100">
                   <div className="d-flex justify-content-between align-items-center w-100 p-2">
                     <div className="base-network-wrapper p-1 d-flex align-items-center gap-2">
@@ -534,6 +544,70 @@ const Games = ({
                   </div>
                 </div>
                 <img src={mainChest} alt="" className="h-100" />
+
+                <div className="position-absolute rocks-wrapper">
+                  <div className="d-flex flex-column justify-content-center align-items-center position-relative w-100 h-100">
+                    {[...Array(5)].map((item, index) => {
+                      return (
+                        <div
+                          key={index}
+                          className={`rockitem rockitem${index + 1}`}
+                          style={{visibility: rockData.includes(index+1) ? 'hidden' : 'visible'}}
+                        >
+                          <img
+                            src={require(`./assets/rocksBg/${index + 1}.png`)}
+                            className="rock-img"
+                          />
+                        </div>
+                      );
+                    })}
+
+                    {[...Array(5)].map((item, index) => {
+                      return (
+                        <div
+                          key={index}
+                          className={`rockitem rockitem${index + 6}`}
+                          style={{visibility: rockData.includes(index+6) ? 'hidden' : 'visible'}}
+                        >
+                          <img
+                            src={require(`./assets/rocksBg/${index + 6}.png`)}
+                            className="rock-img"
+                          />
+                        </div>
+                      );
+                    })}
+
+                    {[...Array(5)].map((item, index) => {
+                      return (
+                        <div
+                          key={index}
+                          className={`rockitem rockitem${index + 11}`}
+                          style={{visibility: rockData.includes(index+11) ? 'hidden' : 'visible'}}
+                        >
+                          <img
+                            src={require(`./assets/rocksBg/${index + 11}.png`)}
+                            className="rock-img"
+                          />
+                        </div>
+                      );
+                    })}
+
+                    {[...Array(5)].map((item, index) => {
+                      return (
+                        <div
+                          key={index}
+                          className={`rockitem rockitem${index + 16}`}
+                          style={{visibility: rockData.includes(index+16) ? 'hidden' : 'visible'}}
+                        >
+                          <img
+                            src={require(`./assets/rocksBg/${index + 16}.png`)}
+                            className="rock-img"
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
               <div className="rewards-bottom-wrapper">
                 {windowSize.width > 992 ? (

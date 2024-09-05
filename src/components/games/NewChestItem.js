@@ -305,6 +305,15 @@ const NewChestItem = ({
     setLoading(true);
     setClaimingChest(true);
 
+    setTimeout(() => {
+      onClaimRewards(chestId) 
+        // setIsChestOpen(true);
+        onChestStatus("initial");
+        onLoadingChest(false);
+        setLoading(false);
+        setClaimingChest(false);
+    }, 2000);
+
     // window.web3 = new Web3(window.ethereum);
     // const daily_bonus_contract = new window.web3.eth.Contract(
     //   window.DAILY_BONUS_ABI,
