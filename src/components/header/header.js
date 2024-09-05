@@ -262,7 +262,7 @@ const Header = ({
       const balance = await ethereum.request({
         method: "eth_getBalance",
         params: [coinbase, "latest"],
-      });
+      }).catch((e)=>{console.error(e); return 0});
 
       if (balance) {
         const infuraWeb3 = new Web3(window.config.infura_endpoint);

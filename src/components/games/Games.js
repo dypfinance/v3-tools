@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./games.scss";
 import getFormattedNumber from "../../functions/get-formatted-number";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
@@ -13,6 +13,9 @@ import mainChest from "./assets/mainChest.webp";
 import kittyDash from "./assets/kittyDash.webp";
 import stoneCrackBanner from "./assets/stoneCrack.webp";
 import cawsAdventures from "./assets/cawsAdventures.webp";
+import Leaderboard from "../leaderboard/Leaderboard";
+import pointsIcon from "./assets/pointsIcon.png";
+import gemIcon from "./assets/gemIcon.png";
 
 const Games = ({
   handleConnection,
@@ -24,7 +27,7 @@ const Games = ({
   dummypremiumChests,
   bnbImages,
 }) => {
-  const [chain, setChain] = useState("bnb");
+  const [chain, setChain] = useState("base");
   const [message, setMessage] = useState("");
   const [rewardData, setRewardData] = useState([]);
   const [rockData, setRockData] = useState([]);
@@ -34,7 +37,7 @@ const Games = ({
   const [claimingChest, setClaimingChest] = useState(false);
   const [selectedChest, setSelectedChest] = useState(null);
   const [disable, setDisable] = useState(false);
-  var rocksArray=[];
+  var rocksArray = [];
   const handleBasePool = async () => {
     await handleSwitchNetworkhook("0x2105")
       .then(() => {
@@ -83,10 +86,103 @@ const Games = ({
       max: 30,
     },
   ];
-const handleAddNewRock=(rock)=>{ 
-  rocksArray=[...rockData, rock]
-  setRockData(rocksArray) 
-} 
+  const handleAddNewRock = (rock) => {
+    rocksArray = [...rockData, rock];
+    setRockData(rocksArray);
+  };
+
+  useEffect(() => {
+    if (chain === "base") {
+      if (coinbase && isConnected) {
+        
+          if (isPremium) {
+            // if (
+            //   claimedChests + claimedPremiumChests === 20 &&
+            //   rewardData.length === 0 &&
+            //   address.toLowerCase() === coinbase.toLowerCase()
+            // ) {
+            //   setMessage("complete");
+            // } else if (
+            //   claimedChests + claimedPremiumChests < 20 &&
+            //   rewardData.length === 0 &&
+            //   address.toLowerCase() === coinbase.toLowerCase() &&
+            //   (chainId === 56 || chainId === 204)
+            // ) {
+            //   setMessage("");
+            //   setDisable(false);
+            // } 
+            // else
+             if (
+              // claimedChests + claimedPremiumChests < 20 &&
+              // rewardData.length === 0 &&
+              // address.toLowerCase() === coinbase.toLowerCase() &&
+              networkId !== 8453 
+            ) {
+              setMessage("switch");
+              setDisable(true);
+            } else {
+              setMessage("");
+              setDisable(false);
+            }
+          } else if (!isPremium) {
+            // if (
+            //   claimedChests === 10 &&
+            //   rewardData.length === 0 &&
+            //   address.toLowerCase() === coinbase.toLowerCase() &&
+            //   (chainId === 56 || chainId === 204)
+            // ) {
+            //   setMessage("premium");
+            // } else if (
+            //   claimedChests < 10 &&
+            //   rewardData.length === 0 &&
+            //   address.toLowerCase() === coinbase.toLowerCase() &&
+            //   (chainId === 56 || chainId === 204)
+            // ) {
+            //   setMessage("");
+            //   setDisable(false);
+            // } else
+            
+            if (
+              // claimedChests < 10 &&
+              // rewardData.length === 0 &&
+              // address.toLowerCase() === coinbase.toLowerCase() &&
+              networkId !== 8453 
+            ) {
+              setMessage("switch");
+              setDisable(true);
+            } else {
+              setMessage("");
+              setDisable(false);
+            }
+          }
+       
+      } else {
+        setMessage("login");
+        setDisable(true);
+      }
+    }
+  }, [
+    
+    chain,
+    networkId,
+    coinbase,
+    // address,
+    isPremium,
+    // claimedChests,
+    // claimedPremiumChests,
+    // claimedSkaleChests,
+    // claimedSkalePremiumChests,
+    // claimedCoreChests,
+    // claimedCorePremiumChests,
+    // claimedVictionChests,
+    // claimedVictionPremiumChests,
+    // claimedMantaChests,
+    // claimedMantaPremiumChests,
+    // claimedTaikoChests,
+    // claimedTaikoPremiumChests,
+    // rewardData,
+  ]);
+  
 
   return (
     <div className="container-lg p-0">
@@ -105,21 +201,21 @@ const handleAddNewRock=(rock)=>{
         <div className="col-12 col-lg-6 position-relative">
           <div className="leaderboard-wrapper">
             <div className="d-flex gap-2 position-relative">
-              <div className="d-flex align-items-center justify-content-center position-relative">
+              <div className="d-flex align-items-center justify-content-center position-relative leaderboard-item-banner">
                 <img src={stoneCrackBanner} alt="" />
                 <div className="d-flex flex-column position-absolute rankwrapper">
                   <h6 className="rank-text-stone text-center">Rank</h6>
                   <h6 className="rank-value-stone text-center">1,250</h6>
                 </div>
               </div>
-              <div className="d-flex align-items-center justify-content-center position-relative">
+              <div className="d-flex align-items-center justify-content-center position-relative leaderboard-item-banner">
                 <img src={kittyDash} alt="" />
                 <div className="d-flex flex-column position-absolute rankwrapper">
                   <h6 className="rank-text-dash text-center">Rank</h6>
                   <h6 className="rank-value-dash text-center">250</h6>
                 </div>
               </div>
-              <div className="d-flex align-items-center justify-content-center position-relative">
+              <div className="d-flex align-items-center justify-content-center position-relative leaderboard-item-banner">
                 <img src={cawsAdventures} alt="" />
                 <div className="d-flex flex-column position-absolute rankwrapper">
                   <h6 className="rank-text-caws text-center">Rank</h6>
@@ -133,7 +229,7 @@ const handleAddNewRock=(rock)=>{
       <div className="game-wrapper-container p-3">
         <div className="d-flex flex-column-reverse flex-lg-row gap-3">
           <div className="col-lg-5 left-games-banner">
-            <div className="d-flex flex-column justify-content-between gap-0 gap-lg-3">
+            <div className="h-100 d-flex flex-column justify-content-between gap-0 gap-lg-3">
               <div className="chest-wrapper grid-overall-wrapper p-2">
                 <div className="new-chests-grid">
                   {[...Array(20)].map((item, index) => (
@@ -150,16 +246,15 @@ const handleAddNewRock=(rock)=>{
                       // openChest={openChest}
                       selectedChest={selectedChest}
                       isPremium={isPremium}
-                        onClaimRewards={(value) => {
-                          console.log(value)
-                          handleAddNewRock(value)
-                          // setLiveRewardData(value);
-                          // onChestClaimed();
-                          // showLiveRewardData(value);
-                          // setIsActive(item.chestId);
-                          // setIsActiveIndex(index + 1);
-                          
-                        }}
+                      onClaimRewards={(value) => {
+                        console.log(value);
+                        handleAddNewRock(value);
+                        // setLiveRewardData(value);
+                        // onChestClaimed();
+                        // showLiveRewardData(value);
+                        // setIsActive(item.chestId);
+                        // setIsActiveIndex(index + 1);
+                      }}
                       //   handleShowRewards={(value, value2) => {
                       //     showSingleRewardData(value, value2);
                       //     setIsActive(value);
@@ -167,14 +262,14 @@ const handleAddNewRock=(rock)=>{
                       //   }}
                       onLoadingChest={(value) => {
                         setDisable(value);
-                        // setSelectedChest(index + 1) 
+                        // setSelectedChest(index + 1)
                       }}
                       onChestStatus={(val) => {
                         setMessage(val);
                       }}
                       address={coinbase}
                       email={"email"}
-                      rewardTypes={index >= 10 ? "premium" : "standard"}
+                      rewardTypes={"standard"}
                       chestId={index + 1}
                       chestIndex={index + 1}
                       open={false}
@@ -198,7 +293,7 @@ const handleAddNewRock=(rock)=>{
                     className="d-flex align-items-center flex-column justify-content-center p-0 p-lg-2 w-100 chest-progress-wrapper"
                     style={{
                       background: "rgba(33, 31, 69,0.8)",
-                      border: "1px solid #10C5C5",
+                      border: "1px solid #55FFFB",
                     }}
                   >
                     <div
@@ -268,6 +363,7 @@ const handleAddNewRock=(rock)=>{
                         style={{
                           textDecoration: "underline",
                           cursor: "pointer",
+                          color: "#ce5d1b"
                         }}
                         onClick={handleBasePool}
                       >
@@ -530,17 +626,21 @@ const handleAddNewRock=(rock)=>{
             </div>
           </div>
           <div className="left-games-banner p-2">
-            <div className="d-flex flex-column gap-3 h-100">
+            <div className="d-flex flex-column h-100">
               <div className="main-image-game h-100 position-relative overflow-hidden">
                 <div className="position-absolute w-100">
-                  <div className="d-flex justify-content-between align-items-center w-100 p-2">
-                    <div className="base-network-wrapper p-1 d-flex align-items-center gap-2">
-                      <img src={baseLogo} alt="" />{" "}
-                      <span className="base-text d-none d-lg-block d-md-block d-sm-block">
-                        Base Network
-                      </span>
+                  <div className="d-flex justify-content-between align-items-start w-100 p-2">
+                    <img src={stoneCrack} alt="" className="stonecrack-logo" />
+                    <div className="d-flex flex-column gap-1 align-items-end">
+                      <div className="totalpoints-wrapper px-3 d-flex align-items-center gap-1 ">
+                        <h6 className="totalpoints-value">12,256,786</h6>{" "}
+                        <h6 className="points-text">Points</h6>
+                      </div>
+                      <div className="usdreward-wrapper px-1 d-flex align-items-center gap-1 ">
+                        <h6 className="usdreward-value">$15.2</h6>{" "}
+                        <h6 className="usdreward-text">Rewards</h6>
+                      </div>
                     </div>
-                    <img src={stoneCrack} alt="" />
                   </div>
                 </div>
                 <img src={mainChest} alt="" className="h-100" />
@@ -552,7 +652,11 @@ const handleAddNewRock=(rock)=>{
                         <div
                           key={index}
                           className={`rockitem rockitem${index + 1}`}
-                          style={{visibility: rockData.includes(index+1) ? 'hidden' : 'visible'}}
+                          style={{
+                            display: rockData.includes(index + 1)
+                              ? "none"
+                              : "block",
+                          }}
                         >
                           <img
                             src={require(`./assets/rocksBg/${index + 1}.png`)}
@@ -567,7 +671,9 @@ const handleAddNewRock=(rock)=>{
                         <div
                           key={index}
                           className={`rockitem rockitem${index + 6}`}
-                          style={{visibility: rockData.includes(index+6) ? 'hidden' : 'visible'}}
+                          style={{
+                            display: rockData.includes(index + 6) ? "none" : "",
+                          }}
                         >
                           <img
                             src={require(`./assets/rocksBg/${index + 6}.png`)}
@@ -582,7 +688,11 @@ const handleAddNewRock=(rock)=>{
                         <div
                           key={index}
                           className={`rockitem rockitem${index + 11}`}
-                          style={{visibility: rockData.includes(index+11) ? 'hidden' : 'visible'}}
+                          style={{
+                            display: rockData.includes(index + 11)
+                              ? "none"
+                              : "",
+                          }}
                         >
                           <img
                             src={require(`./assets/rocksBg/${index + 11}.png`)}
@@ -597,7 +707,11 @@ const handleAddNewRock=(rock)=>{
                         <div
                           key={index}
                           className={`rockitem rockitem${index + 16}`}
-                          style={{visibility: rockData.includes(index+16) ? 'hidden' : 'visible'}}
+                          style={{
+                            display: rockData.includes(index + 16)
+                              ? "none"
+                              : "",
+                          }}
                         >
                           <img
                             src={require(`./assets/rocksBg/${index + 16}.png`)}
@@ -609,13 +723,71 @@ const handleAddNewRock=(rock)=>{
                   </div>
                 </div>
               </div>
-              <div className="rewards-bottom-wrapper">
+              <div className="d-none d-lg-flex d-md-flex w-100 align-items-center gap-2">
+                <div className="left-separator"></div>
+                <h6 className="reward-bottom-text px-2">Rewards</h6>
+                <div className="right-separator"></div>
+              </div>
+              <div className="d-none d-lg-block d-md-block rewards-bottom-wrapper p-1">
                 {windowSize.width > 992 ? (
                   <div className="new-rewards-grid">
-                    <div className="new-rewards-item p-2 d-flex align-items-center justify-content-center gap-2">
-                      <h6 className="mb-0  new-reward-amount">Rewards</h6>
+                    <div className="new-rewards-item-active p-2 d-flex align-items-center gap-2">
+                      <img src={pointsIcon} alt="" style={{ width: 48 }} />
+                      <div className="d-flex flex-column">
+                        <h6 className="reward-title-active">Points</h6>
+                        <h6 className="reward-amount-active d-flex align-items-center gap-1">
+                          1,000-6,000
+                        </h6>
+                      </div>
                     </div>
-                    {dummyRewards.map((item, index) => (
+                    <div className="new-rewards-item-active2 p-2 d-flex align-items-center gap-2">
+                      <div className="h-100 d-flex flex-column justify-content-between w-100">
+                        <h6 className="reward-title-active text-center">
+                          DYP Rewards
+                        </h6>
+                        <div className="d-flex align-items-center gap-1">
+                          <div className="small-reward-wrapper w-100 p-1">
+                            <h6 className="reward-amount text-center">
+                              $0.5-$5
+                            </h6>
+                          </div>
+                          <div className="small-reward-wrapper-active w-100 p-1">
+                            <h6 className="reward-amount-active text-center">
+                              $20-$300
+                            </h6>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="new-rewards-item p-2 d-flex align-items-center gap-2">
+                      <div className="h-100 d-flex flex-column justify-content-between w-100">
+                        <h6 className="reward-title text-center">
+                          ETH Rewards
+                        </h6>
+                        <div className="d-flex align-items-center gap-1">
+                          <div className="small-reward-wrapper w-100 p-1">
+                            <h6 className="reward-amount text-center">
+                              $0.5-$5
+                            </h6>
+                          </div>
+                          <div className="small-reward-wrapper w-100 p-1">
+                            <h6 className="reward-amount text-center">
+                              $20-$300
+                            </h6>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="new-rewards-item p-2 d-flex align-items-center gap-2">
+                      <img src={gemIcon} alt="" style={{ width: 48 }} />
+                      <div className="d-flex flex-column">
+                        <h6 className="reward-title">Base Gem</h6>
+                        <h6 className="reward-amount d-flex align-items-center gap-1">
+                          $500-$2,000
+                        </h6>
+                      </div>
+                    </div>
+                    {/* {dummyRewards.map((item, index) => (
                       <div
                         key={index}
                         className="new-rewards-item p-2 d-flex align-items-center gap-2"
@@ -837,10 +1009,9 @@ const handleAddNewRock=(rock)=>{
                           >
                             {item.amount}
                           </h6>
-                          {/* <span className="mb-0  new-reward-type">{item.title}</span> */}
                         </div>
                       </div>
-                    ))}
+                    ))} */}
                   </div>
                 ) : (
                   <></>

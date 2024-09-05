@@ -956,7 +956,7 @@ class App extends React.Component {
                           appState={this.state}
                           theme={this.state.theme}
                           {...props}
-                          networkId={parseInt(this.state.explorerNetworkId)}
+                          networkId={parseInt(this.state.networkId)}
                           onSelectChain={this.onSelectChain}
                           coinbase={this.state.coinbase}
                           dummypremiumChests={dummyPremiums}

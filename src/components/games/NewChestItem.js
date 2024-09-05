@@ -3,7 +3,6 @@ import premiumLock from "./assets/premiumLock.png";
 import errorSound from "./assets/error.mp3";
 import axios from "axios";
 import Web3 from "web3";
-import { ethers } from "ethers";
 
 const NewChestItem = ({
   item,
@@ -35,6 +34,7 @@ const NewChestItem = ({
   const [shake, setShake] = useState(false);
   const [ischestOpen, setIsChestOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [approved, setApproved] = useState(false);
 
   const getUserRewardsByChest2 = async (
     userEmail,
@@ -299,169 +299,141 @@ const NewChestItem = ({
     }
   };
 
+  const handleCheckIfAlreadyApproved = async () => {
+    window.web3 = new Web3(window.ethereum);
+
+    const dypBaseSc = new window.web3.eth.Contract(
+      window.TOKEN_ABI,
+      window.config.reward_token_dypiusv2_base_address
+    );
+
+    const result = await dypBaseSc.methods
+      .allowance(coinbase, window.config.daily_bonus_base_address)
+      .call()
+      .catch((e) => {
+        console.error(e);
+        return false;
+      });
+    if (result != 0 && Number(result) / 1e18 >= 0.001) {
+      setApproved(true);
+    } else setApproved(false);
+  };
+
+  const handleApprove = async () => {
+    onChestStatus("waiting");
+    onLoadingChest(true);
+    setLoading(true);
+    setClaimingChest(true);
+
+    window.web3 = new Web3(window.ethereum);
+    const dypBaseSc = new window.web3.eth.Contract(
+      window.TOKEN_ABI,
+      window.config.reward_token_dypiusv2_base_address
+    );
+
+    await dypBaseSc.methods
+      .approve(window.config.daily_bonus_base_address, "99999999999900000000")
+      .send({ from: coinbase })
+      .then(() => {
+        setApproved(true);
+        setTimeout(() => {
+          handleOpenChest();
+        }, 1500);
+      })
+      .catch((e) => {
+        console.error(e);
+        setApproved(false);
+        onChestStatus("");
+        onLoadingChest(false);
+        setLoading(false);
+        setClaimingChest(false);
+      });
+  };
+
   const handleOpenChest = async () => {
     onChestStatus("waiting");
     onLoadingChest(true);
     setLoading(true);
     setClaimingChest(true);
 
-    setTimeout(() => {
-      onClaimRewards(chestId) 
-        // setIsChestOpen(true);
-        onChestStatus("initial");
-        onLoadingChest(false);
-        setLoading(false);
-        setClaimingChest(false);
-    }, 2000);
 
-    // window.web3 = new Web3(window.ethereum);
-    // const daily_bonus_contract = new window.web3.eth.Contract(
-    //   window.DAILY_BONUS_ABI,
-    //   window.config.daily_bonus_address
-    // );
 
-    // const daily_bonus_contract_bnb = new window.web3.eth.Contract(
-    //   window.DAILY_BONUS_BNB_ABI,
-    //   window.config.daily_bonus_bnb_address
-    // );
+    window.web3 = new Web3(window.ethereum);
+    const daily_bonus_contract = new window.web3.eth.Contract(
+      window.DAILY_BONUS_BASE_ABI,
+      window.config.daily_bonus_base_address
+    );
 
-    // const daily_bonus_contract_skale = new window.web3.eth.Contract(
-    //   window.DAILY_BONUS_SKALE_ABI,
-    //   window.config.daily_bonus_skale_address
-    // );
+    if (chainId === 8453) {
+      if (rewardTypes === "premium" && isPremium) {
+        await daily_bonus_contract.methods
+          .openPremiumChest()
+          .send({
+            from: address,
+          })
+          .then((data) => {
+            // getUserRewardsByChest(
+            //   email,
+            //   data.transactionHash,
+            //   chestIndex - 1,
+            //   "base"
+            // );
+            setTimeout(() => {
+              onClaimRewards(chestId);
+              setIsChestOpen(true);
+              onChestStatus("initial");
+              onLoadingChest(false);
+              setLoading(false);
+              setClaimingChest(false);
+            }, 1000);
+          })
+          .catch((e) => {
+            window.alertify.error(e?.message);
+            onChestStatus("error");
+            setTimeout(() => {
+              onChestStatus("initial");
+            }, 3000);
+            onLoadingChest(false);
+            setLoading(false);
+            setClaimingChest(false);
 
-    // const daily_bonus_contract_core = new window.web3.eth.Contract(
-    //   window.DAILY_BONUS_CORE_ABI,
-    //   window.config.daily_bonus_core_address
-    // );
-
-    // const daily_bonus_contract_viction = new window.web3.eth.Contract(
-    //   window.DAILY_BONUS_VICTION_ABI,
-    //   window.config.daily_bonus_viction_address
-    // );
-
-    // const daily_bonus_contract_manta = new window.web3.eth.Contract(
-    //   window.DAILY_BONUS_MANTA_ABI,
-    //   window.config.daily_bonus_manta_address
-    // );
-
-    // const daily_bonus_contract_taiko = new window.web3.eth.Contract(
-    //   window.DAILY_BONUS_TAIKO_ABI,
-    //   window.config.daily_bonus_taiko_address
-    // );
-
-    // console.log(daily_bonus_contract);
-    // if (chainId === 204) {
-    //   if (window.WALLET_TYPE !== "binance") {
-    //     if (rewardTypes === "premium" && isPremium) {
-    //       await daily_bonus_contract.methods
-    //         .openPremiumChest()
-    //         .send({
-    //           from: address,
-    //         })
-    //         .then((data) => {
-    //           getUserRewardsByChest(
-    //             email,
-    //             data.transactionHash,
-    //             chestIndex - 1,
-    //             "opbnb"
-    //           );
-    //         })
-    //         .catch((e) => {
-    //           window.alertify.error(e?.message);
-    //           onChestStatus("error");
-    //           setTimeout(() => {
-    //             onChestStatus("initial");
-    //           }, 3000);
-    //           onLoadingChest(false);
-    //           setLoading(false);
-    //           setClaimingChest(false);
-
-    //           console.error(e);
-    //         });
-    //     } else if (rewardTypes === "standard") {
-    //       await daily_bonus_contract.methods
-    //         .openChest()
-    //         .send({
-    //           from: address,
-    //         })
-    //         .then((data) => {
-    //           getUserRewardsByChest(
-    //             email,
-    //             data.transactionHash,
-    //             chestIndex - 1,
-    //             "opbnb"
-    //           );
-    //         })
-    //         .catch((e) => {
-    //           console.error(e);
-    //           window.alertify.error(e?.message);
-    //           onChestStatus("error");
-    //           setTimeout(() => {
-    //             onChestStatus("initial");
-    //           }, 3000);
-    //           onLoadingChest(false);
-    //           setLoading(false);
-    //           setClaimingChest(false);
-    //         });
-    //     }
-    //   } else if (window.WALLET_TYPE === "binance") {
-    //     const daily_bonus_contract_opbnb_binance = new ethers.Contract(
-    //       window.config.daily_bonus_address,
-    //       window.DAILY_BONUS_ABI,
-    //       binanceW3WProvider.getSigner()
-    //     );
-    //     if (rewardTypes === "premium" && isPremium) {
-    //       const txResponse = await daily_bonus_contract_opbnb_binance
-    //         .openPremiumChest()
-    //         .catch((e) => {
-    //           window.alertify.error(e?.message);
-    //           onChestStatus("error");
-    //           setTimeout(() => {
-    //             onChestStatus("initial");
-    //           }, 3000);
-    //           onLoadingChest(false);
-    //           setLoading(false);
-    //           setClaimingChest(false);
-
-    //           console.error(e);
-    //         });
-    //       const txReceipt = await txResponse.wait();
-    //       if (txReceipt) {
-    //         getUserRewardsByChest(
-    //           email,
-    //           txResponse.hash,
-    //           chestIndex - 1,
-    //           "opbnb"
-    //         );
-    //       }
-    //     } else if (rewardTypes === "standard") {
-    //       const txResponse = await daily_bonus_contract_opbnb_binance
-    //         .openChest()
-    //         .catch((e) => {
-    //           console.error(e);
-    //           window.alertify.error(e?.message);
-    //           onChestStatus("error");
-    //           setTimeout(() => {
-    //             onChestStatus("initial");
-    //           }, 3000);
-    //           onLoadingChest(false);
-    //           setLoading(false);
-    //           setClaimingChest(false);
-    //         });
-
-    //       const txReceipt = await txResponse.wait();
-    //       if (txReceipt) {
-    //         getUserRewardsByChest(
-    //           email,
-    //           txResponse.hash,
-    //           chestIndex - 1,
-    //           "opbnb"
-    //         );
-    //       }
-    //     }
-    //   }
-    // }
+            console.error(e);
+          });
+      } else if (rewardTypes === "standard") {
+        await daily_bonus_contract.methods
+          .openChest()
+          .send({
+            from: address,
+          })
+          .then((data) => {
+            // getUserRewardsByChest(
+            //   email,
+            //   data.transactionHash,
+            //   chestIndex - 1,
+            //   "base"
+            // );
+            setTimeout(() => {
+              onClaimRewards(chestId);
+              setIsChestOpen(true);
+              onChestStatus("initial");
+              onLoadingChest(false);
+              setLoading(false);
+              setClaimingChest(false);
+            }, 1000);
+          })
+          .catch((e) => {
+            console.error(e);
+            window.alertify.error(e?.message);
+            onChestStatus("error");
+            setTimeout(() => {
+              onChestStatus("initial");
+            }, 3000);
+            onLoadingChest(false);
+            setLoading(false);
+            setClaimingChest(false);
+          });
+      }
+    }
   };
 
   const handleChestClick = () => {
@@ -471,7 +443,9 @@ const NewChestItem = ({
     }
     if (!disableBtn || open) {
       if (!open && !ischestOpen) {
-        handleOpenChest();
+        if (approved) {
+          handleOpenChest();
+        } else handleApprove();
         // handleShowRewards(100, 100);
       } else {
         // handleShowRewards(chestId, chestIndex - 1);
@@ -480,16 +454,6 @@ const NewChestItem = ({
     }
   };
 
-  useEffect(() => {
-    if (!isPremium && rewardTypes === "premium") {
-      setIsChestOpen(false);
-    }
-  }, [isPremium, rewardTypes]);
-
-  useEffect(() => {
-    setIsChestOpen(false);
-  }, [isPremium, rewardTypes]);
-
   const onShake = () => {
     setShake(true);
     new Audio(errorSound).play();
@@ -497,6 +461,21 @@ const NewChestItem = ({
       setShake(false);
     }, 1000);
   };
+  useEffect(() => {
+    setIsChestOpen(false);
+  }, [isPremium, rewardTypes]);
+
+  useEffect(() => {
+    if (!isPremium && rewardTypes === "premium") {
+      setIsChestOpen(false);
+    }
+  }, [isPremium, rewardTypes]);
+
+  useEffect(() => {
+    if (coinbase) {
+      handleCheckIfAlreadyApproved();
+    }
+  }, [coinbase]);
 
   return (
     <div
@@ -524,9 +503,7 @@ const NewChestItem = ({
       {rewardTypes !== "premium" ? (
         <img
           className={` ${"new-chest-item-img"} ${loading ? "chest-shake" : ""}`}
-          src={require(`./assets/${
-            'axe'
-          }.png`)}
+          src={require(`./assets/axes/${chestId}.png`)}
           alt=""
           style={{
             position: "relative",
@@ -536,12 +513,8 @@ const NewChestItem = ({
         />
       ) : rewardTypes === "premium" && dummypremiumChests ? (
         <img
-          className={`new-chest-item-img ${
-            loading ? ("chest-shake") : ""
-          }`}
-          src={require(`./assets/${
-            'axe'
-          }.png`)}
+          className={`new-chest-item-img ${loading ? "chest-shake" : ""}`}
+          src={require(`./assets/${chestId}.png`)}
           alt=""
           style={{
             position: "relative",
