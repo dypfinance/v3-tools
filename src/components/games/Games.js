@@ -36,6 +36,8 @@ const Games = ({
   const [isActiveIndex, setIsActiveIndex] = useState();
   const [claimingChest, setClaimingChest] = useState(false);
   const [selectedChest, setSelectedChest] = useState(null);
+  const [selectedChest2, setSelectedChest2] = useState();
+
   const [disable, setDisable] = useState(false);
   const [loading, setloading] = useState(false);
 
@@ -89,90 +91,85 @@ const Games = ({
     },
   ];
   const handleAddNewRock = (rock) => {
-    const firstTwo = [1, 2]
-    if(rock === 1) {
+    const firstTwo = [1, 2];
+    if (rock === 1) {
       rocksArray = [...rockData, ...firstTwo];
-    setRockData(rocksArray);
-
+      setRockData(rocksArray);
     } else {
-       rocksArray = [...rockData, rock];
-    setRockData(rocksArray);
+      rocksArray = [...rockData, rock];
+      setRockData(rocksArray);
     }
-   
   };
 
   useEffect(() => {
     if (chain === "base") {
       if (coinbase && isConnected) {
-        
-          if (isPremium) {
-            // if (
-            //   claimedChests + claimedPremiumChests === 20 &&
-            //   rewardData.length === 0 &&
-            //   address.toLowerCase() === coinbase.toLowerCase()
-            // ) {
-            //   setMessage("complete");
-            // } else if (
-            //   claimedChests + claimedPremiumChests < 20 &&
-            //   rewardData.length === 0 &&
-            //   address.toLowerCase() === coinbase.toLowerCase() &&
-            //   (chainId === 56 || chainId === 204)
-            // ) {
-            //   setMessage("");
-            //   setDisable(false);
-            // } 
-            // else
-             if (
-              // claimedChests + claimedPremiumChests < 20 &&
-              // rewardData.length === 0 &&
-              // address.toLowerCase() === coinbase.toLowerCase() &&
-              networkId !== 8453 
-            ) {
-              setMessage("switch");
-              setDisable(true);
-            } else {
-              setMessage("");
-              setDisable(false);
-            }
-          } else if (!isPremium) {
-            // if (
-            //   claimedChests === 10 &&
-            //   rewardData.length === 0 &&
-            //   address.toLowerCase() === coinbase.toLowerCase() &&
-            //   (chainId === 56 || chainId === 204)
-            // ) {
-            //   setMessage("premium");
-            // } else if (
-            //   claimedChests < 10 &&
-            //   rewardData.length === 0 &&
-            //   address.toLowerCase() === coinbase.toLowerCase() &&
-            //   (chainId === 56 || chainId === 204)
-            // ) {
-            //   setMessage("");
-            //   setDisable(false);
-            // } else
-            
-            if (
-              // claimedChests < 10 &&
-              // rewardData.length === 0 &&
-              // address.toLowerCase() === coinbase.toLowerCase() &&
-              networkId !== 8453 
-            ) {
-              setMessage("switch");
-              setDisable(true);
-            } else {
-              setMessage("");
-              setDisable(false);
-            }
+        if (isPremium) {
+          // if (
+          //   claimedChests + claimedPremiumChests === 20 &&
+          //   rewardData.length === 0 &&
+          //   address.toLowerCase() === coinbase.toLowerCase()
+          // ) {
+          //   setMessage("complete");
+          // } else if (
+          //   claimedChests + claimedPremiumChests < 20 &&
+          //   rewardData.length === 0 &&
+          //   address.toLowerCase() === coinbase.toLowerCase() &&
+          //   (chainId === 56 || chainId === 204)
+          // ) {
+          //   setMessage("");
+          //   setDisable(false);
+          // }
+          // else
+          if (
+            // claimedChests + claimedPremiumChests < 20 &&
+            // rewardData.length === 0 &&
+            // address.toLowerCase() === coinbase.toLowerCase() &&
+            networkId !== 8453
+          ) {
+            setMessage("switch");
+            setDisable(true);
+          } else {
+            setMessage("");
+            setDisable(false);
           }
-       
+        } else if (!isPremium) {
+          // if (
+          //   claimedChests === 10 &&
+          //   rewardData.length === 0 &&
+          //   address.toLowerCase() === coinbase.toLowerCase() &&
+          //   (chainId === 56 || chainId === 204)
+          // ) {
+          //   setMessage("premium");
+          // } else if (
+          //   claimedChests < 10 &&
+          //   rewardData.length === 0 &&
+          //   address.toLowerCase() === coinbase.toLowerCase() &&
+          //   (chainId === 56 || chainId === 204)
+          // ) {
+          //   setMessage("");
+          //   setDisable(false);
+          // } else
+
+          if (
+            // claimedChests < 10 &&
+            // rewardData.length === 0 &&
+            // address.toLowerCase() === coinbase.toLowerCase() &&
+            networkId !== 8453
+          ) {
+            setMessage("switch");
+            setDisable(true);
+          } else {
+            setMessage("");
+            setDisable(false);
+          }
+        }
       } else {
         setMessage("login");
         setDisable(true);
       }
     }
   }, [
-    
     chain,
     networkId,
     coinbase,
@@ -192,7 +189,7 @@ const Games = ({
     // claimedTaikoPremiumChests,
     // rewardData,
   ]);
-  
+
   return (
     <div className="container-lg p-0">
       <div className="games-banner d-flex flex-column flex-lg-row px-4 py-3 gap-3 gap-lg-0 align-items-center mb-4">
@@ -258,6 +255,7 @@ const Games = ({
                       onClaimRewards={(value) => {
                         console.log(value);
                         handleAddNewRock(value);
+                        
                         // setLiveRewardData(value);
                         // onChestClaimed();
                         // showLiveRewardData(value);
@@ -271,8 +269,8 @@ const Games = ({
                       //   }}
                       onLoadingChest={(value) => {
                         setDisable(value);
-                        setloading(value)
-                        setSelectedChest(index + 1)
+                        setloading(value);
+                        setSelectedChest(index + 1);
                       }}
                       onChestStatus={(val) => {
                         setMessage(val);
@@ -373,7 +371,7 @@ const Games = ({
                         style={{
                           textDecoration: "underline",
                           cursor: "pointer",
-                          color: "#ce5d1b"
+                          color: "#ce5d1b",
                         }}
                         onClick={handleBasePool}
                       >
@@ -638,17 +636,36 @@ const Games = ({
           <div className="left-games-banner p-2">
             <div className="d-flex flex-column h-100">
               <div className="main-image-game h-100 position-relative overflow-hidden">
-                <div className="position-absolute w-100">
-                  <div className="d-flex justify-content-between align-items-start w-100 p-2">
+                <div className="dynamic-position w-100">
+                  <div className="d-flex flex-column flex-lg-row flex-md-row flex-sm-row justify-content-between align-items-start w-100 p-2">
                     <img src={stoneCrack} alt="" className="stonecrack-logo" />
-                    <div className="d-flex flex-column gap-1 align-items-end">
-                      <div className="totalpoints-wrapper px-3 d-flex align-items-center gap-1 ">
-                        <h6 className="totalpoints-value">12,256,786</h6>{" "}
-                        <h6 className="points-text">Points</h6>
+                    <div className="d-flex w-100 flex-row-reverse gap-1">
+                      <div className=" dynamic-width d-flex flex-column align-items-center ">
+                        <div className="w-100 points-upper-bg">
+                          <h6 className="points-text text-center m-0">
+                            Points
+                          </h6>
+                        </div>
+                        <h6 className="dynamic-width text-center totalpoints-wrapper px-3 totalpoints-value">
+                          12,256,786
+                        </h6>
                       </div>
-                      <div className="usdreward-wrapper px-1 d-flex align-items-center gap-1 ">
-                        <h6 className="usdreward-value">$15.2</h6>{" "}
-                        <h6 className="usdreward-text">Rewards</h6>
+                      <div className="d-flex flex-column align-items-center dynamic-width">
+                        <div className="px-3 usd-upper-bg w-100">
+                          <h6 className="usdreward-text m-0 text-center dynamic-width">
+                            Rewards
+                          </h6>
+                        </div>
+                        <div className="h-100 d-flex gap-3 align-items-center justify-content-center px-3 usdreward-wrapper dynamic-width">
+                          <div className="d-flex flex-column">
+                            <h6 className="usdreward-value-crypto">DYP</h6>
+                            <h6 className="usdreward-value">$15.2</h6>
+                          </div>
+                          <div className="d-flex flex-column">
+                            <h6 className="usdreward-value-crypto">ETH</h6>
+                            <h6 className="usdreward-value">$15.2</h6>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -661,7 +678,15 @@ const Games = ({
                       return (
                         <div
                           key={index}
-                          className={`rockitem rockitem${index + 1} ${loading === true && selectedChest === index + 1 && 'chest-pulsate'} `}
+                          className={`rockitem rockitem${index + 1} ${
+                            loading === true &&
+                            selectedChest === index + 1 &&
+                            "chest-pulsate"
+                          }  ${
+                            loading === false &&
+                            selectedChest === index + 1 &&
+                            "chest-fade"
+                          } `}
                           style={{
                             display: rockData.includes(index + 1)
                               ? "none"
@@ -680,7 +705,11 @@ const Games = ({
                       return (
                         <div
                           key={index}
-                          className={`rockitem rockitem${index + 6}`}
+                          className={`rockitem  ${
+                            loading === true &&
+                            selectedChest === index + 6 &&
+                            "chest-pulsate"
+                          } rockitem${index + 6}`}
                           style={{
                             display: rockData.includes(index + 6) ? "none" : "",
                           }}
@@ -697,7 +726,11 @@ const Games = ({
                       return (
                         <div
                           key={index}
-                          className={`rockitem rockitem${index + 11}`}
+                          className={`rockitem rockitem${index + 11} ${
+                            loading === true &&
+                            selectedChest === index + 11 &&
+                            "chest-pulsate"
+                          }`}
                           style={{
                             display: rockData.includes(index + 11)
                               ? "none"
@@ -716,7 +749,11 @@ const Games = ({
                       return (
                         <div
                           key={index}
-                          className={`rockitem rockitem${index + 16}`}
+                          className={`rockitem rockitem${index + 16} ${
+                            loading === true &&
+                            selectedChest === index + 16 &&
+                            "chest-pulsate"
+                          }`}
                           style={{
                             display: rockData.includes(index + 16)
                               ? "none"

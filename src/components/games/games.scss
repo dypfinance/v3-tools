@@ -4,6 +4,20 @@
   border-radius: 20px;
 }
 
+.points-upper-bg {
+  background: url('./assets/pointsUpperBg.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.usd-upper-bg {
+  background: url('./assets/usdUpperBg.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
 .game-wrapper-container {
   background: url("./assets/gameBg.webp");
   background-position: center;
@@ -168,15 +182,50 @@ line-height: normal;
     height: 20px;
   }
 }
+
+.shimmer1 {
+  animation: shimmer 2.5s infinite;
+}
+
+.shimmer {
+  color: grey;
+  display:inline-block;
+  -webkit-mask:linear-gradient(-60deg,#000 30%,#0005,#000 70%) right/300% 100%;
+  mask:linear-gradient(-60deg,#000 30%,#0005,#000 70%) right/300% 100%;
+
+  background-repeat: no-repeat;
+  animation: shimmer 2.5s infinite;
+}
+
+
+@keyframes shimmer {
+  100% {-webkit-mask-position:left;mask-position:left}
+ 
+
+}
+
+
+.dynamic-position {
+  position: absolute;
+  @media screen and (max-width: 575px) {
+    position: relative;
+  }
+}
+
+.dynamic-width {
+  width : auto;
+  @media screen and (max-width: 575px) {
+    width: 100% !important;
+  }
+}
+
 .points-text {
   color: #ffd37e;
-  font-size: 12px;
+  font-size: 10px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  @media screen and (max-width: 600px) {
-    font-size: 10px;
-  }
+ 
 }
 
 .usdreward-wrapper {
@@ -188,25 +237,32 @@ line-height: normal;
 }
 
 .usdreward-value {
-  color: #55fffb;
-  font-size: 16px;
+  color: #EAEAEA;
+  font-size: 14px;
   font-style: normal;
   font-weight: 700;
-  line-height: normal;
+  line-height: 100%;
   @media screen and (max-width: 600px) {
     font-size: 12px;
   }
 }
 
+.usdreward-value-crypto {
+  color: #FFEACF;
+  text-align: center;
+  font-size: 7px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 100%; /* 7px */
+}
+
 .usdreward-text {
-  color: #55fffb;
-  font-size: 12px;
+  color: #FFEACF;
+  text-align: center;
+  font-size: 10px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  @media screen and (max-width: 600px) {
-    font-size: 10px;
-  }
 }
 
 .chest-progress-wrapper {
@@ -1092,6 +1148,41 @@ border: 1px solid transparent;
 .chest-pulsate {
   -webkit-animation: vibrate-1 0.3s linear infinite both;
   animation: vibrate-1 0.3s linear infinite both;
+  top: auto;
+  left: auto;
+}
+
+
+@-webkit-keyframes scale-out-center {
+  0% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: scale(0);
+            transform: scale(0);
+    opacity: 1;
+  }
+}
+@keyframes scale-out-center {
+  0% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: scale(0);
+            transform: scale(0);
+    opacity: 1;
+  }
+}
+
+
+
+.chest-fade {
+  -webkit-animation: scale-out-center 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) alternate both;
+  animation: scale-out-center 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) alternate both;
   top: auto;
   left: auto;
 }

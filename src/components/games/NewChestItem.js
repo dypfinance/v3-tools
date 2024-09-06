@@ -39,6 +39,10 @@ const NewChestItem = ({
   const [loading, setLoading] = useState(false);
   const [approved, setApproved] = useState(false);
 
+  const audiostart = new Audio(crackStoneSound);
+  const audioerror = new Audio(errorSound);
+  const audiosuccess = new Audio(crackedStoneSound);
+
   const getUserRewardsByChest2 = async (
     userEmail,
     txHash,
@@ -380,6 +384,7 @@ const NewChestItem = ({
             //   chestIndex - 1,
             //   "base"
             // );
+            onCrackStone("success");
             setTimeout(() => {
               onClaimRewards(chestId);
               setIsChestOpen(true);
@@ -387,7 +392,6 @@ const NewChestItem = ({
               onLoadingChest(false);
               setLoading(false);
               setClaimingChest(false);
-              onCrackStone("success");
             }, 1000);
           })
           .catch((e) => {
@@ -396,10 +400,10 @@ const NewChestItem = ({
             setTimeout(() => {
               onChestStatus("initial");
             }, 3000);
+              onCrackStone("error");
             onLoadingChest(false);
             setLoading(false);
             setClaimingChest(false);
-            onCrackStone("error");
 
             console.error(e);
           });
@@ -416,6 +420,7 @@ const NewChestItem = ({
             //   chestIndex - 1,
             //   "base"
             // );
+            onCrackStone("success");
             setTimeout(() => {
               onClaimRewards(chestId);
               setIsChestOpen(true);
@@ -423,7 +428,6 @@ const NewChestItem = ({
               onLoadingChest(false);
               setLoading(false);
               setClaimingChest(false);
-              onCrackStone("success");
             }, 1000);
           })
           .catch((e) => {
@@ -433,10 +437,10 @@ const NewChestItem = ({
             setTimeout(() => {
               onChestStatus("initial");
             }, 3000);
+              onCrackStone("error");
             onLoadingChest(false);
             setLoading(false);
             setClaimingChest(false);
-            onCrackStone("error");
           });
       }
     }
@@ -469,32 +473,27 @@ const NewChestItem = ({
   };
 
   const onCrackStone = (event) => {
-    const audiostart = new Audio(crackStoneSound);
-    const audioerror = new Audio(errorSound);
-    const audiosuccess = new Audio(crackedStoneSound);
-
-    console.log(audiostart, audioerror, audiosuccess, event);
     if (event === "start") {
       if (!audiostart.loop) {
         audiostart.loop = true;
       }
       audiostart.play();
-    }  if (event === "error") {
+    }
+    if (event === "error") {
       if (audiostart.loop) {
         audiostart.loop = false;
       }
       audiostart.pause();
       audiostart.currentTime = 0;
       audioerror.play();
-    }  if (event === "success") {
-      console.log(' audiostart.loop', audiostart.loop, audiostart.currentTime)
+    }
+    if (event === "success") {
       if (audiostart.loop) {
         audiostart.loop = false;
       }
+      audiostart.pause();
       audiostart.loop = false;
-      audiostart.src = '';
       audiostart.currentTime = 0;
-      audiostart.preload ='none'
       audiosuccess.play();
     }
   };
