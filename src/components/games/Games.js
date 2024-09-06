@@ -37,6 +37,8 @@ const Games = ({
   const [claimingChest, setClaimingChest] = useState(false);
   const [selectedChest, setSelectedChest] = useState(null);
   const [disable, setDisable] = useState(false);
+  const [loading, setloading] = useState(false);
+
   var rocksArray = [];
   const handleBasePool = async () => {
     await handleSwitchNetworkhook("0x2105")
@@ -87,8 +89,16 @@ const Games = ({
     },
   ];
   const handleAddNewRock = (rock) => {
-    rocksArray = [...rockData, rock];
+    const firstTwo = [1, 2]
+    if(rock === 1) {
+      rocksArray = [...rockData, ...firstTwo];
     setRockData(rocksArray);
+
+    } else {
+       rocksArray = [...rockData, rock];
+    setRockData(rocksArray);
+    }
+   
   };
 
   useEffect(() => {
@@ -183,7 +193,6 @@ const Games = ({
     // rewardData,
   ]);
   
-
   return (
     <div className="container-lg p-0">
       <div className="games-banner d-flex flex-column flex-lg-row px-4 py-3 gap-3 gap-lg-0 align-items-center mb-4">
@@ -262,7 +271,8 @@ const Games = ({
                       //   }}
                       onLoadingChest={(value) => {
                         setDisable(value);
-                        // setSelectedChest(index + 1)
+                        setloading(value)
+                        setSelectedChest(index + 1)
                       }}
                       onChestStatus={(val) => {
                         setMessage(val);
@@ -651,7 +661,7 @@ const Games = ({
                       return (
                         <div
                           key={index}
-                          className={`rockitem rockitem${index + 1}`}
+                          className={`rockitem rockitem${index + 1} ${loading === true && selectedChest === index + 1 && 'chest-pulsate'} `}
                           style={{
                             display: rockData.includes(index + 1)
                               ? "none"

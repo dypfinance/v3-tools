@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import premiumLock from "./assets/premiumLock.png";
 import errorSound from "./assets/error.mp3";
+import crackStoneSound from "./assets/stone-crack-sound.mp3";
+import crackedStoneSound from "./assets/stone-cracked-sound.mp3";
+
 import axios from "axios";
 import Web3 from "web3";
 
@@ -355,8 +358,7 @@ const NewChestItem = ({
     onLoadingChest(true);
     setLoading(true);
     setClaimingChest(true);
-
-
+    onCrackStone("start");
 
     window.web3 = new Web3(window.ethereum);
     const daily_bonus_contract = new window.web3.eth.Contract(
@@ -385,6 +387,7 @@ const NewChestItem = ({
               onLoadingChest(false);
               setLoading(false);
               setClaimingChest(false);
+              onCrackStone("success");
             }, 1000);
           })
           .catch((e) => {
@@ -396,6 +399,7 @@ const NewChestItem = ({
             onLoadingChest(false);
             setLoading(false);
             setClaimingChest(false);
+            onCrackStone("error");
 
             console.error(e);
           });
@@ -419,6 +423,7 @@ const NewChestItem = ({
               onLoadingChest(false);
               setLoading(false);
               setClaimingChest(false);
+              onCrackStone("success");
             }, 1000);
           })
           .catch((e) => {
@@ -431,6 +436,7 @@ const NewChestItem = ({
             onLoadingChest(false);
             setLoading(false);
             setClaimingChest(false);
+            onCrackStone("error");
           });
       }
     }
@@ -461,6 +467,38 @@ const NewChestItem = ({
       setShake(false);
     }, 1000);
   };
+
+  const onCrackStone = (event) => {
+    const audiostart = new Audio(crackStoneSound);
+    const audioerror = new Audio(errorSound);
+    const audiosuccess = new Audio(crackedStoneSound);
+
+    console.log(audiostart, audioerror, audiosuccess, event);
+    if (event === "start") {
+      if (!audiostart.loop) {
+        audiostart.loop = true;
+      }
+      audiostart.play();
+    }  if (event === "error") {
+      if (audiostart.loop) {
+        audiostart.loop = false;
+      }
+      audiostart.pause();
+      audiostart.currentTime = 0;
+      audioerror.play();
+    }  if (event === "success") {
+      console.log(' audiostart.loop', audiostart.loop, audiostart.currentTime)
+      if (audiostart.loop) {
+        audiostart.loop = false;
+      }
+      audiostart.loop = false;
+      audiostart.src = '';
+      audiostart.currentTime = 0;
+      audiostart.preload ='none'
+      audiosuccess.play();
+    }
+  };
+
   useEffect(() => {
     setIsChestOpen(false);
   }, [isPremium, rewardTypes]);
