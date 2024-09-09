@@ -951,7 +951,7 @@ class App extends React.Component {
                       path="/games"
                       render={(props) => (
                         <Games
-                          handleConnection={this.handleConnection}
+                          handleConnection={this.showModal}
                           isConnected={this.state.isConnected}
                           appState={this.state}
                           theme={this.state.theme}

@@ -4,6 +4,20 @@
   border-radius: 20px;
 }
 
+
+.sign-in-btn {
+  border-radius: 8px;
+  background: linear-gradient(95deg, #d75853 0.51%, #f28a4d 100%);
+  color: #fff;
+  text-align: center;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  border: none;
+  white-space: nowrap;
+}
+
 .points-upper-bg {
   background: url('./assets/pointsUpperBg.svg');
   background-position: center;

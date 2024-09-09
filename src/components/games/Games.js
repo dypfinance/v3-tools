@@ -54,42 +54,42 @@ const Games = ({
 
   const windowSize = useWindowSize();
 
-  const dummyRewards = [
-    {
-      title: "Points",
-      amount: "Points",
-      img: "points",
-      error: true,
-      threshold: [1, 200000],
-    },
-    {
-      title: "Money",
-      amount: "$0.5 - $5",
-      img: 2,
-      error: false,
-      threshold: [],
-      min: 0.5,
-      max: 5,
-    },
-    {
-      title: "Money",
-      amount: "$15-$20",
-      img: 5,
-      error: true,
-      threshold: [],
-      min: 15,
-      max: 20,
-    },
-    {
-      title: "Money",
-      amount: "$20-$30",
-      img: 30,
-      error: false,
-      threshold: [],
-      min: 20,
-      max: 30,
-    },
-  ];
+  // const dummyRewards = [
+  //   {
+  //     title: "Points",
+  //     amount: "Points",
+  //     img: "points",
+  //     error: true,
+  //     threshold: [1, 200000],
+  //   },
+  //   {
+  //     title: "Money",
+  //     amount: "$0.5 - $5",
+  //     img: 2,
+  //     error: false,
+  //     threshold: [],
+  //     min: 0.5,
+  //     max: 5,
+  //   },
+  //   {
+  //     title: "Money",
+  //     amount: "$15-$20",
+  //     img: 5,
+  //     error: true,
+  //     threshold: [],
+  //     min: 15,
+  //     max: 20,
+  //   },
+  //   {
+  //     title: "Money",
+  //     amount: "$20-$30",
+  //     img: 30,
+  //     error: false,
+  //     threshold: [],
+  //     min: 20,
+  //     max: 30,
+  //   },
+  // ];
   const handleAddNewRock = (rock) => {
     const firstTwo = [1, 2];
     if (rock === 1) {
@@ -165,7 +165,7 @@ const Games = ({
           }
         }
       } else {
-        setMessage("login");
+        setMessage("connect");
         setDisable(true);
       }
     }
@@ -477,7 +477,7 @@ const Games = ({
                 ) : message === "won" ? (
                   <div className="d-flex align-items-center position-relative flex-column flex-lg-row justify-content-between p-0 p-lg-2 w-100 chest-progress-wrapper">
                     <div
-                      className="chain-desc-wrapper p-2 d-flex flex-column"
+                      className="chain-desc-wrapper w-100 p-2 d-flex flex-column"
                       style={{
                         filter: "brightness(1)",
                         position: "relative",
@@ -525,7 +525,7 @@ const Games = ({
                 ) : message === "wonPoints" ? (
                   <div className="d-flex align-items-center position-relative flex-column flex-lg-row justify-content-between p-0 p-lg-2 w-100 chest-progress-wrapper">
                     <div
-                      className="chain-desc-wrapper p-2 d-flex flex-column"
+                      className="chain-desc-wrapper w-100 p-2 d-flex flex-column"
                       style={{
                         filter: "brightness(1)",
                         position: "relative",
@@ -563,7 +563,7 @@ const Games = ({
                     }}
                   >
                     <div
-                      className="chain-desc-wrapper p-2 d-flex flex-column"
+                      className="chain-desc-wrapper w-100 p-2 d-flex flex-column"
                       style={{
                         filter: "brightness(1)",
                         position: "relative",
@@ -587,6 +587,40 @@ const Games = ({
                       Sign In
                     </NavLink>
                   </div> */}
+                  </div>
+                ) : message === "connect" ? (
+                  <div
+                    className="d-flex align-items-center flex-column flex-lg-row justify-content-between p-0 p-lg-2 w-100 chest-progress-wrapper"
+                    style={{
+                      border: "1px solid #8262D0",
+                      background:
+                        "linear-gradient(180deg, #8262D0 0%, #482293 100%)",
+                    }}
+                  >
+                    <div
+                      className="chain-desc-wrapper w-100 p-2 d-flex flex-column"
+                      style={{
+                        filter: "brightness(1)",
+                        position: "relative",
+                      }}
+                    >
+                      <h6 className="desc-title mb-0" style={{ color: "#fff" }}>
+                        Connect wallet
+                      </h6>
+                      <span className="chain-desc mb-0">
+                        Sign in to access Daily Bonus and earn tailored rewards!
+                      </span>
+                    </div>
+                    <div className="d-flex align-items-center justify-content-end get-premium-wrapper p-3 p-lg-0">
+                    <button
+                      className="sign-in-btn px-4 py-1"
+                      onClick={() => {
+                        handleConnection()
+                      }}
+                    >
+                      Connect Wallet
+                    </button>
+                  </div>
                   </div>
                 ) : message === "comingsoon" ? (
                   <div
@@ -682,11 +716,9 @@ const Games = ({
                             loading === true &&
                             selectedChest === index + 1 &&
                             "chest-pulsate"
-                          }  ${
-                            loading === false &&
-                            selectedChest === index + 1 &&
-                            "chest-fade"
-                          } `}
+                          } 
+                           
+                          `}
                           style={{
                             display: rockData.includes(index + 1)
                               ? "none"
@@ -696,6 +728,7 @@ const Games = ({
                           <img
                             src={require(`./assets/rocksBg/${index + 1}.png`)}
                             className="rock-img"
+                            alt=""
                           />
                         </div>
                       );
@@ -717,6 +750,8 @@ const Games = ({
                           <img
                             src={require(`./assets/rocksBg/${index + 6}.png`)}
                             className="rock-img"
+                            alt=""
+
                           />
                         </div>
                       );
@@ -740,6 +775,8 @@ const Games = ({
                           <img
                             src={require(`./assets/rocksBg/${index + 11}.png`)}
                             className="rock-img"
+                            alt=""
+
                           />
                         </div>
                       );
@@ -763,6 +800,8 @@ const Games = ({
                           <img
                             src={require(`./assets/rocksBg/${index + 16}.png`)}
                             className="rock-img"
+                            alt=""
+
                           />
                         </div>
                       );
