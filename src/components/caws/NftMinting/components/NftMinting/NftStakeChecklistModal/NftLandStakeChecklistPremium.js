@@ -6,9 +6,9 @@ import PropTypes from "prop-types";
 
 // import ToolTip from "../../../../elements/ToolTip";
 // import X from "../../../../../assets/images/x_close.png";
-import NftPlaceHolder from "../../General/NftPlaceHolder/NftPlaceHolder";
-import NftStakingCawChecklist from "../../General/NftStakingCawChecklist/NftStakingCawChecklist";
-import CawsPremiumChecklist from "../../General/NftStakingCawChecklist/CawsPremiumChecklist";
+import NftPlaceHolder from "../../../../../LandNFTModal/LandNFTPlaceHolder";
+// import NftStakingCawChecklist from "../../General/NftStakingCawChecklist/NftStakingCawChecklist";
+// import CawsPremiumChecklist from "../../General/NftStakingCawChecklist/CawsPremiumChecklist";
 import { formattedNum } from "../../../../../../functions/formatUSD";
 import getFormattedNumber from "../../../../../../functions/get-formatted-number";
 // import EthLogo from "../../../../../assets/General/eth-create-nft.png";
@@ -16,8 +16,9 @@ import getFormattedNumber from "../../../../../../functions/get-formatted-number
 // import CatLogo from "../../../../../assets/General/cat-totalsupply-icon.svg";
 import "./_nftStakeChecklistModal.scss";
 import CountDownTimerUnstake from "../../../../../locker/Countdown";
+import LandPremiumChecklist from "../../General/NftStakingCawChecklist/LandPremiumChecklist";
 
-const NftStakeCheckListPremiumModal = ({
+const NftLandStakeCheckListPremiumModal = ({
   nftItem,
   open,
   onShareClick,
@@ -100,10 +101,10 @@ const NftStakeCheckListPremiumModal = ({
 
   const checkApproval = async () => {
     const address = coinbase;
-    const stakeApr50 = await window.config.nft_caws_premiumstake_address;
+    const stakeApr50 = await window.config.nft_land_premiumstake_address;
     if (address !== null) {
       if (apr == 50) {
-        const result = await window.nft
+        const result = await window.landnft
           .checkapproveStake(address, stakeApr50)
           .then((data) => {
             return data;
@@ -128,10 +129,10 @@ const NftStakeCheckListPremiumModal = ({
   const handleSelectAll = () => {
     setCheckBtn(!checkbtn);
     if (checkbtn === false) {
-      if (nftIds.length > 4) {
-        setSelectedNftIds(nftIds.slice(0, 4 - mystakes.length));
-      } else if (nftIds.length <= 4) {
-        setSelectedNftIds(nftIds.slice(0, 4 - mystakes.length));
+      if (nftIds.length > 50) {
+        setSelectedNftIds(nftIds.slice(0, 50));
+      } else if (nftIds.length <= 50) {
+        setSelectedNftIds(nftIds);
       }
     } else if (checkbtn === true) {
       setSelectedNftIds([]);
@@ -142,9 +143,9 @@ const NftStakeCheckListPremiumModal = ({
   const handleSelectAllToUnstake = () => {
     setCheckUnstakeBtn(!checkUnstakebtn);
     if (checkUnstakebtn === false) {
-      if (nftIds.length > 4) {
-        setSelectedNftIds(nftIds.slice(0, 4));
-      } else if (nftIds.length <= 4) {
+      if (nftIds.length > 50) {
+        setSelectedNftIds(nftIds.slice(0, 50));
+      } else if (nftIds.length <= 50) {
         setSelectedNftIds(nftIds);
       }
     } else if (checkUnstakebtn === true) {
@@ -154,11 +155,11 @@ const NftStakeCheckListPremiumModal = ({
   };
 
   const handleApprove = async () => {
-    const stakeApr50 = await window.config.nft_caws_premiumstake_address;
+    const stakeApr50 = await window.config.nft_land_premiumstake_address;
 
     setloading(true);
     setStatus("*Waiting for approval");
-    await window.nft
+    await window.landnft
       .approveStake(stakeApr50)
       .then(() => {
         setActive(false);
@@ -176,8 +177,8 @@ const NftStakeCheckListPremiumModal = ({
   };
 
   const handleDeposit = async (value) => {
-    let stake_contract = await window.getContractCawsPremiumNFT(
-      "CAWSPREMIUM"
+    let stake_contract = await window.getContractLandPremiumNFT(
+      "LANDPREMIUM"
     );
     setloadingdeposit(true);
     setStatus("*Processing deposit");
@@ -221,22 +222,22 @@ const NftStakeCheckListPremiumModal = ({
 
   useEffect(() => {
     if (
-      selectNftIds.length > 4 &&
+      selectNftIds.length > 50 &&
       checkbtn === false &&
       showToStake === true
     ) {
-      window.alertify.error("Limit to Stake/Unstake NFT is 4 NFT's per wallet");
+      window.alertify.error("Limit to Stake/Unstake NFT is 50 NFT's per round");
       const interval = setInterval(async () => {
         setCheckBtn(false);
         setCheckUnstakeBtn(false);
         return () => clearInterval(interval);
       }, 500);
     } else if (
-      selectNftIds.length > 4 &&
+      selectNftIds.length > 50 &&
       checkbtn === true &&
       showToStake === true
     ) {
-      window.alertify.error("Limit to Stake/Unstake NFT is 4 NFT's per wallet");
+      window.alertify.error("Limit to Stake/Unstake NFT is 50 NFT's per round");
       const interval = setInterval(async () => {
         setCheckBtn(false);
         setCheckUnstakeBtn(false);
@@ -244,22 +245,22 @@ const NftStakeCheckListPremiumModal = ({
         return () => clearInterval(interval);
       }, 500);
     } else if (
-      selectNftIds.length > 4 &&
+      selectNftIds.length > 50 &&
       checkUnstakebtn === false &&
       showToStake === false
     ) {
-      window.alertify.error("Limit to Stake/Unstake NFT is 4 NFT's per wallet");
+      window.alertify.error("Limit to Stake/Unstake NFT is 50 NFT's per round");
       const interval = setInterval(async () => {
         setCheckBtn(false);
         setCheckUnstakeBtn(false);
         return () => clearInterval(interval);
       }, 500);
     } else if (
-      selectNftIds.length > 4 &&
+      selectNftIds.length > 50 &&
       checkUnstakebtn === true &&
       showToStake === false
     ) {
-      window.alertify.error("Limit to Stake/Unstake NFT is 4 NFT's per round");
+      window.alertify.error("Limit to Stake/Unstake NFT is 50 NFT's per round");
       const interval = setInterval(async () => {
         setCheckBtn(false);
         setCheckUnstakeBtn(false);
@@ -285,8 +286,8 @@ const NftStakeCheckListPremiumModal = ({
   const onEmptyState = () => {};
 
   const handleUnstake = async (value) => {
-    let stake_contract = await window.getContractCawsPremiumNFT(
-      "CAWSPREMIUM"
+    let stake_contract = await window.getContractLandPremiumNFT(
+      "LANDPREMIUM"
     );
     setStatus("*Processing unstake");
     setColor("#F13227");
@@ -316,8 +317,8 @@ const NftStakeCheckListPremiumModal = ({
   };
 
   const handleClaim = async (itemId) => {
-    let staking_contract = await window.getContractCawsPremiumNFT(
-      "CAWSPREMIUM"
+    let staking_contract = await window.getContractLandPremiumNFT(
+      "LANDPREMIUM"
     );
 
     setloadingClaim(true);
@@ -514,7 +515,7 @@ const NftStakeCheckListPremiumModal = ({
             ) : nftItem.length <= 4 ? (
               <>
                 {nftItem.map((item, id) => {
-                  let nftId = item.name?.slice(6, nftItem.name?.length);
+                  let nftId = item.name?.slice(1, nftItem.name?.length);
 
                   if (showToStake) {
                     // selectNftIds.push(nftId);
@@ -527,7 +528,7 @@ const NftStakeCheckListPremiumModal = ({
                   }
                   return (
                     <>
-                      <CawsPremiumChecklist
+                      <LandPremiumChecklist
                         key={id}
                         nft={item}
                         width={195}
@@ -538,9 +539,9 @@ const NftStakeCheckListPremiumModal = ({
                           ((showToStake === true && checkbtn === true && selectNftIds.includes(nftId)) ||
                             (showStaked === true &&
                               checkUnstakebtn === true && selectNftIds.includes(nftId))) &&
-                          selectNftIds.length <= 4 
+                          selectNftIds.length <= 50 
                         }
-                        checked2={(selectNftIds.length <= 4 )? true : false}
+                        checked2={(selectNftIds.length <= 50 )? true : false}
                         checklistItemID={nftId}
                         onChange={(value) => {
                           selectNftIds.indexOf(value) === -1
@@ -583,7 +584,7 @@ const NftStakeCheckListPremiumModal = ({
               </>
             ) : (
               nftItem.map((item, id) => {
-                let nftId = item.name?.slice(6, nftItem.name?.length);
+                let nftId = item.name?.slice(1, nftItem.name?.length);
                 if (showToStake) {
                   // selectNftIds.push(nftId);
                   nftIds.push(nftId);
@@ -595,7 +596,7 @@ const NftStakeCheckListPremiumModal = ({
                 }
                 return (
                   <>
-                    <CawsPremiumChecklist
+                    <LandPremiumChecklist
                       key={id}
                       nft={item}
                       width={195}
@@ -606,9 +607,9 @@ const NftStakeCheckListPremiumModal = ({
                       checked={
                         ((showToStake === true && checkbtn === true && selectNftIds.includes(nftId)) ||
                           (showStaked === true && checkUnstakebtn === true && selectNftIds.includes(nftId))) &&
-                        selectNftIds.length <= 4
+                        selectNftIds.length <= 50
                       }
-                      checked2={selectNftIds.length <= 4 ? true : false}
+                      checked2={selectNftIds.length <= 50 ? true : false}
                       checklistItemID={nftId}
                       onChange={(value) => {
                         selectNftIds.indexOf(value) === -1
@@ -659,7 +660,7 @@ const NftStakeCheckListPremiumModal = ({
                   }}
                 >
                   {selectNftIds.length}
-                  /4
+                  /50
                 </span>
                 <span
                   style={{
@@ -671,7 +672,7 @@ const NftStakeCheckListPremiumModal = ({
                 </span>
 
                 <img
-                  src={require("./catlogo.svg").default}
+                  src={require("./landplaceholder.svg").default}
                   alt=""
                   style={{ width: 24, height: 24 }}
                 />
@@ -679,7 +680,7 @@ const NftStakeCheckListPremiumModal = ({
             </div>
 
             <div
-              className="mt-4 row mx-0 justify-content-xxl-between justify-content-lg-between justify-content-md-between justify-content-sm-between justify-content-center gap-3"
+              className="mt-4 d-flex flex-column flex-lg-row mx-0 justify-content-xxl-between justify-content-lg-between justify-content-md-between justify-content-sm-between justify-content-center gap-3"
               style={{
                 gap: 20,
                 display: showStaked === false ? "" : "none",
@@ -715,7 +716,7 @@ const NftStakeCheckListPremiumModal = ({
                     (!showApprove &&
                       nftItem.length > 0 &&
                       selectNftIds.length != 0 &&
-                      selectNftIds.length < 4)
+                      selectNftIds.length < 51)
                       ? "linear-gradient(90.74deg, #7770E0 0%, #554FD8 100%)"
                       : "#14142A",
                   pointerEvents:
@@ -726,7 +727,7 @@ const NftStakeCheckListPremiumModal = ({
                 onClick={() =>
                   (checkbtn === true && selectNftIds.length === 0) ||
                   (checkbtn === false && selectNftIds.length === 0) ||
-                  selectNftIds.length > 4
+                  selectNftIds.length > 50
                     ? onEmptyState()
                     : handleDeposit(val)
                 }
@@ -878,12 +879,12 @@ const NftStakeCheckListPremiumModal = ({
                             borderColor={"#999999"}
                             padding={"5px 1px 0px 0px"}
                           /> */}
-                        <p className="claim-timer-subtitle m-0">Cooldown</p>
+                        {/* <p className="claim-timer-subtitle m-0">Cooldown</p> */}
                       </div>
-                      <CountDownTimerUnstake
+                      {/* <CountDownTimerUnstake
                         date={Date.now() + countDownLeft}
                         onComplete={() => {}}
-                      />
+                      /> */}
                     </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                       <div
@@ -900,7 +901,7 @@ const NftStakeCheckListPremiumModal = ({
                           }}
                         >
                           {countDownLeft < 0 ? selectNftIds.length : 0}
-                          /4
+                          /50
                         </span>
                         <span
                           style={{
@@ -915,7 +916,7 @@ const NftStakeCheckListPremiumModal = ({
                         </span>
 
                         <img
-                          src={require("./catlogo.svg").default}
+                          src={require("./landplaceholder.svg").default}
                           alt=""
                           style={{ width: 24, height: 24 }}
                         />
@@ -924,21 +925,21 @@ const NftStakeCheckListPremiumModal = ({
                         style={{ fontSize: 10, color: "#C0C9FF" }}
                         className="mt-1"
                       >
-                        Maximum of 4 NFTs selectable
+                        Maximum of 50 NFTs selectable
                       </span>
                     </div>
                   </div>
                 </div>
                 <button
-                  className="btn activebtn"
+                  className="btn activebtn mw-100 m-auto"
                   onClick={() => {
                     checkUnstakebtn === true &&
                     selectNftIds.length === nftItem.length &&
-                    selectNftIds.length < 5
+                    selectNftIds.length < 51
                       ? onUnstake()
                       : (checkUnstakebtn === true &&
                           selectNftIds.length === 0) ||
-                        selectNftIds.length > 4
+                        selectNftIds.length > 50
                       ? onEmptyState()
                       : selectNftIds.length !== 0 &&
                         selectNftIds.length < nftItem.length
@@ -950,11 +951,11 @@ const NftStakeCheckListPremiumModal = ({
                       active &&
                       selectNftIds.length !== 0 &&
                       countDownLeft < 0 &&
-                      selectNftIds.length < 5
+                      selectNftIds.length < 51
                         ? "linear-gradient(90.74deg, #7770E0 0%, #554FD8 100%)"
                         : nftItem.length !== 0 &&
                           selectNftIds.length != 0 &&
-                          selectNftIds.length < 5 &&
+                          selectNftIds.length < 51 &&
                           countDownLeft < 0
                         ? "linear-gradient(90.74deg, #7770E0 0%, #554FD8 100%)"
                         : "#14142A",
@@ -966,10 +967,9 @@ const NftStakeCheckListPremiumModal = ({
                           selectNftIds.length == 0
                         ? "auto"
                         : "none",
-                    width: "50%",
+                    // width: "50%",
                     borderRadius: "8px",
                     color: ETHrewards != 0 ? "#FFFFFF" : "#C0C9FF",
-                    margin: "auto",
                   }}
                 >
                   {loading ? (
@@ -993,7 +993,7 @@ const NftStakeCheckListPremiumModal = ({
     </Modal>
   );
 };
-NftStakeCheckListPremiumModal.propTypes = {
+NftLandStakeCheckListPremiumModal.propTypes = {
   nftItem: PropTypes.array,
   open: PropTypes.bool,
   onShareClick: PropTypes.func,
@@ -1008,4 +1008,4 @@ NftStakeCheckListPremiumModal.propTypes = {
   coinbase: PropTypes.string,
 };
 
-export default NftStakeCheckListPremiumModal;
+export default NftLandStakeCheckListPremiumModal;

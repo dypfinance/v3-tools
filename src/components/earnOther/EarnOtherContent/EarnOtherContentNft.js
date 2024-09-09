@@ -82,7 +82,7 @@ const EarnOtherContentNft = ({
       tokenTicker: "ETH",
       pool: "WOD",
       id: "",
-      coming_soon: true,
+      coming_soon: false,
       lockTime: "No lock",
       poolCap: "100",
       new_pool: "Yes",
@@ -445,6 +445,11 @@ const EarnOtherContentNft = ({
       setExpiredPools(false)
       setclickedCawsPool(true)
     }
+    else if(poolClickedType === 'details-land-nft' && poolClicked === true && clickedCawsPool === false) {
+      setMyStakes(false)
+      setExpiredPools(false)
+      setclickedCawsPool(true)
+    }
   },[poolClickedType,poolClicked,clickedCawsPool])
 
   return (
@@ -625,27 +630,7 @@ const EarnOtherContentNft = ({
           </div>
         </div>
       </div>
-      {listStyle === "table" && (
-        <div className="w-100 otherpools-wrapper">
-          {dummyData_eth.map((item, index) => {
-            return (
-              <NavLink to={`/earn/nft-staking/${item.pool}`}>
-                <TopOtherPoolsNftCard
-                  key={index}
-                  lockTime={item.lockTime}
-                  chain={item.chain}
-                  apr={item.apr}
-                  tokenLogo={item.tokenLogo}
-                  expired={item.expired}
-                  top_pick={item.top_pick}
-                  tokenName={item.tokenName}
-                  coming_soon={item.coming_soon}
-                />
-              </NavLink>
-            );
-          })}
-        </div>
-      )}
+    
       {listStyle === "list" && (
         <div className="row mx-0 justify-content-between align-items-center px-0 py-3 w-100">
           {windowSize.width > 768 && (
@@ -679,14 +664,16 @@ const EarnOtherContentNft = ({
                       lockTime={item.lockTime}
                       expired={item.expired}
                       chainId={chainId}
+                      cardIndex={index}
                     handleConnection={handleConnection}
                     handleSwitchNetwork={handleSwitchNetwork}
                     isConnected={isConnected}
                     coinbase={coinbase}
                     isNewPool={item.new_pool === "Yes" ? true : false}
                     isPremium ={isPremium}
-                    clickedCawsPool={item.tokenName !=='WOD' && clickedCawsPool}
+                    clickedCawsPool={clickedCawsPool}
                     onCloseCard={()=>{onCloseCard(); setclickedCawsPool(false)}}
+                    poolClickedType={poolClickedType}
                     />
                   </div>
                 );

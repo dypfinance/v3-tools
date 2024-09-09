@@ -31,7 +31,7 @@ const NftPlaceHolder = ({ onMintClick }) => {
             className="placeholder-button"
             rel="noreferrer"
           >
-            Buy on Opensea
+            Buy on Marketplace
           </a>
         </div>
       </a>
