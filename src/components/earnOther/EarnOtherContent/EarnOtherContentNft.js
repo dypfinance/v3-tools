@@ -529,17 +529,17 @@ const EarnOtherContentNft = ({
                 <div className="pill"></div>
               </div>
             </div>
-            <div className="col-lg-4 col-xl-3 px-0">
+            <div className="col-lg-4 col-xl-3 px-0 w-100">
         
-                <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
+                <div className="total-value-locked-container p-2 d-flex flex-column justify-content-between align-items-start">
                   <span style={{ fontWeight: "300", fontSize: "13px" }}>
-                    Total value locked
+                    Total value locked &nbsp;
                   </span>
                   <h6
                     className="text-white"
                     style={{ fontWeight: "600", fontSize: "17px" }}
                   >
-                    ${getFormattedNumber(totalTvl, 0)}
+                  ${getFormattedNumber(totalTvl, 0)}
                   </h6>
                 </div>
          
