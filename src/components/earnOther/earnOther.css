@@ -481,6 +481,22 @@ hr {
   padding: 6px 12px;
 }
 
+
+.hero-stake-land-btn {
+  border-radius: 8px;
+  background: linear-gradient(95deg, #c37c00 0.51%, #a93e00 100%);
+  color: #fff;
+  text-align: center;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  border: none;
+  width: fit-content;
+  padding: 6px 12px;
+}
+
+
 .premiumBgDesktop {
   background: url(./assets/premiumBg.webp);
   background-position: center;
@@ -526,9 +542,27 @@ hr {
   border-radius: 8px;
 }
 
+.landBgDesktop {
+  background: url(./assets/landBg.webp);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  min-height: 150px;
+  border-radius: 8px;
+}
+
 @media only screen and (max-width: 500px) {
   .cawsBgDesktop {
     background: url(./assets/cawsBgMobile.webp);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    min-height: 350px;
+    border-radius: 8px;
+  }
+
+  .landBgDesktop {
+    background: url(./assets/landBgMobile.webp);
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
