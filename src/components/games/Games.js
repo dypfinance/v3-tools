@@ -16,6 +16,7 @@ import cawsAdventures from "./assets/cawsAdventures.webp";
 import Leaderboard from "../leaderboard/Leaderboard";
 import pointsIcon from "./assets/pointsIcon.png";
 import gemIcon from "./assets/gemIcon.png";
+import spark from "./assets/spark.svg";
 
 const Games = ({
   handleConnection,
@@ -37,7 +38,10 @@ const Games = ({
   const [claimingChest, setClaimingChest] = useState(false);
   const [selectedChest, setSelectedChest] = useState(null);
   const [selectedChest2, setSelectedChest2] = useState();
-
+  const [sparkles, setSparkles] = useState({
+    show: false,
+    position: 1,
+  });
   const [disable, setDisable] = useState(false);
   const [loading, setloading] = useState(false);
 
@@ -192,7 +196,7 @@ const Games = ({
 
   return (
     <div className="container-lg p-0">
-      <div className="games-banner d-flex flex-column flex-lg-row px-4 py-3 gap-3 gap-lg-0 align-items-center mb-4">
+      <div className="games-banner d-flex flex-column flex-lg-row px-4 py-3 gap-3 gap-lg-0 align-items-center mb-4 position-relative">
         <div className="col-12 col-lg-6">
           <div className="d-flex flex-column gap-2">
             <h6 className="migration-banner-title mb-0">Games on Base</h6>
@@ -204,6 +208,8 @@ const Games = ({
             </p>
           </div>
         </div>
+
+        <div className="position-relative" style={{ width: "100px" }}></div>
         <div className="col-12 col-lg-6 position-relative">
           <div className="leaderboard-wrapper">
             <div className="d-flex gap-2 position-relative">
@@ -255,7 +261,7 @@ const Games = ({
                       onClaimRewards={(value) => {
                         console.log(value);
                         handleAddNewRock(value);
-                        
+
                         // setLiveRewardData(value);
                         // onChestClaimed();
                         // showLiveRewardData(value);
@@ -268,9 +274,16 @@ const Games = ({
                       //     setIsActiveIndex(index + 1);
                       //   }}
                       onLoadingChest={(value) => {
+                        setTimeout(() => {
+                          setSparkles({
+                            show: value,
+                            position: index + 1
+                          });
+                        }, 350);
                         setDisable(value);
                         setloading(value);
                         setSelectedChest(index + 1);
+                      
                       }}
                       onChestStatus={(val) => {
                         setMessage(val);
@@ -612,15 +625,15 @@ const Games = ({
                       </span>
                     </div>
                     <div className="d-flex align-items-center justify-content-end get-premium-wrapper p-3 p-lg-0">
-                    <button
-                      className="sign-in-btn px-4 py-1"
-                      onClick={() => {
-                        handleConnection()
-                      }}
-                    >
-                      Connect Wallet
-                    </button>
-                  </div>
+                      <button
+                        className="sign-in-btn px-4 py-1"
+                        onClick={() => {
+                          handleConnection();
+                        }}
+                      >
+                        Connect Wallet
+                      </button>
+                    </div>
                   </div>
                 ) : message === "comingsoon" ? (
                   <div
@@ -670,6 +683,15 @@ const Games = ({
           <div className="left-games-banner p-2">
             <div className="d-flex flex-column h-100">
               <div className="main-image-game h-100 position-relative overflow-hidden">
+               {sparkles.show &&
+                <div class={`animation-container position-${sparkles.position}`}>
+                <div class="spark-wrapper">
+                  <img src={spark} class="spark-1" alt="Spark" />
+                  <img src={spark} class="spark-2" alt="Spark" />
+                  <img src={spark} class="spark-3" alt="Spark" />
+                </div>
+              </div>
+               }
                 <div className="dynamic-position w-100">
                   <div className="d-flex flex-column flex-lg-row flex-md-row flex-sm-row justify-content-between align-items-start w-100 p-2">
                     <img src={stoneCrack} alt="" className="stonecrack-logo" />
@@ -751,7 +773,6 @@ const Games = ({
                             src={require(`./assets/rocksBg/${index + 6}.png`)}
                             className="rock-img"
                             alt=""
-
                           />
                         </div>
                       );
@@ -776,7 +797,6 @@ const Games = ({
                             src={require(`./assets/rocksBg/${index + 11}.png`)}
                             className="rock-img"
                             alt=""
-
                           />
                         </div>
                       );
@@ -801,7 +821,6 @@ const Games = ({
                             src={require(`./assets/rocksBg/${index + 16}.png`)}
                             className="rock-img"
                             alt=""
-
                           />
                         </div>
                       );
