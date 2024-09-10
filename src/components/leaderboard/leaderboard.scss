@@ -40,6 +40,9 @@
 .playerTable {
   border-radius: 8px;
   color: white;
+  background: rgba(28, 60, 94, 0.20);
+backdrop-filter: blur(12.5px);
+padding: 8px;
 }
 
 .playerData {
@@ -66,6 +69,17 @@
   @media screen and (max-width: 500px) {
     font-size: 9px;
   }
+}
+
+.durationText{
+  color: #C0C9FF !important;
+font-size: 15px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+text-align: center;
+cursor: pointer;
+
 }
 
 .optionText {
@@ -105,9 +119,8 @@
  
 
 .optionsWrapper {
-  border-radius: 12px;
-  background: #1e2237;
-  padding: 2px;
+  border-radius: 8px;
+  background: rgba(28, 60, 94, 0.20);
 }
 
 .playerRow {
@@ -234,11 +247,13 @@
 .otheroptionsActive {
   // background: linear-gradient(90.31deg, #7344B3 0.27%, #20BBCA 99.74%);
   // font-weight: bold;
-  padding: 10px;
   border-radius: 12px;
+border: 1px solid #76D1F5;
+background: rgba(118, 209, 245, 0.10);
+  padding: 7px;
   white-space: nowrap;
   // border-bottom: 1px solid #09f3d2 !important;
-  color: #fff;
+  color: #76D1F5 !important;
 }
 
 .comingsoon {

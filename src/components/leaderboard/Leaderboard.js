@@ -30,6 +30,7 @@ const Leaderboard = ({
   const [inactiveBoard, setInactiveBoard] = useState(false);
   const [prizes, setPrizes] = useState(weeklyPrizes);
   const [activePlayer, setActivePlayer] = useState(false);
+const [type, setType] = useState("stoneCrack")
 
 
   const handleOption = (item) => {
@@ -51,7 +52,18 @@ const Leaderboard = ({
       style={{ minHeight: "560px" }}
     >
       <div className="row w-100 align-items-start gap-4 gap-lg-0">
-        <div className="d-flex flex-column gap-3 col-12  px-0 px-lg-3">
+        <div className="d-flex flex-column gap-3 col-12  px-0">
+            <div className="leaderboard-types-grid">
+              <button className={`leaderboard-type-btn ${type === "stoneCrack" && "leaderboard-type-btn-active"} d-flex-align-items-center justify-content-center p-2`} onClick={() => setType("stoneCrack")}>
+                Stone Crack
+              </button>
+              <button className={`leaderboard-type-btn ${type === "kittyDash" && "leaderboard-type-btn-active"} d-flex-align-items-center justify-content-center p-2`} onClick={() => {setType("kittyDash"); handleOption("weekly");}}>
+                Kitty Dash
+              </button>
+              <button className={`leaderboard-type-btn ${type === "caws" && "leaderboard-type-btn-active"} d-flex-align-items-center justify-content-center p-2`} onClick={() => {setType("caws"); handleOption("weekly")}}>
+                CAWS Adventure
+              </button>
+            </div>
           <div className="d-flex align-items-center gap-1">
             <div className="optionsWrapper col-12">
               <div
@@ -61,25 +73,27 @@ const Leaderboard = ({
                 <span
                   className={`${
                     optionText === "weekly" && "otheroptionsActive"
-                  } optionText col-3`}
-                  style={{ width: "24%" }}
+                  } durationText col-3`}
+                  style={{ width: type !== "stoneCrack" ? "100%" : "50%" }}
                   onClick={() => {
                     handleOption("weekly");
                   }}
                 >
                   Weekly
                 </span>
+               {type === "stoneCrack" &&
                 <span
-                  className={`${
-                    optionText === "monthly" && "otheroptionsActive"
-                  } optionText col-3`}
-                  style={{ width: "24%" }}
-                  onClick={() => {
-                    handleOption("monthly");
-                  }}
-                >
-                  Monthly
-                </span>
+                className={`${
+                  optionText === "monthly" && "otheroptionsActive"
+                } durationText col-3`}
+                style={{ width: "50%" }}
+                onClick={() => {
+                  handleOption("monthly");
+                }}
+              >
+                Monthly
+              </span>
+               }
               </div>
             </div>
           </div>
@@ -100,66 +114,41 @@ const Leaderboard = ({
                   )}
                 </tr>
 
-                {monthlyplayerData &&
-                  inactiveBoard === true &&
-                  optionText === "monthly" &&
-                  monthlyplayerData.length > 0 &&
-                  monthlyplayerData.map((item, index) => {
+                {[...Array(10)].map((item, index) => {
                     return (
                       <tr
                         key={index}
-                        className={`playerInnerRow ${
-                          inactiveBoard || item.displayName === username
-                            ? "playerInnerRow-inactive"
-                            : null
-                        }`}
+                        className={`playerInnerRow`}
                       >
                         <td className="playerData col-1">
-                          #{Number(item.position) + 1}
+                          {Number(index) + 1}
                         </td>
                         <td className="playerName col-5">
-                          {item.displayName === username ? (
                             <div className="position-relative d-flex align-items-center">
-                              <img
+                              {/* <img
                                 src={premiumAvatar}
                                 alt=""
                                 className="playerAvatar"
-                              />
+                              /> */}
                               <span>
                                 {" "}
-                                {item.displayName?.slice(0, 13)}
-                                {item.displayName?.length > 13 && "..."}
+                                DarkSliffer
                               </span>
                             </div>
-                          ) : (
-                            <div className="position-relative d-flex align-items-center">
-                              <img
-                                src={playerAvatar}
-                                alt=""
-                                className="playerAvatar"
-                              />{" "}
-                              {item.displayName?.slice(0, 13)}
-                              {item.displayName?.length > 13 && "..."}
-                            </div>
-                          )}
                         </td>
                         <td className="playerScore col-2  text-center">
-                          {getFormattedNumber(item.statValue, 0)}
+                          1500
                         </td>
                         <td
-                          className={`playerReward text-center col-2 ${
-                            username === item.displayName
-                              ? "goldenscore"
-                              : "playerReward"
-                          }`}
+                          className={`playerReward text-center col-2`}
                         >
-                          ${prizes[index]}
+                          ${weeklyPrizes[index]}
                         </td>
                       </tr>
                     );
                   })}
 
-                {weeklyplayerData &&
+                {/* {weeklyplayerData &&
                   inactiveBoard === true &&
                   optionText === "weekly" &&
                   weeklyplayerData.length > 0 &&
@@ -227,11 +216,11 @@ const Leaderboard = ({
                       size={20}
                       style={{ alignSelf: "center", margin: "auto" }}
                     />
-                  )}
+                  )} */}
               </tbody>
             </table>
 
-            {activePlayer === false &&
+            {/* {activePlayer === false &&
               inactiveBoard === false &&
               optionText !== "genesis" && (
                 <table className="playerTable">
@@ -285,7 +274,7 @@ const Leaderboard = ({
                     </tr>
                   </tbody>
                 </table>
-              )}
+              )} */}
           </div>
           <div className="optionsWrapper2 p-2">
             <div className="d-flex flex-column">

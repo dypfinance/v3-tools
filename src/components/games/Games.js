@@ -17,6 +17,7 @@ import Leaderboard from "../leaderboard/Leaderboard";
 import pointsIcon from "./assets/pointsIcon.png";
 import gemIcon from "./assets/gemIcon.png";
 import spark from "./assets/spark.svg";
+import leaderboardsCup from './assets/leaderboardsCup.png'
 
 const Games = ({
   handleConnection,
@@ -32,7 +33,7 @@ const Games = ({
   const [message, setMessage] = useState("");
   const [rewardData, setRewardData] = useState([]);
   const [rockData, setRockData] = useState([]);
-
+const [active, setActive] = useState(false)
   const [isActive, setIsActive] = useState();
   const [isActiveIndex, setIsActiveIndex] = useState();
   const [claimingChest, setClaimingChest] = useState(false);
@@ -195,40 +196,46 @@ const Games = ({
   ]);
 
   return (
-    <div className="container-lg p-0">
-      <div className="games-banner d-flex flex-column flex-lg-row px-4 py-3 gap-3 gap-lg-0 align-items-center mb-4 position-relative">
-        <div className="col-12 col-lg-6">
+    <>
+       <div className="container-lg p-0">
+      <div className="row">
+
+      <div className="col-12 col-lg-4">
+      <div className="games-banner loyalty-game-banner d-flex flex-column flex-lg-row px-4 py-3 gap-3 gap-lg-0 align-items-center mb-4 position-relative">
           <div className="d-flex flex-column gap-2">
-            <h6 className="migration-banner-title mb-0">Games on Base</h6>
-            <p className="migration-banner-desc mb-0">
-              Experience the best of gaming on Base, with a variety of fun and
-              engaging minigames. Whether you prefer puzzles, action-packed
-              challenges, or casual games, Base has something for everyone to
-              enjoy.
+            <h6 className="migration-banner-title mb-0">Loyalty Program</h6>
+            <p className="games-banner-desc mb-0">
+            90 days of gas-free transactions
             </p>
           </div>
         </div>
-
-        <div className="position-relative" style={{ width: "100px" }}></div>
-        <div className="col-12 col-lg-6 position-relative">
+      </div>
+      <div className="col-12 col-lg-5">
+      <div className="games-banner d-flex flex-column flex-lg-row px-4 py-3 gap-3 gap-lg-0 align-items-center mb-4 position-relative">
+          <div className="d-flex flex-column gap-2">
+            <h6 className="migration-banner-title mb-0">Games</h6>
+            <p className="games-banner-desc mb-0">
+            Enjoy the best gaming experience
+            </p>
+          </div>
           <div className="leaderboard-wrapper">
             <div className="d-flex gap-2 position-relative">
               <div className="d-flex align-items-center justify-content-center position-relative leaderboard-item-banner">
-                <img src={stoneCrackBanner} alt="" />
+                <img src={stoneCrackBanner} className="game-leaderboard-img" alt="" />
                 <div className="d-flex flex-column position-absolute rankwrapper">
                   <h6 className="rank-text-stone text-center">Rank</h6>
                   <h6 className="rank-value-stone text-center">1,250</h6>
                 </div>
               </div>
               <div className="d-flex align-items-center justify-content-center position-relative leaderboard-item-banner">
-                <img src={kittyDash} alt="" />
+                <img src={kittyDash} className="game-leaderboard-img" alt="" />
                 <div className="d-flex flex-column position-absolute rankwrapper">
                   <h6 className="rank-text-dash text-center">Rank</h6>
                   <h6 className="rank-value-dash text-center">250</h6>
                 </div>
               </div>
               <div className="d-flex align-items-center justify-content-center position-relative leaderboard-item-banner">
-                <img src={cawsAdventures} alt="" />
+                <img src={cawsAdventures} className="game-leaderboard-img" alt="" />
                 <div className="d-flex flex-column position-absolute rankwrapper">
                   <h6 className="rank-text-caws text-center">Rank</h6>
                   <h6 className="rank-value-caws text-center">50</h6>
@@ -236,6 +243,24 @@ const Games = ({
               </div>
             </div>
           </div>
+        </div>
+      </div>
+      <div className="col-12 col-lg-3">
+      <div className="games-banner d-flex flex-column flex-lg-row px-4 py-3 gap-3 gap-lg-0 align-items-center mb-4 position-relative">
+         <div className="d-flex align-items-center justify-content-between w-100">
+         <div className="d-flex flex-column gap-2">
+            <h6 className="migration-banner-title mb-0">Leaderboards</h6>
+            <p className="games-banner-desc mb-0">
+            See where you stand
+            </p>
+          </div>
+          <img src={leaderboardsCup} width={50} alt="" onClick={() => setActive(true)} style={{cursor: "pointer"}} />
+         </div>
+        </div>
+      </div>
+        <div className="position-relative" style={{ width: "100px" }}></div>
+        <div className="col-12 col-lg-6 position-relative">
+         
         </div>
       </div>
       <div className="game-wrapper-container p-3">
@@ -1127,6 +1152,21 @@ const Games = ({
         </div>
       </div>
     </div>
+      <div
+        id="popup"
+        className={`popup-wrapper ${
+          active && "popup-active"
+        } p-3 d-flex flex-column gap-3 justify-content-center align-items-center`}
+        style={{borderRadius: "8px", background: "#1A1A36"}}
+      >
+        <div className="d-flex align-items-center justify-content-between w-100">
+          <h6 className="leaderboards-popup-title mb-0">Leaderboards</h6>
+          <img src={require('./assets/xMark.svg').default} alt="" style={{cursor: "pointer"}} onClick={() => setActive(false)} />
+        </div>
+      <Leaderboard />
+      </div>
+    </>
+ 
   );
 };
 
