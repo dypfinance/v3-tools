@@ -10,7 +10,7 @@ import { ClickAwayListener } from "@material-ui/core";
 import { handleSwitchNetworkhook } from "../../../functions/hooks";
 import axios from "axios";
 import Modal from "../../Modal/Modal";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Web3 from "web3";
 
 const StakeDypiusAvaxOther = ({
@@ -177,7 +177,7 @@ const StakeDypiusAvaxOther = ({
   const [maxDepositTooltip, setMaxDepositTooltip] = useState(false);
   const [approvedAmount, setapprovedAmount] = useState("0.00");
   const [earlyWithdrawTooltip, setEarlyWithdrawTooltip] = useState(false);
-  const navigate = useHistory();
+  const navigate = useNavigate();
 
   const poolCapClose = () => {
     setPoolCapTooltip(false);
@@ -929,7 +929,7 @@ const StakeDypiusAvaxOther = ({
   }, [coinbase, popup, show]);
 
   const handleNavigateToPlans = () => {
-    navigate.push("/plans");
+    navigate("/plans");
   };
 
   return (

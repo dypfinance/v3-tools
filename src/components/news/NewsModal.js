@@ -30,7 +30,6 @@ const NewsModal = ({
   newsId,
   latestNewsData,
   pressData,
-  theme,
   onHandleUpvote,
   onHandleDownvote,
   onSelectOtherNews,
@@ -597,7 +596,6 @@ const NewsModal = ({
                       >
                         <RelatedNews
                           newsId={item.id}
-                          theme={theme}
                           title={item.title}
                           date={item.date}
                           month={item.month}

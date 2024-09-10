@@ -1,11 +1,11 @@
 import React, { useRef, useEffect } from "react";
 import Slider from "react-slick";
 import bscBgDesktop from "../assets/bscBg.webp";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const EarnOtherHero = ({ type, isPremium, onSliderClick }) => {
   const sliderRef = useRef();
-  const navigate = useHistory();
+  const navigate = useNavigate();
 
   const settings = {
     arrows: false,
@@ -89,7 +89,7 @@ const EarnOtherHero = ({ type, isPremium, onSliderClick }) => {
     if (obj.buttonType === "popup") {
       onSliderClick(obj.chain);
     } else if (obj.buttonType === "link") {
-      navigate.push("/plans");
+      navigate("/plans");
     } else if (obj.buttonType === "details-nft") {
       onSliderClick("details-nft");
     }

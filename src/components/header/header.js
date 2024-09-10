@@ -30,8 +30,6 @@ import error from "../../assets/error.svg";
 
 const Header = ({
   toggleMobileSidebar,
-  toggleTheme,
-  theme,
   chainId,
   coinbase,
   logout,
@@ -41,7 +39,7 @@ const Header = ({
   hideModal,
   handleConnection,
   isConnected,
-  appState,
+  isPremium,
   onSetCurrencyAmount,
   showFlyout,
 }) => {
@@ -576,7 +574,7 @@ const Header = ({
                           >
                             <Dropdown.Item>
                               <NavLink
-                                to={appState.isPremium ? "/account" : "/plans"}
+                                to={isPremium ? "/account" : "/plans"}
                                 className={"d-flex w-100"}
                               >
                                 <span className="d-flex gap-2 align-items-center">

@@ -10,7 +10,6 @@ import { ClickAwayListener } from "@material-ui/core";
 import { handleSwitchNetworkhook } from "../../../functions/hooks";
 import axios from "axios";
 import Modal from "../../Modal/Modal";
-import { useHistory } from "react-router-dom";
 import Web3 from "web3";
 
 const StakeDypiusEthOther = ({
@@ -179,8 +178,6 @@ const StakeDypiusEthOther = ({
   const [maxDepositTooltip, setMaxDepositTooltip] = useState(false);
   const [approvedAmount, setapprovedAmount] = useState("0.00");
   const [earlyWithdrawTooltip, setEarlyWithdrawTooltip] = useState(false);
-
-  const navigate = useHistory();
 
   const earlyWithdrawClose = () => {
     setEarlyWithdrawTooltip(false);
@@ -855,9 +852,7 @@ const StakeDypiusEthOther = ({
       });
   };
 
-  const handleNavigateToPlans = () => {
-    navigate.push("/plans");
-  };
+
 
   useEffect(() => {
     getUsdPerDyp();

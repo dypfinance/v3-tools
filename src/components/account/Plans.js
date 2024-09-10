@@ -992,7 +992,7 @@ export default class Subscription extends React.Component {
       },
     ];
 
-    return this.props.appState.isPremium ? (
+    return this.props.isPremium ? (
       <></>
     ) : (
       <div style={{ minHeight: "65vh" }}>

@@ -1,0 +1,84 @@
+.container {
+  padding: 32px 60px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.playerCreationTitle {
+  font-size: 24;
+  color: white;
+  margin-top: 42;
+  margin-bottom: 42;
+}
+
+.containerbnb {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100%;
+  justify-content: space-between;
+}
+
+.labelBNB {
+  color: #c0cbf7;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.create_acc_bnb {
+  color: #f1edff;
+  text-align: center;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.containergecko {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  height: 100%;
+  justify-content: space-between;
+}
+
+.createplayertxt {
+  color: #18ffff;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.18px;
+}
+.successmsg {
+  color: #f1edff;
+  text-align: center;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 28px;
+  letter-spacing: -0.432px;
+}
+
+.bottomGroup_graytxt {
+  color: #c0cbf7;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+  letter-spacing: -0.18px;
+  margin: 0;
+}
+
+.createplayertxt2 {
+  color: #fff;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.18px;
+}

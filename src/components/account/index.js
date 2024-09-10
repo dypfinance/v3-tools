@@ -15,7 +15,6 @@ import { shortAddress } from "../../functions/shortAddress";
 import TopPoolsCard from "../top-pools-card/TopPoolsCard";
 import useWindowSize from "../../functions/useWindowSize";
 import gotoWod from "./assets/gotoWod.svg";
-import { useHistory } from "react-router-dom";
 
 const { BigNumber } = window;
 

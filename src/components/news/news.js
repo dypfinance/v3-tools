@@ -16,7 +16,7 @@ import Slider from "react-slick";
 import pressReleaseNext from "./assets/pressReleaseNext.svg";
 import Web3 from "web3";
 
-const News = ({ theme, isPremium, coinbase }) => {
+const News = ({  isPremium, coinbase }) => {
   const settings = {
     dots: false,
     infinite: true,
@@ -664,7 +664,6 @@ const News = ({ theme, isPremium, coinbase }) => {
             link={activeNews.link}
             image={activeNews.image}
             content={newsContent}
-            theme={theme}
             coinbase={coinbase}
             upvotes={activeNews.vote.up}
             downvotes={activeNews.vote.down}
@@ -715,7 +714,6 @@ const News = ({ theme, isPremium, coinbase }) => {
                             title={item.title}
                             link={item.link}
                             day={item.date}
-                            theme={theme}
                             coinbase={coinbase}
                             upvotes={
                               votes.length !== 0
@@ -822,7 +820,6 @@ const News = ({ theme, isPremium, coinbase }) => {
                           month={item.month}
                           day={item.date.slice(0, 10)}
                           fullDate={item.date}
-                          theme={theme}
                           newsId={item.id}
                           upvotes={item.vote.up}
                           downvotes={item.vote.down}
@@ -863,7 +860,6 @@ const News = ({ theme, isPremium, coinbase }) => {
                             month={item.month}
                             day={item.date.slice(0, 10)}
                             fullDate={item.date}
-                            theme={theme}
                             onVotesFetch={fetchVotingdata}
                             coinbase={coinbase}
                             upvotes={item.vote.up}
@@ -1006,7 +1002,6 @@ const News = ({ theme, isPremium, coinbase }) => {
                     fulldate={item.date}
                     month={item.month}
                     year={item.year}
-                    theme={theme}
                     onVotesFetch={fetchVotingdata}
                     newsId={item.id}
                     upvotes={item.vote.up}
