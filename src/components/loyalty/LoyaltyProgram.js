@@ -80,7 +80,7 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
       return `${diffInSeconds} seconds ago`;
     } else if (diffInSeconds < 3600) {
       const minutes = Math.floor(diffInSeconds / 60);
-      return `${minutes} ${minutes === 1 ? "minute" : "minutes"} ago`;
+      return `${minutes} ${minutes === 1 ? "min" : "min"} ago`;
     } else if (diffInSeconds < 86400) {
       const hours = Math.floor(diffInSeconds / 3600);
       return `${hours} ${hours === 1 ? "hour" : "hours"} ago`;
