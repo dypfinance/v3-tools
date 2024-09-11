@@ -18,6 +18,15 @@ import trustwallet from "./assets/trustwallet.png";
 import safepal from "./assets/safepal.png";
 import axios from "axios";
 import { shortAddress } from "../../functions/shortAddress";
+import Countdown from "react-countdown";
+import getFormattedNumber from "../../functions/get-formatted-number";
+
+const renderer = ({days,hours,minutes}) => {
+  return (
+    <h6 className="loyalty-timer mb-0">{days}d : {hours}h : {minutes}m</h6>
+  )
+  
+}
 
 const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
   const baseUrl = "https://api.worldofdypians.com/api";
@@ -29,15 +38,19 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
     twitterUser: "",
   });
   const [latestUsers, setLatestUsers] = useState([]);
-  const [user, setUser] = useState(null);
   const [refresh, setRefresh] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [totalUsers, setTotalUsers] = useState(0)
+
+  
+  let loyaltyCd = new Date("2024-09-25T23:59:59.000+02:00");
 
   const fetchLatestUsers = async () => {
     await axios
       .get(`${baseUrl}/loyalty/latest`)
       .then((data) => {
         setLatestUsers(data.data.participants);
+        setTotalUsers(data.data.totalCount)
       })
       .catch((err) => console.log(err));
   };
@@ -46,7 +59,6 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
     await axios
       .get(`${baseUrl}/loyalty/check/${coinbase}`)
       .then((data) => {
-        setUser(data.data.user);
         if (data.data.user) {
           setStep(5);
         } else {
@@ -155,7 +167,7 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
               <div className="loyalty-banner-timer px-5 py-4 position-relative d-flex align-items-center justify-content-center">
                 <img src={clock} alt="" className="loyalty-clock" />
                 <div className="d-flex flex-column align-items-center ">
-                  <h6 className="loyalty-timer mb-0">2d : 15h : 14m</h6>
+                  <Countdown renderer={renderer} date={loyaltyCd} />
                   <span className="loyalty-time-left">Time left</span>
                 </div>
               </div>
@@ -210,7 +222,7 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
                       <img src={fireIcon} alt="" />
                       <span className="participants-desc">
                         {" "}
-                        <span style={{ color: "#FCE202" }}>252,654</span> joined
+                        <span style={{ color: "#FCE202" }}>{getFormattedNumber(totalUsers, 0)}</span> joined
                         the Loyalty Program
                       </span>
                     </div>
