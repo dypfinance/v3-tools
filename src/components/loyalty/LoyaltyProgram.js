@@ -349,7 +349,7 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
           <>
             <div className="d-flex w-100 align-items-center justify-content-between">
               <span className="loyalty-popup-span">Wallet Address</span>
-              <span className="loyalty-popup-span-2">0xB329...bDe8</span>
+              <span className="loyalty-popup-span-2">{shortAddress(coinbase)}</span>
             </div>
             <div className="reimbursement-divider "></div>
             <form className="d-flex flex-column gap-3 w-100">
