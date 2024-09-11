@@ -215,7 +215,7 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
                       </span>
                     </div>
                     <div className="d-flex flex-column gap-2 w-100">
-                      {latestUsers.map((item, index) => (
+                      {latestUsers.slice(0,7).map((item, index) => (
                         <div
                           key={index}
                           className="participant-item d-flex align-items-center justify-content-between w-100 py-1"
