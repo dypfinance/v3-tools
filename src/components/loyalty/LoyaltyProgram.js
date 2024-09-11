@@ -16,6 +16,7 @@ import coinbase from "./assets/coinbase.png";
 import coin98 from "./assets/coin98.png";
 import trustwallet from "./assets/trustwallet.png";
 import safepal from "./assets/safepal.png";
+import { shortAddress } from "../../functions/shortAddress";
 
 const LoyaltyProgram = ({coinbase, isConnected, handleConnection}) => {
   const [popup, setPopup] = useState(false);
@@ -275,7 +276,7 @@ const LoyaltyProgram = ({coinbase, isConnected, handleConnection}) => {
           <>
             <div className="d-flex w-100 align-items-center justify-content-between">
               <span className="loyalty-popup-span">Wallet Address</span>
-              <span className="loyalty-popup-span-2">0xB329...bDe8</span>
+              <span className="loyalty-popup-span-2">{shortAddress(coinbase)}</span>
             </div>
             <div className="reimbursement-divider "></div>
             <div className="d-flex flex-column gap-3 w-100">
