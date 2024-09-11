@@ -15,7 +15,9 @@ import { shortAddress } from "../../functions/shortAddress";
 import TopPoolsCard from "../top-pools-card/TopPoolsCard";
 import useWindowSize from "../../functions/useWindowSize";
 import gotoWod from "./assets/gotoWod.svg";
-import '../caws/NftMinting/components/General/NftStakingCawCard/_nftStakeCawCard.scss'
+import "../caws/NftMinting/components/General/NftStakingCawCard/_nftStakeCawCard.scss";
+import Plans from "./Plans";
+
 const { BigNumber } = window;
 
 export default class Subscription extends React.Component {
@@ -52,6 +54,7 @@ export default class Subscription extends React.Component {
       myLandNFTs: [],
       landStakes: [],
       viewall: false,
+      showPremiumPopup: false,
       username: "",
       userNameInput: "",
       showInput: false,
@@ -449,6 +452,10 @@ export default class Subscription extends React.Component {
         .call()
         .then((data) => {
           return web3eth.utils.fromWei(data, "ether");
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
         });
 
       const balavax = await contract2.methods
@@ -456,6 +463,10 @@ export default class Subscription extends React.Component {
         .call()
         .then((data) => {
           return web3avax.utils.fromWei(data, "ether");
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
         });
 
       const balbnb = await contract3.methods
@@ -463,6 +474,10 @@ export default class Subscription extends React.Component {
         .call()
         .then((data) => {
           return web3bsc.utils.fromWei(data, "ether");
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
         });
 
       if (this.props.networkId === 43114) {
@@ -502,6 +517,10 @@ export default class Subscription extends React.Component {
           let depositedTokens = new BigNumber(data).div(1e18).toFixed(2);
 
           this.setState({ ethBalance: depositedTokens });
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
         });
       await contract2.methods
         .balanceOf(walletAddress)
@@ -510,6 +529,10 @@ export default class Subscription extends React.Component {
           let depositedTokens = new BigNumber(data).div(1e18).toFixed(2);
 
           this.setState({ avaxBalance: depositedTokens });
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
         });
 
       await contract3.methods
@@ -519,6 +542,10 @@ export default class Subscription extends React.Component {
           let depositedTokens = new BigNumber(data).div(1e18).toFixed(2);
 
           this.setState({ bnbBalance: depositedTokens });
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
         });
     }
   };
@@ -535,7 +562,6 @@ export default class Subscription extends React.Component {
       // this.getDypBalance();
       this.fetchAvatar();
       this.fetchUsername();
-      this.fetchUserPools();
       this.fetchAvaxFarming();
       this.fetchAvaxStaking();
       this.fetchBnbStaking();
@@ -579,7 +605,6 @@ export default class Subscription extends React.Component {
     this.props.onSubscribe();
     this.fetchAvatar();
     this.fetchUsername();
-    this.fetchUserPools();
     this.fetchAvaxFarming();
     this.fetchAvaxStaking();
     this.fetchBnbStaking();
@@ -673,7 +698,11 @@ export default class Subscription extends React.Component {
 
       let getBalanceOf = await nfts_contract.methods
         .balanceOf(this.props.coinbase)
-        .call();
+        .call()
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
 
       let nftList = [];
 
@@ -682,6 +711,10 @@ export default class Subscription extends React.Component {
           await nfts_contract.methods
             .tokenOfOwnerByIndex(this.props.coinbase, i)
             .call()
+            .catch((e) => {
+              console.error(e);
+              return 0;
+            })
         );
 
       let nfts = nftList.map((nft) => window.getNft(nft));
@@ -701,7 +734,11 @@ export default class Subscription extends React.Component {
 
       let getBalanceOf = await nfts_contract.methods
         .balanceOf(this.props.coinbase)
-        .call();
+        .call()
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
 
       let nftList = [];
 
@@ -710,6 +747,10 @@ export default class Subscription extends React.Component {
           await nfts_contract.methods
             .tokenOfOwnerByIndex(this.props.coinbase, i)
             .call()
+            .catch((e) => {
+              console.error(e);
+              return 0;
+            })
         );
 
       let nfts = nftList.map((nft) => window.getLandNft(nft));
@@ -770,6 +811,10 @@ export default class Subscription extends React.Component {
           for (let i = 0; i < result.length; i++)
             stakenft.push(parseInt(result[i]));
           return stakenft;
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
         });
 
       return myStakes;
@@ -791,6 +836,10 @@ export default class Subscription extends React.Component {
           for (let i = 0; i < result.length; i++)
             stakenft.push(parseInt(result[i]));
           return stakenft;
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
         });
 
       return myStakes;
@@ -865,7 +914,11 @@ export default class Subscription extends React.Component {
         const result = await subscribeTokencontract.methods
           .allowance(this.props.coinbase, ethsubscribeAddress)
           .call()
-          .then();
+          .then()
+          .catch((e) => {
+            console.error(e);
+            return 0;
+          });
 
         if (result != 0) {
           this.setState({ lockActive: true });
@@ -880,7 +933,11 @@ export default class Subscription extends React.Component {
         const result = await subscribeTokencontract.methods
           .allowance(this.props.coinbase, avaxsubscribeAddress)
           .call()
-          .then();
+          .then()
+          .catch((e) => {
+            console.error(e);
+            return 0;
+          });
 
         if (result != 0) {
           this.setState({ lockActive: true });
@@ -1092,36 +1149,48 @@ export default class Subscription extends React.Component {
       this.setState({ openTooltip: true });
     };
 
-    return  (
-      <div>
-        <div className="d-flex align-items-start align-items-lg-0 justify-content-between flex-column flex-lg-row gap-4 gap-lg-0">
+    const handleLogout = () => {
+      this.props.onLogout();
+    };
+
+    return (
+      <>
+        <div>
           <div
-            className={`d-flex flex-column ${
-              this.state.showInput ? "gap-5 gap-lg-2" : "gap-2"
-            }`}
+            className={` ${
+              this.props.isPremium === true
+                ? "user-cardImg-active-premium"
+                : "user-cardImg"
+            }  bordereddiv `}
           >
-            <div
-              className={`d-flex align-items-center w-100 justify-content-between justify-content-lg-start gap-3`}
-              // style={{ height: 38 }}
-            >
-              <div className="position-relative">
-                <div className="avatar-border"></div>
-                <img
-                  src={require("./assets/changeImage.svg").default}
-                  alt=""
-                  className="add-image"
-                />
-                <img
-                  src={this.state.image}
-                  alt="your image"
-                  className="avatarimg"
-                />
-                <input
-                  type="file"
-                  id="group_image"
-                  onChange={this.onImageChange}
-                />
-                {/* {this.state.showSavebtn === true ? (
+            <div className="d-flex align-items-start align-items-lg-0 justify-content-between flex-column flex-lg-row gap-4 gap-lg-0">
+              <div
+                className={`d-flex flex-column ${
+                  this.state.showInput ? "gap-5 gap-lg-2" : "gap-2"
+                }`}
+              >
+                <div
+                  className={`d-flex align-items-center w-100 justify-content-between justify-content-lg-start gap-3`}
+                  // style={{ height: 38 }}
+                >
+                  <div className="position-relative">
+                    <div className="avatar-border"></div>
+                    <img
+                      src={require("./assets/changeImage.svg").default}
+                      alt=""
+                      className="add-image"
+                    />
+                    <img
+                      src={this.state.image}
+                      alt="your image"
+                      className="avatarimg"
+                    />
+                    <input
+                      type="file"
+                      id="group_image"
+                      onChange={this.onImageChange}
+                    />
+                    {/* {this.state.showSavebtn === true ? (
                 <div
                   className="savebtn"
                   type=""
@@ -1156,198 +1225,250 @@ export default class Subscription extends React.Component {
               ) : (
                 <></>
               )} */}
-              </div>
-              <div className="d-flex flex-column gap-2">
-                <div className="d-flex flex-column flex-lg-row align-items-start align-items-lg-center gap-2 gap-lg-3">
-                  <h6 className="account-username">
-                    {this.state.username ? this.state.username : "Dypian"}
-                  </h6>
-                  {this.state.showInput ? (
-                    <div className="d-flex align-items-center gap-2">
-                      <div
-                        className="input-container px-0"
-                        style={{ width: "190px" }}
-                      >
-                        <input
-                          type="text"
-                          min={1}
-                          max={365}
-                          id="username"
-                          name="username"
-                          placeholder=" "
-                          className="text-input"
-                          style={{ width: "100%" }}
-                          value={this.state.userNameInput}
-                          onChange={(e) =>
-                            this.setState({ userNameInput: e.target.value })
-                          }
-                        />
-                        <label
-                          htmlFor="username"
-                          className="label"
-                          onClick={() => focusInput("username")}
-                        >
-                          Enter a new name
-                        </label>
+                  </div>
+                  <div className="d-flex flex-column gap-2">
+                    <div className="d-flex flex-column flex-lg-row align-items-start align-items-lg-center gap-2 gap-lg-3">
+                      <h6 className="account-username">
+                        {this.props.email
+                          ? this.props.game_username
+                          : this.state.username
+                          ? this.state.username
+                          : "Dypian"}
+                      </h6>
+                      {/* {this.state.showInput ? (
+                        <div className="d-flex align-items-center gap-2">
+                          <div
+                            className="input-container px-0"
+                            style={{ width: "190px" }}
+                          >
+                            <input
+                              type="text"
+                              min={1}
+                              max={365}
+                              id="username"
+                              name="username"
+                              placeholder=" "
+                              className="text-input"
+                              style={{ width: "100%" }}
+                              value={this.state.userNameInput}
+                              onChange={(e) =>
+                                this.setState({ userNameInput: e.target.value })
+                              }
+                            />
+                            <label
+                              htmlFor="username"
+                              className="label"
+                              onClick={() => focusInput("username")}
+                            >
+                              Enter a new name
+                            </label>
+                            <img
+                              src={
+                                require(`./assets/clearFieldIcon.svg`).default
+                              }
+                              className="clear-icon cursor-pointer"
+                              alt="clear field"
+                              onClick={() =>
+                                this.setState({ showInput: false })
+                              }
+                            />
+                          </div>
+                          <button
+                            className="btn outline-btn py-2"
+                            onClick={() =>
+                              this.postUsername(this.state.userNameInput)
+                            }
+                          >
+                            Submit
+                          </button>
+                        </div>
+                      ) : (
                         <img
-                          src={require(`./assets/clearFieldIcon.svg`).default}
-                          className="clear-icon cursor-pointer"
-                          alt="clear field"
-                          onClick={() => this.setState({ showInput: false })}
+                          src={openNameChange}
+                          className="cursor-pointer"
+                          alt=""
+                          onClick={() => this.setState({ showInput: true })}
+                          style={{ zIndex: 2 }}
                         />
-                      </div>
-                      <button
-                        className="btn outline-btn py-2"
-                        onClick={() =>
-                          this.postUsername(this.state.userNameInput)
-                        }
-                      >
-                        Submit
-                      </button>
+                      )} */}
+                    </div>
+                    <div className="d-flex align-items-center gap-2">
+                      <span className="account-wallet-address">
+                        {shortAddress(
+                          this.props.email
+                            ? this.props.address !==undefined ? this.props.address
+                            : this.props.isConnected === true ? this.props.coinbase : '': this.props.coinbase
+                        )}
+                      </span>
+
+                      {this.props.isConnected && (this.props.coinbase || this.props.address ) && (
+                        <ClickAwayListener onClickAway={handleTooltipClose}>
+                          <Tooltip
+                            PopperProps={{
+                              disablePortal: true,
+                            }}
+                            onClose={handleTooltipClose}
+                            open={this.state.openTooltip}
+                            disableFocusListener
+                            disableHoverListener
+                            disableTouchListener
+                            placement="top"
+                            title={
+                              <div className="tooltip-text">
+                                {"Wallet address copied!"}
+                              </div>
+                            }
+                          >
+                            <img
+                              src={
+                                require("./assets/clipboardIcon.svg").default
+                              }
+                              className="cursor-pointer"
+                              alt="clipboard"
+                              onClick={() => {
+                                navigator.clipboard.writeText(
+                                  this.props.coinbase
+                                );
+                                handleTooltipOpen();
+                              }}
+                            />
+                          </Tooltip>
+                        </ClickAwayListener>
+                      )}
+                    </div>
+                    <span className="account-wallet-address">
+                      {this.props.email}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div
+                className={
+                  "d-flex justify-content-between justify-content-lg-end"
+                }
+              >
+                <div className="d-flex flex-column align-items-start gap-3 align-items-lg-start w-100 justify-content-between justify-content-lg-end gap-1">
+                  {/* <span className=" my-plan-tag">My plan</span> */}
+
+                  {this.props.isPremium === true ? (
+                    <div className="plan-tag py-2 px-4 d-flex align-items-center gap-2">
+                      <img
+                        src={require("./assets/premiumDypIcon.svg").default}
+                        alt=""
+                        style={{ width: 28, height: 28 }}
+                      />
+                      <span className="plan-tag-title">Premium</span>
                     </div>
                   ) : (
-                    <img
-                      src={openNameChange}
-                      className="cursor-pointer"
-                      alt=""
-                      onClick={() => this.setState({ showInput: true })}
-                      style={{ zIndex: 2 }}
-                    />
-                  )}
-                </div>
-                <div className="d-flex align-items-center gap-2">
-                  <span className="account-wallet-address">
-                    {shortAddress(this.props.coinbase)}
-                  </span>
-                  <ClickAwayListener onClickAway={handleTooltipClose}>
-                    <Tooltip
-                      PopperProps={{
-                        disablePortal: true,
+                    <button
+                      className="plan-tag py-2 px-4 d-flex align-items-center gap-2"
+                      onClick={() => {
+                        this.setState({ showPremiumPopup: true });
                       }}
-                      onClose={handleTooltipClose}
-                      open={this.state.openTooltip}
-                      disableFocusListener
-                      disableHoverListener
-                      disableTouchListener
-                      placement="top"
-                      title={
-                        <div className="tooltip-text">
-                          {"Wallet address copied!"}
-                        </div>
-                      }
                     >
                       <img
-                        src={require("./assets/clipboardIcon.svg").default}
-                        className="cursor-pointer"
-                        alt="clipboard"
-                        onClick={() => {
-                          navigator.clipboard.writeText(this.props.coinbase);
-                          handleTooltipOpen();
-                        }}
+                        src={require("./assets/premiumDypIcon.svg").default}
+                        alt=""
+                        style={{ width: 28, height: 28 }}
                       />
-                    </Tooltip>
-                  </ClickAwayListener>
+                      <span className="plan-tag-title">Become Premium</span>
+                    </button>
+                  )}
+                  {!this.props.email ? (
+                    <NavLink to='/sign-in' className="btn pill-btn px-4 py-1 w-100">
+                      Sign in
+                    </NavLink>
+                  ) : this.props.email && this.props.address && this.props.userId ? (
+                    <button
+                      className="w-100 errorbtn px-4 py-1"
+                      onClick={handleLogout}
+                    >
+                      Log out
+                    </button>
+                  ) : !this.props.userId && this.props.email ? <NavLink className="walletconnectBtn d-flex justify-content-center w-100 align-items-center" to='/player'>Create Player</NavLink> : <button onClick={this.props.onLinkWallet} className="walletconnectBtn w-100 d-flex justify-content-center w-100 align-items-center">Link wallet</button>}
                 </div>
               </div>
             </div>
           </div>
-          <div
-            className={
-              this.props.coinbase
-                ? "mb-3 d-flex justify-content-between justify-content-lg-end"
-                : "d-none"
-            }
-          >
-            <div className="d-flex flex-column align-items-start align-items-lg-start w-100 justify-content-between justify-content-lg-end gap-1">
-              {/* <span className=" my-plan-tag">My plan</span> */}
-              <div className="plan-tag py-2 px-4 d-flex align-items-center gap-2">
-                <img
-                  src={require("./assets/premiumDypIcon.svg").default}
-                  alt=""
-                  style={{ width: 28, height: 28 }}
-                />
-                <span className="plan-tag-title">
-                  {this.props.isPremium ? "Premium" : "Free"}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="row mt-4 gap-3 gap-lg-0">
-          <div className="col-12 col-lg-6">
-            <div className="dyp-balances-wrapper d-flex flex-column gap-4 p-3">
-              <h6 className="balances-title">Multichain DYP Balance</h6>
-              <div className="d-flex flex-column flex-lg-row gap-3 align-items-center justify-content-between">
-                <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-3 gap-xxl-3 gap-lg-1">
-                  <img
-                    src={require(`./assets/ethIcon.svg`).default}
-                    width={20}
-                    height={20}
-                    alt=""
-                  />
-                  <div className="d-flex align-items-center gap-1">
-                    <span className="balance-amount mb-0">
-                      {getFormattedNumber(this.state.ethBalance)} DYP
-                    </span>
+          <div className={`bordereddiv border-0`}></div>
+          <div className="row mx-0 mt-4 gap-3 gap-lg-0">
+            <div className="col-12 ps-0 col-lg-6">
+              <div className="dyp-balances-wrapper d-flex flex-column gap-4 p-3">
+                <h6 className="balances-title">Multichain DYP Balance</h6>
+                <div className="d-flex flex-column flex-lg-row gap-3 align-items-center justify-content-between">
+                  <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-3 gap-xxl-3 gap-lg-1">
                     <img
-                      src={require(`./assets/dypv1Icon.svg`).default}
+                      src={require(`./assets/ethIcon.svg`).default}
                       width={20}
                       height={20}
                       alt=""
                     />
+                    <div className="d-flex align-items-center gap-1">
+                      <span className="balance-amount mb-0">
+                        {getFormattedNumber(this.state.ethBalance)} DYP
+                      </span>
+                      <img
+                        src={require(`./assets/dypv1Icon.svg`).default}
+                        width={20}
+                        height={20}
+                        alt=""
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2  gap-3 gap-xxl-3 gap-lg-1">
-                  <img
-                    src={require(`./assets/wbnbIcon.svg`).default}
-                    width={20}
-                    height={20}
-                    alt=""
-                  />
-                  <div className="d-flex align-items-center gap-1">
-                    <span className="balance-amount mb-0">
-                      {getFormattedNumber(this.state.bnbBalance)} DYP
-                    </span>
+                  <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2  gap-3 gap-xxl-3 gap-lg-1">
                     <img
-                      src={require(`./assets/dypv1Icon.svg`).default}
+                      src={require(`./assets/wbnbIcon.svg`).default}
                       width={20}
                       height={20}
                       alt=""
                     />
+                    <div className="d-flex align-items-center gap-1">
+                      <span className="balance-amount mb-0">
+                        {getFormattedNumber(this.state.bnbBalance)} DYP
+                      </span>
+                      <img
+                        src={require(`./assets/dypv1Icon.svg`).default}
+                        width={20}
+                        height={20}
+                        alt=""
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-3 gap-xxl-3 gap-lg-1">
-                  <img src={require(`./assets/wavaxIcon.svg`).default} alt="" />
-                  <div className="d-flex align-items-center gap-1">
-                    <span className="balance-amount mb-0">
-                      {getFormattedNumber(this.state.avaxBalance)} DYP
-                    </span>
+                  <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-3 gap-xxl-3 gap-lg-1">
                     <img
-                      src={require(`./assets/dypv1Icon.svg`).default}
-                      width={20}
-                      height={20}
+                      src={require(`./assets/wavaxIcon.svg`).default}
                       alt=""
                     />
+                    <div className="d-flex align-items-center gap-1">
+                      <span className="balance-amount mb-0">
+                        {getFormattedNumber(this.state.avaxBalance)} DYP
+                      </span>
+                      <img
+                        src={require(`./assets/dypv1Icon.svg`).default}
+                        width={20}
+                        height={20}
+                        alt=""
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+            <div className="col-12 pe-0 col-lg-6">
+              <a
+                href="https://www.worldofdypians.com/"
+                target={"_blank"}
+                className="wod-wrapper d-flex flex-column align-items-end gap-3 p-3"
+              >
+                <h6 className="wod-title">Experience unique gameplay</h6>
+                <div className="d-flex align-items-center gap-1">
+                  <span className="explore-wod">Explore more</span>
+                  <img src={gotoWod} alt="" />
+                </div>
+              </a>
+            </div>
           </div>
-          <div className="col-12 col-lg-6">
-            <a
-              href="https://www.worldofdypians.com/"
-              target={"_blank"}
-              className="wod-wrapper d-flex flex-column align-items-end gap-3 p-3"
-            >
-              <h6 className="wod-title">Experience unique gameplay</h6>
-              <div className="d-flex align-items-center gap-1">
-                <span className="explore-wod">Explore more</span>
-                <img src={gotoWod} alt="" />
-              </div>
-            </a>
-          </div>
-        </div>
-        {/* <div className="row mt-5 gap-4 gap-lg-0">
+          {/* <div className="row mt-5 gap-4 gap-lg-0">
           <div className="col-12 col-lg-6 position-relative d-flex justify-content-center">
             <div
               className="purplediv"
@@ -1661,7 +1782,7 @@ export default class Subscription extends React.Component {
         ) : (
           <></>
         )} */}
-        {/* <form onSubmit={this.handleSubscribe}>     
+          {/* <form onSubmit={this.handleSubscribe}>     
           <div>
             {!this.props.appState.isPremium ? (
               <table className="w-100">
@@ -1996,403 +2117,417 @@ export default class Subscription extends React.Component {
           )}
         </form> */}
 
-        {this.state.userPools && this.state.userPools.length > 0 && this.props.isPremium === true && (
-          <>
-            <h4 className="d-block mb-5 mt-5" id="my-fav">
-              My Earnings
-            </h4>
-            <div
-              style={{
-                gap: "50px 0px",
-                display: "grid",
-                gridTemplateColumns: "repeat(1, 1fr)",
-              }}
-            >
-              <div
-                className="row p-0 m-0 poolrows"
-                style={{
-                  gap: "50px 0px",
-                }}
-              >
-                {this.state.ethStake &&
-                  this.state.ethStake
-                    .slice(0, this.state.ethStake.length)
-                    .map((pool, index) => (
-                      <NavLink
-                        to="/earn/dypius"
-                        style={{
-                          display:
-                            this.state.userPools.length > 0
-                              ? this.state.userPools.find(
-                                  (obj) => obj.contract_address == pool.id
-                                )
-                                ? "block"
-                                : "none"
-                              : "none",
-                          position: "relative",
-                        }}
-                      >
-                        <div
-                          style={{
-                            display:
-                              this.state.userPools.length > 0
-                                ? this.state.userPools.find(
-                                    (obj) => obj.contract_address == pool.id
-                                  )
-                                  ? "block"
-                                  : "none"
-                                : "none",
-                            position: "relative",
-                          }}
-                        >
-                          <div className="d-flex justify-content-center align-items-center ethereumTagwrapper">
-                            <img
-                              src="/assets/img/ethereum.svg"
-                              className="popup-chains-icon"
+          {this.state.userPools &&
+            this.state.userPools.length > 0 &&
+            this.props.isPremium === true && (
+              <>
+                <h4 className="d-block mb-5 mt-5" id="my-fav">
+                  My Earnings
+                </h4>
+                <div
+                  style={{
+                    gap: "50px 0px",
+                    display: "grid",
+                    gridTemplateColumns: "repeat(1, 1fr)",
+                  }}
+                >
+                  <div
+                    className="row p-0 m-0 poolrows"
+                    style={{
+                      gap: "50px 0px",
+                    }}
+                  >
+                    {this.state.ethStake &&
+                      this.state.ethStake
+                        .slice(0, this.state.ethStake.length)
+                        .map((pool, index) => (
+                          <NavLink
+                            to="/earn/dypius"
+                            style={{
+                              display:
+                                this.state.userPools.length > 0
+                                  ? this.state.userPools.find(
+                                      (obj) => obj.contract_address == pool.id
+                                    )
+                                    ? "block"
+                                    : "none"
+                                  : "none",
+                              position: "relative",
+                            }}
+                          >
+                            <div
+                              style={{
+                                display:
+                                  this.state.userPools.length > 0
+                                    ? this.state.userPools.find(
+                                        (obj) => obj.contract_address == pool.id
+                                      )
+                                      ? "block"
+                                      : "none"
+                                    : "none",
+                                position: "relative",
+                              }}
+                            >
+                              <div className="d-flex justify-content-center align-items-center ethereumTagwrapper">
+                                <img
+                                  src="/assets/img/ethereum.svg"
+                                  className="popup-chains-icon"
+                                />
+                                <h6
+                                  className={`d-flex justify-content-center align-items-center chain-popup-text-active`}
+                                >
+                                  Ethereum
+                                </h6>
+                              </div>
+                              <TopPoolsCard
+                                key={index}
+                                chain={this.props.networkId}
+                                top_pick={pool.top_pick}
+                                tokenName={pool.pair_name}
+                                apr={pool.apy_percent + "%"}
+                                tvl={"$" + getFormattedNumber(pool.tvl_usd)}
+                                lockTime={
+                                  pool.lock_time ? pool.lock_time : "No Lock"
+                                }
+                                tokenLogo={
+                                  pool.icon
+                                    ? pool.icon
+                                    : pool.pair_name === "DYP"
+                                    ? "dyplogo.svg"
+                                    : "idypius.svg"
+                                }
+                                onShowDetailsClick={() => {}}
+                                onHideDetailsClick={() => {}}
+                                cardType={"table"}
+                                details={false}
+                                isNewPool={
+                                  pool.new_pool === "Yes" ? true : false
+                                }
+                                isStaked={
+                                  this.state.userPools.length > 0
+                                    ? this.state.userPools.find(
+                                        (obj) => obj.contract_address == pool.id
+                                      )
+                                      ? true
+                                      : false
+                                    : false
+                                }
+                                isAccount={true}
+                                expired={pool.expired === "Yes" ? true : false}
+                              />
+                            </div>
+                          </NavLink>
+                        ))}
+                    {this.state.bnbStake &&
+                      this.state.bnbStake
+                        .slice(0, this.state.bnbStake.length)
+                        .map((pool, index) => (
+                          <NavLink
+                            to="/earn/dypius"
+                            style={{
+                              display:
+                                this.state.userPools.length > 0
+                                  ? this.state.userPools.find(
+                                      (obj) => obj.contract_address == pool.id
+                                    )
+                                    ? "block"
+                                    : "none"
+                                  : "none",
+                              position: "relative",
+                            }}
+                          >
+                            <div
+                              style={{
+                                display:
+                                  this.state.userPools.length > 0
+                                    ? this.state.userPools.find(
+                                        (obj) => obj.contract_address == pool.id
+                                      )
+                                      ? "block"
+                                      : "none"
+                                    : "none",
+                                position: "relative",
+                              }}
+                            >
+                              <div className="d-flex justify-content-center align-items-center bnbTagwrapper">
+                                <img
+                                  src={
+                                    require("../../assets/bnblogo.svg").default
+                                  }
+                                  alt=""
+                                  style={{ height: 20, width: 20 }}
+                                  className="popup-chains-icon"
+                                ></img>
+                                <h6
+                                  className={`d-flex justify-content-center align-items-center chain-popup-text-active`}
+                                >
+                                  BNB Chain
+                                </h6>
+                              </div>
+
+                              <TopPoolsCard
+                                key={index}
+                                chain={this.props.networkId}
+                                top_pick={pool.top_pick}
+                                tokenName={pool.pair_name}
+                                apr={pool.apy_percent + "%"}
+                                tvl={"$" + getFormattedNumber(pool.tvl_usd)}
+                                lockTime={
+                                  pool.lock_time ? pool.lock_time : "No Lock"
+                                }
+                                tokenLogo={
+                                  pool.icon
+                                    ? pool.icon
+                                    : pool.pair_name === "DYP"
+                                    ? "dyplogo.svg"
+                                    : "idypius.svg"
+                                }
+                                onShowDetailsClick={() => {}}
+                                onHideDetailsClick={() => {}}
+                                cardType={"table"}
+                                details={false}
+                                isNewPool={
+                                  pool.new_pool === "Yes" ? true : false
+                                }
+                                isStaked={
+                                  this.state.userPools.length > 0
+                                    ? this.state.userPools.find(
+                                        (obj) => obj.contract_address == pool.id
+                                      )
+                                      ? true
+                                      : false
+                                    : false
+                                }
+                                isAccount={true}
+                                expired={pool.expired === "Yes" ? true : false}
+                              />
+                            </div>
+                          </NavLink>
+                        ))}
+                    {this.state.avaxStake &&
+                      this.state.avaxStake
+                        .slice(0, this.state.avaxStake.length)
+                        .map((pool, index) => (
+                          <NavLink
+                            to="/earn/dypius"
+                            style={{
+                              display:
+                                this.state.userPools.length > 0
+                                  ? this.state.userPools.find(
+                                      (obj) => obj.contract_address == pool.id
+                                    )
+                                    ? "block"
+                                    : "none"
+                                  : "none",
+                              position: "relative",
+                            }}
+                          >
+                            <div
+                              style={{
+                                display:
+                                  this.state.userPools.length > 0
+                                    ? this.state.userPools.find(
+                                        (obj) => obj.contract_address == pool.id
+                                      )
+                                      ? "block"
+                                      : "none"
+                                    : "none",
+                                position: "relative",
+                              }}
+                            >
+                              <div className="d-flex justify-content-center align-items-center avaxTagWrapper">
+                                <img
+                                  src={
+                                    require("../../assets/wavax.svg").default
+                                  }
+                                  alt=""
+                                  style={{ height: 20, width: 20 }}
+                                  className="popup-chains-icon"
+                                ></img>
+                                <h6
+                                  className={`d-flex justify-content-center align-items-center chain-popup-text-active`}
+                                >
+                                  Avalanche
+                                </h6>
+                              </div>
+
+                              <TopPoolsCard
+                                key={index}
+                                chain={this.props.networkId}
+                                top_pick={pool.top_pick}
+                                tokenName={pool.pair_name}
+                                apr={pool.apy_percent + "%"}
+                                tvl={"$" + getFormattedNumber(pool.tvl_usd)}
+                                lockTime={
+                                  pool.lock_time ? pool.lock_time : "No Lock"
+                                }
+                                tokenLogo={
+                                  pool.icon
+                                    ? pool.icon
+                                    : pool.pair_name === "DYP"
+                                    ? "dyplogo.svg"
+                                    : "idypius.svg"
+                                }
+                                onShowDetailsClick={() => {}}
+                                onHideDetailsClick={() => {}}
+                                cardType={"table"}
+                                details={false}
+                                isNewPool={
+                                  pool.new_pool === "Yes" ? true : false
+                                }
+                                isStaked={
+                                  this.state.userPools.length > 0
+                                    ? this.state.userPools.find(
+                                        (obj) => obj.contract_address == pool.id
+                                      )
+                                      ? true
+                                      : false
+                                    : false
+                                }
+                                isAccount={true}
+                                expired={pool.expired === "Yes" ? true : false}
+                              />
+                            </div>
+                          </NavLink>
+                        ))}
+                  </div>
+                </div>
+              </>
+            )}
+          <div
+            className="row"
+            // style={{ marginTop: mycaws.length === 0 || lands.length === 0 ? "6rem" : "" }}
+          >
+            <div className="col-12 col-lg-6">
+              <div className="mycawsCollection position-relative mb-5">
+                <div className="nft-ethereum-tag p-2 d-flex align-items-center gap-2">
+                  <img src={require("./assets/ethIcon.svg").default} alt="" />
+                  <span className="nft-ethereum-span">Ethereum</span>
+                </div>
+                <div className="d-flex flex-column gap-2 justify-content-between align-items-start">
+                  <div className="col-xxl-2 col-lg-2 col-12 col-md-2">
+                    <h6 className="mycawscollection-title">CAWS NFTs</h6>
+                  </div>
+                  <div
+                    className={
+                      this.state.viewall === false
+                        ? "cawscontaier"
+                        : "cawscontaier-open"
+                    }
+                  >
+                    {mycaws.length > 0 &&
+                      this.props.coinbase !== null &&
+                      mycaws
+                        .slice(
+                          0,
+                          this.state.viewall === false &&
+                            window.innerWidth > 756
+                            ? 2
+                            : this.state.viewall === false &&
+                              window.innerWidth <= 756 &&
+                              window.innerWidth > 500
+                            ? 1
+                            : this.state.viewall === false &&
+                              window.innerWidth <= 500
+                            ? 1
+                            : mycaws.length
+                        )
+                        .map((item, id) => {
+                          return (
+                            <NftCawCard
+                              key={id}
+                              nft={item}
+                              action={() => {
+                                window.location.assign("/earn/dypius");
+                              }}
+                              modalId="#newNftStake"
+                              coinbase={this.props.coinbase}
                             />
-                            <h6
-                              className={`d-flex justify-content-center align-items-center chain-popup-text-active`}
-                            >
-                              Ethereum
-                            </h6>
-                          </div>
-                          <TopPoolsCard
-                            key={index}
-                            chain={this.props.networkId}
-                            top_pick={pool.top_pick}
-                            tokenName={pool.pair_name}
-                            apr={pool.apy_percent + "%"}
-                            tvl={"$" + getFormattedNumber(pool.tvl_usd)}
-                            lockTime={
-                              pool.lock_time ? pool.lock_time : "No Lock"
-                            }
-                            tokenLogo={
-                              pool.icon
-                                ? pool.icon
-                                : pool.pair_name === "DYP"
-                                ? "dyplogo.svg"
-                                : "idypius.svg"
-                            }
-                            onShowDetailsClick={() => {}}
-                            onHideDetailsClick={() => {}}
-                            cardType={"table"}
-                            details={false}
-                            isNewPool={pool.new_pool === "Yes" ? true : false}
-                            isStaked={
-                              this.state.userPools.length > 0
-                                ? this.state.userPools.find(
-                                    (obj) => obj.contract_address == pool.id
-                                  )
-                                  ? true
-                                  : false
-                                : false
-                            }
-                            isAccount={true}
-                            expired={pool.expired === "Yes" ? true : false}
-                          />
-                        </div>
-                      </NavLink>
-                    ))}
-                {this.state.bnbStake &&
-                  this.state.bnbStake
-                    .slice(0, this.state.bnbStake.length)
-                    .map((pool, index) => (
-                      <NavLink
-                        to="/earn/dypius"
-                        style={{
-                          display:
-                            this.state.userPools.length > 0
-                              ? this.state.userPools.find(
-                                  (obj) => obj.contract_address == pool.id
-                                )
-                                ? "block"
-                                : "none"
-                              : "none",
-                          position: "relative",
-                        }}
-                      >
-                        <div
-                          style={{
-                            display:
-                              this.state.userPools.length > 0
-                                ? this.state.userPools.find(
-                                    (obj) => obj.contract_address == pool.id
-                                  )
-                                  ? "block"
-                                  : "none"
-                                : "none",
-                            position: "relative",
-                          }}
-                        >
-                          <div className="d-flex justify-content-center align-items-center bnbTagwrapper">
-                            <img
-                              src={require("../../assets/bnblogo.svg").default}
-                              alt=""
-                              style={{ height: 20, width: 20 }}
-                              className="popup-chains-icon"
-                            ></img>
-                            <h6
-                              className={`d-flex justify-content-center align-items-center chain-popup-text-active`}
-                            >
-                              BNB Chain
-                            </h6>
-                          </div>
-
-                          <TopPoolsCard
-                            key={index}
-                            chain={this.props.networkId}
-                            top_pick={pool.top_pick}
-                            tokenName={pool.pair_name}
-                            apr={pool.apy_percent + "%"}
-                            tvl={"$" + getFormattedNumber(pool.tvl_usd)}
-                            lockTime={
-                              pool.lock_time ? pool.lock_time : "No Lock"
-                            }
-                            tokenLogo={
-                              pool.icon
-                                ? pool.icon
-                                : pool.pair_name === "DYP"
-                                ? "dyplogo.svg"
-                                : "idypius.svg"
-                            }
-                            onShowDetailsClick={() => {}}
-                            onHideDetailsClick={() => {}}
-                            cardType={"table"}
-                            details={false}
-                            isNewPool={pool.new_pool === "Yes" ? true : false}
-                            isStaked={
-                              this.state.userPools.length > 0
-                                ? this.state.userPools.find(
-                                    (obj) => obj.contract_address == pool.id
-                                  )
-                                  ? true
-                                  : false
-                                : false
-                            }
-                            isAccount={true}
-                            expired={pool.expired === "Yes" ? true : false}
-                          />
-                        </div>
-                      </NavLink>
-                    ))}
-                {this.state.avaxStake &&
-                  this.state.avaxStake
-                    .slice(0, this.state.avaxStake.length)
-                    .map((pool, index) => (
-                      <NavLink
-                        to="/earn/dypius"
-                        style={{
-                          display:
-                            this.state.userPools.length > 0
-                              ? this.state.userPools.find(
-                                  (obj) => obj.contract_address == pool.id
-                                )
-                                ? "block"
-                                : "none"
-                              : "none",
-                          position: "relative",
-                        }}
-                      >
-                        <div
-                          style={{
-                            display:
-                              this.state.userPools.length > 0
-                                ? this.state.userPools.find(
-                                    (obj) => obj.contract_address == pool.id
-                                  )
-                                  ? "block"
-                                  : "none"
-                                : "none",
-                            position: "relative",
-                          }}
-                        >
-                          <div className="d-flex justify-content-center align-items-center avaxTagWrapper">
-                            <img
-                              src={require("../../assets/wavax.svg").default}
-                              alt=""
-                              style={{ height: 20, width: 20 }}
-                              className="popup-chains-icon"
-                            ></img>
-                            <h6
-                              className={`d-flex justify-content-center align-items-center chain-popup-text-active`}
-                            >
-                              Avalanche
-                            </h6>
-                          </div>
-
-                          <TopPoolsCard
-                            key={index}
-                            chain={this.props.networkId}
-                            top_pick={pool.top_pick}
-                            tokenName={pool.pair_name}
-                            apr={pool.apy_percent + "%"}
-                            tvl={"$" + getFormattedNumber(pool.tvl_usd)}
-                            lockTime={
-                              pool.lock_time ? pool.lock_time : "No Lock"
-                            }
-                            tokenLogo={
-                              pool.icon
-                                ? pool.icon
-                                : pool.pair_name === "DYP"
-                                ? "dyplogo.svg"
-                                : "idypius.svg"
-                            }
-                            onShowDetailsClick={() => {}}
-                            onHideDetailsClick={() => {}}
-                            cardType={"table"}
-                            details={false}
-                            isNewPool={pool.new_pool === "Yes" ? true : false}
-                            isStaked={
-                              this.state.userPools.length > 0
-                                ? this.state.userPools.find(
-                                    (obj) => obj.contract_address == pool.id
-                                  )
-                                  ? true
-                                  : false
-                                : false
-                            }
-                            isAccount={true}
-                            expired={pool.expired === "Yes" ? true : false}
-                          />
-                        </div>
-                      </NavLink>
-                    ))}
+                          );
+                        })}
+                  </div>
+                  <button
+                    className="outline-btn"
+                    style={{
+                      height: "fit-content",
+                      display: mycaws.length > 4 ? "block" : "none",
+                    }}
+                    onClick={() => {
+                      this.setState({ viewall: !this.state.viewall });
+                    }}
+                  >
+                    {this.state.viewall === false ? " View all" : "View less"}
+                  </button>
+                </div>
               </div>
             </div>
-          </>
-        )}
-        <div
-          className="row"
-          // style={{ marginTop: mycaws.length === 0 || lands.length === 0 ? "6rem" : "" }}
-        >
-          <div className="col-12 col-lg-6">
-            <div className="mycawsCollection position-relative mb-5">
-              <div className="nft-ethereum-tag p-2 d-flex align-items-center gap-2">
-                <img src={require("./assets/ethIcon.svg").default} alt="" />
-                <span className="nft-ethereum-span">Ethereum</span>
-              </div>
-              <div className="d-flex flex-column gap-2 justify-content-between align-items-start">
-                <div className="col-xxl-2 col-lg-2 col-12 col-md-2">
-                  <h6 className="mycawscollection-title">CAWS NFTs</h6>
+            <div className="col-12 col-lg-6">
+              <div className="mycawsCollection position-relative mb-5">
+                <div className="nft-ethereum-tag p-2 d-flex align-items-center gap-2">
+                  <img src={require("./assets/ethIcon.svg").default} alt="" />
+                  <span className="nft-ethereum-span">Ethereum</span>
                 </div>
-                <div
-                  className={
-                    this.state.viewall === false
-                      ? "cawscontaier"
-                      : "cawscontaier-open"
-                  }
-                >
-                  {mycaws.length > 0 &&
-                    this.props.coinbase !== null &&
-                    mycaws
-                      .slice(
-                        0,
-                        this.state.viewall === false && window.innerWidth > 756
-                          ? 2
-                          : this.state.viewall === false &&
-                            window.innerWidth <= 756 &&
-                            window.innerWidth > 500
-                          ? 1
-                          : this.state.viewall === false &&
-                            window.innerWidth <= 500
-                          ? 1
-                          : mycaws.length
-                      )
-                      .map((item, id) => {
-                        return (
-                          <NftCawCard
-                            key={id}
-                            nft={item}
-                            action={() => {
-                              window.location.assign("/earn/dypius");
-                            }}
-                            modalId="#newNftStake"
-                            coinbase={this.props.coinbase}
-                          />
-                        );
-                      })}
+                <div className="d-flex flex-column gap-2 justify-content-between align-items-start">
+                  <div className="col-xxl-2 col-lg-2 col-12 col-md-2">
+                    <h6 className="mycawscollection-title">WoD NFTs</h6>
+                  </div>
+                  <div
+                    className={
+                      this.state.viewall === false
+                        ? "cawscontaier"
+                        : "cawscontaier-open"
+                    }
+                  >
+                    {lands.length > 0 &&
+                      this.props.coinbase !== null &&
+                      lands
+                        .slice(
+                          0,
+                          this.state.viewall === false &&
+                            window.innerWidth > 756
+                            ? 2
+                            : this.state.viewall === false &&
+                              window.innerWidth <= 756 &&
+                              window.innerWidth > 500
+                            ? 1
+                            : this.state.viewall === false &&
+                              window.innerWidth <= 500
+                            ? 1
+                            : lands.length
+                        )
+                        .map((item, id) => {
+                          return (
+                            <NftCawCard
+                              key={id}
+                              nft={item}
+                              action={() => {
+                                window.location.assign("/earn/dypius");
+                              }}
+                              modalId="#newNftStake"
+                              coinbase={this.props.coinbase}
+                            />
+                          );
+                        })}
+                  </div>
+                  <button
+                    className="outline-btn"
+                    style={{
+                      height: "fit-content",
+                      display: lands.length > 2 ? "block" : "none",
+                    }}
+                    onClick={() => {
+                      this.setState({ viewall: !this.state.viewall });
+                    }}
+                  >
+                    {this.state.viewall === false ? " View all" : "View less"}
+                  </button>
                 </div>
-                <button
-                  className="outline-btn"
-                  style={{
-                    height: "fit-content",
-                    display: mycaws.length > 4 ? "block" : "none",
-                  }}
-                  onClick={() => {
-                    this.setState({ viewall: !this.state.viewall });
-                  }}
-                >
-                  {this.state.viewall === false ? " View all" : "View less"}
-                </button>
               </div>
             </div>
           </div>
-          <div className="col-12 col-lg-6">
-            <div className="mycawsCollection position-relative mb-5">
-              <div className="nft-ethereum-tag p-2 d-flex align-items-center gap-2">
-                <img src={require("./assets/ethIcon.svg").default} alt="" />
-                <span className="nft-ethereum-span">Ethereum</span>
-              </div>
-              <div className="d-flex flex-column gap-2 justify-content-between align-items-start">
-                <div className="col-xxl-2 col-lg-2 col-12 col-md-2">
-                  <h6 className="mycawscollection-title">WoD NFTs</h6>
-                </div>
-                <div
-                  className={
-                    this.state.viewall === false
-                      ? "cawscontaier"
-                      : "cawscontaier-open"
-                  }
-                >
-                  {lands.length > 0 &&
-                    this.props.coinbase !== null &&
-                    lands
-                      .slice(
-                        0,
-                        this.state.viewall === false && window.innerWidth > 756
-                          ? 2
-                          : this.state.viewall === false &&
-                            window.innerWidth <= 756 &&
-                            window.innerWidth > 500
-                          ? 1
-                          : this.state.viewall === false &&
-                            window.innerWidth <= 500
-                          ? 1
-                          : lands.length
-                      )
-                      .map((item, id) => {
-                        return (
-                          <NftCawCard
-                            key={id}
-                            nft={item}
-                            action={() => {
-                              window.location.assign("/earn/dypius");
-                            }}
-                            modalId="#newNftStake"
-                            coinbase={this.props.coinbase}
-                          />
-                        );
-                      })}
-                </div>
-                <button
-                  className="outline-btn"
-                  style={{
-                    height: "fit-content",
-                    display: lands.length > 2 ? "block" : "none",
-                  }}
-                  onClick={() => {
-                    this.setState({ viewall: !this.state.viewall });
-                  }}
-                >
-                  {this.state.viewall === false ? " View all" : "View less"}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        {/* <TierLevels display={"none"} infoDisplay={"flex"} /> */}
-        {/* <h4 className="d-block mb-5 mt-5" id="my-fav">
+          {/* <TierLevels display={"none"} infoDisplay={"flex"} /> */}
+          {/* <h4 className="d-block mb-5 mt-5" id="my-fav">
           My favourite pairs
         </h4>
         <div className="row p-0 m-0 favorites-grid">
@@ -2585,8 +2720,22 @@ export default class Subscription extends React.Component {
             );
           })}
         </div> */}
-      </div>
-    )
+        </div>
+        {this.state.showPremiumPopup === true && (
+          <Plans
+            networkId={this.props.networkId}
+            handleSwitchNetwork={this.props.handleSwitchNetwork}
+            coinbase={this.props.coinbase}
+            isPremium={this.props.isPremium}
+            isConnected={this.props.isConnected}
+            onSubscribe={this.props.onSubscribe}
+            onClose={() => {
+              this.setState({ showPremiumPopup: false });
+            }}
+          />
+        )}
+      </>
+    );
     //  : (
     //   <div
     //     className="d-flex align-items-center justify-content-center"

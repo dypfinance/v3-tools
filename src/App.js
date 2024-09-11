@@ -68,6 +68,9 @@ import ForgotPassword from "./components/gameAccount/ForgotPassword/ForgotPasswo
 import ResetPassword from "./components/gameAccount/ResetPassword/ResetPassword";
 import PlayerCreation from "./components/gameAccount/PlayerCreation/PlayerCreation";
 import LandingScreen from "./components/gameAccount/LandingScreen/LandingScreen";
+import { useMutation, useQuery } from "@apollo/client";
+import { GENERATE_NONCE, GET_PLAYER, VERIFY_WALLET } from "./functions/Dashboard.schema";
+import { ethers } from "ethers";
 
 function App() {
   const [theme, setTheme] = useState("theme-dark");
@@ -112,6 +115,8 @@ function App() {
   const [aggregatorPools, setaggregatorPools] = useState([]);
   const [userCurencyBalance, setuserCurencyBalance] = useState(0);
   const [fireAppcontent, setFireAppContent] = useState(false);
+  const [syncStatus, setsyncStatus] = useState("initial");
+  const [showSyncModal, setshowSyncModal] = useState(false);
 
   const showModal = () => {
     setshow(true);
@@ -304,7 +309,7 @@ function App() {
     );
     const userAddr = await window.getCoinbase();
 
-    if (userAddr) {
+    if (userAddr && isConnected === true) {
       subscribedPlatformTokenAmountNewETH = await ethNewcontract.methods
         .subscriptionPlatformTokenAmount(userAddr)
         .call()
@@ -383,25 +388,25 @@ function App() {
       ) {
         setisPremium(true);
       }
-    }
+    } else setisPremium(false);
   };
 
   const handleConnection = async () => {
-    let referrer = window.param("r");
-
+    let referrer2 = window.param("r");
+    let isConnected2 = await window.connectWallet(undefined, false);
     try {
       localStorage.setItem("logout", "false");
-      isConnected = await window.connectWallet(undefined, false);
-      if (isConnected) {
-        if (referrer) {
-          referrer = String(referrer).trim().toLowerCase();
+
+      if (isConnected2) {
+        if (referrer2) {
+          referrer2 = String(referrer2).trim().toLowerCase();
         }
-        if (!window.web3.utils.isAddress(referrer)) {
-          referrer = window.config.ZERO_ADDRESS;
+        if (!window.web3.utils.isAddress(referrer2)) {
+          referrer2 = window.config.ZERO_ADDRESS;
         }
       }
 
-      setreferrer(referrer);
+      setreferrer(referrer2);
 
       let the_graph_result_ETH_V2 = await window.get_the_graph_eth_v2();
       setthe_graph_result_ETH_V2(
@@ -414,16 +419,16 @@ function App() {
       console.log(e);
       return;
     }
-    setisConnected(isConnected);
+    setisConnected(isConnected2);
 
     // console.log(window.coinbase_address)
-    let coinbase = await window.getCoinbase();
-    if (coinbase != null || coinbase != undefined) {
-      setcoinbase(coinbase);
+    let coinbase2 = await window.getCoinbase();
+    if (coinbase2 != null || coinbase2 != undefined) {
+      setcoinbase(coinbase2);
     }
     setshow(false);
 
-    return isConnected;
+    return isConnected2;
   };
 
   const tvl = async () => {
@@ -550,9 +555,10 @@ function App() {
     }
   };
 
-  const logout = () => {
+  const handlelogout = () => {
     localStorage.setItem("logout", "true");
     setisConnected(false);
+    setisPremium(false);
     checkConnection();
   };
 
@@ -722,6 +728,85 @@ function App() {
   document.addEventListener("touchstart", { passive: true });
   const windowSize = useWindowSize();
 
+  const { email, logout } = useAuth();
+  const {
+    data,
+    refetch: refetchPlayer,
+    loading: loadingPlayer,
+  } = useQuery(GET_PLAYER, {
+    fetchPolicy: "network-only",
+  });
+
+  const [generateNonce, { loading: loadingGenerateNonce, data: dataNonce }] =
+  useMutation(GENERATE_NONCE);
+const [verifyWallet, { loading: loadingVerify, data: dataVerify }] =
+  useMutation(VERIFY_WALLET);
+
+  const signWalletPublicAddress = async () => {
+   
+      try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner(coinbase);
+        const signature = await signer.signMessage(
+          `Signing one-time nonce: ${dataNonce?.generateWalletNonce?.nonce}`
+        );
+        verifyWallet({
+          variables: {
+            publicAddress: coinbase,
+            signature: signature,
+          },
+        }).then(() => {
+          setsyncStatus("success");
+          setTimeout(() => {
+            setshowSyncModal(false);
+            setsyncStatus("initial");
+          }, 1000);
+          refreshSubscription(coinbase);
+
+          // if (isonlink) {
+          //   handleFirstTask(account);
+          // }
+        });
+      } catch (error) {
+        setsyncStatus("error");
+        setTimeout(() => {
+          setsyncStatus("initial");
+        }, 3000);
+
+        console.log("🚀 ~ file: Dashboard.js:30 ~ getTokens ~ error", error);
+      }
+     
+  };
+
+  const onLogout = () => {
+    logout();
+    setTimeout(() => {
+      refetchPlayer();
+    }, 1000);
+  };
+
+  const onLinkWallet = async()=>{
+    await generateNonce({
+      variables: {
+        publicAddress: coinbase,
+      },
+    })
+  }
+
+
+  useEffect(() => {
+    if (dataVerify?.verifyWallet) {
+      refetchPlayer();
+    }
+  }, [dataVerify]);
+
+  useEffect(() => {
+    if (dataNonce?.generateWalletNonce) {
+      signWalletPublicAddress();
+    }
+  }, [dataNonce]);
+
+
   return (
     <div className={`page_wrapper ${isMinimized ? "minimize" : ""}`}>
       {/* <img src={navRadius} className="nav-radius" alt="" /> */}
@@ -760,7 +845,7 @@ function App() {
             toggleMobileSidebar={toggleMobileSidebar}
             isOpenInMobile={isOpenInMobile}
             chainId={parseInt(networkId)}
-            logout={logout}
+            logout={handlelogout}
             handleSwitchNetwork={handleSwitchNetwork}
             handleConnection={handleConnection}
             showModal={showModal}
@@ -879,7 +964,7 @@ function App() {
 
                   <Route
                     exact
-                    path="/auth"
+                    path="/sign-in"
                     element={
                       <Auth isConnected={isConnected} coinbase={coinbase} />
                     }
@@ -1180,10 +1265,16 @@ function App() {
                         isPremium={isPremium}
                         onSubscribe={refreshSubscription}
                         showRibbon={showRibbon2}
+                        email={email}
+                        address={data?.getPlayer?.wallet?.publicAddress}
+                        game_username={data?.getPlayer?.displayName}
+                        onLogout={onLogout}
+                        onLinkWallet={onLinkWallet}
+                        userId={data?.getPlayer?.playerId}
                       />
                     }
                   />
-                  <Route
+                  {/* <Route
                     exact
                     path="/plans"
                     element={
@@ -1196,7 +1287,7 @@ function App() {
                         onSubscribe={refreshSubscription}
                       />
                     }
-                  />
+                  /> */}
                   <Route
                     exact
                     path="/locker/:pair_id?"

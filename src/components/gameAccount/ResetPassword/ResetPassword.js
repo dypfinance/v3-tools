@@ -60,7 +60,7 @@ const ResetPassword = () => {
             <h1>New Password succesfully changed</h1>
             <h1
               onClick={() => {
-                history("/auth");
+                history("/sign-in");
               }}
               className={classes.succesfulText}
             >
