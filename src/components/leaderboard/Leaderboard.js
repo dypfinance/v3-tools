@@ -99,9 +99,9 @@ const [type, setType] = useState("stoneCrack")
           </div>
           <div
             className="d-flex flex-column gap-2 tablewrapper"
-            style={{ height: optionText === "genesis" ? "345px" : "384px" }}
           >
-            <table className="playerTable">
+         <div className="inner-table-wrapper p-2 w-100">
+         <table className="playerTable w-100">
               <tbody>
                 <tr className="playerRow">
                   <th className="playerHeader">Rank</th>
@@ -219,6 +219,7 @@ const [type, setType] = useState("stoneCrack")
                   )} */}
               </tbody>
             </table>
+         </div>
 
             {/* {activePlayer === false &&
               inactiveBoard === false &&

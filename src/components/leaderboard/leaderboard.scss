@@ -37,12 +37,16 @@
   padding: 5px;
 }
 
+.inner-table-wrapper{
+  background: rgba(28, 60, 94, 0.20);
+  backdrop-filter: blur(12.5px);
+  border-radius: 8px;
+}
+
 .playerTable {
   border-radius: 8px;
   color: white;
-  background: rgba(28, 60, 94, 0.20);
-backdrop-filter: blur(12.5px);
-padding: 8px;
+
 }
 
 .playerData {
@@ -485,10 +489,13 @@ background: rgba(118, 209, 245, 0.10);
   margin: auto;
 }
 
- 
- 
- 
- 
 .playerInnerRow-inactive {
   background: rgba(0, 254, 207, 0.1) !important;
+}
+
+.optionsWrapper2{
+  border-radius: 10px;
+border: 1px solid rgba(76, 78, 100, 0.00);
+background: linear-gradient(180deg, rgba(28, 60, 94, 0.15) 99.99%, rgba(28, 60, 94, 0.15) 100%);
+backdrop-filter: blur(13px);
 }
