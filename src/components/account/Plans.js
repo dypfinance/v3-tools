@@ -347,9 +347,9 @@ export default class Subscription extends React.Component {
   };
 
   componentDidUpdate(prevProps) {
-    if (this.props.isPremium) {
-      window.location.href = "https://app.dypius.com/account";
-    }
+    // if (this.props.isPremium) {
+    //   window.location.href = "https://app.dypius.com/account";
+    // }
 
     // Typical usage (don't forget to compare props):
     if (this.props.coinbase !== prevProps.coinbase) {
@@ -394,9 +394,9 @@ export default class Subscription extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.isPremium) {
-      window.location.href = "https://app.dypius.com/account";
-    }
+    // if (this.props.isPremium) {
+    //   window.location.href = "https://app.dypius.com/account";
+    // }
     this.getDypBalance();
 
     this.setState({ coinbase: this.props.coinbase });
@@ -751,7 +751,7 @@ export default class Subscription extends React.Component {
         this.setState({ loadspinnerSub: false, approveStatus: "success" });
         this.props.onSubscribe();
         this.handleUpdatePremiumUser();
-        window.location.href = "https://app.dypius.com/account";
+        // window.location.href = "https://app.dypius.com/account";
       })
       .catch((e) => {
         this.setState({ status: e?.message });

@@ -691,6 +691,8 @@ function App() {
     useEffect(() => {
       if (!isLoading || !isAuthenticated || !playerId) {
         setFireAppContent(false);
+      } else if (!isLoading && isAuthenticated && playerId) {
+        setFireAppContent(true);
       }
     }, [isLoading, isAuthenticated, playerId]);
 
@@ -801,7 +803,6 @@ function App() {
               }`}
             >
               <div className="right-content pr-0 my-4 my-lg-5">
-                
                 <Routes>
                   <Route element={GoogleAnalyticsReporter} />
 
@@ -866,7 +867,7 @@ function App() {
                   <Route
                     exact
                     path="/farms"
-                    element={ 
+                    element={
                       <Farms
                         handleConnection={handleConnection}
                         isConnected={isConnected}
@@ -1069,11 +1070,7 @@ function App() {
                     path="/submit-info"
                     render={() => <SubmitInfo theme={theme} />}
                   /> */}
-                  <Route
-                    exact
-                    path="/disclaimer"
-                    element={<Disclaimer />}
-                  />
+                  <Route exact path="/disclaimer" element={<Disclaimer />} />
                   {/* <Route exact path="/swap" component={Swap} /> */}
 
                   {/* <Route
@@ -1168,9 +1165,7 @@ function App() {
                   <Route
                     exact
                     path="/news/:news_id?"
-                    element={
-                      <News isPremium={isPremium} coinbase={coinbase} />
-                    }
+                    element={<News isPremium={isPremium} coinbase={coinbase} />}
                   />
 
                   <Route

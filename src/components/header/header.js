@@ -574,7 +574,7 @@ const Header = ({
                           >
                             <Dropdown.Item>
                               <NavLink
-                                to={isPremium ? "/account" : "/plans"}
+                                to={"/account"}
                                 className={"d-flex w-100"}
                               >
                                 <span className="d-flex gap-2 align-items-center">
@@ -618,7 +618,7 @@ const Header = ({
                       (coinbase !== undefined || coinbase !== null) &&
                       routeData.pathname !== "/swap" && (
                         <NavLink
-                          to="/plans"
+                          to="/account"
                           className="account-user-wrapper d-flex align-items-center gap-1"
                         >
                           <img

@@ -15,7 +15,7 @@ import { shortAddress } from "../../functions/shortAddress";
 import TopPoolsCard from "../top-pools-card/TopPoolsCard";
 import useWindowSize from "../../functions/useWindowSize";
 import gotoWod from "./assets/gotoWod.svg";
-
+import '../caws/NftMinting/components/General/NftStakingCawCard/_nftStakeCawCard.scss'
 const { BigNumber } = window;
 
 export default class Subscription extends React.Component {
@@ -526,9 +526,9 @@ export default class Subscription extends React.Component {
   componentDidUpdate(prevProps) {
     // Typical usage (don't forget to compare props):
 
-    if (this.props.isPremium === false) {
-      window.location.href = "https://app.dypius.com/plans";
-    }
+    // if (this.props.isPremium === false) {
+    //   window.location.href = "https://app.dypius.com/plans";
+    // }
 
     if (this.props.coinbase !== prevProps.coinbase) {
       this.fetchUserPools();
@@ -570,9 +570,9 @@ export default class Subscription extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.isPremium === false) {
-      window.location.href = "https://app.dypius.com/plans";
-    }
+    // if (this.props.isPremium === false) {
+    //   window.location.href = "https://app.dypius.com/plans";
+    // }
     // window._refreshBalIntervalDyp = setInterval(this.getDypBalance, 2000);
     this.getAllBalance();
     this.fetchUserPools();
@@ -1092,7 +1092,7 @@ export default class Subscription extends React.Component {
       this.setState({ openTooltip: true });
     };
 
-    return this.props.isPremium ? (
+    return  (
       <div>
         <div className="d-flex align-items-start align-items-lg-0 justify-content-between flex-column flex-lg-row gap-4 gap-lg-0">
           <div
@@ -1996,7 +1996,7 @@ export default class Subscription extends React.Component {
           )}
         </form> */}
 
-        {this.state.userPools && this.state.userPools.length > 0 && (
+        {this.state.userPools && this.state.userPools.length > 0 && this.props.isPremium === true && (
           <>
             <h4 className="d-block mb-5 mt-5" id="my-fav">
               My Earnings
@@ -2391,7 +2391,7 @@ export default class Subscription extends React.Component {
           </div>
         </div>
 
-        <TierLevels display={"none"} infoDisplay={"flex"} />
+        {/* <TierLevels display={"none"} infoDisplay={"flex"} /> */}
         {/* <h4 className="d-block mb-5 mt-5" id="my-fav">
           My favourite pairs
         </h4>
@@ -2586,16 +2586,17 @@ export default class Subscription extends React.Component {
           })}
         </div> */}
       </div>
-    ) : (
-      <div
-        className="d-flex align-items-center justify-content-center"
-        style={{ minHeight: "65vh" }}
-      >
-        <div class="spinner-border text-info" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-      </div>
-    );
+    )
+    //  : (
+    //   <div
+    //     className="d-flex align-items-center justify-content-center"
+    //     style={{ minHeight: "65vh" }}
+    //   >
+    //     <div class="spinner-border text-info" role="status">
+    //       <span class="visually-hidden">Loading...</span>
+    //     </div>
+    //   </div>
+    // );
   };
 
   render() {
