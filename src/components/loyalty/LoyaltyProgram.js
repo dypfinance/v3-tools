@@ -121,13 +121,14 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
   useEffect(() => {
     if (coinbase && isConnected) {
       loyaltyCheck();
+    } else {
+      setStep(1);
     }
   }, [coinbase, isConnected]);
 
   useEffect(() => {
     fetchLatestUsers();
-  }, [refresh])
-  
+  }, [refresh]);
 
   return (
     <>
@@ -349,7 +350,9 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
           <>
             <div className="d-flex w-100 align-items-center justify-content-between">
               <span className="loyalty-popup-span">Wallet Address</span>
-              <span className="loyalty-popup-span-2">{shortAddress(coinbase)}</span>
+              <span className="loyalty-popup-span-2">
+                {shortAddress(coinbase)}
+              </span>
             </div>
             <div className="reimbursement-divider "></div>
             <form className="d-flex flex-column gap-3 w-100">
