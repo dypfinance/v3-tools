@@ -293,10 +293,8 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
                           className="participant-item d-flex align-items-center justify-content-between w-100 py-1"
                         >
                           <span className="participant-name">
-                            {shortAddress(item.walletAddress)} joined the{" "}
-                            <span style={{ color: "#fff" }}>
-                              Loyalty Program
-                            </span>
+                            {shortAddress(item.walletAddress)} joined
+                             
                           </span>
                           <span className="participant-time-ago">
                             {getTimeAgo(item.timestamp)}
