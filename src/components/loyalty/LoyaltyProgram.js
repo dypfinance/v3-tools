@@ -41,9 +41,40 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
   const [refresh, setRefresh] = useState(false);
   const [loading, setLoading] = useState(false);
   const [totalUsers, setTotalUsers] = useState(0)
+  const [dypPrice, setDypPrice] = useState(0);
+  const [ethPrice, setEthPrice] = useState(0);
+
 
   
   let loyaltyCd = new Date("2024-09-25T23:59:59.000+02:00");
+
+  const convertEthToUsd = async () => {
+    const res = axios
+      .get("https://api.coinbase.com/v2/prices/ETH-USD/spot")
+      .then((data) => {
+        return data.data.data.amount;
+      });
+    return res;
+  };
+
+  const getPriceDYP = async () => {
+    const dypprice = await axios
+      .get(
+        "https://api.geckoterminal.com/api/v2/networks/eth/pools/0x7c81087310a228470db28c1068f0663d6bf88679"
+      )
+      .then((res) => {
+        return res.data.data.attributes.base_token_price_usd;
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+
+      const ethprice  = await convertEthToUsd();
+      setEthPrice(ethprice)
+
+    // let usdPerToken = await window.getPrice("defi-yield-protocol");
+    setDypPrice(dypprice);
+  };
 
   const fetchLatestUsers = async () => {
     await axios
@@ -142,6 +173,11 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
     fetchLatestUsers();
   }, [refresh]);
 
+  useEffect(()=>{
+    getPriceDYP();
+    window.scrollTo(0,0)
+  },[])
+
   return (
     <>
       <div className="container-lg p-0">
@@ -193,20 +229,20 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
                           <div className="d-flex align-items-center gap-2">
                             <img src={dyp} alt="" />
                             <h6 className="mb-0 reimbursement-token">
-                              2,500.20 DYP
+                            {step === 5 && isConnected ? 0.1 : 0} DYP
                             </h6>
                           </div>
-                          <span className="reimbursement-usd">$57.92</span>
+                          <span className="reimbursement-usd">${(step === 5 && isConnected) ? getFormattedNumber(0.1 * dypPrice,4) : 0}</span>
                         </div>
                         <div className="reimbursement-divider"></div>
                         <div className="d-flex align-items-center justify-content-between w-100">
                           <div className="d-flex align-items-center gap-2">
                             <img src={eth} alt="" />
                             <h6 className="mb-0 reimbursement-token">
-                              2,500.20 ETH
+                            {step === 5 && isConnected ? 0.000004 : 0} ETH
                             </h6>
                           </div>
-                          <span className="reimbursement-usd">$57.92</span>
+                          <span className="reimbursement-usd">${(step === 5 && isConnected) ? getFormattedNumber(0.000004 * ethPrice,4) : 0}</span>
                         </div>
                       </div>
                     </div>
