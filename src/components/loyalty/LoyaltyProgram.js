@@ -45,8 +45,8 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
   const [refresh, setRefresh] = useState(false);
   const [loading, setLoading] = useState(false);
   const [totalUsers, setTotalUsers] = useState(0);
-  const [dypPrice, setDypPrice] = useState(0);
-  const [ethPrice, setEthPrice] = useState(0);
+  // const [dypPrice, setDypPrice] = useState(0);
+  // const [ethPrice, setEthPrice] = useState(0);
 
   let loyaltyCd = new Date("2024-09-16T12:59:59.000+02:00");
 
@@ -59,24 +59,23 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
     return res;
   };
 
-  const getPriceDYP = async () => {
-    const dypprice = await axios
-      .get(
-        "https://api.geckoterminal.com/api/v2/networks/eth/pools/0x7c81087310a228470db28c1068f0663d6bf88679"
-      )
-      .then((res) => {
-        return res.data.data.attributes.base_token_price_usd;
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+  // const getPriceDYP = async () => {
+  //   const dypprice = await axios
+  //     .get(
+  //       "https://api.geckoterminal.com/api/v2/networks/eth/pools/0x7c81087310a228470db28c1068f0663d6bf88679"
+  //     )
+  //     .then((res) => {
+  //       return res.data.data.attributes.base_token_price_usd;
+  //     })
+  //     .catch((e) => {
+  //       console.log(e);
+  //     });
 
-    const ethprice = await convertEthToUsd();
-    setEthPrice(ethprice);
-
-    // let usdPerToken = await window.getPrice("defi-yield-protocol");
-    setDypPrice(dypprice);
-  };
+  //   const ethprice = await convertEthToUsd();
+  //   setEthPrice(ethprice);
+ 
+  //   setDypPrice(dypprice);
+  // };
 
   const fetchLatestUsers = async () => {
     await axios
@@ -150,7 +149,7 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
         setRefresh(true);
         setStep(4);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {console.log(err); setStep(6)});
   };
 
   const html = document.querySelector("html");
@@ -176,7 +175,7 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
   }, [refresh]);
 
   useEffect(() => {
-    getPriceDYP();
+    // getPriceDYP();
     window.scrollTo(0, 0);
   }, []);
 
@@ -483,15 +482,14 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
               Close
             </h6>
           </div>
-        ) : step === 5 ? (
+        ) : step === 6 ? (
           <div className="d-flex flex-column w-100 align-items-center gap-3">
             <img src={denied} alt="" />
             <p
               className="loyalty-popup-desc"
               style={{ textAlign: "center", width: "75%" }}
             >
-              Your application for the Loyalty Program has already been
-              received. Please check back soon.
+              An error occured. Please try again later.
             </p>
             <h6 className="loyalty-popup-close" onClick={() => setPopup(false)}>
               Close
