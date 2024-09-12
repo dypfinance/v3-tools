@@ -56,6 +56,7 @@ import avax from "../earn/assets/avax.svg";
 import avaxActive from "../earn/assets/avaxActive.svg";
 import WhitelistPopup from "../whitelistPopup/WhitelistPopup";
 import StakingDypiusBase1 from "../FARMINNG/stakingDypiusBase1";
+import LoyaltyCard from "../launchpad-card/LoyaltyCard";
 
 const Dashboard = ({
   isConnected,
@@ -669,30 +670,30 @@ setbasePoolsDyp(sortedActivebase)
       pool: null,
       faqIndex: 6,
     },
-    {
-      title: "What is Dypius Vault?",
-      option: "Vault",
-      pathName: "/earn/dypius",
-      section: "earnFaq",
-      pool: null,
-      faqIndex: 0,
-    },
-    {
-      title: "What is Dypius Bridge?",
-      option: "Bridge",
-      pathName: "/bridge",
-      section: "earnFaq",
-      pool: null,
-      faqIndex: 0,
-    },
-    {
-      title: "Will my lock period reset if I deposit ad...",
-      option: "Farming",
-      pathName: "/earn/dypius",
-      section: "earnFaq",
-      pool: null,
-      faqIndex: 4,
-    },
+    // {
+    //   title: "What is Dypius Vault?",
+    //   option: "Vault",
+    //   pathName: "/earn/dypius",
+    //   section: "earnFaq",
+    //   pool: null,
+    //   faqIndex: 0,
+    // },
+    // {
+    //   title: "What is Dypius Bridge?",
+    //   option: "Bridge",
+    //   pathName: "/bridge",
+    //   section: "earnFaq",
+    //   pool: null,
+    //   faqIndex: 0,
+    // },
+    // {
+    //   title: "Will my lock period reset if I deposit ad...",
+    //   option: "Farming",
+    //   pathName: "/earn/dypius",
+    //   section: "earnFaq",
+    //   pool: null,
+    //   faqIndex: 4,
+    // },
   ];
 
   const fetchPopularNewsData = async () => {
@@ -1462,10 +1463,12 @@ setbasePoolsDyp(sortedActivebase)
           </div>
           <div className="right-side-wrapper d-flex flex-column flex-md-row flex-xxl-column gap-4">
             <div className="launchpad-section-wrapper d-flex flex-column gap-3 gap-xxl-1">
-              <h6 className="header">World of Dypians</h6>
-              <LaunchpadCard />
+              <h6 className="header">Loyalty Program</h6>
+              <LoyaltyCard  />
             </div>
             <ChainlinkCard />
+            <LaunchpadCard />
+
             <div
               className="faq-items-wrapper d-flex flex-column"
               style={{ gap: "11px" }}
