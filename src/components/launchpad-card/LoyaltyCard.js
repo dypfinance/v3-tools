@@ -6,17 +6,18 @@ import { NavLink } from "react-router-dom";
 import whitelistHomeBg from "./assets/whitelistHomeBg.png";
 import loyaltyBanner from "./assets/loyaltyBanner.png";
 
-const LaunchpadCard = ({ type }) => {
+const LoyaltyCard = () => {
   return (
-    <a
-      to="https://www.worldofdypians.com/"
+    <NavLink
+      to={`/loyalty-program`}
       className="launchpad-wrapper"
-      rel="noreferrer"
-      target="_blank"
-      style={{ marginTop: "12px" }}
     >
       <div className="d-flex flex-column gap-2 align-items-center justify-content-between">
-        <img src={defiBg} alt="" className="launchpadbg" />
+        <img
+          src={loyaltyBanner}
+          alt=""
+          className="launchpadbg"
+        />
         <div
           className="d-flex gap-2 align-items-center justify-content-between w-100"
           style={{ padding: "0px 10px 4px 10px" }}
@@ -29,13 +30,13 @@ const LaunchpadCard = ({ type }) => {
               lineHeight: "16px",
             }}
           >
-            Discover excitement like never before!
+             Join and earn gas rebates now!
           </h6>
           <img src={rightlogo} alt="" />
         </div>
       </div>
-    </a>
+    </NavLink>
   );
 };
 
-export default LaunchpadCard;
+export default LoyaltyCard;

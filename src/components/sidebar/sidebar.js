@@ -144,6 +144,11 @@ const Sidebar = (props) => {
       link: "/governance",
     },
     {
+      label: "Loyalty",
+      icon: "loyaltyIcon",
+      link: "/loyalty-program",
+    },
+    {
       label: "Bridge",
       icon: "bridgeIcon",
       link: "/bridge",
