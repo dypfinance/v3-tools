@@ -600,6 +600,7 @@ export default class Subscription extends React.Component {
     //   window.location.href = "https://app.dypius.com/plans";
     // }
     // window._refreshBalIntervalDyp = setInterval(this.getDypBalance, 2000);
+    this.props.onPlayerFetch();
     this.getAllBalance();
     this.fetchUserPools();
     this.props.onSubscribe();
@@ -1296,45 +1297,50 @@ export default class Subscription extends React.Component {
                       <span className="account-wallet-address">
                         {shortAddress(
                           this.props.email
-                            ? this.props.address !==undefined ? this.props.address
-                            : this.props.isConnected === true ? this.props.coinbase : '': this.props.coinbase
+                            ? this.props.address !== undefined
+                              ? this.props.address
+                              : this.props.isConnected === true
+                              ? this.props.coinbase
+                              : ""
+                            : this.props.coinbase
                         )}
                       </span>
 
-                      {this.props.isConnected && (this.props.coinbase || this.props.address ) && (
-                        <ClickAwayListener onClickAway={handleTooltipClose}>
-                          <Tooltip
-                            PopperProps={{
-                              disablePortal: true,
-                            }}
-                            onClose={handleTooltipClose}
-                            open={this.state.openTooltip}
-                            disableFocusListener
-                            disableHoverListener
-                            disableTouchListener
-                            placement="top"
-                            title={
-                              <div className="tooltip-text">
-                                {"Wallet address copied!"}
-                              </div>
-                            }
-                          >
-                            <img
-                              src={
-                                require("./assets/clipboardIcon.svg").default
-                              }
-                              className="cursor-pointer"
-                              alt="clipboard"
-                              onClick={() => {
-                                navigator.clipboard.writeText(
-                                  this.props.coinbase
-                                );
-                                handleTooltipOpen();
+                      {this.props.isConnected &&
+                        (this.props.coinbase || this.props.address) && (
+                          <ClickAwayListener onClickAway={handleTooltipClose}>
+                            <Tooltip
+                              PopperProps={{
+                                disablePortal: true,
                               }}
-                            />
-                          </Tooltip>
-                        </ClickAwayListener>
-                      )}
+                              onClose={handleTooltipClose}
+                              open={this.state.openTooltip}
+                              disableFocusListener
+                              disableHoverListener
+                              disableTouchListener
+                              placement="top"
+                              title={
+                                <div className="tooltip-text">
+                                  {"Wallet address copied!"}
+                                </div>
+                              }
+                            >
+                              <img
+                                src={
+                                  require("./assets/clipboardIcon.svg").default
+                                }
+                                className="cursor-pointer"
+                                alt="clipboard"
+                                onClick={() => {
+                                  navigator.clipboard.writeText(
+                                    this.props.coinbase
+                                  );
+                                  handleTooltipOpen();
+                                }}
+                              />
+                            </Tooltip>
+                          </ClickAwayListener>
+                        )}
                     </div>
                     <span className="account-wallet-address">
                       {this.props.email}
@@ -1375,17 +1381,36 @@ export default class Subscription extends React.Component {
                     </button>
                   )}
                   {!this.props.email ? (
-                    <NavLink to='/sign-in' className="btn pill-btn px-4 py-1 w-100">
+                    <NavLink
+                      to="/sign-in"
+                      className="btn pill-btn px-4 py-1 w-100"
+                    >
                       Sign in
                     </NavLink>
-                  ) : this.props.email && this.props.address && this.props.userId ? (
+                  ) : this.props.email &&
+                    this.props.address &&
+                    this.props.userId ? (
                     <button
                       className="w-100 errorbtn px-4 py-1"
                       onClick={handleLogout}
                     >
                       Log out
                     </button>
-                  ) : !this.props.userId && this.props.email ? <NavLink className="walletconnectBtn d-flex justify-content-center w-100 align-items-center" to='/player'>Create Player</NavLink> : <button onClick={this.props.onLinkWallet} className="walletconnectBtn w-100 d-flex justify-content-center w-100 align-items-center">Link wallet</button>}
+                  ) : !this.props.userId && this.props.email ? (
+                    <NavLink
+                      className="walletconnectBtn d-flex justify-content-center w-100 align-items-center"
+                      to="/player"
+                    >
+                      Create Player
+                    </NavLink>
+                  ) : (
+                    <button
+                      onClick={this.props.onLinkWallet}
+                      className="walletconnectBtn w-100 d-flex justify-content-center w-100 align-items-center"
+                    >
+                      Link wallet
+                    </button>
+                  )}
                 </div>
               </div>
             </div>

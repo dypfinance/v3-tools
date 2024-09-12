@@ -778,6 +778,10 @@ const [verifyWallet, { loading: loadingVerify, data: dataVerify }] =
      
   };
 
+  const onPlayerFetch = ()=>{
+    refetchPlayer();
+  }
+
   const onLogout = () => {
     logout();
     setTimeout(() => {
@@ -1271,6 +1275,7 @@ const [verifyWallet, { loading: loadingVerify, data: dataVerify }] =
                         onLogout={onLogout}
                         onLinkWallet={onLinkWallet}
                         userId={data?.getPlayer?.playerId}
+                        onPlayerFetch={onPlayerFetch}
                       />
                     }
                   />
