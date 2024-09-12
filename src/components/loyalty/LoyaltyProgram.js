@@ -286,11 +286,11 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
                         joined the Loyalty Program
                       </span>
                     </div>
-                    <div className="d-flex flex-column gap-2 w-100">
+                    <div className="d-flex flex-column w-100">
                       {latestUsers.slice(0, 7).map((item, index) => (
                         <div
                           key={index}
-                          className="participant-item d-flex align-items-center justify-content-between w-100 py-1"
+                          className="participant-item d-flex align-items-center justify-content-between w-100 py-2"
                         >
                           <span className="participant-name">
                             {shortAddress(item.walletAddress)} joined
