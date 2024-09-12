@@ -9,7 +9,7 @@ import loyaltyBanner from "./assets/loyaltyBanner.png";
 const LaunchpadCard = ({ type }) => {
   return (
     <a
-      to="https://www.worldofdypians.com/"
+      href="https://www.worldofdypians.com/"
       className="launchpad-wrapper"
       rel="noreferrer"
       target="_blank"

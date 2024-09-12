@@ -3,6 +3,7 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import closeX from "../earnOther/assets/closeX.svg";
 import migrationPopup from "./dypBaseBg.webp";
+import loyaltyPopupBanner from "./loyaltyPopupBanner.png";
 import "./whitelist.css";
 import OutsideClickHandler from "react-outside-click-handler";
 import { NavLink } from "react-router-dom";
@@ -54,31 +55,30 @@ const WhitelistPopup = ({ open, onClose }) => {
                 <div className="d-flex flex-column align-items-center justify-content-center">
                   <div className="d-flex align-items-center justify-content-center mb-2 popup-title-wrapper gap-2 p-2 px-4">
                     <h6 className="popup-title d-flex align-items-center gap-2 mb-0">
-                      Dypius Expands to
+                      Loyalty Program
                     </h6>
-                    <h6 className="popup-title metaverse mb-0">Base</h6>
                   </div>
-                  <span className="popup-span mb-0">
-                    Seamlessly bridge DYP to Base via the official Base SuperBridge
+                  <span className="popup-span mb-0 w-100">
+                    Join and earn gas rebates now!
                   </span>
                 </div>
                 <img
-                  src={migrationPopup}
-                  className="land-nft-image w-100"
+                  src={loyaltyPopupBanner}
+                  className="land-nft-image w-100 my-5"
                   alt="land nft"
                 />
                 {/* <span className="popup-content">
           Total Genesis land supply limited to 1,000 plots
         </span> */}
-                <a
-                  href="https://superbridge.app/base"
+                <NavLink
+                  to="/loyalty-program"
                   target={"_blank"}
                   onClick={onClose}
                 >
                   <button className="btn filled-btn m-3">
-                    Bridge DYP on Base
+                    Apply
                   </button>
-                </a>
+                </NavLink>
               </div>
             </div>
           </div>
