@@ -15,6 +15,8 @@ import metamask from "./assets/metamask.png";
 import checkIcon from "./assets/checkIcon.svg";
 import coin98 from "./assets/coin98.png";
 import trustwallet from "./assets/trustwallet.png";
+import coinbaseWallet from "./assets/coinbase.png";
+
 import safepal from "./assets/safepal.png";
 import axios from "axios";
 import { shortAddress } from "../../functions/shortAddress";
@@ -253,7 +255,7 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
                       </div>
                     </div> */}
                   </div>
-                  {step === 5 && (
+                  {(step === 5 || step === 4) && (
                     <img src={appliedBadge} alt="" className="appliedbadge" />
                   )}
                   {/* <div className="d-flex flex-column w-100 mb-3 mb-lg-0">
@@ -393,7 +395,7 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
               onClick={handleConnection}
             >
               <span className="loyalty-wallet-title">Coinbase</span>
-              <img src={coinbase} width={30} height={30} alt="" />
+              <img src={coinbaseWallet} width={30} height={30} alt="" />
             </div>
             <div
               className="connect-wallet-item p-3 w-100 d-flex align-items-center justify-content-between"
