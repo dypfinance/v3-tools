@@ -8,6 +8,14 @@
   position: relative;
 }
 
+.loyalty-joined {
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: -0.018em;
+  color: #4cd0cd;
+  margin-top: 10px;
+}
+
 .loyalty-banner::before {
   content: "";
   position: absolute;
@@ -86,9 +94,13 @@
 }
 
 .reimbursement-wrapper{
-    border-radius: 0px 0px 12px 12px;
+    border-radius: 12px;
     background: #312F69;
     box-shadow: 0px 32px 64px 0px rgba(17, 17, 17, 0.12);
+}
+
+.appliedbadge {
+  width: 150px;
 }
 
 .my-reimbursement{

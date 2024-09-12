@@ -12,7 +12,7 @@ import xMark from "./assets/xMark.svg";
 import successful from "./assets/successful.svg";
 import denied from "./assets/denied.svg";
 import metamask from "./assets/metamask.png";
-import coinbase from "./assets/coinbase.png";
+import checkIcon from "./assets/checkIcon.svg";
 import coin98 from "./assets/coin98.png";
 import trustwallet from "./assets/trustwallet.png";
 import safepal from "./assets/safepal.png";
@@ -20,13 +20,15 @@ import axios from "axios";
 import { shortAddress } from "../../functions/shortAddress";
 import Countdown from "react-countdown";
 import getFormattedNumber from "../../functions/get-formatted-number";
+import appliedBadge from "./assets/appliedBadge.webp";
 
-const renderer = ({days,hours,minutes}) => {
+const renderer = ({ days, hours, minutes }) => {
   return (
-    <h6 className="loyalty-timer mb-0">{days}d : {hours}h : {minutes}m</h6>
-  )
-  
-}
+    <h6 className="loyalty-timer mb-0">
+      {days}d : {hours}h : {minutes}m
+    </h6>
+  );
+};
 
 const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
   const baseUrl = "https://api.worldofdypians.com/api";
@@ -40,12 +42,10 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
   const [latestUsers, setLatestUsers] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [totalUsers, setTotalUsers] = useState(0)
+  const [totalUsers, setTotalUsers] = useState(0);
   const [dypPrice, setDypPrice] = useState(0);
   const [ethPrice, setEthPrice] = useState(0);
 
-
-  
   let loyaltyCd = new Date("2024-09-16T12:59:59.000+02:00");
 
   const convertEthToUsd = async () => {
@@ -69,8 +69,8 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
         console.log(e);
       });
 
-      const ethprice  = await convertEthToUsd();
-      setEthPrice(ethprice)
+    const ethprice = await convertEthToUsd();
+    setEthPrice(ethprice);
 
     // let usdPerToken = await window.getPrice("defi-yield-protocol");
     setDypPrice(dypprice);
@@ -81,7 +81,7 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
       .get(`${baseUrl}/loyalty/latest`)
       .then((data) => {
         setLatestUsers(data.data.participants);
-        setTotalUsers(data.data.totalCount)
+        setTotalUsers(data.data.totalCount);
       })
       .catch((err) => console.log(err));
   };
@@ -173,15 +173,15 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
     fetchLatestUsers();
   }, [refresh]);
 
-  useEffect(()=>{
+  useEffect(() => {
     getPriceDYP();
-    window.scrollTo(0,0)
-  },[])
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <>
       <div className="container-lg p-0">
-        <div className="row">
+        <div className="row gap-3 gap-lg-0">
           <div className="col-12">
             <div className="loyalty-banner loyalty-container d-flex flex-column flex-lg-row p-4 gap-3 gap-lg-5 align-items-center mb-4">
               <div className="d-flex flex-column gap-2 loyalty-banner-content">
@@ -192,13 +192,19 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
                   ecosystem with lower costs and great benefits for loyal
                   participants!
                 </p>
-                <button
-                  className="btn filled-btn"
-                  style={{ width: "fit-content" }}
-                  onClick={() => setPopup(true)}
-                >
-                  Apply
-                </button>
+                {step !== 5 ? (
+                  <button
+                    className="btn filled-btn"
+                    style={{ width: "fit-content" }}
+                    onClick={() => setPopup(true)}
+                  >
+                    Apply
+                  </button>
+                ) : (
+                  <h6 className="loyalty-joined m-0 d-flex align-items-center gap-1">
+                  <img src={checkIcon} alt='' />  You have already applied.
+                  </h6>
+                )}
               </div>
               <div className="loyalty-banner-timer px-5 py-4 position-relative d-flex align-items-center justify-content-center">
                 <img src={clock} alt="" className="loyalty-clock" />
@@ -211,16 +217,19 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
           </div>
           <div className="col-12 col-lg-6 ">
             <div className="loyalty-container p-3 h-100">
-              <div className="row h-100">
-                <div className="col-12 col-lg-5 d-flex align-items-end">
-                  <div className="d-flex flex-column gap-3">
-                    <h6 className="loyalty-title mb-0">90 days gas free</h6>
-                    <p className="loyalty-desc mb-0">
+              <div className="row h-100 gap-3 gap-lg-0">
+                <div className="col-12 col-lg-5 d-flex flex-column gap-2 justify-content-between align-items-center">
+                  <div className="d-flex flex-column h-100 justify-content-between  gap-3">
+                    <h6 className="loyalty-banner-title text-center mb-0">
+                      90 days gas free
+                    </h6>
+                    <p className="loyalty-desc mb-0 h-100 align-items-center  d-flex">
                       Winners will enjoy 90 days of gas-free transactions in the
                       Dypius ecosystem on Base, with ETH and DYPv2 reimbursed to
                       cover the gas costs for one transaction per day.
                     </p>
-                    <div className="d-flex flex-column w-100 mb-3 mb-lg-0">
+
+                    {/* <div className="d-flex flex-column w-100 mb-3 mb-lg-0">
                       <div className="d-flex align-items-center justify-content-center p-2 my-reimbursement">
                         My Reimbursement
                       </div>
@@ -245,8 +254,24 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
                           <span className="reimbursement-usd">${(step === 5 && isConnected) ? getFormattedNumber(0.000004 * ethPrice,4) : 0}</span>
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
+                  {step === 5 && (
+                    <img src={appliedBadge} alt="" className="appliedbadge" />
+                  )}
+                  {/* <div className="d-flex flex-column w-100 mb-3 mb-lg-0">
+                    <div className="d-flex p-3 flex-column align-items-center justify-content-center gap-2 reimbursement-wrapper">
+                      <div className="d-flex align-items-center justify-content-between w-100">
+                        <div className="d-flex align-items-center gap-2">
+                          {step === 5 && (
+                            <h6 className="loyalty-joined m-0">
+                              You have already applied.
+                            </h6>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div> */}
                 </div>
                 <div className="col-12 col-lg-7">
                   <div
@@ -257,13 +282,14 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
                     <div className="d-flex align-items-center gap-2">
                       <img src={fireIcon} alt="" />
                       <span className="participants-desc">
-                        {" "}
-                        <span style={{ color: "#FCE202" }}>{getFormattedNumber(totalUsers, 0)}</span> joined
-                        the Loyalty Program
+                        <span style={{ color: "#FCE202" }}>
+                          {getFormattedNumber(totalUsers, 0)}
+                        </span>{" "}
+                        joined the Loyalty Program
                       </span>
                     </div>
                     <div className="d-flex flex-column gap-2 w-100">
-                      {latestUsers.slice(0,7).map((item, index) => (
+                      {latestUsers.slice(0, 7).map((item, index) => (
                         <div
                           key={index}
                           className="participant-item d-flex align-items-center justify-content-between w-100 py-1"

@@ -59,12 +59,15 @@ const WhitelistPopup = ({ open, onClose }) => {
                     </h6>
                   </div>
                   <span className="popup-span mb-0 w-100">
-                    Join and earn gas rebates now!
+                    This program rewards your interactions within Dypius
+                    ecosystem by offering gas fee rebates on Base. Join us in
+                    exploring the ecosystem with lower costs and great benefits
+                    for loyal participants!
                   </span>
                 </div>
                 <img
                   src={loyaltyPopupBanner}
-                  className="land-nft-image w-100 my-5"
+                  className="land-nft-image w-100"
                   alt="land nft"
                 />
                 {/* <span className="popup-content">
@@ -72,12 +75,9 @@ const WhitelistPopup = ({ open, onClose }) => {
         </span> */}
                 <NavLink
                   to="/loyalty-program"
-                  target={"_blank"}
                   onClick={onClose}
                 >
-                  <button className="btn filled-btn m-3">
-                    Apply
-                  </button>
+                  <button className="btn filled-btn m-3">Apply</button>
                 </NavLink>
               </div>
             </div>
