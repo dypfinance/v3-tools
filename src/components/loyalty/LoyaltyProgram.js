@@ -192,19 +192,6 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
                   ecosystem with lower costs and great benefits for loyal
                   participants!
                 </p>
-                {step !== 5 ? (
-                  <button
-                    className="btn filled-btn"
-                    style={{ width: "fit-content" }}
-                    onClick={() => setPopup(true)}
-                  >
-                    Apply
-                  </button>
-                ) : (
-                  <h6 className="loyalty-joined m-0 d-flex align-items-center gap-1">
-                  <img src={checkIcon} alt='' />  You have already applied.
-                  </h6>
-                )}
               </div>
               <div className="loyalty-banner-timer px-5 py-4 position-relative d-flex align-items-center justify-content-center">
                 <img src={clock} alt="" className="loyalty-clock" />
@@ -218,17 +205,27 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
           <div className="col-12 col-lg-6 ">
             <div className="loyalty-container p-3 h-100">
               <div className="row h-100 gap-3 gap-lg-0">
-                <div className="col-12 col-lg-5 d-flex flex-column gap-2 justify-content-between align-items-center">
-                  <div className="d-flex flex-column h-100 justify-content-between  gap-3">
+                <div className="col-12 col-lg-5 d-flex flex-column gap-4 justify-content-start align-items-center">
+                  <div className="d-flex flex-column justify-content-start gap-3">
                     <h6 className="loyalty-banner-title text-center mb-0">
                       90 days gas free
                     </h6>
-                    <p className="loyalty-desc mb-0 h-100 align-items-center  d-flex">
-                      Winners will enjoy 90 days of gas-free transactions in the
-                      Dypius ecosystem on Base, with ETH and DYPv2 reimbursed to
-                      cover the gas costs for one transaction per day.
-                    </p>
-
+                    <div className="d-flex flex-column gap-5 h-100 justify-content-start align-items-center pt-3">
+                      <p className="loyalty-desc mb-0 align-items-center  d-flex">
+                        Winners will enjoy 90 days of gas-free transactions in
+                        the Dypius ecosystem on Base, with ETH and DYPv2
+                        reimbursed to cover the gas costs for one transaction
+                        per day.
+                      </p>
+                      {step !== 5 && step !== 4 && (
+                        <button
+                          className="btn hero-stake-eth-btn2 w-75"
+                          onClick={() => setPopup(true)}
+                        >
+                          Apply
+                        </button>
+                      )}
+                    </div>
                     {/* <div className="d-flex flex-column w-100 mb-3 mb-lg-0">
                       <div className="d-flex align-items-center justify-content-center p-2 my-reimbursement">
                         My Reimbursement
@@ -430,7 +427,9 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
             </div>
             <div className="reimbursement-divider "></div>
             <form className="d-flex flex-column gap-3 w-100">
-              <span className="loyalty-popup-span">Other Details</span>
+              <span className="loyalty-popup-span">
+                Other Details (optional)
+              </span>
               <input
                 type="email"
                 placeholder="Email Address"
