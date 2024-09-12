@@ -17,6 +17,7 @@ import Leaderboard from "../leaderboard/Leaderboard";
 import pointsIcon from "./assets/pointsIcon.png";
 import gemIcon from "./assets/gemIcon.png";
 import spark from "./assets/spark.svg";
+import { NavLink } from "react-router-dom";
 
 const Games = ({
   handleConnection,
@@ -27,6 +28,9 @@ const Games = ({
   isPremium,
   dummypremiumChests,
   bnbImages,
+  email,
+  address,
+  userId,
 }) => {
   const [chain, setChain] = useState("base");
   const [message, setMessage] = useState("");
@@ -107,7 +111,10 @@ const Games = ({
 
   useEffect(() => {
     if (chain === "base") {
-      if (coinbase && isConnected) {
+      if (!address && !email) {
+        setMessage("login");
+        setDisable(true);
+      } else if (coinbase && isConnected) {
         if (isPremium) {
           // if (
           //   claimedChests + claimedPremiumChests === 20 &&
@@ -177,8 +184,10 @@ const Games = ({
     chain,
     networkId,
     coinbase,
-    // address,
+    address,
     isPremium,
+    email,
+    isConnected
     // claimedChests,
     // claimedPremiumChests,
     // claimedSkaleChests,
@@ -277,13 +286,12 @@ const Games = ({
                         setTimeout(() => {
                           setSparkles({
                             show: value,
-                            position: index + 1
+                            position: index + 1,
                           });
                         }, 350);
                         setDisable(value);
                         setloading(value);
                         setSelectedChest(index + 1);
-                      
                       }}
                       onChestStatus={(val) => {
                         setMessage(val);
@@ -589,17 +597,15 @@ const Games = ({
                         Sign in to access Daily Bonus and earn tailored rewards!
                       </span>
                     </div>
-                    {/* <div className="d-flex align-items-center justify-content-end get-premium-wrapper p-3 p-lg-0">
+                    <div className="d-flex align-items-center justify-content-end get-premium-wrapper p-3 p-lg-0">
                     <NavLink
                       className="sign-in-btn px-4 py-1"
-                      to="/auth"
-                      onClick={() => {
-                        html.classList.remove("hidescroll");
-                      }}
+                      to="/sign-in"
+                       
                     >
                       Sign In
                     </NavLink>
-                  </div> */}
+                  </div>
                   </div>
                 ) : message === "connect" ? (
                   <div
@@ -683,15 +689,17 @@ const Games = ({
           <div className="left-games-banner p-2">
             <div className="d-flex flex-column h-100">
               <div className="main-image-game h-100 position-relative overflow-hidden">
-               {sparkles.show &&
-                <div class={`animation-container position-${sparkles.position}`}>
-                <div class="spark-wrapper">
-                  <img src={spark} class="spark-1" alt="Spark" />
-                  <img src={spark} class="spark-2" alt="Spark" />
-                  <img src={spark} class="spark-3" alt="Spark" />
-                </div>
-              </div>
-               }
+                {sparkles.show && (
+                  <div
+                    class={`animation-container position-${sparkles.position}`}
+                  >
+                    <div class="spark-wrapper">
+                      <img src={spark} class="spark-1" alt="Spark" />
+                      <img src={spark} class="spark-2" alt="Spark" />
+                      <img src={spark} class="spark-3" alt="Spark" />
+                    </div>
+                  </div>
+                )}
                 <div className="dynamic-position w-100">
                   <div className="d-flex flex-column flex-lg-row flex-md-row flex-sm-row justify-content-between align-items-start w-100 p-2">
                     <img src={stoneCrack} alt="" className="stonecrack-logo" />

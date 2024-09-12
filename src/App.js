@@ -999,6 +999,9 @@ const [verifyWallet, { loading: loadingVerify, data: dataVerify }] =
                         dummypremiumChests={dummyPremiums}
                         isPremium={isPremium}
                         bnbImages={chestImagesBnb}
+                        email={email}
+                        address={data?.getPlayer?.wallet?.publicAddress}
+                        userId={data?.getPlayer?.playerId}
                       />
                     }
                   />
