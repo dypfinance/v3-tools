@@ -6,12 +6,17 @@ import { CircularProgress } from "@mui/material";
 import playerAvatar from "./assets/userAvatar2.png";
 import premiumAvatar from "./assets/premiumAvatar.png";
 import premiumStar from "./assets/premiumStar.png";
+import kittyDashFlag from "./assets/kittyDashFlag.png";
+import stoneCrackFlag from "./assets/stoneCrackFlag.png";
+import cawsAdventuresFlag from "./assets/cawsAdventuresFlag.png";
 
 const Leaderboard = ({
   userData,
   username,
   monthlyplayerData,
   weeklyplayerData,
+  type,
+  setType,
 }) => {
   const weeklyPrizes = ["25", "15", "10", "8", "0", "0", "0", "0", "0", "0"];
   const monthlyPrizes = [
@@ -26,12 +31,264 @@ const Leaderboard = ({
     "10",
     "10",
   ];
+
+  const stoneHeaders = {
+    scoreColor: "#FFBE6F",
+    rewardColor: "#FBF1CA",
+    headers: [
+      {
+        name: "Rank",
+        class: "col-1"
+      },
+      {
+        name: "Player",
+        class: "col-3"
+      },
+      {
+        name: "Score",
+        class: "col-4 text-center"
+      },
+      {
+        name: "ETH Reward",
+        class: "col-2 text-center"
+      },
+      {
+        name: "DYP Reward",
+        class: "col-2 text-center"
+      },
+      ],
+  };
+
+  const kittyHeaders = {
+    scoreColor: "#F6B67E",
+    rewardColor: "#3ED2FF",
+    headers: [{
+      name: "Rank",
+      class: "col-1"
+    },
+    {
+      name: "Player",
+      class: "col-3"
+    },
+    {
+      name: "Score",
+      class: "col-4 text-center"
+    },
+    {
+      name: "Reward",
+      class: "col-4 text-center"
+    },
+  ,],
+  };
+
+  const cawsHeaders = {
+    scoreColor: "#FF8961",
+    rewardColor: "#FFECCC",
+    headers: [
+      {
+        name: "Rank",
+        class: "col-1"
+      },
+      {
+        name: "Player",
+        class: "col-3"
+      },
+      {
+        name: "Score",
+        class: "col-3 text-center"
+      },
+      {
+        name: "Level",
+        class: "col-2 text-center"
+      },
+      {
+        name: "Time",
+        class: "col-3 text-center"
+      },
+      ],
+  };
+
+  const stoneData = [
+    {
+      player: "DarkSliffer",
+      score: 11502635,
+      ethReward: 1000,
+      dypReward: 1000,
+    },
+    {
+      player: "Energy",
+      score: 10102000,
+      ethReward: 500,
+      dypReward: 500,
+    },
+    {
+      player: "POGL",
+      score: 7502635,
+      ethReward: 10,
+      dypReward: 10,
+    },
+    {
+      player: "GDoge",
+      score: 5000000,
+      ethReward: 10,
+      dypReward: 10,
+    },
+    {
+      player: "Beku",
+      score: 2404445,
+      ethReward: 10,
+      dypReward: 10,
+    },
+    {
+      player: "Lorena",
+      score: 1152879,
+      ethReward: 10,
+      dypReward: 10,
+    },
+    {
+      player: "Dark",
+      score: 906800,
+      ethReward: 10,
+      dypReward: 10,
+    },
+    {
+      player: "Rediness",
+      score: 901625,
+      ethReward: 10,
+      dypReward: 10,
+    },
+    {
+      player: "Gbani",
+      score: 800583,
+      ethReward: 10,
+      dypReward: 10,
+    },
+    {
+      player: "Sakrifica",
+      score: 783540,
+      ethReward: 10,
+      dypReward: 10,
+    },
+  ];
+  const kittyData = [
+    {
+      player: "DarkSliffer",
+      score: 11502635,
+      reward: 1000,
+    },
+    {
+      player: "Energy",
+      score: 10102000,
+      reward: 500,
+    },
+    {
+      player: "POGL",
+      score: 7502635,
+      reward: 10,
+    },
+    {
+      player: "GDoge",
+      score: 5000000,
+      reward: 10,
+    },
+    {
+      player: "Beku",
+      score: 2404445,
+      reward: 10,
+    },
+    {
+      player: "Lorena",
+      score: 1152879,
+      reward: 10,
+    },
+    {
+      player: "Dark",
+      score: 906800,
+      reward: 10,
+    },
+    {
+      player: "Rediness",
+      score: 901625,
+      reward: 10,
+    },
+    {
+      player: "Gbani",
+      score: 800583,
+      reward: 10,
+    },
+    {
+      player: "Sakrifica",
+      score: 783540,
+      reward: 10,
+    },
+  ];
+  const cawsData = [
+    {
+      player: "DarkSliffer",
+      score: 11502635,
+      level: 10,
+      time: "2m:01s",
+    },
+    {
+      player: "Energy",
+      score: 10102000,
+      level: 10,
+      time: "2m:05s",
+    },
+    {
+      player: "POGL",
+      score: 7502635,
+      level: 10,
+      time: "3m:15s",
+    },
+    {
+      player: "GDoge",
+      score: 5000000,
+      level: 9,
+      time: "6m:12s",
+    },
+    {
+      player: "Beku",
+      score: 2404445,
+      level: 8,
+      time: "6m:55s",
+    },
+    {
+      player: "Lorena",
+      score: 1152879,
+      level: 10,
+      time: "10m:05s",
+    },
+    {
+      player: "Dark",
+      score: 906800,
+      level: 10,
+      time: "50m:05s",
+    },
+    {
+      player: "Rediness",
+      score: 901625,
+      level: 9,
+      time: "59m:05s",
+    },
+    {
+      player: "Gbani",
+      score: 800583,
+      level: 2,
+      time: "1h:12m:05s",
+    },
+    {
+      player: "Sakrifica",
+      score: 783540,
+      level: 10,
+      time: "1h:16m:05s",
+    },
+  ];
+
   const [optionText, setOptionText] = useState("weekly");
   const [inactiveBoard, setInactiveBoard] = useState(false);
   const [prizes, setPrizes] = useState(weeklyPrizes);
   const [activePlayer, setActivePlayer] = useState(false);
-const [type, setType] = useState("stoneCrack")
-
 
   const handleOption = (item) => {
     setOptionText(item);
@@ -53,18 +310,33 @@ const [type, setType] = useState("stoneCrack")
     >
       <div className="row w-100 align-items-start gap-4 gap-lg-0">
         <div className="d-flex flex-column gap-3 col-12  px-0">
-            <div className="leaderboard-types-grid">
-              <button className={`leaderboard-type-btn ${type === "stoneCrack" && "leaderboard-type-btn-active"} d-flex-align-items-center justify-content-center p-2`} onClick={() => setType("stoneCrack")}>
-                Stone Crack
-              </button>
-              <button className={`leaderboard-type-btn ${type === "kittyDash" && "leaderboard-type-btn-active"} d-flex-align-items-center justify-content-center p-2`} onClick={() => {setType("kittyDash"); handleOption("weekly");}}>
-                Kitty Dash
-              </button>
-              <button className={`leaderboard-type-btn ${type === "caws" && "leaderboard-type-btn-active"} d-flex-align-items-center justify-content-center p-2`} onClick={() => {setType("caws"); handleOption("weekly")}}>
-                CAWS Adventure
-              </button>
-            </div>
-          <div className="d-flex align-items-center gap-1">
+          <div className="d-flex leaderboards-flag-wrapper align-items-center gap-2 justify-content-center">
+            <img
+              src={stoneCrackFlag}
+              onClick={() => setType("stoneCrack")}
+              className="leaderboard-flag"
+              alt=""
+            />
+            <img
+              src={kittyDashFlag}
+              onClick={() => {
+                setType("kittyDash");
+                handleOption("weekly");
+              }}
+              className="leaderboard-flag"
+              alt=""
+            />
+            <img
+              src={cawsAdventuresFlag}
+              onClick={() => {
+                setType("cawsAdventure");
+                handleOption("weekly");
+              }}
+              className="leaderboard-flag"
+              alt=""
+            />
+          </div>
+          <div className="d-flex align-items-center gap-1 mt-5">
             <div className="optionsWrapper col-12">
               <div
                 className="d-flex gap-1 align-items-center justify-content-between"
@@ -72,7 +344,13 @@ const [type, setType] = useState("stoneCrack")
               >
                 <span
                   className={`${
-                    optionText === "weekly" && "otheroptionsActive"
+                    optionText === "weekly" && type === "stoneCrack"
+                      ? "otheroptionsActive-stone"
+                      : optionText === "weekly" && type === "kittyDash"
+                      ? "otheroptionsActive-kitty"
+                      : optionText === "weekly" && type === "cawsAdventure"
+                      ? "otheroptionsActive-caws"
+                      : ""
                   } durationText col-3`}
                   style={{ width: type !== "stoneCrack" ? "100%" : "50%" }}
                   onClick={() => {
@@ -81,74 +359,142 @@ const [type, setType] = useState("stoneCrack")
                 >
                   Weekly
                 </span>
-               {type === "stoneCrack" &&
-                <span
-                className={`${
-                  optionText === "monthly" && "otheroptionsActive"
-                } durationText col-3`}
-                style={{ width: "50%" }}
-                onClick={() => {
-                  handleOption("monthly");
-                }}
-              >
-                Monthly
-              </span>
-               }
+                {type === "stoneCrack" && (
+                  <span
+                    className={`${
+                      optionText === "monthly" && type === "stoneCrack"
+                        ? "otheroptionsActive-stone"
+                        : optionText === "monthly" && type === "kittyDash"
+                        ? "otheroptionsActive-kitty"
+                        : optionText === "monthly" && type === "cawsAdventure"
+                        ? "otheroptionsActive-caws"
+                        : ""
+                    } durationText col-3`}
+                    style={{ width: "50%" }}
+                    onClick={() => {
+                      handleOption("monthly");
+                    }}
+                  >
+                    Monthly
+                  </span>
+                )}
               </div>
             </div>
           </div>
-          <div
-            className="d-flex flex-column gap-2 tablewrapper"
-          >
-         <div className="inner-table-wrapper p-2 w-100">
-         <table className="playerTable w-100">
-              <tbody>
-                <tr className="playerRow">
-                  <th className="playerHeader">Rank</th>
-                  <th className="playerHeader">Player</th>
-                  {optionText !== "genesis" && (
-                    <th className="playerHeader text-center">Score</th>
-                  )}
-                  {optionText !== "genesis" && (
-                    <th className="playerHeader text-center">Reward</th>
-                  )}
-                </tr>
+          <div className="d-flex flex-column gap-2 tablewrapper">
+            <div className="inner-table-wrapper p-2 w-100">
+              <table className="playerTable w-100">
+                <tbody>
+                  <tr className="playerRow">
+                    {type === "stoneCrack" ? (
+                      <>
+                        {stoneHeaders.headers.map((item, index) => (
+                         <th className={`playerHeader ${item.class}`} key={index}>
+                         {item.name}
+                       </th>
+                        ))}
+                      </>
+                    ) : type === "kittyDash" ? (
+                      <>
+                        {kittyHeaders.headers.map((item, index) => (
+                          <th className={`playerHeader ${item.class}`} key={index}>
+                            {item.name}
+                          </th>
+                        ))}
+                      </>
+                    ) : (
+                      <>
+                        {cawsHeaders.headers.map((item, index) => (
+                               <th className={`playerHeader ${item.class}`} key={index}>
+                               {item.name}
+                             </th>
+                        ))}
+                      </>
+                    )}
+                  </tr>
 
-                {[...Array(10)].map((item, index) => {
-                    return (
-                      <tr
-                        key={index}
-                        className={`playerInnerRow`}
-                      >
+                  {type === "stoneCrack" ? (
+                    <>
+                      {stoneData.map((item, index) => (
+                        <tr key={index} className={`playerInnerRow`}>
+                          <td className="playerData col-1">{Number(index) + 1}</td>
+                          <td className="playerName col-3">
+                            <div className="position-relative d-flex align-items-center">
+                              <span>{item.player}</span>
+                            </div>
+                          </td>
+                          <td
+                            className="playerScore col-4 text-center"
+                            style={{ color: stoneHeaders.scoreColor }}
+                          >
+                            {getFormattedNumber(item.score, 0)}
+                          </td>
+                          <td
+                            className={`playerReward col-2 text-center`}
+                            style={{ color: stoneHeaders.rewardColor }}
+                          >
+                            ${getFormattedNumber(item.ethReward, 0)}
+                          </td>
+                          <td
+                            className={`playerReward col-2 text-center`}
+                            style={{ color: stoneHeaders.rewardColor }}
+                          >
+                            ${getFormattedNumber(item.dypReward, 0)}
+                          </td>
+                        </tr>
+                      ))}
+                    </>
+                  ) : type === "kittyDash" ? (
+                    <>
+                      {kittyData.map((item, index) => (
+                        <tr key={index} className={`playerInnerRow`}>
+                          <td className="playerData col-1">{Number(index) + 1}</td>
+                          <td className="playerName col-3">
+                            <div className="position-relative d-flex align-items-center">
+                              <span>{item.player}</span>
+                            </div>
+                          </td>
+                          <td
+                            className="playerScore col-4 text-center"
+                            style={{ color: kittyHeaders.scoreColor }}
+                          >
+                            {getFormattedNumber(item.score, 0)}
+                          </td>
+                          <td
+                            className={`playerReward col-4 text-center`}
+                            style={{ color: kittyHeaders.rewardColor }}
+                          >
+                            ${getFormattedNumber(item.reward, 0)}
+                          </td>
+                        </tr>
+                      ))}
+                    </>
+                  ) : (
+                    <>
+                     {cawsData.map((item, index) => (
+                        <tr key={index} className={`playerInnerRow`}>
                         <td className="playerData col-1">
                           {Number(index) + 1}
                         </td>
-                        <td className="playerName col-5">
-                            <div className="position-relative d-flex align-items-center">
-                              {/* <img
-                                src={premiumAvatar}
-                                alt=""
-                                className="playerAvatar"
-                              /> */}
-                              <span>
-                                {" "}
-                                DarkSliffer
-                              </span>
-                            </div>
+                        <td className="playerName col-3">
+                          <div className="position-relative d-flex align-items-center">
+                            <span>{item.player}</span>
+                          </div>
                         </td>
-                        <td className="playerScore col-2  text-center">
-                          1500
+                        <td className="playerScore col-3 text-center" style={{color: cawsHeaders.scoreColor}}>{getFormattedNumber(item.score, 0)}</td>
+                        <td className={`playerReward col-2 text-center`} style={{color: cawsHeaders.scoreColor}}>
+                          {getFormattedNumber(item.level, 0)}
                         </td>
-                        <td
-                          className={`playerReward text-center col-2`}
-                        >
-                          ${weeklyPrizes[index]}
+                        <td className={`playerReward col-3 text-center`} style={{color: cawsHeaders.rewardColor}}>
+                          {item.time}
                         </td>
+                       
                       </tr>
-                    );
-                  })}
+                    ))}
+                    </>
+                  )}
 
-                {/* {weeklyplayerData &&
+                  {/* {weeklyplayerData &&
                   inactiveBoard === true &&
                   optionText === "weekly" &&
                   weeklyplayerData.length > 0 &&
@@ -217,9 +563,9 @@ const [type, setType] = useState("stoneCrack")
                       style={{ alignSelf: "center", margin: "auto" }}
                     />
                   )} */}
-              </tbody>
-            </table>
-         </div>
+                </tbody>
+              </table>
+            </div>
 
             {/* {activePlayer === false &&
               inactiveBoard === false &&

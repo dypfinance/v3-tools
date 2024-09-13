@@ -45,6 +45,8 @@ const [active, setActive] = useState(false)
   });
   const [disable, setDisable] = useState(false);
   const [loading, setloading] = useState(false);
+const [type, setType] = useState("stoneCrack")
+
 
   var rocksArray = [];
   const handleBasePool = async () => {
@@ -1154,16 +1156,15 @@ const [active, setActive] = useState(false)
     </div>
       <div
         id="popup"
-        className={`popup-wrapper ${
+        className={`popup-wrapper  ${type === "kittyDash" ? "kittydash-bg" : type === "stoneCrack" ? "stonecrack-bg" : "cawsadventure-bg"} ${
           active && "popup-active"
         } p-3 d-flex flex-column gap-3 justify-content-center align-items-center`}
         style={{borderRadius: "8px", background: "#1A1A36"}}
       >
-        <div className="d-flex align-items-center justify-content-between w-100">
-          <h6 className="leaderboards-popup-title mb-0">Leaderboards</h6>
+        <div className="d-flex align-items-center justify-content-end w-100" style={{zIndex: 2}}>
           <img src={require('./assets/xMark.svg').default} alt="" style={{cursor: "pointer"}} onClick={() => setActive(false)} />
         </div>
-      <Leaderboard />
+      <Leaderboard type={type} setType={setType} />
       </div>
     </>
  

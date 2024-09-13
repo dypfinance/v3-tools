@@ -4,6 +4,19 @@
   border-radius: 12px;
 }
 
+.stonecrack-bg{
+  background-image: url('../leaderboard/assets/stonecrackBg.webp') !important;
+  background-size: 100% !important;
+}
+.kittydash-bg{
+  background-image: url('../leaderboard/assets/kittydashBg.webp') !important;
+  background-size: 100% !important;
+}
+.cawsadventure-bg{
+  background-image: url('../leaderboard/assets/cawsadventureBg.webp') !important;
+  background-size: 100% !important;
+}
+
 .sign-in-btn {
   border-radius: 8px;
   background: linear-gradient(95deg, #d75853 0.51%, #f28a4d 100%);
