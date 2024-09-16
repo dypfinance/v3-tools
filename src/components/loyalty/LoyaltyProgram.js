@@ -45,6 +45,8 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
   const [refresh, setRefresh] = useState(false);
   const [loading, setLoading] = useState(false);
   const [totalUsers, setTotalUsers] = useState(0);
+  const [expired, setisExpired] = useState(false);
+
   // const [dypPrice, setDypPrice] = useState(0);
   // const [ethPrice, setEthPrice] = useState(0);
 
@@ -197,7 +199,7 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
               <div className="loyalty-banner-timer px-5 py-4 position-relative d-flex align-items-center justify-content-center">
                 <img src={clock} alt="" className="loyalty-clock" />
                 <div className="d-flex flex-column align-items-center ">
-                  <Countdown renderer={renderer} date={loyaltyCd} />
+                  <Countdown renderer={renderer} date={loyaltyCd} onComplete={()=>{setisExpired(true)}} />
                   <span className="loyalty-time-left">Time left</span>
                 </div>
               </div>
@@ -218,7 +220,7 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
                         reimbursed to cover the gas costs for one transaction
                         per day.
                       </p>
-                      {step !== 5 && step !== 4 && (
+                      {step !== 5 && step !== 4 && expired === false && (
                         <button
                           className="btn hero-stake-eth-btn2 w-75"
                           onClick={() => setPopup(true)}
@@ -226,6 +228,8 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
                           Apply
                         </button>
                       )}
+
+                      {expired === true && <button className="disabled-btn pe-none" disabled>Ended</button>}
                     </div>
                     {/* <div className="d-flex flex-column w-100 mb-3 mb-lg-0">
                       <div className="d-flex align-items-center justify-content-center p-2 my-reimbursement">
