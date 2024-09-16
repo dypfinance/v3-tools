@@ -16,7 +16,6 @@ const MainNews = ({
   month,
   day,
   year,
-  theme,
   onShowModalClick,
   newsId,
   upvotes,

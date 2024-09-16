@@ -321,6 +321,7 @@ const NewChestItem = ({
         console.error(e);
         return false;
       });
+      console.log(Number(result))
     if (result != 0 && Number(result) / 1e18 >= 0.001) {
       setApproved(true);
     } else setApproved(false);
@@ -372,10 +373,31 @@ const NewChestItem = ({
 
     if (chainId === 8453) {
       if (rewardTypes === "premium" && isPremium) {
+
+       
+        const gasPrice = await window.baseWeb3.eth.getGasPrice();
+        console.log("gasPrice", gasPrice);
+        const currentGwei = window.web3.utils.fromWei(gasPrice, "gwei");
+        const transactionParameters = {
+          gasPrice: window.web3.utils.toWei(currentGwei.toString(), "gwei"),
+        };
+
+        await daily_bonus_contract.methods
+          .openPremiumChest()
+          .estimateGas({ from: address })
+          .then((gas) => {
+            transactionParameters.gas = window.web3.utils.toHex(gas);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+        console.log(transactionParameters);
+
         await daily_bonus_contract.methods
           .openPremiumChest()
           .send({
             from: address,
+            ...transactionParameters
           })
           .then((data) => {
             // getUserRewardsByChest(
@@ -408,10 +430,30 @@ const NewChestItem = ({
             console.error(e);
           });
       } else if (rewardTypes === "standard") {
+
+        const gasPrice = await window.baseWeb3.eth.getGasPrice();
+        console.log("gasPrice", gasPrice);
+        const currentGwei = window.web3.utils.fromWei(gasPrice, "gwei");
+        const transactionParameters = {
+          gasPrice: window.web3.utils.toWei(currentGwei.toString(), "gwei"),
+        };
+
+        await daily_bonus_contract.methods
+          .openChest()
+          .estimateGas({ from: address })
+          .then((gas) => {
+            transactionParameters.gas = window.web3.utils.toHex(gas);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+        console.log(transactionParameters);
+
         await daily_bonus_contract.methods
           .openChest()
           .send({
             from: address,
+            ...transactionParameters
           })
           .then((data) => {
             // getUserRewardsByChest(

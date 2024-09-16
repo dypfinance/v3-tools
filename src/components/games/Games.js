@@ -23,6 +23,7 @@ import leaderboardsCup from "./assets/leaderboardsCup.png";
 import StoneCrackPopup from "./components/StoneCrackPopup";
 import KittyDashPopup from "./components/KittyDashPopup";
 import CawsAdventurePopup from "./components/CawsAdventurePopup";
+import { NavLink } from "react-router-dom";
 
 const Games = ({
   handleConnection,
@@ -33,6 +34,9 @@ const Games = ({
   isPremium,
   dummypremiumChests,
   bnbImages,
+  email,
+  address,
+  userId,
 }) => {
   const [chain, setChain] = useState("base");
   const [message, setMessage] = useState("");
@@ -134,7 +138,10 @@ const Games = ({
 
   useEffect(() => {
     if (chain === "base") {
-      if (coinbase && isConnected) {
+      if (!address && !email) {
+        setMessage("login");
+        setDisable(true);
+      } else if (coinbase && isConnected) {
         if (isPremium) {
           // if (
           //   claimedChests + claimedPremiumChests === 20 &&
@@ -204,8 +211,10 @@ const Games = ({
     chain,
     networkId,
     coinbase,
-    // address,
+    address,
     isPremium,
+    email,
+    isConnected
     // claimedChests,
     // claimedPremiumChests,
     // claimedSkaleChests,
@@ -676,10 +685,8 @@ const Games = ({
                       {/* <div className="d-flex align-items-center justify-content-end get-premium-wrapper p-3 p-lg-0">
                     <NavLink
                       className="sign-in-btn px-4 py-1"
-                      to="/auth"
-                      onClick={() => {
-                        html.classList.remove("hidescroll");
-                      }}
+                      to="/sign-in"
+                       
                     >
                       Sign In
                     </NavLink>
