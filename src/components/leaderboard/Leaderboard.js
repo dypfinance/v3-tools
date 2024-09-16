@@ -6,12 +6,19 @@ import { CircularProgress } from "@mui/material";
 import playerAvatar from "./assets/userAvatar2.png";
 import premiumAvatar from "./assets/premiumAvatar.png";
 import premiumStar from "./assets/premiumStar.png";
+import kittyDashFlag from "./assets/kittyDashFlag.png";
+import stoneCrackFlag from "./assets/stoneCrackFlag.png";
+import cawsAdventuresFlag from "./assets/cawsAdventuresFlag.png";
+import eth from './assets/eth.svg'
+import dyp from './assets/dyp.svg'
 
 const Leaderboard = ({
   userData,
   username,
   monthlyplayerData,
   weeklyplayerData,
+  type,
+  setType,
 }) => {
   const weeklyPrizes = ["25", "15", "10", "8", "0", "0", "0", "0", "0", "0"];
   const monthlyPrizes = [
@@ -26,11 +33,264 @@ const Leaderboard = ({
     "10",
     "10",
   ];
+
+  const stoneHeaders = {
+    scoreColor: "#FFBE6F",
+    rewardColor: "#FBF1CA",
+    headers: [
+      {
+        name: "Rank",
+        class: "col-1"
+      },
+      {
+        name: "Player",
+        class: "col-3"
+      },
+      {
+        name: "Score",
+        class: "col-4 text-center"
+      },
+      {
+        name: "ETH Reward",
+        class: "col-2 text-center"
+      },
+      {
+        name: "DYP Reward",
+        class: "col-2 text-center"
+      },
+      ],
+  };
+
+  const kittyHeaders = {
+    scoreColor: "#F6B67E",
+    rewardColor: "#3ED2FF",
+    headers: [{
+      name: "Rank",
+      class: "col-1"
+    },
+    {
+      name: "Player",
+      class: "col-3"
+    },
+    {
+      name: "Score",
+      class: "col-4 text-center"
+    },
+    {
+      name: "Reward",
+      class: "col-4 text-center"
+    },
+  ,],
+  };
+
+  const cawsHeaders = {
+    scoreColor: "#FF8961",
+    rewardColor: "#FFECCC",
+    headers: [
+      {
+        name: "Rank",
+        class: "col-1"
+      },
+      {
+        name: "Player",
+        class: "col-3"
+      },
+      {
+        name: "Score",
+        class: "col-3 text-center"
+      },
+      {
+        name: "Level",
+        class: "col-2 text-center"
+      },
+      {
+        name: "Time",
+        class: "col-3 text-center"
+      },
+      ],
+  };
+
+  const stoneData = [
+    {
+      player: "DarkSliffer",
+      score: 11502635,
+      ethReward: 1000,
+      dypReward: 1000,
+    },
+    {
+      player: "Energy",
+      score: 10102000,
+      ethReward: 500,
+      dypReward: 500,
+    },
+    {
+      player: "POGL",
+      score: 7502635,
+      ethReward: 10,
+      dypReward: 10,
+    },
+    {
+      player: "GDoge",
+      score: 5000000,
+      ethReward: 10,
+      dypReward: 10,
+    },
+    {
+      player: "Beku",
+      score: 2404445,
+      ethReward: 10,
+      dypReward: 10,
+    },
+    {
+      player: "Lorena",
+      score: 1152879,
+      ethReward: 10,
+      dypReward: 10,
+    },
+    {
+      player: "Dark",
+      score: 906800,
+      ethReward: 10,
+      dypReward: 10,
+    },
+    {
+      player: "Rediness",
+      score: 901625,
+      ethReward: 10,
+      dypReward: 10,
+    },
+    {
+      player: "Gbani",
+      score: 800583,
+      ethReward: 10,
+      dypReward: 10,
+    },
+    {
+      player: "Sakrifica",
+      score: 783540,
+      ethReward: 10,
+      dypReward: 10,
+    },
+  ];
+  const kittyData = [
+    {
+      player: "DarkSliffer",
+      score: 11502635,
+      reward: 1000,
+    },
+    {
+      player: "Energy",
+      score: 10102000,
+      reward: 500,
+    },
+    {
+      player: "POGL",
+      score: 7502635,
+      reward: 10,
+    },
+    {
+      player: "GDoge",
+      score: 5000000,
+      reward: 10,
+    },
+    {
+      player: "Beku",
+      score: 2404445,
+      reward: 10,
+    },
+    {
+      player: "Lorena",
+      score: 1152879,
+      reward: 10,
+    },
+    {
+      player: "Dark",
+      score: 906800,
+      reward: 10,
+    },
+    {
+      player: "Rediness",
+      score: 901625,
+      reward: 10,
+    },
+    {
+      player: "Gbani",
+      score: 800583,
+      reward: 10,
+    },
+    {
+      player: "Sakrifica",
+      score: 783540,
+      reward: 10,
+    },
+  ];
+  const cawsData = [
+    {
+      player: "DarkSliffer",
+      score: 11502635,
+      level: 10,
+      time: "2m:01s",
+    },
+    {
+      player: "Energy",
+      score: 10102000,
+      level: 10,
+      time: "2m:05s",
+    },
+    {
+      player: "POGL",
+      score: 7502635,
+      level: 10,
+      time: "3m:15s",
+    },
+    {
+      player: "GDoge",
+      score: 5000000,
+      level: 9,
+      time: "6m:12s",
+    },
+    {
+      player: "Beku",
+      score: 2404445,
+      level: 8,
+      time: "6m:55s",
+    },
+    {
+      player: "Lorena",
+      score: 1152879,
+      level: 10,
+      time: "10m:05s",
+    },
+    {
+      player: "Dark",
+      score: 906800,
+      level: 10,
+      time: "50m:05s",
+    },
+    {
+      player: "Rediness",
+      score: 901625,
+      level: 9,
+      time: "59m:05s",
+    },
+    {
+      player: "Gbani",
+      score: 800583,
+      level: 2,
+      time: "1h:12m:05s",
+    },
+    {
+      player: "Sakrifica",
+      score: 783540,
+      level: 10,
+      time: "1h:16m:05s",
+    },
+  ];
+
   const [optionText, setOptionText] = useState("weekly");
   const [inactiveBoard, setInactiveBoard] = useState(false);
   const [prizes, setPrizes] = useState(weeklyPrizes);
   const [activePlayer, setActivePlayer] = useState(false);
-
 
   const handleOption = (item) => {
     setOptionText(item);
@@ -51,115 +311,209 @@ const Leaderboard = ({
       style={{ minHeight: "560px" }}
     >
       <div className="row w-100 align-items-start gap-4 gap-lg-0">
-        <div className="d-flex flex-column gap-3 col-12  px-0 px-lg-3">
-          <div className="d-flex align-items-center gap-1">
+        <div className="d-flex flex-column gap-3 col-12  px-0">
+          <div className="d-flex leaderboards-flag-wrapper align-items-center gap-2 justify-content-center">
+            <img
+              src={stoneCrackFlag}
+              onClick={() => setType("stoneCrack")}
+              className="leaderboard-flag"
+              alt=""
+            />
+            <img
+              src={kittyDashFlag}
+              onClick={() => {
+                setType("kittyDash");
+                handleOption("weekly");
+              }}
+              className="leaderboard-flag"
+              alt=""
+            />
+            <img
+              src={cawsAdventuresFlag}
+              onClick={() => {
+                setType("cawsAdventure");
+                handleOption("weekly");
+              }}
+              className="leaderboard-flag"
+              alt=""
+            />
+          </div>
+          <div className="d-flex align-items-center gap-1 mt-5">
             <div className="optionsWrapper col-12">
               <div
-                className="d-flex gap-1 align-items-center justify-content-between"
+                className="d-flex gap-1 align-items-center justify-content-between position-relative"
                 style={{ height: 38 }}
               >
+                <div className={`leaderboard-options-bg ${optionText === "monthly" && "move-right"} ${type !== "stoneCrack" && "d-none"} w-50`}></div>
                 <span
                   className={`${
-                    optionText === "weekly" && "otheroptionsActive"
-                  } optionText col-3`}
-                  style={{ width: "24%" }}
+                    optionText === "weekly" && type === "stoneCrack"
+                      ? "otheroptionsActive-stone"
+                      : optionText === "weekly" && type === "kittyDash"
+                      ? "otheroptionsActive-kitty"
+                      : optionText === "weekly" && type === "cawsAdventure"
+                      ? "otheroptionsActive-caws"
+                      : ""
+                  } durationText`}
+                  style={{ width: type !== "stoneCrack" ? "100%" : "50%" }}
                   onClick={() => {
                     handleOption("weekly");
                   }}
                 >
                   Weekly
                 </span>
-                <span
-                  className={`${
-                    optionText === "monthly" && "otheroptionsActive"
-                  } optionText col-3`}
-                  style={{ width: "24%" }}
-                  onClick={() => {
-                    handleOption("monthly");
-                  }}
-                >
-                  Monthly
-                </span>
+                {type === "stoneCrack" && (
+                  <span
+                    className={`${
+                      optionText === "monthly" && type === "stoneCrack"
+                        ? "otheroptionsActive-stone"
+                        : optionText === "monthly" && type === "kittyDash"
+                        ? "otheroptionsActive-kitty"
+                        : optionText === "monthly" && type === "cawsAdventure"
+                        ? "otheroptionsActive-caws"
+                        : ""
+                    } durationText col-3`}
+                    style={{ width: "50%" }}
+                    onClick={() => {
+                      handleOption("monthly");
+                    }}
+                  >
+                    Monthly
+                  </span>
+                )}
               </div>
             </div>
           </div>
-          <div
-            className="d-flex flex-column gap-2 tablewrapper"
-            style={{ height: optionText === "genesis" ? "345px" : "384px" }}
-          >
-            <table className="playerTable">
-              <tbody>
-                <tr className="playerRow">
-                  <th className="playerHeader">Rank</th>
-                  <th className="playerHeader">Player</th>
-                  {optionText !== "genesis" && (
-                    <th className="playerHeader text-center">Score</th>
-                  )}
-                  {optionText !== "genesis" && (
-                    <th className="playerHeader text-center">Reward</th>
-                  )}
-                </tr>
+          <div className="d-flex flex-column gap-2 tablewrapper">
+            <div className="inner-table-wrapper p-2 w-100">
+              <table className="playerTable w-100">
+                <tbody>
+                  <tr className="playerRow">
+                    {type === "stoneCrack" ? (
+                      <>
+                        {stoneHeaders.headers.map((item, index) => (
+                        item.name === "ETH Reward" ? 
+                         <th className={`playerHeader ${item.class}`} key={index}>
+                          <img src={eth} width={15} height={15} alt="" />
+                          {" "}
+                        {item.name.slice(4, item.name.length)}
+                      </th>
+                      : item.name === "DYP Reward" ?
+                      <th className={`playerHeader ${item.class}`} key={index}>
+                      <img src={dyp} width={15} height={15} alt="" />
+                      {" "}
+                    {item.name.slice(4, item.name.length)}
+                  </th>
+                  :
+                      <th className={`playerHeader ${item.class}`} key={index}>
+                      {item.name}
+                    </th>
+                        ))}
+                      </>
+                    ) : type === "kittyDash" ? (
+                      <>
+                        {kittyHeaders.headers.map((item, index) => (
+                          <th className={`playerHeader ${item.class}`} key={index}>
+                            {item.name}
+                          </th>
+                        ))}
+                      </>
+                    ) : (
+                      <>
+                        {cawsHeaders.headers.map((item, index) => (
+                               <th className={`playerHeader ${item.class}`} key={index}>
+                               {item.name}
+                             </th>
+                        ))}
+                      </>
+                    )}
+                  </tr>
 
-                {monthlyplayerData &&
-                  inactiveBoard === true &&
-                  optionText === "monthly" &&
-                  monthlyplayerData.length > 0 &&
-                  monthlyplayerData.map((item, index) => {
-                    return (
-                      <tr
-                        key={index}
-                        className={`playerInnerRow ${
-                          inactiveBoard || item.displayName === username
-                            ? "playerInnerRow-inactive"
-                            : null
-                        }`}
-                      >
+                  {type === "stoneCrack" ? (
+                    <>
+                      {stoneData.map((item, index) => (
+                        <tr key={index} className={`playerInnerRow`}>
+                          <td className="playerData col-1">{Number(index) + 1}</td>
+                          <td className="playerName col-3">
+                            <div className="position-relative d-flex align-items-center">
+                              <span>{item.player}</span>
+                            </div>
+                          </td>
+                          <td
+                            className="playerScore col-4 text-center"
+                            style={{ color: stoneHeaders.scoreColor }}
+                          >
+                            {getFormattedNumber(item.score, 0)}
+                          </td>
+                          <td
+                            className={`playerReward col-2 text-center leaderboard-rewards-bg`}
+                            style={{ color: stoneHeaders.rewardColor }}
+                          >
+                            {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
+                            ${getFormattedNumber(item.ethReward, 0)}
+                          </td>
+                          <td
+                            className={`playerReward col-2 text-center leaderboard-rewards-bg`}
+                            style={{ color: stoneHeaders.rewardColor }}
+                          >
+                            {/* <img src={dyp} width={12} height={12} alt="" />{" "} */}
+
+                            ${getFormattedNumber(item.dypReward, 0)}
+                          </td>
+                        </tr>
+                      ))}
+                    </>
+                  ) : type === "kittyDash" ? (
+                    <>
+                      {kittyData.map((item, index) => (
+                        <tr key={index} className={`playerInnerRow`}>
+                          <td className="playerData col-1">{Number(index) + 1}</td>
+                          <td className="playerName col-3">
+                            <div className="position-relative d-flex align-items-center">
+                              <span>{item.player}</span>
+                            </div>
+                          </td>
+                          <td
+                            className="playerScore col-4 text-center"
+                            style={{ color: kittyHeaders.scoreColor }}
+                          >
+                            {getFormattedNumber(item.score, 0)}
+                          </td>
+                          <td
+                            className={`playerReward col-4 text-center`}
+                            style={{ color: kittyHeaders.rewardColor }}
+                          >
+                            ${getFormattedNumber(item.reward, 0)}
+                          </td>
+                        </tr>
+                      ))}
+                    </>
+                  ) : (
+                    <>
+                     {cawsData.map((item, index) => (
+                        <tr key={index} className={`playerInnerRow`}>
                         <td className="playerData col-1">
-                          #{Number(item.position) + 1}
+                          {Number(index) + 1}
                         </td>
-                        <td className="playerName col-5">
-                          {item.displayName === username ? (
-                            <div className="position-relative d-flex align-items-center">
-                              <img
-                                src={premiumAvatar}
-                                alt=""
-                                className="playerAvatar"
-                              />
-                              <span>
-                                {" "}
-                                {item.displayName?.slice(0, 13)}
-                                {item.displayName?.length > 13 && "..."}
-                              </span>
-                            </div>
-                          ) : (
-                            <div className="position-relative d-flex align-items-center">
-                              <img
-                                src={playerAvatar}
-                                alt=""
-                                className="playerAvatar"
-                              />{" "}
-                              {item.displayName?.slice(0, 13)}
-                              {item.displayName?.length > 13 && "..."}
-                            </div>
-                          )}
+                        <td className="playerName col-3">
+                          <div className="position-relative d-flex align-items-center">
+                            <span>{item.player}</span>
+                          </div>
                         </td>
-                        <td className="playerScore col-2  text-center">
-                          {getFormattedNumber(item.statValue, 0)}
+                        <td className="playerScore col-3 text-center" style={{color: cawsHeaders.scoreColor}}>{getFormattedNumber(item.score, 0)}</td>
+                        <td className={`playerReward col-2 text-center`} style={{color: cawsHeaders.scoreColor}}>
+                          {getFormattedNumber(item.level, 0)}
                         </td>
-                        <td
-                          className={`playerReward text-center col-2 ${
-                            username === item.displayName
-                              ? "goldenscore"
-                              : "playerReward"
-                          }`}
-                        >
-                          ${prizes[index]}
+                        <td className={`playerReward col-3 text-center`} style={{color: cawsHeaders.rewardColor}}>
+                          {item.time}
                         </td>
+                       
                       </tr>
-                    );
-                  })}
+                    ))}
+                    </>
+                  )}
 
-                {weeklyplayerData &&
+                  {/* {weeklyplayerData &&
                   inactiveBoard === true &&
                   optionText === "weekly" &&
                   weeklyplayerData.length > 0 &&
@@ -227,11 +581,12 @@ const Leaderboard = ({
                       size={20}
                       style={{ alignSelf: "center", margin: "auto" }}
                     />
-                  )}
-              </tbody>
-            </table>
+                  )} */}
+                </tbody>
+              </table>
+            </div>
 
-            {activePlayer === false &&
+            {/* {activePlayer === false &&
               inactiveBoard === false &&
               optionText !== "genesis" && (
                 <table className="playerTable">
@@ -285,7 +640,7 @@ const Leaderboard = ({
                     </tr>
                   </tbody>
                 </table>
-              )}
+              )} */}
           </div>
           <div className="optionsWrapper2 p-2">
             <div className="d-flex flex-column">

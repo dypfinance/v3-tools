@@ -1,9 +1,21 @@
 .games-banner {
   position: relative;
-  background: #282a5c;
-  border-radius: 20px;
+  background-color: #2d2d66;
+  border-radius: 12px;
 }
 
+.stonecrack-bg{
+  background-image: url('../leaderboard/assets/stonecrackBg.webp') !important;
+  background-size: 100% !important;
+}
+.kittydash-bg{
+  background-image: url('../leaderboard/assets/kittydashBg.webp') !important;
+  background-size: 100% !important;
+}
+.cawsadventure-bg{
+  background-image: url('../leaderboard/assets/cawsadventureBg.webp') !important;
+  background-size: 100% !important;
+}
 
 .sign-in-btn {
   border-radius: 8px;
@@ -19,14 +31,14 @@
 }
 
 .points-upper-bg {
-  background: url('./assets/pointsUpperBg.svg');
+  background: url("./assets/pointsUpperBg.svg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 }
 
 .usd-upper-bg {
-  background: url('./assets/usdUpperBg.svg');
+  background: url("./assets/usdUpperBg.svg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -158,37 +170,37 @@
 }
 
 .reward-title-active {
-  color: #55FFFB; 
-font-size: 12px;
-font-style: normal;
-font-weight: 400;
-line-height: normal;
-letter-spacing: -0.216px;
+  color: #55fffb;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.216px;
 }
 
 .reward-title {
-  color: #92ACFF; 
-font-size: 12px;
-font-style: normal;
-font-weight: 400;
-line-height: normal;
-letter-spacing: -0.216px;
+  color: #92acff;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.216px;
 }
 
 .reward-amount-active {
-  color: #55FFFB; 
-font-size: 12px;
-font-style: normal;
-font-weight: 500;
-line-height: normal;
+  color: #55fffb;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
 }
 
 .reward-amount {
-  color: #92ACFF; 
-font-size: 12px;
-font-style: normal;
-font-weight: 500;
-line-height: normal;
+  color: #92acff;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
 }
 
 .stonecrack-logo {
@@ -203,21 +215,21 @@ line-height: normal;
 
 .shimmer {
   color: grey;
-  display:inline-block;
-  -webkit-mask:linear-gradient(-60deg,#000 30%,#0005,#000 70%) right/300% 100%;
-  mask:linear-gradient(-60deg,#000 30%,#0005,#000 70%) right/300% 100%;
+  display: inline-block;
+  -webkit-mask: linear-gradient(-60deg, #000 30%, #0005, #000 70%) right/300%
+    100%;
+  mask: linear-gradient(-60deg, #000 30%, #0005, #000 70%) right/300% 100%;
 
   background-repeat: no-repeat;
   animation: shimmer 2.5s infinite;
 }
 
-
 @keyframes shimmer {
-  100% {-webkit-mask-position:left;mask-position:left}
- 
-
+  100% {
+    -webkit-mask-position: left;
+    mask-position: left;
+  }
 }
-
 
 .dynamic-position {
   position: absolute;
@@ -227,7 +239,7 @@ line-height: normal;
 }
 
 .dynamic-width {
-  width : auto;
+  width: auto;
   @media screen and (max-width: 575px) {
     width: 100% !important;
   }
@@ -239,7 +251,6 @@ line-height: normal;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
- 
 }
 
 .usdreward-wrapper {
@@ -251,7 +262,7 @@ line-height: normal;
 }
 
 .usdreward-value {
-  color: #EAEAEA;
+  color: #eaeaea;
   font-size: 14px;
   font-style: normal;
   font-weight: 700;
@@ -262,7 +273,7 @@ line-height: normal;
 }
 
 .usdreward-value-crypto {
-  color: #FFEACF;
+  color: #ffeacf;
   text-align: center;
   font-size: 7px;
   font-style: normal;
@@ -271,7 +282,7 @@ line-height: normal;
 }
 
 .usdreward-text {
-  color: #FFEACF;
+  color: #ffeacf;
   text-align: center;
   font-size: 10px;
   font-style: normal;
@@ -291,7 +302,7 @@ line-height: normal;
 
 .leaderboard-wrapper {
   right: 0;
-  top: -77px;
+  bottom: 0;
   position: absolute;
   @media screen and (max-width: 991px) {
     right: auto;
@@ -303,6 +314,7 @@ line-height: normal;
 .leaderboard-item-banner {
   cursor: pointer;
   transition: all 0.25s ease-in-out;
+  width: 90px;
 }
 
 .leaderboard-item-banner:hover {
@@ -461,59 +473,66 @@ line-height: normal;
 
 .new-rewards-item-active {
   border-radius: 12px;
-  border: 1px solid #55FFFB;
-  background: rgba(85, 255, 251, 0.20);
+  border: 1px solid #55fffb;
+  background: rgba(85, 255, 251, 0.2);
   transition: all 0.25s;
 }
 
 .new-rewards-item-active2 {
   border-radius: 12px;
-  border: 1px solid #55FFFB;
-  background: #26264F;
+  border: 1px solid #55fffb;
+  background: #26264f;
   transition: all 0.25s;
 }
 
 .small-reward-wrapper {
   border-radius: 12px;
-background: #232246;
-border: 1px solid transparent;
-
+  background: #232246;
+  border: 1px solid transparent;
 }
 
 .left-separator {
   height: 1px;
   width: 100%;
-  background: linear-gradient(to right, rgba(146, 172, 255, 0),rgba(146, 172, 255, 0.5), rgba(146, 172, 255, 1));
+  background: linear-gradient(
+    to right,
+    rgba(146, 172, 255, 0),
+    rgba(146, 172, 255, 0.5),
+    rgba(146, 172, 255, 1)
+  );
 }
 
 .right-separator {
   height: 1px;
   width: 100%;
-  background: linear-gradient(to left, rgba(146, 172, 255, 0),rgba(146, 172, 255, 0.5), rgba(146, 172, 255, 1));
+  background: linear-gradient(
+    to left,
+    rgba(146, 172, 255, 0),
+    rgba(146, 172, 255, 0.5),
+    rgba(146, 172, 255, 1)
+  );
 }
 
 .reward-bottom-text {
-  color: #92ACFF;
-text-align: center;
-font-size: 10px;
-font-style: normal;
-font-weight: 700;
-line-height: 24px; /* 240% */
+  color: #92acff;
+  text-align: center;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px; /* 240% */
 }
 
 .small-reward-wrapper-active {
   border-radius: 12px;
-  border: 1px solid #55FFFB;
-  background: rgba(85, 255, 251, 0.20);
+  border: 1px solid #55fffb;
+  background: rgba(85, 255, 251, 0.2);
 }
-
 
 .new-rewards-item {
   border-radius: 20px;
-  background: #26264F;
+  background: #26264f;
   transition: all 0.25s;
-border: 1px solid transparent;
-
+  border: 1px solid transparent;
 }
 .new-reward-amount {
   color: #fff;
@@ -760,10 +779,9 @@ border: 1px solid transparent;
   animation: shake 1s ease-in-out infinite;
 }
 
-
 .stone:before,
 .stone:after {
-  content: '';
+  content: "";
   position: absolute;
   width: 50%;
   height: 100%;
@@ -812,13 +830,20 @@ border: 1px solid transparent;
   transform: scale(1);
 }
 
-
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  20%, 60% { transform: translateX(-5px); }
-  40%, 80% { transform: translateX(5px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20%,
+  60% {
+    transform: translateX(-5px);
+  }
+  40%,
+  80% {
+    transform: translateX(5px);
+  }
 }
-
 
 @keyframes animateDot {
   0% {
@@ -1166,37 +1191,36 @@ border: 1px solid transparent;
   left: auto;
 }
 
-
 @-webkit-keyframes scale-out-center {
   0% {
     -webkit-transform: scale(1);
-            transform: scale(1);
+    transform: scale(1);
     opacity: 1;
   }
   100% {
     -webkit-transform: scale(0);
-            transform: scale(0);
+    transform: scale(0);
     opacity: 1;
   }
 }
 @keyframes scale-out-center {
   0% {
     -webkit-transform: scale(1);
-            transform: scale(1);
+    transform: scale(1);
     opacity: 1;
   }
   100% {
     -webkit-transform: scale(0);
-            transform: scale(0);
+    transform: scale(0);
     opacity: 1;
   }
 }
 
-
-
 .chest-fade {
-  -webkit-animation: scale-out-center 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) alternate both;
-  animation: scale-out-center 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) alternate both;
+  -webkit-animation: scale-out-center 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53)
+    alternate both;
+  animation: scale-out-center 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53)
+    alternate both;
   top: auto;
   left: auto;
 }
@@ -1275,10 +1299,7 @@ border: 1px solid transparent;
   pointer-events: none !important;
 }
 
-
-
 .spark-wrapper {
- 
   animation: curvedMovement 2s ease-in-out infinite; /* Curved movement */
 }
 
@@ -1287,24 +1308,21 @@ border: 1px solid transparent;
   height: 20px;
   transform-origin: center;
   animation: spark1 0.7s ease-in-out infinite; /* Spinning animation */
-    filter: drop-shadow(0 0 15px gold);
-
+  filter: drop-shadow(0 0 15px gold);
 }
 .spark-2 {
   width: 20px;
   height: 20px;
   transform-origin: center;
   animation: spark2 0.7s ease-in-out infinite; /* Spinning animation */
-    filter: drop-shadow(0 0 15px gold);
-
+  filter: drop-shadow(0 0 15px gold);
 }
 .spark-3 {
   width: 20px;
   height: 20px;
   transform-origin: center;
   animation: spark3 0.7s ease-in-out infinite; /* Spinning animation */
-    filter: drop-shadow(0 0 15px gold);
-
+  filter: drop-shadow(0 0 15px gold);
 }
 
 /* Curved path movement */
@@ -1312,7 +1330,7 @@ border: 1px solid transparent;
   0% {
     transform: translate(0, 0) rotate(0deg);
   }
- 
+
   100% {
     transform: translate(-100px, -200px) rotate(360deg); /* Completes the path and the spin */
   }
@@ -1321,7 +1339,7 @@ border: 1px solid transparent;
   0% {
     transform: translate(0, 0) rotate(0deg);
   }
- 
+
   100% {
     transform: translate(0px, -200px) rotate(360deg); /* Completes the path and the spin */
   }
@@ -1330,7 +1348,7 @@ border: 1px solid transparent;
   0% {
     transform: translate(0, 0) rotate(0deg);
   }
- 
+
   100% {
     transform: translate(60px, -100px) rotate(360deg); /* Completes the path and the spin */
   }
@@ -1354,90 +1372,187 @@ border: 1px solid transparent;
   display: flex;
   justify-content: center;
   align-items: center;
-
 }
 
-
-
-.position-1{
+.position-1 {
   left: -17%;
   bottom: 10%;
 }
 
-.position-2{
+.position-2 {
   left: -12%;
   bottom: 15%;
 }
 
-.position-3{
+.position-3 {
   left: -5%;
   bottom: 15%;
 }
 
-.position-4{
+.position-4 {
   left: 1%;
-    bottom: 20%;
+  bottom: 20%;
 }
 
-.position-5{
+.position-5 {
   left: 6%;
-    bottom: 18%;
+  bottom: 18%;
 }
-.position-6{
+.position-6 {
   left: -18%;
 }
-.position-7{
+.position-7 {
   left: -11%;
 }
-.position-8{
+.position-8 {
   left: -5%;
   bottom: 4%;
 }
 
-.position-9{
+.position-9 {
   left: 1%;
   bottom: 4%;
 }
-.position-10{
+.position-10 {
   left: 10%;
 }
-.position-11{
-     left: -20%;
-    bottom: -12%;
+.position-11 {
+  left: -20%;
+  bottom: -12%;
 }
-.position-12{
+.position-12 {
   left: -12%;
   bottom: -10%;
 }
-.position-13{
+.position-13 {
   left: -4%;
   bottom: -10%;
 }
-.position-14{
+.position-14 {
   left: 2%;
   bottom: -10%;
 }
-.position-15{
+.position-15 {
   left: 11%;
   bottom: -10%;
 }
-.position-16{
+.position-16 {
   left: -19%;
   bottom: -25%;
 }
-.position-17{
+.position-17 {
   left: -13%;
   bottom: -25%;
 }
-.position-18{
+.position-18 {
   left: -5%;
   bottom: -25%;
 }
-.position-19{
+.position-19 {
   left: 4%;
   bottom: -25%;
 }
-.position-20{
+.position-20 {
   left: 13%;
   bottom: -25%;
+}
+
+.games-banner-desc {
+  color: #a9b2f3 !important;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 17px; /* 141.667% */
+}
+
+.game-leaderboard-img {
+  width: 100%;
+}
+
+.loyalty-game-banner {
+  background-image: url("./assets/loyaltyBg.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: right;
+}
+
+.leaderboards-popup-title {
+  color: #fff !important;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 12px; /* 66.667% */
+  letter-spacing: -0.324px;
+}
+
+.leaderboard-types-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.leaderboard-type-btn {
+  background-color: #1c3c5e;
+  border-top: 3px solid #2d537c;
+  border-left: 3px solid #2d537c;
+  border-right: 3px solid #1c3c5e;
+  border-bottom: 3px solid #1c3c5e;
+  color: #94b2dd !important;
+  text-align: center;
+  font-size: 13.885px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 99.8%; /* 13.857px */
+  border-radius: 12px 0 12px 0;
+}
+
+.leaderboard-type-btn-active{
+  background-color: #126181 !important;
+  border-top: 3px solid #09F3D2 !important;
+  border-left: 3px solid #09F3D2 !important;
+  border-right: 3px solid #126181 !important;
+  border-bottom: 3px solid #126181 !important;
+  color: #CAF7FF !important;
+}
+
+.games-popup-title{
+  color: #FFF !important;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 12px; /* 66.667% */
+  letter-spacing: -0.324px;
+}
+
+.games-popup-subtitle{
+  color: #F1EDFF ;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 17px; /* 121.429% */
+}
+
+.games-popup-content{
+  color: #F1EDFF !important;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 17px; /* 141.667% */
+}
+
+.games-popup-image-wrapper{
+  border-radius: 12px;
+background: #23223E;
+}
+
+.games-popup-danger-wrapper{
+  border-radius: 12px;
+background: rgba(202, 77, 77, 0.10);
+}
+
+@media screen and (max-width: 1000px) {
+  .games-popup-scroll-wrapper{
+    height: 400px;
+    overflow-y: scroll;
+  }
 }
