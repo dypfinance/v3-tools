@@ -271,7 +271,7 @@ class STAKINGACTIVEBSC {
     ].forEach((fn_name) => {
       this[fn_name] = async function (...args) {
         let contract = await getContract({ key: this.ticker });
-        return await contract.methods[fn_name](...args).call();
+        return await contract.methods[fn_name](...args).call().catch((e)=>{console.error(e); return 0})
       };
     });
 

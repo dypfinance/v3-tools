@@ -411,7 +411,7 @@ const TopPoolsListCard = ({
             }`}
             // style={{ width: "100px" }}
           >
-            {cardType === "Farming" || cardType === "Buyback" ? (
+            {(cardType === "Farming" || cardType === "Buyback") && tokenLogo !=="bsc.svg"  ? (
               coins.length > 0 &&
               coins.slice(0, 5).map((coin, index) => (
                 <>
@@ -674,31 +674,7 @@ const TopPoolsListCard = ({
             //   />
             // ) :
 
-            showDetails && topList === "Farming" && chain === "bnb" ? (
-              <BscFarmingFunc
-                is_wallet_connected={isConnected}
-                coinbase={coinbase}
-                latestApr={theBnbPool.apy_percent}
-                the_graph_result={the_graph_resultbsc}
-                lp_id={LP_IDBNB_Array[cardIndex]}
-                chainId={chainId}
-                handleConnection={handleConnection}
-                expired={false}
-                handleSwitchNetwork={handleSwitchNetwork}
-                liquidity={wbsc_address}
-                constant={window.farming_activebsc_1}
-                staking={window.constant_staking_newbscactive1}
-                token={window.token_newbsc}
-                lp_symbol={"USD"}
-                lock="3 Days"
-                rebase_factor={1}
-                expiration_time={"18 July 2024"}
-                fee="0.4"
-                finalApr={"3"}
-                lockTime={3}
-                listType={listType}
-              />
-            ) : showDetails &&
+             showDetails &&
               topList === "Farming" &&
               chain === "avax" ? //   liquidity={wbnb_address} //   handleSwitchNetwork={handleSwitchNetwork} //   expired={false} //   handleConnection={handleConnection} //   chainId={chainId} //   lp_id={LP_IDAVAX_Array[cardIndex]} //   the_graph_result={the_graph_resultavax} //   coinbase={coinbase} //   is_wallet_connected={isConnected} //   <FarmAvaxFunc
             //   constant={window.farming_activeavax_1}
@@ -811,16 +787,29 @@ const TopPoolsListCard = ({
                 expired={true}
               />
             ) : chain === "bnb" ? (
-              <BscFarming
-                is_wallet_connected={isConnected}
-                coinbase={coinbase}
-                the_graph_result={the_graph_resultbsc}
-                lp_id={LP_IDBNB_Array[cardIndex]}
-                chainId={chainId}
-                handleConnection={handleConnection}
-                handleSwitchNetwork={handleSwitchNetwork}
-                expired={true}
-              />
+              <BscFarmingFunc
+              is_wallet_connected={isConnected}
+              coinbase={coinbase}
+              latestApr={theBnbPool.apy_percent}
+              the_graph_result={the_graph_resultbsc}
+              lp_id={LP_IDBNB_Array[cardIndex]}
+              chainId={chainId}
+              handleConnection={handleConnection}
+              expired={true}
+              handleSwitchNetwork={handleSwitchNetwork}
+              liquidity={wbsc_address}
+              constant={window.farming_activebsc_1}
+              staking={window.constant_staking_newbscactive1}
+              token={window.token_newbsc}
+              lp_symbol={"USD"}
+              lock="3 Days"
+              rebase_factor={1}
+              expiration_time={"18 July 2024"}
+              fee="0.4"
+              finalApr={"3"}
+              lockTime={3}
+              listType={listType}
+            />
             ) : (
               <FarmAvax
                 is_wallet_connected={isConnected}
@@ -851,7 +840,7 @@ const TopPoolsListCard = ({
               isConnected={isConnected}
               the_graph_result={the_graph_result}
             />
-          ) : //     : showDetails &&
+          )   : //     : showDetails &&
           //     topList === "Staking" &&
           //     cardIndex === 0 &&
           //     chain === "eth" ? (

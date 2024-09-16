@@ -595,7 +595,6 @@ const EarnTopPicks = ({
         return b.apy_percent - a.apy_percent;
       });
       
-      console.log(sortedActiveDYP, sortedActiveiDYP)
 
       setActivePools(sortedActiveDYP);
       setTopPools([...object2activeEth, ...activeEth2]);
@@ -607,7 +606,7 @@ const EarnTopPicks = ({
       setCawsLandCard(land);
     }
   };
-  console.log(activePools)
+  
 
   const fetchBnbStaking2 = async () => {
     const bnb_result = await axios
@@ -1548,6 +1547,7 @@ const allpools = [...sortedActiveDYP,...sortedActiveiDYP]
                   : expiredPools === true &&
                     expiredDYPPools &&
                     expiredDYPPools.length > 0 &&
+                    topList === "Staking" &&
                     expiredDYPPools.slice(0, 1).map((pool, index) => (
                       <TopPoolsCard
                         key={index}
@@ -1624,15 +1624,15 @@ const allpools = [...sortedActiveDYP,...sortedActiveiDYP]
                       />
                     ))}
 
-                {topList === "Farming" && chain === "bnb" && (
+                {topList === "Farming" && chain === "bnb" && expiredPools === true && (
                   <TopPoolsCard
-                    chain={chain}
+                    chain={'bnb'}
                     top_pick={false}
                     tokenName={"WBNB"}
                     apr={`${getFormattedNumber(theBnbPool.apy_percent, 0)}%`}
                     tvl={`$${getFormattedNumber(theBnbPool.tvl_usd, 2)}`}
                     lockTime={"3 Days"}
-                    tokenLogo={"bnb.svg"}
+                    tokenLogo={"bsc.svg"}
                     onShowDetailsClick={() => {
                       setActiveCard(topPools[0]);
                       setActiveCard2(null);
@@ -1654,7 +1654,7 @@ const allpools = [...sortedActiveDYP,...sortedActiveiDYP]
                     details={details === 0 ? true : false}
                     isNewPool={true}
                     isStaked={false}
-                    expired={false}
+                    expired={true}
                     network={chainId}
                     isPremium={isPremium}
                   />
@@ -1662,9 +1662,7 @@ const allpools = [...sortedActiveDYP,...sortedActiveiDYP]
               </div>
 
               {activeCard && topList === "Farming" ? (
-                chain === "eth" ? (
-                  <></>
-                ) : chain === "bnb" ? (
+                 chain === "bnb" && listing === "table" ? (
                   <BscFarmingFunc
                     is_wallet_connected={isConnected}
                     wbnbPrice={wbnbPrice}
@@ -1674,7 +1672,7 @@ const allpools = [...sortedActiveDYP,...sortedActiveiDYP]
                     lp_id={LP_IDBNB_Array[cardIndex]}
                     chainId={chainId}
                     handleConnection={handleConnection}
-                    expired={false}
+                    expired={true}
                     handleSwitchNetwork={handleSwitchNetwork}
                     liquidity={wbsc_address}
                     constant={window.farming_activebsc_1}
@@ -1743,11 +1741,11 @@ const allpools = [...sortedActiveDYP,...sortedActiveiDYP]
           <div className="list-pools-container px-0">
             {topList === "Farming" &&
               chain === "bnb" &&
-              expiredPools === false && (
+              expiredPools === true && (
                 <TopPoolsListCard
                   theBnbPool={theBnbPool}
                   the_graph_resultbsc={the_graph_resultbsc}
-                  expired={false}
+                  expired={true}
                   chain={chain}
                   top_pick={false}
                   tokenName={"WBNB"}
@@ -1755,7 +1753,7 @@ const allpools = [...sortedActiveDYP,...sortedActiveiDYP]
                   tvl={"$20,000"}
                   lockTime={"3 Days"}
                   cardType={topList}
-                  tokenLogo={"bnb.svg"}
+                  tokenLogo={"bsc.svg"}
                   listType={listType}
                   onShowDetailsClick={() => {
                     setActiveCardNFT(false);
@@ -1765,7 +1763,7 @@ const allpools = [...sortedActiveDYP,...sortedActiveiDYP]
                     setActiveCard3(null);
                     setActiveCard4(null);
                     setDetails();
-                    setselectedpoolType(pool.type);
+                    // setselectedpoolType(pool.type);
                   }}
                   onHideDetailsClick={() => {
                     setActiveCard(false);
@@ -1783,7 +1781,37 @@ const allpools = [...sortedActiveDYP,...sortedActiveiDYP]
                 />
               )}
 
-            {topList === "Farming" &&
+              {/* {activeCard && topList === "Farming" &&
+                 chain === "bnb" && listing !== "table" ? (
+                  <BscFarmingFunc
+                    is_wallet_connected={isConnected}
+                    wbnbPrice={wbnbPrice}
+                    coinbase={coinbase}
+                    latestTvl={theBnbPool.tvl_usd}
+                    the_graph_result={the_graph_resultbsc}
+                    lp_id={LP_IDBNB_Array[cardIndex]}
+                    chainId={chainId}
+                    handleConnection={handleConnection}
+                    expired={true}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    liquidity={wbsc_address}
+                    constant={window.farming_activebsc_1}
+                    staking={window.constant_staking_newbscactive1}
+                    token={window.token_newbsc}
+                    lp_symbol={"USD"}
+                    lock="3 Days"
+                    rebase_factor={1}
+                    expiration_time={"18 July 2024"}
+                    fee="0.4"
+                    finalApr={activePools[cardIndex]?.apy_percent}
+                    latestApr={theBnbPool.apy_percent}
+                    lockTime={3}
+                    listType={listType}
+                  />
+                ) : null
+              } */}
+
+            {/* {topList === "Farming" &&
               chain === "avax" &&
               expiredPools === false && (
                 <TopPoolsListCard
@@ -1821,9 +1849,9 @@ const allpools = [...sortedActiveDYP,...sortedActiveiDYP]
                   handleSwitchNetwork={handleSwitchNetwork}
                   isPremium={isPremium}
                 />
-              )}
+              )} */}
 
-            {expiredPools === false
+            {expiredPools === false &&  topList !== "Farming" 
               ? activePools.map((pool, index) => (
                   <TopPoolsListCard
                     key={index}
@@ -1900,82 +1928,7 @@ const allpools = [...sortedActiveDYP,...sortedActiveiDYP]
                     isPremium={isPremium}
                   />
                 ))
-              : expiredDYPPools.slice(0, 1).map((pool, index) => (
-                  <TopPoolsListCard
-                    key={index}
-                    theBnbPool={theBnbPool}
-                    expiredPools={expiredDYPPools}
-                    activePools={activePools}
-                    expired={true}
-                    chain={chain}
-                    top_pick={false}
-                    tokenName={
-                      pool.tokenName
-                        ? pool.tokenName
-                        : pool.pair_name
-                        ? pool.pair_name
-                        : ""
-                    }
-                    apr={pool?.apy_percent + "%"}
-                    tvl={
-                      pool?.tvl_usd === "--"
-                        ? pool?.tvl_usd
-                        : "$" + getFormattedNumber(pool?.tvl_usd)
-                    }
-                    lockTime={
-                      pool.lockTime
-                        ? pool.lockTime
-                        : pool.lock_time
-                        ? pool.lock_time
-                        : locktimeFarm[index]
-                    }
-                    cardType={topList}
-                    tokenLogo={
-                      pool.icon
-                        ? pool.icon
-                        : pool.pair_name === "iDYP"
-                        ? "idypius.svg"
-                        : "dyplogo.svg"
-                    }
-                    listType={listType}
-                    onShowDetailsClick={() => {
-                      setActiveCard(topPools[index]);
-                      handleCardIndexStake(index);
-                      handleCardIndexStake30(index);
-                      handleCardIndexStakeiDyp(index);
-                      setselectedPool(pool);
-                      setShowDetails(true);
-                      setselectedpoolType(pool?.type);
-                    }}
-                    onHideDetailsClick={() => {
-                      setActiveCard(null);
-                      setselectedpoolType("");
-                    }}
-                    showDetails={showDetails}
-                    topList={topList}
-                    cardIndex={index + 1}
-                    chainId={chainId}
-                    handleConnection={handleConnection}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    coinbase={coinbase}
-                    referrer={referrer}
-                    lp_id={lp_id[cardIndex]}
-                    the_graph_result={the_graph_result}
-                    the_graph_resultbsc={the_graph_resultbsc}
-                    isConnected={isConnected}
-                    the_graph_resultavax={the_graph_resultavax}
-                    display={
-                      pool?.expired
-                        ? pool?.expired === "Yes"
-                          ? "none"
-                          : "flex"
-                        : "flex"
-                    }
-                    isNewPool={pool?.new_pool === "Yes" ? true : false}
-                    totalTvl={pool?.tvl_usd}
-                    isPremium={isPremium}
-                  />
-                ))}
+              :<></>}
           </div>
         ) : topPools.length === 0 ? (
           <div
