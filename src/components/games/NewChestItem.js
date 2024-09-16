@@ -32,7 +32,7 @@ const NewChestItem = ({
   setClaimingChest,
   image,
   coinbase,
-  binanceW3WProvider,
+  binanceW3WProvider,isConnected
 }) => {
   const [shake, setShake] = useState(false);
   const [ischestOpen, setIsChestOpen] = useState(false);
@@ -321,7 +321,7 @@ const NewChestItem = ({
         console.error(e);
         return false;
       });
-      console.log(Number(result))
+      console.log(Number(result), Number(result) / 1e18, Number(result) / 1e18 >= 0.001 )
     if (result != 0 && Number(result) / 1e18 >= 0.001) {
       setApproved(true);
     } else setApproved(false);
@@ -551,10 +551,10 @@ const NewChestItem = ({
   }, [isPremium, rewardTypes]);
 
   useEffect(() => {
-    if (coinbase) {
+    if (coinbase && isConnected) {
       handleCheckIfAlreadyApproved();
     }
-  }, [coinbase]);
+  }, [coinbase, isConnected]);
 
   return (
     <div
