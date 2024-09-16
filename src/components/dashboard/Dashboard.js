@@ -57,6 +57,15 @@ import avaxActive from "../earn/assets/avaxActive.svg";
 import WhitelistPopup from "../whitelistPopup/WhitelistPopup";
 import StakingDypiusBase1 from "../FARMINNG/stakingDypiusBase1";
 import LoyaltyCard from "../launchpad-card/LoyaltyCard";
+import Countdown from "react-countdown";
+
+const renderer = ({ days, hours, minutes }) => {
+  return (
+    <h6 className="d-none">
+      {days}d : {hours}h : {minutes}m
+    </h6>
+  );
+};
 
 const Dashboard = ({
   isConnected,
@@ -108,6 +117,9 @@ const Dashboard = ({
   const [bnbPools, setBnbPools] = useState([]);
   const [avaxPools, setAvaxPools] = useState([]);
   const [basePools, setBasePools] = useState([]);
+  const [expired, setisExpired] = useState(false);
+
+  let loyaltyCd = new Date("2024-09-16T12:59:59.000+02:00");
 
 
   const wbsc_address = "0x2170Ed0880ac9A755fd29B2688956BD959F933F8";
@@ -1041,6 +1053,7 @@ setbasePoolsDyp(sortedActivebase)
           <div className="d-flex flex-column gap-4 justify-content-between">
             <div className="d-flex flex-column flex-md-row m-0 gap-3 justify-content-between">
               {/* <Calculator /> */}
+              <Countdown renderer={renderer} date={loyaltyCd} onComplete={()=>{setisExpired(true)}} />
               <MigrationBanner />
               <div className="d-flex flex-column gap-3 gap-lg-4 justify-content-between dashboard-cards-wrapper">
                 <ExplorerCard />
@@ -2589,7 +2602,7 @@ setbasePoolsDyp(sortedActivebase)
         </Modal>
       )}
 
-      {whitelistPopup === true && (
+      {whitelistPopup === true && expired === false && (
         <WhitelistPopup
           open={whitelistPopup}
           onClose={() => {
