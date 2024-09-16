@@ -9,6 +9,8 @@ import premiumStar from "./assets/premiumStar.png";
 import kittyDashFlag from "./assets/kittyDashFlag.png";
 import stoneCrackFlag from "./assets/stoneCrackFlag.png";
 import cawsAdventuresFlag from "./assets/cawsAdventuresFlag.png";
+import eth from './assets/eth.svg'
+import dyp from './assets/dyp.svg'
 
 const Leaderboard = ({
   userData,
@@ -339,9 +341,10 @@ const Leaderboard = ({
           <div className="d-flex align-items-center gap-1 mt-5">
             <div className="optionsWrapper col-12">
               <div
-                className="d-flex gap-1 align-items-center justify-content-between"
+                className="d-flex gap-1 align-items-center justify-content-between position-relative"
                 style={{ height: 38 }}
               >
+                <div className={`leaderboard-options-bg ${optionText === "monthly" && "move-right"} ${type !== "stoneCrack" && "d-none"} w-50`}></div>
                 <span
                   className={`${
                     optionText === "weekly" && type === "stoneCrack"
@@ -351,7 +354,7 @@ const Leaderboard = ({
                       : optionText === "weekly" && type === "cawsAdventure"
                       ? "otheroptionsActive-caws"
                       : ""
-                  } durationText col-3`}
+                  } durationText`}
                   style={{ width: type !== "stoneCrack" ? "100%" : "50%" }}
                   onClick={() => {
                     handleOption("weekly");
@@ -389,9 +392,22 @@ const Leaderboard = ({
                     {type === "stoneCrack" ? (
                       <>
                         {stoneHeaders.headers.map((item, index) => (
+                        item.name === "ETH Reward" ? 
                          <th className={`playerHeader ${item.class}`} key={index}>
-                         {item.name}
-                       </th>
+                          <img src={eth} width={15} height={15} alt="" />
+                          {" "}
+                        {item.name.slice(4, item.name.length)}
+                      </th>
+                      : item.name === "DYP Reward" ?
+                      <th className={`playerHeader ${item.class}`} key={index}>
+                      <img src={dyp} width={15} height={15} alt="" />
+                      {" "}
+                    {item.name.slice(4, item.name.length)}
+                  </th>
+                  :
+                      <th className={`playerHeader ${item.class}`} key={index}>
+                      {item.name}
+                    </th>
                         ))}
                       </>
                     ) : type === "kittyDash" ? (
@@ -430,15 +446,18 @@ const Leaderboard = ({
                             {getFormattedNumber(item.score, 0)}
                           </td>
                           <td
-                            className={`playerReward col-2 text-center`}
+                            className={`playerReward col-2 text-center leaderboard-rewards-bg`}
                             style={{ color: stoneHeaders.rewardColor }}
                           >
+                            {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
                             ${getFormattedNumber(item.ethReward, 0)}
                           </td>
                           <td
-                            className={`playerReward col-2 text-center`}
+                            className={`playerReward col-2 text-center leaderboard-rewards-bg`}
                             style={{ color: stoneHeaders.rewardColor }}
                           >
+                            {/* <img src={dyp} width={12} height={12} alt="" />{" "} */}
+
                             ${getFormattedNumber(item.dypReward, 0)}
                           </td>
                         </tr>

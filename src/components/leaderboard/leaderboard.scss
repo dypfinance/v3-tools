@@ -62,7 +62,7 @@
   font-style: normal;
   font-weight: 600;
   font-size: 10px;
-  line-height: 12px;
+  line-height: 17px;
   letter-spacing: -0.018em;
   color: #f7f7ff;
   position: sticky;
@@ -240,14 +240,32 @@
   color: #09f3d2;
 }
 
-.otheroptionsActive-stone {
-  border-radius: 12px;
+.leaderboard-options-bg{
+  height: 100%;
+  position: absolute;
+  left: 0;
   border: 1px solid #FBF1CA;
   background: rgba(139, 125, 107, 0.30);
+  border-radius: 12px;
+  transition: all .25s;
+}
+
+.move-right{
+  transform: translate(100%);
+}
+
+.otheroptionsActive-stone {
+  border-radius: 12px;
+  // border: 1px solid #FBF1CA;
+  // background: rgba(139, 125, 107, 0.30);
   padding: 7px;
   white-space: nowrap;
   color: #FBF1CA !important;
 }
+
+
+
+
 .otheroptionsActive-kitty {
   border-radius: 12px;
   border: 1px solid #C4F9FF;
@@ -529,4 +547,8 @@
 
 .leaderboard-flag:hover {
   transform: scale(1.1);
+}
+
+.leaderboard-rewards-bg{
+  background: rgba(42, 40, 89, 0.6);
 }

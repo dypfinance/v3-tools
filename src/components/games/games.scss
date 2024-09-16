@@ -1,6 +1,6 @@
 .games-banner {
   position: relative;
-  background-color: #282a5c;
+  background-color: #2d2d66;
   border-radius: 12px;
 }
 
@@ -1470,7 +1470,7 @@
 }
 
 .loyalty-game-banner {
-  background-image: url("./assets/loyaltyBannerBg.svg");
+  background-image: url("./assets/loyaltyBg.png");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: right;
@@ -1513,4 +1513,46 @@
   border-right: 3px solid #126181 !important;
   border-bottom: 3px solid #126181 !important;
   color: #CAF7FF !important;
+}
+
+.games-popup-title{
+  color: #FFF !important;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 12px; /* 66.667% */
+  letter-spacing: -0.324px;
+}
+
+.games-popup-subtitle{
+  color: #F1EDFF ;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 17px; /* 121.429% */
+}
+
+.games-popup-content{
+  color: #F1EDFF !important;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 17px; /* 141.667% */
+}
+
+.games-popup-image-wrapper{
+  border-radius: 12px;
+background: #23223E;
+}
+
+.games-popup-danger-wrapper{
+  border-radius: 12px;
+background: rgba(202, 77, 77, 0.10);
+}
+
+@media screen and (max-width: 1000px) {
+  .games-popup-scroll-wrapper{
+    height: 400px;
+    overflow-y: scroll;
+  }
 }
