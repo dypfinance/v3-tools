@@ -22,12 +22,14 @@ import axios from "axios";
 import { shortAddress } from "../../functions/shortAddress";
 import Countdown from "react-countdown";
 import getFormattedNumber from "../../functions/get-formatted-number";
-import appliedBadge from "./assets/appliedBadge.webp";
+import winnerBadge from "./assets/winnerBadge.webp";
+import { loyaltyAddresses } from ".";
 
 const renderer = ({ days, hours, minutes }) => {
   return (
     <h6 className="loyalty-timer mb-0">
-      {days}d : {hours}h : {minutes}m
+      {/* {days}d : {hours}h : {minutes}m */}
+    Season two
     </h6>
   );
 };
@@ -46,6 +48,8 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
   const [loading, setLoading] = useState(false);
   const [totalUsers, setTotalUsers] = useState(0);
   const [expired, setisExpired] = useState(false);
+  const [isWinner, setisWinner] = useState(false);
+
 
   // const [dypPrice, setDypPrice] = useState(0);
   // const [ethPrice, setEthPrice] = useState(0);
@@ -154,6 +158,22 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
       .catch((err) => {console.log(err); setStep(6)});
   };
 
+
+  const checkIfWinner = ()=>{
+    let found = 0;
+    for (let i of loyaltyAddresses) {
+      if (coinbase.toLowerCase() === i.toLowerCase()) {
+        found = 1;
+      }  
+    }
+
+    if(found === 0) {
+      setisWinner(false)
+    } else if(found === 1) {
+      setisWinner(true)
+    }
+  }
+
   const html = document.querySelector("html");
 
   useEffect(() => {
@@ -167,8 +187,10 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
   useEffect(() => {
     if (coinbase && isConnected) {
       loyaltyCheck();
+      checkIfWinner()
     } else {
       setStep(1);
+      setisWinner(false)
     }
   }, [coinbase, isConnected]);
 
@@ -200,7 +222,7 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
                 <img src={clock} alt="" className="loyalty-clock" />
                 <div className="d-flex flex-column align-items-center ">
                   <Countdown renderer={renderer} date={loyaltyCd} onComplete={()=>{setisExpired(true)}} />
-                  <span className="loyalty-time-left">Time left</span>
+                  <span className="loyalty-time-left">Coming Soon</span>
                 </div>
               </div>
             </div>
@@ -220,16 +242,16 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
                         reimbursed to cover the gas costs for one transaction
                         per day.
                       </p>
-                      {step !== 5 && step !== 4 && expired === false && (
+                      {/* {step !== 5 && step !== 4 && expired === false && (
                         <button
                           className="btn hero-stake-eth-btn2 w-75"
                           onClick={() => setPopup(true)}
                         >
                           Apply
                         </button>
-                      )}
+                      )} */}
 
-                      {expired === true && <button className="disabled-btn pe-none" disabled>Ended</button>}
+                      {/* {expired === true && <button className="disabled-btn pe-none" disabled>Ended</button>} */}
                     </div>
                     {/* <div className="d-flex flex-column w-100 mb-3 mb-lg-0">
                       <div className="d-flex align-items-center justify-content-center p-2 my-reimbursement">
@@ -258,8 +280,8 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
                       </div>
                     </div> */}
                   </div>
-                  {(step === 5 || step === 4) && (
-                    <img src={appliedBadge} alt="" className="appliedbadge" />
+                  {isWinner && (
+                    <img src={winnerBadge} alt="" className="appliedbadge" />
                   )}
                   {/* <div className="d-flex flex-column w-100 mb-3 mb-lg-0">
                     <div className="d-flex p-3 flex-column align-items-center justify-content-center gap-2 reimbursement-wrapper">
