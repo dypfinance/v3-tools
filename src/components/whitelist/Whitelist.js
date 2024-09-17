@@ -55,7 +55,7 @@ const Whitelist = ({
   const [depositStatus, setdepositStatus] = useState("initial");
   const [selectedToken, setselectedToken] = useState();
   const [allUserCommitments, setAllUserCommitments] = useState([]);
-  let expireDay = new Date("2024-09-18T14:00:00.000+02:00");
+  let expireDay = new Date("2024-09-30T14:00:00.000+02:00");
 
   const poolCap = 25000;
 
@@ -159,6 +159,11 @@ const Whitelist = ({
       window.config.commitment_address
     );
 
+    let commitment_contract_eth = new window.infuraWeb3.eth.Contract(
+      window.COMMITMENT_ETH_ABI,
+      window.config.commitment_eth_address
+    );
+
     const total_commitments = await commitment_contract.methods
       .commitmentCountForUser(
         coinbase,
@@ -169,7 +174,33 @@ const Whitelist = ({
         console.error(e);
         return [];
       });
+
+    const total_commitments_eth_usdt = await commitment_contract_eth.methods
+      .commitmentCountForUser(
+        coinbase,
+        window.config.commitmenteth_tokens[0].address
+      )
+      .call()
+      .catch((e) => {
+        console.error(e);
+        return [];
+      });
+
+    const total_commitments_eth_usdc = await commitment_contract_eth.methods
+      .commitmentCountForUser(
+        coinbase,
+        window.config.commitmenteth_tokens[1].address
+      )
+      .call()
+      .catch((e) => {
+        console.error(e);
+        return [];
+      });
     let totalTokenDeposited = 0;
+    let totalCommitmentArray_bnb = [];
+    let totalCommitmentArray_eth_usdt = [];
+    let totalCommitmentArray_eth_usdc = [];
+
     if (total_commitments && total_commitments > 0) {
       const finalResult = await Promise.all(
         window.range(0, total_commitments - 1).map(async (i) => {
@@ -197,37 +228,140 @@ const Whitelist = ({
       const finalResult_sorted = finalResult.sort(function (a, b) {
         return a.commitment_list.timestamp - b.commitment_list.timestamp;
       });
-      setTotalDeposited(totalTokenDeposited);
-      setAllUserCommitments(finalResult_sorted);
-    } else {
+      totalCommitmentArray_bnb = finalResult_sorted;
+    }
+    if (total_commitments_eth_usdt && total_commitments_eth_usdt > 0) {
+      const finalResult = await Promise.all(
+        window.range(0, total_commitments_eth_usdt - 1).map(async (i) => {
+          const commitment_list = await commitment_contract_eth.methods
+            .commitments(
+              coinbase,
+              window.config.commitmenteth_tokens[0].address,
+              i
+            )
+            .call()
+            .catch((e) => {
+              console.error(e);
+              return [];
+            });
+          if (commitment_list) {
+            totalTokenDeposited += commitment_list.amount / 1e6;
+            return {
+              commitment_list,
+              network: "Ethereum",
+              token: "USDT",
+            };
+          }
+        })
+      );
+      const finalResult_sorted = finalResult.sort(function (a, b) {
+        return a.commitment_list.timestamp - b.commitment_list.timestamp;
+      });
+      
+      totalCommitmentArray_eth_usdt = finalResult_sorted;
+    }
+    if (total_commitments_eth_usdc && total_commitments_eth_usdc > 0) {
+      const finalResult = await Promise.all(
+        window.range(0, total_commitments_eth_usdc - 1).map(async (i) => {
+          const commitment_list = await commitment_contract_eth.methods
+            .commitments(
+              coinbase,
+              window.config.commitmenteth_tokens[1].address,
+              i
+            )
+            .call()
+            .catch((e) => {
+              console.error(e);
+              return [];
+            });
+          if (commitment_list) {
+            totalTokenDeposited += commitment_list.amount / 1e6;
+            return {
+              commitment_list,
+              network: "Ethereum",
+              token: "USDC",
+            };
+          }
+        })
+      );
+      const finalResult_sorted = finalResult.sort(function (a, b) {
+        return a.commitment_list.timestamp - b.commitment_list.timestamp;
+      });
+      totalCommitmentArray_eth_usdc = finalResult_sorted;
+    } else if (
+      total_commitments &&
+      total_commitments === 0 &&
+      total_commitments_eth_usdt &&
+      total_commitments_eth_usdt === 0 &&
+      total_commitments_eth_usdc &&
+      total_commitments_eth_usdc === 0
+    ) {
       setAllUserCommitments([]);
       setTotalDeposited(0);
     }
-
-    // console.log(commitment_list);
+    const finalCommitmentArray = [
+      ...totalCommitmentArray_bnb,
+      ...totalCommitmentArray_eth_usdc,
+      ...totalCommitmentArray_eth_usdt,
+    ];
+    if (finalCommitmentArray && finalCommitmentArray.length > 0) {
+      const finalResult_sorted = finalCommitmentArray.sort(function (a, b) {
+        return a.commitment_list.timestamp - b.commitment_list.timestamp;
+      });
+      setAllUserCommitments(finalResult_sorted);
+      setTotalDeposited(totalTokenDeposited);
+    } else setAllUserCommitments([]);
   };
   // console.log("userPools", userPools);
   const checkApproval = async (amount) => {
-    const result = await window
-      .checkapproveStakePool(
-        coinbase,
-        selectedCoin.address,
-        window.config.commitment_address
-      )
-      .then((data) => {
-        return data;
-      });
+    if (networkId === 56) {
+      const result = await window
+        .checkapproveStakePool(
+          coinbase,
+          selectedCoin.address,
+          window.config.commitment_address
+        )
+        .then((data) => {
+          return data;
+        });
 
-    let result_formatted = new window.BigNumber(result).div(1e18).toFixed(6);
+      let result_formatted = new window.BigNumber(result)
+        .div(10 ** selectedToken.decimals)
+        .toFixed(6);
 
-    if (
-      Number(result_formatted) >= Number(amount) &&
-      Number(result_formatted) !== 0
-      // && Number(amount) >= 100
-    ) {
-      setdepositStatus("deposit");
-    } else {
-      setdepositStatus("initial");
+      if (
+        Number(result_formatted) >= Number(amount) &&
+        Number(result_formatted) !== 0 &&
+        Number(amount) >= 100
+      ) {
+        setdepositStatus("deposit");
+      } else {
+        setdepositStatus("initial");
+      }
+    } else if (networkId === 1) {
+      const result = await window
+        .checkapproveStakePool(
+          coinbase,
+          selectedCoin.address,
+          window.config.commitment_eth_address
+        )
+        .then((data) => {
+          return data;
+        });
+
+      let result_formatted = new window.BigNumber(result)
+        .div(10 ** selectedToken.decimals)
+        .toFixed(6);
+      console.log(Number(result_formatted), result, Number(amount));
+      if (
+        Number(result_formatted) >= Number(amount) &&
+        Number(result_formatted) !== 0 &&
+        Number(amount) >= 100
+      ) {
+        setdepositStatus("deposit");
+      } else {
+        setdepositStatus("initial");
+      }
     }
   };
 
@@ -254,59 +388,119 @@ const Whitelist = ({
   };
 
   const handleStake = async () => {
-    setdepositLoading(true);
+    if (networkId === 56) {
+      setdepositLoading(true);
 
-    let amount = depositAmount;
-    amount = new window.BigNumber(amount).times(1e18).toFixed(0);
+      let amount = depositAmount;
+      amount = new window.BigNumber(amount)
+        .times(10 ** selectedToken.decimals)
+        .toFixed(0);
 
-    window.web3 = new Web3(window.ethereum);
-    let commitment_contract = new window.web3.eth.Contract(
-      window.COMMITMENT_ABI,
-      window.config.commitment_address
-    );
+      window.web3 = new Web3(window.ethereum);
+      let commitment_contract = new window.web3.eth.Contract(
+        window.COMMITMENT_ABI,
+        window.config.commitment_address
+      );
 
-    const gasPrice = await window.web3.eth.getGasPrice();
-    console.log("gasPrice", gasPrice);
-    const currentGwei = window.web3.utils.fromWei(gasPrice, "gwei");
+      const gasPrice = await window.web3.eth.getGasPrice();
+      console.log("gasPrice", gasPrice);
+      const currentGwei = window.web3.utils.fromWei(gasPrice, "gwei");
 
-    const transactionParameters = {
-      gasPrice: window.web3.utils.toWei(currentGwei.toString(), "gwei"),
-    };
+      const transactionParameters = {
+        gasPrice: window.web3.utils.toWei(currentGwei.toString(), "gwei"),
+      };
 
-    await commitment_contract.methods
-      .commit(selectedToken.address, amount)
-      .estimateGas({ from: coinbase })
-      .then((gas) => {
-        transactionParameters.gas = window.web3.utils.toHex(gas);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    console.log(transactionParameters);
+      await commitment_contract.methods
+        .commit(selectedToken.address, amount)
+        .estimateGas({ from: coinbase })
+        .then((gas) => {
+          transactionParameters.gas = window.web3.utils.toHex(gas);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      console.log(transactionParameters);
 
-    await commitment_contract.methods
-      .commit(selectedToken.address, amount)
-      .send({ from: coinbase, ...transactionParameters })
-      .then(() => {
-        setdepositLoading(false);
-        setdepositStatus("success");
-        getUserBalanceForToken(selectedToken);
-        getUserCommitment();
-        setTimeout(() => {
-          setdepositStatus("initial");
-          setDepositAmount("");
-        }, 5000);
-      })
-      .catch((e) => {
-        setdepositLoading(false);
-        setdepositStatus("fail");
-        seterrorMsg(e?.message);
-        setTimeout(() => {
-          setDepositAmount("");
-          setdepositStatus("initial");
-          seterrorMsg("");
-        }, 10000);
-      });
+      await commitment_contract.methods
+        .commit(selectedToken.address, amount)
+        .send({ from: coinbase, ...transactionParameters })
+        .then(() => {
+          setdepositLoading(false);
+          setdepositStatus("success");
+          getUserBalanceForToken(selectedToken);
+          getUserCommitment();
+          setTimeout(() => {
+            setdepositStatus("initial");
+            setDepositAmount("");
+          }, 5000);
+        })
+        .catch((e) => {
+          setdepositLoading(false);
+          setdepositStatus("fail");
+          seterrorMsg(e?.message);
+          setTimeout(() => {
+            setDepositAmount("");
+            setdepositStatus("initial");
+            seterrorMsg("");
+          }, 10000);
+        });
+    } else if (networkId === 1) {
+      setdepositLoading(true);
+
+      let amount = depositAmount;
+      amount = new window.BigNumber(amount)
+        .times(10 ** selectedToken.decimals)
+        .toFixed(0);
+
+      window.web3 = new Web3(window.ethereum);
+      let commitment_contract = new window.web3.eth.Contract(
+        window.COMMITMENT_ETH_ABI,
+        window.config.commitment_eth_address
+      );
+
+      const gasPrice = await window.web3.eth.getGasPrice();
+      console.log("gasPrice", gasPrice);
+      const currentGwei = window.web3.utils.fromWei(gasPrice, "gwei");
+
+      const transactionParameters = {
+        gasPrice: window.web3.utils.toWei(currentGwei.toString(), "gwei"),
+      };
+
+      await commitment_contract.methods
+        .commit(selectedToken.address, amount)
+        .estimateGas({ from: coinbase })
+        .then((gas) => {
+          transactionParameters.gas = window.web3.utils.toHex(gas);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      console.log(transactionParameters);
+
+      await commitment_contract.methods
+        .commit(selectedToken.address, amount)
+        .send({ from: coinbase, ...transactionParameters })
+        .then(() => {
+          setdepositLoading(false);
+          setdepositStatus("success");
+          getUserBalanceForToken(selectedToken);
+          getUserCommitment();
+          setTimeout(() => {
+            setdepositStatus("initial");
+            setDepositAmount("");
+          }, 5000);
+        })
+        .catch((e) => {
+          setdepositLoading(false);
+          setdepositStatus("fail");
+          seterrorMsg(e?.message);
+          setTimeout(() => {
+            setDepositAmount("");
+            setdepositStatus("initial");
+            seterrorMsg("");
+          }, 10000);
+        });
+    }
   };
 
   const handleApprove = async () => {
@@ -318,9 +512,16 @@ const Whitelist = ({
     );
 
     let amount = depositAmount;
-    amount = new window.BigNumber(amount).times(1e18).toFixed(0);
+    amount = new window.BigNumber(amount)
+      .times(10 ** selectedToken.decimals)
+      .toFixed(0);
     await token_contract.methods
-      .approve(window.config.commitment_address, amount)
+      .approve(
+        networkId === 56
+          ? window.config.commitment_address
+          : window.config.commitment_eth_address,
+        amount
+      )
       .send({ from: coinbase })
       .then(() => {
         setdepositLoading(false);
@@ -346,12 +547,10 @@ const Whitelist = ({
           "Deposit amount is greater than available quota. Please add another amount."
         );
         setCanDeposit(false);
-      }
-      //  else if (depositAmount < 100) {
-      //   setCanDeposit(false);
-      //   seterrorMsg("Minimum deposit amount is 100" + " " + selectedCoin.coin);
-      // }
-      else {
+      } else if (depositAmount < 100) {
+        setCanDeposit(false);
+        seterrorMsg("Minimum deposit amount is 100" + " " + selectedCoin.coin);
+      } else {
         seterrorMsg("");
         setCanDeposit(true);
       }
@@ -913,7 +1112,7 @@ const Whitelist = ({
                           <td className="item-history-table-td table-greentext text-center">
                             <a
                               className="table-greentext"
-                              href={`https://bscscan.com/address/${coinbase}`}
+                              href={item.network === "BNB Chain" ? `https://bscscan.com/address/${coinbase}` : `https://etherscan.io/address/${coinbase}`}
                               target="_blank"
                               rel="noreferrer"
                             >
@@ -922,14 +1121,19 @@ const Whitelist = ({
                           </td>
                           <td className="item-history-table-td text-center">
                             {getFormattedNumber(
-                              item.commitment_list.amount / 1e18,
+                              item.network === "BNB Chain"
+                                ? item.commitment_list.amount / 1e18
+                                : item.commitment_list.amount / 1e6,
                               2
                             )}{" "}
                             {item.token}
                           </td>
                           <td className="item-history-table-td right-border text-center">
                             {getFormattedNumber(
-                              item.commitment_list.amount / 1e18 / 0.0325,
+                              item.network === "BNB Chain"
+                                ? item.commitment_list.amount / 1e18 / 0.0325
+                                : item.commitment_list.amount / 1e6 / 0.0325,
+
                               0
                             )}{" "}
                             WOD
@@ -941,13 +1145,13 @@ const Whitelist = ({
                               </button>
                             ) : (
                               <> */}
-                                {item.commitment_list.accepted === false &&
-                                item.commitment_list.refunded === false
-                                  ? "Successful"
-                                  : item.commitment_list.accepted === true
-                                  ? "Approved"
-                                  : "Refund"}
-                              {/* </> */}
+                            {item.commitment_list.accepted === false &&
+                            item.commitment_list.refunded === false
+                              ? "Successful"
+                              : item.commitment_list.accepted === true
+                              ? "Approved"
+                              : "Refund"}
+                            {/* </> */}
                             {/* )} */}
                           </td>
                         </tr>
