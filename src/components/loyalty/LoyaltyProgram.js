@@ -23,6 +23,7 @@ import { shortAddress } from "../../functions/shortAddress";
 import Countdown from "react-countdown";
 import getFormattedNumber from "../../functions/get-formatted-number";
 import appliedBadge from "./assets/appliedBadge.webp";
+import '../LandPopup/landpopup.css'
 
 const renderer = ({ days, hours, minutes }) => {
   return (
@@ -312,7 +313,7 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
             </div>
           </div>
           <div className="col-12 col-lg-6">
-            <div className="loyalty-container p-3 d-flex flex-column align-items-center gap-2">
+            <div className="loyalty-container h-100 p-3 d-flex flex-column align-items-center gap-2">
               <h6 className="loyalty-banner-title mb-0">Benefits</h6>
               <div className="loyalty-benefits-grid w-100">
                 <div className="loyalty-benefit-item p-3 d-flex flex-column gap-2">
