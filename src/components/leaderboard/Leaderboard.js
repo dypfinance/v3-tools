@@ -9,8 +9,8 @@ import premiumStar from "./assets/premiumStar.png";
 import kittyDashFlag from "./assets/kittyDashFlag.png";
 import stoneCrackFlag from "./assets/stoneCrackFlag.png";
 import cawsAdventuresFlag from "./assets/cawsAdventuresFlag.png";
-import eth from './assets/eth.svg'
-import dyp from './assets/dyp.svg'
+import eth from "./assets/eth.svg";
+import dyp from "./assets/dyp.svg";
 
 const Leaderboard = ({
   userData,
@@ -40,47 +40,49 @@ const Leaderboard = ({
     headers: [
       {
         name: "Rank",
-        class: "col-1"
+        class: "col-1",
       },
       {
         name: "Player",
-        class: "col-3"
+        class: "col-3",
       },
       {
         name: "Score",
-        class: "col-4 text-center"
+        class: "col-4 text-center",
       },
       {
         name: "ETH Reward",
-        class: "col-2 text-center"
+        class: "col-2 text-center leaderboard-rewards-bg",
       },
       {
         name: "DYP Reward",
-        class: "col-2 text-center"
+        class: "col-2 text-center leaderboard-rewards-bg",
       },
-      ],
+    ],
   };
 
   const kittyHeaders = {
     scoreColor: "#F6B67E",
     rewardColor: "#3ED2FF",
-    headers: [{
-      name: "Rank",
-      class: "col-1"
-    },
-    {
-      name: "Player",
-      class: "col-3"
-    },
-    {
-      name: "Score",
-      class: "col-4 text-center"
-    },
-    {
-      name: "Reward",
-      class: "col-4 text-center"
-    },
-  ,],
+    headers: [
+      {
+        name: "Rank",
+        class: "col-1",
+      },
+      {
+        name: "Player",
+        class: "col-3",
+      },
+      {
+        name: "Score",
+        class: "col-4 text-center",
+      },
+      {
+        name: "Reward",
+        class: "col-4 text-center",
+      },
+      ,
+    ],
   };
 
   const cawsHeaders = {
@@ -89,25 +91,25 @@ const Leaderboard = ({
     headers: [
       {
         name: "Rank",
-        class: "col-1"
+        class: "col-1",
       },
       {
         name: "Player",
-        class: "col-3"
+        class: "col-3",
       },
       {
         name: "Score",
-        class: "col-3 text-center"
+        class: "col-3 text-center",
       },
       {
         name: "Level",
-        class: "col-2 text-center"
+        class: "col-2 text-center",
       },
       {
         name: "Time",
-        class: "col-3 text-center"
+        class: "col-3 text-center",
       },
-      ],
+    ],
   };
 
   const stoneData = [
@@ -344,7 +346,11 @@ const Leaderboard = ({
                 className="d-flex gap-1 align-items-center justify-content-between position-relative"
                 style={{ height: 38 }}
               >
-                <div className={`leaderboard-options-bg ${optionText === "monthly" && "move-right"} ${type !== "stoneCrack" && "d-none"} w-50`}></div>
+                <div
+                  className={`leaderboard-options-bg ${
+                    optionText === "monthly" && "move-right"
+                  } ${type !== "stoneCrack" && "d-none"} w-50`}
+                ></div>
                 <span
                   className={`${
                     optionText === "weekly" && type === "stoneCrack"
@@ -385,35 +391,53 @@ const Leaderboard = ({
             </div>
           </div>
           <div className="d-flex flex-column gap-2 tablewrapper">
-            <div className="inner-table-wrapper p-2 w-100">
+            <div className="inner-table-wrapper p-2 w-100 position-relative">
+              {type === "stoneCrack" && (
+                <span className="playerHeader reward-position d-none  d-lg-flex justify-content-center px-0 leaderboard-rewards-bg">
+                  Rewards
+                </span>
+              )}
               <table className="playerTable w-100">
                 <tbody>
                   <tr className="playerRow">
                     {type === "stoneCrack" ? (
                       <>
-                        {stoneHeaders.headers.map((item, index) => (
-                        item.name === "ETH Reward" ? 
-                         <th className={`playerHeader ${item.class}`} key={index}>
-                          <img src={eth} width={15} height={15} alt="" />
-                          {" "}
-                        {item.name.slice(4, item.name.length)}
-                      </th>
-                      : item.name === "DYP Reward" ?
-                      <th className={`playerHeader ${item.class}`} key={index}>
-                      <img src={dyp} width={15} height={15} alt="" />
-                      {" "}
-                    {item.name.slice(4, item.name.length)}
-                  </th>
-                  :
-                      <th className={`playerHeader ${item.class}`} key={index}>
-                      {item.name}
-                    </th>
-                        ))}
+                        {stoneHeaders.headers.map((item, index) =>
+                          item.name === "ETH Reward" ? (
+                            <th
+                              className={`playerHeader ${item.class}`}
+                              key={index}
+                            >
+                              <img src={eth} width={15} height={15} alt="" />{" "}
+                              {/* {item.name.slice(4, item.name.length)} */}
+                              ETH
+                            </th>
+                          ) : item.name === "DYP Reward" ? (
+                            <th
+                              className={`playerHeader ${item.class}`}
+                              key={index}
+                            >
+                              <img src={dyp} width={15} height={15} alt="" />{" "}
+                              {/* {item.name.slice(4, item.name.length)} */}
+                              DYP
+                            </th>
+                          ) : (
+                            <th
+                              className={`playerHeader ${item.class}`}
+                              key={index}
+                            >
+                              {item.name}
+                            </th>
+                          )
+                        )}
                       </>
                     ) : type === "kittyDash" ? (
                       <>
                         {kittyHeaders.headers.map((item, index) => (
-                          <th className={`playerHeader ${item.class}`} key={index}>
+                          <th
+                            className={`playerHeader ${item.class}`}
+                            key={index}
+                          >
                             {item.name}
                           </th>
                         ))}
@@ -421,9 +445,12 @@ const Leaderboard = ({
                     ) : (
                       <>
                         {cawsHeaders.headers.map((item, index) => (
-                               <th className={`playerHeader ${item.class}`} key={index}>
-                               {item.name}
-                             </th>
+                          <th
+                            className={`playerHeader ${item.class}`}
+                            key={index}
+                          >
+                            {item.name}
+                          </th>
                         ))}
                       </>
                     )}
@@ -433,7 +460,9 @@ const Leaderboard = ({
                     <>
                       {stoneData.map((item, index) => (
                         <tr key={index} className={`playerInnerRow`}>
-                          <td className="playerData col-1">{Number(index) + 1}</td>
+                          <td className="playerData col-1">
+                            {Number(index) + 1}
+                          </td>
                           <td className="playerName col-3">
                             <div className="position-relative d-flex align-items-center">
                               <span>{item.player}</span>
@@ -457,7 +486,6 @@ const Leaderboard = ({
                             style={{ color: stoneHeaders.rewardColor }}
                           >
                             {/* <img src={dyp} width={12} height={12} alt="" />{" "} */}
-
                             ${getFormattedNumber(item.dypReward, 0)}
                           </td>
                         </tr>
@@ -467,7 +495,9 @@ const Leaderboard = ({
                     <>
                       {kittyData.map((item, index) => (
                         <tr key={index} className={`playerInnerRow`}>
-                          <td className="playerData col-1">{Number(index) + 1}</td>
+                          <td className="playerData col-1">
+                            {Number(index) + 1}
+                          </td>
                           <td className="playerName col-3">
                             <div className="position-relative d-flex align-items-center">
                               <span>{item.player}</span>
@@ -490,26 +520,36 @@ const Leaderboard = ({
                     </>
                   ) : (
                     <>
-                     {cawsData.map((item, index) => (
+                      {cawsData.map((item, index) => (
                         <tr key={index} className={`playerInnerRow`}>
-                        <td className="playerData col-1">
-                          {Number(index) + 1}
-                        </td>
-                        <td className="playerName col-3">
-                          <div className="position-relative d-flex align-items-center">
-                            <span>{item.player}</span>
-                          </div>
-                        </td>
-                        <td className="playerScore col-3 text-center" style={{color: cawsHeaders.scoreColor}}>{getFormattedNumber(item.score, 0)}</td>
-                        <td className={`playerReward col-2 text-center`} style={{color: cawsHeaders.scoreColor}}>
-                          {getFormattedNumber(item.level, 0)}
-                        </td>
-                        <td className={`playerReward col-3 text-center`} style={{color: cawsHeaders.rewardColor}}>
-                          {item.time}
-                        </td>
-                       
-                      </tr>
-                    ))}
+                          <td className="playerData col-1">
+                            {Number(index) + 1}
+                          </td>
+                          <td className="playerName col-3">
+                            <div className="position-relative d-flex align-items-center">
+                              <span>{item.player}</span>
+                            </div>
+                          </td>
+                          <td
+                            className="playerScore col-3 text-center"
+                            style={{ color: cawsHeaders.scoreColor }}
+                          >
+                            {getFormattedNumber(item.score, 0)}
+                          </td>
+                          <td
+                            className={`playerReward col-2 text-center`}
+                            style={{ color: cawsHeaders.scoreColor }}
+                          >
+                            {getFormattedNumber(item.level, 0)}
+                          </td>
+                          <td
+                            className={`playerReward col-3 text-center`}
+                            style={{ color: cawsHeaders.rewardColor }}
+                          >
+                            {item.time}
+                          </td>
+                        </tr>
+                      ))}
                     </>
                   )}
 

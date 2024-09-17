@@ -582,7 +582,7 @@ const NewChestItem = ({
       {rewardTypes !== "premium" ? (
         <img
           className={` ${"new-chest-item-img"} ${loading ? "chest-shake" : ""}`}
-          src={require(`./assets/axes/${chestId}.png`)}
+          src={require(`./assets/axes/${chestIndex}.png`)}
           alt=""
           style={{
             position: "relative",
@@ -593,7 +593,7 @@ const NewChestItem = ({
       ) : rewardTypes === "premium" && dummypremiumChests ? (
         <img
           className={`new-chest-item-img ${loading ? "chest-shake" : ""}`}
-          src={require(`./assets/${chestId}.png`)}
+          src={require(`./assets/${chestIndex}.png`)}
           alt=""
           style={{
             position: "relative",

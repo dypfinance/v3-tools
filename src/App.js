@@ -117,6 +117,9 @@ function App() {
   const [fireAppcontent, setFireAppContent] = useState(false);
   const [syncStatus, setsyncStatus] = useState("initial");
   const [showSyncModal, setshowSyncModal] = useState(false);
+  const [chests, setChests] = useState([]);
+  const [openedChests, setOpenedChests] = useState([])
+  const [chestCount, setChestCount] = useState(0);
 
   const showModal = () => {
     setshow(true);
@@ -135,6 +138,11 @@ function App() {
       setexplorerNetworkId(43114);
     }
   };
+
+
+  const onChestClaimed = () => {
+    setChestCount(chestCount + 1)
+  }
 
   const fetchAggregatorPools = async () => {
     const result = await axios
@@ -778,6 +786,31 @@ const [verifyWallet, { loading: loadingVerify, data: dataVerify }] =
      
   };
 
+
+  const getAllChests = async () => {
+    const emailData = { emailAddress: email };
+
+    const result = await axios.post(
+      "https://worldofdypiansdailybonus.azurewebsites.net/api/GetRewardsDypius?code=H9zoL4Hdr7fr7rzSZLTzilDT99fgwth006S7bO3J3Ua9AzFucS1HoA%3D%3D",
+      emailData
+    );
+    if (result.status === 200 && result.data) {
+      console.log(result.data, "chests");
+      setChests(result.data.chestOrder)
+      setOpenedChests(result.data.chestOrder.filter((item) => {
+        return item.isOpened = true
+      }))
+     
+    }
+  };
+
+  useEffect(() => {
+   if(email){
+    getAllChests();
+   }
+  }, [email, chestCount])
+  
+
   const onPlayerFetch = ()=>{
     refetchPlayer();
   }
@@ -996,10 +1029,13 @@ const [verifyWallet, { loading: loadingVerify, data: dataVerify }] =
                         networkId={parseInt(networkId)}
                         onSelectChain={onSelectChain}
                         coinbase={coinbase}
+                        onChestClaimed={onChestClaimed}
                         dummypremiumChests={dummyPremiums}
                         isPremium={isPremium}
                         bnbImages={chestImagesBnb}
                         email={email}
+                        chests={chests}
+                        openedChests={openedChests}
                         address={data?.getPlayer?.wallet?.publicAddress}
                         userId={data?.getPlayer?.playerId}
                       />
