@@ -18,6 +18,7 @@ import { handleSwitchNetworkhook } from "../../functions/hooks";
 import Web3 from "web3";
 import wallet from "../FARMINNG/assets/wallet.svg";
 import moment from "moment";
+import axios from "axios";
 
 const Whitelist = ({
   networkId,
@@ -54,6 +55,8 @@ const Whitelist = ({
   const [depositLoading, setdepositLoading] = useState(false);
   const [depositStatus, setdepositStatus] = useState("initial");
   const [selectedToken, setselectedToken] = useState();
+  const [totalCommitmentValue, settotalCommitmentValue] = useState(0);
+
   const [allUserCommitments, setAllUserCommitments] = useState([]);
   let expireDay = new Date("2024-09-30T14:00:00.000+02:00");
 
@@ -92,6 +95,20 @@ const Whitelist = ({
     if (dypResult.length > 0) {
       sethasDypStaked(true);
     }
+  };
+
+  const getTotalCommitment = async () => {
+    const result = await axios
+      .get("https://api.worldofdypians.com/api/latest-commitments")
+      .catch((e) => {
+        console.error(e);
+        return 0;
+      });
+
+      if(result && result.status === 200) {
+        const total = result.data.total
+        settotalCommitmentValue(total)
+      }
   };
 
   const requirements = [
@@ -257,7 +274,7 @@ const Whitelist = ({
       const finalResult_sorted = finalResult.sort(function (a, b) {
         return a.commitment_list.timestamp - b.commitment_list.timestamp;
       });
-      
+
       totalCommitmentArray_eth_usdt = finalResult_sorted;
     }
     if (total_commitments_eth_usdc && total_commitments_eth_usdc > 0) {
@@ -618,6 +635,10 @@ const Whitelist = ({
     }
   }, [userPools]);
 
+  useEffect(()=>{
+    getTotalCommitment()
+  },[])
+
   return (
     <div className="container-lg p-0">
       <div className="whitelist-banner d-flex flex-column flex-lg-row p-4 gap-3 gap-lg-0 align-items-center mb-4">
@@ -635,7 +656,7 @@ const Whitelist = ({
           <div className="position-relative d-flex align-items-center flex-column">
             <div className="commiting-wrapper p-3">
               <div className="d-flex flex-column gap-2">
-                <span className="commiting-amount">--</span>
+                <span className="commiting-amount">${getFormattedNumber(totalCommitmentValue)}</span>
                 <span className="migration-status-text-2">
                   Total Committed Value
                 </span>
@@ -688,7 +709,33 @@ const Whitelist = ({
                   left
                 </span>
               </div>
-              <img src={tooltipIcon} alt="" />
+              <Tooltip
+                title={
+                  <>
+                    <div className="d-flex flex-column gap-2">
+                      <span className="whitelist-tooltip-content-text">
+                        The deposit process for the WOD token whitelist is
+                        straightforward and lasts for two weeks from launch. You
+                        can deposit using Ethereum or BNB Chain and make
+                        multiple commitments. The minimum commitment is $100 per
+                        transaction, while the total amount you can commit is
+                        $25,000. For BNB Chain, deposits are accepted in USDT,
+                        while Ethereum allows USDT or USDC.
+                      </span>
+                      <span className="whitelist-tooltip-content-text">
+                        After depositing, your commitment is marked as
+                        'Successful' until the review. If approved, you'll be
+                        eligible to receive WOD tokens. If not, the committed
+                        funds are automatically refunded to your wallet.
+                      </span>
+                    </div>
+                  </>
+                }
+                enterDelay={0}
+                leaveDelay={2000}
+              >
+                <img src={tooltipIcon} alt="" />
+              </Tooltip>
             </div>
             <div className="whitelist-deposit-wrapper mt-3  d-flex flex-column gap-2">
               <div className="whitelist-deposit-wrapper-header p-2 d-flex align-items-center justify-content-between">
@@ -964,7 +1011,9 @@ const Whitelist = ({
                     <>
                       <div className="whitelist-tooltip-content-text">
                         You only need to complete one of the requirements to be
-                        eligible for the whitelist.
+                        eligible for the whitelist. Meeting multiple
+                        requirements and increasing your holding/staking value
+                        will raise your accepted allocation.
                       </div>
                     </>
                   }
@@ -1048,8 +1097,8 @@ const Whitelist = ({
                             token.
                           </li>
                           <li className="whitelist-tooltip-content-text mb-2">
-                            <b>Refund:</b> You can withdraw your initial
-                            commitment.
+                            <b>Refund:</b> Committed funds are automatically
+                            refunded.
                           </li>
                         </ul>
                       </div>
@@ -1112,7 +1161,11 @@ const Whitelist = ({
                           <td className="item-history-table-td table-greentext text-center">
                             <a
                               className="table-greentext"
-                              href={item.network === "BNB Chain" ? `https://bscscan.com/address/${coinbase}` : `https://etherscan.io/address/${coinbase}`}
+                              href={
+                                item.network === "BNB Chain"
+                                  ? `https://bscscan.com/address/${coinbase}`
+                                  : `https://etherscan.io/address/${coinbase}`
+                              }
                               target="_blank"
                               rel="noreferrer"
                             >
@@ -1120,22 +1173,30 @@ const Whitelist = ({
                             </a>
                           </td>
                           <td className="item-history-table-td text-center">
-                            {getFormattedNumber(
-                              item.network === "BNB Chain"
-                                ? item.commitment_list.amount / 1e18
-                                : item.commitment_list.amount / 1e6,
-                              2
-                            )}{" "}
+                            {item.commitment_list.refunded === true
+                              ? "Refunded"
+                              : getFormattedNumber(
+                                  item.network === "BNB Chain"
+                                    ? item.commitment_list.amount / 1e18
+                                    : item.commitment_list.amount / 1e6,
+                                  2
+                                )}{" "}
                             {item.token}
                           </td>
                           <td className="item-history-table-td right-border text-center">
-                            {getFormattedNumber(
-                              item.network === "BNB Chain"
-                                ? item.commitment_list.amount / 1e18 / 0.0325
-                                : item.commitment_list.amount / 1e6 / 0.0325,
+                            {item.commitment_list.refunded === true
+                              ? "Refunded"
+                              : getFormattedNumber(
+                                  item.network === "BNB Chain"
+                                    ? item.commitment_list.amount /
+                                        1e18 /
+                                        0.0325
+                                    : item.commitment_list.amount /
+                                        1e6 /
+                                        0.0325,
 
-                              0
-                            )}{" "}
+                                  0
+                                )}{" "}
                             WOD
                           </td>
                           <td className="item-history-table-td last-td table-greentext right-border text-center">
