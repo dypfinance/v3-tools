@@ -148,7 +148,7 @@ const TopPoolsCard = ({
         <div className="d-flex flex-column gap-0">
           <div className="d-flex m-0 justify-content between gap-2 align-items-center justify-content-between title-apr-wrapper">
             <div className="d-flex align-items-center">
-              {cardType === "Farming" || cardType === "Buyback"
+              {(cardType === "Farming" || cardType === "Buyback") && tokenLogo !=="bsc.svg" 
                 ? coins.length > 0 &&
                   coins.slice(0, 5).map((coin, index) => (
                     <h6 className="token-name d-flex align-items-center gap-2">

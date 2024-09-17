@@ -25,17 +25,20 @@ const EarnOtherNft = ({
 
     if (eth_result2 && eth_result2.status === 200) {
       const result = eth_result2.data.stakingInfoCAWS.find((obj) => {
-        return obj.id === "0x097bB1679AC734E90907Ff4173bA966c694428Fc";
+        return obj.id.toLowerCase() === "0x097bB1679AC734E90907Ff4173bA966c694428Fc".toLowerCase() ;
       });
       const result2 = eth_result2.data.stakingInfoCAWS.find((obj) => {
-        return obj.id !== "0x097bB1679AC734E90907Ff4173bA966c694428Fc";
+        return obj.id.toLowerCase()  !== "0x097bB1679AC734E90907Ff4173bA966c694428Fc".toLowerCase() ;
       });
       const resultLand = eth_result2.data.stakingInfoLAND.find((obj) => {
-        return obj.id === "0x6821710B0D6E9e10ACfd8433aD023f874ed782F1";
+        return obj.id.toLowerCase()  === "0x6821710B0D6E9e10ACfd8433aD023f874ed782F1".toLowerCase() ;
+      });
+      const resultLand2 = eth_result2.data.stakingInfoLAND.find((obj) => {
+        return obj.id.toLowerCase()  === "0x3e0c0443a6a5382b2ef20ecfe3bdbe84f1436523".toLowerCase() ;
       });
       const resultCawsLand = eth_result2.data.stakinginfoCAWSLAND.find(
         (obj) => {
-          return obj.id === "0xD324A03BF17Eee8D34A8843D094a76FF8f561e38";
+          return obj.id.toLowerCase()  === "0xD324A03BF17Eee8D34A8843D094a76FF8f561e38".toLowerCase() ;
         }
       );
 
@@ -44,6 +47,7 @@ const EarnOtherNft = ({
           Number(result.tvl_usd) +
             Number(result2.tvl_usd) +
             Number(resultLand.tvl_usd) +
+            Number(resultLand2.tvl_usd) +
             Number(resultCawsLand.tvl_usd)
         );
       }

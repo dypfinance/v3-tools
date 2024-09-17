@@ -271,7 +271,7 @@ class STAKINGACTIVEBSC {
     ].forEach((fn_name) => {
       this[fn_name] = async function (...args) {
         let contract = await getContract({ key: this.ticker });
-        return await contract.methods[fn_name](...args).call();
+        return await contract.methods[fn_name](...args).call().catch((e)=>{console.error(e); return 0})
       };
     });
 
@@ -2099,7 +2099,8 @@ window.config = {
   reward_tokenwbnb_address: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c", //REWARD TOKEN wbnb
 
   reward_token_dypius_eth_address: "0x39b46b212bdf15b42b166779b9d1787a68b9d0c3", //REWARD TOKEN DYPV2
-  reward_token_dypiusv2_base_address: "0x5b2124D427fAc9C80c902cbDD74b03Dd85d7d3FE", //REWARD TOKEN DYPV2
+  reward_token_dypiusv2_base_address:
+    "0x5b2124D427fAc9C80c902cbDD74b03Dd85d7d3FE", //REWARD TOKEN DYPV2
 
   reward_token_dypius_base_address:
     "0x4200000000000000000000000000000000000006", //REWARD TOKEN DYPV2
@@ -2355,8 +2356,7 @@ window.config = {
   //new dypv2 staking contracts
 
   constant_staking_dypius_base1_address:
-  "0x9845a667b1A603FF21596FDdec51968a2bccAc11",
-
+    "0x9845a667b1A603FF21596FDdec51968a2bccAc11",
 
   constant_staking_dypius_eth1_address:
     "0xC9075092Cc46E176B1F3c0D0EB8223F1e46555B0",
@@ -2642,6 +2642,7 @@ window.config = {
 
   /*CAWS PREMIUM STAKING*/
   nft_caws_premiumstake_address: "0x097bB1679AC734E90907Ff4173bA966c694428Fc",
+  nft_land_premiumstake_address: "0x3E0c0443A6a5382B2Ef20ECfe3bdbE84F1436523",
 
   /* MINT LANDNFT */
   landnft_address: "0xcd60d912655281908ee557ce1add61e983385a03",
@@ -2782,7 +2783,6 @@ window.REWARD_TOKEN_DYPIUS_ETH_ABI = window.TOKEN_ABI;
 window.REWARD_TOKEN_DYPIUS_BASE_ABI = window.TOKEN_ABI;
 window.REWARD_TOKEN_DYPIUSV2_BASE_ABI = window.TOKEN_ABI;
 
-
 window.REWARD_TOKEN_DYPIUS_BSC_ABI = window.TOKEN_ABI;
 window.REWARD_TOKEN_WBNB_ABI = window.TOKEN_ABI;
 window.REWARD_TOKEN_WAVAX_ABI = window.TOKEN_ABI;
@@ -2794,7 +2794,6 @@ window.reward_token = new TOKEN("REWARD_TOKEN");
 window.reward_token_dypius_eth = new TOKEN("REWARD_TOKEN_DYPIUS_ETH");
 window.reward_token_dypius_base = new TOKEN("REWARD_TOKEN_DYPIUS_BASE");
 window.reward_token_dypiusv2_base = new TOKEN("REWARD_TOKEN_DYPIUSV2_BASE");
-
 
 window.reward_token_dypius_bsc = new TOKENBSC("REWARD_TOKEN_DYPIUS_BSC");
 window.reward_token_wbnb = new TOKENBSC("REWARD_TOKEN_WBNB");
@@ -2935,12 +2934,9 @@ window.constant_staking_dypius_bscother1 = new CONSTANT_STAKING_DEFI(
   "CONSTANT_STAKING_DYPIUS_BSCOTHER1"
 );
 
-
 window.constant_staking_dypius_ethother1 = new CONSTANT_STAKING_DEFI(
   "CONSTANT_STAKING_DYPIUS_ETHOTHER1"
 );
-
-
 
 window.constant_staking_dypius_avaxother1 = new CONSTANT_STAKING_DEFI(
   "CONSTANT_STAKING_DYPIUS_AVAXOTHER1"
@@ -3172,16 +3168,18 @@ window.CONSTANT_STAKING_DYPIUS_AVAX1_ABI = window.CONSTANT_STAKING_DYPIUS_ABI;
 window.CONSTANT_STAKINGNEW_NEW1_ABI = window.CONSTANT_STAKINGNEW_ABI;
 window.CONSTANT_STAKINGNEW_NEW2_ABI = window.CONSTANT_STAKINGNEW_ABI;
 window.CONSTANT_STAKING_DYPIUS_ETH1_ABI = window.CONSTANT_STAKING_DYPIUS_ABI;
-window.CONSTANT_STAKING_DYPIUS_PHASE2_ETH1_ABI = window.CONSTANT_STAKING_DYPIUS_ABI;
+window.CONSTANT_STAKING_DYPIUS_PHASE2_ETH1_ABI =
+  window.CONSTANT_STAKING_DYPIUS_ABI;
 window.CONSTANT_STAKING_DYPIUS_BASE1_ABI = window.CONSTANT_STAKING_DYPIUS_ABI;
 
-window.CONSTANT_STAKING_DYPIUS_PHASE2_ETH2_ABI = window.CONSTANT_STAKING_DYPIUS_ABI;
-window.CONSTANT_STAKING_DYPIUS_PHASE2_ETH3_ABI = window.CONSTANT_STAKING_DYPIUS_ABI;
-window.CONSTANT_STAKING_DYPIUS_PHASE2_ETH4_ABI = window.CONSTANT_STAKING_DYPIUS_ABI;
-window.CONSTANT_STAKING_DYPIUS_PHASE2_ETH5_ABI = window.CONSTANT_STAKING_DYPIUS_ABI;
-
-
-
+window.CONSTANT_STAKING_DYPIUS_PHASE2_ETH2_ABI =
+  window.CONSTANT_STAKING_DYPIUS_ABI;
+window.CONSTANT_STAKING_DYPIUS_PHASE2_ETH3_ABI =
+  window.CONSTANT_STAKING_DYPIUS_ABI;
+window.CONSTANT_STAKING_DYPIUS_PHASE2_ETH4_ABI =
+  window.CONSTANT_STAKING_DYPIUS_ABI;
+window.CONSTANT_STAKING_DYPIUS_PHASE2_ETH5_ABI =
+  window.CONSTANT_STAKING_DYPIUS_ABI;
 
 window.CONSTANT_STAKINGNEW_NEW3_ABI = window.CONSTANT_STAKINGNEW_ABI;
 window.CONSTANT_STAKING_NEWI3 = window.CONSTANT_STAKING_OLD_ABI;
@@ -4044,6 +4042,65 @@ class CAWSPREMIUM {
 
   async checkLockoutTimeCawsPremium() {
     let nft_contract = await getContractCawsPremiumNFT("CAWSPREMIUM");
+    const time = await nft_contract.methods.LOCKUP_TIME().call();
+    return time;
+  }
+}
+
+/**
+ *
+ * @param {"TOKEN" | "LANDPREMIUM" } key
+ */
+async function getContractLandPremiumNFT(key) {
+  let address = window.config.nft_land_premiumstake_address;
+
+  window.web3 = new Web3(window.ethereum);
+  window.cached_contracts[key] = new window.web3.eth.Contract(
+    window.LANDPREMIUM_ABI,
+    address,
+    {
+      from: await getCoinbase(),
+    }
+  );
+
+  return window.cached_contracts[key];
+}
+
+class LANDPREMIUM {
+  constructor(key = "LANDPREMIUM") {
+    this.key = key;
+    [
+      "LOCKUP_TIME",
+      "MAX_DEPOSIT",
+      "MAX_POOL",
+      "depositsOf",
+      "expiration",
+      "stakingTime",
+    ].forEach((fn_name) => {
+      this[fn_name] = async function (...args) {
+        let contract = await getContractLandPremiumNFT(this.key);
+        return await contract.methods[fn_name](...args).call();
+      };
+    });
+  }
+
+  async approveStakeLandPremium(addr) {
+    let nft_contract = await getContractLandPremiumNFT("LANDPREMIUM");
+    return await nft_contract.methods.setApprovalForAll(addr, true).send();
+  }
+
+  async checkapproveStakeLandPremium(useraddr, addr) {
+    let nft_contract = await getContractLandPremiumNFT("LANDPREMIUM");
+    return await nft_contract.methods.isApprovedForAll(useraddr, addr).call();
+  }
+
+  async depositStakeLandPremium() {
+    let nft_contract = await getContractLandPremiumNFT("LANDPREMIUM");
+    return await nft_contract.methods.deposit([]).send();
+  }
+
+  async checkLockoutTimeLandPremium() {
+    let nft_contract = await getContractLandPremiumNFT("LANDPREMIUM");
     const time = await nft_contract.methods.LOCKUP_TIME().call();
     return time;
   }
@@ -9454,6 +9511,320 @@ window.CAWSPREMIUM_ABI = [
   {
     inputs: [{ internalType: "uint256", name: "_maxDeposit", type: "uint256" }],
     name: "setMaxDeposit",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "_maxPool", type: "uint256" }],
+    name: "setPoolCap",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "_rate", type: "uint256" }],
+    name: "setRate",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "stakingDestinationAddress",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "stakingTime",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "unpause",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256[]", name: "tokenIds", type: "uint256[]" },
+    ],
+    name: "withdraw",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "withdrawTokens",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+];
+
+window.LANDPREMIUM_ABI = [
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_stakingDestinationAddress",
+        type: "address",
+      },
+      { internalType: "uint256", name: "_rate", type: "uint256" },
+      { internalType: "uint256", name: "_expiration", type: "uint256" },
+      { internalType: "address", name: "_erc20Address", type: "address" },
+    ],
+    stateMutability: "nonpayable",
+    type: "constructor",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "newExpiration",
+        type: "uint256",
+      },
+    ],
+    name: "ExpirationChanged",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "newLockTime",
+        type: "uint256",
+      },
+    ],
+    name: "LockTimeChanged",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "previousOwner",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "OwnershipTransferred",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "Paused",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "newRate",
+        type: "uint256",
+      },
+    ],
+    name: "RateChanged",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "Unpaused",
+    type: "event",
+  },
+  {
+    inputs: [],
+    name: "LOCKUP_TIME",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "MAX_POOL",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "uint256", name: "", type: "uint256" },
+    ],
+    name: "_depositBlocks",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "account", type: "address" },
+      { internalType: "uint256", name: "tokenId", type: "uint256" },
+    ],
+    name: "calculateReward",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "account", type: "address" },
+      { internalType: "uint256[]", name: "tokenIds", type: "uint256[]" },
+    ],
+    name: "calculateRewards",
+    outputs: [
+      { internalType: "uint256[]", name: "rewards", type: "uint256[]" },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256[]", name: "tokenIds", type: "uint256[]" },
+    ],
+    name: "claimRewards",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256[]", name: "tokenIds", type: "uint256[]" },
+    ],
+    name: "deposit",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "account", type: "address" }],
+    name: "depositsOf",
+    outputs: [{ internalType: "uint256[]", name: "", type: "uint256[]" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256[]", name: "tokenIds", type: "uint256[]" },
+    ],
+    name: "emergencyWithdraw",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "erc20Address",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "expiration",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "uint256", name: "", type: "uint256" },
+      { internalType: "bytes", name: "", type: "bytes" },
+    ],
+    name: "onERC721Received",
+    outputs: [{ internalType: "bytes4", name: "", type: "bytes4" }],
+    stateMutability: "pure",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "owner",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "pause",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "paused",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "rate",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "_expiration", type: "uint256" }],
+    name: "setExpiration",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "_lockTime", type: "uint256" }],
+    name: "setLockTime",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -37873,7 +38244,6 @@ Object.keys(window.config)
       k.startsWith("reward_token_dypius_eth") ||
       k.startsWith("reward_token_dypius_base") ||
       k.startsWith("reward_token_dypiusv2_base") ||
-
       k.startsWith("reward_token_dypius_bsc") ||
       k.startsWith("reward_token_wbnb") ||
       k.startsWith("reward_token_wavax") ||
@@ -37906,7 +38276,6 @@ Object.keys(window.config)
       k.startsWith("constant_stakingnew_new2") ||
       k.startsWith("constant_staking_dypius_eth1") ||
       k.startsWith("constant_staking_dypius_base1") ||
-
       k.startsWith("constant_staking_dypius_phase2_eth1") ||
       k.startsWith("constant_staking_dypius_phase2_eth2") ||
       k.startsWith("constant_staking_dypius_phase2_eth3") ||
@@ -37935,7 +38304,6 @@ Object.keys(window.config)
       k.startsWith("constant_staking_dypius_bsc1") ||
       k.startsWith("constant_staking_dypius_bscother1") ||
       k.startsWith("constant_staking_dypius_ethother1") ||
-
       k.startsWith("constant_staking_dypius_avaxother1") ||
       k.startsWith("constant_stakingnew_newavax2") ||
       k.startsWith("constant_stakingdaiavax") ||

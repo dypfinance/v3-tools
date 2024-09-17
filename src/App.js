@@ -56,6 +56,7 @@ import {  MobileView, BrowserView } from "react-device-detect";
 import closeX from "./components/earnOther/assets/closeX.svg";
 import Whitelist from "./components/whitelist/Whitelist";
 // import WhitelistPopup from "./components/whitelistPopup/WhitelistPopup";
+import LoyaltyProgram from "./components/loyalty/LoyaltyProgram";
 
 class App extends React.Component {
   constructor(props) {
@@ -1030,6 +1031,18 @@ class App extends React.Component {
                       />
                     )}
                   /> */}
+                   <Route
+                      exact
+                      path="/loyalty-program"
+                      render={(props) => (
+                       <LoyaltyProgram 
+                       coinbase={this.state.coinbase}
+                       isConnected={this.state.isConnected}
+                       handleConnection={this.handleConnection}
+                       />
+                      )}
+                    />
+
 
                     <Route
                       exact

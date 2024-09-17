@@ -72,6 +72,17 @@ const EarnOtherHero = ({ type, isPremium, onSliderClick }) => {
       bannerBgClass: "cawsBgDesktop",
       apr: "cawsApr.svg",
     },
+
+    {
+      title: "New Genesis NFT Staking Pool",
+      desc: "Stake your assets to earn ETH rewards",
+      buttonType: "details-land-nft",
+      chain: "eth",
+      buttonTitle: "Stake Now",
+      buttonClass: "hero-stake-land-btn",
+      bannerBgClass: "landBgDesktop",
+      apr: "landApr.svg",
+    },
     {
       title: "Become a Premium Subscriber!",
       desc: "Enjoy extra benefits by upgrading to premium.",
@@ -92,6 +103,8 @@ const EarnOtherHero = ({ type, isPremium, onSliderClick }) => {
       navigate.push("/plans");
     } else if (obj.buttonType === "details-nft") {
       onSliderClick("details-nft");
+    }else if (obj.buttonType === "details-land-nft") {
+      onSliderClick("details-land-nft");
     }
   };
 

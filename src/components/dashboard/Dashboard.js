@@ -56,6 +56,16 @@ import avax from "../earn/assets/avax.svg";
 import avaxActive from "../earn/assets/avaxActive.svg";
 import WhitelistPopup from "../whitelistPopup/WhitelistPopup";
 import StakingDypiusBase1 from "../FARMINNG/stakingDypiusBase1";
+import LoyaltyCard from "../launchpad-card/LoyaltyCard";
+import Countdown from "react-countdown";
+
+const renderer = ({ days, hours, minutes }) => {
+  return (
+    <h6 className="d-none">
+      {days}d : {hours}h : {minutes}m
+    </h6>
+  );
+};
 
 const Dashboard = ({
   isConnected,
@@ -107,6 +117,9 @@ const Dashboard = ({
   const [bnbPools, setBnbPools] = useState([]);
   const [avaxPools, setAvaxPools] = useState([]);
   const [basePools, setBasePools] = useState([]);
+  const [expired, setisExpired] = useState(false);
+
+  let loyaltyCd = new Date("2024-09-16T12:59:59.000+02:00");
 
 
   const wbsc_address = "0x2170Ed0880ac9A755fd29B2688956BD959F933F8";
@@ -669,30 +682,30 @@ setbasePoolsDyp(sortedActivebase)
       pool: null,
       faqIndex: 6,
     },
-    {
-      title: "What is Dypius Vault?",
-      option: "Vault",
-      pathName: "/earn/dypius",
-      section: "earnFaq",
-      pool: null,
-      faqIndex: 0,
-    },
-    {
-      title: "What is Dypius Bridge?",
-      option: "Bridge",
-      pathName: "/bridge",
-      section: "earnFaq",
-      pool: null,
-      faqIndex: 0,
-    },
-    {
-      title: "Will my lock period reset if I deposit ad...",
-      option: "Farming",
-      pathName: "/earn/dypius",
-      section: "earnFaq",
-      pool: null,
-      faqIndex: 4,
-    },
+    // {
+    //   title: "What is Dypius Vault?",
+    //   option: "Vault",
+    //   pathName: "/earn/dypius",
+    //   section: "earnFaq",
+    //   pool: null,
+    //   faqIndex: 0,
+    // },
+    // {
+    //   title: "What is Dypius Bridge?",
+    //   option: "Bridge",
+    //   pathName: "/bridge",
+    //   section: "earnFaq",
+    //   pool: null,
+    //   faqIndex: 0,
+    // },
+    // {
+    //   title: "Will my lock period reset if I deposit ad...",
+    //   option: "Farming",
+    //   pathName: "/earn/dypius",
+    //   section: "earnFaq",
+    //   pool: null,
+    //   faqIndex: 4,
+    // },
   ];
 
   const fetchPopularNewsData = async () => {
@@ -1040,6 +1053,7 @@ setbasePoolsDyp(sortedActivebase)
           <div className="d-flex flex-column gap-4 justify-content-between">
             <div className="d-flex flex-column flex-md-row m-0 gap-3 justify-content-between">
               {/* <Calculator /> */}
+              <Countdown renderer={renderer} date={loyaltyCd} onComplete={()=>{setisExpired(true)}} />
               <MigrationBanner />
               <div className="d-flex flex-column gap-3 gap-lg-4 justify-content-between dashboard-cards-wrapper">
                 <ExplorerCard />
@@ -1462,10 +1476,12 @@ setbasePoolsDyp(sortedActivebase)
           </div>
           <div className="right-side-wrapper d-flex flex-column flex-md-row flex-xxl-column gap-4">
             <div className="launchpad-section-wrapper d-flex flex-column gap-3 gap-xxl-1">
-              <h6 className="header">World of Dypians</h6>
-              <LaunchpadCard />
+              <h6 className="header">Loyalty Program</h6>
+              <LoyaltyCard  />
             </div>
             <ChainlinkCard />
+            <LaunchpadCard />
+
             <div
               className="faq-items-wrapper d-flex flex-column"
               style={{ gap: "11px" }}
@@ -2586,7 +2602,7 @@ setbasePoolsDyp(sortedActivebase)
         </Modal>
       )}
 
-      {whitelistPopup === true && (
+      {whitelistPopup === true && expired === false && (
         <WhitelistPopup
           open={whitelistPopup}
           onClose={() => {
