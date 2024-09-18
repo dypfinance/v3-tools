@@ -46,13 +46,12 @@ const Games = ({
   const [chain, setChain] = useState("base");
   const [message, setMessage] = useState("");
   const [rewardData, setRewardData] = useState([]);
-  const [rockData, setRockData] = useState([]);
+  // const [rockData, setRockData] = useState([]);
   const [active, setActive] = useState(false);
   const [isActive, setIsActive] = useState();
   const [isActiveIndex, setIsActiveIndex] = useState();
   const [claimingChest, setClaimingChest] = useState(false);
   const [selectedChest, setSelectedChest] = useState(null);
-  const [selectedChest2, setSelectedChest2] = useState();
   const [liverewardData, setLiveRewardData] = useState([]);
 
   const [sparkles, setSparkles] = useState({
@@ -132,16 +131,16 @@ const Games = ({
   //     max: 30,
   //   },
   // ];
-  const handleAddNewRock = (rock) => {
-    const firstTwo = [1, 2];
-    if (rock === 1) {
-      rocksArray = [...rockData, ...firstTwo];
-      setRockData(rocksArray);
-    } else {
-      rocksArray = [...rockData, rock];
-      setRockData(rocksArray);
-    }
-  };
+  // const handleAddNewRock = (rock) => {
+  //   const firstTwo = [1, 2];
+  //   if (rock === 1) {
+  //     rocksArray = [...rockData, ...firstTwo];
+  //     setRockData(rocksArray);
+  //   } else {
+  //     rocksArray = [...rockData, rock];
+  //     setRockData(rocksArray);
+  //   }
+  // };
 
   const showLiveRewardData = (value) => {
     const filteredResult = value;
@@ -470,7 +469,7 @@ const Games = ({
                             selectedChest={selectedChest}
                             isPremium={isPremium}
                             onClaimRewards={(value) => {
-                              handleAddNewRock(value);
+                              // handleAddNewRock(value);
                               setRewardData(value);
                               setLiveRewardData(value);
                               onChestClaimed();
@@ -530,7 +529,7 @@ const Games = ({
                             isPremium={isPremium}
                             onClaimRewards={(value) => {
                               console.log(value);
-                              handleAddNewRock(value);
+                              // handleAddNewRock(value);
 
                               // setLiveRewardData(value);
                               // onChestClaimed();
