@@ -692,6 +692,26 @@
   border: none;
 }
 
+.premiumtext-alert {
+  color: #ed8225;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  width: fit-content;
+}
+
+.syncbtn {
+  border-radius: 10px;
+  background: linear-gradient(90deg, #830e47 0%, #5065c3 100%);
+  padding: 5px 10px;
+  color: #fff;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 500;
+  border: none;
+}
+
 
 .subscribe-container {
   background: #312f69;

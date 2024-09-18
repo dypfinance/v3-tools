@@ -69,7 +69,11 @@ import ResetPassword from "./components/gameAccount/ResetPassword/ResetPassword"
 import PlayerCreation from "./components/gameAccount/PlayerCreation/PlayerCreation";
 import LandingScreen from "./components/gameAccount/LandingScreen/LandingScreen";
 import { useMutation, useQuery } from "@apollo/client";
-import { GENERATE_NONCE, GET_PLAYER, VERIFY_WALLET } from "./functions/Dashboard.schema";
+import {
+  GENERATE_NONCE,
+  GET_PLAYER,
+  VERIFY_WALLET,
+} from "./functions/Dashboard.schema";
 import { ethers } from "ethers";
 
 function App() {
@@ -118,7 +122,7 @@ function App() {
   const [syncStatus, setsyncStatus] = useState("initial");
   const [showSyncModal, setshowSyncModal] = useState(false);
   const [chests, setChests] = useState([]);
-  const [openedChests, setOpenedChests] = useState([])
+  const [openedChests, setOpenedChests] = useState([]);
   const [chestCount, setChestCount] = useState(0);
 
   const showModal = () => {
@@ -139,10 +143,9 @@ function App() {
     }
   };
 
-
   const onChestClaimed = () => {
-    setChestCount(chestCount + 1)
-  }
+    setChestCount(chestCount + 1);
+  };
 
   const fetchAggregatorPools = async () => {
     const result = await axios
@@ -746,74 +749,112 @@ function App() {
   });
 
   const [generateNonce, { loading: loadingGenerateNonce, data: dataNonce }] =
-  useMutation(GENERATE_NONCE);
-const [verifyWallet, { loading: loadingVerify, data: dataVerify }] =
-  useMutation(VERIFY_WALLET);
+    useMutation(GENERATE_NONCE);
+  const [verifyWallet, { loading: loadingVerify, data: dataVerify }] =
+    useMutation(VERIFY_WALLET);
 
   const signWalletPublicAddress = async () => {
-   
-      try {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner(coinbase);
-        const signature = await signer.signMessage(
-          `Signing one-time nonce: ${dataNonce?.generateWalletNonce?.nonce}`
-        );
-        verifyWallet({
-          variables: {
-            publicAddress: coinbase,
-            signature: signature,
-          },
-        }).then(() => {
-          setsyncStatus("success");
-          setTimeout(() => {
-            setshowSyncModal(false);
-            setsyncStatus("initial");
-          }, 1000);
-          refreshSubscription(coinbase);
-
-          // if (isonlink) {
-          //   handleFirstTask(account);
-          // }
-        });
-      } catch (error) {
-        setsyncStatus("error");
+    try {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner(coinbase);
+      const signature = await signer.signMessage(
+        `Signing one-time nonce: ${dataNonce?.generateWalletNonce?.nonce}`
+      );
+      verifyWallet({
+        variables: {
+          publicAddress: coinbase,
+          signature: signature,
+        },
+      }).then(() => {
+        setsyncStatus("success");
         setTimeout(() => {
+          setshowSyncModal(false);
           setsyncStatus("initial");
-        }, 3000);
+        }, 1000);
+        refreshSubscription(coinbase);
 
-        console.log("🚀 ~ file: Dashboard.js:30 ~ getTokens ~ error", error);
-      }
-     
+        // if (isonlink) {
+        //   handleFirstTask(account);
+        // }
+      });
+    } catch (error) {
+      setsyncStatus("error");
+      setTimeout(() => {
+        setsyncStatus("initial");
+      }, 3000);
+
+      console.log("🚀 ~ file: Dashboard.js:30 ~ getTokens ~ error", error);
+    }
   };
 
-
   const getAllChests = async () => {
-    const emailData = { emailAddress: email };
+    let headersList = {
+      Accept: "*/*",
+      "User-Agent": "Thunder Client (https://www.thunderclient.com)",
+      "Content-Type": "application/json",
+    };
 
-    const result = await axios.post(
+    let bodyContent = JSON.stringify({ emailAddress: email });
+
+    let response = await fetch(
       "https://worldofdypiansdailybonus.azurewebsites.net/api/GetRewardsDypius?code=H9zoL4Hdr7fr7rzSZLTzilDT99fgwth006S7bO3J3Ua9AzFucS1HoA%3D%3D",
-      emailData
+      {
+        method: "POST",
+        body: bodyContent,
+        headers: headersList,
+      }
     );
-    if (result.status === 200 && result.data) {
-      console.log(result.data, "chests");
-      setChests(result.data.chestOrder)
-      setOpenedChests(result.data.chestOrder.filter((item) => {
-        return item.isOpened = true
-      }))
+    if (response && response.status === 200) {
+      let data = await response.json();
      
+      setChests(data.chestOrder);
+      let standardChestsArray = [];
+      let premiumChestsArray = [];
+      let openedChests = [];
+      // let openedStandardChests = [];
+      // let openedPremiumChests = [];
+
+      if (data.chestOrder.length > 0) {
+        for (let item = 0; item < data.chestOrder.length; item++) {
+          if (data.chestOrder[item].chestType === "Standard") {
+            if (data.chestOrder[item].isOpened === true) {
+              {
+                openedChests.push(data.chestOrder[item]);
+                // openedStandardChests.push(data.chestOrder[item]);
+              }
+            }
+            standardChestsArray.push(data.chestOrder[item]);
+          } else if (data.chestOrder[item].chestType === "Premium") {
+            if (data.chestOrder[item].isOpened === true) {
+              {
+                openedChests.push(data.chestOrder[item]);
+                // openedPremiumChests.push(data.chestOrder[item]);
+              }
+            }
+            premiumChestsArray.push(data.chestOrder[item]);
+          }
+        }
+        setOpenedChests(openedChests);
+     
+      }
+
+      // setOpenedChests(
+      //   data.chestOrder.filter((item) => {
+      //     return (item.isOpened = true);
+      //   })
+      // );
     }
   };
 
   useEffect(() => {
-   if(email){
-    getAllChests();
-   }
-  }, [email, chestCount])
-  
+    if (email) {
+      getAllChests();
+    }
+  }, [email, chestCount]);
 
-  const onPlayerFetch = ()=>{
+  const onPlayerFetch = () => {
     refetchPlayer();
-  }
+  };
 
   const onLogout = () => {
     logout();
@@ -822,14 +863,13 @@ const [verifyWallet, { loading: loadingVerify, data: dataVerify }] =
     }, 1000);
   };
 
-  const onLinkWallet = async()=>{
+  const onLinkWallet = async () => {
     await generateNonce({
       variables: {
         publicAddress: coinbase,
       },
-    })
-  }
-
+    });
+  };
 
   useEffect(() => {
     if (dataVerify?.verifyWallet) {
@@ -842,7 +882,6 @@ const [verifyWallet, { loading: loadingVerify, data: dataVerify }] =
       signWalletPublicAddress();
     }
   }, [dataNonce]);
-
 
   return (
     <div className={`page_wrapper ${isMinimized ? "minimize" : ""}`}>

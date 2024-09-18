@@ -167,7 +167,7 @@ const NewChestItem = ({
         setTimeout(() => {
           onClaimRewards(result.data);
           setIsChestOpen(true);
-          onChestStatus("initial");
+          // onChestStatus("initial");
           onLoadingChest(false);
           setLoading(false);
           setClaimingChest(false);
@@ -202,7 +202,7 @@ const NewChestItem = ({
         setTimeout(() => {
           onClaimRewards(result.data);
           setIsChestOpen(true);
-          onChestStatus("initial");
+          // onChestStatus("initial");
           onLoadingChest(false);
           setLoading(false);
           setClaimingChest(false);

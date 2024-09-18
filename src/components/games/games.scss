@@ -170,7 +170,7 @@
 }
 
 .reward-title-active {
-  color: #55fffb;
+  color: #55fffb !important;
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -188,7 +188,7 @@
 }
 
 .reward-amount-active {
-  color: #55fffb;
+  color: #55fffb !important;
   font-size: 12px;
   font-style: normal;
   font-weight: 500;
@@ -471,18 +471,25 @@
   display: none;
 }
 
-.new-rewards-item-active {
-  border-radius: 12px;
-  border: 1px solid #55fffb;
-  background: rgba(85, 255, 251, 0.2);
+.new-rewards-item {
+  border-radius: 20px;
+  background: #26264f;
   transition: all 0.25s;
+  border: 1px solid transparent;
+}
+
+.new-rewards-item-active {
+  border-radius: 20px !important;
+  border: 1px solid #55fffb !important;
+  background: rgba(85, 255, 251, 0.2) !important;
+  transition: all 0.25s !important;
 }
 
 .new-rewards-item-active2 {
   border-radius: 12px;
-  border: 1px solid #55fffb;
-  background: #26264f;
-  transition: all 0.25s;
+  border: 1px solid #55fffb !important;
+  background: #26264f !important;
+  transition: all 0.25s !important;
 }
 
 .small-reward-wrapper {
@@ -524,16 +531,11 @@
 
 .small-reward-wrapper-active {
   border-radius: 12px;
-  border: 1px solid #55fffb;
-  background: rgba(85, 255, 251, 0.2);
+  border: 1px solid #55fffb !important;
+  background: rgba(85, 255, 251, 0.2) !important;
 }
 
-.new-rewards-item {
-  border-radius: 20px;
-  background: #26264f;
-  transition: all 0.25s;
-  border: 1px solid transparent;
-}
+
 .new-reward-amount {
   color: #fff;
   font-size: 14px;
@@ -709,7 +711,7 @@
 }
 
 .selected-new-chest {
-  border: 2px solid #00d6be !important;
+  border: 1px solid #00d6be !important;
   background-color: linear-gradient(
     92deg,
     #bb3104 0%,
@@ -718,7 +720,7 @@
     #bb3104 100%
   ) !important;
   .new-claim-chest-btn {
-    border: 2px solid #00d6be !important;
+    border: 1px solid #00d6be !important;
   }
 }
 
@@ -1374,85 +1376,85 @@
   align-items: center;
 }
 
+// .position-1 {
+//   left: -17%;
+//   bottom: 10%;
+// }
+
 .position-1 {
-  left: -17%;
-  bottom: 10%;
+  left: -12%;
+  bottom: 15%;
 }
 
 .position-2 {
-  left: -12%;
+  left: -5%;
   bottom: 15%;
 }
 
 .position-3 {
-  left: -5%;
-  bottom: 15%;
-}
-
-.position-4 {
   left: 1%;
   bottom: 20%;
 }
 
-.position-5 {
+.position-4 {
   left: 6%;
   bottom: 18%;
 }
-.position-6 {
+.position-5 {
   left: -18%;
 }
-.position-7 {
+.position-6 {
   left: -11%;
 }
-.position-8 {
+.position-7 {
   left: -5%;
   bottom: 4%;
 }
 
-.position-9 {
+.position-8 {
   left: 1%;
   bottom: 4%;
 }
-.position-10 {
+.position-9 {
   left: 10%;
 }
-.position-11 {
+.position-10 {
   left: -20%;
   bottom: -12%;
 }
-.position-12 {
+.position-11 {
   left: -12%;
   bottom: -10%;
 }
-.position-13 {
+.position-12 {
   left: -4%;
   bottom: -10%;
 }
-.position-14 {
+.position-13 {
   left: 2%;
   bottom: -10%;
 }
-.position-15 {
+.position-14 {
   left: 11%;
   bottom: -10%;
 }
-.position-16 {
+.position-15 {
   left: -19%;
   bottom: -25%;
 }
-.position-17 {
+.position-16 {
   left: -13%;
   bottom: -25%;
 }
-.position-18 {
+.position-17 {
   left: -5%;
   bottom: -25%;
 }
-.position-19 {
+.position-18 {
   left: 4%;
   bottom: -25%;
 }
-.position-20 {
+.position-19 {
   left: 13%;
   bottom: -25%;
 }
