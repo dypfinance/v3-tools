@@ -60,7 +60,7 @@ const Whitelist = ({
   const [allUserCommitments, setAllUserCommitments] = useState([]);
   let expireDay = new Date("2024-10-02T14:00:00.000+02:00");
 
-  const poolCap = 25000;
+  const poolCap = 20000;
 
   const idyp_pools = [
     "0x41b8a58f4307ea722ad0a964966caa18a6011d93",
@@ -719,7 +719,7 @@ const Whitelist = ({
                         can deposit using Ethereum or BNB Chain and make
                         multiple commitments. The minimum commitment is $100 per
                         transaction, while the total amount you can commit is
-                        $25,000. For BNB Chain, deposits are accepted in USDT,
+                        $20,000. For BNB Chain, deposits are accepted in USDT,
                         while Ethereum allows USDT or USDC.
                       </span>
                       <span className="whitelist-tooltip-content-text">
