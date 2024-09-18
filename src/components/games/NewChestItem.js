@@ -32,7 +32,8 @@ const NewChestItem = ({
   setClaimingChest,
   image,
   coinbase,
-  binanceW3WProvider,isConnected
+  binanceW3WProvider,
+  isConnected,
 }) => {
   const [shake, setShake] = useState(false);
   const [ischestOpen, setIsChestOpen] = useState(false);
@@ -108,7 +109,6 @@ const NewChestItem = ({
           }, 3000);
         });
       if (result && result.status === 200) {
-        
         onClaimRewards(result.data);
         setIsChestOpen(true);
         // onChestStatus("success");
@@ -118,8 +118,6 @@ const NewChestItem = ({
       }
     }
   };
-
- 
 
   const getUserRewardsByChest = async (
     userEmail,
@@ -152,8 +150,6 @@ const NewChestItem = ({
               getUserRewardsByChest2(userEmail, txHash, chestId, chainText);
             }, 2000);
           } else {
-
-            
             onLoadingChest(false);
             setLoading(false);
             setClaimingChest(false);
@@ -167,7 +163,6 @@ const NewChestItem = ({
           }
         });
       if (result && result.status === 200) {
-      
         onCrackStone("success");
         setTimeout(() => {
           onClaimRewards(result.data);
@@ -177,8 +172,6 @@ const NewChestItem = ({
           setLoading(false);
           setClaimingChest(false);
         }, 1000);
-
-        
       }
     } else {
       const result = await axios
@@ -215,7 +208,6 @@ const NewChestItem = ({
           setClaimingChest(false);
         }, 1000);
       }
-      
     }
   };
 
@@ -327,7 +319,7 @@ const NewChestItem = ({
         console.error(e);
         return false;
       });
-      
+
     if (result != 0 && Number(result) / 1e18 >= 0.001) {
       handleOpenChest();
     } else handleApprove();
@@ -410,7 +402,6 @@ const NewChestItem = ({
               chestIndex - 1,
               "base"
             );
-           
           })
           .catch((e) => {
             window.alertify.error(e?.message);
@@ -497,7 +488,6 @@ const NewChestItem = ({
         // handleShowRewards(100, 100);
       } else {
         handleShowRewards(chestId, chestIndex - 1);
-        
       }
     }
   };
@@ -546,7 +536,6 @@ const NewChestItem = ({
     }
   }, [isPremium, rewardTypes]);
 
-
   return (
     <div
       className={`new-chest-item ${open && "new-chest-item-open"}  ${
@@ -571,16 +560,20 @@ const NewChestItem = ({
       style={{ position: "relative", bottom: "5px", filter: item.premium && "blur(5px)" }}
     /> */}
       {rewardTypes !== "premium" ? (
-        <img
-          className={` ${"new-chest-item-img"} ${loading ? "chest-shake" : ""}`}
-          src={require(`./assets/axes/${chestIndex}.png`)}
-          alt=""
-          style={{
-            position: "relative",
-            bottom: "5px",
-            filter: rewardTypes === "premium" && !isPremium && "blur(5px)",
-          }}
-        />
+        
+          <img
+            className={` ${"new-chest-item-img"} ${
+              loading ? "chest-shake" : ""
+            }`}
+            src={require(`./assets/axes/${chestIndex}.png`)}
+            alt=""
+            style={{
+              position: "relative",
+              bottom: "5px",
+              filter: rewardTypes === "premium" && !isPremium && "blur(5px)",
+            }}
+          />
+       
       ) : rewardTypes === "premium" && dummypremiumChests ? (
         <img
           className={`new-chest-item-img ${loading ? "chest-shake" : ""}`}

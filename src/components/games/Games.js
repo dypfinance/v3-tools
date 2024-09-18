@@ -10,6 +10,8 @@ import warning from "./assets/warning.svg";
 import baseLogo from "./assets/baseLogo.svg";
 import stoneCrack from "./assets/stoneCrack.svg";
 import mainChest from "./assets/mainChest.webp";
+import mainChestCracked from "./assets/mainChestCracked.webp";
+
 import kittyDash from "./assets/kittyDash.webp";
 import stoneCrackBanner from "./assets/stoneCrackBanner.png";
 import cawsAdventureBanner from "./assets/cawsAdventureBanner.png";
@@ -181,7 +183,7 @@ const Games = ({
       } else if (resultWon) {
         setMessage("won");
       } else if (resultPoints) {
-        setMessage("points");
+        setMessage("wonPoints");
       }
 
       setLiveRewardData(filteredResult);
@@ -239,7 +241,7 @@ const Games = ({
       } else if (resultWon) {
         setMessage("won");
       } else if (resultPoints) {
-        setMessage("points");
+        setMessage("wonPoints");
       }
       setLiveRewardData(filteredResult);
       setRewardData(filteredResult);
@@ -255,23 +257,22 @@ const Games = ({
         setDisable(true);
       } else if (coinbase && isConnected) {
         if (isPremium) {
-          // if (
-          //   claimedChests + claimedPremiumChests === 20 &&
-          //   rewardData.length === 0 &&
-          //   address.toLowerCase() === coinbase.toLowerCase()
-          // ) {
-          //   setMessage("complete");
-          // } else if (
-          //   claimedChests + claimedPremiumChests < 20 &&
-          //   rewardData.length === 0 &&
-          //   address.toLowerCase() === coinbase.toLowerCase() &&
-          //   (chainId === 56 || chainId === 204)
-          // ) {
-          //   setMessage("");
-          //   setDisable(false);
-          // }
-          // else
           if (
+            openedChests && openedChests.length === 20 &&
+            rewardData.length === 0 &&
+            address.toLowerCase() === coinbase.toLowerCase()
+          ) {
+            setMessage("complete");
+          } else if (
+            openedChests && openedChests.length < 20 &&
+            rewardData.length === 0 &&
+            address.toLowerCase() === coinbase.toLowerCase() &&
+            networkId === 8453
+          ) {
+            setMessage("");
+            setDisable(false);
+          }
+          else  if (
             // claimedChests + claimedPremiumChests < 20 &&
             // rewardData.length === 0 &&
             // address.toLowerCase() === coinbase.toLowerCase() &&
@@ -284,22 +285,22 @@ const Games = ({
             setDisable(false);
           }
         } else if (!isPremium) {
-          // if (
-          //   claimedChests === 10 &&
-          //   rewardData.length === 0 &&
-          //   address.toLowerCase() === coinbase.toLowerCase() &&
-          //   (chainId === 56 || chainId === 204)
-          // ) {
-          //   setMessage("premium");
-          // } else if (
-          //   claimedChests < 10 &&
-          //   rewardData.length === 0 &&
-          //   address.toLowerCase() === coinbase.toLowerCase() &&
-          //   (chainId === 56 || chainId === 204)
-          // ) {
-          //   setMessage("");
-          //   setDisable(false);
-          // } else
+          if (
+            openedChests && openedChests.length === 20 &&
+            rewardData.length === 0 &&
+            address.toLowerCase() === coinbase.toLowerCase() &&
+            networkId === 8453
+          ) {
+            setMessage("complete");
+          } else if (
+            openedChests && openedChests.length < 20 &&
+            rewardData.length === 0 &&
+            address.toLowerCase() === coinbase.toLowerCase() &&
+            networkId === 8453
+          ) {
+            setMessage("");
+            setDisable(false);
+          } else
 
           if (
             // claimedChests < 10 &&
@@ -327,6 +328,7 @@ const Games = ({
     isPremium,
     email,
     isConnected,
+    openedChests
     // claimedChests,
     // claimedPremiumChests,
     // claimedSkaleChests,
@@ -755,7 +757,11 @@ const Games = ({
                       </div>
                     </div>
                   ) : message === "complete" ? (
-                    <div className="d-flex align-items-center justify-content-center complete-bg p-0 p-lg-2 w-100 chest-progress-wrapper">
+                    <div className="d-flex align-items-center justify-content-center complete-bg p-0 p-lg-2 w-100 chest-progress-wrapper"
+                    style={{
+                      border: "1px solid #f2c624",
+                    }}
+                    >
                       <h6 className="completed-text mb-0">Completed</h6>
                     </div>
                   ) : message === "won" ? (
@@ -1009,11 +1015,17 @@ const Games = ({
                       </div>
                     </div>
                   </div>
-                  <img src={mainChest} alt="" className="h-100" />
+                  {openedChests && openedChests.length === 20 ? (
+                    <img src={mainChestCracked} alt="" className="h-100" />
+                  ) : openedChests && openedChests.length < 20 ? (
+                    <img src={mainChest} alt="" className="h-100" />
+                  ) : (
+                    <img src={mainChest} alt="" className="h-100" />
+                  )}
 
                   <div className="position-absolute rocks-wrapper">
                     <div className="d-flex flex-column justify-content-center align-items-center position-relative w-100 h-100">
-                      {[...Array(5)].map((item, index) => {
+                      {[...Array(4)].map((item, index) => {
                         return (
                           <div
                             key={index}
@@ -1025,9 +1037,10 @@ const Games = ({
                            
                           `}
                             style={{
-                              display: rockData.includes(index + 1)
-                                ? "none"
-                                : "block",
+                              display:
+                                chests[index]?.isOpened === true
+                                  ? "none"
+                                  : "block",
                             }}
                           >
                             <img
@@ -1045,17 +1058,18 @@ const Games = ({
                             key={index}
                             className={`rockitem  ${
                               loading === true &&
-                              selectedChest === index + 6 &&
+                              selectedChest === index + 5 &&
                               "chest-pulsate"
-                            } rockitem${index + 6}`}
+                            } rockitem${index + 5}`}
                             style={{
-                              display: rockData.includes(index + 6)
-                                ? "none"
-                                : "",
+                              display:
+                                chests[index + 4]?.isOpened === true
+                                  ? "none"
+                                  : "",
                             }}
                           >
                             <img
-                              src={require(`./assets/rocksBg/${index + 6}.png`)}
+                              src={require(`./assets/rocksBg/${index + 5}.png`)}
                               className="rock-img"
                               alt=""
                             />
@@ -1067,20 +1081,21 @@ const Games = ({
                         return (
                           <div
                             key={index}
-                            className={`rockitem rockitem${index + 11} ${
+                            className={`rockitem rockitem${index + 10} ${
                               loading === true &&
-                              selectedChest === index + 11 &&
+                              selectedChest === index + 10 &&
                               "chest-pulsate"
                             }`}
                             style={{
-                              display: rockData.includes(index + 11)
-                                ? "none"
-                                : "",
+                              display:
+                                chests[index + 9]?.isOpened === true
+                                  ? "none"
+                                  : "",
                             }}
                           >
                             <img
                               src={require(`./assets/rocksBg/${
-                                index + 11
+                                index + 10
                               }.png`)}
                               className="rock-img"
                               alt=""
@@ -1093,20 +1108,21 @@ const Games = ({
                         return (
                           <div
                             key={index}
-                            className={`rockitem rockitem${index + 16} ${
+                            className={`rockitem rockitem${index + 15} ${
                               loading === true &&
-                              selectedChest === index + 16 &&
+                              selectedChest === index + 15 &&
                               "chest-pulsate"
                             }`}
                             style={{
-                              display: rockData.includes(index + 16)
-                                ? "none"
-                                : "",
+                              display:
+                                chests[index + 14]?.isOpened === true
+                                  ? "none"
+                                  : "",
                             }}
                           >
                             <img
                               src={require(`./assets/rocksBg/${
-                                index + 16
+                                index + 15
                               }.png`)}
                               className="rock-img"
                               alt=""
@@ -1125,58 +1141,232 @@ const Games = ({
                 <div className="d-none d-lg-block d-md-block rewards-bottom-wrapper p-1">
                   {windowSize.width > 992 ? (
                     <div className="new-rewards-grid">
-                      <div className="new-rewards-item-active p-2 d-flex align-items-center gap-2">
-                        <img src={pointsIcon} alt="" style={{ width: 48 }} />
+                      <div
+                        className={` ${
+                          rewardData &&
+                          rewardData.rewards?.find((obj) => {
+                            return obj.rewardType === "Points";
+                          }) &&
+                          "new-rewards-item-active"
+                        } new-rewards-item p-2 d-flex align-items-center gap-2`}
+                      >
+                        <img
+                          src={pointsIcon}
+                          alt=""
+                          style={{
+                            width: 48,
+                            filter:
+                              rewardData &&
+                              rewardData.rewards?.find((obj) => {
+                                return obj.rewardType === "Points";
+                              })
+                                ? ""
+                                : "grayscale(1)",
+                          }}
+                        />
                         <div className="d-flex flex-column">
-                          <h6 className="reward-title-active">Points</h6>
-                          <h6 className="reward-amount-active d-flex align-items-center gap-1">
+                          <h6
+                            className={`${
+                              rewardData &&
+                              rewardData.rewards?.find((obj) => {
+                                return obj.rewardType === "Points";
+                              }) &&
+                              "reward-title-active"
+                            } reward-title`}
+                          >
+                            Points
+                          </h6>
+                          <h6
+                            className={` ${
+                              rewardData &&
+                              rewardData.rewards?.find((obj) => {
+                                return obj.rewardType === "Points";
+                              }) &&
+                              "reward-amount-active"
+                            } reward-amount d-flex align-items-center gap-1`}
+                          >
                             1,000-6,000
                           </h6>
                         </div>
                       </div>
-                      <div className="new-rewards-item-active2 p-2 d-flex align-items-center gap-2">
+                      <div
+                        className={`${
+                          rewardData &&
+                          rewardData.rewards?.find((obj) => {
+                            return obj.rewardType === "dypRewards";
+                          }) &&
+                          "new-rewards-item-active2"
+                        } new-rewards-item p-2 d-flex align-items-center gap-2`}
+                      >
                         <div className="h-100 d-flex flex-column justify-content-between w-100">
-                          <h6 className="reward-title-active text-center">
+                          <h6
+                            className={`${
+                              rewardData &&
+                              rewardData.rewards?.find((obj) => {
+                                return obj.rewardType === "dypRewards";
+                              }) &&
+                              "reward-title-active"
+                            } reward-title text-center`}
+                          >
                             DYP Rewards
                           </h6>
                           <div className="d-flex align-items-center gap-1">
-                            <div className="small-reward-wrapper w-100 p-1">
-                              <h6 className="reward-amount text-center">
+                            <div
+                              className={`${
+                                rewardData &&
+                                rewardData.rewards?.find((obj) => {
+                                  return obj.rewardType === "dypRewards";
+                                }) &&
+                                "small-reward-wrapper-active"
+                              } small-reward-wrapper w-100 p-1`}
+                            >
+                              <h6
+                                className={`${
+                                  rewardData &&
+                                  rewardData.rewards?.find((obj) => {
+                                    return obj.rewardType === "dypRewards";
+                                  }) &&
+                                  "reward-amount-active"
+                                } reward-amount text-center`}
+                              >
                                 $0.5-$5
                               </h6>
                             </div>
-                            <div className="small-reward-wrapper-active w-100 p-1">
-                              <h6 className="reward-amount-active text-center">
+                            <div
+                              className={`${
+                                rewardData &&
+                                rewardData.rewards?.find((obj) => {
+                                  return obj.rewardType === "dypRewards";
+                                }) &&
+                                "small-reward-wrapper-active"
+                              } small-reward-wrapper w-100 p-1`}
+                            >
+                              <h6
+                                className={`${
+                                  rewardData &&
+                                  rewardData.rewards?.find((obj) => {
+                                    return obj.rewardType === "dypRewards";
+                                  }) &&
+                                  "reward-amount-active"
+                                } reward-amount text-center`}
+                              >
                                 $20-$300
                               </h6>
                             </div>
                           </div>
                         </div>
                       </div>
-                      <div className="new-rewards-item p-2 d-flex align-items-center gap-2">
+                      <div
+                        className={`${
+                          rewardData &&
+                          rewardData.rewards?.find((obj) => {
+                            return obj.rewardType === "ethRewards";
+                          }) &&
+                          "new-rewards-item-active2"
+                        } new-rewards-item p-2 d-flex align-items-center gap-2`}
+                      >
                         <div className="h-100 d-flex flex-column justify-content-between w-100">
-                          <h6 className="reward-title text-center">
+                          <h6
+                            className={`${
+                              rewardData &&
+                              rewardData.rewards?.find((obj) => {
+                                return obj.rewardType === "ethRewards";
+                              }) &&
+                              "reward-title-active"
+                            } reward-title text-center`}
+                          >
                             ETH Rewards
                           </h6>
                           <div className="d-flex align-items-center gap-1">
-                            <div className="small-reward-wrapper w-100 p-1">
-                              <h6 className="reward-amount text-center">
+                            <div
+                              className={`${
+                                rewardData &&
+                                rewardData.rewards?.find((obj) => {
+                                  return obj.rewardType === "ethRewards";
+                                }) &&
+                                "small-reward-wrapper-active"
+                              } small-reward-wrapper w-100 p-1`}
+                            >
+                              <h6
+                                className={`${
+                                  rewardData &&
+                                  rewardData.rewards?.find((obj) => {
+                                    return obj.rewardType === "ethRewards";
+                                  }) &&
+                                  "reward-amount-active"
+                                } reward-amount text-center`}
+                              >
                                 $0.5-$5
                               </h6>
                             </div>
-                            <div className="small-reward-wrapper w-100 p-1">
-                              <h6 className="reward-amount text-center">
+                            <div
+                              className={`${
+                                rewardData &&
+                                rewardData.rewards?.find((obj) => {
+                                  return obj.rewardType === "ethRewards";
+                                }) &&
+                                "small-reward-wrapper-active"
+                              } small-reward-wrapper w-100 p-1`}
+                            >
+                              <h6
+                                className={`${
+                                  rewardData &&
+                                  rewardData.rewards?.find((obj) => {
+                                    return obj.rewardType === "ethRewards";
+                                  }) &&
+                                  "reward-amount-active"
+                                } reward-amount text-center`}
+                              >
                                 $20-$300
                               </h6>
                             </div>
                           </div>
                         </div>
                       </div>
-                      <div className="new-rewards-item p-2 d-flex align-items-center gap-2">
-                        <img src={gemIcon} alt="" style={{ width: 48 }} />
+                      <div
+                        className={` ${
+                          rewardData &&
+                          rewardData.rewards?.find((obj) => {
+                            return obj.rewardType === "gem";
+                          }) &&
+                          "new-rewards-item-active"
+                        } new-rewards-item p-2 d-flex align-items-center gap-2`}
+                      >
+                        <img
+                          src={gemIcon}
+                          alt=""
+                          style={{
+                            width: 48,
+                            filter:
+                              rewardData &&
+                              rewardData.rewards?.find((obj) => {
+                                return obj.rewardType === "gem";
+                              })
+                                ? ""
+                                : "grayscale(1)",
+                          }}
+                        />
                         <div className="d-flex flex-column">
-                          <h6 className="reward-title">Base Gem</h6>
-                          <h6 className="reward-amount d-flex align-items-center gap-1">
+                          <h6
+                            className={`${
+                              rewardData &&
+                              rewardData.rewards?.find((obj) => {
+                                return obj.rewardType === "gem";
+                              }) &&
+                              "reward-title-active"
+                            } reward-title text-center`}
+                          >
+                            Base Gem
+                          </h6>
+                          <h6
+                            className={`${
+                              rewardData &&
+                              rewardData.rewards?.find((obj) => {
+                                return obj.rewardType === "gem";
+                              }) &&
+                              "reward-amount-active"
+                            } reward-amount d-flex align-items-center gap-1`}
+                          >
                             $500-$2,000
                           </h6>
                         </div>
