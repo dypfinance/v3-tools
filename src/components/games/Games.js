@@ -347,14 +347,18 @@ const Games = ({
       <div className="container-lg p-0">
         <div className="row">
           <div className="col-12 col-lg-4">
-            <div className="games-banner loyalty-game-banner d-flex flex-column  flex-lg-row px-4 py-3 gap-3 gap-lg-0 align-items-start align-items-lg-center mb-4 position-relative">
-              <div className="d-flex flex-column gap-2">
-                <h6 className="migration-banner-title mb-0">Loyalty Program</h6>
-                <p className="games-banner-desc mb-0">
-                  90 days of gas-free transactions
-                </p>
+            <NavLink to="/loyalty-program">
+              <div className="games-banner loyalty-game-banner d-flex flex-column  flex-lg-row px-4 py-3 gap-3 gap-lg-0 align-items-start align-items-lg-center mb-4 position-relative">
+                <div className="d-flex flex-column gap-2">
+                  <h6 className="migration-banner-title mb-0">
+                    Loyalty Program
+                  </h6>
+                  <p className="games-banner-desc mb-0">
+                    90 days of gas-free transactions
+                  </p>
+                </div>
               </div>
-            </div>
+            </NavLink>
           </div>
           <div className="col-12 col-lg-5">
             <div className="games-banner d-flex flex-column flex-lg-row px-4 py-3 gap-3 gap-lg-0 align-items-start align-items-lg-center mb-4 position-relative">

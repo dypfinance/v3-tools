@@ -32,7 +32,7 @@ const NewChestItem = ({
   setClaimingChest,
   image,
   coinbase,
-  binanceW3WProvider,
+  binanceW3WProvider,isConnected
 }) => {
   const [shake, setShake] = useState(false);
   const [ischestOpen, setIsChestOpen] = useState(false);
