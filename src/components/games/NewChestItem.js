@@ -511,17 +511,19 @@ const NewChestItem = ({
       if (audiostart.loop) {
         audiostart.loop = false;
       }
-      audiostart.pause();
+      audiostart.loop = false;
       audiostart.currentTime = 0;
-      audioerror.play();
+      audiostart.pause();
+      audiosuccess.play();
     }
     if (event === "success") {
       if (audiostart.loop) {
         audiostart.loop = false;
       }
-      audiostart.pause();
+     
       audiostart.loop = false;
       audiostart.currentTime = 0;
+      audiostart.pause();
       audiosuccess.play();
     }
   };
