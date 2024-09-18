@@ -2602,7 +2602,7 @@ setbasePoolsDyp(sortedActivebase)
         </Modal>
       )}
 
-      {whitelistPopup === true && expired === false && (
+      {whitelistPopup === true && (
         <WhitelistPopup
           open={whitelistPopup}
           onClose={() => {
