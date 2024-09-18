@@ -52,6 +52,8 @@ const Games = ({
   const [isActiveIndex, setIsActiveIndex] = useState();
   const [claimingChest, setClaimingChest] = useState(false);
   const [selectedChest, setSelectedChest] = useState(null);
+  const [selectedChest2, setSelectedChest2] = useState(null);
+
   const [liverewardData, setLiveRewardData] = useState([]);
 
   const [sparkles, setSparkles] = useState({
@@ -66,8 +68,53 @@ const Games = ({
     kittyDash: false,
     cawsAdventure: false,
   });
+  const [totalPoints, settotalPoints] = useState(0);
+  const [totalUsdETH, settotalUsdETH] = useState(0);
+  const [totalUsdDYP, settotalUsdDYP] = useState(0);
 
   const html = document.querySelector("html");
+
+  const countEarnedRewards = () => {
+    if (openedChests && openedChests.length > 0) {
+      let resultPoints = 0;
+      let resultUsdDYP = 0;
+      let resultUsdETH = 0;
+
+      openedChests.forEach((chest) => {
+        
+        if (chest.isOpened === true && chest.rewards) {
+          if (chest.rewards.length > 1) {
+            chest.rewards.forEach((innerChest) => {
+              if (innerChest.rewardType === "Points") {
+                resultPoints += Number(innerChest.reward);
+              }
+              if (
+                innerChest.rewardType === "MoneyETH" &&
+                innerChest.status === "Claimed"
+              ) {
+                resultUsdETH += Number(innerChest.reward);
+              } else if (
+                innerChest.rewardType === "MoneyDYP" &&
+                innerChest.status === "Claimed"
+              ) {
+                resultUsdDYP += Number(innerChest.reward);
+              }
+            });
+          } else if (chest.rewards.length === 1) {
+            chest.rewards.forEach((innerChest) => {
+              if (innerChest.rewardType === "Points") {
+                resultPoints += Number(innerChest.reward);
+              }
+            });
+          }
+        }
+      });
+
+      settotalPoints(resultPoints);
+      settotalUsdDYP(resultUsdDYP);
+      settotalUsdETH(resultUsdETH);
+    }
+  };
 
   useEffect(() => {
     if (
@@ -82,7 +129,7 @@ const Games = ({
     }
   }, [popups.stoneCrack, popups.kittyDash, popups.cawsAdventure, active]);
 
-  var rocksArray = [];
+ 
   const handleBasePool = async () => {
     await handleSwitchNetworkhook("0x2105")
       .then(() => {
@@ -145,42 +192,18 @@ const Games = ({
   const showLiveRewardData = (value) => {
     const filteredResult = value;
     if (filteredResult && filteredResult.rewards) {
-      const result = filteredResult.rewards.find((obj) => {
-        return (
-          obj.rewardType === "Money" &&
-          obj.status === "Unclaimed" &&
-          obj.claimType === "CAWS"
-        );
+      const resultWonETH = filteredResult.rewards.find((obj) => {
+        return obj.rewardType === "MoneyETH" && obj.status === "Claimed";
       });
-
-      const resultLand = filteredResult.rewards.find((obj) => {
-        return (
-          obj.rewardType === "Money" &&
-          obj.status === "Unclaimed" &&
-          obj.claimType === "LAND"
-        );
-      });
-
-      const resultPremium = filteredResult.rewards.find((obj) => {
-        return (
-          obj.rewardType === "Money" &&
-          obj.status === "Unclaimed" &&
-          obj.claimType === "PREMIUM"
-        );
-      });
-      const resultWon = filteredResult.rewards.find((obj) => {
-        return obj.rewardType === "Money" && obj.status === "Claimed";
+      const resultWonDYP = filteredResult.rewards.find((obj) => {
+        return obj.rewardType === "MoneyDYP" && obj.status === "Claimed";
       });
       const resultPoints = filteredResult.rewards.length === 1;
 
-      if (result) {
-        setMessage("caws");
-      } else if (!result && resultLand) {
-        setMessage("wod");
-      } else if (!result && !resultLand && resultPremium) {
-        setMessage("needPremium");
-      } else if (resultWon) {
-        setMessage("won");
+      if (resultWonETH) {
+        setMessage("woneth");
+      } else if (resultWonDYP) {
+        setMessage("wondyp");
       } else if (resultPoints) {
         setMessage("wonPoints");
       }
@@ -199,49 +222,24 @@ const Games = ({
 
     setIsActive(chestID);
     setIsActiveIndex(chestIndex + 1);
-
+console.log('filteredResult',filteredResult)
     if (filteredResult && filteredResult.rewards) {
-      const result = filteredResult.rewards.find((obj) => {
-        return (
-          obj.rewardType === "Money" &&
-          obj.status === "Unclaimed" &&
-          obj.claimType === "CAWS"
-        );
+      const resultWonETH = filteredResult.rewards.find((obj) => {
+        return obj.rewardType === "MoneyETH" && obj.status === "Claimed";
       });
-
-      const resultLand = filteredResult.rewards.find((obj) => {
-        return (
-          obj.rewardType === "Money" &&
-          obj.status === "Unclaimed" &&
-          obj.claimType === "LAND"
-        );
+      const resultWonDYP = filteredResult.rewards.find((obj) => {
+        return obj.rewardType === "MoneyDYP" && obj.status === "Claimed";
       });
-
-      const resultPremium = filteredResult.rewards.find((obj) => {
-        return (
-          obj.rewardType === "Money" &&
-          obj.status === "Unclaimed" &&
-          obj.claimType === "PREMIUM"
-        );
-      });
-
-      const resultWon = filteredResult.rewards.find((obj) => {
-        return obj.rewardType === "Money" && obj.status === "Claimed";
-      });
-
       const resultPoints = filteredResult.rewards.length === 1;
 
-      if (result) {
-        setMessage("caws");
-      } else if (!result && resultLand) {
-        setMessage("wod");
-      } else if (!result && !resultLand && resultPremium) {
-        setMessage("needPremium");
-      } else if (resultWon) {
-        setMessage("won");
+      if (resultWonETH) {
+        setMessage("woneth");
+      } else if (resultWonDYP) {
+        setMessage("wondyp");
       } else if (resultPoints) {
         setMessage("wonPoints");
       }
+
       setLiveRewardData(filteredResult);
       setRewardData(filteredResult);
     } else {
@@ -251,65 +249,66 @@ const Games = ({
 
   useEffect(() => {
     if (chain === "base") {
-      if (!address && !email) {
+      if (!email) {
         setMessage("login");
         setDisable(true);
       } else if (coinbase && isConnected) {
         if (isPremium) {
           if (
-            openedChests && openedChests.length === 20 &&
+            openedChests &&
+            openedChests.length === 20 &&
             rewardData.length === 0 &&
             address.toLowerCase() === coinbase.toLowerCase()
           ) {
             setMessage("complete");
           } else if (
-            openedChests && openedChests.length < 20 &&
+            openedChests &&
+            openedChests.length < 20 &&
             rewardData.length === 0 &&
             address.toLowerCase() === coinbase.toLowerCase() &&
             networkId === 8453
           ) {
             setMessage("");
             setDisable(false);
-          }
-          else  if (
+          } else if (
             // claimedChests + claimedPremiumChests < 20 &&
-            // rewardData.length === 0 &&
+            rewardData.length === 0 &&
             // address.toLowerCase() === coinbase.toLowerCase() &&
             networkId !== 8453
           ) {
             setMessage("switch");
             setDisable(true);
-          } else {
+          } else if (rewardData.length === 0) {
             setMessage("");
             setDisable(false);
           }
         } else if (!isPremium) {
           if (
-            openedChests && openedChests.length === 20 &&
+            openedChests &&
+            openedChests.length === 20 &&
             rewardData.length === 0 &&
             address.toLowerCase() === coinbase.toLowerCase() &&
             networkId === 8453
           ) {
             setMessage("complete");
           } else if (
-            openedChests && openedChests.length < 20 &&
+            openedChests &&
+            openedChests.length < 20 &&
             rewardData.length === 0 &&
             address.toLowerCase() === coinbase.toLowerCase() &&
             networkId === 8453
           ) {
             setMessage("");
             setDisable(false);
-          } else
-
-          if (
+          } else if (
             // claimedChests < 10 &&
-            // rewardData.length === 0 &&
+            rewardData.length === 0 &&
             // address.toLowerCase() === coinbase.toLowerCase() &&
             networkId !== 8453
           ) {
             setMessage("switch");
             setDisable(true);
-          } else {
+          } else if (rewardData.length === 0) {
             setMessage("");
             setDisable(false);
           }
@@ -327,7 +326,8 @@ const Games = ({
     isPremium,
     email,
     isConnected,
-    openedChests
+    rewardData,
+    openedChests,
     // claimedChests,
     // claimedPremiumChests,
     // claimedSkaleChests,
@@ -340,8 +340,11 @@ const Games = ({
     // claimedMantaPremiumChests,
     // claimedTaikoChests,
     // claimedTaikoPremiumChests,
-    // rewardData,
   ]);
+
+  useEffect(() => {
+    countEarnedRewards();
+  }, [openedChests]);
 
   return (
     <>
@@ -486,12 +489,13 @@ const Games = ({
                               setTimeout(() => {
                                 setSparkles({
                                   show: value,
-                                  position: index + 1,
+                                  position: openedChests.length + 1,
                                 });
                               }, 350);
                               setDisable(value);
                               setloading(value);
                               setSelectedChest(index + 1);
+                              setSelectedChest2(openedChests.length + 1);
                             }}
                             onChestStatus={(val) => {
                               setMessage(val);
@@ -562,7 +566,7 @@ const Games = ({
                             chestId={index + 1}
                             chestIndex={index + 1}
                             open={false}
-                            disableBtn={disable}
+                            disableBtn={true}
                             isActive={isActive}
                             isActiveIndex={isActiveIndex}
                             dummypremiumChests={
@@ -756,14 +760,13 @@ const Games = ({
                       </div>
                     </div>
                   ) : message === "complete" ? (
-                    <div className="d-flex align-items-center justify-content-center complete-bg p-0 p-lg-2 w-100 chest-progress-wrapper"
-                    style={{
-                      border: "1px solid #f2c624",
-                    }}
+                    <div
+                      className="d-flex align-items-center justify-content-center complete-bg p-0 p-lg-2 w-100 chest-progress-wrapper"
+                       
                     >
                       <h6 className="completed-text mb-0">Completed</h6>
                     </div>
-                  ) : message === "won" ? (
+                  ) : message === "woneth" ? (
                     <div className="d-flex align-items-center position-relative flex-column flex-lg-row justify-content-between p-0 p-lg-2 w-100 chest-progress-wrapper">
                       <div
                         className="chain-desc-wrapper w-100 p-2 d-flex flex-column"
@@ -798,7 +801,55 @@ const Games = ({
                             {getFormattedNumber(
                               rewardData.rewards
                                 ? rewardData.rewards.find((obj) => {
-                                    return obj.rewardType === "Money";
+                                    return obj.rewardType === "MoneyETH";
+                                  }).reward
+                                : 0,
+                              2
+                            )}
+                          </h6>
+
+                          <span className="win-amount-desc">Rewards</span>
+                        </div>
+                      </div>
+
+                      <img src={winConfetti} alt="" className="win-confetti" />
+                    </div>
+                  ) : message === "wondyp" ? (
+                    <div className="d-flex align-items-center position-relative flex-column flex-lg-row justify-content-between p-0 p-lg-2 w-100 chest-progress-wrapper">
+                      <div
+                        className="chain-desc-wrapper w-100 p-2 d-flex flex-column"
+                        style={{
+                          filter: "brightness(1)",
+                          position: "relative",
+                        }}
+                      >
+                        <h6 className="win-text mb-0">You Won</h6>
+                      </div>
+                      <div className="d-flex align-items-center gap-2 win-rewards-container">
+                        <div className="d-flex flex-column align-items-center neutral-border p-1">
+                          <h6 className="win-amount mb-0">
+                            {getFormattedNumber(
+                              rewardData.rewards
+                                ? rewardData.rewards.find((obj) => {
+                                    return obj.rewardType === "Points";
+                                  }).reward
+                                : 0,
+                              0
+                            )}
+                          </h6>
+
+                          <span className="win-amount-desc">
+                            Leaderboard Points
+                          </span>
+                        </div>
+                        <h6 className="win-amount mb-0">+</h6>
+                        <div className="d-flex flex-column align-items-center p-1">
+                          <h6 className="win-amount mb-0">
+                            $
+                            {getFormattedNumber(
+                              rewardData.rewards
+                                ? rewardData.rewards.find((obj) => {
+                                    return obj.rewardType === "MoneyDYP";
                                   }).reward
                                 : 0,
                               2
@@ -812,7 +863,10 @@ const Games = ({
                       <img src={winConfetti} alt="" className="win-confetti" />
                     </div>
                   ) : message === "wonPoints" ? (
-                    <div className="d-flex align-items-center position-relative flex-column flex-lg-row justify-content-between p-0 p-lg-2 w-100 chest-progress-wrapper">
+                    <div
+                      className="d-flex align-items-center position-relative flex-column flex-lg-row justify-content-between p-0 p-lg-2 w-100 chest-progress-wrapper"
+                      style={{ border: "1px solid #f2c624" }}
+                    >
                       <div
                         className="chain-desc-wrapper w-100 p-2 d-flex flex-column"
                         style={{
@@ -869,15 +923,14 @@ const Games = ({
                           rewards!
                         </span>
                       </div>
-                      {/* <div className="d-flex align-items-center justify-content-end get-premium-wrapper p-3 p-lg-0">
-                    <NavLink
-                      className="sign-in-btn px-4 py-1"
-                      to="/sign-in"
-                       
-                    >
-                      Sign In
-                    </NavLink>
-                  </div> */}
+                      <div className="d-flex align-items-center justify-content-end get-premium-wrapper p-3 p-lg-0">
+                        <NavLink
+                          className="sign-in-btn px-4 py-1"
+                          to="/account"
+                        >
+                          Sign In
+                        </NavLink>
+                      </div>
                     </div>
                   ) : message === "connect" ? (
                     <div
@@ -902,8 +955,8 @@ const Games = ({
                           Connect wallet
                         </h6>
                         <span className="chain-desc mb-0">
-                          Sign in to access Daily Bonus and earn tailored
-                          rewards!
+                          Connect wallet in order to access Daily Bonus and earn
+                          tailored rewards!
                         </span>
                       </div>
                       <div className="d-flex align-items-center justify-content-end get-premium-wrapper p-3 p-lg-0">
@@ -984,14 +1037,14 @@ const Games = ({
                         className="stonecrack-logo"
                       />
                       <div className="d-flex w-100 flex-row-reverse gap-1">
-                        <div className=" dynamic-width d-flex flex-column align-items-center ">
+                        <div className="col-lg-3 d-flex flex-column align-items-center ">
                           <div className="w-100 points-upper-bg">
                             <h6 className="points-text text-center m-0">
                               Points
                             </h6>
                           </div>
-                          <h6 className="dynamic-width text-center totalpoints-wrapper px-3 totalpoints-value">
-                            12,256,786
+                          <h6 className="w-100 text-center totalpoints-wrapper px-3 totalpoints-value">
+                            {getFormattedNumber(totalPoints, 0)}
                           </h6>
                         </div>
                         <div className="d-flex flex-column align-items-center dynamic-width">
@@ -1003,11 +1056,15 @@ const Games = ({
                           <div className="h-100 d-flex gap-3 align-items-center justify-content-center px-3 usdreward-wrapper dynamic-width">
                             <div className="d-flex flex-column">
                               <h6 className="usdreward-value-crypto">DYP</h6>
-                              <h6 className="usdreward-value">$15.2</h6>
+                              <h6 className="usdreward-value">
+                                ${getFormattedNumber(totalUsdDYP, 2)}
+                              </h6>
                             </div>
                             <div className="d-flex flex-column">
                               <h6 className="usdreward-value-crypto">ETH</h6>
-                              <h6 className="usdreward-value">$15.2</h6>
+                              <h6 className="usdreward-value">
+                                ${getFormattedNumber(totalUsdETH, 2)}
+                              </h6>
                             </div>
                           </div>
                         </div>
@@ -1030,14 +1087,14 @@ const Games = ({
                             key={index}
                             className={`rockitem rockitem${index + 1} ${
                               loading === true &&
-                              selectedChest === index + 1 &&
+                              selectedChest2 === index + 1 &&
                               "chest-pulsate"
                             } 
                            
                           `}
                             style={{
                               display:
-                                chests[index]?.isOpened === true
+                                index + 1 <= openedChests.length
                                   ? "none"
                                   : "block",
                             }}
@@ -1057,14 +1114,12 @@ const Games = ({
                             key={index}
                             className={`rockitem  ${
                               loading === true &&
-                              selectedChest === index + 5 &&
+                              selectedChest2 === index + 5 &&
                               "chest-pulsate"
                             } rockitem${index + 5}`}
                             style={{
                               display:
-                                chests[index + 4]?.isOpened === true
-                                  ? "none"
-                                  : "",
+                                index + 5 <= openedChests.length ? "none" : "",
                             }}
                           >
                             <img
@@ -1082,14 +1137,12 @@ const Games = ({
                             key={index}
                             className={`rockitem rockitem${index + 10} ${
                               loading === true &&
-                              selectedChest === index + 10 &&
+                              selectedChest2 === index + 10 &&
                               "chest-pulsate"
                             }`}
                             style={{
                               display:
-                                chests[index + 9]?.isOpened === true
-                                  ? "none"
-                                  : "",
+                                index + 10 <= openedChests.length ? "none" : "",
                             }}
                           >
                             <img
@@ -1109,14 +1162,12 @@ const Games = ({
                             key={index}
                             className={`rockitem rockitem${index + 15} ${
                               loading === true &&
-                              selectedChest === index + 15 &&
+                              selectedChest2 === index + 15 &&
                               "chest-pulsate"
                             }`}
                             style={{
                               display:
-                                chests[index + 14]?.isOpened === true
-                                  ? "none"
-                                  : "",
+                                index + 15 <= openedChests.length ? "none" : "",
                             }}
                           >
                             <img
@@ -1202,7 +1253,7 @@ const Games = ({
                             className={`${
                               rewardData &&
                               rewardData.rewards?.find((obj) => {
-                                return obj.rewardType === "dypRewards";
+                                return obj.rewardType === "MoneyDYP";
                               }) &&
                               "reward-title-active"
                             } reward-title text-center`}
@@ -1212,9 +1263,16 @@ const Games = ({
                           <div className="d-flex align-items-center gap-1">
                             <div
                               className={`${
+                                rewardData.rewards?.find((obj) => {
+                                  return obj.rewardType === "MoneyDYP";
+                                }) &&
                                 rewardData &&
                                 rewardData.rewards?.find((obj) => {
-                                  return obj.rewardType === "dypRewards";
+                                  return (
+                                    obj.rewardType === "MoneyDYP" &&
+                                    Number(obj.reward) >= 0.5 &&
+                                    Number(obj.reward) <= 5
+                                  );
                                 }) &&
                                 "small-reward-wrapper-active"
                               } small-reward-wrapper w-100 p-1`}
@@ -1223,7 +1281,15 @@ const Games = ({
                                 className={`${
                                   rewardData &&
                                   rewardData.rewards?.find((obj) => {
-                                    return obj.rewardType === "dypRewards";
+                                    return obj.rewardType === "MoneyDYP";
+                                  }) &&
+                                  rewardData &&
+                                  rewardData.rewards?.find((obj) => {
+                                    return (
+                                      obj.rewardType === "MoneyDYP" &&
+                                      Number(obj.reward) >= 0.5 &&
+                                      Number(obj.reward) <= 5
+                                    );
                                   }) &&
                                   "reward-amount-active"
                                 } reward-amount text-center`}
@@ -1235,7 +1301,15 @@ const Games = ({
                               className={`${
                                 rewardData &&
                                 rewardData.rewards?.find((obj) => {
-                                  return obj.rewardType === "dypRewards";
+                                  return obj.rewardType === "MoneyDYP";
+                                }) &&
+                                rewardData &&
+                                rewardData.rewards?.find((obj) => {
+                                  return (
+                                    obj.rewardType === "MoneyDYP" &&
+                                    Number(obj.reward) >= 20 &&
+                                    Number(obj.reward) <= 300
+                                  );
                                 }) &&
                                 "small-reward-wrapper-active"
                               } small-reward-wrapper w-100 p-1`}
@@ -1244,7 +1318,15 @@ const Games = ({
                                 className={`${
                                   rewardData &&
                                   rewardData.rewards?.find((obj) => {
-                                    return obj.rewardType === "dypRewards";
+                                    return obj.rewardType === "MoneyDYP";
+                                  }) &&
+                                  rewardData &&
+                                  rewardData.rewards?.find((obj) => {
+                                    return (
+                                      obj.rewardType === "MoneyDYP" &&
+                                      Number(obj.reward) >= 20 &&
+                                      Number(obj.reward) <= 300
+                                    );
                                   }) &&
                                   "reward-amount-active"
                                 } reward-amount text-center`}
@@ -1259,7 +1341,7 @@ const Games = ({
                         className={`${
                           rewardData &&
                           rewardData.rewards?.find((obj) => {
-                            return obj.rewardType === "ethRewards";
+                            return obj.rewardType === "MoneyETH";
                           }) &&
                           "new-rewards-item-active2"
                         } new-rewards-item p-2 d-flex align-items-center gap-2`}
@@ -1269,7 +1351,7 @@ const Games = ({
                             className={`${
                               rewardData &&
                               rewardData.rewards?.find((obj) => {
-                                return obj.rewardType === "ethRewards";
+                                return obj.rewardType === "MoneyETH";
                               }) &&
                               "reward-title-active"
                             } reward-title text-center`}
@@ -1281,7 +1363,15 @@ const Games = ({
                               className={`${
                                 rewardData &&
                                 rewardData.rewards?.find((obj) => {
-                                  return obj.rewardType === "ethRewards";
+                                  return obj.rewardType === "MoneyETH";
+                                }) &&
+                                rewardData &&
+                                rewardData.rewards?.find((obj) => {
+                                  return (
+                                    obj.rewardType === "MoneyETH" &&
+                                    Number(obj.reward) >= 0.5 &&
+                                    Number(obj.reward) <= 5
+                                  );
                                 }) &&
                                 "small-reward-wrapper-active"
                               } small-reward-wrapper w-100 p-1`}
@@ -1290,7 +1380,15 @@ const Games = ({
                                 className={`${
                                   rewardData &&
                                   rewardData.rewards?.find((obj) => {
-                                    return obj.rewardType === "ethRewards";
+                                    return obj.rewardType === "MoneyETH";
+                                  }) &&
+                                  rewardData &&
+                                  rewardData.rewards?.find((obj) => {
+                                    return (
+                                      obj.rewardType === "MoneyETH" &&
+                                      Number(obj.reward) >= 0.5 &&
+                                      Number(obj.reward) <= 5
+                                    );
                                   }) &&
                                   "reward-amount-active"
                                 } reward-amount text-center`}
@@ -1302,7 +1400,15 @@ const Games = ({
                               className={`${
                                 rewardData &&
                                 rewardData.rewards?.find((obj) => {
-                                  return obj.rewardType === "ethRewards";
+                                  return obj.rewardType === "MoneyETH";
+                                }) &&
+                                rewardData &&
+                                rewardData.rewards?.find((obj) => {
+                                  return (
+                                    obj.rewardType === "MoneyETH" &&
+                                    Number(obj.reward) >= 20 &&
+                                    Number(obj.reward) <= 300
+                                  );
                                 }) &&
                                 "small-reward-wrapper-active"
                               } small-reward-wrapper w-100 p-1`}
@@ -1311,7 +1417,15 @@ const Games = ({
                                 className={`${
                                   rewardData &&
                                   rewardData.rewards?.find((obj) => {
-                                    return obj.rewardType === "ethRewards";
+                                    return obj.rewardType === "MoneyETH";
+                                  }) &&
+                                  rewardData &&
+                                  rewardData.rewards?.find((obj) => {
+                                    return (
+                                      obj.rewardType === "MoneyETH" &&
+                                      Number(obj.reward) >= 20 &&
+                                      Number(obj.reward) <= 300
+                                    );
                                   }) &&
                                   "reward-amount-active"
                                 } reward-amount text-center`}

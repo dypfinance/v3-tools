@@ -1158,13 +1158,13 @@ export default class Subscription extends React.Component {
       <>
         <div>
           <div
-            className={` ${
+            className={` p-0 ${
               this.props.isPremium === true
                 ? "user-cardImg-active-premium"
                 : "user-cardImg"
             }  bordereddiv `}
           >
-            <div className="d-flex align-items-start align-items-lg-0 justify-content-between flex-column flex-lg-row gap-4 gap-lg-0">
+            <div className="d-flex bordereddiv align-items-start align-items-lg-0 justify-content-between flex-column flex-lg-row gap-4 gap-lg-0">
               <div
                 className={`d-flex flex-column ${
                   this.state.showInput ? "gap-5 gap-lg-2" : "gap-2"
@@ -1414,6 +1414,28 @@ export default class Subscription extends React.Component {
                 </div>
               </div>
             </div>
+            {this.props.address &&
+                        this.props.email &&
+                        this.props.coinbase &&
+                        this.props.syncStatus !== "" &&
+                        this.props.address.toLowerCase() !== this.props.coinbase.toLowerCase() && (
+            <div className="bordereddiv border-0 py-2">
+              <div className="d-flex align-items-center gap-2 justify-content-between">
+                <h6 className="premiumtext-alert"> Your gaming account is not linked to the wallet
+                              you connected. To update the game wallet address,
+                              press the synchronize button.</h6>{" "}
+                <button className="d-flex align-items-center justify-content-center gap-1 syncbtn col-1" onClick={this.props.onSyncClick}>
+                  {this.props.syncStatus === "initial"
+                    ? "Synchronize"
+                    : this.props.syncStatus === "loading"
+                    ? "Synchronising..."
+                    : this.props.syncStatus === "success"
+                    ? "Success"
+                    : "Error"}
+                </button>
+              </div>
+            </div>
+  )}
           </div>
           <div className={`bordereddiv border-0`}></div>
           <div className="row mx-0 mt-4 gap-3 gap-lg-0">
