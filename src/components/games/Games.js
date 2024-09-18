@@ -198,10 +198,16 @@ const Games = ({
       const resultWonDYP = filteredResult.rewards.find((obj) => {
         return obj.rewardType === "MoneyDYP" && obj.status === "Claimed";
       });
+
+      const resultWonETHGem = filteredResult.rewards.find((obj) => {
+        return obj.rewardType === "MoneyETH" && obj.status === "Unclaimable";
+      });
       const resultPoints = filteredResult.rewards.length === 1;
 
       if (resultWonETH) {
         setMessage("woneth");
+      } else if (resultWonETHGem) {
+        setMessage("gem");
       } else if (resultWonDYP) {
         setMessage("wondyp");
       } else if (resultPoints) {
@@ -227,6 +233,9 @@ console.log('filteredResult',filteredResult)
       const resultWonETH = filteredResult.rewards.find((obj) => {
         return obj.rewardType === "MoneyETH" && obj.status === "Claimed";
       });
+      const resultWonETHGem = filteredResult.rewards.find((obj) => {
+        return obj.rewardType === "MoneyETH" && obj.status === "Unclaimable";
+      });
       const resultWonDYP = filteredResult.rewards.find((obj) => {
         return obj.rewardType === "MoneyDYP" && obj.status === "Claimed";
       });
@@ -234,6 +243,8 @@ console.log('filteredResult',filteredResult)
 
       if (resultWonETH) {
         setMessage("woneth");
+      } else if (resultWonETHGem) {
+        setMessage("gem");
       } else if (resultWonDYP) {
         setMessage("wondyp");
       } else if (resultPoints) {
