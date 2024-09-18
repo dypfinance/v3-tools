@@ -819,7 +819,7 @@ const Whitelist = ({
                             height: "39px",
                             borderRadius: "0 8px 8px 0",
                           }}
-                          type="number"
+                          type="text"
                           autoComplete="off"
                           name="amount_deposit"
                           id="amount_deposit"
@@ -831,6 +831,8 @@ const Whitelist = ({
                             checkApproval(e.target.value);
                           }}
                           min={100}
+                          maxLength={10}
+                          pattern="[0-9]{4}"
                         />
                         <button
                           className="inner-max-btn position-absolute"
