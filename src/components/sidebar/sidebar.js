@@ -141,6 +141,11 @@ const Sidebar = (props) => {
       icon: "gamesIcon",
       link: "/games",
     },
+    {
+      label: "Loyalty",
+      icon: "loyaltyIcon",
+      link: "/loyalty-program",
+    },
     
     {
       label: "Governance",
@@ -253,7 +258,7 @@ const Sidebar = (props) => {
           <div
             className={`sidebar-container w-100 accordion justify-content-center ${
               activeSidebar ? "align-items-start" : "align-items-center"
-            } d-flex flex-column gap-4`}
+            } d-flex flex-column gap-2`}
             id="accordionExample2"
           >
             {sidebarItems.map((sideItem, index) =>

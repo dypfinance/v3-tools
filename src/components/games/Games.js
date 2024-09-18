@@ -34,9 +34,12 @@ const Games = ({
   isPremium,
   dummypremiumChests,
   bnbImages,
+  onChestClaimed,
   email,
   address,
   userId,
+  chests,
+  openedChests,
 }) => {
   const [chain, setChain] = useState("base");
   const [message, setMessage] = useState("");
@@ -48,6 +51,8 @@ const Games = ({
   const [claimingChest, setClaimingChest] = useState(false);
   const [selectedChest, setSelectedChest] = useState(null);
   const [selectedChest2, setSelectedChest2] = useState();
+  const [liverewardData, setLiveRewardData] = useState([]);
+
   const [sparkles, setSparkles] = useState({
     show: false,
     position: 1,
@@ -133,6 +138,113 @@ const Games = ({
     } else {
       rocksArray = [...rockData, rock];
       setRockData(rocksArray);
+    }
+  };
+
+  const showLiveRewardData = (value) => {
+    const filteredResult = value;
+    if (filteredResult && filteredResult.rewards) {
+      const result = filteredResult.rewards.find((obj) => {
+        return (
+          obj.rewardType === "Money" &&
+          obj.status === "Unclaimed" &&
+          obj.claimType === "CAWS"
+        );
+      });
+
+      const resultLand = filteredResult.rewards.find((obj) => {
+        return (
+          obj.rewardType === "Money" &&
+          obj.status === "Unclaimed" &&
+          obj.claimType === "LAND"
+        );
+      });
+
+      const resultPremium = filteredResult.rewards.find((obj) => {
+        return (
+          obj.rewardType === "Money" &&
+          obj.status === "Unclaimed" &&
+          obj.claimType === "PREMIUM"
+        );
+      });
+      const resultWon = filteredResult.rewards.find((obj) => {
+        return obj.rewardType === "Money" && obj.status === "Claimed";
+      });
+      const resultPoints = filteredResult.rewards.length === 1;
+
+      if (result) {
+        setMessage("caws");
+      } else if (!result && resultLand) {
+        setMessage("wod");
+      } else if (!result && !resultLand && resultPremium) {
+        setMessage("needPremium");
+      } else if (resultWon) {
+        setMessage("won");
+      } else if (resultPoints) {
+        setMessage("points");
+      }
+
+      setLiveRewardData(filteredResult);
+      setRewardData(filteredResult);
+    } else {
+      setLiveRewardData([]);
+    }
+  };
+
+  const showSingleRewardData = (chestID, chestIndex) => {
+    const filteredResult = openedChests.find(
+      (el) => el.chestId === chestID && chests.indexOf(el) === chestIndex
+    );
+
+    setIsActive(chestID);
+    setIsActiveIndex(chestIndex + 1);
+
+    if (filteredResult && filteredResult.rewards) {
+      const result = filteredResult.rewards.find((obj) => {
+        return (
+          obj.rewardType === "Money" &&
+          obj.status === "Unclaimed" &&
+          obj.claimType === "CAWS"
+        );
+      });
+
+      const resultLand = filteredResult.rewards.find((obj) => {
+        return (
+          obj.rewardType === "Money" &&
+          obj.status === "Unclaimed" &&
+          obj.claimType === "LAND"
+        );
+      });
+
+      const resultPremium = filteredResult.rewards.find((obj) => {
+        return (
+          obj.rewardType === "Money" &&
+          obj.status === "Unclaimed" &&
+          obj.claimType === "PREMIUM"
+        );
+      });
+
+      const resultWon = filteredResult.rewards.find((obj) => {
+        return obj.rewardType === "Money" && obj.status === "Claimed";
+      });
+
+      const resultPoints = filteredResult.rewards.length === 1;
+
+      if (result) {
+        setMessage("caws");
+      } else if (!result && resultLand) {
+        setMessage("wod");
+      } else if (!result && !resultLand && resultPremium) {
+        setMessage("needPremium");
+      } else if (resultWon) {
+        setMessage("won");
+      } else if (resultPoints) {
+        setMessage("points");
+      }
+      setLiveRewardData(filteredResult);
+      setRewardData(filteredResult);
+    } else {
+      setLiveRewardData([]);
     }
   };
 
@@ -311,7 +423,11 @@ const Games = ({
             </div>
           </div>
           <div className="col-12 col-lg-3">
-            <div className="games-banner d-flex flex-column flex-lg-row px-4 py-3 gap-3 gap-lg-0 align-items-center mb-4 position-relative">
+            <div
+              className="games-banner d-flex flex-column flex-lg-row px-4 py-3 gap-3 gap-lg-0 align-items-center mb-4 position-relative"
+              onClick={() => setActive(true)}
+              style={{ cursor: "pointer" }}
+            >
               <div className="d-flex align-items-center justify-content-between w-100">
                 <div className="d-flex flex-column gap-2">
                   <h6 className="migration-banner-title mb-0">Leaderboards</h6>
@@ -321,7 +437,6 @@ const Games = ({
                   src={leaderboardsCup}
                   width={50}
                   alt=""
-                  onClick={() => setActive(true)}
                   style={{ cursor: "pointer" }}
                 />
               </div>
@@ -336,65 +451,127 @@ const Games = ({
               <div className="h-100 d-flex flex-column justify-content-between gap-0 gap-lg-3">
                 <div className="chest-wrapper grid-overall-wrapper p-2">
                   <div className="new-chests-grid">
-                    {[...Array(20)].map((item, index) => (
-                      <NewChestItem
-                        coinbase={coinbase}
-                        claimingChest={claimingChest}
-                        setClaimingChest={setClaimingChest}
-                        buyNftPopup={false}
-                        chainId={networkId}
-                        chain={chain}
-                        key={index}
-                        item={item}
-                        isConnected={isConnected}
-                        image={bnbImages[index]}
-                        // openChest={openChest}
-                        selectedChest={selectedChest}
-                        isPremium={isPremium}
-                        onClaimRewards={(value) => {
-                          console.log(value);
-                          handleAddNewRock(value);
+                    {chests.length > 0 ? (
+                      <>
+                        {chests.map((item, index) => (
+                          <NewChestItem
+                            coinbase={coinbase}
+                            claimingChest={claimingChest}
+                            setClaimingChest={setClaimingChest}
+                            buyNftPopup={false}
+                            chainId={networkId}
+                            chain={chain}
+                            key={index}
+                            item={item}
+                            image={bnbImages[index]}
+                            // openChest={openChest}
+                            selectedChest={selectedChest}
+                            isPremium={isPremium}
+                            onClaimRewards={(value) => {
+                              handleAddNewRock(value);
+                              setRewardData(value);
+                              setLiveRewardData(value);
+                              onChestClaimed();
+                              showLiveRewardData(value);
+                              setIsActive(item.chestId);
+                              setIsActiveIndex(index + 1);
+                            }}
+                            handleShowRewards={(value, value2) => {
+                              showSingleRewardData(value, value2);
+                              setIsActive(value);
+                              setIsActiveIndex(index + 1);
+                            }}
+                            onLoadingChest={(value) => {
+                              setTimeout(() => {
+                                setSparkles({
+                                  show: value,
+                                  position: index + 1,
+                                });
+                              }, 350);
+                              setDisable(value);
+                              setloading(value);
+                              setSelectedChest(index + 1);
+                            }}
+                            onChestStatus={(val) => {
+                              setMessage(val);
+                            }}
+                            address={coinbase}
+                            email={email}
+                            rewardTypes={item.chestType?.toLowerCase()}
+                            chestId={item.chestId}
+                            chestIndex={index + 1}
+                            open={item.isOpened}
+                            disableBtn={disable}
+                            isActive={isActive}
+                            isActiveIndex={isActiveIndex}
+                            dummypremiumChests={
+                              dummypremiumChests[index - 10]?.closedImg
+                            }
+                          />
+                        ))}
+                      </>
+                    ) : (
+                      <>
+                        {[...Array(20)].map((item, index) => (
+                          <NewChestItem
+                            coinbase={coinbase}
+                            claimingChest={claimingChest}
+                            setClaimingChest={setClaimingChest}
+                            buyNftPopup={false}
+                            chainId={networkId}
+                            chain={chain}
+                            key={index}
+                            item={item}
+                            image={bnbImages[index]}
+                            // openChest={openChest}
+                            selectedChest={selectedChest}
+                            isPremium={isPremium}
+                            onClaimRewards={(value) => {
+                              console.log(value);
+                              handleAddNewRock(value);
 
-                          // setLiveRewardData(value);
-                          // onChestClaimed();
-                          // showLiveRewardData(value);
-                          // setIsActive(item.chestId);
-                          // setIsActiveIndex(index + 1);
-                        }}
-                        //   handleShowRewards={(value, value2) => {
-                        //     showSingleRewardData(value, value2);
-                        //     setIsActive(value);
-                        //     setIsActiveIndex(index + 1);
-                        //   }}
-                        onLoadingChest={(value) => {
-                          setTimeout(() => {
-                            setSparkles({
-                              show: value,
-                              position: index + 1,
-                            });
-                          }, 350);
-                          setDisable(value);
-                          setloading(value);
-                          setSelectedChest(index + 1);
-                        }}
-                        onChestStatus={(val) => {
-                          setMessage(val);
-                        }}
-                        address={coinbase}
-                        email={"email"}
-                        rewardTypes={"standard"}
-                        chestId={index + 1}
-                        chestIndex={index + 1}
-                        open={false}
-                        disableBtn={disable}
-                        isActive={isActive}
-                        isActiveIndex={isActiveIndex}
-                        dummypremiumChests={
-                          dummypremiumChests[index - 10]?.closedImg
-                        }
-                        //   binanceW3WProvider={binanceW3WProvider}
-                      />
-                    ))}
+                              // setLiveRewardData(value);
+                              // onChestClaimed();
+                              // showLiveRewardData(value);
+                              // setIsActive(item.chestId);
+                              // setIsActiveIndex(index + 1);
+                            }}
+                            //   handleShowRewards={(value, value2) => {
+                            //     showSingleRewardData(value, value2);
+                            //     setIsActive(value);
+                            //     setIsActiveIndex(index + 1);
+                            //   }}
+                            onLoadingChest={(value) => {
+                              setTimeout(() => {
+                                setSparkles({
+                                  show: value,
+                                  position: index + 1,
+                                });
+                              }, 350);
+                              setDisable(value);
+                              setloading(value);
+                              setSelectedChest(index + 1);
+                            }}
+                            onChestStatus={(val) => {
+                              setMessage(val);
+                            }}
+                            address={coinbase}
+                            email={"email"}
+                            rewardTypes={"standard"}
+                            chestId={index + 1}
+                            chestIndex={index + 1}
+                            open={false}
+                            disableBtn={disable}
+                            isActive={isActive}
+                            isActiveIndex={isActiveIndex}
+                            dummypremiumChests={
+                              dummypremiumChests[index - 10]?.closedImg
+                            }
+                            //   binanceW3WProvider={binanceW3WProvider}
+                          />
+                        ))}
+                      </>
+                    )}
                   </div>
                 </div>
 
