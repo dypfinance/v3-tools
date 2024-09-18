@@ -105,10 +105,10 @@ const Whitelist = ({
         return 0;
       });
 
-      if(result && result.status === 200) {
-        const total = result.data.total
-        settotalCommitmentValue(total)
-      }
+    if (result && result.status === 200) {
+      const total = result.data.total;
+      settotalCommitmentValue(total);
+    }
   };
 
   const requirements = [
@@ -635,9 +635,9 @@ const Whitelist = ({
     }
   }, [userPools]);
 
-  useEffect(()=>{
-    getTotalCommitment()
-  },[])
+  useEffect(() => {
+    getTotalCommitment();
+  }, []);
 
   return (
     <div className="container-lg p-0">
@@ -646,17 +646,27 @@ const Whitelist = ({
           <div className="d-flex flex-column gap-3">
             <h6 className="migration-banner-title mb-0">WOD Token Whitelist</h6>
             <p className="migration-banner-desc mb-0">
-              WOD Token Whitelist grants early access to our exclusive token
-              sale. Join now to secure your spot and be among the first to
-              unlock unique benefits within the World of Dypians ecosystem.
+              Join now to secure your spot and be among the first to unlock
+              unique benefits within the World of Dypians ecosystem.
             </p>
+            <a
+              href="https://www.worldofdypians.com/tokenomics"
+              target="_blank"
+              rel="noreferrer"
+              className="btn filledbtn"
+              style={{width: 'fit-content'}}
+            >
+              Tokenomics
+            </a>
           </div>
         </div>
         <div className="col-12 col-lg-4 d-flex justify-content-center justify-content-lg-end">
           <div className="position-relative d-flex align-items-center flex-column">
             <div className="commiting-wrapper p-3">
               <div className="d-flex flex-column gap-2">
-                <span className="commiting-amount">${getFormattedNumber(totalCommitmentValue)}</span>
+                <span className="commiting-amount">
+                  ${getFormattedNumber(totalCommitmentValue)}
+                </span>
                 <span className="migration-status-text-2">
                   Total Committed Value
                 </span>
@@ -679,7 +689,25 @@ const Whitelist = ({
           <h6 className="mb-0 whitelist-info-title">$42,500,000</h6>
         </div>
         <div className="whitelist-info-item p-3 d-flex flex-column gap-1 align-items-start">
-          <span className="whitelist-info-span">Cliff/Vesting Period</span>
+          <span className="whitelist-info-span d-flex align-items-center justify-content-between w-100">
+            Cliff/Vesting Period
+            <Tooltip
+              title={
+                <>
+                  <div className="d-flex flex-column gap-2">
+                    <span className="whitelist-tooltip-content-text">
+                      6% TGE unlock, followed by 3 months cliff and 16 months of
+                      linear vesting
+                    </span>
+                  </div>
+                </>
+              }
+              enterDelay={0}
+              leaveDelay={0}
+            >
+              <img src={tooltipIcon} alt="" />
+            </Tooltip>{" "}
+          </span>
           <h6 className="mb-0 whitelist-info-title">3/16 Months</h6>
         </div>
         <div className="whitelist-info-item p-3 d-flex flex-column gap-1 align-items-start">
