@@ -562,6 +562,8 @@ class App extends React.Component {
   getAllBalance = async () => {
     const tokenAddress = window.config.token_dypius_new_address;
     const tokenAddress_bsc = window.config.token_dypius_new_bsc_address;
+    const tokenAddress_base = window.config.reward_token_dypiusv2_base_address;
+
     const walletAddress = this.state.coinbase;
     const TokenABI = window.ERC20_ABI;
 
@@ -577,6 +579,11 @@ class App extends React.Component {
       const contract3 = new window.bscWeb3.eth.Contract(
         TokenABI,
         tokenAddress_bsc
+      );
+
+      const contract4 = new window.baseWeb3.eth.Contract(
+        TokenABI,
+        tokenAddress_base
       );
 
       const contract1_idyp = new window.infuraWeb3.eth.Contract(
@@ -634,6 +641,21 @@ class App extends React.Component {
           return 0;
         });
 
+        let baseBalance = await contract4.methods
+        .balanceOf(walletAddress)
+        .call()
+        .then((data) => {
+          let depositedTokens = new window.BigNumber(data)
+            .div(1e18)
+            .toString(10);
+          return depositedTokens;
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+
+
       let avaxBalance_idyp = await contract2_idyp.methods
         .balanceOf(walletAddress)
         .call()
@@ -681,7 +703,8 @@ class App extends React.Component {
       if (
         (ethBalance !== undefined && ethBalance > 0) ||
         (bnbBalance !== undefined && bnbBalance > 0) ||
-        (avaxBalance !== undefined && avaxBalance > 0)
+        (avaxBalance !== undefined && avaxBalance > 0||
+          (baseBalance !== undefined && baseBalance > 0))
       ) {
         this.setState({ hasDypBalance: true });
       } else {

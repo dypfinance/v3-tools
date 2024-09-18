@@ -732,7 +732,7 @@ const Whitelist = ({
                   </>
                 }
                 enterDelay={0}
-                leaveDelay={2000}
+                leaveDelay={0}
               >
                 <img src={tooltipIcon} alt="" />
               </Tooltip>
@@ -1018,7 +1018,7 @@ const Whitelist = ({
                     </>
                   }
                   enterDelay={0}
-                  leaveDelay={2000}
+                  leaveDelay={0}
                 >
                   <img src={tooltipIcon} alt="" />
                 </Tooltip>
@@ -1105,7 +1105,7 @@ const Whitelist = ({
                     </>
                   }
                   enterDelay={0}
-                  leaveDelay={2000}
+                  leaveDelay={0}
                 >
                   <img src={tooltipIcon} alt="" />
                 </Tooltip>
