@@ -2290,7 +2290,7 @@ window.config = {
   subscription_skale_address: "0x6041dC62b74e28596b4917693f6B0F5baA61A13F",
 
   commitment_address: "0x6f532f3e73286958f161bc8ba2ff041826515247",
-  commitment_eth_address: "0xA2EE6F7BE940167E27EB427B274021c062F8f022",
+  commitment_eth_address: "0x6f033fa97a5ac6468fec3afe6f069cf60295b3d0",
 
   ZERO_ADDRESS: "0x0000000000000000000000000000000000000000",
   MAX_LOCKS_TO_LOAD_PER_CALL: 10,
