@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import PropTypes from "prop-types";
 import { isMobile } from "react-device-detect";
-import { NavLink, useHistory } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import calculator from "./assets/calculator.svg";
 import getFormattedNumber from "../../functions/getFormattedNumber2";
 import ethStakeActive from "../../assets/earnAssets/ethStakeActive.svg";
@@ -400,7 +400,6 @@ const Calculator = ({ earnClass, onClose, ref }) => {
   const handleInputUSD = (e) => {
     setUsdToDeposit(e.slice(0, 7));
   };
-  let navigate = useHistory();
  
   const [chainState, setchainState] = useState("eth");
   const [activePill, setActivePill] = useState(pillsNames[0]);

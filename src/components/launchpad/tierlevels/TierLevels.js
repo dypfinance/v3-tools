@@ -1,5 +1,8 @@
 import React from "react";
 import "./tierlevels.css";
+import '../launchpad.css'
+import '../launchpadhero/launchpadhero.css'
+
 import stakingIcon from "../assets/stakingIcon.svg";
 import dypLogo from "../../top-pools-card/assets/dyplogo.svg";
 import timerIcon from "../assets/timerIcon.svg";
