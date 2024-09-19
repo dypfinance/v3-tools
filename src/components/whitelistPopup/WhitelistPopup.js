@@ -7,6 +7,7 @@ import loyaltyPopupBanner from "./loyaltyPopupBanner.png";
 import "./whitelist.css";
 import OutsideClickHandler from "react-outside-click-handler";
 import '../LandPopup/landpopup.css'
+import { NavLink } from "react-router-dom";
 
 const WhitelistPopup = ({ open, onClose }) => {
   const style2 = {

@@ -13,7 +13,7 @@ import arrowup from "./assets/arrow-up.svg";
 import moreinfo from "./assets/more-info.svg";
 import wallet from "./assets/wallet.svg";
 import Tooltip from "@material-ui/core/Tooltip";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { shortAddress } from "../../functions/shortAddress";
 import xMark from "../calculator/assets/xMark.svg";
 import weth from "./assets/weth.svg";
@@ -60,7 +60,7 @@ const LandDetailsPremium = ({
 
   const [hide, setHide] = useState("");
   const windowSize = useWindowSize();
-  const navigate = useHistory();
+  const navigate = useNavigate();
 
   const checkApproval = async () => {
     const address = coinbase;
