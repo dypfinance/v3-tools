@@ -415,7 +415,7 @@ export default class Subscription extends React.Component {
       .send({ from: await window.getCoinbase() })
       .then(() => {
         this.setState({ loadspinnerSub: false, approveStatus: "success" });
-        this.props.onSubscribe();
+        this.props.onSubscribe(this.props.coinbase);
         this.handleUpdatePremiumUser();
         window.location.href = "https://app.dypius.com/account";
       })

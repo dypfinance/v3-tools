@@ -50,10 +50,11 @@
 }
 
 .container {
-  padding: 50px 60px 32px;
+  padding: 45px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  height: 100%;
+  gap: 23px;
 }
 
 .containerbnb {

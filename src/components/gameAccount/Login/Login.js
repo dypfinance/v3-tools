@@ -69,9 +69,7 @@ function Login({onSuccessLogin}) {
     return (
       <div className={classes.container}>
         <Input
-          style={{
-            marginBottom: 24,
-          }}
+         
           placeHolder="Verify"
           value={verifyCode}
           onChange={setVerifyCode}
@@ -89,19 +87,14 @@ function Login({onSuccessLogin}) {
 
   return (
     <div className={classes.container}>
-      <Input
-        style={{
-          marginBottom: 24,
-        }}
+      <Input 
         placeHolder="Email"
         value={username}
         onChange={setUserName}
         inputType="email"
       />
       <Input
-        style={{
-          marginBottom: 48,
-        }}
+         
         inputType="password"
         placeHolder="Password"
         value={password}
@@ -109,7 +102,6 @@ function Login({onSuccessLogin}) {
       />
       <Button
         disabled={disabled}
-        style={{ margin: "auto" }}
         onPress={login}
         loading={isLoginIn}
         title={"Login"}
