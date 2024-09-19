@@ -56,6 +56,7 @@ const Games = ({
   const [claimingChest, setClaimingChest] = useState(false);
   const [selectedChest, setSelectedChest] = useState(null);
   const [selectedChest2, setSelectedChest2] = useState(null);
+  const [openChestIds, setopenChestIds] = useState([]);
 
   const [liverewardData, setLiveRewardData] = useState([]);
 
@@ -158,7 +159,7 @@ const Games = ({
       audiostart.loop = false;
       audiostart.currentTime = 0;
       audiostart.pause();
-      audiosuccess.play();
+      audioerror.play();
     }
     if (event === "success") {
       if (audiostart.loop) {
@@ -174,22 +175,21 @@ const Games = ({
 
   const windowSize = useWindowSize();
 
-  const getRandomNumber = () => {
-    const result = Math.floor(Math.random() * 19) + 1;
-    return result;
-  };
+  // const getRandomNumber = () => {
+  //   const result = Math.floor(Math.random() * 19) + 1;
+  //   return result;
+  // };
 
-  const getRandomUniqueNumbers = (count) => {
-    const numbers = Array.from({ length: 19 }, (_, i) => i + 1);
+  // const getRandomUniqueNumbers = (count) => {
+  //   const numbers = Array.from({ length: 19 }, (_, i) => i + 1);
 
-    for (let i = numbers.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
-    }
+  //   for (let i = numbers.length - 1; i > 0; i--) {
+  //     const j = Math.floor(Math.random() * (i + 1));
+  //     [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
+  //   }
 
-    console.log(numbers.slice(0, count));
-    return numbers.slice(0, count);
-  };
+  //   return numbers.slice(0, count);
+  // };
 
   const showLiveRewardData = (value) => {
     const filteredResult = value;
@@ -259,6 +259,23 @@ const Games = ({
       setLiveRewardData([]);
     }
   };
+
+  const randomOpenedChests = [
+    2, 4, 18, 12, 19, 5, 16, 6, 1, 15, 17, 3, 7, 9, 14, 11, 13, 8, 10
+  ];
+
+  const getIds = () => {
+    if (openedChests && openedChests.length > 0) {
+      let arrayFiltered = [];
+      window.range(0, 19).map((item, index) => {
+        if (chests[index].isOpened === true) {
+          arrayFiltered.push(randomOpenedChests[index]);
+        }
+      });
+      setopenChestIds(arrayFiltered);
+    }
+  };
+  // console.log(selectedChest2);
 
   useEffect(() => {
     if (chain === "base") {
@@ -366,6 +383,7 @@ const Games = ({
 
   useEffect(() => {
     countEarnedRewards();
+    getIds();
   }, [openedChests]);
 
   // useEffect(() => {
@@ -373,12 +391,6 @@ const Games = ({
   //   dataFetchedRef.current = true;
   //   getRandomNumber();
   // }, []);
-
-  const randomOpenedChests = [
-    2, 4, 18, 12, 19, 5, 16, 6, 1, 15, 17, 3, 7, 9, 14, 11, 13, 8, 10,
-  ];
-
- 
 
   return (
     <>
@@ -523,14 +535,40 @@ const Games = ({
                               setTimeout(() => {
                                 setSparkles({
                                   show: value,
-                                  position: randomOpenedChests.slice(openedChests.length, 19)[20-index - randomOpenedChests.slice(openedChests.length, 19).length],
+                                  position:  randomOpenedChests[
+                                    index === 19 && openedChests.length === 19
+                                      ? index
+                                      : index !== 19 && openedChests.length === 19
+                                      ? index
+                                      : index === 19 && openedChests.length < 19
+                                      ? chests.indexOf(
+                                          chests.find((item) => {
+                                            return item.isOpened === false;
+                                          })
+                                        )
+                                      : index
+                                  ]
                                 });
                               }, 350);
                               setDisable(value);
                               setloading(value);
                               setSelectedChest(index + 1);
-                              console.log(randomOpenedChests.slice(openedChests.length, 19)[20-index - randomOpenedChests.slice(openedChests.length, 19)], 20-index - randomOpenedChests.slice(openedChests.length, 19).length)
-                              setSelectedChest2(randomOpenedChests.slice(openedChests.length, 19)[20-index - randomOpenedChests.slice(openedChests.length, 19).length]);
+
+                              setSelectedChest2(
+                                randomOpenedChests[
+                                  index === 19 && openedChests.length === 19
+                                    ? index
+                                    : index !== 19 && openedChests.length === 19
+                                    ? index
+                                    : index === 19 && openedChests.length < 19
+                                    ? chests.indexOf(
+                                        chests.find((item) => {
+                                          return item.isOpened === false;
+                                        })
+                                      )
+                                    : index
+                                ]
+                              );
                             }}
                             onChestStatus={(val) => {
                               setMessage(val);
@@ -1232,9 +1270,7 @@ const Games = ({
                            
                           `}
                             style={{
-                              display: randomOpenedChests
-                                .slice(0, openedChests.length)
-                                .includes(index + 1)
+                              display: openChestIds.includes(index + 1)
                                 ? "none"
                                 : "block",
                             }}
@@ -1258,9 +1294,7 @@ const Games = ({
                               "chest-pulsate"
                             } rockitem${index + 5}`}
                             style={{
-                              display: randomOpenedChests
-                                .slice(0, openedChests.length)
-                                .includes(index + 5)
+                              display: openChestIds.includes(index + 5)
                                 ? "none"
                                 : "",
                               // index + 5 <= openedChests.length ? "none" : "",
@@ -1285,9 +1319,7 @@ const Games = ({
                               "chest-pulsate"
                             }`}
                             style={{
-                              display: randomOpenedChests
-                                .slice(0, openedChests.length)
-                                .includes(index + 10)
+                              display: openChestIds.includes(index + 10)
                                 ? "none"
                                 : "",
                               // index + 10 <= openedChests.length ? "none" : "",
@@ -1314,8 +1346,7 @@ const Games = ({
                               "chest-pulsate"
                             }`}
                             style={{
-                              display: randomOpenedChests
-                                .slice(0, openedChests.length).includes(index + 15)
+                              display: openChestIds.includes(index + 15)
                                 ? "none"
                                 : "",
                               // display:
