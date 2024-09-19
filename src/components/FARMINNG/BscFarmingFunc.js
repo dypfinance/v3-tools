@@ -298,13 +298,14 @@ const BscFarmingFunc = ({
     let web3 = window.bscWeb3;
 
     let pair = new web3.eth.Contract(PAIR_ABI, pair_token_address);
-    let totalSupply = await pair.methods.totalSupply().call();
-    let reserves = await pair.methods.getReserves().call();
+    let totalSupply = await pair.methods.totalSupply().call().catch((e)=>{console.error(e); return 0})
+    let reserves = await pair.methods.getReserves().call().catch((e)=>{console.error(e); return 0})
     let amountlpContract = await pair.methods
       .balanceOf(constant._address)
       .call()
       .catch((e) => {
         console.error(e);
+        return 0
       });
 
     let maxETH = reserves[0];
@@ -631,7 +632,7 @@ const BscFarmingFunc = ({
   };
 
   const handleWithdrawDyp = async () => {
-    let amountConstant = await staking.depositedTokens(coinbase);
+    let amountConstant = await staking.depositedTokens(coinbase).catch((e)=>{console.error(e); return 0});
     amountConstant = new BigNumber(amountConstant).toFixed(0);
     setWithdrawLoading(true);
 
@@ -955,7 +956,7 @@ const BscFarmingFunc = ({
 
     let address = coinbase;
 
-    let amount = await staking.getPendingDivs(address);
+    let amount = await staking.getPendingDivs(address).catch((e)=>{console.error(e); return 0});
 
     let claimdivs2 = new BigNumber(amount)
       .times(100 - window.config.slippage_tolerance_percent_liquidity)
@@ -1135,7 +1136,7 @@ const BscFarmingFunc = ({
   };
 
   const refreshBalance = async () => {
-    let coinbase = coinbase2;
+    let coinbase = coinbase2 === null ? window.coinbase_address : coinbase2;
 
     let lp_data = the_graph_result.lp_data;
 
@@ -1157,27 +1158,26 @@ const BscFarmingFunc = ({
       ];
       let _amountOutMin = await router.methods
         .getAmountsOut(amount, path)
-        .call();
+        .call().catch((e)=>{console.error(e); return 0});
       _amountOutMin = _amountOutMin[_amountOutMin.length - 1];
       _amountOutMin = new BigNumber(_amountOutMin).div(1e18).toFixed(18);
+    
+      let _bal = token.balanceOf(coinbase).catch((e)=>{console.error(e); return 0});
+      let _rBal = reward_token.balanceOf(coinbase).catch((e)=>{console.error(e); return 0});
+      let _pDivs = constant.getPendingDivs(coinbase).catch((e)=>{console.error(e); return 0});
 
-      let _bal = token.balanceOf(coinbase);
-      let _rBal = reward_token.balanceOf(coinbase);
+      let _pDivsEth = constant.getPendingDivsEth(coinbase).catch((e)=>{console.error(e); return 0});
+  
 
-      let _pDivs = constant.getPendingDivs(coinbase);
+      let _tEarned = constant.totalEarnedTokens(coinbase).catch((e)=>{console.error(e); return 0});
 
-      let _pDivsEth = constant.getPendingDivsEth(coinbase);
-      console.log(_pDivsEth);
+      let _tEarnedEth = constant.totalEarnedEth(coinbase).catch((e)=>{console.error(e); return 0});
 
-      let _tEarned = constant.totalEarnedTokens(coinbase);
+      let _stakingTime = constant.depositTime(coinbase).catch((e)=>{console.error(e); return 0});
 
-      let _tEarnedEth = constant.totalEarnedEth(coinbase);
+      let _dTokens = constant.depositedTokens(coinbase).catch((e)=>{console.error(e); return 0});
 
-      let _stakingTime = constant.depositTime(coinbase);
-
-      let _dTokens = constant.depositedTokens(coinbase);
-
-      let _lClaimTime = constant.lastClaimedTime(coinbase);
+      let _lClaimTime = constant.lastClaimedTime(coinbase).catch((e)=>{console.error(e); return 0});
 
       let _tvl = token.balanceOf(constant._address);
 
@@ -1185,25 +1185,25 @@ const BscFarmingFunc = ({
 
       let _tvlConstantiDYP = reward_token_idyp.balanceOf(
         constant._address
-      ); /* TVL of iDYP on Staking */
+      ).catch((e)=>{console.error(e); return 0}); /* TVL of iDYP on Staking */
 
       let _tvlConstantDYP = reward_token.balanceOf(
         constant._address
-      ); /* TVL of iDYP on Staking */
+      ).catch((e)=>{console.error(e); return 0}); /* TVL of iDYP on Staking */
 
       let _tvliDYP = reward_token_idyp.balanceOf(
         constant._address
-      ); /* TVL of iDYP on Farming */
+      ).catch((e)=>{console.error(e); return 0}); /* TVL of iDYP on Farming */
 
-      let _dTokensDYP = staking.depositedTokens(coinbase);
-      let _rewardsPendingClaim = staking.getPendingDivs(coinbase);
+      let _dTokensDYP = staking.depositedTokens(coinbase).catch((e)=>{console.error(e); return 0});
+      let _rewardsPendingClaim = staking.getPendingDivs(coinbase).catch((e)=>{console.error(e); return 0});
 
       // let _pendingDivsStaking = constant.getTotalPendingDivs(coinbase);
 
       //Take DYPS Balance
       let _tvlDYPS = token_dypsbsc.balanceOf(
         constant._address
-      ); /* TVL of DYPS */
+      ).catch((e)=>{console.error(e); return 0}); /* TVL of DYPS */
 
       let [
         token_balance2,
@@ -1545,7 +1545,6 @@ const BscFarmingFunc = ({
     if (coinbase !== coinbase2 && chainId === "56") {
       setCoinbase2(coinbase);
       getTotalLP();
-      getLPTokens();
       console.log(wbnbPrice, "wbnbprice");
     }
     fetchDypPrice();
@@ -1555,6 +1554,8 @@ const BscFarmingFunc = ({
   useEffect(() => {
     if (coinbase && isConnected) {
       setCoinbase2(coinbase);
+      getLPTokens();
+
     }
   }, [coinbase, isConnected]);
 
@@ -2169,7 +2170,7 @@ const BscFarmingFunc = ({
                             <img
                               src={require(`./assets/bsc/${selectedRewardTokenLogo1.toLowerCase()}.svg`)}
                               alt=""
-                              style={{ width: 14, height: 14 }}
+                              style={{ width: 13, height: 13 }}
                             />
                             {selectedRewardTokenLogo1.toUpperCase()}
                             <img
@@ -2676,7 +2677,7 @@ const BscFarmingFunc = ({
                                 <img
                                   src={require(`./assets/bsc/${selectedRewardTokenLogo1.toLowerCase()}.svg`)}
                                   alt=""
-                                  style={{ width: 14, height: 14 }}
+                                  style={{ width: 15, height: 15 }}
                                 />
                                 {selectedRewardTokenLogo1.toUpperCase()}
                                 <img

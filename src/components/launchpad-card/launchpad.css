@@ -37,7 +37,7 @@
   }
 }
 
-.whitelist-days-left{
+/* .whitelist-days-left{
   border-radius: 5px;
   opacity: 0.8;
   background: #14142A;
@@ -45,7 +45,7 @@
   position: absolute;
   right: 8px;
    top: 8px;
-}
+} */
 
 .whitelist-days-left-span{
   color: #4ED5D2 !important;
