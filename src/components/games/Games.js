@@ -523,14 +523,14 @@ const Games = ({
                               setTimeout(() => {
                                 setSparkles({
                                   show: value,
-                                  position: randomOpenedChests.slice(openedChests.length, 19)[index - randomOpenedChests.slice(openedChests.length, 19).length],
+                                  position: randomOpenedChests.slice(openedChests.length, 19)[20-index - randomOpenedChests.slice(openedChests.length, 19).length],
                                 });
                               }, 350);
                               setDisable(value);
                               setloading(value);
                               setSelectedChest(index + 1);
-                              console.log(randomOpenedChests.slice(openedChests.length, 19)[index - randomOpenedChests.slice(openedChests.length, 19).length], index - randomOpenedChests.slice(openedChests.length, 19).length)
-                              setSelectedChest2(randomOpenedChests.slice(openedChests.length, 19)[index - randomOpenedChests.slice(openedChests.length, 19).length]);
+                              console.log(randomOpenedChests.slice(openedChests.length, 19)[20-index - randomOpenedChests.slice(openedChests.length, 19)], 20-index - randomOpenedChests.slice(openedChests.length, 19).length)
+                              setSelectedChest2(randomOpenedChests.slice(openedChests.length, 19)[20-index - randomOpenedChests.slice(openedChests.length, 19).length]);
                             }}
                             onChestStatus={(val) => {
                               setMessage(val);
