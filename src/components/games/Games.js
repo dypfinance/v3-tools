@@ -1048,7 +1048,7 @@ const Games = ({
                       <div className="d-flex align-items-center justify-content-end get-premium-wrapper p-3 p-lg-0">
                         <NavLink
                           className="sign-in-btn px-4 py-1"
-                          to="/account"
+                          to="/sign-in"
                         >
                           Sign In
                         </NavLink>

@@ -107,16 +107,16 @@
 
 .lds-dual-ring {
   display: inline-block;
-  width: 24px;
-  height: 24px;
+  width: 30px;
+  height: 30px;
 }
 
 .lds-dual-ring:after {
   content: " ";
   display: block;
-  width: 40px;
-  height: 40px;
-  margin: 8px;
+  width: 30px;
+  height: 30px;
+  margin: 0px;
   border-radius: 50%;
   border: 6px solid #fff;
   border-color: #fff transparent #fff transparent;

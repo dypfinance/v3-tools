@@ -2,10 +2,12 @@ import React, { useRef } from "react";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import closeX from "../earnOther/assets/closeX.svg";
-import migrationPopup from "./dypBaseBg.webp";
+import migrationPopup from "./migrationPopup.webp";
+import loyaltyPopupBanner from "./loyaltyPopupBanner.png";
 import "./whitelist.css";
 import OutsideClickHandler from "react-outside-click-handler";
 import '../LandPopup/landpopup.css'
+import { NavLink } from "react-router-dom";
 
 const WhitelistPopup = ({ open, onClose }) => {
   const style2 = {
@@ -54,12 +56,16 @@ const WhitelistPopup = ({ open, onClose }) => {
                 <div className="d-flex flex-column align-items-center justify-content-center">
                   <div className="d-flex align-items-center justify-content-center mb-2 popup-title-wrapper gap-2 p-2 px-4">
                     <h6 className="popup-title d-flex align-items-center gap-2 mb-0">
-                      Dypius Expands to
+                    WOD Token
                     </h6>
-                    <h6 className="popup-title metaverse mb-0">Base</h6>
+                <h6 className="popup-title metaverse mb-0">Whitelist</h6>
+
                   </div>
-                  <span className="popup-span mb-0">
-                    Seamlessly bridge DYP to Base via the official Base SuperBridge
+                  <span className="popup-span mb-0 w-100">
+                  As part of the Dypius ecosystem, we're enhancing our user
+                utilities with the upcoming WOD Token launch. Secure your spot
+                now as we are offering early access to the exclusive WOD token
+                sale through a Whitelist for our members.
                   </span>
                 </div>
                 <img
@@ -70,15 +76,12 @@ const WhitelistPopup = ({ open, onClose }) => {
                 {/* <span className="popup-content">
           Total Genesis land supply limited to 1,000 plots
         </span> */}
-                <a
-                  href="https://superbridge.app/base"
-                  target={"_blank"}
+                <NavLink
+                  to="/launchpad"
                   onClick={onClose}
                 >
-                  <button className="btn filled-btn m-3">
-                    Bridge DYP on Base
-                  </button>
-                </a>
+                  <button className="btn filled-btn m-3">Join the Whitelist</button>
+                </NavLink>
               </div>
             </div>
           </div>

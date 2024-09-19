@@ -75,6 +75,7 @@ import {
   VERIFY_WALLET,
 } from "./functions/Dashboard.schema";
 import { ethers } from "ethers";
+import LoyaltyProgram from "./components/loyalty/LoyaltyProgram.js";
 
 function App() {
   const [theme, setTheme] = useState("theme-dark");
@@ -126,6 +127,11 @@ function App() {
   const [openedChests, setOpenedChests] = useState([]);
   const [chestCount, setChestCount] = useState(0);
   const [isonlink, setIsOnLink] = useState(false);
+  const [hasDypBalance, sethasDypBalance] = useState(false);
+  const [hasiDypBalance, sethasiDypBalance] = useState(false);
+  const [userPools, setuserPools] = useState([])
+
+
 
   const showModal = () => {
     setshow(true);
@@ -255,6 +261,20 @@ function App() {
   const handleSwitchNetwork = (chainId) => {
     setnetworkId(chainId);
   };
+
+  const fetchUserPools = async () => {
+    if (coinbase && coinbase.includes("0x") && isConnected === true) {
+      const result = await axios
+        .get(`https://api.dyp.finance/api/user_pools/${coinbase}`)
+        .then((data) => {
+          return data.data.PoolsUserIn;
+        });
+        setuserPools(result)
+        
+    }
+  };
+
+
 
   const refreshSubscription = async (userWallet) => {
     let subscribedPlatformTokenAmountNewETH;
@@ -507,6 +527,176 @@ function App() {
       console.log("Please install MetaMask!");
     }
   };
+
+  const getAllBalance = async () => {
+    const tokenAddress = window.config.token_dypius_new_address;
+    const tokenAddress_bsc = window.config.token_dypius_new_bsc_address;
+    const tokenAddress_base = window.config.reward_token_dypiusv2_base_address;
+
+    const walletAddress = coinbase;
+    const TokenABI = window.ERC20_ABI;
+
+    if (
+      coinbase &&
+     coinbase != undefined &&
+     isConnected
+    ) {
+      const contract1 = new window.infuraWeb3.eth.Contract(
+        TokenABI,
+        tokenAddress
+      );
+      const contract2 = new window.avaxWeb3.eth.Contract(
+        TokenABI,
+        tokenAddress_bsc
+      );
+      const contract3 = new window.bscWeb3.eth.Contract(
+        TokenABI,
+        tokenAddress_bsc
+      );
+
+      const contract4 = new window.baseWeb3.eth.Contract(
+        TokenABI,
+        tokenAddress_base
+      );
+
+      const contract1_idyp = new window.infuraWeb3.eth.Contract(
+        TokenABI,
+        window.config.reward_token_idyp_address
+      );
+      const contract2_idyp = new window.avaxWeb3.eth.Contract(
+        TokenABI,
+        window.config.reward_token_idyp_address
+      );
+      const contract3_idyp = new window.bscWeb3.eth.Contract(
+        TokenABI,
+        window.config.reward_token_idyp_address
+      );
+
+      let ethBalance = await contract1.methods
+        .balanceOf(walletAddress)
+        .call()
+        .then((data) => {
+          let depositedTokens = new window.BigNumber(data)
+            .div(1e18)
+            .toString(10);
+          return depositedTokens;
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+
+      let ethBalance_idyp = await contract1_idyp.methods
+        .balanceOf(walletAddress)
+        .call()
+        .then((data) => {
+          let depositedTokens = new window.BigNumber(data)
+            .div(1e18)
+            .toString(10);
+          return depositedTokens;
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+
+      let avaxBalance = await contract2.methods
+        .balanceOf(walletAddress)
+        .call()
+        .then((data) => {
+          let depositedTokens = new window.BigNumber(data)
+            .div(1e18)
+            .toString(10);
+          return depositedTokens;
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+
+      let baseBalance = await contract4.methods
+        .balanceOf(walletAddress)
+        .call()
+        .then((data) => {
+          let depositedTokens = new window.BigNumber(data)
+            .div(1e18)
+            .toString(10);
+          return depositedTokens;
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+
+      let avaxBalance_idyp = await contract2_idyp.methods
+        .balanceOf(walletAddress)
+        .call()
+        .then((data) => {
+          let depositedTokens = new window.BigNumber(data)
+            .div(1e18)
+            .toString(10);
+          return depositedTokens;
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+
+      let bnbBalance = await contract3.methods
+        .balanceOf(walletAddress)
+        .call()
+        .then((data) => {
+          let depositedTokens = new window.BigNumber(data)
+            .div(1e18)
+            .toString(10);
+
+          return depositedTokens;
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+
+      let bnbBalance_idyp = await contract3_idyp.methods
+        .balanceOf(walletAddress)
+        .call()
+        .then((data) => {
+          let depositedTokens = new window.BigNumber(data)
+            .div(1e18)
+            .toString(10);
+
+          return depositedTokens;
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+
+      if (
+        (ethBalance !== undefined && ethBalance > 0) ||
+        (bnbBalance !== undefined && bnbBalance > 0) ||
+        (avaxBalance !== undefined && avaxBalance > 0) ||
+        (baseBalance !== undefined && baseBalance > 0)
+      ) {
+        sethasDypBalance(true) 
+      } else {
+        sethasDypBalance(false) ;
+      }
+      if (
+        (ethBalance_idyp !== undefined && ethBalance_idyp > 0) ||
+        (bnbBalance_idyp !== undefined && bnbBalance_idyp > 0) ||
+        (avaxBalance_idyp !== undefined && avaxBalance_idyp > 0)
+      ) {
+        sethasiDypBalance(true) 
+      } else {
+        
+      }
+    } else {
+      sethasiDypBalance(false) 
+      sethasDypBalance(false) 
+    }
+  };
+
   useEffect(() => {
     tvl();
     fetchAggregatorPools();
@@ -858,6 +1048,8 @@ function App() {
       refreshSubscription(data?.getPlayer?.wallet?.publicAddress);
     } else if (isConnected && coinbase) {
       refreshSubscription(coinbase);
+      getAllBalance()
+      fetchUserPools()
     } else {
       setisPremium(false);
     }
@@ -1054,6 +1246,17 @@ function App() {
                       />
                     )}
                   /> */}
+                  <Route
+                    exact
+                    path="/loyalty-program"
+                    element={
+                      <LoyaltyProgram
+                        coinbase={coinbase}
+                        isConnected={isConnected}
+                        handleConnection={handleConnection}
+                      />
+                    }
+                  />
 
                   <Route
                     exact
@@ -1172,6 +1375,23 @@ function App() {
                         onConnectWallet={showModal}
                         aggregatorPools={aggregatorPools}
                         userCurencyBalance={userCurencyBalance}
+                      />
+                    }
+                  />
+
+                  <Route
+                    exact
+                    path="/launchpad"
+                    element={
+                      <Whitelist
+                        networkId={parseInt(networkId)}
+                        isConnected={isConnected}
+                        handleConnection={showModal}
+                        coinbase={coinbase}
+                        isPremium={isPremium}
+                        userPools={userPools}
+                        hasDypBalance={hasDypBalance}
+                        hasiDypBalance={hasiDypBalance}
                       />
                     }
                   />

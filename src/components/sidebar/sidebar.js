@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 // import Avax from "../assets/avalanche.svg";
 // import Logo from "../assets/logo.svg";
 // import LogoWhite from "../assets/logo-white.svg";
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useWeb3React } from "@web3-react/core";
 // import { handleSwitchNetwork } from "../functions/hooks";
 // import { injected } from "../../functions/connectors";
@@ -110,8 +110,8 @@ const Sidebar = (props) => {
       label: "Migration",
       icon: "swapIcon",
       link: "/migration",
-    }, 
-     {
+    },
+    {
       label: "Earn",
       icon: "earnIcon",
       link: "/earn",
@@ -146,12 +146,13 @@ const Sidebar = (props) => {
       icon: "loyaltyIcon",
       link: "/loyalty-program",
     },
-    
+
     {
       label: "Governance",
       icon: "governanceIcon",
       link: "/governance",
     },
+
     {
       label: "Bridge",
       icon: "bridgeIcon",
@@ -336,9 +337,11 @@ const Sidebar = (props) => {
                             }
                           >
                             {child.title}
-                            {child.title === 'Dypius' &&   <div className="new-beta-sidebar">
-                          <span className="new-beta-text">New</span>
-                        </div>}
+                            {child.title === "Dypius" && (
+                              <div className="new-beta-sidebar">
+                                <span className="new-beta-text">New</span>
+                              </div>
+                            )}
                           </NavLink>
                         ))}
                       </div>
@@ -384,11 +387,13 @@ const Sidebar = (props) => {
                           }
                         >
                           {sideItem.label}
-                         
                         </h3>
-                      )} {sideItem.label === 'Bridge' && activeSidebar &&   <div className="new-beta-sidebar">
+                      )}{" "}
+                      {sideItem.label === "Bridge" && activeSidebar && (
+                        <div className="new-beta-sidebar">
                           <span className="new-beta-text">New</span>
-                        </div>}
+                        </div>
+                      )}
                     </div>
                   </NavLink>
                 )
@@ -407,7 +412,6 @@ const Sidebar = (props) => {
           </NavLink>
         )}
     </div>
-
   );
 };
 

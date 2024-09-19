@@ -607,8 +607,7 @@ const EarnContent = ({
                   <>
                     <div
                       className={`stake-item ${
-                        option === "Farming" &&
-                        expiredPools === false &&
+                        option === "Farming"  &&
                         "blur-stake"
                       } position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
                         stake === "eth" ? "eth-item-active" : null
@@ -690,7 +689,6 @@ const EarnContent = ({
                     <div
                       className={`stake-item ${
                         option === "Farming" &&
-                        expiredPools === false &&
                         "blur-stake"
                       } position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
                         stake === "avax" ? "avax-item-active" : null
@@ -885,32 +883,7 @@ const EarnContent = ({
           </>
         )}
       </div>
-      {option === "Farming" && networkId === "56" && expiredPools === false ? (
-        <EarnTopPicks
-          onConnectWallet={onConnectWallet}
-          topList={option}
-          listType={listStyle}
-          chain={stake}
-          coinbase={coinbase}
-          the_graph_result={the_graph_result}
-          lp_id={lp_id}
-          isConnected={isConnected}
-          chainId={chainId}
-          networkId={networkId}
-          handleConnection={handleConnection}
-          the_graph_resultavax={the_graph_resultavax}
-          the_graph_resultbsc={the_graph_resultbsc}
-          referrer={referrer}
-          pool={pool}
-          routeOption={routeOption}
-          customChain={customChain}
-          handleSwitchNetwork={handleSwitchNetwork}
-          expiredPools={expiredPools}
-          isPremium={isPremium}
-          showRibbon={showRibbon}
-          onChainSelect={(val)=>{setStake(val)}}
-        />
-      ) : option === "Vault" && networkId !== "1" ? (
+      {option === "Vault" && networkId !== "1" ? (
         <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
           <img
             src={
@@ -935,7 +908,7 @@ const EarnContent = ({
           />
           <h6 className="no-farms">No Vault pools available</h6>
         </div>
-      ) : option === "Farming" && expiredPools === true ? (
+      ) : option === "Farming" && expiredPools === false ? (
         <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
           <img
             src={

@@ -949,14 +949,13 @@ export default class Subscription extends React.Component {
   //   }
   // };
   getStakesIds = async () => {
-    const address = this.props.coinbase; 
-        const infura_web3 = window.infuraWeb3;
-      let staking_contract = new infura_web3.eth.Contract(
-        window.NFTSTAKING_ABI,
-        window.config.nftstaking_address
-      );
+    const address = this.props.coinbase;
+    const infura_web3 = window.infuraWeb3;
+    let staking_contract = new infura_web3.eth.Contract(
+      window.NFTSTAKING_ABI,
+      window.config.nftstaking_address
+    );
     if (address !== null && address !== undefined && this.props.isConnected) {
- 
       let stakenft = [];
       let myStakes = await staking_contract.methods
         .depositsOf(address)
@@ -973,7 +972,6 @@ export default class Subscription extends React.Component {
 
       return myStakes;
     } else if (this.props.email && this.props.address) {
- 
       let stakenft = [];
       let myStakes = await staking_contract.methods
         .depositsOf(this.props.address)
@@ -990,19 +988,52 @@ export default class Subscription extends React.Component {
 
       return myStakes;
     } else {
-      return []
+      return [];
     }
   };
-  getLandStakesIds = async () => {
-    const address = this.props.coinbase; 
-    const infura_web3 = window.infuraWeb3;
-      let staking_contract = new infura_web3.eth.Contract(
-        window.LANDSTAKING_ABI,
-        window.config.landnftstake_address
-      );
 
-    if (address !== null && this.props.coinbase !== undefined && this.props.isConnected) {
-      
+  getStakesIdsCawsPremium = async () => {
+    let staking_contract = await new window.infuraWeb3.eth.Contract(
+      window.CAWSPREMIUM_ABI,
+      window.config.nft_caws_premiumstake_address
+    );
+    let stakenft = [];
+    if (this.props.email && this.props.address) {
+      let myStakes = await staking_contract.methods
+        .depositsOf(this.props.address)
+        .call()
+        .then((result) => {
+          for (let i = 0; i < result.length; i++)
+            stakenft.push(parseInt(result[i]));
+          return stakenft;
+        });
+      return myStakes;
+    } else if (this.props.coinbase && this.props.isConnected) {
+      let myStakes = await staking_contract.methods
+        .depositsOf(this.props.coinbase)
+        .call()
+        .then((result) => {
+          for (let i = 0; i < result.length; i++)
+            stakenft.push(parseInt(result[i]));
+          return stakenft;
+        });
+      return myStakes;
+    }
+  };
+
+  getLandStakesIds = async () => {
+    const address = this.props.coinbase;
+    const infura_web3 = window.infuraWeb3;
+    let staking_contract = new infura_web3.eth.Contract(
+      window.LANDSTAKING_ABI,
+      window.config.landnftstake_address
+    );
+
+    if (
+      address !== null &&
+      this.props.coinbase !== undefined &&
+      this.props.isConnected
+    ) {
       let stakenft = [];
       let myStakes = await staking_contract.methods
         .depositsOf(address)
@@ -1018,8 +1049,7 @@ export default class Subscription extends React.Component {
         });
 
       return myStakes;
-    } else if (this.props.email  && this.props.address) {
-     
+    } else if (this.props.email && this.props.address) {
       let stakenft = [];
       let myStakes = await staking_contract.methods
         .depositsOf(this.props.address)
@@ -1040,12 +1070,22 @@ export default class Subscription extends React.Component {
 
   myStakes = async () => {
     let myStakes = await this.getStakesIds();
+    let myStakesCawsPremium = await this.getStakesIdsCawsPremium();
+    let stakes = [];
+    let stakesCawsPremium = [];
     if (myStakes && myStakes.length > 0) {
-      let stakes = myStakes.map((stake) => window.getNft(stake));
+      stakes = myStakes.map((stake) => window.getNft(stake));
       stakes = await Promise.all(stakes);
       stakes.reverse();
-      this.setState({ myStakess: stakes });
     }
+    if (myStakesCawsPremium && myStakesCawsPremium.length > 0) {
+      stakesCawsPremium = myStakesCawsPremium.map((stake) =>
+        window.getNft(stake)
+      );
+      stakesCawsPremium = await Promise.all(stakes);
+      stakesCawsPremium.reverse();
+    }
+    this.setState({ myStakess: [...stakes, ...stakesCawsPremium] });
   };
   myLandStakes = async () => {
     let myStakes = await this.getLandStakesIds();
@@ -1702,6 +1742,8 @@ export default class Subscription extends React.Component {
                     <img
                       src={require(`./assets/wavaxIcon.svg`).default}
                       alt=""
+                      width={20}
+                      height={20}
                     />
                     <div className="d-flex align-items-center gap-1">
                       <span className="balance-amount mb-0">
@@ -1719,6 +1761,8 @@ export default class Subscription extends React.Component {
                     <img
                       src={require(`./assets/baseLogo.svg`).default}
                       alt=""
+                      width={20}
+                      height={20}
                     />
                     <div className="d-flex align-items-center gap-1">
                       <span className="balance-amount mb-0">
