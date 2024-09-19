@@ -81,7 +81,6 @@ const Games = ({
       let resultUsdETH = 0;
 
       openedChests.forEach((chest) => {
-        
         if (chest.isOpened === true && chest.rewards) {
           if (chest.rewards.length > 1) {
             chest.rewards.forEach((innerChest) => {
@@ -129,7 +128,6 @@ const Games = ({
     }
   }, [popups.stoneCrack, popups.kittyDash, popups.cawsAdventure, active]);
 
- 
   const handleBasePool = async () => {
     await handleSwitchNetworkhook("0x2105")
       .then(() => {
@@ -228,7 +226,7 @@ const Games = ({
 
     setIsActive(chestID);
     setIsActiveIndex(chestIndex + 1);
-console.log('filteredResult',filteredResult)
+    console.log("filteredResult", filteredResult);
     if (filteredResult && filteredResult.rewards) {
       const resultWonETH = filteredResult.rewards.find((obj) => {
         return obj.rewardType === "MoneyETH" && obj.status === "Claimed";
@@ -263,66 +261,75 @@ console.log('filteredResult',filteredResult)
       if (!email) {
         setMessage("login");
         setDisable(true);
-      } else if (coinbase && isConnected) {
-        if (isPremium) {
-          if (
-            openedChests &&
-            openedChests.length === 20 &&
-            rewardData.length === 0 &&
-            address.toLowerCase() === coinbase.toLowerCase()
-          ) {
-            setMessage("complete");
-          } else if (
-            openedChests &&
-            openedChests.length < 20 &&
-            rewardData.length === 0 &&
-            address.toLowerCase() === coinbase.toLowerCase() &&
-            networkId === 8453
-          ) {
-            setMessage("");
-            setDisable(false);
-          } else if (
-            // claimedChests + claimedPremiumChests < 20 &&
-            rewardData.length === 0 &&
-            // address.toLowerCase() === coinbase.toLowerCase() &&
-            networkId !== 8453
-          ) {
-            setMessage("switch");
-            setDisable(true);
-          } else if (rewardData.length === 0) {
-            setMessage("");
-            setDisable(false);
+      } else if (coinbase && isConnected && email && address) {
+        if (coinbase.toLowerCase() === address.toLowerCase()) {
+          if (isPremium) {
+            if (
+              openedChests &&
+              openedChests.length === 20 &&
+              rewardData.length === 0 &&
+              address.toLowerCase() === coinbase.toLowerCase()
+            ) {
+              setMessage("complete");
+            } else if (
+              openedChests &&
+              openedChests.length < 20 &&
+              rewardData.length === 0 &&
+              address.toLowerCase() === coinbase.toLowerCase() &&
+              networkId === 8453
+            ) {
+              setMessage("");
+              setDisable(false);
+            } else if (
+              rewardData.length === 0 &&
+              networkId !== 8453 &&
+              address.toLowerCase() === coinbase.toLowerCase()
+            ) {
+              setMessage("switch");
+              setDisable(true);
+            } else if (
+              rewardData.length === 0 &&
+              address.toLowerCase() === coinbase.toLowerCase()
+            ) {
+              setMessage("");
+              setDisable(false);
+            }
+          } else if (!isPremium) {
+            if (
+              openedChests &&
+              openedChests.length === 20 &&
+              rewardData.length === 0 &&
+              address.toLowerCase() === coinbase.toLowerCase() &&
+              networkId === 8453
+            ) {
+              setMessage("complete");
+            } else if (
+              openedChests &&
+              openedChests.length < 20 &&
+              rewardData.length === 0 &&
+              address.toLowerCase() === coinbase.toLowerCase() &&
+              networkId === 8453
+            ) {
+              setMessage("");
+              setDisable(false);
+            } else if (
+              rewardData.length === 0 &&
+              networkId !== 8453 &&
+              address.toLowerCase() === coinbase.toLowerCase()
+            ) {
+              setMessage("switch");
+              setDisable(true);
+            } else if (
+              rewardData.length === 0 &&
+              address.toLowerCase() === coinbase.toLowerCase()
+            ) {
+              setMessage("");
+              setDisable(false);
+            }
           }
-        } else if (!isPremium) {
-          if (
-            openedChests &&
-            openedChests.length === 20 &&
-            rewardData.length === 0 &&
-            address.toLowerCase() === coinbase.toLowerCase() &&
-            networkId === 8453
-          ) {
-            setMessage("complete");
-          } else if (
-            openedChests &&
-            openedChests.length < 20 &&
-            rewardData.length === 0 &&
-            address.toLowerCase() === coinbase.toLowerCase() &&
-            networkId === 8453
-          ) {
-            setMessage("");
-            setDisable(false);
-          } else if (
-            // claimedChests < 10 &&
-            rewardData.length === 0 &&
-            // address.toLowerCase() === coinbase.toLowerCase() &&
-            networkId !== 8453
-          ) {
-            setMessage("switch");
-            setDisable(true);
-          } else if (rewardData.length === 0) {
-            setMessage("");
-            setDisable(false);
-          }
+        } else {
+          setMessage("switchAccount");
+          setDisable(true);
         }
       } else {
         setMessage("connect");
@@ -770,11 +777,51 @@ console.log('filteredResult',filteredResult)
                         <div className="dot" style={{ "--i": 9 }}></div>
                       </div>
                     </div>
-                  ) : message === "complete" ? (
+                  ) : message === "switchAccount" ? (
                     <div
-                      className="d-flex align-items-center justify-content-center complete-bg p-0 p-lg-2 w-100 chest-progress-wrapper"
-                       
+                      className="d-flex align-items-center flex-column justify-content-center p-0 p-lg-2 w-100 chest-progress-wrapper"
+                      style={{
+                        background: "#1A1C39",
+                        border: "1px solid #ce5d1b",
+                      }}
                     >
+                      <div className="loader red-loader">
+                        <div className="dot" style={{ "--i": 0 }}></div>
+                        <div className="dot" style={{ "--i": 1 }}></div>
+                        <div className="dot" style={{ "--i": 2 }}></div>
+                        <div className="dot" style={{ "--i": 3 }}></div>
+                        <div className="dot" style={{ "--i": 4 }}></div>
+                        <div className="dot" style={{ "--i": 5 }}></div>
+                        <div className="dot" style={{ "--i": 6 }}></div>
+                        <div className="dot" style={{ "--i": 7 }}></div>
+                        <div className="dot" style={{ "--i": 8 }}></div>
+                        <div className="dot" style={{ "--i": 9 }}></div>
+                        <div className="dot" style={{ "--i": 10 }}></div>
+                      </div>
+
+                      <h6
+                        className="loader-text mb-0"
+                        style={{ color: "#ce5d1b" }}
+                      >
+                        Use the wallet associated to your game account.
+                      </h6>
+
+                      <div className="loader red-loader">
+                        <div className="dot" style={{ "--i": 0 }}></div>
+                        <div className="dot" style={{ "--i": 1 }}></div>
+                        <div className="dot" style={{ "--i": 2 }}></div>
+                        <div className="dot" style={{ "--i": 3 }}></div>
+                        <div className="dot" style={{ "--i": 4 }}></div>
+                        <div className="dot" style={{ "--i": 5 }}></div>
+                        <div className="dot" style={{ "--i": 6 }}></div>
+                        <div className="dot" style={{ "--i": 7 }}></div>
+                        <div className="dot" style={{ "--i": 8 }}></div>
+                        <div className="dot" style={{ "--i": 9 }}></div>
+                        <div className="dot" style={{ "--i": 10 }}></div>
+                      </div>
+                    </div>
+                  ) : message === "complete" ? (
+                    <div className="d-flex align-items-center justify-content-center complete-bg p-0 p-lg-2 w-100 chest-progress-wrapper">
                       <h6 className="completed-text mb-0">Completed</h6>
                     </div>
                   ) : message === "woneth" ? (
@@ -824,6 +871,70 @@ console.log('filteredResult',filteredResult)
                       </div>
 
                       <img src={winConfetti} alt="" className="win-confetti" />
+                    </div>
+                  ) : message === "gem" ? (
+                    <div className="d-flex align-items-center flex-column flex-lg-row justify-content-between p-0 p-lg-2 w-100 chest-progress-wrapper">
+                      <div
+                        className="chain-desc-wrapper d-flex flex-column w-100"
+                        style={{
+                          filter: "brightness(1)",
+                          position: "relative",
+                        }}
+                      >
+                        <h6 className="win-text mb-0">You won</h6>
+                        <div className="d-flex align-items-center gap-2">
+                          <img src={danger} alt="" width={20} height={20} />
+                          <span className="win-desc mb-0">
+                            The{" "}
+                            <span style={{ color: "#F2C624" }}>
+                              $
+                              {getFormattedNumber(
+                                rewardData.rewards
+                                  ? rewardData.rewards.find((obj) => {
+                                      return obj.rewardType === "MoneyETH";
+                                    }).reward
+                                  : 0,
+                                2
+                              )}
+                            </span>{" "}
+                            reward cannot be claimed as you need to hold at
+                            least $1,000 worth of DYP tokens.
+                          </span>
+                        </div>
+                      </div>
+                      <div className="d-flex align-items-center gap-2 win-rewards-container position-static m-0">
+                        <div className="d-flex flex-column align-items-center neutral-border p-1">
+                          <h6 className="win-amount mb-0">
+                            {getFormattedNumber(
+                              rewardData.rewards
+                                ? rewardData.rewards.find((obj) => {
+                                    return obj.rewardType === "Points";
+                                  }).reward
+                                : 0,
+                              0
+                            )}
+                          </h6>
+                          <span className="win-amount-desc">
+                            Leaderboard Points
+                          </span>
+                        </div>
+                        <h6 className="win-amount mb-0">+</h6>
+                        <div className="d-flex flex-column align-items-center danger-border p-1">
+                          <h6 className="win-amount mb-0 p-1">
+                            {" "}
+                            $
+                            {getFormattedNumber(
+                              rewardData.rewards
+                                ? rewardData.rewards.find((obj) => {
+                                    return obj.rewardType === "MoneyETH";
+                                  }).reward
+                                : 0,
+                              2
+                            )}
+                          </h6>
+                          <span className="win-amount-desc">Rewards</span>
+                        </div>
+                      </div>
                     </div>
                   ) : message === "wondyp" ? (
                     <div className="d-flex align-items-center position-relative flex-column flex-lg-row justify-content-between p-0 p-lg-2 w-100 chest-progress-wrapper">
@@ -1354,6 +1465,7 @@ console.log('filteredResult',filteredResult)
                           rewardData.rewards?.find((obj) => {
                             return obj.rewardType === "MoneyETH";
                           }) &&
+                          message === "woneth" &&
                           "new-rewards-item-active2"
                         } new-rewards-item p-2 d-flex align-items-center gap-2`}
                       >
@@ -1364,6 +1476,7 @@ console.log('filteredResult',filteredResult)
                               rewardData.rewards?.find((obj) => {
                                 return obj.rewardType === "MoneyETH";
                               }) &&
+                              message === "woneth" &&
                               "reward-title-active"
                             } reward-title text-center`}
                           >
@@ -1384,6 +1497,7 @@ console.log('filteredResult',filteredResult)
                                     Number(obj.reward) <= 5
                                   );
                                 }) &&
+                                message === "woneth" &&
                                 "small-reward-wrapper-active"
                               } small-reward-wrapper w-100 p-1`}
                             >
@@ -1401,6 +1515,7 @@ console.log('filteredResult',filteredResult)
                                       Number(obj.reward) <= 5
                                     );
                                   }) &&
+                                  message === "woneth" &&
                                   "reward-amount-active"
                                 } reward-amount text-center`}
                               >
@@ -1421,6 +1536,7 @@ console.log('filteredResult',filteredResult)
                                     Number(obj.reward) <= 300
                                   );
                                 }) &&
+                                message === "woneth" &&
                                 "small-reward-wrapper-active"
                               } small-reward-wrapper w-100 p-1`}
                             >
@@ -1438,6 +1554,7 @@ console.log('filteredResult',filteredResult)
                                       Number(obj.reward) <= 300
                                     );
                                   }) &&
+                                  message === "woneth" &&
                                   "reward-amount-active"
                                 } reward-amount text-center`}
                               >
@@ -1451,11 +1568,25 @@ console.log('filteredResult',filteredResult)
                         className={` ${
                           rewardData &&
                           rewardData.rewards?.find((obj) => {
-                            return obj.rewardType === "gem";
+                            return obj.rewardType === "MoneyETH";
                           }) &&
+                          message === "gem" &&
                           "new-rewards-item-active"
-                        } new-rewards-item p-2 d-flex align-items-center gap-2`}
+                        } new-rewards-item p-2 d-flex align-items-center gap-2 position-relative`}
                       >
+                        {rewardData &&
+                          rewardData.rewards?.find((obj) => {
+                            return obj.rewardType === "MoneyETH";
+                          }) &&
+                          message === "gem" && (
+                            <img
+                              src={danger}
+                              width={20}
+                              height={20}
+                              className="reward-warning"
+                              alt=""
+                            />
+                          )}
                         <img
                           src={gemIcon}
                           alt=""
@@ -1464,8 +1595,9 @@ console.log('filteredResult',filteredResult)
                             filter:
                               rewardData &&
                               rewardData.rewards?.find((obj) => {
-                                return obj.rewardType === "gem";
-                              })
+                                return obj.rewardType === "MoneyETH";
+                              }) &&
+                              message === "gem"
                                 ? ""
                                 : "grayscale(1)",
                           }}
@@ -1475,8 +1607,9 @@ console.log('filteredResult',filteredResult)
                             className={`${
                               rewardData &&
                               rewardData.rewards?.find((obj) => {
-                                return obj.rewardType === "gem";
+                                return obj.rewardType === "MoneyETH";
                               }) &&
+                              message === "gem" &&
                               "reward-title-active"
                             } reward-title text-center`}
                           >
@@ -1486,8 +1619,9 @@ console.log('filteredResult',filteredResult)
                             className={`${
                               rewardData &&
                               rewardData.rewards?.find((obj) => {
-                                return obj.rewardType === "gem";
+                                return obj.rewardType === "MoneyETH";
                               }) &&
+                              message === "gem" &&
                               "reward-amount-active"
                             } reward-amount d-flex align-items-center gap-1`}
                           >

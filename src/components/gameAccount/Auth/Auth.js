@@ -81,12 +81,7 @@ function Auth({ isConnected, coinbase }) {
     <>
       <LoginWrapper style={{ margin: "6rem 0rem" }}>
         <LoginCard
-          containerStyles={{
-            height: 500,
-          }}
-          cardStyles={{
-            height: 470,
-          }}
+           
         >
           <StyledTabs
             value={value}

@@ -120,10 +120,12 @@ function App() {
   const [userCurencyBalance, setuserCurencyBalance] = useState(0);
   const [fireAppcontent, setFireAppContent] = useState(false);
   const [syncStatus, setsyncStatus] = useState("initial");
-  const [showSyncModal, setshowSyncModal] = useState(false);
+  const [isonSync, setisonSync] = useState(false);
+
   const [chests, setChests] = useState([]);
   const [openedChests, setOpenedChests] = useState([]);
   const [chestCount, setChestCount] = useState(0);
+  const [isonlink, setIsOnLink] = useState(false);
 
   const showModal = () => {
     setshow(true);
@@ -254,7 +256,7 @@ function App() {
     setnetworkId(chainId);
   };
 
-  const refreshSubscription = async () => {
+  const refreshSubscription = async (userWallet) => {
     let subscribedPlatformTokenAmountNewETH;
     let subscribedPlatformTokenAmountNewAvax;
     let subscribedPlatformTokenAmountNewBNB;
@@ -318,11 +320,10 @@ function App() {
       SkaleABI,
       skalesubscribeAddress
     );
-    const userAddr = await window.getCoinbase();
 
-    if (userAddr && isConnected === true) {
+    if (userWallet && isConnected === true) {
       subscribedPlatformTokenAmountNewETH = await ethNewcontract.methods
-        .subscriptionPlatformTokenAmount(userAddr)
+        .subscriptionPlatformTokenAmount(userWallet)
         .call()
         .catch((e) => {
           console.log(e);
@@ -330,7 +331,7 @@ function App() {
         });
 
       subscribedPlatformTokenAmountNewAvax = await avaxNewcontract.methods
-        .subscriptionPlatformTokenAmount(userAddr)
+        .subscriptionPlatformTokenAmount(userWallet)
         .call()
         .catch((e) => {
           console.log(e);
@@ -338,7 +339,7 @@ function App() {
         });
 
       subscribedPlatformTokenAmountNewBNB = await bnbNewcontract.methods
-        .subscriptionPlatformTokenAmount(userAddr)
+        .subscriptionPlatformTokenAmount(userWallet)
         .call()
         .catch((e) => {
           console.log(e);
@@ -346,7 +347,7 @@ function App() {
         });
 
       subscribedPlatformTokenAmountNewBNB2 = await bnbNewcontract2.methods
-        .subscriptionPlatformTokenAmount(userAddr)
+        .subscriptionPlatformTokenAmount(userWallet)
         .call()
         .catch((e) => {
           console.log(e);
@@ -354,7 +355,7 @@ function App() {
         });
 
       subscribedPlatformTokenAmountCfx = await cfxcontract.methods
-        .subscriptionPlatformTokenAmount(userAddr)
+        .subscriptionPlatformTokenAmount(userWallet)
         .call()
         .catch((e) => {
           console.log(e);
@@ -362,7 +363,7 @@ function App() {
         });
 
       subscribedPlatformTokenAmountBase = await basecontract.methods
-        .subscriptionPlatformTokenAmount(userAddr)
+        .subscriptionPlatformTokenAmount(userWallet)
         .call()
         .catch((e) => {
           console.log(e);
@@ -370,7 +371,7 @@ function App() {
         });
 
       subscribedPlatformTokenAmountSkale = await skalecontract.methods
-        .subscriptionPlatformTokenAmount(userAddr)
+        .subscriptionPlatformTokenAmount(userWallet)
         .call()
         .catch((e) => {
           console.log(e);
@@ -528,7 +529,6 @@ function App() {
     if (window.ethereum && !window.coin98) {
       console.log("yes");
       handleEthereum();
-      refreshSubscription();
     } else {
       console.log("no");
       // If the event is not dispatched by the end of the timeout,
@@ -766,23 +766,25 @@ function App() {
           signature: signature,
         },
       }).then(() => {
-        setsyncStatus("success");
-        setTimeout(() => {
-          setshowSyncModal(false);
-          setsyncStatus("initial");
-        }, 1000);
+        if (isonSync) {
+          setsyncStatus("success");
+          setTimeout(() => {
+            setsyncStatus("initial");
+          }, 1000);
+        }
         refreshSubscription(coinbase);
 
-        // if (isonlink) {
-        //   handleFirstTask(account);
-        // }
+        if (isonlink) {
+          window.location.reload();
+        }
       });
     } catch (error) {
-      setsyncStatus("error");
-      setTimeout(() => {
-        setsyncStatus("initial");
-      }, 3000);
-
+      if (isonSync) {
+        setsyncStatus("error");
+        setTimeout(() => {
+          setsyncStatus("initial");
+        }, 3000);
+      }
       console.log("🚀 ~ file: Dashboard.js:30 ~ getTokens ~ error", error);
     }
   };
@@ -806,7 +808,7 @@ function App() {
     );
     if (response && response.status === 200) {
       let data = await response.json();
-     
+
       setChests(data.chestOrder);
       let standardChestsArray = [];
       let premiumChestsArray = [];
@@ -835,7 +837,6 @@ function App() {
           }
         }
         setOpenedChests(openedChests);
-     
       }
 
       // setOpenedChests(
@@ -852,6 +853,16 @@ function App() {
     }
   }, [email, chestCount]);
 
+  useEffect(() => {
+    if (email && data?.getPlayer?.wallet?.publicAddress !== undefined) {
+      refreshSubscription(data?.getPlayer?.wallet?.publicAddress);
+    } else if (isConnected && coinbase) {
+      refreshSubscription(coinbase);
+    } else {
+      setisPremium(false);
+    }
+  }, [isConnected, coinbase, email, data]);
+
   const onPlayerFetch = () => {
     refetchPlayer();
   };
@@ -863,7 +874,26 @@ function App() {
     }, 1000);
   };
 
+  const handleSync = async () => {
+    setsyncStatus("loading");
+
+    try {
+      await generateNonce({
+        variables: {
+          publicAddress: coinbase,
+        },
+      });
+    } catch (error) {
+      setsyncStatus("error");
+      setTimeout(() => {
+        setsyncStatus("initial");
+      }, 3000);
+      console.log("🚀 ~ file: Dashboard.js:30 ~ getTokens ~ error", error);
+    }
+  };
+
   const onLinkWallet = async () => {
+    setIsOnLink(true);
     await generateNonce({
       variables: {
         publicAddress: coinbase,
@@ -1354,6 +1384,8 @@ function App() {
                         onLinkWallet={onLinkWallet}
                         userId={data?.getPlayer?.playerId}
                         onPlayerFetch={onPlayerFetch}
+                        onSyncClick={handleSync}
+                        syncStatus={syncStatus}
                       />
                     }
                   />

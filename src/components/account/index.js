@@ -69,19 +69,29 @@ export default class Subscription extends React.Component {
       avaxFarm: [],
       ethBalance: "0.0",
       bnbBalance: "0.0",
+      baseBalance: "0.0",
+
       avaxBalance: "0.0",
     };
   }
 
   fetchUserPools = async () => {
-    if (this.props.coinbase && this.props.coinbase.includes("0x")) {
+    if (this.props.email && this.props.address) {
       const result = await axios
-        .get(`https://api.dyp.finance/api/user_pools/${this.props.coinbase}`)
+        .get(`https://api.dyp.finance/api/user_pools/${this.props.address}`)
         .then((data) => {
           return data.data.PoolsUserIn;
         });
       this.setState({ userPools: result });
-      // console.log(result)
+    } else {
+      if (this.props.isConnected && this.props.coinbase) {
+        const result = await axios
+          .get(`https://api.dyp.finance/api/user_pools/${this.props.coinbase}`)
+          .then((data) => {
+            return data.data.PoolsUserIn;
+          });
+        this.setState({ userPools: result });
+      } else this.setState({ userPools: [] });
     }
   };
 
@@ -493,23 +503,83 @@ export default class Subscription extends React.Component {
   getAllBalance = async () => {
     const tokenAddress = window.config.token_dypius_new_address;
     const tokenAddress_bsc = window.config.token_dypius_new_bsc_address;
+    const tokenAddress_base = window.config.reward_token_dypiusv2_base_address;
+
     const walletAddress = this.props.coinbase;
     const TokenABI = window.ERC20_ABI;
+    const contract1 = new window.infuraWeb3.eth.Contract(
+      TokenABI,
+      tokenAddress
+    );
+    const contract2 = new window.avaxWeb3.eth.Contract(
+      TokenABI,
+      tokenAddress_bsc
+    );
+    const contract3 = new window.bscWeb3.eth.Contract(
+      TokenABI,
+      tokenAddress_bsc
+    );
 
-    if (this.props.coinbase && this.props.coinbase != undefined) {
-      const contract1 = new window.infuraWeb3.eth.Contract(
-        TokenABI,
-        tokenAddress
-      );
-      const contract2 = new window.avaxWeb3.eth.Contract(
-        TokenABI,
-        tokenAddress_bsc
-      );
-      const contract3 = new window.bscWeb3.eth.Contract(
-        TokenABI,
-        tokenAddress_bsc
-      );
+    const contract4 = new window.baseWeb3.eth.Contract(
+      TokenABI,
+      tokenAddress_base
+    );
 
+    if (this.props.email && this.props.address) {
+      await contract1.methods
+        .balanceOf(this.props.address)
+        .call()
+        .then((data) => {
+          let depositedTokens = new BigNumber(data).div(1e18).toFixed(2);
+
+          this.setState({ ethBalance: depositedTokens });
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+      await contract2.methods
+        .balanceOf(this.props.address)
+        .call()
+        .then((data) => {
+          let depositedTokens = new BigNumber(data).div(1e18).toFixed(2);
+
+          this.setState({ avaxBalance: depositedTokens });
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+
+      await contract3.methods
+        .balanceOf(this.props.address)
+        .call()
+        .then((data) => {
+          let depositedTokens = new BigNumber(data).div(1e18).toFixed(2);
+
+          this.setState({ bnbBalance: depositedTokens });
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+      await contract4.methods
+        .balanceOf(this.props.address)
+        .call()
+        .then((data) => {
+          let depositedTokens = new BigNumber(data).div(1e18).toFixed(2);
+
+          this.setState({ baseBalance: depositedTokens });
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+    } else if (
+      this.props.coinbase &&
+      this.props.coinbase != undefined &&
+      this.props.isConnected
+    ) {
       await contract1.methods
         .balanceOf(walletAddress)
         .call()
@@ -547,6 +617,25 @@ export default class Subscription extends React.Component {
           console.error(e);
           return 0;
         });
+      await contract4.methods
+        .balanceOf(walletAddress)
+        .call()
+        .then((data) => {
+          let depositedTokens = new BigNumber(data).div(1e18).toFixed(2);
+
+          this.setState({ baseBalance: depositedTokens });
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+    } else {
+      this.setState({
+        ethBalance: "0.00",
+        bnbBalance: "0.00",
+        baseBalance: "0.00",
+        avaxBalance: "0.00",
+      });
     }
   };
 
@@ -562,14 +651,21 @@ export default class Subscription extends React.Component {
       // this.getDypBalance();
       this.fetchAvatar();
       this.fetchUsername();
-      this.fetchAvaxFarming();
-      this.fetchAvaxStaking();
-      this.fetchBnbStaking();
-      this.fetchBscFarming();
-      this.fetchEthFarming();
-      this.fetchEthStaking();
       this.getAllBalance();
-      this.props.onSubscribe();
+      this.props.onSubscribe(this.props.coinbase);
+      this.myNft().then();
+      this.myStakes().then();
+      this.myLandNft().then();
+      this.myLandStakes().then();
+    }
+
+    if (this.props.address !== prevProps.address) {
+      this.fetchUserPools();
+      // this.getDypBalance();
+      this.fetchAvatar();
+      this.fetchUsername();
+      this.getAllBalance();
+      this.props.onSubscribe(this.props.address);
       this.myNft().then();
       this.myStakes().then();
       this.myLandNft().then();
@@ -583,16 +679,6 @@ export default class Subscription extends React.Component {
         this.handleSubscriptionTokenChange(this.state.usdtAddress);
       }
     }
-
-    if (this.props.showRibbon !== prevProps.showRibbon) {
-      this.fetchUserPools();
-      this.fetchAvaxFarming();
-      this.fetchAvaxStaking();
-      this.fetchBnbStaking();
-      this.fetchBscFarming();
-      this.fetchEthFarming();
-      this.fetchEthStaking();
-    }
   }
 
   componentDidMount() {
@@ -603,7 +689,7 @@ export default class Subscription extends React.Component {
     this.props.onPlayerFetch();
     this.getAllBalance();
     this.fetchUserPools();
-    this.props.onSubscribe();
+    this.props.onSubscribe(this.props.coinbase);
     this.fetchAvatar();
     this.fetchUsername();
     this.fetchAvaxFarming();
@@ -690,13 +776,44 @@ export default class Subscription extends React.Component {
   // };
 
   myNft = async () => {
-    if (this.props.coinbase !== null && this.props.coinbase !== undefined) {
-      const infura_web3 = window.infuraWeb3;
-      let nfts_contract = new infura_web3.eth.Contract(
-        window.NFT_ABI,
-        window.config.nft_address
-      );
+    const infura_web3 = window.infuraWeb3;
+    let nfts_contract = new infura_web3.eth.Contract(
+      window.NFT_ABI,
+      window.config.nft_address
+    );
 
+    if (this.props.email && this.props.address) {
+      let getBalanceOf = await nfts_contract.methods
+        .balanceOf(this.props.address)
+        .call()
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+
+      let nftList = [];
+
+      for (let i = 0; i < getBalanceOf; i++)
+        nftList.push(
+          await nfts_contract.methods
+            .tokenOfOwnerByIndex(this.props.address, i)
+            .call()
+            .catch((e) => {
+              console.error(e);
+              return 0;
+            })
+        );
+
+      let nfts = nftList.map((nft) => window.getNft(nft));
+
+      nfts = await Promise.all(nfts);
+      nfts.reverse();
+      this.setState({ myNFTs: nfts });
+    } else if (
+      this.props.coinbase !== null &&
+      this.props.coinbase !== undefined &&
+      this.props.isConnected
+    ) {
       let getBalanceOf = await nfts_contract.methods
         .balanceOf(this.props.coinbase)
         .call()
@@ -723,16 +840,49 @@ export default class Subscription extends React.Component {
       nfts = await Promise.all(nfts);
       nfts.reverse();
       this.setState({ myNFTs: nfts });
+    } else {
+      this.setState({ myNFTs: [] });
     }
   };
   myLandNft = async () => {
-    if (this.props.coinbase !== null && this.props.coinbase !== undefined) {
-      const infura_web3 = window.infuraWeb3;
-      let nfts_contract = new infura_web3.eth.Contract(
-        window.LANDMINTING_ABI,
-        window.config.landnft_address
-      );
+    const infura_web3 = window.infuraWeb3;
+    let nfts_contract = new infura_web3.eth.Contract(
+      window.LANDMINTING_ABI,
+      window.config.landnft_address
+    );
 
+    if (this.props.address && this.props.email) {
+      let getBalanceOf = await nfts_contract.methods
+        .balanceOf(this.props.address)
+        .call()
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+
+      let nftList = [];
+
+      for (let i = 0; i < getBalanceOf; i++)
+        nftList.push(
+          await nfts_contract.methods
+            .tokenOfOwnerByIndex(this.props.address, i)
+            .call()
+            .catch((e) => {
+              console.error(e);
+              return 0;
+            })
+        );
+
+      let nfts = nftList.map((nft) => window.getLandNft(nft));
+
+      nfts = await Promise.all(nfts);
+      nfts.reverse();
+      this.setState({ myLandNFTs: nfts });
+    } else if (
+      this.props.coinbase !== null &&
+      this.props.coinbase !== undefined &&
+      this.props.isConnected
+    ) {
       let getBalanceOf = await nfts_contract.methods
         .balanceOf(this.props.coinbase)
         .call()
@@ -759,6 +909,8 @@ export default class Subscription extends React.Component {
       nfts = await Promise.all(nfts);
       nfts.reverse();
       this.setState({ myLandNFTs: nfts });
+    } else {
+      this.setState({ myLandNFTs: [] });
     }
   };
 
@@ -797,13 +949,14 @@ export default class Subscription extends React.Component {
   //   }
   // };
   getStakesIds = async () => {
-    const address = this.props.coinbase;
-    if (address !== null && address !== undefined) {
-      const infura_web3 = window.infuraWeb3;
+    const address = this.props.coinbase; 
+        const infura_web3 = window.infuraWeb3;
       let staking_contract = new infura_web3.eth.Contract(
         window.NFTSTAKING_ABI,
         window.config.nftstaking_address
       );
+    if (address !== null && address !== undefined && this.props.isConnected) {
+ 
       let stakenft = [];
       let myStakes = await staking_contract.methods
         .depositsOf(address)
@@ -819,19 +972,57 @@ export default class Subscription extends React.Component {
         });
 
       return myStakes;
+    } else if (this.props.email && this.props.address) {
+ 
+      let stakenft = [];
+      let myStakes = await staking_contract.methods
+        .depositsOf(this.props.address)
+        .call()
+        .then((result) => {
+          for (let i = 0; i < result.length; i++)
+            stakenft.push(parseInt(result[i]));
+          return stakenft;
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+
+      return myStakes;
+    } else {
+      return []
     }
   };
   getLandStakesIds = async () => {
-    const address = this.props.coinbase;
-    if (address !== null && this.props.coinbase !== undefined) {
-      const infura_web3 = window.infuraWeb3;
+    const address = this.props.coinbase; 
+    const infura_web3 = window.infuraWeb3;
       let staking_contract = new infura_web3.eth.Contract(
         window.LANDSTAKING_ABI,
         window.config.landnftstake_address
       );
+
+    if (address !== null && this.props.coinbase !== undefined && this.props.isConnected) {
+      
       let stakenft = [];
       let myStakes = await staking_contract.methods
         .depositsOf(address)
+        .call()
+        .then((result) => {
+          for (let i = 0; i < result.length; i++)
+            stakenft.push(parseInt(result[i]));
+          return stakenft;
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+
+      return myStakes;
+    } else if (this.props.email  && this.props.address) {
+     
+      let stakenft = [];
+      let myStakes = await staking_contract.methods
+        .depositsOf(this.props.address)
         .call()
         .then((result) => {
           for (let i = 0; i < result.length; i++)
@@ -1075,18 +1266,37 @@ export default class Subscription extends React.Component {
   };
 
   fetchAvatar = async () => {
-    const response = await fetch(
-      `https://api-image.dyp.finance/api/v1/avatar/${this.props.coinbase}`
-    )
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        this.setState({ image: data.status === 0 ? Placeholder : data.avatar });
-      })
-      .catch(console.error);
+    if (this.props.email && this.props.address) {
+      const response = await fetch(
+        `https://api-image.dyp.finance/api/v1/avatar/${this.props.address}`
+      )
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          this.setState({
+            image: data.status === 0 ? Placeholder : data.avatar,
+          });
+        })
+        .catch(console.error);
 
-    return response;
+      return response;
+    } else if (this.props.isConnected && this.props.coinbase) {
+      const response = await fetch(
+        `https://api-image.dyp.finance/api/v1/avatar/${this.props.coinbase}`
+      )
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          this.setState({
+            image: data.status === 0 ? Placeholder : data.avatar,
+          });
+        })
+        .catch(console.error);
+
+      return response;
+    } else this.setState({ image: Placeholder });
   };
 
   deleteAvatar = async () => {
@@ -1415,34 +1625,41 @@ export default class Subscription extends React.Component {
               </div>
             </div>
             {this.props.address &&
-                        this.props.email &&
-                        this.props.coinbase &&
-                        this.props.syncStatus !== "" &&
-                        this.props.address.toLowerCase() !== this.props.coinbase.toLowerCase() && (
-            <div className="bordereddiv border-0 py-2">
-              <div className="d-flex align-items-center gap-2 justify-content-between">
-                <h6 className="premiumtext-alert"> Your gaming account is not linked to the wallet
-                              you connected. To update the game wallet address,
-                              press the synchronize button.</h6>{" "}
-                <button className="d-flex align-items-center justify-content-center gap-1 syncbtn col-1" onClick={this.props.onSyncClick}>
-                  {this.props.syncStatus === "initial"
-                    ? "Synchronize"
-                    : this.props.syncStatus === "loading"
-                    ? "Synchronising..."
-                    : this.props.syncStatus === "success"
-                    ? "Success"
-                    : "Error"}
-                </button>
-              </div>
-            </div>
-  )}
+              this.props.email &&
+              this.props.coinbase &&
+              this.props.syncStatus !== "" &&
+              this.props.address.toLowerCase() !==
+                this.props.coinbase.toLowerCase() && (
+                <div className="bordereddiv border-0 py-2">
+                  <div className="d-flex align-items-center gap-2 justify-content-between">
+                    <h6 className="premiumtext-alert">
+                      {" "}
+                      Your gaming account is not linked to the wallet you
+                      connected. To update the game wallet address, press the
+                      synchronize button.
+                    </h6>{" "}
+                    <button
+                      className="d-flex align-items-center justify-content-center gap-1 syncbtn col-1"
+                      onClick={this.props.onSyncClick}
+                    >
+                      {this.props.syncStatus === "initial"
+                        ? "Synchronize"
+                        : this.props.syncStatus === "loading"
+                        ? "Synchronising..."
+                        : this.props.syncStatus === "success"
+                        ? "Success"
+                        : "Error"}
+                    </button>
+                  </div>
+                </div>
+              )}
           </div>
           <div className={`bordereddiv border-0`}></div>
           <div className="row mx-0 mt-4 gap-3 gap-lg-0">
             <div className="col-12 ps-0 col-lg-6">
               <div className="dyp-balances-wrapper d-flex flex-column gap-4 p-3">
                 <h6 className="balances-title">Multichain DYP Balance</h6>
-                <div className="d-flex flex-column flex-lg-row gap-3 align-items-center justify-content-between">
+                <div className=" balance-item-wrapper gap-3 ">
                   <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-3 gap-xxl-3 gap-lg-1">
                     <img
                       src={require(`./assets/ethIcon.svg`).default}
@@ -1489,6 +1706,23 @@ export default class Subscription extends React.Component {
                     <div className="d-flex align-items-center gap-1">
                       <span className="balance-amount mb-0">
                         {getFormattedNumber(this.state.avaxBalance)} DYP
+                      </span>
+                      <img
+                        src={require(`./assets/dypv1Icon.svg`).default}
+                        width={20}
+                        height={20}
+                        alt=""
+                      />
+                    </div>
+                  </div>
+                  <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-3 gap-xxl-3 gap-lg-1">
+                    <img
+                      src={require(`./assets/baseLogo.svg`).default}
+                      alt=""
+                    />
+                    <div className="d-flex align-items-center gap-1">
+                      <span className="balance-amount mb-0">
+                        {getFormattedNumber(this.state.baseBalance)} DYP
                       </span>
                       <img
                         src={require(`./assets/dypv1Icon.svg`).default}

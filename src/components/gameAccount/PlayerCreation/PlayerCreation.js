@@ -74,29 +74,24 @@ function PlayerCreation() {
       <LoginCard>
         <div className={classes.container}>
           <h4 className={classes.playerCreationTitle}>Player Creation</h4>
-          <form autocomplete="off">
+          <form autocomplete="off" className={`p-0 ${classes.container}`}>
             <Input
               autocomplete="off"
               name="displayName"
-              style={{
-                marginBottom: 24,
-              }}
+              
               placeHolder="Display name"
               value={displayName}
               onChange={setDisplayName}
             />
             <Input
               name="player-password"
-              style={{
-                marginBottom: 48,
-              }}
+               
               inputType="password"
               placeHolder="Password"
               value={password}
               onChange={setPassword}
             />
-            <Button
-              style={{ margin: "auto" }}
+            <Button 
               onPress={_onCreatePlayer}
               title={"Continue"}
               loading={loading}

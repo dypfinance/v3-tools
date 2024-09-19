@@ -1,7 +1,9 @@
 .container {
-  padding: 50px 60px 32px;
+  padding: 45px;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  gap: 23px;
 }
 
 .containergecko {
@@ -77,10 +79,10 @@
 .forgotPasswordText {
   color: white;
   font-family: "poppins";
-  font-size: 18px;
+  font-size: 14px;
   align-self: flex-start;
   text-decoration: none;
-  margin: 40px auto;
+  /* margin: 40px auto; */
   cursor: pointer;
 }
 
