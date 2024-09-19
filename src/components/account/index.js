@@ -1119,7 +1119,7 @@ export default class Subscription extends React.Component {
   myLandStakes = async () => {
     let myStakes = await this.getLandStakesIds();
     let myStakesLandPremium = await this.getStakesIdsLandPremium();
-    console.log(myStakes, myStakesLandPremium)
+    
     let stakes = []
     let stakesLandPremium = []
 
@@ -1136,7 +1136,7 @@ export default class Subscription extends React.Component {
       stakesLandPremium.reverse();
      
    }
-console.log([...stakes, ...stakesLandPremium])
+   
    this.setState({ landStakes: [...stakes, ...stakesLandPremium] });
   };
 
