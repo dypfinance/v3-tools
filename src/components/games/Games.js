@@ -261,7 +261,7 @@ const Games = ({
   };
 
   const randomOpenedChests = [
-    2, 4, 18, 12, 19, 5, 16, 6, 1, 15, 17, 3, 7, 9, 14, 11, 13, 8, 10
+    2, 4, 18, 12, 19, 5, 16, 6, 1, 15, 17, 3, 7, 9, 14, 11, 13, 8, 10,
   ];
 
   const getIds = () => {
@@ -535,19 +535,22 @@ const Games = ({
                               setTimeout(() => {
                                 setSparkles({
                                   show: value,
-                                  position:  randomOpenedChests[
-                                    index === 19 && openedChests.length === 19
-                                      ? index
-                                      : index !== 19 && openedChests.length === 19
-                                      ? index
-                                      : index === 19 && openedChests.length < 19
-                                      ? chests.indexOf(
-                                          chests.find((item) => {
-                                            return item.isOpened === false;
-                                          })
-                                        )
-                                      : index
-                                  ]
+                                  position:
+                                    randomOpenedChests[
+                                      index === 19 && openedChests.length === 19
+                                        ? index
+                                        : index !== 19 &&
+                                          openedChests.length === 19
+                                        ? index
+                                        : index === 19 &&
+                                          openedChests.length < 19
+                                        ? chests.indexOf(
+                                            chests.find((item) => {
+                                              return item.isOpened === false;
+                                            })
+                                          )
+                                        : index
+                                    ],
                                 });
                               }, 350);
                               setDisable(value);
