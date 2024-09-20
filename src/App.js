@@ -130,8 +130,16 @@ function App() {
   const [hasDypBalance, sethasDypBalance] = useState(false);
   const [hasiDypBalance, sethasiDypBalance] = useState(false);
   const [userPools, setuserPools] = useState([])
+  const [previousWeeklyVersion, setpreviousWeeklyVersion] = useState(0);
+  const [previousMonthlyVersion, setpreviousMonthlyVersion] = useState(0);
+  const [previousKittyDashVersion, setpreviousKittyDashVersion] = useState(0);
 
+  const [monthlyplayerData, setmonthlyplayerData] = useState([]);
+  const [weeklyplayerData, setweeklyplayerData] = useState([]);
+  const [kittyDashRecords, setkittyDashRecords] = useState([]);
 
+  const backendApi =
+    "https://axf717szte.execute-api.eu-central-1.amazonaws.com/prod";
 
   const showModal = () => {
     setshow(true);
@@ -1037,6 +1045,114 @@ function App() {
     }
   };
 
+
+  const fetchPreviousMonthlyWinners = async () => {
+    if (previousMonthlyVersion != 0) {
+      const data = {
+        StatisticName: "LeaderboardDypiusMonthly",
+        StartPosition: 0,
+        MaxResultsCount: 10,
+        Version: previousMonthlyVersion - 1,
+      };
+      const result = await axios.post(
+        `${backendApi}/auth/GetLeaderboard?Version=-1`,
+        data
+      );
+
+      setmonthlyplayerData(result.data.data.leaderboard);
+    }
+  };
+
+  const fetchMonthlyWinners = async () => {
+   
+      const data = {
+        StatisticName: "LeaderboardDypiusMonthly",
+        StartPosition: 0,
+        MaxResultsCount: 10,
+      };
+      const result = await axios.post(
+        `${backendApi}/auth/GetLeaderboard`,
+        data
+      );
+
+      setmonthlyplayerData(result.data.data.leaderboard);
+      setpreviousMonthlyVersion(parseInt(result.data.data.version))
+   
+  };
+
+  const fetchWeeklyWinners = async () => {
+     
+      const data = {
+        StatisticName: "LeaderboardDypiusWeekly",
+        StartPosition: 0,
+        MaxResultsCount: 10,
+      };
+      const result = await axios.post(
+        `${backendApi}/auth/GetLeaderboard`,
+        data
+      );
+      setpreviousWeeklyVersion(parseInt(result.data.data.version))
+      setweeklyplayerData(result.data.data.leaderboard);
+     
+  };
+
+
+  const fetchPreviousWeeklyWinners = async () => {
+    if (previousWeeklyVersion != 0) {
+      const data = {
+        StatisticName: "LeaderboardDypiusWeekly",
+        StartPosition: 0,
+        MaxResultsCount: 10,
+        Version: previousWeeklyVersion - 1,
+
+      };
+      const result = await axios.post(
+        `${backendApi}/auth/GetLeaderboard?Version=-1`,
+        data
+      );
+
+      setweeklyplayerData(result.data.data.leaderboard);
+    }
+  };
+
+
+  const fetchKittyDashWinners = async () => {
+    const data = {
+      StatisticName: "MobileGameDailyLeaderboard",
+      StartPosition: 0,
+      MaxResultsCount: 10,
+    };
+    const result = await axios.post(
+      `https://axf717szte.execute-api.eu-central-1.amazonaws.com/prod/auth/GetLeaderboardAroundPlayer`,
+      data
+    );
+    setpreviousKittyDashVersion(parseInt(result.data.data.version))
+    setkittyDashRecords(result.data.data.leaderboard); 
+  };
+
+
+  
+  const fetchPreviousKittyDashWinners = async () => {
+    if (previousKittyDashVersion != 0) {
+      const data = {
+        StatisticName: "MobileGameDailyLeaderboard",
+        StartPosition: 0,
+        MaxResultsCount: 10,
+        Version: previousKittyDashVersion - 1,
+
+      };
+      const result = await axios.post(
+        `${backendApi}/auth/GetLeaderboard?Version=-1`,
+        data
+      );
+
+      setkittyDashRecords(result.data.data.leaderboard);
+    }
+  };
+
+
+
+
   useEffect(() => {
     if (email) {
       getAllChests();
@@ -1310,6 +1426,7 @@ function App() {
                         openedChests={openedChests}
                         address={data?.getPlayer?.wallet?.publicAddress}
                         userId={data?.getPlayer?.playerId}
+                        handleSwitchNetwork={handleSwitchNetwork}
                       />
                     }
                   />

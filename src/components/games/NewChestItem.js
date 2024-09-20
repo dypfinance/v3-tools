@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import premiumLock from "./assets/premiumLock.png";
-import errorSound from "./assets/error.mp3";
-import crackStoneSound from "./assets/stone-crack-sound.mp3";
-import crackedStoneSound from "./assets/stone-cracked-sound.mp3";
+
 
 import axios from "axios";
 import Web3 from "web3";
@@ -34,15 +32,14 @@ const NewChestItem = ({
   coinbase,
   binanceW3WProvider,
   isConnected,
+  onCrackStone
 }) => {
   const [shake, setShake] = useState(false);
   const [ischestOpen, setIsChestOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [approved, setApproved] = useState(false);
 
-  const audiostart = new Audio(crackStoneSound);
-  const audioerror = new Audio(errorSound);
-  const audiosuccess = new Audio(crackedStoneSound);
+
 
   const getUserRewardsByChest2 = async (
     userEmail,
@@ -476,7 +473,7 @@ const NewChestItem = ({
 
   const handleChestClick = () => {
     if (!isPremium && rewardTypes === "premium") {
-      onShake();
+      // onShake();
       return;
     }
     if (!disableBtn || open) {
@@ -492,41 +489,14 @@ const NewChestItem = ({
     }
   };
 
-  const onShake = () => {
-    setShake(true);
-    new Audio(errorSound).play();
-    setTimeout(() => {
-      setShake(false);
-    }, 1000);
-  };
+  // const onShake = () => {
+  //   setShake(true);
+  //   new Audio(errorSound).play();
+  //   setTimeout(() => {
+  //     setShake(false);
+  //   }, 1000);
+  // };
 
-  const onCrackStone = (event) => {
-    if (event === "start") {
-      if (!audiostart.loop) {
-        audiostart.loop = true;
-      }
-      audiostart.play();
-    }
-    if (event === "error") {
-      if (audiostart.loop) {
-        audiostart.loop = false;
-      }
-      audiostart.loop = false;
-      audiostart.currentTime = 0;
-      audiostart.pause();
-      audiosuccess.play();
-    }
-    if (event === "success") {
-      if (audiostart.loop) {
-        audiostart.loop = false;
-      }
-     
-      audiostart.loop = false;
-      audiostart.currentTime = 0;
-      audiostart.pause();
-      audiosuccess.play();
-    }
-  };
 
   useEffect(() => {
     setIsChestOpen(false);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./games.scss";
 import getFormattedNumber from "../../functions/get-formatted-number";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
@@ -6,13 +6,13 @@ import winConfetti from "./assets/winConfetti.png";
 import NewChestItem from "./NewChestItem";
 import useWindowSize from "../../functions/useWindowSize";
 import danger from "./assets/danger.svg";
-import warning from "./assets/warning.svg";
-import baseLogo from "./assets/baseLogo.svg";
+// import warning from "./assets/warning.svg";
+// import baseLogo from "./assets/baseLogo.svg";
 import stoneCrack from "./assets/stoneCrack.svg";
 import mainChest from "./assets/mainChest.webp";
 import mainChestCracked from "./assets/mainChestCracked.webp";
 
-import kittyDash from "./assets/kittyDash.webp";
+// import kittyDash from "./assets/kittyDash.webp";
 import stoneCrackBanner from "./assets/stoneCrackBanner.png";
 import cawsAdventureBanner from "./assets/cawsAdventureBanner.png";
 import kittyDashBanner from "./assets/kittyDashBanner.png";
@@ -26,6 +26,9 @@ import StoneCrackPopup from "./components/StoneCrackPopup";
 import KittyDashPopup from "./components/KittyDashPopup";
 import CawsAdventurePopup from "./components/CawsAdventurePopup";
 import { NavLink } from "react-router-dom";
+import errorSound from "./assets/error.mp3";
+import crackStoneSound from "./assets/stone-crack-sound.mp3";
+import crackedStoneSound from "./assets/stone-cracked-sound.mp3";
 
 const Games = ({
   handleConnection,
@@ -53,6 +56,7 @@ const Games = ({
   const [claimingChest, setClaimingChest] = useState(false);
   const [selectedChest, setSelectedChest] = useState(null);
   const [selectedChest2, setSelectedChest2] = useState(null);
+  const [openChestIds, setopenChestIds] = useState([]);
 
   const [liverewardData, setLiveRewardData] = useState([]);
 
@@ -71,8 +75,11 @@ const Games = ({
   const [totalPoints, settotalPoints] = useState(0);
   const [totalUsdETH, settotalUsdETH] = useState(0);
   const [totalUsdDYP, settotalUsdDYP] = useState(0);
-
+  const dataFetchedRef = useRef(false);
   const html = document.querySelector("html");
+  const audiostart = new Audio(crackStoneSound);
+  const audioerror = new Audio(errorSound);
+  const audiosuccess = new Audio(crackedStoneSound);
 
   const countEarnedRewards = () => {
     if (openedChests && openedChests.length > 0) {
@@ -138,53 +145,50 @@ const Games = ({
       });
   };
 
+  const onCrackStone = (event) => {
+    if (event === "start") {
+      if (!audiostart.loop) {
+        audiostart.loop = true;
+      }
+      audiostart.play();
+    }
+    if (event === "error") {
+      if (audiostart.loop) {
+        audiostart.loop = false;
+      }
+      audiostart.loop = false;
+      audiostart.currentTime = 0;
+      audiostart.pause();
+      audioerror.play();
+    }
+    if (event === "success") {
+      if (audiostart.loop) {
+        audiostart.loop = false;
+      }
+
+      audiostart.loop = false;
+      audiostart.currentTime = 0;
+      audiostart.pause();
+      audiosuccess.play();
+    }
+  };
+
   const windowSize = useWindowSize();
 
-  // const dummyRewards = [
-  //   {
-  //     title: "Points",
-  //     amount: "Points",
-  //     img: "points",
-  //     error: true,
-  //     threshold: [1, 200000],
-  //   },
-  //   {
-  //     title: "Money",
-  //     amount: "$0.5 - $5",
-  //     img: 2,
-  //     error: false,
-  //     threshold: [],
-  //     min: 0.5,
-  //     max: 5,
-  //   },
-  //   {
-  //     title: "Money",
-  //     amount: "$15-$20",
-  //     img: 5,
-  //     error: true,
-  //     threshold: [],
-  //     min: 15,
-  //     max: 20,
-  //   },
-  //   {
-  //     title: "Money",
-  //     amount: "$20-$30",
-  //     img: 30,
-  //     error: false,
-  //     threshold: [],
-  //     min: 20,
-  //     max: 30,
-  //   },
-  // ];
-  // const handleAddNewRock = (rock) => {
-  //   const firstTwo = [1, 2];
-  //   if (rock === 1) {
-  //     rocksArray = [...rockData, ...firstTwo];
-  //     setRockData(rocksArray);
-  //   } else {
-  //     rocksArray = [...rockData, rock];
-  //     setRockData(rocksArray);
+  // const getRandomNumber = () => {
+  //   const result = Math.floor(Math.random() * 19) + 1;
+  //   return result;
+  // };
+
+  // const getRandomUniqueNumbers = (count) => {
+  //   const numbers = Array.from({ length: 19 }, (_, i) => i + 1);
+
+  //   for (let i = numbers.length - 1; i > 0; i--) {
+  //     const j = Math.floor(Math.random() * (i + 1));
+  //     [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
   //   }
+
+  //   return numbers.slice(0, count);
   // };
 
   const showLiveRewardData = (value) => {
@@ -255,6 +259,23 @@ const Games = ({
       setLiveRewardData([]);
     }
   };
+
+  const randomOpenedChests = [
+    2, 4, 18, 12, 19, 5, 16, 6, 1, 15, 17, 3, 7, 9, 14, 11, 13, 8, 10,
+  ];
+
+  const getIds = () => {
+    if (openedChests && openedChests.length > 0) {
+      let arrayFiltered = [];
+      window.range(0, 19).map((item, index) => {
+        if (chests[index].isOpened === true) {
+          arrayFiltered.push(randomOpenedChests[index]);
+        }
+      });
+      setopenChestIds(arrayFiltered);
+    }
+  };
+  // console.log(selectedChest2);
 
   useEffect(() => {
     if (chain === "base") {
@@ -362,7 +383,14 @@ const Games = ({
 
   useEffect(() => {
     countEarnedRewards();
+    getIds();
   }, [openedChests]);
+
+  // useEffect(() => {
+  //   if (dataFetchedRef.current) return;
+  //   dataFetchedRef.current = true;
+  //   getRandomNumber();
+  // }, []);
 
   return (
     <>
@@ -486,7 +514,7 @@ const Games = ({
                             key={index}
                             item={item}
                             image={bnbImages[index]}
-                            // openChest={openChest}
+                            onCrackStone={onCrackStone}
                             selectedChest={selectedChest}
                             isPremium={isPremium}
                             onClaimRewards={(value) => {
@@ -507,13 +535,43 @@ const Games = ({
                               setTimeout(() => {
                                 setSparkles({
                                   show: value,
-                                  position: openedChests.length + 1,
+                                  position:
+                                    randomOpenedChests[
+                                      index === 19 && openedChests.length === 19
+                                        ? index
+                                        : index !== 19 &&
+                                          openedChests.length === 19
+                                        ? index
+                                        : index === 19 &&
+                                          openedChests.length < 19
+                                        ? chests.indexOf(
+                                            chests.find((item) => {
+                                              return item.isOpened === false;
+                                            })
+                                          )
+                                        : index
+                                    ],
                                 });
                               }, 350);
                               setDisable(value);
                               setloading(value);
                               setSelectedChest(index + 1);
-                              setSelectedChest2(openedChests.length + 1);
+
+                              setSelectedChest2(
+                                randomOpenedChests[
+                                  index === 19 && openedChests.length === 19
+                                    ? index
+                                    : index !== 19 && openedChests.length === 19
+                                    ? index
+                                    : index === 19 && openedChests.length < 19
+                                    ? chests.indexOf(
+                                        chests.find((item) => {
+                                          return item.isOpened === false;
+                                        })
+                                      )
+                                    : index
+                                ]
+                              );
                             }}
                             onChestStatus={(val) => {
                               setMessage(val);
@@ -1215,10 +1273,9 @@ const Games = ({
                            
                           `}
                             style={{
-                              display:
-                                index + 1 <= openedChests.length
-                                  ? "none"
-                                  : "block",
+                              display: openChestIds.includes(index + 1)
+                                ? "none"
+                                : "block",
                             }}
                           >
                             <img
@@ -1240,8 +1297,10 @@ const Games = ({
                               "chest-pulsate"
                             } rockitem${index + 5}`}
                             style={{
-                              display:
-                                index + 5 <= openedChests.length ? "none" : "",
+                              display: openChestIds.includes(index + 5)
+                                ? "none"
+                                : "",
+                              // index + 5 <= openedChests.length ? "none" : "",
                             }}
                           >
                             <img
@@ -1263,8 +1322,10 @@ const Games = ({
                               "chest-pulsate"
                             }`}
                             style={{
-                              display:
-                                index + 10 <= openedChests.length ? "none" : "",
+                              display: openChestIds.includes(index + 10)
+                                ? "none"
+                                : "",
+                              // index + 10 <= openedChests.length ? "none" : "",
                             }}
                           >
                             <img
@@ -1288,8 +1349,11 @@ const Games = ({
                               "chest-pulsate"
                             }`}
                             style={{
-                              display:
-                                index + 15 <= openedChests.length ? "none" : "",
+                              display: openChestIds.includes(index + 15)
+                                ? "none"
+                                : "",
+                              // display:
+                              //   index + 15 <= openedChests.length ? "none" : "",
                             }}
                           >
                             <img
