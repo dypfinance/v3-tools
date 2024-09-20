@@ -394,8 +394,7 @@ fetchKittyDashWinners();
       fetchKittyDashWinners();
     }
   }
-
-  console.log(kittyDashRecords, "kitty");
+ 
   
   return (
     <div

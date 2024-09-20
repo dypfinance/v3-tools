@@ -76,7 +76,7 @@ export default class Subscription extends React.Component {
   }
 
   fetchUserPools = async () => {
-    if (this.props.email && this.props.address) {
+    if (this.props.email && this.props.address !==undefined && this.props.address.includes('0x') ) {
       const result = await axios
         .get(`https://api.dyp.finance/api/user_pools/${this.props.address}`)
         .then((data) => {
@@ -525,7 +525,7 @@ export default class Subscription extends React.Component {
       tokenAddress_base
     );
 
-    if (this.props.email && this.props.address) {
+    if (this.props.email && this.props.address !==undefined && this.props.address.includes('0x')) {
       await contract1.methods
         .balanceOf(this.props.address)
         .call()
@@ -782,7 +782,7 @@ export default class Subscription extends React.Component {
       window.config.nft_address
     );
 
-    if (this.props.email && this.props.address) {
+    if (this.props.email && this.props.address !==undefined && this.props.address.includes('0x')) {
       let getBalanceOf = await nfts_contract.methods
         .balanceOf(this.props.address)
         .call()
@@ -851,7 +851,7 @@ export default class Subscription extends React.Component {
       window.config.landnft_address
     );
 
-    if (this.props.address && this.props.email) {
+    if (this.props.address !==undefined && this.props.address.includes('0x') && this.props.email) {
       let getBalanceOf = await nfts_contract.methods
         .balanceOf(this.props.address)
         .call()
@@ -971,7 +971,7 @@ export default class Subscription extends React.Component {
         });
 
       return myStakes;
-    } else if (this.props.email && this.props.address) {
+    } else if (this.props.email && this.props.address !==undefined && this.props.address.includes('0x')) {
       let stakenft = [];
       let myStakes = await staking_contract.methods
         .depositsOf(this.props.address)
@@ -998,7 +998,7 @@ export default class Subscription extends React.Component {
       window.config.nft_caws_premiumstake_address
     );
     let stakenft = [];
-    if (this.props.email && this.props.address) {
+    if (this.props.email && this.props.address !==undefined && this.props.address.includes('0x')) {
       let myStakes = await staking_contract.methods
         .depositsOf(this.props.address)
         .call()
@@ -1027,7 +1027,7 @@ export default class Subscription extends React.Component {
       window.config.nft_land_premiumstake_address
     );
     let stakenft = [];
-    if (this.props.email && this.props.address) {
+    if (this.props.email && this.props.address !==undefined && this.props.address.includes('0x')) {
       let myStakes = await staking_contract.methods
         .depositsOf(this.props.address)
         .call()
@@ -1078,7 +1078,7 @@ export default class Subscription extends React.Component {
         });
 
       return myStakes;
-    } else if (this.props.email && this.props.address) {
+    } else if (this.props.email && this.props.address !==undefined && this.props.address.includes('0x')) {
       let stakenft = [];
       let myStakes = await staking_contract.methods
         .depositsOf(this.props.address)
@@ -1349,7 +1349,7 @@ export default class Subscription extends React.Component {
   };
 
   fetchAvatar = async () => {
-    if (this.props.email && this.props.address) {
+    if (this.props.email && this.props.address !==undefined && this.props.address.includes('0x')) {
       const response = await fetch(
         `https://api-image.dyp.finance/api/v1/avatar/${this.props.address}`
       )
@@ -3117,6 +3117,7 @@ export default class Subscription extends React.Component {
   };
 
   render() {
+
     return (
       <div className="locker container-lg">
         <div>

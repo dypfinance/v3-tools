@@ -46,17 +46,17 @@ const Games = ({
   chests,
   openedChests,
   monthlyplayerData,
-previousMonthlyVersion,
-previousWeeklyVersion,
-weeklyplayerData,
-previousKittyDashVersion,
-kittyDashRecords,
-fetchWeeklyWinners,
-fetchMonthlyWinners,
-fetchKittyDashWinners,
-fetchPreviousMonthlyWinners,
-fetchPreviousWeeklyWinners,
-fetchPreviousKittyDashWinners,
+  previousMonthlyVersion,
+  previousWeeklyVersion,
+  weeklyplayerData,
+  previousKittyDashVersion,
+  kittyDashRecords,
+  fetchWeeklyWinners,
+  fetchMonthlyWinners,
+  fetchKittyDashWinners,
+  fetchPreviousMonthlyWinners,
+  fetchPreviousWeeklyWinners,
+  fetchPreviousKittyDashWinners,
 }) => {
   const [chain, setChain] = useState("base");
   const [message, setMessage] = useState("");
@@ -69,6 +69,7 @@ fetchPreviousKittyDashWinners,
   const [selectedChest, setSelectedChest] = useState(null);
   const [selectedChest2, setSelectedChest2] = useState(null);
   const [openChestIds, setopenChestIds] = useState([]);
+  const [clickPattern, setClickPattern] = useState(null);
 
   const [liverewardData, setLiveRewardData] = useState([]);
 
@@ -185,9 +186,6 @@ fetchPreviousKittyDashWinners,
     }
   };
 
-
-
-
   const windowSize = useWindowSize();
 
   // const getRandomNumber = () => {
@@ -245,7 +243,7 @@ fetchPreviousKittyDashWinners,
 
     setIsActive(chestID);
     setIsActiveIndex(chestIndex + 1);
-    console.log("filteredResult", filteredResult);
+    // console.log("filteredResult", filteredResult);
     if (filteredResult && filteredResult.rewards) {
       const resultWonETH = filteredResult.rewards.find((obj) => {
         return obj.rewardType === "MoneyETH" && obj.status === "Claimed";
@@ -284,13 +282,249 @@ fetchPreviousKittyDashWinners,
       let arrayFiltered = [];
       window.range(0, 19).map((item, index) => {
         if (chests[index].isOpened === true) {
-          arrayFiltered.push(randomOpenedChests[index]);
+          arrayFiltered.push(
+            randomOpenedChests[
+              handleChestSelection2(index, chests, openedChests)
+            ]
+          );
         }
       });
       setopenChestIds(arrayFiltered);
     }
   };
-  // console.log(selectedChest2);
+
+  const getFirstUnopenedChest = (index, chests) => {
+    for (let i = index; i >= 0; i--) {
+      if (!chests[i].isOpened) {
+        return i;
+      }
+    }
+    return index;
+  };
+
+  const handleChestSelection = (index, chests, openedChests) => {
+// console.log('index', index)
+    // Case: All chests are opened
+    if (openedChests.length === 19) {
+      // selectedChestid(3);
+      return 3;
+    }
+
+    // Case: No chests opened, and last button (19) clicked
+    if (openedChests.length === 0 && index === 19) {
+      // selectedChestid(index - 1);
+      return index - 1;
+    }
+
+    // Case: No chests opened, first button (0) clicked
+    if (openedChests.length === 0 && index === 0) {
+      // selectedChestid(index);
+      return index;
+    }
+
+    // Case: Other buttons clicked when no chests opened (index 1 to 18)
+    if (openedChests.length === 0 && index >= 1 && index < 18) {
+      // selectedChestid(index); // Selects the clicked chest
+      
+      return index;
+    }
+
+    // Case: Chests opened, index is 18, chest is opened
+    // if (openedChests.length > 0 && index === 18 && chests[index].isOpened) {
+    //   const unopenedChest = getFirstUnopenedChest(index, chests);
+    //   // selectedChestid(unopenedChest);
+    //   return unopenedChest;
+    // }
+
+    if (
+      openedChests.length > 0 &&
+      index !== 19 &&
+      chests[index].isOpened === false &&
+      chests[index-1].isOpened === false &&
+      chests[index+1].isOpened === true 
+    ) {
+      const unopenedChest = getFirstUnopenedChest(index - 1, chests);
+
+      // selectedChestid(unopenedChest);
+      return unopenedChest;
+    }
+
+    if (
+      openedChests.length > 0 &&
+      index === 19 
+      // &&  chests[index].isOpened === true
+    ) {
+      
+      const unopenedChest = getFirstUnopenedChest(index - 1, chests);
+
+      // selectedChestid(unopenedChest);
+      return unopenedChest;
+    }
+
+    // // Case: Chests opened, index is 18, chest is not opened
+    // if (
+    //   openedChests.length > 0 &&
+    //   index === 18 &&
+    //   !chests[index].isOpened &&
+    //   chests[index + 1].isOpened === false
+    // ) {
+    //   // selectedChestid(index);
+    //   return index;
+    // }
+    // if (
+    //   openedChests.length > 0 &&
+    //   index === 18 &&
+    //   !chests[index].isOpened &&
+    //   chests[index + 1].isOpened === true
+    // ) {
+    //   const unopenedChest = getFirstUnopenedChest(index - 1, chests);
+
+    //   // selectedChestid(unopenedChest);
+    //   return unopenedChest;
+    // }
+   
+    // if (
+    //   openedChests.length > 0 &&
+    //   index === 18 &&
+    //   chests[index].isOpened === true &&
+    //   chests[index + 1].isOpened === true
+    // ) {
+      
+    //   const unopenedChest = getFirstUnopenedChest(index - 1, chests);
+    //   // selectedChestid(unopenedChest);
+    //   return unopenedChest;
+    // }
+    // // Case: Chests opened, index is 17, chest is opened
+    // if (openedChests.length > 0 && index === 17 && chests[index].isOpened) {
+    //   const unopenedChest = getFirstUnopenedChest(index, chests);
+    //   // selectedChestid(unopenedChest);
+    //   return unopenedChest;
+    // }
+
+    // // Case: Chests opened, index is 17, chest is not opened
+    // if (openedChests.length > 0 && index === 17 && !chests[index].isOpened) {
+    //   const unopenedChest = getFirstUnopenedChest(index-1, chests);
+    //   // selectedChestid(unopenedChest);
+    //   return unopenedChest;
+    // }
+
+    // // Case: Chests opened, index is 1, chest is not opened
+    // if (openedChests.length > 0 && index === 1 && !chests[index].isOpened) {
+    //   // selectedChestid(index);
+    //   return index;
+    // }
+
+    // // Default Case: Any other button clicked when some chests are opened
+    if (openedChests.length > 0 && index >= 0 && index < 18 && !chests[index].isOpened) {
+      
+      // selectedChestid(index); // Selects the clicked chest
+      return index;
+    }
+  };
+
+
+  const handleChestSelection2 = (index, chests, openedChests) => {
+     
+    // Case: No chests opened, and last button (19) clicked
+    if (index === 19) {
+      // selectedChestid(index - 1);
+      return index - 1;
+    }
+
+    // Case: No chests opened, first button (0) clicked
+    if (index === 0) {
+      // selectedChestid(index);
+      return index;
+    }
+
+    // Case: Other buttons clicked when no chests opened (index 1 to 18)
+    if (index >= 1 && index < 18) {
+      // selectedChestid(index); // Selects the clicked chest
+      return index;
+    }
+
+    if (
+      openedChests.length > 0 &&
+      index === 19 &&
+      chests[index].isOpened === false
+    ) {
+      const unopenedChest = getFirstUnopenedChest(index - 1, chests);
+
+      // selectedChestid(unopenedChest);
+      return unopenedChest;
+    }
+
+    if (
+      openedChests.length > 0 &&
+      index === 19 &&
+      chests[index].isOpened === true
+    ) {
+      const unopenedChest = getFirstUnopenedChest(index - 1, chests);
+
+      // selectedChestid(unopenedChest);
+      return unopenedChest;
+    }
+
+    // Case: Chests opened, index is 18, chest is not opened
+    if (
+      openedChests.length > 0 &&
+      index === 18 &&
+      !chests[index].isOpened &&
+      chests[index + 1].isOpened === false
+    ) {
+      // selectedChestid(index);
+      return index;
+    }
+    if (
+      openedChests.length > 0 &&
+      index === 18 &&
+      !chests[index].isOpened &&
+      chests[index + 1].isOpened === true
+    ) {
+      const unopenedChest = getFirstUnopenedChest(index - 1, chests);
+
+      // selectedChestid(unopenedChest);
+      return unopenedChest;
+    }
+   
+    if (
+      openedChests.length > 0 &&
+      index === 18 &&
+      chests[index].isOpened === true &&
+      chests[index + 1].isOpened === true
+    ) {
+      
+      const unopenedChest = getFirstUnopenedChest(index - 1, chests);
+ 
+      // selectedChestid(unopenedChest);
+      return unopenedChest;
+    }
+    // Case: Chests opened, index is 17, chest is opened
+    if (openedChests.length > 0 && index === 17 && chests[index].isOpened) {
+      const unopenedChest = getFirstUnopenedChest(index, chests);
+      // selectedChestid(unopenedChest);
+      return unopenedChest;
+    }
+
+    // Case: Chests opened, index is 17, chest is not opened
+    if (openedChests.length > 0 && index === 17 && !chests[index].isOpened) {
+      // selectedChestid(index);
+      return index;
+    }
+
+    // Case: Chests opened, index is 1, chest is not opened
+    if (openedChests.length > 0 && index === 1 && !chests[index].isOpened) {
+      // selectedChestid(index);
+      return index;
+    }
+
+    // Default Case: Any other button clicked when some chests are opened
+    if (openedChests.length > 0 && index >= 0 && index < 18) {
+      // selectedChestid(index); // Selects the clicked chest
+      return index;
+    }
+  };
+
 
   useEffect(() => {
     if (chain === "base") {
@@ -401,14 +635,11 @@ fetchPreviousKittyDashWinners,
     getIds();
   }, [openedChests]);
 
-
-
-
   // useEffect(() => {
   //   if (dataFetchedRef.current) return;
   //   dataFetchedRef.current = true;
   //   getRandomNumber();
-  // }, []);
+  // }, []); 
 
   return (
     <>
@@ -555,19 +786,11 @@ fetchPreviousKittyDashWinners,
                                   show: value,
                                   position:
                                     randomOpenedChests[
-                                      index === 19 && openedChests.length === 19
-                                        ? index
-                                        : index !== 19 &&
-                                          openedChests.length === 19
-                                        ? index
-                                        : index === 19 &&
-                                          openedChests.length < 19
-                                        ? chests.indexOf(
-                                            chests.find((item) => {
-                                              return item.isOpened === false;
-                                            })
-                                          )
-                                        : index
+                                      handleChestSelection(
+                                        index,
+                                        chests,
+                                        openedChests
+                                      )
                                     ],
                                 });
                               }, 350);
@@ -577,17 +800,11 @@ fetchPreviousKittyDashWinners,
 
                               setSelectedChest2(
                                 randomOpenedChests[
-                                  index === 19 && openedChests.length === 19
-                                    ? index
-                                    : index !== 19 && openedChests.length === 19
-                                    ? index
-                                    : index === 19 && openedChests.length < 19
-                                    ? chests.indexOf(
-                                        chests.find((item) => {
-                                          return item.isOpened === false;
-                                        })
-                                      )
-                                    : index
+                                  handleChestSelection(
+                                    index,
+                                    chests,
+                                    openedChests
+                                  )
                                 ]
                               );
                             }}
@@ -1970,21 +2187,21 @@ fetchPreviousKittyDashWinners,
             onClick={() => setActive(false)}
           />
         </div>
-        <Leaderboard 
-        type={type} 
-        setType={setType}
-        monthlyplayerData={monthlyplayerData}
-        previousMonthlyVersion={previousMonthlyVersion}
-        previousWeeklyVersion={previousWeeklyVersion}
-        weeklyplayerData={weeklyplayerData}
-        previousKittyDashVersion={previousKittyDashVersion}
-        kittyDashRecords={kittyDashRecords}
-        fetchWeeklyWinners={fetchWeeklyWinners}
-        fetchMonthlyWinners={fetchMonthlyWinners}
-        fetchKittyDashWinners={fetchKittyDashWinners}
-        fetchPreviousMonthlyWinners={fetchPreviousMonthlyWinners}
-        fetchPreviousWeeklyWinners={fetchPreviousWeeklyWinners}
-        fetchPreviousKittyDashWinners={fetchPreviousKittyDashWinners}
+        <Leaderboard
+          type={type}
+          setType={setType}
+          monthlyplayerData={monthlyplayerData}
+          previousMonthlyVersion={previousMonthlyVersion}
+          previousWeeklyVersion={previousWeeklyVersion}
+          weeklyplayerData={weeklyplayerData}
+          previousKittyDashVersion={previousKittyDashVersion}
+          kittyDashRecords={kittyDashRecords}
+          fetchWeeklyWinners={fetchWeeklyWinners}
+          fetchMonthlyWinners={fetchMonthlyWinners}
+          fetchKittyDashWinners={fetchKittyDashWinners}
+          fetchPreviousMonthlyWinners={fetchPreviousMonthlyWinners}
+          fetchPreviousWeeklyWinners={fetchPreviousWeeklyWinners}
+          fetchPreviousKittyDashWinners={fetchPreviousKittyDashWinners}
         />
       </div>
       <StoneCrackPopup
