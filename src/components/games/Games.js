@@ -45,6 +45,18 @@ const Games = ({
   userId,
   chests,
   openedChests,
+  monthlyplayerData,
+previousMonthlyVersion,
+previousWeeklyVersion,
+weeklyplayerData,
+previousKittyDashVersion,
+kittyDashRecords,
+fetchWeeklyWinners,
+fetchMonthlyWinners,
+fetchKittyDashWinners,
+fetchPreviousMonthlyWinners,
+fetchPreviousWeeklyWinners,
+fetchPreviousKittyDashWinners,
 }) => {
   const [chain, setChain] = useState("base");
   const [message, setMessage] = useState("");
@@ -172,6 +184,9 @@ const Games = ({
       audiosuccess.play();
     }
   };
+
+
+
 
   const windowSize = useWindowSize();
 
@@ -385,6 +400,9 @@ const Games = ({
     countEarnedRewards();
     getIds();
   }, [openedChests]);
+
+
+
 
   // useEffect(() => {
   //   if (dataFetchedRef.current) return;
@@ -1952,7 +1970,22 @@ const Games = ({
             onClick={() => setActive(false)}
           />
         </div>
-        <Leaderboard type={type} setType={setType} />
+        <Leaderboard 
+        type={type} 
+        setType={setType}
+        monthlyplayerData={monthlyplayerData}
+        previousMonthlyVersion={previousMonthlyVersion}
+        previousWeeklyVersion={previousWeeklyVersion}
+        weeklyplayerData={weeklyplayerData}
+        previousKittyDashVersion={previousKittyDashVersion}
+        kittyDashRecords={kittyDashRecords}
+        fetchWeeklyWinners={fetchWeeklyWinners}
+        fetchMonthlyWinners={fetchMonthlyWinners}
+        fetchKittyDashWinners={fetchKittyDashWinners}
+        fetchPreviousMonthlyWinners={fetchPreviousMonthlyWinners}
+        fetchPreviousWeeklyWinners={fetchPreviousWeeklyWinners}
+        fetchPreviousKittyDashWinners={fetchPreviousKittyDashWinners}
+        />
       </div>
       <StoneCrackPopup
         active={popups.stoneCrack}
