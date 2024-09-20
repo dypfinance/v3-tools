@@ -1003,7 +1003,10 @@ function App() {
         body: bodyContent,
         headers: headersList,
       }
-    );
+    ).catch((err) => {
+      console.log(err);
+      
+    });
     if (response && response.status === 200) {
       let data = await response.json();
 
@@ -1057,7 +1060,10 @@ function App() {
       const result = await axios.post(
         `${backendApi}/auth/GetLeaderboard?Version=-1`,
         data
-      );
+      ).catch((err) => {
+        console.log(err);
+        
+      });
 
       setmonthlyplayerData(result.data.data.leaderboard);
     }
@@ -1073,7 +1079,10 @@ function App() {
       const result = await axios.post(
         `${backendApi}/auth/GetLeaderboard`,
         data
-      );
+      ).catch((err) => {
+        console.log(err);
+        
+      });
 
       setmonthlyplayerData(result.data.data.leaderboard);
       setpreviousMonthlyVersion(parseInt(result.data.data.version))
@@ -1090,7 +1099,10 @@ function App() {
       const result = await axios.post(
         `${backendApi}/auth/GetLeaderboard`,
         data
-      );
+      ).catch((err) => {
+        console.log(err);
+        
+      });
       setpreviousWeeklyVersion(parseInt(result.data.data.version))
       setweeklyplayerData(result.data.data.leaderboard);
      
@@ -1109,7 +1121,10 @@ function App() {
       const result = await axios.post(
         `${backendApi}/auth/GetLeaderboard?Version=-1`,
         data
-      );
+      ).catch((err) => {
+        console.log(err);
+        
+      });
 
       setweeklyplayerData(result.data.data.leaderboard);
     }
@@ -1123,15 +1138,15 @@ function App() {
       MaxResultsCount: 10,
     };
     const result = await axios.post(
-      `https://axf717szte.execute-api.eu-central-1.amazonaws.com/prod/auth/GetLeaderboardAroundPlayer`,
+      `${backendApi}/auth/GetLeaderboard`,
       data
-    );
-    setpreviousKittyDashVersion(parseInt(result.data.data.version))
-    setkittyDashRecords(result.data.data.leaderboard); 
+    ).catch((err) => {
+      console.log(err);
+      
+    });
+    setpreviousKittyDashVersion(parseInt(result?.data?.data?.version))
+    setkittyDashRecords(result?.data?.data?.leaderboard); 
   };
-
-
-  
   const fetchPreviousKittyDashWinners = async () => {
     if (previousKittyDashVersion != 0) {
       const data = {
@@ -1144,9 +1159,12 @@ function App() {
       const result = await axios.post(
         `${backendApi}/auth/GetLeaderboard?Version=-1`,
         data
-      );
+      ).catch((err) => {
+        console.log(err);
+        
+      });
 
-      setkittyDashRecords(result.data.data.leaderboard);
+      setkittyDashRecords(result?.data?.data?.leaderboard);
     }
   };
 
@@ -1427,9 +1445,28 @@ function App() {
                         address={data?.getPlayer?.wallet?.publicAddress}
                         userId={data?.getPlayer?.playerId}
                         handleSwitchNetwork={handleSwitchNetwork}
+                        monthlyplayerData={monthlyplayerData}
+                        previousMonthlyVersion={previousMonthlyVersion}
+                        previousWeeklyVersion={previousWeeklyVersion}
+                        weeklyplayerData={weeklyplayerData}
+                        previousKittyDashVersion={previousKittyDashVersion}
+                        kittyDashRecords={kittyDashRecords}
+                        fetchWeeklyWinners={fetchWeeklyWinners}
+                        fetchMonthlyWinners={fetchMonthlyWinners}
+                        fetchKittyDashWinners={fetchKittyDashWinners}
+                        fetchPreviousMonthlyWinners={fetchPreviousMonthlyWinners}
+                        fetchPreviousWeeklyWinners={fetchPreviousWeeklyWinners}
+                        fetchPreviousKittyDashWinners={fetchPreviousKittyDashWinners}
                       />
                     }
                   />
+                  {/* setmonthlyplayerData
+setpreviousMonthlyVersion
+setpreviousWeeklyVersion
+setweeklyplayerData
+setweeklyplayerData
+setpreviousKittyDashVersion
+setkittyDashRecords */}
 
                   <Route
                     exact
