@@ -339,12 +339,12 @@ const Games = ({
     if (
       openedChests.length > 0 &&
       index !== 19 &&
+      index !== 0 &&
       chests[index].isOpened === false &&
       chests[index-1].isOpened === false &&
       chests[index+1].isOpened === true 
     ) {
       const unopenedChest = getFirstUnopenedChest(index - 1, chests);
-
       // selectedChestid(unopenedChest);
       return unopenedChest;
     }
@@ -362,15 +362,19 @@ const Games = ({
     }
 
     // // Case: Chests opened, index is 18, chest is not opened
-    // if (
-    //   openedChests.length > 0 &&
-    //   index === 18 &&
-    //   !chests[index].isOpened &&
-    //   chests[index + 1].isOpened === false
-    // ) {
-    //   // selectedChestid(index);
-    //   return index;
-    // }
+    if (
+      openedChests.length > 0 && 
+      !chests[index].isOpened &&
+      chests[index + 1].isOpened === true&&
+      chests[index - 1].isOpened === true &&
+      index !== 19 &&
+      index !== 0
+    ) {
+      const unopenedChest = getFirstUnopenedChest(index - 1, chests);
+
+      // selectedChestid(unopenedChest);
+      return unopenedChest;
+    }
     // if (
     //   openedChests.length > 0 &&
     //   index === 18 &&
