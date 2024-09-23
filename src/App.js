@@ -1561,6 +1561,7 @@ function App() {
                         openedChests={openedChests}
                         address={data?.getPlayer?.wallet?.publicAddress}
                         userId={data?.getPlayer?.playerId}
+                        username={username}
                         handleSwitchNetwork={handleSwitchNetwork}
                         monthlyplayerData={monthlyplayerData}
                         previousMonthlyVersion={previousMonthlyVersion}
