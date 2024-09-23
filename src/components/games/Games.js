@@ -323,7 +323,7 @@ const Games = ({
     }
 
     // Case: Other buttons clicked when no chests opened (index 1 to 18)
-    if (openedChests.length === 0 && index >= 1 && index < 18) {
+    if (openedChests.length === 0 && index >= 1 && index <= 18) {
       // selectedChestid(index); // Selects the clicked chest
       
       return index;
@@ -419,7 +419,7 @@ const Games = ({
     // }
 
     // // Default Case: Any other button clicked when some chests are opened
-    if (openedChests.length > 0 && index >= 0 && index < 18 && !chests[index].isOpened) {
+    if (openedChests.length > 0 && index >= 0 && index <= 18 && !chests[index].isOpened) {
       
       // selectedChestid(index); // Selects the clicked chest
       return index;
@@ -523,7 +523,7 @@ const Games = ({
     }
 
     // Default Case: Any other button clicked when some chests are opened
-    if (openedChests.length > 0 && index >= 0 && index < 18) {
+    if (openedChests.length > 0 && index >= 0 && index <= 18) {
       // selectedChestid(index); // Selects the clicked chest
       return index;
     }
