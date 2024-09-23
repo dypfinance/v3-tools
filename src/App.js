@@ -129,14 +129,20 @@ function App() {
   const [isonlink, setIsOnLink] = useState(false);
   const [hasDypBalance, sethasDypBalance] = useState(false);
   const [hasiDypBalance, sethasiDypBalance] = useState(false);
-  const [userPools, setuserPools] = useState([])
+  const [userPools, setuserPools] = useState([]);
   const [previousWeeklyVersion, setpreviousWeeklyVersion] = useState(0);
   const [previousMonthlyVersion, setpreviousMonthlyVersion] = useState(0);
   const [previousKittyDashVersion, setpreviousKittyDashVersion] = useState(0);
 
-  const [monthlyplayerData, setmonthlyplayerData] = useState([]);
   const [weeklyplayerData, setweeklyplayerData] = useState([]);
+  const [activePlayerWeekly, setActivePlayerWeekly] = useState(false);
+  const [weeklyUser, setWeeklyUser] = useState({});
+  const [monthlyplayerData, setmonthlyplayerData] = useState([]);
+  const [activePlayerMonthly, setActivePlayerMonthly] = useState(false);
+  const [monthlyUser, setMonthlyUser] = useState({});
   const [kittyDashRecords, setkittyDashRecords] = useState([]);
+  const [activePlayerKitty, setActivePlayerKitty] = useState(false);
+  const [kittyUser, setKittyUser] = useState({});
 
   const backendApi =
     "https://axf717szte.execute-api.eu-central-1.amazonaws.com/prod";
@@ -277,12 +283,9 @@ function App() {
         .then((data) => {
           return data.data.PoolsUserIn;
         });
-        setuserPools(result)
-        
+      setuserPools(result);
     }
   };
-
-
 
   const refreshSubscription = async (userWallet) => {
     let subscribedPlatformTokenAmountNewETH;
@@ -544,11 +547,7 @@ function App() {
     const walletAddress = coinbase;
     const TokenABI = window.ERC20_ABI;
 
-    if (
-      coinbase &&
-     coinbase != undefined &&
-     isConnected
-    ) {
+    if (coinbase && coinbase != undefined && isConnected) {
       const contract1 = new window.infuraWeb3.eth.Contract(
         TokenABI,
         tokenAddress
@@ -686,22 +685,21 @@ function App() {
         (avaxBalance !== undefined && avaxBalance > 0) ||
         (baseBalance !== undefined && baseBalance > 0)
       ) {
-        sethasDypBalance(true) 
+        sethasDypBalance(true);
       } else {
-        sethasDypBalance(false) ;
+        sethasDypBalance(false);
       }
       if (
         (ethBalance_idyp !== undefined && ethBalance_idyp > 0) ||
         (bnbBalance_idyp !== undefined && bnbBalance_idyp > 0) ||
         (avaxBalance_idyp !== undefined && avaxBalance_idyp > 0)
       ) {
-        sethasiDypBalance(true) 
+        sethasiDypBalance(true);
       } else {
-        
       }
     } else {
-      sethasiDypBalance(false) 
-      sethasDypBalance(false) 
+      sethasiDypBalance(false);
+      sethasDypBalance(false);
     }
   };
 
@@ -946,6 +944,9 @@ function App() {
     fetchPolicy: "network-only",
   });
 
+  const userId = data?.getPlayer?.playerId;
+  const username = data?.getPlayer?.displayName;
+
   const [generateNonce, { loading: loadingGenerateNonce, data: dataNonce }] =
     useMutation(GENERATE_NONCE);
   const [verifyWallet, { loading: loadingVerify, data: dataVerify }] =
@@ -1005,7 +1006,6 @@ function App() {
       }
     ).catch((err) => {
       console.log(err);
-      
     });
     if (response && response.status === 200) {
       let data = await response.json();
@@ -1048,6 +1048,141 @@ function App() {
     }
   };
 
+  const fetchRecordsAroundPlayerWeekly = async (itemData) => {
+    const data = {
+      StatisticName: "LeaderboardDypiusWeekly",
+      MaxResultsCount: 6,
+      PlayerId: userId,
+    };
+    if (userId) {
+      const result = await axios.post(
+        `${backendApi}/auth/GetLeaderboardAroundPlayer`,
+        data
+      );
+      var testArray = result.data.data.leaderboard.filter(
+        (item) => item.displayName === username
+      );
+      if (itemData.length > 0) {
+        var testArray2 = Object.values(itemData).filter(
+          (item) => item.displayName === username
+        );
+
+        if (testArray.length > 0 && testArray2.length > 0) {
+          setActivePlayerWeekly(true);
+          setWeeklyUser([]);
+        } else if (testArray.length > 0 && testArray2.length === 0) {
+          setActivePlayerWeekly(false);
+          setWeeklyUser(...testArray);
+        }
+      } else if (testArray.length > 0) {
+        setActivePlayerWeekly(false);
+        setWeeklyUser(...testArray);
+      }
+    }
+  };
+
+  const fetchWeeklyWinners = async () => {
+    const data = {
+      StatisticName: "LeaderboardDypiusWeekly",
+      StartPosition: 0,
+      MaxResultsCount: 10,
+    };
+    const result = await axios
+      .post(`${backendApi}/auth/GetLeaderboard`, data)
+      .catch((err) => {
+        console.log(err);
+      });
+    setpreviousWeeklyVersion(parseInt(result.data.data.version));
+    setweeklyplayerData(result.data.data.leaderboard);
+    var testArray = result.data.data.leaderboard.filter(
+      (item) => item.displayName === username
+    );
+    if (testArray.length > 0) {
+      setActivePlayerWeekly(true);
+      fetchRecordsAroundPlayerWeekly(result.data.data.leaderboard);
+    } else if (testArray.length === 0) {
+      setActivePlayerWeekly(false);
+      fetchRecordsAroundPlayerWeekly(result.data.data.leaderboard);
+    }
+  };
+
+  const fetchPreviousWeeklyWinners = async () => {
+    if (previousWeeklyVersion != 0) {
+      const data = {
+        StatisticName: "LeaderboardDypiusWeekly",
+        StartPosition: 0,
+        MaxResultsCount: 10,
+        Version: previousWeeklyVersion - 1,
+      };
+      const result = await axios
+        .post(`${backendApi}/auth/GetLeaderboard?Version=-1`, data)
+        .catch((err) => {
+          console.log(err);
+        });
+
+      setweeklyplayerData(result.data.data.leaderboard);
+    }
+  };
+
+  const fetchRecordsAroundPlayerMonthly = async (itemData) => {
+    const data = {
+      StatisticName: "LeaderboardDypiusMonthly",
+      MaxResultsCount: 6,
+      PlayerId: userId,
+    };
+    if (userId) {
+      const result = await axios.post(
+        `${backendApi}/auth/GetLeaderboardAroundPlayer`,
+        data
+      );
+      var testArray = result.data.data.leaderboard.filter(
+        (item) => item.displayName === username
+      );
+      if (itemData.length > 0) {
+        var testArray2 = Object.values(itemData).filter(
+          (item) => item.displayName === username
+        );
+
+        if (testArray.length > 0 && testArray2.length > 0) {
+          setActivePlayerMonthly(true);
+          setMonthlyUser([]);
+        } else if (testArray.length > 0 && testArray2.length === 0) {
+          setActivePlayerMonthly(false);
+          setMonthlyUser(...testArray);
+        }
+      } else if (testArray.length > 0) {
+        setActivePlayerMonthly(false);
+        setMonthlyUser(...testArray);
+      }
+    }
+  };
+
+  const fetchMonthlyWinners = async () => {
+    const data = {
+      StatisticName: "LeaderboardDypiusMonthly",
+      StartPosition: 0,
+      MaxResultsCount: 10,
+    };
+    const result = await axios
+      .post(`${backendApi}/auth/GetLeaderboard`, data)
+      .catch((err) => {
+        console.log(err);
+      });
+
+    setmonthlyplayerData(result.data.data.leaderboard);
+    setpreviousMonthlyVersion(parseInt(result.data.data.version));
+
+    var testArray = result.data.data.leaderboard.filter(
+      (item) => item.displayName === username
+    );
+    if (testArray.length > 0) {
+      setActivePlayerMonthly(true);
+      fetchRecordsAroundPlayerMonthly(result.data.data.leaderboard);
+    } else if (testArray.length === 0) {
+      setActivePlayerMonthly(false);
+      fetchRecordsAroundPlayerMonthly(result.data.data.leaderboard);
+    }
+  };
 
   const fetchPreviousMonthlyWinners = async () => {
     if (previousMonthlyVersion != 0) {
@@ -1057,79 +1192,48 @@ function App() {
         MaxResultsCount: 10,
         Version: previousMonthlyVersion - 1,
       };
-      const result = await axios.post(
-        `${backendApi}/auth/GetLeaderboard?Version=-1`,
-        data
-      ).catch((err) => {
-        console.log(err);
-        
-      });
+      const result = await axios
+        .post(`${backendApi}/auth/GetLeaderboard?Version=-1`, data)
+        .catch((err) => {
+          console.log(err);
+        });
 
       setmonthlyplayerData(result.data.data.leaderboard);
     }
   };
 
-  const fetchMonthlyWinners = async () => {
-   
-      const data = {
-        StatisticName: "LeaderboardDypiusMonthly",
-        StartPosition: 0,
-        MaxResultsCount: 10,
-      };
+  const fetchRecordsAroundPlayerKitty = async (itemData) => {
+    const data = {
+      StatisticName: "MobileGameDailyLeaderboard",
+      MaxResultsCount: 6,
+      PlayerId: userId,
+    };
+    if (userId) {
       const result = await axios.post(
-        `${backendApi}/auth/GetLeaderboard`,
+        `${backendApi}/auth/GetLeaderboardAroundPlayer`,
         data
-      ).catch((err) => {
-        console.log(err);
-        
-      });
+      );
+      var testArray = result.data.data.leaderboard.filter(
+        (item) => item.displayName === username
+      );
+      if (itemData.length > 0) {
+        var testArray2 = Object.values(itemData).filter(
+          (item) => item.displayName === username
+        );
 
-      setmonthlyplayerData(result.data.data.leaderboard);
-      setpreviousMonthlyVersion(parseInt(result.data.data.version))
-   
-  };
-
-  const fetchWeeklyWinners = async () => {
-     
-      const data = {
-        StatisticName: "LeaderboardDypiusWeekly",
-        StartPosition: 0,
-        MaxResultsCount: 10,
-      };
-      const result = await axios.post(
-        `${backendApi}/auth/GetLeaderboard`,
-        data
-      ).catch((err) => {
-        console.log(err);
-        
-      });
-      setpreviousWeeklyVersion(parseInt(result.data.data.version))
-      setweeklyplayerData(result.data.data.leaderboard);
-     
-  };
-
-
-  const fetchPreviousWeeklyWinners = async () => {
-    if (previousWeeklyVersion != 0) {
-      const data = {
-        StatisticName: "LeaderboardDypiusWeekly",
-        StartPosition: 0,
-        MaxResultsCount: 10,
-        Version: previousWeeklyVersion - 1,
-
-      };
-      const result = await axios.post(
-        `${backendApi}/auth/GetLeaderboard?Version=-1`,
-        data
-      ).catch((err) => {
-        console.log(err);
-        
-      });
-
-      setweeklyplayerData(result.data.data.leaderboard);
+        if (testArray.length > 0 && testArray2.length > 0) {
+          setActivePlayerKitty(true);
+          setKittyUser([]);
+        } else if (testArray.length > 0 && testArray2.length === 0) {
+          setActivePlayerKitty(false);
+          setKittyUser(...testArray);
+        }
+      } else if (testArray.length > 0) {
+        setActivePlayerKitty(false);
+        setKittyUser(...testArray);
+      }
     }
   };
-
 
   const fetchKittyDashWinners = async () => {
     const data = {
@@ -1137,16 +1241,26 @@ function App() {
       StartPosition: 0,
       MaxResultsCount: 10,
     };
-    const result = await axios.post(
-      `${backendApi}/auth/GetLeaderboard`,
-      data
-    ).catch((err) => {
-      console.log(err);
-      
-    });
-    setpreviousKittyDashVersion(parseInt(result?.data?.data?.version))
-    setkittyDashRecords(result?.data?.data?.leaderboard); 
+    const result = await axios
+      .post(`${backendApi}/auth/GetLeaderboard`, data)
+      .catch((err) => {
+        console.log(err);
+      });
+    setpreviousKittyDashVersion(parseInt(result?.data?.data?.version));
+    setkittyDashRecords(result?.data?.data?.leaderboard);
+
+    var testArray = result.data.data.leaderboard.filter(
+      (item) => item.displayName === username
+    );
+    if (testArray.length > 0) {
+      setActivePlayerKitty(true);
+      fetchRecordsAroundPlayerKitty(result.data.data.leaderboard);
+    } else if (testArray.length === 0) {
+      setActivePlayerKitty(false);
+      fetchRecordsAroundPlayerKitty(result.data.data.leaderboard);
+    }
   };
+
   const fetchPreviousKittyDashWinners = async () => {
     if (previousKittyDashVersion != 0) {
       const data = {
@@ -1154,22 +1268,16 @@ function App() {
         StartPosition: 0,
         MaxResultsCount: 10,
         Version: previousKittyDashVersion - 1,
-
       };
-      const result = await axios.post(
-        `${backendApi}/auth/GetLeaderboard?Version=-1`,
-        data
-      ).catch((err) => {
-        console.log(err);
-        
-      });
+      const result = await axios
+        .post(`${backendApi}/auth/GetLeaderboard?Version=-1`, data)
+        .catch((err) => {
+          console.log(err);
+        });
 
       setkittyDashRecords(result?.data?.data?.leaderboard);
     }
   };
-
-
-
 
   useEffect(() => {
     if (email) {
@@ -1182,8 +1290,8 @@ function App() {
       refreshSubscription(data?.getPlayer?.wallet?.publicAddress);
     } else if (isConnected && coinbase) {
       refreshSubscription(coinbase);
-      getAllBalance()
-      fetchUserPools()
+      getAllBalance();
+      fetchUserPools();
     } else {
       setisPremium(false);
     }
@@ -1454,9 +1562,19 @@ function App() {
                         fetchWeeklyWinners={fetchWeeklyWinners}
                         fetchMonthlyWinners={fetchMonthlyWinners}
                         fetchKittyDashWinners={fetchKittyDashWinners}
-                        fetchPreviousMonthlyWinners={fetchPreviousMonthlyWinners}
+                        fetchPreviousMonthlyWinners={
+                          fetchPreviousMonthlyWinners
+                        }
                         fetchPreviousWeeklyWinners={fetchPreviousWeeklyWinners}
-                        fetchPreviousKittyDashWinners={fetchPreviousKittyDashWinners}
+                        fetchPreviousKittyDashWinners={
+                          fetchPreviousKittyDashWinners
+                        }
+                        kittyUser={kittyUser}
+                        weeklyUser={weeklyUser}
+                        monthlyyUser={monthlyUser}
+                        activePlayerKitty={activePlayerKitty}
+                        activePlayerWeekly={activePlayerWeekly}
+                        activePlayerMonthly={activePlayerMonthly}
                       />
                     }
                   />

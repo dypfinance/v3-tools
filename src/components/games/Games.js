@@ -57,6 +57,12 @@ const Games = ({
   fetchPreviousMonthlyWinners,
   fetchPreviousWeeklyWinners,
   fetchPreviousKittyDashWinners,
+  kittyUser,
+  weeklyUser,
+  monthlyUser,
+  activePlayerKitty,
+  activePlayerWeekly,
+  activePlayerMonthly,
 }) => {
   const [chain, setChain] = useState("base");
   const [message, setMessage] = useState("");
@@ -319,7 +325,7 @@ const Games = ({
   };
 
   const handleChestSelection = (index, chests, openedChests) => {
-// console.log('index', index)
+    // console.log('index', index)
     // Case: All chests are opened
     if (openedChests.length === 19) {
       // selectedChestid(3);
@@ -341,7 +347,7 @@ const Games = ({
     // Case: Other buttons clicked when no chests opened (index 1 to 18)
     if (openedChests.length === 0 && index >= 1 && index <= 18) {
       // selectedChestid(index); // Selects the clicked chest
-      
+
       return index;
     }
 
@@ -357,8 +363,8 @@ const Games = ({
       index !== 19 &&
       index !== 0 &&
       chests[index].isOpened === false &&
-      chests[index-1].isOpened === false &&
-      chests[index+1].isOpened === true 
+      chests[index - 1].isOpened === false &&
+      chests[index + 1].isOpened === true
     ) {
       const unopenedChest = getFirstUnopenedChest(index - 1, chests);
       console.log('omm',unopenedChest)
@@ -368,10 +374,9 @@ const Games = ({
 
     if (
       openedChests.length > 0 &&
-      index === 19 
+      index === 19
       // &&  chests[index].isOpened === true
     ) {
-      
       const unopenedChest = getFirstUnopenedChest(index - 1, chests);
 
       // selectedChestid(unopenedChest);
@@ -404,14 +409,14 @@ const Games = ({
     //   // selectedChestid(unopenedChest);
     //   return unopenedChest;
     // }
-   
+
     // if (
     //   openedChests.length > 0 &&
     //   index === 18 &&
     //   chests[index].isOpened === true &&
     //   chests[index + 1].isOpened === true
     // ) {
-      
+
     //   const unopenedChest = getFirstUnopenedChest(index - 1, chests);
     //   // selectedChestid(unopenedChest);
     //   return unopenedChest;
@@ -551,7 +556,6 @@ const Games = ({
 
 
   const handleChestSelection2 = (index, chests, openedChests) => {
-     
     // Case: No chests opened, and last button (19) clicked
     if (index === 19) {
       // selectedChestid(index - 1);
@@ -613,16 +617,15 @@ const Games = ({
       // selectedChestid(unopenedChest);
       return unopenedChest;
     }
-   
+
     if (
       openedChests.length > 0 &&
       index === 18 &&
       chests[index].isOpened === true &&
       chests[index + 1].isOpened === true
     ) {
-      
       const unopenedChest = getFirstUnopenedChest(index - 1, chests);
- 
+
       // selectedChestid(unopenedChest);
       return unopenedChest;
     }
@@ -652,7 +655,6 @@ const Games = ({
     }
   };
 
-  
   useEffect(() => {
     if (chain === "base") {
       if (!email) {
@@ -2329,6 +2331,12 @@ console.log(selectedChest2, openChestIds)
           fetchPreviousMonthlyWinners={fetchPreviousMonthlyWinners}
           fetchPreviousWeeklyWinners={fetchPreviousWeeklyWinners}
           fetchPreviousKittyDashWinners={fetchPreviousKittyDashWinners}
+          kittyUser={kittyUser}
+          weeklyUser={weeklyUser}
+          monthlyyUser={monthlyUser}
+          activePlayerKitty={activePlayerKitty}
+          activePlayerWeekly={activePlayerWeekly}
+          activePlayerMonthly={activePlayerMonthly}
         />
       </div>
       <StoneCrackPopup
