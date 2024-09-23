@@ -288,6 +288,9 @@ const Games = ({
       let arrayFiltered = [];
       window.range(0, 19).map((item, index) => {
         if (chests[index].isOpened === true) {
+          console.log(index, randomOpenedChests[
+            handleChestSelection2(index, chests, openedChests)
+          ])
           arrayFiltered.push(
             randomOpenedChests[
               handleChestSelection2(index, chests, openedChests)
@@ -300,11 +303,24 @@ const Games = ({
   };
 
   const getFirstUnopenedChest = (index, chests) => {
+    let found = 0;
     for (let i = index; i >= 0; i--) {
       if (!chests[i].isOpened) {
+        found = 1; 
+        console.log(i, found)
         return i;
       }
     }
+
+    if(found === 0) {
+      for (let i = index; i <= 19; i++) {
+        if (!chests[i].isOpened) {
+          found = 1; 
+          return i;
+        }
+      }
+    }
+    
     return index;
   };
 
@@ -329,7 +345,7 @@ const Games = ({
     }
 
     // Case: Other buttons clicked when no chests opened (index 1 to 18)
-    if (openedChests.length === 0 && index >= 1 && index < 18) {
+    if (openedChests.length === 0 && index >= 1 && index <= 18) {
       // selectedChestid(index); // Selects the clicked chest
 
       return index;
@@ -345,12 +361,13 @@ const Games = ({
     if (
       openedChests.length > 0 &&
       index !== 19 &&
+      index !== 0 &&
       chests[index].isOpened === false &&
       chests[index - 1].isOpened === false &&
       chests[index + 1].isOpened === true
     ) {
       const unopenedChest = getFirstUnopenedChest(index - 1, chests);
-
+      console.log('omm',unopenedChest)
       // selectedChestid(unopenedChest);
       return unopenedChest;
     }
@@ -367,15 +384,20 @@ const Games = ({
     }
 
     // // Case: Chests opened, index is 18, chest is not opened
-    // if (
-    //   openedChests.length > 0 &&
-    //   index === 18 &&
-    //   !chests[index].isOpened &&
-    //   chests[index + 1].isOpened === false
-    // ) {
-    //   // selectedChestid(index);
-    //   return index;
-    // }
+    if (
+      openedChests.length > 0 &&  index !== 19 &&
+      index !== 0 &&
+      !chests[index].isOpened &&
+      chests[index + 1].isOpened === true&&
+      chests[index - 1].isOpened === true
+     
+    ) {
+    
+      const unopenedChest = getFirstUnopenedChest(index - 1, chests);
+  console.log('index',index,unopenedChest)
+      // selectedChestid(unopenedChest);
+      return unopenedChest;
+    }
     // if (
     //   openedChests.length > 0 &&
     //   index === 18 &&
@@ -420,16 +442,118 @@ const Games = ({
     // }
 
     // // Default Case: Any other button clicked when some chests are opened
-    if (
-      openedChests.length > 0 &&
-      index >= 0 &&
-      index < 18 &&
-      !chests[index].isOpened
-    ) {
+    if (openedChests.length > 0 && index >= 0 && index <= 18 && !chests[index].isOpened) {
+      
       // selectedChestid(index); // Selects the clicked chest
       return index;
     }
   };
+
+
+  // const handleChestSelection2 = (index, chests, openedChests) => {
+  //   //  console.log(index, 'handleChestSelection2')
+  //   // Case: No chests opened, and last button (19) clicked
+  //   if (index === 19) {
+  //     // selectedChestid(index - 1);
+  //     return index - 1;
+  //   }
+
+  //   // Case: No chests opened, first button (0) clicked
+  //   if (index === 0) {
+  //     // selectedChestid(index);
+  //     return index;
+  //   }
+
+  //   // Case: Other buttons clicked when no chests opened (index 1 to 18)
+  //   if (index >= 1 && index < 18 && openedChests.length === 0) {
+  //     // selectedChestid(index); // Selects the clicked chest
+  //     return index;
+  //   }
+
+  //   if (
+  //     openedChests.length > 0 &&
+  //     index === 19 &&
+  //     chests[index].isOpened === false
+  //   ) {
+  //     const unopenedChest = getFirstUnopenedChest(index - 1, chests);
+
+  //     // selectedChestid(unopenedChest);
+  //     return unopenedChest;
+  //   }
+
+  //   if (
+  //     openedChests.length > 0 &&
+  //     index === 19 &&
+  //     chests[index].isOpened === true
+  //   ) {
+  //     const unopenedChest = getFirstUnopenedChest(index - 1, chests);
+
+  //     // selectedChestid(unopenedChest);
+  //     return unopenedChest;
+  //   }
+
+  //   // Case: Chests opened, index is 18, chest is not opened
+  //   if (
+  //     openedChests.length > 0 &&
+  //     index === 18 &&
+  //     !chests[index].isOpened &&
+  //     chests[index + 1].isOpened === false
+  //   ) {
+  //     // selectedChestid(index);
+  //     return index;
+  //   }
+  //   if (
+  //     openedChests.length > 0 &&
+  //     index === 18 &&
+  //     !chests[index].isOpened &&
+  //     chests[index + 1].isOpened === true
+  //   ) {
+  //     const unopenedChest = getFirstUnopenedChest(index - 1, chests);
+
+  //     // selectedChestid(unopenedChest);
+  //     return unopenedChest;
+  //   }
+   
+  //   if (
+  //     openedChests.length > 0 &&
+  //     index === 18 &&
+  //     chests[index].isOpened === true &&
+  //     chests[index + 1].isOpened === true
+  //   ) {
+      
+  //     // const unopenedChest = getFirstUnopenedChest(index - 1, chests);
+  //     return index-1;
+ 
+  //     // selectedChestid(unopenedChest);
+  //     // return unopenedChest;
+  //   }
+  //   // Case: Chests opened, index is 17, chest is opened
+  //   // if (openedChests.length > 0 && index === 17 && chests[index].isOpened) {
+  //   //   const unopenedChest = getFirstUnopenedChest(index, chests);
+  //   //   // selectedChestid(unopenedChest);
+  //   //   return unopenedChest;
+  //   // }
+
+  //   // // Case: Chests opened, index is 17, chest is not opened
+  //   // if (openedChests.length > 0 && index === 17 && !chests[index].isOpened) {
+  //   //   // selectedChestid(index);
+  //   //   return index;
+  //   // }
+
+  //   // Case: Chests opened, index is 1, chest is not opened
+  //   if (openedChests.length > 0 && index === 1 && !chests[index].isOpened) {
+  //     // selectedChestid(index);
+  //     return index;
+  //   }
+
+  //   // Default Case: Any other button clicked when some chests are opened
+  //   if (openedChests.length > 0 && index >= 1 && index <= 18) {
+  //     // selectedChestid(index); // Selects the clicked chest
+  //     return index-1;
+  //   }
+  // };
+
+
 
   const handleChestSelection2 = (index, chests, openedChests) => {
     // Case: No chests opened, and last button (19) clicked
@@ -525,7 +649,7 @@ const Games = ({
     }
 
     // Default Case: Any other button clicked when some chests are opened
-    if (openedChests.length > 0 && index >= 0 && index < 18) {
+    if (openedChests.length > 0 && index >= 0 && index <= 18) {
       // selectedChestid(index); // Selects the clicked chest
       return index;
     }
@@ -644,8 +768,8 @@ const Games = ({
   //   if (dataFetchedRef.current) return;
   //   dataFetchedRef.current = true;
   //   getRandomNumber();
-  // }, []);
-
+  // }, []); 
+console.log(selectedChest2, openChestIds)
   return (
     <>
       <div className="container-lg p-0">
