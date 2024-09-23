@@ -29,6 +29,12 @@ const Leaderboard = ({
   fetchPreviousMonthlyWinners,
   fetchPreviousWeeklyWinners,
   fetchPreviousKittyDashWinners,
+  kittyUser,
+  weeklyUser,
+  monthlyUser,
+  activePlayerKitty,
+  activePlayerWeekly,
+  activePlayerMonthly,
 }) => {
   const weeklyPrizes = ["25", "15", "10", "8", "0", "0", "0", "0", "0", "0"];
   const monthlyPrizes = [
@@ -163,20 +169,9 @@ const Leaderboard = ({
       ethReward: 10,
       dypReward: 10,
     },
-  ] 
+  ];
 
-  const kittyDashRewards = [
-    1000,
-    500,
-    10,
-    10,
-    10,
-    10,
-    10,
-    10,
-    10,
-    10,
-  ]
+  const kittyDashRewards = [1000, 500, 10, 10, 10, 10, 10, 10, 10, 10];
 
   const stoneData = [
     {
@@ -374,28 +369,30 @@ const Leaderboard = ({
     }
   };
 
-
   useEffect(() => {
     fetchWeeklyWinners();
-fetchMonthlyWinners();
-fetchKittyDashWinners();
-  }, [])
-  
+    fetchMonthlyWinners();
+    fetchKittyDashWinners();
+  }, []);
 
   const switchPrev = () => {
-    setPrevStatus(!prevStatus)
-    if(prevStatus){
-      fetchPreviousWeeklyWinners();
-      fetchPreviousMonthlyWinners();
-      fetchPreviousKittyDashWinners();
-    }else{
-      fetchWeeklyWinners();
-      fetchMonthlyWinners();
-      fetchKittyDashWinners();
-    }
-  }
- 
+    setPrevStatus((prevStatus) => {
+      const newStatus = !prevStatus;
   
+      if (newStatus) {
+        fetchPreviousWeeklyWinners();
+        fetchPreviousMonthlyWinners();
+        fetchPreviousKittyDashWinners();
+      } else {
+        fetchWeeklyWinners();
+        fetchMonthlyWinners();
+        fetchKittyDashWinners();
+      }
+  
+      return newStatus;
+    });
+  };
+
   return (
     <div
       className="main-wrapper py-4 w-100 d-flex gap-4 mt-xxl-0 mt-lg-0 justify-content-center align-items-start"
@@ -548,7 +545,7 @@ fetchKittyDashWinners();
                   {type === "stoneCrack" && optionText === "weekly" ? (
                     <>
                       {weeklyplayerData.map((item, index) => (
-                        <tr key={index} className={`playerInnerRow`}>
+                        <tr key={index} className={`playerInnerRow ${item.displayName === username && "weekly-user-row"}`}>
                           <td className="playerData col-1">
                             {Number(item.position) + 1}
                           </td>
@@ -568,131 +565,208 @@ fetchKittyDashWinners();
                             style={{ color: stoneHeaders.rewardColor }}
                           >
                             {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
-                            ${getFormattedNumber(stoneCrackRewards[index].ethReward, 0)}
+                            $
+                            {getFormattedNumber(
+                              stoneCrackRewards[index].ethReward,
+                              0
+                            )}
                           </td>
                           <td
                             className={`playerReward col-2 text-center leaderboard-rewards-bg`}
                             style={{ color: stoneHeaders.rewardColor }}
                           >
                             {/* <img src={dyp} width={12} height={12} alt="" />{" "} */}
-                            ${getFormattedNumber(stoneCrackRewards[index].ethReward, 0)}
-
+                            $
+                            {getFormattedNumber(
+                              stoneCrackRewards[index].ethReward,
+                              0
+                            )}
                           </td>
                         </tr>
                       ))}
-                      {[...Array(10 - weeklyplayerData.length)].map((item, index) => (
-                        <tr key={index} className={`playerInnerRow`}>
+                      {[...Array(10 - weeklyplayerData.length)].map(
+                        (item, index) => (
+                          <tr key={index} className={`playerInnerRow`}>
+                            <td className="playerData col-1">
+                              {Number(weeklyplayerData.length + index) + 1}
+                            </td>
+                            <td className="playerName col-3">
+                              <div className="position-relative d-flex align-items-center">
+                                <span>--</span>
+                              </div>
+                            </td>
+                            <td
+                              className="playerScore col-4 text-center"
+                              style={{ color: stoneHeaders.scoreColor }}
+                            >
+                              {getFormattedNumber(0, 0)}
+                            </td>
+                            <td
+                              className={`playerReward col-2 text-center leaderboard-rewards-bg`}
+                              style={{ color: stoneHeaders.rewardColor }}
+                            >
+                              {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
+                              $0
+                            </td>
+                            <td
+                              className={`playerReward col-2 text-center leaderboard-rewards-bg`}
+                              style={{ color: stoneHeaders.rewardColor }}
+                            >
+                              {/* <img src={dyp} width={12} height={12} alt="" />{" "} */}
+                              $0
+                            </td>
+                          </tr>
+                        )
+                      )}
+                      {activePlayerWeekly === false && prevStatus === false && (
+                        <tr className={`playerInnerRow weekly-user-row`}>
                           <td className="playerData col-1">
-                            {Number(weeklyplayerData.length + index) + 1}
+                            {Number(weeklyUser?.position) + 1}
                           </td>
                           <td className="playerName col-3">
                             <div className="position-relative d-flex align-items-center">
-                              <span>--</span>
+                              <span>{weeklyUser?.displayName}</span>
                             </div>
                           </td>
                           <td
                             className="playerScore col-4 text-center"
                             style={{ color: stoneHeaders.scoreColor }}
                           >
-                            {getFormattedNumber(0, 0)}
+                            {getFormattedNumber(weeklyUser?.statValue, 0)}
                           </td>
                           <td
                             className={`playerReward col-2 text-center leaderboard-rewards-bg`}
                             style={{ color: stoneHeaders.rewardColor }}
                           >
                             {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
-                            $0
+                            ${getFormattedNumber(0, 0)}
                           </td>
                           <td
                             className={`playerReward col-2 text-center leaderboard-rewards-bg`}
                             style={{ color: stoneHeaders.rewardColor }}
                           >
                             {/* <img src={dyp} width={12} height={12} alt="" />{" "} */}
-                            $0
+                            ${getFormattedNumber(0, 0)}
+                          </td>
+                        </tr>
+                      )}
+                    </>
+                  ) : type === "stoneCrack" && optionText === "monthly" ? (
+                    <>
+                      {monthlyplayerData.map((item, index) => (
+                        <tr key={index} className={`playerInnerRow ${item.displayName === username && "weekly-user-row"}`}>
+                          <td className="playerData col-1">
+                            {Number(item.position) + 1}
+                          </td>
+                          <td className="playerName col-3">
+                            <div className="position-relative d-flex align-items-center">
+                              <span>{item.displayName}</span>
+                            </div>
+                          </td>
+                          <td
+                            className="playerScore col-4 text-center"
+                            style={{ color: stoneHeaders.scoreColor }}
+                          >
+                            {getFormattedNumber(item.statValue, 0)}
+                          </td>
+                          <td
+                            className={`playerReward col-2 text-center leaderboard-rewards-bg`}
+                            style={{ color: stoneHeaders.rewardColor }}
+                          >
+                            {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
+                            $
+                            {getFormattedNumber(
+                              stoneCrackRewards[index].ethReward,
+                              0
+                            )}
+                          </td>
+                          <td
+                            className={`playerReward col-2 text-center leaderboard-rewards-bg`}
+                            style={{ color: stoneHeaders.rewardColor }}
+                          >
+                            {/* <img src={dyp} width={12} height={12} alt="" />{" "} */}
+                            $
+                            {getFormattedNumber(
+                              stoneCrackRewards[index].ethReward,
+                              0
+                            )}
                           </td>
                         </tr>
                       ))}
-                      
+                      {[...Array(10 - monthlyplayerData.length)].map(
+                        (item, index) => (
+                          <tr key={index} className={`playerInnerRow`}>
+                            <td className="playerData col-1">
+                              {Number(monthlyplayerData.length + index) + 1}
+                            </td>
+                            <td className="playerName col-3">
+                              <div className="position-relative d-flex align-items-center">
+                                <span>--</span>
+                              </div>
+                            </td>
+                            <td
+                              className="playerScore col-4 text-center"
+                              style={{ color: stoneHeaders.scoreColor }}
+                            >
+                              {getFormattedNumber(0, 0)}
+                            </td>
+                            <td
+                              className={`playerReward col-2 text-center leaderboard-rewards-bg`}
+                              style={{ color: stoneHeaders.rewardColor }}
+                            >
+                              {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
+                              $0
+                            </td>
+                            <td
+                              className={`playerReward col-2 text-center leaderboard-rewards-bg`}
+                              style={{ color: stoneHeaders.rewardColor }}
+                            >
+                              {/* <img src={dyp} width={12} height={12} alt="" />{" "} */}
+                              $0
+                            </td>
+                          </tr>
+                        )
+                      )}
+                      {activePlayerMonthly === false &&
+                        prevStatus === false && (
+                          <tr className={`playerInnerRow weekly-user-row`}>
+                            <td className="playerData col-1">
+                              {Number(monthlyUser?.position) + 1}
+                            </td>
+                            <td className="playerName col-3">
+                              <div className="position-relative d-flex align-items-center">
+                                <span>{monthlyUser?.displayName}</span>
+                              </div>
+                            </td>
+                            <td
+                              className="playerScore col-4 text-center"
+                              style={{ color: stoneHeaders.scoreColor }}
+                            >
+                              {getFormattedNumber(monthlyUser?.statValue, 0)}
+                            </td>
+                            <td
+                              className={`playerReward col-2 text-center leaderboard-rewards-bg`}
+                              style={{ color: stoneHeaders.rewardColor }}
+                            >
+                              {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
+                              ${getFormattedNumber(0, 0)}
+                            </td>
+                            <td
+                              className={`playerReward col-2 text-center leaderboard-rewards-bg`}
+                              style={{ color: stoneHeaders.rewardColor }}
+                            >
+                              {/* <img src={dyp} width={12} height={12} alt="" />{" "} */}
+                              ${getFormattedNumber(0, 0)}
+                            </td>
+                          </tr>
+                        )}
                     </>
-                  ) :  type === "stoneCrack" && optionText === "monthly" ?
-                  
-                  (
-                    <>
-                    {monthlyplayerData.map((item, index) => (
-                      <tr key={index} className={`playerInnerRow`}>
-                        <td className="playerData col-1">
-                          {Number(item.position) + 1}
-                        </td>
-                        <td className="playerName col-3">
-                          <div className="position-relative d-flex align-items-center">
-                            <span>{item.displayName}</span>
-                          </div>
-                        </td>
-                        <td
-                          className="playerScore col-4 text-center"
-                          style={{ color: stoneHeaders.scoreColor }}
-                        >
-                          {getFormattedNumber(item.statValue, 0)}
-                        </td>
-                        <td
-                          className={`playerReward col-2 text-center leaderboard-rewards-bg`}
-                          style={{ color: stoneHeaders.rewardColor }}
-                        >
-                          {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
-                          ${getFormattedNumber(stoneCrackRewards[index].ethReward, 0)}
-                        </td>
-                        <td
-                          className={`playerReward col-2 text-center leaderboard-rewards-bg`}
-                          style={{ color: stoneHeaders.rewardColor }}
-                        >
-                          {/* <img src={dyp} width={12} height={12} alt="" />{" "} */}
-                          ${getFormattedNumber(stoneCrackRewards[index].ethReward, 0)}
-
-                        </td>
-                      </tr>
-                    ))}
-                    {[...Array(10 - monthlyplayerData.length)].map((item, index) => (
-                      <tr key={index} className={`playerInnerRow`}>
-                        <td className="playerData col-1">
-                          {Number(monthlyplayerData.length + index) + 1}
-                        </td>
-                        <td className="playerName col-3">
-                          <div className="position-relative d-flex align-items-center">
-                            <span>--</span>
-                          </div>
-                        </td>
-                        <td
-                          className="playerScore col-4 text-center"
-                          style={{ color: stoneHeaders.scoreColor }}
-                        >
-                          {getFormattedNumber(0, 0)}
-                        </td>
-                        <td
-                          className={`playerReward col-2 text-center leaderboard-rewards-bg`}
-                          style={{ color: stoneHeaders.rewardColor }}
-                        >
-                          {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
-                          $0
-                        </td>
-                        <td
-                          className={`playerReward col-2 text-center leaderboard-rewards-bg`}
-                          style={{ color: stoneHeaders.rewardColor }}
-                        >
-                          {/* <img src={dyp} width={12} height={12} alt="" />{" "} */}
-                          $0
-                        </td>
-                      </tr>
-                    ))}
-                    
-                  </>
-                  )
-                  
-                  : type === "kittyDash" ? (
+                  ) : type === "kittyDash" ? (
                     <>
                       {kittyDashRecords.map((item, index) => (
-                        <tr key={index} className={`playerInnerRow`}>
+                        <tr key={index} className={`playerInnerRow ${item.displayName === username && "kitty-user-row"}`}>
                           <td className="playerData col-1">
-                          {Number(item.position) + 1}
+                            {Number(item.position) + 1}
                           </td>
                           <td className="playerName col-3">
                             <div className="position-relative d-flex align-items-center">
@@ -713,30 +787,56 @@ fetchKittyDashWinners();
                           </td>
                         </tr>
                       ))}
-                         {[...Array(10 - kittyDashRecords.length)].map((item, index) => (
-                                 <tr key={index} className={`playerInnerRow`}>
-                                 <td className="playerData col-1">
-                                 {Number(kittyDashRecords.length + index) + 1}
-                                 </td>
-                                 <td className="playerName col-3">
-                                   <div className="position-relative d-flex align-items-center">
-                              --
-                                   </div>
-                                 </td>
-                                 <td
-                                   className="playerScore col-4 text-center"
-                                   style={{ color: kittyHeaders.scoreColor }}
-                                 >
-                                   {getFormattedNumber(0, 0)}
-                                 </td>
-                                 <td
-                                   className={`playerReward col-4 text-center`}
-                                   style={{ color: kittyHeaders.rewardColor }}
-                                 >
-                                   ${getFormattedNumber(0, 0)}
-                                 </td>
-                               </tr>
-                    ))}
+                      {[...Array(10 - kittyDashRecords.length)].map(
+                        (item, index) => (
+                          <tr key={index} className={`playerInnerRow`}>
+                            <td className="playerData col-1">
+                              {Number(kittyDashRecords.length + index) + 1}
+                            </td>
+                            <td className="playerName col-3">
+                              <div className="position-relative d-flex align-items-center">
+                                --
+                              </div>
+                            </td>
+                            <td
+                              className="playerScore col-4 text-center"
+                              style={{ color: kittyHeaders.scoreColor }}
+                            >
+                              {getFormattedNumber(0, 0)}
+                            </td>
+                            <td
+                              className={`playerReward col-4 text-center`}
+                              style={{ color: kittyHeaders.rewardColor }}
+                            >
+                              ${getFormattedNumber(0, 0)}
+                            </td>
+                          </tr>
+                        )
+                      )}
+                      {activePlayerKitty === false && prevStatus === false && (
+                        <tr className={`playerInnerRow kitty-user-row`}>
+                          <td className="playerData col-1">
+                            {Number(kittyUser?.position) + 1}
+                          </td>
+                          <td className="playerName col-3">
+                            <div className="position-relative d-flex align-items-center">
+                              <span>{kittyUser?.displayName}</span>
+                            </div>
+                          </td>
+                          <td
+                            className="playerScore col-4 text-center"
+                            style={{ color: kittyHeaders.scoreColor }}
+                          >
+                            {getFormattedNumber(kittyUser?.statValue, 0)}
+                          </td>
+                          <td
+                            className={`playerReward col-4 text-center`}
+                            style={{ color: kittyHeaders.rewardColor }}
+                          >
+                            ${getFormattedNumber(0, 0)}
+                          </td>
+                        </tr>
+                      )}
                     </>
                   ) : (
                     <>
@@ -845,62 +945,6 @@ fetchKittyDashWinners();
                 </tbody>
               </table>
             </div>
-
-            {/* {activePlayer === false &&
-              inactiveBoard === false &&
-              optionText !== "genesis" && (
-                <table className="playerTable">
-                  <tbody>
-                    <tr className={`playerInnerRow-inactive`}>
-                      <td
-                        className={`playerData ${
-                          optionText === "genesis" ? "col-2" : "col-1"
-                        }`}
-                      >
-                        #{userData.position + 1}
-                      </td>
-                      <td className="playerName col-5">
-                        <div className="position-relative  d-flex align-items-center">
-                          <div className="position-relative d-flex align-items-center">
-                            <img
-                              src={premiumAvatar}
-                              alt=""
-                              className="playerAvatar"
-                            />
-                            <img
-                              src={premiumStar}
-                              alt=""
-                              className="premium-star"
-                            />
-                            <span>
-                              {" "}
-                              {userData.displayName?.slice(0, 13)}
-                              {userData.displayName?.length > 13 && "..."}
-                            </span>
-                          </div>
-                        </div>
-                      </td>
-
-                      <td className="playerScore col-2 text-center">
-                        {getFormattedNumber(userData.statValue, 0)}
-                      </td>
-
-                      <td
-                        className={`playerReward text-center ${
-                          username === userData.displayName
-                            ? "goldenscore"
-                            : "playerReward"
-                        } col-2 ${optionText !== "genesis" && "text-center"} `}
-                      >
-                        $
-                        {optionText === "genesis"
-                          ? getFormattedNumber(userData.statValue, 0)
-                          : "0"}{" "}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              )} */}
           </div>
           <div className="optionsWrapper2 p-2">
             <div className="d-flex flex-column">
@@ -908,7 +952,7 @@ fetchKittyDashWinners();
                 <span className="viewWinners">View previous winners</span>
                 <Switch
                   onChange={() => {
-                    switchPrev()
+                    switchPrev();
                   }}
                 />
               </div>
