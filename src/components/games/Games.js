@@ -313,10 +313,9 @@ const Games = ({
     for (let i = index; i >= 0; i--) {
       if (chests[i].isOpened) {
         found = 1;
-        foundIndex = i;
-
-        // console.log(i, found)
+        foundIndex = i; 
         return foundIndex;
+        
       }
     }
 
@@ -601,14 +600,27 @@ const Games = ({
       return index;
     }
 
+    if (openedChests.length > 0 && index === 17 && chests[index].isOpened) {
+      const unopenedChest = getFirstUnopenedChest(index-1, chests);
+      // selectedChestid(unopenedChest);
+      return unopenedChest;
+    }
+
+    // Case: Chests opened, index is 17, chest is not opened
+    if (openedChests.length > 0 && index === 17 && !chests[index].isOpened) {
+      // selectedChestid(index);
+      return index;
+    }
+
+
     // Case: Other buttons clicked when no chests opened (index 1 to 18)
     if (index > 1 && index < 18) {
       // selectedChestid(index); // Selects the clicked chest
 
-      // return index;
-      const unopenedChest = getFirstOpenedChest(index, chests);
-      // selectedChestid(unopenedChest);
-      return unopenedChest;
+      return index;
+      // const unopenedChest = getFirstOpenedChest(index, chests);
+      // // selectedChestid(unopenedChest);
+      // return unopenedChest;
     }
 
     if (
@@ -633,7 +645,7 @@ const Games = ({
       return unopenedChest;
     }
 
-    // Case: Chests opened, index is 18, chest is not opened
+    // // Case: Chests opened, index is 18, chest is not opened
     if (
       openedChests.length > 0 &&
       index === 18 &&
@@ -665,11 +677,11 @@ const Games = ({
       chests[index].isOpened === true &&
       chests[index + 1].isOpened === true
     ) {
-      const unopenedChest = getFirstOpenedChest(index-1, chests);
+      const unopenedChest = getFirstOpenedChest(index, chests);
 
-      if (unopenedChest) {
-        return unopenedChest;
-      } else return index;
+      // if (unopenedChest) {
+        return unopenedChest-1;
+      // } else return index;
     }
 
     if (
@@ -681,17 +693,6 @@ const Games = ({
       return index;
     }
     // Case: Chests opened, index is 17, chest is opened
-    // if (openedChests.length > 0 && index === 17 && chests[index].isOpened) {
-    //   const unopenedChest = getFirstOpenedChest(index-1, chests);
-    //   // selectedChestid(unopenedChest);
-    //   return unopenedChest;
-    // }
-
-    // // Case: Chests opened, index is 17, chest is not opened
-    // if (openedChests.length > 0 && index === 17 && !chests[index].isOpened) {
-    //   // selectedChestid(index);
-    //   return index;
-    // }
 
     // Case: Chests opened, index is 1, chest is not opened
     // if (openedChests.length > 0 && index === 1 && !chests[index].isOpened) {
