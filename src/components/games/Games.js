@@ -288,9 +288,9 @@ const Games = ({
       let arrayFiltered = [];
       window.range(0, 19).map((item, index) => {
         if (chests[index].isOpened === true) {
-          console.log(index, randomOpenedChests[
-            handleChestSelection2(index, chests, openedChests)
-          ])
+          // console.log(index, randomOpenedChests[
+          //   handleChestSelection2(index, chests, openedChests)
+          // ])
           arrayFiltered.push(
             randomOpenedChests[
               handleChestSelection2(index, chests, openedChests)
@@ -307,7 +307,7 @@ const Games = ({
     for (let i = index; i >= 0; i--) {
       if (!chests[i].isOpened) {
         found = 1; 
-        console.log(i, found)
+        // console.log(i, found)
         return i;
       }
     }
@@ -367,7 +367,7 @@ const Games = ({
       chests[index + 1].isOpened === true
     ) {
       const unopenedChest = getFirstUnopenedChest(index - 1, chests);
-      console.log('omm',unopenedChest)
+      // console.log('omm',unopenedChest)
       // selectedChestid(unopenedChest);
       return unopenedChest;
     }
@@ -394,7 +394,7 @@ const Games = ({
     ) {
     
       const unopenedChest = getFirstUnopenedChest(index - 1, chests);
-  console.log('index',index,unopenedChest)
+  // console.log('index',index,unopenedChest)
       // selectedChestid(unopenedChest);
       return unopenedChest;
     }
@@ -631,7 +631,7 @@ const Games = ({
     }
     // Case: Chests opened, index is 17, chest is opened
     if (openedChests.length > 0 && index === 17 && chests[index].isOpened) {
-      const unopenedChest = getFirstUnopenedChest(index, chests);
+      const unopenedChest = getFirstUnopenedChest(index-1, chests);
       // selectedChestid(unopenedChest);
       return unopenedChest;
     }
@@ -647,12 +647,25 @@ const Games = ({
       // selectedChestid(index);
       return index;
     }
-
+    // if (
+    //   openedChests.length > 0 &&
+    //   index !== 19 &&
+    //   index !== 0 &&
+    //   chests[index].isOpened === false &&
+    //   chests[index - 1].isOpened === false &&
+    //   chests[index + 1].isOpened === true
+    // ) {
+    //   const unopenedChest = getFirstUnopenedChest(index - 1, chests);
+    //   console.log('omm',unopenedChest)
+    //   // selectedChestid(unopenedChest);
+    //   return index-1;
+    // }
+    
     // Default Case: Any other button clicked when some chests are opened
-    if (openedChests.length > 0 && index >= 0 && index <= 18) {
-      // selectedChestid(index); // Selects the clicked chest
-      return index;
-    }
+    // if (openedChests.length > 0 && index >= 1 && index < 18) {
+    //   // selectedChestid(index); // Selects the clicked chest
+    //   return index;
+    // }
   };
 
   useEffect(() => {
@@ -769,7 +782,7 @@ const Games = ({
   //   dataFetchedRef.current = true;
   //   getRandomNumber();
   // }, []); 
-console.log(selectedChest2, openChestIds)
+// console.log(selectedChest2, openChestIds)
   return (
     <>
       <div className="container-lg p-0">
