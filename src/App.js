@@ -1078,6 +1078,9 @@ function App() {
         setActivePlayerWeekly(false);
         setWeeklyUser(...testArray);
       }
+    } else {
+      setActivePlayerWeekly(true);
+      setWeeklyUser([]);
     }
   };
 
@@ -1154,6 +1157,9 @@ function App() {
         setActivePlayerMonthly(false);
         setMonthlyUser(...testArray);
       }
+    } else {
+      setActivePlayerMonthly(true);
+      setMonthlyUser([]);
     }
   };
 
@@ -1232,6 +1238,9 @@ function App() {
         setActivePlayerKitty(false);
         setKittyUser(...testArray);
       }
+    } else {
+      setActivePlayerKitty(true);
+      setKittyUser([]);
     }
   };
 
@@ -1302,7 +1311,7 @@ function App() {
   };
 
   const onLogout = () => {
-    logout();
+    logout();    
     setTimeout(() => {
       refetchPlayer();
     }, 1000);

@@ -35,6 +35,7 @@ const Leaderboard = ({
   activePlayerKitty,
   activePlayerWeekly,
   activePlayerMonthly,
+  email,
 }) => {
   const weeklyPrizes = ["25", "15", "10", "8", "0", "0", "0", "0", "0", "0"];
   const monthlyPrizes = [
@@ -378,7 +379,7 @@ const Leaderboard = ({
   const switchPrev = () => {
     setPrevStatus((prevStatus) => {
       const newStatus = !prevStatus;
-  
+
       if (newStatus) {
         fetchPreviousWeeklyWinners();
         fetchPreviousMonthlyWinners();
@@ -388,7 +389,7 @@ const Leaderboard = ({
         fetchMonthlyWinners();
         fetchKittyDashWinners();
       }
-  
+
       return newStatus;
     });
   };
@@ -545,7 +546,12 @@ const Leaderboard = ({
                   {type === "stoneCrack" && optionText === "weekly" ? (
                     <>
                       {weeklyplayerData.map((item, index) => (
-                        <tr key={index} className={`playerInnerRow ${item.displayName === username && "weekly-user-row"}`}>
+                        <tr
+                          key={index}
+                          className={`playerInnerRow ${
+                            item.displayName === username && "weekly-user-row"
+                          }`}
+                        >
                           <td className="playerData col-1">
                             {Number(item.position) + 1}
                           </td>
@@ -618,43 +624,50 @@ const Leaderboard = ({
                           </tr>
                         )
                       )}
-                      {activePlayerWeekly === false && prevStatus === false && (
-                        <tr className={`playerInnerRow weekly-user-row`}>
-                          <td className="playerData col-1">
-                            {Number(weeklyUser?.position) + 1}
-                          </td>
-                          <td className="playerName col-3">
-                            <div className="position-relative d-flex align-items-center">
-                              <span>{weeklyUser?.displayName}</span>
-                            </div>
-                          </td>
-                          <td
-                            className="playerScore col-4 text-center"
-                            style={{ color: stoneHeaders.scoreColor }}
-                          >
-                            {getFormattedNumber(weeklyUser?.statValue, 0)}
-                          </td>
-                          <td
-                            className={`playerReward col-2 text-center leaderboard-rewards-bg`}
-                            style={{ color: stoneHeaders.rewardColor }}
-                          >
-                            {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
-                            ${getFormattedNumber(0, 0)}
-                          </td>
-                          <td
-                            className={`playerReward col-2 text-center leaderboard-rewards-bg`}
-                            style={{ color: stoneHeaders.rewardColor }}
-                          >
-                            {/* <img src={dyp} width={12} height={12} alt="" />{" "} */}
-                            ${getFormattedNumber(0, 0)}
-                          </td>
-                        </tr>
-                      )}
+                      {activePlayerWeekly === false &&
+                        prevStatus === false &&
+                        email && (
+                          <tr className={`playerInnerRow weekly-user-row`}>
+                            <td className="playerData col-1">
+                              {Number(weeklyUser?.position) + 1}
+                            </td>
+                            <td className="playerName col-3">
+                              <div className="position-relative d-flex align-items-center">
+                                <span>{weeklyUser?.displayName}</span>
+                              </div>
+                            </td>
+                            <td
+                              className="playerScore col-4 text-center"
+                              style={{ color: stoneHeaders.scoreColor }}
+                            >
+                              {getFormattedNumber(weeklyUser?.statValue, 0)}
+                            </td>
+                            <td
+                              className={`playerReward col-2 text-center leaderboard-rewards-bg`}
+                              style={{ color: stoneHeaders.rewardColor }}
+                            >
+                              {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
+                              ${getFormattedNumber(0, 0)}
+                            </td>
+                            <td
+                              className={`playerReward col-2 text-center leaderboard-rewards-bg`}
+                              style={{ color: stoneHeaders.rewardColor }}
+                            >
+                              {/* <img src={dyp} width={12} height={12} alt="" />{" "} */}
+                              ${getFormattedNumber(0, 0)}
+                            </td>
+                          </tr>
+                        )}
                     </>
                   ) : type === "stoneCrack" && optionText === "monthly" ? (
                     <>
                       {monthlyplayerData.map((item, index) => (
-                        <tr key={index} className={`playerInnerRow ${item.displayName === username && "weekly-user-row"}`}>
+                        <tr
+                          key={index}
+                          className={`playerInnerRow ${
+                            item.displayName === username && "weekly-user-row"
+                          }`}
+                        >
                           <td className="playerData col-1">
                             {Number(item.position) + 1}
                           </td>
@@ -728,7 +741,8 @@ const Leaderboard = ({
                         )
                       )}
                       {activePlayerMonthly === false &&
-                        prevStatus === false && (
+                        prevStatus === false &&
+                        email && (
                           <tr className={`playerInnerRow weekly-user-row`}>
                             <td className="playerData col-1">
                               {Number(monthlyUser?.position) + 1}
@@ -764,7 +778,12 @@ const Leaderboard = ({
                   ) : type === "kittyDash" ? (
                     <>
                       {kittyDashRecords.map((item, index) => (
-                        <tr key={index} className={`playerInnerRow ${item.displayName === username && "kitty-user-row"}`}>
+                        <tr
+                          key={index}
+                          className={`playerInnerRow ${
+                            item.displayName === username && "kitty-user-row"
+                          }`}
+                        >
                           <td className="playerData col-1">
                             {Number(item.position) + 1}
                           </td>
@@ -813,30 +832,32 @@ const Leaderboard = ({
                           </tr>
                         )
                       )}
-                      {activePlayerKitty === false && prevStatus === false && (
-                        <tr className={`playerInnerRow kitty-user-row`}>
-                          <td className="playerData col-1">
-                            {Number(kittyUser?.position) + 1}
-                          </td>
-                          <td className="playerName col-3">
-                            <div className="position-relative d-flex align-items-center">
-                              <span>{kittyUser?.displayName}</span>
-                            </div>
-                          </td>
-                          <td
-                            className="playerScore col-4 text-center"
-                            style={{ color: kittyHeaders.scoreColor }}
-                          >
-                            {getFormattedNumber(kittyUser?.statValue, 0)}
-                          </td>
-                          <td
-                            className={`playerReward col-4 text-center`}
-                            style={{ color: kittyHeaders.rewardColor }}
-                          >
-                            ${getFormattedNumber(0, 0)}
-                          </td>
-                        </tr>
-                      )}
+                      {activePlayerKitty === false &&
+                        prevStatus === false &&
+                        email && (
+                          <tr className={`playerInnerRow kitty-user-row`}>
+                            <td className="playerData col-1">
+                              {Number(kittyUser?.position) + 1}
+                            </td>
+                            <td className="playerName col-3">
+                              <div className="position-relative d-flex align-items-center">
+                                <span>{kittyUser?.displayName}</span>
+                              </div>
+                            </td>
+                            <td
+                              className="playerScore col-4 text-center"
+                              style={{ color: kittyHeaders.scoreColor }}
+                            >
+                              {getFormattedNumber(kittyUser?.statValue, 0)}
+                            </td>
+                            <td
+                              className={`playerReward col-4 text-center`}
+                              style={{ color: kittyHeaders.rewardColor }}
+                            >
+                              ${getFormattedNumber(0, 0)}
+                            </td>
+                          </tr>
+                        )}
                     </>
                   ) : (
                     <>

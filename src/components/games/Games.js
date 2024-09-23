@@ -2213,6 +2213,7 @@ const Games = ({
           activePlayerKitty={activePlayerKitty}
           activePlayerWeekly={activePlayerWeekly}
           activePlayerMonthly={activePlayerMonthly}
+          email={email}
         />
       </div>
       <StoneCrackPopup
