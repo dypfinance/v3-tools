@@ -883,7 +883,7 @@ function App() {
   ) {
     ethereum?.on("chainChanged", checkNetworkId);
     ethereum?.on("accountsChanged", checkConnection);
-    ethereum?.on("accountsChanged", refreshSubscription);
+    // ethereum?.on("accountsChanged", refreshSubscription);
   }
 
   Amplify.configure(awsExports);
