@@ -883,7 +883,7 @@ function App() {
   ) {
     ethereum?.on("chainChanged", checkNetworkId);
     ethereum?.on("accountsChanged", checkConnection);
-    ethereum?.on("accountsChanged", refreshSubscription);
+    // ethereum?.on("accountsChanged", refreshSubscription);
   }
 
   Amplify.configure(awsExports);
@@ -1561,6 +1561,7 @@ function App() {
                         openedChests={openedChests}
                         address={data?.getPlayer?.wallet?.publicAddress}
                         userId={data?.getPlayer?.playerId}
+                        username={username}
                         handleSwitchNetwork={handleSwitchNetwork}
                         monthlyplayerData={monthlyplayerData}
                         previousMonthlyVersion={previousMonthlyVersion}
