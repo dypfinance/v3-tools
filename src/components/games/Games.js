@@ -274,7 +274,6 @@ const Games = ({
         if (chests[index].isOpened === true) {
           if (randomOpenedChests[index] === undefined) {
             const index2 = getFirstUnopenedChest(index - 1, chests);
-
             if (index2) {
               arrayFiltered.push(randomOpenedChests[index2]);
             }
@@ -329,9 +328,10 @@ const Games = ({
 
     // Case: Other buttons clicked when no chests opened (index 1 to 18)
     if (openedChests.length === 0 && index >= 1 && index <= 18) {
-      const unopenedChest = getFirstUnopenedChest(index - 1, chests);
+      // const unopenedChest = getFirstUnopenedChest(index - 1, chests);
 
-      return unopenedChest;
+      // return unopenedChest;
+      return index;
     }
 
     if (
@@ -342,9 +342,16 @@ const Games = ({
       chests[index - 1].isOpened === false &&
       chests[index + 1].isOpened === true
     ) {
-      const unopenedChest = getFirstUnopenedChest(index - 1, chests);
+      // const unopenedChest = getFirstUnopenedChest(index, chests);
 
-      return unopenedChest;
+      // return unopenedChest;
+      if (!openChestIds.includes(randomOpenedChests[index])) {
+        return index;
+      } else {
+        const unopenedChest = getFirstUnopenedChest(index-1, chests);
+
+        return unopenedChest;
+      }
     }
 
     if (openedChests.length > 0 && index === 19) {
@@ -362,19 +369,25 @@ const Games = ({
       chests[index + 1].isOpened === true &&
       chests[index - 1].isOpened === true
     ) {
-      const unopenedChest = getFirstUnopenedChest(index - 1, chests);
+      if (!openChestIds.includes(randomOpenedChests[index])) {
+        return index;
+      } else {
+        const unopenedChest = getFirstUnopenedChest(index - 1, chests);
 
-      return unopenedChest;
+        return unopenedChest;
+      }
+
+      // console.log('yes')
     }
 
     // // Default Case: Any other button clicked when some chests are opened
     if (
       openedChests.length > 0 &&
-      index > 0 &&
+      index >= 0 &&
       index <= 18 &&
       !chests[index].isOpened
     ) {
-      const unopenedChest = getFirstUnopenedChest(index - 1, chests);
+      const unopenedChest = getFirstUnopenedChest(index, chests);
       return unopenedChest;
     }
   };
