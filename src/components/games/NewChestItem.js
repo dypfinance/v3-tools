@@ -32,7 +32,8 @@ const NewChestItem = ({
   coinbase,
   binanceW3WProvider,
   isConnected,
-  onCrackStone
+  onCrackStone,
+  openedChests
 }) => {
   const [shake, setShake] = useState(false);
   const [ischestOpen, setIsChestOpen] = useState(false);
@@ -79,13 +80,28 @@ const NewChestItem = ({
           }, 3000);
         });
       if (result && result.status === 200) {
-        onClaimRewards(result.data);
-        setIsChestOpen(true);
-
-        // onChestStatus("success");
-        onLoadingChest(false);
-        setLoading(false);
-        setClaimingChest(false);
+        if(chainText === 'base' && openedChests.length ===19) {
+          onCrackStone("successGem");
+          setTimeout(() => {
+            onClaimRewards(result.data);
+            setIsChestOpen(true);
+            // onChestStatus("initial");
+            onLoadingChest(false);
+            setLoading(false);
+            setClaimingChest(false);
+          }, 1000);
+        }
+        else {
+          onCrackStone("success");
+        setTimeout(() => {
+          onClaimRewards(result.data);
+          setIsChestOpen(true);
+          // onChestStatus("initial");
+          onLoadingChest(false);
+          setLoading(false);
+          setClaimingChest(false);
+        }, 1000); 
+        }
       }
     } else {
       const result = await axios
@@ -160,7 +176,19 @@ const NewChestItem = ({
           }
         });
       if (result && result.status === 200) {
-        onCrackStone("success");
+        if(chainText === 'base' && openedChests.length ===19) {
+          onCrackStone("successGem");
+          setTimeout(() => {
+            onClaimRewards(result.data);
+            setIsChestOpen(true);
+            // onChestStatus("initial");
+            onLoadingChest(false);
+            setLoading(false);
+            setClaimingChest(false);
+          }, 1000);
+        }
+        else {
+          onCrackStone("success");
         setTimeout(() => {
           onClaimRewards(result.data);
           setIsChestOpen(true);
@@ -168,7 +196,9 @@ const NewChestItem = ({
           onLoadingChest(false);
           setLoading(false);
           setClaimingChest(false);
-        }, 1000);
+        }, 1000); 
+        }
+       
       }
     } else {
       const result = await axios
@@ -216,7 +246,7 @@ const NewChestItem = ({
     chestIndex,
     chainText
   ) => {
-    if (window.WALLET_TYPE !== "binance") {
+   
       const txResult = await window.web3.eth
         .getTransaction(txHash)
         .catch((e) => {
@@ -247,37 +277,7 @@ const NewChestItem = ({
         }
       }
       count = count + 1;
-    } else if (window.WALLET_TYPE === "binance") {
-      const txResult_binance = await binanceW3WProvider
-        .getTransaction(txHash)
-        .catch((e) => {
-          console.error(e);
-        });
-      console.log(txResult_binance);
-
-      if (txResult_binance) {
-        getUserRewardsByChest(email, txHash, chestIndex, chainText);
-      } else {
-        if (count < 10) {
-          setTimeout(
-            () => {
-              handleCheckIfTxExists(txHash);
-            },
-            count === 9 ? 5000 : 2000
-          );
-        } else {
-          window.alertify.error("Something went wrong.");
-          onChestStatus("error");
-          onLoadingChest(false);
-          setLoading(false);
-          setClaimingChest(false);
-          setTimeout(() => {
-            onChestStatus("initial");
-          }, 3000);
-        }
-      }
-      count = count + 1;
-    }
+  
   };
 
   // const handleCheckIfAlreadyApproved = async () => {
