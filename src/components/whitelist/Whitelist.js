@@ -80,6 +80,7 @@ const Whitelist = ({
     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603",
     "0x9845a667b1A603FF21596FDdec51968a2bccAc11",
     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603",
+    "0xFdD3CFF22CF846208E3B37b47Bc36b2c61D2cA8b"
   ];
 
   const checkStakedPools = () => {
