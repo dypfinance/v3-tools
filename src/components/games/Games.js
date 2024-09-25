@@ -29,6 +29,8 @@ import { NavLink } from "react-router-dom";
 import errorSound from "./assets/error.mp3";
 import crackStoneSound from "./assets/stone-crack-sound.mp3";
 import crackedStoneSound from "./assets/stone-cracked-sound.mp3";
+import crackedGemSound from "./assets/crackedGem.mp3";
+
 
 const Games = ({
   handleConnection,
@@ -99,6 +101,8 @@ const Games = ({
   const audiostart = new Audio(crackStoneSound);
   const audioerror = new Audio(errorSound);
   const audiosuccess = new Audio(crackedStoneSound);
+  const audiosuccessGem = new Audio(crackedGemSound);
+
 
   const countEarnedRewards = () => {
     if (openedChests && openedChests.length > 0) {
@@ -189,6 +193,13 @@ const Games = ({
       audiostart.currentTime = 0;
       audiostart.pause();
       audiosuccess.play();
+    }
+    if (event === "successGem") {
+
+      audiostart.loop = false;
+      audiostart.currentTime = 0;
+      audiostart.pause();
+      audiosuccessGem.play();
     }
   };
 
@@ -489,7 +500,7 @@ const Games = ({
     getIds();
   }, [openedChests]);
 
-  console.log(selectedChest2, openChestIds);
+  // console.log(selectedChest2, openChestIds);
   return (
     <>
       <div className="container-lg p-0">
@@ -607,6 +618,7 @@ const Games = ({
                             claimingChest={claimingChest}
                             setClaimingChest={setClaimingChest}
                             buyNftPopup={false}
+                            openedChests={openedChests}
                             chainId={networkId}
                             chain={chain}
                             key={index}
