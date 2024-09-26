@@ -1349,15 +1349,15 @@ const Games = ({
                       </div>
                     </div>
                   </div>
-                  <div>
+                  <div className="position-relative">
                   {openedChests && openedChests.length === 20 ? (
-                    <img src={mainChestCracked} alt="" className="h-100" />
+                    <img src={mainChestCracked} alt=""/>
                   ) : openedChests && openedChests.length < 20 ? (
-                    <img src={mainChest} alt="" className="h-100" />
+                    <img src={mainChest} alt="" />
                   ) : (
-                    <img src={mainChest} alt="" className="h-100" />
+                    <img src={mainChest} alt="" />
                   )}
-</div>
+
                   <div className="position-absolute rocks-wrapper">
                     <div className="d-flex flex-column justify-content-center align-items-center position-relative w-100 h-100">
                       {[...Array(4)].map((item, index) => {
@@ -1466,7 +1466,7 @@ const Games = ({
                         );
                       })}
                     </div>
-                  </div>
+                  </div></div>
                 </div>
                 <div className="d-none d-lg-flex d-md-flex w-100 align-items-center gap-2">
                   <div className="left-separator"></div>

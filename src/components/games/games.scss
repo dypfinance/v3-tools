@@ -63,7 +63,9 @@
   height: 100%;
 
   @media screen and (max-width: 767px) {
-    top: 26%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 }
 
@@ -250,6 +252,7 @@
 
 .dynamic-position {
   position: absolute;
+  z-index: 1;
   @media screen and (max-width: 575px) {
     position: relative;
   }
