@@ -69,11 +69,7 @@ const Leaderboard = ({
         class: "col-4 text-center",
       },
       {
-        name: "ETH Reward",
-        class: "col-2 text-center leaderboard-rewards-bg",
-      },
-      {
-        name: "DYP Reward",
+        name: "Reward",
         class: "col-2 text-center leaderboard-rewards-bg",
       },
     ],
@@ -132,87 +128,67 @@ const Leaderboard = ({
 
   const stoneCrackRewards = [
     {
-      ethReward: 20,
-      dypReward: 20,
+      reward: 40,
     },
     {
-      ethReward: 15,
-      dypReward: 15,
+      reward: 30,
     },
     {
-      ethReward: 10,
-      dypReward: 10,
+      reward: 20,
     },
     {
-      ethReward: 7.5,
-      dypReward: 7.5,
+      reward: 15,
     },
     {
-      ethReward: 5,
-      dypReward: 5,
+      reward: 10,
     },
     {
-      ethReward: 5,
-      dypReward: 5,
+      reward: 10,
     },
     {
-      ethReward: 5,
-      dypReward: 5,
+      reward: 10,
     },
     {
-      ethReward: 5,
-      dypReward: 5,
+      reward: 10,
     },
     {
-      ethReward: 5,
-      dypReward: 5,
+      reward: 10,
     },
     {
-      ethReward: 5,
-      dypReward: 5,
+      reward: 10,
     },
   ];
 
   const stoneCrackRewardsMonthly = [
     {
-      ethReward: 100,
-      dypReward: 100,
+      rewards: 200,
     },
     {
-      ethReward: 50,
-      dypReward: 50,
+      rewards: 100,
     },
     {
-      ethReward: 25,
-      dypReward: 25,
+      rewards: 50,
     },
     {
-      ethReward: 15,
-      dypReward: 15,
+      rewards: 30,
     },
     {
-      ethReward: 10,
-      dypReward: 10,
+      rewards: 20,
     },
     {
-      ethReward: 10,
-      dypReward: 10,
+      rewards: 20,
     },
     {
-      ethReward: 10,
-      dypReward: 10,
+      rewards: 20,
     },
     {
-      ethReward: 10,
-      dypReward: 10,
+      rewards: 20,
     },
     {
-      ethReward: 10,
-      dypReward: 10,
+      rewards: 20,
     },
     {
-      ethReward: 10,
-      dypReward: 10,
+      rewards: 20,
     },
   ];
 
@@ -552,8 +528,9 @@ const Leaderboard = ({
               )}
               <table
                 className={`playerTable w-100 ${
-                (  (type === "stoneCrack" && optionText === "monthly") ||
-                  (type === "cawsAdventure" )) && "comingsoon2"
+                  ((type === "stoneCrack" && optionText === "monthly") ||
+                    type === "cawsAdventure") &&
+                  "comingsoon2"
                 } `}
               >
                 <tbody>
@@ -561,23 +538,33 @@ const Leaderboard = ({
                     {type === "stoneCrack" ? (
                       <>
                         {stoneHeaders.headers.map((item, index) =>
-                          item.name === "ETH Reward" ? (
+                          item.name === "Reward" ? (
                             <th
                               className={`playerHeader ${item.class}`}
                               key={index}
                             >
-                              <img src={eth} width={15} height={15} alt="" />{" "}
-                              {/* {item.name.slice(4, item.name.length)} */}
-                              ETH
-                            </th>
-                          ) : item.name === "DYP Reward" ? (
-                            <th
-                              className={`playerHeader ${item.class}`}
-                              key={index}
-                            >
-                              <img src={dyp} width={15} height={15} alt="" />{" "}
-                              {/* {item.name.slice(4, item.name.length)} */}
-                              DYP
+                              <div className="d-flex align-items-center justify-content-center gap-1">
+                                <div className="d-flex algin-items-center">
+                                  <img
+                                    src={eth}
+                                    width={15}
+                                    height={15}
+                                    alt=""
+                                    className="me-1 d-none d-lg-block d-md-block"
+                                  />
+                                  ETH
+                                </div> +
+                                <div className="d-flex algin-items-center">
+                                  <img
+                                    src={dyp}
+                                    width={15}
+                                    height={15}
+                                    alt=""
+                                    className="me-1 d-none d-lg-block d-md-block"
+                                  />{" "}
+                                  DYP
+                                </div>
+                              </div>
                             </th>
                           ) : (
                             <th
@@ -644,18 +631,7 @@ const Leaderboard = ({
                             {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
                             $
                             {getFormattedNumber(
-                              stoneCrackRewards[index].ethReward,
-                              0
-                            )}
-                          </td>
-                          <td
-                            className={`playerReward col-2 text-center leaderboard-rewards-bg`}
-                            style={{ color: stoneHeaders.rewardColor }}
-                          >
-                            {/* <img src={dyp} width={12} height={12} alt="" />{" "} */}
-                            $
-                            {getFormattedNumber(
-                              stoneCrackRewards[index].ethReward,
+                              stoneCrackRewards[index].reward,
                               0
                             )}
                           </td>
@@ -720,13 +696,6 @@ const Leaderboard = ({
                               {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
                               ${getFormattedNumber(0, 0)}
                             </td>
-                            <td
-                              className={`playerReward col-2 text-center leaderboard-rewards-bg`}
-                              style={{ color: stoneHeaders.rewardColor }}
-                            >
-                              {/* <img src={dyp} width={12} height={12} alt="" />{" "} */}
-                              ${getFormattedNumber(0, 0)}
-                            </td>
                           </tr>
                         )}
                     </>
@@ -760,18 +729,7 @@ const Leaderboard = ({
                             {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
                             $
                             {getFormattedNumber(
-                              stoneCrackRewardsMonthly[index].ethReward,
-                              0
-                            )}
-                          </td>
-                          <td
-                            className={`playerReward col-2 text-center leaderboard-rewards-bg`}
-                            style={{ color: stoneHeaders.rewardColor }}
-                          >
-                            {/* <img src={dyp} width={12} height={12} alt="" />{" "} */}
-                            $
-                            {getFormattedNumber(
-                              stoneCrackRewardsMonthly[index].ethReward,
+                              stoneCrackRewardsMonthly[index].rewards,
                               0
                             )}
                           </td>
@@ -801,13 +759,6 @@ const Leaderboard = ({
                               {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
                               $0
                             </td>
-                            <td
-                              className={`playerReward col-2 text-center leaderboard-rewards-bg`}
-                              style={{ color: stoneHeaders.rewardColor }}
-                            >
-                              {/* <img src={dyp} width={12} height={12} alt="" />{" "} */}
-                              $0
-                            </td>
                           </tr>
                         )
                       )}
@@ -834,13 +785,6 @@ const Leaderboard = ({
                               style={{ color: stoneHeaders.rewardColor }}
                             >
                               {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
-                              ${getFormattedNumber(0, 0)}
-                            </td>
-                            <td
-                              className={`playerReward col-2 text-center leaderboard-rewards-bg`}
-                              style={{ color: stoneHeaders.rewardColor }}
-                            >
-                              {/* <img src={dyp} width={12} height={12} alt="" />{" "} */}
                               ${getFormattedNumber(0, 0)}
                             </td>
                           </tr>
