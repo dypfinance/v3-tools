@@ -36,6 +36,7 @@ const Leaderboard = ({
   activePlayerWeekly,
   activePlayerMonthly,
   email,
+  leaderboardCaws2d,
 }) => {
   const weeklyPrizes = ["25", "15", "10", "8", "0", "0", "0", "0", "0", "0"];
   const monthlyPrizes = [
@@ -354,7 +355,6 @@ const Leaderboard = ({
   const [optionText, setOptionText] = useState("weekly");
   const [inactiveBoard, setInactiveBoard] = useState(false);
   const [prizes, setPrizes] = useState(weeklyPrizes);
-  const [activePlayer, setActivePlayer] = useState(false);
   const [prevStatus, setPrevStatus] = useState(false);
 
   const handleOption = (item) => {
@@ -392,6 +392,21 @@ const Leaderboard = ({
 
       return newStatus;
     });
+  };
+
+  const formatTimeByLevelAndSecond = (bestTime, level) => {
+    if (level === 10) {
+      let check = Number(bestTime);
+
+      if (check !== 0) {
+        let date = new Date(null);
+
+        date.setSeconds(bestTime);
+        return date.toISOString().substr(11, 8);
+      }
+    } else {
+      return "DNF";
+    }
   };
 
   return (
@@ -861,14 +876,14 @@ const Leaderboard = ({
                     </>
                   ) : (
                     <>
-                      {cawsData.map((item, index) => (
+                      {leaderboardCaws2d.slice(0, 10).map((item, index) => (
                         <tr key={index} className={`playerInnerRow`}>
                           <td className="playerData col-1">
                             {Number(index) + 1}
                           </td>
                           <td className="playerName col-3">
                             <div className="position-relative d-flex align-items-center">
-                              <span>{item.player}</span>
+                              <span>{item.username}</span>
                             </div>
                           </td>
                           <td
@@ -887,7 +902,10 @@ const Leaderboard = ({
                             className={`playerReward col-3 text-center`}
                             style={{ color: cawsHeaders.rewardColor }}
                           >
-                            {item.time}
+                            {formatTimeByLevelAndSecond(
+                              item.timestamp,
+                              item.level
+                            )}
                           </td>
                         </tr>
                       ))}
@@ -967,18 +985,20 @@ const Leaderboard = ({
               </table>
             </div>
           </div>
-          <div className="optionsWrapper2 p-2">
-            <div className="d-flex flex-column">
-              <div className="d-flex justify-content-between gap-2 align-items-center">
-                <span className="viewWinners">View previous winners</span>
-                <Switch
-                  onChange={() => {
-                    switchPrev();
-                  }}
-                />
+          {type !== "cawsAdventure" && (
+            <div className="optionsWrapper2 p-2">
+              <div className="d-flex flex-column">
+                <div className="d-flex justify-content-between gap-2 align-items-center">
+                  <span className="viewWinners">View previous winners</span>
+                  <Switch
+                    onChange={() => {
+                      switchPrev();
+                    }}
+                  />
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>
