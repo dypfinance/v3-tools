@@ -66,6 +66,7 @@ const Games = ({
   activePlayerWeekly,
   activePlayerMonthly,
   username,
+  leaderboardCaws2d
 }) => {
   const [chain, setChain] = useState("base");
   const [message, setMessage] = useState("");
@@ -2071,6 +2072,7 @@ const Games = ({
           activePlayerMonthly={activePlayerMonthly}
           email={email}
           username={username}
+          leaderboardCaws2d={leaderboardCaws2d}
         />
       </div>
       <StoneCrackPopup

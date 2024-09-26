@@ -133,6 +133,7 @@ function App() {
   const [previousWeeklyVersion, setpreviousWeeklyVersion] = useState(0);
   const [previousMonthlyVersion, setpreviousMonthlyVersion] = useState(0);
   const [previousKittyDashVersion, setpreviousKittyDashVersion] = useState(0);
+  const [leaderboard, setleaderboard] = useState([]);
 
   const [weeklyplayerData, setweeklyplayerData] = useState([]);
   const [activePlayerWeekly, setActivePlayerWeekly] = useState(false);
@@ -988,6 +989,19 @@ function App() {
     }
   };
 
+  const loadLeaderboardDataCaws2dGame = async () => {
+   let leaderboard2 = [];
+    try { 
+      leaderboard2 = await (
+        await fetch("https://game.dypius.com/api/leaderboard")
+      ).json();
+    } catch (e) {
+      console.warn(e);
+    }
+    leaderboard2 = leaderboard2.sort((a, b) => b.score - a.score);
+    setleaderboard(leaderboard2);
+  };
+
   const getAllChests = async () => {
     let headersList = {
       Accept: "*/*",
@@ -1294,6 +1308,10 @@ function App() {
     }
   }, [email, chestCount]);
 
+  useEffect(()=>{
+    loadLeaderboardDataCaws2dGame()
+  },[])
+
   useEffect(() => {
     if (email && data?.getPlayer?.wallet?.publicAddress !== undefined) {
       refreshSubscription(data?.getPlayer?.wallet?.publicAddress);
@@ -1547,6 +1565,7 @@ function App() {
                     path="/games"
                     element={
                       <Games
+                      leaderboardCaws2d={leaderboard}
                         handleConnection={showModal}
                         isConnected={isConnected}
                         networkId={parseInt(networkId)}
