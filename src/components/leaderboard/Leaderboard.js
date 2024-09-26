@@ -173,7 +173,7 @@ const Leaderboard = ({
     },
   ];
 
-  const kittyDashRewards = [1000, 500, 10, 10, 10, 10, 10, 10, 10, 10];
+  const kittyDashRewards = [30, 20, 10, 10, 5, 5, 5, 5, 5, 5];
 
   const stoneData = [
     {
