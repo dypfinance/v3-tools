@@ -1455,12 +1455,16 @@ function App() {
   };
 
   const onLinkWallet = async () => {
-    setIsOnLink(true);
-    await generateNonce({
-      variables: {
-        publicAddress: coinbase,
-      },
-    });
+    if (isConnected) {
+      setIsOnLink(true);
+      await generateNonce({
+        variables: {
+          publicAddress: coinbase,
+        },
+      });
+    } else {
+      setshow(true);
+    }
   };
 
   useEffect(() => {
