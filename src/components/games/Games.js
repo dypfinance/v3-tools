@@ -286,7 +286,7 @@ const Games = ({
         if (chests[index].isOpened === true) {
           if (randomOpenedChests[index] === undefined) {
             const index2 = getFirstUnopenedChest(index - 1, chests);
-            if (index2) {
+            if (index2!==undefined) {
               arrayFiltered.push(randomOpenedChests[index2]);
             }
           } else {
