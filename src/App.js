@@ -76,8 +76,22 @@ import {
 } from "./functions/Dashboard.schema";
 import { ethers } from "ethers";
 import LoyaltyProgram from "./components/loyalty/LoyaltyProgram.js";
+import { useParams } from "react-router-dom";
+
+const LockerWrapper = (props) => {
+  const { pair_id } = useParams();
+  
+  return (
+    <Locker
+      {...props}  // Passing down existing props like handleConnection, isConnected, etc.
+      pair_id={pair_id}  // Explicitly passing pair_id as a prop
+    />
+  );
+};
+
 
 function App() {
+
   const [theme, setTheme] = useState("theme-dark");
   const [isMinimized, setisMinimized] = useState(
     false && window.innerWidth >= 992
@@ -2033,11 +2047,12 @@ setkittyDashRecords */}
                     exact
                     path="/locker/:pair_id?"
                     element={
-                      <Locker
+                      <LockerWrapper
                         handleConnection={handleConnection}
                         isConnected={isConnected}
                         theme={theme}
                         coinbase={coinbase}
+                        networkId={networkId}
                         // {...props}
                       />
                     }
