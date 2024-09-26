@@ -132,20 +132,63 @@ const Leaderboard = ({
 
   const stoneCrackRewards = [
     {
-      ethReward: 1000,
-      dypReward: 1000,
+      ethReward: 20,
+      dypReward: 20,
     },
     {
-      ethReward: 500,
-      dypReward: 500,
-    },
-    {
-      ethReward: 10,
-      dypReward: 10,
+      ethReward: 15,
+      dypReward: 15,
     },
     {
       ethReward: 10,
       dypReward: 10,
+    },
+    {
+      ethReward: 7.5,
+      dypReward: 7.5,
+    },
+    {
+      ethReward: 5,
+      dypReward: 5,
+    },
+    {
+      ethReward: 5,
+      dypReward: 5,
+    },
+    {
+      ethReward: 5,
+      dypReward: 5,
+    },
+    {
+      ethReward: 5,
+      dypReward: 5,
+    },
+    {
+      ethReward: 5,
+      dypReward: 5,
+    },
+    {
+      ethReward: 5,
+      dypReward: 5,
+    },
+  ];
+
+  const stoneCrackRewardsMonthly = [
+    {
+      ethReward: 100,
+      dypReward: 100,
+    },
+    {
+      ethReward: 50,
+      dypReward: 50,
+    },
+    {
+      ethReward: 25,
+      dypReward: 25,
+    },
+    {
+      ethReward: 15,
+      dypReward: 15,
     },
     {
       ethReward: 10,
@@ -717,7 +760,7 @@ const Leaderboard = ({
                             {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
                             $
                             {getFormattedNumber(
-                              stoneCrackRewards[index].ethReward,
+                              stoneCrackRewardsMonthly[index].ethReward,
                               0
                             )}
                           </td>
@@ -728,7 +771,7 @@ const Leaderboard = ({
                             {/* <img src={dyp} width={12} height={12} alt="" />{" "} */}
                             $
                             {getFormattedNumber(
-                              stoneCrackRewards[index].ethReward,
+                              stoneCrackRewardsMonthly[index].ethReward,
                               0
                             )}
                           </td>
