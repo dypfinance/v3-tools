@@ -1196,7 +1196,7 @@ const Games = ({
                           Sign in with Your Game Account
                         </h6>
                         <span className="chain-desc mb-0">
-                          Sign in to access Daily Bonus and earn tailored
+                          Sign in to access Stone Crack and earn tailored
                           rewards!
                         </span>
                       </div>
@@ -1232,7 +1232,7 @@ const Games = ({
                           Connect wallet
                         </h6>
                         <span className="chain-desc mb-0">
-                          Connect wallet in order to access Daily Bonus and earn
+                          Connect wallet in order to access Stone Crack and earn
                           tailored rewards!
                         </span>
                       </div>

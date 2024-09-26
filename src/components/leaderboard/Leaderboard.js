@@ -499,7 +499,20 @@ const Leaderboard = ({
                   Rewards
                 </span>
               )}
-              <table className="playerTable w-100">
+              {(type === "stoneCrack" && optionText === "monthly") ||
+              type === "cawsAdventure" ? (
+                <div className="coming-soon-position d-flex align-items-center justify-content-center">
+                  <h6 className="mb-0">Coming Soon</h6>
+                </div>
+              ) : (
+                <></>
+              )}
+              <table
+                className={`playerTable w-100 ${
+                (  (type === "stoneCrack" && optionText === "monthly") ||
+                  (type === "cawsAdventure" )) && "comingsoon2"
+                } `}
+              >
                 <tbody>
                   <tr className="playerRow">
                     {type === "stoneCrack" ? (
