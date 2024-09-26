@@ -543,7 +543,7 @@ const Leaderboard = ({
                               className={`playerHeader ${item.class}`}
                               key={index}
                             >
-                              <div className="d-flex align-items-center justify-content-center gap-1">
+                              <div className="d-flex p-1 align-items-center justify-content-center gap-1">
                                 <div className="d-flex algin-items-center">
                                   <img
                                     src={eth}
