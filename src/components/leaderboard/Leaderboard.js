@@ -2,15 +2,17 @@ import React, { useEffect, useState } from "react";
 import "./leaderboard.scss";
 import Switch from "@mui/material/Switch";
 import getFormattedNumber from "../../functions/get-formatted-number";
-import { CircularProgress } from "@mui/material";
-import playerAvatar from "./assets/userAvatar2.png";
-import premiumAvatar from "./assets/premiumAvatar.png";
-import premiumStar from "./assets/premiumStar.png";
+// import { CircularProgress } from "@mui/material";
+// import playerAvatar from "./assets/userAvatar2.png";
+// import premiumAvatar from "./assets/premiumAvatar.png";
+// import premiumStar from "./assets/premiumStar.png";
 import kittyDashFlag from "./assets/kittyDashFlag.png";
 import stoneCrackFlag from "./assets/stoneCrackFlag.png";
 import cawsAdventuresFlag from "./assets/cawsAdventuresFlag.png";
 import eth from "./assets/eth.svg";
 import dyp from "./assets/dyp.svg";
+import { Tooltip } from "@material-ui/core";
+import tooltipIcon from "./assets/tooltipIcon.svg";
 
 const Leaderboard = ({
   userData,
@@ -514,8 +516,24 @@ const Leaderboard = ({
           <div className="d-flex flex-column gap-2 tablewrapper">
             <div className="inner-table-wrapper p-2 w-100 position-relative">
               {type === "stoneCrack" && (
-                <span className="playerHeader reward-position d-none  d-lg-flex justify-content-center px-0 leaderboard-rewards-bg">
-                  Rewards
+                <span className="playerHeader reward-position  d-lg-flex justify-content-center align-items-center gap-1 px-0 leaderboard-rewards-bg">
+                  Rewards{" "}
+                  <Tooltip
+                    title={
+                      <>
+                        <div className="d-flex flex-column gap-2">
+                          <span className="whitelist-tooltip-content-text">
+                            50% of the rewards will be in ETH and 50% will be in
+                            DYP.
+                          </span>
+                        </div>
+                      </>
+                    }
+                    enterDelay={0}
+                    leaveDelay={0}
+                  >
+                    <img src={tooltipIcon} alt="" className="tooltipicon-leaderboard"/>
+                  </Tooltip>
                 </span>
               )}
               {(type === "stoneCrack" && optionText === "monthly") ||
@@ -553,7 +571,8 @@ const Leaderboard = ({
                                     className="me-1 d-none d-lg-block d-md-block"
                                   />
                                   ETH
-                                </div> +
+                                </div>{" "}
+                                +
                                 <div className="d-flex algin-items-center">
                                   <img
                                     src={dyp}

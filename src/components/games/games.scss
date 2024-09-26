@@ -61,6 +61,10 @@
   top: 0;
   width: 100%;
   height: 100%;
+
+  @media screen and (max-width: 767px) {
+    top: 26%;
+  }
 }
 
 .rockitem {

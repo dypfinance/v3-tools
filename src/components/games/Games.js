@@ -1308,11 +1308,12 @@ const Games = ({
                   )}
                   <div className="dynamic-position w-100">
                     <div className="d-flex flex-column flex-lg-row flex-md-row flex-sm-row justify-content-between align-items-start w-100 p-2">
+                     
                       <img
                         src={stoneCrack}
                         alt=""
                         className="stonecrack-logo"
-                      />
+                      /> 
                       <div className="d-flex w-100 flex-row-reverse gap-1">
                         <div className="col-lg-3 d-flex flex-column align-items-center ">
                           <div className="w-100 points-upper-bg">
@@ -1348,6 +1349,7 @@ const Games = ({
                       </div>
                     </div>
                   </div>
+                  <div>
                   {openedChests && openedChests.length === 20 ? (
                     <img src={mainChestCracked} alt="" className="h-100" />
                   ) : openedChests && openedChests.length < 20 ? (
@@ -1355,7 +1357,7 @@ const Games = ({
                   ) : (
                     <img src={mainChest} alt="" className="h-100" />
                   )}
-
+</div>
                   <div className="position-absolute rocks-wrapper">
                     <div className="d-flex flex-column justify-content-center align-items-center position-relative w-100 h-100">
                       {[...Array(4)].map((item, index) => {
