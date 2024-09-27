@@ -78,27 +78,39 @@
   height: 100%;
 }
 
-.rockitem1, .rockitem18 {
-  z-index: 2;
+.rockitem1 {
+  top: 52% !important;
+  left: 50%;
 }
 
-.rockitem5, .rockitem8, .rockitem11, .rockitem17, .rockitem14 {
+.rockitem13 {
+  left: 51% !important;
+  top: 51% !important;
+}
+
+.rockitem18 {
+  left: 51% !important;
+}
+
+
+
+.rockitem5,.rockitem17, .rockitem8, .rockitem11, .rockitem14 {
   z-index: 3;
 }
 
- .rockitem6, .rockitem9, .rockitem15, .rockitem18, .rockitem10 {
+.rockitem1, .rockitem6, .rockitem16, .rockitem9, .rockitem15, .rockitem10, .rockitem18 {
   z-index: 2;
 }
 
- .rockitem4, .rockitem16, .rockitem19  {
+ .rockitem4, .rockitem19  {
   z-index: 1;
 }
 
-.rockitem2 {
+.rockitem12, .rockitem2 {
   z-index: 5;
 }
 
-.rockitem3, .rockitem12, .rockitem7, .rockitem13 {
+.rockitem3, .rockitem7,  .rockitem13 {
   z-index: 4;
 }
 
