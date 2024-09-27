@@ -16,7 +16,6 @@ const RelatedNews = ({
   year,
   link,
   image,
-  theme,
   onSelectOtherNews,
   newsId,
   upvotes,
@@ -450,11 +449,7 @@ const RelatedNews = ({
                   <></>
                 )}
               </div>
-              {/* <img
-              src={theme === "theme-dark" ? WhiteDots : Dots}
-              alt=""
-              style={{ width: "auto" }}
-            /> */}
+             
               <div className="date-wrapper">
                 <img src={calendar} alt="calendar" />
                 <span className="news-date-text">

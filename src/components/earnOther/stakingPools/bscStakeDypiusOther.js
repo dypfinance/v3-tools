@@ -10,7 +10,6 @@ import { ClickAwayListener } from "@material-ui/core";
 import { handleSwitchNetworkhook } from "../../../functions/hooks";
 import axios from "axios";
 import Modal from "../../Modal/Modal";
-import { useHistory } from "react-router-dom";
 import Web3 from "web3";
 
 const StakeDypiusBscOther = ({
@@ -181,7 +180,6 @@ const StakeDypiusBscOther = ({
   const [approvedAmount, setapprovedAmount] = useState("0.00");
   const [earlyWithdrawTooltip, setEarlyWithdrawTooltip] = useState(false);
 
-  const navigate = useHistory();
 
   const showModal = () => {
     setshow(true);
