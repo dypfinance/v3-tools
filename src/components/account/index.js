@@ -2811,10 +2811,14 @@ export default class Subscription extends React.Component {
                         })}
                   </div>
                   <button
-                    className="outline-btn"
+                   className="outline-btn"
+                    disabled={mycaws.length > 4 ? false : true}
                     style={{
                       height: "fit-content",
-                      display: mycaws.length > 4 ? "block" : "none",
+                      // display: mycaws.length > 4 ? "block" : "none",
+                      display: "block",
+                      opacity: mycaws.length > 4 ? "1" : "0",
+                      pointerEvents: mycaws.length > 4 ? "auto" : "none"
                     }}
                     onClick={() => {
                       this.setState({ viewall: !this.state.viewall });
@@ -2875,9 +2879,13 @@ export default class Subscription extends React.Component {
                   </div>
                   <button
                     className="outline-btn"
+                    disabled={lands.length > 2 ? false : true}
                     style={{
                       height: "fit-content",
-                      display: lands.length > 2 ? "block" : "none",
+                      // display: lands.length > 2 ? "block" : "none",
+                      display: "block",
+                      opacity: lands.length > 2 ? "1" : "0",
+                      pointerEvents: lands.length > 2 ? "auto" : "none"
                     }}
                     onClick={() => {
                       this.setState({ viewall: !this.state.viewall });
