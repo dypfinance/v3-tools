@@ -203,7 +203,7 @@ export default class Farms extends React.Component {
         compact={true}
         keyField="id"
         
-        theme={this.props.theme == "theme-dark" ? "solarized" : "light"}
+        theme={"solarized"}
         persistTableHead={false}
         progressPending={this.state.isLoading}
         fixedHeader={true}

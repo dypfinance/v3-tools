@@ -1,13 +1,14 @@
 import React from "react";
 import filledArrow from "./assets/filledarrow.svg";
-import bridgeLogo from "./assets/bridge-logo.svg";
-import yieldIcon from "./assets/yieldIcon.svg";
-
+// import bridgeLogo from "./assets/bridge-logo.svg";
+// import yieldIcon from "./assets/yieldIcon.svg";
+import { NavLink } from "react-router-dom";
 import "./bridgecard.css";
 
 const BridgeCard = ({onMobileClick}) => {
   return (
-    <div className="bridgecard-wrapper">
+    <NavLink to='/games' className="bridgecard-wrapper">
+    <div className="">
       <div
         className="purplediv"
         style={{ background: "#8890C4", top: "23px" }}
@@ -26,13 +27,14 @@ const BridgeCard = ({onMobileClick}) => {
           </div>
           <div>
             <h6 className="bridgecard-btntext d-flex justify-content-start gap-2 align-items-center">
-              {/* <img src={filledArrow} alt="" /> */}
-              <div className="coming-soon-wrapper p-1"><span className="coming-soon-text">Coming soon</span></div>
+              <img src={filledArrow} alt="" />
+              {/* <div className="coming-soon-wrapper p-1"><span className="coming-soon-text">Coming soon</span></div> */}
             </h6>
           </div>
         </div>
       </div>
     </div>
+    </NavLink>
   );
 };
 

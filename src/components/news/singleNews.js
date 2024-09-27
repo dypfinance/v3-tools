@@ -16,7 +16,6 @@ const SingleNews = ({
   day,
   year,
   onNewsClick,
-  theme,
   upvotes,
   downvotes,
   isConnected,

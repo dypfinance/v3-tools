@@ -44,7 +44,7 @@ export default class Locker extends React.Component {
       loadspinner: "initial",
       loadspinnerLock: "initial",
 
-      pair_address: this.props.match.params.pair_id || "",
+      pair_address: this.props.pair_id || "",
       lpBalance: "",
       unlockDatebtn: "1",
       lockActive: false,
@@ -76,95 +76,30 @@ export default class Locker extends React.Component {
     };
   }
 
-  checkNetworkId = async () => {
-    if (window.ethereum) {
-      window.ethereum
-        .request({ method: "eth_chainId" })
-        .then((data) => {
-          this.getAllData(data);
-          if (data === "0x1") {
-            this.setState({
-              networkId: "1",
-            });
-          } else if (data === "0xa86a") {
-            this.setState({
-              networkId: "43114",
-            });
-          } else if (data === "0x38") {
-            this.setState({
-              networkId: "56",
-            });
-          } else if (data !== "undefined") {
-            this.setState({
-              networkId: "0",
-            });
-          } else {
-            this.setState({
-              networkId: "1",
-            });
-          }
-
-          this.refreshMyLocks().then();
-          this.loadPairInfo().then();
-          let pair_id = this.props.match.params.pair_id;
-
-          // if (window.isConnectedOneTime) {
-          //   this.onComponentMount();
-          // } else {
-          //   window.addOneTimeWalletConnectionListener(this.onComponentMount);
-          // }
-        })
-        .catch(console.error);
-    } else {
-      // if (window.isConnectedOneTime) {
-      //   this.onComponentMount();
-      // } else {
-      //   window.addOneTimeWalletConnectionListener(this.onComponentMount);
-      // }
-      this.setState({
-        networkId: "1",
-      });
-    }
-  };
-
+ 
   checkTotalLpLocked = async () => {
     let baseTokens =
-      this.state.networkId === "1"
+      this.props.networkId === "1"
         ? await window.getBaseTokensETH()
         : await window.getBaseTokens();
 
-    let pair_id = this.props.match.params.pair_id;
+    let pair_id = this.props.pair_id;
     let totalLpLocked =
-      this.state.networkId === "1"
+      this.props.networkId === "1"
         ? await window.getLockedAmountETH(pair_id)
         : await window.getLockedAmount(pair_id);
     this.refreshUsdValueOfLP(pair_id, totalLpLocked, baseTokens);
     this.setState({ totalLpLocked });
   };
 
-  async checkConnection() {
-    const logout = localStorage.getItem("logout");
-
-    if (logout !== "true") {
-      window.getCoinbase().then((data) => {
-        this.setState({
-          coinbase: data,
-        });
-      });
-    } else {
-      this.setState({
-        coinbase: undefined,
-      });
-    }
-  }
-
+ 
   getAllData = async (data) => {
     let pair_id;
-    if (this.props.match.params.pair_id) {
+    if (this.props.pair_id ) {
       pair_id = this.props.match.pair_id;
-    } else if (!this.props.match.params.pair_id && data === "0x1") {
+    } else if (!this.props.pair_id  && data === "0x1") {
       pair_id = "0x76911e11fddb742d75b83c9e1f611f48f19234e4";
-    } else if (!this.props.match.params.pair_id && data === "0xa86a") {
+    } else if (!this.props.pair_id  && data === "0xa86a") {
       pair_id = "0x497070e8b6c55fd283d8b259a6971261e2021c01";
     }
     let baseTokens =
@@ -187,9 +122,8 @@ export default class Locker extends React.Component {
   };
 
   componentDidMount() {
-    // window.scrollTo(0, 0);
-    this.checkNetworkId().then();
-    this.checkConnection().then();
+    // window.scrollTo(0, 0); 
+    
   }
 
   componentWillUnmount() {
@@ -200,13 +134,10 @@ export default class Locker extends React.Component {
     if (this.state.isLoadingMoreMyLocks) return;
     this.setState({ isLoadingMoreMyLocks: true });
     try {
-      let recipient;
-      await window.getCoinbase().then((data) => {
-        recipient = data;
-      });
+      let recipient = this.props.isConnected === true ? this.props.coinbase : window.config.coinbase_address
 
       let recipientLocksLength =
-        this.state.networkId === "1"
+        this.props.networkId === "1"
           ? await window.getActiveLockIdsLengthByRecipientETH(recipient)
           : await window.getActiveLockIdsLengthByRecipient(recipient);
 
@@ -218,7 +149,7 @@ export default class Locker extends React.Component {
         let startIndex = this.state.recipientLocks.length;
         let endIndex = Math.min(recipientLocksLength, startIndex + step);
         let recipientLocks =
-          this.state.networkId === "1"
+          this.props.networkId === "1"
             ? await window.getActiveLocksByRecipientETH(
                 recipient,
                 startIndex,
@@ -240,29 +171,26 @@ export default class Locker extends React.Component {
 
   onComponentMount = async () => {
     this.refreshMyLocks().then();
-
-    this.checkNetworkId().then();
-    this.checkConnection().then();
-
+ 
     // this.setState({ coinbase: await window.getCoinbase() });
     let pair_id;
 
-    if (this.props.match.params.pair_id) {
+    if (this.props.pair_id ) {
       pair_id = this.props.match.pair_id;
     } else if (
-      !this.props.match.params.pair_id &&
-      this.state.networkId === "1"
+      !this.props.pair_id  &&
+      this.props.networkId === "1"
     ) {
       pair_id = "0x76911e11fddb742d75b83c9e1f611f48f19234e4";
     } else if (
-      !this.props.match.params.pair_id &&
-      this.state.networkId === "43314"
+      !this.props.pair_id  &&
+      this.props.networkId === "43314"
     ) {
       pair_id = "0x497070e8b6c55fd283d8b259a6971261e2021c01";
     }
 
     let baseTokens =
-      this.state.networkId === "1"
+      this.props.networkId === "1"
         ? await window.getBaseTokensETH()
         : await window.getBaseTokens();
 
@@ -272,7 +200,7 @@ export default class Locker extends React.Component {
       this.refreshTokenLocks(pair_id);
       this.handlePairChange(null, pair_id);
       let totalLpLocked =
-        this.state.networkId === "1"
+        this.props.networkId === "1"
           ? await window.getLockedAmountETH(pair_id)
           : await window.getLockedAmount(pair_id);
       this.refreshUsdValueOfLP(pair_id, totalLpLocked, baseTokens);
@@ -316,7 +244,7 @@ export default class Locker extends React.Component {
     this.setState({ isLoadingMoreTokenLocks: true });
     try {
       let tokenLocksLength =
-        this.state.networkId === "1"
+        this.props.networkId === "1"
           ? await window.getActiveLockIdsLengthByTokenETH(token)
           : await window.getActiveLockIdsLengthByToken(token);
 
@@ -326,7 +254,7 @@ export default class Locker extends React.Component {
         let startIndex = this.state.tokenLocks.length;
         let endIndex = Math.min(tokenLocksLength, startIndex + step);
         let tokenLocks =
-          this.state.networkId === "1"
+          this.props.networkId === "1"
             ? await window.getActiveLocksByTokenETH(token, startIndex, endIndex)
             : await window.getActiveLocksByToken(token, startIndex, endIndex);
 
@@ -356,7 +284,7 @@ export default class Locker extends React.Component {
     });
 
     let totalLpLocked =
-      this.state.networkId === "1"
+      this.props.networkId === "1"
         ? await window.getLockedAmountETH(newPairAddress)
         : await window.getLockedAmount(newPairAddress);
     this.setState({ totalLpLocked });
@@ -369,7 +297,7 @@ export default class Locker extends React.Component {
   };
 
   loadPairInfo = async () => {
-    let isConnected = this.state.coinbase !== undefined ? true : false;
+    let isConnected = this.props.isConnected
 
     if (!isConnected) {
       this.setState({
@@ -414,7 +342,7 @@ export default class Locker extends React.Component {
     if (pair) {
       let balance = await window.getTokenHolderBalance(
         addr,
-        this.state.coinbase
+        this.props.coinbase
       );
 
       this.setState({ amount: balance, lpBalance: balance });
@@ -423,7 +351,7 @@ export default class Locker extends React.Component {
       let token1 = pair["token1"]?.address;
 
       let baseTokens =
-        this.state.networkId === "1"
+        this.props.networkId === "1"
           ? await window.getBaseTokensETH()
           : await window.getBaseTokens();
       console.log(baseTokens);
@@ -701,7 +629,7 @@ export default class Locker extends React.Component {
         return percentage.toFixed(0);
       }
 
-      if (!this.props.match.params.pair_id) {
+      if (!this.props.pair_id ) {
         const percentage = 25;
         return percentage;
       }
@@ -792,7 +720,7 @@ export default class Locker extends React.Component {
                       </p>
                       <input
                         style={{ width: "266px", height: 46 }}
-                        disabled={this.props.match.params.pair_id}
+                        disabled={this.props.pair_id }
                         value={this.state.pair_address}
                         onChange={(e) => {
                           this.handlePairChange(e);
@@ -905,7 +833,7 @@ export default class Locker extends React.Component {
                       </p>
                       <input
                         style={{ width: "266px", height: 46 }}
-                        disabled={this.props.match.params.pair_id}
+                        disabled={this.props.pair_id }
                         value={this.state.pair_address}
                         onChange={(e) => {
                           this.handlePairChange(e);
@@ -1532,7 +1460,7 @@ export default class Locker extends React.Component {
                     </span>
                   </div>
                 </div>
-                {String(this.state.coinbase).toLowerCase() ==
+                {String(this.props.coinbase).toLowerCase() ==
                   lock.recipient.toLowerCase() && (
                   <button
                     onClick={this.handleClaim(lock.id)}
@@ -2007,7 +1935,7 @@ export default class Locker extends React.Component {
       return percentage.toFixed(0);
     }
 
-    if (!this.props.match.params.pair_id) {
+    if (!this.props.pair_id ) {
       const percentage = 25;
       return percentage;
     }
@@ -2125,7 +2053,7 @@ export default class Locker extends React.Component {
                               placeholder=" "
                               className="text-input"
                               style={{ width: "100%" }}
-                              disabled={this.props.match.params.pair_id}
+                              disabled={this.props.pair_id }
                               value={this.state.pair_address}
                               onChange={(e) => {
                                 this.handlePairChange(e.target.value);
@@ -2565,7 +2493,7 @@ export default class Locker extends React.Component {
                       placeholder=" "
                       className="text-input"
                       style={{ width: "100%" }}
-                      disabled={this.props.match.params.pair_id}
+                      disabled={this.props.pair_id}
                       value={this.state.pair_address}
                       onChange={(e) => {
                         this.handlePairChange(e.target.value);

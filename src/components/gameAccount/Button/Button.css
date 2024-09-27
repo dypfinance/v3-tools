@@ -1,0 +1,134 @@
+.primaryButton {
+  width: 100%;
+  cursor: pointer;
+  padding: 18px;
+  clip-path: polygon(
+    10% 0%,
+    100% 0,
+    100% 20%,
+    100% 65%,
+    90% 100%,
+    20% 100%,
+    0 100%,
+    0% 40%
+  );
+  border-radius: 12px;
+  background: linear-gradient(
+    135deg,
+    rgba(123, 216, 176, 1) 0%,
+    rgba(171, 233, 155, 1) 51%,
+    rgba(213, 248, 136, 1) 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: .5rem 3rem;
+}
+
+
+.primary2Button {
+  width: fit-content;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  clip-path: polygon(
+    10% 0%,
+    100% 0,
+    100% 20%,
+    100% 65%,
+    90% 100%,
+    20% 100%,
+    0 100%,
+    0% 40%
+  );
+  border-radius: 12px;
+  background: rgb(123, 216, 176);
+  background: linear-gradient(
+    135deg,
+    rgba(123, 216, 176, 1) 0%,
+    rgba(171, 233, 155, 1) 51%,
+    rgba(213, 248, 136, 1) 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.coingeckoButton {
+  width: fit-content;
+  cursor: pointer;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: end;
+}
+
+.disabledBtn {
+  .coingeckotitleButton {
+    color: gray !important;
+  }
+  pointer-events: none !important;
+}
+
+.primarytitleButton {
+  font-size: 20px;
+  color: #0b0b2e;
+  font: normal normal normal 20px/30px Poppins;
+  letter-spacing: 0px;
+  color: #0b0b2e;
+  opacity: 1;
+  text-align: left;
+
+}
+
+.primary2titleButton {
+  color: #080B2A;
+  text-align: center;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  margin: 0;
+  gap:20px;
+  display: flex;
+  align-items: center;
+}
+
+.coingeckotitleButton {
+  color: #7dd9af;
+  text-align: center;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+
+}
+
+.lds-dual-ring {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+}
+
+.lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 30px;
+  height: 30px;
+  margin: 0px;
+  border-radius: 50%;
+  border: 6px solid #fff;
+  border-color: #fff transparent #fff transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

@@ -30,8 +30,6 @@ import error from "../../assets/error.svg";
 
 const Header = ({
   toggleMobileSidebar,
-  toggleTheme,
-  theme,
   chainId,
   coinbase,
   logout,
@@ -41,7 +39,7 @@ const Header = ({
   hideModal,
   handleConnection,
   isConnected,
-  appState,
+  isPremium,
   onSetCurrencyAmount,
   showFlyout,
 }) => {
@@ -262,7 +260,7 @@ const Header = ({
       const balance = await ethereum.request({
         method: "eth_getBalance",
         params: [coinbase, "latest"],
-      });
+      }).catch((e)=>{console.error(e); return 0});
 
       if (balance) {
         const infuraWeb3 = new Web3(window.config.infura_endpoint);
@@ -576,7 +574,7 @@ const Header = ({
                           >
                             <Dropdown.Item>
                               <NavLink
-                                to={appState.isPremium ? "/account" : "/plans"}
+                                to={"/account"}
                                 className={"d-flex w-100"}
                               >
                                 <span className="d-flex gap-2 align-items-center">
@@ -620,7 +618,7 @@ const Header = ({
                       (coinbase !== undefined || coinbase !== null) &&
                       routeData.pathname !== "/swap" && (
                         <NavLink
-                          to="/plans"
+                          to="/account"
                           className="account-user-wrapper d-flex align-items-center gap-1"
                         >
                           <img

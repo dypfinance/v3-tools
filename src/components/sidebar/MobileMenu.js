@@ -5,8 +5,8 @@ import governanceIcon from "../../assets/sidebarIcons/governanceIcon.svg";
 import governanceIconActive from "../../assets/sidebarIcons/governanceIconActive.svg";
 import bridgeIcon from "../../assets/sidebarIcons/bridgeIcon.svg";
 import bridgeIconActive from "../../assets/sidebarIcons/bridgeIconActive.svg";
-import yieldsIcon from "../../assets/sidebarIcons/yieldsIcon.svg";
-import yieldsIconActive from "../../assets/sidebarIcons/yieldsIconActive.svg";
+import gamesIcon from "../../assets/sidebarIcons/gamesIcon.svg";
+import gamesIconActive from "../../assets/sidebarIcons/gamesIconActive.svg";
 import explorerIcon from "../../assets/sidebarIcons/explorerIcon.svg";
 import explorerIconActive from "../../assets/sidebarIcons/explorerIconActive.svg";
 import projectsIcon from "../../assets/sidebarIcons/projectsIcon.svg";
@@ -128,9 +128,9 @@ const MobileMenu = () => {
           </div>
         </NavLink>
         <NavLink
-          to="/farms"
+          to="/games"
           className="col"
-          onClick={() => setActiveIcon("yields")}
+          onClick={() => setActiveIcon("games")}
         >
           <div
             className={`d-flex align-items-center sidebar-item ${
@@ -138,7 +138,7 @@ const MobileMenu = () => {
             } p-2 justify-content-center`}
           >
             <img
-              src={activeIcon === "yields" ? yieldsIconActive : yieldsIcon}
+              src={activeIcon === "games" ? gamesIconActive : gamesIcon}
               width={25}
               height={25}
               alt=""
@@ -348,6 +348,14 @@ const MobileMenu = () => {
                 <h3 className="sideitem-text">DYP Locker</h3>
                 <img src={rightArrow} alt="" />
               </NavLink>
+              <NavLink
+                to="/farms"
+                className="d-flex justify-content-between align-items-center w-100 py-2"
+              >
+                <h3 className="sideitem-text">Yields</h3>
+                <img src={rightArrow} alt="" />
+              </NavLink>
+           
             </div>
 
             <NavLink

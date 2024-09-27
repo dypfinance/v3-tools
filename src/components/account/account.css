@@ -6,6 +6,115 @@
   margin-top: 14rem;
 }
 
+
+.premium-gold-bg {
+  border-radius: 12px;
+  border: 0.5px solid #ffbf00;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 191, 0, 0.25) -23.88%,
+    rgba(255, 191, 0, 0) 99.99%
+  );
+  box-shadow: 0px 32px 64px 0px rgba(17, 17, 17, 0.12);
+}
+
+.lifetime-plan {
+  color: #fff;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 14px; /* 100% */
+}
+
+.plan-cost {
+  color: #f7f7fc;
+  font-size: 25px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 32px; /* 114.286% */
+}
+
+.subscription-chain {
+  color: #f7f7fc;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.popup-subtitle {
+  color: #f7f7fc;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.premium-benefits-wrapper {
+  border-radius: 12px;
+  border: 0.5px solid #8e97cd;
+  background: rgba(23, 25, 50, 0.4);
+  box-shadow: 0px 32px 64px 0px rgba(17, 17, 17, 0.12);
+}
+
+.premium-benefits-title {
+  color: #f7f7fc;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.premium-benefits-item {
+  color: #f7f7fc;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.subscription-price-text {
+  color: #d6d8e7;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: -0.216px;
+}
+
+.subscription-price-token {
+  color: #fff;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 18px; /* 150% */
+}
+
+.subscription-price-usd {
+  color: #7dd9af;
+  font-size: 8px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.my-premium-balance-text {
+  color: #ffeace;
+  text-align: right;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: -0.18px;
+}
+
+.premium-chains-wrapper {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+
 .mycawscollection-title {
   font-style: normal;
   font-weight: 600;
@@ -129,16 +238,16 @@
 }
 
 .subscribe-wrapper {
-  width: 30%;
+  width: 40%;
   height: fit-content;
   position: fixed;
   left: 0;
   right: 0;
-  top: 28%;
+  top: 0;
   bottom: 0;
   margin: auto;
   box-shadow: 0 0 0 1000px rgb(0 0 0 / 50%);
-  z-index: 2;
+  z-index: 11;
 }
 
 .my-plan-tag {
@@ -288,6 +397,7 @@
   background-size: cover;
   box-shadow: 0px 32px 64px rgba(17, 17, 17, 0.12);
   border-radius: 12px;
+  height: 100%;
 }
 
 .wod-title {
@@ -496,11 +606,132 @@
   color: #4fad93 !important;
 }
 
+.user-cardImg {
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(33, 36, 64, 0.15) 100%
+  );
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 10px;
+  border: 1px solid #494b61;
+}
+
+.user-cardImg-active {
+  background: linear-gradient(
+    180deg,
+    rgba(27, 245, 255, 0.15) 0%,
+    rgba(118, 15, 90, 0) 100%,
+    rgba(33, 36, 64, 0) 100%
+  );
+  border-radius: 10px;
+  border: 1px solid #494b61;
+}
+
+
+.bordereddiv {
+  padding: 10px 20px;
+  border-radius: 10px;
+  border-bottom: 1px solid #494b61;
+}
+
+.user-cardImg-active-premium {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 191, 0, 0.4) 0%,
+    rgba(33, 36, 64, 0.2) 100%
+  );
+  border-radius: 10px;
+  border: 1px solid #494b61;
+}
+
+.pill-btn {
+  background: linear-gradient(90deg, #7bd8af -10.16%, #d9fa86 129.3%);
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  color: #080b2a;
+  border: none;
+}
+
+
+.errorbtn {
+  background: linear-gradient(90deg, #ffac45 -10.16%, #ff6232 129.3%);
+  color: white !important;
+  border-radius: 8px;
+  border: none;
+}
+
+
+
+.walletconnectBtn {
+  background: linear-gradient(
+      0deg,
+      rgba(0, 254, 207, 0.3),
+      rgba(0, 254, 207, 0.3)
+    ),
+    linear-gradient(
+      112.83deg,
+      rgba(255, 255, 255, 0.47) 0%,
+      rgba(255, 255, 255, 0) 110.84%
+    );
+  box-shadow: 0px 4px 12px rgba(0, 254, 207, 0.24);
+  /* backdrop-filter: blur(4px); */
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 15px;
+  margin: 0 0 0 auto;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: -0.018em;
+  color: #f7f7ff;
+  border: none;
+}
+
+.premiumtext-alert {
+  color: #ed8225;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  width: fit-content;
+}
+
+.balance-item-wrapper {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+}
+
+.syncbtn {
+  border-radius: 10px;
+  background: linear-gradient(90deg, #830e47 0%, #5065c3 100%);
+  padding: 5px 10px;
+  color: #fff;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 500;
+  border: none;
+}
+
+
 .subscribe-container {
   background: #312f69;
   border: 2px solid #8e97cd;
   box-shadow: 0px 32px 64px rgba(17, 17, 17, 0.12);
   border-radius: 12px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+@media screen and (max-width: 991px) {
+  .subscribe-container {
+  height: 500px;
+  }
 }
 
 .token-amount-placeholder {
@@ -542,9 +773,9 @@
   color: #f7f7fc !important;
 }
 
-.subscribe-input-container {
+/* .subscribe-input-container {
   width: 40%;
-}
+} */
 
 .favorites-grid {
   display: grid;
@@ -573,9 +804,9 @@
   .dyp-amount-placeholder {
     text-align: left;
   }
-  .subscribe-input-container {
+  /* .subscribe-input-container {
     width: 100%;
-  }
+  } */
 
   .favorites-grid {
     grid-template-columns: auto;
