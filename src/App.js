@@ -76,8 +76,22 @@ import {
 } from "./functions/Dashboard.schema";
 import { ethers } from "ethers";
 import LoyaltyProgram from "./components/loyalty/LoyaltyProgram.js";
+import { useParams } from "react-router-dom";
+
+const LockerWrapper = (props) => {
+  const { pair_id } = useParams();
+  
+  return (
+    <Locker
+      {...props}  // Passing down existing props like handleConnection, isConnected, etc.
+      pair_id={pair_id}  // Explicitly passing pair_id as a prop
+    />
+  );
+};
+
 
 function App() {
+
   const [theme, setTheme] = useState("theme-dark");
   const [isMinimized, setisMinimized] = useState(
     false && window.innerWidth >= 992
@@ -948,6 +962,80 @@ function App() {
   const userId = data?.getPlayer?.playerId;
   const username = data?.getPlayer?.displayName;
 
+  const placeholderplayerData = [
+    {
+      position: "0",
+      displayName: "...",
+      reward: "---",
+      premium: false,
+      statValue: "---",
+    },
+    {
+      position: "1",
+      displayName: "...",
+      reward: "---",
+      premium: false,
+      statValue: "---",
+    },
+    {
+      position: "2",
+      displayName: "...",
+      reward: "---",
+      premium: false,
+      statValue: "---",
+    },
+    {
+      position: "3",
+      displayName: "...",
+      reward: "---",
+      statValue: "---",
+      premium: false,
+    },
+
+    {
+      position: "4",
+      displayName: "...",
+      reward: "---",
+      premium: false,
+      statValue: "---",
+    },
+    {
+      position: "5",
+      displayName: "...",
+      reward: "---",
+      premium: false,
+      statValue: "---",
+    },
+    {
+      position: "6",
+      displayName: "...",
+      reward: "---",
+      premium: false,
+      statValue: "---",
+    },
+    {
+      position: "7",
+      displayName: "...",
+      reward: "---",
+      premium: false,
+      statValue: "---",
+    },
+    {
+      position: "8",
+      displayName: "...",
+      reward: "---",
+      premium: false,
+      statValue: "---",
+    },
+    {
+      position: "9",
+      displayName: "...",
+      reward: "---",
+      premium: false,
+      statValue: "---",
+    },
+  ];
+
   const [generateNonce, { loading: loadingGenerateNonce, data: dataNonce }] =
     useMutation(GENERATE_NONCE);
   const [verifyWallet, { loading: loadingVerify, data: dataVerify }] =
@@ -990,8 +1078,8 @@ function App() {
   };
 
   const loadLeaderboardDataCaws2dGame = async () => {
-   let leaderboard2 = [];
-    try { 
+    let leaderboard2 = [];
+    try {
       leaderboard2 = await (
         await fetch("https://game.dypius.com/api/leaderboard")
       ).json();
@@ -1062,6 +1150,27 @@ function App() {
     }
   };
 
+  const fillRecordsWeekly = (itemData) => {
+    if (itemData.length === 0) {
+      setweeklyplayerData(placeholderplayerData);
+    } else if (itemData.length <= 10) {
+      const testArray = itemData;
+      const placeholderArray = placeholderplayerData.slice(itemData.length, 10);
+      const finalData = [...testArray, ...placeholderArray];
+      setweeklyplayerData(finalData);
+    }
+  };
+  const fillRecordsMonthly = (itemData) => {
+    if (itemData.length === 0) {
+      setmonthlyplayerData(placeholderplayerData);
+    } else if (itemData.length <= 10) {
+      const testArray = itemData;
+      const placeholderArray = placeholderplayerData.slice(itemData.length, 10);
+      const finalData = [...testArray, ...placeholderArray];
+      setmonthlyplayerData(finalData);
+    }
+  };
+
   const fetchRecordsAroundPlayerWeekly = async (itemData) => {
     const data = {
       StatisticName: "LeaderboardDypiusWeekly",
@@ -1114,6 +1223,7 @@ function App() {
     var testArray = result.data.data.leaderboard.filter(
       (item) => item.displayName === username
     );
+    fillRecordsWeekly(result.data.data.leaderboard);
     if (testArray.length > 0) {
       setActivePlayerWeekly(true);
       fetchRecordsAroundPlayerWeekly(result.data.data.leaderboard);
@@ -1178,30 +1288,32 @@ function App() {
   };
 
   const fetchMonthlyWinners = async () => {
-    const data = {
-      StatisticName: "LeaderboardDypiusMonthly",
-      StartPosition: 0,
-      MaxResultsCount: 10,
-    };
-    const result = await axios
-      .post(`${backendApi}/auth/GetLeaderboard`, data)
-      .catch((err) => {
-        console.log(err);
-      });
+    // const data = {
+    //   StatisticName: "LeaderboardDypiusMonthly",
+    //   StartPosition: 0,
+    //   MaxResultsCount: 10,
+    // };
+    // const result = await axios
+    //   .post(`${backendApi}/auth/GetLeaderboard`, data)
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
 
-    setmonthlyplayerData(result.data.data.leaderboard);
-    setpreviousMonthlyVersion(parseInt(result.data.data.version));
+    fillRecordsMonthly([]);
 
-    var testArray = result.data.data.leaderboard.filter(
-      (item) => item.displayName === username
-    );
-    if (testArray.length > 0) {
-      setActivePlayerMonthly(true);
-      fetchRecordsAroundPlayerMonthly(result.data.data.leaderboard);
-    } else if (testArray.length === 0) {
-      setActivePlayerMonthly(false);
-      fetchRecordsAroundPlayerMonthly(result.data.data.leaderboard);
-    }
+    // setmonthlyplayerData(result.data.data.leaderboard);
+    // setpreviousMonthlyVersion(parseInt(result.data.data.version));
+
+    // var testArray = result.data.data.leaderboard.filter(
+    //   (item) => item.displayName === username
+    // );
+    // if (testArray.length > 0) {
+    //   setActivePlayerMonthly(true);
+    //   fetchRecordsAroundPlayerMonthly(result.data.data.leaderboard);
+    // } else if (testArray.length === 0) {
+    //   setActivePlayerMonthly(false);
+    //   fetchRecordsAroundPlayerMonthly(result.data.data.leaderboard);
+    // }
   };
 
   const fetchPreviousMonthlyWinners = async () => {
@@ -1305,12 +1417,15 @@ function App() {
   useEffect(() => {
     if (email) {
       getAllChests();
+    } else {
+      setChests([]);
+      setOpenedChests([]);
     }
   }, [email, chestCount]);
 
-  useEffect(()=>{
-    loadLeaderboardDataCaws2dGame()
-  },[])
+  // useEffect(()=>{
+  //   loadLeaderboardDataCaws2dGame()
+  // },[])
 
   useEffect(() => {
     if (email && data?.getPlayer?.wallet?.publicAddress !== undefined) {
@@ -1329,7 +1444,7 @@ function App() {
   };
 
   const onLogout = () => {
-    logout();    
+    logout();
     setTimeout(() => {
       refetchPlayer();
     }, 1000);
@@ -1354,12 +1469,16 @@ function App() {
   };
 
   const onLinkWallet = async () => {
-    setIsOnLink(true);
-    await generateNonce({
-      variables: {
-        publicAddress: coinbase,
-      },
-    });
+    if (isConnected) {
+      setIsOnLink(true);
+      await generateNonce({
+        variables: {
+          publicAddress: coinbase,
+        },
+      });
+    } else {
+      setshow(true);
+    }
   };
 
   useEffect(() => {
@@ -1565,7 +1684,7 @@ function App() {
                     path="/games"
                     element={
                       <Games
-                      leaderboardCaws2d={leaderboard}
+                        leaderboardCaws2d={placeholderplayerData}
                         handleConnection={showModal}
                         isConnected={isConnected}
                         networkId={parseInt(networkId)}
@@ -1928,11 +2047,12 @@ setkittyDashRecords */}
                     exact
                     path="/locker/:pair_id?"
                     element={
-                      <Locker
+                      <LockerWrapper
                         handleConnection={handleConnection}
                         isConnected={isConnected}
                         theme={theme}
                         coinbase={coinbase}
+                        networkId={networkId}
                         // {...props}
                       />
                     }

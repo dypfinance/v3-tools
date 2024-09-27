@@ -514,7 +514,7 @@ const NewChestItem = ({
         isActive === chestId &&
         isActiveIndex === chestIndex &&
         "chest-item-active"
-      } ${selectedChest === chestId ? "selected-new-chest" : ""} 
+      }   
       ${claimingChest === true ? "disable-chest" : ""}
       d-flex align-items-center justify-content-center position-relative`}
       onClick={() => handleChestClick()}

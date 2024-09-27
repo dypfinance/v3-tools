@@ -1722,7 +1722,7 @@ export default class Subscription extends React.Component {
                       synchronize button.
                     </h6>{" "}
                     <button
-                      className="d-flex align-items-center justify-content-center gap-1 syncbtn col-1"
+                      className="d-flex align-items-center justify-content-center gap-1 syncbtn"
                       onClick={this.props.onSyncClick}
                     >
                       {this.props.syncStatus === "initial"

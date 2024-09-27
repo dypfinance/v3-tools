@@ -61,6 +61,12 @@
   top: 0;
   width: 100%;
   height: 100%;
+
+  @media screen and (max-width: 767px) {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 }
 
 .rockitem {
@@ -72,19 +78,39 @@
   height: 100%;
 }
 
-.rockitem15, .rockitem16, .rockitem17, .rockitem18, .rockitem19 {
-  z-index: 1;
+.rockitem1 {
+  top: 52% !important;
+  left: 50%;
 }
 
-.rockitem10, .rockitem11, .rockitem12, .rockitem13, .rockitem14 {
-  z-index: 2;
+.rockitem13 {
+  left: 51% !important;
+  top: 51% !important;
 }
 
-.rockitem5, .rockitem6, .rockitem7, .rockitem8, .rockitem9 {
+.rockitem18 {
+  left: 51% !important;
+}
+
+
+
+.rockitem5,.rockitem17, .rockitem8, .rockitem11, .rockitem14 {
   z-index: 3;
 }
 
-.rockitem1, .rockitem2, .rockitem3, .rockitem4 {
+.rockitem1, .rockitem6, .rockitem16, .rockitem9, .rockitem15, .rockitem10, .rockitem18 {
+  z-index: 2;
+}
+
+ .rockitem4, .rockitem19  {
+  z-index: 1;
+}
+
+.rockitem12, .rockitem2 {
+  z-index: 5;
+}
+
+.rockitem3, .rockitem7,  .rockitem13 {
   z-index: 4;
 }
 
@@ -246,9 +272,15 @@
 
 .dynamic-position {
   position: absolute;
+  z-index: 1;
   @media screen and (max-width: 575px) {
     position: relative;
   }
+}
+
+.stone-crack-header {
+  width: fit-content;
+  object-fit: contain;
 }
 
 .dynamic-width {
@@ -1385,7 +1417,7 @@
   position: absolute;
   width: 100%;
   height: 100%;
-  z-index: 5;
+  z-index: 6;
   display: flex;
   justify-content: center;
   align-items: center;
