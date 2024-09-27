@@ -1,10 +1,15 @@
-import React from "react";
+import React, {useEffect} from "react";
 import "./disclaimer.css";
 
 const Disclaimer = () => {
+
+  useEffect(()=>{
+    window.scrollTo(0,0)
+  },[])
+
   return (
     <div className="container-lg">
-      <h6 className="launchpad-hero-title mb-4">Dypius Disclaimer</h6>
+      <h6 className="launchpad-hero-title mb-4">Dypius Terms of Service</h6>
       <div className="purple-wrapper d-flex flex-column gap-3 p-3">
         <p className="disclaimer-text ">
           Dypius is a decentralized platform that people can use for yield

@@ -155,10 +155,10 @@ const Footer = () => {
             </a>
           </li>
           <li>
-            <NavLink  to="/disclaimer"
+            <NavLink  to="/terms-of-service"
               
             >
-              Disclaimer
+              Terms of Service
             </NavLink>
           </li>
           <li>

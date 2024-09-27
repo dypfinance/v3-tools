@@ -1907,7 +1907,7 @@ setkittyDashRecords */}
                     path="/submit-info"
                     render={() => <SubmitInfo theme={theme} />}
                   /> */}
-                  <Route exact path="/disclaimer" element={<Disclaimer />} />
+                  <Route exact path="/terms-of-service" element={<Disclaimer />} />
                   {/* <Route exact path="/swap" component={Swap} /> */}
 
                   {/* <Route
