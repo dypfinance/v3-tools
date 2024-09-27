@@ -31,6 +31,10 @@ import crackStoneSound from "./assets/stone-crack-sound.mp3";
 import crackedStoneSound from "./assets/stone-cracked-sound.mp3";
 import crackedGemSound from "./assets/crackedGem.mp3";
 import stoneCrackHeader from "./assets/stoneCrackHeader.png";
+import OutsideClickHandler from "react-outside-click-handler";
+import { Tooltip } from "@material-ui/core";
+import tooltipIcon from "../leaderboard/assets/tooltipIcon.svg";
+import arrowup from "./assets/arrow-up.svg";
 
 const Games = ({
   handleConnection,
@@ -79,6 +83,7 @@ const Games = ({
   const [selectedChest, setSelectedChest] = useState(null);
   const [selectedChest2, setSelectedChest2] = useState(null);
   const [openChestIds, setopenChestIds] = useState([]);
+  const [popup, setpopup] = useState(false);
 
   const [liverewardData, setLiveRewardData] = useState([]);
 
@@ -609,7 +614,60 @@ const Games = ({
         </div>
         <div className="game-wrapper-container p-3">
           <div className="d-flex flex-column gap-2 align-items-center">
-            <img src={stoneCrackHeader} alt="" className="stone-crack-header" />
+            <div className="d-flex w-100 align-items-center gap-2 position-relative justify-content-between">
+              <div className="w-100 d-flex justify-content-center">
+                <img
+                  src={stoneCrackHeader}
+                  alt=""
+                  className="stone-crack-header"
+                />
+              </div>
+            
+              <img
+                src={tooltipIcon}
+                alt=""
+                onClick={() => {
+                  setpopup(true);
+                }}
+                style={{cursor: 'pointer'}}
+              />
+              {/* </Tooltip> */}
+
+              {popup === true && (
+                <div className="position-absolute" style={{right: '50px', top: '-24px'}}>
+                  <OutsideClickHandler
+                    onOutsideClick={() => {
+                      setpopup(false);
+                    }}
+                  >
+                    <div
+                      className="tooltip d-flex justify-content-center"
+                      style={{ opacity: 1, width: 245 }}
+                    >
+                      <div className="d-flex flex-column gap-2 align-items-start">
+                        <span className="whitelist-tooltip-content-text">
+                          Every transaction requires a combination of ETH and
+                          DYP tokens on BASE.
+                        </span>
+                        <a
+                          href="https://superbridge.app/base"
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={() => {
+                            setpopup(false);
+                          }}
+                        >
+                          <h6 className="bottomitems">
+                            <img src={arrowup} alt="" />
+                            Buy DYP on Base SuperBridge
+                          </h6>
+                        </a>
+                      </div>
+                    </div>
+                  </OutsideClickHandler>
+                </div>
+              )}
+            </div>
             <div className="d-flex flex-column-reverse flex-lg-row gap-3">
               <div className="col-lg-5 left-games-banner">
                 <div className="h-100 d-flex flex-column justify-content-between gap-0 gap-lg-3">
@@ -2093,18 +2151,38 @@ const Games = ({
           leaderboardCaws2d={leaderboardCaws2d}
         />
       </div>
-      <StoneCrackPopup
-        active={popups.stoneCrack}
-        onClose={() => setPopups((prev) => ({ ...prev, stoneCrack: false }))}
-      />
-      <KittyDashPopup
-        active={popups.kittyDash}
-        onClose={() => setPopups((prev) => ({ ...prev, kittyDash: false }))}
-      />
-      <CawsAdventurePopup
-        active={popups.cawsAdventure}
-        onClose={() => setPopups((prev) => ({ ...prev, cawsAdventure: false }))}
-      />
+      <OutsideClickHandler
+        onOutsideClick={() =>
+          setPopups((prev) => ({ ...prev, stoneCrack: false }))
+        }
+      >
+        <StoneCrackPopup
+          active={popups.stoneCrack}
+          onClose={() => setPopups((prev) => ({ ...prev, stoneCrack: false }))}
+        />
+      </OutsideClickHandler>
+      <OutsideClickHandler
+        onOutsideClick={() =>
+          setPopups((prev) => ({ ...prev, kittyDash: false }))
+        }
+      >
+        <KittyDashPopup
+          active={popups.kittyDash}
+          onClose={() => setPopups((prev) => ({ ...prev, kittyDash: false }))}
+        />
+      </OutsideClickHandler>
+      <OutsideClickHandler
+        onOutsideClick={() =>
+          setPopups((prev) => ({ ...prev, cawsAdventure: false }))
+        }
+      >
+        <CawsAdventurePopup
+          active={popups.cawsAdventure}
+          onClose={() =>
+            setPopups((prev) => ({ ...prev, cawsAdventure: false }))
+          }
+        />
+      </OutsideClickHandler>
     </>
   );
 };
