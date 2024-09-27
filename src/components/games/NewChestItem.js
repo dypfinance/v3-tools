@@ -327,7 +327,7 @@ const NewChestItem = ({
     onLoadingChest(true);
     setLoading(true);
     setClaimingChest(true);
-
+    onCrackStone("start");
     window.web3 = new Web3(window.ethereum);
     const dypBaseSc = new window.web3.eth.Contract(
       window.TOKEN_ABI,
