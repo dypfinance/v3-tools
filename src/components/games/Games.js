@@ -31,6 +31,7 @@ import crackStoneSound from "./assets/stone-crack-sound.mp3";
 import crackedStoneSound from "./assets/stone-cracked-sound.mp3";
 import crackedGemSound from "./assets/crackedGem.mp3";
 import stoneCrackHeader from "./assets/stoneCrackHeader.png";
+import OutsideClickHandler from "react-outside-click-handler";
 
 const Games = ({
   handleConnection,
@@ -2093,18 +2094,26 @@ const Games = ({
           leaderboardCaws2d={leaderboardCaws2d}
         />
       </div>
+      <OutsideClickHandler onOutsideClick={() => setPopups((prev) => ({ ...prev, stoneCrack: false }))}>
+
       <StoneCrackPopup
         active={popups.stoneCrack}
         onClose={() => setPopups((prev) => ({ ...prev, stoneCrack: false }))}
-      />
+        />
+        </OutsideClickHandler>
+      <OutsideClickHandler onOutsideClick={() => setPopups((prev) => ({ ...prev, kittyDash: false }))}>
+
       <KittyDashPopup
         active={popups.kittyDash}
         onClose={() => setPopups((prev) => ({ ...prev, kittyDash: false }))}
-      />
+        />
+        </OutsideClickHandler>
+      <OutsideClickHandler onOutsideClick={() => setPopups((prev) => ({ ...prev, cawsAdventure: false }))}>
       <CawsAdventurePopup
         active={popups.cawsAdventure}
         onClose={() => setPopups((prev) => ({ ...prev, cawsAdventure: false }))}
       />
+      </OutsideClickHandler>
     </>
   );
 };

@@ -1605,3 +1605,9 @@ background: rgba(202, 77, 77, 0.10);
     overflow-y: scroll;
   }
 }
+@media screen and (max-height: 1000px) {
+  .games-popup-scroll-wrapper{
+    height: 700px;
+    overflow-y: scroll;
+  }
+}
