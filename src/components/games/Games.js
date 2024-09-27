@@ -30,7 +30,7 @@ import errorSound from "./assets/error.mp3";
 import crackStoneSound from "./assets/stone-crack-sound.mp3";
 import crackedStoneSound from "./assets/stone-cracked-sound.mp3";
 import crackedGemSound from "./assets/crackedGem.mp3";
-
+import stoneCrackHeader from "./assets/stoneCrackHeader.png";
 
 const Games = ({
   handleConnection,
@@ -66,7 +66,7 @@ const Games = ({
   activePlayerWeekly,
   activePlayerMonthly,
   username,
-  leaderboardCaws2d
+  leaderboardCaws2d,
 }) => {
   const [chain, setChain] = useState("base");
   const [message, setMessage] = useState("");
@@ -103,7 +103,6 @@ const Games = ({
   const audioerror = new Audio(errorSound);
   const audiosuccess = new Audio(crackedStoneSound);
   const audiosuccessGem = new Audio(crackedGemSound);
-
 
   const countEarnedRewards = () => {
     if (openedChests && openedChests.length > 0) {
@@ -196,7 +195,6 @@ const Games = ({
       audiosuccess.play();
     }
     if (event === "successGem") {
-
       audiostart.loop = false;
       audiostart.currentTime = 0;
       audiostart.pause();
@@ -286,7 +284,7 @@ const Games = ({
         if (chests[index].isOpened === true) {
           if (randomOpenedChests[index] === undefined) {
             const index2 = getFirstUnopenedChest(index - 1, chests);
-            if (index2!==undefined) {
+            if (index2 !== undefined) {
               arrayFiltered.push(randomOpenedChests[index2]);
             }
           } else {
@@ -360,7 +358,7 @@ const Games = ({
       if (!openChestIds.includes(randomOpenedChests[index])) {
         return index;
       } else {
-        const unopenedChest = getFirstUnopenedChest(index-1, chests);
+        const unopenedChest = getFirstUnopenedChest(index - 1, chests);
 
         return unopenedChest;
       }
@@ -606,442 +604,412 @@ const Games = ({
           <div className="col-12 col-lg-6 position-relative"></div>
         </div>
         <div className="game-wrapper-container p-3">
-          <div className="d-flex flex-column-reverse flex-lg-row gap-3">
-            <div className="col-lg-5 left-games-banner">
-              <div className="h-100 d-flex flex-column justify-content-between gap-0 gap-lg-3">
-                <div className="chest-wrapper grid-overall-wrapper p-2">
-                  <div className="new-chests-grid">
-                    {chests.length > 0 ? (
-                      <>
-                        {chests.map((item, index) => (
-                          <NewChestItem
-                            coinbase={coinbase}
-                            claimingChest={claimingChest}
-                            setClaimingChest={setClaimingChest}
-                            buyNftPopup={false}
-                            openedChests={openedChests}
-                            chainId={networkId}
-                            chain={chain}
-                            key={index}
-                            item={item}
-                            image={bnbImages[index]}
-                            onCrackStone={onCrackStone}
-                            selectedChest={selectedChest}
-                            isPremium={isPremium}
-                            onClaimRewards={(value) => {
-                              // handleAddNewRock(value);
-                              setRewardData(value);
-                              setLiveRewardData(value);
-                              onChestClaimed();
-                              showLiveRewardData(value);
-                              setIsActive(item.chestId);
-                              setIsActiveIndex(index + 1);
-                            }}
-                            handleShowRewards={(value, value2) => {
-                              showSingleRewardData(value, value2);
-                              setIsActive(value);
-                              setIsActiveIndex(index + 1);
-                            }}
-                            onLoadingChest={(value) => {
-                              setTimeout(() => {
-                                setSparkles({
-                                  show: value,
-                                  position:
-                                    randomOpenedChests[
-                                      handleChestSelection(
-                                        index,
-                                        chests,
-                                        openedChests
-                                      )
-                                    ],
-                                });
-                              }, 350);
-                              setDisable(value);
-                              setloading(value);
-                              setSelectedChest(index + 1);
+          <div className="d-flex flex-column gap-2 align-items-center">
+            <img src={stoneCrackHeader} alt="" className="stone-crack-header" />
+            <div className="d-flex flex-column-reverse flex-lg-row gap-3">
+              <div className="col-lg-5 left-games-banner">
+                <div className="h-100 d-flex flex-column justify-content-between gap-0 gap-lg-3">
+                  <div className="chest-wrapper grid-overall-wrapper p-2">
+                    <div className="new-chests-grid">
+                      {chests.length > 0 ? (
+                        <>
+                          {chests.map((item, index) => (
+                            <NewChestItem
+                              coinbase={coinbase}
+                              claimingChest={claimingChest}
+                              setClaimingChest={setClaimingChest}
+                              buyNftPopup={false}
+                              openedChests={openedChests}
+                              chainId={networkId}
+                              chain={chain}
+                              key={index}
+                              item={item}
+                              image={bnbImages[index]}
+                              onCrackStone={onCrackStone}
+                              selectedChest={selectedChest}
+                              isPremium={isPremium}
+                              onClaimRewards={(value) => {
+                                // handleAddNewRock(value);
+                                setRewardData(value);
+                                setLiveRewardData(value);
+                                onChestClaimed();
+                                showLiveRewardData(value);
+                                setIsActive(item.chestId);
+                                setIsActiveIndex(index + 1);
+                              }}
+                              handleShowRewards={(value, value2) => {
+                                showSingleRewardData(value, value2);
+                                setIsActive(value);
+                                setIsActiveIndex(index + 1);
+                              }}
+                              onLoadingChest={(value) => {
+                                setTimeout(() => {
+                                  setSparkles({
+                                    show: value,
+                                    position:
+                                      randomOpenedChests[
+                                        handleChestSelection(
+                                          index,
+                                          chests,
+                                          openedChests
+                                        )
+                                      ],
+                                  });
+                                }, 350);
+                                setDisable(value);
+                                setloading(value);
+                                setSelectedChest(index + 1);
 
-                              setSelectedChest2(
-                                randomOpenedChests[
-                                  handleChestSelection(
-                                    index,
-                                    chests,
-                                    openedChests
-                                  )
-                                ]
-                              );
-                            }}
-                            onChestStatus={(val) => {
-                              setMessage(val);
-                            }}
-                            address={coinbase}
-                            email={email}
-                            rewardTypes={item.chestType?.toLowerCase()}
-                            chestId={item.chestId}
-                            chestIndex={index + 1}
-                            open={item.isOpened}
-                            disableBtn={disable}
-                            isActive={isActive}
-                            isActiveIndex={isActiveIndex}
-                            dummypremiumChests={
-                              dummypremiumChests[index - 10]?.closedImg
-                            }
-                          />
-                        ))}
-                      </>
-                    ) : (
-                      <>
-                        {[...Array(20)].map((item, index) => (
-                          <NewChestItem
-                            coinbase={coinbase}
-                            claimingChest={claimingChest}
-                            setClaimingChest={setClaimingChest}
-                            buyNftPopup={false}
-                            chainId={networkId}
-                            chain={chain}
-                            key={index}
-                            item={item}
-                            image={bnbImages[index]}
-                            // openChest={openChest}
-                            selectedChest={selectedChest}
-                            isPremium={isPremium}
-                            onClaimRewards={(value) => {
-                              console.log(value);
-                              // handleAddNewRock(value);
+                                setSelectedChest2(
+                                  randomOpenedChests[
+                                    handleChestSelection(
+                                      index,
+                                      chests,
+                                      openedChests
+                                    )
+                                  ]
+                                );
+                              }}
+                              onChestStatus={(val) => {
+                                setMessage(val);
+                              }}
+                              address={coinbase}
+                              email={email}
+                              rewardTypes={item.chestType?.toLowerCase()}
+                              chestId={item.chestId}
+                              chestIndex={index + 1}
+                              open={item.isOpened}
+                              disableBtn={disable}
+                              isActive={isActive}
+                              isActiveIndex={isActiveIndex}
+                              dummypremiumChests={
+                                dummypremiumChests[index - 10]?.closedImg
+                              }
+                            />
+                          ))}
+                        </>
+                      ) : (
+                        <>
+                          {[...Array(20)].map((item, index) => (
+                            <NewChestItem
+                              coinbase={coinbase}
+                              claimingChest={claimingChest}
+                              setClaimingChest={setClaimingChest}
+                              buyNftPopup={false}
+                              chainId={networkId}
+                              chain={chain}
+                              key={index}
+                              item={item}
+                              image={bnbImages[index]}
+                              // openChest={openChest}
+                              selectedChest={selectedChest}
+                              isPremium={isPremium}
+                              onClaimRewards={(value) => {
+                                console.log(value);
+                                // handleAddNewRock(value);
 
-                              // setLiveRewardData(value);
-                              // onChestClaimed();
-                              // showLiveRewardData(value);
-                              // setIsActive(item.chestId);
-                              // setIsActiveIndex(index + 1);
-                            }}
-                            //   handleShowRewards={(value, value2) => {
-                            //     showSingleRewardData(value, value2);
-                            //     setIsActive(value);
-                            //     setIsActiveIndex(index + 1);
-                            //   }}
-                            onLoadingChest={(value) => {
-                              setTimeout(() => {
-                                setSparkles({
-                                  show: value,
-                                  position: index + 1,
-                                });
-                              }, 350);
-                              setDisable(value);
-                              setloading(value);
-                              setSelectedChest(index + 1);
-                            }}
-                            onChestStatus={(val) => {
-                              setMessage(val);
-                            }}
-                            address={coinbase}
-                            email={"email"}
-                            rewardTypes={"standard"}
-                            chestId={index + 1}
-                            chestIndex={index + 1}
-                            open={false}
-                            disableBtn={true}
-                            isActive={isActive}
-                            isActiveIndex={isActiveIndex}
-                            dummypremiumChests={
-                              dummypremiumChests[index - 10]?.closedImg
-                            }
-                            //   binanceW3WProvider={binanceW3WProvider}
-                          />
-                        ))}
-                      </>
-                    )}
+                                // setLiveRewardData(value);
+                                // onChestClaimed();
+                                // showLiveRewardData(value);
+                                // setIsActive(item.chestId);
+                                // setIsActiveIndex(index + 1);
+                              }}
+                              //   handleShowRewards={(value, value2) => {
+                              //     showSingleRewardData(value, value2);
+                              //     setIsActive(value);
+                              //     setIsActiveIndex(index + 1);
+                              //   }}
+                              onLoadingChest={(value) => {
+                                setTimeout(() => {
+                                  setSparkles({
+                                    show: value,
+                                    position: index + 1,
+                                  });
+                                }, 350);
+                                setDisable(value);
+                                setloading(value);
+                                setSelectedChest(index + 1);
+                              }}
+                              onChestStatus={(val) => {
+                                setMessage(val);
+                              }}
+                              address={coinbase}
+                              email={"email"}
+                              rewardTypes={"standard"}
+                              chestId={index + 1}
+                              chestIndex={index + 1}
+                              open={false}
+                              disableBtn={true}
+                              isActive={isActive}
+                              isActiveIndex={isActiveIndex}
+                              dummypremiumChests={
+                                dummypremiumChests[index - 10]?.closedImg
+                              }
+                              //   binanceW3WProvider={binanceW3WProvider}
+                            />
+                          ))}
+                        </>
+                      )}
+                    </div>
                   </div>
-                </div>
 
-                <div className="col-12 p-2 pt-0 mt-0 message-height-wrapper">
-                  {message === "" ||
-                  message === "initial" ||
-                  message === "waiting" ? (
-                    <div
-                      className="d-flex align-items-center flex-column justify-content-center p-0 p-lg-2 w-100 chest-progress-wrapper"
-                      style={{
-                        background: "rgba(33, 31, 69,0.8)",
-                        border: "1px solid #55FFFB",
-                      }}
-                    >
+                  <div className="col-12 p-2 pt-0 mt-0 message-height-wrapper">
+                    {message === "" ||
+                    message === "initial" ||
+                    message === "waiting" ? (
                       <div
-                        className={`loader ${
-                          message === "waiting" && "loader-waiting"
-                        }`}
+                        className="d-flex align-items-center flex-column justify-content-center p-0 p-lg-2 w-100 chest-progress-wrapper"
+                        style={{
+                          background: "rgba(33, 31, 69,0.8)",
+                          border: "1px solid #55FFFB",
+                        }}
                       >
-                        <div className="dot" style={{ "--i": 0 }}></div>
-                        <div className="dot" style={{ "--i": 1 }}></div>
-                        <div className="dot" style={{ "--i": 2 }}></div>
-                        <div className="dot" style={{ "--i": 3 }}></div>
-                        <div className="dot" style={{ "--i": 4 }}></div>
-                        <div className="dot" style={{ "--i": 5 }}></div>
-                        <div className="dot" style={{ "--i": 6 }}></div>
-                        <div className="dot" style={{ "--i": 7 }}></div>
-                        <div className="dot" style={{ "--i": 8 }}></div>
-                        <div className="dot" style={{ "--i": 9 }}></div>
-                      </div>
-                      <h6 className="loader-text mb-0">
-                        {message === "waiting"
-                          ? "Processing"
-                          : "Ready to claim"}
-                      </h6>
-                      <div
-                        className={`loader ${
-                          message === "waiting" && "loader-waiting-2"
-                        }`}
-                      >
-                        <div className="dot" style={{ "--i": 0 }}></div>
-                        <div className="dot" style={{ "--i": 1 }}></div>
-                        <div className="dot" style={{ "--i": 2 }}></div>
-                        <div className="dot" style={{ "--i": 3 }}></div>
-                        <div className="dot" style={{ "--i": 4 }}></div>
-                        <div className="dot" style={{ "--i": 5 }}></div>
-                        <div className="dot" style={{ "--i": 6 }}></div>
-                        <div className="dot" style={{ "--i": 7 }}></div>
-                        <div className="dot" style={{ "--i": 8 }}></div>
-                        <div className="dot" style={{ "--i": 9 }}></div>
-                      </div>
-                    </div>
-                  ) : message === "switch" ? (
-                    <div
-                      className="d-flex align-items-center flex-column justify-content-center p-0 p-lg-2 w-100 chest-progress-wrapper"
-                      style={{
-                        background: "#1A1C39",
-                        border: "1px solid #ce5d1b",
-                      }}
-                    >
-                      <div className="loader red-loader">
-                        <div className="dot" style={{ "--i": 0 }}></div>
-                        <div className="dot" style={{ "--i": 1 }}></div>
-                        <div className="dot" style={{ "--i": 2 }}></div>
-                        <div className="dot" style={{ "--i": 3 }}></div>
-                        <div className="dot" style={{ "--i": 4 }}></div>
-                        <div className="dot" style={{ "--i": 5 }}></div>
-                        <div className="dot" style={{ "--i": 6 }}></div>
-                        <div className="dot" style={{ "--i": 7 }}></div>
-                        <div className="dot" style={{ "--i": 8 }}></div>
-                        <div className="dot" style={{ "--i": 9 }}></div>
-                      </div>
-
-                      <h6
-                        className="loader-text mb-0"
-                        style={{ color: "#ce5d1b" }}
-                      >
-                        Switch to{" "}
-                        <span
-                          span
-                          style={{
-                            textDecoration: "underline",
-                            cursor: "pointer",
-                            color: "#ce5d1b",
-                          }}
-                          onClick={handleBasePool}
+                        <div
+                          className={`loader ${
+                            message === "waiting" && "loader-waiting"
+                          }`}
                         >
-                          BASE
-                        </span>{" "}
-                      </h6>
-
-                      <div className="loader red-loader">
-                        <div className="dot" style={{ "--i": 0 }}></div>
-                        <div className="dot" style={{ "--i": 1 }}></div>
-                        <div className="dot" style={{ "--i": 2 }}></div>
-                        <div className="dot" style={{ "--i": 3 }}></div>
-                        <div className="dot" style={{ "--i": 4 }}></div>
-                        <div className="dot" style={{ "--i": 5 }}></div>
-                        <div className="dot" style={{ "--i": 6 }}></div>
-                        <div className="dot" style={{ "--i": 7 }}></div>
-                        <div className="dot" style={{ "--i": 8 }}></div>
-                        <div className="dot" style={{ "--i": 9 }}></div>
-                      </div>
-                    </div>
-                  ) : message === "notsupported" ? (
-                    <div
-                      className="d-flex align-items-center flex-column justify-content-center p-0 p-lg-2 w-100 chest-progress-wrapper"
-                      style={{
-                        background: "#1A1C39",
-                        border: "1px solid #ce5d1b",
-                      }}
-                    >
-                      <div className="loader red-loader">
-                        <div className="dot" style={{ "--i": 0 }}></div>
-                        <div className="dot" style={{ "--i": 1 }}></div>
-                        <div className="dot" style={{ "--i": 2 }}></div>
-                        <div className="dot" style={{ "--i": 3 }}></div>
-                        <div className="dot" style={{ "--i": 4 }}></div>
-                        <div className="dot" style={{ "--i": 5 }}></div>
-                        <div className="dot" style={{ "--i": 6 }}></div>
-                        <div className="dot" style={{ "--i": 7 }}></div>
-                        <div className="dot" style={{ "--i": 8 }}></div>
-                        <div className="dot" style={{ "--i": 9 }}></div>
-                      </div>
-                      <h6
-                        className="loader-text mb-0"
-                        style={{ color: "#ce5d1b" }}
-                      >
-                        Not available
-                      </h6>
-                      <div className="loader red-loader">
-                        <div className="dot" style={{ "--i": 0 }}></div>
-                        <div className="dot" style={{ "--i": 1 }}></div>
-                        <div className="dot" style={{ "--i": 2 }}></div>
-                        <div className="dot" style={{ "--i": 3 }}></div>
-                        <div className="dot" style={{ "--i": 4 }}></div>
-                        <div className="dot" style={{ "--i": 5 }}></div>
-                        <div className="dot" style={{ "--i": 6 }}></div>
-                        <div className="dot" style={{ "--i": 7 }}></div>
-                        <div className="dot" style={{ "--i": 8 }}></div>
-                        <div className="dot" style={{ "--i": 9 }}></div>
-                      </div>
-                    </div>
-                  ) : message === "error" ? (
-                    <div
-                      className="d-flex align-items-center flex-column justify-content-center p-0 p-lg-2 w-100 chest-progress-wrapper"
-                      style={{
-                        background: "#1A1C39",
-                        border: "1px solid #D75853",
-                      }}
-                    >
-                      <div className="loader red-loader">
-                        <div className="dot" style={{ "--i": 0 }}></div>
-                        <div className="dot" style={{ "--i": 1 }}></div>
-                        <div className="dot" style={{ "--i": 2 }}></div>
-                        <div className="dot" style={{ "--i": 3 }}></div>
-                        <div className="dot" style={{ "--i": 4 }}></div>
-                        <div className="dot" style={{ "--i": 5 }}></div>
-                        <div className="dot" style={{ "--i": 6 }}></div>
-                        <div className="dot" style={{ "--i": 7 }}></div>
-                        <div className="dot" style={{ "--i": 8 }}></div>
-                        <div className="dot" style={{ "--i": 9 }}></div>
-                      </div>
-                      <h6
-                        className="loader-text mb-0"
-                        style={{ color: "#D75853" }}
-                      >
-                        Something went wrong. Try again.
-                      </h6>
-                      <div className="loader red-loader">
-                        <div className="dot" style={{ "--i": 0 }}></div>
-                        <div className="dot" style={{ "--i": 1 }}></div>
-                        <div className="dot" style={{ "--i": 2 }}></div>
-                        <div className="dot" style={{ "--i": 3 }}></div>
-                        <div className="dot" style={{ "--i": 4 }}></div>
-                        <div className="dot" style={{ "--i": 5 }}></div>
-                        <div className="dot" style={{ "--i": 6 }}></div>
-                        <div className="dot" style={{ "--i": 7 }}></div>
-                        <div className="dot" style={{ "--i": 8 }}></div>
-                        <div className="dot" style={{ "--i": 9 }}></div>
-                      </div>
-                    </div>
-                  ) : message === "switchAccount" ? (
-                    <div
-                      className="d-flex align-items-center flex-column justify-content-center p-0 p-lg-2 w-100 chest-progress-wrapper"
-                      style={{
-                        background: "#1A1C39",
-                        border: "1px solid #ce5d1b",
-                      }}
-                    >
-                      <div className="loader red-loader">
-                        <div className="dot" style={{ "--i": 0 }}></div>
-                        <div className="dot" style={{ "--i": 1 }}></div>
-                        <div className="dot" style={{ "--i": 2 }}></div>
-                        <div className="dot" style={{ "--i": 3 }}></div>
-                        <div className="dot" style={{ "--i": 4 }}></div>
-                        <div className="dot" style={{ "--i": 5 }}></div>
-                        <div className="dot" style={{ "--i": 6 }}></div>
-                        <div className="dot" style={{ "--i": 7 }}></div>
-                        <div className="dot" style={{ "--i": 8 }}></div>
-                        <div className="dot" style={{ "--i": 9 }}></div>
-                        <div className="dot" style={{ "--i": 10 }}></div>
-                      </div>
-
-                      <h6
-                        className="loader-text mb-0"
-                        style={{ color: "#ce5d1b" }}
-                      >
-                        Use the wallet associated to your game account.
-                      </h6>
-
-                      <div className="loader red-loader">
-                        <div className="dot" style={{ "--i": 0 }}></div>
-                        <div className="dot" style={{ "--i": 1 }}></div>
-                        <div className="dot" style={{ "--i": 2 }}></div>
-                        <div className="dot" style={{ "--i": 3 }}></div>
-                        <div className="dot" style={{ "--i": 4 }}></div>
-                        <div className="dot" style={{ "--i": 5 }}></div>
-                        <div className="dot" style={{ "--i": 6 }}></div>
-                        <div className="dot" style={{ "--i": 7 }}></div>
-                        <div className="dot" style={{ "--i": 8 }}></div>
-                        <div className="dot" style={{ "--i": 9 }}></div>
-                        <div className="dot" style={{ "--i": 10 }}></div>
-                      </div>
-                    </div>
-                  ) : message === "complete" ? (
-                    <div className="d-flex align-items-center justify-content-center complete-bg p-0 p-lg-2 w-100 chest-progress-wrapper">
-                      <h6 className="completed-text mb-0">Completed</h6>
-                    </div>
-                  ) : message === "woneth" ? (
-                    <div className="d-flex align-items-center position-relative flex-column flex-lg-row justify-content-between p-0 p-lg-2 w-100 chest-progress-wrapper">
-                      <div
-                        className="chain-desc-wrapper w-100 p-2 d-flex flex-column"
-                        style={{
-                          filter: "brightness(1)",
-                          position: "relative",
-                        }}
-                      >
-                        <h6 className="win-text mb-0">You Won</h6>
-                      </div>
-                      <div className="d-flex align-items-center gap-2 win-rewards-container">
-                        <div className="d-flex flex-column align-items-center neutral-border p-1">
-                          <h6 className="win-amount mb-0">
-                            {getFormattedNumber(
-                              rewardData.rewards
-                                ? rewardData.rewards.find((obj) => {
-                                    return obj.rewardType === "Points";
-                                  }).reward
-                                : 0,
-                              0
-                            )}
-                          </h6>
-
-                          <span className="win-amount-desc">
-                            Leaderboard Points
-                          </span>
+                          <div className="dot" style={{ "--i": 0 }}></div>
+                          <div className="dot" style={{ "--i": 1 }}></div>
+                          <div className="dot" style={{ "--i": 2 }}></div>
+                          <div className="dot" style={{ "--i": 3 }}></div>
+                          <div className="dot" style={{ "--i": 4 }}></div>
+                          <div className="dot" style={{ "--i": 5 }}></div>
+                          <div className="dot" style={{ "--i": 6 }}></div>
+                          <div className="dot" style={{ "--i": 7 }}></div>
+                          <div className="dot" style={{ "--i": 8 }}></div>
+                          <div className="dot" style={{ "--i": 9 }}></div>
                         </div>
-                        <h6 className="win-amount mb-0">+</h6>
-                        <div className="d-flex flex-column align-items-center p-1">
-                          <h6 className="win-amount mb-0">
-                            $
-                            {getFormattedNumber(
-                              rewardData.rewards
-                                ? rewardData.rewards.find((obj) => {
-                                    return obj.rewardType === "MoneyETH";
-                                  }).reward
-                                : 0,
-                              2
-                            )}
-                          </h6>
-
-                          <span className="win-amount-desc">Rewards</span>
+                        <h6 className="loader-text mb-0">
+                          {message === "waiting"
+                            ? "Processing"
+                            : "Ready to claim"}
+                        </h6>
+                        <div
+                          className={`loader ${
+                            message === "waiting" && "loader-waiting-2"
+                          }`}
+                        >
+                          <div className="dot" style={{ "--i": 0 }}></div>
+                          <div className="dot" style={{ "--i": 1 }}></div>
+                          <div className="dot" style={{ "--i": 2 }}></div>
+                          <div className="dot" style={{ "--i": 3 }}></div>
+                          <div className="dot" style={{ "--i": 4 }}></div>
+                          <div className="dot" style={{ "--i": 5 }}></div>
+                          <div className="dot" style={{ "--i": 6 }}></div>
+                          <div className="dot" style={{ "--i": 7 }}></div>
+                          <div className="dot" style={{ "--i": 8 }}></div>
+                          <div className="dot" style={{ "--i": 9 }}></div>
                         </div>
                       </div>
-
-                      <img src={winConfetti} alt="" className="win-confetti" />
-                    </div>
-                  ) : message === "gem" ? (
-                    <div className="d-flex align-items-center flex-column flex-lg-row justify-content-between p-0 p-lg-2 w-100 chest-progress-wrapper">
+                    ) : message === "switch" ? (
                       <div
-                        className="chain-desc-wrapper d-flex flex-column w-100"
+                        className="d-flex align-items-center flex-column justify-content-center p-0 p-lg-2 w-100 chest-progress-wrapper"
                         style={{
-                          filter: "brightness(1)",
-                          position: "relative",
+                          background: "#1A1C39",
+                          border: "1px solid #ce5d1b",
                         }}
                       >
-                        <h6 className="win-text mb-0">You won</h6>
-                        <div className="d-flex align-items-center gap-2">
-                          <img src={danger} alt="" width={20} height={20} />
-                          <span className="win-desc mb-0">
-                            The{" "}
-                            <span style={{ color: "#F2C624" }}>
+                        <div className="loader red-loader">
+                          <div className="dot" style={{ "--i": 0 }}></div>
+                          <div className="dot" style={{ "--i": 1 }}></div>
+                          <div className="dot" style={{ "--i": 2 }}></div>
+                          <div className="dot" style={{ "--i": 3 }}></div>
+                          <div className="dot" style={{ "--i": 4 }}></div>
+                          <div className="dot" style={{ "--i": 5 }}></div>
+                          <div className="dot" style={{ "--i": 6 }}></div>
+                          <div className="dot" style={{ "--i": 7 }}></div>
+                          <div className="dot" style={{ "--i": 8 }}></div>
+                          <div className="dot" style={{ "--i": 9 }}></div>
+                        </div>
+
+                        <h6
+                          className="loader-text mb-0"
+                          style={{ color: "#ce5d1b" }}
+                        >
+                          Switch to{" "}
+                          <span
+                            span
+                            style={{
+                              textDecoration: "underline",
+                              cursor: "pointer",
+                              color: "#ce5d1b",
+                            }}
+                            onClick={handleBasePool}
+                          >
+                            BASE
+                          </span>{" "}
+                        </h6>
+
+                        <div className="loader red-loader">
+                          <div className="dot" style={{ "--i": 0 }}></div>
+                          <div className="dot" style={{ "--i": 1 }}></div>
+                          <div className="dot" style={{ "--i": 2 }}></div>
+                          <div className="dot" style={{ "--i": 3 }}></div>
+                          <div className="dot" style={{ "--i": 4 }}></div>
+                          <div className="dot" style={{ "--i": 5 }}></div>
+                          <div className="dot" style={{ "--i": 6 }}></div>
+                          <div className="dot" style={{ "--i": 7 }}></div>
+                          <div className="dot" style={{ "--i": 8 }}></div>
+                          <div className="dot" style={{ "--i": 9 }}></div>
+                        </div>
+                      </div>
+                    ) : message === "notsupported" ? (
+                      <div
+                        className="d-flex align-items-center flex-column justify-content-center p-0 p-lg-2 w-100 chest-progress-wrapper"
+                        style={{
+                          background: "#1A1C39",
+                          border: "1px solid #ce5d1b",
+                        }}
+                      >
+                        <div className="loader red-loader">
+                          <div className="dot" style={{ "--i": 0 }}></div>
+                          <div className="dot" style={{ "--i": 1 }}></div>
+                          <div className="dot" style={{ "--i": 2 }}></div>
+                          <div className="dot" style={{ "--i": 3 }}></div>
+                          <div className="dot" style={{ "--i": 4 }}></div>
+                          <div className="dot" style={{ "--i": 5 }}></div>
+                          <div className="dot" style={{ "--i": 6 }}></div>
+                          <div className="dot" style={{ "--i": 7 }}></div>
+                          <div className="dot" style={{ "--i": 8 }}></div>
+                          <div className="dot" style={{ "--i": 9 }}></div>
+                        </div>
+                        <h6
+                          className="loader-text mb-0"
+                          style={{ color: "#ce5d1b" }}
+                        >
+                          Not available
+                        </h6>
+                        <div className="loader red-loader">
+                          <div className="dot" style={{ "--i": 0 }}></div>
+                          <div className="dot" style={{ "--i": 1 }}></div>
+                          <div className="dot" style={{ "--i": 2 }}></div>
+                          <div className="dot" style={{ "--i": 3 }}></div>
+                          <div className="dot" style={{ "--i": 4 }}></div>
+                          <div className="dot" style={{ "--i": 5 }}></div>
+                          <div className="dot" style={{ "--i": 6 }}></div>
+                          <div className="dot" style={{ "--i": 7 }}></div>
+                          <div className="dot" style={{ "--i": 8 }}></div>
+                          <div className="dot" style={{ "--i": 9 }}></div>
+                        </div>
+                      </div>
+                    ) : message === "error" ? (
+                      <div
+                        className="d-flex align-items-center flex-column justify-content-center p-0 p-lg-2 w-100 chest-progress-wrapper"
+                        style={{
+                          background: "#1A1C39",
+                          border: "1px solid #D75853",
+                        }}
+                      >
+                        <div className="loader red-loader">
+                          <div className="dot" style={{ "--i": 0 }}></div>
+                          <div className="dot" style={{ "--i": 1 }}></div>
+                          <div className="dot" style={{ "--i": 2 }}></div>
+                          <div className="dot" style={{ "--i": 3 }}></div>
+                          <div className="dot" style={{ "--i": 4 }}></div>
+                          <div className="dot" style={{ "--i": 5 }}></div>
+                          <div className="dot" style={{ "--i": 6 }}></div>
+                          <div className="dot" style={{ "--i": 7 }}></div>
+                          <div className="dot" style={{ "--i": 8 }}></div>
+                          <div className="dot" style={{ "--i": 9 }}></div>
+                        </div>
+                        <h6
+                          className="loader-text mb-0"
+                          style={{ color: "#D75853" }}
+                        >
+                          Something went wrong. Try again.
+                        </h6>
+                        <div className="loader red-loader">
+                          <div className="dot" style={{ "--i": 0 }}></div>
+                          <div className="dot" style={{ "--i": 1 }}></div>
+                          <div className="dot" style={{ "--i": 2 }}></div>
+                          <div className="dot" style={{ "--i": 3 }}></div>
+                          <div className="dot" style={{ "--i": 4 }}></div>
+                          <div className="dot" style={{ "--i": 5 }}></div>
+                          <div className="dot" style={{ "--i": 6 }}></div>
+                          <div className="dot" style={{ "--i": 7 }}></div>
+                          <div className="dot" style={{ "--i": 8 }}></div>
+                          <div className="dot" style={{ "--i": 9 }}></div>
+                        </div>
+                      </div>
+                    ) : message === "switchAccount" ? (
+                      <div
+                        className="d-flex align-items-center flex-column justify-content-center p-0 p-lg-2 w-100 chest-progress-wrapper"
+                        style={{
+                          background: "#1A1C39",
+                          border: "1px solid #ce5d1b",
+                        }}
+                      >
+                        <div className="loader red-loader">
+                          <div className="dot" style={{ "--i": 0 }}></div>
+                          <div className="dot" style={{ "--i": 1 }}></div>
+                          <div className="dot" style={{ "--i": 2 }}></div>
+                          <div className="dot" style={{ "--i": 3 }}></div>
+                          <div className="dot" style={{ "--i": 4 }}></div>
+                          <div className="dot" style={{ "--i": 5 }}></div>
+                          <div className="dot" style={{ "--i": 6 }}></div>
+                          <div className="dot" style={{ "--i": 7 }}></div>
+                          <div className="dot" style={{ "--i": 8 }}></div>
+                          <div className="dot" style={{ "--i": 9 }}></div>
+                          <div className="dot" style={{ "--i": 10 }}></div>
+                        </div>
+
+                        <h6
+                          className="loader-text mb-0"
+                          style={{ color: "#ce5d1b" }}
+                        >
+                          Use the wallet associated to your game account.
+                        </h6>
+
+                        <div className="loader red-loader">
+                          <div className="dot" style={{ "--i": 0 }}></div>
+                          <div className="dot" style={{ "--i": 1 }}></div>
+                          <div className="dot" style={{ "--i": 2 }}></div>
+                          <div className="dot" style={{ "--i": 3 }}></div>
+                          <div className="dot" style={{ "--i": 4 }}></div>
+                          <div className="dot" style={{ "--i": 5 }}></div>
+                          <div className="dot" style={{ "--i": 6 }}></div>
+                          <div className="dot" style={{ "--i": 7 }}></div>
+                          <div className="dot" style={{ "--i": 8 }}></div>
+                          <div className="dot" style={{ "--i": 9 }}></div>
+                          <div className="dot" style={{ "--i": 10 }}></div>
+                        </div>
+                      </div>
+                    ) : message === "complete" ? (
+                      <div className="d-flex align-items-center justify-content-center complete-bg p-0 p-lg-2 w-100 chest-progress-wrapper">
+                        <h6 className="completed-text mb-0">Completed</h6>
+                      </div>
+                    ) : message === "woneth" ? (
+                      <div className="d-flex align-items-center position-relative flex-column flex-lg-row justify-content-between p-0 p-lg-2 w-100 chest-progress-wrapper">
+                        <div
+                          className="chain-desc-wrapper w-100 p-2 d-flex flex-column"
+                          style={{
+                            filter: "brightness(1)",
+                            position: "relative",
+                          }}
+                        >
+                          <h6 className="win-text mb-0">You Won</h6>
+                        </div>
+                        <div className="d-flex align-items-center gap-2 win-rewards-container">
+                          <div className="d-flex flex-column align-items-center neutral-border p-1">
+                            <h6 className="win-amount mb-0">
+                              {getFormattedNumber(
+                                rewardData.rewards
+                                  ? rewardData.rewards.find((obj) => {
+                                      return obj.rewardType === "Points";
+                                    }).reward
+                                  : 0,
+                                0
+                              )}
+                            </h6>
+
+                            <span className="win-amount-desc">
+                              Leaderboard Points
+                            </span>
+                          </div>
+                          <h6 className="win-amount mb-0">+</h6>
+                          <div className="d-flex flex-column align-items-center p-1">
+                            <h6 className="win-amount mb-0">
                               $
                               {getFormattedNumber(
                                 rewardData.rewards
@@ -1051,520 +1019,546 @@ const Games = ({
                                   : 0,
                                 2
                               )}
-                            </span>{" "}
-                            reward cannot be claimed as you need to hold at
-                            least $1,000 worth of DYP tokens.
-                          </span>
-                        </div>
-                      </div>
-                      <div className="d-flex align-items-center gap-2 win-rewards-container position-static m-0">
-                        <div className="d-flex flex-column align-items-center neutral-border p-1">
-                          <h6 className="win-amount mb-0">
-                            {getFormattedNumber(
-                              rewardData.rewards
-                                ? rewardData.rewards.find((obj) => {
-                                    return obj.rewardType === "Points";
-                                  }).reward
-                                : 0,
-                              0
-                            )}
-                          </h6>
-                          <span className="win-amount-desc">
-                            Leaderboard Points
-                          </span>
-                        </div>
-                        <h6 className="win-amount mb-0">+</h6>
-                        <div className="d-flex flex-column align-items-center danger-border p-1">
-                          <h6 className="win-amount mb-0 p-1">
-                            {" "}
-                            $
-                            {getFormattedNumber(
-                              rewardData.rewards
-                                ? rewardData.rewards.find((obj) => {
-                                    return obj.rewardType === "MoneyETH";
-                                  }).reward
-                                : 0,
-                              2
-                            )}
-                          </h6>
-                          <span className="win-amount-desc">Rewards</span>
-                        </div>
-                      </div>
-                    </div>
-                  ) : message === "wondyp" ? (
-                    <div className="d-flex align-items-center position-relative flex-column flex-lg-row justify-content-between p-0 p-lg-2 w-100 chest-progress-wrapper">
-                      <div
-                        className="chain-desc-wrapper w-100 p-2 d-flex flex-column"
-                        style={{
-                          filter: "brightness(1)",
-                          position: "relative",
-                        }}
-                      >
-                        <h6 className="win-text mb-0">You Won</h6>
-                      </div>
-                      <div className="d-flex align-items-center gap-2 win-rewards-container">
-                        <div className="d-flex flex-column align-items-center neutral-border p-1">
-                          <h6 className="win-amount mb-0">
-                            {getFormattedNumber(
-                              rewardData.rewards
-                                ? rewardData.rewards.find((obj) => {
-                                    return obj.rewardType === "Points";
-                                  }).reward
-                                : 0,
-                              0
-                            )}
-                          </h6>
+                            </h6>
 
-                          <span className="win-amount-desc">
-                            Leaderboard Points
-                          </span>
+                            <span className="win-amount-desc">Rewards</span>
+                          </div>
                         </div>
-                        <h6 className="win-amount mb-0">+</h6>
-                        <div className="d-flex flex-column align-items-center p-1">
-                          <h6 className="win-amount mb-0">
-                            $
-                            {getFormattedNumber(
-                              rewardData.rewards
-                                ? rewardData.rewards.find((obj) => {
-                                    return obj.rewardType === "MoneyDYP";
-                                  }).reward
-                                : 0,
-                              2
-                            )}
-                          </h6>
 
-                          <span className="win-amount-desc">Rewards</span>
-                        </div>
+                        <img
+                          src={winConfetti}
+                          alt=""
+                          className="win-confetti"
+                        />
                       </div>
-
-                      <img src={winConfetti} alt="" className="win-confetti" />
-                    </div>
-                  ) : message === "wonPoints" ? (
-                    <div
-                      className="d-flex align-items-center position-relative flex-column flex-lg-row justify-content-between p-0 p-lg-2 w-100 chest-progress-wrapper"
-                      style={{ border: "1px solid #f2c624" }}
-                    >
-                      <div
-                        className="chain-desc-wrapper w-100 p-2 d-flex flex-column"
-                        style={{
-                          filter: "brightness(1)",
-                          position: "relative",
-                        }}
-                      >
-                        <h6 className="win-text mb-0">You Won</h6>
-                      </div>
-                      <div className="d-flex align-items-center gap-2 win-rewards-container">
-                        <div className="d-flex flex-column align-items-center neutral-border p-1">
-                          <h6 className="win-amount mb-0">
-                            {getFormattedNumber(
-                              rewardData.rewards
-                                ? rewardData.rewards.find((obj) => {
-                                    return obj.rewardType === "Points";
-                                  }).reward
-                                : 0,
-                              0
-                            )}
-                          </h6>
-                          <span className="win-amount-desc">
-                            Leaderboard Points
-                          </span>
-                        </div>
-                      </div>
-
-                      <img src={winConfetti} alt="" className="win-confetti" />
-                    </div>
-                  ) : message === "login" ? (
-                    <div
-                      className="d-flex align-items-center flex-column flex-lg-row justify-content-between p-0 p-lg-2 w-100 chest-progress-wrapper"
-                      style={{
-                        border: "1px solid #8262D0",
-                        background:
-                          "linear-gradient(180deg, #8262D0 0%, #482293 100%)",
-                      }}
-                    >
-                      <div
-                        className="chain-desc-wrapper w-100 p-2 d-flex flex-column"
-                        style={{
-                          filter: "brightness(1)",
-                          position: "relative",
-                        }}
-                      >
-                        <h6
-                          className="desc-title mb-0"
-                          style={{ color: "#fff" }}
-                        >
-                          Sign in with Your Game Account
-                        </h6>
-                        <span className="chain-desc mb-0">
-                          Sign in to access Stone Crack and earn tailored
-                          rewards!
-                        </span>
-                      </div>
-                      <div className="d-flex align-items-center justify-content-end get-premium-wrapper p-3 p-lg-0">
-                        <NavLink
-                          className="sign-in-btn px-4 py-1"
-                          to="/sign-in"
-                        >
-                          Sign In
-                        </NavLink>
-                      </div>
-                    </div>
-                  ) : message === "connect" ? (
-                    <div
-                      className="d-flex align-items-center flex-column flex-lg-row justify-content-between p-0 p-lg-2 w-100 chest-progress-wrapper"
-                      style={{
-                        border: "1px solid #8262D0",
-                        background:
-                          "linear-gradient(180deg, #8262D0 0%, #482293 100%)",
-                      }}
-                    >
-                      <div
-                        className="chain-desc-wrapper w-100 p-2 d-flex flex-column"
-                        style={{
-                          filter: "brightness(1)",
-                          position: "relative",
-                        }}
-                      >
-                        <h6
-                          className="desc-title mb-0"
-                          style={{ color: "#fff" }}
-                        >
-                          Connect wallet
-                        </h6>
-                        <span className="chain-desc mb-0">
-                          Connect wallet in order to access Stone Crack and earn
-                          tailored rewards!
-                        </span>
-                      </div>
-                      <div className="d-flex align-items-center justify-content-end get-premium-wrapper p-3 p-lg-0">
-                        <button
-                          className="sign-in-btn px-4 py-1"
-                          onClick={() => {
-                            handleConnection();
+                    ) : message === "gem" ? (
+                      <div className="d-flex align-items-center flex-column flex-lg-row justify-content-between p-0 p-lg-2 w-100 chest-progress-wrapper">
+                        <div
+                          className="chain-desc-wrapper d-flex flex-column w-100"
+                          style={{
+                            filter: "brightness(1)",
+                            position: "relative",
                           }}
                         >
-                          Connect Wallet
-                        </button>
+                          <h6 className="win-text mb-0">You won</h6>
+                          <div className="d-flex align-items-center gap-2">
+                            <img src={danger} alt="" width={20} height={20} />
+                            <span className="win-desc mb-0">
+                              The{" "}
+                              <span style={{ color: "#F2C624" }}>
+                                $
+                                {getFormattedNumber(
+                                  rewardData.rewards
+                                    ? rewardData.rewards.find((obj) => {
+                                        return obj.rewardType === "MoneyETH";
+                                      }).reward
+                                    : 0,
+                                  2
+                                )}
+                              </span>{" "}
+                              reward cannot be claimed as you need to hold at
+                              least $1,000 worth of DYP tokens.
+                            </span>
+                          </div>
+                        </div>
+                        <div className="d-flex align-items-center gap-2 win-rewards-container position-static m-0">
+                          <div className="d-flex flex-column align-items-center neutral-border p-1">
+                            <h6 className="win-amount mb-0">
+                              {getFormattedNumber(
+                                rewardData.rewards
+                                  ? rewardData.rewards.find((obj) => {
+                                      return obj.rewardType === "Points";
+                                    }).reward
+                                  : 0,
+                                0
+                              )}
+                            </h6>
+                            <span className="win-amount-desc">
+                              Leaderboard Points
+                            </span>
+                          </div>
+                          <h6 className="win-amount mb-0">+</h6>
+                          <div className="d-flex flex-column align-items-center danger-border p-1">
+                            <h6 className="win-amount mb-0 p-1">
+                              {" "}
+                              $
+                              {getFormattedNumber(
+                                rewardData.rewards
+                                  ? rewardData.rewards.find((obj) => {
+                                      return obj.rewardType === "MoneyETH";
+                                    }).reward
+                                  : 0,
+                                2
+                              )}
+                            </h6>
+                            <span className="win-amount-desc">Rewards</span>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  ) : message === "comingsoon" ? (
-                    <div
-                      className="d-flex align-items-center flex-column justify-content-center p-0 p-lg-2 w-100 chest-progress-wrapper"
-                      style={{
-                        background: "#1A1C39",
-                        border: "1px solid #D75853",
-                      }}
-                    >
-                      <div className="loader red-loader">
-                        <div className="dot" style={{ "--i": 0 }}></div>
-                        <div className="dot" style={{ "--i": 1 }}></div>
-                        <div className="dot" style={{ "--i": 2 }}></div>
-                        <div className="dot" style={{ "--i": 3 }}></div>
-                        <div className="dot" style={{ "--i": 4 }}></div>
-                        <div className="dot" style={{ "--i": 5 }}></div>
-                        <div className="dot" style={{ "--i": 6 }}></div>
-                        <div className="dot" style={{ "--i": 7 }}></div>
-                        <div className="dot" style={{ "--i": 8 }}></div>
-                        <div className="dot" style={{ "--i": 9 }}></div>
+                    ) : message === "wondyp" ? (
+                      <div className="d-flex align-items-center position-relative flex-column flex-lg-row justify-content-between p-0 p-lg-2 w-100 chest-progress-wrapper">
+                        <div
+                          className="chain-desc-wrapper w-100 p-2 d-flex flex-column"
+                          style={{
+                            filter: "brightness(1)",
+                            position: "relative",
+                          }}
+                        >
+                          <h6 className="win-text mb-0">You Won</h6>
+                        </div>
+                        <div className="d-flex align-items-center gap-2 win-rewards-container">
+                          <div className="d-flex flex-column align-items-center neutral-border p-1">
+                            <h6 className="win-amount mb-0">
+                              {getFormattedNumber(
+                                rewardData.rewards
+                                  ? rewardData.rewards.find((obj) => {
+                                      return obj.rewardType === "Points";
+                                    }).reward
+                                  : 0,
+                                0
+                              )}
+                            </h6>
+
+                            <span className="win-amount-desc">
+                              Leaderboard Points
+                            </span>
+                          </div>
+                          <h6 className="win-amount mb-0">+</h6>
+                          <div className="d-flex flex-column align-items-center p-1">
+                            <h6 className="win-amount mb-0">
+                              $
+                              {getFormattedNumber(
+                                rewardData.rewards
+                                  ? rewardData.rewards.find((obj) => {
+                                      return obj.rewardType === "MoneyDYP";
+                                    }).reward
+                                  : 0,
+                                2
+                              )}
+                            </h6>
+
+                            <span className="win-amount-desc">Rewards</span>
+                          </div>
+                        </div>
+
+                        <img
+                          src={winConfetti}
+                          alt=""
+                          className="win-confetti"
+                        />
                       </div>
-                      <h6
-                        className="loader-text mb-0"
-                        style={{ color: "#D75853" }}
+                    ) : message === "wonPoints" ? (
+                      <div
+                        className="d-flex align-items-center position-relative flex-column flex-lg-row justify-content-between p-0 p-lg-2 w-100 chest-progress-wrapper"
+                        style={{ border: "1px solid #f2c624" }}
                       >
-                        Coming Soon
-                      </h6>
-                      <div className="loader red-loader">
-                        <div className="dot" style={{ "--i": 0 }}></div>
-                        <div className="dot" style={{ "--i": 1 }}></div>
-                        <div className="dot" style={{ "--i": 2 }}></div>
-                        <div className="dot" style={{ "--i": 3 }}></div>
-                        <div className="dot" style={{ "--i": 4 }}></div>
-                        <div className="dot" style={{ "--i": 5 }}></div>
-                        <div className="dot" style={{ "--i": 6 }}></div>
-                        <div className="dot" style={{ "--i": 7 }}></div>
-                        <div className="dot" style={{ "--i": 8 }}></div>
-                        <div className="dot" style={{ "--i": 9 }}></div>
+                        <div
+                          className="chain-desc-wrapper w-100 p-2 d-flex flex-column"
+                          style={{
+                            filter: "brightness(1)",
+                            position: "relative",
+                          }}
+                        >
+                          <h6 className="win-text mb-0">You Won</h6>
+                        </div>
+                        <div className="d-flex align-items-center gap-2 win-rewards-container">
+                          <div className="d-flex flex-column align-items-center neutral-border p-1">
+                            <h6 className="win-amount mb-0">
+                              {getFormattedNumber(
+                                rewardData.rewards
+                                  ? rewardData.rewards.find((obj) => {
+                                      return obj.rewardType === "Points";
+                                    }).reward
+                                  : 0,
+                                0
+                              )}
+                            </h6>
+                            <span className="win-amount-desc">
+                              Leaderboard Points
+                            </span>
+                          </div>
+                        </div>
+
+                        <img
+                          src={winConfetti}
+                          alt=""
+                          className="win-confetti"
+                        />
                       </div>
-                    </div>
-                  ) : (
-                    <></>
-                  )}
+                    ) : message === "login" ? (
+                      <div
+                        className="d-flex align-items-center flex-column flex-lg-row justify-content-between p-0 p-lg-2 w-100 chest-progress-wrapper"
+                        style={{
+                          border: "1px solid #8262D0",
+                          background:
+                            "linear-gradient(180deg, #8262D0 0%, #482293 100%)",
+                        }}
+                      >
+                        <div
+                          className="chain-desc-wrapper w-100 p-2 d-flex flex-column"
+                          style={{
+                            filter: "brightness(1)",
+                            position: "relative",
+                          }}
+                        >
+                          <h6
+                            className="desc-title mb-0"
+                            style={{ color: "#fff" }}
+                          >
+                            Sign in with Your Game Account
+                          </h6>
+                          <span className="chain-desc mb-0">
+                            Sign in to access Stone Crack and earn tailored
+                            rewards!
+                          </span>
+                        </div>
+                        <div className="d-flex align-items-center justify-content-end get-premium-wrapper p-3 p-lg-0">
+                          <NavLink
+                            className="sign-in-btn px-4 py-1"
+                            to="/sign-in"
+                          >
+                            Sign In
+                          </NavLink>
+                        </div>
+                      </div>
+                    ) : message === "connect" ? (
+                      <div
+                        className="d-flex align-items-center flex-column flex-lg-row justify-content-between p-0 p-lg-2 w-100 chest-progress-wrapper"
+                        style={{
+                          border: "1px solid #8262D0",
+                          background:
+                            "linear-gradient(180deg, #8262D0 0%, #482293 100%)",
+                        }}
+                      >
+                        <div
+                          className="chain-desc-wrapper w-100 p-2 d-flex flex-column"
+                          style={{
+                            filter: "brightness(1)",
+                            position: "relative",
+                          }}
+                        >
+                          <h6
+                            className="desc-title mb-0"
+                            style={{ color: "#fff" }}
+                          >
+                            Connect wallet
+                          </h6>
+                          <span className="chain-desc mb-0">
+                            Connect wallet in order to access Stone Crack and
+                            earn tailored rewards!
+                          </span>
+                        </div>
+                        <div className="d-flex align-items-center justify-content-end get-premium-wrapper p-3 p-lg-0">
+                          <button
+                            className="sign-in-btn px-4 py-1"
+                            onClick={() => {
+                              handleConnection();
+                            }}
+                          >
+                            Connect Wallet
+                          </button>
+                        </div>
+                      </div>
+                    ) : message === "comingsoon" ? (
+                      <div
+                        className="d-flex align-items-center flex-column justify-content-center p-0 p-lg-2 w-100 chest-progress-wrapper"
+                        style={{
+                          background: "#1A1C39",
+                          border: "1px solid #D75853",
+                        }}
+                      >
+                        <div className="loader red-loader">
+                          <div className="dot" style={{ "--i": 0 }}></div>
+                          <div className="dot" style={{ "--i": 1 }}></div>
+                          <div className="dot" style={{ "--i": 2 }}></div>
+                          <div className="dot" style={{ "--i": 3 }}></div>
+                          <div className="dot" style={{ "--i": 4 }}></div>
+                          <div className="dot" style={{ "--i": 5 }}></div>
+                          <div className="dot" style={{ "--i": 6 }}></div>
+                          <div className="dot" style={{ "--i": 7 }}></div>
+                          <div className="dot" style={{ "--i": 8 }}></div>
+                          <div className="dot" style={{ "--i": 9 }}></div>
+                        </div>
+                        <h6
+                          className="loader-text mb-0"
+                          style={{ color: "#D75853" }}
+                        >
+                          Coming Soon
+                        </h6>
+                        <div className="loader red-loader">
+                          <div className="dot" style={{ "--i": 0 }}></div>
+                          <div className="dot" style={{ "--i": 1 }}></div>
+                          <div className="dot" style={{ "--i": 2 }}></div>
+                          <div className="dot" style={{ "--i": 3 }}></div>
+                          <div className="dot" style={{ "--i": 4 }}></div>
+                          <div className="dot" style={{ "--i": 5 }}></div>
+                          <div className="dot" style={{ "--i": 6 }}></div>
+                          <div className="dot" style={{ "--i": 7 }}></div>
+                          <div className="dot" style={{ "--i": 8 }}></div>
+                          <div className="dot" style={{ "--i": 9 }}></div>
+                        </div>
+                      </div>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="left-games-banner p-2">
-              <div className="d-flex flex-column h-100">
-                <div className="main-image-game h-100 position-relative overflow-hidden">
-                  {sparkles.show && (
-                    <div
-                      class={`animation-container position-${sparkles.position}`}
-                    >
-                      <div class="spark-wrapper">
-                        <img src={spark} class="spark-1" alt="Spark" />
-                        <img src={spark} class="spark-2" alt="Spark" />
-                        <img src={spark} class="spark-3" alt="Spark" />
+              <div className="left-games-banner p-2">
+                <div className="d-flex flex-column h-100">
+                  <div className="main-image-game h-100 position-relative overflow-hidden">
+                    {sparkles.show && (
+                      <div
+                        class={`animation-container position-${sparkles.position}`}
+                      >
+                        <div class="spark-wrapper">
+                          <img src={spark} class="spark-1" alt="Spark" />
+                          <img src={spark} class="spark-2" alt="Spark" />
+                          <img src={spark} class="spark-3" alt="Spark" />
+                        </div>
+                      </div>
+                    )}
+                    <div className="dynamic-position w-100">
+                      <div className="d-flex flex-column flex-lg-row flex-md-row flex-sm-row justify-content-between align-items-start w-100 p-2">
+                        <div className="d-flex w-100 flex-row-reverse gap-1">
+                          <div className="col-lg-3 d-flex flex-column align-items-center ">
+                            <div className="w-100 points-upper-bg">
+                              <h6 className="points-text text-center m-0">
+                                Points
+                              </h6>
+                            </div>
+                            <h6 className="w-100 text-center totalpoints-wrapper px-3 totalpoints-value">
+                              {getFormattedNumber(totalPoints, 0)}
+                            </h6>
+                          </div>
+                          <div className="d-flex flex-column align-items-center dynamic-width">
+                            <div className="px-3 usd-upper-bg w-100">
+                              <h6 className="usdreward-text m-0 text-center dynamic-width">
+                                Rewards
+                              </h6>
+                            </div>
+                            <div className="h-100 d-flex gap-3 align-items-center justify-content-center px-3 usdreward-wrapper dynamic-width">
+                              <div className="d-flex flex-column">
+                                <h6 className="usdreward-value-crypto">DYP</h6>
+                                <h6 className="usdreward-value">
+                                  ${getFormattedNumber(totalUsdDYP, 2)}
+                                </h6>
+                              </div>
+                              <div className="d-flex flex-column">
+                                <h6 className="usdreward-value-crypto">ETH</h6>
+                                <h6 className="usdreward-value">
+                                  ${getFormattedNumber(totalUsdETH, 2)}
+                                </h6>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  )}
-                  <div className="dynamic-position w-100">
-                    <div className="d-flex flex-column flex-lg-row flex-md-row flex-sm-row justify-content-between align-items-start w-100 p-2">
-                     
-                      <img
-                        src={stoneCrack}
-                        alt=""
-                        className="stonecrack-logo"
-                      /> 
-                      <div className="d-flex w-100 flex-row-reverse gap-1">
-                        <div className="col-lg-3 d-flex flex-column align-items-center ">
-                          <div className="w-100 points-upper-bg">
-                            <h6 className="points-text text-center m-0">
-                              Points
-                            </h6>
-                          </div>
-                          <h6 className="w-100 text-center totalpoints-wrapper px-3 totalpoints-value">
-                            {getFormattedNumber(totalPoints, 0)}
-                          </h6>
-                        </div>
-                        <div className="d-flex flex-column align-items-center dynamic-width">
-                          <div className="px-3 usd-upper-bg w-100">
-                            <h6 className="usdreward-text m-0 text-center dynamic-width">
-                              Rewards
-                            </h6>
-                          </div>
-                          <div className="h-100 d-flex gap-3 align-items-center justify-content-center px-3 usdreward-wrapper dynamic-width">
-                            <div className="d-flex flex-column">
-                              <h6 className="usdreward-value-crypto">DYP</h6>
-                              <h6 className="usdreward-value">
-                                ${getFormattedNumber(totalUsdDYP, 2)}
-                              </h6>
-                            </div>
-                            <div className="d-flex flex-column">
-                              <h6 className="usdreward-value-crypto">ETH</h6>
-                              <h6 className="usdreward-value">
-                                ${getFormattedNumber(totalUsdETH, 2)}
-                              </h6>
-                            </div>
-                          </div>
+                    <div className="position-relative">
+                      {openedChests && openedChests.length === 20 ? (
+                        <img src={mainChestCracked} alt="" />
+                      ) : openedChests && openedChests.length < 20 ? (
+                        <img src={mainChest} alt="" />
+                      ) : (
+                        <img src={mainChest} alt="" />
+                      )}
+
+                      <div className="position-absolute rocks-wrapper">
+                        <div className="d-flex flex-column justify-content-center align-items-center position-relative w-100 h-100">
+                          {[...Array(4)].map((item, index) => {
+                            return (
+                              <div
+                                key={index}
+                                className={`rockitem rockitem${index + 1} ${
+                                  loading === true &&
+                                  selectedChest2 === index + 1 &&
+                                  "chest-pulsate"
+                                } 
+                           
+                          `}
+                                style={{
+                                  display: openChestIds.includes(index + 1)
+                                    ? "none"
+                                    : "block",
+                                }}
+                              >
+                                <img
+                                  src={require(`./assets/rocksBg/${
+                                    index + 1
+                                  }.png`)}
+                                  className="rock-img"
+                                  alt=""
+                                />
+                              </div>
+                            );
+                          })}
+
+                          {[...Array(5)].map((item, index) => {
+                            return (
+                              <div
+                                key={index}
+                                className={`rockitem  ${
+                                  loading === true &&
+                                  selectedChest2 === index + 5 &&
+                                  "chest-pulsate"
+                                } rockitem${index + 5}`}
+                                style={{
+                                  display: openChestIds.includes(index + 5)
+                                    ? "none"
+                                    : "",
+                                  // index + 5 <= openedChests.length ? "none" : "",
+                                }}
+                              >
+                                <img
+                                  src={require(`./assets/rocksBg/${
+                                    index + 5
+                                  }.png`)}
+                                  className="rock-img"
+                                  alt=""
+                                />
+                              </div>
+                            );
+                          })}
+
+                          {[...Array(5)].map((item, index) => {
+                            return (
+                              <div
+                                key={index}
+                                className={`rockitem rockitem${index + 10} ${
+                                  loading === true &&
+                                  selectedChest2 === index + 10 &&
+                                  "chest-pulsate"
+                                }`}
+                                style={{
+                                  display: openChestIds.includes(index + 10)
+                                    ? "none"
+                                    : "",
+                                  // index + 10 <= openedChests.length ? "none" : "",
+                                }}
+                              >
+                                <img
+                                  src={require(`./assets/rocksBg/${
+                                    index + 10
+                                  }.png`)}
+                                  className="rock-img"
+                                  alt=""
+                                />
+                              </div>
+                            );
+                          })}
+
+                          {[...Array(5)].map((item, index) => {
+                            return (
+                              <div
+                                key={index}
+                                className={`rockitem rockitem${index + 15} ${
+                                  loading === true &&
+                                  selectedChest2 === index + 15 &&
+                                  "chest-pulsate"
+                                }`}
+                                style={{
+                                  display: openChestIds.includes(index + 15)
+                                    ? "none"
+                                    : "",
+                                  // display:
+                                  //   index + 15 <= openedChests.length ? "none" : "",
+                                }}
+                              >
+                                <img
+                                  src={require(`./assets/rocksBg/${
+                                    index + 15
+                                  }.png`)}
+                                  className="rock-img"
+                                  alt=""
+                                />
+                              </div>
+                            );
+                          })}
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div className="position-relative">
-                  {openedChests && openedChests.length === 20 ? (
-                    <img src={mainChestCracked} alt=""/>
-                  ) : openedChests && openedChests.length < 20 ? (
-                    <img src={mainChest} alt="" />
-                  ) : (
-                    <img src={mainChest} alt="" />
-                  )}
-
-                  <div className="position-absolute rocks-wrapper">
-                    <div className="d-flex flex-column justify-content-center align-items-center position-relative w-100 h-100">
-                      {[...Array(4)].map((item, index) => {
-                        return (
-                          <div
-                            key={index}
-                            className={`rockitem rockitem${index + 1} ${
-                              loading === true &&
-                              selectedChest2 === index + 1 &&
-                              "chest-pulsate"
-                            } 
-                           
-                          `}
+                  <div className="d-none d-lg-flex d-md-flex w-100 align-items-center gap-2">
+                    <div className="left-separator"></div>
+                    <h6 className="reward-bottom-text px-2">Rewards</h6>
+                    <div className="right-separator"></div>
+                  </div>
+                  <div className="d-none d-lg-block d-md-block rewards-bottom-wrapper p-1">
+                    {windowSize.width > 992 ? (
+                      <div className="new-rewards-grid">
+                        <div
+                          className={` ${
+                            rewardData &&
+                            rewardData.rewards?.find((obj) => {
+                              return obj.rewardType === "Points";
+                            }) &&
+                            "new-rewards-item-active"
+                          } new-rewards-item p-2 d-flex align-items-center gap-2`}
+                        >
+                          <img
+                            src={pointsIcon}
+                            alt=""
                             style={{
-                              display: openChestIds.includes(index + 1)
-                                ? "none"
-                                : "block",
+                              width: 48,
+                              filter:
+                                rewardData &&
+                                rewardData.rewards?.find((obj) => {
+                                  return obj.rewardType === "Points";
+                                })
+                                  ? ""
+                                  : "grayscale(1)",
                             }}
-                          >
-                            <img
-                              src={require(`./assets/rocksBg/${index + 1}.png`)}
-                              className="rock-img"
-                              alt=""
-                            />
-                          </div>
-                        );
-                      })}
-
-                      {[...Array(5)].map((item, index) => {
-                        return (
-                          <div
-                            key={index}
-                            className={`rockitem  ${
-                              loading === true &&
-                              selectedChest2 === index + 5 &&
-                              "chest-pulsate"
-                            } rockitem${index + 5}`}
-                            style={{
-                              display: openChestIds.includes(index + 5)
-                                ? "none"
-                                : "",
-                              // index + 5 <= openedChests.length ? "none" : "",
-                            }}
-                          >
-                            <img
-                              src={require(`./assets/rocksBg/${index + 5}.png`)}
-                              className="rock-img"
-                              alt=""
-                            />
-                          </div>
-                        );
-                      })}
-
-                      {[...Array(5)].map((item, index) => {
-                        return (
-                          <div
-                            key={index}
-                            className={`rockitem rockitem${index + 10} ${
-                              loading === true &&
-                              selectedChest2 === index + 10 &&
-                              "chest-pulsate"
-                            }`}
-                            style={{
-                              display: openChestIds.includes(index + 10)
-                                ? "none"
-                                : "",
-                              // index + 10 <= openedChests.length ? "none" : "",
-                            }}
-                          >
-                            <img
-                              src={require(`./assets/rocksBg/${
-                                index + 10
-                              }.png`)}
-                              className="rock-img"
-                              alt=""
-                            />
-                          </div>
-                        );
-                      })}
-
-                      {[...Array(5)].map((item, index) => {
-                        return (
-                          <div
-                            key={index}
-                            className={`rockitem rockitem${index + 15} ${
-                              loading === true &&
-                              selectedChest2 === index + 15 &&
-                              "chest-pulsate"
-                            }`}
-                            style={{
-                              display: openChestIds.includes(index + 15)
-                                ? "none"
-                                : "",
-                              // display:
-                              //   index + 15 <= openedChests.length ? "none" : "",
-                            }}
-                          >
-                            <img
-                              src={require(`./assets/rocksBg/${
-                                index + 15
-                              }.png`)}
-                              className="rock-img"
-                              alt=""
-                            />
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div></div>
-                </div>
-                <div className="d-none d-lg-flex d-md-flex w-100 align-items-center gap-2">
-                  <div className="left-separator"></div>
-                  <h6 className="reward-bottom-text px-2">Rewards</h6>
-                  <div className="right-separator"></div>
-                </div>
-                <div className="d-none d-lg-block d-md-block rewards-bottom-wrapper p-1">
-                  {windowSize.width > 992 ? (
-                    <div className="new-rewards-grid">
-                      <div
-                        className={` ${
-                          rewardData &&
-                          rewardData.rewards?.find((obj) => {
-                            return obj.rewardType === "Points";
-                          }) &&
-                          "new-rewards-item-active"
-                        } new-rewards-item p-2 d-flex align-items-center gap-2`}
-                      >
-                        <img
-                          src={pointsIcon}
-                          alt=""
-                          style={{
-                            width: 48,
-                            filter:
-                              rewardData &&
-                              rewardData.rewards?.find((obj) => {
-                                return obj.rewardType === "Points";
-                              })
-                                ? ""
-                                : "grayscale(1)",
-                          }}
-                        />
-                        <div className="d-flex flex-column">
-                          <h6
-                            className={`${
-                              rewardData &&
-                              rewardData.rewards?.find((obj) => {
-                                return obj.rewardType === "Points";
-                              }) &&
-                              "reward-title-active"
-                            } reward-title`}
-                          >
-                            Points
-                          </h6>
-                          <h6
-                            className={` ${
-                              rewardData &&
-                              rewardData.rewards?.find((obj) => {
-                                return obj.rewardType === "Points";
-                              }) &&
-                              "reward-amount-active"
-                            } reward-amount d-flex align-items-center gap-1`}
-                          >
-                            1,000-6,000
-                          </h6>
-                        </div>
-                      </div>
-                      <div
-                        className={`${
-                          rewardData &&
-                          rewardData.rewards?.find((obj) => {
-                            return obj.rewardType === "dypRewards";
-                          }) &&
-                          "new-rewards-item-active2"
-                        } new-rewards-item p-2 d-flex align-items-center gap-2`}
-                      >
-                        <div className="h-100 d-flex flex-column justify-content-between w-100">
-                          <h6
-                            className={`${
-                              rewardData &&
-                              rewardData.rewards?.find((obj) => {
-                                return obj.rewardType === "MoneyDYP";
-                              }) &&
-                              "reward-title-active"
-                            } reward-title text-center`}
-                          >
-                            DYP Rewards
-                          </h6>
-                          <div className="d-flex align-items-center gap-1">
-                            <div
+                          />
+                          <div className="d-flex flex-column">
+                            <h6
                               className={`${
+                                rewardData &&
+                                rewardData.rewards?.find((obj) => {
+                                  return obj.rewardType === "Points";
+                                }) &&
+                                "reward-title-active"
+                              } reward-title`}
+                            >
+                              Points
+                            </h6>
+                            <h6
+                              className={` ${
+                                rewardData &&
+                                rewardData.rewards?.find((obj) => {
+                                  return obj.rewardType === "Points";
+                                }) &&
+                                "reward-amount-active"
+                              } reward-amount d-flex align-items-center gap-1`}
+                            >
+                              1,000-6,000
+                            </h6>
+                          </div>
+                        </div>
+                        <div
+                          className={`${
+                            rewardData &&
+                            rewardData.rewards?.find((obj) => {
+                              return obj.rewardType === "dypRewards";
+                            }) &&
+                            "new-rewards-item-active2"
+                          } new-rewards-item p-2 d-flex align-items-center gap-2`}
+                        >
+                          <div className="h-100 d-flex flex-column justify-content-between w-100">
+                            <h6
+                              className={`${
+                                rewardData &&
                                 rewardData.rewards?.find((obj) => {
                                   return obj.rewardType === "MoneyDYP";
                                 }) &&
-                                rewardData &&
-                                rewardData.rewards?.find((obj) => {
-                                  return (
-                                    obj.rewardType === "MoneyDYP" &&
-                                    Number(obj.reward) >= 0.5 &&
-                                    Number(obj.reward) <= 5
-                                  );
-                                }) &&
-                                "small-reward-wrapper-active"
-                              } small-reward-wrapper w-100 p-1`}
+                                "reward-title-active"
+                              } reward-title text-center`}
                             >
-                              <h6
+                              DYP Rewards
+                            </h6>
+                            <div className="d-flex align-items-center gap-1">
+                              <div
                                 className={`${
-                                  rewardData &&
                                   rewardData.rewards?.find((obj) => {
                                     return obj.rewardType === "MoneyDYP";
                                   }) &&
@@ -1576,30 +1570,30 @@ const Games = ({
                                       Number(obj.reward) <= 5
                                     );
                                   }) &&
-                                  "reward-amount-active"
-                                } reward-amount text-center`}
+                                  "small-reward-wrapper-active"
+                                } small-reward-wrapper w-100 p-1`}
                               >
-                                $0.5-$5
-                              </h6>
-                            </div>
-                            <div
-                              className={`${
-                                rewardData &&
-                                rewardData.rewards?.find((obj) => {
-                                  return obj.rewardType === "MoneyDYP";
-                                }) &&
-                                rewardData &&
-                                rewardData.rewards?.find((obj) => {
-                                  return (
-                                    obj.rewardType === "MoneyDYP" &&
-                                    Number(obj.reward) >= 20 &&
-                                    Number(obj.reward) <= 300
-                                  );
-                                }) &&
-                                "small-reward-wrapper-active"
-                              } small-reward-wrapper w-100 p-1`}
-                            >
-                              <h6
+                                <h6
+                                  className={`${
+                                    rewardData &&
+                                    rewardData.rewards?.find((obj) => {
+                                      return obj.rewardType === "MoneyDYP";
+                                    }) &&
+                                    rewardData &&
+                                    rewardData.rewards?.find((obj) => {
+                                      return (
+                                        obj.rewardType === "MoneyDYP" &&
+                                        Number(obj.reward) >= 0.5 &&
+                                        Number(obj.reward) <= 5
+                                      );
+                                    }) &&
+                                    "reward-amount-active"
+                                  } reward-amount text-center`}
+                                >
+                                  $0.5-$5
+                                </h6>
+                              </div>
+                              <div
                                 className={`${
                                   rewardData &&
                                   rewardData.rewards?.find((obj) => {
@@ -1613,58 +1607,57 @@ const Games = ({
                                       Number(obj.reward) <= 300
                                     );
                                   }) &&
-                                  "reward-amount-active"
-                                } reward-amount text-center`}
+                                  "small-reward-wrapper-active"
+                                } small-reward-wrapper w-100 p-1`}
                               >
-                                $20-$300
-                              </h6>
+                                <h6
+                                  className={`${
+                                    rewardData &&
+                                    rewardData.rewards?.find((obj) => {
+                                      return obj.rewardType === "MoneyDYP";
+                                    }) &&
+                                    rewardData &&
+                                    rewardData.rewards?.find((obj) => {
+                                      return (
+                                        obj.rewardType === "MoneyDYP" &&
+                                        Number(obj.reward) >= 20 &&
+                                        Number(obj.reward) <= 300
+                                      );
+                                    }) &&
+                                    "reward-amount-active"
+                                  } reward-amount text-center`}
+                                >
+                                  $20-$300
+                                </h6>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                      <div
-                        className={`${
-                          rewardData &&
-                          rewardData.rewards?.find((obj) => {
-                            return obj.rewardType === "MoneyETH";
-                          }) &&
-                          message === "woneth" &&
-                          "new-rewards-item-active2"
-                        } new-rewards-item p-2 d-flex align-items-center gap-2`}
-                      >
-                        <div className="h-100 d-flex flex-column justify-content-between w-100">
-                          <h6
-                            className={`${
-                              rewardData &&
-                              rewardData.rewards?.find((obj) => {
-                                return obj.rewardType === "MoneyETH";
-                              }) &&
-                              message === "woneth" &&
-                              "reward-title-active"
-                            } reward-title text-center`}
-                          >
-                            ETH Rewards
-                          </h6>
-                          <div className="d-flex align-items-center gap-1">
-                            <div
+                        <div
+                          className={`${
+                            rewardData &&
+                            rewardData.rewards?.find((obj) => {
+                              return obj.rewardType === "MoneyETH";
+                            }) &&
+                            message === "woneth" &&
+                            "new-rewards-item-active2"
+                          } new-rewards-item p-2 d-flex align-items-center gap-2`}
+                        >
+                          <div className="h-100 d-flex flex-column justify-content-between w-100">
+                            <h6
                               className={`${
                                 rewardData &&
                                 rewardData.rewards?.find((obj) => {
                                   return obj.rewardType === "MoneyETH";
                                 }) &&
-                                rewardData &&
-                                rewardData.rewards?.find((obj) => {
-                                  return (
-                                    obj.rewardType === "MoneyETH" &&
-                                    Number(obj.reward) >= 0.5 &&
-                                    Number(obj.reward) <= 5
-                                  );
-                                }) &&
                                 message === "woneth" &&
-                                "small-reward-wrapper-active"
-                              } small-reward-wrapper w-100 p-1`}
+                                "reward-title-active"
+                              } reward-title text-center`}
                             >
-                              <h6
+                              ETH Rewards
+                            </h6>
+                            <div className="d-flex align-items-center gap-1">
+                              <div
                                 className={`${
                                   rewardData &&
                                   rewardData.rewards?.find((obj) => {
@@ -1679,31 +1672,31 @@ const Games = ({
                                     );
                                   }) &&
                                   message === "woneth" &&
-                                  "reward-amount-active"
-                                } reward-amount text-center`}
+                                  "small-reward-wrapper-active"
+                                } small-reward-wrapper w-100 p-1`}
                               >
-                                $0.5-$5
-                              </h6>
-                            </div>
-                            <div
-                              className={`${
-                                rewardData &&
-                                rewardData.rewards?.find((obj) => {
-                                  return obj.rewardType === "MoneyETH";
-                                }) &&
-                                rewardData &&
-                                rewardData.rewards?.find((obj) => {
-                                  return (
-                                    obj.rewardType === "MoneyETH" &&
-                                    Number(obj.reward) >= 20 &&
-                                    Number(obj.reward) <= 300
-                                  );
-                                }) &&
-                                message === "woneth" &&
-                                "small-reward-wrapper-active"
-                              } small-reward-wrapper w-100 p-1`}
-                            >
-                              <h6
+                                <h6
+                                  className={`${
+                                    rewardData &&
+                                    rewardData.rewards?.find((obj) => {
+                                      return obj.rewardType === "MoneyETH";
+                                    }) &&
+                                    rewardData &&
+                                    rewardData.rewards?.find((obj) => {
+                                      return (
+                                        obj.rewardType === "MoneyETH" &&
+                                        Number(obj.reward) >= 0.5 &&
+                                        Number(obj.reward) <= 5
+                                      );
+                                    }) &&
+                                    message === "woneth" &&
+                                    "reward-amount-active"
+                                  } reward-amount text-center`}
+                                >
+                                  $0.5-$5
+                                </h6>
+                              </div>
+                              <div
                                 className={`${
                                   rewardData &&
                                   rewardData.rewards?.find((obj) => {
@@ -1718,81 +1711,99 @@ const Games = ({
                                     );
                                   }) &&
                                   message === "woneth" &&
-                                  "reward-amount-active"
-                                } reward-amount text-center`}
+                                  "small-reward-wrapper-active"
+                                } small-reward-wrapper w-100 p-1`}
                               >
-                                $20-$300
-                              </h6>
+                                <h6
+                                  className={`${
+                                    rewardData &&
+                                    rewardData.rewards?.find((obj) => {
+                                      return obj.rewardType === "MoneyETH";
+                                    }) &&
+                                    rewardData &&
+                                    rewardData.rewards?.find((obj) => {
+                                      return (
+                                        obj.rewardType === "MoneyETH" &&
+                                        Number(obj.reward) >= 20 &&
+                                        Number(obj.reward) <= 300
+                                      );
+                                    }) &&
+                                    message === "woneth" &&
+                                    "reward-amount-active"
+                                  } reward-amount text-center`}
+                                >
+                                  $20-$300
+                                </h6>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                      <div
-                        className={` ${
-                          rewardData &&
-                          rewardData.rewards?.find((obj) => {
-                            return obj.rewardType === "MoneyETH";
-                          }) &&
-                          message === "gem" &&
-                          "new-rewards-item-active"
-                        } new-rewards-item p-2 d-flex align-items-center gap-2 position-relative`}
-                      >
-                        {rewardData &&
-                          rewardData.rewards?.find((obj) => {
-                            return obj.rewardType === "MoneyETH";
-                          }) &&
-                          message === "gem" && (
-                            <img
-                              src={danger}
-                              width={20}
-                              height={20}
-                              className="reward-warning"
-                              alt=""
-                            />
-                          )}
-                        <img
-                          src={gemIcon}
-                          alt=""
-                          style={{
-                            width: 48,
-                            filter:
-                              rewardData &&
-                              rewardData.rewards?.find((obj) => {
-                                return obj.rewardType === "MoneyETH";
-                              }) &&
-                              message === "gem"
-                                ? ""
-                                : "grayscale(1)",
-                          }}
-                        />
-                        <div className="d-flex flex-column">
-                          <h6
-                            className={`${
-                              rewardData &&
-                              rewardData.rewards?.find((obj) => {
-                                return obj.rewardType === "MoneyETH";
-                              }) &&
-                              message === "gem" &&
-                              "reward-title-active"
-                            } reward-title text-center`}
-                          >
-                            Base Gem
-                          </h6>
-                          <h6
-                            className={`${
-                              rewardData &&
-                              rewardData.rewards?.find((obj) => {
-                                return obj.rewardType === "MoneyETH";
-                              }) &&
-                              message === "gem" &&
-                              "reward-amount-active"
-                            } reward-amount d-flex align-items-center gap-1`}
-                          >
-                            $500-$2,000
-                          </h6>
+                        <div
+                          className={` ${
+                            rewardData &&
+                            rewardData.rewards?.find((obj) => {
+                              return obj.rewardType === "MoneyETH";
+                            }) &&
+                            message === "gem" &&
+                            "new-rewards-item-active"
+                          } new-rewards-item p-2 d-flex align-items-center gap-2 position-relative`}
+                        >
+                          {rewardData &&
+                            rewardData.rewards?.find((obj) => {
+                              return obj.rewardType === "MoneyETH";
+                            }) &&
+                            message === "gem" && (
+                              <img
+                                src={danger}
+                                width={20}
+                                height={20}
+                                className="reward-warning"
+                                alt=""
+                              />
+                            )}
+                          <img
+                            src={gemIcon}
+                            alt=""
+                            style={{
+                              width: 48,
+                              filter:
+                                rewardData &&
+                                rewardData.rewards?.find((obj) => {
+                                  return obj.rewardType === "MoneyETH";
+                                }) &&
+                                message === "gem"
+                                  ? ""
+                                  : "grayscale(1)",
+                            }}
+                          />
+                          <div className="d-flex flex-column">
+                            <h6
+                              className={`${
+                                rewardData &&
+                                rewardData.rewards?.find((obj) => {
+                                  return obj.rewardType === "MoneyETH";
+                                }) &&
+                                message === "gem" &&
+                                "reward-title-active"
+                              } reward-title text-center`}
+                            >
+                              Base Gem
+                            </h6>
+                            <h6
+                              className={`${
+                                rewardData &&
+                                rewardData.rewards?.find((obj) => {
+                                  return obj.rewardType === "MoneyETH";
+                                }) &&
+                                message === "gem" &&
+                                "reward-amount-active"
+                              } reward-amount d-flex align-items-center gap-1`}
+                            >
+                              $500-$2,000
+                            </h6>
+                          </div>
                         </div>
-                      </div>
-                      {/* {dummyRewards.map((item, index) => (
+                        {/* {dummyRewards.map((item, index) => (
                       <div
                         key={index}
                         className="new-rewards-item p-2 d-flex align-items-center gap-2"
@@ -2017,10 +2028,11 @@ const Games = ({
                         </div>
                       </div>
                     ))} */}
-                    </div>
-                  ) : (
-                    <></>
-                  )}
+                      </div>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

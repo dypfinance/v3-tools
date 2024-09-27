@@ -258,6 +258,11 @@
   }
 }
 
+.stone-crack-header {
+  width: fit-content;
+  object-fit: contain;
+}
+
 .dynamic-width {
   width: auto;
   @media screen and (max-width: 575px) {
