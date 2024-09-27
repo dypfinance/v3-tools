@@ -689,6 +689,20 @@ export default class Subscription extends React.Component {
         });
     };
 
+    const handleSkalePool = async () => {
+      if (window.ethereum) {
+        await handleSwitchNetworkhook("0x585eb4b1")
+          .then(() => {
+            this.props.handleSwitchNetwork("1482601649 ");
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      } else {
+        window.alertify.error("No web3 detected. Please install Metamask!");
+      }
+    };
+
     return (
       <div>
         {/* <div className="row mt-5 gap-4 gap-lg-0">
@@ -1260,6 +1274,20 @@ export default class Subscription extends React.Component {
                             }}
                           />
                           Conflux Network
+                        </li>
+                        <li
+                          className="dropdown-item launchpad-item d-flex align-items-center gap-2"
+                          onClick={handleSkalePool}
+                        >
+                          <img
+                            src={skaleIcon}
+                            alt=""
+                            style={{
+                              width: "18px",
+                              height: "18px",
+                            }}
+                          />
+                          Skale Network
                         </li>
                       </ul>
                     </div>

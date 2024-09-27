@@ -499,6 +499,10 @@ const Games = ({
     getIds();
   }, [openedChests]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   // console.log(selectedChest2, openChestIds);
   return (
     <>
