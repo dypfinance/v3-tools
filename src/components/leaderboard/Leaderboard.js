@@ -194,7 +194,7 @@ const Leaderboard = ({
     },
   ];
 
-  const kittyDashRewards = [30, 20, 10, 10, 5, 5, 5, 5, 5, 5];
+  const kittyDashRewards = [120, 80, 40, 40, 20, 20, 20, 20, 20, 20];
 
   const stoneData = [
     {
@@ -448,7 +448,7 @@ const Leaderboard = ({
               src={kittyDashFlag}
               onClick={() => {
                 setType("kittyDash");
-                handleOption("weekly");
+                handleOption("monthly");
               }}
               className="leaderboard-flag"
               alt=""
@@ -474,24 +474,26 @@ const Leaderboard = ({
                     optionText === "monthly" && "move-right"
                   } ${type !== "stoneCrack" && "d-none"} w-50`}
                 ></div>
-                <span
-                  className={`${
-                    optionText === "weekly" && type === "stoneCrack"
-                      ? "otheroptionsActive-stone"
-                      : optionText === "weekly" && type === "kittyDash"
-                      ? "otheroptionsActive-kitty"
-                      : optionText === "weekly" && type === "cawsAdventure"
-                      ? "otheroptionsActive-caws"
-                      : ""
-                  } durationText`}
-                  style={{ width: type !== "stoneCrack" ? "100%" : "50%" }}
-                  onClick={() => {
-                    handleOption("weekly");
-                  }}
-                >
-                  Weekly
-                </span>
-                {type === "stoneCrack" && (
+                {type !== "kittyDash" && (
+                  <span
+                    className={`${
+                      optionText === "weekly" && type === "stoneCrack"
+                        ? "otheroptionsActive-stone"
+                        : optionText === "weekly" && type === "kittyDash"
+                        ? "otheroptionsActive-kitty"
+                        : optionText === "weekly" && type === "cawsAdventure"
+                        ? "otheroptionsActive-caws"
+                        : ""
+                    } durationText`}
+                    style={{ width: type !== "stoneCrack" ? "100%" : "50%" }}
+                    onClick={() => {
+                      handleOption("weekly");
+                    }}
+                  >
+                    Weekly
+                  </span>
+                )}
+                {type === "stoneCrack" || type === "kittyDash" ? (
                   <span
                     className={`${
                       optionText === "monthly" && type === "stoneCrack"
@@ -502,13 +504,15 @@ const Leaderboard = ({
                         ? "otheroptionsActive-caws"
                         : ""
                     } durationText col-3`}
-                    style={{ width: "50%" }}
+                    style={{ width: type === "kittyDash" ? "100%" : "50%" }}
                     onClick={() => {
                       handleOption("monthly");
                     }}
                   >
                     Monthly
                   </span>
+                ) : (
+                  <></>
                 )}
               </div>
             </div>
@@ -532,12 +536,15 @@ const Leaderboard = ({
                     enterDelay={0}
                     leaveDelay={0}
                   >
-                    <img src={tooltipIcon} alt="" className="tooltipicon-leaderboard"/>
+                    <img
+                      src={tooltipIcon}
+                      alt=""
+                      className="tooltipicon-leaderboard"
+                    />
                   </Tooltip>
                 </span>
               )}
-              {(type === "stoneCrack" && optionText === "monthly") ||
-              type === "cawsAdventure" ? (
+              {type === "cawsAdventure" ? (
                 <div className="coming-soon-position d-flex align-items-center justify-content-center">
                   <h6 className="mb-0">Coming Soon</h6>
                 </div>
@@ -546,10 +553,8 @@ const Leaderboard = ({
               )}
               <table
                 className={`playerTable w-100 ${
-                  ((type === "stoneCrack" && optionText === "monthly") ||
-                    type === "cawsAdventure") &&
-                  "comingsoon2"
-                } `}
+                  type === "cawsAdventure" && "comingsoon2"
+                }`}
               >
                 <tbody>
                   <tr className="playerRow">
