@@ -1822,18 +1822,14 @@ export default class Subscription extends React.Component {
                 </div>
               </div>
             </div>
-            <div className="col-12 pe-0 col-lg-6">
-              <a
-                href="https://www.worldofdypians.com/"
-                target={"_blank"}
-                className="wod-wrapper d-flex flex-column align-items-end gap-3 p-3"
-              >
-                <h6 className="wod-title">Experience unique gameplay</h6>
-                <div className="d-flex align-items-center gap-1">
-                  <span className="explore-wod">Explore more</span>
-                  <img src={gotoWod} alt="" />
-                </div>
-              </a>
+            <div className="col-12 pe-lg-0 p-0 col-lg-6">
+              <NavLink  className="wod-wrapper d-flex flex-column align-items-start gap-3 p-3 justify-content-end" to='/games'>
+                
+                <div className="btn hero-stake-eth-btn2 px-5 py-1 ">
+                  <span className="explore-wod">Explore</span> 
+                </div></NavLink>
+             
+              
             </div>
           </div>
           {/* <div className="row mt-5 gap-4 gap-lg-0">

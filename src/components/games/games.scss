@@ -79,17 +79,17 @@
 }
 
 .rockitem1 {
-  top: 52% !important;
+  top: 52%;
   left: 50%;
 }
 
 .rockitem13 {
-  left: 51% !important;
-  top: 51% !important;
+  left: 51%;
+  top: 51% ;
 }
 
 .rockitem18 {
-  left: 51% !important;
+  left: 51%;
 }
 
 
@@ -360,6 +360,9 @@
   cursor: pointer;
   transition: all 0.25s ease-in-out;
   width: 90px;
+  @media screen and (max-width: 767px) {
+    width: auto;
+  }
 }
 
 .leaderboard-item-banner:hover {
