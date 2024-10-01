@@ -1288,32 +1288,32 @@ function App() {
   };
 
   const fetchMonthlyWinners = async () => {
-    // const data = {
-    //   StatisticName: "LeaderboardDypiusMonthly",
-    //   StartPosition: 0,
-    //   MaxResultsCount: 10,
-    // };
-    // const result = await axios
-    //   .post(`${backendApi}/auth/GetLeaderboard`, data)
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    const data = {
+      StatisticName: "LeaderboardDypiusMonthly",
+      StartPosition: 0,
+      MaxResultsCount: 10,
+    };
+    const result = await axios
+      .post(`${backendApi}/auth/GetLeaderboard`, data)
+      .catch((err) => {
+        console.log(err);
+      });
 
     fillRecordsMonthly([]);
 
-    // setmonthlyplayerData(result.data.data.leaderboard);
-    // setpreviousMonthlyVersion(parseInt(result.data.data.version));
+    setmonthlyplayerData(result.data.data.leaderboard);
+    setpreviousMonthlyVersion(parseInt(result.data.data.version));
 
-    // var testArray = result.data.data.leaderboard.filter(
-    //   (item) => item.displayName === username
-    // );
-    // if (testArray.length > 0) {
-    //   setActivePlayerMonthly(true);
-    //   fetchRecordsAroundPlayerMonthly(result.data.data.leaderboard);
-    // } else if (testArray.length === 0) {
-    //   setActivePlayerMonthly(false);
-    //   fetchRecordsAroundPlayerMonthly(result.data.data.leaderboard);
-    // }
+    var testArray = result.data.data.leaderboard.filter(
+      (item) => item.displayName === username
+    );
+    if (testArray.length > 0) {
+      setActivePlayerMonthly(true);
+      fetchRecordsAroundPlayerMonthly(result.data.data.leaderboard);
+    } else if (testArray.length === 0) {
+      setActivePlayerMonthly(false);
+      fetchRecordsAroundPlayerMonthly(result.data.data.leaderboard);
+    }
   };
 
   const fetchPreviousMonthlyWinners = async () => {
