@@ -58,7 +58,7 @@ const Whitelist = ({
   const [totalCommitmentValue, settotalCommitmentValue] = useState(0);
 
   const [allUserCommitments, setAllUserCommitments] = useState([]);
-  let expireDay = new Date("2024-10-02T14:00:00.000+02:00");
+  let expireDay = new Date("2024-10-16T14:00:00.000+02:00");
 
   const poolCap = 20000;
 
