@@ -55,6 +55,8 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
   // const [dypPrice, setDypPrice] = useState(0);
   // const [ethPrice, setEthPrice] = useState(0);
 
+
+
   let loyaltyCd = new Date("2024-09-16T12:59:59.000+02:00");
 
   const convertEthToUsd = async () => {
@@ -308,23 +310,23 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
                       <img src={fireIcon} alt="" />
                       <span className="participants-desc">
                         <span style={{ color: "#FCE202" }}>
-                          {getFormattedNumber(totalUsers, 0)}
+                          {getFormattedNumber(359639, 0)}
                         </span>{" "}
                         joined the Loyalty Program
                       </span>
                     </div>
                     <div className="d-flex flex-column w-100">
-                      {latestUsers.slice(0, 7).map((item, index) => (
+                      {loyaltyAddresses.slice(0, 7).map((item, index) => (
                         <div
                           key={index}
                           className="participant-item d-flex align-items-center justify-content-between w-100 py-2"
                         >
                           <span className="participant-name">
-                            {shortAddress(item.walletAddress)} joined
+                            {shortAddress(item)} joined
                              
                           </span>
                           <span className="participant-time-ago">
-                            {getTimeAgo(item.timestamp)}
+                            {getTimeAgo(1726576825000)}
                           </span>
                         </div>
                       ))}
