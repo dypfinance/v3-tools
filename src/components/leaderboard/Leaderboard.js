@@ -16,6 +16,7 @@ import tooltipIcon from "./assets/tooltipIcon.svg";
 
 const Leaderboard = ({
   userData,
+  userId,
   username,
   type,
   setType,
@@ -392,10 +393,12 @@ const Leaderboard = ({
   };
 
   useEffect(() => {
-    fetchWeeklyWinners();
-    fetchMonthlyWinners();
-    fetchKittyDashWinners();
-  }, []);
+    if (userId && username) {
+      fetchWeeklyWinners();
+      fetchMonthlyWinners();
+      fetchKittyDashWinners();
+    }
+  }, [userId, username]);
 
   const switchPrev = () => {
     setPrevStatus((prevStatus) => {
