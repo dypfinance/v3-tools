@@ -16,6 +16,8 @@ import tooltipIcon from "./assets/tooltipIcon.svg";
 
 const Leaderboard = ({
   userData,
+  userId,
+  address,
   username,
   type,
   setType,
@@ -39,6 +41,8 @@ const Leaderboard = ({
   activePlayerMonthly,
   email,
   leaderboardCaws2d,
+  activePlayerCaws2d,
+  caws2dUser,
 }) => {
   const weeklyPrizes = ["25", "15", "10", "8", "0", "0", "0", "0", "0", "0"];
   const monthlyPrizes = [
@@ -122,7 +126,7 @@ const Leaderboard = ({
         class: "col-2 text-center",
       },
       {
-        name: "Time",
+        name: "Reward",
         class: "col-3 text-center",
       },
     ],
@@ -392,10 +396,12 @@ const Leaderboard = ({
   };
 
   useEffect(() => {
-    fetchWeeklyWinners();
-    fetchMonthlyWinners();
-    fetchKittyDashWinners();
-  }, []);
+    if (userId && username) {
+      fetchWeeklyWinners();
+      fetchMonthlyWinners();
+      fetchKittyDashWinners();
+    }
+  }, [userId, username]);
 
   const switchPrev = () => {
     setPrevStatus((prevStatus) => {
@@ -429,7 +435,6 @@ const Leaderboard = ({
       return "DNF";
     }
   };
-
   return (
     <div
       className="main-wrapper py-4 w-100 d-flex gap-4 mt-xxl-0 mt-lg-0 justify-content-center align-items-start"
@@ -457,7 +462,7 @@ const Leaderboard = ({
               src={cawsAdventuresFlag}
               onClick={() => {
                 setType("cawsAdventure");
-                handleOption("weekly");
+                handleOption("monthly");
               }}
               className="leaderboard-flag"
               alt=""
@@ -474,7 +479,7 @@ const Leaderboard = ({
                     optionText === "monthly" && "move-right"
                   } ${type !== "stoneCrack" && "d-none"} w-50`}
                 ></div>
-                {type !== "kittyDash" && (
+                {type !== "kittyDash" && type !== "cawsAdventure" && (
                   <span
                     className={`${
                       optionText === "weekly" && type === "stoneCrack"
@@ -493,7 +498,9 @@ const Leaderboard = ({
                     Weekly
                   </span>
                 )}
-                {type === "stoneCrack" || type === "kittyDash" ? (
+                {type === "stoneCrack" ||
+                type === "kittyDash" ||
+                type === "cawsAdventure" ? (
                   <span
                     className={`${
                       optionText === "monthly" && type === "stoneCrack"
@@ -504,7 +511,12 @@ const Leaderboard = ({
                         ? "otheroptionsActive-caws"
                         : ""
                     } durationText col-3`}
-                    style={{ width: type === "kittyDash" ? "100%" : "50%" }}
+                    style={{
+                      width:
+                        type === "kittyDash" || type === "cawsAdventure"
+                          ? "100%"
+                          : "50%",
+                    }}
                     onClick={() => {
                       handleOption("monthly");
                     }}
@@ -544,17 +556,17 @@ const Leaderboard = ({
                   </Tooltip>
                 </span>
               )}
-              {type === "cawsAdventure" ? (
+              {/* {type === "cawsAdventure" ? (
                 <div className="coming-soon-position d-flex align-items-center justify-content-center">
                   <h6 className="mb-0">Coming Soon</h6>
                 </div>
               ) : (
                 <></>
-              )}
+              )} */}
               <table
-                className={`playerTable w-100 ${
-                  type === "cawsAdventure" && "comingsoon2"
-                }`}
+                className={`playerTable w-100 
+            
+                `}
               >
                 <tbody>
                   <tr className="playerRow">
@@ -901,7 +913,13 @@ const Leaderboard = ({
                   ) : (
                     <>
                       {leaderboardCaws2d.slice(0, 10).map((item, index) => (
-                        <tr key={index} className={`playerInnerRow`}>
+                        <tr
+                          key={index}
+                          className={`playerInnerRow ${
+                            item.address.toLowerCase() ===
+                              address?.toLowerCase() && "caws-user-row"
+                          }`}
+                        >
                           <td className="playerData col-1">
                             {Number(index) + 1}
                           </td>
@@ -926,13 +944,48 @@ const Leaderboard = ({
                             className={`playerReward col-3 text-center`}
                             style={{ color: cawsHeaders.rewardColor }}
                           >
-                            {formatTimeByLevelAndSecond(
-                              item.timestamp,
-                              item.level
-                            )}
+                            5$
                           </td>
                         </tr>
                       ))}
+                      {activePlayerCaws2d === false &&
+                        prevStatus === false &&
+                        email && (
+                          <tr className={`playerInnerRow caws-user-row`}>
+                            <td className="playerData col-1">
+                              {Number(
+                                leaderboardCaws2d.indexOf(
+                                  leaderboardCaws2d.find((item) => {
+                                    return item.address === address;
+                                  })
+                                )
+                              ) + 1}
+                            </td>
+                            <td className="playerName col-3">
+                              <div className="position-relative d-flex align-items-center">
+                                <span>{username}</span>
+                              </div>
+                            </td>
+                            <td
+                              className="playerScore col-4 text-center"
+                              style={{ color: cawsHeaders.scoreColor }}
+                            >
+                              {getFormattedNumber(caws2dUser?.score, 0)}
+                            </td>
+                            <td
+                              className={`playerReward col-4 text-center`}
+                              style={{ color: cawsHeaders.scoreColor }}
+                            >
+                              {caws2dUser?.level}
+                            </td>
+                            <td
+                              className={`playerReward col-4 text-center`}
+                              style={{ color: cawsHeaders.rewardColor }}
+                            >
+                              $0
+                            </td>
+                          </tr>
+                        )}
                     </>
                   )}
 
