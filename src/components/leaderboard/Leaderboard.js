@@ -123,11 +123,15 @@ const Leaderboard = ({
       },
       {
         name: "Level",
+        class: "col-1 text-center",
+      },
+      {
+        name: "Time",
         class: "col-2 text-center",
       },
       {
         name: "Reward",
-        class: "col-3 text-center",
+        class: "col-2 text-center",
       },
     ],
   };
@@ -200,182 +204,7 @@ const Leaderboard = ({
 
   const kittyDashRewards = [120, 80, 40, 40, 20, 20, 20, 20, 20, 20];
 
-  const stoneData = [
-    {
-      player: "DarkSliffer",
-      score: 11502635,
-      ethReward: 1000,
-      dypReward: 1000,
-    },
-    {
-      player: "Energy",
-      score: 10102000,
-      ethReward: 500,
-      dypReward: 500,
-    },
-    {
-      player: "POGL",
-      score: 7502635,
-      ethReward: 10,
-      dypReward: 10,
-    },
-    {
-      player: "GDoge",
-      score: 5000000,
-      ethReward: 10,
-      dypReward: 10,
-    },
-    {
-      player: "Beku",
-      score: 2404445,
-      ethReward: 10,
-      dypReward: 10,
-    },
-    {
-      player: "Lorena",
-      score: 1152879,
-      ethReward: 10,
-      dypReward: 10,
-    },
-    {
-      player: "Dark",
-      score: 906800,
-      ethReward: 10,
-      dypReward: 10,
-    },
-    {
-      player: "Rediness",
-      score: 901625,
-      ethReward: 10,
-      dypReward: 10,
-    },
-    {
-      player: "Gbani",
-      score: 800583,
-      ethReward: 10,
-      dypReward: 10,
-    },
-    {
-      player: "Sakrifica",
-      score: 783540,
-      ethReward: 10,
-      dypReward: 10,
-    },
-  ];
-  const kittyData = [
-    {
-      player: "DarkSliffer",
-      score: 11502635,
-      reward: 1000,
-    },
-    {
-      player: "Energy",
-      score: 10102000,
-      reward: 500,
-    },
-    {
-      player: "POGL",
-      score: 7502635,
-      reward: 10,
-    },
-    {
-      player: "GDoge",
-      score: 5000000,
-      reward: 10,
-    },
-    {
-      player: "Beku",
-      score: 2404445,
-      reward: 10,
-    },
-    {
-      player: "Lorena",
-      score: 1152879,
-      reward: 10,
-    },
-    {
-      player: "Dark",
-      score: 906800,
-      reward: 10,
-    },
-    {
-      player: "Rediness",
-      score: 901625,
-      reward: 10,
-    },
-    {
-      player: "Gbani",
-      score: 800583,
-      reward: 10,
-    },
-    {
-      player: "Sakrifica",
-      score: 783540,
-      reward: 10,
-    },
-  ];
-  const cawsData = [
-    {
-      player: "DarkSliffer",
-      score: 11502635,
-      level: 10,
-      time: "2m:01s",
-    },
-    {
-      player: "Energy",
-      score: 10102000,
-      level: 10,
-      time: "2m:05s",
-    },
-    {
-      player: "POGL",
-      score: 7502635,
-      level: 10,
-      time: "3m:15s",
-    },
-    {
-      player: "GDoge",
-      score: 5000000,
-      level: 9,
-      time: "6m:12s",
-    },
-    {
-      player: "Beku",
-      score: 2404445,
-      level: 8,
-      time: "6m:55s",
-    },
-    {
-      player: "Lorena",
-      score: 1152879,
-      level: 10,
-      time: "10m:05s",
-    },
-    {
-      player: "Dark",
-      score: 906800,
-      level: 10,
-      time: "50m:05s",
-    },
-    {
-      player: "Rediness",
-      score: 901625,
-      level: 9,
-      time: "59m:05s",
-    },
-    {
-      player: "Gbani",
-      score: 800583,
-      level: 2,
-      time: "1h:12m:05s",
-    },
-    {
-      player: "Sakrifica",
-      score: 783540,
-      level: 10,
-      time: "1h:16m:05s",
-    },
-  ];
+  const caws2dRewards = [120, 80, 40, 40, 20, 20, 20, 20, 20, 20];
 
   const [optionText, setOptionText] = useState("weekly");
   const [inactiveBoard, setInactiveBoard] = useState(false);
@@ -396,11 +225,9 @@ const Leaderboard = ({
   };
 
   useEffect(() => {
-    if (userId && username) {
       fetchWeeklyWinners();
       fetchMonthlyWinners();
       fetchKittyDashWinners();
-    }
   }, [userId, username]);
 
   const switchPrev = () => {
@@ -936,15 +763,24 @@ const Leaderboard = ({
                           </td>
                           <td
                             className={`playerReward col-2 text-center`}
-                            style={{ color: cawsHeaders.scoreColor }}
+                            style={{ color: cawsHeaders.rewardColor }}
                           >
                             {getFormattedNumber(item.level, 0)}
+                          </td>
+                          <td
+                            className={`playerReward col-2 text-center`}
+                            style={{ color: cawsHeaders.rewardColor }}
+                          >
+                            {formatTimeByLevelAndSecond(
+                              item.timestamp,
+                              item.level
+                            )}
                           </td>
                           <td
                             className={`playerReward col-3 text-center`}
                             style={{ color: cawsHeaders.rewardColor }}
                           >
-                            5$
+                           ${caws2dRewards[index]}
                           </td>
                         </tr>
                       ))}
@@ -974,9 +810,18 @@ const Leaderboard = ({
                             </td>
                             <td
                               className={`playerReward col-4 text-center`}
-                              style={{ color: cawsHeaders.scoreColor }}
+                              style={{ color: cawsHeaders.rewardColor }}
                             >
                               {caws2dUser?.level}
+                            </td>
+                            <td
+                              className={`playerReward col-4 text-center`}
+                              style={{ color: cawsHeaders.rewardColor }}
+                            >
+                              {formatTimeByLevelAndSecond(
+                                caws2dUser.timestamp,
+                                caws2dUser.level
+                              )}
                             </td>
                             <td
                               className={`playerReward col-4 text-center`}
