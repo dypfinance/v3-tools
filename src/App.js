@@ -1719,7 +1719,7 @@ function App() {
                         }
                         kittyUser={kittyUser}
                         weeklyUser={weeklyUser}
-                        monthlyyUser={monthlyUser}
+                        monthlyUser={monthlyUser}
                         activePlayerKitty={activePlayerKitty}
                         activePlayerWeekly={activePlayerWeekly}
                         activePlayerMonthly={activePlayerMonthly}

@@ -2142,12 +2142,13 @@ const Games = ({
           fetchPreviousKittyDashWinners={fetchPreviousKittyDashWinners}
           kittyUser={kittyUser}
           weeklyUser={weeklyUser}
-          monthlyyUser={monthlyUser}
+          monthlyUser={monthlyUser}
           activePlayerKitty={activePlayerKitty}
           activePlayerWeekly={activePlayerWeekly}
           activePlayerMonthly={activePlayerMonthly}
           email={email}
           username={username}
+          userId={userId}
           leaderboardCaws2d={leaderboardCaws2d}
         />
       </div>

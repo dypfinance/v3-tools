@@ -380,7 +380,7 @@
     grid-template-columns: repeat(2, 1fr);
   }
   @media screen and (max-height: 840px) {
-    gap: 10px;
+    gap: 14px;
   }
 }
 
@@ -1610,7 +1610,7 @@ background: rgba(202, 77, 77, 0.10);
 }
 @media screen and (max-height: 1000px) {
   .games-popup-scroll-wrapper{
-    height: 700px;
+    height: 500px;
     overflow-y: scroll;
   }
 }
