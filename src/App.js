@@ -80,18 +80,16 @@ import { useParams } from "react-router-dom";
 
 const LockerWrapper = (props) => {
   const { pair_id } = useParams();
-  
+
   return (
     <Locker
-      {...props}  // Passing down existing props like handleConnection, isConnected, etc.
-      pair_id={pair_id}  // Explicitly passing pair_id as a prop
+      {...props} // Passing down existing props like handleConnection, isConnected, etc.
+      pair_id={pair_id} // Explicitly passing pair_id as a prop
     />
   );
 };
 
-
 function App() {
-
   const [theme, setTheme] = useState("theme-dark");
   const [isMinimized, setisMinimized] = useState(
     false && window.innerWidth >= 992
@@ -154,10 +152,13 @@ function App() {
   const [weeklyUser, setWeeklyUser] = useState({});
   const [monthlyplayerData, setmonthlyplayerData] = useState([]);
   const [activePlayerMonthly, setActivePlayerMonthly] = useState(false);
-  const [monthlyUser, setMonthlyUser] = useState({});
+  const [monthlyUser, setMonthlyUser] = useState([]);
   const [kittyDashRecords, setkittyDashRecords] = useState([]);
   const [activePlayerKitty, setActivePlayerKitty] = useState(false);
   const [kittyUser, setKittyUser] = useState({});
+
+  const [activePlayerCaws2d, setActivePlayerCaws2d] = useState(false);
+  const [caws2dUser, setCaws2dUser] = useState({});
 
   const backendApi =
     "https://axf717szte.execute-api.eu-central-1.amazonaws.com/prod";
@@ -1041,6 +1042,17 @@ function App() {
   const [verifyWallet, { loading: loadingVerify, data: dataVerify }] =
     useMutation(VERIFY_WALLET);
 
+  const fillRecordsCaws2d = (itemData) => {
+    if (itemData.length === 0) {
+      setleaderboard(placeholderplayerData);
+    } else if (itemData.length <= 10) {
+      const testArray = itemData;
+      const placeholderArray = placeholderplayerData.slice(itemData.length, 10);
+      const finalData = [...testArray, ...placeholderArray];
+      setleaderboard(finalData);
+    }
+  };
+
   const signWalletPublicAddress = async () => {
     try {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -1087,9 +1099,35 @@ function App() {
       console.warn(e);
     }
     leaderboard2 = leaderboard2.sort((a, b) => b.score - a.score);
-    setleaderboard(leaderboard2);
-  };
 
+    var testArray = leaderboard2.filter(
+      (item) =>
+        item.address.toLowerCase() ===
+        data?.getPlayer?.wallet?.publicAddress?.toLowerCase()
+    );
+
+    console.log(testArray, leaderboard2);
+    fillRecordsCaws2d(leaderboard2);
+    if (
+      testArray.length > 0 &&
+      leaderboard2.indexOf(
+        leaderboard2.find((item) => {
+          return (
+            item.address ===
+            data?.getPlayer?.wallet?.publicAddress?.toLowerCase()
+          );
+        })
+      ) > 20
+    ) {
+      setActivePlayerCaws2d(false);
+      setCaws2dUser(...testArray);
+    } else {
+      setCaws2dUser([]);
+    }
+
+    setleaderboard(leaderboard2);
+  }; 
+  
   const getAllChests = async () => {
     let headersList = {
       Accept: "*/*",
@@ -1265,6 +1303,7 @@ function App() {
       var testArray = result.data.data.leaderboard.filter(
         (item) => item.displayName === username
       );
+
       if (itemData.length > 0) {
         var testArray2 = Object.values(itemData).filter(
           (item) => item.displayName === username
@@ -1298,15 +1337,12 @@ function App() {
       .catch((err) => {
         console.log(err);
       });
-
-    fillRecordsMonthly([]);
-
-    setmonthlyplayerData(result.data.data.leaderboard);
     setpreviousMonthlyVersion(parseInt(result.data.data.version));
-
+    setmonthlyplayerData(result.data.data.leaderboard);
     var testArray = result.data.data.leaderboard.filter(
       (item) => item.displayName === username
     );
+    fillRecordsMonthly(result.data.data.leaderboard);
     if (testArray.length > 0) {
       setActivePlayerMonthly(true);
       fetchRecordsAroundPlayerMonthly(result.data.data.leaderboard);
@@ -1423,9 +1459,9 @@ function App() {
     }
   }, [email, chestCount]);
 
-  // useEffect(()=>{
-  //   loadLeaderboardDataCaws2dGame()
-  // },[])
+  useEffect(() => {
+    loadLeaderboardDataCaws2dGame();
+  }, [data]);
 
   useEffect(() => {
     if (email && data?.getPlayer?.wallet?.publicAddress !== undefined) {
@@ -1684,7 +1720,7 @@ function App() {
                     path="/games"
                     element={
                       <Games
-                        leaderboardCaws2d={placeholderplayerData}
+                        leaderboardCaws2d={leaderboard}
                         handleConnection={showModal}
                         isConnected={isConnected}
                         networkId={parseInt(networkId)}
@@ -1718,9 +1754,11 @@ function App() {
                           fetchPreviousKittyDashWinners
                         }
                         kittyUser={kittyUser}
+                        caws2dUser={caws2dUser}
                         weeklyUser={weeklyUser}
                         monthlyUser={monthlyUser}
                         activePlayerKitty={activePlayerKitty}
+                        activePlayerCaws2d={activePlayerCaws2d}
                         activePlayerWeekly={activePlayerWeekly}
                         activePlayerMonthly={activePlayerMonthly}
                       />
@@ -1907,7 +1945,11 @@ setkittyDashRecords */}
                     path="/submit-info"
                     render={() => <SubmitInfo theme={theme} />}
                   /> */}
-                  <Route exact path="/terms-of-service" element={<Disclaimer />} />
+                  <Route
+                    exact
+                    path="/terms-of-service"
+                    element={<Disclaimer />}
+                  />
                   {/* <Route exact path="/swap" component={Swap} /> */}
 
                   {/* <Route

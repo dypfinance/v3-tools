@@ -4,6 +4,7 @@
   font-size: 24px;
   line-height: 32px;
   color: #ffffff;
+
   @media screen and (max-width: 786px) {
     font-size: 18px;
   }
@@ -13,6 +14,7 @@
   height: 442px;
   background: rgba(151, 89, 192, 0.3);
   border-radius: 12px;
+
   h6 {
     margin-bottom: 0;
     font-family: "Oxanium" !important;
@@ -30,6 +32,7 @@
   left: 0;
   margin: auto;
   z-index: 5;
+
   h6 {
     margin-bottom: 0;
     font-family: "Oxanium" !important;
@@ -71,6 +74,9 @@
   background: rgba(28, 60, 94, 0.2);
   backdrop-filter: blur(12.5px);
   border-radius: 8px;
+  display: grid;
+  max-height: 390px;
+  overflow: auto;
 }
 
 .playerTable {
@@ -99,6 +105,7 @@
   top: 0;
   z-index: 2;
   white-space: nowrap;
+
   @media screen and (max-width: 500px) {
     font-size: 9px;
   }
@@ -170,6 +177,7 @@
     height: 25px;
   }
 }
+
 .premium-star {
   position: absolute;
   width: 12px;
@@ -185,6 +193,7 @@
   color: #fff;
   height: 32px;
 }
+
 .playerScore {
   font-weight: 500;
   font-size: 14px;
@@ -192,6 +201,7 @@
   letter-spacing: -0.018em;
   color: rgba(243, 192, 9, 1);
   height: 32px;
+
   @media screen and (max-width: 400px) {
     font-size: 12px;
   }
@@ -246,6 +256,7 @@
   height: 68px;
   bottom: 85px;
 }
+
 .playersreward {
   font-style: normal;
   font-weight: 700;
@@ -301,6 +312,7 @@
   white-space: nowrap;
   color: #c4f9ff !important;
 }
+
 .otheroptionsActive-caws {
   border-radius: 12px;
   border: 1px solid #ffeccc;
@@ -313,6 +325,7 @@
 .comingsoon2 {
   filter: blur(3px);
 }
+
 .watermark {
   color: #fff;
   font-size: 26px;
@@ -413,6 +426,7 @@
   left: 0;
   margin: auto;
 }
+
 .optionswrapper-bg-2 {
   position: absolute;
   width: 50%;
@@ -431,12 +445,15 @@
 .move-1 {
   transform: translateX(125%);
 }
+
 .move-2 {
   transform: translateX(250%);
 }
+
 .move-3 {
   transform: translateX(370%);
 }
+
 .move-4 {
   transform: translateX(492%);
 }
@@ -465,6 +482,7 @@
   filter: blur(5px);
   pointer-events: none;
 }
+
 .reset-time-lb {
   color: #b1a8b9;
   font-family: "Montserrat";
@@ -472,6 +490,7 @@
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+
   @media screen and (max-width: 786px) {
     font-size: 8px;
   }
@@ -484,6 +503,7 @@
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+
   @media screen and (max-width: 786px) {
     font-size: 8px;
   }
@@ -514,6 +534,7 @@
     font-size: 12px;
   }
 }
+
 .left-arrow-leaderboard {
   position: absolute;
   left: -4%;
@@ -522,6 +543,7 @@
   width: 30px;
   cursor: pointer;
 }
+
 .right-arrow-leaderboard {
   position: absolute;
   right: -4%;
@@ -546,11 +568,9 @@
 .optionsWrapper2 {
   border-radius: 10px;
   border: 1px solid rgba(76, 78, 100, 0);
-  background: linear-gradient(
-    180deg,
-    rgba(28, 60, 94, 0.15) 99.99%,
-    rgba(28, 60, 94, 0.15) 100%
-  );
+  background: linear-gradient(180deg,
+      rgba(28, 60, 94, 0.15) 99.99%,
+      rgba(28, 60, 94, 0.15) 100%);
   backdrop-filter: blur(13px);
 }
 
@@ -601,5 +621,12 @@
 .weekly-user-row {
   border-radius: 0px 0px 8px 8px !important;
   background: rgba(139, 125, 107, 0.4) !important;
+  backdrop-filter: blur(12.5px) !important;
+}
+
+
+.caws-user-row {
+  border-radius: 0px 0px 8px 8px !important;
+  background: rgb(139 94 79 / 40%) !important;
   backdrop-filter: blur(12.5px) !important;
 }

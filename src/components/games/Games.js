@@ -71,6 +71,8 @@ const Games = ({
   activePlayerMonthly,
   username,
   leaderboardCaws2d,
+  activePlayerCaws2d,
+  caws2dUser
 }) => {
   const [chain, setChain] = useState("base");
   const [message, setMessage] = useState("");
@@ -2128,6 +2130,8 @@ const Games = ({
         <Leaderboard
           type={type}
           setType={setType}
+          address={address}
+          userId={userId}
           monthlyplayerData={monthlyplayerData}
           previousMonthlyVersion={previousMonthlyVersion}
           previousWeeklyVersion={previousWeeklyVersion}
@@ -2144,6 +2148,8 @@ const Games = ({
           weeklyUser={weeklyUser}
           monthlyUser={monthlyUser}
           activePlayerKitty={activePlayerKitty}
+          activePlayerCaws2d={activePlayerCaws2d}
+          caws2dUser={caws2dUser}
           activePlayerWeekly={activePlayerWeekly}
           activePlayerMonthly={activePlayerMonthly}
           email={email}
