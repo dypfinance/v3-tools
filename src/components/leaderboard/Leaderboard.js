@@ -393,11 +393,9 @@ const Leaderboard = ({
   };
 
   useEffect(() => {
-    if (userId && username) {
       fetchWeeklyWinners();
       fetchMonthlyWinners();
       fetchKittyDashWinners();
-    }
   }, [userId, username]);
 
   const switchPrev = () => {
