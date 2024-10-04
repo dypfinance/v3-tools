@@ -1105,15 +1105,29 @@ function App() {
         item.address.toLowerCase() ===
         data?.getPlayer?.wallet?.publicAddress?.toLowerCase()
     );
+
+    console.log(testArray, leaderboard2);
     fillRecordsCaws2d(leaderboard2);
-    if (testArray.length > 0) {
+    if (
+      testArray.length > 0 &&
+      leaderboard2.indexOf(
+        leaderboard2.find((item) => {
+          return (
+            item.address ===
+            data?.getPlayer?.wallet?.publicAddress?.toLowerCase()
+          );
+        })
+      ) > 20
+    ) {
       setActivePlayerCaws2d(false);
       setCaws2dUser(...testArray);
+    } else {
+      setCaws2dUser([]);
     }
 
     setleaderboard(leaderboard2);
-  };
-
+  }; 
+  
   const getAllChests = async () => {
     let headersList = {
       Accept: "*/*",
@@ -1289,7 +1303,7 @@ function App() {
       var testArray = result.data.data.leaderboard.filter(
         (item) => item.displayName === username
       );
-    
+
       if (itemData.length > 0) {
         var testArray2 = Object.values(itemData).filter(
           (item) => item.displayName === username
@@ -1514,7 +1528,7 @@ function App() {
       signWalletPublicAddress();
     }
   }, [dataNonce]);
-  
+
   return (
     <div className={`page_wrapper ${isMinimized ? "minimize" : ""}`}>
       {/* <img src={navRadius} className="nav-radius" alt="" /> */}

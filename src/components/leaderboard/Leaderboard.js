@@ -204,7 +204,9 @@ const Leaderboard = ({
 
   const kittyDashRewards = [120, 80, 40, 40, 20, 20, 20, 20, 20, 20];
 
-  const caws2dRewards = [120, 80, 40, 40, 20, 20, 20, 20, 20, 20];
+  const caws2dRewards = [
+    100, 60, 40, 30, 20, 20, 20, 20, 20, 20, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+  ];
 
   const [optionText, setOptionText] = useState("weekly");
   const [inactiveBoard, setInactiveBoard] = useState(false);
@@ -225,9 +227,9 @@ const Leaderboard = ({
   };
 
   useEffect(() => {
-      fetchWeeklyWinners();
-      fetchMonthlyWinners();
-      fetchKittyDashWinners();
+    fetchWeeklyWinners();
+    fetchMonthlyWinners();
+    fetchKittyDashWinners();
   }, [userId, username]);
 
   const switchPrev = () => {
@@ -456,6 +458,7 @@ const Leaderboard = ({
                           <th
                             className={`playerHeader ${item.class}`}
                             key={index}
+                            style={{background: '#313243'}}
                           >
                             {item.name}
                           </th>
@@ -739,7 +742,7 @@ const Leaderboard = ({
                     </>
                   ) : (
                     <>
-                      {leaderboardCaws2d.slice(0, 10).map((item, index) => (
+                      {leaderboardCaws2d.slice(0, 20).map((item, index) => (
                         <tr
                           key={index}
                           className={`playerInnerRow ${
@@ -769,7 +772,7 @@ const Leaderboard = ({
                           </td>
                           <td
                             className={`playerReward col-2 text-center`}
-                            style={{ color: cawsHeaders.rewardColor }}
+                            style={{ color: cawsHeaders.rewardColor , fontSize: '12px'}}
                           >
                             {formatTimeByLevelAndSecond(
                               item.timestamp,
@@ -780,57 +783,10 @@ const Leaderboard = ({
                             className={`playerReward col-3 text-center`}
                             style={{ color: cawsHeaders.rewardColor }}
                           >
-                           ${caws2dRewards[index]}
+                            ${caws2dRewards[index]}
                           </td>
                         </tr>
                       ))}
-                      {activePlayerCaws2d === false &&
-                        prevStatus === false &&
-                        email && (
-                          <tr className={`playerInnerRow caws-user-row`}>
-                            <td className="playerData col-1">
-                              {Number(
-                                leaderboardCaws2d.indexOf(
-                                  leaderboardCaws2d.find((item) => {
-                                    return item.address === address;
-                                  })
-                                )
-                              ) + 1}
-                            </td>
-                            <td className="playerName col-3">
-                              <div className="position-relative d-flex align-items-center">
-                                <span>{username}</span>
-                              </div>
-                            </td>
-                            <td
-                              className="playerScore col-4 text-center"
-                              style={{ color: cawsHeaders.scoreColor }}
-                            >
-                              {getFormattedNumber(caws2dUser?.score, 0)}
-                            </td>
-                            <td
-                              className={`playerReward col-4 text-center`}
-                              style={{ color: cawsHeaders.rewardColor }}
-                            >
-                              {caws2dUser?.level}
-                            </td>
-                            <td
-                              className={`playerReward col-4 text-center`}
-                              style={{ color: cawsHeaders.rewardColor }}
-                            >
-                              {formatTimeByLevelAndSecond(
-                                caws2dUser.timestamp,
-                                caws2dUser.level
-                              )}
-                            </td>
-                            <td
-                              className={`playerReward col-4 text-center`}
-                              style={{ color: cawsHeaders.rewardColor }}
-                            >
-                              $0
-                            </td>
-                          </tr>
-                        )}
                     </>
                   )}
 
@@ -906,6 +862,65 @@ const Leaderboard = ({
                 </tbody>
               </table>
             </div>
+            {activePlayerCaws2d === false &&
+              type === "cawsAdventure" &&
+              prevStatus === false &&
+              caws2dUser.address !== undefined &&
+              email && (
+                <div className="px-2" style={{background: 'rgba(139, 94, 79, 0.4)'}}>
+                <table
+                  className={`playerTable w-100 
+            
+                `}
+                >
+                  <tbody>
+                    <tr className={`playerInnerRow caws-user-row`}>
+                      <td className="playerData col-1">
+                        {/* {Number(
+                          leaderboardCaws2d.indexOf(
+                            leaderboardCaws2d.find((item) => {
+                              return item.address === address;
+                            })
+                          )
+                        ) + 1} */}
+                      </td>
+                      <td className="playerName col-3">
+                        <div className="position-relative d-flex align-items-center">
+                          <span>{username}</span>
+                        </div>
+                      </td>
+                      <td
+                        className="playerScore col-3 text-center"
+                        style={{ color: cawsHeaders.scoreColor }}
+                      >
+                        {getFormattedNumber(caws2dUser?.score, 0)}
+                      </td>
+                      <td
+                        className="playerScore col-2 text-center"
+                        style={{ color: cawsHeaders.rewardColor }}
+                      >
+                        {getFormattedNumber(caws2dUser?.level, 0)}
+                      </td>
+                      <td
+                        className={`playerReward col-2 text-center`}
+                        style={{ color: cawsHeaders.rewardColor, fontSize: '12px' }}
+                      >
+                        {formatTimeByLevelAndSecond(
+                          caws2dUser.timestamp,
+                          caws2dUser.level
+                        )}
+                      </td>
+                      <td
+                        className={`playerReward col-3 text-center`}
+                        style={{ color: cawsHeaders.rewardColor }}
+                      >
+                        $0
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                </div>
+              )}
           </div>
           {type !== "cawsAdventure" && (
             <div className="optionsWrapper2 p-2">
