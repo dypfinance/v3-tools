@@ -12,7 +12,7 @@ const Footer = () => {
     <div className="col-1"></div>
     <div className={`${windowSize.width < 991 ? 'col-12' : windowSize.width < 1490 ? 'col-11' : 'col-10'}`}>
     <div className="py-4 flex-column flex-lg-row px-0 container-lg d-flex justify-content-between gap-3 align-items-start align-items-lg-center">
-      <div className="d-flex flex-row flex-lg-column justify-content-between justify-content-lg-center align-items-center align-items-lg-start col-12 col-lg-6 gap-2">
+      <div className="d-flex flex-row flex-lg-column justify-content-between justify-content-lg-center align-items-center align-items-lg-start col-12 col-lg-4 gap-2">
         <a target={"_blank"} href="https://dypius.com/">
           <img src="/assets/img/dypiusFooter.svg" alt="Dypius" ></img>
         </a>
