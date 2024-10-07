@@ -359,7 +359,7 @@ const Leaderboard = ({
             </div>
           </div>
           <div className="d-flex flex-column gap-2 tablewrapper">
-            <div className="inner-table-wrapper p-2 w-100 position-relative">
+            <div className="inner-table-wrapper p-2 w-100 position-relative d-flex flex-column align-items-end">
               {type === "stoneCrack" && (
                 <span className="playerHeader reward-position d-none  d-lg-flex justify-content-center align-items-center gap-1 px-0 leaderboard-rewards-bg">
                   Rewards{" "}

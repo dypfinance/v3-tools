@@ -74,8 +74,8 @@
   background: rgba(28, 60, 94, 0.2);
   backdrop-filter: blur(12.5px);
   border-radius: 8px;
-  display: grid;
-  max-height: 390px;
+  // display: grid;
+  max-height: 413px;
   overflow: auto;
 }
 
@@ -601,9 +601,9 @@
 }
 
 .reward-position {
-  position: absolute;
-  top: -2.5%;
-  right: 1.5%;
+  position: relative;
+  top: auto;
+  right: auto;
   width: 19.3%;
 }
 
