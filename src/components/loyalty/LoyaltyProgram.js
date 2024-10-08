@@ -25,6 +25,7 @@ import getFormattedNumber from "../../functions/get-formatted-number";
 import winnerBadge from "./assets/winnerBadge.webp";
 import { loyaltyAddresses } from ".";
 import '../LandPopup/landpopup.css'
+import moment from "moment";
 
 const renderer = ({ days, hours, minutes }) => {
   return (
@@ -326,7 +327,7 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
                              
                           </span>
                           <span className="participant-time-ago">
-                            {getTimeAgo(1726576825000)}
+                            {moment.duration(1726576825000 - Date.now()).humanize(true)}
                           </span>
                         </div>
                       ))}
