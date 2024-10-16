@@ -80,7 +80,7 @@ const Whitelist = ({
     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603",
     "0x9845a667b1A603FF21596FDdec51968a2bccAc11",
     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603",
-    "0xFdD3CFF22CF846208E3B37b47Bc36b2c61D2cA8b"
+    "0xFdD3CFF22CF846208E3B37b47Bc36b2c61D2cA8b",
   ];
 
   const checkStakedPools = () => {
@@ -655,7 +655,7 @@ const Whitelist = ({
               target="_blank"
               rel="noreferrer"
               className="btn filledbtn"
-              style={{width: 'fit-content'}}
+              style={{ width: "fit-content" }}
             >
               Tokenomics
             </a>
@@ -721,12 +721,12 @@ const Whitelist = ({
       </div>
       <div className="row mt-4">
         <div className="col-12 col-lg-7">
-          <div className="whitelist-info-item d-flex flex-column w-100 p-3 h-100">
+          <div className="whitelist-info-item d-flex flex-column w-100 p-3 h-100 justify-content-between">
             <div className="d-flex align-items-center justify-content-between">
               <div className="d-flex align-items-center gap-2">
                 <h6 className="mb-0 whitelist-deposit-title">Whitelist</h6>
                 <span className="whitelist-days-left">
-                  {moment
+                  {/* {moment
                     .duration(expireDay.getTime() - Date.now())
                     .humanize(true)
                     .slice(
@@ -735,10 +735,11 @@ const Whitelist = ({
                         .duration(expireDay.getTime() - Date.now())
                         .humanize(true).length
                     )}{" "}
-                  left
+                  left */}
+                  Ended
                 </span>
               </div>
-              <Tooltip
+              {/* <Tooltip
                 title={
                   <>
                     <div className="d-flex flex-column gap-2">
@@ -764,9 +765,13 @@ const Whitelist = ({
                 leaveDelay={0}
               >
                 <img src={tooltipIcon} alt="" />
-              </Tooltip>
+              </Tooltip> */}
             </div>
-            <div className="whitelist-deposit-wrapper mt-3  d-flex flex-column gap-2">
+            <h6 className="mb-0 whitelist-deposit-title text-center">
+              Private Round ended.
+            </h6>
+
+            {/* <div className="whitelist-deposit-wrapper mt-3  d-flex flex-column gap-2">
               <div className="whitelist-deposit-wrapper-header p-2 d-flex align-items-center justify-content-between">
                 <span className="commitment-text">Commitment</span>
                 <div className="d-flex align-items-center gap-1">
@@ -1023,7 +1028,7 @@ const Whitelist = ({
                   </button>
                 )}
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="col-12 col-lg-5 mt-2 mt-lg-0">
@@ -1034,7 +1039,7 @@ const Whitelist = ({
               </h6>
               <span className="my-commitment-span">My Commitment</span>
             </div>
-            <div className="whitelist-info-item d-flex flex-column w-100 p-3">
+            {/* <div className="whitelist-info-item d-flex flex-column w-100 p-3">
               <div className="d-flex align-items-center justify-content-between">
                 <h6 className="mb-0 whitelist-deposit-title">Requirements</h6>
                 <Tooltip
@@ -1096,7 +1101,7 @@ const Whitelist = ({
                   <img src={buyToken} alt="" />
                 </a>
               )}
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

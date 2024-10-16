@@ -3,6 +3,8 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import closeX from "../earnOther/assets/closeX.svg";
 import migrationPopup from "./migrationPopup.webp";
+import basebg from "./baseBg.png";
+
 import loyaltyPopupBanner from "./loyaltyPopupBanner.png";
 import "./whitelist.css";
 import OutsideClickHandler from "react-outside-click-handler";
@@ -56,31 +58,28 @@ const WhitelistPopup = ({ open, onClose }) => {
                 <div className="d-flex flex-column align-items-center justify-content-center">
                   <div className="d-flex align-items-center justify-content-center mb-2 popup-title-wrapper gap-2 p-2 px-4">
                     <h6 className="popup-title d-flex align-items-center gap-2 mb-0">
-                    WOD Token
+                    Games on
                     </h6>
-                <h6 className="popup-title metaverse mb-0">Whitelist</h6>
+                <h6 className="popup-title metaverse mb-0">Base</h6>
 
                   </div>
                   <span className="popup-span mb-0 w-100">
-                  As part of the Dypius ecosystem, we're enhancing our user
-                utilities with the upcoming WOD Token launch. Secure your spot
-                now as we are offering early access to the exclusive WOD token
-                sale through a Whitelist for our members.
+                  Enjoy the ultimate gaming experience on Base.
                   </span>
                 </div>
                 <img
-                  src={migrationPopup}
-                  className="land-nft-image w-100"
+                  src={basebg}
+                  className="land-nft-image"
                   alt="land nft"
                 />
                 {/* <span className="popup-content">
           Total Genesis land supply limited to 1,000 plots
         </span> */}
                 <NavLink
-                  to="/launchpad"
+                  to="/games"
                   onClick={onClose}
                 >
-                  <button className="btn filled-btn m-3">Join the Whitelist</button>
+                  <button className="btn filled-btn m-3">Play</button>
                 </NavLink>
               </div>
             </div>

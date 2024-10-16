@@ -101,7 +101,7 @@ border-radius: 0 12px 12px 0;
   font-size: 18px;
   font-style: normal;
   font-weight: 600;
-  line-height: 12px; /* 66.667% */
+  /* line-height: 12px; */
   letter-spacing: -0.324px;
 }
 
