@@ -1689,8 +1689,8 @@ function App() {
                       <Farms
                         handleConnection={handleConnection}
                         isConnected={isConnected}
-                        networkId={parseInt(explorerNetworkId)}
-                        handleSwitchNetwork={handleSwitchNetwork}
+                        networkId={parseInt(explorerNetworkId)} 
+                        onSelectChain={onSelectChain}
                       />
                     }
                   />
