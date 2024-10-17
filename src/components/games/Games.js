@@ -2153,8 +2153,7 @@ const Games = ({
           activePlayerWeekly={activePlayerWeekly}
           activePlayerMonthly={activePlayerMonthly}
           email={email}
-          username={username}
-          userId={userId}
+          username={username} 
           leaderboardCaws2d={leaderboardCaws2d}
         />
       </div>
