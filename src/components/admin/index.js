@@ -206,11 +206,11 @@ export default class Admin extends React.Component {
           {/* <p className='mt-4'>Enter Pair Address</p>
                     <input value={this.state.pair_address} onChange={this.handlePairChange} className='form-control' type='text' placeholder='Pair Address' />
                     <br /> */}
-          {this.props.appState.isConnected ? (
+          {this.props.isConnected ? (
             <div>
               <label
                 style={{ minWidth: "250px" }}
-                disabled={!this.props.appState.isConnected}
+                disabled={!this.props.isConnected}
                 className="btn v1 p-2"
                 type="submit"
               >
@@ -226,7 +226,7 @@ export default class Admin extends React.Component {
               <br />
               <label
                 style={{ minWidth: "250px" }}
-                disabled={!this.props.appState.isConnected}
+                disabled={!this.props.isConnected}
                 className="btn v1 p-2"
                 type="submit"
               >
@@ -246,7 +246,7 @@ export default class Admin extends React.Component {
               </p>
               {/* <p>DYP Locked in Subscription: {getFormattedNumber(this.props.appState.subscribedPlatformTokenAmount/1e18, 6)} DYP</p> */}
               <button
-                disabled={this.props.appState.isConnected}
+                disabled={this.props.isConnected}
                 onClick={this.props.handleConnection}
                 className="btn v1"
                 type="button"

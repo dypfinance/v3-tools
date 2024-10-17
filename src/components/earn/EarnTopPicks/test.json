@@ -1,0 +1,34 @@
+{
+  "stakingInfoDYPBASE": [
+    {
+      "id": "0x13a3EA792db25d6E239f4b785bA17FB5B9faf84e",
+      "apy_percent": 37.5,
+      "tvl_usd": 2344.8308785277886,
+      "link_logo": "https://www.dypius.com/logo192.png",
+      "link_pair": "https://app.dyp.finance/constant-staking-3",
+      "pool_name": "DYP Constant Staking BASE",
+      "pair_name": "DYP",
+      "return_types": "DYP",
+      "lock_time": "No lock",
+      "expired": "No",
+      "new_pool": "No",
+      "apy_performancefee": 37.5,
+      "performancefee": 0
+    },
+    {
+      "id": "0x13a3EA792db25d6E239f4b785bA17FB5B9faf84e",
+      "apy_percent": 37.5,
+      "tvl_usd": 2329.4098550575163,
+      "link_logo": "https://www.dypius.com/logo192.png",
+      "link_pair": "https://app.dyp.finance/constant-staking-3",
+      "pool_name": "DYP Constant Staking BASE",
+      "pair_name": "DYP",
+      "return_types": "DYP",
+      "lock_time": "No lock",
+      "expired": "No",
+      "new_pool": "No",
+      "apy_performancefee": 37.5,
+      "performancefee": 0
+    }
+  ]
+}

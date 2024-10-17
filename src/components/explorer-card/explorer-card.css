@@ -3,7 +3,7 @@
   background-color: #312f69;
   border-radius: 12px;
   border: 2px solid #312f69;
-  background-image: url("./assets/wodBanner.webp");
+  /* background-image: url("./assets/wodBanner.webp"); */
   background-position: right center;
   background-repeat: no-repeat;
   background-size: contain;
@@ -14,6 +14,22 @@
   cursor: pointer;
 }
 
+.launchpad-tag {
+  border-radius: 5px;
+background: linear-gradient(90deg, #F36D46 0%, #EF5174 100%);
+height: 20px;
+}
+
+.launchpad-tag-title {
+  color: #FFF;
+text-align: center;
+font-size: 10px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+letter-spacing: -0.2px;
+}
+
 .explorercard-wrapper:focus,
 .explorercard-wrapper:hover,
 .explorercard-wrapper:active {
@@ -21,13 +37,15 @@
 }
 
 .explorer-chart {
-  position: absolute;
-  left: 0;
+  position: relative;
+  width: 152px;
+height: 152px;
+  /* left: 0;
   right: 0;
   bottom: 0;
   top: 0;
   margin: auto;
-  width: 100%;
+  width: 100%; */
 }
 
 .purplediv {
@@ -42,7 +60,7 @@
 .explorercard-title {
   font-style: normal;
   font-weight: 500;
-  font-size: 20px;
+  font-size: 17px;
   line-height: 27px;
   color: #f7f7fc;
 }
@@ -84,14 +102,14 @@
   .explorercard-wrapper {
     background-position: right -55px center;
   }
-  .explorer-chart {
+  /* .explorer-chart {
     position: absolute;
     right: 0;
     top: 5px;
     width: 150px;
-  }
+  } */
 
   .explorercard-desc {
-    width: 50% !important;
+    /* width: 50% !important; */
   }
 }

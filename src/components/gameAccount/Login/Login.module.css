@@ -1,0 +1,118 @@
+.container {
+  padding: 45px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 23px;
+}
+
+.containergecko {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  height: 100%;
+  justify-content: space-between;
+}
+
+.containerbnb {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100%;
+  justify-content: space-between;
+}
+
+
+.createplayertxt2 {
+  color: #fff;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.18px;
+}
+
+
+
+.labelBNB {
+  color: #c0cbf7;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.create_acc_bnb {
+  color: #f1edff;
+  text-align: center;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.bottomGroup_graytxt {
+  color: #c0cbf7;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+  letter-spacing: -0.18px;
+  margin: 0;
+
+}
+
+.bottomGroup_login {
+  color: #09fbd3;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: -0.18px;
+  text-decoration-line: underline;
+  cursor: pointer;
+  margin: 0;
+}
+
+
+.forgotPasswordText {
+  color: white;
+  font-family: "poppins";
+  font-size: 14px;
+  align-self: flex-start;
+  text-decoration: none;
+  /* margin: 40px auto; */
+  cursor: pointer;
+}
+
+.createplayertxt {
+  color: #18ffff;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.18px;
+}
+
+.errorText {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 21px;
+  text-align: center;
+  letter-spacing: -0.018em;
+  color: #fe7a00;
+}
+
+.errorText2 {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 21px;
+  text-align: center;
+  letter-spacing: -0.018em;
+  color: #fe7a00;
+  cursor: pointer;
+  text-decoration: underline;
+}

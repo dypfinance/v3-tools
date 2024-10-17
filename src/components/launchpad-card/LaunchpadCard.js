@@ -3,10 +3,18 @@ import defiBg from "./assets/defiBg.webp";
 import rightlogo from "./assets/filledArrow.svg";
 import "./launchpad.css";
 import { NavLink } from "react-router-dom";
+import whitelistHomeBg from "./assets/whitelistHomeBg.png";
+import loyaltyBanner from "./assets/loyaltyBanner.png";
 
-const LaunchpadCard = () => {
+const LaunchpadCard = ({ type }) => {
   return (
-    <NavLink to="/earn/defi-staking" className="launchpad-wrapper">
+    <a
+      href="https://www.worldofdypians.com/"
+      className="launchpad-wrapper"
+      rel="noreferrer"
+      target="_blank"
+      style={{ marginTop: "12px" }}
+    >
       <div className="d-flex flex-column gap-2 align-items-center justify-content-between">
         <img src={defiBg} alt="" className="launchpadbg" />
         <div
@@ -21,12 +29,12 @@ const LaunchpadCard = () => {
               lineHeight: "16px",
             }}
           >
-            Make the most of your assets with DeFi Staking
+            Discover excitement like never before!
           </h6>
           <img src={rightlogo} alt="" />
         </div>
       </div>
-    </NavLink>
+    </a>
   );
 };
 

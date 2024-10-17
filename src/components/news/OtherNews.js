@@ -15,7 +15,6 @@ const OtherNews = ({
   date,
   year,
   month,
-  theme,
   onOtherNewsClick,
   newsId,
   upvotes,

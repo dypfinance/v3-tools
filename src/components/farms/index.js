@@ -26,7 +26,7 @@ createTheme("solarized", {
     disabled: "rgba(0,0,0,.12)",
   },
   background: {
-    default: "transparent",
+    default: "#1e1c40",
   },
   context: {
     background: "transparent" || "#E91E63",
@@ -162,7 +162,7 @@ export default class Farms extends React.Component {
             {/* <img src="/assets/img/icon.svg" alt="" /> */}
             <img src={row.link_logo} height={40} width={40} alt="" />
             <a
-              className="token-link"
+              className="token-link text-white"
               target="_blank"
               rel="noopener noreferrer"
               href={row.link_pair}
@@ -203,7 +203,7 @@ export default class Farms extends React.Component {
         compact={true}
         keyField="id"
         
-        theme={this.props.theme == "theme-dark" ? "solarized" : "light"}
+        theme={"solarized"}
         persistTableHead={false}
         progressPending={this.state.isLoading}
         fixedHeader={true}

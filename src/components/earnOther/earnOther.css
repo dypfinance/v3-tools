@@ -368,6 +368,19 @@ hr {
   width: 100%;
   /*  margin-left: -25px; */
 }
+.details-text3 {
+  border-radius: 6px;
+  background: linear-gradient(135deg, #eb5e39 0%, #eb5e39 100%);
+  padding: 6px 12px;
+  color: #080b2a;
+  text-align: center;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  width: 100%;
+  /*  margin-left: -25px; */
+}
 .select-network-text {
   color: #f7f7fc;
   font-size: 12px;
@@ -426,6 +439,23 @@ hr {
   width: fit-content;
 }
 
+
+
+.hero-stake-eth-btn2 {
+  border-radius: 8px;
+  background: linear-gradient(95deg, #00b1d2 0.51%, #00be8c 100%);
+  color: #fff;
+  text-align: center;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  padding: 6px 12px;
+  border: none;
+  width: fit-content;
+}
+
+
 .hero-stake-bnb-btn {
   border-radius: 8px;
   background: linear-gradient(95deg, #83ac40 0.51%, #008657 100%);
@@ -467,6 +497,22 @@ hr {
   width: fit-content;
   padding: 6px 12px;
 }
+
+
+.hero-stake-land-btn {
+  border-radius: 8px;
+  background: linear-gradient(95deg, #c37c00 0.51%, #a93e00 100%);
+  color: #fff;
+  text-align: center;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  border: none;
+  width: fit-content;
+  padding: 6px 12px;
+}
+
 
 .premiumBgDesktop {
   background: url(./assets/premiumBg.webp);
@@ -513,9 +559,27 @@ hr {
   border-radius: 8px;
 }
 
+.landBgDesktop {
+  background: url(./assets/landBg.webp);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  min-height: 150px;
+  border-radius: 8px;
+}
+
 @media only screen and (max-width: 500px) {
   .cawsBgDesktop {
     background: url(./assets/cawsBgMobile.webp);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    min-height: 350px;
+    border-radius: 8px;
+  }
+
+  .landBgDesktop {
+    background: url(./assets/landBgMobile.webp);
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;

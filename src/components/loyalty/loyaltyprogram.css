@@ -1,0 +1,322 @@
+.loyalty-container {
+  border-radius: 12px;
+  background: radial-gradient(
+    100% 100% at 100% 50.3%,
+    #242152 0%,
+    #242152 100%
+  );
+  position: relative;
+}
+
+.loyalty-joined {
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: -0.018em;
+  color: #4cd0cd;
+  margin-top: 10px;
+}
+
+.loyalty-banner::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-image: url("./assets/loyaltyBannerBg.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: right;
+  pointer-events: none;
+}
+
+.loyalty-banner-title {
+  color: #f7f7fc !important;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+.loyalty-banner-desc {
+  color: #d6d8e7 !important;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 17px; /* 141.667% */
+}
+
+.loyalty-banner-timer {
+  border-radius: 8px;
+  border: 2px solid #50add3;
+  background: #2a2859;
+}
+
+.loyalty-timer {
+  color: #f7f7fc !important;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  letter-spacing: -0.36px;
+}
+
+.loyalty-clock {
+  position: absolute;
+  top: -20px;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+.loyalty-time-left {
+  color: #c0c9ff !important;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.288px;
+}
+
+.loyalty-title{
+    color: #F7F7FC !important;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 28px; /* 175% */
+}
+
+.loyalty-desc{
+    color: #D6D8E7 !important;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 17px; /* 141.667% */
+}
+
+.reimbursement-wrapper{
+    border-radius: 12px;
+    background: #312F69;
+    box-shadow: 0px 32px 64px 0px rgba(17, 17, 17, 0.12);
+}
+
+.appliedbadge {
+  width: 150px;
+}
+
+.my-reimbursement{
+    border-radius: 12px 12px 0px 0px;
+background: #383579;
+box-shadow: 0px 32px 64px 0px rgba(17, 17, 17, 0.12);
+color: #FFF !important;
+text-align: center;
+font-size: 10px;
+font-style: normal;
+font-weight: 600;
+line-height: 24px; /* 240% */
+
+}
+.reimbursement-token{
+    color: #FFF !important;
+font-size: 12px;
+font-style: normal;
+font-weight: 500;
+line-height: 17px; /* 141.667% */
+}
+
+.reimbursement-usd{
+    color: #FCE202 !important;
+    text-align: right;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: -0.18px;
+}
+
+.reimbursement-divider{
+    border-radius: 50px;
+    background: #565891;
+    height: 1px;
+    width: 100%;
+}
+
+.participants-title{
+    color: #FFF !important;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 17px; /* 121.429% */
+}
+
+.participants-desc{
+    color: #FFF !important;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 17px;
+}
+
+.participant-item{
+    border-top: 1px solid #565891;
+}
+
+.participant-name{
+    color: rgba(255, 255, 255, 0.40) !important;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 17px; /* 170% */
+}
+
+.participant-time-ago{
+    color: #4ED5D2 !important;
+    text-align: right;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: -0.18px;
+}
+
+
+.loyalty-benefits-grid{
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 12px;
+}
+
+.loyalty-benefit-item{
+  border-radius: 12px;
+  background-color: #312F69;
+}
+
+.benefit-icon-wrapper{
+  border-radius: 8px;
+  background: #2B2A59;
+  width: 48px;
+  height: 48px;
+}
+
+.loyalty-benefits-desc{
+  color: #D6D8E7 !important;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.loyalty-benefit-item:nth-child(1){
+  background-image: url('./assets/blueBg.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: left;
+}
+.loyalty-benefit-item:nth-child(2){
+  background-image: url('./assets/cyanBg.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: left;
+}
+.loyalty-benefit-item:nth-child(3){
+  background-image: url('./assets/purpleBg.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: left;
+}
+.loyalty-benefit-item:nth-child(4){
+  background-image: url('./assets/greenBg.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: left;
+}
+
+
+.loyalty-popup-title{
+  color: #F7F7FC !important;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 12px; /* 66.667% */
+  letter-spacing: -0.324px;
+}
+
+.loyalty-popup-desc{
+  color: #F7F7FC !important;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 17px; /* 141.667% */
+}
+
+.connect-wallet-item{
+  border-radius: 8px;
+  border: 2px solid #6A608C;
+  width: 100%;
+  cursor: pointer;
+}
+
+.loyalty-wallet-title{
+  color: #F7F7FC !important;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.loyalty-popup-span{
+  color: #D1D0D7 !important;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 16px; /* 114.286% */
+}
+.loyalty-popup-span-2{
+  color: #FCE202 !important;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 16px; /* 114.286% */
+}
+
+.loyalty-popup-input{
+  border-radius: 8px;
+  border: 1px solid #AAA5EB !important;
+  background: #272450 !important;
+}
+
+.loyalty-popup-input::placeholder{
+  color: #F7F7FC !important;
+font-size: 14px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+}
+
+.loyalty-popup-close{
+  color: #F7F7FC !important;
+text-align: center;
+font-size: 16px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+text-decoration-line: underline;
+cursor: pointer;
+}
+
+.loyalty-banner-content{
+  width: 50%;
+}
+
+@media screen and (max-width: 786px) {
+  .loyalty-banner-content{
+    width: 100%;
+  }
+
+  .loyalty-banner::before{
+    background-image: none !important;
+  }
+
+  .loyalty-benefits-grid{
+    grid-template-columns: repeat(1, 1fr);
+  }
+}

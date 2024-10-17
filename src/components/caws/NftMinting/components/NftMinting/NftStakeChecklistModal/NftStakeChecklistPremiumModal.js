@@ -292,7 +292,7 @@ const NftStakeCheckListPremiumModal = ({
     setColor("#F13227");
 
     await stake_contract.methods
-      .emergencyWithdraw(
+      .withdraw(
         checkUnstakebtn === true
           ? nftIds.length === selectNftIds.length
             ? nftIds
@@ -715,7 +715,7 @@ const NftStakeCheckListPremiumModal = ({
                     (!showApprove &&
                       nftItem.length > 0 &&
                       selectNftIds.length != 0 &&
-                      selectNftIds.length < 51)
+                      selectNftIds.length < 4)
                       ? "linear-gradient(90.74deg, #7770E0 0%, #554FD8 100%)"
                       : "#14142A",
                   pointerEvents:

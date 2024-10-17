@@ -8,6 +8,7 @@ import premiumTag from "../../assets/earnAssets/premiumTag.svg";
 
 import useWindowSize from "../../functions/useWindowSize";
 import CawsDetailsPremium from "../FARMINNG/cawsPremium";
+import LandDetailsPremium from "../FARMINNG/landPremium";
 
 import "../top-pools-card/top-pools.css";
 
@@ -18,35 +19,20 @@ const TopOtherPoolsNftListCard = ({
   tokenTicker,
   apr,
   lockTime,
-  tvl,
-  onShowDetailsClick,
-  theBnbPool,
-  onHideDetailsClick,
-  top_pick,
-  isNewPool,
-  cardType,
   chain,
-  topList,
+  coming_soon,
   cardIndex,
   chainId,
   handleConnection,
   handleSwitchNetwork,
   coinbase,
-  referrer,
   isConnected,
-  the_graph_result,
-  lp_id,
-  the_graph_resultavax,
-  the_graph_resultbsc,
   listType,
   display,
   expired,
-  expiredPools,
-  activePools,
-  totalTvl,
-  totalNftsLocked,
   clickedCawsPool,
   onCloseCard,
+  poolClickedType,
   isPremium,
 }) => {
   const ethCoins = ["ethereum", "wbtc", "usdc", "usdt"];
@@ -96,7 +82,6 @@ const TopOtherPoolsNftListCard = ({
     }
   }, [chain]);
 
- 
   const handleDetails = () => {
     if (showDetails === false && clickedCawsPool === false) {
       setShowDetails(true);
@@ -113,6 +98,15 @@ const TopOtherPoolsNftListCard = ({
     }
   };
 
+  useEffect(() => {
+    if (poolClickedType === "details-land-nft") {
+      setcardIndex(1);
+    } else if (poolClickedType === "details-nft") {
+      setcardIndex(0);
+    } else {
+      setcardIndex();
+    }
+  }, [poolClickedType]);
   return (
     <>
       <div
@@ -120,7 +114,10 @@ const TopOtherPoolsNftListCard = ({
           expired === true ? "poolscardwrapperexpired" : "list-pool-card-nft"
         } ${showDetails && "pools-card-hover"} `}
         onClick={() => handleDetails()}
-        style={{ display: display }}
+        style={{
+          display: display,
+          pointerEvents: coming_soon ? "none" : "auto",
+        }}
       >
         <img
           src={premiumIcon}
@@ -196,11 +193,19 @@ const TopOtherPoolsNftListCard = ({
                       {lockTime}
                     </h5>
                   </td>
-                  <td className="earnother-td col-2">
-                    <h6 className="details-text2 w-75 gap-1 d-flex align-items-center cursor-pointer justify-content-center m-0">
-                      Stake
-                    </h6>
-                  </td>
+                  {!coming_soon ? (
+                    <td className="earnother-td col-2">
+                      <h6 className="details-text2 w-75 gap-1 d-flex align-items-center cursor-pointer justify-content-center m-0">
+                        Stake
+                      </h6>
+                    </td>
+                  ) : (
+                    <td className="earnother-td col-2">
+                      <h6 className="details-text3 w-75 gap-1 d-flex align-items-center cursor-pointer justify-content-center m-0">
+                        Coming Soon
+                      </h6>
+                    </td>
+                  )}
                 </tr>
               ) : windowSize.width && windowSize.width <= 768 ? (
                 <>
@@ -259,13 +264,23 @@ const TopOtherPoolsNftListCard = ({
                       </div>
                     </td>
                   </tr>
-                  <tr className="d-flex w-100 align-items-center justify-content-around">
-                    <td className="earnother-td w-100">
-                      <h6 className="details-text2 gap-1 d-flex align-items-center cursor-pointer justify-content-center m-0 w-100">
-                        Stake
-                      </h6>
-                    </td>
-                  </tr>
+                  {!coming_soon ? (
+                    <tr className="d-flex w-100 align-items-center justify-content-around">
+                      <td className="earnother-td w-100">
+                        <h6 className="details-text2 gap-1 d-flex align-items-center cursor-pointer justify-content-center m-0 w-100">
+                          Stake
+                        </h6>
+                      </td>
+                    </tr>
+                  ) : (
+                    <tr className="d-flex w-100 align-items-center justify-content-around">
+                      <td className="earnother-td w-100">
+                        <h6 className="details-text3 gap-1 d-flex align-items-center cursor-pointer justify-content-center m-0 w-100">
+                          Coming Soon
+                        </h6>
+                      </td>
+                    </tr>
+                  )}
                 </>
               ) : (
                 <></>
@@ -274,19 +289,38 @@ const TopOtherPoolsNftListCard = ({
           </table>
         </div>
       </div>
-      {(showDetails || clickedCawsPool) && expired === false && (
-        <CawsDetailsPremium
-          coinbase={coinbase}
-          isConnected={isConnected}
-          listType={listType}
-          chainId={chainId}
-          handleSwitchNetwork={handleSwitchNetwork}
-          handleConnection={handleConnection}
-          expired={false}
-          apr={25}
-          isPremium={isPremium}
-        />
-      )}
+      {(showDetails || clickedCawsPool || poolClickedType === "details-nft") &&
+        expired === false &&
+        cardIndex === 0 && cardIndexDyp ===0 && (
+          <CawsDetailsPremium
+            coinbase={coinbase}
+            isConnected={isConnected}
+            listType={listType}
+            chainId={chainId}
+            handleSwitchNetwork={handleSwitchNetwork}
+            handleConnection={handleConnection}
+            expired={false}
+            apr={25}
+            isPremium={isPremium}
+          />
+        )}
+      {(showDetails ||
+        clickedCawsPool ||
+        poolClickedType === "details-land-nft") &&
+        expired === false &&
+        cardIndex === 1 && cardIndexDyp ===1 && (
+          <LandDetailsPremium
+            coinbase={coinbase}
+            isConnected={isConnected}
+            listType={listType}
+            chainId={chainId}
+            handleSwitchNetwork={handleSwitchNetwork}
+            handleConnection={handleConnection}
+            expired={false}
+            apr={25}
+            isPremium={isPremium}
+          />
+        )}
     </>
   );
 };

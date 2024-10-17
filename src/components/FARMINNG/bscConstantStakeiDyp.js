@@ -564,16 +564,15 @@ const StakeBscIDyp = ({
   };
 
   const getApproxReturn = (depositAmount, days) => {
-    let APY = getAPY() - fee_s;
-    const expirationDate = new Date("2024-07-18 23:11:00 GMT+02:00");
-    const expirationDate2 = new Date("2025-07-22 23:11:00 GMT+02:00");
+    let APY = apr - fee_s;
+    const expirationDate = new Date("2024-07-18T23:11:00.000+02:00");
+    const expirationDate2 = new Date("2025-07-22T23:11:00.000+02:00");
 
     const currentDate = new Date();
     const finalExpDate = expired === true ? expirationDate : expirationDate2
     const timeDifference = finalExpDate - currentDate;
     const millisecondsInADay = 1000 * 60 * 60 * 24;
     const daysUntilExpiration = Math.floor(timeDifference / millisecondsInADay);
-
     return ((depositAmount * APY) / 100 / 365) * (expired === true ? 60 : daysUntilExpiration);
   };
 

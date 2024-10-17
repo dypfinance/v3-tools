@@ -1,24 +1,32 @@
 import React from "react";
 import Web3 from "web3";
 import getFormattedNumber from "../../functions/get-formatted-number";
-import { NavLink } from "react-router-dom";
-import Error from "../../assets/error.svg";
+// import { NavLink } from "react-router-dom";
+// import Error from "../../assets/error.svg";
 import Placeholder from "../../assets/person.svg";
 import "./account.css";
-import NftCawCard from "../caws/NftMinting/components/General/NftCawCard/NftCawCard";
-import TierLevels from "../launchpad/tierlevels/TierLevels";
+// import NftCawCard from "../caws/NftMinting/components/General/NftCawCard/NftCawCard";
+// import TierLevels from "../launchpad/tierlevels/TierLevels";
 import coinStackIcon from "../launchpad/assets/coinStackIcon.svg";
 import axios from "axios";
-import openNameChange from "./assets/openNameChange.svg";
-import { ClickAwayListener, Tooltip } from "@material-ui/core";
-import { shortAddress } from "../../functions/shortAddress";
-import TopPoolsCard from "../top-pools-card/TopPoolsCard";
-import useWindowSize from "../../functions/useWindowSize";
+// import openNameChange from "./assets/openNameChange.svg";
+// import { ClickAwayListener, Tooltip } from "@material-ui/core";
+// import { shortAddress } from "../../functions/shortAddress";
+// import TopPoolsCard from "../top-pools-card/TopPoolsCard";
+// import useWindowSize from "../../functions/useWindowSize";
 import launchpadIndicator from "../launchpad/assets/launchpadIndicator.svg";
 import greenCheck from "./assets/greenCheck.svg";
-import premiumDypTag from "./assets/premiumDypTag.png";
-import premiumDypBanner from "./assets/premiumDypBanner2.png";
-import KeyFeaturesCard from "../launchpad/launchpadhero/KeyFeaturesCard";
+import metaverseIcon from "./assets/metaverseIcon.svg";
+import dappsIcon from "./assets/dappsIcon.svg";
+
+// import premiumDypTag from "./assets/premiumDypTag.png";
+// import premiumDypBanner from "./assets/premiumDypBanner2.png";
+// import KeyFeaturesCard from "../launchpad/launchpadhero/KeyFeaturesCard";
+import conflux from "./assets/conflux.svg";
+import baseLogo from "./assets/baseLogo.svg";
+import skaleIcon from "./assets/skaleIcon.svg";
+import premiumIcon from "./assets/premiumIcon.svg";
+import { handleSwitchNetworkhook } from "../../functions/hooks";
 
 const { BigNumber } = window;
 
@@ -33,7 +41,7 @@ export default class Subscription extends React.Component {
       )[0],
       tokenBalance: 0,
       price: "",
-      formattedPrice: 0.0,
+      formattedPrice: "0.0",
       favorites: [],
       favoritesETH: [],
       selectedFile: null,
@@ -46,7 +54,7 @@ export default class Subscription extends React.Component {
       loadspinnerRemove: false,
       showSavebtn: false,
       showRemovebtn: false,
-      subscribe_now: false,
+      subscribe_now: true,
       wethAddress: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
       wavaxAddress: "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7",
       wbnbAddress: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
@@ -57,348 +65,200 @@ export default class Subscription extends React.Component {
       triggerText: "See more V",
       isApproved: false,
       approveStatus: "initial",
-
-      myNFTs: [],
-      myStakess: [],
+      chainDropdown: {
+        name: "Ethereum",
+        symbol: "eth",
+      },
       viewall: false,
-      username: "",
-      userNameInput: "",
       showInput: false,
       openTooltip: false,
-      dypBalance: "0.0",
-      userPools: [],
-      ethStake: [],
-      bnbStake: [],
-      avaxStake: [],
-      ethFarm: [],
-      bscFarm: [],
-      avaxFarm: [],
       dropdownTitle: "",
       dropdownIcon: "",
     };
   }
 
-  fetchUserPools = async () => {
-    if (this.props.coinbase && this.props.coinbase.includes("0x")) {
-      const result = await axios
-        .get(`https://api.dyp.finance/api/user_pools/${this.props.coinbase}`)
-        .then((data) => {
-          return data.data.PoolsUserIn;
-        });
-      this.setState({ userPools: result });
-      // console.log(result)
-    }
-  };
-
-  fetchEthStaking = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_eth`)
-      .then((res) => {
-        const dypIdyp = res.data.stakingInfoDYPEth.concat(
-          res.data.stakingInfoiDYPEth
-        );
-
-        const expiredEth = dypIdyp.filter((item) => {
-          return item.expired !== "No";
-        });
-        const activeEth = dypIdyp.filter((item) => {
-          return item.expired !== "Yes";
-        });
-
-        const sortedExpired = expiredEth.sort(function (a, b) {
-          return b.tvl_usd - a.tvl_usd;
-        });
-        const allEthPools = [...activeEth, ...sortedExpired];
-        this.setState({ ethStake: allEthPools });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  fetchBnbStaking = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_bnb`)
-      .then((res) => {
-        const dypIdypBnb = res.data.stakingInfoDYPBnb.concat(
-          res.data.stakingInfoiDYPBnb
-        );
-
-        const expiredBnb = dypIdypBnb.filter((item) => {
-          return item.expired !== "No";
-        });
-        const activeBnb = dypIdypBnb.filter((item) => {
-          return item.expired !== "Yes";
-        });
-        const sortedActive = activeBnb.sort(function (a, b) {
-          return b.tvl_usd - a.tvl_usd;
-        });
-        const sortedExpired = expiredBnb.sort(function (a, b) {
-          return b.tvl_usd - a.tvl_usd;
-        });
-
-        const allBnbPools = [...sortedActive, ...sortedExpired];
-        this.setState({ bnbStake: allBnbPools });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  fetchAvaxStaking = async () => {
-    await axios
-      .get(`https://api.dyp.finance/api/get_staking_info_avax`)
-      .then((res) => {
-        const dypIdypAvax = res.data.stakingInfoDYPAvax.concat(
-          res.data.stakingInfoiDYPAvax
-        );
-
-        const expiredAvax = dypIdypAvax.filter((item) => {
-          return item.expired !== "No";
-        });
-
-        const activeAvax = dypIdypAvax.filter((item) => {
-          return item.expired !== "Yes";
-        });
-
-        const sortedActive = activeAvax.sort(function (a, b) {
-          return b.tvl_usd - a.tvl_usd;
-        });
-        const sortedExpired = expiredAvax.sort(function (a, b) {
-          return b.tvl_usd - a.tvl_usd;
-        });
-
-        const avaxAllPools = [...sortedActive, ...sortedExpired];
-        this.setState({ avaxStake: avaxAllPools });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  fetchEthFarming = async () => {
-    await axios
-      .get("https://api.dyp.finance/api/the_graph_eth_v2")
-      .then((res) => {
-        let temparray = Object.entries(res.data.the_graph_eth_v2.lp_data);
-        let farming = [];
-        temparray.map((item) => {
-          farming.push(item[1]);
-        });
-
-        const expiredFarmingEth = farming.filter((item) => {
-          return item.expired !== "No";
-        });
-        const activeFarmingEth = farming.filter((item) => {
-          return item.expired !== "Yes";
-        });
-
-        const sortedActive = activeFarmingEth.sort(function (a, b) {
-          return b.tvl_usd - a.tvl_usd;
-        });
-        const sortedExpired = expiredFarmingEth.sort(function (a, b) {
-          return b.tvl_usd - a.tvl_usd;
-        });
-
-        const ethAllPools = [...sortedActive, ...sortedExpired];
-        this.setState({ ethFarm: ethAllPools });
-      })
-      .catch((err) => console.error(err));
-  };
-
-  fetchBscFarming = async () => {
-    await axios
-      .get("https://api.dyp.finance/api/the_graph_bsc_v2")
-      .then((res) => {
-        let temparray = Object.entries(res.data.the_graph_bsc_v2.lp_data);
-        let farming = [];
-        temparray.map((item) => {
-          farming.push(item[1]);
-        });
-        const expiredFarmingBsc = farming.filter((item) => {
-          return item.expired !== "No";
-        });
-        const activeFarmingBsc = farming.filter((item) => {
-          return item.expired !== "Yes";
-        });
-
-        const sortedActive = activeFarmingBsc.sort(function (a, b) {
-          return b.tvl_usd - a.tvl_usd;
-        });
-        const sortedExpired = expiredFarmingBsc.sort(function (a, b) {
-          return b.tvl_usd - a.tvl_usd;
-        });
-
-        const bnbAllpools = [...sortedActive, ...sortedExpired];
-        this.setState({ bscFarm: bnbAllpools });
-      })
-      .catch((err) => console.error(err));
-  };
-
-  fetchAvaxFarming = async () => {
-    await axios
-      .get("https://api.dyp.finance/api/the_graph_avax_v2")
-      .then((res) => {
-        let temparray = Object.entries(res.data.the_graph_avax_v2.lp_data);
-        let farming = [];
-        temparray.map((item) => {
-          farming.push(item[1]);
-        });
-        const expiredFarmingAvax = farming.filter((item) => {
-          return item.expired !== "No";
-        });
-        const activeFarmingAvax = farming.filter((item) => {
-          return item.expired !== "Yes";
-        });
-
-        const sortedActive = activeFarmingAvax.sort(function (a, b) {
-          return b.tvl_usd - a.tvl_usd;
-        });
-        const sortedExpired = expiredFarmingAvax.sort(function (a, b) {
-          return b.tvl_usd - a.tvl_usd;
-        });
-
-        const avaxAllPools = [...sortedActive, ...sortedExpired];
-      })
-      .catch((err) => console.error(err));
-  };
-
-  fetchUsername = async () => {
-    if (this.props.coinbase && this.props.coinbase.includes("0x")) {
-      await axios
-        .get(
-          `https://api-image.dyp.finance/api/v1/username/${this.props.coinbase}`
-        )
-        .then((res) => {
-          if (res.data?.username) {
-            this.setState({ username: res.data?.username });
-          } else {
-            this.setState({ username: "Dypian" });
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  };
-
-  postUsername = async (userInput) => {
-    const usernameData = {
-      username: userInput,
-    };
-    if (this.props.coinbase && this.props.coinbase.includes("0x")) {
-      await axios
-        .post(
-          `https://api-image.dyp.finance/api/v1/username/${this.props.coinbase}`,
-          usernameData
-        )
-        .then((res) => {
-          this.setState({ username: res.data?.username });
-          this.fetchUsername();
-          this.setState({ userNameInput: "", showInput: false });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  };
-
-  getDypBalance = async () => {
-    const web3eth = window.infuraWeb3;
-    const web3avax = window.avaxWeb3;
-    const web3bsc = window.bscWeb3;
-    const tokenAddress = "0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17";
-    const walletAddress = this.props.coinbase;
-    const TokenABI = window.ERC20_ABI;
-    if (walletAddress !== null && walletAddress !== undefined) {
-      const contract1 = new web3eth.eth.Contract(TokenABI, tokenAddress);
-      const contract2 = new web3avax.eth.Contract(TokenABI, tokenAddress);
-      const contract3 = new web3bsc.eth.Contract(TokenABI, tokenAddress);
-
-      const baleth = await contract1.methods
-        .balanceOf(walletAddress)
-        .call()
-        .then((data) => {
-          return web3eth.utils.fromWei(data, "ether");
-        });
-
-      const balavax = await contract2.methods
-        .balanceOf(walletAddress)
-        .call()
-        .then((data) => {
-          return web3avax.utils.fromWei(data, "ether");
-        });
-
-      const balbnb = await contract3.methods
-        .balanceOf(walletAddress)
-        .call()
-        .then((data) => {
-          return web3bsc.utils.fromWei(data, "ether");
-        });
-
-      if (this.props.networkId === 43114) {
-        this.setState({ dypBalance: balavax });
-      } else if (this.props.networkId === 1) {
-        this.setState({ dypBalance: baleth });
-      } else if (this.props.networkId === 56) {
-        this.setState({ dypBalance: balbnb });
-      } else this.setState({ dypBalance: "0.0" });
-    }
-  };
+ 
 
   componentDidUpdate(prevProps) {
-    if (this.props.isPremium) {
-      window.location.href = "https://app.dypius.com/account";
-    }
+    // if (this.props.isPremium) {
+    //   window.location.href = "https://app.dypius.com/account";
+    // }
 
     // Typical usage (don't forget to compare props):
-    if (this.props.coinbase !== prevProps.coinbase) {
-      this.fetchUserPools();
-      this.getDypBalance();
-      this.fetchAvatar();
-      this.fetchUsername();
-      this.fetchUserPools();
-      this.fetchAvaxFarming();
-      this.fetchAvaxStaking();
-      this.fetchBnbStaking();
-      this.fetchBscFarming();
-      this.fetchEthFarming();
-      this.fetchEthStaking();
+    const chainDropdowns = [
+      {
+        name: "Ethereum",
+        symbol: "eth",
+      },
+      {
+        name: "BNB Chain",
+        symbol: "bnb",
+      },
 
-      if (this.props.networkId === 1) {
-        this.myNft().then();
-        this.myStakes().then();
-      }
-    }
-
+      {
+        name: "Avalanche",
+        symbol: "wavax",
+      },
+      {
+        name: "Conflux",
+        symbol: "conflux",
+      },
+      {
+        name: "Base",
+        symbol: "base",
+      },
+      {
+        name: "SKALE",
+        symbol: "skale",
+      },
+ 
+    ];
     if (this.props.networkId !== prevProps.networkId) {
-      this.setState({ subscribe_now: false });
-      this.getDypBalance();
-
+      // this.setState({ subscribe_now: false });
       if (this.props.networkId === 43114) {
+        this.setState({
+          dropdownIcon: "wavax",
+          dropdownTitle: "WAVAX",
+        });
         this.handleSubscriptionTokenChange(this.state.wavaxAddress);
       } else if (this.props.networkId === 1) {
         this.handleSubscriptionTokenChange(this.state.wethAddress);
-        this.myNft().then();
-        this.myStakes().then();
+        this.setState({
+          dropdownIcon: "weth",
+          dropdownTitle: "WETH",
+        });
+        this.setState({ chainDropdown: chainDropdowns[0]});
       } else if (this.props.networkId === 56) {
         this.handleSubscriptionTokenChange(this.state.wbnbAddress);
+        this.setState({
+          dropdownIcon: "wbnb",
+          dropdownTitle: "WBNB",
+        });
+        this.setState({ chainDropdown: chainDropdowns[1]});
       } else if (this.props.networkId === 1030) {
         this.handleSubscriptionTokenChange(this.state.wcfxAddress);
+
+        this.setState({
+          dropdownIcon: "wcfx",
+          dropdownTitle: "WCFX",
+        });
+        this.setState({ chainDropdown: chainDropdowns[3]});
+
       } else if (this.props.networkId === 8453) {
         this.handleSubscriptionTokenChange(this.state.wbaseAddress);
+        this.setState({
+          dropdownIcon: "weth",
+          dropdownTitle: "WETH",
+        });
+        this.setState({ chainDropdown: chainDropdowns[4]});
+
       } else if (this.props.networkId === 1482601649) {
         this.handleSubscriptionTokenChange(this.state.wskaleaddress);
+        this.setState({
+          dropdownIcon: "usdc",
+          dropdownTitle: "USDC",
+        });
+        this.setState({ chainDropdown: chainDropdowns[5]});
+
+      } else {
+        this.setState({
+          dropdownIcon: "weth",
+          dropdownTitle: "WETH",
+        });
+        this.setState({ chainDropdown: chainDropdowns[0]});
+
       }
     }
   }
 
   componentDidMount() {
-    if (this.props.isPremium) {
-      window.location.href = "https://app.dypius.com/account";
-    }
-    this.getDypBalance();
+    // if (this.props.isPremium) {
+    //   window.location.href = "https://app.dypius.com/account";
+    // }
+    const chainDropdowns = [
+      {
+        name: "Ethereum",
+        symbol: "eth",
+      },
+      {
+        name: "BNB Chain",
+        symbol: "bnb",
+      },
 
+      {
+        name: "Avalanche",
+        symbol: "wavax",
+      },
+      {
+        name: "Conflux",
+        symbol: "conflux",
+      },
+      {
+        name: "Base",
+        symbol: "base",
+      },
+      {
+        name: "SKALE",
+        symbol: "skale",
+      },
+ 
+    ];
+
+    if (this.props.networkId === 43114) {
+      this.setState({
+        dropdownIcon: "wavax",
+        dropdownTitle: "WAVAX",
+      }); 
+      this.setState({ chainDropdown: chainDropdowns[2]});
+
+      this.handleSubscriptionTokenChange(this.state.wavaxAddress);
+    } else if (this.props.networkId === 1) {
+      this.handleSubscriptionTokenChange(this.state.wethAddress);
+      this.setState({
+        dropdownIcon: "weth",
+        dropdownTitle: "WETH",
+      });
+      this.setState({ chainDropdown: chainDropdowns[0]});
+    } else if (this.props.networkId === 56) {
+      this.handleSubscriptionTokenChange(this.state.wbnbAddress);
+      this.setState({
+        dropdownIcon: "wbnb",
+        dropdownTitle: "WBNB",
+      });
+      this.setState({ chainDropdown: chainDropdowns[1]});
+    } else if (this.props.networkId === 1030) {
+      this.handleSubscriptionTokenChange(this.state.wcfxAddress);
+
+      this.setState({
+        dropdownIcon: "wcfx",
+        dropdownTitle: "WCFX",
+      });
+      this.setState({ chainDropdown: chainDropdowns[3]});
+
+    } else if (this.props.networkId === 8453) {
+      this.handleSubscriptionTokenChange(this.state.wbaseAddress);
+      this.setState({
+        dropdownIcon: "weth",
+        dropdownTitle: "WETH",
+      });
+      this.setState({ chainDropdown: chainDropdowns[4]});
+
+    } else if (this.props.networkId === 1482601649) {
+      this.handleSubscriptionTokenChange(this.state.wskaleaddress);
+      this.setState({
+        dropdownIcon: "usdc",
+        dropdownTitle: "USDC",
+      });
+      this.setState({ chainDropdown: chainDropdowns[5]});
+
+    } else {
+      this.setState({
+        dropdownIcon: "weth",
+        dropdownTitle: "WETH",
+      });
+      this.setState({ chainDropdown: chainDropdowns[0]});
+
+    }
     this.setState({ coinbase: this.props.coinbase });
     window.scrollTo(0, 0);
   }
@@ -445,12 +305,15 @@ export default class Subscription extends React.Component {
       price / 10 ** tokenDecimals,
       tokenDecimals
     );
-    let tokenBalance = await window.getTokenHolderBalance(
+    if(this.props.coinbase && this.props.isConnected === true) {
+     let tokenBalance = await window.getTokenHolderBalance(
       token,
       this.props.coinbase
     );
-    console.log(tokenBalance, "tokenBalance");
-    this.setState({ price, formattedPrice, tokenBalance });
+    this.setState({tokenBalance }); 
+    }
+ 
+    this.setState({ price, formattedPrice});
   };
 
   handleApprove = async (e) => {
@@ -511,203 +374,6 @@ export default class Subscription extends React.Component {
       });
   };
 
-  myNft = async () => {
-    if (this.props.coinbase !== null && this.props.coinbase !== undefined) {
-      let myNft = await window.myNftListContract(this.props.coinbase);
-
-      let nfts = myNft.map((nft) => window.getNft(nft));
-
-      nfts = await Promise.all(nfts);
-
-      nfts.reverse();
-      this.setState({ myNFTs: nfts });
-    }
-  };
-
-  getStakesIds = async () => {
-    const address = this.props.coinbase;
-    if (address !== null && this.props.coinbase !== undefined) {
-      let staking_contract = await window.getContractNFT("NFTSTAKING");
-      let stakenft = [];
-      let myStakes = await staking_contract.methods
-        .depositsOf(address)
-        .call()
-        .then((result) => {
-          for (let i = 0; i < result.length; i++)
-            stakenft.push(parseInt(result[i]));
-          return stakenft;
-        });
-
-      return myStakes;
-    }
-  };
-
-  myStakes = async () => {
-    let myStakes = await this.getStakesIds();
-    let stakes = myStakes.map((stake) => window.getNft(stake));
-    stakes = await Promise.all(stakes);
-    stakes.reverse();
-    this.setState({ myStakess: stakes });
-  };
-
-  handleCheckIfAlreadyApproved = async (token) => {
-    if (this.props.coinbase && this.props.coinbase.includes("0x")) {
-      const web3eth = new Web3(window.config.infura_endpoint);
-      const bscWeb3 = new Web3(window.config.bsc_endpoint);
-      const avaxWeb3 = new Web3(window.config.avax_endpoint);
-      const cfxWeb3 = new Web3(window.config.conflux_endpoint);
-      const baseWeb3 = new Web3(window.config.base_endpoint);
-      const skaleWeb3 = new Web3(window.config.skale_endpoint);
-
-      const ethsubscribeAddress = window.config.subscription_neweth_address;
-      const avaxsubscribeAddress = window.config.subscription_newavax_address;
-      const bnbsubscribeAddress = window.config.subscription_newbnb_address;
-      const confluxsubscribeAddress = window.config.subscription_cfx_address;
-      const basesubscribeAddress = window.config.subscription_base_address;
-      const skalesubscribeAddress = window.config.subscription_skale_address;
-
-      const subscribeToken = token;
-      const subscribeTokencontract = new web3eth.eth.Contract(
-        window.ERC20_ABI,
-        subscribeToken
-      );
-
-      const subscribeTokencontractbnb = new bscWeb3.eth.Contract(
-        window.ERC20_ABI,
-        subscribeToken
-      );
-
-      const subscribeTokencontractavax = new avaxWeb3.eth.Contract(
-        window.ERC20_ABI,
-        subscribeToken
-      );
-
-      const subscribeTokencontractcfx = new cfxWeb3.eth.Contract(
-        window.ERC20_ABI,
-        subscribeToken
-      );
-
-      const subscribeTokencontractskale = new skaleWeb3.eth.Contract(
-        window.ERC20_ABI,
-        subscribeToken
-      );
-
-      const subscribeTokencontractbase = new baseWeb3.eth.Contract(
-        window.ERC20_ABI,
-        subscribeToken
-      );
-
-      let tokenprice =
-        this.props.networkId === 1
-          ? await window.getEstimatedTokenSubscriptionAmountETH(token)
-          : this.props.networkId === 56
-          ? await window.getEstimatedTokenSubscriptionAmountBNB(token)
-          : this.props.networkId === 1030
-          ? await window.getEstimatedTokenSubscriptionAmountCFX(token)
-          : this.props.networkId === 43114
-          ? await window.getEstimatedTokenSubscriptionAmount(token)
-          : this.props.networkId === 8453
-          ? await window.getEstimatedTokenSubscriptionAmountBase(token)
-          : this.props.networkId === 1482601649
-          ? await window.getEstimatedTokenSubscriptionAmountSkale(token)
-          : await window.getEstimatedTokenSubscriptionAmount(token);
-
-      if (this.props.coinbase && this.props.coinbase.includes("0x")) {
-        if (this.props.networkId === 1) {
-          const result = await subscribeTokencontract.methods
-            .allowance(this.props.coinbase, ethsubscribeAddress)
-            .call()
-            .then();
-
-          if (result != 0 && Number(result) >= Number(tokenprice)) {
-            this.setState({ lockActive: true });
-            this.setState({ loadspinner: false });
-            this.setState({ isApproved: true });
-          } else if (result == 0 || Number(result) < Number(tokenprice)) {
-            this.setState({ lockActive: false });
-            this.setState({ loadspinner: false });
-            this.setState({ isApproved: false });
-          }
-        } else if (this.props.networkId === 56) {
-          const result = await subscribeTokencontractbnb.methods
-            .allowance(this.props.coinbase, bnbsubscribeAddress)
-            .call()
-            .then();
-
-          if (result != 0 && Number(result) >= Number(tokenprice)) {
-            this.setState({ lockActive: true });
-            this.setState({ loadspinner: false });
-            this.setState({ isApproved: true });
-          } else if (result == 0 || Number(result) < Number(tokenprice)) {
-            this.setState({ lockActive: false });
-            this.setState({ loadspinner: false });
-            this.setState({ isApproved: false });
-          }
-        } else if (this.props.networkId === 1030) {
-          const result = await subscribeTokencontractcfx.methods
-            .allowance(this.props.coinbase, confluxsubscribeAddress)
-            .call()
-            .then();
-
-          if (result != 0 && Number(result) >= Number(tokenprice)) {
-            this.setState({ lockActive: true });
-            this.setState({ loadspinner: false });
-            this.setState({ isApproved: true });
-          } else if (result == 0 || Number(result) < Number(tokenprice)) {
-            this.setState({ lockActive: false });
-            this.setState({ loadspinner: false });
-            this.setState({ isApproved: false });
-          }
-        } else if (this.props.networkId === 8453) {
-          const result = await subscribeTokencontractbase.methods
-            .allowance(this.props.coinbase, basesubscribeAddress)
-            .call()
-            .then();
-
-          if (result != 0 && Number(result) >= Number(tokenprice)) {
-            this.setState({ lockActive: true });
-            this.setState({ loadspinner: false });
-            this.setState({ isApproved: true });
-          } else if (result == 0 || Number(result) < Number(tokenprice)) {
-            this.setState({ lockActive: false });
-            this.setState({ loadspinner: false });
-            this.setState({ isApproved: false });
-          }
-        } else if (this.props.networkId === 1482601649) {
-          const result = await subscribeTokencontractskale.methods
-            .allowance(this.props.coinbase, skalesubscribeAddress)
-            .call()
-            .then();
-
-          if (result != 0 && Number(result) >= Number(tokenprice)) {
-            this.setState({ lockActive: true });
-            this.setState({ loadspinner: false });
-            this.setState({ isApproved: true });
-          } else if (result == 0 || Number(result) < Number(tokenprice)) {
-            this.setState({ lockActive: false });
-            this.setState({ loadspinner: false });
-            this.setState({ isApproved: false });
-          }
-        } else {
-          const result = await subscribeTokencontractavax.methods
-            .allowance(this.props.coinbase, avaxsubscribeAddress)
-            .call()
-            .then();
-
-          if (result != 0 && Number(result) >= Number(tokenprice)) {
-            this.setState({ lockActive: true });
-            this.setState({ loadspinner: false });
-            this.setState({ isApproved: true });
-          } else if (result == 0 || Number(result) < Number(tokenprice)) {
-            this.setState({ lockActive: false });
-            this.setState({ loadspinner: false });
-            this.setState({ isApproved: false });
-          }
-        }
-      }
-    }
-  };
-
   handleUpdatePremiumUser = async () => {
     const wallet = await window.getCoinbase();
     await axios
@@ -749,7 +415,7 @@ export default class Subscription extends React.Component {
       .send({ from: await window.getCoinbase() })
       .then(() => {
         this.setState({ loadspinnerSub: false, approveStatus: "success" });
-        this.props.onSubscribe();
+        this.props.onSubscribe(this.props.coinbase);
         this.handleUpdatePremiumUser();
         window.location.href = "https://app.dypius.com/account";
       })
@@ -793,116 +459,60 @@ export default class Subscription extends React.Component {
       });
   };
 
-  onImageChange = (event) => {
-    const fileTypes = [
-      "image/apng",
-      "image/bmp",
-      "image/gif",
-      "image/jpeg",
-      "image/pjpeg",
-      "image/png",
-      "image/svg+xml",
-      "image/tiff",
-      "image/webp",
-      "image/x-icon",
-    ];
+  handleCheckIfAlreadyApproved = async () => {
+    const web3eth = new Web3(
+      "https://mainnet.infura.io/v3/94608dc6ddba490697ec4f9b723b586e"
+    );
 
-    this.setState({ showSavebtn: true, showRemovebtn: true });
+    const ethsubscribeAddress = window.config.subscriptioneth_address;
+    const avaxsubscribeAddress = window.config.subscription_address;
+    const subscribeToken = this.state.selectedSubscriptionToken;
+    const subscribeTokencontract = new web3eth.eth.Contract(
+      window.ERC20_ABI,
+      subscribeToken
+    );
 
-    if (fileTypes.includes(event.target.files[0].type)) {
-      if (event.target.files && event.target.files[0]) {
-        this.setState({ selectedFile: event.target.files[0] });
-        let reader = new FileReader();
-        reader.onload = (e) => {
-          this.setState({ image: e.target.result });
-          this.handleSubmission();
-        };
-        reader.readAsDataURL(event.target.files[0]);
+    if (this.props.coinbase) {
+      if (this.props.networkId === 1) {
+        const result = await subscribeTokencontract.methods
+          .allowance(this.props.coinbase, ethsubscribeAddress)
+          .call()
+          .then()
+          .catch((e) => {
+            console.error(e);
+            return 0;
+          });
+
+        if (result != 0) {
+          this.setState({ lockActive: true });
+          this.setState({ loadspinner: false });
+          this.setState({ isApproved: true });
+        } else if (result == 0) {
+          this.setState({ lockActive: false });
+          this.setState({ loadspinner: false });
+          this.setState({ isApproved: false });
+        }
+      } else {
+        const result = await subscribeTokencontract.methods
+          .allowance(this.props.coinbase, avaxsubscribeAddress)
+          .call()
+          .then()
+          .catch((e) => {
+            console.error(e);
+            return 0;
+          });
+
+        if (result != 0) {
+          this.setState({ lockActive: true });
+          this.setState({ loadspinner: false });
+          this.setState({ isApproved: true });
+        } else if (result == 0) {
+          this.setState({ lockActive: false });
+          this.setState({ loadspinner: false });
+          this.setState({ isApproved: false });
+        }
       }
-    } else {
-      window.alertify.error("Image type not supported");
     }
-  };
-
-  handleSubmission = async () => {
-    const formData = new FormData();
-    formData.append("image", this.state.selectedFile);
-    this.setState({ loadspinnerSave: true });
-    if (this.props.coinbase && this.props.coinbase.includes("0x")) {
-      await window.connectWallet(undefined, false);
-    }
-    let signature;
-
-    try {
-      signature = await window.sign(
-        window.config.metamask_message2,
-        await window.getCoinbase()
-      );
-    } catch (e) {
-      console.error(e);
-      console.log(e);
-      this.setState({ loadspinnerSave: false });
-
-      return;
-    }
-
-    if (!signature) {
-      window.alertify("No Signature provided");
-      this.setState({ loadspinnerSave: false });
-
-      return;
-    }
-
-    formData.append("signature", signature);
-
-    await fetch("https://api-image.dyp.finance/api/v1/upload/avatar", {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        console.log("Success:", result);
-        setTimeout(() => {
-          window.location.reload();
-        }, 3000);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-
-    window.alertify.message("Avatar has been uploaded successfully!");
-    this.setState({ loadspinnerSave: false, showSavebtn: false });
-    // this.fetchAvatar().then();
-  };
-
-  fetchAvatar = async () => {
-    const response = await fetch(
-      `https://api-image.dyp.finance/api/v1/avatar/${this.props.coinbase}`
-    )
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        this.setState({ image: data.status === 0 ? Placeholder : data.avatar });
-      })
-      .catch(console.error);
-
-    return response;
-  };
-
-  deleteAvatar = async () => {
-    const response = await fetch(
-      `https://api-image.dyp.finance/api/v1/avatar/${this.props.coinbase}/delete`
-    )
-      .then((res) => {
-        return res.json();
-      })
-      .then(() => {
-        this.setState({ image: Placeholder });
-      })
-      .catch(console.error);
-
-    return response;
   };
 
   GetSubscriptionForm = () => {
@@ -931,7 +541,6 @@ export default class Subscription extends React.Component {
             this.state.selectedSubscriptionToken
           ]?.decimals;
     // this.handleCheckIfAlreadyApproved()
-    let mycaws = [...this.state.myNFTs, ...this.state.myStakess];
 
     const focusInput = (input) => {
       document.getElementById(input).focus();
@@ -949,6 +558,39 @@ export default class Subscription extends React.Component {
       "dApps access",
     ];
 
+    const chainDropdowns = [
+      {
+        name: "Ethereum",
+        symbol: "eth",
+      },
+      {
+        name: "BNB Chain",
+        symbol: "bnb",
+      },
+
+      {
+        name: "Avalanche",
+        symbol: "wavax",
+      },
+      {
+        name: "Conflux",
+        symbol: "conflux",
+      },
+      {
+        name: "Base",
+        symbol: "base",
+      },
+      {
+        name: "SKALE",
+        symbol: "skale",
+      },
+
+      // {
+      //   name: "SEI",
+      //   symbol: "sei",
+      // },
+    ];
+
     const paidPlanItems = [
       "All free features included",
       // "Manual research info for projects",
@@ -960,11 +602,16 @@ export default class Subscription extends React.Component {
 
     const benefits = [
       "DYP Tools administrative dashboard",
-      " Exclusive access to World of Dypians metaverse platform",
       "Priority access to dedicated DeFi pools",
       "Voting capabilities in the News section",
       "Early access to upcoming features and updates",
-    ]; 
+    ];
+    const metaverseBenefits = [
+      "Exclusive access to World of Dypians",
+      "Access to Daily Bonus Event",
+      "Access every Treasure Hunt Event",
+      "Early access to upcoming features and updates",
+    ];
 
     const keyFeatures = [
       {
@@ -992,10 +639,72 @@ export default class Subscription extends React.Component {
       },
     ];
 
-    return this.props.appState.isPremium ? (
-      <></>
-    ) : (
-      <div style={{ minHeight: "65vh" }}>
+    const handleEthPool = async () => {
+      await handleSwitchNetworkhook("0x1")
+        .then(() => {
+          this.props.handleSwitchNetwork("1");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    };
+
+    const handleBnbPool = async () => {
+      await handleSwitchNetworkhook("0x38")
+        .then(() => {
+          this.props.handleSwitchNetwork("56");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    };
+
+    const handleBasePool = async () => {
+      await handleSwitchNetworkhook("0x2105")
+        .then(() => {
+          this.props.handleSwitchNetwork("8453");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    };
+
+    const handleAvaxPool = async () => {
+      await handleSwitchNetworkhook("0xa86a")
+        .then(() => {
+          this.props.handleSwitchNetwork("43114");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    };
+
+    const handleConfluxPool = async () => {
+      await handleSwitchNetworkhook("0x406")
+        .then(() => {
+          this.props.handleSwitchNetwork("1030");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    };
+
+    const handleSkalePool = async () => {
+      if (window.ethereum) {
+        await handleSwitchNetworkhook("0x585eb4b1")
+          .then(() => {
+            this.props.handleSwitchNetwork("1482601649 ");
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      } else {
+        window.alertify.error("No web3 detected. Please install Metamask!");
+      }
+    };
+
+    return (
+      <div>
         {/* <div className="row mt-5 gap-4 gap-lg-0">
         <div className="col-12 col-lg-6 position-relative d-flex justify-content-center">
           <div
@@ -1209,8 +918,8 @@ export default class Subscription extends React.Component {
           </div>
         </div>
       </div> */}
-        <div className="row mt-5">
-          <div className="d-flex flex-column">
+        <div className="">
+          {/* <div className="d-flex flex-column">
             <h6 className="plans-page-title">
               Upgrade to Premium Membership and Unlock Exclusive Benefits Today!
             </h6>
@@ -1218,9 +927,9 @@ export default class Subscription extends React.Component {
               The premium membership is designed to enhance your experience and
               provide you with outstanding value.
             </p>
-          </div>
+          </div> */}
           <div className="d-flex flex-column flex-lg-row align-items-center align-items-lg-end justify-content-center justify-content-lg-between all-plans-wrapper mt-4">
-            <div className="plans-benefits d-flex align-items-center p-3">
+            {/* <div className="plans-benefits d-flex align-items-center p-3">
               <ul className="d-flex flex-column gap-3">
                 {benefits.map((item, index) => (
                   <li key={index} className="d-flex align-items-center gap-2">
@@ -1233,8 +942,8 @@ export default class Subscription extends React.Component {
                   </li>
                 ))}
               </ul>
-            </div>
-            <div className="premium-subscribe-wrapper col-3 p-3">
+            </div> */}
+            {/* <div className="premium-subscribe-wrapper col-3 p-3">
               <div className="premium-gradient d-flex align-items-center justify-content-between p-3">
                 <div className="d-flex flex-column">
                   <span className="premium-span">Premium</span>
@@ -1249,9 +958,6 @@ export default class Subscription extends React.Component {
                 <span className="lifetime-subscription text-center">
                   Lifetime subscription
                 </span>
-                {/* <span className="lifetime-desc invisible">
-                  The subscription tokens will be used to buy DYP
-                </span> */}
               </div>
               <div className="d-flex justify-content-center mt-0 mt-lg-3">
                 <div
@@ -1332,17 +1038,17 @@ export default class Subscription extends React.Component {
                   Subscribe now
                 </div>
               </div>
-            </div>
-            <div className="premium-dyp-wrapper">
+            </div> */}
+            {/* <div className="premium-dyp-wrapper">
               <img
                 src={premiumDypBanner}
                 className="premium-dyp-banner"
                 alt=""
               />
-            </div>
+            </div> */}
             {/* <img src={premiumDyp} alt="premium dyp banner" className="premium-dyp-banner" /> */}
           </div>
-          <div className="features-wrapper w-100 d-flex align-items-center justify-content-between my-5 flex-column flex-lg-row gap-3 gap-lg-0">
+          {/* <div className="features-wrapper w-100 d-flex align-items-center justify-content-between my-5 flex-column flex-lg-row gap-3 gap-lg-0">
             {keyFeatures.map((item) => (
               <KeyFeaturesCard
                 icon={item.icon}
@@ -1350,7 +1056,7 @@ export default class Subscription extends React.Component {
                 content={item.content}
               />
             ))}
-          </div>
+          </div> */}
         </div>
 
         {this.state.subscribe_now === true ? (
@@ -1373,60 +1079,261 @@ export default class Subscription extends React.Component {
                   height={28}
                   width={28}
                   className="cursor-pointer"
-                  onClick={() => this.setState({ subscribe_now: false })}
+                  onClick={() => {
+                    this.setState({ subscribe_now: false });
+                    this.props.onClose();
+                  }}
                   alt="close subscription"
                 />
               </div>
+              <div className="premium-gold-bg d-flex flex-column flex-lg-row gap-3 gap-lg-0 align-items-center justify-content-between p-3 mt-4">
+                <div className="d-flex flex-column gap-2">
+                  <span className="lifetime-plan mb-0">Lifetime plan</span>
+                  <h6 className="plan-cost mb-0">$100</h6>
+                </div>
+                <div className="d-flex flex-column flex-lg-row align-items-center gap-3">
+                  <div className="premium-chains-wrapper">
+                    <div className="d-flex align-items-center gap-2">
+                      <img
+                        src={require(`./assets/ethIcon.svg`).default}
+                        style={{ width: 18, height: 18 }}
+                        alt=""
+                      />
+                      <span className="subscription-chain mb-0">Ethereum</span>
+                    </div>
+                    <div className="d-flex align-items-center gap-2">
+                      <img
+                        src={require(`./assets/wbnbIcon.svg`).default}
+                        style={{ width: 18, height: 18 }}
+                        alt=""
+                      />
+                      <span className="subscription-chain mb-0">BNB Chain</span>
+                    </div>
+
+                    <div className="d-flex align-items-center gap-2">
+                      <img
+                        src={require(`./assets/wavaxIcon.svg`).default}
+                        style={{ width: 18, height: 18 }}
+                        alt=""
+                      />
+                      <span className="subscription-chain mb-0">Avalanche</span>
+                    </div>
+                    <div className="d-flex align-items-center gap-2">
+                      <img
+                        src={baseLogo}
+                        alt=""
+                        style={{ width: 18, height: 18 }}
+                      />
+                      <span className="subscription-chain mb-0">Base</span>
+                    </div>
+                    <div className="d-flex align-items-center gap-2">
+                      <img
+                        src={conflux}
+                        alt=""
+                        style={{ width: 18, height: 18 }}
+                      />
+                      <span className="subscription-chain mb-0">Conflux</span>
+                    </div>
+                    <div className="d-flex align-items-center gap-2">
+                      <img
+                        src={skaleIcon}
+                        alt=""
+                        style={{ width: 18, height: 18 }}
+                      />
+                      <span className="subscription-chain mb-0">SKALE</span>
+                    </div>
+                  </div>
+                  <img src={premiumIcon} alt="" />
+                </div>
+              </div>
+              <div className="my-3">
+                <h6 className="popup-subtitle mb-0">Benefits</h6>
+              </div>
+              <div className="premium-benefits-wrapper d-flex flex-column flex-lg-row gap-3 gap-lg-0 align-items-center justify-content-between p-3">
+                <div className="d-flex flex-column gap-2">
+                  <div className="d-flex align-items-center gap-2">
+                    <img src={metaverseIcon} alt="" />
+                    <h6 className="premium-benefits-title mb-0">Metaverse</h6>
+                  </div>
+                  {metaverseBenefits.map((item, index) => (
+                    <div className="d-flex align-items-center gap-2">
+                      <img src={greenCheck} alt="" />
+                      <span className="premium-benefits-item mb-0">{item}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="d-flex flex-column gap-2">
+                  <div className="d-flex align-items-center gap-2">
+                    <img src={dappsIcon} alt="" />
+                    <h6 className="premium-benefits-title mb-0">Dapps</h6>
+                  </div>
+                  {benefits.map((item, index) => (
+                    <div className="d-flex align-items-center gap-2">
+                      <img src={greenCheck} alt="" />
+                      <span className="premium-benefits-item mb-0">{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
               <div className="d-flex mt-4 align-items-end justify-content-between flex-column-reverse flex-lg-row w-100">
-                <div className="d-flex flex-column gap-3 subscribe-input-container">
-                  <span className="token-amount-placeholder">
-                    Select Subscription Token
-                  </span>
-                  {/* <div
-                    className="input-container px-0"
-                    style={{ width: "100%" }}
-                  >
-                    <input
-                      type="number"
-                      disabled
-                      min={1}
-                      max={365}
-                      id="token_amount"
-                      name="token_amount"
-                      placeholder=" "
-                      className="text-input"
-                      value={this.state.formattedPrice}
-                      style={{ width: "100%" }}
-                    />
-                    <label
-                      htmlFor="token_amount"
-                      className="label"
-                      onClick={() => focusInput("token_amount")}
-                    >
-                      Subscription Token Amount
-                    </label>
-                  </div> */}
-                  <div class="dropdown position relative">
-                    <button
-                      class={`btn launchpad-dropdown d-flex justify-content-between align-items-center dropdown-toggle w-100`}
-                      type="button"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                    >
-                      <div
-                        className="d-flex align-items-center gap-2"
-                        style={{ color: "#fff" }}
+                <div className="d-flex flex-column gap-1 subscribe-input-container w-100">
+                  <div className="d-flex gap-1 align-items-center justify-content-start">
+                    <span className="my-premium-balance-text">
+                      Select Chain
+                    </span>
+                  </div>
+                  <div className=" d-flex align-items-center gap-3 justify-content-between">
+                    <div class="dropdown position relative">
+                      <button
+                        class={`btn launchpad-dropdown d-flex justify-content-between align-items-center dropdown-toggle`}
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
                       >
-                        <img
-                          src={require(`./assets/${this.state.dropdownIcon.toLowerCase()}Icon.svg`)}
-                          alt=""
-                        />
-                        {this.state.dropdownTitle}
-                      </div>
-                      <img src={launchpadIndicator} alt="" />
-                    </button>
-                    <ul class="dropdown-menu w-100">
-                      {/* <li className="dropdown-item launchpad-item d-flex align-items-center gap-2"
+                        <div
+                          className="d-flex align-items-center gap-2 me-2"
+                          style={{ color: "#fff" }}
+                        >
+                          <img
+                            src={require(`./assets/${this.state.chainDropdown.symbol}Icon.svg`)}
+                            alt=""
+                            style={{ width: 18, height: 18 }}
+                          />
+                          {this.state.chainDropdown.name}
+                        </div>
+                        <img src={launchpadIndicator} alt="" />
+                      </button>
+                      <ul class="dropdown-menu w-100">
+                        <li
+                          className="dropdown-item launchpad-item d-flex align-items-center gap-2"
+                          onClick={handleEthPool}
+                        >
+                          <img
+                            src={
+                              require(`./assets/ethIcon.svg`)
+                                .default
+                            }
+                            style={{ width: 18, height: 18 }}
+                            alt=""
+                          />
+                          Ethereum
+                        </li>
+
+                        <li
+                          className="dropdown-item launchpad-item d-flex align-items-center gap-2"
+                          onClick={handleBnbPool}
+                        >
+                          <img
+                            src={
+                              require(`./assets/wbnbIcon.svg`)
+                                .default
+                            }
+                            style={{ width: 18, height: 18 }}
+                            alt=""
+                          />
+                          BNB Chain
+                        </li>
+                        <li
+                          className="dropdown-item launchpad-item d-flex align-items-center gap-2"
+                          onClick={handleAvaxPool}
+                        >
+                          <img
+                            src={
+                              require(`./assets/wavaxIcon.svg`)
+                                .default
+                            }
+                            style={{ width: 18, height: 18 }}
+                            alt=""
+                          />
+                          Avalanche
+                        </li>
+                        <li
+                          className="dropdown-item launchpad-item d-flex align-items-center gap-2"
+                          onClick={handleBasePool}
+                        >
+                          <img
+                            src={baseLogo}
+                            alt=""
+                            style={{
+                              width: "18px",
+                              height: "18px",
+                            }}
+                          />
+                          Base Network
+                        </li>
+                        <li
+                          className="dropdown-item launchpad-item d-flex align-items-center gap-2"
+                          onClick={handleConfluxPool}
+                        >
+                          <img
+                            src={conflux}
+                            alt=""
+                            style={{
+                              width: "18px",
+                              height: "18px",
+                            }}
+                          />
+                          Conflux Network
+                        </li>
+                        <li
+                          className="dropdown-item launchpad-item d-flex align-items-center gap-2"
+                          onClick={handleSkalePool}
+                        >
+                          <img
+                            src={skaleIcon}
+                            alt=""
+                            style={{
+                              width: "18px",
+                              height: "18px",
+                            }}
+                          />
+                          Skale Network
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="d-flex flex-column gap-1 subscribe-input-container w-100">
+                  <div className="d-flex gap-1 align-items-center justify-content-lg-end">
+                    <span className="my-premium-balance-text">
+                      My balance:{" "}
+                      {getFormattedNumber(
+                        this.state.tokenBalance / 10 ** tokenDecimals,
+                        6
+                      )}{" "}
+                      {this.state.dropdownTitle}
+                    </span>
+                  </div>
+                  <div className="d-flex align-items-center gap-3 justify-content-between">
+                    <span className="token-amount-placeholder">
+                      Subscription price:
+                    </span>
+                    <div className="d-flex align-items-center gap-2">
+                      <div class="dropdown position relative">
+                        <button
+                          class={`btn launchpad-dropdown d-flex justify-content-between align-items-center dropdown-toggle`}
+                          type="button"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                        >
+                          <div
+                            className="d-flex align-items-center gap-2"
+                            style={{ color: "#fff" }}
+                          >
+                            {this.state.dropdownIcon !== "" && (
+                              <img
+                                src={require(`./assets/${this.state.dropdownIcon.toLowerCase()}Icon.svg`)}
+                                alt=""
+                                className="me-2"
+                              />
+                            )}
+                            {/* {this.state.dropdownTitle} */}
+                          </div>
+                          <img src={launchpadIndicator} alt="" />
+                        </button>
+                        <ul class="dropdown-menu w-100">
+                          {/* <li className="dropdown-item launchpad-item d-flex align-items-center gap-2"
                     onClick={() => {
                       this.setState({dropdownTitle: 'WETH', dropdownIcon: 'wethIcon.svg'})
                     }}
@@ -1459,171 +1366,166 @@ export default class Subscription extends React.Component {
                       />
                       USDC
                     </li> */}
-                      {Object.keys(
-                        this.props.networkId === 1
-                          ? window.config.subscriptioneth_tokens
-                          : this.props.networkId === 56
-                          ? window.config.subscriptionbnb_tokens
-                          : this.props.networkId === 1030
-                          ? window.config.subscriptioncfx_tokens
-                          : this.props.networkId === 8453
-                          ? window.config.subscriptionbase_tokens
-                          : this.props.networkId === 1482601649
-                          ? window.config.subscriptionskale_tokens
-                          : window.config.subscription_tokens
-                      ).map((t, i) => (
-                        // <span className="radio-wrapper" key={t}>
-                        //   <input
-                        //     type="radio"
-                        //     value={t}
-                        //     name={"tokensymbol"}
-                        //     checked={
-                        //       t == this.state.selectedSubscriptionToken
-                        //     }
-                        //     disabled={!this.props.appState.isConnected}
-                        //     onChange={
-                        //       (e) => {
-                        //         this.handleSubscriptionTokenChange(
-                        //           e.target.value
-                        //         );
-                        //         this.handleCheckIfAlreadyApproved();
-                        //       console.log(e.target.value);
+                          {Object.keys(
+                            this.props.networkId === 1
+                              ? window.config.subscriptioneth_tokens
+                              : this.props.networkId === 56
+                              ? window.config.subscriptionbnb_tokens
+                              : this.props.networkId === 1030
+                              ? window.config.subscriptioncfx_tokens
+                              : this.props.networkId === 8453
+                              ? window.config.subscriptionbase_tokens
+                              : this.props.networkId === 1482601649
+                              ? window.config.subscriptionskale_tokens
+                              : window.config.subscription_tokens
+                          ).map((t, i) => (
+                            // <span className="radio-wrapper" key={t}>
+                            //   <input
+                            //     type="radio"
+                            //     value={t}
+                            //     name={"tokensymbol"}
+                            //     checked={
+                            //       t == this.state.selectedSubscriptionToken
+                            //     }
+                            //     disabled={!this.props.appState.isConnected}
+                            //     onChange={
+                            //       (e) => {
+                            //         this.handleSubscriptionTokenChange(
+                            //           e.target.value
+                            //         );
+                            //         this.handleCheckIfAlreadyApproved();
+                            //       console.log(e.target.value);
 
-                        //       }
+                            //       }
 
-                        //     }
-                        //   />
-                        //   {this.props.networkId === 1
-                        //     ? window.config.subscriptioneth_tokens[t]?.symbol
-                        //     : window.config.subscription_tokens[t]?.symbol}
-                        // </span>
-                        <li
-                          key={i}
-                          className="dropdown-item launchpad-item d-flex align-items-center gap-2"
-                          onClick={() => {
-                            window.cached_contracts = Object.create(null);
-                            setTimeout(() => {
-                              this.setState({
-                                dropdownTitle:
+                            //     }
+                            //   />
+                            //   {this.props.networkId === 1
+                            //     ? window.config.subscriptioneth_tokens[t]?.symbol
+                            //     : window.config.subscription_tokens[t]?.symbol}
+                            // </span>
+                            <li
+                              key={i}
+                              className="dropdown-item launchpad-item d-flex align-items-center gap-2"
+                              onClick={() => {
+                                window.cached_contracts = Object.create(null);
+                                setTimeout(() => {
+                                  this.setState({
+                                    dropdownTitle:
+                                      this.props.networkId === 1
+                                        ? window.config.subscriptioneth_tokens[
+                                            t
+                                          ]?.symbol
+                                        : this.props.networkId === 56
+                                        ? window.config.subscriptionbnb_tokens[
+                                            t
+                                          ]?.symbol
+                                        : this.props.networkId === 1030
+                                        ? window.config.subscriptioncfx_tokens[
+                                            t
+                                          ]?.symbol
+                                        : this.props.networkId === 8453
+                                        ? window.config.subscriptionbase_tokens[
+                                            t
+                                          ]?.symbol
+                                        : this.props.networkId === 1482601649
+                                        ? window.config
+                                            .subscriptionskale_tokens[t]?.symbol
+                                        : window.config.subscription_tokens[t]
+                                            ?.symbol,
+                                    dropdownIcon:
+                                      this.props.networkId === 1
+                                        ? window.config.subscriptioneth_tokens[
+                                            t
+                                          ]?.symbol
+                                        : this.props.networkId === 56
+                                        ? window.config.subscriptionbnb_tokens[
+                                            t
+                                          ]?.symbol
+                                        : this.props.networkId === 1030
+                                        ? window.config.subscriptioncfx_tokens[
+                                            t
+                                          ]?.symbol
+                                        : this.props.networkId === 8453
+                                        ? window.config.subscriptionbase_tokens[
+                                            t
+                                          ]?.symbol
+                                        : this.props.networkId === 1482601649
+                                        ? window.config
+                                            .subscriptionskale_tokens[t]?.symbol
+                                        : window.config.subscription_tokens[t]
+                                            ?.symbol,
+                                  });
+                                  // console.log(t);
+                                  this.handleSubscriptionTokenChange(t);
+                                  this.handleCheckIfAlreadyApproved(t);
+                                }, 200);
+                              }}
+                            >
+                              <img
+                                src={
                                   this.props.networkId === 1
-                                    ? window.config.subscriptioneth_tokens[t]
-                                        ?.symbol
+                                    ? require(`./assets/${window.config.subscriptioneth_tokens[
+                                        t
+                                      ]?.symbol.toLowerCase()}Icon.svg`)
                                     : this.props.networkId === 56
-                                    ? window.config.subscriptionbnb_tokens[t]
-                                        ?.symbol
+                                    ? require(`./assets/${window.config.subscriptionbnb_tokens[
+                                        t
+                                      ]?.symbol.toLowerCase()}Icon.svg`)
                                     : this.props.networkId === 1030
-                                    ? window.config.subscriptioncfx_tokens[t]
-                                        ?.symbol
+                                    ? require(`./assets/${window.config.subscriptioncfx_tokens[
+                                        t
+                                      ]?.symbol.toLowerCase()}Icon.svg`)
                                     : this.props.networkId === 8453
-                                    ? window.config.subscriptionbase_tokens[t]
-                                        ?.symbol
+                                    ? require(`./assets/${window.config.subscriptionbase_tokens[
+                                        t
+                                      ]?.symbol.toLowerCase()}Icon.svg`)
                                     : this.props.networkId === 1482601649
-                                    ? window.config.subscriptionskale_tokens[t]
-                                        ?.symbol
-                                    : window.config.subscription_tokens[t]
-                                        ?.symbol,
-                                dropdownIcon:
-                                  this.props.networkId === 1
-                                    ? window.config.subscriptioneth_tokens[t]
-                                        ?.symbol
-                                    : this.props.networkId === 56
-                                    ? window.config.subscriptionbnb_tokens[t]
-                                        ?.symbol
-                                    : this.props.networkId === 1030
-                                    ? window.config.subscriptioncfx_tokens[t]
-                                        ?.symbol
-                                    : this.props.networkId === 8453
-                                    ? window.config.subscriptionbase_tokens[t]
-                                        ?.symbol
-                                    : this.props.networkId === 1482601649
-                                    ? window.config.subscriptionskale_tokens[t]
-                                        ?.symbol
-                                    : window.config.subscription_tokens[t]
-                                        ?.symbol,
-                              });
-                              // console.log(t);
-                              this.handleSubscriptionTokenChange(t);
-                              this.handleCheckIfAlreadyApproved(t);
-                            }, 200);
-                          }}
-                        >
-                          <img
-                            src={
-                              this.props.networkId === 1
-                                ? require(`./assets/${window.config.subscriptioneth_tokens[
-                                    t
-                                  ]?.symbol.toLowerCase()}Icon.svg`)
+                                    ? require(`./assets/${window.config.subscriptionskale_tokens[
+                                        t
+                                      ]?.symbol.toLowerCase()}Icon.svg`)
+                                    : require(`./assets/${window.config.subscription_tokens[
+                                        t
+                                      ]?.symbol.toLowerCase()}Icon.svg`)
+                                }
+                                alt=""
+                              />
+                              {this.props.networkId === 1
+                                ? window.config.subscriptioneth_tokens[t]
+                                    ?.symbol
                                 : this.props.networkId === 56
-                                ? require(`./assets/${window.config.subscriptionbnb_tokens[
-                                    t
-                                  ]?.symbol.toLowerCase()}Icon.svg`)
+                                ? window.config.subscriptionbnb_tokens[t]
+                                    ?.symbol
                                 : this.props.networkId === 1030
-                                ? require(`./assets/${window.config.subscriptioncfx_tokens[
-                                    t
-                                  ]?.symbol.toLowerCase()}Icon.svg`)
+                                ? window.config.subscriptioncfx_tokens[t]
+                                    ?.symbol
                                 : this.props.networkId === 8453
-                                ? require(`./assets/${window.config.subscriptionbase_tokens[
-                                    t
-                                  ]?.symbol.toLowerCase()}Icon.svg`)
+                                ? window.config.subscriptionbase_tokens[t]
+                                    ?.symbol
                                 : this.props.networkId === 1482601649
-                                ? require(`./assets/${window.config.subscriptionskale_tokens[
-                                    t
-                                  ]?.symbol.toLowerCase()}Icon.svg`)
-                                : require(`./assets/${window.config.subscription_tokens[
-                                    t
-                                  ]?.symbol.toLowerCase()}Icon.svg`)
-                            }
-                            alt=""
-                          />
-                          {this.props.networkId === 1
-                            ? window.config.subscriptioneth_tokens[t]?.symbol
-                            : this.props.networkId === 56
-                            ? window.config.subscriptionbnb_tokens[t]?.symbol
-                            : this.props.networkId === 1030
-                            ? window.config.subscriptioncfx_tokens[t]?.symbol
-                            : this.props.networkId === 8453
-                            ? window.config.subscriptionbase_tokens[t]?.symbol
-                            : this.props.networkId === 1482601649
-                            ? window.config.subscriptionskale_tokens[t]?.symbol
-                            : window.config.subscription_tokens[t]?.symbol}
-                        </li>
-                      ))}
-                    </ul>
+                                ? window.config.subscriptionskale_tokens[t]
+                                    ?.symbol
+                                : window.config.subscription_tokens[t]?.symbol}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      <span className="usdt-text">
+                        {this.state.formattedPrice.slice(0, 9)}
+                      </span>
+                      {/* {this.state.dropdownIcon !== "" && (
+                    <img
+                      src={require(`./assets/${this.state.dropdownIcon.toLowerCase()}Icon.svg`)}
+                      alt=""
+                      height={24}
+                      width={24}
+                    />
+                  )} */}
+                    </div>
                   </div>
                 </div>
-                <div className="d-flex flex-column align-items-end justify-content-lg-end">
-                  <span className="token-balance-placeholder">
-                    Token Balance
-                  </span>
-                  <h6 className="account-token-amount">
-                    {" "}
-                    {getFormattedNumber(
-                      this.state.tokenBalance / 10 ** tokenDecimals,
-                      6
-                    )}
-                  </h6>
-                </div>
               </div>
-              <div
-                className="subscription-token-wrapper  p-2 d-flex align-items-center justify-content-between  mt-3"
-                style={{ width: "100%" }}
-              >
-                <span className="token-amount-placeholder">
-                  Subscription price:
-                </span>
-                <div className="d-flex align-items-center gap-2">
-                  <span className="usdt-text">
-                    {this.state.formattedPrice.slice(0, 9)}
-                  </span>
 
-                  <img
-                    src={require(`./assets/${this.state.dropdownIcon.toLowerCase()}Icon.svg`)}
-                    height={24}
-                    width={24}
-                    alt="usdt"
-                  />
-                </div>
-              </div>
               {this.props.networkId === 1482601649 && (
                 <div className="gotoNebula-wrapper p-3 mt-3">
                   <div className="d-flex w-100 justify-content-between gap-2">
@@ -1643,20 +1545,17 @@ export default class Subscription extends React.Component {
               )}
               <hr className="form-divider my-4" />
               <div
-                className={`d-flex align-items-center ${
-                  !this.props.coinbase
-                    ? "justify-content-between"
-                    : "justify-content-end"
-                }`}
+                className={`d-flex flex-column gap-2 align-items-center justify-content-center`}
               >
                 {!this.props.coinbase && (
                   <span style={{ color: "rgb(227, 6 ,19)" }}>
                     Please connect your wallet first
                   </span>
                 )}
-                <div className="d-flex flex-column gap-2 justify-content-end align-items-center">
+                {this.props.isConnected && this.props.coinbase &&
+                <div className="d-flex flex-column gap-2 justify-content-center align-items-center">
                   <button
-                    className={"btn success-btn px-4 align-self-end"}
+                    className={"btn success-btn px-4 "}
                     disabled={
                       this.state.approveStatus === "fail" ||
                       !this.props.coinbase
@@ -1699,7 +1598,7 @@ export default class Subscription extends React.Component {
                     )}
                   </button>
                   <span style={{ color: "#E30613" }}>{this.state.status}</span>
-                </div>
+                </div> }
               </div>
             </div>
           </div>

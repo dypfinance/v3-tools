@@ -274,6 +274,14 @@
   text-align: center;
   display: flex;
 }
+.migration-status-text-2 {
+  color: #C0C9FF !important;
+  text-align: center;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
 
 .migration-text-wrapper {
   width: 0;
@@ -288,9 +296,45 @@
   line-height: normal;
 }
 
+.general-bridge-wrapper {
+  border-radius: 12px;
+  background: url('./assets/dypbridgeBg.webp');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;
+  min-height: 167px;
+}
+
+.base-bridge-wrapper {
+  border-radius: 12px;
+  background: radial-gradient(50% 50% at 50% 50%, #008dfc 0%, #1b63ff 100%);
+  min-height: 58%;
+}
+
+.base-bridge-text {
+  color: #f0edff;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 17px;
+}
+
 @media screen and (max-width: 991px) {
   .migration-details-wrapper {
     width: 100%;
+  }
+
+  .general-bridge-wrapper {
+    border-radius: 12px;
+    background: url('./assets/dypbridgeBgMobile.webp');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%;
+    min-height: 300px;
+  }
+
+  .base-bridge-wrapper {
+    
   }
 }
 
