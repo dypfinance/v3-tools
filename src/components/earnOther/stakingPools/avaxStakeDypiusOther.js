@@ -929,7 +929,7 @@ const StakeDypiusAvaxOther = ({
   }, [coinbase, popup, show]);
 
   const handleNavigateToPlans = () => {
-    navigate("/plans");
+    navigate("/account");
   };
 
   return (
