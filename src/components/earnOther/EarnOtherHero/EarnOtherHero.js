@@ -87,7 +87,7 @@ const EarnOtherHero = ({ type, isPremium, onSliderClick }) => {
       title: "Become a Premium Subscriber!",
       desc: "Enjoy extra benefits by upgrading to premium.",
       buttonType: "link",
-      buttonUrl: "/plans",
+      buttonUrl: "/account",
       buttonTitle: "Get Premium",
       chain: "Get Premium",
       buttonClass: "hero-premium-btn",
@@ -100,7 +100,7 @@ const EarnOtherHero = ({ type, isPremium, onSliderClick }) => {
     if (obj.buttonType === "popup") {
       onSliderClick(obj.chain);
     } else if (obj.buttonType === "link") {
-      navigate("/plans");
+      navigate("/account");
     } else if (obj.buttonType === "details-nft") {
       onSliderClick("details-nft");
     }else if (obj.buttonType === "details-land-nft") {

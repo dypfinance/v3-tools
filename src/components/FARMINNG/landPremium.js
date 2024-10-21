@@ -248,7 +248,7 @@ const LandDetailsPremium = ({
   };
 
   const handleNavigateToPlans = () => {
-    navigate.push("/plans");
+    navigate.push("/account");
   };
 
   const totalStakedNft = async () => {

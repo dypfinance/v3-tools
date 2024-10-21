@@ -405,7 +405,7 @@ const Sidebar = (props) => {
       {activeSidebar &&
         (props.isPremium === false || props.isPremium === null) && (
           <NavLink
-            to={"/plans"}
+            to={"/account"}
             className="d-flex align-items-center justify-content-center"
           >
             <img src={sidebarPremium} alt="" style={{ width: "80%" }} />
