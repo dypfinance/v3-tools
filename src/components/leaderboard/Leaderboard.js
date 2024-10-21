@@ -111,19 +111,19 @@ const Leaderboard = ({
     headers: [
       {
         name: "Rank",
-        class: "col-1",
+        class: "col-2",
       },
       {
         name: "Player",
-        class: "col-3",
+        class: "col-2",
       },
       {
         name: "Score",
-        class: "col-3 text-center",
+        class: "col-2 text-center",
       },
       {
         name: "Level",
-        class: "col-1 text-center",
+        class: "col-2 text-center",
       },
       {
         name: "Time",
@@ -267,7 +267,7 @@ const Leaderboard = ({
   return (
     <div
       className="main-wrapper py-4 w-100 d-flex gap-4 mt-xxl-0 mt-lg-0 justify-content-center align-items-start"
-      style={{ minHeight: "560px" }}
+      // style={{ minHeight: "560px" }}
     >
       <div className="row w-100 align-items-start gap-4 gap-lg-0">
         <div className="d-flex flex-column gap-3 col-12  px-0">
@@ -750,16 +750,16 @@ const Leaderboard = ({
                               address?.toLowerCase() && "caws-user-row"
                           }`}
                         >
-                          <td className="playerData col-1">
+                          <td className="playerData col-2">
                             {Number(index) + 1}
                           </td>
-                          <td className="playerName col-3">
+                          <td className="playerName2 col-2">
                             <div className="position-relative d-flex align-items-center">
                               <span>{item.username}</span>
                             </div>
                           </td>
                           <td
-                            className="playerScore col-3 text-center"
+                            className="playerScore col-2 text-center"
                             style={{ color: cawsHeaders.scoreColor }}
                           >
                             {getFormattedNumber(item.score, 0)}
@@ -780,7 +780,7 @@ const Leaderboard = ({
                             )}
                           </td>
                           <td
-                            className={`playerReward col-3 text-center`}
+                            className={`playerReward col-2 text-center`}
                             style={{ color: cawsHeaders.rewardColor }}
                           >
                             ${caws2dRewards[index]}

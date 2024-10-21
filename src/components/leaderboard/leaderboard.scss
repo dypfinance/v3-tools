@@ -218,10 +218,28 @@
   @media screen and (max-width: 786px) {
     font-size: 12px;
     overflow-x: hidden;
-    width: 100%;
-    max-width: 100px;
+    // width: 100%;
+    // max-width: 100px;
   }
 }
+
+
+.playerName2 {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  letter-spacing: -0.018em;
+  color: #f7f7ff;
+
+  @media screen and (max-width: 786px) {
+    font-size: 12px;
+    overflow-x: hidden;
+    // width: 100%;
+    // max-width: 100px;
+  }
+}
+
 
 .playersname {
   font-style: normal;
