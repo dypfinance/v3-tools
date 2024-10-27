@@ -517,7 +517,7 @@ const Games = ({
         <div className="row">
           <div className="col-12 col-lg-4">
             <NavLink to="/loyalty-program">
-              <div className="games-banner loyalty-game-banner d-flex flex-column  flex-lg-row px-4 py-3 gap-3 gap-lg-0 align-items-start align-items-lg-center mb-4 position-relative">
+              <div className="games-banner loyalty-game-banner d-flex flex-column  flex-lg-row px-3 py-3 gap-3 gap-lg-0 align-items-start align-items-lg-center mb-4 position-relative">
                 <div className="d-flex flex-column gap-2">
                   <h6 className="migration-banner-title mb-0">
                     Loyalty Program
@@ -530,7 +530,7 @@ const Games = ({
             </NavLink>
           </div>
           <div className="col-12 col-lg-5">
-            <div className="games-banner d-flex flex-column flex-lg-row px-4 py-3 gap-3 gap-lg-0 align-items-start align-items-lg-center mb-4 position-relative">
+            <div className="games-banner d-flex flex-column flex-lg-row px-3 py-3 gap-3 gap-lg-0 align-items-start align-items-lg-center mb-4 position-relative">
               <div className="d-flex flex-column gap-2">
                 <h6 className="migration-banner-title mb-0">Games</h6>
                 <p className="games-banner-desc mb-0">
@@ -593,7 +593,7 @@ const Games = ({
           </div>
           <div className="col-12 col-lg-3">
             <div
-              className="games-banner d-flex flex-column flex-lg-row px-4 py-3 gap-3 gap-lg-0 align-items-center mb-4 position-relative"
+              className="games-banner d-flex flex-column flex-lg-row px-3 py-3 gap-3 gap-lg-0 align-items-center mb-4 position-relative"
               onClick={() => setActive(true)}
               style={{ cursor: "pointer" }}
             >
@@ -636,7 +636,7 @@ const Games = ({
               {/* </Tooltip> */}
 
               {popup === true && (
-                <div className="position-absolute" style={{right: '50px', top: '-24px'}}>
+                <div className="position-absolute" style={{right: '245px', top: '-20px'}}>
                   <OutsideClickHandler
                     onOutsideClick={() => {
                       setpopup(false);
@@ -661,7 +661,7 @@ const Games = ({
                         >
                           <h6 className="bottomitems">
                             <img src={arrowup} alt="" />
-                            Buy DYP on Base SuperBridge
+                            Bridge DYP on Base SuperBridge
                           </h6>
                         </a>
                       </div>
