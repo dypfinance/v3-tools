@@ -1244,7 +1244,7 @@ setbasePoolsDyp(sortedActivebase)
                   </div>
                   {activeCardFarm && network === 56 ? (
                     <BscFarmingFunc
-                      is_wallet_connected={isConnected}
+                    isConnected={isConnected}
                       wbnbPrice={wbnbPrice}
                       coinbase={coinbase}
                       latestTvl={theBnbPool[0][1].tvl_usd}
