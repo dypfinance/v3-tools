@@ -1664,7 +1664,7 @@ const allpools = [...sortedActiveDYP,...sortedActiveiDYP]
               {activeCard && topList === "Farming" ? (
                  chain === "bnb" && listing === "table" ? (
                   <BscFarmingFunc
-                    is_wallet_connected={isConnected}
+                  isConnected={isConnected}
                     wbnbPrice={wbnbPrice}
                     coinbase={coinbase}
                     latestTvl={theBnbPool.tvl_usd}
@@ -1784,7 +1784,7 @@ const allpools = [...sortedActiveDYP,...sortedActiveiDYP]
               {/* {activeCard && topList === "Farming" &&
                  chain === "bnb" && listing !== "table" ? (
                   <BscFarmingFunc
-                    is_wallet_connected={isConnected}
+                    isConnected={isConnected}
                     wbnbPrice={wbnbPrice}
                     coinbase={coinbase}
                     latestTvl={theBnbPool.tvl_usd}

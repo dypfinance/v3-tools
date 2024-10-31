@@ -204,8 +204,7 @@ const BscFarmingFunc = ({
   const [show, setShow] = useState(false);
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [showCalculator, setShowCalculator] = useState(false);
-  const [popup, setPopup] = useState(false);
-  const [is_wallet_connected, setIs_wallet_connected] = useState(false);
+  const [popup, setPopup] = useState(false); 
   const [selectedTokenLogo, setSelectedTokenLogo] = useState("wbnb");
   const [selectedRewardTokenLogo1, setSelectedRewardTokenLogo1] =
     useState("wbnb");
@@ -298,14 +297,26 @@ const BscFarmingFunc = ({
     let web3 = window.bscWeb3;
 
     let pair = new web3.eth.Contract(PAIR_ABI, pair_token_address);
-    let totalSupply = await pair.methods.totalSupply().call().catch((e)=>{console.error(e); return 0})
-    let reserves = await pair.methods.getReserves().call().catch((e)=>{console.error(e); return 0})
+    let totalSupply = await pair.methods
+      .totalSupply()
+      .call()
+      .catch((e) => {
+        console.error(e);
+        return 0;
+      });
+    let reserves = await pair.methods
+      .getReserves()
+      .call()
+      .catch((e) => {
+        console.error(e);
+        return 0;
+      });
     let amountlpContract = await pair.methods
       .balanceOf(constant._address)
       .call()
       .catch((e) => {
         console.error(e);
-        return 0
+        return 0;
       });
 
     let maxETH = reserves[0];
@@ -632,7 +643,10 @@ const BscFarmingFunc = ({
   };
 
   const handleWithdrawDyp = async () => {
-    let amountConstant = await staking.depositedTokens(coinbase).catch((e)=>{console.error(e); return 0});
+    let amountConstant = await staking.depositedTokens(coinbase).catch((e) => {
+      console.error(e);
+      return 0;
+    });
     amountConstant = new BigNumber(amountConstant).toFixed(0);
     setWithdrawLoading(true);
 
@@ -798,9 +812,9 @@ const BscFarmingFunc = ({
         setWithdrawStatus("fail");
         setErrorMsg3(e?.message);
         setTimeout(() => {
-        setWithdrawStatus("initial");
-        setErrorMsg3('');
-        setSelectedPool("");
+          setWithdrawStatus("initial");
+          setErrorMsg3("");
+          setSelectedPool("");
         }, 5000);
       });
   };
@@ -956,7 +970,10 @@ const BscFarmingFunc = ({
 
     let address = coinbase;
 
-    let amount = await staking.getPendingDivs(address).catch((e)=>{console.error(e); return 0});
+    let amount = await staking.getPendingDivs(address).catch((e) => {
+      console.error(e);
+      return 0;
+    });
 
     let claimdivs2 = new BigNumber(amount)
       .times(100 - window.config.slippage_tolerance_percent_liquidity)
@@ -1158,52 +1175,98 @@ const BscFarmingFunc = ({
       ];
       let _amountOutMin = await router.methods
         .getAmountsOut(amount, path)
-        .call().catch((e)=>{console.error(e); return 0});
+        .call()
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
       _amountOutMin = _amountOutMin[_amountOutMin.length - 1];
       _amountOutMin = new BigNumber(_amountOutMin).div(1e18).toFixed(18);
-    
-      let _bal = token.balanceOf(coinbase).catch((e)=>{console.error(e); return 0});
-      let _rBal = reward_token.balanceOf(coinbase).catch((e)=>{console.error(e); return 0});
-      let _pDivs = constant.getPendingDivs(coinbase).catch((e)=>{console.error(e); return 0});
 
-      let _pDivsEth = constant.getPendingDivsEth(coinbase).catch((e)=>{console.error(e); return 0});
-  
+      let _bal = token.balanceOf(coinbase).catch((e) => {
+        console.error(e);
+        return 0;
+      });
+      let _rBal = reward_token.balanceOf(coinbase).catch((e) => {
+        console.error(e);
+        return 0;
+      });
+      let _pDivs = constant.getPendingDivs(coinbase).catch((e) => {
+        console.error(e);
+        return 0;
+      });
 
-      let _tEarned = constant.totalEarnedTokens(coinbase).catch((e)=>{console.error(e); return 0});
+      let _pDivsEth = constant.getPendingDivsEth(coinbase).catch((e) => {
+        console.error(e);
+        return 0;
+      });
 
-      let _tEarnedEth = constant.totalEarnedEth(coinbase).catch((e)=>{console.error(e); return 0});
+      let _tEarned = constant.totalEarnedTokens(coinbase).catch((e) => {
+        console.error(e);
+        return 0;
+      });
 
-      let _stakingTime = constant.depositTime(coinbase).catch((e)=>{console.error(e); return 0});
+      let _tEarnedEth = constant.totalEarnedEth(coinbase).catch((e) => {
+        console.error(e);
+        return 0;
+      });
 
-      let _dTokens = constant.depositedTokens(coinbase).catch((e)=>{console.error(e); return 0});
+      let _stakingTime = constant.depositTime(coinbase).catch((e) => {
+        console.error(e);
+        return 0;
+      });
 
-      let _lClaimTime = constant.lastClaimedTime(coinbase).catch((e)=>{console.error(e); return 0});
+      let _dTokens = constant.depositedTokens(coinbase).catch((e) => {
+        console.error(e);
+        return 0;
+      });
+
+      let _lClaimTime = constant.lastClaimedTime(coinbase).catch((e) => {
+        console.error(e);
+        return 0;
+      });
 
       let _tvl = token.balanceOf(constant._address);
 
       //Take iDYP Balance on Staking & Farming
 
-      let _tvlConstantiDYP = reward_token_idyp.balanceOf(
-        constant._address
-      ).catch((e)=>{console.error(e); return 0}); /* TVL of iDYP on Staking */
+      let _tvlConstantiDYP = reward_token_idyp
+        .balanceOf(constant._address)
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        }); /* TVL of iDYP on Staking */
 
-      let _tvlConstantDYP = reward_token.balanceOf(
-        constant._address
-      ).catch((e)=>{console.error(e); return 0}); /* TVL of iDYP on Staking */
+      let _tvlConstantDYP = reward_token
+        .balanceOf(constant._address)
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        }); /* TVL of iDYP on Staking */
 
-      let _tvliDYP = reward_token_idyp.balanceOf(
-        constant._address
-      ).catch((e)=>{console.error(e); return 0}); /* TVL of iDYP on Farming */
+      let _tvliDYP = reward_token_idyp
+        .balanceOf(constant._address)
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        }); /* TVL of iDYP on Farming */
 
-      let _dTokensDYP = staking.depositedTokens(coinbase).catch((e)=>{console.error(e); return 0});
-      let _rewardsPendingClaim = staking.getPendingDivs(coinbase).catch((e)=>{console.error(e); return 0});
+      let _dTokensDYP = staking.depositedTokens(coinbase).catch((e) => {
+        console.error(e);
+        return 0;
+      });
+      let _rewardsPendingClaim = staking.getPendingDivs(coinbase).catch((e) => {
+        console.error(e);
+        return 0;
+      });
 
       // let _pendingDivsStaking = constant.getTotalPendingDivs(coinbase);
 
       //Take DYPS Balance
-      let _tvlDYPS = token_dypsbsc.balanceOf(
-        constant._address
-      ).catch((e)=>{console.error(e); return 0}); /* TVL of DYPS */
+      let _tvlDYPS = token_dypsbsc.balanceOf(constant._address).catch((e) => {
+        console.error(e);
+        return 0;
+      }); /* TVL of DYPS */
 
       let [
         token_balance2,
@@ -1555,11 +1618,9 @@ const BscFarmingFunc = ({
     if (coinbase && isConnected) {
       setCoinbase2(coinbase);
       getLPTokens();
-
     }
   }, [coinbase, isConnected]);
 
-  let is_connected = is_wallet_connected;
 
   let usd_per_token = the_graph_result.token_data
     ? the_graph_result.token_data["0x961c8c0b1aad0c0b10a51fef6a867e3091bcef17"]
@@ -1929,11 +1990,9 @@ const BscFarmingFunc = ({
                               onClick={() => handleSelectedTokenChange(t)}
                             >
                               <img
-                                src={
-                                  require(`./assets/bsc/${buyback_activetokensbsc[
-                                    t
-                                  ].symbol.toLowerCase()}.svg`) 
-                                }
+                                src={require(`./assets/bsc/${buyback_activetokensbsc[
+                                  t
+                                ].symbol.toLowerCase()}.svg`)}
                                 alt=""
                                 style={{ width: 14, height: 14 }}
                               />

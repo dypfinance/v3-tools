@@ -788,7 +788,7 @@ const TopPoolsListCard = ({
               />
             ) : chain === "bnb" ? (
               <BscFarmingFunc
-              is_wallet_connected={isConnected}
+              isConnected={isConnected}
               coinbase={coinbase}
               latestApr={theBnbPool.apy_percent}
               the_graph_result={the_graph_resultbsc}
