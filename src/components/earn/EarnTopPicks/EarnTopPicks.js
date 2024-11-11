@@ -594,7 +594,6 @@ const EarnTopPicks = ({
       const sortedActiveiDYP = object2activeEth.sort(function (a, b) {
         return b.apy_percent - a.apy_percent;
       });
-      
 
       setActivePools(sortedActiveDYP);
       setTopPools([...object2activeEth, ...activeEth2]);
@@ -606,7 +605,6 @@ const EarnTopPicks = ({
       setCawsLandCard(land);
     }
   };
-  
 
   const fetchBnbStaking2 = async () => {
     const bnb_result = await axios
@@ -677,7 +675,7 @@ const EarnTopPicks = ({
       const sortedActiveiDYP = object2activeBnb.sort(function (a, b) {
         return b.apy_percent - a.apy_percent;
       });
-const allpools = [...sortedActiveDYP,...sortedActiveiDYP]
+      const allpools = [...sortedActiveDYP, ...sortedActiveiDYP];
 
       setActivePools(allpools);
       setExpiredPools(sortedExpired);
@@ -916,7 +914,8 @@ const allpools = [...sortedActiveDYP,...sortedActiveiDYP]
           return "method-btn-disabled";
         }
       }
-    }   if (chain === "base") {
+    }
+    if (chain === "base") {
       if (tokentype === "dyp") {
         if (locktimeToCheck === selectedPool.lock_time) {
           return "method-btn-active";
@@ -1080,7 +1079,8 @@ const allpools = [...sortedActiveDYP,...sortedActiveiDYP]
           setselectedPool(...result);
         }
       }
-    }   if (selectedchain === "base") {
+    }
+    if (selectedchain === "base") {
       if (selectedpoolType === "dyp") {
         const result = basePoolsDyp.filter((item) => {
           return item.lock_time === locktime;
@@ -1379,7 +1379,7 @@ const allpools = [...sortedActiveDYP,...sortedActiveiDYP]
       setselectedchain("bnb");
     } else if (chainId === "43114") {
       setselectedchain("avax");
-    }  else if (chainId === "8453") {
+    } else if (chainId === "8453") {
       setselectedchain("base");
     } else {
       setselectedchain("eth");
@@ -1624,47 +1624,1245 @@ const allpools = [...sortedActiveDYP,...sortedActiveiDYP]
                       />
                     ))}
 
-                {topList === "Farming" && chain === "bnb" && expiredPools === true && (
-                  <TopPoolsCard
-                    chain={'bnb'}
-                    top_pick={false}
-                    tokenName={"WBNB"}
-                    apr={`${getFormattedNumber(theBnbPool.apy_percent, 0)}%`}
-                    tvl={`$${getFormattedNumber(theBnbPool.tvl_usd, 2)}`}
-                    lockTime={"3 Days"}
-                    tokenLogo={"bsc.svg"}
-                    onShowDetailsClick={() => {
-                      setActiveCard(topPools[0]);
-                      setActiveCard2(null);
-                      setActiveCard3(null);
-                      setActiveCard4(null);
-                      setActiveCardCawsLand(null);
-                      setActiveCardNFT(false);
-                      setActiveCardLandNFT(false);
-                      handleCardIndexStake(0);
-                      handleCardIndexStake30(0);
-                      handleCardIndexStakeiDyp(0);
-                      setDetails(0);
-                    }}
-                    onHideDetailsClick={() => {
-                      setActiveCard(null);
-                      setDetails();
-                    }}
-                    cardType={topList}
-                    details={details === 0 ? true : false}
-                    isNewPool={true}
-                    isStaked={false}
-                    expired={true}
-                    network={chainId}
-                    isPremium={isPremium}
-                  />
-                )}
+                {topList === "Farming" &&
+                  chain === "bnb" &&
+                  expiredPools === true && (
+                    <TopPoolsCard
+                      chain={"bnb"}
+                      top_pick={false}
+                      tokenName={"WBNB"}
+                      apr={`${getFormattedNumber(theBnbPool.apy_percent, 0)}%`}
+                      tvl={`$${getFormattedNumber(theBnbPool.tvl_usd, 2)}`}
+                      lockTime={"3 Days"}
+                      tokenLogo={"bsc.svg"}
+                      onShowDetailsClick={() => {
+                        setActiveCard(topPools[0]);
+                        setActiveCard2(null);
+                        setActiveCard3(null);
+                        setActiveCard4(null);
+                        setActiveCardCawsLand(null);
+                        setActiveCardNFT(false);
+                        setActiveCardLandNFT(false);
+                        handleCardIndexStake(0);
+                        handleCardIndexStake30(0);
+                        handleCardIndexStakeiDyp(0);
+                        setDetails(0);
+                      }}
+                      onHideDetailsClick={() => {
+                        setActiveCard(null);
+                        setDetails();
+                      }}
+                      cardType={topList}
+                      details={details === 0 ? true : false}
+                      isNewPool={true}
+                      isStaked={false}
+                      expired={true}
+                      network={chainId}
+                      isPremium={isPremium}
+                    />
+                  )}
               </div>
 
+              {windowSize && windowSize.width > 1300 &&
+                    topList === "Vault" ? (
+                <>
+                  <div className="top-picks-container">
+                    {expiredPools === false &&
+                    activePools &&
+                    activePools.length > 0 &&
+                    topList === "Vault" ? (
+                      topPools.slice(0, 3).map((pool, index) => (
+                        <TopPoolsCard
+                          key={index}
+                          chain={chain}
+                          top_pick={false}
+                          tokenName={pool?.pair_name}
+                          apr={pool?.apy_percent + "%"}
+                          tvl={
+                            pool?.tvl_usd === "--"
+                              ? pool?.tvl_usd
+                              : "$" + getFormattedNumber(pool?.tvl_usd)
+                          }
+                          lockTime={
+                            pool?.lock_time
+                              ? pool?.lock_time
+                              : locktimeFarm[index]
+                          }
+                          tokenLogo={
+                            pool?.icon
+                              ? pool?.icon
+                              : pool?.pair_name === "DYP"
+                              ? "dyplogo.svg"
+                              : "idypius.svg"
+                          }
+                          onShowDetailsClick={() => {
+                            setActiveCard(topPools[index]);
+                            setActiveCard2(null);
+                            setActiveCard3(null);
+                            setActiveCard4(null);
+                            setActiveCardCawsLand(null);
+                            setActiveCardNFT(false);
+                            setActiveCardLandNFT(false);
+                            handleCardIndexStake(index);
+                            handleCardIndexStake30(index);
+                            handleCardIndexStakeiDyp(index);
+                            setDetails(index);
+                            setselectedPool(topList !== "Vault" && pool);
+                            setShowDetails(topList !== "Vault" && true);
+                            setselectedpoolType(pool?.type);
+                            setselectedIndex(index);
+                            handleSelectPool(
+                              pool?.chain,
+                              pool?.lock_time,
+                              pool?.type,
+                              ethPoolsDyp,
+                              basePoolsDyp,
+                              ethPoolsiDyp,
+                              bnbPoolsDyp,
+                              bnbPoolsiDyp,
+                              avaxPoolsDyp,
+                              avaxPoolsiDyp
+                            );
+                          }}
+                          onHideDetailsClick={() => {
+                            setActiveCard(null);
+                            setDetails();
+                            setselectedpoolType("");
+                          }}
+                          cardType={topList}
+                          details={details === index ? true : false}
+                          isNewPool={pool?.new_pool === "Yes" ? true : false}
+                          isStaked={
+                            userPools.length > 0
+                              ? userPools.find(
+                                  (obj) => obj.contract_address === pool?.id
+                                )
+                                ? true
+                                : false
+                              : false
+                          }
+                          expired={false}
+                          network={chainId}
+                          isPremium={isPremium}
+                        />
+                      ))
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                  {activeCard && topList === "Vault" && chain === "eth" ? (
+                    <Vault
+                      vault={vaultArrayNew[cardIndex]}
+                      token={tokenvaultArrayNew[cardIndex]}
+                      platformTokenApyPercent={vaultplatformArrayNew[cardIndex]}
+                      UNDERLYING_DECIMALS={vaultdecimalsArrayNew[cardIndex]}
+                      UNDERLYING_SYMBOL={vaultsymbolArrayNew[cardIndex]}
+                      expiration_time={"1 August 2024"}
+                      coinbase={coinbase}
+                      lockTime={"No Lock"}
+                      handleConnection={handleConnection}
+                      chainId={chainId}
+                      listType={listType}
+                      handleSwitchNetwork={handleSwitchNetwork}
+                      expired={false}
+                      isConnected={isConnected}
+                      the_graph_result={the_graph_result}
+                    />
+                  ) : (
+                    <></>
+                  )}
+                  <div className="top-picks-container pt-3">
+                    {expiredPools === false &&
+                    activePools &&
+                    activePools.length > 0 &&
+                    topList === "Vault" ? (
+                      topPools.slice(3, 6).map((pool, index) => (
+                        <TopPoolsCard
+                          key={index}
+                          chain={chain}
+                          top_pick={false}
+                          tokenName={pool?.pair_name}
+                          apr={pool?.apy_percent + "%"}
+                          tvl={
+                            pool?.tvl_usd === "--"
+                              ? pool?.tvl_usd
+                              : "$" + getFormattedNumber(pool?.tvl_usd)
+                          }
+                          lockTime={
+                            pool?.lock_time
+                              ? pool?.lock_time
+                              : locktimeFarm[index]
+                          }
+                          tokenLogo={
+                            pool?.icon
+                              ? pool?.icon
+                              : pool?.pair_name === "DYP"
+                              ? "dyplogo.svg"
+                              : "idypius.svg"
+                          }
+                          onShowDetailsClick={() => {
+                            setActiveCard();
+                            setActiveCard2(topPools[index + 3]);
+                            setActiveCard3(null);
+                            setActiveCard4(null);
+                            setActiveCardCawsLand(null);
+                            setActiveCardNFT(false);
+                            setActiveCardLandNFT(false);
+                            handleCardIndexStake(index + 3);
+                            handleCardIndexStake30(index + 3);
+                            handleCardIndexStakeiDyp(index + 3);
+                            setDetails(index + 3);
+                            setselectedPool(topList !== "Vault" && pool);
+                            setShowDetails(topList !== "Vault" && true);
+                            setselectedpoolType(pool?.type);
+                            setselectedIndex(index + 3);
+                            handleSelectPool(
+                              pool?.chain,
+                              pool?.lock_time,
+                              pool?.type,
+                              ethPoolsDyp,
+                              basePoolsDyp,
+                              ethPoolsiDyp,
+                              bnbPoolsDyp,
+                              bnbPoolsiDyp,
+                              avaxPoolsDyp,
+                              avaxPoolsiDyp
+                            );
+                          }}
+                          onHideDetailsClick={() => {
+                            setActiveCard2();
+                            setDetails();
+                            setselectedpoolType("");
+                          }}
+                          cardType={topList}
+                          details={details === index + 3 ? true : false}
+                          isNewPool={pool?.new_pool === "Yes" ? true : false}
+                          isStaked={
+                            userPools.length > 0
+                              ? userPools.find(
+                                  (obj) => obj.contract_address === pool?.id
+                                )
+                                ? true
+                                : false
+                              : false
+                          }
+                          expired={false}
+                          network={chainId}
+                          isPremium={isPremium}
+                        />
+                      ))
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                  {activeCard2 && topList === "Vault" && chain === "eth" ? (
+                    <Vault
+                      vault={vaultArrayNew[cardIndex]}
+                      token={tokenvaultArrayNew[cardIndex]}
+                      platformTokenApyPercent={vaultplatformArrayNew[cardIndex]}
+                      UNDERLYING_DECIMALS={vaultdecimalsArrayNew[cardIndex]}
+                      UNDERLYING_SYMBOL={vaultsymbolArrayNew[cardIndex]}
+                      expiration_time={"1 August 2024"}
+                      coinbase={coinbase}
+                      lockTime={"No Lock"}
+                      handleConnection={handleConnection}
+                      chainId={chainId}
+                      listType={listType}
+                      handleSwitchNetwork={handleSwitchNetwork}
+                      expired={false}
+                      isConnected={isConnected}
+                      the_graph_result={the_graph_result}
+                    />
+                  ) : (
+                    <></>
+                  )}
+                </>
+              ) : (
+                <></>
+              )}
+
+              {windowSize &&
+              windowSize.width <= 1300 &&
+              windowSize.width >= 787 &&
+              topList === "Vault" ? (
+                <>
+                  <div className="top-picks-container">
+                    {expiredPools === false &&
+                    activePools &&
+                    activePools.length > 0 &&
+                    topList === "Vault" ? (
+                      topPools.slice(0, 2).map((pool, index) => (
+                        <TopPoolsCard
+                          key={index}
+                          chain={chain}
+                          top_pick={false}
+                          tokenName={pool?.pair_name}
+                          apr={pool?.apy_percent + "%"}
+                          tvl={
+                            pool?.tvl_usd === "--"
+                              ? pool?.tvl_usd
+                              : "$" + getFormattedNumber(pool?.tvl_usd)
+                          }
+                          lockTime={
+                            pool?.lock_time
+                              ? pool?.lock_time
+                              : locktimeFarm[index]
+                          }
+                          tokenLogo={
+                            pool?.icon
+                              ? pool?.icon
+                              : pool?.pair_name === "DYP"
+                              ? "dyplogo.svg"
+                              : "idypius.svg"
+                          }
+                          onShowDetailsClick={() => {
+                            setActiveCard(topPools[index]);
+                            setActiveCard2(null);
+                            setActiveCard3(null);
+                            setActiveCard4(null);
+                            setActiveCardCawsLand(null);
+                            setActiveCardNFT(false);
+                            setActiveCardLandNFT(false);
+                            handleCardIndexStake(index);
+                            handleCardIndexStake30(index);
+                            handleCardIndexStakeiDyp(index);
+                            setDetails(index);
+                            setselectedPool(topList !== "Vault" && pool);
+                            setShowDetails(topList !== "Vault" && true);
+                            setselectedpoolType(pool?.type);
+                            setselectedIndex(index);
+                            handleSelectPool(
+                              pool?.chain,
+                              pool?.lock_time,
+                              pool?.type,
+                              ethPoolsDyp,
+                              basePoolsDyp,
+                              ethPoolsiDyp,
+                              bnbPoolsDyp,
+                              bnbPoolsiDyp,
+                              avaxPoolsDyp,
+                              avaxPoolsiDyp
+                            );
+                          }}
+                          onHideDetailsClick={() => {
+                            setActiveCard(null);
+                            setDetails();
+                            setselectedpoolType("");
+                          }}
+                          cardType={topList}
+                          details={details === index ? true : false}
+                          isNewPool={pool?.new_pool === "Yes" ? true : false}
+                          isStaked={
+                            userPools.length > 0
+                              ? userPools.find(
+                                  (obj) => obj.contract_address === pool?.id
+                                )
+                                ? true
+                                : false
+                              : false
+                          }
+                          expired={false}
+                          network={chainId}
+                          isPremium={isPremium}
+                        />
+                      ))
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                  {activeCard && topList === "Vault" && chain === "eth" ? (
+                    <Vault
+                      vault={vaultArrayNew[cardIndex]}
+                      token={tokenvaultArrayNew[cardIndex]}
+                      platformTokenApyPercent={vaultplatformArrayNew[cardIndex]}
+                      UNDERLYING_DECIMALS={vaultdecimalsArrayNew[cardIndex]}
+                      UNDERLYING_SYMBOL={vaultsymbolArrayNew[cardIndex]}
+                      expiration_time={"1 August 2024"}
+                      coinbase={coinbase}
+                      lockTime={"No Lock"}
+                      handleConnection={handleConnection}
+                      chainId={chainId}
+                      listType={listType}
+                      handleSwitchNetwork={handleSwitchNetwork}
+                      expired={false}
+                      isConnected={isConnected}
+                      the_graph_result={the_graph_result}
+                    />
+                  ) : (
+                    <></>
+                  )}
+                  <div className="top-picks-container pt-3">
+                    {expiredPools === false &&
+                    activePools &&
+                    activePools.length > 0 &&
+                    topList === "Vault" ? (
+                      topPools.slice(2, 4).map((pool, index) => (
+                        <TopPoolsCard
+                          key={index}
+                          chain={chain}
+                          top_pick={false}
+                          tokenName={pool?.pair_name}
+                          apr={pool?.apy_percent + "%"}
+                          tvl={
+                            pool?.tvl_usd === "--"
+                              ? pool?.tvl_usd
+                              : "$" + getFormattedNumber(pool?.tvl_usd)
+                          }
+                          lockTime={
+                            pool?.lock_time
+                              ? pool?.lock_time
+                              : locktimeFarm[index]
+                          }
+                          tokenLogo={
+                            pool?.icon
+                              ? pool?.icon
+                              : pool?.pair_name === "DYP"
+                              ? "dyplogo.svg"
+                              : "idypius.svg"
+                          }
+                          onShowDetailsClick={() => {
+                            setActiveCard();
+                            setActiveCard2(topPools[index + 2]);
+                            setActiveCard3(null);
+                            setActiveCard4(null);
+                            setActiveCardCawsLand(null);
+                            setActiveCardNFT(false);
+                            setActiveCardLandNFT(false);
+                            handleCardIndexStake(index + 2);
+                            handleCardIndexStake30(index + 2);
+                            handleCardIndexStakeiDyp(index + 2);
+                            setDetails(index + 2);
+                            setselectedPool(topList !== "Vault" && pool);
+                            setShowDetails(topList !== "Vault" && true);
+                            setselectedpoolType(pool?.type);
+                            setselectedIndex(index + 2);
+                            handleSelectPool(
+                              pool?.chain,
+                              pool?.lock_time,
+                              pool?.type,
+                              ethPoolsDyp,
+                              basePoolsDyp,
+                              ethPoolsiDyp,
+                              bnbPoolsDyp,
+                              bnbPoolsiDyp,
+                              avaxPoolsDyp,
+                              avaxPoolsiDyp
+                            );
+                          }}
+                          onHideDetailsClick={() => {
+                            setActiveCard2();
+                            setDetails();
+                            setselectedpoolType("");
+                          }}
+                          cardType={topList}
+                          details={details === index + 2 ? true : false}
+                          isNewPool={pool?.new_pool === "Yes" ? true : false}
+                          isStaked={
+                            userPools.length > 0
+                              ? userPools.find(
+                                  (obj) => obj.contract_address === pool?.id
+                                )
+                                ? true
+                                : false
+                              : false
+                          }
+                          expired={false}
+                          network={chainId}
+                          isPremium={isPremium}
+                        />
+                      ))
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                  {activeCard2 && topList === "Vault" && chain === "eth" ? (
+                    <Vault
+                      vault={vaultArrayNew[cardIndex]}
+                      token={tokenvaultArrayNew[cardIndex]}
+                      platformTokenApyPercent={vaultplatformArrayNew[cardIndex]}
+                      UNDERLYING_DECIMALS={vaultdecimalsArrayNew[cardIndex]}
+                      UNDERLYING_SYMBOL={vaultsymbolArrayNew[cardIndex]}
+                      expiration_time={"1 August 2024"}
+                      coinbase={coinbase}
+                      lockTime={"No Lock"}
+                      handleConnection={handleConnection}
+                      chainId={chainId}
+                      listType={listType}
+                      handleSwitchNetwork={handleSwitchNetwork}
+                      expired={false}
+                      isConnected={isConnected}
+                      the_graph_result={the_graph_result}
+                    />
+                  ) : (
+                    <></>
+                  )}
+
+                  <div className="top-picks-container pt-3">
+                    {expiredPools === false &&
+                    activePools &&
+                    activePools.length > 0 &&
+                    topList === "Vault" ? (
+                      topPools.slice(4, 6).map((pool, index) => (
+                        <TopPoolsCard
+                          key={index}
+                          chain={chain}
+                          top_pick={false}
+                          tokenName={pool?.pair_name}
+                          apr={pool?.apy_percent + "%"}
+                          tvl={
+                            pool?.tvl_usd === "--"
+                              ? pool?.tvl_usd
+                              : "$" + getFormattedNumber(pool?.tvl_usd)
+                          }
+                          lockTime={
+                            pool?.lock_time
+                              ? pool?.lock_time
+                              : locktimeFarm[index]
+                          }
+                          tokenLogo={
+                            pool?.icon
+                              ? pool?.icon
+                              : pool?.pair_name === "DYP"
+                              ? "dyplogo.svg"
+                              : "idypius.svg"
+                          }
+                          onShowDetailsClick={() => {
+                            setActiveCard();
+                            setActiveCard2();
+                            setActiveCard3(topPools[index + 4]);
+                            setActiveCard4(null);
+                            setActiveCardCawsLand(null);
+                            setActiveCardNFT(false);
+                            setActiveCardLandNFT(false);
+                            handleCardIndexStake(index + 4);
+                            handleCardIndexStake30(index + 4);
+                            handleCardIndexStakeiDyp(index + 4);
+                            setDetails(index + 4);
+                            setselectedPool(topList !== "Vault" && pool);
+                            setShowDetails(topList !== "Vault" && true);
+                            setselectedpoolType(pool?.type);
+                            setselectedIndex(index + 4);
+                            handleSelectPool(
+                              pool?.chain,
+                              pool?.lock_time,
+                              pool?.type,
+                              ethPoolsDyp,
+                              basePoolsDyp,
+                              ethPoolsiDyp,
+                              bnbPoolsDyp,
+                              bnbPoolsiDyp,
+                              avaxPoolsDyp,
+                              avaxPoolsiDyp
+                            );
+                          }}
+                          onHideDetailsClick={() => {
+                            setActiveCard3();
+                            setDetails();
+                            setselectedpoolType("");
+                          }}
+                          cardType={topList}
+                          details={details === index + 4 ? true : false}
+                          isNewPool={pool?.new_pool === "Yes" ? true : false}
+                          isStaked={
+                            userPools.length > 0
+                              ? userPools.find(
+                                  (obj) => obj.contract_address === pool?.id
+                                )
+                                ? true
+                                : false
+                              : false
+                          }
+                          expired={false}
+                          network={chainId}
+                          isPremium={isPremium}
+                        />
+                      ))
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                  {activeCard3 && topList === "Vault" && chain === "eth" ? (
+                    <Vault
+                      vault={vaultArrayNew[cardIndex]}
+                      token={tokenvaultArrayNew[cardIndex]}
+                      platformTokenApyPercent={vaultplatformArrayNew[cardIndex]}
+                      UNDERLYING_DECIMALS={vaultdecimalsArrayNew[cardIndex]}
+                      UNDERLYING_SYMBOL={vaultsymbolArrayNew[cardIndex]}
+                      expiration_time={"1 August 2024"}
+                      coinbase={coinbase}
+                      lockTime={"No Lock"}
+                      handleConnection={handleConnection}
+                      chainId={chainId}
+                      listType={listType}
+                      handleSwitchNetwork={handleSwitchNetwork}
+                      expired={false}
+                      isConnected={isConnected}
+                      the_graph_result={the_graph_result}
+                    />
+                  ) : (
+                    <></>
+                  )}
+                </>
+              ) : (
+                <></>
+              )}
+
+
+{windowSize && windowSize.width < 787 &&
+              topList === "Vault" ? (
+                <>
+                  <div className="top-picks-container">
+                    {expiredPools === false &&
+                    activePools &&
+                    activePools.length > 0 &&
+                    topList === "Vault" ? (
+                      topPools.slice(0, 1).map((pool, index) => (
+                        <TopPoolsCard
+                          key={index}
+                          chain={chain}
+                          top_pick={false}
+                          tokenName={pool?.pair_name}
+                          apr={pool?.apy_percent + "%"}
+                          tvl={
+                            pool?.tvl_usd === "--"
+                              ? pool?.tvl_usd
+                              : "$" + getFormattedNumber(pool?.tvl_usd)
+                          }
+                          lockTime={
+                            pool?.lock_time
+                              ? pool?.lock_time
+                              : locktimeFarm[index]
+                          }
+                          tokenLogo={
+                            pool?.icon
+                              ? pool?.icon
+                              : pool?.pair_name === "DYP"
+                              ? "dyplogo.svg"
+                              : "idypius.svg"
+                          }
+                          onShowDetailsClick={() => {
+                            setActiveCard(topPools[index]);
+                            setActiveCard2(null);
+                            setActiveCard3(null);
+                            setActiveCard4(null);
+                            setActiveCardCawsLand(null);
+                            setActiveCardNFT(false);
+                            setActiveCardLandNFT(false);
+                            handleCardIndexStake(index);
+                            handleCardIndexStake30(index);
+                            handleCardIndexStakeiDyp(index);
+                            setDetails(index);
+                            setselectedPool(topList !== "Vault" && pool);
+                            setShowDetails(topList !== "Vault" && true);
+                            setselectedpoolType(pool?.type);
+                            setselectedIndex(index);
+                            handleSelectPool(
+                              pool?.chain,
+                              pool?.lock_time,
+                              pool?.type,
+                              ethPoolsDyp,
+                              basePoolsDyp,
+                              ethPoolsiDyp,
+                              bnbPoolsDyp,
+                              bnbPoolsiDyp,
+                              avaxPoolsDyp,
+                              avaxPoolsiDyp
+                            );
+                          }}
+                          onHideDetailsClick={() => {
+                            setActiveCard(null);
+                            setDetails();
+                            setselectedpoolType("");
+                          }}
+                          cardType={topList}
+                          details={details === index ? true : false}
+                          isNewPool={pool?.new_pool === "Yes" ? true : false}
+                          isStaked={
+                            userPools.length > 0
+                              ? userPools.find(
+                                  (obj) => obj.contract_address === pool?.id
+                                )
+                                ? true
+                                : false
+                              : false
+                          }
+                          expired={false}
+                          network={chainId}
+                          isPremium={isPremium}
+                        />
+                      ))
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                  {activeCard && topList === "Vault" && chain === "eth" ? (
+                    <Vault
+                      vault={vaultArrayNew[cardIndex]}
+                      token={tokenvaultArrayNew[cardIndex]}
+                      platformTokenApyPercent={vaultplatformArrayNew[cardIndex]}
+                      UNDERLYING_DECIMALS={vaultdecimalsArrayNew[cardIndex]}
+                      UNDERLYING_SYMBOL={vaultsymbolArrayNew[cardIndex]}
+                      expiration_time={"1 August 2024"}
+                      coinbase={coinbase}
+                      lockTime={"No Lock"}
+                      handleConnection={handleConnection}
+                      chainId={chainId}
+                      listType={listType}
+                      handleSwitchNetwork={handleSwitchNetwork}
+                      expired={false}
+                      isConnected={isConnected}
+                      the_graph_result={the_graph_result}
+                    />
+                  ) : (
+                    <></>
+                  )}
+                  <div className="top-picks-container pt-3">
+                    {expiredPools === false &&
+                    activePools &&
+                    activePools.length > 0 &&
+                    topList === "Vault" ? (
+                      topPools.slice(1, 2).map((pool, index) => (
+                        <TopPoolsCard
+                          key={index}
+                          chain={chain}
+                          top_pick={false}
+                          tokenName={pool?.pair_name}
+                          apr={pool?.apy_percent + "%"}
+                          tvl={
+                            pool?.tvl_usd === "--"
+                              ? pool?.tvl_usd
+                              : "$" + getFormattedNumber(pool?.tvl_usd)
+                          }
+                          lockTime={
+                            pool?.lock_time
+                              ? pool?.lock_time
+                              : locktimeFarm[index]
+                          }
+                          tokenLogo={
+                            pool?.icon
+                              ? pool?.icon
+                              : pool?.pair_name === "DYP"
+                              ? "dyplogo.svg"
+                              : "idypius.svg"
+                          }
+                          onShowDetailsClick={() => {
+                            setActiveCard();
+                            setActiveCard2(topPools[index + 1]);
+                            setActiveCard3(null);
+                            setActiveCard4(null);
+                            setActiveCardCawsLand(null);
+                            setActiveCardNFT(false);
+                            setActiveCardLandNFT(false);
+                            handleCardIndexStake(index + 1);
+                            handleCardIndexStake30(index + 1);
+                            handleCardIndexStakeiDyp(index + 1);
+                            setDetails(index + 1);
+                            setselectedPool(topList !== "Vault" && pool);
+                            setShowDetails(topList !== "Vault" && true);
+                            setselectedpoolType(pool?.type);
+                            setselectedIndex(index + 1);
+                            handleSelectPool(
+                              pool?.chain,
+                              pool?.lock_time,
+                              pool?.type,
+                              ethPoolsDyp,
+                              basePoolsDyp,
+                              ethPoolsiDyp,
+                              bnbPoolsDyp,
+                              bnbPoolsiDyp,
+                              avaxPoolsDyp,
+                              avaxPoolsiDyp
+                            );
+                          }}
+                          onHideDetailsClick={() => {
+                            setActiveCard2();
+                            setDetails();
+                            setselectedpoolType("");
+                          }}
+                          cardType={topList}
+                          details={details === index + 1 ? true : false}
+                          isNewPool={pool?.new_pool === "Yes" ? true : false}
+                          isStaked={
+                            userPools.length > 0
+                              ? userPools.find(
+                                  (obj) => obj.contract_address === pool?.id
+                                )
+                                ? true
+                                : false
+                              : false
+                          }
+                          expired={false}
+                          network={chainId}
+                          isPremium={isPremium}
+                        />
+                      ))
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                  {activeCard2 && topList === "Vault" && chain === "eth" ? (
+                    <Vault
+                      vault={vaultArrayNew[cardIndex]}
+                      token={tokenvaultArrayNew[cardIndex]}
+                      platformTokenApyPercent={vaultplatformArrayNew[cardIndex]}
+                      UNDERLYING_DECIMALS={vaultdecimalsArrayNew[cardIndex]}
+                      UNDERLYING_SYMBOL={vaultsymbolArrayNew[cardIndex]}
+                      expiration_time={"1 August 2024"}
+                      coinbase={coinbase}
+                      lockTime={"No Lock"}
+                      handleConnection={handleConnection}
+                      chainId={chainId}
+                      listType={listType}
+                      handleSwitchNetwork={handleSwitchNetwork}
+                      expired={false}
+                      isConnected={isConnected}
+                      the_graph_result={the_graph_result}
+                    />
+                  ) : (
+                    <></>
+                  )}
+
+                  <div className="top-picks-container pt-3">
+                    {expiredPools === false &&
+                    activePools &&
+                    activePools.length > 0 &&
+                    topList === "Vault" ? (
+                      topPools.slice(2,3).map((pool, index) => (
+                        <TopPoolsCard
+                          key={index}
+                          chain={chain}
+                          top_pick={false}
+                          tokenName={pool?.pair_name}
+                          apr={pool?.apy_percent + "%"}
+                          tvl={
+                            pool?.tvl_usd === "--"
+                              ? pool?.tvl_usd
+                              : "$" + getFormattedNumber(pool?.tvl_usd)
+                          }
+                          lockTime={
+                            pool?.lock_time
+                              ? pool?.lock_time
+                              : locktimeFarm[index]
+                          }
+                          tokenLogo={
+                            pool?.icon
+                              ? pool?.icon
+                              : pool?.pair_name === "DYP"
+                              ? "dyplogo.svg"
+                              : "idypius.svg"
+                          }
+                          onShowDetailsClick={() => {
+                            setActiveCard();
+                            setActiveCard2();
+                            setActiveCard3(topPools[index + 2]);
+                            setActiveCard4(null);
+                            setActiveCardCawsLand(null);
+                            setActiveCardNFT(false);
+                            setActiveCardLandNFT(false);
+                            handleCardIndexStake(index + 2);
+                            handleCardIndexStake30(index + 2);
+                            handleCardIndexStakeiDyp(index + 2);
+                            setDetails(index + 2);
+                            setselectedPool(topList !== "Vault" && pool);
+                            setShowDetails(topList !== "Vault" && true);
+                            setselectedpoolType(pool?.type);
+                            setselectedIndex(index + 2);
+                            handleSelectPool(
+                              pool?.chain,
+                              pool?.lock_time,
+                              pool?.type,
+                              ethPoolsDyp,
+                              basePoolsDyp,
+                              ethPoolsiDyp,
+                              bnbPoolsDyp,
+                              bnbPoolsiDyp,
+                              avaxPoolsDyp,
+                              avaxPoolsiDyp
+                            );
+                          }}
+                          onHideDetailsClick={() => {
+                            setActiveCard3();
+                            setDetails();
+                            setselectedpoolType("");
+                          }}
+                          cardType={topList}
+                          details={details === index + 2 ? true : false}
+                          isNewPool={pool?.new_pool === "Yes" ? true : false}
+                          isStaked={
+                            userPools.length > 0
+                              ? userPools.find(
+                                  (obj) => obj.contract_address === pool?.id
+                                )
+                                ? true
+                                : false
+                              : false
+                          }
+                          expired={false}
+                          network={chainId}
+                          isPremium={isPremium}
+                        />
+                      ))
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                  {activeCard3 && topList === "Vault" && chain === "eth" ? (
+                    <Vault
+                      vault={vaultArrayNew[cardIndex]}
+                      token={tokenvaultArrayNew[cardIndex]}
+                      platformTokenApyPercent={vaultplatformArrayNew[cardIndex]}
+                      UNDERLYING_DECIMALS={vaultdecimalsArrayNew[cardIndex]}
+                      UNDERLYING_SYMBOL={vaultsymbolArrayNew[cardIndex]}
+                      expiration_time={"1 August 2024"}
+                      coinbase={coinbase}
+                      lockTime={"No Lock"}
+                      handleConnection={handleConnection}
+                      chainId={chainId}
+                      listType={listType}
+                      handleSwitchNetwork={handleSwitchNetwork}
+                      expired={false}
+                      isConnected={isConnected}
+                      the_graph_result={the_graph_result}
+                    />
+                  ) : (
+                    <></>
+                  )}
+
+<div className="top-picks-container pt-3">
+                    {expiredPools === false &&
+                    activePools &&
+                    activePools.length > 0 &&
+                    topList === "Vault" ? (
+                      topPools.slice(3,4).map((pool, index) => (
+                        <TopPoolsCard
+                          key={index}
+                          chain={chain}
+                          top_pick={false}
+                          tokenName={pool?.pair_name}
+                          apr={pool?.apy_percent + "%"}
+                          tvl={
+                            pool?.tvl_usd === "--"
+                              ? pool?.tvl_usd
+                              : "$" + getFormattedNumber(pool?.tvl_usd)
+                          }
+                          lockTime={
+                            pool?.lock_time
+                              ? pool?.lock_time
+                              : locktimeFarm[index]
+                          }
+                          tokenLogo={
+                            pool?.icon
+                              ? pool?.icon
+                              : pool?.pair_name === "DYP"
+                              ? "dyplogo.svg"
+                              : "idypius.svg"
+                          }
+                          onShowDetailsClick={() => {
+                            setActiveCard();
+                            setActiveCard2();
+                            setActiveCard3();
+                            setActiveCard4(topPools[index + 3]);
+                            setActiveCardCawsLand(null);
+                            setActiveCardNFT(false);
+                            setActiveCardLandNFT(false);
+                            handleCardIndexStake(index + 3);
+                            handleCardIndexStake30(index + 3);
+                            handleCardIndexStakeiDyp(index + 3);
+                            setDetails(index + 3);
+                            setselectedPool(topList !== "Vault" && pool);
+                            setShowDetails(topList !== "Vault" && true);
+                            setselectedpoolType(pool?.type);
+                            setselectedIndex(index + 3);
+                            handleSelectPool(
+                              pool?.chain,
+                              pool?.lock_time,
+                              pool?.type,
+                              ethPoolsDyp,
+                              basePoolsDyp,
+                              ethPoolsiDyp,
+                              bnbPoolsDyp,
+                              bnbPoolsiDyp,
+                              avaxPoolsDyp,
+                              avaxPoolsiDyp
+                            );
+                          }}
+                          onHideDetailsClick={() => {
+                            setActiveCard4();
+                            setDetails();
+                            setselectedpoolType("");
+                          }}
+                          cardType={topList}
+                          details={details === index + 3 ? true : false}
+                          isNewPool={pool?.new_pool === "Yes" ? true : false}
+                          isStaked={
+                            userPools.length > 0
+                              ? userPools.find(
+                                  (obj) => obj.contract_address === pool?.id
+                                )
+                                ? true
+                                : false
+                              : false
+                          }
+                          expired={false}
+                          network={chainId}
+                          isPremium={isPremium}
+                        />
+                      ))
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                  {activeCard4 && topList === "Vault" && chain === "eth" ? (
+                    <Vault
+                      vault={vaultArrayNew[cardIndex]}
+                      token={tokenvaultArrayNew[cardIndex]}
+                      platformTokenApyPercent={vaultplatformArrayNew[cardIndex]}
+                      UNDERLYING_DECIMALS={vaultdecimalsArrayNew[cardIndex]}
+                      UNDERLYING_SYMBOL={vaultsymbolArrayNew[cardIndex]}
+                      expiration_time={"1 August 2024"}
+                      coinbase={coinbase}
+                      lockTime={"No Lock"}
+                      handleConnection={handleConnection}
+                      chainId={chainId}
+                      listType={listType}
+                      handleSwitchNetwork={handleSwitchNetwork}
+                      expired={false}
+                      isConnected={isConnected}
+                      the_graph_result={the_graph_result}
+                    />
+                  ) : (
+                    <></>
+                  )}
+
+
+<div className="top-picks-container pt-3">
+                    {expiredPools === false &&
+                    activePools &&
+                    activePools.length > 0 &&
+                    topList === "Vault" ? (
+                      topPools.slice(4,5).map((pool, index) => (
+                        <TopPoolsCard
+                          key={index}
+                          chain={chain}
+                          top_pick={false}
+                          tokenName={pool?.pair_name}
+                          apr={pool?.apy_percent + "%"}
+                          tvl={
+                            pool?.tvl_usd === "--"
+                              ? pool?.tvl_usd
+                              : "$" + getFormattedNumber(pool?.tvl_usd)
+                          }
+                          lockTime={
+                            pool?.lock_time
+                              ? pool?.lock_time
+                              : locktimeFarm[index]
+                          }
+                          tokenLogo={
+                            pool?.icon
+                              ? pool?.icon
+                              : pool?.pair_name === "DYP"
+                              ? "dyplogo.svg"
+                              : "idypius.svg"
+                          }
+                          onShowDetailsClick={() => {
+                            setActiveCard();
+                            setActiveCard2();
+                            setActiveCard3();
+                            setActiveCard4();
+                            setActiveCard5(topPools[index + 4]);
+                            setActiveCardCawsLand(null);
+                            setActiveCardNFT(false);
+                            setActiveCardLandNFT(false);
+                            handleCardIndexStake(index + 4);
+                            handleCardIndexStake30(index + 4);
+                            handleCardIndexStakeiDyp(index + 4);
+                            setDetails(index + 4);
+                            setselectedPool(topList !== "Vault" && pool);
+                            setShowDetails(topList !== "Vault" && true);
+                            setselectedpoolType(pool?.type);
+                            setselectedIndex(index + 4);
+                            handleSelectPool(
+                              pool?.chain,
+                              pool?.lock_time,
+                              pool?.type,
+                              ethPoolsDyp,
+                              basePoolsDyp,
+                              ethPoolsiDyp,
+                              bnbPoolsDyp,
+                              bnbPoolsiDyp,
+                              avaxPoolsDyp,
+                              avaxPoolsiDyp
+                            );
+                          }}
+                          onHideDetailsClick={() => {
+                            setActiveCard5();
+                            setDetails();
+                            setselectedpoolType("");
+                          }}
+                          cardType={topList}
+                          details={details === index + 4 ? true : false}
+                          isNewPool={pool?.new_pool === "Yes" ? true : false}
+                          isStaked={
+                            userPools.length > 0
+                              ? userPools.find(
+                                  (obj) => obj.contract_address === pool?.id
+                                )
+                                ? true
+                                : false
+                              : false
+                          }
+                          expired={false}
+                          network={chainId}
+                          isPremium={isPremium}
+                        />
+                      ))
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                  {activeCard5 && topList === "Vault" && chain === "eth" ? (
+                    <Vault
+                      vault={vaultArrayNew[cardIndex]}
+                      token={tokenvaultArrayNew[cardIndex]}
+                      platformTokenApyPercent={vaultplatformArrayNew[cardIndex]}
+                      UNDERLYING_DECIMALS={vaultdecimalsArrayNew[cardIndex]}
+                      UNDERLYING_SYMBOL={vaultsymbolArrayNew[cardIndex]}
+                      expiration_time={"1 August 2024"}
+                      coinbase={coinbase}
+                      lockTime={"No Lock"}
+                      handleConnection={handleConnection}
+                      chainId={chainId}
+                      listType={listType}
+                      handleSwitchNetwork={handleSwitchNetwork}
+                      expired={false}
+                      isConnected={isConnected}
+                      the_graph_result={the_graph_result}
+                    />
+                  ) : (
+                    <></>
+                  )}
+
+<div className="top-picks-container pt-3">
+                    {expiredPools === false &&
+                    activePools &&
+                    activePools.length > 0 &&
+                    topList === "Vault" ? (
+                      topPools.slice(5,6).map((pool, index) => (
+                        <TopPoolsCard
+                          key={index}
+                          chain={chain}
+                          top_pick={false}
+                          tokenName={pool?.pair_name}
+                          apr={pool?.apy_percent + "%"}
+                          tvl={
+                            pool?.tvl_usd === "--"
+                              ? pool?.tvl_usd
+                              : "$" + getFormattedNumber(pool?.tvl_usd)
+                          }
+                          lockTime={
+                            pool?.lock_time
+                              ? pool?.lock_time
+                              : locktimeFarm[index]
+                          }
+                          tokenLogo={
+                            pool?.icon
+                              ? pool?.icon
+                              : pool?.pair_name === "DYP"
+                              ? "dyplogo.svg"
+                              : "idypius.svg"
+                          }
+                          onShowDetailsClick={() => {
+                            setActiveCard();
+                            setActiveCard2();
+                            setActiveCard3();
+                            setActiveCard4();
+                            setActiveCard5();
+                            setActiveCard6(topPools[index + 5]);
+                            setActiveCardCawsLand(null);
+                            setActiveCardNFT(false);
+                            setActiveCardLandNFT(false);
+                            handleCardIndexStake(index + 5);
+                            handleCardIndexStake30(index + 5);
+                            handleCardIndexStakeiDyp(index + 5);
+                            setDetails(index + 5);
+                            setselectedPool(topList !== "Vault" && pool);
+                            setShowDetails(topList !== "Vault" && true);
+                            setselectedpoolType(pool?.type);
+                            setselectedIndex(index + 5);
+                            handleSelectPool(
+                              pool?.chain,
+                              pool?.lock_time,
+                              pool?.type,
+                              ethPoolsDyp,
+                              basePoolsDyp,
+                              ethPoolsiDyp,
+                              bnbPoolsDyp,
+                              bnbPoolsiDyp,
+                              avaxPoolsDyp,
+                              avaxPoolsiDyp
+                            );
+                          }}
+                          onHideDetailsClick={() => {
+                            setActiveCard6();
+                            setDetails();
+                            setselectedpoolType("");
+                          }}
+                          cardType={topList}
+                          details={details === index + 4 ? true : false}
+                          isNewPool={pool?.new_pool === "Yes" ? true : false}
+                          isStaked={
+                            userPools.length > 0
+                              ? userPools.find(
+                                  (obj) => obj.contract_address === pool?.id
+                                )
+                                ? true
+                                : false
+                              : false
+                          }
+                          expired={false}
+                          network={chainId}
+                          isPremium={isPremium}
+                        />
+                      ))
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                  {activeCard6 && topList === "Vault" && chain === "eth" ? (
+                    <Vault
+                      vault={vaultArrayNew[cardIndex]}
+                      token={tokenvaultArrayNew[cardIndex]}
+                      platformTokenApyPercent={vaultplatformArrayNew[cardIndex]}
+                      UNDERLYING_DECIMALS={vaultdecimalsArrayNew[cardIndex]}
+                      UNDERLYING_SYMBOL={vaultsymbolArrayNew[cardIndex]}
+                      expiration_time={"1 August 2024"}
+                      coinbase={coinbase}
+                      lockTime={"No Lock"}
+                      handleConnection={handleConnection}
+                      chainId={chainId}
+                      listType={listType}
+                      handleSwitchNetwork={handleSwitchNetwork}
+                      expired={false}
+                      isConnected={isConnected}
+                      the_graph_result={the_graph_result}
+                    />
+                  ) : (
+                    <></>
+                  )}
+
+
+                  
+                </>
+              ) : (
+                <></>
+              )}
+
+
+
               {activeCard && topList === "Farming" ? (
-                 chain === "bnb" && listing === "table" ? (
+                chain === "bnb" && listing === "table" ? (
                   <BscFarmingFunc
-                  isConnected={isConnected}
+                    isConnected={isConnected}
                     wbnbPrice={wbnbPrice}
                     coinbase={coinbase}
                     latestTvl={theBnbPool.tvl_usd}
@@ -1689,53 +2887,10 @@ const allpools = [...sortedActiveDYP,...sortedActiveiDYP]
                     listType={listType}
                   />
                 ) : null
-              ) : activeCard && topList === "Vault" && chain === "eth" ? (
-                <Vault
-                  vault={vaultArrayNew[cardIndex]}
-                  token={tokenvaultArrayNew[cardIndex]}
-                  platformTokenApyPercent={vaultplatformArrayNew[cardIndex]}
-                  UNDERLYING_DECIMALS={vaultdecimalsArrayNew[cardIndex]}
-                  UNDERLYING_SYMBOL={vaultsymbolArrayNew[cardIndex]}
-                  expiration_time={"1 August 2024"}
-                  coinbase={coinbase}
-                  lockTime={"No Lock"}
-                  handleConnection={handleConnection}
-                  chainId={chainId}
-                  listType={listType}
-                  handleSwitchNetwork={handleSwitchNetwork}
-                  expired={false}
-                  isConnected={isConnected}
-                  the_graph_result={the_graph_result}
-                />
               ) : (
                 <></>
               )}
             </>
-          
-            {activeCard2 && topList === "Vault" && chain === "eth" ? (
-              <Vault
-                vault={vaultArrayNew[cardIndex]}
-                token={tokenvaultArrayNew[cardIndex]}
-                platformTokenApyPercent={vaultplatformArrayNew[cardIndex]}
-                UNDERLYING_DECIMALS={vaultdecimalsArrayNew[cardIndex]}
-                UNDERLYING_SYMBOL={vaultsymbolArrayNew[cardIndex]}
-                expiration_time={"1 August 2024"}
-                coinbase={coinbase}
-                lockTime={"No Lock"}
-                handleConnection={handleConnection}
-                chainId={chainId}
-                listType={listType}
-                handleSwitchNetwork={handleSwitchNetwork}
-                expired={false}
-                isConnected={isConnected}
-                the_graph_result={the_graph_result}
-              />
-            ) : (
-              <></>
-            )}
-          
-
-            
           </div>
         ) : listing !== "table" && topPools.length > 0 ? (
           <div className="list-pools-container px-0">
@@ -1781,7 +2936,7 @@ const allpools = [...sortedActiveDYP,...sortedActiveiDYP]
                 />
               )}
 
-              {/* {activeCard && topList === "Farming" &&
+            {/* {activeCard && topList === "Farming" &&
                  chain === "bnb" && listing !== "table" ? (
                   <BscFarmingFunc
                     isConnected={isConnected}
@@ -1851,84 +3006,86 @@ const allpools = [...sortedActiveDYP,...sortedActiveiDYP]
                 />
               )} */}
 
-            {expiredPools === false &&  topList !== "Farming" 
-              ? activePools.map((pool, index) => (
-                  <TopPoolsListCard
-                    key={index}
-                    theBnbPool={theBnbPool}
-                    expiredPools={expiredDYPPools}
-                    activePools={activePools}
-                    expired={false}
-                    chain={chain}
-                    top_pick={false}
-                    tokenName={
-                      pool.tokenName
-                        ? pool.tokenName
-                        : pool.pair_name
-                        ? pool.pair_name
-                        : ""
-                    }
-                    apr={pool?.apy_percent + "%"}
-                    tvl={
-                      pool?.tvl_usd === "--"
-                        ? pool?.tvl_usd
-                        : "$" + getFormattedNumber(pool?.tvl_usd)
-                    }
-                    lockTime={
-                      pool.lockTime
-                        ? pool.lockTime
-                        : pool.lock_time
-                        ? pool.lock_time
-                        : locktimeFarm[index]
-                    }
-                    cardType={topList}
-                    tokenLogo={
-                      pool.icon
-                        ? pool.icon
-                        : pool.pair_name === "iDYP"
-                        ? "idypius.svg"
-                        : "dyplogo.svg"
-                    }
-                    listType={listType}
-                    onShowDetailsClick={() => {
-                      setActiveCard(topPools[index]);
-                      handleCardIndexStake(index);
-                      handleCardIndexStake30(index);
-                      handleCardIndexStakeiDyp(index);
-                      setselectedPool(pool);
-                      setShowDetails(true);
-                      setselectedpoolType(pool?.type);
-                    }}
-                    onHideDetailsClick={() => {
-                      setActiveCard(null);
-                      setselectedpoolType("");
-                    }}
-                    showDetails={showDetails}
-                    topList={topList}
-                    cardIndex={index + 1}
-                    chainId={chainId}
-                    handleConnection={handleConnection}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    coinbase={coinbase}
-                    referrer={referrer}
-                    lp_id={lp_id[cardIndex]}
-                    the_graph_result={the_graph_result}
-                    the_graph_resultbsc={the_graph_resultbsc}
-                    isConnected={isConnected}
-                    the_graph_resultavax={the_graph_resultavax}
-                    display={
-                      pool.expired
-                        ? pool.expired === "Yes"
-                          ? "none"
-                          : "flex"
+            {expiredPools === false && topList !== "Farming" ? (
+              activePools.map((pool, index) => (
+                <TopPoolsListCard
+                  key={index}
+                  theBnbPool={theBnbPool}
+                  expiredPools={expiredDYPPools}
+                  activePools={activePools}
+                  expired={false}
+                  chain={chain}
+                  top_pick={false}
+                  tokenName={
+                    pool.tokenName
+                      ? pool.tokenName
+                      : pool.pair_name
+                      ? pool.pair_name
+                      : ""
+                  }
+                  apr={pool?.apy_percent + "%"}
+                  tvl={
+                    pool?.tvl_usd === "--"
+                      ? pool?.tvl_usd
+                      : "$" + getFormattedNumber(pool?.tvl_usd)
+                  }
+                  lockTime={
+                    pool.lockTime
+                      ? pool.lockTime
+                      : pool.lock_time
+                      ? pool.lock_time
+                      : locktimeFarm[index]
+                  }
+                  cardType={topList}
+                  tokenLogo={
+                    pool.icon
+                      ? pool.icon
+                      : pool.pair_name === "iDYP"
+                      ? "idypius.svg"
+                      : "dyplogo.svg"
+                  }
+                  listType={listType}
+                  onShowDetailsClick={() => {
+                    setActiveCard(topPools[index]);
+                    handleCardIndexStake(index);
+                    handleCardIndexStake30(index);
+                    handleCardIndexStakeiDyp(index);
+                    setselectedPool(pool);
+                    setShowDetails(true);
+                    setselectedpoolType(pool?.type);
+                  }}
+                  onHideDetailsClick={() => {
+                    setActiveCard(null);
+                    setselectedpoolType("");
+                  }}
+                  showDetails={showDetails}
+                  topList={topList}
+                  cardIndex={index + 1}
+                  chainId={chainId}
+                  handleConnection={handleConnection}
+                  handleSwitchNetwork={handleSwitchNetwork}
+                  coinbase={coinbase}
+                  referrer={referrer}
+                  lp_id={lp_id[cardIndex]}
+                  the_graph_result={the_graph_result}
+                  the_graph_resultbsc={the_graph_resultbsc}
+                  isConnected={isConnected}
+                  the_graph_resultavax={the_graph_resultavax}
+                  display={
+                    pool.expired
+                      ? pool.expired === "Yes"
+                        ? "none"
                         : "flex"
-                    }
-                    isNewPool={pool?.new_pool === "Yes" ? true : false}
-                    totalTvl={pool?.tvl_usd}
-                    isPremium={isPremium}
-                  />
-                ))
-              :<></>}
+                      : "flex"
+                  }
+                  isNewPool={pool?.new_pool === "Yes" ? true : false}
+                  totalTvl={pool?.tvl_usd}
+                  isPremium={isPremium}
+                />
+              ))
+            ) : (
+              <></>
+            )}
           </div>
         ) : topPools.length === 0 ? (
           <div
@@ -2026,7 +3183,7 @@ const allpools = [...sortedActiveDYP,...sortedActiveiDYP]
                         "No lock",
                         selectedpoolType,
                         ethPoolsDyp,
-                            basePoolsDyp,
+                        basePoolsDyp,
                         expiredPools === true
                           ? ethPoolsiDypExpired
                           : ethPoolsiDyp,
@@ -2069,7 +3226,7 @@ const allpools = [...sortedActiveDYP,...sortedActiveiDYP]
                         "30 days",
                         selectedpoolType,
                         ethPoolsDyp,
-                            basePoolsDyp,
+                        basePoolsDyp,
                         expiredPools === true
                           ? ethPoolsiDypExpired
                           : ethPoolsiDyp,
@@ -2112,7 +3269,7 @@ const allpools = [...sortedActiveDYP,...sortedActiveiDYP]
                         "60 days",
                         selectedpoolType,
                         ethPoolsDyp,
-                            basePoolsDyp,
+                        basePoolsDyp,
                         expiredPools === true
                           ? ethPoolsiDypExpired
                           : ethPoolsiDyp,
@@ -2162,7 +3319,7 @@ const allpools = [...sortedActiveDYP,...sortedActiveiDYP]
                         "90 days",
                         selectedpoolType,
                         ethPoolsDyp,
-                            basePoolsDyp,
+                        basePoolsDyp,
                         expiredPools === true
                           ? ethPoolsiDypExpired
                           : ethPoolsiDyp,
@@ -2216,7 +3373,7 @@ const allpools = [...sortedActiveDYP,...sortedActiveiDYP]
                         "120 days",
                         selectedpoolType,
                         ethPoolsDyp,
-                            basePoolsDyp,
+                        basePoolsDyp,
                         expiredPools === true
                           ? ethPoolsiDypExpired
                           : ethPoolsiDyp,
@@ -2452,10 +3609,10 @@ const allpools = [...sortedActiveDYP,...sortedActiveiDYP]
                             >
                               <img
                                 src={
-                                  (selectedPool?.id ===
-                                    "0x92A84052Fe6945949A295AF14a7506e3dc085492") ||
-                                  (selectedPool?.id ===
-                                    "0xFdD3CFF22CF846208E3B37b47Bc36b2c61D2cA8b")
+                                  selectedPool?.id ===
+                                    "0x92A84052Fe6945949A295AF14a7506e3dc085492" ||
+                                  selectedPool?.id ===
+                                    "0xFdD3CFF22CF846208E3B37b47Bc36b2c61D2cA8b"
                                     ? warning
                                     : moreinfo
                                 }
@@ -2770,44 +3927,45 @@ const allpools = [...sortedActiveDYP,...sortedActiveiDYP]
                     }}
                   />
                 ) : topList === "Staking" &&
-                (selectedPool?.id ===
-                  "0x13a3EA792db25d6E239f4b785bA17FB5B9faf84e" || selectedPool?.id ===
-                  "0x9845a667b1A603FF21596FDdec51968a2bccAc11") &&
-                chain === "base" ? (
-                <StakingDypiusBase1
-                selectedPool={selectedPool}
-                selectedTab={selectedTab}
-                staking={window.constant_staking_dypius_base1}
-                apr={selectedPool?.apy_percent}
-                liquidity={eth_address}
-                expiration_time={"01 Sep 2025"}
-                finalApr={selectedPool?.apy_performancefee}
-                lockTime={
-                  selectedPool?.lock_time?.split(" ")[0] === "No"
-                    ? "No Lock"
-                    : parseInt(selectedPool?.lock_time?.split(" ")[0])
-                }
-                listType={listType}
-                other_info={false}
-                fee={selectedPool?.performancefee}
-                is_wallet_connected={isConnected}
-                coinbase={coinbase}
-                the_graph_result={the_graph_result}
-                chainId={chainId}
-                handleConnection={handleConnection}
-                handleSwitchNetwork={handleSwitchNetwork}
-                expired={false}
-                referrer={referrer}
-                onConnectWallet={() => {
-                  setShowDetails(false);
-                  onConnectWallet();
-                  setselectedPool([]);
-                  setDetails(999);
-                }}
-                poolCap={2000000}
-                start_date={"01 Sep 2024"}
-                />
-              ) : topList === "Staking" &&
+                  (selectedPool?.id ===
+                    "0x13a3EA792db25d6E239f4b785bA17FB5B9faf84e" ||
+                    selectedPool?.id ===
+                      "0x9845a667b1A603FF21596FDdec51968a2bccAc11") &&
+                  chain === "base" ? (
+                  <StakingDypiusBase1
+                    selectedPool={selectedPool}
+                    selectedTab={selectedTab}
+                    staking={window.constant_staking_dypius_base1}
+                    apr={selectedPool?.apy_percent}
+                    liquidity={eth_address}
+                    expiration_time={"01 Sep 2025"}
+                    finalApr={selectedPool?.apy_performancefee}
+                    lockTime={
+                      selectedPool?.lock_time?.split(" ")[0] === "No"
+                        ? "No Lock"
+                        : parseInt(selectedPool?.lock_time?.split(" ")[0])
+                    }
+                    listType={listType}
+                    other_info={false}
+                    fee={selectedPool?.performancefee}
+                    is_wallet_connected={isConnected}
+                    coinbase={coinbase}
+                    the_graph_result={the_graph_result}
+                    chainId={chainId}
+                    handleConnection={handleConnection}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    expired={false}
+                    referrer={referrer}
+                    onConnectWallet={() => {
+                      setShowDetails(false);
+                      onConnectWallet();
+                      setselectedPool([]);
+                      setDetails(999);
+                    }}
+                    poolCap={2000000}
+                    start_date={"01 Sep 2024"}
+                  />
+                ) : topList === "Staking" &&
                   selectedPool?.id ===
                     "0x998A9F0DF7DAF20c2B0Bb379Dcae394636926a96" &&
                   chain === "eth" ? (
