@@ -679,11 +679,15 @@ const Whitelist = ({
       <div className="whitelist-info-grid">
         <div className="whitelist-info-item p-3 d-flex flex-column gap-1 align-items-start">
           <span className="whitelist-info-span">Token Distribution</span>
-          <h6 className="mb-0 whitelist-info-title">Private Round</h6>
+          {/* <h6 className="mb-0 whitelist-info-title">Private Round</h6> */}
+          <h6 className="mb-0 whitelist-info-title">IDO</h6>
+
         </div>
         <div className="whitelist-info-item p-3 d-flex flex-column gap-1 align-items-start">
           <span className="whitelist-info-span">Token Price</span>
-          <h6 className="mb-0 whitelist-info-title">$0.0325</h6>
+          {/* <h6 className="mb-0 whitelist-info-title">$0.0325</h6>0.0425 */}
+          <h6 className="mb-0 whitelist-info-title">$0.0425</h6>
+
         </div>
         <div className="whitelist-info-item p-3 d-flex flex-column gap-1 align-items-start">
           <span className="whitelist-info-span">Fully Diluted Valuation</span>
@@ -709,7 +713,7 @@ const Whitelist = ({
               <img src={tooltipIcon} alt="" />
             </Tooltip>{" "}
           </span>
-          <h6 className="mb-0 whitelist-info-title">3/16 Months</h6>
+          <h6 className="mb-0 whitelist-info-title">6 Months</h6>
         </div>
         <div className="whitelist-info-item p-3 d-flex flex-column gap-1 align-items-start">
           <span className="whitelist-info-span">Network</span>
