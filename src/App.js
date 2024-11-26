@@ -1106,7 +1106,7 @@ function App() {
         data?.getPlayer?.wallet?.publicAddress?.toLowerCase()
     );
 
-    console.log(testArray, leaderboard2);
+
     fillRecordsCaws2d(leaderboard2);
     if (
       testArray.length > 0 &&

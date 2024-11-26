@@ -855,6 +855,7 @@ const StakeDypiusEth = ({
       <div className="separator my-2"></div>
       {selectedTab === "deposit" ? (
         <div className="d-flex flex-column w-100 gap-2">
+          <div className={`d-flex flex-column ${ expired && 'blurrypool'} `}>
           <div className="d-flex align-items-center gap-2 justify-content-between w-100">
             <span className="deposit-popup-txt">Deposit</span>
             <div className="d-flex gap-1 align-items-baseline">
@@ -910,6 +911,7 @@ const StakeDypiusEth = ({
                 <span className="bal-bigTxt2">{approvedAmount} DYP</span>
               </div>
             </div>
+          </div>
           </div>
           <div className="info-pool-wrapper p-3 w-100">
             <div className="d-flex w-100 justify-content-between align-items-start align-items-lg-center gap-2 flex-column flex-lg-row">
@@ -1128,7 +1130,7 @@ const StakeDypiusEth = ({
               </div>
             </div>
           </div>
-          {is_wallet_connected && chainId === "1" && (
+          {is_wallet_connected && chainId === "1" && !expired && (
             <button
               disabled={
                 true
