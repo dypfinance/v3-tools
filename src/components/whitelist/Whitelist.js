@@ -680,40 +680,22 @@ const Whitelist = ({
         <div className="whitelist-info-item p-3 d-flex flex-column gap-1 align-items-start">
           <span className="whitelist-info-span">Token Distribution</span>
           {/* <h6 className="mb-0 whitelist-info-title">Private Round</h6> */}
-          <h6 className="mb-0 whitelist-info-title">IDO</h6>
-
+          <h6 className="mb-0 whitelist-info-title">Private Round</h6>
         </div>
         <div className="whitelist-info-item p-3 d-flex flex-column gap-1 align-items-start">
           <span className="whitelist-info-span">Token Price</span>
           {/* <h6 className="mb-0 whitelist-info-title">$0.0325</h6>0.0425 */}
-          <h6 className="mb-0 whitelist-info-title">$0.0425</h6>
-
+          <h6 className="mb-0 whitelist-info-title">$0.0325</h6>
         </div>
         <div className="whitelist-info-item p-3 d-flex flex-column gap-1 align-items-start">
-          <span className="whitelist-info-span">Fully Diluted Valuation</span>
-          <h6 className="mb-0 whitelist-info-title">$42,500,000</h6>
+          <span className="whitelist-info-span">Cliff Period</span>
+          <h6 className="mb-0 whitelist-info-title">3 Months</h6>
         </div>
         <div className="whitelist-info-item p-3 d-flex flex-column gap-1 align-items-start">
           <span className="whitelist-info-span d-flex align-items-center justify-content-between w-100">
-            Cliff/Vesting Period
-            <Tooltip
-              title={
-                <>
-                  <div className="d-flex flex-column gap-2">
-                    <span className="whitelist-tooltip-content-text">
-                      6% TGE unlock, followed by 3 months cliff and 16 months of
-                      linear vesting
-                    </span>
-                  </div>
-                </>
-              }
-              enterDelay={0}
-              leaveDelay={0}
-            >
-              <img src={tooltipIcon} alt="" />
-            </Tooltip>{" "}
+            Vesting Period
           </span>
-          <h6 className="mb-0 whitelist-info-title">6 Months</h6>
+          <h6 className="mb-0 whitelist-info-title">12 Months</h6>
         </div>
         <div className="whitelist-info-item p-3 d-flex flex-column gap-1 align-items-start">
           <span className="whitelist-info-span">Network</span>
@@ -727,10 +709,12 @@ const Whitelist = ({
         <div className="col-12 col-lg-7">
           <div className="whitelist-info-item d-flex flex-column w-100 p-3 h-100 justify-content-between">
             <div className="d-flex align-items-center justify-content-between">
-              <div className="d-flex align-items-center gap-2">
-                <h6 className="mb-0 whitelist-deposit-title">Whitelist</h6>
-                <span className="whitelist-days-left">
-                  {/* {moment
+              <div className="d-flex align-items-center justify-content-between w-100">
+                <h6 className="mb-0 whitelist-deposit-title">
+                  Available to claim
+                </h6>
+                {/* <span className="whitelist-days-left">
+                  {moment
                     .duration(expireDay.getTime() - Date.now())
                     .humanize(true)
                     .slice(
@@ -739,9 +723,10 @@ const Whitelist = ({
                         .duration(expireDay.getTime() - Date.now())
                         .humanize(true).length
                     )}{" "}
-                  left */}
+                  left
                   Ended
-                </span>
+                </span> */}
+                <span className="available-claim-wod">0.00 WOD</span>
               </div>
               {/* <Tooltip
                 title={
@@ -771,9 +756,17 @@ const Whitelist = ({
                 <img src={tooltipIcon} alt="" />
               </Tooltip> */}
             </div>
-            <h6 className="mb-0 whitelist-deposit-title text-center">
+            {/* <h6 className="mb-0 whitelist-deposit-title text-center">
               Private Round ended.
-            </h6>
+            </h6> */}
+            <div className="d-flex w-100 justify-content-center">
+              <button
+                className="btn filledbtn mt-3 mt-lg-0"
+                style={{ width: "fit-content" }}
+              >
+                Claim
+              </button>
+            </div>
 
             {/* <div className="whitelist-deposit-wrapper mt-3  d-flex flex-column gap-2">
               <div className="whitelist-deposit-wrapper-header p-2 d-flex align-items-center justify-content-between">
@@ -1037,11 +1030,35 @@ const Whitelist = ({
         </div>
         <div className="col-12 col-lg-5 mt-2 mt-lg-0">
           <div className="d-flex flex-column gap-2">
-            <div className="my-commitment-wrapper py-4 w-100 d-flex flex-column align-items-center gap-2">
-              <h6 className="mb-0 my-commitment-value">
-                ${getFormattedNumber(totalDeposited)}
-              </h6>
-              <span className="my-commitment-span">My Commitment</span>
+            <div className="my-commitment-wrapper flex-column flex-lg-row py-4 px-3 w-100 d-flex  align-items-center justify-content-between gap-4">
+              {/* <div className="d-flex flex-column align-items-center gap-2">
+                {" "}
+                <h6 className="mb-0 my-commitment-value">
+                  ${getFormattedNumber(totalDeposited)}
+                </h6>
+                <span className="my-commitment-span">My Commitment</span>
+              </div> */}
+              <div className="d-flex flex-column align-items-center gap-2">
+                {" "}
+                <h6 className="mb-0 my-commitment-value">
+                 0.00
+                </h6>
+                <span className="my-commitment-span">Total WOD</span>
+              </div>
+              <div className="d-flex flex-column align-items-center gap-2">
+                {" "}
+                <h6 className="mb-0 my-commitment-value">
+                  0.00
+                </h6>
+                <span className="my-commitment-span">WOD Withdrew</span>
+              </div>
+              <div className="d-flex flex-column align-items-center gap-2">
+                {" "}
+                <h6 className="mb-0 my-commitment-value">
+                  0.00 
+                </h6>
+                <span className="my-commitment-span">WOD Remaining</span>
+              </div>
             </div>
             {/* <div className="whitelist-info-item d-flex flex-column w-100 p-3">
               <div className="d-flex align-items-center justify-content-between">
