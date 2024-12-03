@@ -50,7 +50,9 @@ const StakeDypiusEth3Phase2 = ({
   referrer,
   fee,
   renderedPage,
-  onConnectWallet,poolCap,start_date
+  onConnectWallet,
+  poolCap,
+  start_date,
 }) => {
   let {
     reward_token_dypius_eth,
@@ -325,7 +327,6 @@ const StakeDypiusEth3Phase2 = ({
       let _bal;
       if (chainId === "1" && coinbase && is_wallet_connected) {
         _bal = reward_token_dypius_eth.balanceOf(coinbase);
-     
       }
       if (staking && coinbase !== undefined && coinbase !== null) {
         let _pDivs = staking.getTotalPendingDivs(coinbase);
@@ -561,6 +562,8 @@ const StakeDypiusEth3Phase2 = ({
         setdepositLoading(false);
         setdepositStatus("success");
         refreshBalance();
+        getAvailableQuota();
+
         setTimeout(() => {
           setdepositStatus("initial");
           setdepositAmount("");
@@ -589,6 +592,7 @@ const StakeDypiusEth3Phase2 = ({
         setwithdrawLoading(false);
         setwithdrawStatus("success");
         refreshBalance();
+        getAvailableQuota();
       })
       .catch((e) => {
         setwithdrawLoading(false);
@@ -658,9 +662,9 @@ const StakeDypiusEth3Phase2 = ({
   };
 
   const getApproxReturn = (depositAmount, days) => {
-    const expirationDate = new Date("2025-06-07T23:11:00.000+02:00")
+    const expirationDate = new Date("2025-06-07T23:11:00.000+02:00");
     const currentDate = new Date();
-    const timeDifference = expirationDate - currentDate; 
+    const timeDifference = expirationDate - currentDate;
     const millisecondsInADay = 1000 * 60 * 60 * 24;
     const daysUntilExpiration = Math.floor(timeDifference / millisecondsInADay);
 
@@ -837,14 +841,14 @@ const StakeDypiusEth3Phase2 = ({
   };
 
   const getAvailableQuota = async () => {
-     
     if (staking && staking._address) {
-      const stakingSc = new window.infuraWeb3.eth.Contract(
-        window.CONSTANT_STAKING_DYPIUS_ABI,
-        staking._address
+      const tokenSc = new window.infuraWeb3.eth.Contract(
+        window.TOKEN_ABI,
+        reward_token_dypius_eth._address
       );
-      const totalDeposited = await stakingSc.methods
-        .totalDeposited()
+
+      const totalDeposited = await tokenSc.methods
+        .balanceOf(staking._address)
         .call()
         .catch((e) => {
           console.error(e);
@@ -859,16 +863,18 @@ const StakeDypiusEth3Phase2 = ({
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     const result = Number(depositAmount) + Number(totalDeposited);
-    if(result>poolCap) {
-      seterrorMsg('Deposit amount is greater than available quota. Please add another amount.')
-      setCanDeposit(false)
+    if (result > poolCap) {
+      seterrorMsg(
+        "Deposit amount is greater than available quota. Please add another amount."
+      );
+      setCanDeposit(false);
     } else {
-      seterrorMsg('')
-      setCanDeposit(true)
+      seterrorMsg("");
+      setCanDeposit(true);
     }
-  },[depositAmount, totalDeposited, poolCap])
+  }, [depositAmount, totalDeposited, poolCap]);
 
   useEffect(() => {
     getUsdPerDyp();
@@ -940,7 +946,7 @@ const StakeDypiusEth3Phase2 = ({
                 <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Pool Cap:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    {abbreviateNumber(poolCap,1)} DYP
+                    {abbreviateNumber(poolCap, 1)} DYP
                     <ClickAwayListener onClickAway={poolCapClose}>
                       <Tooltip
                         open={poolCapTooltip}
@@ -1152,11 +1158,15 @@ const StakeDypiusEth3Phase2 = ({
           {is_wallet_connected && chainId === "1" && (
             <button
               disabled={
-                depositAmount === "" || depositLoading === true || canDeposit === false ? true : false
+                depositAmount === "" ||
+                depositLoading === true ||
+                canDeposit === false
+                  ? true
+                  : false
               }
               className={`btn filledbtn ${
-                ((depositAmount === "" &&
-                depositStatus === "initial" )|| (canDeposit === false)) &&
+                ((depositAmount === "" && depositStatus === "initial") ||
+                  canDeposit === false) &&
                 "disabled-btn"
               } ${
                 depositStatus === "deposit" || depositStatus === "success"

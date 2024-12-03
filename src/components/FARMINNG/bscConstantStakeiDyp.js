@@ -462,6 +462,7 @@ const StakeBscIDyp = ({
         setdepositLoading(false);
         setdepositStatus("success");
         refreshBalance();
+        // getAvailableQuota();
 
         setTimeout(() => {
           setdepositAmount("");
@@ -491,6 +492,8 @@ const StakeBscIDyp = ({
         setwithdrawLoading(false);
         setwithdrawStatus("success");
         refreshBalance();
+        getAvailableQuota();
+
         setTimeout(() => {
           setwithdrawStatus("initial");
           setwithdrawAmount("");
@@ -569,11 +572,14 @@ const StakeBscIDyp = ({
     const expirationDate2 = new Date("2025-07-22T23:11:00.000+02:00");
 
     const currentDate = new Date();
-    const finalExpDate = expired === true ? expirationDate : expirationDate2
+    const finalExpDate = expired === true ? expirationDate : expirationDate2;
     const timeDifference = finalExpDate - currentDate;
     const millisecondsInADay = 1000 * 60 * 60 * 24;
     const daysUntilExpiration = Math.floor(timeDifference / millisecondsInADay);
-    return ((depositAmount * APY) / 100 / 365) * (expired === true ? 60 : daysUntilExpiration);
+    return (
+      ((depositAmount * APY) / 100 / 365) *
+      (expired === true ? 60 : daysUntilExpiration)
+    );
   };
 
   const getReferralLink = () => {
@@ -713,7 +719,7 @@ const StakeBscIDyp = ({
     let result_formatted2 = new BigNumber(result).div(1e18).toFixed(2);
 
     setapprovedAmount(result_formatted2);
-
+    
     if (
       Number(result_formatted) >= Number(amount) &&
       Number(result_formatted) !== 0
@@ -738,12 +744,13 @@ const StakeBscIDyp = ({
 
   const getAvailableQuota = async () => {
     if (staking && staking._address && poolCap !== 0) {
-      const stakingSc = new window.bscWeb3.eth.Contract(
-        window.CONSTANT_STAKING_DYPIUS_ABI,
-        staking._address
+      const tokenSc = new window.bscWeb3.eth.Contract(
+        window.TOKEN_ABI,
+        reward_token_idyp._address
       );
-      const totalDeposited = await stakingSc.methods
-        .totalDeposited()
+
+      const totalDeposited = await tokenSc.methods
+        .balanceOf(staking._address)
         .call()
         .catch((e) => {
           console.error(e);
@@ -959,7 +966,10 @@ const StakeBscIDyp = ({
                 <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Available Quota:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                  {poolCap === 0 ? 'N/A' : getFormattedNumber(availableQuota, 2)} {poolCap === 0 ? '' : 'iDYP'}
+                    {poolCap === 0
+                      ? "N/A"
+                      : getFormattedNumber(availableQuota, 2)}{" "}
+                    {poolCap === 0 ? "" : "iDYP"}
                     <ClickAwayListener onClickAway={quotaClose}>
                       <Tooltip
                         open={quotaTooltip}
@@ -1147,12 +1157,18 @@ const StakeBscIDyp = ({
           {is_wallet_connected && chainId === "56" && (
             <button
               disabled={
-                depositAmount === "" || depositLoading === true || canDeposit === false || expired === true ? true : false
+                depositAmount === "" ||
+                depositLoading === true ||
+                canDeposit === false ||
+                expired === true
+                  ? true
+                  : false
               }
               className={`btn filledbtn ${
-                ((depositAmount === "" &&
-                  depositStatus === "initial" )|| (canDeposit === false || expired === true)) &&
-                  "disabled-btn"
+                ((depositAmount === "" && depositStatus === "initial") ||
+                  canDeposit === false ||
+                  expired === true) &&
+                "disabled-btn"
               } ${
                 depositStatus === "deposit" || depositStatus === "success"
                   ? "success-button"

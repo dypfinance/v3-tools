@@ -50,7 +50,9 @@ const StakeDypiusEth1Phase2 = ({
   referrer,
   fee,
   renderedPage,
-  onConnectWallet,poolCap,start_date
+  onConnectWallet,
+  poolCap,
+  start_date,
 }) => {
   let {
     reward_token_dypius_eth,
@@ -182,7 +184,6 @@ const StakeDypiusEth1Phase2 = ({
   const [availableQuota, setavailableQuota] = useState(0);
   const [totalDeposited, settotalDeposited] = useState(0);
   const [canDeposit, setCanDeposit] = useState(true);
-
 
   const poolCapClose = () => {
     setPoolCapTooltip(false);
@@ -327,7 +328,6 @@ const StakeDypiusEth1Phase2 = ({
       let _bal;
       if (chainId === "1" && coinbase && is_wallet_connected) {
         _bal = reward_token_dypius_eth.balanceOf(coinbase);
-      
       }
       if (staking && coinbase !== undefined && coinbase !== null) {
         let _pDivs = staking.getTotalPendingDivs(coinbase);
@@ -563,10 +563,12 @@ const StakeDypiusEth1Phase2 = ({
         setdepositLoading(false);
         setdepositStatus("success");
         refreshBalance();
+        getAvailableQuota();
+
         setTimeout(() => {
           setdepositStatus("initial");
-        setdepositAmount("");
-      }, 5000);
+          setdepositAmount("");
+        }, 5000);
       })
       .catch((e) => {
         setdepositLoading(false);
@@ -591,8 +593,10 @@ const StakeDypiusEth1Phase2 = ({
         setwithdrawLoading(false);
         setwithdrawStatus("success");
         refreshBalance();
+        getAvailableQuota();
+
         setTimeout(() => {
-          setwithdrawStatus("initial"); 
+          setwithdrawStatus("initial");
           setwithdrawAmount("");
         }, 5000);
       })
@@ -664,12 +668,12 @@ const StakeDypiusEth1Phase2 = ({
   };
 
   const getApproxReturn = (depositAmount, days) => {
-    const expirationDate = new Date("2025-06-07T23:11:00.000+02:00")
+    const expirationDate = new Date("2025-06-07T23:11:00.000+02:00");
     const currentDate = new Date();
-    const timeDifference = expirationDate - currentDate; 
+    const timeDifference = expirationDate - currentDate;
     const millisecondsInADay = 1000 * 60 * 60 * 24;
     const daysUntilExpiration = Math.floor(timeDifference / millisecondsInADay);
-    
+
     return ((depositAmount * apr) / 100 / 365) * daysUntilExpiration;
   };
 
@@ -842,35 +846,45 @@ const StakeDypiusEth1Phase2 = ({
       });
   };
 
-  const getAvailableQuota = async()=>{
-     
-    if(staking && staking._address){
-    const stakingSc = new window.infuraWeb3.eth.Contract(window.CONSTANT_STAKING_DYPIUS_ABI, staking._address)
-    const totalDeposited = await stakingSc.methods.totalDeposited().call().catch((e)=>{console.error(e)})
-  
-    const totalDeposited_formatted = new BigNumber(totalDeposited).div(1e18).toFixed(6);
-    const quotaLeft = poolCap - totalDeposited_formatted;
-    setavailableQuota(quotaLeft)
-    settotalDeposited(totalDeposited_formatted)
-  }
-  }
+  const getAvailableQuota = async () => {
+    if (staking && staking._address) {
+      const tokenSc = new window.infuraWeb3.eth.Contract(
+        window.TOKEN_ABI,
+        reward_token_dypius_eth._address
+      );
 
-  useEffect(()=>{
-    const result = Number(depositAmount) + Number(totalDeposited);
-    if(result>poolCap) {
-      seterrorMsg('Deposit amount is greater than available quota. Please add another amount.')
-      setCanDeposit(false)
-    } else {
-      seterrorMsg('')
-      setCanDeposit(true)
+      const totalDeposited = await tokenSc.methods
+        .balanceOf(staking._address)
+        .call()
+        .catch((e) => {
+          console.error(e);
+        });
+
+      const totalDeposited_formatted = new BigNumber(totalDeposited)
+        .div(1e18)
+        .toFixed(6);
+      const quotaLeft = poolCap - totalDeposited_formatted;
+      setavailableQuota(quotaLeft);
+      settotalDeposited(totalDeposited_formatted);
     }
-  },[depositAmount, totalDeposited,poolCap])
+  };
 
-
+  useEffect(() => {
+    const result = Number(depositAmount) + Number(totalDeposited);
+    if (result > poolCap) {
+      seterrorMsg(
+        "Deposit amount is greater than available quota. Please add another amount."
+      );
+      setCanDeposit(false);
+    } else {
+      seterrorMsg("");
+      setCanDeposit(true);
+    }
+  }, [depositAmount, totalDeposited, poolCap]);
 
   useEffect(() => {
     getUsdPerDyp();
-    getAvailableQuota()
+    getAvailableQuota();
   }, [staking, poolCap]);
 
   return (
@@ -937,7 +951,7 @@ const StakeDypiusEth1Phase2 = ({
                 <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Pool Cap:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                    {abbreviateNumber(poolCap,1)} DYP
+                    {abbreviateNumber(poolCap, 1)} DYP
                     <ClickAwayListener onClickAway={poolCapClose}>
                       <Tooltip
                         open={poolCapTooltip}
@@ -961,7 +975,7 @@ const StakeDypiusEth1Phase2 = ({
                 <div className="d-flex align-items-center gap-2">
                   <span className="bal-smallTxt">Available Quota:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                   {getFormattedNumber(availableQuota, 2)} DYP
+                    {getFormattedNumber(availableQuota, 2)} DYP
                     <ClickAwayListener onClickAway={quotaClose}>
                       <Tooltip
                         open={quotaTooltip}
@@ -1038,7 +1052,7 @@ const StakeDypiusEth1Phase2 = ({
                     <div className="d-flex flex-column align-items-baseline">
                       <span className="bal-smallTxt">Rewards</span>
                       <span className="bal-bigTxt2">
-                        {getFormattedNumber(pendingDivs,5)} DYP
+                        {getFormattedNumber(pendingDivs, 5)} DYP
                       </span>
                     </div>
                     <button
@@ -1134,7 +1148,7 @@ const StakeDypiusEth1Phase2 = ({
                 <div className="d-flex align-items-center gap-1">
                   <span className="bal-smallTxt">Start date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                   {start_date}
+                    {start_date}
                   </span>
                 </div>
                 <div className="d-flex align-items-center gap-1">
@@ -1148,14 +1162,18 @@ const StakeDypiusEth1Phase2 = ({
           </div>
           {is_wallet_connected && chainId === "1" && (
             <button
-            disabled={
-              depositAmount === "" || depositLoading === true || canDeposit === false ? true : false
-            }
-            className={`btn filledbtn ${
-              ((depositAmount === "" &&
-              depositStatus === "initial" )|| (canDeposit === false)) &&
-              "disabled-btn"
-            }  ${
+              disabled={
+                depositAmount === "" ||
+                depositLoading === true ||
+                canDeposit === false
+                  ? true
+                  : false
+              }
+              className={`btn filledbtn ${
+                ((depositAmount === "" && depositStatus === "initial") ||
+                  canDeposit === false) &&
+                "disabled-btn"
+              }  ${
                 depositStatus === "deposit" || depositStatus === "success"
                   ? "success-button"
                   : depositStatus === "fail"
@@ -1302,7 +1320,7 @@ const StakeDypiusEth1Phase2 = ({
                 <div className="d-flex flex-column align-items-baseline">
                   <span className="bal-smallTxt">Rewards</span>
                   <span className="bal-bigTxt2">
-                    {getFormattedNumber(pendingDivs,5)} DYP
+                    {getFormattedNumber(pendingDivs, 5)} DYP
                   </span>
                 </div>
                 <button
