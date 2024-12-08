@@ -9,6 +9,29 @@ import bnb from "./assets/bnb.svg";
 import { CircularProgressbar } from "react-circular-progressbar";
 import ReviewsBar from "./ProgressBar/ReviewsBar";
 import axios from "axios";
+import Countdown from "react-countdown";
+const renderer = ({ days, hours, minutes, seconds }) => {
+  return (
+    <div className="d-flex align-items-center gap-2">
+      <div className="d-flex flex-column align-items-center justify-content-center unit2">
+        <h6 className="time-big-number2">{days < 10 ? "0" + days : days}</h6>
+        <h6 className="time-small-number2">Days</h6>
+      </div>
+      <h6 className="timer-separator2">:</h6>
+      <div className="d-flex flex-column align-items-center justify-content-center unit2">
+        <h6 className="time-big-number2">{hours < 10 ? "0" + hours : hours}</h6>
+        <h6 className="time-small-number2">Hours</h6>
+      </div>
+      <h6 className="timer-separator2">:</h6>
+      <div className="d-flex flex-column align-items-center justify-content-center unit2">
+        <h6 className="time-big-number2">
+          {minutes < 10 ? "0" + minutes : minutes}
+        </h6>
+        <h6 className="time-small-number2">Minutes</h6>
+      </div>
+    </div>
+  );
+};
 
 const DypMigration = ({
   networkId,
@@ -79,26 +102,33 @@ const DypMigration = ({
     tokenBSC: destinationToken,
   });
 
+  let loyaltyCd = new Date("2025-01-08T12:59:59.000+02:00");
+
   return (
     <div className="container-lg p-0">
       <div className="migration-banner d-flex flex-column flex-lg-row p-4 gap-3 gap-lg-0 align-items-center mb-4">
         <div className="col-12 col-lg-6">
           <div className="d-flex flex-column gap-3">
-            <h6 className="migration-banner-title mb-0">Migrate DYP tokens</h6>
+            <h6 className="migration-banner-title mb-0">
+              Final Call: Migrate DYP tokens
+            </h6>
+          
             <p className="migration-banner-desc mb-0">
-              Easily migrate your old DYP tokens from Ethereum, BNB Chain, and
-              Avalanche to the new DYP v2 token on Ethereum. This upgrade
-              ensures that you will benefit from the latest features and
-              improvements in the Dypius ecosystem.
+              The deadline to migrate is January 8, 2025. After this, migration
+              will close permanently. Migrate your tokens today to secure
+              continued access and utility!
             </p>
+          <Countdown date={loyaltyCd} renderer={renderer} />
+
           </div>
         </div>
 
-        <div className="col-12 col-lg-2 d-flex justify-content-center justify-content-lg-end">
+        <div className="col-12 col-lg-2 d-flex flex-column justify-content-center align-items-center">
           <div className="position-relative d-flex align-items-center flex-column">
-          <ReviewsBar score={migrationPercentage} />
-          <div className="position-relative migration-text-wrapper">
-          <span className="migration-status-text">Migration Status</span></div>
+            <ReviewsBar score={migrationPercentage} />
+            <div className="position-relative migration-text-wrapper">
+              <span className="migration-status-text">Migration Status</span>
+            </div>
           </div>
         </div>
       </div>
