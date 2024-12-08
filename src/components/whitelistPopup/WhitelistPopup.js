@@ -56,13 +56,13 @@ const WhitelistPopup = ({ open, onClose }) => {
 
   const settings = {
     dots: false,
-    infinite: false,
+    infinite: true,
     arrows: false,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
     initialSlide: 0,
-    autoplay: false,
+    autoplay: true,
     autoplaySpeed: 4000,
   };
 
