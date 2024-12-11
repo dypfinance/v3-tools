@@ -138,6 +138,11 @@ function App() {
   const [chests, setChests] = useState([]);
   const [openedChests, setOpenedChests] = useState([]);
   const [chestCount, setChestCount] = useState(0);
+
+  const [opbnbchests, setopbnbChests] = useState([]);
+  const [opbnbopenedChests, setopbnbOpenedChests] = useState([]);
+  const [opbnbchestCount, setopbnbChestCount] = useState(0);
+
   const [isonlink, setIsOnLink] = useState(false);
   const [hasDypBalance, sethasDypBalance] = useState(false);
   const [hasiDypBalance, sethasiDypBalance] = useState(false);
@@ -184,6 +189,11 @@ function App() {
   const onChestClaimed = () => {
     setChestCount(chestCount + 1);
   };
+
+  const onOpbnbChestClaimed = () => {
+    setChestCount(chestCount + 1);
+  };
+
 
   const fetchAggregatorPools = async () => {
     const result = await axios
@@ -1106,7 +1116,6 @@ function App() {
         data?.getPlayer?.wallet?.publicAddress?.toLowerCase()
     );
 
-
     fillRecordsCaws2d(leaderboard2);
     if (
       testArray.length > 0 &&
@@ -1126,8 +1135,8 @@ function App() {
     }
 
     setleaderboard(leaderboard2);
-  }; 
-  
+  };
+
   const getAllChests = async () => {
     let headersList = {
       Accept: "*/*",
@@ -1178,6 +1187,66 @@ function App() {
           }
         }
         setOpenedChests(openedChests);
+      }
+
+      // setOpenedChests(
+      //   data.chestOrder.filter((item) => {
+      //     return (item.isOpened = true);
+      //   })
+      // );
+    }
+  };
+
+  const getAllOpbnbChests = async () => {
+    let headersList = {
+      Accept: "*/*",
+      "User-Agent": "Thunder Client (https://www.thunderclient.com)",
+      "Content-Type": "application/json",
+    };
+
+    let bodyContent = JSON.stringify({ emailAddress: email, chain: 'opbnb' });
+
+    let response = await fetch(
+      "https://worldofdypiansdailybonus.azurewebsites.net/api/GetRewardsDypius?code=H9zoL4Hdr7fr7rzSZLTzilDT99fgwth006S7bO3J3Ua9AzFucS1HoA%3D%3D",
+      {
+        method: "POST",
+        body: bodyContent,
+        headers: headersList,
+      }
+    ).catch((err) => {
+      console.log(err);
+    });
+    if (response && response.status === 200) {
+      let data = await response.json();
+
+      setopbnbChests(data.chestOrder);
+      let standardChestsArray = [];
+      let premiumChestsArray = [];
+      let openedChests = [];
+      // let openedStandardChests = [];
+      // let openedPremiumChests = [];
+
+      if (data.chestOrder.length > 0) {
+        for (let item = 0; item < data.chestOrder.length; item++) {
+          if (data.chestOrder[item].chestType === "Standard") {
+            if (data.chestOrder[item].isOpened === true) {
+              {
+                openedChests.push(data.chestOrder[item]);
+                // openedStandardChests.push(data.chestOrder[item]);
+              }
+            }
+            standardChestsArray.push(data.chestOrder[item]);
+          } else if (data.chestOrder[item].chestType === "Premium") {
+            if (data.chestOrder[item].isOpened === true) {
+              {
+                openedChests.push(data.chestOrder[item]);
+                // openedPremiumChests.push(data.chestOrder[item]);
+              }
+            }
+            premiumChestsArray.push(data.chestOrder[item]);
+          }
+        }
+        setopbnbOpenedChests(openedChests);
       }
 
       // setOpenedChests(
@@ -1689,7 +1758,7 @@ function App() {
                       <Farms
                         handleConnection={handleConnection}
                         isConnected={isConnected}
-                        networkId={parseInt(explorerNetworkId)} 
+                        networkId={parseInt(explorerNetworkId)}
                         onSelectChain={onSelectChain}
                       />
                     }
@@ -1727,12 +1796,15 @@ function App() {
                         onSelectChain={onSelectChain}
                         coinbase={coinbase}
                         onChestClaimed={onChestClaimed}
+                        onOpbnbChestClaimed={onOpbnbChestClaimed}
                         dummypremiumChests={dummyPremiums}
                         isPremium={isPremium}
                         bnbImages={chestImagesBnb}
                         email={email}
                         chests={chests}
+                        opbnbchests={opbnbchests}
                         openedChests={openedChests}
+                        openedOpbnbChests={opbnbopenedChests}
                         address={data?.getPlayer?.wallet?.publicAddress}
                         userId={data?.getPlayer?.playerId}
                         username={username}

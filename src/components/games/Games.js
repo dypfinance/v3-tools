@@ -72,7 +72,10 @@ const Games = ({
   username,
   leaderboardCaws2d,
   activePlayerCaws2d,
-  caws2dUser
+  caws2dUser,
+  onOpbnbChestClaimed,
+  opbnbchests,
+  openedOpbnbChests,
 }) => {
   const [chain, setChain] = useState("base");
   const [message, setMessage] = useState("");
@@ -85,6 +88,8 @@ const Games = ({
   const [selectedChest, setSelectedChest] = useState(null);
   const [selectedChest2, setSelectedChest2] = useState(null);
   const [openChestIds, setopenChestIds] = useState([]);
+  const [openChestIdsOpbnb, setopenChestIdsOpbnb] = useState([]);
+
   const [popup, setpopup] = useState(false);
 
   const [liverewardData, setLiveRewardData] = useState([]);
@@ -104,6 +109,11 @@ const Games = ({
   const [totalPoints, settotalPoints] = useState(0);
   const [totalUsdETH, settotalUsdETH] = useState(0);
   const [totalUsdDYP, settotalUsdDYP] = useState(0);
+
+  const [totalPointsOpbnb, settotalPointsOpbnb] = useState(0);
+  const [totalUsdETHOpbnb, settotalUsdETHOpbnb] = useState(0);
+  const [totalUsdDYPOpbnb, settotalUsdDYPOpbnb] = useState(0);
+
   const dataFetchedRef = useRef(false);
   const html = document.querySelector("html");
   const audiostart = new Audio(crackStoneSound);
@@ -150,6 +160,45 @@ const Games = ({
       settotalUsdDYP(resultUsdDYP);
       settotalUsdETH(resultUsdETH);
     }
+
+    if (openedOpbnbChests && openedOpbnbChests.length > 0) {
+      let resultPointsopbnb = 0;
+      let resultUsdDYPopbnb = 0;
+      let resultUsdETHopbnb = 0;
+
+      openedOpbnbChests.forEach((chest) => {
+        if (chest.isOpened === true && chest.rewards) {
+          if (chest.rewards.length > 1) {
+            chest.rewards.forEach((innerChest) => {
+              if (innerChest.rewardType === "Points") {
+                resultPointsopbnb += Number(innerChest.reward);
+              }
+              if (
+                innerChest.rewardType === "MoneyETH" &&
+                innerChest.status === "Claimed"
+              ) {
+                resultUsdETHopbnb += Number(innerChest.reward);
+              } else if (
+                innerChest.rewardType === "MoneyDYP" &&
+                innerChest.status === "Claimed"
+              ) {
+                resultUsdDYPopbnb += Number(innerChest.reward);
+              }
+            });
+          } else if (chest.rewards.length === 1) {
+            chest.rewards.forEach((innerChest) => {
+              if (innerChest.rewardType === "Points") {
+                resultPointsopbnb += Number(innerChest.reward);
+              }
+            });
+          }
+        }
+      });
+
+      settotalPointsOpbnb(resultPointsopbnb);
+      settotalUsdDYPOpbnb(resultUsdDYPopbnb);
+      settotalUsdETHOpbnb(resultUsdETHopbnb);
+    }
   };
 
   useEffect(() => {
@@ -169,6 +218,16 @@ const Games = ({
     await handleSwitchNetworkhook("0x2105")
       .then(() => {
         handleSwitchNetwork("8453");
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const handleOpbnbPool = async () => {
+    await handleSwitchNetworkhook("0xcc")
+      .then(() => {
+        handleSwitchNetwork("204");
       })
       .catch((e) => {
         console.log(e);
@@ -280,30 +339,6 @@ const Games = ({
     }
   };
 
-  const randomOpenedChests = [
-    2, 4, 18, 12, 19, 5, 16, 6, 1, 15, 17, 3, 7, 9, 14, 11, 13, 8, 10,
-  ];
-
-  const getIds = () => {
-    if (openedChests && openedChests.length > 0) {
-      let arrayFiltered = [];
-      window.range(0, 19).map((item, index) => {
-        if (chests[index].isOpened === true) {
-          if (randomOpenedChests[index] === undefined) {
-            const index2 = getFirstUnopenedChest(index - 1, chests);
-            if (index2 !== undefined) {
-              arrayFiltered.push(randomOpenedChests[index2]);
-            }
-          } else {
-            arrayFiltered.push(randomOpenedChests[index]);
-          }
-        }
-      });
-
-      setopenChestIds(arrayFiltered);
-    }
-  };
-
   const getFirstUnopenedChest = (index, chests) => {
     let found = 0;
     for (let i = index; i >= 0; i--) {
@@ -324,6 +359,90 @@ const Games = ({
     }
 
     return index;
+  };
+
+  const showSingleRewardDataOpbnb = (chestID, chestIndex) => {
+    const filteredResult = openedOpbnbChests.find(
+      (el) => el.chestId === chestID && chests.indexOf(el) === chestIndex
+    );
+
+    setIsActive(chestID);
+    setIsActiveIndex(chestIndex + 1);
+    // console.log("filteredResult", filteredResult);
+    if (filteredResult && filteredResult.rewards) {
+      const resultWonETH = filteredResult.rewards.find((obj) => {
+        return obj.rewardType === "MoneyETH" && obj.status === "Claimed";
+      });
+      const resultWonETHGem = filteredResult.rewards.find((obj) => {
+        return obj.rewardType === "MoneyETH" && obj.status === "Unclaimable";
+      });
+      const resultWonDYP = filteredResult.rewards.find((obj) => {
+        return obj.rewardType === "MoneyDYP" && obj.status === "Claimed";
+      });
+      const resultPoints = filteredResult.rewards.length === 1;
+
+      if (resultWonETH) {
+        setMessage("woneth");
+      } else if (resultWonETHGem) {
+        setMessage("gem");
+      } else if (resultWonDYP) {
+        setMessage("wondyp");
+      } else if (resultPoints) {
+        setMessage("wonPoints");
+      }
+
+      setLiveRewardData(filteredResult);
+      setRewardData(filteredResult);
+    } else {
+      setLiveRewardData([]);
+    }
+  };
+
+  const randomOpenedChests = [
+    2, 4, 18, 12, 19, 5, 16, 6, 1, 15, 17, 3, 7, 9, 14, 11, 13, 8, 10,
+  ];
+
+  const randomOpenedChestsOpbnb = [
+    9, 1, 18, 7, 5, 19, 15, 12, 2, 8, 14, 6, 3, 16, 10, 11, 13, 4, 17,
+  ];
+  const getIds = () => {
+    if (openedChests && openedChests.length > 0) {
+      let arrayFiltered = [];
+      window.range(0, 19).map((item, index) => {
+        if (chests[index].isOpened === true) {
+          if (randomOpenedChests[index] === undefined) {
+            const index2 = getFirstUnopenedChest(index - 1, chests);
+            if (index2 !== undefined) {
+              arrayFiltered.push(randomOpenedChests[index2]);
+            }
+          } else {
+            arrayFiltered.push(randomOpenedChests[index]);
+          }
+        }
+      });
+
+      setopenChestIds(arrayFiltered);
+    }
+  };
+
+  const getIdsOpbnb = () => {
+    if (openedOpbnbChests && openedOpbnbChests.length > 0) {
+      let arrayFiltered = [];
+      window.range(0, 19).map((item, index) => {
+        if (chests[index].isOpened === true) {
+          if (randomOpenedChestsOpbnb[index] === undefined) {
+            const index2 = getFirstUnopenedChest(index - 1, chests);
+            if (index2 !== undefined) {
+              arrayFiltered.push(randomOpenedChestsOpbnb[index2]);
+            }
+          } else {
+            arrayFiltered.push(randomOpenedChestsOpbnb[index]);
+          }
+        }
+      });
+
+      setopenChestIdsOpbnb(arrayFiltered);
+    }
   };
 
   const handleChestSelection = (index, chests, openedChests) => {
@@ -387,6 +506,89 @@ const Games = ({
       chests[index - 1].isOpened === true
     ) {
       if (!openChestIds.includes(randomOpenedChests[index])) {
+        return index;
+      } else {
+        const unopenedChest = getFirstUnopenedChest(index - 1, chests);
+
+        return unopenedChest;
+      }
+
+      // console.log('yes')
+    }
+
+    // // Default Case: Any other button clicked when some chests are opened
+    if (
+      openedChests.length > 0 &&
+      index >= 0 &&
+      index <= 18 &&
+      !chests[index].isOpened
+    ) {
+      const unopenedChest = getFirstUnopenedChest(index, chests);
+      return unopenedChest;
+    }
+  };
+
+  const handleChestSelectionOpbnb = (index, chests, openedChests) => {
+    // Case: All chests are opened
+    if (openedChests.length === 19) {
+      // selectedChestid(3);
+      return 3;
+    }
+
+    // Case: No chests opened, and last button (19) clicked
+    if (openedChests.length === 0 && index === 19) {
+      return index - 1;
+    }
+
+    // Case: No chests opened, first button (0) clicked
+    if (index === 0) {
+      return index;
+    }
+
+    // Case: Other buttons clicked when no chests opened (index 1 to 18)
+    if (openedChests.length === 0 && index >= 1 && index <= 18) {
+      // const unopenedChest = getFirstUnopenedChest(index - 1, chests);
+
+      // return unopenedChest;
+      return index;
+    }
+
+    if (
+      openedChests.length > 0 &&
+      index !== 19 &&
+      index !== 0 &&
+      chests[index].isOpened === false &&
+      chests[index - 1].isOpened === false &&
+      chests[index + 1].isOpened === true
+    ) {
+      // const unopenedChest = getFirstUnopenedChest(index, chests);
+
+      // return unopenedChest;
+      if (!openChestIdsOpbnb.includes(randomOpenedChestsOpbnb[index])) {
+        return index;
+      } else {
+        const unopenedChest = getFirstUnopenedChest(index - 1, chests);
+
+        return unopenedChest;
+      }
+    }
+
+    if (openedChests.length > 0 && index === 19) {
+      const unopenedChest = getFirstUnopenedChest(index - 1, chests);
+
+      return unopenedChest;
+    }
+
+    // // Case: Chests opened, index is 18, chest is not opened
+    if (
+      openedChests.length > 0 &&
+      index !== 19 &&
+      index !== 0 &&
+      !chests[index].isOpened &&
+      chests[index + 1].isOpened === true &&
+      chests[index - 1].isOpened === true
+    ) {
+      if (!openChestIdsOpbnb.includes(randomOpenedChestsOpbnb[index])) {
         return index;
       } else {
         const unopenedChest = getFirstUnopenedChest(index - 1, chests);
@@ -488,6 +690,84 @@ const Games = ({
         setMessage("connect");
         setDisable(true);
       }
+    } else if (chain === "opbnb") {
+      if (!email) {
+        setMessage("login");
+        setDisable(true);
+      } else if (coinbase && isConnected && email && address) {
+        if (coinbase.toLowerCase() === address.toLowerCase()) {
+          if (isPremium) {
+            if (
+              openedOpbnbChests &&
+              openedOpbnbChests.length === 20 &&
+              rewardData.length === 0 &&
+              address.toLowerCase() === coinbase.toLowerCase()
+            ) {
+              setMessage("complete");
+            } else if (
+              openedOpbnbChests &&
+              openedOpbnbChests.length < 20 &&
+              rewardData.length === 0 &&
+              address.toLowerCase() === coinbase.toLowerCase() &&
+              networkId === 204
+            ) {
+              setMessage("");
+              setDisable(false);
+            } else if (
+              rewardData.length === 0 &&
+              networkId !== 204 &&
+              address.toLowerCase() === coinbase.toLowerCase()
+            ) {
+              setMessage("switchopbnb");
+              setDisable(true);
+            } else if (
+              rewardData.length === 0 &&
+              address.toLowerCase() === coinbase.toLowerCase()
+            ) {
+              setMessage("");
+              setDisable(false);
+            }
+          } else if (!isPremium) {
+            if (
+              openedOpbnbChests &&
+              openedOpbnbChests.length === 20 &&
+              rewardData.length === 0 &&
+              address.toLowerCase() === coinbase.toLowerCase() &&
+              networkId === 204
+            ) {
+              setMessage("complete");
+            } else if (
+              openedOpbnbChests &&
+              openedOpbnbChests.length < 20 &&
+              rewardData.length === 0 &&
+              address.toLowerCase() === coinbase.toLowerCase() &&
+              networkId === 204
+            ) {
+              setMessage("");
+              setDisable(false);
+            } else if (
+              rewardData.length === 0 &&
+              networkId !== 204 &&
+              address.toLowerCase() === coinbase.toLowerCase()
+            ) {
+              setMessage("switchopbnb");
+              setDisable(true);
+            } else if (
+              rewardData.length === 0 &&
+              address.toLowerCase() === coinbase.toLowerCase()
+            ) {
+              setMessage("");
+              setDisable(false);
+            }
+          }
+        } else {
+          setMessage("switchAccount");
+          setDisable(true);
+        }
+      } else {
+        setMessage("connect");
+        setDisable(true);
+      }
     }
   }, [
     chain,
@@ -503,8 +783,9 @@ const Games = ({
 
   useEffect(() => {
     countEarnedRewards();
+    getIdsOpbnb();
     getIds();
-  }, [openedChests]);
+  }, [openedChests, openedOpbnbChests]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -624,19 +905,22 @@ const Games = ({
                   className="stone-crack-header"
                 />
               </div>
-            
+
               <img
                 src={tooltipIcon}
                 alt=""
                 onClick={() => {
                   setpopup(true);
                 }}
-                style={{cursor: 'pointer'}}
+                style={{ cursor: "pointer" }}
               />
               {/* </Tooltip> */}
 
               {popup === true && (
-                <div className="position-absolute" style={{right: '245px', top: '-20px'}}>
+                <div
+                  className="position-absolute"
+                  style={{ right: "245px", top: "-20px" }}
+                >
                   <OutsideClickHandler
                     onOutsideClick={() => {
                       setpopup(false);
@@ -675,7 +959,7 @@ const Games = ({
                 <div className="h-100 d-flex flex-column justify-content-between gap-0 gap-lg-3">
                   <div className="chest-wrapper grid-overall-wrapper p-2">
                     <div className="new-chests-grid">
-                      {chests.length > 0 ? (
+                      {chain === "base" && chests.length > 0 ? (
                         <>
                           {chests.map((item, index) => (
                             <NewChestItem
@@ -730,6 +1014,83 @@ const Games = ({
                                       index,
                                       chests,
                                       openedChests
+                                    )
+                                  ]
+                                );
+                              }}
+                              onChestStatus={(val) => {
+                                setMessage(val);
+                              }}
+                              address={coinbase}
+                              email={email}
+                              rewardTypes={item.chestType?.toLowerCase()}
+                              chestId={item.chestId}
+                              chestIndex={index + 1}
+                              open={item.isOpened}
+                              disableBtn={disable}
+                              isActive={isActive}
+                              isActiveIndex={isActiveIndex}
+                              dummypremiumChests={
+                                dummypremiumChests[index - 10]?.closedImg
+                              }
+                            />
+                          ))}
+                        </>
+                      ) : chain === "opbnb" && opbnbchests.length > 0 ? (
+                        <>
+                          {opbnbchests.map((item, index) => (
+                            <NewChestItem
+                              coinbase={coinbase}
+                              claimingChest={claimingChest}
+                              setClaimingChest={setClaimingChest}
+                              buyNftPopup={false}
+                              openedChests={openedOpbnbChests}
+                              chainId={networkId}
+                              chain={chain}
+                              key={index}
+                              item={item}
+                              image={bnbImages[index]}
+                              onCrackStone={onCrackStone}
+                              selectedChest={selectedChest}
+                              isPremium={isPremium}
+                              onClaimRewards={(value) => {
+                                // handleAddNewRock(value);
+                                setRewardData(value);
+                                setLiveRewardData(value);
+                                onOpbnbChestClaimed();
+                                showLiveRewardData(value);
+                                setIsActive(item.chestId);
+                                setIsActiveIndex(index + 1);
+                              }}
+                              handleShowRewards={(value, value2) => {
+                                showSingleRewardDataOpbnb(value, value2);
+                                setIsActive(value);
+                                setIsActiveIndex(index + 1);
+                              }}
+                              onLoadingChest={(value) => {
+                                setTimeout(() => {
+                                  setSparkles({
+                                    show: value,
+                                    position:
+                                      randomOpenedChestsOpbnb[
+                                        handleChestSelectionOpbnb(
+                                          index,
+                                          opbnbchests,
+                                          openedOpbnbChests
+                                        )
+                                      ],
+                                  });
+                                }, 350);
+                                setDisable(value);
+                                setloading(value);
+                                setSelectedChest(index + 1);
+
+                                setSelectedChest2(
+                                  randomOpenedChestsOpbnb[
+                                    handleChestSelectionOpbnb(
+                                      index,
+                                      opbnbchests,
+                                      openedOpbnbChests
                                     )
                                   ]
                                 );
@@ -902,6 +1263,58 @@ const Games = ({
                             onClick={handleBasePool}
                           >
                             BASE
+                          </span>{" "}
+                        </h6>
+
+                        <div className="loader red-loader">
+                          <div className="dot" style={{ "--i": 0 }}></div>
+                          <div className="dot" style={{ "--i": 1 }}></div>
+                          <div className="dot" style={{ "--i": 2 }}></div>
+                          <div className="dot" style={{ "--i": 3 }}></div>
+                          <div className="dot" style={{ "--i": 4 }}></div>
+                          <div className="dot" style={{ "--i": 5 }}></div>
+                          <div className="dot" style={{ "--i": 6 }}></div>
+                          <div className="dot" style={{ "--i": 7 }}></div>
+                          <div className="dot" style={{ "--i": 8 }}></div>
+                          <div className="dot" style={{ "--i": 9 }}></div>
+                        </div>
+                      </div>
+                    ) : message === "switchopbnb" ? (
+                      <div
+                        className="d-flex align-items-center flex-column justify-content-center p-0 p-lg-2 w-100 chest-progress-wrapper"
+                        style={{
+                          background: "#1A1C39",
+                          border: "1px solid #ce5d1b",
+                        }}
+                      >
+                        <div className="loader red-loader">
+                          <div className="dot" style={{ "--i": 0 }}></div>
+                          <div className="dot" style={{ "--i": 1 }}></div>
+                          <div className="dot" style={{ "--i": 2 }}></div>
+                          <div className="dot" style={{ "--i": 3 }}></div>
+                          <div className="dot" style={{ "--i": 4 }}></div>
+                          <div className="dot" style={{ "--i": 5 }}></div>
+                          <div className="dot" style={{ "--i": 6 }}></div>
+                          <div className="dot" style={{ "--i": 7 }}></div>
+                          <div className="dot" style={{ "--i": 8 }}></div>
+                          <div className="dot" style={{ "--i": 9 }}></div>
+                        </div>
+
+                        <h6
+                          className="loader-text mb-0"
+                          style={{ color: "#ce5d1b" }}
+                        >
+                          Switch to{" "}
+                          <span
+                            span
+                            style={{
+                              textDecoration: "underline",
+                              cursor: "pointer",
+                              color: "#ce5d1b",
+                            }}
+                            onClick={handleOpbnbPool}
+                          >
+                            OpBNB
                           </span>{" "}
                         </h6>
 
@@ -1392,7 +1805,12 @@ const Games = ({
                               </h6>
                             </div>
                             <h6 className="w-100 text-center totalpoints-wrapper px-3 totalpoints-value">
-                              {getFormattedNumber(totalPoints, 0)}
+                              {getFormattedNumber(
+                                chain === "base"
+                                  ? totalPoints
+                                  : totalPointsOpbnb,
+                                0
+                              )}
                             </h6>
                           </div>
                           <div className="d-flex flex-column align-items-center dynamic-width">
@@ -1405,13 +1823,25 @@ const Games = ({
                               <div className="d-flex flex-column">
                                 <h6 className="usdreward-value-crypto">DYP</h6>
                                 <h6 className="usdreward-value">
-                                  ${getFormattedNumber(totalUsdDYP, 2)}
+                                  $
+                                  {getFormattedNumber(
+                                    chain === "base"
+                                      ? totalUsdDYP
+                                      : totalUsdDYPOpbnb,
+                                    2
+                                  )}
                                 </h6>
                               </div>
                               <div className="d-flex flex-column">
                                 <h6 className="usdreward-value-crypto">ETH</h6>
                                 <h6 className="usdreward-value">
-                                  ${getFormattedNumber(totalUsdETH, 2)}
+                                  $
+                                  {getFormattedNumber(
+                                    chain === "base"
+                                      ? totalUsdETH
+                                      : totalUsdETHOpbnb,
+                                    2
+                                  )}
                                 </h6>
                               </div>
                             </div>
@@ -1420,127 +1850,261 @@ const Games = ({
                       </div>
                     </div>
                     <div className="position-relative">
-                      {openedChests && openedChests.length === 20 ? (
+                      {chain === "base" ? (
+                        openedChests && openedChests.length === 20 ? (
+                          <img src={mainChestCracked} alt="" />
+                        ) : openedChests && openedChests.length < 20 ? (
+                          <img src={mainChest} alt="" />
+                        ) : (
+                          <img src={mainChest} alt="" />
+                        )
+                      ) : openedOpbnbChests &&
+                        openedOpbnbChests.length === 20 ? (
                         <img src={mainChestCracked} alt="" />
-                      ) : openedChests && openedChests.length < 20 ? (
+                      ) : openedOpbnbChests && openedOpbnbChests.length < 20 ? (
                         <img src={mainChest} alt="" />
                       ) : (
                         <img src={mainChest} alt="" />
                       )}
-
-                      <div className="position-absolute rocks-wrapper">
-                        <div className="d-flex flex-column justify-content-center align-items-center position-relative w-100 h-100">
-                          {[...Array(4)].map((item, index) => {
-                            return (
-                              <div
-                                key={index}
-                                className={`rockitem rockitem${index + 1} ${
-                                  loading === true &&
-                                  selectedChest2 === index + 1 &&
-                                  "chest-pulsate"
-                                } 
+                      {chain === "base" && (
+                        <div className="position-absolute rocks-wrapper">
+                          <div className="d-flex flex-column justify-content-center align-items-center position-relative w-100 h-100">
+                            {[...Array(4)].map((item, index) => {
+                              return (
+                                <div
+                                  key={index}
+                                  className={`rockitem rockitem${index + 1} ${
+                                    loading === true &&
+                                    selectedChest2 === index + 1 &&
+                                    "chest-pulsate"
+                                  } 
                            
                           `}
-                                style={{
-                                  display: openChestIds.includes(index + 1)
-                                    ? "none"
-                                    : "block",
-                                }}
-                              >
-                                <img
-                                  src={require(`./assets/rocksBg/${
-                                    index + 1
-                                  }.png`)}
-                                  className="rock-img"
-                                  alt=""
-                                />
-                              </div>
-                            );
-                          })}
+                                  style={{
+                                    display: openChestIds.includes(index + 1)
+                                      ? "none"
+                                      : "block",
+                                  }}
+                                >
+                                  <img
+                                    src={require(`./assets/rocksBg/${
+                                      index + 1
+                                    }.png`)}
+                                    className="rock-img"
+                                    alt=""
+                                  />
+                                </div>
+                              );
+                            })}
 
-                          {[...Array(5)].map((item, index) => {
-                            return (
-                              <div
-                                key={index}
-                                className={`rockitem  ${
-                                  loading === true &&
-                                  selectedChest2 === index + 5 &&
-                                  "chest-pulsate"
-                                } rockitem${index + 5}`}
-                                style={{
-                                  display: openChestIds.includes(index + 5)
-                                    ? "none"
-                                    : "",
-                                  // index + 5 <= openedChests.length ? "none" : "",
-                                }}
-                              >
-                                <img
-                                  src={require(`./assets/rocksBg/${
-                                    index + 5
-                                  }.png`)}
-                                  className="rock-img"
-                                  alt=""
-                                />
-                              </div>
-                            );
-                          })}
+                            {[...Array(5)].map((item, index) => {
+                              return (
+                                <div
+                                  key={index}
+                                  className={`rockitem  ${
+                                    loading === true &&
+                                    selectedChest2 === index + 5 &&
+                                    "chest-pulsate"
+                                  } rockitem${index + 5}`}
+                                  style={{
+                                    display: openChestIds.includes(index + 5)
+                                      ? "none"
+                                      : "",
+                                    // index + 5 <= openedChests.length ? "none" : "",
+                                  }}
+                                >
+                                  <img
+                                    src={require(`./assets/rocksBg/${
+                                      index + 5
+                                    }.png`)}
+                                    className="rock-img"
+                                    alt=""
+                                  />
+                                </div>
+                              );
+                            })}
 
-                          {[...Array(5)].map((item, index) => {
-                            return (
-                              <div
-                                key={index}
-                                className={`rockitem rockitem${index + 10} ${
-                                  loading === true &&
-                                  selectedChest2 === index + 10 &&
-                                  "chest-pulsate"
-                                }`}
-                                style={{
-                                  display: openChestIds.includes(index + 10)
-                                    ? "none"
-                                    : "",
-                                  // index + 10 <= openedChests.length ? "none" : "",
-                                }}
-                              >
-                                <img
-                                  src={require(`./assets/rocksBg/${
-                                    index + 10
-                                  }.png`)}
-                                  className="rock-img"
-                                  alt=""
-                                />
-                              </div>
-                            );
-                          })}
+                            {[...Array(5)].map((item, index) => {
+                              return (
+                                <div
+                                  key={index}
+                                  className={`rockitem rockitem${index + 10} ${
+                                    loading === true &&
+                                    selectedChest2 === index + 10 &&
+                                    "chest-pulsate"
+                                  }`}
+                                  style={{
+                                    display: openChestIds.includes(index + 10)
+                                      ? "none"
+                                      : "",
+                                    // index + 10 <= openedChests.length ? "none" : "",
+                                  }}
+                                >
+                                  <img
+                                    src={require(`./assets/rocksBg/${
+                                      index + 10
+                                    }.png`)}
+                                    className="rock-img"
+                                    alt=""
+                                  />
+                                </div>
+                              );
+                            })}
 
-                          {[...Array(5)].map((item, index) => {
-                            return (
-                              <div
-                                key={index}
-                                className={`rockitem rockitem${index + 15} ${
-                                  loading === true &&
-                                  selectedChest2 === index + 15 &&
-                                  "chest-pulsate"
-                                }`}
-                                style={{
-                                  display: openChestIds.includes(index + 15)
-                                    ? "none"
-                                    : "",
-                                  // display:
-                                  //   index + 15 <= openedChests.length ? "none" : "",
-                                }}
-                              >
-                                <img
-                                  src={require(`./assets/rocksBg/${
-                                    index + 15
-                                  }.png`)}
-                                  className="rock-img"
-                                  alt=""
-                                />
-                              </div>
-                            );
-                          })}
+                            {[...Array(5)].map((item, index) => {
+                              return (
+                                <div
+                                  key={index}
+                                  className={`rockitem rockitem${index + 15} ${
+                                    loading === true &&
+                                    selectedChest2 === index + 15 &&
+                                    "chest-pulsate"
+                                  }`}
+                                  style={{
+                                    display: openChestIds.includes(index + 15)
+                                      ? "none"
+                                      : "",
+                                    // display:
+                                    //   index + 15 <= openedChests.length ? "none" : "",
+                                  }}
+                                >
+                                  <img
+                                    src={require(`./assets/rocksBg/${
+                                      index + 15
+                                    }.png`)}
+                                    className="rock-img"
+                                    alt=""
+                                  />
+                                </div>
+                              );
+                            })}
+                          </div>
                         </div>
-                      </div>
+                      )}
+
+                      {chain === "opbnb" && (
+                        <div className="position-absolute rocks-wrapper">
+                          <div className="d-flex flex-column justify-content-center align-items-center position-relative w-100 h-100">
+                            {[...Array(4)].map((item, index) => {
+                              return (
+                                <div
+                                  key={index}
+                                  className={`rockitem rockitem${index + 1} ${
+                                    loading === true &&
+                                    selectedChest2 === index + 1 &&
+                                    "chest-pulsate"
+                                  } 
+                           
+                          `}
+                                  style={{
+                                    display: openChestIdsOpbnb.includes(
+                                      index + 1
+                                    )
+                                      ? "none"
+                                      : "block",
+                                  }}
+                                >
+                                  <img
+                                    src={require(`./assets/rocksBg/${
+                                      index + 1
+                                    }.png`)}
+                                    className="rock-img"
+                                    alt=""
+                                  />
+                                </div>
+                              );
+                            })}
+
+                            {[...Array(5)].map((item, index) => {
+                              return (
+                                <div
+                                  key={index}
+                                  className={`rockitem  ${
+                                    loading === true &&
+                                    selectedChest2 === index + 5 &&
+                                    "chest-pulsate"
+                                  } rockitem${index + 5}`}
+                                  style={{
+                                    display: openChestIdsOpbnb.includes(
+                                      index + 5
+                                    )
+                                      ? "none"
+                                      : "",
+                                    // index + 5 <= openedChests.length ? "none" : "",
+                                  }}
+                                >
+                                  <img
+                                    src={require(`./assets/rocksBg/${
+                                      index + 5
+                                    }.png`)}
+                                    className="rock-img"
+                                    alt=""
+                                  />
+                                </div>
+                              );
+                            })}
+
+                            {[...Array(5)].map((item, index) => {
+                              return (
+                                <div
+                                  key={index}
+                                  className={`rockitem rockitem${index + 10} ${
+                                    loading === true &&
+                                    selectedChest2 === index + 10 &&
+                                    "chest-pulsate"
+                                  }`}
+                                  style={{
+                                    display: openChestIdsOpbnb.includes(
+                                      index + 10
+                                    )
+                                      ? "none"
+                                      : "",
+                                    // index + 10 <= openedChests.length ? "none" : "",
+                                  }}
+                                >
+                                  <img
+                                    src={require(`./assets/rocksBg/${
+                                      index + 10
+                                    }.png`)}
+                                    className="rock-img"
+                                    alt=""
+                                  />
+                                </div>
+                              );
+                            })}
+
+                            {[...Array(5)].map((item, index) => {
+                              return (
+                                <div
+                                  key={index}
+                                  className={`rockitem rockitem${index + 15} ${
+                                    loading === true &&
+                                    selectedChest2 === index + 15 &&
+                                    "chest-pulsate"
+                                  }`}
+                                  style={{
+                                    display: openChestIdsOpbnb.includes(
+                                      index + 15
+                                    )
+                                      ? "none"
+                                      : "",
+                                    // display:
+                                    //   index + 15 <= openedChests.length ? "none" : "",
+                                  }}
+                                >
+                                  <img
+                                    src={require(`./assets/rocksBg/${
+                                      index + 15
+                                    }.png`)}
+                                    className="rock-img"
+                                    alt=""
+                                  />
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                   <div className="d-none d-lg-flex d-md-flex w-100 align-items-center gap-2">
@@ -1867,231 +2431,6 @@ const Games = ({
                             </h6>
                           </div>
                         </div>
-                        {/* {dummyRewards.map((item, index) => (
-                      <div
-                        key={index}
-                        className="new-rewards-item p-2 d-flex align-items-center gap-2"
-                        style={{
-                          filter:
-                            item.title2 !== "needPremium"
-                              ? (rewardData &&
-                                  rewardData.rewards?.find((obj) => {
-                                    return (
-                                      obj.rewardType === "Points" &&
-                                      Number(obj.reward) <= item.threshold[1]
-                                    );
-                                  })) ||
-                                (rewardData &&
-                                  rewardData.rewards?.find((obj) => {
-                                    return (
-                                      obj.rewardType !== "Points" &&
-                                      Number(obj.reward) > item.min &&
-                                      Number(obj.reward) <= item.max
-                                    );
-                                  }) &&
-                                  message != "needPremium")
-                                ? "brightness(1)"
-                                : "brightness(0.5)"
-                              : (rewardData &&
-                                  rewardData.rewards?.find((obj) => {
-                                    return (
-                                      obj.rewardType === "Points" &&
-                                      Number(obj.reward) <= item.threshold[1]
-                                    );
-                                  })) ||
-                                (rewardData &&
-                                  rewardData.rewards?.find((obj) => {
-                                    return (
-                                      obj.rewardType !== "Points" &&
-                                      Number(obj.reward) > item.min &&
-                                      Number(obj.reward) <= item.max &&
-                                      message === "needPremium"
-                                    );
-                                  }))
-                              ? "brightness(1)"
-                              : "brightness(0.5)",
-                        }}
-                      >
-                        <div className="position-relative">
-                          <img
-                            src={require(`./assets/${item.img}${
-                              item.title2 !== "needPremium"
-                                ? (rewardData &&
-                                    rewardData.rewards?.find((obj) => {
-                                      return (
-                                        obj.rewardType === "Points" &&
-                                        Number(obj.reward) <= item.threshold[1]
-                                      );
-                                    })) ||
-                                  (rewardData &&
-                                    rewardData.rewards?.find((obj) => {
-                                      return (
-                                        obj.rewardType !== "Points" &&
-                                        Number(obj.reward) > item.min &&
-                                        Number(obj.reward) <= item.max
-                                      );
-                                    }) &&
-                                    message != "needPremium")
-                                  ? "Active"
-                                  : ""
-                                : (rewardData &&
-                                    rewardData.rewards?.find((obj) => {
-                                      return (
-                                        obj.rewardType === "Points" &&
-                                        Number(obj.reward) <= item.threshold[1]
-                                      );
-                                    })) ||
-                                  (rewardData &&
-                                    rewardData.rewards?.find((obj) => {
-                                      return (
-                                        obj.rewardType !== "Points" &&
-                                        Number(obj.reward) > item.min &&
-                                        Number(obj.reward) <= item.max
-                                      );
-                                    }) &&
-                                    message === "needPremium")
-                                ? "Active"
-                                : ""
-                            }Icon.png`)}
-                            width={60}
-                            height={60}
-                            alt=""
-                          />
-                          {item.title2 !== "needPremium" ? (
-                            rewardData &&
-                            rewardData.rewards?.find((obj) => {
-                              return obj.rewardType === item.title;
-                            }) &&
-                            rewardData &&
-                            rewardData.rewards?.find((obj) => {
-                              return (
-                                obj.rewardType === item.title &&
-                                obj.status === "Unclaimed" &&
-                                obj.reward > item.min &&
-                                obj.reward <= item.max
-                              );
-                            }) &&
-                            message !== "needPremium" ? (
-                              <img
-                                src={warning}
-                                width={20}
-                                height={20}
-                                className="reward-warning"
-                                alt=""
-                              />
-                            ) : rewardData &&
-                              rewardData.rewards?.find((obj) => {
-                                return obj.rewardType === item.title;
-                              }) &&
-                              rewardData &&
-                              rewardData.rewards?.find((obj) => {
-                                return (
-                                  obj.rewardType === item.title &&
-                                  obj.status === "Unclaimable" &&
-                                  obj.reward > item.min &&
-                                  obj.reward <= item.max
-                                );
-                              }) &&
-                              message !== "needPremium" ? (
-                              <img
-                                src={danger}
-                                width={20}
-                                height={20}
-                                className="reward-warning"
-                                alt=""
-                              />
-                            ) : (
-                              <></>
-                            )
-                          ) : rewardData &&
-                            rewardData.rewards?.find((obj) => {
-                              return obj.rewardType === item.title;
-                            }) &&
-                            rewardData &&
-                            rewardData.rewards?.find((obj) => {
-                              return (
-                                obj.rewardType === item.title &&
-                                obj.status === "Unclaimed" &&
-                                obj.reward > item.min &&
-                                obj.reward <= item.max
-                              );
-                            }) &&
-                            message === "needPremium" ? (
-                            <img
-                              src={warning}
-                              width={20}
-                              height={20}
-                              className="reward-warning"
-                              alt=""
-                            />
-                          ) : rewardData &&
-                            rewardData.rewards?.find((obj) => {
-                              return obj.rewardType === item.title;
-                            }) &&
-                            rewardData &&
-                            rewardData.rewards?.find((obj) => {
-                              return (
-                                obj.rewardType === item.title &&
-                                obj.status === "Unclaimable" &&
-                                obj.reward > item.min &&
-                                obj.reward <= item.max
-                              );
-                            }) &&
-                            message === "needPremium" ? (
-                            <img
-                              src={danger}
-                              width={20}
-                              height={20}
-                              className="reward-warning"
-                              alt=""
-                            />
-                          ) : (
-                            <></>
-                          )}
-                        </div>
-                        <div className="d-flex align-items-bottom gap-1">
-                          <h6
-                            className="mb-0  new-reward-amount"
-                            style={{
-                              color:
-                                rewardData &&
-                                rewardData.rewards?.find((obj) => {
-                                  return (
-                                    obj.rewardType === "Points" &&
-                                    Number(obj.reward) <= item.threshold[1]
-                                  );
-                                })
-                                  ? "#F2C624"
-                                  : item.title2 !== "needPremium"
-                                  ? rewardData.rewards?.find((obj) => {
-                                      return (
-                                        obj.rewardType === item.title &&
-                                        (obj.status !== "Unclaimed" ||
-                                          obj.status !== "Unclaimable") &&
-                                        obj.reward > item.min &&
-                                        obj.reward <= item.max
-                                      );
-                                    }) && message !== "needPremium"
-                                    ? "#F2C624"
-                                    : "#fff"
-                                  : rewardData.rewards?.find((obj) => {
-                                      return (
-                                        obj.rewardType === item.title &&
-                                        (obj.status !== "Unclaimed" ||
-                                          obj.status !== "Unclaimable") &&
-                                        obj.reward > item.min &&
-                                        obj.reward <= item.max
-                                      );
-                                    }) && message === "needPremium"
-                                  ? "#F2C624"
-                                  : "#fff",
-                            }}
-                          >
-                            {item.amount}
-                          </h6>
-                        </div>
-                      </div>
-                    ))} */}
                       </div>
                     ) : (
                       <></>
@@ -2153,7 +2492,7 @@ const Games = ({
           activePlayerWeekly={activePlayerWeekly}
           activePlayerMonthly={activePlayerMonthly}
           email={email}
-          username={username} 
+          username={username}
           leaderboardCaws2d={leaderboardCaws2d}
         />
       </div>
