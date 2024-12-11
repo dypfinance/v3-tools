@@ -308,9 +308,11 @@ export default function initBridge({
         console.log({ url });
         // let args = await window.jQuery.get(url);
         let args = await fetch(url)
-        .then(response => response.json())
-        .then(data => {return data})
-        .catch(error => console.error('Error:', error));
+          .then((response) => response.json())
+          .then((data) => {
+            return data;
+          })
+          .catch((error) => console.error("Error:", error));
         console.log({ args });
         let bridge = bridgeBSC;
         bridge
@@ -576,7 +578,12 @@ export default function initBridge({
                           });
                           this.props.onSelectSourceChain("eth");
                           this.props.onSelectChain(
-                            this.props.activebtn !== "2" ? "bnb" : "avax"
+                            this.props.activebtn !== "2" &&
+                              this.props.activebtn !== "8"
+                              ? "bnb"
+                              : this.props.activebtn === "8"
+                              ? "opbnb"
+                              : "avax"
                           );
                         }}
                       >
@@ -588,29 +595,30 @@ export default function initBridge({
                         </h6>
                       </div>
 
-                      {this.props.activebtn !== "2" && (
-                        <div
-                          className={
-                            this.props.sourceChain === "bnb"
-                              ? "optionbtn-active"
-                              : "optionbtn-passive bridge-passive"
-                          }
-                          onClick={() => {
-                            this.setState({
-                              sourceChain: "bnb",
-                            });
-                            this.props.onSelectSourceChain("bnb");
-                            this.props.onSelectChain("eth");
-                          }}
-                        >
-                          <h6 className="optiontext d-flex align-items-center gap-2">
-                            <img src={bnb} alt="" />
-                            <p className=" mb-0 optiontext d-none d-lg-flex">
-                              BNB Chain
-                            </p>
-                          </h6>
-                        </div>
-                      )}
+                      {this.props.activebtn !== "2" &&
+                        this.props.activebtn !== "8" && (
+                          <div
+                            className={
+                              this.props.sourceChain === "bnb"
+                                ? "optionbtn-active"
+                                : "optionbtn-passive bridge-passive"
+                            }
+                            onClick={() => {
+                              this.setState({
+                                sourceChain: "bnb",
+                              });
+                              this.props.onSelectSourceChain("bnb");
+                              this.props.onSelectChain("eth");
+                            }}
+                          >
+                            <h6 className="optiontext d-flex align-items-center gap-2">
+                              <img src={bnb} alt="" />
+                              <p className=" mb-0 optiontext d-none d-lg-flex">
+                                BNB Chain
+                              </p>
+                            </h6>
+                          </div>
+                        )}
                       {this.props.activebtn === "2" && (
                         <div
                           className={
@@ -630,6 +638,29 @@ export default function initBridge({
                             <img src={avax} alt="" />
                             <p className=" mb-0 optiontext d-none d-lg-flex">
                               Avalanche
+                            </p>
+                          </h6>
+                        </div>
+                      )}
+                      {this.props.activebtn === "8" && (
+                        <div
+                          className={
+                            this.props.sourceChain === "opbnb"
+                              ? "optionbtn-active"
+                              : "optionbtn-passive bridge-passive"
+                          }
+                          onClick={() => {
+                            this.setState({
+                              sourceChain: "opbnb",
+                            });
+                            this.props.onSelectSourceChain("opbnb");
+                            this.props.onSelectChain("eth");
+                          }}
+                        >
+                          <h6 className="optiontext d-flex align-items-center gap-2">
+                            <img src={bnb} alt="" />
+                            <p className=" mb-0 optiontext d-none d-lg-flex">
+                              OpBNB Chain
                             </p>
                           </h6>
                         </div>
@@ -888,32 +919,33 @@ export default function initBridge({
                                       </p>
                                     </h6>
                                   </div>
-                                  {this.props.activebtn !== "2" && (
-                                    <div
-                                      className={
-                                        this.props.destinationChain === "bnb"
-                                          ? "optionbtn-active"
-                                          : "optionbtn-passive bridge-passive"
-                                      }
-                                      onClick={() => {
-                                        // this.props.onSelectChain("bnb");
-                                      }}
-                                      style={{
-                                        pointerEvents:
-                                          this.props.networkId === 1 ||
-                                          this.props.networkId === 56
-                                            ? "none"
-                                            : "auto",
-                                      }}
-                                    >
-                                      <h6 className="optiontext d-flex align-items-center gap-2">
-                                        <img src={bnb} alt="" />
-                                        <p className=" mb-0 optiontext d-none d-lg-flex">
-                                          BNB Chain
-                                        </p>
-                                      </h6>
-                                    </div>
-                                  )}
+                                  {this.props.activebtn !== "2" &&
+                                    this.props.activebtn !== "8" && (
+                                      <div
+                                        className={
+                                          this.props.destinationChain === "bnb"
+                                            ? "optionbtn-active"
+                                            : "optionbtn-passive bridge-passive"
+                                        }
+                                        onClick={() => {
+                                          // this.props.onSelectChain("bnb");
+                                        }}
+                                        style={{
+                                          pointerEvents:
+                                            this.props.networkId === 1 ||
+                                            this.props.networkId === 56
+                                              ? "none"
+                                              : "auto",
+                                        }}
+                                      >
+                                        <h6 className="optiontext d-flex align-items-center gap-2">
+                                          <img src={bnb} alt="" />
+                                          <p className=" mb-0 optiontext d-none d-lg-flex">
+                                            BNB Chain
+                                          </p>
+                                        </h6>
+                                      </div>
+                                    )}
                                   {this.props.activebtn === "2" && (
                                     <div
                                       className={
@@ -936,6 +968,32 @@ export default function initBridge({
                                         <img src={avax} alt="" />
                                         <p className=" mb-0 optiontext d-none d-lg-flex">
                                           Avalanche
+                                        </p>
+                                      </h6>
+                                    </div>
+                                  )}
+                                  {this.props.activebtn === "8" && (
+                                    <div
+                                      className={
+                                        this.props.destinationChain === "opbnb"
+                                          ? "optionbtn-active"
+                                          : "optionbtn-passive bridge-passive"
+                                      }
+                                      onClick={() => {
+                                        // this.props.onSelectChain("bnb");
+                                      }}
+                                      style={{
+                                        pointerEvents:
+                                          this.props.networkId === 1 ||
+                                          this.props.networkId === 56
+                                            ? "none"
+                                            : "auto",
+                                      }}
+                                    >
+                                      <h6 className="optiontext d-flex align-items-center gap-2">
+                                        <img src={bnb} alt="" />
+                                        <p className=" mb-0 optiontext d-none d-lg-flex">
+                                          OpBNB Chain
                                         </p>
                                       </h6>
                                     </div>

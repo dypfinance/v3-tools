@@ -7,7 +7,9 @@ import NewChestItem from "./NewChestItem";
 import useWindowSize from "../../functions/useWindowSize";
 import danger from "./assets/danger.svg";
 // import warning from "./assets/warning.svg";
-// import baseLogo from "./assets/baseLogo.svg";
+import baseLogo from "./assets/baseLogo.svg";
+import bnbLogo from "./assets/bnb.svg";
+
 import stoneCrack from "./assets/stoneCrack.svg";
 import mainChest from "./assets/mainChest.webp";
 import mainChestCracked from "./assets/mainChestCracked.webp";
@@ -954,6 +956,34 @@ const Games = ({
                 </div>
               )}
             </div>
+
+            <div className="d-flex align-items-center gap-2">
+              <button
+                className={` ${
+                  chain === "base"
+                    ? "new-chain-active-btn"
+                    : "new-chain-inactive-btn "
+                } d-flex gap-1 align-items-center`}
+                onClick={() => {
+                  setChain("base");
+                }}
+              >
+                <img src={baseLogo} alt="" /> Base
+              </button>
+              <button
+                className={`${
+                  chain === "opbnb"
+                    ? "new-chain-active-btn"
+                    : "new-chain-inactive-btn "
+                } d-flex gap-1 align-items-center`}
+                onClick={() => {
+                  setChain("opbnb");
+                }}
+              >
+                <img src={bnbLogo} alt="" /> opBNB
+              </button>
+            </div>
+
             <div className="d-flex flex-column-reverse flex-lg-row gap-3">
               <div className="col-lg-5 left-games-banner">
                 <div className="h-100 d-flex flex-column justify-content-between gap-0 gap-lg-3">
@@ -1314,7 +1344,7 @@ const Games = ({
                             }}
                             onClick={handleOpbnbPool}
                           >
-                            OpBNB
+                            opBNB
                           </span>{" "}
                         </h6>
 

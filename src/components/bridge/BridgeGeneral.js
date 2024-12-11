@@ -153,6 +153,26 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
           setSourceToken(window.token_dypius_new_bsc);
         }, 500);
       }
+    } else  if (activebtn === "8") {
+      if (chainText === "eth") {
+        window.cached_contracts = Object.create(null);
+        setSourceChain(chainText);
+        setTimeout(() => {
+          setSourceBridge(window.new_dypius_bridge_ethbsc);
+          setDestinationBridge(window.new_dypius_bridge_bsc);
+          setSourceToken(window.token_dypius_new);
+          setDestinationToken(window.token_dypius_new_bsc);
+        }, 500);
+      } else if (chainText === "opbnb") {
+        window.cached_contracts = Object.create(null);
+        setSourceChain(chainText);
+        setTimeout(() => {
+          setDestinationBridge(window.new_dypius_bridge_ethbsc);
+          setSourceBridge(window.new_dypius_bridge_bsc);
+          setDestinationToken(window.token_dypius_new);
+          setSourceToken(window.token_dypius_new_bsc);
+        }, 500);
+      }
     } else if (activebtn === "2") {
       if (chainText === "eth") {
         window.cached_contracts = Object.create(null);
@@ -298,6 +318,31 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
                 <h6 className="optiontext d-flex align-items-center gap-2">
                   <img src={eth} alt="" /> <img src={bnb} alt="" />
                   <p className=" mb-0 optiontext d-none d-lg-flex">ETH/BSC</p>
+                </h6>
+              </div>
+              <div
+                className={
+                  activebtn === "8"
+                    ? "optionbtn-active activeethbnb"
+                    : "optionbtn-passive bridge-passive"
+                }
+                onClick={() => {
+                  window.cached_contracts = Object.create(null);
+                  setActiveBtn("8");
+                  setSourceChain("eth");
+                  setDestinationChain("opbnb");
+                  setTimeout(() => {
+                    handleSourceChain("eth", "8");
+                    // setSourceBridge(window.new_dypius_bridge_ethbsc);
+                    // setDestinationBridge(window.new_dypius_bridge_bsc);
+                    // setSourceToken(window.token_dypius_new);
+                    // setDestinationToken(window.token_dypius_new_bsc);
+                  }, 500);
+                }}
+              >
+                <h6 className="optiontext d-flex align-items-center gap-2">
+                  <img src={eth} alt="" /> <img src={bnb} alt="" />
+                  <p className=" mb-0 optiontext d-none d-lg-flex">ETH/OPBNB</p>
                 </h6>
               </div>
               <div
