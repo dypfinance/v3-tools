@@ -1050,6 +1050,8 @@ function App() {
       const placeholderArray = placeholderplayerData.slice(itemData.length, 10);
       const finalData = [...testArray, ...placeholderArray];
       setleaderboard(finalData);
+    } else if(itemData.length > 10) {
+    setleaderboard(itemData);
     }
   };
 
@@ -1100,11 +1102,11 @@ function App() {
     }
     leaderboard2 = leaderboard2.sort((a, b) => b.score - a.score);
 
-    var testArray = leaderboard2.filter(
+    var testArray = leaderboard2.length > 0 ? leaderboard2.filter(
       (item) =>
         item.address.toLowerCase() ===
         data?.getPlayer?.wallet?.publicAddress?.toLowerCase()
-    );
+    ) : [];
 
 
     fillRecordsCaws2d(leaderboard2);
@@ -1125,7 +1127,6 @@ function App() {
       setCaws2dUser([]);
     }
 
-    setleaderboard(leaderboard2);
   }; 
   
   const getAllChests = async () => {
