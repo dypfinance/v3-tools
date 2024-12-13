@@ -746,7 +746,7 @@ const Leaderboard = ({
                         <tr
                           key={index}
                           className={`playerInnerRow ${
-                            item.address.toLowerCase() ===
+                            item?.address?.toLowerCase() ===
                               address?.toLowerCase() && "caws-user-row"
                           }`}
                         >
@@ -755,28 +755,28 @@ const Leaderboard = ({
                           </td>
                           <td className="playerName2 col-2">
                             <div className="position-relative d-flex align-items-center">
-                              <span>{item.username}</span>
+                              <span>{item?.username}</span>
                             </div>
                           </td>
                           <td
                             className="playerScore col-2 text-center"
                             style={{ color: cawsHeaders.scoreColor }}
                           >
-                            {getFormattedNumber(item.score, 0)}
+                            {getFormattedNumber(item?.score, 0)}
                           </td>
                           <td
                             className={`playerReward col-2 text-center`}
                             style={{ color: cawsHeaders.rewardColor }}
                           >
-                            {getFormattedNumber(item.level, 0)}
+                            {getFormattedNumber(item?.level, 0)}
                           </td>
                           <td
                             className={`playerReward col-2 text-center`}
                             style={{ color: cawsHeaders.rewardColor , fontSize: '12px'}}
                           >
                             {formatTimeByLevelAndSecond(
-                              item.timestamp,
-                              item.level
+                              item?.timestamp,
+                              item?.level
                             )}
                           </td>
                           <td

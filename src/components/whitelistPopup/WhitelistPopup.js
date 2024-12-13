@@ -72,6 +72,25 @@ const WhitelistPopup = ({ open, onClose }) => {
     <OutsideClickHandler onOutsideClick={onClose}>
       <div id="popup" className={`popup-wrapper ${open && "popup-active"} p-3`}>
         <div style={style2}>
+          <div
+            className="d-flex align-items-center  justify-content-end gap-5 w-100"
+            style={{ height: 1 }}
+          >
+            <img
+              src={closeX}
+              alt=""
+              className="close-x position-relative cursor-pointer "
+              onClick={onClose}
+              style={{
+                bottom: "-25px",
+                alignSelf: "end",
+                width: 23,
+                height: 23,
+                right: 20,
+                zIndex: "1",
+              }}
+            />
+          </div>
           <Slider {...settings} ref={slider}>
             <div className="d-flex py-3 flex-column justify-content-center position-relative align-items-center">
               <div className="d-flex flex-column align-items-center justify-content-center">
@@ -107,25 +126,6 @@ const WhitelistPopup = ({ open, onClose }) => {
 
             <div className="d-flex py-3 flex-column justify-content-center position-relative align-items-center">
               <div className="d-flex flex-column gap-3 align-items-center justify-content-between">
-                <div
-                  className="d-flex align-items-center  justify-content-end gap-5 w-100"
-                  style={{ height: 1 }}
-                >
-                  <img
-                    src={closeX}
-                    alt=""
-                    className="close-x position-relative cursor-pointer "
-                    onClick={onClose}
-                    style={{
-                      bottom: "-25px",
-                      alignSelf: "end",
-                      width: 23,
-                      height: 23,
-                      right: 20,
-                    }}
-                  />
-                </div>
-
                 <div className="d-flex flex-column gap-3 justify-content-center align-items-center px-3">
                   <div className="d-flex flex-column align-items-center justify-content-center">
                     <div className="d-flex align-items-center justify-content-center mb-2 popup-title-wrapper gap-2 p-2 px-4">
