@@ -256,11 +256,11 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
                           </button>
                         )}
 
-                      {(expired === true || selectedLoyalty === "base") && (
+                      {/* {(expired === true || selectedLoyalty === "base") && (
                         <button className="disabled-btn pe-none" disabled>
                           Ended
                         </button>
-                      )}
+                      )} */}
                     </div>
                     {/* <div className="d-flex flex-column w-100 mb-3 mb-lg-0">
                       <div className="d-flex align-items-center justify-content-center p-2 my-reimbursement">
