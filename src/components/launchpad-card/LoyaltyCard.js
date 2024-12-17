@@ -10,7 +10,7 @@ const LoyaltyCard = () => {
   return (
     <NavLink
       to={`/loyalty-program`}
-      className="launchpad-wrapper"
+      className="launchpad-wrapper wrapper2"
     >
       <div className="d-flex flex-column gap-2 align-items-center justify-content-between">
         <img
