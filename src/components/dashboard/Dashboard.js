@@ -1,16 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "./dashboard.css";
-import TopPoolsCard from "../top-pools-card/TopPoolsCard";
-import NewsCard from "../newsCard/NewsCard";
-import GovCard from "../gov-card/GovCard";
-import BridgeCard from "../bridgecard/BridgeCard";
-import ExplorerCard from "../explorer-card/ExplorerCard";
-import Calculator from "../calculator/Calculator";
-import FaqCard from "../faqcard/FaqCard";
-import LaunchpadCard from "../launchpad-card/LaunchpadCard";
-import ChainlinkCard from "../chainlink-card/ChainlinkCard";
-import TrendingNews from "../newsCard/TrendingNews";
-import rightarrow from "./assets/right-arrow.svg";
 import { NavLink } from "react-router-dom";
 import useWindowSize from "../../functions/useWindowSize";
 import axios from "axios";
@@ -25,39 +14,42 @@ import StakeDypiusBsc from "../FARMINNG/bscConstantStakeDypius";
 import StakeDypiusEth3Phase2 from "../FARMINNG/stakingDypiusEth3Phase2";
 import StakeDypiusEth1Phase2 from "../FARMINNG/stakingDypiusEth1Phase2";
 import StakeDypiusEth2Phase2 from "../FARMINNG/stakingDypiusEth2Phase2";
-import StakingiDypPhase2 from "../FARMINNG/stakingiDypPhase2";
-
+import StakingDypiusBase1 from "../FARMINNG/stakingDypiusBase1";
 import InitConstantStakingiDYP from "../FARMINNG/constant-staking-idyp-new-front";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
-import closeX from "../earnOther/assets/closeX.svg";
-import ethereumIcon from "../top-pools-card/assets/ethereum.svg";
-import bnbIcon from "../top-pools-card/assets/bsc.svg";
-import avaxIcon from "../top-pools-card/assets/avax.svg";
 import { ClickAwayListener } from "@material-ui/core";
 import Tooltip from "@material-ui/core/Tooltip";
-import moreinfo from "../FARMINNG/assets/more-info.svg";
-import warning from "../FARMINNG/assets/warning.svg";
+import Countdown from "react-countdown";
 import StakeDypiusBscOther from "../earnOther/stakingPools/bscStakeDypiusOther";
 import StakeDypiusEthOther from "../earnOther/stakingPools/ethStakeDypiusOther";
 import StakeDypiusAvaxOther from "../earnOther/stakingPools/avaxStakeDypiusOther";
 import CountDown from "react-countdown";
 import StakeBscIDyp from "../FARMINNG/bscConstantStakeiDyp";
+
+import TopPoolsCard from "../top-pools-card/TopPoolsCard";
+import NewsCard from "../newsCard/NewsCard";
+import GovCard from "../gov-card/GovCard";
+import BridgeCard from "../bridgecard/BridgeCard";
+import ExplorerCard from "../explorer-card/ExplorerCard";
+import FaqCard from "../faqcard/FaqCard";
+import LaunchpadCard from "../launchpad-card/LaunchpadCard";
+import ChainlinkCard from "../chainlink-card/ChainlinkCard";
+import TrendingNews from "../newsCard/TrendingNews";
+import WhitelistPopup from "../whitelistPopup/WhitelistPopup";
+import LoyaltyCard from "../launchpad-card/LoyaltyCard";
+ 
+ 
 import eth from "../earn/assets/eth.svg";
 import ethActive from "../earn/assets/ethActive.svg";
-
 import bnb from "../earn/assets/bnb.svg";
 import bnbActive from "../earn/assets/bnbActive.svg";
-
 import base from "../earn/assets/base.svg";
 import baseActive from "../earn/assets/baseActive.svg";
-
 import avax from "../earn/assets/avax.svg";
 import avaxActive from "../earn/assets/avaxActive.svg";
-import WhitelistPopup from "../whitelistPopup/WhitelistPopup";
-import StakingDypiusBase1 from "../FARMINNG/stakingDypiusBase1";
-import LoyaltyCard from "../launchpad-card/LoyaltyCard";
-import Countdown from "react-countdown";
+
+
 
 const renderer = ({ days, hours, minutes }) => {
   return (
@@ -1043,7 +1035,7 @@ const Dashboard = ({
                   to="/earn/dypius"
                   className="view-more-title d-flex justify-content-center align-items-center gap-1"
                 >
-                  View all <img src={rightarrow} alt="" />{" "}
+                  View all <img src={'https://cdn.worldofdypians.com/tools/rightlogo.svg'} alt="" />{" "}
                 </NavLink>
               </div>
               {windowSize.width > 786 ? (
@@ -1412,7 +1404,7 @@ const Dashboard = ({
                 className="view-more-title d-flex justify-content-center align-items-center gap-1"
                 to="/news"
               >
-                View all <img src={rightarrow} alt="" />
+                View all <img src={'https://cdn.worldofdypians.com/tools/rightlogo.svg'} alt="" />
               </NavLink>
               <div className="d-flex flex-column flex-md-row gap-3 justify-content-between px-0">
                 {popularNewsData.length !== 0 && (
@@ -1510,7 +1502,7 @@ const Dashboard = ({
                     </span>
                   </div>
                   <img
-                    src={closeX}
+                    src={'https://cdn.worldofdypians.com/wod/popupXmark.svg'}
                     alt=""
                     className="close-x position-relative cursor-pointer "
                     onClick={() => {
@@ -1742,8 +1734,8 @@ const Dashboard = ({
                                         "0x92A84052Fe6945949A295AF14a7506e3dc085492" ||
                                       selectedPool?.id ===
                                         "0xFdD3CFF22CF846208E3B37b47Bc36b2c61D2cA8b"
-                                        ? warning
-                                        : moreinfo
+                                        ? 'https://cdn.worldofdypians.com/tools/warning.svg'
+                                        : 'https://cdn.worldofdypians.com/tools/more-info.svg'
                                     }
                                     alt=""
                                     onClick={aprOpen}

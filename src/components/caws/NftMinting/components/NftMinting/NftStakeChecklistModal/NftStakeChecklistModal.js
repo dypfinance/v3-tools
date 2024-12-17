@@ -625,7 +625,7 @@ const NftStakeCheckListModal = ({
       </div>{" "}
       <div style={{ display: "block" }} className="bottom-static-wrapper">
         <p className="d-flex info-text align-items-start gap-3">
-          <img src={require("./more-info.svg").default} alt="" />
+          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" />
           {!showStaked
             ? "Please select which NFTs to Stake."
             : "Please select your NFTs to Claim or to Unstake"}

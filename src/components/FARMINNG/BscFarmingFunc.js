@@ -10,10 +10,7 @@ import ellipse from "./assets/ellipse.svg";
 import empty from "./assets/empty.svg";
 import check from "./assets/check.svg";
 import failMark from "../../assets/failMark.svg";
-import arrowup from "./assets/arrow-up.svg";
-import whiteArrowUp from "./assets/whiteArrowUp.svg";
-import moreinfo from "./assets/more-info.svg";
-import stats from "./assets/stats.svg";
+ 
 import purplestats from "./assets/purpleStat.svg";
 import wallet from "./assets/wallet.svg";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -1815,7 +1812,7 @@ const BscFarmingFunc = ({
                           }
                         >
                           <img
-                            src={moreinfo}
+                            src={'https://cdn.worldofdypians.com/tools/more-info.svg'}
                             alt=""
                             onClick={performanceOpen}
                           />
@@ -1843,7 +1840,7 @@ const BscFarmingFunc = ({
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={aprOpen} />
+                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={aprOpen} />
                         </Tooltip>
                       </ClickAwayListener>
                     </h6>
@@ -1867,7 +1864,7 @@ const BscFarmingFunc = ({
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={lockOpen} />
+                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={lockOpen} />
                         </Tooltip>
                       </ClickAwayListener>
                     </h6>
@@ -2029,7 +2026,7 @@ const BscFarmingFunc = ({
                       </div>
                     }
                   >
-                    <img src={moreinfo} alt="" onClick={depositOpen} />
+                    <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={depositOpen} />
                   </Tooltip>
                 </ClickAwayListener>
               </div>
@@ -2160,7 +2157,7 @@ const BscFarmingFunc = ({
                         </div>
                       }
                     >
-                      <img src={moreinfo} alt="" onClick={rewardsOpen} />
+                      <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={rewardsOpen} />
                     </Tooltip>
                   </ClickAwayListener>
                 </h6>
@@ -2421,7 +2418,7 @@ const BscFarmingFunc = ({
                       </div>
                     }
                   >
-                    <img src={moreinfo} alt="" onClick={withdrawOpen} />
+                    <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={withdrawOpen} />
                   </Tooltip>
                 </ClickAwayListener>
               </h6>

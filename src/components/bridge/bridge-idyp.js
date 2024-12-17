@@ -5,8 +5,7 @@ import "./bridge.css";
 import eth from "./assets/eth.svg";
 import bnb from "./assets/bnb.svg";
 import avax from "./assets/avax.svg";
-import wallet from "./assets/wallet.svg";
-import moreinfo from "./assets/more-info.svg";
+import wallet from "./assets/wallet.svg"; 
 import switchicon from "./assets/switch.svg";
 import failMark from "../../assets/failMark.svg";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -725,7 +724,7 @@ export default function initBridgeidyp({
                                   </div>
                                 }
                               >
-                                <img src={moreinfo} alt="" />
+                                <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" />
                               </Tooltip>
                             </h6>
 
@@ -989,7 +988,7 @@ export default function initBridgeidyp({
                                     </div>
                                   }
                                 >
-                                  <img src={moreinfo} alt="" />
+                                  <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" />
                                 </Tooltip>
                               </div>
                             </h6>

@@ -1,8 +1,6 @@
 import React from "react";
-import filledArrow from "./assets/filledarrow.svg";
-import govLogo from "./assets/gov-logo.svg";
-import { NavLink } from "react-router-dom";
 import "./govcard.css";
+  
 
 const GovCard = () => {
   return (
@@ -14,7 +12,7 @@ const GovCard = () => {
       <div className="d-flex flex-column gap-2 justify-content-between h-100">
         <div className="">
           <h6 className="governancecard-title d-flex justify-content-between gap-2 align-items-center">
-          Bridge on Base <img src={govLogo} alt="" style={{height:39, width:39}}/>
+          Bridge on Base <img src={'https://cdn.worldofdypians.com/tools/gov-logo.svg'} alt="" style={{height:39, width:39}}/>
           </h6>
         </div>
         <div className="d-flex flex-column h-100 justify-content-between">
@@ -25,7 +23,7 @@ const GovCard = () => {
           </div>
 
           <h6 className="govcard-btntext d-flex justify-content-end gap-2 align-items-center">
-            <img src={filledArrow} alt="" />
+            <img src={'https://cdn.worldofdypians.com/tools/filledArrow.svg'} alt="" />
           </h6>
         </div>
       </div>

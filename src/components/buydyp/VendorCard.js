@@ -39,7 +39,7 @@ const VendorCard = ({
       <div className="d-flex align-items-center justify-content-between">
         <span className="tutorial-text">View video tutorials</span>
         <img
-          src={require("../newsCard/assets/filledArrow.svg").default}
+          src={'https://cdn.worldofdypians.com/tools/filledArrow.svg'}
           alt=""
         />
       </div>

@@ -21,8 +21,7 @@ import empty from "../assets/empty.svg";
 import check from "../assets/check.svg";
 import govhero from "../assets/govhero.png";
 import statsLinkIcon from "../../FARMINNG/assets/statsLinkIcon.svg";
-import purplestats from "../../FARMINNG/assets/purpleStat.svg";
-import moreinfo from "../../FARMINNG/assets//more-info.svg";
+import purplestats from "../../FARMINNG/assets/purpleStat.svg"; 
 import failMark from "../../../assets/failMark.svg";
 import Tooltip from "@material-ui/core/Tooltip";
 import ellipse from "../assets/ellipse.svg";
@@ -2269,7 +2268,7 @@ class ProposalDetails extends React.Component {
                           </div>
                         }
                       >
-                        <img src={moreinfo} alt="" />
+                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" />
                       </Tooltip>
                     </div>
                     <div className="d-flex gap-2 align-items-center justify-content-between flex-column flex-lg-row mt-2">
@@ -2418,7 +2417,7 @@ class ProposalDetails extends React.Component {
                           </div>
                         }
                       >
-                        <img src={moreinfo} alt="" />
+                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" />
                       </Tooltip>
                     </div>
 

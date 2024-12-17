@@ -1183,7 +1183,7 @@ const NftCawsWodChecklistModal = ({
       </div>{" "}
       <div style={{ display: "block" }} className="bottom-static-wrapper">
         <p className="d-flex info-text align-items-start gap-3">
-          <img src={require("./more-info.svg").default} alt="" />
+          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" />
           {!showStaked
             ? "Please choose the NFTs that you wish to stake. Once you have made your selection, you will be required to approve the process before depositing the NFTs.            "
             : "Please select your NFTs to Claim or to Unstake"}

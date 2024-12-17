@@ -28,12 +28,9 @@ import FarmAvaxFunc from "../../FARMINNG/FarmAvaxFunc";
 import StakeDypiusBsc from "../../FARMINNG/bscConstantStakeDypius";
 import StakeDypiusAvax from "../../FARMINNG/stakeDypiusAvax";
 import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
-import closeX from "../../earnOther/assets/closeX.svg";
+import Box from "@mui/material/Box"; 
 import { ClickAwayListener } from "@material-ui/core";
-import Tooltip from "@material-ui/core/Tooltip";
-import moreinfo from "../../FARMINNG/assets/more-info.svg";
-import warning from "../../FARMINNG/assets/warning.svg";
+import Tooltip from "@material-ui/core/Tooltip";  
 
 import eth from "../assets/eth.svg";
 import ethActive from "../assets/ethActive.svg";
@@ -3220,7 +3217,7 @@ const EarnTopPicks = ({
                     </span>
                   </div>
                   <img
-                    src={closeX}
+                    src={'https://cdn.worldofdypians.com/wod/popupXmark.svg'}
                     alt=""
                     className="close-x position-relative cursor-pointer "
                     onClick={() => {
@@ -3762,8 +3759,8 @@ const EarnTopPicks = ({
                                     "0x92A84052Fe6945949A295AF14a7506e3dc085492" ||
                                   selectedPool?.id ===
                                     "0xFdD3CFF22CF846208E3B37b47Bc36b2c61D2cA8b"
-                                    ? warning
-                                    : moreinfo
+                                    ? 'https://cdn.worldofdypians.com/tools/warning.svg'
+                                    : 'https://cdn.worldofdypians.com/tools/more-info.svg'
                                 }
                                 alt=""
                                 onClick={aprOpen}

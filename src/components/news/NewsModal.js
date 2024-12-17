@@ -13,8 +13,7 @@ import goBackArrow from "./assets/goBackArrow.svg";
 import passiveUpvote from "./assets/passiveUpvote.svg";
 import passiveDownvote from "./assets/passiveDownvote.svg";
 import activeUpvote from "./assets/activeUpvote.svg";
-import activeDownvote from "./assets/activeDownvote.svg";
-import calendar from "../newsCard/assets/calendar.svg";
+import activeDownvote from "./assets/activeDownvote.svg"; 
 import newsReddit from "./assets/newsReddit.svg";
 import newsShare from "./assets/newsShare.svg";
 import newsTelegram from "./assets/newsTelegram.svg";
@@ -305,7 +304,7 @@ const NewsModal = ({
                     <span className="go-back-text">Go Back</span>
                   </button>
                   <div className="date-wrapper">
-                    <img src={calendar} alt="calendar" />
+                    <img src={'https://cdn.worldofdypians.com/tools/calendar.svg'} alt="calendar" />
                     <span className="news-date-text">
                       {formattedDate.toLocaleDateString("en-US", options)}
                     </span>

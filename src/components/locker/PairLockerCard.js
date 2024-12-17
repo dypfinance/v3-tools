@@ -1,5 +1,4 @@
-import React from "react";
-import moreInfo from "../FARMINNG/assets/more-info.svg";
+import React from "react"; 
 import topLockedImage from './assets/topLocked.svg'
 
 
@@ -61,7 +60,7 @@ const PairLockerCard = ({ completed, active, topLocked, id, pair_address, lpAmou
             <div className="d-flex align-items-start justify-content-between position-relative">
               <span className="pair-indicator">Status</span>
                 {active === true &&  
-              <img src={moreInfo} alt="" className="more-info-tag" />
+              <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" className="more-info-tag" />
                 
                 }             
               {active === true ? 

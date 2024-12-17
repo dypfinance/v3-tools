@@ -1,7 +1,4 @@
-import React, { useEffect, useState } from "react";
-import greenArrow from "./assets/greenarrow.svg";
-import orangeArrow from "./assets/orangearrow.svg";
-import topPick from "./assets/toppick.svg";
+import React, { useEffect, useState } from "react";  
 import "./top-pools.css";
 
 import initFarmAvax from "../FARMINNG/farmAvax";
@@ -417,7 +414,7 @@ const TopPoolsListCard = ({
                 <>
                   <img
                     key={index}
-                    src={require(`./assets/${coin}.svg`)}
+                    src={`https://cdn.worldofdypians.com/tools/${coin}.svg`}
                     alt=""
                     className="pool-coins"
                   />
@@ -436,7 +433,7 @@ const TopPoolsListCard = ({
             ) : tokenLogo !== undefined && tokenLogo !== "landcaws" ? (
               <>
                 <img
-                  src={require(`./assets/${tokenLogo}`)}
+                  src={`https://cdn.worldofdypians.com/tools/${tokenLogo}`}
                   width={32}
                   height={32}
                   alt=""
@@ -454,7 +451,7 @@ const TopPoolsListCard = ({
                   cawswodcoins.map((coin, index) => (
                     <img
                       key={index}
-                      src={require(`./assets/${coin}.png`)}
+                      src={`https://cdn.worldofdypians.com/tools/${coin}.png`}
                       alt=""
                       className="pool-coins"
                     />
@@ -531,7 +528,7 @@ const TopPoolsListCard = ({
           className="col-12 col-lg-4 d-flex justify-content-end gap-5"
           style={{ width: "170px" }}
         >
-          {top_pick && <img src={topPick} alt="" />}
+          {top_pick && <img src={'https://cdn.worldofdypians.com/tools/toppick.svg'} alt="" />}
           {/* {isNewPool && <img src={newPool} alt="" />} */}
 
           <h6
@@ -545,7 +542,7 @@ const TopPoolsListCard = ({
           >
             {showDetails === false ? "Deposit" : "Close"}
             <img
-              src={showDetails === false ? greenArrow : orangeArrow}
+              src={showDetails === false ? 'https://cdn.worldofdypians.com/tools/greenarrow.svg' : 'https://cdn.worldofdypians.com/tools/orangearrow.svg'}
               alt=""
             />
           </h6>

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment";
 import getFormattedNumber from "../../../functions/get-formatted-number";
-import { shortAddress } from "../../../functions/shortAddress";
-import moreinfo from "../../FARMINNG/assets/more-info.svg";
+import { shortAddress } from "../../../functions/shortAddress"; 
 import wallet from "../../FARMINNG/assets/wallet.svg";
 import Tooltip from "@material-ui/core/Tooltip";
 import statsLinkIcon from "../../FARMINNG/assets/statsLinkIcon.svg";
@@ -995,7 +994,7 @@ const StakeDypiusAvaxOther = ({
                         </div>
                       }
                     >
-                      <img src={moreinfo} alt="" onClick={aprOpen} />
+                      <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={aprOpen} />
                     </Tooltip>
                   </ClickAwayListener>
                 </span>
@@ -1112,7 +1111,7 @@ const StakeDypiusAvaxOther = ({
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={poolCapOpen} />
+                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={poolCapOpen} />
                         </Tooltip>
                       </ClickAwayListener>
                     </span>
@@ -1136,7 +1135,7 @@ const StakeDypiusAvaxOther = ({
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={quotaOpen} />
+                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={quotaOpen} />
                         </Tooltip>
                       </ClickAwayListener>
                     </span>
@@ -1160,7 +1159,7 @@ const StakeDypiusAvaxOther = ({
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={maxDepositOpen} />
+                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={maxDepositOpen} />
                         </Tooltip>
                       </ClickAwayListener>
                     </span>
@@ -1279,7 +1278,7 @@ const StakeDypiusAvaxOther = ({
                           }
                         >
                           <img
-                            src={moreinfo}
+                            src={'https://cdn.worldofdypians.com/tools/more-info.svg'}
                             alt=""
                             onClick={earlyWithdrawOpen}
                           />
@@ -1306,7 +1305,7 @@ const StakeDypiusAvaxOther = ({
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={poolFeeOpen} />
+                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={poolFeeOpen} />
                         </Tooltip>
                       </ClickAwayListener>
                     </span>
@@ -1573,7 +1572,7 @@ const StakeDypiusAvaxOther = ({
                           }
                         >
                           <img
-                            src={moreinfo}
+                            src={'https://cdn.worldofdypians.com/tools/more-info.svg'}
                             alt=""
                             onClick={earlyWithdrawOpen}
                           />
@@ -1600,7 +1599,7 @@ const StakeDypiusAvaxOther = ({
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={poolFeeOpen} />
+                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={poolFeeOpen} />
                         </Tooltip>
                       </ClickAwayListener>
                     </span>
@@ -1791,7 +1790,7 @@ const StakeDypiusAvaxOther = ({
     //                       }
     //                     >
     //                       <img
-    //                         src={moreinfo}
+    //                         src={'https://cdn.worldofdypians.com/tools/more-info.svg'}
     //                         alt=""
     //                         onClick={performanceOpen}
     //                       />

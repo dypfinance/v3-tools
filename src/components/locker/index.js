@@ -22,8 +22,7 @@ import Error from "../../assets/error.svg";
 import "./newlocker.css";
 import liquidityIcon from "./assets/liquidityIcon.svg";
 import securityIcon from "./assets/securityIcon.svg";
-import greySecurityIcon from "./assets/greySecurityIcon.svg";
-import moreInfo from "../FARMINNG/assets/more-info.svg";
+import greySecurityIcon from "./assets/greySecurityIcon.svg"; 
 import ethStakeActive from "../../assets/earnAssets/ethStakeActive.svg";
 import bnbStakeActive from "../../assets/earnAssets/bnbStakeActive.svg";
 import avaxStakeActive from "../../assets/earnAssets/avaxStakeActive.svg";
@@ -2028,8 +2027,7 @@ export default class Locker extends React.Component {
                     <div className="d-flex align-items-center gap-2">
                       <img src={greySecurityIcon} alt="" />
                       <h6 className="locker-function-title">Create lock</h6>
-                    </div>
-                    {/* <img src={moreInfo} alt="" height={24} width={24} /> */}
+                    </div> 
                   </div>
                   <hr className="form-divider my-4" style={{ height: "3px" }} />
                   <div className="d-flex flex-column flex-lg-row align-items-center justify-content-between gap-5">
@@ -2396,7 +2394,7 @@ export default class Locker extends React.Component {
                         <span className="locker-indicator">
                           DYP locker status
                         </span>
-                        <img src={moreInfo} alt="" height={20} width={20} />
+                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" height={20} width={20} />
                       </div>
                       <div className="locker-status d-flex align-items-center gap-3 p-2">
                         <span className="locker-status-text">

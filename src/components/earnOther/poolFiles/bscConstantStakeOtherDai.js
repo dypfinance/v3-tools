@@ -9,8 +9,7 @@ import ellipse from "../../FARMINNG/assets/ellipse.svg";
 // import failMark from "../../assets/failMark.svg";
 import Clipboard from "react-clipboard.js";
 import ReactTooltip from "react-tooltip";
-import arrowup from "../../FARMINNG/assets/arrow-up.svg";
-import moreinfo from "../../FARMINNG/assets/more-info.svg";
+import arrowup from "../../FARMINNG/assets/arrow-up.svg"; 
 // import stats from "../../FARMINNG/assets/stats.svg";
 import purplestats from "../../FARMINNG/assets/purpleStat.svg";
 import referralimg from "../../FARMINNG/assets/referral.svg";
@@ -918,7 +917,7 @@ const StakeBscOtherDai = ({
                           }
                         >
                           <img
-                            src={moreinfo}
+                            src={'https://cdn.worldofdypians.com/tools/more-info.svg'}
                             alt=""
                             onClick={performanceOpen}
                           />
@@ -946,7 +945,7 @@ const StakeBscOtherDai = ({
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={aprOpen} />
+                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={aprOpen} />
                         </Tooltip>
                       </ClickAwayListener>
                     </h6>
@@ -970,7 +969,7 @@ const StakeBscOtherDai = ({
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={lockOpen} />
+                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={lockOpen} />
                         </Tooltip>
                       </ClickAwayListener>
                     </h6>
@@ -1107,7 +1106,7 @@ const StakeBscOtherDai = ({
                       </div>
                     }
                   >
-                    <img src={moreinfo} alt="" onClick={depositOpen} />
+                    <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={depositOpen} />
                   </Tooltip>
                 </ClickAwayListener>
               </div>
@@ -1259,7 +1258,7 @@ const StakeBscOtherDai = ({
                         </div>
                       }
                     >
-                      <img src={moreinfo} alt="" onClick={rewardsOpen} />
+                      <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={rewardsOpen} />
                     </Tooltip>
                   </ClickAwayListener>
                 </h6>
@@ -1405,7 +1404,7 @@ const StakeBscOtherDai = ({
                       </div>
                     }
                   >
-                    <img src={moreinfo} alt="" onClick={withdrawOpen} />
+                    <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={withdrawOpen} />
                   </Tooltip>
                 </ClickAwayListener>
               </h6>

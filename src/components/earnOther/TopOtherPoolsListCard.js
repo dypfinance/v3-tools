@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import useWindowSize from "../../functions/useWindowSize";
 import "../top-pools-card/top-pools.css";
-import TopPoolsListCardInner from "../top-pools-card/TopPoolsListCardInner";
 import nftTag from "./assets/nftTag.svg";
-import stakeTag from "./assets/stakeTag.svg";
-import hotTag from "./assets/hotTag.svg";
 import watch from "./assets/watch.svg";
 import premium24hrstag from "../top-pools-card/assets/24hrsPremiumTag.svg";
 import CountDown from "react-countdown";

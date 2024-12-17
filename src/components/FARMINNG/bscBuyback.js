@@ -10,8 +10,7 @@ import empty from "./assets/empty.svg";
 import check from "./assets/check.svg";
 import failMark from "../../assets/failMark.svg";
 import arrowup from "./assets/arrow-up.svg";
-import whiteArrowUp from "./assets/whiteArrowUp.svg";
-import moreinfo from "./assets/more-info.svg";
+import whiteArrowUp from "./assets/whiteArrowUp.svg"; 
 import stats from "./assets/stats.svg";
 import purplestats from "./assets/purpleStat.svg";
 import wallet from "./assets/wallet.svg";
@@ -1414,7 +1413,7 @@ export default function initBscBuyback({
                           }
                         >
                           <img
-                            src={moreinfo}
+                            src={'https://cdn.worldofdypians.com/tools/more-info.svg'}
                             alt=""
                             onClick={performanceOpen}
                           />
@@ -1442,7 +1441,7 @@ export default function initBscBuyback({
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={aprOpen} />
+                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={aprOpen} />
                         </Tooltip>
                       </ClickAwayListener>
                       </h6>
@@ -1466,7 +1465,7 @@ export default function initBscBuyback({
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={lockOpen} />
+                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={lockOpen} />
                         </Tooltip>
                       </ClickAwayListener>
                       </h6>
@@ -1646,7 +1645,7 @@ export default function initBscBuyback({
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={depositOpen} />
+                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={depositOpen} />
                         </Tooltip>
                       </ClickAwayListener>
                   </div>
@@ -1787,7 +1786,7 @@ export default function initBscBuyback({
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={rewardsOpen} />
+                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={rewardsOpen} />
                         </Tooltip>
                       </ClickAwayListener>
                     </h6>
@@ -2093,7 +2092,7 @@ export default function initBscBuyback({
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={withdrawOpen} />
+                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={withdrawOpen} />
                         </Tooltip>
                       </ClickAwayListener>
                   </h6>

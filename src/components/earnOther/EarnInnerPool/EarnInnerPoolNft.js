@@ -12,8 +12,7 @@ import ethStakeActive from "../../../assets/earnAssets/ethStakeActive.svg";
 import bnbStakeActive from "../../../assets/earnAssets/bnbStakeActive.svg";
 import avaxStakeActive from "../../../assets/earnAssets/avaxStakeActive.svg";
 import baseStakeActive from "../../../assets/earnAssets/baseActive.svg";
-
-import greenArrow from "../../../assets/earnOtherAssets/greenArrow.svg";
+ 
 import { NavLink } from "react-router-dom";
 import { shortAddress } from "../../../functions/shortAddress";
 import SwitchChainModal from "../../switch-chain-modal/SwitchChainModal";
@@ -247,7 +246,7 @@ const EarnInnerPoolNft = ({
                     target="_blank"
                     rel="noreferrer"
                   >
-                    Dypius <img alt="" src={greenArrow} />
+                    Dypius <img alt="" src={'https://cdn.worldofdypians.com/tools/greenarrow.svg'} />
                   </a>
                 </div>
               </div>
@@ -274,7 +273,7 @@ const EarnInnerPoolNft = ({
                         ? "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7"
                         : "0x4200000000000000000000000000000000000006"
                     )}{" "}
-                    <img alt="" src={greenArrow} />
+                    <img alt="" src={'https://cdn.worldofdypians.com/tools/greenarrow.svg'} />
                   </a>
                 </div>
               </div>

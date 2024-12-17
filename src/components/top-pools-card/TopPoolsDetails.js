@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import ellipse from "./assets/ellipse.svg";
-import arrowup from "./assets/arrow-up.svg";
-import moreinfo from "./assets/more-info.svg";
+import arrowup from "./assets/arrow-up.svg"; 
 
 const TopPoolsDetails = ({performanceFee, rewardsToken, contractExp, tvl }) => {
   const [depositValue, setDepositValue] = useState(1000);
@@ -45,7 +44,7 @@ const TopPoolsDetails = ({performanceFee, rewardsToken, contractExp, tvl }) => {
           </div>
           <div>
             <h6 className="bottomitems">
-              <img src={moreinfo} alt="" />
+              <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" />
               More info
             </h6>
           </div>

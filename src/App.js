@@ -53,8 +53,7 @@ import axios from "axios";
 import MobileFlyout from "./components/mobileFlyout/MobileFlyout";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
-import { MobileView, BrowserView } from "react-device-detect";
-import closeX from "./components/earnOther/assets/closeX.svg";
+import { MobileView, BrowserView } from "react-device-detect"; 
 import Whitelist from "./components/whitelist/Whitelist";
 // import WhitelistPopup from "./components/whitelistPopup/WhitelistPopup";
 import Games from "./components/games/Games";
@@ -2172,7 +2171,7 @@ setkittyDashRecords */}
                   <h4 className="mobile-popup-title">Dypius Mobile App</h4>
 
                   <img
-                    src={closeX}
+                    src={'https://cdn.worldofdypians.com/wod/popupXmark.svg'}
                     alt=""
                     className="close-x position-relative cursor-pointer "
                     onClick={() => {

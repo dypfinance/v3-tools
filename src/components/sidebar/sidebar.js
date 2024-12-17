@@ -232,12 +232,12 @@ const Sidebar = (props) => {
                     onMouseLeave={() => setHover(null)}
                   >
                     <img
-                      src={require(`../../assets/sidebarIcons/${
+                      src={`https://cdn.worldofdypians.com/tools/${
                         activeLink === sideItem.label ||
                         hover === sideItem.label
                           ? sideItem.icon + "Active.svg"
                           : sideItem.icon + ".svg"
-                      }`)}
+                      }`}
                       alt=""
                       style={{ width: 32, height: 32 }}
                     />
@@ -317,12 +317,12 @@ const Sidebar = (props) => {
                       onMouseLeave={() => setHover(null)}
                     >
                       <img
-                        src={require(`../../assets/sidebarIcons/${
+                        src={`https://cdn.worldofdypians.com/tools/${
                           activeLink === sideItem.label ||
                           hover === sideItem.label
                             ? sideItem.icon + "Active.svg"
                             : sideItem.icon + ".svg"
-                        }`)}
+                        }`}
                         alt=""
                         style={{ width: 32, height: 32 }}
                       />

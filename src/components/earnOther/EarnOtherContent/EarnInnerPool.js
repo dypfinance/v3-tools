@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ClickAwayListener } from "@material-ui/core";
-import Tooltip from "@material-ui/core/Tooltip";
-import moreinfo from "../../FARMINNG/assets/more-info.svg";
+import Tooltip from "@material-ui/core/Tooltip"; 
 import getFormattedNumber from "../../../functions/get-formatted-number";
 import moment from "moment";
 import axios from "axios";
@@ -798,7 +797,7 @@ const EarnInnerPool = ({
                       </div>
                     }
                   >
-                    <img src={moreinfo} alt="" onClick={aprOpen} />
+                    <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={aprOpen} />
                   </Tooltip>
                 </ClickAwayListener>
               </span>
@@ -897,7 +896,7 @@ const EarnInnerPool = ({
                           </div>
                         }
                       >
-                        <img src={moreinfo} alt="" onClick={poolCapOpen} />
+                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={poolCapOpen} />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -919,7 +918,7 @@ const EarnInnerPool = ({
                           </div>
                         }
                       >
-                        <img src={moreinfo} alt="" onClick={quotaOpen} />
+                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={quotaOpen} />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -943,7 +942,7 @@ const EarnInnerPool = ({
                           </div>
                         }
                       >
-                        <img src={moreinfo} alt="" onClick={maxDepositOpen} />
+                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={maxDepositOpen} />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -1042,7 +1041,7 @@ const EarnInnerPool = ({
                         }
                       >
                         <img
-                          src={moreinfo}
+                          src={'https://cdn.worldofdypians.com/tools/more-info.svg'}
                           alt=""
                           onClick={earlyWithdrawOpen}
                         />
@@ -1069,7 +1068,7 @@ const EarnInnerPool = ({
                           </div>
                         }
                       >
-                        <img src={moreinfo} alt="" onClick={poolFeeOpen} />
+                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={poolFeeOpen} />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -1107,7 +1106,7 @@ const EarnInnerPool = ({
                           </div>
                         }
                       >
-                        <img src={moreinfo} alt="" onClick={startDateOpen} />
+                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={startDateOpen} />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -1131,7 +1130,7 @@ const EarnInnerPool = ({
                           </div>
                         }
                       >
-                        <img src={moreinfo} alt="" onClick={endDateOpen} />
+                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={endDateOpen} />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -1346,7 +1345,7 @@ const EarnInnerPool = ({
                         }
                       >
                         <img
-                          src={moreinfo}
+                          src={'https://cdn.worldofdypians.com/tools/more-info.svg'}
                           alt=""
                           onClick={earlyWithdrawOpen}
                         />
@@ -1373,7 +1372,7 @@ const EarnInnerPool = ({
                           </div>
                         }
                       >
-                        <img src={moreinfo} alt="" onClick={poolFeeOpen} />
+                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={poolFeeOpen} />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -1411,7 +1410,7 @@ const EarnInnerPool = ({
                           </div>
                         }
                       >
-                        <img src={moreinfo} alt="" onClick={startDateOpen} />
+                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={startDateOpen} />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -1435,7 +1434,7 @@ const EarnInnerPool = ({
                           </div>
                         }
                       >
-                        <img src={moreinfo} alt="" onClick={endDateOpen} />
+                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={endDateOpen} />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>

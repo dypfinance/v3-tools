@@ -6,8 +6,7 @@ import useWindowSize from "../../../functions/useWindowSize";
 import TopOtherPoolsCard from "../TopOtherPoolsCard";
 import TopOtherPoolsListCard from "../TopOtherPoolsListCard";
 import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
-import closeX from "../assets/closeX.svg";
+import Box from "@mui/material/Box"; 
 import { FadeLoader } from "react-spinners";
 import searchIcon from "../assets/searchIcon.svg";
 import EarnInnerPool from "./EarnInnerPool";
@@ -600,7 +599,7 @@ const EarnOtherContent = ({
                     </span>
                   </div>
                   <img
-                    src={closeX}
+                    src={'https://cdn.worldofdypians.com/wod/popupXmark.svg'}
                     alt=""
                     className="close-x position-relative cursor-pointer "
                     onClick={() => {

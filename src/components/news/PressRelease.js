@@ -5,8 +5,7 @@ import OutsideClickHandler from "react-outside-click-handler";
 import passiveUpvote from "./assets/passiveUpvote.svg";
 import passiveDownvote from "./assets/passiveDownvote.svg";
 import activeUpvote from "./assets/activeUpvote.svg";
-import activeDownvote from "./assets/activeDownvote.svg";
-import calendar from "../newsCard/assets/calendar.svg";
+import activeDownvote from "./assets/activeDownvote.svg"; 
 
 const PressRealease = ({
   title,
@@ -306,7 +305,7 @@ const PressRealease = ({
               style={{ width: "auto" }}
             /> */}
             <div className="date-wrapper">
-              <img src={calendar} alt="calendar" />
+              <img src={'https://cdn.worldofdypians.com/tools/calendar.svg'} alt="calendar" />
               <span className="news-date-text">
                 {formattedDate.toLocaleDateString("en-US", options)}
               </span>

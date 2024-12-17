@@ -9,8 +9,7 @@ import Address from "./address";
 import WalletModal from "../WalletModal";
 import "./top-pools.css";
 import ellipse from "./assets/ellipse.svg";
-import arrowup from "./assets/arrow-up.svg";
-import moreinfo from "./assets/more-info.svg";
+import arrowup from "./assets/arrow-up.svg"; 
 import wallet from "./assets/wallet.svg";
 import Tooltip from "@material-ui/core/Tooltip";
 import OutsideClickHandler from "react-outside-click-handler";
@@ -270,7 +269,7 @@ const LandDetails = ({
                       </div>
                     }
                   >
-                    <img src={moreinfo} alt="" />
+                    <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" />
                   </Tooltip>
                 </h6>
               </div>
@@ -288,7 +287,7 @@ const LandDetails = ({
                       </div>
                     }
                   >
-                    <img src={moreinfo} alt="" />
+                    <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" />
                   </Tooltip>
                 </h6>
               </div>
@@ -430,7 +429,7 @@ const LandDetails = ({
                     </div>
                   }
                 >
-                  <img src={moreinfo} alt="" />
+                  <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" />
                 </Tooltip>
               </div>
               <div className="d-flex flex-column gap-2 justify-content-between">
@@ -505,7 +504,7 @@ const LandDetails = ({
                       </div>
                     }
                   >
-                    <img src={moreinfo} alt="" />
+                    <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" />
                   </Tooltip>
                 </h6>
               </div>
@@ -548,7 +547,7 @@ const LandDetails = ({
                     </div>
                   }
                 >
-                  <img src={moreinfo} alt="" />
+                  <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" />
                 </Tooltip>
               </h6>
 

@@ -612,8 +612,7 @@ const LandNftStakeCheckListModal = ({
         <p className="d-flex info-text align-items-start gap-3">
           <img
             src={
-              require("../caws/NftMinting/components/NftMinting/NftStakeChecklistModal/more-info.svg")
-                .default
+             'https://cdn.worldofdypians.com/tools/more-info.svg'
             }
             alt=""
           />

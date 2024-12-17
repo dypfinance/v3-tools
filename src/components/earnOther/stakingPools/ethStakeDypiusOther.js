@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment";
-import getFormattedNumber from "../../../functions/get-formatted-number";
-import moreinfo from "../../FARMINNG/assets/more-info.svg";
+import getFormattedNumber from "../../../functions/get-formatted-number"; 
 import wallet from "../../FARMINNG/assets/wallet.svg";
 import Tooltip from "@material-ui/core/Tooltip";
 import statsLinkIcon from "../../FARMINNG/assets/statsLinkIcon.svg";
@@ -923,7 +922,7 @@ const StakeDypiusEthOther = ({
                         </div>
                       }
                     >
-                      <img src={moreinfo} alt="" onClick={aprOpen} />
+                      <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={aprOpen} />
                     </Tooltip>
                   </ClickAwayListener>
                 </span>
@@ -1044,7 +1043,7 @@ const StakeDypiusEthOther = ({
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={poolCapOpen} />
+                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={poolCapOpen} />
                         </Tooltip>
                       </ClickAwayListener>
                     </span>
@@ -1068,7 +1067,7 @@ const StakeDypiusEthOther = ({
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={quotaOpen} />
+                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={quotaOpen} />
                         </Tooltip>
                       </ClickAwayListener>
                     </span>
@@ -1092,7 +1091,7 @@ const StakeDypiusEthOther = ({
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={maxDepositOpen} />
+                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={maxDepositOpen} />
                         </Tooltip>
                       </ClickAwayListener>
                     </span>
@@ -1210,7 +1209,7 @@ const StakeDypiusEthOther = ({
                           }
                         >
                           <img
-                            src={moreinfo}
+                            src={'https://cdn.worldofdypians.com/tools/more-info.svg'}
                             alt=""
                             onClick={earlyWithdrawOpen}
                           />
@@ -1237,7 +1236,7 @@ const StakeDypiusEthOther = ({
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={poolFeeOpen} />
+                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={poolFeeOpen} />
                         </Tooltip>
                       </ClickAwayListener>
                     </span>
@@ -1506,7 +1505,7 @@ const StakeDypiusEthOther = ({
                           }
                         >
                           <img
-                            src={moreinfo}
+                            src={'https://cdn.worldofdypians.com/tools/more-info.svg'}
                             alt=""
                             onClick={earlyWithdrawOpen}
                           />
@@ -1533,7 +1532,7 @@ const StakeDypiusEthOther = ({
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={poolFeeOpen} />
+                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={poolFeeOpen} />
                         </Tooltip>
                       </ClickAwayListener>
                     </span>
@@ -1801,7 +1800,7 @@ const StakeDypiusEthOther = ({
     //                       }
     //                     >
     //                       <img
-    //                         src={moreinfo}
+    //                         src={'https://cdn.worldofdypians.com/tools/more-info.svg'}
     //                         alt=""
     //                         onClick={performanceOpen}
     //                       />
@@ -1829,7 +1828,7 @@ const StakeDypiusEthOther = ({
     //                         </div>
     //                       }
     //                     >
-    //                       <img src={moreinfo} alt="" onClick={aprOpen} />
+    //                       <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={aprOpen} />
     //                     </Tooltip>
     //                   </ClickAwayListener>
     //                 </h6>
@@ -1853,7 +1852,7 @@ const StakeDypiusEthOther = ({
     //                         </div>
     //                       }
     //                     >
-    //                       <img src={moreinfo} alt="" onClick={lockOpen} />
+    //                       <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={lockOpen} />
     //                     </Tooltip>
     //                   </ClickAwayListener>
     //                 </h6>
@@ -1983,7 +1982,7 @@ const StakeDypiusEthOther = ({
     //                   </div>
     //                 }
     //               >
-    //                 <img src={moreinfo} alt="" onClick={depositOpen} />
+    //                 <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={depositOpen} />
     //               </Tooltip>
     //             </ClickAwayListener>
     //           </div>
@@ -2135,7 +2134,7 @@ const StakeDypiusEthOther = ({
     //                     </div>
     //                   }
     //                 >
-    //                   <img src={moreinfo} alt="" onClick={rewardsOpen} />
+    //                   <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={rewardsOpen} />
     //                 </Tooltip>
     //               </ClickAwayListener>
     //             </h6>
@@ -2283,7 +2282,7 @@ const StakeDypiusEthOther = ({
     //                   </div>
     //                 }
     //               >
-    //                 <img src={moreinfo} alt="" onClick={withdrawOpen} />
+    //                 <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={withdrawOpen} />
     //               </Tooltip>
     //             </ClickAwayListener>
     //           </h6>
