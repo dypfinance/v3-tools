@@ -1,0 +1,56 @@
+.package-plan-wrapper{
+    background: #282a5c;
+    border-radius: 12px;
+}
+
+.package-plan-header-holder{
+background: linear-gradient(135deg, #7f00ff, #e100ff);
+border-radius: 12px;
+
+}
+
+.main-package-holder{
+    background: linear-gradient(135deg, #aa771c, #ffe39f);
+
+}
+
+.package-benefit{
+    font-size: 13px;
+}
+
+.top-package-pick{
+    border-radius: 6px;
+    background: #75cac2;
+    position: absolute;
+    right: 5px;
+    top: -10px;
+}
+
+.top-package-pick-span{
+    font-size: 12px;
+}
+
+.main-package-wrapper{
+    transform: scale(1.05);
+}
+
+.pricing-grid{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 24px;
+}
+
+/* border: 2px solid #565891;
+background: #1e1c40;
+} */
+
+.pricing-package-buy-wrapper{
+ border: 2px solid #565891;
+background: #1e1c40;
+border-radius: 12px;
+}
+
+.package-amount-needed{
+    color: #c0c9ff !important;
+    font-size: 12px;
+}

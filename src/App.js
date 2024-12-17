@@ -77,6 +77,7 @@ import {
 import { ethers } from "ethers";
 import LoyaltyProgram from "./components/loyalty/LoyaltyProgram.js";
 import { useParams } from "react-router-dom";
+import PricingPackages from "./components/pricingpackages/PricingPackages.js";
 
 const LockerWrapper = (props) => {
   const { pair_id } = useParams();
@@ -1050,8 +1051,8 @@ function App() {
       const placeholderArray = placeholderplayerData.slice(itemData.length, 10);
       const finalData = [...testArray, ...placeholderArray];
       setleaderboard(finalData);
-    } else if(itemData.length > 10) {
-    setleaderboard(itemData);
+    } else if (itemData.length > 10) {
+      setleaderboard(itemData);
     }
   };
 
@@ -1102,12 +1103,14 @@ function App() {
     }
     leaderboard2 = leaderboard2.sort((a, b) => b.score - a.score);
 
-    var testArray = leaderboard2.length > 0 ? leaderboard2.filter(
-      (item) =>
-        item.address.toLowerCase() ===
-        data?.getPlayer?.wallet?.publicAddress?.toLowerCase()
-    ) : [];
-
+    var testArray =
+      leaderboard2.length > 0
+        ? leaderboard2.filter(
+            (item) =>
+              item.address.toLowerCase() ===
+              data?.getPlayer?.wallet?.publicAddress?.toLowerCase()
+          )
+        : [];
 
     fillRecordsCaws2d(leaderboard2);
     if (
@@ -1126,9 +1129,8 @@ function App() {
     } else {
       setCaws2dUser([]);
     }
+  };
 
-  }; 
-  
   const getAllChests = async () => {
     let headersList = {
       Accept: "*/*",
@@ -1690,7 +1692,7 @@ function App() {
                       <Farms
                         handleConnection={handleConnection}
                         isConnected={isConnected}
-                        networkId={parseInt(explorerNetworkId)} 
+                        networkId={parseInt(explorerNetworkId)}
                         onSelectChain={onSelectChain}
                       />
                     }
@@ -1854,6 +1856,7 @@ setkittyDashRecords */}
                       />
                     }
                   />
+                  <Route exact path="/packages" element={<PricingPackages />} />
 
                   <Route
                     exact
