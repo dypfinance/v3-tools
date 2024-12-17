@@ -1,74 +1,19 @@
 import { NavLink } from "react-router-dom";
-// import Ethereum from "../assets/ethereum.svg";
-// import Avax from "../assets/avalanche.svg";
-// import Logo from "../assets/logo.svg";
-// import LogoWhite from "../assets/logo-white.svg";
 import React, { useState, useEffect } from "react";
-import { useWeb3React } from "@web3-react/core";
-// import { handleSwitchNetwork } from "../functions/hooks";
-// import { injected } from "../../functions/connectors";
-// import NotConnected from "../assets/notconnected.svg";
-// import Connected from "../assets/connected.svg";
-// import SubmitInfo from "../submit-info/SubmitInfo";
-// import Crown from "../assets/crown.png";
-// import RightArrow from "../assets/rightarrow.svg";
 import { useEagerConnect, useInactiveListener } from "../../functions/hooks";
-// import axios from "axios";
-// import WalletModal from "../WalletModal";
-// import Logout from "../assets/logout.svg";
-import toolsLogo from "../../assets/sidebarIcons/toolsLogo.svg";
-import toolsLogoActive from "../../assets/sidebarIcons/toolsLogoActive.svg";
-import accordionIndicator from "../../assets/sidebarIcons/accordionIndicator.svg";
-// import sidebarDypius from "../../assets/sidebarDypius.svg";
-import "./sidebar.css";
-import navRadius from "../../assets/navRadius.svg";
 import useWindowSize from "../../functions/useWindowSize";
-import sidebarPremium from "./assets/sidebarPremium.png";
-
-const activateLasers = () => {
-  window.$.alert("Coming Soon!");
-};
+import "./sidebar.css";
+   
+ 
 
 const Sidebar = (props) => {
-  // const [activeBtn, setActiveBtn] = useState("avax");
   const [activeLink, setActiveLink] = useState(null);
   const [hover, setHover] = useState(null);
-  const [location, setlocation] = useState("news");
-  // const [networkId, setNetworkId] = useState(1);
+
   const [activeSidebar, setActiveSidebar] = useState(false);
-
-  let chainId = parseInt(props.network);
-
-  const [avatar, setAvatar] = useState("/assets/img/person.svg");
-
-  const { active, account } = useWeb3React();
 
   const triedEager = useEagerConnect();
   useInactiveListener(!triedEager);
-
-  const fetchAvatar = async () => {
-    const response = await fetch(
-      `https://api-image.dyp.finance/api/v1/avatar/${account}`
-    )
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        data.avatar
-          ? setAvatar(data.avatar)
-          : setAvatar("/assets/img/person.svg");
-      })
-      .catch(console.error);
-
-    return response;
-  };
-
-  // useEffect(() => {
-  //   const logout = localStorage.getItem("logout");
-  //   if (logout !== "true") {
-  //     fetchAvatar().then();
-  //   }
-  // }, [account]);
 
   const windowSize = useWindowSize();
 
@@ -221,7 +166,7 @@ const Sidebar = (props) => {
     },
   ];
 
-  const sidebarItem = document.querySelectorAll(".sidebar-item");
+  // const sidebarItem = document.querySelectorAll(".sidebar-item");
 
   const windowUrl = window.location.href;
 
@@ -236,7 +181,7 @@ const Sidebar = (props) => {
       } d-none d-lg-flex flex-column gap-3 justify-content-between align-items-start`}
     >
       <img
-        src={navRadius}
+        src={'https://cdn.worldofdypians.com/tools/navRadius.svg'}
         className={`nav-radius ${activeSidebar && "nav-radius-open"}`}
         alt=""
       />
@@ -244,7 +189,11 @@ const Sidebar = (props) => {
         <div className="d-flex w-100 justify-content-center align-items-center pb-5">
           <NavLink to="/" onClick={() => setActiveLink("")}>
             <img
-              src={activeSidebar ? toolsLogoActive : toolsLogo}
+              src={
+                activeSidebar
+                  ? "https://cdn.worldofdypians.com/tools/toolsLogoActive.svg"
+                  : "https://cdn.worldofdypians.com/tools/toolsLogo.svg"
+              }
               alt=""
               style={{ height: "40px" }}
             />
@@ -305,7 +254,7 @@ const Sidebar = (props) => {
                           {sideItem.label}
                         </h3>
                         <img
-                          src={accordionIndicator}
+                          src={'https://cdn.worldofdypians.com/tools/accordionIndicator.svg'}
                           alt="indicator"
                           id="indicator"
                         />
@@ -408,7 +357,7 @@ const Sidebar = (props) => {
             to={"/account"}
             className="d-flex align-items-center justify-content-center"
           >
-            <img src={sidebarPremium} alt="" style={{ width: "80%" }} />
+            <img src={'https://cdn.worldofdypians.com/tools/sidebarPremium.png'} alt="" style={{ width: "80%" }} />
           </NavLink>
         )}
     </div>

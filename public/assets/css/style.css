@@ -2581,13 +2581,13 @@ color: #FFFFFF !important;
   outline: currentcolor none medium;
   border: 1px solid rgb(237, 238, 242);
   border-radius: 12px;
-  width: 93% !important;
+  width: 100%;
   display: flex;
   flex-direction: row;
   -moz-box-align: center;
   align-items: center;
   -moz-box-pack: justify;
-  padding: 1rem;
+  padding: 10px;
   margin: auto;
   opacity: 1;
 }
@@ -2598,7 +2598,7 @@ color: #FFFFFF !important;
 
 .close-icon {
   position: relative;
-  top: 1rem;
+  /* top: 1rem; */
 }
 
 .details-modal-content {
@@ -2742,10 +2742,10 @@ color: #4ED5D2 !important;
 } */
 
 .walletmodal-wrapper {
-  padding: 2rem;
+  /* padding: 2rem; */
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
 }
 
 .modal-main {
@@ -4642,7 +4642,7 @@ right: -8% !important;
 .theme-dark .modal-content {
   background-color: #1a1a36;
   color: #fff;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .modal-content {

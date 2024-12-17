@@ -516,7 +516,7 @@
 }
 
 .accordion-button:not(.collapsed)::after {
-  background-image: url("../assets/close.svg") !important;
+  background-image: url("https://cdn.worldofdypians.com/wod/xMark.svg") !important;
   width: 94px;
   height: 25px;
   background-repeat: no-repeat;
