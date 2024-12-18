@@ -78,6 +78,7 @@ import { ethers } from "ethers";
 import LoyaltyProgram from "./components/loyalty/LoyaltyProgram.js";
 import { useParams } from "react-router-dom";
 import PricingPackages from "./components/pricingpackages/PricingPackages.js";
+import BundleTOS from "./components/pricingpackages/BundleTOS.js";
 
 const LockerWrapper = (props) => {
   const { pair_id } = useParams();
@@ -1857,6 +1858,7 @@ setkittyDashRecords */}
                     }
                   />
                   <Route exact path="/packages" element={<PricingPackages />} />
+                  <Route exact path="/bundles-terms-of-service" element={<BundleTOS />} />
 
                   <Route
                     exact
