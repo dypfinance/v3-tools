@@ -23,9 +23,6 @@ import "./newlocker.css";
 import liquidityIcon from "./assets/liquidityIcon.svg";
 import securityIcon from "./assets/securityIcon.svg";
 import greySecurityIcon from "./assets/greySecurityIcon.svg"; 
-import ethStakeActive from "../../assets/earnAssets/ethStakeActive.svg";
-import bnbStakeActive from "../../assets/earnAssets/bnbStakeActive.svg";
-import avaxStakeActive from "../../assets/earnAssets/avaxStakeActive.svg";
 import lockerCalendarIcon from "./assets/lockerCalendarIcon.svg";
 import coinStackIcon from "../launchpad/assets/coinStackIcon.svg";
 import purpleLiquidityLocker from "./assets/purpleLiquidityLocker.svg";
@@ -2137,8 +2134,8 @@ export default class Locker extends React.Component {
                             <img
                               src={
                                 this.state.selectedBaseTokenTicker === "WETH"
-                                  ? ethStakeActive
-                                  : avaxStakeActive
+                                  ? 'https://cdn.worldofdypians.com/tools/ethStakeActive.svg'
+                                  : 'https://cdn.worldofdypians.com/tools/avaxStakeActive.svg'
                               }
                               alt=""
                               height={24}

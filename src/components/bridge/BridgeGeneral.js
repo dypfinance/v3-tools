@@ -4,9 +4,7 @@ import BridgeFAQ from "./BridgeFAQ";
 import initBridgeidyp from "./bridge-idyp";
 import dyp from "./assets/dyp.svg";
 import idyp from "./assets/idyp.svg";
-import eth from "./assets/eth.svg";
-import bnb from "./assets/bnb.svg";
-import avax from "./assets/avax.svg";
+
 import base from "./assets/base.svg";
 
 import whiteArrow from "./assets/whiteArrow.svg";
@@ -296,7 +294,14 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
                 }}
               >
                 <h6 className="optiontext d-flex align-items-center gap-2">
-                  <img src={eth} alt="" /> <img src={bnb} alt="" />
+                  <img
+                    src={"https://cdn.worldofdypians.com/tools/ethSquare.svg"}
+                    alt=""
+                  />{" "}
+                  <img
+                    src={"https://cdn.worldofdypians.com/tools/bnbSquare.svg"}
+                    alt=""
+                  />
                   <p className=" mb-0 optiontext d-none d-lg-flex">ETH/BSC</p>
                 </h6>
               </div>
@@ -322,7 +327,14 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
                 }}
               >
                 <h6 className="optiontext d-flex align-items-center gap-2">
-                  <img src={eth} alt="" /> <img src={avax} alt="" />
+                  <img
+                    src={"https://cdn.worldofdypians.com/tools/ethSquare.svg"}
+                    alt=""
+                  />{" "}
+                  <img
+                    src={"https://cdn.worldofdypians.com/tools/avaxSquare.svg"}
+                    alt=""
+                  />
                   <p className=" mb-0 optiontext d-none d-lg-flex">ETH/AVAX</p>
                 </h6>
               </div>
@@ -333,7 +345,11 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
                 rel="noreferrer"
               >
                 <h6 className="optiontext d-flex align-items-center gap-2">
-                  <img src={eth} alt="" /> <img src={base} alt="" />
+                  <img
+                    src={"https://cdn.worldofdypians.com/tools/ethSquare.svg"}
+                    alt=""
+                  />{" "}
+                  <img src={base} alt="" />
                   <p className=" mb-0 optiontext d-none d-lg-flex">ETH/BASE</p>
                 </h6>
               </a>
@@ -404,7 +420,14 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
             }}
           >
             <h6 className="optiontext d-flex align-items-center gap-2">
-              <img src={eth} alt="" /> <img src={bnb} alt="" />
+              <img
+                src={"https://cdn.worldofdypians.com/tools/ethSquare.svg"}
+                alt=""
+              />{" "}
+              <img
+                src={"https://cdn.worldofdypians.com/tools/bnbSquare.svg"}
+                alt=""
+              />
               <p className=" mb-0 optiontext d-none d-lg-flex">ETH/BNB</p>
             </h6>
           </div>
@@ -430,7 +453,14 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
             }}
           >
             <h6 className="optiontext d-flex align-items-center gap-2">
-              <img src={eth} alt="" /> <img src={avax} alt="" />
+              <img
+                src={"https://cdn.worldofdypians.com/tools/ethSquare.svg"}
+                alt=""
+              />{" "}
+              <img
+                src={"https://cdn.worldofdypians.com/tools/avaxSquare.svg"}
+                alt=""
+              />
               <p className=" mb-0 optiontext d-none d-lg-flex">ETH/AVAX</p>
             </h6>
           </div>

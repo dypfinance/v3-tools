@@ -5,24 +5,11 @@ import Modal from "../Modal/Modal";
 import Address from "./address";
 import WalletModal from "../WalletModal";
 import "./top-pools.css";
-import Countdown from "react-countdown";
-import ellipse from "./assets/ellipse.svg";
-import empty from "./assets/empty.svg";
-import check from "./assets/check.svg";
-import failMark from "../../assets/failMark.svg";
- 
-import purplestats from "./assets/purpleStat.svg";
-import wallet from "./assets/wallet.svg";
-import Tooltip from "@material-ui/core/Tooltip";
-import dropdownVector from "./assets/dropdownVector.svg";
-import { DropdownButton } from "react-bootstrap";
-import axios from "axios";
-import statsLinkIcon from "./assets/statsLinkIcon.svg";
+import Countdown from "react-countdown"; 
+
+import Tooltip from "@material-ui/core/Tooltip"; 
+import axios from "axios"; 
 import { shortAddress } from "../../functions/shortAddress";
-import poolStatsIcon from "./assets/poolStatsIcon.svg";
-import poolsCalculatorIcon from "./assets/poolsCalculatorIcon.svg";
-import calculatorIcon from "../calculator/assets/calculator.svg";
-import xMark from "../calculator/assets/xMark.svg";
 import { ClickAwayListener } from "@material-ui/core";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
 
@@ -1267,7 +1254,7 @@ export default function initBscFarming({
                 <div className="d-flex flex-column flex-lg-row w-100 align-items-start align-items-lg-center justify-content-between">
                   <h6 className="activetxt position-relative activetxt-vault">
                     <img
-                      src={ellipse}
+                      src={'https://cdn.worldofdypians.com/tools/ellipse.svg'}
                       alt=""
                       className="position-relative"
                       style={{ top: "-1px" }}
@@ -1379,7 +1366,7 @@ export default function initBscFarming({
                         className="bottomitems"
                         onClick={() => this.setState({ showCalculator: true })}
                       >
-                        <img src={poolsCalculatorIcon} alt="" />
+                        <img src={'https://cdn.worldofdypians.com/tools/poolsCalculatorIcon.svg'} alt="" />
                         Calculator
                       </h6>
                       <div
@@ -1388,7 +1375,7 @@ export default function initBscFarming({
                         }}
                       >
                         <h6 className="bottomitems">
-                          <img src={purplestats} alt="" />
+                          <img src={'https://cdn.worldofdypians.com/tools/purpleStat.svg'} alt="" />
                           Stats
                         </h6>
                       </div>
@@ -1417,7 +1404,7 @@ export default function initBscFarming({
                         className="connectbtn btn"
                         onClick={this.showModal}
                       >
-                        <img src={wallet} alt="" /> Connect wallet
+                        <img src={'https://cdn.worldofdypians.com/tools/walletIcon.svg'} alt="" /> Connect wallet
                       </button>
                     ) : chainId === "56" ? (
                       <div className="addressbtn btn">
@@ -1470,7 +1457,7 @@ export default function initBscFarming({
                               />
                               {this.state.selectedTokenLogo.toUpperCase()}
                               <img
-                                src={dropdownVector}
+                                src={'https://cdn.worldofdypians.com/tools/dropdownVector.svg'}
                                 alt=""
                                 style={{ width: 10, height: 10 }}
                               />
@@ -1620,7 +1607,7 @@ export default function initBscFarming({
                           <>Success</>
                         ) : (
                           <>
-                            <img src={failMark} alt="" />
+                            <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
                             Failed
                           </>
                         )}
@@ -1683,7 +1670,7 @@ export default function initBscFarming({
                         >
                           <img
                             src={
-                              this.state.selectedPool === "wbnb" ? check : empty
+                              this.state.selectedPool === "wbnb" ? 'https://cdn.worldofdypians.com/wod/check.svg' : 'https://cdn.worldofdypians.com/wod/empty.svg'
                             }
                             alt=""
                             className="activestate"
@@ -1759,7 +1746,7 @@ export default function initBscFarming({
                                 />
                                 {this.state.selectedRewardTokenLogo1.toUpperCase()}
                                 <img
-                                  src={dropdownVector}
+                                  src={'https://cdn.worldofdypians.com/tools/dropdownVector.svg'}
                                   alt=""
                                   style={{ width: 10, height: 10 }}
                                 />
@@ -1825,7 +1812,7 @@ export default function initBscFarming({
                         >
                           <img
                             src={
-                              this.state.selectedPool === "dyp" ? check : empty
+                              this.state.selectedPool === "dyp" ? 'https://cdn.worldofdypians.com/wod/check.svg' : 'https://cdn.worldofdypians.com/wod/empty.svg'
                             }
                             alt=""
                             className="activestate"
@@ -1895,7 +1882,7 @@ export default function initBscFarming({
                               />
                              DYP
                               <img
-                                src={dropdownVector}
+                                src={'https://cdn.worldofdypians.com/tools/dropdownVector.svg'}
                                 alt=""
                                 style={{ width: 10, height: 10 }}
                               />
@@ -1964,7 +1951,7 @@ export default function initBscFarming({
                           </div>
                         ) : this.state.claimStatus === "failed" ? (
                           <>
-                            <img src={failMark} alt="" />
+                            <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
                             Failed
                           </>
                         ) : this.state.claimStatus === "success" ? (
@@ -2193,7 +2180,7 @@ export default function initBscFarming({
                       className="stats-link"
                     >
                       {shortAddress(coinbase)}{" "}
-                      <img src={statsLinkIcon} alt="" />
+                      <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                     </a>
                   </div>
                   <hr />
@@ -2209,7 +2196,7 @@ export default function initBscFarming({
                             color: "#f7f7fc",
                           }}
                         >
-                          <img src={poolStatsIcon} alt="" />
+                          <img src={'https://cdn.worldofdypians.com/tools/poolStatsIcon.svg'} alt="" />
                           Pool stats
                         </h6>
                         {/* <h6 className="d-flex gap-2 align-items-center myaddrtext">
@@ -2340,7 +2327,7 @@ export default function initBscFarming({
                           href={`https://github.com/dypfinance/staking-governance-security-audits`}
                           className="stats-link"
                         >
-                          Audit <img src={statsLinkIcon} alt="" />
+                          Audit <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                         </a>
                         <a
                           target="_blank"
@@ -2348,7 +2335,7 @@ export default function initBscFarming({
                           href={`${window.config.bscscan_baseURL}/token/${token._address}?a=${coinbase}`}
                           className="stats-link"
                         >
-                          View transaction <img src={statsLinkIcon} alt="" />
+                          View transaction <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                         </a>
                       </div>
                     </div>
@@ -2425,8 +2412,7 @@ export default function initBscFarming({
                               <img
                                 src={
                                   this.state.selectedPool === "wbnb2"
-                                    ? check
-                                    : empty
+                                    ? 'https://cdn.worldofdypians.com/wod/check.svg' : 'https://cdn.worldofdypians.com/wod/empty.svg'
                                 }
                                 alt=""
                                 className="activestate"
@@ -2533,7 +2519,7 @@ export default function initBscFarming({
                                     />
                                     {this.state.selectedRewardTokenLogo1.toUpperCase()}
                                     <img
-                                      src={dropdownVector}
+                                      src={'https://cdn.worldofdypians.com/tools/dropdownVector.svg'}
                                       alt=""
                                       style={{ width: 10, height: 10 }}
                                     />
@@ -2607,8 +2593,7 @@ export default function initBscFarming({
                               <img
                                 src={
                                   this.state.selectedPool === "dyp2"
-                                    ? check
-                                    : empty
+                                    ? 'https://cdn.worldofdypians.com/wod/check.svg' : 'https://cdn.worldofdypians.com/wod/empty.svg'
                                 }
                                 alt=""
                                 className="activestate"
@@ -2803,7 +2788,7 @@ export default function initBscFarming({
                             </div>
                           ) : this.state.withdrawStatus === "failed" ? (
                             <>
-                              <img src={failMark} alt="" />
+                              <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
                               Failed
                             </>
                           ) : this.state.withdrawStatus === "success" ? (

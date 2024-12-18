@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment";
-import getFormattedNumber from "../../../functions/get-formatted-number"; 
-import wallet from "../../FARMINNG/assets/wallet.svg";
-import Tooltip from "@material-ui/core/Tooltip";
-import statsLinkIcon from "../../FARMINNG/assets/statsLinkIcon.svg";
+import getFormattedNumber from "../../../functions/get-formatted-number";  
+import Tooltip from "@material-ui/core/Tooltip"; 
 import { shortAddress } from "../../../functions/shortAddress";
 import { ClickAwayListener } from "@material-ui/core";
 import { handleSwitchNetworkhook } from "../../../functions/hooks";
@@ -1012,7 +1010,7 @@ const StakeDypiusBscOther = ({
                 <span className="info-pool-left-text">Chain</span>
                 <span className="info-pool-right-text d-flex gap-1 align-items-center">
                   <img
-                    src={require(`../../top-pools-card/assets/bsc.svg`).default}
+                    src={'https://cdn.worldofdypians.com/wod/bnbIcon.svg'}
                     width={12}
                     height={12}
                     alt=""
@@ -1320,7 +1318,7 @@ const StakeDypiusBscOther = ({
                       className="stats-link2 text-decoration-underline"
                     >
                       {shortAddress(staking?._address)}{" "}
-                      {/* <img src={statsLinkIcon} alt="" /> */}
+                      {/* <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" /> */}
                     </a>
                   </div>
                   <div className="d-flex align-items-center gap-1">
@@ -1617,7 +1615,7 @@ const StakeDypiusBscOther = ({
                       className="stats-link2 text-decoration-underline"
                     >
                       {shortAddress(staking?._address)}{" "}
-                      {/* <img src={statsLinkIcon} alt="" /> */}
+                      {/* <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" /> */}
                     </a>
                   </div>
                   <div className="d-flex align-items-center gap-1">
@@ -1683,7 +1681,7 @@ const StakeDypiusBscOther = ({
         coinbase === undefined ||
         is_wallet_connected === false ? (
           <button className="connectbtn btn m-auto" onClick={onConnectWallet}>
-            <img src={wallet} alt="" /> Connect wallet
+            <img src={'https://cdn.worldofdypians.com/tools/walletIcon.svg'} alt="" /> Connect wallet
           </button>
         ) : chainId !== "56" ? (
           <button
@@ -1908,7 +1906,7 @@ const StakeDypiusBscOther = ({
     //                 className="bottomitems"
     //                 onClick={() => setshowCalculator(true)}
     //               >
-    //                 <img src={poolsCalculatorIcon} alt="" />
+    //                 <img src={'https://cdn.worldofdypians.com/tools/poolsCalculatorIcon.svg'} alt="" />
     //                 Calculator
     //               </h6>
     //               <a
@@ -1932,7 +1930,7 @@ const StakeDypiusBscOther = ({
     //                 }}
     //               >
     //                 <h6 className="bottomitems">
-    //                   <img src={purplestats} alt="" />
+    //                   <img src={'https://cdn.worldofdypians.com/tools/purpleStat.svg'} alt="" />
     //                   Stats
     //                 </h6>
     //               </div>
@@ -1967,7 +1965,7 @@ const StakeDypiusBscOther = ({
     //                 }}
     //               >
     //                 {" "}
-    //                 <img src={wallet} alt="" /> Connect wallet
+    //                 <img src={'https://cdn.worldofdypians.com/tools/walletIcon.svg'} alt="" /> Connect wallet
     //               </button>
     //             ) : chainId === "56" ? (
     //               <div className="addressbtn btn">
@@ -2575,7 +2573,7 @@ const StakeDypiusBscOther = ({
     //                   className="stats-link"
     //                 >
     //                   {shortAddress(coinbase)}{" "}
-    //                   <img src={statsLinkIcon} alt="" />
+    //                   <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
     //                 </a>
     //                 <a
     //                   target="_blank"
@@ -2583,7 +2581,7 @@ const StakeDypiusBscOther = ({
     //                   href={`https://github.com/dypfinance/staking-governance-security-audits`}
     //                   className="stats-link"
     //                 >
-    //                   Audit <img src={statsLinkIcon} alt="" />
+    //                   Audit <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
     //                 </a>
     //                 <a
     //                   target="_blank"
@@ -2591,7 +2589,7 @@ const StakeDypiusBscOther = ({
     //                   href={`${window.config.bscscan_baseURL}/token/${reward_token_dypius_bsc._address}?a=${coinbase}`}
     //                   className="stats-link"
     //                 >
-    //                   View transaction <img src={statsLinkIcon} alt="" />
+    //                   View transaction <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
     //                 </a>
     //               </div>
     //             </div>

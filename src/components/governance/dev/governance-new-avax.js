@@ -1,37 +1,24 @@
 import React, { useState } from "react";
 import moment from "moment";
-import { NavLink, Route } from "react-router-dom";
 import Address from "../../FARMINNG/address";
 import getFormattedNumber from "../../../functions/get-formatted-number";
 import "./governance-new.css";
 import Modal from "../../Modal/Modal";
 import WalletModal from "../../WalletModal";
-import eth from "../assets/eth.svg";
-import bnb from "../assets/bnb.svg";
-import avax from "../assets/avax.svg";
+import { shortAddress } from "../../../functions/shortAddress";
+import axios from "axios";
+import Tooltip from "@material-ui/core/Tooltip";
+
+ 
 import submit from "../assets/submit.svg";
 import walleticon from "../assets/walleticon.svg";
 import copy from "../assets/copy.svg";
-import emptyCard from "../assets/emptycard.png";
 import freetextPassive from "../assets/freetext-passive.svg";
 import freetextActive from "../assets/freetext-active.svg";
-import disburselogoActive from "../assets/disburselogo-active.svg";
-import disburselogoPassive from "../assets/disburselogo-passive.svg";
-import empty from "../assets/empty.svg";
-import check from "../assets/check.svg";
-import govhero from "../assets/govhero.png";
-import statsLinkIcon from "../../FARMINNG/assets/statsLinkIcon.svg";
-import purplestats from "../../FARMINNG/assets/purpleStat.svg"; 
-import failMark from "../../../assets/failMark.svg";
-import Tooltip from "@material-ui/core/Tooltip";
-import ellipse from "../assets/ellipse.svg";
-import ellipsegreen from "../assets/ellipsegreen.svg";
-
+import govhero from "../assets/govhero.png"; 
+import ellipse from "../assets/ellipse.svg"; 
 import tyHero from "../assets/tyhero.png";
 import totalVotesIcon from "../assets/totalVotesIcon.svg";
-
-import { shortAddress } from "../../../functions/shortAddress";
-import axios from "axios";
 
 const {
   new_governanceavax: governance,
@@ -297,14 +284,13 @@ const AddProposal = (props) => {
                       <img
                         src={
                           formState.stakingPool === stakingPools[0].pools
-                            ? check
-                            : empty
+                            ? 'https://cdn.worldofdypians.com/wod/check.svg' : 'https://cdn.worldofdypians.com/wod/empty.svg'
                         }
                         alt=""
                       />
 
                       <img
-                        src={avax}
+                        src={'https://cdn.worldofdypians.com/wod/avaxIcon.svg'}
                         alt=""
                         style={{ width: 18, height: 18 }}
                       />
@@ -441,7 +427,7 @@ const ProposalCard = (props) => (
         <div className="avaxchain">
           <span className="chaintext">
             AVAX Chain
-            <img src={avax} alt="" className="chainlogo2" />
+            <img src={'https://cdn.worldofdypians.com/wod/avaxIcon.svg'} alt="" className="chainlogo2" />
           </span>
         </div>
       </div>
@@ -832,7 +818,7 @@ export default class Governance extends React.Component {
             <div className="col-12 col-xxl-4 flex-column d-flex justify-content-between gap-2">
               <div className="d-flex  w-100 justify-content-center gap-2">
                 <div className="totalproposals col-4">
-                  <img src={eth} alt="" className="chainlogo" />
+                  <img src={'https://cdn.worldofdypians.com/wod/eth.svg'} alt="" className="chainlogo" />
                   <div className="d-flex flex-column gap-2 justify-content-center align-items-center">
                     <h6 className="chaintitle">Ethereum</h6>
                     <h6 className="totalpoolsnr">
@@ -842,7 +828,7 @@ export default class Governance extends React.Component {
                   </div>
                 </div>
                 <div className="totalproposals col-4">
-                  <img src={bnb} alt="" className="chainlogo" />
+                  <img src={'https://cdn.worldofdypians.com/wod/bnbIcon.svg'} alt="" className="chainlogo" />
                   <div className="d-flex flex-column gap-2 justify-content-center align-items-center">
                     <h6 className="chaintitle">BNB Chain</h6>
                     <h6 className="totalpoolsnr">
@@ -852,7 +838,7 @@ export default class Governance extends React.Component {
                   </div>
                 </div>
                 <div className="totalproposals col-4">
-                  <img src={avax} alt="" className="chainlogo" />
+                  <img src={'https://cdn.worldofdypians.com/wod/avaxIcon.svg'} alt="" className="chainlogo" />
                   <div className="d-flex flex-column gap-2 justify-content-center align-items-center">
                     <h6 className="chaintitle">Avalanche</h6>
                     <h6 className="totalpoolsnr">
@@ -982,7 +968,7 @@ export default class Governance extends React.Component {
                             <span className="chaintext">
                               AVAX Chain
                               <img
-                                src={avax}
+                                src={'https://cdn.worldofdypians.com/wod/avaxIcon.svg'}
                                 alt=""
                                 className="chainlogo2"
                                 style={{ top: "-1px" }}
@@ -1692,7 +1678,7 @@ class ProposalDetails extends React.Component {
                       }
                     >
                       <img
-                        src={expires.includes("ago") ? ellipse : ellipsegreen}
+                        src={expires.includes("ago") ? ellipse : 'https://cdn.worldofdypians.com/tools/ellipse.svg'}
                         alt=""
                         className="position-relative"
                       />
@@ -1706,7 +1692,7 @@ class ProposalDetails extends React.Component {
                       }}
                     >
                       <h6 className="bottomitems">
-                        <img src={purplestats} alt="" />
+                        <img src={'https://cdn.worldofdypians.com/tools/purpleStat.svg'} alt="" />
                         Stats
                       </h6>
                     </div>
@@ -1807,7 +1793,7 @@ class ProposalDetails extends React.Component {
                           type="button"
                         >
                           <img
-                            src={this.state.option == "0" ? check : empty}
+                            src={this.state.option == "0" ? 'https://cdn.worldofdypians.com/wod/check.svg' : 'https://cdn.worldofdypians.com/wod/empty.svg'}
                             alt=""
                           />
 
@@ -1824,7 +1810,7 @@ class ProposalDetails extends React.Component {
                           type="button"
                         >
                           <img
-                            src={this.state.option == "1" ? check : empty}
+                            src={this.state.option == "1" ? 'https://cdn.worldofdypians.com/wod/check.svg' : 'https://cdn.worldofdypians.com/wod/empty.svg'}
                             alt=""
                           />
                           {this.getOptionText("1")}
@@ -1879,7 +1865,7 @@ class ProposalDetails extends React.Component {
                         <>Success</>
                       ) : (
                         <>
-                          <img src={failMark} alt="" />
+                          <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
                           Failed
                         </>
                       )}
@@ -1983,7 +1969,7 @@ class ProposalDetails extends React.Component {
                           <>Success</>
                         ) : (
                           <>
-                            <img src={failMark} alt="" />
+                            <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
                             Failed
                           </>
                         )}
@@ -2063,7 +2049,7 @@ class ProposalDetails extends React.Component {
                   href={`https://github.com/dypfinance/Avalanche-Bridge-and-Farming-contracts/tree/main/Audits`}
                   className="stats-link"
                 >
-                  Audit <img src={statsLinkIcon} alt="" />
+                  Audit <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                 </a>
               </div>
               <div className="d-flex align-items-center gap-1 justify-content-between">
@@ -2088,7 +2074,7 @@ class ProposalDetails extends React.Component {
                   {shortAddress(  this.props.is_v2 === true
                       ? governancedypv2._address
                       : governance._address)}{" "}
-                  <img src={statsLinkIcon} alt="" />
+                  <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                 </a>
               </div>
               <div className="d-flex align-items-center gap-1 justify-content-between">
@@ -2110,7 +2096,7 @@ class ProposalDetails extends React.Component {
                   className="stats-link"
                 >
                   {shortAddress(this.state.coinbase)}{" "}
-                  <img src={statsLinkIcon} alt="" />
+                  <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                 </a>
               </div>
             </div>

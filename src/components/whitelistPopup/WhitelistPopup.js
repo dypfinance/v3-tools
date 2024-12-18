@@ -5,8 +5,6 @@ import "../LandPopup/landpopup.css";
 import { NavLink } from "react-router-dom";
 import Slider from "react-slick";
 import Countdown from "react-countdown";
-
-import closeX from "../earnOther/assets/closeX.svg";
  
 
 const renderer = ({ days, hours, minutes }) => {

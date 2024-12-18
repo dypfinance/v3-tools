@@ -4,8 +4,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import getFormattedNumber from "../../../functions/get-formatted-number";
 import moment from "moment";
 import axios from "axios";
-import { shortAddress } from "../../../functions/shortAddress";
-import statsLinkIcon from "../../FARMINNG/assets/statsLinkIcon.svg";
+import { shortAddress } from "../../../functions/shortAddress"; 
 
 const EarnInnerPool = ({
   selectedBtn,
@@ -1082,7 +1081,7 @@ const EarnInnerPool = ({
                     className="stats-link2"
                   >
                     {shortAddress(staking._address)}{" "}
-                    <img src={statsLinkIcon} alt="" />
+                    <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                   </a>
                 </div>
               </div>
@@ -1386,7 +1385,7 @@ const EarnInnerPool = ({
                     className="stats-link2"
                   >
                     {shortAddress(staking._address)}{" "}
-                    <img src={statsLinkIcon} alt="" />
+                    <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                   </a>
                 </div>
               </div>

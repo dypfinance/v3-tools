@@ -1,22 +1,17 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useEffect } from "react";
 import getFormattedNumber from "../../../functions/getFormattedNumber2";
 import useWindowSize from "../../../functions/useWindowSize";
-import TopOtherPoolsCard from "../TopOtherPoolsCard";
 import TopOtherPoolsListCard from "../TopOtherPoolsListCard";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box"; 
 import { FadeLoader } from "react-spinners";
-import searchIcon from "../assets/searchIcon.svg";
-import EarnInnerPool from "./EarnInnerPool";
-import arrowUp from "../assets/arrowUp.svg";
-import arrowUpActive from "../assets/arrowUpActive.svg";
-import arrowDown from "../assets/arrowDown.svg";
-import arrowDownActive from "../assets/arrowDownActive.svg";
+
 import StakeDypiusAvaxOther from "../stakingPools/avaxStakeDypiusOther";
 import StakeDypiusBscOther from "../stakingPools/bscStakeDypiusOther";
 import StakeDypiusEthOther from "../stakingPools/ethStakeDypiusOther";
+    
+
 
 const EarnOtherContent = ({
   totalTvlBNB,
@@ -206,7 +201,7 @@ const EarnOtherContent = ({
             <div className="col-5 px-0">
               <div className="d-flex position-relative">
                 <div className="position-absolute searchwrapper">
-                  <img src={searchIcon} alt="" />
+                  <img src={'https://cdn.worldofdypians.com/tools/searchIcon.svg'} alt="" />
                 </div>
                 <input
                   value={query}
@@ -274,7 +269,7 @@ const EarnOtherContent = ({
             <div className="d-block p-0">
               <div className="d-flex position-relative">
                 <div className="position-absolute searchwrapper">
-                  <img src={searchIcon} alt="" />
+                  <img src={'https://cdn.worldofdypians.com/tools/searchIcon.svg'} alt="" />
                 </div>
                 <input
                   value={query}
@@ -480,13 +475,13 @@ const EarnOtherContent = ({
                         APR
                         <div className="d-flex flex-column">
                           <img
-                            src={sorting === true ? arrowUpActive : arrowUp}
+                            src={sorting === true ? 'https://cdn.worldofdypians.com/tools/arrowUpActive.svg' : 'https://cdn.worldofdypians.com/tools/arrowUp.svg'}
                             alt=""
                             className=""
                           />
                           <img
                             src={
-                              sorting === false ? arrowDownActive : arrowDown
+                              sorting === false ? 'https://cdn.worldofdypians.com/tools/arrowDownActive.svg' : 'https://cdn.worldofdypians.com/tools/arrowDown.svg'
                             }
                             alt=""
                             className="arrowBtns"

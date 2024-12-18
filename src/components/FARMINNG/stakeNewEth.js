@@ -6,19 +6,13 @@ import Address from "./address";
 import WalletModal from "../WalletModal";
 import "./top-pools.css";
 import { shortAddress } from "../../functions/shortAddress";
-import ellipse from "./assets/ellipse.svg";
-import Clipboard from "react-clipboard.js";
-import failMark from "../../assets/failMark.svg";
+import Clipboard from "react-clipboard.js"; 
 import ReactTooltip from "react-tooltip";
-import arrowup from "./assets/arrow-up.svg"; 
-import purplestats from "./assets/purpleStat.svg";
+import arrowup from "./assets/arrow-up.svg";  
 import referralimg from "./assets/referral.svg";
-import copy from "./assets/copy.svg";
-import wallet from "./assets/wallet.svg";
+import copy from "./assets/copy.svg"; 
 import Tooltip from "@material-ui/core/Tooltip";
-import Countdown from "react-countdown";
-import statsLinkIcon from "./assets/statsLinkIcon.svg";
-import poolsCalculatorIcon from "./assets/poolsCalculatorIcon.svg";
+import Countdown from "react-countdown";  
 import { ClickAwayListener } from "@material-ui/core";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
 import axios from "axios";
@@ -677,7 +671,7 @@ const StakeNewEth = ({
               ) : (
                 <h6 className="activetxt">
                   <img
-                    src={ellipse}
+                    src={'https://cdn.worldofdypians.com/tools/ellipse.svg'}
                     alt=""
                     className="position-relative"
                     style={{ top: "-1px" }}
@@ -771,7 +765,7 @@ const StakeNewEth = ({
                     className="bottomitems"
                     onClick={() => setshowCalculator(true)}
                   >
-                    <img src={poolsCalculatorIcon} alt="" />
+                    <img src={'https://cdn.worldofdypians.com/tools/poolsCalculatorIcon.svg'} alt="" />
                     Calculator
                   </h6>
                   <a
@@ -795,7 +789,7 @@ const StakeNewEth = ({
                     }}
                   >
                     <h6 className="bottomitems">
-                      <img src={purplestats} alt="" />
+                      <img src={'https://cdn.worldofdypians.com/tools/purpleStat.svg'} alt="" />
                       Stats
                     </h6>
                   </div>
@@ -817,7 +811,7 @@ const StakeNewEth = ({
                 coinbase === undefined ||
                 is_wallet_connected === false ? (
                   <button className="connectbtn btn" onClick={showModal}>
-                    <img src={wallet} alt="" /> Connect wallet
+                    <img src={'https://cdn.worldofdypians.com/tools/walletIcon.svg'} alt="" /> Connect wallet
                   </button>
                 ) : chainId === "1" ? (
                   <div className="addressbtn btn">
@@ -984,7 +978,7 @@ const StakeNewEth = ({
                       <>Success</>
                     ) : (
                       <>
-                        <img src={failMark} alt="" />
+                        <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
                         Failed
                       </>
                     )}
@@ -1083,7 +1077,7 @@ const StakeNewEth = ({
                         </div>
                       ) : claimStatus === "failed" ? (
                         <>
-                          <img src={failMark} alt="" />
+                          <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
                           Failed
                         </>
                       ) : claimStatus === "success" ? (
@@ -1116,7 +1110,7 @@ const StakeNewEth = ({
                           </div>
                         ) : reInvestStatus === "failed" ? (
                           <>
-                            <img src={failMark} alt="" />
+                            <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
                             Failed
                           </>
                         ) : reInvestStatus === "success" ? (
@@ -1309,7 +1303,7 @@ const StakeNewEth = ({
                       className="stats-link"
                     >
                       {shortAddress(coinbase)}{" "}
-                      <img src={statsLinkIcon} alt="" />
+                      <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                     </a>
                     <a
                       target="_blank"
@@ -1317,7 +1311,7 @@ const StakeNewEth = ({
                       href={`https://github.com/dypfinance/staking-governance-security-audits`}
                       className="stats-link"
                     >
-                      Audit <img src={statsLinkIcon} alt="" />
+                      Audit <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                     </a>
                     <a
                       target="_blank"
@@ -1325,7 +1319,7 @@ const StakeNewEth = ({
                       href={`${window.config.etherscan_baseURL}/token/${reward_token._address}?a=${coinbase}`}
                       className="stats-link"
                     >
-                      View transaction <img src={statsLinkIcon} alt="" />
+                      View transaction <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                     </a>
                   </div>
                 </div>
@@ -1467,7 +1461,7 @@ const StakeNewEth = ({
                         </div>
                       ) : withdrawStatus === "failed" ? (
                         <>
-                          <img src={failMark} alt="" />
+                          <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
                           Failed
                         </>
                       ) : withdrawStatus === "success" ? (

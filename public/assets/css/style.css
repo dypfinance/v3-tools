@@ -764,8 +764,7 @@ a:hover {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  /* margin-left: 268px; */
-  background-image: url("../../../src/assets/bodyBg.png");
+  /* margin-left: 268px; */ 
 }
 
 @media only screen and (max-width: 767px) {
@@ -833,8 +832,7 @@ a:hover {
   background-color: gainsboro;
 }
 
-.sidebar {
-  background: url(../img/sidebar-hero.png) !important;
+.sidebar { 
   background-repeat: no-repeat !important;
   background-size: cover !important;
   position: fixed;
@@ -864,53 +862,11 @@ a:hover {
   background-position: right;
   background-repeat: no-repeat;
 }
-
-.toggle-button-wrapper .toggle-circle {
-  background-image: url("../img/sunActive.svg");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-color: #f6f6f6;
-}
-
-.toggle-button-wrapper .toggle-circle {
-  position: relative;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background-color: var(--white);
-  left: 4px;
-  top: 1px;
-  transition: 0.3s;
-}
-
-.toggle-button-wrapper .toggle-circle .active-toggle {
-  background-image: url("../img/sunPassive.svg");
-  background-position: left;
-  background-repeat: no-repeat;
-}
-
-.toggle-button-wrapper svg {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 2;
-}
-
-.active-toggle .toggle-circle {
-  left: 26px;
-  background-image: url("../img/moonactive.svg");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-color: #f6f6f6;
-}
+   
 
 .page_wrapper {
-  /* transition: 0.3s; */
   position: relative;
-  /* background-image: url('../../../src/assets/bodyBg.png'); */
-  /* overflow: hidden; */
-  
-  
+
     min-height: 100vh;
     justify-content: space-between;
     display: flex;
@@ -1936,16 +1892,7 @@ body.theme-dark img.graph-two {
   border: 1px solid #565891;
   padding: 20px;
 }
-
-.premiumbanner2 {
-  background: url(../img/premiumbanner.png) no-repeat;
-  background-position: center;
-  background-size: cover;
-  min-height: 170px;
-  height: 100%;
-  margin-top: 2rem;
-  padding: 55px;
-}
+ 
 
 .subscribebtn {
   background: #e30613;
@@ -2114,32 +2061,9 @@ body.theme-dark img.graph-two {
   width: 100%;
   padding: 1rem 2rem 0;
 }
+ 
 
-.eth ::after {
-  content: "";
-  position: absolute;
-  width: 30px;
-  height: 33px;
-  top: -17px;
-  right: -2px;
-  background-image: url(../img/svg/ethbg.svg);
-  background-repeat: no-repeat;
-  border-radius: 6px 0px;
-  padding: 5px 10px 5px 0;
-}
 
-/* .avax::after {
-  content: "";
-  position: absolute;
-  width: 30px;
-  height: 33px;
-  top: -17px;
-  right: -2px;
-  background-image: url(../img/svg/avaxbg.svg);
-  background-repeat: no-repeat;
-  border-radius: 6px 0px;
-  padding: 5px 10px 5px 0;
-} */
 
 .news-title {
   font-weight: 600;
@@ -3288,15 +3212,7 @@ padding: 12px;
 /*---------------------------------
         Content Account CSS
 --------------------------------*/
-.accout-left-wrapper {
-  background-size: cover;
-  box-shadow: 0px 32px 64px rgba(17, 17, 17, 0.08);
-  border-radius: 12px;
-  padding: 20px;
-  background-image: url(../img/acount-left-hero.svg);
-  background-repeat: no-repeat;
-}
-
+ 
 .account-left-text {
   font-weight: 700;
   font-size: 14px;
@@ -3314,14 +3230,7 @@ padding: 12px;
   color: #ffffff !important;
 }
 
-.account-right-wrapper {
-  position: relative;
-  border-radius: 12px;
-  padding: 20px;
-  background-image: url(../img/account-right-hero.svg);
-  background-repeat: no-repeat;
-  background-size: cover;
-}
+ 
 
 .inputfile-wrapper {
   background: #f6f6f6;
@@ -3498,7 +3407,7 @@ body.theme-dark .content-footer {
   z-index: 99;
   visibility: hidden;
   opacity: 0;
-  background-image: url("../../../src/assets/bodyBg.png");
+  /* background-image: url("https://cdn.worldofdypians.com/tools/toolsbg.png"); */
 
   /* transition: 0.3s; */
 }
@@ -4214,7 +4123,7 @@ right: -8% !important;
 
 .placeholderdiv {
   /* height: 480px; */
-  background-image: url(../img/badge-hero.png);
+  /* background-image: url(../img/badge-hero.png); */
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;

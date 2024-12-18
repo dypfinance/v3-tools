@@ -2,17 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./leaderboard.scss";
 import Switch from "@mui/material/Switch";
 import getFormattedNumber from "../../functions/get-formatted-number";
-// import { CircularProgress } from "@mui/material";
-// import playerAvatar from "./assets/userAvatar2.png";
-// import premiumAvatar from "./assets/premiumAvatar.png";
-// import premiumStar from "./assets/premiumStar.png";
-import kittyDashFlag from "./assets/kittyDashFlag.png";
-import stoneCrackFlag from "./assets/stoneCrackFlag.png";
-import cawsAdventuresFlag from "./assets/cawsAdventuresFlag.png";
-import eth from "./assets/eth.svg";
-import dyp from "./assets/dyp.svg";
 import { Tooltip } from "@material-ui/core";
-import tooltipIcon from "./assets/tooltipIcon.svg";
 
 const Leaderboard = ({
   userData,
@@ -273,13 +263,13 @@ const Leaderboard = ({
         <div className="d-flex flex-column gap-3 col-12  px-0">
           <div className="d-flex leaderboards-flag-wrapper align-items-center gap-2 justify-content-center">
             <img
-              src={stoneCrackFlag}
+              src={"https://cdn.worldofdypians.com/tools/stoneCrackFlag.png"}
               onClick={() => setType("stoneCrack")}
               className="leaderboard-flag"
               alt=""
             />
             <img
-              src={kittyDashFlag}
+              src={"https://cdn.worldofdypians.com/tools/kittyDashFlag.png"}
               onClick={() => {
                 setType("kittyDash");
                 handleOption("monthly");
@@ -288,7 +278,9 @@ const Leaderboard = ({
               alt=""
             />
             <img
-              src={cawsAdventuresFlag}
+              src={
+                "https://cdn.worldofdypians.com/tools/cawsAdventuresFlag.png"
+              }
               onClick={() => {
                 setType("cawsAdventure");
                 handleOption("monthly");
@@ -378,7 +370,9 @@ const Leaderboard = ({
                     leaveDelay={0}
                   >
                     <img
-                      src={tooltipIcon}
+                      src={
+                        "https://cdn.worldofdypians.com/tools/tooltipIcon.svg"
+                      }
                       alt=""
                       className="tooltipicon-leaderboard"
                     />
@@ -410,7 +404,9 @@ const Leaderboard = ({
                               <div className="d-flex p-1 align-items-center justify-content-center gap-1">
                                 <div className="d-flex algin-items-center">
                                   <img
-                                    src={eth}
+                                    src={
+                                      "https://cdn.worldofdypians.com/wod/eth.svg"
+                                    }
                                     width={15}
                                     height={15}
                                     alt=""
@@ -421,7 +417,9 @@ const Leaderboard = ({
                                 +
                                 <div className="d-flex algin-items-center">
                                   <img
-                                    src={dyp}
+                                    src={
+                                      "https://cdn.worldofdypians.com/tools/dyplogo.svg"
+                                    }
                                     width={15}
                                     height={15}
                                     alt=""
@@ -458,7 +456,7 @@ const Leaderboard = ({
                           <th
                             className={`playerHeader ${item.class}`}
                             key={index}
-                            style={{background: '#313243'}}
+                            style={{ background: "#313243" }}
                           >
                             {item.name}
                           </th>
@@ -772,7 +770,10 @@ const Leaderboard = ({
                           </td>
                           <td
                             className={`playerReward col-2 text-center`}
-                            style={{ color: cawsHeaders.rewardColor , fontSize: '12px'}}
+                            style={{
+                              color: cawsHeaders.rewardColor,
+                              fontSize: "12px",
+                            }}
                           >
                             {formatTimeByLevelAndSecond(
                               item?.timestamp,
@@ -867,58 +868,64 @@ const Leaderboard = ({
               prevStatus === false &&
               caws2dUser.address !== undefined &&
               email && (
-                <div className="px-2" style={{background: 'rgba(139, 94, 79, 0.4)'}}>
-                <table
-                  className={`playerTable w-100 
+                <div
+                  className="px-2"
+                  style={{ background: "rgba(139, 94, 79, 0.4)" }}
+                >
+                  <table
+                    className={`playerTable w-100 
             
                 `}
-                >
-                  <tbody>
-                    <tr className={`playerInnerRow caws-user-row`}>
-                      <td className="playerData col-1">
-                        {/* {Number(
+                  >
+                    <tbody>
+                      <tr className={`playerInnerRow caws-user-row`}>
+                        <td className="playerData col-1">
+                          {/* {Number(
                           leaderboardCaws2d.indexOf(
                             leaderboardCaws2d.find((item) => {
                               return item.address === address;
                             })
                           )
                         ) + 1} */}
-                      </td>
-                      <td className="playerName col-3">
-                        <div className="position-relative d-flex align-items-center">
-                          <span>{username}</span>
-                        </div>
-                      </td>
-                      <td
-                        className="playerScore col-3 text-center"
-                        style={{ color: cawsHeaders.scoreColor }}
-                      >
-                        {getFormattedNumber(caws2dUser?.score, 0)}
-                      </td>
-                      <td
-                        className="playerScore col-2 text-center"
-                        style={{ color: cawsHeaders.rewardColor }}
-                      >
-                        {getFormattedNumber(caws2dUser?.level, 0)}
-                      </td>
-                      <td
-                        className={`playerReward col-2 text-center`}
-                        style={{ color: cawsHeaders.rewardColor, fontSize: '12px' }}
-                      >
-                        {formatTimeByLevelAndSecond(
-                          caws2dUser.timestamp,
-                          caws2dUser.level
-                        )}
-                      </td>
-                      <td
-                        className={`playerReward col-3 text-center`}
-                        style={{ color: cawsHeaders.rewardColor }}
-                      >
-                        $0
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                        </td>
+                        <td className="playerName col-3">
+                          <div className="position-relative d-flex align-items-center">
+                            <span>{username}</span>
+                          </div>
+                        </td>
+                        <td
+                          className="playerScore col-3 text-center"
+                          style={{ color: cawsHeaders.scoreColor }}
+                        >
+                          {getFormattedNumber(caws2dUser?.score, 0)}
+                        </td>
+                        <td
+                          className="playerScore col-2 text-center"
+                          style={{ color: cawsHeaders.rewardColor }}
+                        >
+                          {getFormattedNumber(caws2dUser?.level, 0)}
+                        </td>
+                        <td
+                          className={`playerReward col-2 text-center`}
+                          style={{
+                            color: cawsHeaders.rewardColor,
+                            fontSize: "12px",
+                          }}
+                        >
+                          {formatTimeByLevelAndSecond(
+                            caws2dUser.timestamp,
+                            caws2dUser.level
+                          )}
+                        </td>
+                        <td
+                          className={`playerReward col-3 text-center`}
+                          style={{ color: cawsHeaders.rewardColor }}
+                        >
+                          $0
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               )}
           </div>

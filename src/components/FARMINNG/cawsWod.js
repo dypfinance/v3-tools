@@ -1,21 +1,13 @@
 import React, { useState, useEffect } from "react";
-import Web3 from "web3";
 import axios from "axios";
-import moment from "moment";
 import getFormattedNumber from "../../functions/get-formatted-number";
-import { formattedNum } from "../../functions/formatUSD";
 
 import Address from "./address";
 import WalletModal from "../WalletModal";
-import "./top-pools.css";
-import ellipse from "./assets/ellipse.svg";
-import arrowup from "./assets/arrow-up.svg"; 
-import wallet from "./assets/wallet.svg";
+import "./top-pools.css";  
 import Tooltip from "@material-ui/core/Tooltip";
 
-import { shortAddress } from "../../functions/shortAddress";
-import xMark from "../calculator/assets/xMark.svg";
-import weth from "./assets/weth.svg";
+ 
 import { handleSwitchNetworkhook } from "../../functions/hooks";
 import useWindowSize from "../../functions/useWindowSize";
 import NftCawsWodChecklistModal from "../caws/NftMinting/components/NftMinting/NftStakeChecklistModal/NftCawsWodChecklistModal";
@@ -393,7 +385,7 @@ const CawsWodDetails = ({
                           }}
                         >
                           <h6 className="bottomitems">
-                            <img src={arrowup} alt="" />
+                            <img src={'https://cdn.worldofdypians.com/tools/arrow-up.svg'} alt="" />
                             WoD Marketplace
                           </h6>
                       </a>
@@ -406,7 +398,7 @@ const CawsWodDetails = ({
                           }}
                         >
                           <h6 className="bottomitems">
-                            <img src={arrowup} alt="" />
+                            <img src={'https://cdn.worldofdypians.com/tools/arrow-up.svg'} alt="" />
                             Coinbase
                           </h6>
                         </a>
@@ -420,7 +412,7 @@ const CawsWodDetails = ({
                           }}
                         >
                           <h6 className="bottomitems">
-                            <img src={arrowup} alt="" />
+                            <img src={'https://cdn.worldofdypians.com/tools/arrow-up.svg'} alt="" />
                             OpenSea
                           </h6>
                         </a>
@@ -456,7 +448,7 @@ const CawsWodDetails = ({
                           }}
                         >
                           <h6 className="bottomitems">
-                            <img src={arrowup} alt="" />
+                            <img src={'https://cdn.worldofdypians.com/tools/arrow-up.svg'} alt="" />
                             WoD Marketplace
                           </h6>
                       </a>
@@ -469,7 +461,7 @@ const CawsWodDetails = ({
                           }}
                         >
                           <h6 className="bottomitems">
-                            <img src={arrowup} alt="" />
+                            <img src={'https://cdn.worldofdypians.com/tools/arrow-up.svg'} alt="" />
                             Coinbase
                           </h6>
                         </a>
@@ -483,7 +475,7 @@ const CawsWodDetails = ({
                           }}
                         >
                           <h6 className="bottomitems">
-                            <img src={arrowup} alt="" />
+                            <img src={'https://cdn.worldofdypians.com/tools/arrow-up.svg'} alt="" />
                             OpenSea
                           </h6>
                         </a>
@@ -513,7 +505,7 @@ const CawsWodDetails = ({
                       setShowModal(true);
                     }}
                   >
-                    <img src={wallet} alt="" /> Connect wallet
+                    <img src={'https://cdn.worldofdypians.com/tools/walletIcon.svg'} alt="" /> Connect wallet
                   </button>
                 ) : chainId === "1" ? (
                   <div className="addressbtn btn">
@@ -619,7 +611,7 @@ const CawsWodDetails = ({
                 <div className="d-flex align-items-center justify-content-between gap-2"></div>
                 <div className="form-row d-flex gap-2 align-items-end justify-content-between">
                   <h6 className="rewardstxtCaws d-flex align-items-center gap-2">
-                    <img src={weth} alt="" />{" "}
+                  <img src={'https://cdn.worldofdypians.com/tools/ethStakeActive.svg'} alt="" style={{height: 25, width: 25}} />
                     {getFormattedNumber(EthRewards, 6)} WETH ($
                     {getFormattedNumber(ethToUSD, 6)})
                   </h6>

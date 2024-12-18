@@ -1,11 +1,4 @@
-import React, { useEffect, useState } from "react";
-import ethStake from "../../assets/earnAssets/ethStakeActive.svg";
-import avaxStake from "../../assets/earnAssets/avaxStakeActive.svg";
-import baseStake from "../../assets/earnAssets/baseActive.svg";
-import bnbStakeActive from "../../assets/earnAssets/bnbStakeActive.svg";
-import premiumIcon from "../../assets/earnAssets/premiumIcon.svg";
-import premiumTag from "../../assets/earnAssets/premiumTag.svg";
-
+import React, { useEffect, useState } from "react"; 
 import useWindowSize from "../../functions/useWindowSize";
 import CawsDetailsPremium from "../FARMINNG/cawsPremium";
 import LandDetailsPremium from "../FARMINNG/landPremium";
@@ -120,7 +113,7 @@ const TopOtherPoolsNftListCard = ({
         }}
       >
         <img
-          src={premiumIcon}
+          src={'https://cdn.worldofdypians.com/tools/premiumIcon.svg'}
           className="position-absolute nft-premium-icon d-none d-lg-block"
         />
         <div className="px-0 d-flex justify-content-between align-items-center">
@@ -131,7 +124,7 @@ const TopOtherPoolsNftListCard = ({
                   <td className="earnother-td col-2">
                     <div className={`col-6 d-flex align-items-center gap-2`}>
                       <img
-                        src={require(`../top-pools-card/assets/${tokenLogo}`)}
+                        src={`https://cdn.worldofdypians.com/tools/${tokenLogo}`}
                         width={28}
                         height={28}
                         alt=""
@@ -156,12 +149,12 @@ const TopOtherPoolsNftListCard = ({
                       <img
                         src={
                           chain === "Ethereum"
-                            ? ethStake
+                            ? 'https://cdn.worldofdypians.com/tools/ethStakeActive.svg'
                             : chain === "BNB Chain"
-                            ? bnbStakeActive
+                            ? 'https://cdn.worldofdypians.com/tools/bnbStakeActive.svg'
                             : chain === "Base"
-                            ? baseStake
-                            : avaxStake
+                            ? 'https://cdn.worldofdypians.com/tools/baseStakeActive.svg'
+                            : 'https://cdn.worldofdypians.com/tools/avaxStakeActive.svg'
                         }
                         style={{ width: 18, height: 18 }}
                         alt=""
@@ -214,7 +207,7 @@ const TopOtherPoolsNftListCard = ({
                       <div className="d-flex align-items-center w-100  justify-content-between gap-2">
                         <div className={` d-flex align-items-center gap-1`}>
                           <img
-                            src={require(`../top-pools-card/assets/${tokenLogo}`)}
+                            src={`https://cdn.worldofdypians.com/tools/${tokenLogo}`}
                             width={28}
                             height={28}
                             alt=""
@@ -235,7 +228,7 @@ const TopOtherPoolsNftListCard = ({
                               }}
                             >
                               <img
-                                src={premiumTag}
+                                src={'https://cdn.worldofdypians.com/tools/premiumTag.svg'}
                                 className="d-block d-lg-none d-md-none w-auto"
                               />
                             </h5>

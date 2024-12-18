@@ -5,7 +5,6 @@
     border-radius: 12px;
     padding: 20px;
     border: 2px solid #312f69;
-    /* background-image: url(./assets/calculatorbg.png); */
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -26,7 +25,7 @@
     right: 0;
     bottom: 0;
     top: 0;
-    background-image: url('./assets/migrationBannerBg.png');
+    background-image: url('https://cdn.worldofdypians.com/tools/migrationBannerBg.png');
     background-size: cover;
     background-position: right;
     background-repeat: no-repeat;

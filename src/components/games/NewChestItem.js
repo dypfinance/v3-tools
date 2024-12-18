@@ -1,7 +1,4 @@
 import React, { useState, useEffect } from "react";
-import premiumLock from "./assets/premiumLock.png";
-
-
 import axios from "axios";
 import Web3 from "web3";
 
@@ -33,14 +30,12 @@ const NewChestItem = ({
   binanceW3WProvider,
   isConnected,
   onCrackStone,
-  openedChests
+  openedChests,
 }) => {
   const [shake, setShake] = useState(false);
   const [ischestOpen, setIsChestOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [approved, setApproved] = useState(false);
-
-
 
   const getUserRewardsByChest2 = async (
     userEmail,
@@ -80,7 +75,7 @@ const NewChestItem = ({
           }, 3000);
         });
       if (result && result.status === 200) {
-        if(chainText === 'base' && openedChests.length ===19) {
+        if (chainText === "base" && openedChests.length === 19) {
           onCrackStone("successGem");
           setTimeout(() => {
             onClaimRewards(result.data);
@@ -90,17 +85,16 @@ const NewChestItem = ({
             setLoading(false);
             setClaimingChest(false);
           }, 1000);
-        }
-        else {
+        } else {
           onCrackStone("success");
-        setTimeout(() => {
-          onClaimRewards(result.data);
-          setIsChestOpen(true);
-          // onChestStatus("initial");
-          onLoadingChest(false);
-          setLoading(false);
-          setClaimingChest(false);
-        }, 1000); 
+          setTimeout(() => {
+            onClaimRewards(result.data);
+            setIsChestOpen(true);
+            // onChestStatus("initial");
+            onLoadingChest(false);
+            setLoading(false);
+            setClaimingChest(false);
+          }, 1000);
         }
       }
     } else {
@@ -176,7 +170,7 @@ const NewChestItem = ({
           }
         });
       if (result && result.status === 200) {
-        if(chainText === 'base' && openedChests.length ===19) {
+        if (chainText === "base" && openedChests.length === 19) {
           onCrackStone("successGem");
           setTimeout(() => {
             onClaimRewards(result.data);
@@ -186,19 +180,17 @@ const NewChestItem = ({
             setLoading(false);
             setClaimingChest(false);
           }, 1000);
-        }
-        else {
+        } else {
           onCrackStone("success");
-        setTimeout(() => {
-          onClaimRewards(result.data);
-          setIsChestOpen(true);
-          // onChestStatus("initial");
-          onLoadingChest(false);
-          setLoading(false);
-          setClaimingChest(false);
-        }, 1000); 
+          setTimeout(() => {
+            onClaimRewards(result.data);
+            setIsChestOpen(true);
+            // onChestStatus("initial");
+            onLoadingChest(false);
+            setLoading(false);
+            setClaimingChest(false);
+          }, 1000);
         }
-       
       }
     } else {
       const result = await axios
@@ -246,38 +238,34 @@ const NewChestItem = ({
     chestIndex,
     chainText
   ) => {
-   
-      const txResult = await window.web3.eth
-        .getTransaction(txHash)
-        .catch((e) => {
-          console.error(e);
-        });
+    const txResult = await window.web3.eth.getTransaction(txHash).catch((e) => {
+      console.error(e);
+    });
 
-      console.log(txResult);
+    console.log(txResult);
 
-      if (txResult) {
-        getUserRewardsByChest(email, txHash, chestIndex, chainText);
+    if (txResult) {
+      getUserRewardsByChest(email, txHash, chestIndex, chainText);
+    } else {
+      if (count < 10) {
+        setTimeout(
+          () => {
+            handleCheckIfTxExists(txHash);
+          },
+          count === 9 ? 5000 : 2000
+        );
       } else {
-        if (count < 10) {
-          setTimeout(
-            () => {
-              handleCheckIfTxExists(txHash);
-            },
-            count === 9 ? 5000 : 2000
-          );
-        } else {
-          window.alertify.error("Something went wrong.");
-          onChestStatus("error");
-          onLoadingChest(false);
-          setLoading(false);
-          setClaimingChest(false);
-          setTimeout(() => {
-            onChestStatus("initial");
-          }, 3000);
-        }
+        window.alertify.error("Something went wrong.");
+        onChestStatus("error");
+        onLoadingChest(false);
+        setLoading(false);
+        setClaimingChest(false);
+        setTimeout(() => {
+          onChestStatus("initial");
+        }, 3000);
       }
-      count = count + 1;
-  
+    }
+    count = count + 1;
   };
 
   // const handleCheckIfAlreadyApproved = async () => {
@@ -497,7 +485,6 @@ const NewChestItem = ({
   //   }, 1000);
   // };
 
-
   useEffect(() => {
     setIsChestOpen(false);
   }, [isPremium, rewardTypes]);
@@ -522,47 +509,22 @@ const NewChestItem = ({
         pointerEvents: !disableBtn && !buyNftPopup ? "auto" : "none",
       }}
     >
-      {/* <img
-    className='new-chest-item-img'
-      src={require(`../../screens/Account/src/Components/WalletBalance/chestImages/premium/blueCrystal${
-        !open ? "" :  "OpenGems"
-      }.png`)}
-      
-      alt=""
-      style={{ position: "relative", bottom: "5px", filter: item.premium && "blur(5px)" }}
-    /> */}
-      {rewardTypes !== "premium" ? (
-        
-          <img
-            className={` ${"new-chest-item-img"} ${
-              loading ? "chest-shake" : ""
-            }`}
-            src={require(`./assets/axes/${chestIndex}.png`)}
-            alt=""
-            style={{
-              position: "relative",
-              bottom: "5px",
-              filter: rewardTypes === "premium" && !isPremium && "blur(5px)",
-            }}
-          />
-       
-      ) : rewardTypes === "premium" && dummypremiumChests ? (
-        <img
-          className={`new-chest-item-img ${loading ? "chest-shake" : ""}`}
-          src={require(`./assets/${chestIndex}.png`)}
-          alt=""
-          style={{
-            position: "relative",
-            bottom: "5px",
-            filter: rewardTypes === "premium" && !isPremium && "blur(5px)",
-          }}
-        />
-      ) : (
-        <></>
-      )}
+  
+
+      <img
+        className={` ${"new-chest-item-img"} ${loading ? "chest-shake" : ""}`}
+        src={`https://cdn.worldofdypians.com/tools/axes/${chestIndex}.png`}
+        alt=""
+        style={{
+          position: "relative",
+          bottom: "5px",
+          filter: rewardTypes === "premium" && !isPremium && "blur(5px)",
+        }}
+      />
+
       {rewardTypes === "premium" && !isPremium && (
         <img
-          src={premiumLock}
+          src={"https://cdn.worldofdypians.com/tools/premiumLock.png"}
           className={`premium-lock ${shake && "shake-lock"}`}
           alt=""
         />

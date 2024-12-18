@@ -2,13 +2,9 @@ import React, { useEffect, useState } from "react";
 import "./top-pools.css";
 import LandDetails from "../FARMINNG/land";
 import CawsDetails from "../FARMINNG/caws";
-
 import CawsWodDetails from "../FARMINNG/cawsWod";
 import axios from "axios";
 import useWindowSize from "../../functions/useWindowSize";
-
-import ethStake from "../../assets/earnAssets/ethStakeActive.svg";
- 
 
 const TopPoolsNftListCardInner = ({
   tokenLogo,
@@ -228,7 +224,7 @@ const TopPoolsNftListCardInner = ({
                       className="d-flex align-items-center gap-2"
                     >
                       <img
-                        src={ethStake}
+                        src={'https://cdn.worldofdypians.com/tools/avaxStakeActive.svg'}
                         style={{ width: 18, height: 18 }}
                         alt=""
                         className="pool-coins"

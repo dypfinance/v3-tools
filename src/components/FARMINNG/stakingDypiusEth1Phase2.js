@@ -5,12 +5,8 @@ import Modal from "../Modal/Modal";
 import Address from "./address";
 import WalletModal from "../WalletModal";
 import "./top-pools.css";
- 
-import wallet from "./assets/wallet.svg";
-import Tooltip from "@material-ui/core/Tooltip";
-import Countdown from "react-countdown";
-import poolsCalculatorIcon from "./assets/poolsCalculatorIcon.svg";
-import statsLinkIcon from "./assets/statsLinkIcon.svg";
+  
+import Tooltip from "@material-ui/core/Tooltip"; 
 import { shortAddress } from "../../functions/shortAddress";
 import { ClickAwayListener } from "@material-ui/core";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
@@ -1118,7 +1114,7 @@ const StakeDypiusEth1Phase2 = ({
                     className="stats-link2"
                   >
                     {shortAddress(staking?._address)}{" "}
-                    <img src={statsLinkIcon} alt="" />
+                    <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                   </a>
                 </div>
               </div>
@@ -1376,7 +1372,7 @@ const StakeDypiusEth1Phase2 = ({
                     className="stats-link2"
                   >
                     {shortAddress(staking._address)}{" "}
-                    <img src={statsLinkIcon} alt="" />
+                    <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                   </a>
                 </div>
               </div>
@@ -1402,7 +1398,7 @@ const StakeDypiusEth1Phase2 = ({
       coinbase === undefined ||
       is_wallet_connected === false ? (
         <button className="connectbtn btn m-auto" onClick={onConnectWallet}>
-          <img src={wallet} alt="" /> Connect wallet
+          <img src={'https://cdn.worldofdypians.com/tools/walletIcon.svg'} alt="" /> Connect wallet
         </button>
       ) : chainId !== "1" ? (
         <button
@@ -1539,7 +1535,7 @@ const StakeDypiusEth1Phase2 = ({
     //                 className="bottomitems"
     //                 onClick={() => setshowCalculator(true)}
     //               >
-    //                 <img src={poolsCalculatorIcon} alt="" />
+    //                 <img src={'https://cdn.worldofdypians.com/tools/poolsCalculatorIcon.svg'} alt="" />
     //                 Calculator
     //               </h6>
     //               <a
@@ -1563,7 +1559,7 @@ const StakeDypiusEth1Phase2 = ({
     //                 }}
     //               >
     //                 <h6 className="bottomitems">
-    //                   <img src={purplestats} alt="" />
+    //                   <img src={'https://cdn.worldofdypians.com/tools/purpleStat.svg'} alt="" />
     //                   Stats
     //                 </h6>
     //               </div>
@@ -1589,7 +1585,7 @@ const StakeDypiusEth1Phase2 = ({
     //             coinbase === undefined ||
     //             is_wallet_connected === false ? (
     //               <button className="connectbtn btn" onClick={showModal}>
-    //                 <img src={wallet} alt="" /> Connect wallet
+    //                 <img src={'https://cdn.worldofdypians.com/tools/walletIcon.svg'} alt="" /> Connect wallet
     //               </button>
     //             ) : chainId === "1" ? (
     //               <div className="addressbtn btn">
@@ -2183,7 +2179,7 @@ const StakeDypiusEth1Phase2 = ({
     //                   className="stats-link"
     //                 >
     //                   {shortAddress(coinbase)}{" "}
-    //                   <img src={statsLinkIcon} alt="" />
+    //                   <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
     //                 </a>
     //                 <a
     //                   target="_blank"
@@ -2191,7 +2187,7 @@ const StakeDypiusEth1Phase2 = ({
     //                   href={`https://github.com/dypfinance/staking-governance-security-audits`}
     //                   className="stats-link"
     //                 >
-    //                   Audit <img src={statsLinkIcon} alt="" />
+    //                   Audit <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
     //                 </a>
     //                 <a
     //                   target="_blank"
@@ -2199,7 +2195,7 @@ const StakeDypiusEth1Phase2 = ({
     //                   href={`${window.config.etherscan_baseURL}/token/${reward_token_dypius_eth._address}?a=${coinbase}`}
     //                   className="stats-link"
     //                 >
-    //                   View transaction <img src={statsLinkIcon} alt="" />
+    //                   View transaction <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
     //                 </a>
     //               </div>
     //             </div>

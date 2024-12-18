@@ -4,28 +4,20 @@ import getFormattedNumber from "../../functions/get-formatted-number";
 import Modal from "../Modal/Modal";
 import Address from "./address";
 import WalletModal from "../WalletModal";
-import "./top-pools.css";
-import ellipse from "./assets/ellipse.svg";
-import failMark from "../../assets/failMark.svg";
+import "./top-pools.css"; 
 import Clipboard from "react-clipboard.js";
 import ReactTooltip from "react-tooltip";
-import arrowup from "./assets/arrow-up.svg"; 
-import stats from "./assets/stats.svg";
-import purplestats from "./assets/purpleStat.svg";
-import referralimg from "./assets/referral.svg";
-import copy from "./assets/copy.svg";
-import wallet from "./assets/wallet.svg";
 import Tooltip from "@material-ui/core/Tooltip";
-import Countdown from "react-countdown";
-import poolsCalculatorIcon from "./assets/poolsCalculatorIcon.svg";
-import statsLinkIcon from "./assets/statsLinkIcon.svg";
-import CountDownTimer from "../locker/Countdown";
+import Countdown from "react-countdown"; 
 import { shortAddress } from "../../functions/shortAddress";
-import calculatorIcon from "../calculator/assets/calculator.svg";
-import xMark from "../calculator/assets/xMark.svg";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
 import { ClickAwayListener } from "@material-ui/core";
 import axios from "axios";
+
+import arrowup from "./assets/arrow-up.svg"; 
+import referralimg from "./assets/referral.svg";
+import copy from "./assets/copy.svg"; 
+
 
 const renderer = ({ days, hours, minutes, seconds }) => {
   return (
@@ -797,7 +789,7 @@ const StakeBscDai = ({
               ) : (
                 <h6 className="activetxt">
                   <img
-                    src={ellipse}
+                    src={'https://cdn.worldofdypians.com/tools/ellipse.svg'}
                     alt=""
                     className="position-relative"
                     style={{ top: "-1px" }}
@@ -896,7 +888,7 @@ const StakeBscDai = ({
                     className="bottomitems"
                     onClick={() => setshowCalculator(true)}
                   >
-                    <img src={poolsCalculatorIcon} alt="" />
+                    <img src={'https://cdn.worldofdypians.com/tools/poolsCalculatorIcon.svg'} alt="" />
                     Calculator
                   </h6>
                   <a
@@ -920,7 +912,7 @@ const StakeBscDai = ({
                     }}
                   >
                     <h6 className="bottomitems">
-                      <img src={purplestats} alt="" />
+                      <img src={'https://cdn.worldofdypians.com/tools/purpleStat.svg'} alt="" />
                       Stats
                     </h6>
                   </div>
@@ -953,7 +945,7 @@ const StakeBscDai = ({
                       fontSize: renderedPage === "dashboard" && "10px",
                     }}
                   >
-                    <img src={wallet} alt="" /> Connect wallet
+                    <img src={'https://cdn.worldofdypians.com/tools/walletIcon.svg'} alt="" /> Connect wallet
                   </button>
                 ) : chainId === "56" ? (
                   <div className="addressbtn btn">
@@ -1137,7 +1129,7 @@ const StakeBscDai = ({
                       <>Success</>
                     ) : (
                       <>
-                        <img src={failMark} alt="" />
+                        <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
                         Failed
                       </>
                     )}
@@ -1248,7 +1240,7 @@ const StakeBscDai = ({
                         </div>
                       ) : claimStatus === "failed" ? (
                         <>
-                          <img src={failMark} alt="" />
+                          <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
                           Failed
                         </>
                       ) : claimStatus === "success" ? (
@@ -1282,7 +1274,7 @@ const StakeBscDai = ({
                           </div>
                         ) : reInvestStatus === "failed" ? (
                           <>
-                            <img src={failMark} alt="" />
+                            <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
                             Failed
                           </>
                         ) : reInvestStatus === "success" ? (
@@ -1548,7 +1540,7 @@ const StakeBscDai = ({
                       className="stats-link"
                     >
                       {shortAddress(coinbase)}{" "}
-                      <img src={statsLinkIcon} alt="" />
+                      <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                     </a>
                     <a
                       target="_blank"
@@ -1556,7 +1548,7 @@ const StakeBscDai = ({
                       href={`https://github.com/dypfinance/staking-governance-security-audits`}
                       className="stats-link"
                     >
-                      Audit <img src={statsLinkIcon} alt="" />
+                      Audit <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                     </a>
                     <a
                       target="_blank"
@@ -1564,7 +1556,7 @@ const StakeBscDai = ({
                       href={`${window.config.bscscan_baseURL}/token/${reward_token._address}?a=${coinbase}`}
                       className="stats-link"
                     >
-                      View transaction <img src={statsLinkIcon} alt="" />
+                      View transaction <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                     </a>
                   </div>
                 </div>
@@ -1706,7 +1698,7 @@ const StakeBscDai = ({
                         </div>
                       ) : withdrawStatus === "failed" ? (
                         <>
-                          <img src={failMark} alt="" />
+                          <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
                           Failed
                         </>
                       ) : withdrawStatus === "success" ? (

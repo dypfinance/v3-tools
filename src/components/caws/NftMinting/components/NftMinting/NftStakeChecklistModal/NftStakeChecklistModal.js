@@ -3,16 +3,10 @@ import axios from "axios";
 import _ from "lodash";
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-
-// import ToolTip from "../../../../elements/ToolTip";
-// import X from "../../../../../assets/images/x_close.png";
 import NftPlaceHolder from "../../General/NftPlaceHolder/NftPlaceHolder";
 import NftStakingCawChecklist from "../../General/NftStakingCawChecklist/NftStakingCawChecklist";
 import { formattedNum } from "../../../../../../functions/formatUSD";
 import getFormattedNumber from "../../../../../../functions/get-formatted-number";
-// import EthLogo from "../../../../../assets/General/eth-create-nft.png";
-// import CountDownTimerUnstake from "../../../../elements/CountDownUnstake";
-// import CatLogo from "../../../../../assets/General/cat-totalsupply-icon.svg";
 import "./_nftStakeChecklistModal.scss";
 import CountDownTimerUnstake from "../../../../../locker/Countdown";
 
@@ -625,7 +619,10 @@ const NftStakeCheckListModal = ({
       </div>{" "}
       <div style={{ display: "block" }} className="bottom-static-wrapper">
         <p className="d-flex info-text align-items-start gap-3">
-          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" />
+          <img
+            src={"https://cdn.worldofdypians.com/tools/more-info.svg"}
+            alt=""
+          />
           {!showStaked
             ? "Please select which NFTs to Stake."
             : "Please select your NFTs to Claim or to Unstake"}
@@ -687,7 +684,7 @@ const NftStakeCheckListModal = ({
                 </span>
 
                 <img
-                  src={require("./catlogo.svg").default}
+                  src={'https://cdn.worldofdypians.com/tools/catlogo.svg'}
                   alt=""
                   style={{ width: 24, height: 24 }}
                 />
@@ -812,7 +809,13 @@ const NftStakeCheckListModal = ({
                     </p>
                     <div className="d-flex justify-content-between">
                       <h6 className="rewardstxtCaws d-flex align-items-center gap-2">
-                        <img src={require("./weth.svg").default} alt="" />{" "}
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/tools/ethStakeActive.svg"
+                          }
+                          style={{ height: 25, width: 25 }}
+                          alt=""
+                        />{" "}
                         {getFormattedNumber(ETHrewards, 6)} WETH (
                         {formattedNum(ethToUSD, true)})
                       </h6>
@@ -846,7 +849,7 @@ const NftStakeCheckListModal = ({
                     width: "50%",
                     borderRadius: "8px",
                     color: ETHrewards != 0 ? "#FFFFFF" : "#C0C9FF",
-                    border: 'none',
+                    border: "none",
                     margin: "auto",
                   }}
                 >
@@ -931,7 +934,7 @@ const NftStakeCheckListModal = ({
                         </span>
 
                         <img
-                          src={require("./catlogo.svg").default}
+                          src={'https://cdn.worldofdypians.com/tools/catlogo.svg'}
                           alt=""
                           style={{ width: 24, height: 24 }}
                         />

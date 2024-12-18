@@ -15,13 +15,9 @@ const NftPlaceHolder = ({ onMintClick, width }) => {
             className="d-flex align-items-center justify-content-center p-3"
             style={{ border: "1px grey dashed", borderRadius: "8px" }}
           >
-            {/* <img
-              src={require("./cat_desktop.jpeg")}
-              alt=""
-              className="placeholder-content-img nft-coins"
-            /> */}
+    
             <img
-              src={require("./landplaceholder.svg").default}
+              src={'https://cdn.worldofdypians.com/tools/landplaceholder2.svg'}
               alt=""
               className="placeholder-content-img nft-coins"
             />

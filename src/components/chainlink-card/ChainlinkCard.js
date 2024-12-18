@@ -41,19 +41,19 @@ const ChainlinkCard = () => {
           {/* <span style={{fontSize: '10px', fontWeight: '400', lineHeight: '14px', color: '#857DFA'}}>Earned by users</span> */}
           <div>
             <h6 className="d-flex align-items-center gap-2 totalpaidtxt text-white">
-              <img src={'https://cdn.worldofdypians.com/wod/eth.svg'} alt="" />
+              <img src={'https://cdn.worldofdypians.com/wod/eth.svg'} alt=""  style={{height: 18, width: 18}}/>
               {getFormattedNumber(totalpaid?.ethTotal.wethPaiOutTotals, 0)} ETH
             </h6>
           </div>
           <div>
             <h6 className="d-flex align-items-center gap-2 totalpaidtxt text-white">
-              <img src={'https://cdn.worldofdypians.com/wod/bnbIcon.svg'} alt="" />
+              <img src={'https://cdn.worldofdypians.com/wod/bnbIcon.svg'} alt=""  style={{height: 18, width: 18}}/>
               {getFormattedNumber(totalpaid?.bnbTotal.wbnbPaidOutTotals, 0)} BNB
             </h6>
           </div>
           <div>
             <h6 className="d-flex align-items-center gap-2 totalpaidtxt text-white">
-              <img src={'https://cdn.worldofdypians.com/wod/avaxIcon.svg'} alt="" />
+              <img src={'https://cdn.worldofdypians.com/wod/avaxIcon.svg'} alt="" style={{height: 18, width: 18}}/>
               {getFormattedNumber(
                 totalpaid?.avaxTotal.avaxPaidOutTotals,
                 0

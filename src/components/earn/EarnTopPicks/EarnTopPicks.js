@@ -1,48 +1,27 @@
 import React, { useEffect, useState } from "react";
-import TopPoolsCard from "../../top-pools-card/TopPoolsCard";
-import CawsCard from "../../top-pools-card/CawsCard";
-import TopPoolsListCard from "../../top-pools-card/TopPoolsListCard";
-import axios from "axios";
-import getFormattedNumber from "../../../functions/getFormattedNumber2";
-import initStakingNew from "../../FARMINNG/staking-new-front";
-import initFarmAvax from "../../FARMINNG/farmAvax";
-import stakeAvax from "../../FARMINNG/stakeAvax";
-import stakeAvax30 from "../../FARMINNG/stakeAvax30";
-import CawsDetails from "../../FARMINNG/caws";
 import { FadeLoader } from "react-spinners";
 import useWindowSize from "../../../functions/useWindowSize";
-import initBscFarming from "../../FARMINNG/bscFarming";
+import axios from "axios";
+import getFormattedNumber from "../../../functions/getFormattedNumber2";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import { ClickAwayListener } from "@material-ui/core";
+import Tooltip from "@material-ui/core/Tooltip";
+
+
+import TopPoolsCard from "../../top-pools-card/TopPoolsCard";
+import TopPoolsListCard from "../../top-pools-card/TopPoolsListCard";
 import InitConstantStakingiDYP from "../../FARMINNG/constant-staking-idyp-new-front";
-import StakingiDypPhase2 from "../../FARMINNG/stakingiDypPhase2";
 import StakeAvaxIDyp from "../../FARMINNG/stakeAvaxiDyp";
 import StakeBscIDyp from "../../FARMINNG/bscConstantStakeiDyp";
-import StakeBsc from "../../FARMINNG/bscConstantStake";
 import StakeDypiusEth from "../../FARMINNG/constant-staking-dypius-new";
 import StakeDypiusEth1Phase2 from "../../FARMINNG/stakingDypiusEth1Phase2";
 import StakeDypiusEth2Phase2 from "../../FARMINNG/stakingDypiusEth2Phase2";
 import StakeDypiusEth3Phase2 from "../../FARMINNG/stakingDypiusEth3Phase2";
 import Vault from "../../FARMINNG/vault-new";
-import StakeNewEth from "../../FARMINNG/stakeNewEth";
 import BscFarmingFunc from "../../FARMINNG/BscFarmingFunc";
-import FarmAvaxFunc from "../../FARMINNG/FarmAvaxFunc";
 import StakeDypiusBsc from "../../FARMINNG/bscConstantStakeDypius";
 import StakeDypiusAvax from "../../FARMINNG/stakeDypiusAvax";
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box"; 
-import { ClickAwayListener } from "@material-ui/core";
-import Tooltip from "@material-ui/core/Tooltip";  
-
-import eth from "../assets/eth.svg";
-import ethActive from "../assets/ethActive.svg";
-
-import bnb from "../assets/bnb.svg";
-import bnbActive from "../assets/bnbActive.svg";
-
-import base from "../assets/base.svg";
-import baseActive from "../assets/baseActive.svg";
-
-import avax from "../assets/avax.svg";
-import avaxActive from "../assets/avaxActive.svg";
 import StakingDypiusBase1 from "../../FARMINNG/stakingDypiusBase1";
 
 const EarnTopPicks = ({
@@ -202,18 +181,15 @@ const EarnTopPicks = ({
   const [ethPoolsiDypExpired, setethPoolsiDypExpired] = useState([]);
   const [ethPoolsDypExpired, setethPoolsDypExpired] = useState([]);
 
-
   const [bnbPoolsDyp, setbnbPoolsDyp] = useState([]);
   const [bnbPoolsiDyp, setbnbPoolsiDyp] = useState([]);
   const [bnbPoolsiDypExpired, setbnbPoolsiDypExpired] = useState([]);
   const [bnbPoolsDypExpired, setbnbPoolsDypExpired] = useState([]);
 
-
   const [avaxPoolsDyp, setavaxPoolsDyp] = useState([]);
   const [avaxPoolsiDyp, setavaxPoolsiDyp] = useState([]);
   const [avaxPoolsiDypExpired, setavaxPoolsiDypExpired] = useState([]);
   const [avaxPoolsDypExpired, setavaxPoolsDypExpired] = useState([]);
-
 
   const [basePoolsDyp, setbasePoolsDyp] = useState([]);
   const [basePoolsiDyp, setbaseoolsiDyp] = useState([]);
@@ -317,7 +293,6 @@ const EarnTopPicks = ({
         return item.id === "0x41b8a58f4307ea722ad0a964966caa18a6011d93";
       });
 
-      
       const ethexpiredDyp = dypData.filter((item) => {
         return item.id === "0xC9075092Cc46E176B1F3c0D0EB8223F1e46555B0";
       });
@@ -330,10 +305,8 @@ const EarnTopPicks = ({
         return { ...item, tvl_usd: item.tvl_usd, type: "dyp", chain: "eth" };
       });
 
-
       setethPoolsiDypExpired(objectexpired);
       setethPoolsDypExpired(objectexpiredDyp);
-
 
       // const object2_phase2 = phase2_pools.filter((pools) => {
       //   return pools.type === "dyp";
@@ -386,17 +359,14 @@ const EarnTopPicks = ({
     ) {
       const dypIdypBnb = bnb_result.data.stakingInfoiDYPBnb;
       const dypBnb = bnb_result2.data.stakingInfoDYPBnb;
- 
 
       const expiredBnb = dypIdypBnb.filter((item) => {
         return item.id === "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d";
       });
 
-      
       const expiredBnbDYP = dypBnb.filter((item) => {
         return item.id === "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603";
       });
-
 
       const object2expired = expiredBnb.map((item) => {
         return { ...item, tvl_usd: item.tvl_usd, type: "idyp", chain: "bnb" };
@@ -465,19 +435,16 @@ const EarnTopPicks = ({
         return item.id === "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603";
       });
 
-
       const objectexpiredAvax = expiredAvax.map((item) => {
         return { ...item, tvl_usd: item.tvl_usd, type: "idyp", chain: "avax" };
       });
 
-      
       const objectexpiredAvaxDyp = expiredAvaxDyp.map((item) => {
         return { ...item, tvl_usd: item.tvl_usd, type: "dyp", chain: "avax" };
-      }); 
+      });
 
       setavaxPoolsiDypExpired(objectexpiredAvax);
       setavaxPoolsDypExpired(objectexpiredAvaxDyp);
-
 
       const object2 = dypAvax.map((item) => {
         return { ...item, tvl_usd: item.tvl_usd, type: "dyp", chain: "avax" };
@@ -624,10 +591,8 @@ const EarnTopPicks = ({
         return { ...item, tvl_usd: item.tvl_usd, type: "dyp", chain: "eth" };
       });
 
-
       setethPoolsiDypExpired(objectexpired);
       setethPoolsDypExpired(objectexpiredDyp);
-
 
       const activeEth2 = object2.filter((item) => {
         return item.expired !== "Yes";
@@ -689,11 +654,9 @@ const EarnTopPicks = ({
         return item.id === "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d";
       });
 
-            
       const expiredBnbDYP = dypBnb.filter((item) => {
         return item.id === "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603";
       });
-
 
       const activeBnb = dypIdypBnb.filter((item) => {
         return item.expired !== "Yes";
@@ -721,7 +684,6 @@ const EarnTopPicks = ({
 
       setbnbPoolsiDypExpired(object2expired);
       setbnbPoolsDypExpired(object2expiredDyp);
-
 
       const allActiveBnb = [...object2activeBnb, ...activeBnb2];
       const allExpireBnb = [...object2expired, ...object2expiredDyp];
@@ -776,7 +738,6 @@ const EarnTopPicks = ({
         return item.id === "0xe026fb242d9523dc8e8d8833f7309dbdbed59d3d";
       });
 
-      
       const expiredAvaxDyp = dypAvax.filter((item) => {
         return item.id === "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603";
       });
@@ -810,7 +771,7 @@ const EarnTopPicks = ({
         return b.apy_percent - a.apy_percent;
       });
 
-      setExpiredPools([...objectexpiredAvax,...objectexpiredAvaxDyp]);
+      setExpiredPools([...objectexpiredAvax, ...objectexpiredAvaxDyp]);
       setActivePools(sortedActive);
       setTopPools([...dypIdypAvax, ...object2]);
     }
@@ -1740,8 +1701,7 @@ const EarnTopPicks = ({
                   )}
               </div>
 
-              {windowSize && windowSize.width > 1300 &&
-                    topList === "Vault" ? (
+              {windowSize && windowSize.width > 1300 && topList === "Vault" ? (
                 <>
                   <div className="top-picks-container">
                     {expiredPools === false &&
@@ -2284,9 +2244,7 @@ const EarnTopPicks = ({
                 <></>
               )}
 
-
-{windowSize && windowSize.width < 787 &&
-              topList === "Vault" ? (
+              {windowSize && windowSize.width < 787 && topList === "Vault" ? (
                 <>
                   <div className="top-picks-container">
                     {expiredPools === false &&
@@ -2504,7 +2462,7 @@ const EarnTopPicks = ({
                     activePools &&
                     activePools.length > 0 &&
                     topList === "Vault" ? (
-                      topPools.slice(2,3).map((pool, index) => (
+                      topPools.slice(2, 3).map((pool, index) => (
                         <TopPoolsCard
                           key={index}
                           chain={chain}
@@ -2605,12 +2563,12 @@ const EarnTopPicks = ({
                     <></>
                   )}
 
-<div className="top-picks-container pt-3">
+                  <div className="top-picks-container pt-3">
                     {expiredPools === false &&
                     activePools &&
                     activePools.length > 0 &&
                     topList === "Vault" ? (
-                      topPools.slice(3,4).map((pool, index) => (
+                      topPools.slice(3, 4).map((pool, index) => (
                         <TopPoolsCard
                           key={index}
                           chain={chain}
@@ -2711,13 +2669,12 @@ const EarnTopPicks = ({
                     <></>
                   )}
 
-
-<div className="top-picks-container pt-3">
+                  <div className="top-picks-container pt-3">
                     {expiredPools === false &&
                     activePools &&
                     activePools.length > 0 &&
                     topList === "Vault" ? (
-                      topPools.slice(4,5).map((pool, index) => (
+                      topPools.slice(4, 5).map((pool, index) => (
                         <TopPoolsCard
                           key={index}
                           chain={chain}
@@ -2819,12 +2776,12 @@ const EarnTopPicks = ({
                     <></>
                   )}
 
-<div className="top-picks-container pt-3">
+                  <div className="top-picks-container pt-3">
                     {expiredPools === false &&
                     activePools &&
                     activePools.length > 0 &&
                     topList === "Vault" ? (
-                      topPools.slice(5,6).map((pool, index) => (
+                      topPools.slice(5, 6).map((pool, index) => (
                         <TopPoolsCard
                           key={index}
                           chain={chain}
@@ -2926,15 +2883,10 @@ const EarnTopPicks = ({
                   ) : (
                     <></>
                   )}
-
-
-                  
                 </>
               ) : (
                 <></>
               )}
-
-
 
               {activeCard && topList === "Farming" ? (
                 chain === "bnb" && listing === "table" ? (
@@ -3217,7 +3169,7 @@ const EarnTopPicks = ({
                     </span>
                   </div>
                   <img
-                    src={'https://cdn.worldofdypians.com/wod/popupXmark.svg'}
+                    src={"https://cdn.worldofdypians.com/wod/popupXmark.svg"}
                     alt=""
                     className="close-x position-relative cursor-pointer "
                     onClick={() => {
@@ -3240,20 +3192,16 @@ const EarnTopPicks = ({
                       "No lock",
                       selectedpoolType,
                       selectedPool,
-                      expiredPools === true
-                        ? ethPoolsDypExpired
-                        : ethPoolsDyp,
+                      expiredPools === true ? ethPoolsDypExpired : ethPoolsDyp,
                       basePoolsDyp,
                       expiredPools === true
                         ? ethPoolsiDypExpired
                         : ethPoolsiDyp,
-                        expiredPools === true
-                        ? bnbPoolsDypExpired
-                        : bnbPoolsDyp,
+                      expiredPools === true ? bnbPoolsDypExpired : bnbPoolsDyp,
                       expiredPools === true
                         ? bnbPoolsiDypExpired
                         : bnbPoolsiDyp,
-                        expiredPools === true
+                      expiredPools === true
                         ? avaxPoolsDypExpired
                         : avaxPoolsDyp,
                       expiredPools === true
@@ -3266,19 +3214,19 @@ const EarnTopPicks = ({
                         "No lock",
                         selectedpoolType,
                         expiredPools === true
-                        ? ethPoolsDypExpired
-                        : ethPoolsDyp,
+                          ? ethPoolsDypExpired
+                          : ethPoolsDyp,
                         basePoolsDyp,
                         expiredPools === true
                           ? ethPoolsiDypExpired
                           : ethPoolsiDyp,
-                          expiredPools === true
-                        ? bnbPoolsDypExpired
-                        : bnbPoolsDyp,
+                        expiredPools === true
+                          ? bnbPoolsDypExpired
+                          : bnbPoolsDyp,
                         expiredPools === true
                           ? bnbPoolsiDypExpired
                           : bnbPoolsiDyp,
-                          expiredPools === true
+                        expiredPools === true
                           ? avaxPoolsDypExpired
                           : avaxPoolsDyp,
                         expiredPools === true
@@ -3295,20 +3243,16 @@ const EarnTopPicks = ({
                       "30 days",
                       selectedpoolType,
                       selectedPool,
-                      expiredPools === true
-                        ? ethPoolsDypExpired
-                        : ethPoolsDyp,
+                      expiredPools === true ? ethPoolsDypExpired : ethPoolsDyp,
                       basePoolsDyp,
                       expiredPools === true
                         ? ethPoolsiDypExpired
                         : ethPoolsiDyp,
-                        expiredPools === true
-                        ? bnbPoolsDypExpired
-                        : bnbPoolsDyp,
+                      expiredPools === true ? bnbPoolsDypExpired : bnbPoolsDyp,
                       expiredPools === true
                         ? bnbPoolsiDypExpired
                         : bnbPoolsiDyp,
-                        expiredPools === true
+                      expiredPools === true
                         ? avaxPoolsDypExpired
                         : avaxPoolsDyp,
                       expiredPools === true
@@ -3321,19 +3265,19 @@ const EarnTopPicks = ({
                         "30 days",
                         selectedpoolType,
                         expiredPools === true
-                        ? ethPoolsDypExpired
-                        : ethPoolsDyp,
+                          ? ethPoolsDypExpired
+                          : ethPoolsDyp,
                         basePoolsDyp,
                         expiredPools === true
                           ? ethPoolsiDypExpired
                           : ethPoolsiDyp,
-                          expiredPools === true
-                        ? bnbPoolsDypExpired
-                        : bnbPoolsDyp,
+                        expiredPools === true
+                          ? bnbPoolsDypExpired
+                          : bnbPoolsDyp,
                         expiredPools === true
                           ? bnbPoolsiDypExpired
                           : bnbPoolsiDyp,
-                          expiredPools === true
+                        expiredPools === true
                           ? avaxPoolsDypExpired
                           : avaxPoolsDyp,
                         expiredPools === true
@@ -3350,20 +3294,16 @@ const EarnTopPicks = ({
                       "60 days",
                       selectedpoolType,
                       selectedPool,
-                      expiredPools === true
-                        ? ethPoolsDypExpired
-                        : ethPoolsDyp,
+                      expiredPools === true ? ethPoolsDypExpired : ethPoolsDyp,
                       basePoolsDyp,
                       expiredPools === true
                         ? ethPoolsiDypExpired
                         : ethPoolsiDyp,
-                        expiredPools === true
-                        ? bnbPoolsDypExpired
-                        : bnbPoolsDyp,
+                      expiredPools === true ? bnbPoolsDypExpired : bnbPoolsDyp,
                       expiredPools === true
                         ? bnbPoolsiDypExpired
                         : bnbPoolsiDyp,
-                        expiredPools === true
+                      expiredPools === true
                         ? avaxPoolsDypExpired
                         : avaxPoolsDyp,
                       expiredPools === true
@@ -3376,19 +3316,19 @@ const EarnTopPicks = ({
                         "60 days",
                         selectedpoolType,
                         expiredPools === true
-                        ? ethPoolsDypExpired
-                        : ethPoolsDyp,
+                          ? ethPoolsDypExpired
+                          : ethPoolsDyp,
                         basePoolsDyp,
                         expiredPools === true
                           ? ethPoolsiDypExpired
                           : ethPoolsiDyp,
-                          expiredPools === true
-                        ? bnbPoolsDypExpired
-                        : bnbPoolsDyp,
+                        expiredPools === true
+                          ? bnbPoolsDypExpired
+                          : bnbPoolsDyp,
                         expiredPools === true
                           ? bnbPoolsiDypExpired
                           : bnbPoolsiDyp,
-                          expiredPools === true
+                        expiredPools === true
                           ? avaxPoolsDypExpired
                           : avaxPoolsDyp,
                         expiredPools === true
@@ -3412,20 +3352,16 @@ const EarnTopPicks = ({
                       "90 days",
                       selectedpoolType,
                       selectedPool,
-                      expiredPools === true
-                        ? ethPoolsDypExpired
-                        : ethPoolsDyp,
+                      expiredPools === true ? ethPoolsDypExpired : ethPoolsDyp,
                       basePoolsDyp,
                       expiredPools === true
                         ? ethPoolsiDypExpired
                         : ethPoolsiDyp,
-                        expiredPools === true
-                        ? bnbPoolsDypExpired
-                        : bnbPoolsDyp,
+                      expiredPools === true ? bnbPoolsDypExpired : bnbPoolsDyp,
                       expiredPools === true
                         ? bnbPoolsiDypExpired
                         : bnbPoolsiDyp,
-                        expiredPools === true
+                      expiredPools === true
                         ? avaxPoolsDypExpired
                         : avaxPoolsDyp,
                       expiredPools === true
@@ -3438,19 +3374,19 @@ const EarnTopPicks = ({
                         "90 days",
                         selectedpoolType,
                         expiredPools === true
-                        ? ethPoolsDypExpired
-                        : ethPoolsDyp,
+                          ? ethPoolsDypExpired
+                          : ethPoolsDyp,
                         basePoolsDyp,
                         expiredPools === true
                           ? ethPoolsiDypExpired
                           : ethPoolsiDyp,
-                          expiredPools === true
-                        ? bnbPoolsDypExpired
-                        : bnbPoolsDyp,
+                        expiredPools === true
+                          ? bnbPoolsDypExpired
+                          : bnbPoolsDyp,
                         expiredPools === true
                           ? bnbPoolsiDypExpired
                           : bnbPoolsiDyp,
-                          expiredPools === true
+                        expiredPools === true
                           ? avaxPoolsDypExpired
                           : avaxPoolsDyp,
                         expiredPools === true
@@ -3478,20 +3414,16 @@ const EarnTopPicks = ({
                       "120 days",
                       selectedpoolType,
                       selectedPool,
-                      expiredPools === true
-                        ? ethPoolsDypExpired
-                        : ethPoolsDyp,
+                      expiredPools === true ? ethPoolsDypExpired : ethPoolsDyp,
                       basePoolsDyp,
                       expiredPools === true
                         ? ethPoolsiDypExpired
                         : ethPoolsiDyp,
-                        expiredPools === true
-                        ? bnbPoolsDypExpired
-                        : bnbPoolsDyp,
+                      expiredPools === true ? bnbPoolsDypExpired : bnbPoolsDyp,
                       expiredPools === true
                         ? bnbPoolsiDypExpired
                         : bnbPoolsiDyp,
-                        expiredPools === true
+                      expiredPools === true
                         ? avaxPoolsDypExpired
                         : avaxPoolsDyp,
                       expiredPools === true
@@ -3504,19 +3436,19 @@ const EarnTopPicks = ({
                         "120 days",
                         selectedpoolType,
                         expiredPools === true
-                        ? ethPoolsDypExpired
-                        : ethPoolsDyp,
+                          ? ethPoolsDypExpired
+                          : ethPoolsDyp,
                         basePoolsDyp,
                         expiredPools === true
                           ? ethPoolsiDypExpired
                           : ethPoolsiDyp,
-                          expiredPools === true
-                        ? bnbPoolsDypExpired
-                        : bnbPoolsDyp,
+                        expiredPools === true
+                          ? bnbPoolsDypExpired
+                          : bnbPoolsDyp,
                         expiredPools === true
                           ? bnbPoolsiDypExpired
                           : bnbPoolsiDyp,
-                          expiredPools === true
+                        expiredPools === true
                           ? avaxPoolsDypExpired
                           : avaxPoolsDyp,
                         expiredPools === true
@@ -3554,6 +3486,12 @@ const EarnTopPicks = ({
                           ? ethPools.find((item) => {
                               return item.type === "dyp";
                             })
+                            ? ethPools.find((item) => {
+                                return item.type === "dyp";
+                              })
+                            : ethPools.find((item) => {
+                                return item.type === "idyp";
+                              })
                           : selectedPool.type === "idyp" &&
                             expiredPools === false
                           ? ethPools.find((item) => {
@@ -3569,7 +3507,11 @@ const EarnTopPicks = ({
                       className={`d-flex justify-content-center align-items-center chain-popup-text`}
                     >
                       <img
-                        src={selectedchain === "eth" ? ethActive : eth}
+                        src={
+                          selectedchain === "eth"
+                            ? "https://cdn.worldofdypians.com/wod/eth.svg"
+                            : "https://cdn.worldofdypians.com/tools/ethGray.svg"
+                        }
                         alt=""
                         className="popup-chains-icon"
                       />
@@ -3588,21 +3530,44 @@ const EarnTopPicks = ({
 
                       setselectedPool(
                         selectedPool.type === "dyp"
-                        ?
-                        expiredPools === false
-                          ? bnbPools.find((item) => {
-                              return item.type === "dyp";
-                            })
-                            :  bnbPoolsDypExpired.find((item) => {
-                              return item.type === "dyp";
-                            })
+                          ? expiredPools === false
+                            ? bnbPools.find((item) => {
+                                return item.type === "dyp";
+                              })
+                              ? bnbPools.find((item) => {
+                                  return item.type === "dyp";
+                                })
+                              : bnbPools.find((item) => {
+                                  return item.type === "idyp";
+                                })
+                            : bnbPoolsDypExpired.find((item) => {
+                                return item.type === "dyp";
+                              })
+                            ? bnbPoolsDypExpired.find((item) => {
+                                return item.type === "dyp";
+                              })
+                            : bnbPoolsiDypExpired.find((item) => {
+                                return item.type === "idyp";
+                              })
                           : selectedPool.type === "idyp" &&
                             expiredPools === false
                           ? bnbPools.find((item) => {
                               return item.type === "idyp";
                             })
+                            ? bnbPools.find((item) => {
+                                return item.type === "idyp";
+                              })
+                            : bnbPools.find((item) => {
+                                return item.type === "dyp";
+                              })
                           : bnbPoolsiDypExpired.find((item) => {
                               return item.type === "idyp";
+                            })
+                          ? bnbPoolsiDypExpired.find((item) => {
+                              return item.type === "idyp";
+                            })
+                          : bnbPoolsDypExpired.find((item) => {
+                              return item.type === "dyp";
                             })
                       );
                     }}
@@ -3611,7 +3576,11 @@ const EarnTopPicks = ({
                       className={`d-flex justify-content-center align-items-center chain-popup-text`}
                     >
                       <img
-                        src={selectedchain === "bnb" ? bnbActive : bnb}
+                        src={
+                          selectedchain === "bnb"
+                            ? "https://cdn.worldofdypians.com/wod/bnbIcon.svg"
+                            : "https://cdn.worldofdypians.com/tools/bnbGray.svg"
+                        }
                         alt=""
                         className="popup-chains-icon"
                       />
@@ -3633,13 +3602,31 @@ const EarnTopPicks = ({
                           ? basePools.find((item) => {
                               return item.type === "dyp";
                             })
+                            ? basePools.find((item) => {
+                                return item.type === "dyp";
+                              })
+                            : basePools.find((item) => {
+                                return item.type === "idyp";
+                              })
                           : selectedPool.type === "idyp" &&
                             expiredPools === false
                           ? basePools.find((item) => {
                               return item.type === "idyp";
                             })
+                            ? basePools.find((item) => {
+                                return item.type === "idyp";
+                              })
+                            : basePools.find((item) => {
+                                return item.type === "dyp";
+                              })
                           : basePoolsiDypExpired.find((item) => {
                               return item.type === "idyp";
+                            })
+                          ? basePoolsiDypExpired.find((item) => {
+                              return item.type === "idyp";
+                            })
+                          : basePoolsDyp.find((item) => {
+                              return item.type === "dyp";
                             })
                       );
                     }}
@@ -3648,7 +3635,11 @@ const EarnTopPicks = ({
                       className={`d-flex justify-content-center align-items-center chain-popup-text`}
                     >
                       <img
-                        src={selectedchain === "base" ? baseActive : base}
+                        src={
+                          selectedchain === "base"
+                            ? "https://cdn.worldofdypians.com/wod/baseBlueLogo.svg"
+                            : "https://cdn.worldofdypians.com/tools/baseGray.svg"
+                        }
                         alt=""
                         className="popup-chains-icon"
                       />
@@ -3671,17 +3662,41 @@ const EarnTopPicks = ({
                           ? avaxPools.find((item) => {
                               return item.type === "dyp";
                             })
+                            ? avaxPools.find((item) => {
+                                return item.type === "dyp";
+                              })
+                            : avaxPools.find((item) => {
+                                return item.type === "idyp";
+                              })
                           : selectedPool.type === "idyp" &&
                             expiredPools === false
                           ? avaxPools.find((item) => {
                               return item.type === "idyp";
                             })
-                          : selectedPool?.type === 'idyp'?
-                          
-                          avaxPoolsiDypExpired.find((item) => {
+                            ? avaxPools.find((item) => {
+                                return item.type === "idyp";
+                              })
+                            : avaxPools.find((item) => {
+                                return item.type === "dyp";
+                              })
+                          : selectedPool?.type === "idyp"
+                          ? avaxPoolsiDypExpired.find((item) => {
                               return item.type === "idyp";
-                            }) : avaxPoolsDypExpired.find((item) => {
+                            })
+                            ? avaxPoolsiDypExpired.find((item) => {
+                                return item.type === "idyp";
+                              })
+                            : avaxPools.find((item) => {
+                                return item.type === "dyp";
+                              })
+                          : avaxPoolsDypExpired.find((item) => {
                               return item.type === "dyp";
+                            })
+                          ? avaxPoolsDypExpired.find((item) => {
+                              return item.type === "dyp";
+                            })
+                          : avaxPoolsiDypExpired.find((item) => {
+                              return item.type === "idyp";
                             })
                       );
                     }}
@@ -3690,7 +3705,11 @@ const EarnTopPicks = ({
                       className={`d-flex justify-content-center align-items-center chain-popup-text`}
                     >
                       <img
-                        src={selectedchain === "avax" ? avaxActive : avax}
+                        src={
+                          selectedchain === "avax"
+                            ? "https://cdn.worldofdypians.com/wod/avaxIcon.svg"
+                            : "https://cdn.worldofdypians.com/tools/avaxGray.svg"
+                        }
                         alt=""
                         className="popup-chains-icon"
                       />
@@ -3759,8 +3778,8 @@ const EarnTopPicks = ({
                                     "0x92A84052Fe6945949A295AF14a7506e3dc085492" ||
                                   selectedPool?.id ===
                                     "0xFdD3CFF22CF846208E3B37b47Bc36b2c61D2cA8b"
-                                    ? 'https://cdn.worldofdypians.com/tools/warning.svg'
-                                    : 'https://cdn.worldofdypians.com/tools/more-info.svg'
+                                    ? "https://cdn.worldofdypians.com/tools/warning.svg"
+                                    : "https://cdn.worldofdypians.com/tools/more-info.svg"
                                 }
                                 alt=""
                                 onClick={aprOpen}
@@ -4041,7 +4060,7 @@ const EarnTopPicks = ({
                   selectedPool?.id ===
                     "0xC9075092Cc46E176B1F3c0D0EB8223F1e46555B0" &&
                   chain === "eth" ? (
-                    <StakeDypiusEth
+                  <StakeDypiusEth
                     selectedPool={selectedPool}
                     selectedTab={selectedTab}
                     staking={window.constant_staking_dypius_eth1}

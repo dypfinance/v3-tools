@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import ellipse from "./assets/ellipse.svg";
+import React, { useState } from "react"; 
 import arrowup from "./assets/arrow-up.svg"; 
 
 const TopPoolsDetails = ({performanceFee, rewardsToken, contractExp, tvl }) => {
@@ -10,7 +9,7 @@ const TopPoolsDetails = ({performanceFee, rewardsToken, contractExp, tvl }) => {
         <div className="activewrapper">
           <h6 className="activetxt">
             <img
-              src={ellipse}
+              src={'https://cdn.worldofdypians.com/tools/ellipse.svg'}
               alt=""
               className="position-relative"
               style={{ top: '-1px' }}

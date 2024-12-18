@@ -2,20 +2,15 @@ import React from "react";
 import getFormattedNumber from "../../functions/get-formatted-number";
 import Countdown from "react-countdown";
 import "./bridge.css";
-import eth from "./assets/eth.svg";
-import bnb from "./assets/bnb.svg";
-import avax from "./assets/avax.svg";
-import wallet from "./assets/wallet.svg"; 
-import switchicon from "./assets/switch.svg";
-import failMark from "../../assets/failMark.svg";
+  
+import switchicon from "./assets/switch.svg"; 
 import Tooltip from "@material-ui/core/Tooltip";
 import Timeline from "@mui/lab/Timeline";
 import TimelineItem, { timelineItemClasses } from "@mui/lab/TimelineItem";
 import TimelineSeparator from "@mui/lab/TimelineSeparator";
 import TimelineConnector from "@mui/lab/TimelineConnector";
 import TimelineContent from "@mui/lab/TimelineContent";
-import TimelineDot from "@mui/lab/TimelineDot";
-import routeIcon from "./assets/route-icon.svg";
+import TimelineDot from "@mui/lab/TimelineDot"; 
 import Address from "../FARMINNG/address";
 import WalletModal from "../WalletModal";
 import PropTypes from "prop-types";
@@ -580,7 +575,7 @@ export default function initBridge({
                         }}
                       >
                         <h6 className="optiontext d-flex align-items-center gap-2">
-                          <img src={eth} alt="" />
+                          <img src={'https://cdn.worldofdypians.com/tools/ethSquare.svg'} alt="" />
                           <p className=" mb-0 optiontext d-none d-lg-flex">
                             Ethereum
                           </p>
@@ -603,7 +598,7 @@ export default function initBridge({
                           }}
                         >
                           <h6 className="optiontext d-flex align-items-center gap-2">
-                            <img src={bnb} alt="" />
+                            <img src={'https://cdn.worldofdypians.com/tools/bnbSquare.svg'} alt="" />
                             <p className=" mb-0 optiontext d-none d-lg-flex">
                               BNB Chain
                             </p>
@@ -626,7 +621,7 @@ export default function initBridge({
                           }}
                         >
                           <h6 className="optiontext d-flex align-items-center gap-2">
-                            <img src={avax} alt="" />
+                            <img src={'https://cdn.worldofdypians.com/tools/avaxSquare.svg'} alt="" />
                             <p className=" mb-0 optiontext d-none d-lg-flex">
                               Avalanche
                             </p>
@@ -642,7 +637,7 @@ export default function initBridge({
                           this.setState({ showWalletModal: true });
                         }}
                       >
-                        <img src={wallet} alt="" />
+                        <img src={'https://cdn.worldofdypians.com/tools/walletIcon.svg'} alt=""  style={{height: 20, width: 20}}/>
                         Connect wallet
                       </button>
                     ) : (
@@ -813,7 +808,7 @@ export default function initBridge({
                                   <>Success</>
                                 ) : (
                                   <>
-                                    <img src={failMark} alt="" />
+                                    <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
                                     Failed
                                   </>
                                 )}
@@ -881,7 +876,7 @@ export default function initBridge({
                                     }}
                                   >
                                     <h6 className="optiontext d-flex align-items-center gap-2">
-                                      <img src={eth} alt="" />
+                                      <img src={'https://cdn.worldofdypians.com/tools/ethSquare.svg'} alt="" />
                                       <p className=" mb-0 optiontext d-none d-lg-flex">
                                         Ethereum
                                       </p>
@@ -906,7 +901,7 @@ export default function initBridge({
                                       }}
                                     >
                                       <h6 className="optiontext d-flex align-items-center gap-2">
-                                        <img src={bnb} alt="" />
+                                        <img src={'https://cdn.worldofdypians.com/tools/bnbSquare.svg'} alt="" />
                                         <p className=" mb-0 optiontext d-none d-lg-flex">
                                           BNB Chain
                                         </p>
@@ -932,7 +927,7 @@ export default function initBridge({
                                       }}
                                     >
                                       <h6 className="optiontext d-flex align-items-center gap-2">
-                                        <img src={avax} alt="" />
+                                        <img src={'https://cdn.worldofdypians.com/tools/avaxSquare.svg'} alt="" />
                                         <p className=" mb-0 optiontext d-none d-lg-flex">
                                           Avalanche
                                         </p>
@@ -1078,7 +1073,7 @@ export default function initBridge({
                                   <>Success</>
                                 ) : (
                                   <>
-                                    <img src={failMark} alt="" />
+                                    <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
                                     Failed
                                   </>
                                 )}
@@ -1133,7 +1128,7 @@ export default function initBridge({
             </div>
             <div>
               <h6 className="guidetitle">
-                <img src={routeIcon} alt="" />
+                <img src={'https://cdn.worldofdypians.com/tools/route-icon.svg'} alt="" />
                 Bridge process guide
               </h6>
               <div className="separator"></div>

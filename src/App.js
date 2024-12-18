@@ -25,10 +25,6 @@ import Governancebsc from "./components/governance/dev/governance-new-bsc";
 import GovernanceEth from "./components/governance/dev/governance-new";
 import { Navigate } from "react-router-dom";
 // import LandFlyout from "./components/LandFlyout/LandFlyout";
-// import Launchpad from "./components/launchpad/Launchpad";
-// import LaunchpadForm from "./components/launchpad/launchpadform/LaunchpadForm";
-// import LaunchpadDetails from "./components/launchpad/launchpaddetails/LaunchpadDetails";
-// import TierLevels from "./components/launchpad/tierlevels/TierLevels";
 // import NftMinting from "./components/caws/NftMinting/index";
 import Bridge from "./components/bridge/BridgeGeneral";
 import Footer from "./components/Footer/footer";
@@ -45,7 +41,6 @@ import Plans from "./components/account/Plans";
 import DypMigration from "./components/bridge/DypMigration";
 import AlertRibbon from "./components/alert-ribbon/AlertRibbon";
 import EarnOther from "./components/earnOther/EarnOther";
-import EarnInnerPool from "./components/earnOther/EarnInnerPool/EarnInnerPool";
 import EarnOtherNft from "./components/earnOther/EarnOtherNft";
 import EarnInnerPoolNft from "./components/earnOther/EarnInnerPool/EarnInnerPoolNft";
 import WalletModal from "./components/WalletModal";
@@ -1772,25 +1767,7 @@ setweeklyplayerData
 setpreviousKittyDashVersion
 setkittyDashRecords */}
 
-                  <Route
-                    exact
-                    path="/earn/defi-staking/:pool"
-                    element={
-                      <EarnInnerPool
-                        coinbase={coinbase}
-                        handleSwitchNetwork={handleSwitchNetwork}
-                        handleConnection={handleConnection}
-                        isConnected={isConnected}
-                        chainId={networkId}
-                        the_graph_result={the_graph_result_ETH_V2}
-                        the_graph_resultavax={the_graph_result_AVAX_V2}
-                        the_graph_resultbsc={the_graph_result_BSC_V2}
-                        lp_id={LP_ID_Array}
-                        referrer={referrer}
-                        isPremium={isPremium}
-                      />
-                    }
-                  />
+              
 
                   <Route
                     exact
@@ -2155,7 +2132,7 @@ setkittyDashRecords */}
       {(window.location?.pathname === "/genesis" && window.innerWidth < 786) ||
       (window.location?.pathname === "/caws-staking" &&
         window.innerWidth < 786) ? null : (
-        <Footer></Footer>
+        <Footer/>
       )}
 
       {(showMobilePopup === true || downloadClick === true) && (
