@@ -4,21 +4,16 @@ import getFormattedNumber from "../../../functions/get-formatted-number";
 import Modal from "../../Modal/Modal";
 import Address from "../../FARMINNG/address";
 import WalletModal from "../../WalletModal";
-import "../../FARMINNG/top-pools.css";
-import ellipse from "../../FARMINNG/assets/ellipse.svg";
+import "../../FARMINNG/top-pools.css"; 
 // import failMark from "../../assets/failMark.svg";
 import Clipboard from "react-clipboard.js";
 import ReactTooltip from "react-tooltip";
-import arrowup from "../../FARMINNG/assets/arrow-up.svg";
-import moreinfo from "../../FARMINNG/assets/more-info.svg";
-import purplestats from "../../FARMINNG/assets/purpleStat.svg";
+import arrowup from "../../FARMINNG/assets/arrow-up.svg";  
 import referralimg from "../../FARMINNG/assets/referral.svg";
 import copy from "../../FARMINNG/assets/copy.svg";
 import wallet from "../../FARMINNG/assets/wallet.svg";
 import Tooltip from "@material-ui/core/Tooltip";
-import Countdown from "react-countdown";
-import poolsCalculatorIcon from "../../FARMINNG/assets/poolsCalculatorIcon.svg";
-import statsLinkIcon from "../../FARMINNG/assets/statsLinkIcon.svg";
+import Countdown from "react-countdown"; 
 import { shortAddress } from "../../../functions/shortAddress";
 import { ClickAwayListener } from "@material-ui/core";
 import { handleSwitchNetworkhook } from "../../../functions/hooks";
@@ -761,7 +756,7 @@ const StakeBscOther = ({
             >
               <h6 className="activetxt">
                 <img
-                  src={ellipse}
+                  src={'https://cdn.worldofdypians.com/tools/ellipse.svg'}
                   alt=""
                   className="position-relative"
                   style={{ top: "-1px" }}
@@ -796,7 +791,7 @@ const StakeBscOther = ({
                           }
                         >
                           <img
-                            src={moreinfo}
+                            src={'https://cdn.worldofdypians.com/tools/more-info.svg'}
                             alt=""
                             onClick={performanceOpen}
                           />
@@ -824,7 +819,7 @@ const StakeBscOther = ({
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={aprOpen} />
+                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={aprOpen} />
                         </Tooltip>
                       </ClickAwayListener>
                     </h6>
@@ -848,7 +843,7 @@ const StakeBscOther = ({
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={lockOpen} />
+                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={lockOpen} />
                         </Tooltip>
                       </ClickAwayListener>
                     </h6>
@@ -859,7 +854,7 @@ const StakeBscOther = ({
                     className="bottomitems"
                     onClick={() => setshowCalculator(true)}
                   >
-                    <img src={poolsCalculatorIcon} alt="" />
+                    <img src={'https://cdn.worldofdypians.com/tools/poolsCalculatorIcon.svg'} alt="" />
                     Calculator
                   </h6>
                   <a
@@ -883,7 +878,7 @@ const StakeBscOther = ({
                     }}
                   >
                     <h6 className="bottomitems">
-                      <img src={purplestats} alt="" />
+                      <img src={'https://cdn.worldofdypians.com/tools/purpleStat.svg'} alt="" />
                       Stats
                     </h6>
                   </div>
@@ -988,7 +983,7 @@ const StakeBscOther = ({
                       </div>
                     }
                   >
-                    <img src={moreinfo} alt="" onClick={depositOpen} />
+                    <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={depositOpen} />
                   </Tooltip>
                 </ClickAwayListener>
               </div>
@@ -1141,7 +1136,7 @@ const StakeBscOther = ({
                         </div>
                       }
                     >
-                      <img src={moreinfo} alt="" onClick={rewardsOpen} />
+                      <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={rewardsOpen} />
                     </Tooltip>
                   </ClickAwayListener>
                 </h6>
@@ -1286,7 +1281,7 @@ const StakeBscOther = ({
                       </div>
                     }
                   >
-                    <img src={moreinfo} alt="" onClick={withdrawOpen} />
+                    <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={withdrawOpen} />
                   </Tooltip>
                 </ClickAwayListener>
               </h6>
@@ -1514,7 +1509,7 @@ const StakeBscOther = ({
                       className="stats-link"
                     >
                       {shortAddress(coinbase)}{" "}
-                      <img src={statsLinkIcon} alt="" />
+                      <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                     </a>
                     <a
                       target="_blank"
@@ -1522,7 +1517,7 @@ const StakeBscOther = ({
                       href={`https://github.com/dypfinance/staking-governance-security-audits`}
                       className="stats-link"
                     >
-                      Audit <img src={statsLinkIcon} alt="" />
+                      Audit <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                     </a>
                     <a
                       target="_blank"
@@ -1530,7 +1525,7 @@ const StakeBscOther = ({
                       href={`${window.config.bscscan_baseURL}/token/${reward_tokenwbnb._address}?a=${coinbase}`}
                       className="stats-link"
                     >
-                      View transaction <img src={statsLinkIcon} alt="" />
+                      View transaction <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                     </a>
                   </div>
                 </div>

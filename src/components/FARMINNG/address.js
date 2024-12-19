@@ -1,7 +1,6 @@
 import React from "react";
 import ReactTooltip from "react-tooltip";
-import Clipboard from "react-clipboard.js";
-import copy from "./assets/copy.svg";
+import Clipboard from "react-clipboard.js"; 
 
 export default function Address(props) {
   let id = Math.random().toString(36);
@@ -39,7 +38,7 @@ export default function Address(props) {
             paddingLeft: ".4rem",
           }}
         >
-          <img src={copy} alt="" />
+          <img src={'https://cdn.worldofdypians.com/tools/copyGreen.svg'} alt="" />
         </span>
       </Clipboard>
       <ReactTooltip id={id} effect="solid" />

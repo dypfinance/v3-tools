@@ -1,7 +1,7 @@
 import React from "react";
 import "./mobileFlyout.css";
 import newTag from "./newTag.svg";
-import close from "../general/close.svg";
+
 const MobileFlyout = ({ onClose,onDownloadClick }) => {
   return (
     <div className="mobile-flyout-wrapper p-2 w-100 d-block d-lg-none d-md-none">
@@ -13,7 +13,7 @@ const MobileFlyout = ({ onClose,onDownloadClick }) => {
         </div>
         <div className="d-flex justify-content-end">
           <img
-            src={close}
+            src={'https://cdn.worldofdypians.com/wod/xMark.svg'}
             alt=""
             onClick={onClose}
             style={{ width: 22, height: 22 }}

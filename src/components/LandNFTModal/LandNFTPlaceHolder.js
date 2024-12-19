@@ -16,7 +16,7 @@ const NftPlaceHolder = ({ onMintClick }) => {
             style={{ border: "1px grey dashed", borderRadius: "8px" }}
           >
             <img
-              src={require("./landplaceholder.svg").default}
+              src={"https://cdn.worldofdypians.com/tools/landplaceholder.svg"}
               alt=""
               className="placeholder-content-img"
               style={{ width: 135, height: 110, scale: "0.8" }}

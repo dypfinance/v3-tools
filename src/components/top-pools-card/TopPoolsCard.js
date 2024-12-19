@@ -1,21 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "./top-pools.css";
-import greenArrow from "./assets/greenarrow.svg";
-import purpleArrow from "./assets/purpleArrow.svg";
-
-import orangeArrow from "./assets/orangearrow.svg";
-import TopPoolsDetails from "./TopPoolsDetails";
-import newPool from "./assets/newPool.png";
-import staked from "./assets/staked.svg";
-import topPick from "./assets/toppick.svg";
-import comingSoon from "./assets/comingSoon.svg";
-
-import stakeTag from "../../assets/earnAssets/stakeTag.svg";
-import vaultTag from "../../assets/earnAssets/vaultTag.svg";
-import cawsLabel from "./assets/cawsLabel.svg";
-
-import buybackTag from "../../assets/earnAssets/buybackTag.svg";
-import getFormattedNumber from "../../functions/getFormattedNumber2";
 
 const TopPoolsCard = ({
   isAccount,
@@ -93,8 +77,6 @@ const TopPoolsCard = ({
     }
   }, [chain]);
 
- 
-
   return (
     <>
       <div
@@ -112,29 +94,43 @@ const TopPoolsCard = ({
       >
         {isStaked && isPremium && (
           <img
-            src={staked}
+            src={"https://cdn.worldofdypians.com/tools/staked.svg"}
             className="staked"
             alt="staked"
             style={{ right: isAccount === true ? 60 : "" }}
           />
         )}
         {top_pick === true && (
-          <img src={topPick} className="toppick" alt="top pick" />
+          <img
+            src={"https://cdn.worldofdypians.com/tools/toppick.svg"}
+            className="toppick"
+            alt="top pick"
+          />
         )}
-        {tvl === '--' && (
-          <img src={comingSoon} className="comingsoon" alt="top pick" />
+        {tvl === "--" && (
+          <img
+            src={"https://cdn.worldofdypians.com/tools/comingSoon.svg"}
+            className="comingsoon"
+            alt="top pick"
+          />
         )}
-        {isNewPool && <img src={newPool} className="new-pool" alt="new pool" />}
+        {isNewPool && (
+          <img
+            src={"https://cdn.worldofdypians.com/tools/newPool.png"}
+            className="new-pool"
+            alt="new pool"
+          />
+        )}
         {tag && (
           <img
             src={
               tag === "stake"
-                ? stakeTag
+                ? "https://cdn.worldofdypians.com/tools/stakeTag.svg"
                 : tag === "vault"
-                ? vaultTag
+                ? "https://cdn.worldofdypians.com/tools/vaultTag.svg"
                 : tag === "nft"
-                ? cawsLabel
-                : buybackTag
+                ? "https://cdn.worldofdypians.com/tools/cawsLabel.svg"
+                : "https://cdn.worldofdypians.com/tools/buybackTag.svg"
             }
             alt="pool-tag"
             className="dashboard-pool-tag d-none d-lg-flex"
@@ -148,13 +144,14 @@ const TopPoolsCard = ({
         <div className="d-flex flex-column gap-0">
           <div className="d-flex m-0 justify-content between gap-2 align-items-center justify-content-between title-apr-wrapper">
             <div className="d-flex align-items-center">
-              {(cardType === "Farming" || cardType === "Buyback") && tokenLogo !=="bsc.svg" 
+              {(cardType === "Farming" || cardType === "Buyback") &&
+              tokenLogo !== "bsc.svg"
                 ? coins.length > 0 &&
                   coins.slice(0, 5).map((coin, index) => (
                     <h6 className="token-name d-flex align-items-center gap-2">
                       <img
                         key={index}
-                        src={require(`./assets/${coin}.svg`)}
+                        src={`https://cdn.worldofdypians.com/tools/${coin}.svg`}
                         alt=""
                         className="pool-coins"
                       />
@@ -164,7 +161,7 @@ const TopPoolsCard = ({
                 : tokenLogo !== undefined && (
                     <h6 className="token-name d-flex align-items-center gap-2">
                       <img
-                        src={require(`./assets/${tokenLogo}`)}
+                        src={`https://cdn.worldofdypians.com/tools/${tokenLogo}`}
                         alt=""
                         className="tokenlogo"
                         width={32}
@@ -228,12 +225,12 @@ const TopPoolsCard = ({
                 <img
                   src={
                     details === false && expired === false
-                      ? greenArrow
+                      ? "https://cdn.worldofdypians.com/tools/greenarrow.svg"
                       : details === false && expired === true
-                      ? purpleArrow
+                      ? "https://cdn.worldofdypians.com/tools/purpleArrow.svg"
                       : details === true && expired === true
-                      ? orangeArrow
-                      : orangeArrow
+                      ? "https://cdn.worldofdypians.com/tools/orangearrow.svg"
+                      : "https://cdn.worldofdypians.com/tools/orangearrow.svg"
                   }
                   alt=""
                 />

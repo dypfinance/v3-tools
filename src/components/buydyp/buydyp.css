@@ -13,6 +13,13 @@
   color: #d6d8e7 !important;
 }
 
+.prev-arrow{
+  transform: rotate(180deg);
+}
+
+ .novidimg {
+  width: fit-content !important;
+ }
 .vendor-container{
     grid-template-columns: repeat(2,1fr);
     gap: 24px;
@@ -82,7 +89,7 @@ color: #4ED5D2 !important;
 
 .selected-vendor-card{
   border: 2px solid #857DFA !important;
-  background-image: url('./assets/vendorCardBackground.png');
+  background-image: url('https://cdn.worldofdypians.com/tools/vendorCardBackground.png');
   background-size: cover;
   background-repeat: no-repeat;
 }

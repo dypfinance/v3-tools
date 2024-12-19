@@ -12,7 +12,7 @@ const NftPlaceHolder = ({ onMintClick, width }) => {
       >
         <div className="placeholder-content">
           <img
-            src={require("./cat_desktop.jpeg")}
+            src={"https://cdn.worldofdypians.com/tools/cat_desktop.jpeg"}
             alt=""
             className="placeholder-content-img"
           />

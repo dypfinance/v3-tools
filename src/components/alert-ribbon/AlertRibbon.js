@@ -1,7 +1,6 @@
 import React from "react";
 import "./alertribon.css";
-import Countdown from "react-countdown";
-import close from "../general/close.svg";
+import Countdown from "react-countdown"; 
 
 const renderer = ({ days }) => {
   return <>{days < 10 ? "0" + days : days}</>;
@@ -21,7 +20,7 @@ const AlertRibbon = ({ onClose, onComplete }) => {
             🚨
           </span>
         </div>
-        <img src={close} alt="" className="ribbon-x" onClick={onClose} />
+        <img src={'https://cdn.worldofdypians.com/wod/xMark.svg'} alt="" className="ribbon-x" onClick={onClose} />
       </div>
     </div>
   );

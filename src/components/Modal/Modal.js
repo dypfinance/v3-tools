@@ -1,5 +1,4 @@
-import React from "react";
-import xMark from "./xMark.svg";
+import React from "react"; 
 import withdrawIcon from "./withdrawIcon.svg";
 import statsIcon from "./statsIcon.svg";
 import calculatorIcon from "../calculator/assets/calculator.svg";
@@ -64,7 +63,7 @@ const Modal = ({ visible, modalId, setIsVisible, children, title, width, maxHeig
               </h6>
             </div>
             <img
-              src={xMark}
+              src={'https://cdn.worldofdypians.com/wod/xMark.svg'}
               style={{ cursor: "pointer" }}
               onClick={closeModal}
             />

@@ -1,6 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import Slider from "react-slick";
-import bscBgDesktop from "../assets/bscBg.webp";
+import Slider from "react-slick"; 
 import { useNavigate } from "react-router-dom";
 
 const EarnOtherHero = ({ type, isPremium, onSliderClick }) => {
@@ -140,7 +139,7 @@ const EarnOtherHero = ({ type, isPremium, onSliderClick }) => {
                     </div>
                     {item.apr && item.apr !== "" && (
                       <img
-                        src={require(`../assets/${item.apr}`)}
+                        src={`https://cdn.worldofdypians.com/tools/${item.apr}`}
                         className="aprimage"
                       />
                     )}
@@ -173,7 +172,7 @@ const EarnOtherHero = ({ type, isPremium, onSliderClick }) => {
                     </div>
                     {item.apr && item.apr !== "" && (
                       <img
-                        src={require(`../assets/${item.apr}`)}
+                        src={`https://cdn.worldofdypians.com/tools/${item.apr}`}
                         className="aprimage"
                       />
                     )}

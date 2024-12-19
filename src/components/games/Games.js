@@ -2,41 +2,19 @@ import React, { useState, useEffect, useRef } from "react";
 import "./games.scss";
 import getFormattedNumber from "../../functions/get-formatted-number";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
-import winConfetti from "./assets/winConfetti.png";
-import NewChestItem from "./NewChestItem";
-import useWindowSize from "../../functions/useWindowSize";
-import danger from "./assets/danger.svg";
-// import warning from "./assets/warning.svg";
-import baseLogo from "./assets/baseLogo.svg";
-import bnbLogo from "./assets/bnb.svg";
-
-import stoneCrack from "./assets/stoneCrack.svg";
-import mainChest from "./assets/mainChest.webp";
-import mainChestCracked from "./assets/mainChestCracked.webp";
-
-// import kittyDash from "./assets/kittyDash.webp";
-import stoneCrackBanner from "./assets/stoneCrackBanner.png";
-import cawsAdventureBanner from "./assets/cawsAdventureBanner.png";
-import kittyDashBanner from "./assets/kittyDashBanner.png";
-import cawsAdventures from "./assets/cawsAdventures.webp";
-import Leaderboard from "../leaderboard/Leaderboard";
-import pointsIcon from "./assets/pointsIcon.png";
-import gemIcon from "./assets/gemIcon.png";
-import spark from "./assets/spark.svg";
-import leaderboardsCup from "./assets/leaderboardsCup.png";
-import StoneCrackPopup from "./components/StoneCrackPopup";
-import KittyDashPopup from "./components/KittyDashPopup";
-import CawsAdventurePopup from "./components/CawsAdventurePopup";
 import { NavLink } from "react-router-dom";
+import OutsideClickHandler from "react-outside-click-handler";
+import useWindowSize from "../../functions/useWindowSize";
 import errorSound from "./assets/error.mp3";
 import crackStoneSound from "./assets/stone-crack-sound.mp3";
 import crackedStoneSound from "./assets/stone-cracked-sound.mp3";
 import crackedGemSound from "./assets/crackedGem.mp3";
-import stoneCrackHeader from "./assets/stoneCrackHeader.png";
-import OutsideClickHandler from "react-outside-click-handler";
-import { Tooltip } from "@material-ui/core";
-import tooltipIcon from "../leaderboard/assets/tooltipIcon.svg";
-import arrowup from "./assets/arrow-up.svg";
+
+import NewChestItem from "./NewChestItem";
+import CawsAdventurePopup from "./components/CawsAdventurePopup";
+import StoneCrackPopup from "./components/StoneCrackPopup";
+import KittyDashPopup from "./components/KittyDashPopup";
+import Leaderboard from "../leaderboard/Leaderboard";
 
 const Games = ({
   handleConnection,
@@ -829,7 +807,9 @@ const Games = ({
                     }
                   >
                     <img
-                      src={stoneCrackBanner}
+                      src={
+                        "https://cdn.worldofdypians.com/tools/stoneCrackBanner.png"
+                      }
                       className="game-leaderboard-img"
                       alt=""
                     />
@@ -845,7 +825,9 @@ const Games = ({
                     }
                   >
                     <img
-                      src={kittyDashBanner}
+                      src={
+                        "https://cdn.worldofdypians.com/tools/kittyDashBanner.png"
+                      }
                       className="game-leaderboard-img"
                       alt=""
                     />
@@ -861,7 +843,9 @@ const Games = ({
                     }
                   >
                     <img
-                      src={cawsAdventureBanner}
+                      src={
+                        "https://cdn.worldofdypians.com/tools/cawsAdventureBanner.png"
+                      }
                       className="game-leaderboard-img"
                       alt=""
                     />
@@ -886,7 +870,9 @@ const Games = ({
                   <p className="games-banner-desc mb-0">See where you stand</p>
                 </div>
                 <img
-                  src={leaderboardsCup}
+                  src={
+                    "https://cdn.worldofdypians.com/tools/leaderboardsCup.png"
+                  }
                   width={50}
                   alt=""
                   style={{ cursor: "pointer" }}
@@ -902,14 +888,16 @@ const Games = ({
             <div className="d-flex w-100 align-items-center gap-2 position-relative justify-content-between">
               <div className="w-100 d-flex justify-content-center">
                 <img
-                  src={stoneCrackHeader}
+                  src={
+                    "https://cdn.worldofdypians.com/tools/stoneCrackHeader.png"
+                  }
                   alt=""
                   className="stone-crack-header"
                 />
               </div>
 
               <img
-                src={tooltipIcon}
+                src={"https://cdn.worldofdypians.com/tools/tooltipIcon.svg"}
                 alt=""
                 onClick={() => {
                   setpopup(true);
@@ -946,7 +934,12 @@ const Games = ({
                           }}
                         >
                           <h6 className="bottomitems">
-                            <img src={arrowup} alt="" />
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/tools/arrow-up.svg"
+                              }
+                              alt=""
+                            />
                             Bridge DYP on Base SuperBridge
                           </h6>
                         </a>
@@ -1533,7 +1526,9 @@ const Games = ({
                         </div>
 
                         <img
-                          src={winConfetti}
+                          src={
+                            "https://cdn.worldofdypians.com/tools/winConfetti.png"
+                          }
                           alt=""
                           className="win-confetti"
                         />
@@ -1549,7 +1544,14 @@ const Games = ({
                         >
                           <h6 className="win-text mb-0">You won</h6>
                           <div className="d-flex align-items-center gap-2">
-                            <img src={danger} alt="" width={20} height={20} />
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/tools/danger.svg"
+                              }
+                              alt=""
+                              width={20}
+                              height={20}
+                            />
                             <span className="win-desc mb-0">
                               The{" "}
                               <span style={{ color: "#F2C624" }}>
@@ -1649,7 +1651,9 @@ const Games = ({
                         </div>
 
                         <img
-                          src={winConfetti}
+                          src={
+                            "https://cdn.worldofdypians.com/tools/winConfetti.png"
+                          }
                           alt=""
                           className="win-confetti"
                         />
@@ -1687,7 +1691,9 @@ const Games = ({
                         </div>
 
                         <img
-                          src={winConfetti}
+                          src={
+                            "https://cdn.worldofdypians.com/tools/winConfetti.png"
+                          }
                           alt=""
                           className="win-confetti"
                         />
@@ -1819,9 +1825,27 @@ const Games = ({
                         class={`animation-container position-${sparkles.position}`}
                       >
                         <div class="spark-wrapper">
-                          <img src={spark} class="spark-1" alt="Spark" />
-                          <img src={spark} class="spark-2" alt="Spark" />
-                          <img src={spark} class="spark-3" alt="Spark" />
+                          <img
+                            src={
+                              "https://cdn.worldofdypians.com/tools/spark.svg"
+                            }
+                            class="spark-1"
+                            alt="Spark"
+                          />
+                          <img
+                            src={
+                              "https://cdn.worldofdypians.com/tools/spark.svg"
+                            }
+                            class="spark-2"
+                            alt="Spark"
+                          />
+                          <img
+                            src={
+                              "https://cdn.worldofdypians.com/tools/spark.svg"
+                            }
+                            class="spark-3"
+                            alt="Spark"
+                          />
                         </div>
                       </div>
                     )}
@@ -1880,22 +1904,49 @@ const Games = ({
                       </div>
                     </div>
                     <div className="position-relative">
-                      {chain === "base" ? (
-                        openedChests && openedChests.length === 20 ? (
-                          <img src={mainChestCracked} alt="" />
-                        ) : openedChests && openedChests.length < 20 ? (
-                          <img src={mainChest} alt="" />
-                        ) : (
-                          <img src={mainChest} alt="" />
-                        )
-                      ) : openedOpbnbChests &&
-                        openedOpbnbChests.length === 20 ? (
-                        <img src={mainChestCracked} alt="" />
-                      ) : openedOpbnbChests && openedOpbnbChests.length < 20 ? (
-                        <img src={mainChest} alt="" />
+                      {chain === "base" ? (openedChests && openedChests.length === 20 ? (
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/tools/mainChestCracked.webp"
+                          }
+                          alt=""
+                        />
+                      ) : openedChests && openedChests.length < 20 ? (
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/tools/mainChest.webp"
+                          }
+                          alt=""
+                        />
                       ) : (
-                        <img src={mainChest} alt="" />
-                      )}
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/tools/mainChest.webp"
+                          }
+                          alt=""
+                        />
+                      )) :(openedOpbnbChests  && openedOpbnbChests .length === 20 ? (
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/tools/mainChestCracked.webp"
+                          }
+                          alt=""
+                        />
+                      ) : openedOpbnbChests  && openedOpbnbChests .length < 20 ? (
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/tools/mainChest.webp"
+                          }
+                          alt=""
+                        />
+                      ) : (
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/tools/mainChest.webp"
+                          }
+                          alt=""
+                        />
+                      )) }
                       {chain === "base" && (
                         <div className="position-absolute rocks-wrapper">
                           <div className="d-flex flex-column justify-content-center align-items-center position-relative w-100 h-100">
@@ -1917,9 +1968,10 @@ const Games = ({
                                   }}
                                 >
                                   <img
-                                    src={require(`./assets/rocksBg/${
+                                
+                                    src={`https://cdn.worldofdypians.com/tools/${
                                       index + 1
-                                    }.png`)}
+                                    }.png`}
                                     className="rock-img"
                                     alt=""
                                   />
@@ -1944,9 +1996,10 @@ const Games = ({
                                   }}
                                 >
                                   <img
-                                    src={require(`./assets/rocksBg/${
+                                 
+                                    src={`https://cdn.worldofdypians.com/tools/${
                                       index + 5
-                                    }.png`)}
+                                    }.png`}
                                     className="rock-img"
                                     alt=""
                                   />
@@ -1971,9 +2024,10 @@ const Games = ({
                                   }}
                                 >
                                   <img
-                                    src={require(`./assets/rocksBg/${
+                                
+                                    src={`https://cdn.worldofdypians.com/tools/${
                                       index + 10
-                                    }.png`)}
+                                    }.png`}
                                     className="rock-img"
                                     alt=""
                                   />
@@ -1999,9 +2053,9 @@ const Games = ({
                                   }}
                                 >
                                   <img
-                                    src={require(`./assets/rocksBg/${
+                                    src={`https://cdn.worldofdypians.com/tools/${
                                       index + 15
-                                    }.png`)}
+                                    }.png`}
                                     className="rock-img"
                                     alt=""
                                   />
@@ -2035,9 +2089,9 @@ const Games = ({
                                   }}
                                 >
                                   <img
-                                    src={require(`./assets/rocksBg/${
+                                    src={`.https://cdn.worldofdypians.com/tools/${
                                       index + 1
-                                    }.png`)}
+                                    }.png`}
                                     className="rock-img"
                                     alt=""
                                   />
@@ -2064,9 +2118,9 @@ const Games = ({
                                   }}
                                 >
                                   <img
-                                    src={require(`./assets/rocksBg/${
+                                    src={`https://cdn.worldofdypians.com/tools/${
                                       index + 5
-                                    }.png`)}
+                                    }.png`}
                                     className="rock-img"
                                     alt=""
                                   />
@@ -2093,9 +2147,9 @@ const Games = ({
                                   }}
                                 >
                                   <img
-                                    src={require(`./assets/rocksBg/${
+                                    src={`https://cdn.worldofdypians.com/tools/${
                                       index + 10
-                                    }.png`)}
+                                    }.png`}
                                     className="rock-img"
                                     alt=""
                                   />
@@ -2123,9 +2177,9 @@ const Games = ({
                                   }}
                                 >
                                   <img
-                                    src={require(`./assets/rocksBg/${
+                                    src={`https://cdn.worldofdypians.com/tools/${
                                       index + 15
-                                    }.png`)}
+                                    }.png`}
                                     className="rock-img"
                                     alt=""
                                   />
@@ -2155,7 +2209,9 @@ const Games = ({
                           } new-rewards-item p-2 d-flex align-items-center gap-2`}
                         >
                           <img
-                            src={pointsIcon}
+                            src={
+                              "https://cdn.worldofdypians.com/tools/pointsIcon.png"
+                            }
                             alt=""
                             style={{
                               width: 48,
@@ -2412,7 +2468,9 @@ const Games = ({
                             }) &&
                             message === "gem" && (
                               <img
-                                src={danger}
+                                src={
+                                  "https://cdn.worldofdypians.com/tools/danger.svg"
+                                }
                                 width={20}
                                 height={20}
                                 className="reward-warning"
@@ -2420,7 +2478,9 @@ const Games = ({
                               />
                             )}
                           <img
-                            src={gemIcon}
+                            src={
+                              "https://cdn.worldofdypians.com/tools/gemIcon.png"
+                            }
                             alt=""
                             style={{
                               width: 48,
@@ -2490,7 +2550,7 @@ const Games = ({
           style={{ zIndex: 2 }}
         >
           <img
-            src={require("./assets/xMark.svg").default}
+            src={'https://cdn.worldofdypians.com/wod/xMark.svg'}
             alt=""
             style={{ cursor: "pointer" }}
             onClick={() => setActive(false)}

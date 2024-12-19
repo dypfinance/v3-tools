@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import "./top-pools.css";
-import greenArrow from "./assets/greenarrow.svg";
-import orangeArrow from "./assets/orangearrow.svg";
-import newPool from "./assets/newPool.png";
-// import staked from "./assets/staked.svg";
-// import topPick from "./assets/cawsbanner.svg";
-import purpleArrow from "./assets/purpleArrow.svg";
+import "./top-pools.css";   
 
 const CawsWodCard = ({
   cardId,
@@ -123,12 +117,12 @@ const CawsWodCard = ({
               <img
                 src={
                   details === false && expired === false
-                    ? greenArrow
+                    ? 'https://cdn.worldofdypians.com/tools/greenarrow.svg'
                     : details === false && expired === true
-                    ? purpleArrow
+                    ? 'https://cdn.worldofdypians.com/tools/purpleArrow.svg'
                     : details === true && expired === true
-                    ? orangeArrow
-                    : orangeArrow
+                    ? 'https://cdn.worldofdypians.com/tools/orangearrow.svg'
+                    : 'https://cdn.worldofdypians.com/tools/orangearrow.svg'
                 }
                 alt=""
               />

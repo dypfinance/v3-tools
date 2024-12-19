@@ -5,21 +5,14 @@ import Modal from "../Modal/Modal";
 import Address from "./address";
 import WalletModal from "../WalletModal";
 import "./top-pools.css";
-import { shortAddress } from "../../functions/shortAddress";
-import ellipse from "./assets/ellipse.svg";
-import Clipboard from "react-clipboard.js";
-import failMark from "../../assets/failMark.svg";
+import { shortAddress } from "../../functions/shortAddress"; 
+import Clipboard from "react-clipboard.js"; 
 import ReactTooltip from "react-tooltip";
-import arrowup from "./assets/arrow-up.svg";
-import moreinfo from "./assets/more-info.svg";
-import purplestats from "./assets/purpleStat.svg";
+import arrowup from "./assets/arrow-up.svg";  
 import referralimg from "./assets/referral.svg";
-import copy from "./assets/copy.svg";
-import wallet from "./assets/wallet.svg";
+import copy from "./assets/copy.svg"; 
 import Tooltip from "@material-ui/core/Tooltip";
-import Countdown from "react-countdown";
-import statsLinkIcon from "./assets/statsLinkIcon.svg";
-import poolsCalculatorIcon from "./assets/poolsCalculatorIcon.svg";
+import Countdown from "react-countdown";  
 import { ClickAwayListener } from "@material-ui/core";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
 import axios from "axios";
@@ -729,7 +722,7 @@ settvlUSD(tvlUSD)
               ) : (
                 <h6 className="activetxt">
                   <img
-                    src={ellipse}
+                    src={'https://cdn.worldofdypians.com/tools/ellipse.svg'}
                     alt=""
                     className="position-relative"
                     style={{ top: "-1px" }}
@@ -760,7 +753,7 @@ settvlUSD(tvlUSD)
                           }
                         >
                           <img
-                            src={moreinfo}
+                            src={'https://cdn.worldofdypians.com/tools/more-info.svg'}
                             alt=""
                             onClick={performanceOpen}
                           />
@@ -788,7 +781,7 @@ settvlUSD(tvlUSD)
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={aprOpen} />
+                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={aprOpen} />
                         </Tooltip>
                       </ClickAwayListener>
                     </h6>
@@ -812,7 +805,7 @@ settvlUSD(tvlUSD)
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={lockOpen} />
+                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={lockOpen} />
                         </Tooltip>
                       </ClickAwayListener>
                     </h6>
@@ -823,7 +816,7 @@ settvlUSD(tvlUSD)
                     className="bottomitems"
                     onClick={() => setshowCalculator(true)}
                   >
-                    <img src={poolsCalculatorIcon} alt="" />
+                    <img src={'https://cdn.worldofdypians.com/tools/poolsCalculatorIcon.svg'} alt="" />
                     Calculator
                   </h6>
                   <a
@@ -844,7 +837,7 @@ settvlUSD(tvlUSD)
                     }}
                   >
                     <h6 className="bottomitems">
-                      <img src={purplestats} alt="" />
+                      <img src={'https://cdn.worldofdypians.com/tools/purpleStat.svg'} alt="" />
                       Stats
                     </h6>
                   </div>
@@ -866,7 +859,7 @@ settvlUSD(tvlUSD)
                 coinbase === undefined ||
                 is_wallet_connected === false ? (
                   <button className="connectbtn btn" onClick={showModal}>
-                    <img src={wallet} alt="" /> Connect wallet
+                    <img src={'https://cdn.worldofdypians.com/tools/walletIcon.svg'} alt="" /> Connect wallet
                   </button>
                 ) : chainId === "43114" ? (
                   <div className="addressbtn btn">
@@ -919,7 +912,7 @@ settvlUSD(tvlUSD)
                       </div>
                     }
                   >
-                    <img src={moreinfo} alt="" onClick={depositOpen} />
+                    <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={depositOpen} />
                   </Tooltip>
                 </ClickAwayListener>
               </div>
@@ -1010,7 +1003,7 @@ settvlUSD(tvlUSD)
                       <>Success</>
                     ) : (
                       <>
-                        <img src={failMark} alt="" />
+                        <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
                         Failed
                       </>
                     )}
@@ -1043,7 +1036,7 @@ settvlUSD(tvlUSD)
                         </div>
                       }
                     >
-                      <img src={moreinfo} alt="" onClick={rewardsOpen} />
+                      <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={rewardsOpen} />
                     </Tooltip>
                   </ClickAwayListener>
                 </h6>
@@ -1099,7 +1092,7 @@ settvlUSD(tvlUSD)
                         </div>
                       ) : claimStatus === "failed" ? (
                         <>
-                          <img src={failMark} alt="" />
+                          <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
                           Failed
                         </>
                       ) : claimStatus === "success" ? (
@@ -1132,7 +1125,7 @@ settvlUSD(tvlUSD)
                         </div>
                       ) : reInvestStatus === "failed" ? (
                         <>
-                          <img src={failMark} alt="" />
+                          <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
                           Failed
                         </>
                       ) : reInvestStatus === "success" ? (
@@ -1168,7 +1161,7 @@ settvlUSD(tvlUSD)
                       </div>
                     }
                   >
-                    <img src={moreinfo} alt="" onClick={withdrawOpen} />
+                    <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={withdrawOpen} />
                   </Tooltip>
                 </ClickAwayListener>
               </h6>
@@ -1319,7 +1312,7 @@ settvlUSD(tvlUSD)
                       className="stats-link"
                     >
                       {shortAddress(coinbase)}{" "}
-                      <img src={statsLinkIcon} alt="" />
+                      <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                     </a>
                     <a
                       target="_blank"
@@ -1327,7 +1320,7 @@ settvlUSD(tvlUSD)
                       href={`https://github.com/dypfinance/staking-governance-security-audits`}
                       className="stats-link"
                     >
-                      Audit <img src={statsLinkIcon} alt="" />
+                      Audit <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                     </a>
                     <a
                       target="_blank"
@@ -1335,7 +1328,7 @@ settvlUSD(tvlUSD)
                       href={`${window.config.snowtrace_baseURL}/token/${reward_tokenn._address}?a=${coinbase}`}
                       className="stats-link"
                     >
-                      View transaction <img src={statsLinkIcon} alt="" />
+                      View transaction <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                     </a>
                   </div>
                 </div>
@@ -1458,7 +1451,7 @@ settvlUSD(tvlUSD)
                         </div>
                       ) : withdrawStatus === "failed" ? (
                         <>
-                          <img src={failMark} alt="" />
+                          <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
                           Failed
                         </>
                       ) : withdrawStatus === "success" ? (

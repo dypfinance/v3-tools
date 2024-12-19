@@ -1,25 +1,10 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment";
 import getFormattedNumber from "../../functions/getFormattedNumber2";
-import Modal from "../Modal/Modal";
-import Address from "./address";
-import WalletModal from "../WalletModal";
 import "./top-pools.css";
 import { shortAddress } from "../../functions/shortAddress";
-import ellipse from "./assets/ellipse.svg";
-import Clipboard from "react-clipboard.js";
-import failMark from "../../assets/failMark.svg";
-import ReactTooltip from "react-tooltip";
-import arrowup from "./assets/arrow-up.svg";
-import moreinfo from "./assets/more-info.svg";
-import purplestats from "./assets/purpleStat.svg";
-import referralimg from "./assets/referral.svg";
-import copy from "./assets/copy.svg";
-import wallet from "./assets/wallet.svg";
+  
 import Tooltip from "@material-ui/core/Tooltip";
-import Countdown from "react-countdown";
-import statsLinkIcon from "./assets/statsLinkIcon.svg";
-import poolsCalculatorIcon from "./assets/poolsCalculatorIcon.svg";
 import { ClickAwayListener } from "@material-ui/core";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
 import axios from "axios";
@@ -773,7 +758,7 @@ const InitConstantStakingiDYP = ({
                       </div>
                     }
                   >
-                    <img src={moreinfo} alt="" onClick={aprOpen} />
+                    <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={aprOpen} />
                   </Tooltip>
                 </ClickAwayListener>
               </span>
@@ -888,7 +873,7 @@ const InitConstantStakingiDYP = ({
                           </div>
                         }
                       >
-                        <img src={moreinfo} alt="" onClick={poolCapOpen} />
+                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={poolCapOpen} />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -910,7 +895,7 @@ const InitConstantStakingiDYP = ({
                           </div>
                         }
                       >
-                        <img src={moreinfo} alt="" onClick={quotaOpen} />
+                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={quotaOpen} />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -934,7 +919,7 @@ const InitConstantStakingiDYP = ({
                           </div>
                         }
                       >
-                        <img src={moreinfo} alt="" onClick={maxDepositOpen} />
+                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={maxDepositOpen} />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -1008,7 +993,7 @@ const InitConstantStakingiDYP = ({
                         </div>
                       ) : reInvestStatus === "failed" ? (
                         <>
-                          {/* <img src={failMark} alt="" /> */}
+                          {/* <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" /> */}
                           Failed
                         </>
                       ) : reInvestStatus === "success" ? (
@@ -1047,7 +1032,7 @@ const InitConstantStakingiDYP = ({
                           </div>
                         }
                       >
-                        <img src={moreinfo} alt="" onClick={poolFeeOpen} />
+                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={poolFeeOpen} />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -1061,7 +1046,7 @@ const InitConstantStakingiDYP = ({
                     className="stats-link2"
                   >
                     {shortAddress(staking?._address)}{" "}
-                    <img src={statsLinkIcon} alt="" />
+                    <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                   </a>
                 </div>
               </div>
@@ -1307,7 +1292,7 @@ const InitConstantStakingiDYP = ({
                           </div>
                         }
                       >
-                        <img src={moreinfo} alt="" onClick={poolFeeOpen} />
+                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={poolFeeOpen} />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -1321,7 +1306,7 @@ const InitConstantStakingiDYP = ({
                     className="stats-link2"
                   >
                     {shortAddress(staking?._address)}{" "}
-                    <img src={statsLinkIcon} alt="" />
+                    <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                   </a>
                 </div>
               </div>
@@ -1349,7 +1334,7 @@ const InitConstantStakingiDYP = ({
       coinbase === undefined ||
       is_wallet_connected === false ? (
         <button className="connectbtn btn m-auto" onClick={onConnectWallet}>
-          <img src={wallet} alt="" /> Connect wallet
+          <img src={'https://cdn.worldofdypians.com/tools/walletIcon.svg'} alt="" /> Connect wallet
         </button>
       ) : chainId !== "1" ? (
         <button
@@ -1411,7 +1396,7 @@ const InitConstantStakingiDYP = ({
     //                       }
     //                     >
     //                       <img
-    //                         src={moreinfo}
+    //                         src={'https://cdn.worldofdypians.com/tools/more-info.svg'}
     //                         alt=""
     //                         onClick={performanceOpen}
     //                       />
@@ -1439,7 +1424,7 @@ const InitConstantStakingiDYP = ({
     //                         </div>
     //                       }
     //                     >
-    //                       <img src={moreinfo} alt="" onClick={aprOpen} />
+    //                       <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={aprOpen} />
     //                     </Tooltip>
     //                   </ClickAwayListener>
     //                 </h6>
@@ -1463,7 +1448,7 @@ const InitConstantStakingiDYP = ({
     //                         </div>
     //                       }
     //                     >
-    //                       <img src={moreinfo} alt="" onClick={lockOpen} />
+    //                       <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={lockOpen} />
     //                     </Tooltip>
     //                   </ClickAwayListener>
     //                 </h6>
@@ -1474,7 +1459,7 @@ const InitConstantStakingiDYP = ({
     //                 className="bottomitems"
     //                 onClick={() => setshowCalculator(true)}
     //               >
-    //                 <img src={poolsCalculatorIcon} alt="" />
+    //                 <img src={'https://cdn.worldofdypians.com/tools/poolsCalculatorIcon.svg'} alt="" />
     //                 Calculator
     //               </h6>
     //               <a
@@ -1498,7 +1483,7 @@ const InitConstantStakingiDYP = ({
     //                 }}
     //               >
     //                 <h6 className="bottomitems">
-    //                   <img src={purplestats} alt="" />
+    //                   <img src={'https://cdn.worldofdypians.com/tools/purpleStat.svg'} alt="" />
     //                   Stats
     //                 </h6>
     //               </div>
@@ -1575,7 +1560,7 @@ const InitConstantStakingiDYP = ({
     //                   </div>
     //                 }
     //               >
-    //                 <img src={moreinfo} alt="" onClick={depositOpen} />
+    //                 <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={depositOpen} />
     //               </Tooltip>
     //             </ClickAwayListener>
     //           </div>
@@ -1657,7 +1642,7 @@ const InitConstantStakingiDYP = ({
     //                   <>Success</>
     //                 ) : (
     //                   <>
-    //                     <img src={failMark} alt="" />
+    //                     <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
     //                     Failed
     //                   </>
     //                 )}
@@ -1690,7 +1675,7 @@ const InitConstantStakingiDYP = ({
     //                     </div>
     //                   }
     //                 >
-    //                   <img src={moreinfo} alt="" onClick={rewardsOpen} />
+    //                   <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={rewardsOpen} />
     //                 </Tooltip>
     //               </ClickAwayListener>
     //             </h6>
@@ -1747,7 +1732,7 @@ const InitConstantStakingiDYP = ({
     //                   </div>
     //                 ) : claimStatus === "failed" ? (
     //                   <>
-    //                     <img src={failMark} alt="" />
+    //                     <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
     //                     Failed
     //                   </>
     //                 ) : claimStatus === "success" ? (
@@ -1780,7 +1765,7 @@ const InitConstantStakingiDYP = ({
     //                     </div>
     //                   ) : reInvestStatus === "failed" ? (
     //                     <>
-    //                       <img src={failMark} alt="" />
+    //                       <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
     //                       Failed
     //                     </>
     //                   ) : reInvestStatus === "success" ? (
@@ -1816,7 +1801,7 @@ const InitConstantStakingiDYP = ({
     //                   </div>
     //                 }
     //               >
-    //                 <img src={moreinfo} alt="" onClick={withdrawOpen} />
+    //                 <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={withdrawOpen} />
     //               </Tooltip>
     //             </ClickAwayListener>
     //           </h6>
@@ -1967,7 +1952,7 @@ const InitConstantStakingiDYP = ({
     //                   className="stats-link"
     //                 >
     //                   {shortAddress(coinbase)}{" "}
-    //                   <img src={statsLinkIcon} alt="" />
+    //                   <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
     //                 </a>
     //                 <a
     //                   target="_blank"
@@ -1975,7 +1960,7 @@ const InitConstantStakingiDYP = ({
     //                   href={`https://github.com/dypfinance/staking-governance-security-audits`}
     //                   className="stats-link"
     //                 >
-    //                   Audit <img src={statsLinkIcon} alt="" />
+    //                   Audit <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
     //                 </a>
     //                 <a
     //                   target="_blank"
@@ -1983,7 +1968,7 @@ const InitConstantStakingiDYP = ({
     //                   href={`${window.config.etherscan_baseURL}/token/${reward_token._address}?a=${coinbase}`}
     //                   className="stats-link"
     //                 >
-    //                   View transaction <img src={statsLinkIcon} alt="" />
+    //                   View transaction <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
     //                 </a>
     //               </div>
     //             </div>
@@ -2105,7 +2090,7 @@ const InitConstantStakingiDYP = ({
     //                     </div>
     //                   ) : withdrawStatus === "failed" ? (
     //                     <>
-    //                       <img src={failMark} alt="" />
+    //                       <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
     //                       Failed
     //                     </>
     //                   ) : withdrawStatus === "success" ? (

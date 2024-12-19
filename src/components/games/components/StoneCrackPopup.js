@@ -1,7 +1,4 @@
-import React from "react";
-import stone from "../assets/popupAssets/stone.png";
-import brokenGem from "../assets/popupAssets/brokenGem.png";
-import danger from "../assets/popupAssets/danger.svg";
+import React from "react";  
 
 const StoneCrackPopup = ({ active, onClose }) => {
   return (
@@ -18,7 +15,7 @@ const StoneCrackPopup = ({ active, onClose }) => {
       >
         <h6 className="games-popup-title mb-0">Stone Crack</h6>
         <img
-          src={require("../assets/xMark.svg").default}
+          src={'https://cdn.worldofdypians.com/wod/xMark.svg'}
           alt=""
           style={{ cursor: "pointer" }}
           onClick={onClose}
@@ -52,16 +49,16 @@ const StoneCrackPopup = ({ active, onClose }) => {
       <div className="games-popup-image-wrapper p-2 d-flex flex-column flex-lg-row align-items-center gap-2">
         <div className="d-flex flex-column align-items-center gap-2">
           <span className="games-popup-desc">Stone</span>
-          <img src={stone} alt="" />
+          <img src={'https://cdn.worldofdypians.com/tools/stone.png'} alt="" />
         </div>
         <div className="d-flex flex-column align-items-center gap-2">
           <span className="games-popup-desc">Broken Gem</span>
-          <img src={brokenGem} alt="" />
+          <img src={'https://cdn.worldofdypians.com/tools/brokenGem.png'} alt="" />
         </div>
       </div>
       <div className="games-popup-danger-wrapper p-2 d-flex flex-column gap-2">
         <div className="d-flex align-items-center gap-2">
-          <img src={danger} alt="" />
+          <img src={"https://cdn.worldofdypians.com/tools/danger.svg"} alt="" />
           <h6
             className="mb-0 games-popup-subtitle"
             style={{ color: "#FD5D5D" }}

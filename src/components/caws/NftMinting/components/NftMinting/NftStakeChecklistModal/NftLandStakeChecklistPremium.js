@@ -3,19 +3,10 @@ import axios from "axios";
 import _ from "lodash";
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-
-// import ToolTip from "../../../../elements/ToolTip";
-// import X from "../../../../../assets/images/x_close.png";
 import NftPlaceHolder from "../../../../../LandNFTModal/LandNFTPlaceHolder";
-// import NftStakingCawChecklist from "../../General/NftStakingCawChecklist/NftStakingCawChecklist";
-// import CawsPremiumChecklist from "../../General/NftStakingCawChecklist/CawsPremiumChecklist";
 import { formattedNum } from "../../../../../../functions/formatUSD";
 import getFormattedNumber from "../../../../../../functions/get-formatted-number";
-// import EthLogo from "../../../../../assets/General/eth-create-nft.png";
-// import CountDownTimerUnstake from "../../../../elements/CountDownUnstake";
-// import CatLogo from "../../../../../assets/General/cat-totalsupply-icon.svg";
 import "./_nftStakeChecklistModal.scss";
-import CountDownTimerUnstake from "../../../../../locker/Countdown";
 import LandPremiumChecklist from "../../General/NftStakingCawChecklist/LandPremiumChecklist";
 
 const NftLandStakeCheckListPremiumModal = ({
@@ -633,7 +624,7 @@ const NftLandStakeCheckListPremiumModal = ({
       </div>{" "}
       <div style={{ display: "block" }} className="bottom-static-wrapper">
         <p className="d-flex info-text align-items-start gap-3">
-          <img src={require("./more-info.svg").default} alt="" />
+          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" />
           {!showStaked
             ? "Please select which NFTs to Stake."
             : "Please select your NFTs to Claim or to Unstake"}
@@ -672,7 +663,7 @@ const NftLandStakeCheckListPremiumModal = ({
                 </span>
 
                 <img
-                  src={require("./landplaceholder.svg").default}
+                  src={"https://cdn.worldofdypians.com/tools/landplaceholder2.svg"}
                   alt=""
                   style={{ width: 24, height: 24 }}
                 />
@@ -797,7 +788,7 @@ const NftLandStakeCheckListPremiumModal = ({
                     </p>
                     <div className="d-flex justify-content-between">
                       <h6 className="rewardstxtCaws d-flex align-items-center gap-2">
-                        <img src={require("./weth.svg").default} alt="" />{" "}
+                        <img src={'https://cdn.worldofdypians.com/tools/ethStakeActive.svg'} alt="" />{" "}
                         {getFormattedNumber(ETHrewards, 6)} WETH (
                         {formattedNum(ethToUSD, true)})
                       </h6>
@@ -916,7 +907,7 @@ const NftLandStakeCheckListPremiumModal = ({
                         </span>
 
                         <img
-                          src={require("./landplaceholder.svg").default}
+                          src={"https://cdn.worldofdypians.com/tools/landplaceholder2.svg"}
                           alt=""
                           style={{ width: 24, height: 24 }}
                         />
