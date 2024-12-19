@@ -3,10 +3,7 @@ import axios from "axios";
 import ToolTip from "./ToolTip";
 import OutsideClickHandler from "react-outside-click-handler";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import passiveUpvote from "./assets/passiveUpvote.svg";
-import passiveDownvote from "./assets/passiveDownvote.svg";
-import activeUpvote from "./assets/activeUpvote.svg";
-import activeDownvote from "./assets/activeDownvote.svg"; 
+ 
 
 const RelatedNews = ({
   title,
@@ -392,10 +389,10 @@ const RelatedNews = ({
                 <img
                   src={
                     likeIndicator === false && dislikeIndicator === false
-                      ? passiveUpvote
-                      : likeIndicator === true
-                      ? activeUpvote
-                      : passiveUpvote
+                    ? 'https://cdn.worldofdypians.com/tools/passiveDownvote.svg'
+                    : dislikeIndicator === true
+                    ? 'https://cdn.worldofdypians.com/tools/activeDownvote.svg'
+                    : 'https://cdn.worldofdypians.com/tools/passiveDownvote.svg'
                   }
                   alt=""
                   className="like-indicator"
@@ -413,10 +410,10 @@ const RelatedNews = ({
                   style={{ transform: "rotate(0deg)" }}
                   src={
                     likeIndicator === false && dislikeIndicator === false
-                      ? passiveDownvote
-                      : dislikeIndicator === true
-                      ? activeDownvote
-                      : passiveDownvote
+                    ? 'https://cdn.worldofdypians.com/tools/passiveDownvote.svg'
+                    : dislikeIndicator === true
+                    ? 'https://cdn.worldofdypians.com/tools/activeDownvote.svg'
+                    : 'https://cdn.worldofdypians.com/tools/passiveDownvote.svg'
                   }
                   alt=""
                   className="like-indicator"

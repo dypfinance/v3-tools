@@ -2,8 +2,7 @@ import React from "react";
 import getFormattedNumber from "../../functions/get-formatted-number";
 import Countdown from "react-countdown";
 import "./bridge.css";
-  
-import switchicon from "./assets/switch.svg"; 
+   
 import Tooltip from "@material-ui/core/Tooltip";
 import Timeline from "@mui/lab/Timeline";
 import TimelineItem, { timelineItemClasses } from "@mui/lab/TimelineItem";
@@ -832,7 +831,7 @@ export default function initBridge({
                     </div>
                   </div>
                   <img
-                    src={switchicon}
+                    src={'https://cdn.worldofdypians.com/tools/switch.svg'}
                     alt=""
                     onClick={this.handleSwapChains}
                     style={{

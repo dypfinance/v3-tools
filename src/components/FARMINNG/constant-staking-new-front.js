@@ -7,8 +7,7 @@ import WalletModal from "../WalletModal";
 import "./top-pools.css"; 
 import Clipboard from "react-clipboard.js";
 import ReactTooltip from "react-tooltip"; 
-import referralimg from "./assets/referral.svg";
-import copy from "./assets/copy.svg"; 
+import referralimg from "./assets/referral.svg"; 
 import Tooltip from "@material-ui/core/Tooltip";
 import Countdown from "react-countdown"; 
 import { shortAddress } from "../../functions/shortAddress";
@@ -1627,7 +1626,7 @@ const StakeEth = ({
                         className=""
                       >
                         <button className="copybtn btn">
-                          <img src={copy} alt="" /> Copy{" "}
+                          <img src={'https://cdn.worldofdypians.com/tools/copyGreen.svg'} alt="" /> Copy{" "}
                         </button>{" "}
                       </Clipboard>
                       <ReactTooltip id={id} effect="solid" />

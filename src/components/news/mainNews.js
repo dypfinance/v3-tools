@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import featuredNewsShadow from "./assets/featuredNewsShadow.png"; 
+import React, { useState, useEffect } from "react"; 
 
 const MainNews = ({
   link,
@@ -116,7 +115,7 @@ const MainNews = ({
             </span>
           </div>
           <img
-            src={featuredNewsShadow}
+            src={'https://cdn.worldofdypians.com/tools/featuredNewsShadow.png'}
             alt=""
             className={`featured-shadow w-100 ${
               bannerShadow && "featured-shadow-hover"

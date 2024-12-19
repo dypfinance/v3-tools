@@ -2,8 +2,7 @@ import React from "react";
 import getFormattedNumber from "../../functions/get-formatted-number";
 import Countdown from "react-countdown";
 import "./bridge.css";
-  
-import switchicon from "./assets/switch.svg"; 
+   
 import Tooltip from "@material-ui/core/Tooltip";
 import Address from "../FARMINNG/address";
 import WalletModal from "../WalletModal";
@@ -832,7 +831,7 @@ export default function initBridgeidyp({
                   </div>
                   <img
                     onClick={this.handleSwapChains}
-                    src={switchicon}
+                    src={'https://cdn.worldofdypians.com/tools/switch.svg'}
                     alt=""
                     style={{
                       width: 55,
@@ -1101,7 +1100,7 @@ export default function initBridgeidyp({
                             <div className="separator"></div>
                             <div className="d-flex gap-2 align-items-start">
                               <img
-                                src={require("./assets/errorinfo.svg").default}
+                                src={'https://cdn.worldofdypians.com/tools/errorinfo.svg'}
                                 alt=""
                               />
                               <h6 className="bottominfotxt">

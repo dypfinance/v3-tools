@@ -2,10 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ToolTip from "./ToolTip";
 import OutsideClickHandler from "react-outside-click-handler";
-import passiveUpvote from "./assets/passiveUpvote.svg";
-import passiveDownvote from "./assets/passiveDownvote.svg";
-import activeUpvote from "./assets/activeUpvote.svg";
-import activeDownvote from "./assets/activeDownvote.svg"; 
+
+ 
 
 const SingleNews = ({
   title,
@@ -336,10 +334,10 @@ const SingleNews = ({
               <img
                 src={
                   likeIndicator === false && dislikeIndicator === false
-                    ? passiveUpvote
+                    ? 'https://cdn.worldofdypians.com/tools/passiveUpvote.svg'
                     : likeIndicator === true
-                    ? activeUpvote
-                    : passiveUpvote
+                    ? 'https://cdn.worldofdypians.com/tools/activeUpvote.svg'
+                    : 'https://cdn.worldofdypians.com/tools/passiveUpvote.svg'
                 }
                 alt=""
                 className="like-indicator"
@@ -357,10 +355,10 @@ const SingleNews = ({
                 style={{ transform: "rotate(0deg)" }}
                 src={
                   likeIndicator === false && dislikeIndicator === false
-                    ? passiveDownvote
+                    ? 'https://cdn.worldofdypians.com/tools/passiveDownvote.svg'
                     : dislikeIndicator === true
-                    ? activeDownvote
-                    : passiveDownvote
+                    ? 'https://cdn.worldofdypians.com/tools/activeDownvote.svg'
+                    : 'https://cdn.worldofdypians.com/tools/passiveDownvote.svg'
                 }
                 alt=""
                 className="like-indicator"

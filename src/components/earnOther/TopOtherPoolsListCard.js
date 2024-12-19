@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import useWindowSize from "../../functions/useWindowSize";
 import "../top-pools-card/top-pools.css";
-import nftTag from "./assets/nftTag.svg";
-import watch from "./assets/watch.svg";
-import premium24hrstag from "../top-pools-card/assets/24hrsPremiumTag.svg";
 import CountDown from "react-countdown";
+  
 
 const TopOtherPoolsListCard = ({
   tokenLogo,
@@ -140,7 +138,7 @@ const TopOtherPoolsListCard = ({
                         {tokenTicker}
                       </h5>
                       {livePremiumOnly && tokenTicker === "AVAX" && (
-                        <img src={premium24hrstag} alt="" />
+                        <img src={'https://cdn.worldofdypians.com/tools/24hrsPremiumTag.svg'} alt="" />
                       )}
                       {/* {isHot && <img src={hotTag} alt="" />} */}
                     </div>
@@ -157,7 +155,7 @@ const TopOtherPoolsListCard = ({
                       >
                         {apr}
                       </h5>
-                      {isNft && <img src={nftTag} alt="" />}
+                      {isNft && <img src={'https://cdn.worldofdypians.com/tools/nftTag.svg'} alt="" />}
                     </div>
                   </td>
 
@@ -190,7 +188,7 @@ const TopOtherPoolsListCard = ({
                   <td className="earnother-td col-2">
                     {isComingSoon ? (
                       <h6 className="details-text2 gap-1 d-flex align-items-center cursor-pointer justify-content-center w-75">
-                        <img src={watch} alt="" /> Coming Soon
+                        <img src={'https://cdn.worldofdypians.com/tools/watch.svg'} alt="" /> Coming Soon
                       </h6>
                     ) : (
                       <h6 className="details-text2 gap-1 d-flex align-items-center w-75 cursor-pointer justify-content-center">
@@ -225,7 +223,7 @@ const TopOtherPoolsListCard = ({
                             </h5>
                           </div>
                           {livePremiumOnly && tokenTicker === "AVAX" && (
-                            <img src={premium24hrstag} alt="" />
+                            <img src={'https://cdn.worldofdypians.com/tools/24hrsPremiumTag.svg'} alt="" />
                           )}
                         </div>
                         <div className="d-flex flex-column gap-2">
@@ -255,7 +253,7 @@ const TopOtherPoolsListCard = ({
                     <td className="earnother-td w-100">
                       {isComingSoon ? (
                         <h6 className="details-text2 m-0 gap-1 d-flex align-items-center cursor-pointer justify-content-center w-100">
-                          <img src={watch} alt="" /> Coming Soon
+                          <img src={'https://cdn.worldofdypians.com/tools/watch.svg'} alt="" /> Coming Soon
                         </h6>
                       ) : (
                         <h6 className="details-text2 m-0 gap-1 d-flex align-items-center cursor-pointer justify-content-center w-100">

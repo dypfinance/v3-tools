@@ -1,12 +1,18 @@
-import React from 'react'
-import Placeholder from './placeholder.svg'
-import PlaceholderBlack from './placeholder-black.svg'
+import React from "react";
 
+const Skeleton = (theme) => {
+  return (
+    <div>
+      <img
+        src={
+          theme.theme === "theme-dark"
+            ? "https://cdn.worldofdypians.com/tools/placeholder-black.svg"
+            : "https://cdn.worldofdypians.com/tools/placeholder.svg"
+        }
+        alt=""
+      />
+    </div>
+  );
+};
 
-const Skeleton = (theme)=>{
-    return(<div>
-        <img src={theme.theme === 'theme-dark' ? PlaceholderBlack : Placeholder} alt=''/>
-    </div>)
-}
-
-export default Skeleton
+export default Skeleton;

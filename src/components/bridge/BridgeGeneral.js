@@ -1,19 +1,11 @@
 import React, { useState, useEffect } from "react";
 import initBridge from "./bridge";
+import initBridgeidyp from "./bridge-idyp"; 
 import BridgeFAQ from "./BridgeFAQ";
-import initBridgeidyp from "./bridge-idyp";
-import dyp from "./assets/dyp.svg";
-import idyp from "./assets/idyp.svg";
-
-import base from "./assets/base.svg";
-
-import whiteArrow from "./assets/whiteArrow.svg";
-import whiteBase from "./assets/white-base.svg";
-import superBridge from "./assets/superbridge.svg";
-
 import "./bridge.css";
 import { useLocation } from "react-router-dom";
-import Web3 from "web3";
+
+   
 
 const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
   const [sourceChain, setSourceChain] = useState("");
@@ -269,7 +261,7 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
         <div className="d-flex flex-lg-row flex-column-reverse justify-content-between gap-3 mb-4">
           <div className="d-flex flex-column">
             <h3 className="text-white mb-4">
-              <img src={dyp} alt="" /> DYP
+              <img src={'https://cdn.worldofdypians.com/tools/dyplogo.svg'} alt="" /> DYP
             </h3>
             <h5 className="text-white mb-2">Choose route</h5>
             <div className="d-flex gap-3 mb-2">
@@ -349,7 +341,7 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
                     src={"https://cdn.worldofdypians.com/tools/ethSquare.svg"}
                     alt=""
                   />{" "}
-                  <img src={base} alt="" />
+                  <img src={'https://cdn.worldofdypians.com/tools/baseSquare.svg'} alt="" />
                   <p className=" mb-0 optiontext d-none d-lg-flex">ETH/BASE</p>
                 </h6>
               </a>
@@ -364,13 +356,13 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
             <div className="base-bridge-wrapper d-flex flex-column justify-content-center px-3 py-2">
               <div className="d-flex flex-column flex-lg-row align-items-center gap-2 justify-content-between">
                 <div className="d-flex align-items-center gap-1">
-                  <img src={whiteBase} alt="" />
+                  <img src={'https://cdn.worldofdypians.com/tools/white-base.svg'} alt="" />
                   <span className="base-bridge-text">
                     Seamlessly bridge DYP to Base via the official Base Super
                     Bridge
                   </span>
                 </div>
-                <img src={superBridge} alt="" />
+                <img src={'https://cdn.worldofdypians.com/tools/superbridge.svg'} alt="" />
               </div>
             </div>
           </a>
@@ -394,7 +386,7 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
       <div className="bigseparator mt-5 mb-5"></div>
       <div>
         <h3 className="text-white mb-4">
-          <img src={idyp} alt="" style={{ width: 32, height: 32 }} /> iDYP
+          <img src={'https://cdn.worldofdypians.com/tools/idypius.svg'} alt="" style={{ width: 32, height: 32 }} /> iDYP
         </h3>
         <h5 className="text-white mb-2">Choose route</h5>
         <div className="d-flex gap-3 mb-2">
@@ -495,7 +487,7 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
             rel="noreferrer"
             className="d-flex align-items-center gap-1 btn bridgenow-btn"
           >
-            Bridge now <img src={whiteArrow} alt="" />{" "}
+            Bridge now <img src={'https://cdn.worldofdypians.com/tools/whiteArrow.svg'} alt="" />{" "}
           </a>
         </div>
       </div>
