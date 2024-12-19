@@ -1955,7 +1955,7 @@ const BscFarmingFunc = ({
                           style={{ position: "relative", bottom: "4px" }}
                         >
                           <img
-                            src={require(`./assets/bsc/${selectedTokenLogo.toLowerCase()}.svg`)}
+                            src={`https://cdn.worldofdypians.com/tools/${selectedTokenLogo.toLowerCase()}.svg`}
                             alt=""
                             style={{ width: 14, height: 14 }}
                           />
@@ -1973,9 +1973,9 @@ const BscFarmingFunc = ({
                               onClick={() => handleSelectedTokenChange(t)}
                             >
                               <img
-                                src={require(`./assets/bsc/${buyback_activetokensbsc[
+                                src={`https://cdn.worldofdypians.com/tools/${buyback_activetokensbsc[
                                   t
-                                ].symbol.toLowerCase()}.svg`)}
+                                ].symbol.toLowerCase()}.svg`}
                                 alt=""
                                 style={{ width: 14, height: 14 }}
                               />
@@ -2210,7 +2210,7 @@ const BscFarmingFunc = ({
                             aria-expanded="false"
                           >
                             <img
-                              src={require(`./assets/bsc/${selectedRewardTokenLogo1.toLowerCase()}.svg`)}
+                              src={`https://cdn.worldofdypians.com/tools/${selectedRewardTokenLogo1.toLowerCase()}.svg`}
                               alt=""
                               style={{ width: 13, height: 13 }}
                             />
@@ -2234,7 +2234,7 @@ const BscFarmingFunc = ({
                               }}
                             >
                               <img
-                                src={require(`./assets/bsc/wbnb.svg`).default}
+                                src={'https://cdn.worldofdypians.com/tools/wbnbIcon.svg'}
                                 alt=""
                                 style={{ width: 14, height: 14 }}
                               />
@@ -2296,7 +2296,7 @@ const BscFarmingFunc = ({
 
                       <div className="d-flex align-items-center justify-content-center w-100 claimreward-header ">
                         <img
-                          src={require(`./assets/dyp.svg`).default}
+                          src={'https://cdn.worldofdypians.com/tools/dyplogo.svg'}
                           alt=""
                           style={{ width: 14, height: 14 }}
                         />
@@ -2717,7 +2717,7 @@ const BscFarmingFunc = ({
                                 aria-expanded="false"
                               >
                                 <img
-                                  src={require(`./assets/bsc/${selectedRewardTokenLogo1.toLowerCase()}.svg`)}
+                                  src={`https://cdn.worldofdypians.com/tools/${selectedRewardTokenLogo1.toLowerCase()}.svg`}
                                   alt=""
                                   style={{ width: 15, height: 15 }}
                                 />
@@ -2741,7 +2741,7 @@ const BscFarmingFunc = ({
                                 >
                                   <img
                                     src={
-                                      require(`./assets/bsc/wbnb.svg`).default
+                                     'https://cdn.worldofdypians.com/tools/wbnbIcon.svg'
                                     }
                                     alt=""
                                     style={{ width: 14, height: 14 }}
@@ -2814,7 +2814,7 @@ const BscFarmingFunc = ({
                           </div>
                           <div className="d-flex align-items-center justify-content-center w-100 claimreward-header">
                             <img
-                              src={require(`./assets/dyp.svg`).default}
+                              src={'https://cdn.worldofdypians.com/tools/dyplogo.svg'}
                               alt=""
                               style={{ width: 14, height: 14 }}
                             />

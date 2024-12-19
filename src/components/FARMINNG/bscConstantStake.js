@@ -7,7 +7,6 @@ import WalletModal from "../WalletModal";
 import "./top-pools.css"; 
 import Clipboard from "react-clipboard.js";
 import ReactTooltip from "react-tooltip"; 
-import referralimg from "./assets/referral.svg";
  
 import Tooltip from "@material-ui/core/Tooltip";
 import Countdown from "react-countdown"; 
@@ -1404,7 +1403,7 @@ const StakeBsc = ({
                 <div className="d-flex align-items-center justify-content-between">
                   <div className="referralwrapper col-8">
                     <div className="d-flex gap-2 align-items-start justify-content-between">
-                      <img src={referralimg} alt="" />
+                      {/* <img src={referralimg} alt="" /> */}
                       <div
                         className="d-flex gap-2 flex-column"
                         style={{ width: "60%" }}

@@ -18,7 +18,7 @@ const VendorCard = ({
         {activeLink ? (
           <a href={link} target={"_blank"} className="vendor-image-wrapper">
             <img
-              src={require(`./assets/${logo}`)}
+              src={`https://cdn.worldofdypians.com/tools/${logo}`}
               width={64}
               height={64}
               alt=""
@@ -26,7 +26,7 @@ const VendorCard = ({
           </a>
         ) : (
           <img
-            src={require(`./assets/${logo}`).default}
+            src={`https://cdn.worldofdypians.com/tools/${logo}`}
             width={64}
             height={64}
             alt=""
