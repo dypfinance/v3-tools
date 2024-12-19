@@ -360,8 +360,8 @@ const Leaderboard = ({
                       <>
                         <div className="d-flex flex-column gap-2">
                           <span className="whitelist-tooltip-content-text">
-                            50% of the rewards will be in ETH and 50% will be in
-                            DYP.
+                            50% of the rewards will be in ETH/BNB and 50% will
+                            be in DYP.
                           </span>
                         </div>
                       </>
@@ -475,7 +475,7 @@ const Leaderboard = ({
                           }`}
                         >
                           <td className="playerData col-1">
-                            {Number(item.position) + 1}
+                            {getFormattedNumber(Number(item.position) + 1, 0)}
                           </td>
                           <td className="playerName col-3">
                             <div className="position-relative d-flex align-items-center">
@@ -540,7 +540,13 @@ const Leaderboard = ({
                         email && (
                           <tr className={`playerInnerRow weekly-user-row`}>
                             <td className="playerData col-1">
-                              {Number(weeklyUser?.position) + 1}
+                              {weeklyUser?.statValue !== undefined &&
+                              weeklyUser?.statValue > 0
+                                ? getFormattedNumber(
+                                    Number(weeklyUser.position) + 1,
+                                    0
+                                  )
+                                : "---"}
                             </td>
                             <td className="playerName col-3">
                               <div className="position-relative d-flex align-items-center">
@@ -631,7 +637,13 @@ const Leaderboard = ({
                         email && (
                           <tr className={`playerInnerRow weekly-user-row`}>
                             <td className="playerData col-1">
-                              {Number(monthlyUser?.position) + 1}
+                              {monthlyUser?.statValue !== undefined &&
+                              monthlyUser?.statValue > 0
+                                ? getFormattedNumber(
+                                    Number(monthlyUser.position) + 1,
+                                    0
+                                  )
+                                : "---"}
                             </td>
                             <td className="playerName col-3">
                               <div className="position-relative d-flex align-items-center">

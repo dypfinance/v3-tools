@@ -56,6 +56,18 @@ const Games = ({
   onOpbnbChestClaimed,
   opbnbchests,
   openedOpbnbChests,
+  monthlyplayerDataOpbnb,
+  previousMonthlyVersionOpbnb,
+  previousWeeklyVersionOpbnb,
+  weeklyplayerDataOpbnb,
+  weeklyUserOpbnb,
+  monthlyUserOpbnb,
+  fetchWeeklyOpbnbWinners,
+  fetchPreviousWeeklyOpbnbWinners,
+  activePlayerWeeklyOpbnb,
+  fetchMonthlyOpbnbWinners,
+  fetchPreviousMonthlyOpbnbWinners,
+  activePlayerMonthlyOpbnb,
 }) => {
   const [chain, setChain] = useState("base");
   const [message, setMessage] = useState("");
@@ -922,8 +934,12 @@ const Games = ({
                     >
                       <div className="d-flex flex-column gap-2 align-items-start">
                         <span className="whitelist-tooltip-content-text">
-                          Every transaction requires a combination of ETH and
-                          DYP tokens on BASE.
+                          Every transaction on Base network requires a
+                          combination of ETH and DYP tokens on BASE.
+                        </span>
+                        <span className="whitelist-tooltip-content-text">
+                          Every transaction on opBNB Chain requires a
+                          combination of ETH and DYP tokens on opBNB Chain.
                         </span>
                         <a
                           href="https://superbridge.app/base"
@@ -943,6 +959,24 @@ const Games = ({
                             Bridge DYP on Base SuperBridge
                           </h6>
                         </a>
+                        <NavLink
+                          to="/bridge"
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={() => {
+                            setpopup(false);
+                          }}
+                        >
+                          <h6 className="bottomitems">
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/tools/arrow-up.svg"
+                              }
+                              alt=""
+                            />
+                            Bridge DYP on opBNB Chain
+                          </h6>
+                        </NavLink>
                       </div>
                     </div>
                   </OutsideClickHandler>
@@ -959,9 +993,14 @@ const Games = ({
                 } d-flex gap-1 align-items-center`}
                 onClick={() => {
                   setChain("base");
+                  handleBasePool();
                 }}
               >
-                <img src={baseLogo} alt="" /> Base
+                <img
+                  src={"https://cdn.worldofdypians.com/wod/baseBlueLogo.svg"}
+                  alt=""
+                />{" "}
+                Base
               </button>
               <button
                 className={`${
@@ -971,9 +1010,14 @@ const Games = ({
                 } d-flex gap-1 align-items-center`}
                 onClick={() => {
                   setChain("opbnb");
+                  handleOpbnbPool();
                 }}
               >
-                <img src={bnbLogo} alt="" /> opBNB
+                <img
+                  src={"https://cdn.worldofdypians.com/wod/bnbIcon.svg"}
+                  alt=""
+                />{" "}
+                opBNB
               </button>
             </div>
 
@@ -1904,14 +1948,38 @@ const Games = ({
                       </div>
                     </div>
                     <div className="position-relative">
-                      {chain === "base" ? (openedChests && openedChests.length === 20 ? (
+                      {chain === "base" ? (
+                        openedChests && openedChests.length === 20 ? (
+                          <img
+                            src={
+                              "https://cdn.worldofdypians.com/tools/mainChestCracked.webp"
+                            }
+                            alt=""
+                          />
+                        ) : openedChests && openedChests.length < 20 ? (
+                          <img
+                            src={
+                              "https://cdn.worldofdypians.com/tools/mainChest.webp"
+                            }
+                            alt=""
+                          />
+                        ) : (
+                          <img
+                            src={
+                              "https://cdn.worldofdypians.com/tools/mainChest.webp"
+                            }
+                            alt=""
+                          />
+                        )
+                      ) : openedOpbnbChests &&
+                        openedOpbnbChests.length === 20 ? (
                         <img
                           src={
                             "https://cdn.worldofdypians.com/tools/mainChestCracked.webp"
                           }
                           alt=""
                         />
-                      ) : openedChests && openedChests.length < 20 ? (
+                      ) : openedOpbnbChests && openedOpbnbChests.length < 20 ? (
                         <img
                           src={
                             "https://cdn.worldofdypians.com/tools/mainChest.webp"
@@ -1925,28 +1993,7 @@ const Games = ({
                           }
                           alt=""
                         />
-                      )) :(openedOpbnbChests  && openedOpbnbChests .length === 20 ? (
-                        <img
-                          src={
-                            "https://cdn.worldofdypians.com/tools/mainChestCracked.webp"
-                          }
-                          alt=""
-                        />
-                      ) : openedOpbnbChests  && openedOpbnbChests .length < 20 ? (
-                        <img
-                          src={
-                            "https://cdn.worldofdypians.com/tools/mainChest.webp"
-                          }
-                          alt=""
-                        />
-                      ) : (
-                        <img
-                          src={
-                            "https://cdn.worldofdypians.com/tools/mainChest.webp"
-                          }
-                          alt=""
-                        />
-                      )) }
+                      )}
                       {chain === "base" && (
                         <div className="position-absolute rocks-wrapper">
                           <div className="d-flex flex-column justify-content-center align-items-center position-relative w-100 h-100">
@@ -1968,7 +2015,6 @@ const Games = ({
                                   }}
                                 >
                                   <img
-                                
                                     src={`https://cdn.worldofdypians.com/tools/${
                                       index + 1
                                     }.png`}
@@ -1996,7 +2042,6 @@ const Games = ({
                                   }}
                                 >
                                   <img
-                                 
                                     src={`https://cdn.worldofdypians.com/tools/${
                                       index + 5
                                     }.png`}
@@ -2024,7 +2069,6 @@ const Games = ({
                                   }}
                                 >
                                   <img
-                                
                                     src={`https://cdn.worldofdypians.com/tools/${
                                       index + 10
                                     }.png`}
@@ -2089,7 +2133,7 @@ const Games = ({
                                   }}
                                 >
                                   <img
-                                    src={`.https://cdn.worldofdypians.com/tools/${
+                                    src={`https://cdn.worldofdypians.com/tools/${
                                       index + 1
                                     }.png`}
                                     className="rock-img"
@@ -2550,7 +2594,7 @@ const Games = ({
           style={{ zIndex: 2 }}
         >
           <img
-            src={'https://cdn.worldofdypians.com/wod/xMark.svg'}
+            src={"https://cdn.worldofdypians.com/wod/xMark.svg"}
             alt=""
             style={{ cursor: "pointer" }}
             onClick={() => setActive(false)}

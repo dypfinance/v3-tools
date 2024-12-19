@@ -42,7 +42,9 @@ const Header = ({
   const [skaleState, setSkaleState] = useState(false);
   const [currencyAmount, setCurrencyAmount] = useState(0);
 
-  const [avatar, setAvatar] = useState("https://cdn.worldofdypians.com/tools/person.svg");
+  const [avatar, setAvatar] = useState(
+    "https://cdn.worldofdypians.com/tools/person.svg"
+  );
   const routeData = useLocation();
 
   const { ethereum } = window;
@@ -456,7 +458,9 @@ const Header = ({
                                 {ethState === true
                                   ? "Ethereum"
                                   : bnbState === true
-                                  ? chainId === 56 ? "BNB Chain" : 'opBNB Chain'
+                                  ? chainId === 56
+                                    ? "BNB Chain"
+                                    : "opBNB Chain"
                                   : avaxState === true
                                   ? "Avalanche"
                                   : baseState === true
@@ -494,7 +498,12 @@ const Header = ({
                             BNB Chain
                           </Dropdown.Item>
                           <Dropdown.Item onClick={() => handleOpBnbPool()}>
-                            <img src={bnb} alt="" />
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/wod/bnbIcon.svg"
+                              }
+                              alt=""
+                            />
                             opBNB Chain
                           </Dropdown.Item>
                           <Dropdown.Item onClick={() => handleAvaxPool()}>

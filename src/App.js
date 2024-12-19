@@ -48,7 +48,7 @@ import axios from "axios";
 import MobileFlyout from "./components/mobileFlyout/MobileFlyout";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
-import { MobileView, BrowserView } from "react-device-detect"; 
+import { MobileView, BrowserView } from "react-device-detect";
 import Whitelist from "./components/whitelist/Whitelist";
 // import WhitelistPopup from "./components/whitelistPopup/WhitelistPopup";
 import Games from "./components/games/Games";
@@ -152,6 +152,19 @@ function App() {
   const [monthlyplayerData, setmonthlyplayerData] = useState([]);
   const [activePlayerMonthly, setActivePlayerMonthly] = useState(false);
   const [monthlyUser, setMonthlyUser] = useState([]);
+
+  const [weeklyplayerDataOpbnb, setweeklyplayerDataOpbnb] = useState([]);
+  const [activePlayerWeeklyOpbnb, setActivePlayerWeeklyOpbnb] = useState(false);
+  const [weeklyUserOpbnb, setWeeklyUserOpbnb] = useState({});
+  const [monthlyplayerDataOpbnb, setmonthlyplayerDataOpbnb] = useState([]);
+  const [activePlayerMonthlyOpbnb, setActivePlayerMonthlyOpbnb] =
+    useState(false);
+  const [monthlyUserOpbnb, setMonthlyUserOpbnb] = useState([]);
+  const [previousWeeklyVersionOpbnb, setpreviousWeeklyVersionOpbnb] =
+    useState(0);
+  const [previousMonthlyVersionOpbnb, setpreviousMonthlyVersionOpbnb] =
+    useState(0);
+
   const [kittyDashRecords, setkittyDashRecords] = useState([]);
   const [activePlayerKitty, setActivePlayerKitty] = useState(false);
   const [kittyUser, setKittyUser] = useState({});
@@ -185,9 +198,8 @@ function App() {
   };
 
   const onOpbnbChestClaimed = () => {
-    setChestCount(chestCount + 1);
+    setopbnbChestCount(opbnbchestCount + 1);
   };
-
 
   const fetchAggregatorPools = async () => {
     const result = await axios
@@ -224,6 +236,8 @@ function App() {
               setnetworkId("43114");
             } else if (data === "0x2105") {
               setnetworkId("8453");
+            } else if (data === "0xcc") {
+              setnetworkId("204");
             } else if (data === "0x406") {
               setnetworkId("1030");
             } else if (data === "0x38") {
@@ -264,6 +278,8 @@ function App() {
           setnetworkId("43114");
         } else if (chainId === "0x2105") {
           setnetworkId("8453");
+        } else if (chainId === "0xcc") {
+          setnetworkId("204");
         } else if (chainId === "0x406") {
           setnetworkId("1030");
         } else if (chainId === "0x38") {
@@ -1054,8 +1070,8 @@ function App() {
       const placeholderArray = placeholderplayerData.slice(itemData.length, 10);
       const finalData = [...testArray, ...placeholderArray];
       setleaderboard(finalData);
-    } else if(itemData.length > 10) {
-    setleaderboard(itemData);
+    } else if (itemData.length > 10) {
+      setleaderboard(itemData);
     }
   };
 
@@ -1106,11 +1122,14 @@ function App() {
     }
     leaderboard2 = leaderboard2.sort((a, b) => b.score - a.score);
 
-    var testArray = leaderboard2.length > 0 ? leaderboard2.filter(
-      (item) =>
-        item.address.toLowerCase() ===
-        data?.getPlayer?.wallet?.publicAddress?.toLowerCase()
-    ) : [];
+    var testArray =
+      leaderboard2.length > 0
+        ? leaderboard2.filter(
+            (item) =>
+              item.address.toLowerCase() ===
+              data?.getPlayer?.wallet?.publicAddress?.toLowerCase()
+          )
+        : [];
 
     fillRecordsCaws2d(leaderboard2);
     if (
@@ -1129,9 +1148,8 @@ function App() {
     } else {
       setCaws2dUser([]);
     }
+  };
 
-  }; 
-  
   const getAllChests = async () => {
     let headersList = {
       Accept: "*/*",
@@ -1199,7 +1217,7 @@ function App() {
       "Content-Type": "application/json",
     };
 
-    let bodyContent = JSON.stringify({ emailAddress: email, chain: 'opbnb' });
+    let bodyContent = JSON.stringify({ emailAddress: email, chain: "opbnb" });
 
     let response = await fetch(
       "https://worldofdypiansdailybonus.azurewebsites.net/api/GetRewardsDypius?code=H9zoL4Hdr7fr7rzSZLTzilDT99fgwth006S7bO3J3Ua9AzFucS1HoA%3D%3D",
@@ -1270,6 +1288,188 @@ function App() {
       const placeholderArray = placeholderplayerData.slice(itemData.length, 10);
       const finalData = [...testArray, ...placeholderArray];
       setmonthlyplayerData(finalData);
+    }
+  };
+
+  const fillRecordsWeeklyOpbnb = (itemData) => {
+    if (itemData.length === 0) {
+      setweeklyplayerDataOpbnb(placeholderplayerData);
+    } else if (itemData.length <= 10) {
+      const testArray = itemData;
+      const placeholderArray = placeholderplayerData.slice(itemData.length, 10);
+      const finalData = [...testArray, ...placeholderArray];
+      setweeklyplayerDataOpbnb(finalData);
+    }
+  };
+  const fillRecordsMonthlyOpbnb = (itemData) => {
+    if (itemData.length === 0) {
+      setmonthlyplayerDataOpbnb(placeholderplayerData);
+    } else if (itemData.length <= 10) {
+      const testArray = itemData;
+      const placeholderArray = placeholderplayerData.slice(itemData.length, 10);
+      const finalData = [...testArray, ...placeholderArray];
+      setmonthlyplayerDataOpbnb(finalData);
+    }
+  };
+
+  const fetchRecordsAroundPlayerWeeklyOpbnb = async (itemData) => {
+    const data = {
+      StatisticName: "LeaderboardDypiusWeeklyOPBNB",
+      MaxResultsCount: 6,
+      PlayerId: userId,
+    };
+    if (userId) {
+      const result = await axios.post(
+        `${backendApi}/auth/GetLeaderboardAroundPlayer`,
+        data
+      );
+      var testArray = result.data.data.leaderboard.filter(
+        (item) => item.displayName === username
+      );
+      if (itemData.length > 0) {
+        var testArray2 = Object.values(itemData).filter(
+          (item) => item.displayName === username
+        );
+
+        if (testArray.length > 0 && testArray2.length > 0) {
+          setActivePlayerWeeklyOpbnb(true);
+          setWeeklyUserOpbnb([]);
+        } else if (testArray.length > 0 && testArray2.length === 0) {
+          setActivePlayerWeeklyOpbnb(false);
+          setWeeklyUserOpbnb(...testArray);
+        }
+      } else if (testArray.length > 0) {
+        setActivePlayerWeeklyOpbnb(false);
+        setWeeklyUserOpbnb(...testArray);
+      }
+    } else {
+      setActivePlayerWeeklyOpbnb(true);
+      setWeeklyUserOpbnb([]);
+    }
+  };
+
+  const fetchWeeklyOpbnbWinners = async () => {
+    const data = {
+      StatisticName: "LeaderboardDypiusWeeklyOPBNB",
+      StartPosition: 0,
+      MaxResultsCount: 10,
+    };
+    const result = await axios
+      .post(`${backendApi}/auth/GetLeaderboard`, data)
+      .catch((err) => {
+        console.log(err);
+      });
+    setpreviousWeeklyVersionOpbnb(parseInt(result.data.data.version));
+    setweeklyplayerDataOpbnb(result.data.data.leaderboard);
+    var testArray = result.data.data.leaderboard.filter(
+      (item) => item.displayName === username
+    );
+    fillRecordsWeeklyOpbnb(result.data.data.leaderboard);
+    if (testArray.length > 0) {
+      setActivePlayerWeeklyOpbnb(true);
+      fetchRecordsAroundPlayerWeeklyOpbnb(result.data.data.leaderboard);
+    } else if (testArray.length === 0) {
+      setActivePlayerWeeklyOpbnb(false);
+      fetchRecordsAroundPlayerWeeklyOpbnb(result.data.data.leaderboard);
+    }
+  };
+
+  const fetchPreviousWeeklyOpbnbWinners = async () => {
+    if (previousWeeklyVersionOpbnb != 0) {
+      const data = {
+        StatisticName: "LeaderboardDypiusWeeklyOPBNB",
+        StartPosition: 0,
+        MaxResultsCount: 10,
+        Version: previousWeeklyVersionOpbnb - 1,
+      };
+      const result = await axios
+        .post(`${backendApi}/auth/GetLeaderboard?Version=-1`, data)
+        .catch((err) => {
+          console.log(err);
+        });
+
+      setweeklyplayerDataOpbnb(result.data.data.leaderboard);
+    }
+  };
+
+  const fetchRecordsAroundPlayerMonthlyOpbnb = async (itemData) => {
+    const data = {
+      StatisticName: "LeaderboardDypiusMonthlyOPBNB",
+      MaxResultsCount: 6,
+      PlayerId: userId,
+    };
+    if (userId) {
+      const result = await axios.post(
+        `${backendApi}/auth/GetLeaderboardAroundPlayer`,
+        data
+      );
+      var testArray = result.data.data.leaderboard.filter(
+        (item) => item.displayName === username
+      );
+
+      if (itemData.length > 0) {
+        var testArray2 = Object.values(itemData).filter(
+          (item) => item.displayName === username
+        );
+
+        if (testArray.length > 0 && testArray2.length > 0) {
+          setActivePlayerMonthlyOpbnb(true);
+          setMonthlyUserOpbnb([]);
+        } else if (testArray.length > 0 && testArray2.length === 0) {
+          setActivePlayerMonthlyOpbnb(false);
+          setMonthlyUserOpbnb(...testArray);
+        }
+      } else if (testArray.length > 0) {
+        setActivePlayerMonthlyOpbnb(false);
+        setMonthlyUserOpbnb(...testArray);
+      }
+    } else {
+      setActivePlayerMonthlyOpbnb(true);
+      setMonthlyUserOpbnb([]);
+    }
+  };
+
+  const fetchMonthlyOpbnbWinners = async () => {
+    const data = {
+      StatisticName: "LeaderboardDypiusMonthlyOPBNB",
+      StartPosition: 0,
+      MaxResultsCount: 10,
+    };
+    const result = await axios
+      .post(`${backendApi}/auth/GetLeaderboard`, data)
+      .catch((err) => {
+        console.log(err);
+      });
+    setpreviousMonthlyVersionOpbnb(parseInt(result.data.data.version));
+    setmonthlyplayerDataOpbnb(result.data.data.leaderboard);
+    var testArray = result.data.data.leaderboard.filter(
+      (item) => item.displayName === username
+    );
+    fillRecordsMonthlyOpbnb(result.data.data.leaderboard);
+    if (testArray.length > 0) {
+      setActivePlayerMonthlyOpbnb(true);
+      fetchRecordsAroundPlayerMonthlyOpbnb(result.data.data.leaderboard);
+    } else if (testArray.length === 0) {
+      setActivePlayerMonthlyOpbnb(false);
+      fetchRecordsAroundPlayerMonthlyOpbnb(result.data.data.leaderboard);
+    }
+  };
+
+  const fetchPreviousMonthlyOpbnbWinners = async () => {
+    if (previousMonthlyVersionOpbnb != 0) {
+      const data = {
+        StatisticName: "LeaderboardDypiusMonthlyOPBNB",
+        StartPosition: 0,
+        MaxResultsCount: 10,
+        Version: previousMonthlyVersionOpbnb - 1,
+      };
+      const result = await axios
+        .post(`${backendApi}/auth/GetLeaderboard?Version=-1`, data)
+        .catch((err) => {
+          console.log(err);
+        });
+
+      setmonthlyplayerDataOpbnb(result.data.data.leaderboard);
     }
   };
 
@@ -1522,6 +1722,17 @@ function App() {
       setOpenedChests([]);
     }
   }, [email, chestCount]);
+
+  
+  useEffect(() => {
+    if (email) {
+      getAllOpbnbChests();
+    } else {
+      setopbnbChests([]);
+      setopbnbOpenedChests([]);
+    }
+  }, [email, opbnbchestCount]);
+
 
   useEffect(() => {
     loadLeaderboardDataCaws2dGame();
@@ -1805,29 +2016,49 @@ function App() {
                         username={username}
                         handleSwitchNetwork={handleSwitchNetwork}
                         monthlyplayerData={monthlyplayerData}
+                        monthlyplayerDataOpbnb={monthlyplayerDataOpbnb}
                         previousMonthlyVersion={previousMonthlyVersion}
+                        previousMonthlyVersionOpbnb={previousMonthlyVersionOpbnb}
+
                         previousWeeklyVersion={previousWeeklyVersion}
+                        previousWeeklyVersionOpbnb={previousWeeklyVersionOpbnb}
+
                         weeklyplayerData={weeklyplayerData}
+                        weeklyUser={weeklyUser}
+                        monthlyUser={monthlyUser}
+
+                        weeklyplayerDataOpbnb={weeklyplayerDataOpbnb}
+                        weeklyUserOpbnb={weeklyUserOpbnb}
+                        monthlyUserOpbnb={monthlyUserOpbnb}
+
                         previousKittyDashVersion={previousKittyDashVersion}
                         kittyDashRecords={kittyDashRecords}
-                        fetchWeeklyWinners={fetchWeeklyWinners}
-                        fetchMonthlyWinners={fetchMonthlyWinners}
                         fetchKittyDashWinners={fetchKittyDashWinners}
-                        fetchPreviousMonthlyWinners={
-                          fetchPreviousMonthlyWinners
-                        }
-                        fetchPreviousWeeklyWinners={fetchPreviousWeeklyWinners}
                         fetchPreviousKittyDashWinners={
                           fetchPreviousKittyDashWinners
                         }
                         kittyUser={kittyUser}
                         caws2dUser={caws2dUser}
-                        weeklyUser={weeklyUser}
-                        monthlyUser={monthlyUser}
                         activePlayerKitty={activePlayerKitty}
                         activePlayerCaws2d={activePlayerCaws2d}
+                        fetchWeeklyWinners={fetchWeeklyWinners}
+                        fetchPreviousWeeklyWinners={fetchPreviousWeeklyWinners}
                         activePlayerWeekly={activePlayerWeekly}
+                        fetchMonthlyWinners={fetchMonthlyWinners}
+                        fetchPreviousMonthlyWinners={
+                          fetchPreviousMonthlyWinners
+                        }
                         activePlayerMonthly={activePlayerMonthly}
+                        fetchWeeklyOpbnbWinners={fetchWeeklyOpbnbWinners}
+                        fetchPreviousWeeklyOpbnbWinners={
+                          fetchPreviousWeeklyOpbnbWinners
+                        }
+                        activePlayerWeeklyOpbnb={activePlayerWeeklyOpbnb}
+                        fetchMonthlyOpbnbWinners={fetchMonthlyOpbnbWinners}
+                        fetchPreviousMonthlyOpbnbWinners={
+                          fetchPreviousMonthlyOpbnbWinners
+                        }
+                        activePlayerMonthlyOpbnb={activePlayerMonthlyOpbnb}
                       />
                     }
                   />
@@ -1838,8 +2069,6 @@ setweeklyplayerData
 setweeklyplayerData
 setpreviousKittyDashVersion
 setkittyDashRecords */}
-
-              
 
                   <Route
                     exact
@@ -2204,7 +2433,7 @@ setkittyDashRecords */}
       {(window.location?.pathname === "/genesis" && window.innerWidth < 786) ||
       (window.location?.pathname === "/caws-staking" &&
         window.innerWidth < 786) ? null : (
-        <Footer/>
+        <Footer />
       )}
 
       {(showMobilePopup === true || downloadClick === true) && (
@@ -2220,7 +2449,7 @@ setkittyDashRecords */}
                   <h4 className="mobile-popup-title">Dypius Mobile App</h4>
 
                   <img
-                    src={'https://cdn.worldofdypians.com/wod/popupXmark.svg'}
+                    src={"https://cdn.worldofdypians.com/wod/popupXmark.svg"}
                     alt=""
                     className="close-x position-relative cursor-pointer "
                     onClick={() => {
