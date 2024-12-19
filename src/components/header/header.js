@@ -59,7 +59,7 @@ const Header = ({
       setBnbState(false);
       setEthState(false);
       setSkaleState(false);
-    } else if (chainId === 56) {
+    } else if (chainId === 56 || chainId === 204) {
       setAvaxState(false);
       setBnbState(true);
       setEthState(false);
@@ -121,6 +121,19 @@ const Header = ({
     }
   };
 
+  const handleOpBnbPool = async () => {
+    if (window.ethereum) {
+      await handleSwitchNetworkhook("0xcc")
+        .then(() => {
+          handleSwitchNetwork("204");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    } else {
+      window.alertify.error("No web3 detected. Please install Metamask!");
+    }
+  };
   const handleAvaxPool = async () => {
     if (window.ethereum) {
       await handleSwitchNetworkhook("0xa86a")
@@ -443,7 +456,7 @@ const Header = ({
                                 {ethState === true
                                   ? "Ethereum"
                                   : bnbState === true
-                                  ? "BNB Chain"
+                                  ? chainId === 56 ? "BNB Chain" : 'opBNB Chain'
                                   : avaxState === true
                                   ? "Avalanche"
                                   : baseState === true
@@ -479,6 +492,10 @@ const Header = ({
                               alt=""
                             />
                             BNB Chain
+                          </Dropdown.Item>
+                          <Dropdown.Item onClick={() => handleOpBnbPool()}>
+                            <img src={bnb} alt="" />
+                            opBNB Chain
                           </Dropdown.Item>
                           <Dropdown.Item onClick={() => handleAvaxPool()}>
                             <img
