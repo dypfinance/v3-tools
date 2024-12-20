@@ -85,7 +85,7 @@ const NewChestItem = ({
             setLoading(false);
             setClaimingChest(false);
           }, 1000);
-        } else  if (chainText === "opbnb" && openedChests.length === 19) {
+        } else if (chainText === "opbnb" && openedChests.length === 19) {
           onCrackStone("successGem");
           setTimeout(() => {
             onClaimRewards(result.data);
@@ -190,7 +190,7 @@ const NewChestItem = ({
             setLoading(false);
             setClaimingChest(false);
           }, 1000);
-        } else  if (chainText === "opbnb" && openedChests.length === 19) {
+        } else if (chainText === "opbnb" && openedChests.length === 19) {
           onCrackStone("successGem");
           setTimeout(() => {
             onClaimRewards(result.data);
@@ -366,27 +366,9 @@ const NewChestItem = ({
       window.config.token_dypius_new_opbnb_address
     );
 
-if (chain === "base") {
-    await dypBaseSc.methods
-      .approve(window.config.daily_bonus_base_address, "99999999999900000000")
-      .send({ from: coinbase })
-      .then(() => {
-        setApproved(true);
-        setTimeout(() => {
-          handleOpenChest();
-        }, 1500);
-      })
-      .catch((e) => {
-        console.error(e);
-        setApproved(false);
-        onChestStatus("");
-        onLoadingChest(false);
-        setLoading(false);
-        setClaimingChest(false);
-      });
-    } else if (chain === "opbnb") {
-      await dypOpbnbSc.methods
-        .approve(window.config.daily_bonus_opbnb_address, "99999999999900000000")
+    if (chain === "base") {
+      await dypBaseSc.methods
+        .approve(window.config.daily_bonus_base_address, "99999999999900000000")
         .send({ from: coinbase })
         .then(() => {
           setApproved(true);
@@ -395,12 +377,42 @@ if (chain === "base") {
           }, 1500);
         })
         .catch((e) => {
-          console.error(e);
-          setApproved(false);
-          onChestStatus("");
+          window.alertify.error(e?.message);
+          onChestStatus("error");
+          setTimeout(() => {
+            onChestStatus("initial");
+          }, 3000);
+          onCrackStone("error");
           onLoadingChest(false);
           setLoading(false);
           setClaimingChest(false);
+          console.error(e);
+          
+        });
+    } else if (chain === "opbnb") {
+      await dypOpbnbSc.methods
+        .approve(
+          window.config.daily_bonus_opbnb_address,
+          "99999999999900000000"
+        )
+        .send({ from: coinbase })
+        .then(() => {
+          setApproved(true);
+          setTimeout(() => {
+            handleOpenChest();
+          }, 1500);
+        })
+        .catch((e) => {
+          window.alertify.error(e?.message);
+          onChestStatus("error");
+          setTimeout(() => {
+            onChestStatus("initial");
+          }, 3000);
+          onCrackStone("error");
+          onLoadingChest(false);
+          setLoading(false);
+          setClaimingChest(false);
+          console.error(e);
         });
     }
   };
@@ -525,7 +537,7 @@ if (chain === "base") {
             setClaimingChest(false);
           });
       }
-    } else  if (chainId === 204) {
+    } else if (chainId === 204) {
       if (rewardTypes === "premium" && isPremium) {
         const gasPrice = await window.opbnbWeb3.eth.getGasPrice();
         console.log("gasPrice", gasPrice);

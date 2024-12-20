@@ -293,7 +293,7 @@ const Header = ({
           onSetCurrencyAmount(amount);
 
           setCurrencyAmount(amount.slice(0, 7));
-        }  else if (chainId === 204) {
+        } else if (chainId === 204) {
           const stringBalance = opbnbWeb3.utils.hexToNumberString(balance);
           const amount = opbnbWeb3.utils.fromWei(stringBalance, "ether");
           onSetCurrencyAmount(amount);
@@ -493,6 +493,8 @@ const Header = ({
                             <img
                               src={"https://cdn.worldofdypians.com/wod/eth.svg"}
                               alt=""
+                              height={20}
+                              width={20}
                             />
                             Ethereum
                           </Dropdown.Item>
@@ -502,6 +504,8 @@ const Header = ({
                                 "https://cdn.worldofdypians.com/wod/bnbIcon.svg"
                               }
                               alt=""
+                              height={20}
+                              width={20}
                             />
                             BNB Chain
                           </Dropdown.Item>
@@ -511,6 +515,8 @@ const Header = ({
                                 "https://cdn.worldofdypians.com/wod/bnbIcon.svg"
                               }
                               alt=""
+                              height={20}
+                              width={20}
                             />
                             opBNB Chain
                           </Dropdown.Item>
@@ -520,6 +526,8 @@ const Header = ({
                                 "https://cdn.worldofdypians.com/wod/avaxIcon.svg"
                               }
                               alt=""
+                              height={20}
+                              width={20}
                             />
                             Avalanche
                           </Dropdown.Item>
@@ -529,6 +537,8 @@ const Header = ({
                                 "https://cdn.worldofdypians.com/wod/confluxIcon.svg"
                               }
                               alt=""
+                              height={20}
+                              width={20}
                             />
                             Conflux
                           </Dropdown.Item>
@@ -538,6 +548,8 @@ const Header = ({
                                 "https://cdn.worldofdypians.com/wod/base.svg"
                               }
                               alt=""
+                              height={20}
+                              width={20}
                             />
                             Base
                           </Dropdown.Item>
@@ -547,6 +559,8 @@ const Header = ({
                                 "https://cdn.worldofdypians.com/wod/skaleIcon.svg"
                               }
                               alt=""
+                              height={20}
+                              width={20}
                             />
                             SKALE
                           </Dropdown.Item>
@@ -610,7 +624,7 @@ const Header = ({
                                   {currencyAmount}{" "}
                                   {chainId === 1
                                     ? "ETH"
-                                    : (chainId === 56 || chainId === 204)
+                                    : chainId === 56 || chainId === 204
                                     ? "BNB"
                                     : chainId === 43114
                                     ? "AVAX"
