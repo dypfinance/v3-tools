@@ -14,7 +14,6 @@ import Sidebar from "./components/sidebar/sidebar";
 import Header from "./components/header/header";
 import { Route, Routes } from "react-router-dom";
 // import SubmitInfo from "./components/submit-info/SubmitInfo";
-import { Switch } from "react-router-dom";
 import { RedirectPathToHomeOnly } from "./functions/redirects";
 import Earn from "./components/earn/Earn";
 import Dashboard from "./components/dashboard/Dashboard";
@@ -32,17 +31,17 @@ import BuyDyp from "./components/buydyp/BuyDyp";
 // import Swap from "./components/swap/Swap";
 import MobileMenu from "./components/sidebar/MobileMenu";
 import Disclaimer from "./components/disclaimer/Disclaimer";
-import ScrollToTop from "./functions/ScrollToTop";
+// import ScrollToTop from "./functions/ScrollToTop";
 // import LandPopup from "./components/LandPopup/LandPopup";
 // import { withRouter } from "react-router-dom";
-import GenesisStaking from "./components/genesisStaking/GenesisStaking";
+// import GenesisStaking from "./components/genesisStaking/GenesisStaking";
 // import CawsStaking from "./components/genesisStaking/CawsStaking";
 import Plans from "./components/account/Plans";
 import DypMigration from "./components/bridge/DypMigration";
 import AlertRibbon from "./components/alert-ribbon/AlertRibbon";
 import EarnOther from "./components/earnOther/EarnOther";
 import EarnOtherNft from "./components/earnOther/EarnOtherNft";
-import EarnInnerPoolNft from "./components/earnOther/EarnInnerPool/EarnInnerPoolNft";
+// import EarnInnerPoolNft from "./components/earnOther/EarnInnerPool/EarnInnerPoolNft";
 import WalletModal from "./components/WalletModal";
 import axios from "axios";
 import MobileFlyout from "./components/mobileFlyout/MobileFlyout";
@@ -1846,26 +1845,7 @@ setkittyDashRecords */}
                       />
                     }
                   />
-
-                  <Route
-                    exact
-                    path="/earn/nft-staking/:pool"
-                    element={
-                      <EarnInnerPoolNft
-                        coinbase={coinbase}
-                        handleSwitchNetwork={handleSwitchNetwork}
-                        handleConnection={handleConnection}
-                        isConnected={isConnected}
-                        chainId={networkId}
-                        the_graph_result={the_graph_result_ETH_V2}
-                        the_graph_resultavax={the_graph_result_AVAX_V2}
-                        the_graph_resultbsc={the_graph_result_BSC_V2}
-                        lp_id={LP_ID_Array}
-                        referrer={referrer}
-                        isPremium={isPremium}
-                      />
-                    }
-                  />
+ 
 
                   <Route
                     exact
@@ -2088,7 +2068,7 @@ setkittyDashRecords */}
                       />
                     }
                   />
-                  <Route
+                  {/* <Route
                     exact
                     path="/genesis"
                     element={
@@ -2100,7 +2080,7 @@ setkittyDashRecords */}
                         handleSwitchNetwork={handleSwitchNetwork}
                       />
                     }
-                  />
+                  /> */}
                   {/* <Route
                     exact
                     path="/caws-staking"
