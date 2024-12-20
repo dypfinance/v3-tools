@@ -69,7 +69,7 @@ const BundlePopup = ({
           className="bundle-popup-list-item"
           style={{ listStyle: "inside", listStylePosition: "initial" }}
         >
-          The locked tokens can be withdrawn after the lock period ends.
+          The full amount of locked tokens will be returned after the lock period ends, ensuring no cost to the user.
         </li>
         <li
           className="bundle-popup-list-item"
