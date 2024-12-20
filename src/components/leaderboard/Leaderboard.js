@@ -5,17 +5,13 @@ import getFormattedNumber from "../../functions/get-formatted-number";
 import { Tooltip } from "@material-ui/core";
 
 const Leaderboard = ({
-  userData,
   userId,
   address,
   username,
   type,
   setType,
   monthlyplayerData,
-  previousMonthlyVersion,
-  previousWeeklyVersion,
   weeklyplayerData,
-  previousKittyDashVersion,
   kittyDashRecords,
   fetchWeeklyWinners,
   fetchMonthlyWinners,
@@ -33,6 +29,16 @@ const Leaderboard = ({
   leaderboardCaws2d,
   activePlayerCaws2d,
   caws2dUser,
+  monthlyplayerDataOpbnb,
+  weeklyplayerDataOpbnb,
+  fetchWeeklyOpbnbWinners,
+  fetchMonthlyOpbnbWinners,
+  fetchPreviousWeeklyOpbnbWinners,
+  fetchPreviousMonthlyOpbnbWinners,
+  weeklyUserOpbnb,
+  monthlyUserOpbnb,
+  activePlayerWeeklyOpbnb,
+  activePlayerMonthlyOpbnb,
 }) => {
   const weeklyPrizes = ["25", "15", "10", "8", "0", "0", "0", "0", "0", "0"];
   const monthlyPrizes = [
@@ -202,6 +208,8 @@ const Leaderboard = ({
   const [inactiveBoard, setInactiveBoard] = useState(false);
   const [prizes, setPrizes] = useState(weeklyPrizes);
   const [prevStatus, setPrevStatus] = useState(false);
+  const [selectedChain, setselectedChain] = useState('base');
+
 
   const handleOption = (item) => {
     setOptionText(item);
@@ -219,6 +227,8 @@ const Leaderboard = ({
   useEffect(() => {
     fetchWeeklyWinners();
     fetchMonthlyWinners();
+    fetchWeeklyOpbnbWinners();
+    fetchMonthlyOpbnbWinners();
     fetchKittyDashWinners();
   }, [userId, username]);
 
@@ -229,10 +239,14 @@ const Leaderboard = ({
       if (newStatus) {
         fetchPreviousWeeklyWinners();
         fetchPreviousMonthlyWinners();
+        fetchPreviousWeeklyOpbnbWinners();
+        fetchPreviousMonthlyOpbnbWinners();
         fetchPreviousKittyDashWinners();
       } else {
         fetchWeeklyWinners();
         fetchMonthlyWinners();
+        fetchWeeklyOpbnbWinners();
+        fetchMonthlyOpbnbWinners();
         fetchKittyDashWinners();
       }
 
@@ -465,7 +479,7 @@ const Leaderboard = ({
                     )}
                   </tr>
 
-                  {type === "stoneCrack" && optionText === "weekly" ? (
+                  {type === "stoneCrack" && optionText === "weekly" && selectedChain === 'base' ? (
                     <>
                       {weeklyplayerData.map((item, index) => (
                         <tr
@@ -569,7 +583,7 @@ const Leaderboard = ({
                           </tr>
                         )}
                     </>
-                  ) : type === "stoneCrack" && optionText === "monthly" ? (
+                  ) : type === "stoneCrack" && optionText === "monthly" && selectedChain === 'base'? (
                     <>
                       {monthlyplayerData.map((item, index) => (
                         <tr
@@ -655,6 +669,207 @@ const Leaderboard = ({
                               style={{ color: stoneHeaders.scoreColor }}
                             >
                               {getFormattedNumber(monthlyUser?.statValue, 0)}
+                            </td>
+                            <td
+                              className={`playerReward col-2 text-center leaderboard-rewards-bg`}
+                              style={{ color: stoneHeaders.rewardColor }}
+                            >
+                              {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
+                              ${getFormattedNumber(0, 0)}
+                            </td>
+                          </tr>
+                        )}
+                    </>
+                  ) : type === "stoneCrack" && optionText === "weekly" && selectedChain === 'opbnb' ? (
+                    <>
+                      {weeklyplayerDataOpbnb.map((item, index) => (
+                        <tr
+                          key={index}
+                          className={`playerInnerRow ${
+                            item.displayName === username && "weekly-user-row"
+                          }`}
+                        >
+                          <td className="playerData col-1">
+                            {getFormattedNumber(Number(item.position) + 1, 0)}
+                          </td>
+                          <td className="playerName col-3">
+                            <div className="position-relative d-flex align-items-center">
+                              <span>{item.displayName}</span>
+                            </div>
+                          </td>
+                          <td
+                            className="playerScore col-4 text-center"
+                            style={{ color: stoneHeaders.scoreColor }}
+                          >
+                            {getFormattedNumber(item.statValue, 0)}
+                          </td>
+                          <td
+                            className={`playerReward col-2 text-center leaderboard-rewards-bg`}
+                            style={{ color: stoneHeaders.rewardColor }}
+                          >
+                            {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
+                            $
+                            {getFormattedNumber(
+                              stoneCrackRewards[index].reward,
+                              0
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                      {[...Array(10 - weeklyplayerDataOpbnb.length)].map(
+                        (item, index) => (
+                          <tr key={index} className={`playerInnerRow`}>
+                            <td className="playerData col-1">
+                              {Number(weeklyplayerDataOpbnb.length + index) + 1}
+                            </td>
+                            <td className="playerName col-3">
+                              <div className="position-relative d-flex align-items-center">
+                                <span>--</span>
+                              </div>
+                            </td>
+                            <td
+                              className="playerScore col-4 text-center"
+                              style={{ color: stoneHeaders.scoreColor }}
+                            >
+                              {getFormattedNumber(0, 0)}
+                            </td>
+                            <td
+                              className={`playerReward col-2 text-center leaderboard-rewards-bg`}
+                              style={{ color: stoneHeaders.rewardColor }}
+                            >
+                              {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
+                              $0
+                            </td>
+                            <td
+                              className={`playerReward col-2 text-center leaderboard-rewards-bg`}
+                              style={{ color: stoneHeaders.rewardColor }}
+                            >
+                              {/* <img src={dyp} width={12} height={12} alt="" />{" "} */}
+                              $0
+                            </td>
+                          </tr>
+                        )
+                      )}
+                      {activePlayerWeeklyOpbnb === false &&
+                        prevStatus === false &&
+                        email && (
+                          <tr className={`playerInnerRow weekly-user-row`}>
+                            <td className="playerData col-1">
+                              {weeklyUserOpbnb?.statValue !== undefined &&
+                              weeklyUserOpbnb?.statValue > 0
+                                ? getFormattedNumber(
+                                    Number(weeklyUserOpbnb.position) + 1,
+                                    0
+                                  )
+                                : "---"}
+                            </td>
+                            <td className="playerName col-3">
+                              <div className="position-relative d-flex align-items-center">
+                                <span>{weeklyUserOpbnb?.displayName}</span>
+                              </div>
+                            </td>
+                            <td
+                              className="playerScore col-4 text-center"
+                              style={{ color: stoneHeaders.scoreColor }}
+                            >
+                              {getFormattedNumber(weeklyUserOpbnb?.statValue, 0)}
+                            </td>
+                            <td
+                              className={`playerReward col-2 text-center leaderboard-rewards-bg`}
+                              style={{ color: stoneHeaders.rewardColor }}
+                            >
+                              {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
+                              ${getFormattedNumber(0, 0)}
+                            </td>
+                          </tr>
+                        )}
+                    </>
+                  ) : type === "stoneCrack" && optionText === "monthly" && selectedChain === 'opbnb'? (
+                    <>
+                      {monthlyplayerDataOpbnb.map((item, index) => (
+                        <tr
+                          key={index}
+                          className={`playerInnerRow ${
+                            item.displayName === username && "weekly-user-row"
+                          }`}
+                        >
+                          <td className="playerData col-1">
+                            {Number(item.position) + 1}
+                          </td>
+                          <td className="playerName col-3">
+                            <div className="position-relative d-flex align-items-center">
+                              <span>{item.displayName}</span>
+                            </div>
+                          </td>
+                          <td
+                            className="playerScore col-4 text-center"
+                            style={{ color: stoneHeaders.scoreColor }}
+                          >
+                            {getFormattedNumber(item.statValue, 0)}
+                          </td>
+                          <td
+                            className={`playerReward col-2 text-center leaderboard-rewards-bg`}
+                            style={{ color: stoneHeaders.rewardColor }}
+                          >
+                            {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
+                            $
+                            {getFormattedNumber(
+                              stoneCrackRewardsMonthly[index].rewards,
+                              0
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                      {[...Array(10 - monthlyplayerDataOpbnb.length)].map(
+                        (item, index) => (
+                          <tr key={index} className={`playerInnerRow`}>
+                            <td className="playerData col-1">
+                              {Number(monthlyplayerDataOpbnb.length + index) + 1}
+                            </td>
+                            <td className="playerName col-3">
+                              <div className="position-relative d-flex align-items-center">
+                                <span>--</span>
+                              </div>
+                            </td>
+                            <td
+                              className="playerScore col-4 text-center"
+                              style={{ color: stoneHeaders.scoreColor }}
+                            >
+                              {getFormattedNumber(0, 0)}
+                            </td>
+                            <td
+                              className={`playerReward col-2 text-center leaderboard-rewards-bg`}
+                              style={{ color: stoneHeaders.rewardColor }}
+                            >
+                              {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
+                              $0
+                            </td>
+                          </tr>
+                        )
+                      )}
+                      {activePlayerMonthlyOpbnb === false &&
+                        prevStatus === false &&
+                        email && (
+                          <tr className={`playerInnerRow weekly-user-row`}>
+                            <td className="playerData col-1">
+                              {monthlyUserOpbnb?.statValue !== undefined &&
+                              monthlyUserOpbnb?.statValue > 0
+                                ? getFormattedNumber(
+                                    Number(monthlyUserOpbnb.position) + 1,
+                                    0
+                                  )
+                                : "---"}
+                            </td>
+                            <td className="playerName col-3">
+                              <div className="position-relative d-flex align-items-center">
+                                <span>{monthlyUserOpbnb?.displayName}</span>
+                              </div>
+                            </td>
+                            <td
+                              className="playerScore col-4 text-center"
+                              style={{ color: stoneHeaders.scoreColor }}
+                            >
+                              {getFormattedNumber(monthlyUserOpbnb?.statValue, 0)}
                             </td>
                             <td
                               className={`playerReward col-2 text-center leaderboard-rewards-bg`}

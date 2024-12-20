@@ -897,130 +897,131 @@ const Games = ({
         </div>
         <div className="game-wrapper-container p-3">
           <div className="d-flex flex-column gap-2 align-items-center">
-            <div className="d-flex w-100 align-items-center gap-2 position-relative justify-content-between">
-              <div className="w-100 d-flex justify-content-center">
+            <div className="d-flex flex-column flex-lg-row align-items-center gap-2 justify-content-between w-100">
+              <div className="d-flex align-items-center gap-2 position-relative justify-content-start">
+                <div className="d-flex justify-content-center">
+                  <img
+                    src={
+                      "https://cdn.worldofdypians.com/tools/stoneCrackHeader.png"
+                    }
+                    alt=""
+                    className="stone-crack-header"
+                  />
+                </div>
+
                 <img
-                  src={
-                    "https://cdn.worldofdypians.com/tools/stoneCrackHeader.png"
-                  }
+                  src={"https://cdn.worldofdypians.com/tools/tooltipIcon.svg"}
                   alt=""
-                  className="stone-crack-header"
+                  onClick={() => {
+                    setpopup(true);
+                  }}
+                  style={{ cursor: "pointer" }}
                 />
+                {/* </Tooltip> */}
+
+                {popup === true && (
+                  <div
+                    className="position-absolute"
+                    style={{ right: "245px", top: "-20px" }}
+                  >
+                    <OutsideClickHandler
+                      onOutsideClick={() => {
+                        setpopup(false);
+                      }}
+                    >
+                      <div
+                        className="tooltip d-flex justify-content-center"
+                        style={{ opacity: 1, width: 245 }}
+                      >
+                        <div className="d-flex flex-column gap-2 align-items-start">
+                          <span className="whitelist-tooltip-content-text">
+                            Every transaction on Base network requires a
+                            combination of ETH and DYP tokens on BASE.
+                          </span>
+                          <span className="whitelist-tooltip-content-text">
+                            Every transaction on opBNB Chain requires a
+                            combination of ETH and DYP tokens on opBNB Chain.
+                          </span>
+                          <a
+                            href="https://superbridge.app/base"
+                            target="_blank"
+                            rel="noreferrer"
+                            onClick={() => {
+                              setpopup(false);
+                            }}
+                          >
+                            <h6 className="bottomitems">
+                              <img
+                                src={
+                                  "https://cdn.worldofdypians.com/tools/arrow-up.svg"
+                                }
+                                alt=""
+                              />
+                              Bridge DYP on Base SuperBridge
+                            </h6>
+                          </a>
+                          <NavLink
+                            to="/bridge"
+                            target="_blank"
+                            rel="noreferrer"
+                            onClick={() => {
+                              setpopup(false);
+                            }}
+                          >
+                            <h6 className="bottomitems">
+                              <img
+                                src={
+                                  "https://cdn.worldofdypians.com/tools/arrow-up.svg"
+                                }
+                                alt=""
+                              />
+                              Bridge DYP on opBNB Chain
+                            </h6>
+                          </NavLink>
+                        </div>
+                      </div>
+                    </OutsideClickHandler>
+                  </div>
+                )}
               </div>
 
-              <img
-                src={"https://cdn.worldofdypians.com/tools/tooltipIcon.svg"}
-                alt=""
-                onClick={() => {
-                  setpopup(true);
-                }}
-                style={{ cursor: "pointer" }}
-              />
-              {/* </Tooltip> */}
-
-              {popup === true && (
-                <div
-                  className="position-absolute"
-                  style={{ right: "245px", top: "-20px" }}
+              <div className="d-flex align-items-center gap-2">
+                <button
+                  className={` ${
+                    chain === "base"
+                      ? "new-chain-active-btn"
+                      : "new-chain-inactive-btn "
+                  } d-flex gap-1 align-items-center`}
+                  onClick={() => {
+                    setChain("base");
+                    handleBasePool();
+                  }}
                 >
-                  <OutsideClickHandler
-                    onOutsideClick={() => {
-                      setpopup(false);
-                    }}
-                  >
-                    <div
-                      className="tooltip d-flex justify-content-center"
-                      style={{ opacity: 1, width: 245 }}
-                    >
-                      <div className="d-flex flex-column gap-2 align-items-start">
-                        <span className="whitelist-tooltip-content-text">
-                          Every transaction on Base network requires a
-                          combination of ETH and DYP tokens on BASE.
-                        </span>
-                        <span className="whitelist-tooltip-content-text">
-                          Every transaction on opBNB Chain requires a
-                          combination of ETH and DYP tokens on opBNB Chain.
-                        </span>
-                        <a
-                          href="https://superbridge.app/base"
-                          target="_blank"
-                          rel="noreferrer"
-                          onClick={() => {
-                            setpopup(false);
-                          }}
-                        >
-                          <h6 className="bottomitems">
-                            <img
-                              src={
-                                "https://cdn.worldofdypians.com/tools/arrow-up.svg"
-                              }
-                              alt=""
-                            />
-                            Bridge DYP on Base SuperBridge
-                          </h6>
-                        </a>
-                        <NavLink
-                          to="/bridge"
-                          target="_blank"
-                          rel="noreferrer"
-                          onClick={() => {
-                            setpopup(false);
-                          }}
-                        >
-                          <h6 className="bottomitems">
-                            <img
-                              src={
-                                "https://cdn.worldofdypians.com/tools/arrow-up.svg"
-                              }
-                              alt=""
-                            />
-                            Bridge DYP on opBNB Chain
-                          </h6>
-                        </NavLink>
-                      </div>
-                    </div>
-                  </OutsideClickHandler>
-                </div>
-              )}
+                  <img
+                    src={"https://cdn.worldofdypians.com/wod/baseBlueLogo.svg"}
+                    alt=""
+                  />{" "}
+                  Base
+                </button>
+                <button
+                  className={`${
+                    chain === "opbnb"
+                      ? "new-chain-active-btn"
+                      : "new-chain-inactive-btn "
+                  } d-flex gap-1 align-items-center`}
+                  onClick={() => {
+                    setChain("opbnb");
+                    handleOpbnbPool();
+                  }}
+                >
+                  <img
+                    src={"https://cdn.worldofdypians.com/wod/bnbIcon.svg"}
+                    alt=""
+                  />{" "}
+                  opBNB
+                </button>
+              </div>
             </div>
-
-            <div className="d-flex align-items-center gap-2">
-              <button
-                className={` ${
-                  chain === "base"
-                    ? "new-chain-active-btn"
-                    : "new-chain-inactive-btn "
-                } d-flex gap-1 align-items-center`}
-                onClick={() => {
-                  setChain("base");
-                  handleBasePool();
-                }}
-              >
-                <img
-                  src={"https://cdn.worldofdypians.com/wod/baseBlueLogo.svg"}
-                  alt=""
-                />{" "}
-                Base
-              </button>
-              <button
-                className={`${
-                  chain === "opbnb"
-                    ? "new-chain-active-btn"
-                    : "new-chain-inactive-btn "
-                } d-flex gap-1 align-items-center`}
-                onClick={() => {
-                  setChain("opbnb");
-                  handleOpbnbPool();
-                }}
-              >
-                <img
-                  src={"https://cdn.worldofdypians.com/wod/bnbIcon.svg"}
-                  alt=""
-                />{" "}
-                opBNB
-              </button>
-            </div>
-
             <div className="d-flex flex-column-reverse flex-lg-row gap-3">
               <div className="col-lg-5 left-games-banner">
                 <div className="h-100 d-flex flex-column justify-content-between gap-0 gap-lg-3">
@@ -1975,21 +1976,21 @@ const Games = ({
                         openedOpbnbChests.length === 20 ? (
                         <img
                           src={
-                            "https://cdn.worldofdypians.com/tools/mainChestCracked.webp"
+                            "https://cdn.worldofdypians.com/tools/mainChestCrackedOpbnb.webp"
                           }
                           alt=""
                         />
                       ) : openedOpbnbChests && openedOpbnbChests.length < 20 ? (
                         <img
                           src={
-                            "https://cdn.worldofdypians.com/tools/mainChest.webp"
+                            "https://cdn.worldofdypians.com/tools/mainOpbnbChest.webp"
                           }
                           alt=""
                         />
                       ) : (
                         <img
                           src={
-                            "https://cdn.worldofdypians.com/tools/mainChest.webp"
+                            "https://cdn.worldofdypians.com/tools/mainOpbnbChest.webp"
                           }
                           alt=""
                         />
@@ -2606,25 +2607,33 @@ const Games = ({
           address={address}
           userId={userId}
           monthlyplayerData={monthlyplayerData}
-          previousMonthlyVersion={previousMonthlyVersion}
-          previousWeeklyVersion={previousWeeklyVersion}
+          monthlyplayerDataOpbnb={monthlyplayerDataOpbnb}
           weeklyplayerData={weeklyplayerData}
-          previousKittyDashVersion={previousKittyDashVersion}
+          weeklyplayerDataOpbnb={weeklyplayerDataOpbnb}
+
           kittyDashRecords={kittyDashRecords}
           fetchWeeklyWinners={fetchWeeklyWinners}
+          fetchWeeklyOpbnbWinners={fetchWeeklyOpbnbWinners}
           fetchMonthlyWinners={fetchMonthlyWinners}
+          fetchMonthlyOpbnbWinners={fetchMonthlyOpbnbWinners}
           fetchKittyDashWinners={fetchKittyDashWinners}
           fetchPreviousMonthlyWinners={fetchPreviousMonthlyWinners}
+          fetchPreviousMonthlyOpbnbWinners={fetchPreviousMonthlyOpbnbWinners}
           fetchPreviousWeeklyWinners={fetchPreviousWeeklyWinners}
+          fetchPreviousWeeklyOpbnbWinners={fetchPreviousWeeklyOpbnbWinners}
           fetchPreviousKittyDashWinners={fetchPreviousKittyDashWinners}
           kittyUser={kittyUser}
           weeklyUser={weeklyUser}
+          weeklyUserOpbnb={weeklyUserOpbnb}
           monthlyUser={monthlyUser}
+          monthlyUserOpbnb={monthlyUserOpbnb}
           activePlayerKitty={activePlayerKitty}
           activePlayerCaws2d={activePlayerCaws2d}
           caws2dUser={caws2dUser}
           activePlayerWeekly={activePlayerWeekly}
+          activePlayerWeeklyOpbnb={activePlayerWeeklyOpbnb}
           activePlayerMonthly={activePlayerMonthly}
+          activePlayerMonthlyOpbnb={activePlayerMonthlyOpbnb}
           email={email}
           username={username}
           leaderboardCaws2d={leaderboardCaws2d}

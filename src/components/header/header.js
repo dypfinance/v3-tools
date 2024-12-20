@@ -269,6 +269,8 @@ const Header = ({
         const infuraWeb3 = new Web3(window.config.infura_endpoint);
 
         const bscWeb3 = new Web3(window.config.bsc_endpoint);
+        const opbnbWeb3 = new Web3(window.config.opbnb_endpoint);
+
         const avaxWeb3 = new Web3(window.config.avax_endpoint);
         const web3cfx = new Web3(window.config.conflux_endpoint);
         const web3base = new Web3(window.config.base_endpoint);
@@ -288,6 +290,12 @@ const Header = ({
         } else if (chainId === 56) {
           const stringBalance = bscWeb3.utils.hexToNumberString(balance);
           const amount = bscWeb3.utils.fromWei(stringBalance, "ether");
+          onSetCurrencyAmount(amount);
+
+          setCurrencyAmount(amount.slice(0, 7));
+        }  else if (chainId === 204) {
+          const stringBalance = opbnbWeb3.utils.hexToNumberString(balance);
+          const amount = opbnbWeb3.utils.fromWei(stringBalance, "ether");
           onSetCurrencyAmount(amount);
 
           setCurrencyAmount(amount.slice(0, 7));
@@ -602,7 +610,7 @@ const Header = ({
                                   {currencyAmount}{" "}
                                   {chainId === 1
                                     ? "ETH"
-                                    : chainId === 56
+                                    : (chainId === 56 || chainId === 204)
                                     ? "BNB"
                                     : chainId === 43114
                                     ? "AVAX"
