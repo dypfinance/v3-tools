@@ -1,16 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "./dashboard.css";
-import TopPoolsCard from "../top-pools-card/TopPoolsCard";
-import NewsCard from "../newsCard/NewsCard";
-import GovCard from "../gov-card/GovCard";
-import BridgeCard from "../bridgecard/BridgeCard";
-import ExplorerCard from "../explorer-card/ExplorerCard";
-import Calculator from "../calculator/Calculator";
-import FaqCard from "../faqcard/FaqCard";
-import LaunchpadCard from "../launchpad-card/LaunchpadCard";
-import ChainlinkCard from "../chainlink-card/ChainlinkCard";
-import TrendingNews from "../newsCard/TrendingNews";
-import rightarrow from "./assets/right-arrow.svg";
 import { NavLink } from "react-router-dom";
 import useWindowSize from "../../functions/useWindowSize";
 import axios from "axios";
@@ -25,39 +14,30 @@ import StakeDypiusBsc from "../FARMINNG/bscConstantStakeDypius";
 import StakeDypiusEth3Phase2 from "../FARMINNG/stakingDypiusEth3Phase2";
 import StakeDypiusEth1Phase2 from "../FARMINNG/stakingDypiusEth1Phase2";
 import StakeDypiusEth2Phase2 from "../FARMINNG/stakingDypiusEth2Phase2";
-import StakingiDypPhase2 from "../FARMINNG/stakingiDypPhase2";
-
+import StakingDypiusBase1 from "../FARMINNG/stakingDypiusBase1";
 import InitConstantStakingiDYP from "../FARMINNG/constant-staking-idyp-new-front";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
-import closeX from "../earnOther/assets/closeX.svg";
-import ethereumIcon from "../top-pools-card/assets/ethereum.svg";
-import bnbIcon from "../top-pools-card/assets/bsc.svg";
-import avaxIcon from "../top-pools-card/assets/avax.svg";
 import { ClickAwayListener } from "@material-ui/core";
 import Tooltip from "@material-ui/core/Tooltip";
-import moreinfo from "../FARMINNG/assets/more-info.svg";
-import warning from "../FARMINNG/assets/warning.svg";
+import Countdown from "react-countdown";
 import StakeDypiusBscOther from "../earnOther/stakingPools/bscStakeDypiusOther";
 import StakeDypiusEthOther from "../earnOther/stakingPools/ethStakeDypiusOther";
 import StakeDypiusAvaxOther from "../earnOther/stakingPools/avaxStakeDypiusOther";
 import CountDown from "react-countdown";
 import StakeBscIDyp from "../FARMINNG/bscConstantStakeiDyp";
-import eth from "../earn/assets/eth.svg";
-import ethActive from "../earn/assets/ethActive.svg";
 
-import bnb from "../earn/assets/bnb.svg";
-import bnbActive from "../earn/assets/bnbActive.svg";
-
-import base from "../earn/assets/base.svg";
-import baseActive from "../earn/assets/baseActive.svg";
-
-import avax from "../earn/assets/avax.svg";
-import avaxActive from "../earn/assets/avaxActive.svg";
+import TopPoolsCard from "../top-pools-card/TopPoolsCard";
+import NewsCard from "../newsCard/NewsCard";
+import GovCard from "../gov-card/GovCard";
+import BridgeCard from "../bridgecard/BridgeCard";
+import ExplorerCard from "../explorer-card/ExplorerCard";
+import FaqCard from "../faqcard/FaqCard";
+import LaunchpadCard from "../launchpad-card/LaunchpadCard";
+import ChainlinkCard from "../chainlink-card/ChainlinkCard";
+import TrendingNews from "../newsCard/TrendingNews";
 import WhitelistPopup from "../whitelistPopup/WhitelistPopup";
-import StakingDypiusBase1 from "../FARMINNG/stakingDypiusBase1";
 import LoyaltyCard from "../launchpad-card/LoyaltyCard";
-import Countdown from "react-countdown";
 
 const renderer = ({ days, hours, minutes }) => {
   return (
@@ -141,7 +121,6 @@ const Dashboard = ({
   const [resultFilteredPool, setresultFilteredPool] = useState([]);
   const [selectedIndex, setselectedIndex] = useState();
   const [whitelistPopup, setwhitelistPopup] = useState(true);
-
 
   const fetchUserPools = async () => {
     if (coinbase && coinbase.includes("0x")) {
@@ -694,7 +673,6 @@ const Dashboard = ({
     avaxDyppool,
     avaxiDypPool
   ) => {
-    
     if (chain === "eth") {
       if (tokentype === "dyp") {
         if (locktimeToCheck === selectedPool.lock_time) {
@@ -815,7 +793,8 @@ const Dashboard = ({
         if (locktimeToCheck === selectedPool.lock_time) {
           return "method-btn-active";
         } else if (
-          locktimeToCheck !== selectedPool.lock_time && locktimeToCheck !== '120 days' &&
+          locktimeToCheck !== selectedPool.lock_time &&
+          locktimeToCheck !== "120 days" &&
           avaxDyppool?.find((obj) => {
             return obj.lock_time === locktimeToCheck;
           })
@@ -823,9 +802,10 @@ const Dashboard = ({
           return "method-btn";
         } else if (
           (locktimeToCheck !== selectedPool.lock_time &&
-          !avaxDyppool?.find((obj) => {
-            return obj.lock_time === locktimeToCheck;
-          })) || locktimeToCheck === '120 days'
+            !avaxDyppool?.find((obj) => {
+              return obj.lock_time === locktimeToCheck;
+            })) ||
+          locktimeToCheck === "120 days"
         ) {
           return "method-btn-disabled";
         }
@@ -999,8 +979,7 @@ const Dashboard = ({
     if (selectedPool && selectedPool.chain) {
       setselectedchain(selectedPool?.chain);
     }
-  }, [selectedPool]);
-
+  }, [selectedPool]); 
   return (
     <>
       <div className="d-none">
@@ -1043,7 +1022,11 @@ const Dashboard = ({
                   to="/earn/dypius"
                   className="view-more-title d-flex justify-content-center align-items-center gap-1"
                 >
-                  View all <img src={rightarrow} alt="" />{" "}
+                  View all{" "}
+                  <img
+                    src={"https://cdn.worldofdypians.com/tools/rightlogo.svg"}
+                    alt=""
+                  />{" "}
                 </NavLink>
               </div>
               {windowSize.width > 786 ? (
@@ -1065,7 +1048,9 @@ const Dashboard = ({
                             {item.chain === "bnb" && (
                               <div className="d-flex justify-content-end align-items-center bnbTagwrapper pe-2">
                                 <img
-                                  src={require("./assets/bnblogo.svg").default}
+                                  src={
+                                    "https://cdn.worldofdypians.com/wod/bnbIcon.svg"
+                                  }
                                   alt=""
                                   style={{ height: 20, width: 20 }}
                                   className="popup-chains-icon d-block"
@@ -1080,7 +1065,9 @@ const Dashboard = ({
                             {item.chain === "eth" && (
                               <div className="d-flex justify-content-end pe-2 align-items-center ethereumTagwrapper">
                                 <img
-                                  src={require("./assets/ethereum.svg").default}
+                                  src={
+                                    "https://cdn.worldofdypians.com/wod/eth.svg"
+                                  }
                                   alt=""
                                   style={{ height: 20, width: 20 }}
                                   className="popup-chains-icon d-block"
@@ -1095,7 +1082,9 @@ const Dashboard = ({
                             {item.chain === "base" && (
                               <div className="d-flex justify-content-end pe-2 align-items-center baseTagwrapper">
                                 <img
-                                  src={require("./assets/base.svg").default}
+                                  src={
+                                    "https://cdn.worldofdypians.com/wod/base.svg"
+                                  }
                                   alt=""
                                   style={{ height: 20, width: 20 }}
                                   className="popup-chains-icon d-block"
@@ -1110,7 +1099,9 @@ const Dashboard = ({
                             {item.chain === "avax" && (
                               <div className="d-flex justify-content-end align-items-center pe-2 avaxTagWrapper">
                                 <img
-                                  src={require("./assets/avaxlogo.svg").default}
+                                  src={
+                                    "https://cdn.worldofdypians.com/wod/avaxIcon.svg"
+                                  }
                                   alt=""
                                   style={{ height: 20, width: 20 }}
                                   className="popup-chains-icon d-block"
@@ -1257,7 +1248,9 @@ const Dashboard = ({
                             {item.chain === "bnb" && (
                               <div className="d-flex justify-content-end align-items-center bnbTagwrapper pe-2">
                                 <img
-                                  src={require("./assets/bnblogo.svg").default}
+                                  src={
+                                    "https://cdn.worldofdypians.com/wod/bnbIcon.svg"
+                                  }
                                   alt=""
                                   style={{ height: 20, width: 20 }}
                                   className="popup-chains-icon d-block"
@@ -1272,7 +1265,9 @@ const Dashboard = ({
                             {item.chain === "eth" && (
                               <div className="d-flex justify-content-end pe-2 align-items-center ethereumTagwrapper">
                                 <img
-                                  src={require("./assets/ethereum.svg").default}
+                                  src={
+                                    "https://cdn.worldofdypians.com/wod/eth.svg"
+                                  }
                                   alt=""
                                   style={{ height: 20, width: 20 }}
                                   className="popup-chains-icon d-block"
@@ -1287,7 +1282,9 @@ const Dashboard = ({
                             {item.chain === "base" && (
                               <div className="d-flex justify-content-end pe-2 align-items-center baseTagwrapper">
                                 <img
-                                  src={require("./assets/base.svg").default}
+                                  src={
+                                    "https://cdn.worldofdypians.com/wod/base.svg"
+                                  }
                                   alt=""
                                   style={{ height: 20, width: 20 }}
                                   className="popup-chains-icon d-block"
@@ -1302,7 +1299,9 @@ const Dashboard = ({
                             {item.chain === "avax" && (
                               <div className="d-flex justify-content-end align-items-center pe-2 avaxTagWrapper">
                                 <img
-                                  src={require("./assets/avaxlogo.svg").default}
+                                  src={
+                                    "https://cdn.worldofdypians.com/wod/avaxIcon.svg"
+                                  }
                                   alt=""
                                   style={{ height: 20, width: 20 }}
                                   className="popup-chains-icon d-block"
@@ -1412,7 +1411,11 @@ const Dashboard = ({
                 className="view-more-title d-flex justify-content-center align-items-center gap-1"
                 to="/news"
               >
-                View all <img src={rightarrow} alt="" />
+                View all{" "}
+                <img
+                  src={"https://cdn.worldofdypians.com/tools/rightlogo.svg"}
+                  alt=""
+                />
               </NavLink>
               <div className="d-flex flex-column flex-md-row gap-3 justify-content-between px-0">
                 {popularNewsData.length !== 0 && (
@@ -1510,7 +1513,7 @@ const Dashboard = ({
                     </span>
                   </div>
                   <img
-                    src={closeX}
+                    src={"https://cdn.worldofdypians.com/wod/popupXmark.svg"}
                     alt=""
                     className="close-x position-relative cursor-pointer "
                     onClick={() => {
@@ -1742,8 +1745,8 @@ const Dashboard = ({
                                         "0x92A84052Fe6945949A295AF14a7506e3dc085492" ||
                                       selectedPool?.id ===
                                         "0xFdD3CFF22CF846208E3B37b47Bc36b2c61D2cA8b"
-                                        ? warning
-                                        : moreinfo
+                                        ? "https://cdn.worldofdypians.com/tools/warning.svg"
+                                        : "https://cdn.worldofdypians.com/tools/more-info.svg"
                                     }
                                     alt=""
                                     onClick={aprOpen}
@@ -1807,10 +1810,38 @@ const Dashboard = ({
                       setselectedPool(
                         selectedPool.tokenType === "dyp"
                           ? ethPools.find((item) => {
-                              return item.tokenType === "dyp" && item.chain === 'eth';
+                              return (
+                                item.tokenType === "dyp" && item.chain === "eth"
+                              );
+                            })
+                            ? ethPools.find((item) => {
+                                return (
+                                  item.tokenType === "dyp" &&
+                                  item.chain === "eth"
+                                );
+                              })
+                            : ethPools.find((item) => {
+                                return (
+                                  item.tokenType === "idyp" &&
+                                  item.chain === "eth"
+                                );
+                              })
+                          : ethPools.find((item) => {
+                              return (
+                                item.tokenType === "idyp" &&
+                                item.chain === "eth"
+                              );
+                            })
+                          ? ethPools.find((item) => {
+                              return (
+                                item.tokenType === "idyp" &&
+                                item.chain === "eth"
+                              );
                             })
                           : ethPools.find((item) => {
-                              return item.tokenType === "idyp" && item.chain === 'eth';
+                              return (
+                                item.tokenType === "dyp" && item.chain === "eth"
+                              );
                             })
                       );
                     }}
@@ -1819,7 +1850,11 @@ const Dashboard = ({
                       className={`d-flex justify-content-center align-items-center chain-popup-text`}
                     >
                       <img
-                        src={selectedchain === "eth" ? ethActive : eth}
+                        src={
+                          selectedchain === "eth"
+                            ? "https://cdn.worldofdypians.com/wod/eth.svg"
+                            : "https://cdn.worldofdypians.com/tools/ethGray.svg"
+                        }
                         alt=""
                         className="popup-chains-icon"
                       />
@@ -1839,10 +1874,38 @@ const Dashboard = ({
                       setselectedPool(
                         selectedPool.tokenType === "dyp"
                           ? bnbPools.find((item) => {
-                              return (item.tokenType === "dyp" && item.chain === 'bnb');
+                              return (
+                                item.tokenType === "dyp" && item.chain === "bnb"
+                              );
+                            })
+                            ? bnbPools.find((item) => {
+                                return (
+                                  item.tokenType === "dyp" &&
+                                  item.chain === "bnb"
+                                );
+                              })
+                            : bnbPools.find((item) => {
+                                return (
+                                  item.tokenType === "idyp" &&
+                                  item.chain === "bnb"
+                                );
+                              })
+                          : bnbPools.find((item) => {
+                              return (
+                                item.tokenType === "idyp" &&
+                                item.chain === "bnb"
+                              );
+                            })
+                          ? bnbPools.find((item) => {
+                              return (
+                                item.tokenType === "idyp" &&
+                                item.chain === "bnb"
+                              );
                             })
                           : bnbPools.find((item) => {
-                              return (item.tokenType === "idyp" && item.chain === 'bnb');
+                              return (
+                                item.tokenType === "dyp" && item.chain === "bnb"
+                              );
                             })
                       );
                     }}
@@ -1851,7 +1914,11 @@ const Dashboard = ({
                       className={`d-flex justify-content-center align-items-center chain-popup-text`}
                     >
                       <img
-                        src={selectedchain === "bnb" ? bnbActive : bnb}
+                        src={
+                          selectedchain === "bnb"
+                            ? "https://cdn.worldofdypians.com/wod/bnbIcon.svg"
+                            : "https://cdn.worldofdypians.com/tools/bnbGray.svg"
+                        }
                         alt=""
                         className="popup-chains-icon"
                       />
@@ -1871,10 +1938,40 @@ const Dashboard = ({
                       setselectedPool(
                         selectedPool.tokenType === "dyp"
                           ? basePools.find((item) => {
-                              return (item.tokenType === "dyp" && item.chain === 'base');
+                              return (
+                                item.tokenType === "dyp" &&
+                                item.chain === "base"
+                              );
+                            })
+                            ? basePools.find((item) => {
+                                return (
+                                  item.tokenType === "dyp" &&
+                                  item.chain === "base"
+                                );
+                              })
+                            : basePools.find((item) => {
+                                return (
+                                  item.tokenType === "idyp" &&
+                                  item.chain === "base"
+                                );
+                              })
+                          : basePools.find((item) => {
+                              return (
+                                item.tokenType === "idyp" &&
+                                item.chain === "base"
+                              );
+                            })
+                          ? basePools.find((item) => {
+                              return (
+                                item.tokenType === "idyp" &&
+                                item.chain === "base"
+                              );
                             })
                           : basePools.find((item) => {
-                              return (item.tokenType === "idyp" && item.chain === 'base');
+                              return (
+                                item.tokenType === "dyp" &&
+                                item.chain === "base"
+                              );
                             })
                       );
                     }}
@@ -1883,7 +1980,11 @@ const Dashboard = ({
                       className={`d-flex justify-content-center align-items-center chain-popup-text`}
                     >
                       <img
-                        src={selectedchain === "base" ? baseActive : base}
+                        src={
+                          selectedchain === "base"
+                            ? "https://cdn.worldofdypians.com/wod/baseBlueLogo.svg"
+                            : "https://cdn.worldofdypians.com/tools/baseGray.svg"
+                        }
                         alt=""
                         className="popup-chains-icon"
                       />
@@ -1892,11 +1993,12 @@ const Dashboard = ({
                   </div>
                   <div
                     className={`position-relative w-100 ${
-                      selectedchain === "avax"
-                        ? "chain-popup-item-avax"
-                        : selectedpoolType === "idyp"
-                        ? "chain-popup-item-disabled"
-                        : "chain-popup-item"
+                      // selectedchain === "avax"
+                      //   ? "chain-popup-item-avax"
+                      //   : selectedpoolType === "idyp"
+                      //   ? 
+                        "chain-popup-item-disabled"
+                        // : "chain-popup-item"
                     }`}
                     onClick={() => {
                       setselectedchain("avax");
@@ -1904,10 +2006,40 @@ const Dashboard = ({
                       setselectedPool(
                         selectedPool.tokenType === "dyp"
                           ? avaxPools.find((item) => {
-                              return (item.tokenType === "dyp" && item.chain === 'avax');
+                              return (
+                                item.tokenType === "dyp" &&
+                                item.chain === "avax"
+                              );
+                            })
+                            ? avaxPools.find((item) => {
+                                return (
+                                  item.tokenType === "dyp" &&
+                                  item.chain === "avax"
+                                );
+                              })
+                            : avaxPools.find((item) => {
+                                return (
+                                  item.tokenType === "idyp" &&
+                                  item.chain === "avax"
+                                );
+                              })
+                          : avaxPools.find((item) => {
+                              return (
+                                item.tokenType === "idyp" &&
+                                item.chain === "avax"
+                              );
+                            })
+                          ? avaxPools.find((item) => {
+                              return (
+                                item.tokenType === "idyp" &&
+                                item.chain === "avax"
+                              );
                             })
                           : avaxPools.find((item) => {
-                              return (item.tokenType === "idyp" && item.chain === 'avax');
+                              return (
+                                item.tokenType === "dyp" &&
+                                item.chain === "avax"
+                              );
                             })
                       );
                     }}
@@ -1916,7 +2048,11 @@ const Dashboard = ({
                       className={`d-flex justify-content-center align-items-center chain-popup-text`}
                     >
                       <img
-                        src={selectedchain === "avax" ? avaxActive : avax}
+                        src={
+                          selectedchain === "avax"
+                            ? "https://cdn.worldofdypians.com/wod/avaxIcon.svg"
+                            : "https://cdn.worldofdypians.com/tools/avaxGray.svg"
+                        }
                         alt=""
                         className="popup-chains-icon"
                       />

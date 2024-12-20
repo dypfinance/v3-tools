@@ -8,7 +8,7 @@ import getFormattedNumber from "../../functions/getFormattedNumber2";
 import ethStakeActive from "../../assets/earnAssets/ethStakeActive.svg";
 import bnbStakeActive from "../../assets/earnAssets/bnbStakeActive.svg";
 import avaxStakeActive from "../../assets/earnAssets/avaxStakeActive.svg";
-import filledArrow from "../bridgecard/assets/filledarrow.svg";
+
 import calculatorChart from "./assets/calculatorChart.png";
 import usdt from "./assets/usdt.svg";
 import usdc from "./assets/usdc.svg";
@@ -699,7 +699,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
                     <img src={ethStakeActive} width={20} height={20} alt="" />
                     <h6 className="chain-name">Ethereum</h6>
                   </div>
-                  <img src={filledArrow} alt="" />
+                  <img src={'https://cdn.worldofdypians.com/tools/filledArrow.svg'} alt="" />
                 </div>
               </div>
             </NavLink>
@@ -746,7 +746,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
                       {activeMethod === "Vault" ? "USDC" : "BNB Chain"}
                     </h6>
                   </div>
-                  <img src={filledArrow} alt="" />
+                  <img src={'https://cdn.worldofdypians.com/tools/filledArrow.svg'} alt="" />
                 </div>
               </div>
             </NavLink>
@@ -793,7 +793,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
                       {activeMethod === "Vault" ? "USDT" : "Avalanche"}
                     </h6>
                   </div>
-                  <img src={filledArrow} alt="" />
+                  <img src={'https://cdn.worldofdypians.com/tools/filledArrow.svg'} alt="" />
                 </div>
               </div>
             </NavLink>

@@ -1,32 +1,15 @@
 import "./header.css";
 import Web3 from "web3";
-import getFormattedNumber from "../../functions/get-formatted-number";
 import React, { useEffect, useState } from "react";
-import coin from "./assets/coins.svg";
-import avax from "./assets/avax.svg";
-import bnb from "./assets/bnb.svg";
-import eth from "./assets/eth.svg";
-import base from "./assets/base.svg";
-import skale from "./assets/skale.svg";
-
-import conflux from "./assets/conflux.svg";
-import dropdown from "./assets/dropdown.svg";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import { shortAddress } from "../../functions/shortAddress";
-import ellipse from "./assets/ellipse.svg";
-import user from "./assets/user.svg";
-import plans from "./assets/plans.svg";
-import logoutimg from "./assets/logout.svg";
-import walletIcon from "./assets/walletIcon.svg";
 import WalletModal from "../WalletModal";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
 import { NavLink } from "react-router-dom";
 import useWindowSize from "../../functions/useWindowSize";
-import toolsLogo from "../../assets/sidebarIcons/toolsLogo.svg";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
-import error from "../../assets/error.svg";
 
 const Header = ({
   toggleMobileSidebar,
@@ -59,7 +42,9 @@ const Header = ({
   const [skaleState, setSkaleState] = useState(false);
   const [currencyAmount, setCurrencyAmount] = useState(0);
 
-  const [avatar, setAvatar] = useState("../../assets/img/person.svg");
+  const [avatar, setAvatar] = useState(
+    "https://cdn.worldofdypians.com/tools/person.svg"
+  );
   const routeData = useLocation();
 
   const { ethereum } = window;
@@ -76,7 +61,7 @@ const Header = ({
       setBnbState(false);
       setEthState(false);
       setSkaleState(false);
-    } else if (chainId === 56) {
+    } else if (chainId === 56 || chainId === 204) {
       setAvaxState(false);
       setBnbState(true);
       setEthState(false);
@@ -138,6 +123,19 @@ const Header = ({
     }
   };
 
+  const handleOpBnbPool = async () => {
+    if (window.ethereum) {
+      await handleSwitchNetworkhook("0xcc")
+        .then(() => {
+          handleSwitchNetwork("204");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    } else {
+      window.alertify.error("No web3 detected. Please install Metamask!");
+    }
+  };
   const handleAvaxPool = async () => {
     if (window.ethereum) {
       await handleSwitchNetworkhook("0xa86a")
@@ -217,7 +215,7 @@ const Header = ({
       .then((data) => {
         data.avatar
           ? setAvatar(data.avatar)
-          : setAvatar("/assets/img/person.svg");
+          : setAvatar("https://cdn.worldofdypians.com/tools/person.svg");
       })
       .catch(console.error);
 
@@ -257,15 +255,22 @@ const Header = ({
   //  console.log(isConnected)
   const getEthBalance = async () => {
     if (checklogout === "false" && coinbase) {
-      const balance = await ethereum.request({
-        method: "eth_getBalance",
-        params: [coinbase, "latest"],
-      }).catch((e)=>{console.error(e); return 0});
+      const balance = await ethereum
+        .request({
+          method: "eth_getBalance",
+          params: [coinbase, "latest"],
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
 
       if (balance) {
         const infuraWeb3 = new Web3(window.config.infura_endpoint);
 
         const bscWeb3 = new Web3(window.config.bsc_endpoint);
+        const opbnbWeb3 = new Web3(window.config.opbnb_endpoint);
+
         const avaxWeb3 = new Web3(window.config.avax_endpoint);
         const web3cfx = new Web3(window.config.conflux_endpoint);
         const web3base = new Web3(window.config.base_endpoint);
@@ -285,6 +290,12 @@ const Header = ({
         } else if (chainId === 56) {
           const stringBalance = bscWeb3.utils.hexToNumberString(balance);
           const amount = bscWeb3.utils.fromWei(stringBalance, "ether");
+          onSetCurrencyAmount(amount);
+
+          setCurrencyAmount(amount.slice(0, 7));
+        } else if (chainId === 204) {
+          const stringBalance = opbnbWeb3.utils.hexToNumberString(balance);
+          const amount = opbnbWeb3.utils.fromWei(stringBalance, "ether");
           onSetCurrencyAmount(amount);
 
           setCurrencyAmount(amount.slice(0, 7));
@@ -363,7 +374,18 @@ const Header = ({
 
   return (
     <>
-      <header className="header-wrap" style={{ zIndex: 5, top: windowSize.width <991 && showFlyout === true ? '40px' : windowSize.width <991 && showFlyout === false ? 0 : 0  }}>
+      <header
+        className="header-wrap"
+        style={{
+          zIndex: 5,
+          top:
+            windowSize.width < 991 && showFlyout === true
+              ? "40px"
+              : windowSize.width < 991 && showFlyout === false
+              ? 0
+              : 0,
+        }}
+      >
         <div className="container-fluid d-flex justify-content-center justify-content-lg-start">
           <div className="row w-100">
             <div className="col-1"></div>
@@ -394,11 +416,18 @@ const Header = ({
                   </span>
                 </div>
                 <NavLink to="/">
-                  <img src={toolsLogo} className="d-flex d-lg-none" alt="" />
+                  <img
+                    src={"https://cdn.worldofdypians.com/tools/toolsLogo.svg"}
+                    className="d-flex d-lg-none"
+                    alt=""
+                  />
                 </NavLink>
                 <div className="d-flex m-0 justify-content-between gap-3 align-items-center">
                   <NavLink className="buydyp-btn btn" to="/buydyp">
-                    <img src={coin} alt="" />
+                    <img
+                      src={"https://cdn.worldofdypians.com/tools/coins.svg"}
+                      alt=""
+                    />
                     <span className="buy-dyp-text d-none d-lg-flex">
                       Buy DYP
                     </span>
@@ -416,18 +445,18 @@ const Header = ({
                               <img
                                 src={
                                   ethState === true
-                                    ? eth
+                                    ? "https://cdn.worldofdypians.com/wod/eth.svg"
                                     : bnbState === true
-                                    ? bnb
+                                    ? "https://cdn.worldofdypians.com/wod/bnbIcon.svg"
                                     : avaxState === true
-                                    ? avax
+                                    ? "https://cdn.worldofdypians.com/wod/avaxIcon.svg"
                                     : baseState === true
-                                    ? base
+                                    ? "https://cdn.worldofdypians.com/wod/base.svg"
                                     : confluxState === true
-                                    ? conflux
+                                    ? "https://cdn.worldofdypians.com/wod/confluxIcon.svg"
                                     : skaleState === true
-                                    ? skale
-                                    : error
+                                    ? "https://cdn.worldofdypians.com/wod/skaleIcon.svg"
+                                    : "https://cdn.worldofdypians.com/wod/error.svg"
                                 }
                                 height={16}
                                 width={16}
@@ -437,7 +466,9 @@ const Header = ({
                                 {ethState === true
                                   ? "Ethereum"
                                   : bnbState === true
-                                  ? "BNB Chain"
+                                  ? chainId === 56
+                                    ? "BNB Chain"
+                                    : "opBNB Chain"
                                   : avaxState === true
                                   ? "Avalanche"
                                   : baseState === true
@@ -449,32 +480,88 @@ const Header = ({
                                   : "Unsupported Chain"}
                               </span>
 
-                              <img src={dropdown} alt="" />
+                              <img
+                                src={
+                                  "https://cdn.worldofdypians.com/wod/dropdown.svg"
+                                }
+                                alt=""
+                              />
                             </span>
                           }
                         >
                           <Dropdown.Item onClick={() => handleEthPool()}>
-                            <img src={eth} alt="" />
+                            <img
+                              src={"https://cdn.worldofdypians.com/wod/eth.svg"}
+                              alt=""
+                              height={20}
+                              width={20}
+                            />
                             Ethereum
                           </Dropdown.Item>
                           <Dropdown.Item onClick={() => handleBnbPool()}>
-                            <img src={bnb} alt="" />
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/wod/bnbIcon.svg"
+                              }
+                              alt=""
+                              height={20}
+                              width={20}
+                            />
                             BNB Chain
                           </Dropdown.Item>
+                          <Dropdown.Item onClick={() => handleOpBnbPool()}>
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/wod/bnbIcon.svg"
+                              }
+                              alt=""
+                              height={20}
+                              width={20}
+                            />
+                            opBNB Chain
+                          </Dropdown.Item>
                           <Dropdown.Item onClick={() => handleAvaxPool()}>
-                            <img src={avax} alt="" />
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/wod/avaxIcon.svg"
+                              }
+                              alt=""
+                              height={20}
+                              width={20}
+                            />
                             Avalanche
                           </Dropdown.Item>
                           <Dropdown.Item onClick={() => handleConfluxPool()}>
-                            <img src={conflux} alt="" />
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/wod/confluxIcon.svg"
+                              }
+                              alt=""
+                              height={20}
+                              width={20}
+                            />
                             Conflux
                           </Dropdown.Item>
                           <Dropdown.Item onClick={() => handleBasePool()}>
-                            <img src={base} alt="" />
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/wod/base.svg"
+                              }
+                              alt=""
+                              height={20}
+                              width={20}
+                            />
                             Base
                           </Dropdown.Item>
                           <Dropdown.Item onClick={() => handleSkalePool()}>
-                            <img src={skale} alt="" />
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/wod/skaleIcon.svg"
+                              }
+                              alt=""
+                              height={20}
+                              width={20}
+                            />
                             SKALE
                           </Dropdown.Item>
                         </DropdownButton>
@@ -537,7 +624,7 @@ const Header = ({
                                   {currencyAmount}{" "}
                                   {chainId === 1
                                     ? "ETH"
-                                    : chainId === 56
+                                    : chainId === 56 || chainId === 204
                                     ? "BNB"
                                     : chainId === 43114
                                     ? "AVAX"
@@ -578,13 +665,23 @@ const Header = ({
                                 className={"d-flex w-100"}
                               >
                                 <span className="d-flex gap-2 align-items-center">
-                                  <img src={user} alt="" />
+                                  <img
+                                    src={
+                                      "https://cdn.worldofdypians.com/tools/user.svg"
+                                    }
+                                    alt=""
+                                  />
                                   My account
                                 </span>
                               </NavLink>
                             </Dropdown.Item>
                             <Dropdown.Item onClick={() => logout()}>
-                              <img src={logoutimg} alt="" />
+                              <img
+                                src={
+                                  "https://cdn.worldofdypians.com/tools/logout.svg"
+                                }
+                                alt=""
+                              />
                               Disconnect wallet
                             </Dropdown.Item>
                           </DropdownButton>
@@ -602,7 +699,9 @@ const Header = ({
                               style={{ bottom: "5px", fontSize: "12px" }}
                             >
                               <img
-                                src={walletIcon}
+                                src={
+                                  "https://cdn.worldofdypians.com/tools/walletIcon.svg"
+                                }
                                 alt=""
                                 className="position-relative"
                                 // style={{ top: 4 }}
@@ -622,7 +721,9 @@ const Header = ({
                           className="account-user-wrapper d-flex align-items-center gap-1"
                         >
                           <img
-                            src={require(`./assets/user2.svg`).default}
+                            src={
+                              "https://cdn.worldofdypians.com/tools/user2.svg"
+                            }
                             alt=""
                           />
                           <span className="account-user d-none d-lg-flex">

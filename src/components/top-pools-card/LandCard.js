@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./top-pools.css";
-import greenArrow from "./assets/greenarrow.svg";
-import orangeArrow from "./assets/orangearrow.svg";
-// import newPool from "./assets/newPool.png";
+import "./top-pools.css";  
 import landNftIcon from "./assets/lanft-poolicon.png";
 import purpleArrow from "./assets/purpleArrow.svg";
 
@@ -113,12 +110,12 @@ const LandCard = ({
               <img
                 src={
                   details === false && expired === false
-                    ? greenArrow
+                    ? 'https://cdn.worldofdypians.com/tools/greenarrow.svg'
                     : details === false && expired === true
                     ? purpleArrow
                     : details === true && expired === true
-                    ? orangeArrow
-                    : orangeArrow
+                    ? 'https://cdn.worldofdypians.com/tools/orangearrow.svg'
+                    : 'https://cdn.worldofdypians.com/tools/orangearrow.svg'
                 }
                 alt=""
               />

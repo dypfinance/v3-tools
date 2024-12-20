@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
-import stakeVideo from "./comingsoon.svg";
 import axios from "axios";
-import arrowActive from "./arrowActive.svg";
-import arrowPassive from "./arrowPassive.svg";
 
 import Collapse from "react-bootstrap/Collapse";
 
@@ -93,10 +90,10 @@ const EarnFaq = ({ faqTypes, faqIndex }) => {
                   <img
                     src={
                       open === -1
-                        ? arrowPassive
+                        ? 'https://cdn.worldofdypians.com/tools/arrowPassive.svg'
                         : open === index
-                        ? arrowActive
-                        : arrowPassive
+                        ? 'https://cdn.worldofdypians.com/tools/arrowActive.svg'
+                        : 'https://cdn.worldofdypians.com/tools/arrowPassive.svg'
                     }
                     alt=""
                   />

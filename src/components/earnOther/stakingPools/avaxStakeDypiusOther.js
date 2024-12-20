@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment";
 import getFormattedNumber from "../../../functions/get-formatted-number";
-import { shortAddress } from "../../../functions/shortAddress";
-import moreinfo from "../../FARMINNG/assets/more-info.svg";
-import wallet from "../../FARMINNG/assets/wallet.svg";
+import { shortAddress } from "../../../functions/shortAddress"; 
 import Tooltip from "@material-ui/core/Tooltip";
-import statsLinkIcon from "../../FARMINNG/assets/statsLinkIcon.svg";
 import { ClickAwayListener } from "@material-ui/core";
 import { handleSwitchNetworkhook } from "../../../functions/hooks";
 import axios from "axios";
 import Modal from "../../Modal/Modal";
 import { useNavigate } from "react-router-dom";
 import Web3 from "web3";
-
+ 
 const StakeDypiusAvaxOther = ({
   selectedPool,
   selectedTab,
@@ -995,7 +992,7 @@ const StakeDypiusAvaxOther = ({
                         </div>
                       }
                     >
-                      <img src={moreinfo} alt="" onClick={aprOpen} />
+                      <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={aprOpen} />
                     </Tooltip>
                   </ClickAwayListener>
                 </span>
@@ -1008,7 +1005,7 @@ const StakeDypiusAvaxOther = ({
                 <span className="info-pool-right-text d-flex gap-1 align-items-center">
                   <img
                     src={
-                      require(`../../top-pools-card/assets/avax.svg`).default
+                     'https://cdn.worldofdypians.com/wod/avaxIcon.svg'
                     }
                     width={12}
                     height={12}
@@ -1112,7 +1109,7 @@ const StakeDypiusAvaxOther = ({
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={poolCapOpen} />
+                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={poolCapOpen} />
                         </Tooltip>
                       </ClickAwayListener>
                     </span>
@@ -1136,7 +1133,7 @@ const StakeDypiusAvaxOther = ({
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={quotaOpen} />
+                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={quotaOpen} />
                         </Tooltip>
                       </ClickAwayListener>
                     </span>
@@ -1160,7 +1157,7 @@ const StakeDypiusAvaxOther = ({
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={maxDepositOpen} />
+                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={maxDepositOpen} />
                         </Tooltip>
                       </ClickAwayListener>
                     </span>
@@ -1279,7 +1276,7 @@ const StakeDypiusAvaxOther = ({
                           }
                         >
                           <img
-                            src={moreinfo}
+                            src={'https://cdn.worldofdypians.com/tools/more-info.svg'}
                             alt=""
                             onClick={earlyWithdrawOpen}
                           />
@@ -1306,7 +1303,7 @@ const StakeDypiusAvaxOther = ({
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={poolFeeOpen} />
+                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={poolFeeOpen} />
                         </Tooltip>
                       </ClickAwayListener>
                     </span>
@@ -1322,7 +1319,7 @@ const StakeDypiusAvaxOther = ({
                       className="stats-link2 text-decoration-underline"
                     >
                       {shortAddress(staking?._address)}{" "}
-                      {/* <img src={statsLinkIcon} alt="" /> */}
+                      {/* <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" /> */}
                     </a>
                   </div>
                   <div className="d-flex align-items-center gap-1">
@@ -1573,7 +1570,7 @@ const StakeDypiusAvaxOther = ({
                           }
                         >
                           <img
-                            src={moreinfo}
+                            src={'https://cdn.worldofdypians.com/tools/more-info.svg'}
                             alt=""
                             onClick={earlyWithdrawOpen}
                           />
@@ -1600,7 +1597,7 @@ const StakeDypiusAvaxOther = ({
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={poolFeeOpen} />
+                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={poolFeeOpen} />
                         </Tooltip>
                       </ClickAwayListener>
                     </span>
@@ -1616,7 +1613,7 @@ const StakeDypiusAvaxOther = ({
                       className="stats-link2 text-decoration-underline"
                     >
                       {shortAddress(staking?._address)}{" "}
-                      {/* <img src={statsLinkIcon} alt="" /> */}
+                      {/* <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" /> */}
                     </a>
                   </div>
                   <div className="d-flex align-items-center gap-1">
@@ -1640,7 +1637,7 @@ const StakeDypiusAvaxOther = ({
         coinbase === undefined ||
         is_wallet_connected === false ? (
           <button className="connectbtn btn m-auto" onClick={onConnectWallet}>
-            <img src={wallet} alt="" /> Connect wallet
+            <img src={'https://cdn.worldofdypians.com/tools/walletIcon.svg'} alt="" /> Connect wallet
           </button>
         ) : chainId !== "43114" ? (
           <button
@@ -1791,7 +1788,7 @@ const StakeDypiusAvaxOther = ({
     //                       }
     //                     >
     //                       <img
-    //                         src={moreinfo}
+    //                         src={'https://cdn.worldofdypians.com/tools/more-info.svg'}
     //                         alt=""
     //                         onClick={performanceOpen}
     //                       />
@@ -1854,7 +1851,7 @@ const StakeDypiusAvaxOther = ({
     //                 className="bottomitems"
     //                 onClick={() => setshowCalculator(true)}
     //               >
-    //                 <img src={poolsCalculatorIcon} alt="" />
+    //                 <img src={'https://cdn.worldofdypians.com/tools/poolsCalculatorIcon.svg'} alt="" />
     //                 Calculator
     //               </h6>
     //               <a
@@ -1875,7 +1872,7 @@ const StakeDypiusAvaxOther = ({
     //                 }}
     //               >
     //                 <h6 className="bottomitems">
-    //                   <img src={purplestats} alt="" />
+    //                   <img src={'https://cdn.worldofdypians.com/tools/purpleStat.svg'} alt="" />
     //                   Stats
     //                 </h6>
     //               </div>
@@ -1897,7 +1894,7 @@ const StakeDypiusAvaxOther = ({
     //             coinbase === undefined ||
     //             is_wallet_connected === false ? (
     //               <button className="connectbtn btn" onClick={showModal}>
-    //                 <img src={wallet} alt="" /> Connect wallet
+    //                 <img src={'https://cdn.worldofdypians.com/tools/walletIcon.svg'} alt="" /> Connect wallet
     //               </button>
     //             ) : chainId === "43114" ? (
     //               <div className="addressbtn btn">
@@ -2346,7 +2343,7 @@ const StakeDypiusAvaxOther = ({
     //                   className="stats-link"
     //                 >
     //                   {shortAddress(coinbase)}{" "}
-    //                   <img src={statsLinkIcon} alt="" />
+    //                   <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
     //                 </a>
     //                 <a
     //                   target="_blank"
@@ -2354,7 +2351,7 @@ const StakeDypiusAvaxOther = ({
     //                   href={`https://github.com/dypfinance/staking-governance-security-audits`}
     //                   className="stats-link"
     //                 >
-    //                   Audit <img src={statsLinkIcon} alt="" />
+    //                   Audit <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
     //                 </a>
     //                 <a
     //                   target="_blank"
@@ -2362,7 +2359,7 @@ const StakeDypiusAvaxOther = ({
     //                   href={`${window.config.snowtrace_baseURL}/token/${reward_token_dypius_bsc._address}?a=${coinbase}`}
     //                   className="stats-link"
     //                 >
-    //                   View transaction <img src={statsLinkIcon} alt="" />
+    //                   View transaction <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
     //                 </a>
     //               </div>
     //             </div>

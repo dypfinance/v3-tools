@@ -2,8 +2,7 @@ import React, { useRef, useState } from "react";
 import "./buydyp.css";
 import VendorCard from "./VendorCard";
 import Slider from "react-slick";
-import VideoCard from "./VideoCard";
-import customSliderArrow from "../launchpad/assets/customSliderArrow.svg";
+import VideoCard from "./VideoCard"; 
 
 const BuyDyp = () => {
   const settings = {
@@ -455,7 +454,7 @@ console.log(videoList.length)
                 <div className="selected-image-wrapper">
                   <img
                     src={
-                      require(`./assets/${buyDypItems[activeVendor].logo}`)
+                      `https://cdn.worldofdypians.com/tools/${buyDypItems[activeVendor].logo}`
                         
                     }
                     height={32}
@@ -479,7 +478,7 @@ console.log(videoList.length)
             </div>
             <hr className="form-divider my-3" />
             {videoList.length === 0 ? (
-              <img src={require("./assets/commingSoon.svg").default} />
+              <img src={"https://cdn.worldofdypians.com/tools/commingSoon.svg"} />
             ) : (
               <iframe
                 src={activeVideo?.link}
@@ -501,7 +500,7 @@ console.log(videoList.length)
                     onClick={() => previous()}
                   >
                     <img
-                      src={customSliderArrow}
+                      src={'https://cdn.worldofdypians.com/tools/customSliderArrow.svg'}
                       alt=""
                       className="prev-arrow"
                     />
@@ -511,7 +510,7 @@ console.log(videoList.length)
                     onClick={() => next()}
                   >
                     <img
-                      src={customSliderArrow}
+                      src={'https://cdn.worldofdypians.com/tools/customSliderArrow.svg'}
                       alt=""
                       className="next-arrow"
                     />
@@ -520,14 +519,14 @@ console.log(videoList.length)
               )}
             </div>
             <div className="mt-2">
-              {videoList.length <= 0 ? (
+              {videoList.length === 0 ? (
                 <Slider {...settings} ref={slider}>
-                  <img src={require("./assets/noVideo.svg").default} alt="" />
-                  <img src={require("./assets/noVideo.svg").default} alt="" />
-                  <img src={require("./assets/noVideo.svg").default} alt="" />
-                  <img src={require("./assets/noVideo.svg").default} alt="" />
-                  <img src={require("./assets/noVideo.svg").default} alt="" />
-                  <img src={require("./assets/noVideo.svg").default} alt="" />
+                  <img src={"https://cdn.worldofdypians.com/tools/noVideo.svg"} alt="" className="novidimg" />
+                  <img src={"https://cdn.worldofdypians.com/tools/noVideo.svg"} alt=""  className="novidimg"/>
+                  <img src={"https://cdn.worldofdypians.com/tools/noVideo.svg"} alt=""  className="novidimg"/>
+                  <img src={"https://cdn.worldofdypians.com/tools/noVideo.svg"} alt=""  className="novidimg"/>
+                  <img src={"https://cdn.worldofdypians.com/tools/noVideo.svg"} alt=""  className="novidimg"/>
+                  <img src={"https://cdn.worldofdypians.com/tools/noVideo.svg"} alt=""  className="novidimg"/>
                 </Slider>
               ) : (
                 <Slider {...settings} ref={slider}>
@@ -548,11 +547,12 @@ console.log(videoList.length)
                   {videoList?.length < 4 &&
                     emptyVideos
                       .slice(0, 4 - videoList.length)
-                      .map((item) => (
+                      .map((item, index) => (
                         <img
-                          src={require("./assets/noVideo.svg").default}
-                          className="d-none d-lg-flex"
+                          src={"https://cdn.worldofdypians.com/tools/noVideo.svg"}
+                          className="d-none d-lg-flex novidimg"
                           alt=""
+                          key={index}
                         />
                       ))}
                 </Slider>

@@ -1,13 +1,4 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import VotePassive from "./assets/votepassive.svg";
-import Upvote from "./assets/upvote.svg";
-import Downvote from "./assets/downvote.svg";
-import Clock from "./assets/clock.svg";
-import ToolTip from "./ToolTip";
-import OutsideClickHandler from "react-outside-click-handler";
-import featuredNewsShadow from "./assets/featuredNewsShadow.png";
-import calendar from "../newsCard/assets/calendar.svg";
+import React, { useState, useEffect } from "react"; 
 
 const MainNews = ({
   link,
@@ -118,13 +109,13 @@ const MainNews = ({
         {/* <a target="_blank" href={link}> */}
         <div className="main-image position-relative">
           <div className="d-flex align-items-center gap-2 main-date-item">
-            <img src={calendar} alt="calendar" />
+            <img src={'https://cdn.worldofdypians.com/tools/calendar.svg'} alt="calendar" />
             <span className="news-date-text">
               {formattedDate.toLocaleDateString("en-US", options)}
             </span>
           </div>
           <img
-            src={featuredNewsShadow}
+            src={'https://cdn.worldofdypians.com/tools/featuredNewsShadow.png'}
             alt=""
             className={`featured-shadow w-100 ${
               bannerShadow && "featured-shadow-hover"

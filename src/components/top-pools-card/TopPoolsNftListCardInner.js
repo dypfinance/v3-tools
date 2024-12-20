@@ -1,23 +1,10 @@
 import React, { useEffect, useState } from "react";
-import greenArrow from "./assets/greenarrow.svg";
-import orangeArrow from "./assets/orangearrow.svg";
-import topPick from "./assets/toppick.svg";
-import comingSoonTag from "./assets/comingSoonTag.svg";
-
-import newPool from "./assets/newPool.png";
-import getFormattedNumber from "../../functions/get-formatted-number";
 import "./top-pools.css";
 import LandDetails from "../FARMINNG/land";
 import CawsDetails from "../FARMINNG/caws";
-import CawsDetailsPremium from "../FARMINNG/cawsPremium";
 import CawsWodDetails from "../FARMINNG/cawsWod";
 import axios from "axios";
 import useWindowSize from "../../functions/useWindowSize";
-
-import ethStake from "../../assets/earnAssets/ethStakeActive.svg";
-import avaxStake from "../../assets/earnAssets/avaxStakeActive.svg";
-import bnbStakeActive from "../../assets/earnAssets/bnbStakeActive.svg";
-import baseStake from "../../assets/earnAssets/baseActive.svg";
 
 const TopPoolsNftListCardInner = ({
   tokenLogo,
@@ -199,7 +186,7 @@ const TopPoolsNftListCardInner = ({
                           return (
                             <img
                               key={index}
-                              src={require(`./assets/${item}`)}
+                              src={`https://cdn.worldofdypians.com/tools/${item}`}
                               width={28}
                               height={28}
                               alt=""
@@ -237,7 +224,7 @@ const TopPoolsNftListCardInner = ({
                       className="d-flex align-items-center gap-2"
                     >
                       <img
-                        src={ethStake}
+                        src={'https://cdn.worldofdypians.com/tools/avaxStakeActive.svg'}
                         style={{ width: 18, height: 18 }}
                         alt=""
                         className="pool-coins"
@@ -287,7 +274,7 @@ const TopPoolsNftListCardInner = ({
                               return (
                                 <img
                                   key={index}
-                                  src={require(`./assets/${item}`)}
+                                  src={`https://cdn.worldofdypians.com/tools/${item}`}
                                   width={28}
                                   height={28}
                                   alt=""

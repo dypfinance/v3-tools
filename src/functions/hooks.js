@@ -160,6 +160,20 @@ export const handleSwitchNetworkhook = async (chainID) => {
     blockExplorerUrls: ["https://snowtrace.io/"],
   };
 
+  
+  const OPBNBPARAMS = {
+    chainId: "0xcc", // A 0x-prefixed hexadecimal string
+    rpcUrls: ["https://opbnb.publicnode.com"],
+    chainName: "opBNB Mainnet",
+    nativeCurrency: {
+      name: "opBNB",
+      symbol: "BNB", // 2-6 characters long
+      decimals: 18,
+    },
+
+    blockExplorerUrls: ["https://mainnet.opbnbscan.com"],
+  };
+
   const BNBPARAMS = {
     chainId: "0x38", // A 0x-prefixed hexadecimal string
     chainName: "Smart Chain",
@@ -244,6 +258,8 @@ export const handleSwitchNetworkhook = async (chainID) => {
               ? [BNBPARAMS]
               : chainID === "0x2105"
               ? [BASEPARAMS]
+              : chainID === "0xcc"
+              ? [OPBNBPARAMS]
               : chainID === "0x406"
               ? [CONFLUXPARAMS]
               : chainID === "0x585eb4b1"

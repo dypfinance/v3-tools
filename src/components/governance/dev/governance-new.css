@@ -308,7 +308,7 @@
   right: -12px;
   width: 24px;
   height: 24px;
-  top: 0px;
+  top: -1px;
 }
 
 .chaintext {
@@ -396,7 +396,7 @@
 .totalproposals {
   border-radius: 12px;
   padding: 25px 10px 25px 10px;
-  background: url(../assets/statsbg.png);
+  background: url('https://cdn.worldofdypians.com/tools/statsbg.png');
   background-color: rgba(255, 255, 255, 0.06);
   background-position: center;
   background-repeat: no-repeat;
@@ -495,7 +495,7 @@
 .emptycard {
   height: 150px;
   border-radius: 12px;
-  background: url("../assets/emptycard.png");
+  background: url("https://cdn.worldofdypians.com/tools/emptycard.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
@@ -507,7 +507,7 @@
   margin: auto;
   position: absolute;
   bottom: 0;
-  background-image: url("../assets/detailsbg.svg") !important;
+  background-image: url("https://cdn.worldofdypians.com/tools/detailsbg.svg") !important;
   width: 94px;
   height: 25px;
   background-repeat: no-repeat;
@@ -516,7 +516,7 @@
 }
 
 .accordion-button:not(.collapsed)::after {
-  background-image: url("../assets/close.svg") !important;
+  background-image: url("https://cdn.worldofdypians.com/tools/closegov.svg") !important;
   width: 94px;
   height: 25px;
   background-repeat: no-repeat;
@@ -701,6 +701,8 @@
   left: 0;
   right: 0;
   margin: auto;
+  width: 30px;
+  height: 30px;
 }
 
 .govcard1 {
@@ -708,7 +710,7 @@
   padding: 20px 10px;
   border-radius: 12px;
   background-color: #26264f;
-  background-image: url(../assets/card1.png);
+  background-image: url('https://cdn.worldofdypians.com/tools/card1.png');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -719,7 +721,7 @@
   padding: 20px 10px;
   border-radius: 12px;
   background-color: #26264f;
-  background-image: url(../assets/card2.png);
+  background-image: url('https://cdn.worldofdypians.com/tools/card2.png');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -732,7 +734,7 @@
   padding: 20px 10px;
   border-radius: 12px;
   background-color: #26264f;
-  background-image: url(../assets/card3.png);
+  background-image: url('https://cdn.worldofdypians.com/tools/card3.png');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -767,7 +769,7 @@
 }
 
 .cardwrapper {
-  background: url(../assets/cardbg.png);
+  background: url('https://cdn.worldofdypians.com/tools/cardbg.png');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -801,7 +803,7 @@
 .total-proposals-wrapper{
   background: #26264F;
 border-radius: 12px;
-background-image: url('../assets/totalVotesBackground.png');
+background-image: url('https://cdn.worldofdypians.com/tools/totalVotesBackground.png');
 background-repeat: no-repeat;
 background-size: cover;
 }

@@ -221,25 +221,25 @@ gap: 12px;
 }
 
 .loyalty-benefit-item:nth-child(1){
-  background-image: url('./assets/blueBg.svg');
+  background-image: url('https://cdn.worldofdypians.com/tools/blueBg.svg');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: left;
 }
 .loyalty-benefit-item:nth-child(2){
-  background-image: url('./assets/cyanBg.svg');
+  background-image: url('https://cdn.worldofdypians.com/tools/cyanBg.svg');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: left;
 }
 .loyalty-benefit-item:nth-child(3){
-  background-image: url('./assets/purpleBg.svg');
+  background-image: url('https://cdn.worldofdypians.com/tools/purpleBg.svg');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: left;
 }
 .loyalty-benefit-item:nth-child(4){
-  background-image: url('./assets/greenBg.svg');
+  background-image: url('https://cdn.worldofdypians.com/tools/greenBg.svg');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: left;

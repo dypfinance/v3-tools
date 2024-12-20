@@ -1,10 +1,6 @@
 import React from "react";
-import defiBg from "./assets/defiBg.webp";
-import rightlogo from "./assets/filledArrow.svg";
 import "./launchpad.css";
-import { NavLink } from "react-router-dom";
-import whitelistHomeBg from "./assets/whitelistHomeBg.png";
-import loyaltyBanner from "./assets/loyaltyBanner.png";
+import { NavLink } from "react-router-dom"; 
 
 const LoyaltyCard = () => {
   return (
@@ -14,7 +10,7 @@ const LoyaltyCard = () => {
     >
       <div className="d-flex flex-column gap-2 align-items-center justify-content-between">
         <img
-          src={loyaltyBanner}
+          src={'https://cdn.worldofdypians.com/tools/loyaltyBanner.png'}
           alt=""
           className="launchpadbg"
         />
@@ -32,7 +28,7 @@ const LoyaltyCard = () => {
           >
              Join and earn gas rebates now!
           </h6>
-          <img src={rightlogo} alt="" />
+          <img src={'https://cdn.worldofdypians.com/tools/filledArrow.svg'} alt="" />
         </div>
       </div>
     </NavLink>

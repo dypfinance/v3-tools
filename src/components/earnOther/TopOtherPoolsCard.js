@@ -1,17 +1,6 @@
 import React, { useEffect, useState } from "react";
-import "../top-pools-card/top-pools.css";
-import greenArrow from "../top-pools-card/assets/greenarrow.svg";
-import purpleArrow from "../top-pools-card/assets/purpleArrow.svg";
-
-import orangeArrow from "../top-pools-card/assets/orangearrow.svg";
-import newPool from "../top-pools-card/assets/newPool.png";
-import staked from "../top-pools-card/assets/staked.svg";
-import topPick from "../top-pools-card/assets/toppick.svg";
-import stakeTag from "../../assets/earnAssets/stakeTag.svg";
-import vaultTag from "../../assets/earnAssets/vaultTag.svg";
-import cawsLabel from "../top-pools-card/assets/cawsLabel.svg";
-
-import buybackTag from "../../assets/earnAssets/buybackTag.svg";
+import "../top-pools-card/top-pools.css";   
+    
 
 const TopOtherPoolsCard = ({
   isAccount,
@@ -86,26 +75,26 @@ const TopOtherPoolsCard = ({
       >
         {isStaked && (
           <img
-            src={staked}
+            src={'https://cdn.worldofdypians.com/tools/staked.svg'}
             className="staked"
             alt="staked"
             style={{ right: isAccount === true ? 60 : "" }}
           />
         )}
         {top_pick === true && (
-          <img src={topPick} className="toppick" alt="top pick" />
+          <img src={'https://cdn.worldofdypians.com/tools/toppick.svg'} className="toppick" alt="top pick" />
         )}
-        {isNewPool && <img src={newPool} className="new-pool" alt="new pool" />}
+        {isNewPool && <img src={'https://cdn.worldofdypians.com/tools/newPool.png'} className="new-pool" alt="new pool" />}
         {tag && (
           <img
             src={
               tag === "stake"
-                ? stakeTag
+                ? 'https://cdn.worldofdypians.com/tools/stakeTag.svg'
                 : tag === "vault"
-                ? vaultTag
+                ? 'https://cdn.worldofdypians.com/tools/vaultTag.svg'
                 : tag === "nft"
-                ? cawsLabel
-                : buybackTag
+                ? 'https://cdn.worldofdypians.com/tools/cawsLabel.svg'
+                : 'https://cdn.worldofdypians.com/tools/buybackTag.svg'
             }
             alt="pool-tag"
             className="dashboard-pool-tag d-none d-lg-flex"
@@ -193,7 +182,7 @@ const TopOtherPoolsCard = ({
             >
               Stake
               <img
-                src={greenArrow}
+                src={'https://cdn.worldofdypians.com/tools/greenarrow.svg'}
                 alt=""
                 style={{ transform: "rotate(270deg)" }}
               />
