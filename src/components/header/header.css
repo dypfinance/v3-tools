@@ -91,6 +91,8 @@
   line-height: 18px;
   color: #f7f7fc !important;
   padding: 10px 8px;
+  cursor: pointer;
+
 }
 
 .dropdown-item:nth-child(1) {

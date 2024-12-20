@@ -23,13 +23,13 @@
 }
 
 .liquidity-background {
-  background-image: url("./assets/liquidityBackground.svg");
+  background-image: url("https://cdn.worldofdypians.com/tools/liquidityBackground.svg");
   background-size: cover;
   background-repeat: no-repeat;
 }
 
 .security-background {
-  background-image: url("./assets/securityBackground.svg");
+  background-image: url("https://cdn.worldofdypians.com/tools/securityBackground.svg");
   background-size: cover;
   background-repeat: no-repeat;
 }

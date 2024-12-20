@@ -1,9 +1,4 @@
-import React from "react";
-import filledArrow from "./assets/filledarrow.svg";
-import zoom from "./assets/zoom.svg";
-import yieldsIcon from "../../assets/sidebarIcons/yieldsIcon.svg";
-import explorerChart from "./assets/explorerChart.webp";
-import swapBanner from "./assets/swapBanner.webp";
+import React from "react"; 
 import "./explorer-card.css";
 import { NavLink } from "react-router-dom";
 
@@ -18,7 +13,7 @@ const ExplorerCard = () => {
         style={{ background: "#8890C4", top: "15px" }}
       ></div>
       <div className="d-flex justify-content-center align-items-center">
-        <img src={swapBanner} className="explorer-chart d-none d-lg-flex" alt="" />
+        <img src={'https://cdn.worldofdypians.com/tools/swapBanner.webp'} className="explorer-chart d-none d-lg-flex" alt="" />
       </div>
       <div className="col-12 col-lg-7 d-flex flex-column gap-3 justify-content-between">
         <div className=" d-flex justify-content-between gap-2 align-items-center">
@@ -38,7 +33,7 @@ const ExplorerCard = () => {
         </div>
         <div className="">
           <h6 className="explorercard-btntext d-flex gap-2 align-items-center">
-            Explore more <img src={filledArrow} alt="" />
+            Explore more <img src={'https://cdn.worldofdypians.com/tools/filledArrow.svg'} alt="" />
           </h6>
         </div>
       </div>

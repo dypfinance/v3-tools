@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "./bridge.css";
-import { useLocation } from "react-router-dom";
-import initMigration from "./migration";
-import Web3 from "web3";
-import avax from "./assets/avax.svg";
-import eth from "./assets/eth.svg";
-import bnb from "./assets/bnb.svg";
-import { CircularProgressbar } from "react-circular-progressbar";
+import initMigration from "./migration"; 
 import ReviewsBar from "./ProgressBar/ReviewsBar";
 import axios from "axios";
 import Countdown from "react-countdown";
+
 const renderer = ({ days, hours, minutes, seconds }) => {
   return (
     <div className="d-flex align-items-center gap-2">
@@ -112,14 +107,13 @@ const DypMigration = ({
             <h6 className="migration-banner-title mb-0">
               Final Call: Migrate DYP tokens
             </h6>
-          
+
             <p className="migration-banner-desc mb-0">
               The deadline to migrate is January 8, 2025. After this, migration
               will close permanently. Migrate your tokens today to secure
               continued access and utility!
             </p>
-          <Countdown date={loyaltyCd} renderer={renderer} />
-
+            <Countdown date={loyaltyCd} renderer={renderer} />
           </div>
         </div>
 
@@ -154,19 +148,19 @@ const DypMigration = ({
                   href="https://etherscan.io/address/0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17"
                   target="_blank"
                 >
-                  <img src={eth} alt="" />
+                  <img src={'https://cdn.worldofdypians.com/tools/ethSquare.svg'} alt="" />
                 </a>
                 <a
                   href="https://bscscan.com/address/0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17"
                   target="_blank"
                 >
-                  <img src={bnb} alt="" />
+                  <img src={'https://cdn.worldofdypians.com/tools/bnbSquare.svg'} alt="" />
                 </a>
                 <a
                   href="https://snowtrace.io/address/0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17"
                   target="_blank"
                 >
-                  <img src={avax} alt="" />
+                  <img src={'https://cdn.worldofdypians.com/tools/avaxSquare.svg'} alt="" />
                 </a>
               </div>
             </div>
@@ -187,7 +181,7 @@ const DypMigration = ({
                 href="https://etherscan.io/address/0x39b46b212bdf15b42b166779b9d1787a68b9d0c3"
                 target="_blank"
               >
-                <img src={eth} alt="" />
+                <img src={'https://cdn.worldofdypians.com/tools/ethSquare.svg'} alt="" />
               </a>
             </div>
           </div>
@@ -231,7 +225,7 @@ const DypMigration = ({
             >
               <div className="d-flex align-items-center.gap-2">
                 <span className="explore-migration">Explore the Guide</span>
-                <img src={require("./assets/greenArrow.svg").default} alt="" />
+                <img src={'https://cdn.worldofdypians.com/tools/rightlogo.svg'} alt="" />
               </div>
             </a>
             <a
@@ -242,7 +236,7 @@ const DypMigration = ({
             >
               <div className="d-flex align-items-center.gap-2">
                 <span className="explore-migration">FAQs</span>
-                <img src={require("./assets/greenArrow.svg").default} alt="" />
+                <img src={'https://cdn.worldofdypians.com/tools/rightlogo.svg'} alt="" />
               </div>
             </a>
           </div>

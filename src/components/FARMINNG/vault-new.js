@@ -4,17 +4,9 @@ import getFormattedNumber from "../../functions/get-formatted-number";
 import Modal from "../Modal/Modal";
 import Address from "./address";
 import WalletModal from "../WalletModal";
-import "./top-pools.css";
-import ellipse from "./assets/ellipse.svg";
-import failMark from "../../assets/failMark.svg";
-import moreinfo from "./assets/more-info.svg";
-import purplestats from "./assets/purpleStat.svg";
-import wallet from "./assets/wallet.svg";
-import Tooltip from "@material-ui/core/Tooltip";
-import statsLinkIcon from "./assets/statsLinkIcon.svg";
-import { shortAddress } from "../../functions/shortAddress";
-import poolStatsIcon from "./assets/poolStatsIcon.svg";
-import poolsCalculatorIcon from "./assets/poolsCalculatorIcon.svg";
+import "./top-pools.css";  
+import Tooltip from "@material-ui/core/Tooltip"; 
+import { shortAddress } from "../../functions/shortAddress";  
 import { ClickAwayListener } from "@material-ui/core";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
 import axios from "axios";
@@ -928,7 +920,7 @@ const Vault = ({
             <div className="d-flex flex-column flex-lg-row w-100 align-items-start align-items-lg-center justify-content-between">
               <h6 className="activetxt position-relative activetxt-vault">
                 <img
-                  src={ellipse}
+                  src={'https://cdn.worldofdypians.com/tools/ellipse.svg'}
                   alt=""
                   className="position-relative"
                   style={{ top: "-1px" }}
@@ -963,7 +955,7 @@ const Vault = ({
                           }
                         >
                           <img
-                            src={moreinfo}
+                            src={'https://cdn.worldofdypians.com/tools/more-info.svg'}
                             alt=""
                             onClick={performanceOpen}
                           />
@@ -991,7 +983,7 @@ const Vault = ({
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={aprOpen} />
+                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={aprOpen} />
                         </Tooltip>
                       </ClickAwayListener>
                     </h6>
@@ -1015,7 +1007,7 @@ const Vault = ({
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={lockOpen} />
+                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={lockOpen} />
                         </Tooltip>
                       </ClickAwayListener>
                     </h6>
@@ -1040,7 +1032,7 @@ const Vault = ({
                     className="bottomitems"
                     onClick={() => setshowCalculator(true)}
                   >
-                    <img src={poolsCalculatorIcon} alt="" />
+                    <img src={'https://cdn.worldofdypians.com/tools/poolsCalculatorIcon.svg'} alt="" />
                     Calculator
                   </h6>
                   <div
@@ -1049,7 +1041,7 @@ const Vault = ({
                     }}
                   >
                     <h6 className="bottomitems">
-                      <img src={purplestats} alt="" />
+                      <img src={'https://cdn.worldofdypians.com/tools/purpleStat.svg'} alt="" />
                       Stats
                     </h6>
                   </div>
@@ -1075,7 +1067,7 @@ const Vault = ({
                 coinbase === undefined ||
                 isConnected === false ? (
                   <button className="connectbtn btn" onClick={showModal}>
-                    <img src={wallet} alt="" /> Connect wallet
+                    <img src={'https://cdn.worldofdypians.com/tools/walletIcon.svg'} alt="" /> Connect wallet
                   </button>
                 ) : chainId === "1" ? (
                   <div className="addressbtn btn">
@@ -1148,7 +1140,7 @@ const Vault = ({
                       </div>
                     }
                   >
-                    <img src={moreinfo} alt="" onClick={depositOpen} />
+                    <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={depositOpen} />
                   </Tooltip>
                 </ClickAwayListener>
               </div>
@@ -1246,7 +1238,7 @@ const Vault = ({
                       <>Success</>
                     ) : (
                       <>
-                        <img src={failMark} alt="" />
+                        <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
                         Failed
                       </>
                     )}
@@ -1312,7 +1304,7 @@ const Vault = ({
                         </div>
                       }
                     >
-                      <img src={moreinfo} alt="" onClick={rewardsOpen} />
+                      <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={rewardsOpen} />
                     </Tooltip>
                   </ClickAwayListener>
                 </h6>
@@ -1354,7 +1346,7 @@ const Vault = ({
                       </div>
                     ) : claimStatus === "failed" ? (
                       <>
-                        <img src={failMark} alt="" />
+                        <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
                         Failed
                       </>
                     ) : claimStatus === "success" ? (
@@ -1390,7 +1382,7 @@ const Vault = ({
                       </div>
                     }
                   >
-                    <img src={moreinfo} alt="" onClick={withdrawOpen} />
+                    <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={withdrawOpen} />
                   </Tooltip>
                 </ClickAwayListener>
               </h6>
@@ -1542,7 +1534,7 @@ const Vault = ({
                   href={`${window.config.etherscan_baseURL}/address/${coinbase}`}
                   className="stats-link"
                 >
-                  {shortAddress(coinbase)} <img src={statsLinkIcon} alt="" />
+                  {shortAddress(coinbase)} <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                 </a>
               </div>
               <hr />
@@ -1558,7 +1550,7 @@ const Vault = ({
                         color: "#f7f7fc",
                       }}
                     >
-                      <img src={poolStatsIcon} alt="" />
+                      <img src={'https://cdn.worldofdypians.com/tools/poolStatsIcon.svg'} alt="" />
                       Pool stats
                     </h6>
                   </div>
@@ -1660,7 +1652,7 @@ const Vault = ({
                     href={`https://github.com/dypfinance/staking-governance-security-audits`}
                     className="stats-link"
                   >
-                    Audit <img src={statsLinkIcon} alt="" />
+                    Audit <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                   </a>
                   <a
                     target="_blank"
@@ -1668,7 +1660,7 @@ const Vault = ({
                     href={`${window.config.etherscan_baseURL}/token/${token._address}?a=${coinbase}`}
                     className="stats-link"
                   >
-                    View transaction <img src={statsLinkIcon} alt="" />
+                    View transaction <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                   </a>
                 </div>
               </div>
@@ -1779,7 +1771,7 @@ const Vault = ({
                         </div>
                       ) : withdrawStatus === "failed" ? (
                         <>
-                          <img src={failMark} alt="" />
+                          <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
                           Failed
                         </>
                       ) : withdrawStatus === "success" ? (

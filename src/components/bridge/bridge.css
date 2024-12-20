@@ -28,7 +28,7 @@
 .swiftwrapper {
   border-radius: 12px;
   border: 1px solid #7770df;
-  background: url(./assets/bridgebg.png);
+  background: url('https://cdn.worldofdypians.com/tools/bridgebg.png');
   background-position: center;
   background-size: 100% 100%;
   background-repeat: no-repeat;
@@ -43,7 +43,7 @@
 
 @media only screen and (max-width: 700px) {
   .swiftwrapper {
-    background: url(./assets/bridgebgMobile.png);
+    background: url('https://cdn.worldofdypians.com/tools/bridgebgMobile.png');
     aspect-ratio: 0.63/0.7;
     background-size: cover;
   }
@@ -122,7 +122,7 @@
 }
 
 .greendot {
-  background: url("./assets/greendot.svg");
+  background: url("https://cdn.worldofdypians.com/tools/greendot.svg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -168,7 +168,7 @@
   bottom: 0;
   top: 0;
   margin: auto;
-  background-image: url("./assets/migrationBannerBg.png");
+  background-image: url("https://cdn.worldofdypians.com/tools/migrationBannerMainBg.png");
   background-repeat: no-repeat;
   background-position: right;
   border-radius: 20px;
@@ -298,7 +298,7 @@
 
 .general-bridge-wrapper {
   border-radius: 12px;
-  background: url('./assets/dypbridgeBg.webp');
+  background: url('https://cdn.worldofdypians.com/tools/dypbridgeBg.webp');
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100% 100%;
@@ -326,16 +326,14 @@
 
   .general-bridge-wrapper {
     border-radius: 12px;
-    background: url('./assets/dypbridgeBgMobile.webp');
+    background: url('https://cdn.worldofdypians.com/tools/dypbridgeBgMobile.webp');
     background-repeat: no-repeat;
     background-position: center;
     background-size: 100% 100%;
     min-height: 300px;
   }
 
-  .base-bridge-wrapper {
-    
-  }
+ 
 }
 
 .migration-title {

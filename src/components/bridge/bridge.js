@@ -2,13 +2,7 @@ import React from "react";
 import getFormattedNumber from "../../functions/get-formatted-number";
 import Countdown from "react-countdown";
 import "./bridge.css";
-import eth from "./assets/eth.svg";
-import bnb from "./assets/bnb.svg";
-import avax from "./assets/avax.svg";
-import wallet from "./assets/wallet.svg";
-import moreinfo from "./assets/more-info.svg";
-import switchicon from "./assets/switch.svg";
-import failMark from "../../assets/failMark.svg";
+
 import Tooltip from "@material-ui/core/Tooltip";
 import Timeline from "@mui/lab/Timeline";
 import TimelineItem, { timelineItemClasses } from "@mui/lab/TimelineItem";
@@ -16,7 +10,6 @@ import TimelineSeparator from "@mui/lab/TimelineSeparator";
 import TimelineConnector from "@mui/lab/TimelineConnector";
 import TimelineContent from "@mui/lab/TimelineContent";
 import TimelineDot from "@mui/lab/TimelineDot";
-import routeIcon from "./assets/route-icon.svg";
 import Address from "../FARMINNG/address";
 import WalletModal from "../WalletModal";
 import PropTypes from "prop-types";
@@ -83,6 +76,7 @@ export default function initBridge({
         ethBalance: 0,
         bnbBalance: 0,
         avaxBalance: 0,
+        opbnbBalance: 0,
         destinationChainText: "",
       };
     }
@@ -118,6 +112,10 @@ export default function initBridge({
               this.setState({
                 destinationChainText: "bnb",
               });
+            } else if (data === "0xcc") {
+              this.setState({
+                destinationChainText: "opbnb",
+              });
             } else {
               this.setState({
                 destinationChainText: "",
@@ -140,10 +138,14 @@ export default function initBridge({
     fetchData = async () => {
       //Get DYP Balance Ethereum Pool
       let ethPool = await window.getTokenHolderBalanceAll(
-        this.props.sourceChain === "avax" || this.props.sourceChain === "bnb"
+        this.props.sourceChain === "avax" ||
+          this.props.sourceChain === "bnb" ||
+          this.props.sourceChain === "opbnb"
           ? bridgeBSC._address
           : bridgeETH._address,
-        this.props.sourceChain === "avax" || this.props.sourceChain === "bnb"
+        this.props.sourceChain === "avax" ||
+          this.props.sourceChain === "bnb" ||
+          this.props.sourceChain === "opbnb"
           ? bridgeBSC.tokenAddress
           : bridgeETH.tokenAddress,
         1
@@ -295,11 +297,17 @@ export default function initBridge({
           (this.props.sourceChain === "avax" &&
             this.props.destinationChain === "eth")
             ? window.config.SIGNATURE_APIBRIDGE_AVAX_URL_NEW
+            : (this.props.sourceChain === "eth" &&
+                this.props.destinationChain === "opbnb") ||
+              (this.props.sourceChain === "opbnb" &&
+                this.props.destinationChain === "eth")
+            ? window.config.SIGNATURE_APIBRIDGE_OPBNB_URL_NEW
             : window.config.SIGNATURE_APIBRIDGE_BSC_URL_NEW;
         let url =
           signature +
           `/api/withdraw-args?depositNetwork=${
-            this.props.sourceChain === "bnb"
+            this.props.sourceChain === "bnb" ||
+            this.props.sourceChain === "opbnb"
               ? "BSC"
               : this.props.sourceChain === "eth"
               ? "ETH"
@@ -308,9 +316,11 @@ export default function initBridge({
         console.log({ url });
         // let args = await window.jQuery.get(url);
         let args = await fetch(url)
-        .then(response => response.json())
-        .then(data => {return data})
-        .catch(error => console.error('Error:', error));
+          .then((response) => response.json())
+          .then((data) => {
+            return data;
+          })
+          .catch((error) => console.error("Error:", error));
         console.log({ args });
         let bridge = bridgeBSC;
         bridge
@@ -380,6 +390,8 @@ export default function initBridge({
           const tokenAddress = window.config.token_dypius_new_address;
           const tokenAddress_bsc = window.config.token_dypius_new_bsc_address;
           const tokenAddress_avax = window.config.token_dypius_new_avax_address;
+          const tokenAddress_opbnb =
+            window.config.token_dypius_new_opbnb_address;
 
           // let chainId = this.props.networkId;
           // let network = window.config.chain_ids[chainId] || "UNKNOWN";
@@ -415,6 +427,17 @@ export default function initBridge({
               .then((data) => {
                 this.setState({ token_balance: data });
               });
+          } else if (this.props.sourceChain === "opbnb") {
+            const token_contract_opbnb = new window.opbnbWeb3.eth.Contract(
+              window.TOKENBSC_ABI,
+              tokenAddress_opbnb
+            );
+            await token_contract_opbnb.methods
+              .balanceOf(this.props.coinbase)
+              .call()
+              .then((data) => {
+                this.setState({ token_balance: data });
+              });
           } else if (this.props.sourceChain === "avax") {
             const token_contract_avax = new window.avaxWeb3.eth.Contract(
               window.TOKENAVAX_ABI,
@@ -435,11 +458,17 @@ export default function initBridge({
                 (this.props.sourceChain === "avax" &&
                   this.props.destinationChain === "eth")
                   ? window.config.SIGNATURE_APIBRIDGE_AVAX_URL_NEW
+                  : (this.props.sourceChain === "eth" &&
+                      this.props.destinationChain === "opbnb") ||
+                    (this.props.sourceChain === "opbnb" &&
+                      this.props.destinationChain === "eth")
+                  ? window.config.SIGNATURE_APIBRIDGE_OPBNB_URL_NEW
                   : window.config.SIGNATURE_APIBRIDGE_BSC_URL_NEW;
               let url =
                 signature +
                 `/api/withdraw-args?depositNetwork=${
-                  this.props.sourceChain === "bnb"
+                  this.props.sourceChain === "bnb" ||
+                  this.props.sourceChain === "opbnb"
                     ? "BSC"
                     : this.props.sourceChain === "eth"
                     ? "ETH"
@@ -466,6 +495,7 @@ export default function initBridge({
       const tokenAddress = window.config.token_dypius_new_address;
       const tokenAddress_bsc = window.config.token_dypius_new_bsc_address;
       const tokenAddress_avax = window.config.token_dypius_new_avax_address;
+      const tokenAddress_opbnb = window.config.token_dypius_new_opbnb_address;
 
       const walletAddress = this.props.coinbase;
       const TokenABI = window.ERC20_ABI;
@@ -483,6 +513,10 @@ export default function initBridge({
           TokenABI,
           tokenAddress_avax
         );
+        const contract4 = new window.opbnbWeb3.eth.Contract(
+          TokenABI,
+          tokenAddress_opbnb
+        );
         if (this.props.sourceChain === "eth") {
           await contract1.methods
             .balanceOf(walletAddress)
@@ -496,6 +530,13 @@ export default function initBridge({
             .call()
             .then((data) => {
               this.setState({ bnbBalance: data });
+            });
+        } else if (this.props.sourceChain === "opbnb") {
+          await contract4.methods
+            .balanceOf(walletAddress)
+            .call()
+            .then((data) => {
+              this.setState({ opbnbBalance: data });
             });
         } else if (this.props.sourceChain === "avax") {
           await contract3.methods
@@ -513,6 +554,7 @@ export default function initBridge({
         let chainId = this.props.networkId;
         if (chainId === 43114) this.setState({ chainText: "AVAX" });
         else if (chainId === 56) this.setState({ chainText: "BSC" });
+        else if (chainId === 204) this.setState({ chainText: "OPBNB" });
         else if (chainId === 1) this.setState({ chainText: "ETH" });
         else {
           this.setState({ chainText: "" });
@@ -576,41 +618,57 @@ export default function initBridge({
                           });
                           this.props.onSelectSourceChain("eth");
                           this.props.onSelectChain(
-                            this.props.activebtn !== "2" ? "bnb" : "avax"
+                            this.props.activebtn !== "2" &&
+                              this.props.activebtn !== "8"
+                              ? "bnb"
+                              : this.props.activebtn === "8"
+                              ? "opbnb"
+                              : "avax"
                           );
                         }}
                       >
                         <h6 className="optiontext d-flex align-items-center gap-2">
-                          <img src={eth} alt="" />
+                          <img
+                            src={
+                              "https://cdn.worldofdypians.com/tools/ethSquare.svg"
+                            }
+                            alt=""
+                          />
                           <p className=" mb-0 optiontext d-none d-lg-flex">
                             Ethereum
                           </p>
                         </h6>
                       </div>
 
-                      {this.props.activebtn !== "2" && (
-                        <div
-                          className={
-                            this.props.sourceChain === "bnb"
-                              ? "optionbtn-active"
-                              : "optionbtn-passive bridge-passive"
-                          }
-                          onClick={() => {
-                            this.setState({
-                              sourceChain: "bnb",
-                            });
-                            this.props.onSelectSourceChain("bnb");
-                            this.props.onSelectChain("eth");
-                          }}
-                        >
-                          <h6 className="optiontext d-flex align-items-center gap-2">
-                            <img src={bnb} alt="" />
-                            <p className=" mb-0 optiontext d-none d-lg-flex">
-                              BNB Chain
-                            </p>
-                          </h6>
-                        </div>
-                      )}
+                      {this.props.activebtn !== "2" &&
+                        this.props.activebtn !== "8" && (
+                          <div
+                            className={
+                              this.props.sourceChain === "bnb"
+                                ? "optionbtn-active"
+                                : "optionbtn-passive bridge-passive"
+                            }
+                            onClick={() => {
+                              this.setState({
+                                sourceChain: "bnb",
+                              });
+                              this.props.onSelectSourceChain("bnb");
+                              this.props.onSelectChain("eth");
+                            }}
+                          >
+                            <h6 className="optiontext d-flex align-items-center gap-2">
+                              <img
+                                src={
+                                  "https://cdn.worldofdypians.com/tools/bnbSquare.svg"
+                                }
+                                alt=""
+                              />
+                              <p className=" mb-0 optiontext d-none d-lg-flex">
+                                BNB Chain
+                              </p>
+                            </h6>
+                          </div>
+                        )}
                       {this.props.activebtn === "2" && (
                         <div
                           className={
@@ -627,9 +685,42 @@ export default function initBridge({
                           }}
                         >
                           <h6 className="optiontext d-flex align-items-center gap-2">
-                            <img src={avax} alt="" />
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/tools/avaxSquare.svg"
+                              }
+                              alt=""
+                            />
                             <p className=" mb-0 optiontext d-none d-lg-flex">
                               Avalanche
+                            </p>
+                          </h6>
+                        </div>
+                      )}
+                      {this.props.activebtn === "8" && (
+                        <div
+                          className={
+                            this.props.sourceChain === "opbnb"
+                              ? "optionbtn-active"
+                              : "optionbtn-passive bridge-passive"
+                          }
+                          onClick={() => {
+                            this.setState({
+                              sourceChain: "opbnb",
+                            });
+                            this.props.onSelectSourceChain("opbnb");
+                            this.props.onSelectChain("eth");
+                          }}
+                        >
+                          <h6 className="optiontext d-flex align-items-center gap-2">
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/tools/bnbSquare.svg"
+                              }
+                              alt=""
+                            />
+                            <p className=" mb-0 optiontext d-none d-lg-flex">
+                              opBNB Chain
                             </p>
                           </h6>
                         </div>
@@ -643,7 +734,13 @@ export default function initBridge({
                           this.setState({ showWalletModal: true });
                         }}
                       >
-                        <img src={wallet} alt="" />
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/tools/walletIcon.svg"
+                          }
+                          alt=""
+                          style={{ height: 20, width: 20 }}
+                        />
                         Connect wallet
                       </button>
                     ) : (
@@ -676,6 +773,11 @@ export default function initBridge({
                                       : this.props.sourceChain === "avax"
                                       ? getFormattedNumber(
                                           this.state.avaxBalance / 1e18,
+                                          2
+                                        )
+                                      : this.props.sourceChain === "opbnb"
+                                      ? getFormattedNumber(
+                                          this.state.opbnbBalance / 1e18,
                                           2
                                         )
                                       : getFormattedNumber(
@@ -726,7 +828,12 @@ export default function initBridge({
                                   </div>
                                 }
                               >
-                                <img src={moreinfo} alt="" />
+                                <img
+                                  src={
+                                    "https://cdn.worldofdypians.com/tools/more-info.svg"
+                                  }
+                                  alt=""
+                                />
                               </Tooltip>
                             </h6>
 
@@ -814,7 +921,12 @@ export default function initBridge({
                                   <>Success</>
                                 ) : (
                                   <>
-                                    <img src={failMark} alt="" />
+                                    <img
+                                      src={
+                                        "https://cdn.worldofdypians.com/wod/failMark.svg"
+                                      }
+                                      alt=""
+                                    />
                                     Failed
                                   </>
                                 )}
@@ -838,7 +950,7 @@ export default function initBridge({
                     </div>
                   </div>
                   <img
-                    src={switchicon}
+                    src={"https://cdn.worldofdypians.com/tools/switch.svg"}
                     alt=""
                     onClick={this.handleSwapChains}
                     style={{
@@ -882,38 +994,49 @@ export default function initBridge({
                                     }}
                                   >
                                     <h6 className="optiontext d-flex align-items-center gap-2">
-                                      <img src={eth} alt="" />
+                                      <img
+                                        src={
+                                          "https://cdn.worldofdypians.com/tools/ethSquare.svg"
+                                        }
+                                        alt=""
+                                      />
                                       <p className=" mb-0 optiontext d-none d-lg-flex">
                                         Ethereum
                                       </p>
                                     </h6>
                                   </div>
-                                  {this.props.activebtn !== "2" && (
-                                    <div
-                                      className={
-                                        this.props.destinationChain === "bnb"
-                                          ? "optionbtn-active"
-                                          : "optionbtn-passive bridge-passive"
-                                      }
-                                      onClick={() => {
-                                        // this.props.onSelectChain("bnb");
-                                      }}
-                                      style={{
-                                        pointerEvents:
-                                          this.props.networkId === 1 ||
-                                          this.props.networkId === 56
-                                            ? "none"
-                                            : "auto",
-                                      }}
-                                    >
-                                      <h6 className="optiontext d-flex align-items-center gap-2">
-                                        <img src={bnb} alt="" />
-                                        <p className=" mb-0 optiontext d-none d-lg-flex">
-                                          BNB Chain
-                                        </p>
-                                      </h6>
-                                    </div>
-                                  )}
+                                  {this.props.activebtn !== "2" &&
+                                    this.props.activebtn !== "8" && (
+                                      <div
+                                        className={
+                                          this.props.destinationChain === "bnb"
+                                            ? "optionbtn-active"
+                                            : "optionbtn-passive bridge-passive"
+                                        }
+                                        onClick={() => {
+                                          // this.props.onSelectChain("bnb");
+                                        }}
+                                        style={{
+                                          pointerEvents:
+                                            this.props.networkId === 1 ||
+                                            this.props.networkId === 56
+                                              ? "none"
+                                              : "auto",
+                                        }}
+                                      >
+                                        <h6 className="optiontext d-flex align-items-center gap-2">
+                                          <img
+                                            src={
+                                              "https://cdn.worldofdypians.com/tools/bnbSquare.svg"
+                                            }
+                                            alt=""
+                                          />
+                                          <p className=" mb-0 optiontext d-none d-lg-flex">
+                                            BNB Chain
+                                          </p>
+                                        </h6>
+                                      </div>
+                                    )}
                                   {this.props.activebtn === "2" && (
                                     <div
                                       className={
@@ -933,9 +1056,45 @@ export default function initBridge({
                                       }}
                                     >
                                       <h6 className="optiontext d-flex align-items-center gap-2">
-                                        <img src={avax} alt="" />
+                                        <img
+                                          src={
+                                            "https://cdn.worldofdypians.com/tools/bnbSquare.svg"
+                                          }
+                                          alt=""
+                                        />
                                         <p className=" mb-0 optiontext d-none d-lg-flex">
                                           Avalanche
+                                        </p>
+                                      </h6>
+                                    </div>
+                                  )}
+                                  {this.props.activebtn === "8" && (
+                                    <div
+                                      className={
+                                        this.props.destinationChain === "opbnb"
+                                          ? "optionbtn-active"
+                                          : "optionbtn-passive bridge-passive"
+                                      }
+                                      onClick={() => {
+                                        // this.props.onSelectChain("bnb");
+                                      }}
+                                      style={{
+                                        pointerEvents:
+                                          this.props.networkId === 1 ||
+                                          this.props.networkId === 56
+                                            ? "none"
+                                            : "auto",
+                                      }}
+                                    >
+                                      <h6 className="optiontext d-flex align-items-center gap-2">
+                                        <img
+                                          src={
+                                            "https://cdn.worldofdypians.com/tools/bnbSquare.svg"
+                                          }
+                                          alt=""
+                                        />
+                                        <p className=" mb-0 optiontext d-none d-lg-flex">
+                                          opBNB Chain
                                         </p>
                                       </h6>
                                     </div>
@@ -988,7 +1147,7 @@ export default function initBridge({
                                     </div>
                                   }
                                 >
-                                  <img src={moreinfo} alt="" />
+                                  <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" />
                                 </Tooltip>
                               </div> */}
                             </h6>
@@ -1042,6 +1201,9 @@ export default function initBridge({
                                           : this.props.destinationChain ===
                                             "avax"
                                           ? "0xa86a"
+                                          : this.props.destinationChain ===
+                                            "opbnb"
+                                          ? "0xcc"
                                           : "0x38",
                                         this.props.destinationChain
                                       );
@@ -1073,13 +1235,20 @@ export default function initBridge({
                                       ? "to Ethereum"
                                       : this.props.destinationChain === "bnb"
                                       ? "to BNB Chain"
+                                      : this.props.destinationChain === "opbnb"
+                                      ? "to opBNB Chain"
                                       : "to Avalanche"}
                                   </>
                                 ) : this.state.withdrawStatus === "success" ? (
                                   <>Success</>
                                 ) : (
                                   <>
-                                    <img src={failMark} alt="" />
+                                    <img
+                                      src={
+                                        "https://cdn.worldofdypians.com/wod/failMark.svg"
+                                      }
+                                      alt=""
+                                    />
                                     Failed
                                   </>
                                 )}
@@ -1134,7 +1303,10 @@ export default function initBridge({
             </div>
             <div>
               <h6 className="guidetitle">
-                <img src={routeIcon} alt="" />
+                <img
+                  src={"https://cdn.worldofdypians.com/tools/route-icon.svg"}
+                  alt=""
+                />
                 Bridge process guide
               </h6>
               <div className="separator"></div>

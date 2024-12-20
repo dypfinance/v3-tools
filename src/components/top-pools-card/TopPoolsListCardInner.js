@@ -1,9 +1,5 @@
-import React, { useEffect, useState } from "react";
-import greenArrow from "./assets/greenarrow.svg";
-import orangeArrow from "./assets/orangearrow.svg";
-import topPick from "./assets/toppick.svg";
-import comingSoonTag from "./assets/comingSoonTag.svg";
-import newPool from "./assets/newPool.png";
+import React, { useEffect, useState } from "react";  
+import comingSoonTag from "./assets/comingSoonTag.svg"; 
 import getFormattedNumber from "../../functions/get-formatted-number";
 import "./top-pools.css";
 
@@ -179,7 +175,7 @@ const TopPoolsListCardInner = ({
         onClick={() => handleDetails()}
         style={{ display: display }}
       >
-        {isNewPool && <img src={newPool} alt="" className="new-pool2" />}
+        {isNewPool && <img src={'https://cdn.worldofdypians.com/tools/newPool.png'} alt="" className="new-pool2" />}
         <div className="col-12 col-lg-4 d-flex justify-content-between align-items-center">
           <div
             className={` d-flex align-items-center ${
@@ -193,7 +189,7 @@ const TopPoolsListCardInner = ({
                 <>
                   <img
                     key={index}
-                    src={require(`./assets/${coin}.svg`)}
+                    src={`https://cdn.worldofdypians.com/tools/${coin}.svg`}
                     alt=""
                     className="pool-coins"
                   />
@@ -208,7 +204,7 @@ const TopPoolsListCardInner = ({
             ) : tokenLogo !== undefined && tokenLogo !== "landcaws" ? (
               <>
                 <img
-                  src={require(`./assets/${tokenLogo}`)}
+                  src={`https://cdn.worldofdypians.com/tools/${tokenLogo}`}
                   width={32}
                   height={32}
                   alt=""
@@ -226,7 +222,7 @@ const TopPoolsListCardInner = ({
                   cawswodcoins.map((coin, index) => (
                     <img
                       key={index}
-                      src={require(`./assets/${coin}.png`)}
+                      src={`https://cdn.worldofdypians.com/tools/${coin}.png`}
                       alt=""
                       className="pool-coins"
                     />
@@ -342,7 +338,7 @@ const TopPoolsListCardInner = ({
           className="col-12 col-lg-2 d-flex justify-content-center justify-content-xxl-end justify-content-xl-end justify-content-lg-end justify-content-md-end gap-5"
           style={{ width: "170px" }}
         >
-          {top_pick && <img src={topPick} alt="" />}
+          {top_pick && <img src={'https://cdn.worldofdypians.com/tools/toppick.svg'} alt="" />}
           {comingSoon && <img src={comingSoonTag} alt="" />}
 
           <h6
@@ -354,7 +350,7 @@ const TopPoolsListCardInner = ({
           >
             {showDetails === false ? "Deposit" : "Close"}
             <img
-              src={showDetails === false ? greenArrow : orangeArrow}
+              src={showDetails === false ? 'https://cdn.worldofdypians.com/tools/greenarrow.svg' : 'https://cdn.worldofdypians.com/tools/orangearrow.svg'}
               alt=""
             />
           </h6>

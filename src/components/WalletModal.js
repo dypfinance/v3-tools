@@ -7,11 +7,11 @@ const WalletModal = ({ handleClose, show, handleConnection, coin98 }) => {
     <Modal visible={show} onModalClose={handleClose} maxWidth={820}>
       <OutsideClickHandler onOutsideClick={handleClose}>
         <div className="walletmodal-wrapper">
-          <div className="sc-jwKygS bFQpTL">
+          <div className="sc-jwKygS bFQpTL mx-2 mx-lg-3">
             <h3 style={{ fontSize: 20 }}>Connect to a wallet</h3>
           </div>
           <div>
-            <div className="row flex-column" style={{ gap: 20 }}>
+            <div className="row flex-column mx-2 mx-lg-3 align-items-center gap-3">
               {coin98 ? (
                 <>
                   <button
@@ -25,9 +25,9 @@ const WalletModal = ({ handleClose, show, handleConnection, coin98 }) => {
                     >
                       <span>Coin98</span>
                       <img
-                        src="/images/wallets/coin98.svg"
-                        width={50}
-                        height={50}
+                        src="https://cdn.worldofdypians.com/wod/coin98Connect.svg"
+                        width={35}
+                        height={35}
                         alt="Icon"
                       />
                     </div>
@@ -46,9 +46,9 @@ const WalletModal = ({ handleClose, show, handleConnection, coin98 }) => {
                     >
                       <span>MetaMask</span>
                       <img
-                        src="/images/wallets/metamask.svg"
-                        width={50}
-                        height={50}
+                        src="https://cdn.worldofdypians.com/wod/metamaskConnect.svg"
+                        width={35}
+                        height={35}
                         alt="Icon"
                       />
                     </div>
@@ -64,9 +64,9 @@ const WalletModal = ({ handleClose, show, handleConnection, coin98 }) => {
                     >
                       <span>Coinbase</span>
                       <img
-                        src="/images/wallets/coinbase.svg"
-                        width={50}
-                        height={50}
+                        src="https://cdn.worldofdypians.com/wod/coinbaseConnect.svg"
+                        width={35}
+                        height={35}
                         alt="Icon"
                       />
                     </div>
@@ -82,9 +82,9 @@ const WalletModal = ({ handleClose, show, handleConnection, coin98 }) => {
                     >
                       <span>Coin98</span>
                       <img
-                        src="/images/wallets/coin98.svg"
-                        width={50}
-                        height={50}
+                        src="https://cdn.worldofdypians.com/wod/coin98Connect.svg"
+                        width={35}
+                        height={35}
                         alt="Icon"
                       />
                     </div>
@@ -100,9 +100,9 @@ const WalletModal = ({ handleClose, show, handleConnection, coin98 }) => {
                     >
                       <span>Trust Wallet</span>
                       <img
-                        src="/images/wallets/trustwallet.svg"
-                        width={50}
-                        height={50}
+                        src="https://cdn.worldofdypians.com/wod/trustwalletConnect.svg"
+                        width={35}
+                        height={35}
                         alt="Icon"
                       />
                     </div>
@@ -118,9 +118,9 @@ const WalletModal = ({ handleClose, show, handleConnection, coin98 }) => {
                     >
                       <span>SafePal</span>
                       <img
-                        src="/images/wallets/safepal.svg"
-                        width={50}
-                        height={50}
+                        src="https://cdn.worldofdypians.com/wod/safepalConnect.svg"
+                        width={35}
+                        height={35}
                         alt="Icon"
                       />
                     </div>

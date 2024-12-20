@@ -1,16 +1,8 @@
 import React from "react";
-import moment from "moment";
 import DataTable, { createTheme } from "react-data-table-component";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { NavLink } from "react-router-dom";
-import ethlogo from "../../assets/ethlogo.svg";
-import bnblogo from "../../assets/bnblogo.svg";
-import avaxlogo from "../../assets/avaxlogo.svg";
 import getFormattedNumber from "../../functions/get-formatted-number";
-import ethPools from '../../assets/ethPools.png'
-import bnbPools from '../../assets/bnbPools.png'
-import avaxPools from '../../assets/avaxPools.png'
-import { Tooltip } from "@material-ui/core";
+
 
 const Circular = () => (
   // we need to add some padding to circular progress to keep it from activating our scrollbar
@@ -68,8 +60,7 @@ export default class Farms extends React.Component {
       filteredFarms: [],
       isLoading: true,
       filteredByName: "",
-      destinationChain: ""
-
+      destinationChain: "",
     };
   }
 
@@ -88,7 +79,6 @@ export default class Farms extends React.Component {
       });
       await this.fetchFarms().then();
     }
-
   }
 
   fetchFarms = async () => {
@@ -96,13 +86,10 @@ export default class Farms extends React.Component {
       let network = this.props.networkId;
       let farms = await window.$.get(
         network == 1
-          ? `${window.config.farm_api}/api/farm-info/eth/` 
-          :
-          network == 56
-          ?
-          `${window.config.farm_api}/api/farm-info-bsc/`
-          : 
-          `${window.config.farm_api}/api/farm-info-avax/`
+          ? `${window.config.farm_api}/api/farm-info/eth/`
+          : network == 56
+          ? `${window.config.farm_api}/api/farm-info-bsc/`
+          : `${window.config.farm_api}/api/farm-info-avax/`
       );
       farms = farms.farmInfo;
       //console.log({ farms })
@@ -154,9 +141,9 @@ export default class Farms extends React.Component {
     const columns = [
       {
         name: "Pool",
-        selector: row => row.pair_name,
+        selector: (row) => row.pair_name,
         sortable: true,
-        minWidth: '200px',
+        minWidth: "200px",
         cell: (row) => (
           <div className="token">
             {/* <img src="/assets/img/icon.svg" alt="" /> */}
@@ -170,30 +157,30 @@ export default class Farms extends React.Component {
               {" "}
               {row.pair_name}{" "}
             </a>
-            <img src="/assets/img/link.svg" alt="" />
+            <img src="https://cdn.worldofdypians.com/tools/link.svg" alt="" />
           </div>
         ),
       },
       {
         name: "Project",
-        selector: row => row.pool_name,
+        selector: (row) => row.pool_name,
         sortable: true,
       },
       {
         name: "TVL",
-        selector: row => row.tvl_usd,
+        selector: (row) => row.tvl_usd,
         sortable: true,
         cell: (row) => <div> ${getFormattedNumber(row.tvl_usd)} </div>,
       },
       {
         name: "APY",
-        selector: row => row.apy_percent,
+        selector: (row) => row.apy_percent,
         sortable: true,
         cell: (row) => <div> {getFormattedNumber(row.apy_percent)}% </div>,
       },
       {
         name: "Confidence",
-        selector: row => row.confidence,
+        selector: (row) => row.confidence,
         sortable: false,
       },
     ];
@@ -202,7 +189,6 @@ export default class Farms extends React.Component {
         progressComponent={<Circular />}
         compact={true}
         keyField="id"
-        
         theme={"solarized"}
         persistTableHead={false}
         progressPending={this.state.isLoading}
@@ -219,88 +205,119 @@ export default class Farms extends React.Component {
   render() {
     return (
       <div className="container-lg p-0">
-           <div className="d-flex flex-column gap-3">
-            <h2 className="launchpad-hero-title">Yields</h2>
-            <p className="launchpad-hero-desc">
-              This list does not imply endorsement by Dypius. There
-              might be Smart Contract risk and IL risk.
-              <br />
-              <b>
-                Please conduct your own research before dealing with any
-                project!
-              </b>
-            </p>
-          </div>
+        <div className="d-flex flex-column gap-3">
+          <h2 className="launchpad-hero-title">Yields</h2>
+          <p className="launchpad-hero-desc">
+            This list does not imply endorsement by Dypius. There might be Smart
+            Contract risk and IL risk.
+            <br />
+            <b>
+              Please conduct your own research before dealing with any project!
+            </b>
+          </p>
+        </div>
         <div className="row flex-column flex-lg-row gap-5 gap-lg-0 justify-content-between align-items-center my-4">
-        <div className="col-12 col-lg-4">
-          <img src={this.state.destinationChain === "eth"? ethPools : this.state.destinationChain === 'bnb' ? bnbPools : this.state.destinationChain === "avax" ? avaxPools : ethPools} alt="" />
+          <div className="col-12 col-lg-4">
+            <img
+              src={
+                this.state.destinationChain === "eth"
+                  ? "https://cdn.worldofdypians.com/tools/ethPools.png"
+                  : this.state.destinationChain === "bnb"
+                  ? "https://cdn.worldofdypians.com/tools/bnbPools.png"
+                  : this.state.destinationChain === "avax"
+                  ? "https://cdn.worldofdypians.com/tools/avaxPools.png"
+                  : "https://cdn.worldofdypians.com/tools/ethPools.png"
+              }
+              alt=""
+            />
           </div>
           <div className="position-relative col-12 col-lg-5 col-xl-4">
-              <p className="launchpad-hero-desc position-absolute" style={{ fontSize: 12, top: '-27px' }}>
+            <p
+              className="launchpad-hero-desc position-absolute"
+              style={{ fontSize: 12, top: "-27px" }}
+            >
               Change network (view purposes only)
-              </p>
-              <div className="d-flex justify-content-around align-items-center" style={{
+            </p>
+            <div
+              className="d-flex justify-content-around align-items-center"
+              style={{
                 background: "#312F69",
                 padding: "10px",
                 borderRadius: "12px",
                 boxShadow: "0px 32px 64px rgba(17, 17, 17, 0.12)",
-              }}>
-                <div
-                  className={
-                    this.props.networkId === 1
-                      ? "optionbtn-active"
-                      : "optionbtn-passive"
-                  }
-                  onClick={() => {
-                    this.props.onSelectChain("eth");
-                    this.setState({
-                      destinationChain: "eth",
-                    });
-                  }}
-                >
-                  <h6 className="optiontext">
-                    <img src={ethlogo} alt="" /> Ethereum
-                  </h6>
-                </div>
-             
-                       <div
-                  className={
-                    this.props.networkId === 56
-                      ? "optionbtn-active"
-                      : "optionbtn-passive"
-                  }
-                  onClick={() => {
-                    this.props.onSelectChain("bnb");
-                    this.setState({
-                      destinationChain: "bnb",
-                    });
-                  }}
-                >
-                  <h6 className="optiontext" >
-                    <img src={bnblogo} alt="" /> BNB Chain
-                  </h6>
-                </div>
+              }}
+            >
+              <div
+                className={
+                  this.props.networkId === 1
+                    ? "optionbtn-active"
+                    : "optionbtn-passive"
+                }
+                onClick={() => {
+                  this.props.onSelectChain("eth");
+                  this.setState({
+                    destinationChain: "eth",
+                  });
+                }}
+              >
+                <h6 className="optiontext">
+                  <img
+                    src={"https://cdn.worldofdypians.com/wod/eth.svg"}
+                    alt=""
+                    style={{ height: 18, width: 18 }}
+                  />{" "}
+                  Ethereum
+                </h6>
+              </div>
 
-                <div
-                  className={
-                    this.props.networkId === 43114
-                      ? "optionbtn-active"
-                      : "optionbtn-passive"
-                  }
-                  onClick={() => {
-                    this.props.onSelectChain("avax");
-                    this.setState({
-                      destinationChain: "avax",
-                    });
-                  }}
-                >
-                  <h6 className="optiontext">
-                    <img src={avaxlogo} alt="" /> Avalanche
-                  </h6>
-                </div>
+              <div
+                className={
+                  this.props.networkId === 56
+                    ? "optionbtn-active"
+                    : "optionbtn-passive"
+                }
+                onClick={() => {
+                  this.props.onSelectChain("bnb");
+                  this.setState({
+                    destinationChain: "bnb",
+                  });
+                }}
+              >
+                <h6 className="optiontext">
+                  <img
+                    src={"https://cdn.worldofdypians.com/wod/bnbIcon.svg"}
+                    alt=""
+                    style={{ height: 18, width: 18 }}
+                  />{" "}
+                  BNB Chain
+                </h6>
+              </div>
+
+              <div
+                className={
+                  this.props.networkId === 43114
+                    ? "optionbtn-active"
+                    : "optionbtn-passive"
+                }
+                onClick={() => {
+                  this.props.onSelectChain("avax");
+                  this.setState({
+                    destinationChain: "avax",
+                  });
+                }}
+              >
+                <h6 className="optiontext">
+                  <img
+                    src={"https://cdn.worldofdypians.com/wod/avaxIcon.svg"}
+                    alt=""
+                    style={{ height: 18, width: 18 }}
+                  />{" "}
+                  Avalanche
+                </h6>
               </div>
             </div>
-            <div className="col-12 col-lg-3 col-xl-4">
+          </div>
+          <div className="col-12 col-lg-3 col-xl-4">
             <div
               className="search-box"
               style={{
@@ -330,12 +347,11 @@ export default class Farms extends React.Component {
                   placeholder="Filter by Name"
                 />
                 <button type="submit" id="submit">
-                  <img src="/assets/img/search.svg" alt="Image" />
+                  <img src="https://cdn.worldofdypians.com/tools/search.svg" alt="Image" />
                 </button>
               </form>
             </div>
-            </div>
-           
+          </div>
         </div>
         <div className="table-box">
           <div className="form-container p-3 position-relative">
