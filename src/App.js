@@ -143,6 +143,7 @@ function App() {
   const [isonlink, setIsOnLink] = useState(false);
   const [hasDypBalance, sethasDypBalance] = useState(false);
   const [hasiDypBalance, sethasiDypBalance] = useState(false);
+  const [dypBalance, setDypBalance] = useState(0)
   const [userPools, setuserPools] = useState([]);
   const [previousWeeklyVersion, setpreviousWeeklyVersion] = useState(0);
   const [previousMonthlyVersion, setpreviousMonthlyVersion] = useState(0);
@@ -610,6 +611,8 @@ function App() {
           console.error(e);
           return 0;
         });
+
+        setDypBalance(ethBalance)
 
       let ethBalance_idyp = await contract1_idyp.methods
         .balanceOf(walletAddress)
@@ -1857,7 +1860,7 @@ setkittyDashRecords */}
                       />
                     }
                   />
-                  <Route exact path="/packages" element={<PricingPackages />} />
+                  <Route exact path="/bundles" element={<PricingPackages dypBalance={dypBalance} />} />
                   <Route exact path="/bundles-terms-of-service" element={<BundleTOS />} />
 
                   <Route

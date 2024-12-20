@@ -1,16 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./pricingpackages.css";
 import greenCheck from "./assets/greenCheck.svg";
 import OutsideClickHandler from "react-outside-click-handler";
 import BundlePopup from "./BundlePopup";
 import UnlockPopup from "./UnlockPopup";
+import axios from "axios";
+import getFormattedNumber from "../../functions/get-formatted-number";
 
-const PricingPackages = () => {
+const PricingPackages = ({ dypBalance }) => {
   const [popup, setPopup] = useState(false);
-  const [withdrawPopup, setWithdrawPopup] = useState(true);
-  const [firstLock, setFirstLock] = useState(true);
+  const [withdrawPopup, setWithdrawPopup] = useState(false);
+  const [firstLock, setFirstLock] = useState(false);
   const [secondLock, setSecondLock] = useState(false);
   const [thirdLock, setThirdLock] = useState(false);
+  const [dypPrice, setDypPrice] = useState(0);
+  const [activeBundle, setActiveBundle] = useState(null);
 
   const basicBenefits = [
     "Token Contract Development",
@@ -48,6 +52,27 @@ const PricingPackages = () => {
     "12-Month Ongoing Support",
   ];
 
+  const getPriceDYP = async () => {
+    const dypprice = await axios
+      .get(
+        "https://api.geckoterminal.com/api/v2/networks/eth/pools/0x7c81087310a228470db28c1068f0663d6bf88679"
+      )
+      .then((res) => {
+        return res.data.data.attributes.base_token_price_usd;
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+
+    setDypPrice(dypprice);
+  };
+
+  useEffect(() => {
+    getPriceDYP();
+  }, []);
+
+  console.log(dypPrice);
+
   return (
     <>
       <div className="container-lg p-0">
@@ -75,7 +100,7 @@ const PricingPackages = () => {
                     <div className="d-flex flex-column">
                       <span className="package-amount-needed">My Balance:</span>
                       <h6 className="package-plan-price mb-0 text-white">
-                        X,XXX DYP
+                        {getFormattedNumber(dypBalance, 2)} DYP
                       </h6>
                     </div>
                   </div>
@@ -107,44 +132,47 @@ const PricingPackages = () => {
                   ))}
                 </div>
               </div>
-             {firstLock ? 
-            <div className="pricing-package-buy-wrapper p-3 d-flex gap-3 align-items-center justify-content-center w-100" style={{minHeight: "108.8px"}}>
-            <a
-              href="https://docs.google.com/forms/d/e/1FAIpQLSf9l087pAlIjiyJQniUXDfbl5OwXUA6nvehCDr-dpsNYVcwEg/viewform"
-              target="_blank"
-              className="btn contact-btn px-5 py-2"
-              style={{ fontSize: "14px" }}
-            >
-              Contact
-            </a>
-            <button
-              className="btn filledbtn px-5 py-2"
-              style={{ fontSize: "14px" }}
-              onClick={() => setWithdrawPopup(true)}
-            >
-              Unlock
-            </button>
-          </div>
-            :
-            <div className="pricing-package-buy-wrapper p-3 d-flex gap-2 align-items-center justify-content-between w-100">
-            <div className="d-flex flex-column">
-              <span className="package-amount-needed">
-                Minimum Lock Amount:
-              </span>
-              <h6 className="package-plan-price mb-0 text-white">
-                X,XXX DYP
-              </h6>
-              <span className="package-price-usd">$25,000</span>
-            </div>
-            <button
-              className="btn filledbtn px-5 py-2"
-              style={{ fontSize: "14px" }}
-              onClick={() => setPopup(true)}
-            >
-              Lock
-            </button>
-          </div> 
-            }
+              {firstLock ? (
+                <div
+                  className="pricing-package-buy-wrapper p-3 d-flex gap-3 align-items-center justify-content-center w-100"
+                  style={{ minHeight: "108.8px" }}
+                >
+                  <a
+                    href="https://docs.google.com/forms/d/e/1FAIpQLSf9l087pAlIjiyJQniUXDfbl5OwXUA6nvehCDr-dpsNYVcwEg/viewform"
+                    target="_blank"
+                    className="btn contact-btn px-5 py-2"
+                    style={{ fontSize: "14px" }}
+                  >
+                    Contact
+                  </a>
+                  <button
+                    className="btn filledbtn px-5 py-2"
+                    style={{ fontSize: "14px" }}
+                    onClick={() => setWithdrawPopup(true)}
+                  >
+                    Unlock
+                  </button>
+                </div>
+              ) : (
+                <div className="pricing-package-buy-wrapper p-3 d-flex gap-2 align-items-center justify-content-between w-100">
+                  <div className="d-flex flex-column">
+                    <span className="package-amount-needed">
+                      Minimum Lock Amount:
+                    </span>
+                    <h6 className="package-plan-price mb-0 text-white">
+                      {getFormattedNumber(25000 / dypPrice, 0)} DYP
+                    </h6>
+                    <span className="package-price-usd">$25,000</span>
+                  </div>
+                  <button
+                    className="btn filledbtn px-5 py-2"
+                    style={{ fontSize: "14px" }}
+                    onClick={() => {setActiveBundle(1); setPopup(true);}}
+                  >
+                    Lock
+                  </button>
+                </div>
+              )}
             </div>
             <div className="package-plan-wrapper main-package-wrapper d-flex flex-column justify-content-between">
               <div className="d-flex flex-column gap-2">
@@ -173,44 +201,47 @@ const PricingPackages = () => {
                   ))}
                 </div>
               </div>
-                  {secondLock ?
-                      <div className="pricing-package-buy-wrapper p-3 d-flex gap-3 align-items-center justify-content-center w-100" style={{minHeight: "108.8px"}}>
-                      <a
-                        href="https://docs.google.com/forms/d/e/1FAIpQLSf9l087pAlIjiyJQniUXDfbl5OwXUA6nvehCDr-dpsNYVcwEg/viewform"
-                        target="_blank"
-                        className="btn contact-btn px-5 py-2"
-                        style={{ fontSize: "14px" }}
-                      >
-                        Contact
-                      </a>
-                      <button
-                        className="btn filledbtn px-5 py-2"
-                        style={{ fontSize: "14px" }}
-                        onClick={() => setWithdrawPopup(true)}
-                      >
-                        Unlock
-                      </button>
-                    </div>
-                :
-                <div className="pricing-package-buy-wrapper p-3 d-flex gap-2 align-items-center justify-content-between w-100">
-                <div className="d-flex flex-column">
-                  <span className="package-amount-needed">
-                    Minimum Lock Amount:
-                  </span>
-                  <h6 className="package-plan-price mb-0 text-white">
-                    XX,XXX DYP
-                  </h6>
-                  <span className="package-price-usd">$50,000</span>
-                </div>
-                <button
-                  className="btn filledbtn px-5 py-2"
-                  style={{ fontSize: "14px" }}
-                  onClick={() => setPopup(true)}
+              {secondLock ? (
+                <div
+                  className="pricing-package-buy-wrapper p-3 d-flex gap-3 align-items-center justify-content-center w-100"
+                  style={{ minHeight: "108.8px" }}
                 >
-                  Lock
-                </button>
-              </div>  
-                }
+                  <a
+                    href="https://docs.google.com/forms/d/e/1FAIpQLSf9l087pAlIjiyJQniUXDfbl5OwXUA6nvehCDr-dpsNYVcwEg/viewform"
+                    target="_blank"
+                    className="btn contact-btn px-5 py-2"
+                    style={{ fontSize: "14px" }}
+                  >
+                    Contact
+                  </a>
+                  <button
+                    className="btn filledbtn px-5 py-2"
+                    style={{ fontSize: "14px" }}
+                    onClick={() => setWithdrawPopup(true)}
+                  >
+                    Unlock
+                  </button>
+                </div>
+              ) : (
+                <div className="pricing-package-buy-wrapper p-3 d-flex gap-2 align-items-center justify-content-between w-100">
+                  <div className="d-flex flex-column">
+                    <span className="package-amount-needed">
+                      Minimum Lock Amount:
+                    </span>
+                    <h6 className="package-plan-price mb-0 text-white">
+                      {getFormattedNumber(50000 / dypPrice, 0)} DYP
+                    </h6>
+                    <span className="package-price-usd">$50,000</span>
+                  </div>
+                  <button
+                    className="btn filledbtn px-5 py-2"
+                    style={{ fontSize: "14px" }}
+                    onClick={() => {setActiveBundle(2); setPopup(true);}}
+                  >
+                    Lock
+                  </button>
+                </div>
+              )}
             </div>
             <div className="package-plan-wrapper d-flex flex-column justify-content-between">
               <div className="d-flex flex-column gap-2">
@@ -237,8 +268,11 @@ const PricingPackages = () => {
                 </div>
               </div>
 
-                  {thirdLock ? 
-                  <div className="pricing-package-buy-wrapper p-3 d-flex gap-3 align-items-center justify-content-center w-100" style={{minHeight: "108.8px"}}>
+              {thirdLock ? (
+                <div
+                  className="pricing-package-buy-wrapper p-3 d-flex gap-3 align-items-center justify-content-center w-100"
+                  style={{ minHeight: "108.8px" }}
+                >
                   <a
                     href="https://docs.google.com/forms/d/e/1FAIpQLSf9l087pAlIjiyJQniUXDfbl5OwXUA6nvehCDr-dpsNYVcwEg/viewform"
                     target="_blank"
@@ -255,37 +289,45 @@ const PricingPackages = () => {
                     Unlock
                   </button>
                 </div>
-                    :
-                    <div className="pricing-package-buy-wrapper p-3 d-flex gap-2 align-items-center justify-content-between w-100">
-                    <div className="d-flex flex-column">
-                      <span className="package-amount-needed">
-                        Minimum Lock Amount:
-                      </span>
-                      <h6 className="package-plan-price mb-0 text-white">
-                        XX,XXX DYP
-                      </h6>
-                      <span className="package-price-usd">$100,000</span>
-                    </div>
-                    <button
-                      className="btn filledbtn px-5 py-2"
-                      style={{ fontSize: "14px" }}
-                      onClick={() => setPopup(true)}
-                    >
-                      Lock
-                    </button>
+              ) : (
+                <div className="pricing-package-buy-wrapper p-3 d-flex gap-2 align-items-center justify-content-between w-100">
+                  <div className="d-flex flex-column">
+                    <span className="package-amount-needed">
+                      Minimum Lock Amount:
+                    </span>
+                    <h6 className="package-plan-price mb-0 text-white">
+                      {getFormattedNumber(100000 / dypPrice, 0)} DYP
+                    </h6>
+                    <span className="package-price-usd">$100,000</span>
                   </div>
-                }
+                  <button
+                    className="btn filledbtn px-5 py-2"
+                    style={{ fontSize: "14px" }}
+                    onClick={() => {setActiveBundle(3); setPopup(true);}}
+                  >
+                    Lock
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
       </div>
       <OutsideClickHandler onOutsideClick={() => setPopup(false)}>
-        <BundlePopup active={popup} onClose={() => setPopup(false)} />
+        <BundlePopup
+          activeBundle={activeBundle}
+          setFirstLock={setFirstLock}
+          setSecondLock={setSecondLock}
+          setThirdLock={setThirdLock}
+          active={popup}
+          onClose={() => setPopup(false)}
+        />
       </OutsideClickHandler>
       <OutsideClickHandler onOutsideClick={() => setWithdrawPopup(false)}>
         <UnlockPopup
           active={withdrawPopup}
           onClose={() => setWithdrawPopup(false)}
+          activeBundle={activeBundle}
         />
       </OutsideClickHandler>
     </>

@@ -1,10 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import xMark from "./assets/xMark.svg";
 import dyp from "./assets/dyp.svg";
 import eth from "./assets/eth.svg";
 import "./pricingpackages.css";
+import Countdown from "react-countdown";
+
+const renderer = ({ days, hours, minutes }) => {
+  // Render the countdown
+  return (
+    <div className="d-flex align-items-center gap-2">
+      <span className="unlock-timer">{days} days</span>
+      <span className="unlock-timer">{hours} hours</span>
+      <span className="unlock-timer">{minutes} min</span>
+    </div>
+  );
+};
 
 const UnlockPopup = ({ active, onClose }) => {
+  const sixMonthsFromNow = new Date();
+  sixMonthsFromNow.setMonth(sixMonthsFromNow.getMonth() + 6);
+  const [timerFinished, setTimerFinished] = useState(false);
+
   return (
     <div
       id="popup"
@@ -34,11 +50,11 @@ const UnlockPopup = ({ active, onClose }) => {
         style={{ borderBottom: "1px solid #3B3C68" }}
       >
         <span className="unlock-timer-span">Timer</span>
-        <div className="d-flex align-items-center gap-2">
-          <span className="unlock-timer">12 days</span>
-          <span className="unlock-timer">16 hours</span>
-          <span className="unlock-timer">00 min</span>
-        </div>
+        <Countdown
+          date={sixMonthsFromNow}
+          onComplete={() => setTimerFinished(true)}
+          renderer={renderer}
+        />
       </div>
       <div className="unlock-bundle-wrapper d-flex flex-column w-100">
         <div className="unlock-bundle-wrapper-inner d-flex align-items-center justify-content-between ">
@@ -49,33 +65,38 @@ const UnlockPopup = ({ active, onClose }) => {
           <div className="unlock-eth-wrapper d-flex flex-column  p-3">
             <span className="unlock-network">Network</span>
             <div className="d-flex align-items-center gap-2">
-            <img src={eth} width={20} height={20} alt="" />
-            <span className="unlock-eth">Ethereum</span>
+              <img src={eth} width={20} height={20} alt="" />
+              <span className="unlock-eth">Ethereum</span>
             </div>
           </div>
         </div>
         <div className="d-flex flex-column flex-lg-row gap-2 gap-lg-0 align-items-lg-center justify-content-between w-100 px-3 py-4">
-            <span className="bundle-dyp-available-span">
-                Available to Claim
-            </span>
-            <h6 className="mb-0 bundle-dyp-available">122,540.40 DYP</h6>
+          <span className="bundle-dyp-available-span">Available to Claim</span>
+          <h6 className="mb-0 bundle-dyp-available">122,540.40 DYP</h6>
         </div>
         <div className="unlock-bundle-wrapper-inner bundle-wrapper-grid p-3">
-            <div className="d-flex flex-column align-items-center">
-                <span className="lock-dyp-stat">26,548,220</span>
-                <span className="lock-dyp-stat-span">Total DYP</span>
-            </div>
-            <div className="d-flex flex-column align-items-center">
-                <span className="lock-dyp-stat">250,000</span>
-                <span className="lock-dyp-stat-span">DYP Withdrew</span>
-            </div>
-            <div className="d-flex flex-column align-items-center">
-                <span className="lock-dyp-stat">25,200,850</span>
-                <span className="lock-dyp-stat-span">DYP Remaining</span>
-            </div>
+          <div className="d-flex flex-column align-items-center">
+            <span className="lock-dyp-stat">26,548,220</span>
+            <span className="lock-dyp-stat-span">Total DYP</span>
+          </div>
+          <div className="d-flex flex-column align-items-center">
+            <span className="lock-dyp-stat">250,000</span>
+            <span className="lock-dyp-stat-span">DYP Withdrew</span>
+          </div>
+          <div className="d-flex flex-column align-items-center">
+            <span className="lock-dyp-stat">25,200,850</span>
+            <span className="lock-dyp-stat-span">DYP Remaining</span>
+          </div>
         </div>
       </div>
-      <button className="btn filledbtn px-5 py-2" style={{ fontSize: "14px" }}>
+      <button
+        className={`btn ${
+          timerFinished ? "filledbtn" : "disabled-btn"
+        } px-5 py-2`}
+        disabled={!timerFinished}
+        style={{ fontSize: "14px" }}
+        onClick={onClose}
+      >
         Unlock
       </button>
     </div>

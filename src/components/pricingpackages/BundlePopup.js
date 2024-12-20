@@ -1,11 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import xMark from "./assets/xMark.svg";
 import getDypIcon from "./assets/getDypIcon.svg";
 import "./pricingpackages.css";
 import { Checkbox } from "@mui/material";
 import { NavLink } from "react-router-dom";
 
-const BundlePopup = ({ active, onClose }) => {
+const BundlePopup = ({
+  active,
+  onClose,
+  activeBundle,
+  setFirstLock,
+  setSecondLock,
+  setThirdLock,
+}) => {
+  const [buttonState, setButtonState] = useState("approve");
+  const [terms, setTerms] = useState(false);
+
+  const handleDeposit = () => {
+    if (activeBundle === 1) {
+      setFirstLock(true);
+    } else if (activeBundle === 2) {
+      setSecondLock(true);
+    } else if (activeBundle === 3) {
+      setThirdLock(true);
+    }
+    onClose();
+  };
+
+  const handleApprove = () => {
+    setButtonState("loading");
+    setTimeout(() => {
+      setButtonState("deposit");
+    }, 2000);
+  };
+
   return (
     <div
       id="popup"
@@ -59,7 +87,7 @@ const BundlePopup = ({ active, onClose }) => {
         </li>
       </ul>
       <div className="d-flex align-items-center justify-content-start w-100">
-        <Checkbox />
+        <Checkbox onChange={() => setTerms(!terms)} />
         <span className="bundle-tos">
           I agree to the{" "}
           <NavLink
@@ -97,8 +125,28 @@ const BundlePopup = ({ active, onClose }) => {
         <h6 className="mb-0 bundle-dyp-amount">250,000 DYP</h6>
         <span className="mb-0 bundle-usd-amount">$25,000</span>
       </div>
-      <button className="btn filledbtn px-5 py-2" style={{ fontSize: "14px" }}>
-        Approve
+      <button
+        className={`btn ${
+          terms && buttonState !== "loading" ? "filledbtn" : "disabled-btn"
+        } px-5 py-2`}
+        disabled={!terms || buttonState === "loading"}
+        style={{ fontSize: "14px" }}
+        onClick={() => {
+          buttonState === "approve" ? handleApprove() : handleDeposit();
+        }}
+      >
+        {buttonState === "loading" ? (
+          <div
+            class="spinner-border spinner-border-sm text-light"
+            role="status"
+          >
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        ) : buttonState === "approve" ? (
+          "Approve"
+        ) : (
+          "Deposit"
+        )}
       </button>
     </div>
   );
