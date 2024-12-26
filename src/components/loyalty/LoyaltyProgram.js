@@ -195,15 +195,17 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
               <div className={` ${selectedLoyalty === 'base' && 'invisible'} loyalty-banner-timer px-5 py-4 position-relative d-flex align-items-center justify-content-center`}>
                 <img src={'https://cdn.worldofdypians.com/tools/clock.svg'} alt="" className="loyalty-clock" />
                 <div className="d-flex flex-column align-items-center ">
-                  <Countdown
+                  {/* <Countdown
                     renderer={renderer}
                     date={loyaltyCd}
                     onComplete={() => {
                       setisExpired(true);
                     }}
-                  />
-
-                  <span className="loyalty-time-left">Time left</span>
+                  /> */}
+                    <h6 className="loyalty-timer mb-0">
+                      Season Three
+                    </h6>
+                  <span className="loyalty-time-left">Coming Soon</span>
                 </div>
               </div>
             </div>
