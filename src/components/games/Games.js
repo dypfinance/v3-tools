@@ -939,7 +939,7 @@ const Games = ({
                           </span>
                           <span className="whitelist-tooltip-content-text">
                             Every transaction on opBNB Chain requires a
-                            combination of ETH and DYP tokens on opBNB Chain.
+                            combination of BNB and DYP tokens on opBNB Chain.
                           </span>
                           <a
                             href="https://superbridge.app/base"
@@ -1931,7 +1931,7 @@ const Games = ({
                                 </h6>
                               </div>
                               <div className="d-flex flex-column">
-                                <h6 className="usdreward-value-crypto">ETH</h6>
+                                <h6 className="usdreward-value-crypto">{ chain === "base" ? 'ETH' : 'BNB'}</h6>
                                 <h6 className="usdreward-value">
                                   $
                                   {getFormattedNumber(
