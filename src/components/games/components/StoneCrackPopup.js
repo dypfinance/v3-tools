@@ -40,7 +40,7 @@ const StoneCrackPopup = ({ active, onClose }) => {
       <p className="games-popup-desc mb-0">
         Every hit earns you points, which contribute to your rank on the Weekly
         and Monthly leaderboards. Additionally, each hit offers direct rewards
-        in ETH/BNB and DYP v2. Rewards follow a probability-based system, where
+        in ETH and DYP v2. Rewards follow a probability-based system, where
         smaller rewards are more likely to be acquired, while higher-value
         rewards are rarer. This system adds a layer of unpredictability and
         excitement, rewarding daily play with increased chances of earning more
