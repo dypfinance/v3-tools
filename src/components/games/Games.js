@@ -355,12 +355,11 @@ const Games = ({
 
   const showSingleRewardDataOpbnb = (chestID, chestIndex) => {
     const filteredResult = openedOpbnbChests.find(
-      (el) => el.chestId === chestID && chests.indexOf(el) === chestIndex
+      (el) => el.chestId === chestID && opbnbchests.indexOf(el) === chestIndex
     );
 
     setIsActive(chestID);
-    setIsActiveIndex(chestIndex + 1);
-    // console.log("filteredResult", filteredResult);
+    setIsActiveIndex(chestIndex + 1); 
     if (filteredResult && filteredResult.rewards) {
       const resultWonETH = filteredResult.rewards.find((obj) => {
         return obj.rewardType === "MoneyETH" && obj.status === "Claimed";
@@ -389,7 +388,7 @@ const Games = ({
       setLiveRewardData([]);
     }
   };
-
+// console.log(rewardData,openedOpbnbChests)
   const randomOpenedChests = [
     2, 4, 18, 12, 19, 5, 16, 6, 1, 15, 17, 3, 7, 9, 14, 11, 13, 8, 10,
   ];
@@ -421,9 +420,9 @@ const Games = ({
     if (openedOpbnbChests && openedOpbnbChests.length > 0) {
       let arrayFiltered = [];
       window.range(0, 19).map((item, index) => {
-        if (chests[index].isOpened === true) {
+        if (opbnbchests[index].isOpened === true) {
           if (randomOpenedChestsOpbnb[index] === undefined) {
-            const index2 = getFirstUnopenedChest(index - 1, chests);
+            const index2 = getFirstUnopenedChest(index - 1, opbnbchests);
             if (index2 !== undefined) {
               arrayFiltered.push(randomOpenedChestsOpbnb[index2]);
             }
@@ -777,7 +776,7 @@ const Games = ({
     countEarnedRewards();
     getIdsOpbnb();
     getIds();
-  }, [openedChests, openedOpbnbChests]);
+  }, [openedChests, openedOpbnbChests, opbnbchests, chests]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
