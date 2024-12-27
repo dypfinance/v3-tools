@@ -102,7 +102,7 @@ const Footer = () => {
                       ></img>
                     </a>
                   </li>
-                  <li>
+                  {/* <li>
                     <a target={"_blank"} href="https://www.youtube.com/@Dypius">
                       <img
                         src="https://cdn.worldofdypians.com/tools/youtube.svg"
@@ -111,7 +111,7 @@ const Footer = () => {
                         width={24}
                       ></img>
                     </a>
-                  </li>
+                  </li> */}
                   <li>
                     <a
                       target={"_blank"}
