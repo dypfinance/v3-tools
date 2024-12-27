@@ -1157,7 +1157,7 @@ function App() {
       "Content-Type": "application/json",
     };
 
-    let bodyContent = JSON.stringify({ emailAddress: email });
+    let bodyContent = JSON.stringify({ emailAddress: email, chainid: "base" });
 
     let response = await fetch(
       "https://worldofdypiansdailybonus.azurewebsites.net/api/GetRewardsDypius?code=H9zoL4Hdr7fr7rzSZLTzilDT99fgwth006S7bO3J3Ua9AzFucS1HoA%3D%3D",
@@ -1217,7 +1217,7 @@ function App() {
       "Content-Type": "application/json",
     };
 
-    let bodyContent = JSON.stringify({ emailAddress: email, chain: "opbnb" });
+    let bodyContent = JSON.stringify({ emailAddress: email, chainid: "opbnb" });
 
     let response = await fetch(
       "https://worldofdypiansdailybonus.azurewebsites.net/api/GetRewardsDypius?code=H9zoL4Hdr7fr7rzSZLTzilDT99fgwth006S7bO3J3Ua9AzFucS1HoA%3D%3D",
@@ -1314,7 +1314,7 @@ function App() {
 
   const fetchRecordsAroundPlayerWeeklyOpbnb = async (itemData) => {
     const data = {
-      StatisticName: "LeaderboardDypiusWeeklyOPBNB",
+      StatisticName: "LeaderboardDypiusOpBNBWeekly",
       MaxResultsCount: 6,
       PlayerId: userId,
     };
@@ -1350,7 +1350,7 @@ function App() {
 
   const fetchWeeklyOpbnbWinners = async () => {
     const data = {
-      StatisticName: "LeaderboardDypiusWeeklyOPBNB",
+      StatisticName: "LeaderboardDypiusOpBNBWeekly",
       StartPosition: 0,
       MaxResultsCount: 10,
     };
@@ -1377,7 +1377,7 @@ function App() {
   const fetchPreviousWeeklyOpbnbWinners = async () => {
     if (previousWeeklyVersionOpbnb != 0) {
       const data = {
-        StatisticName: "LeaderboardDypiusWeeklyOPBNB",
+        StatisticName: "LeaderboardDypiusOpBNBWeekly",
         StartPosition: 0,
         MaxResultsCount: 10,
         Version: previousWeeklyVersionOpbnb - 1,
@@ -1394,7 +1394,7 @@ function App() {
 
   const fetchRecordsAroundPlayerMonthlyOpbnb = async (itemData) => {
     const data = {
-      StatisticName: "LeaderboardDypiusMonthlyOPBNB",
+      StatisticName: "LeaderboardDypiusOpBNBMonthly",
       MaxResultsCount: 6,
       PlayerId: userId,
     };
@@ -1431,7 +1431,7 @@ function App() {
 
   const fetchMonthlyOpbnbWinners = async () => {
     const data = {
-      StatisticName: "LeaderboardDypiusMonthlyOPBNB",
+      StatisticName: "LeaderboardDypiusOpBNBMonthly",
       StartPosition: 0,
       MaxResultsCount: 10,
     };
@@ -1458,7 +1458,7 @@ function App() {
   const fetchPreviousMonthlyOpbnbWinners = async () => {
     if (previousMonthlyVersionOpbnb != 0) {
       const data = {
-        StatisticName: "LeaderboardDypiusMonthlyOPBNB",
+        StatisticName: "LeaderboardDypiusOpBNBMonthly",
         StartPosition: 0,
         MaxResultsCount: 10,
         Version: previousMonthlyVersionOpbnb - 1,

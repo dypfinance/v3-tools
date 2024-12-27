@@ -118,7 +118,7 @@ const WhitelistPopup = ({ open, onClose }) => {
               </NavLink>
             </div>
 
-            <div className="d-flex py-3 flex-column justify-content-center position-relative align-items-center">
+            {/* <div className="d-flex py-3 flex-column justify-content-center position-relative align-items-center">
               <div className="d-flex flex-column gap-3 align-items-center justify-content-between">
                 <div className="d-flex flex-column gap-3 justify-content-center align-items-center px-3">
                   <div className="d-flex flex-column align-items-center justify-content-center">
@@ -133,15 +133,13 @@ const WhitelistPopup = ({ open, onClose }) => {
                     </span>
                   </div>
                   <img src={'https://cdn.worldofdypians.com/tools/baseBg.png'} className="land-nft-image" alt="land nft" />
-                  {/* <span className="popup-content">
-          Total Genesis land supply limited to 1,000 plots
-        </span> */}
+               
                   <NavLink to="/games" onClick={onClose}>
                     <button className="btn filled-btn m-3">Play</button>
                   </NavLink>
                 </div>
               </div>
-            </div>
+            </div> */}
           </Slider>
         </div>
       </div>

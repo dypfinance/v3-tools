@@ -208,8 +208,7 @@ const Leaderboard = ({
   const [inactiveBoard, setInactiveBoard] = useState(false);
   const [prizes, setPrizes] = useState(weeklyPrizes);
   const [prevStatus, setPrevStatus] = useState(false);
-  const [selectedChain, setselectedChain] = useState('base');
-
+  const [selectedChain, setselectedChain] = useState("base");
 
   const handleOption = (item) => {
     setOptionText(item);
@@ -304,9 +303,47 @@ const Leaderboard = ({
             />
           </div>
           <div className="d-flex align-items-center gap-1 mt-5">
-            <div className="optionsWrapper col-12">
+            <div className={`optionsWrapper col-12 ${type==='stoneCrack' && 'd-flex flex-column flex-lg-row w-100 justify-content-between gap-2'} `}>
+              {type === "stoneCrack" && (
+                <div className="d-flex align-items-center gap-2 col-lg-5">
+                  <button
+                    className={`w-100 ${
+                      selectedChain === "base"
+                        ? "new-chain-active-btn"
+                        : "new-chain-inactive-btn "
+                    } d-flex gap-1 align-items-center`}
+                    onClick={() => {
+                      setselectedChain("base");
+                    }}
+                  >
+                    <img
+                      src={
+                        "https://cdn.worldofdypians.com/wod/baseBlueLogo.svg"
+                      }
+                      alt=""
+                    />{" "}
+                    Base
+                  </button>
+                  <button
+                    className={`w-100 ${
+                      selectedChain === "opbnb"
+                        ? "new-chain-active-btn"
+                        : "new-chain-inactive-btn "
+                    } d-flex gap-1 align-items-center`}
+                    onClick={() => {
+                      setselectedChain("opbnb");
+                    }}
+                  >
+                    <img
+                      src={"https://cdn.worldofdypians.com/wod/bnbIcon.svg"}
+                      alt=""
+                    />{" "}
+                    opBNB
+                  </button>
+                </div>
+              )}
               <div
-                className="d-flex gap-1 align-items-center justify-content-between position-relative"
+                className="w-100 d-flex gap-1 align-items-center justify-content-between position-relative"
                 style={{ height: 38 }}
               >
                 <div
@@ -479,7 +516,9 @@ const Leaderboard = ({
                     )}
                   </tr>
 
-                  {type === "stoneCrack" && optionText === "weekly" && selectedChain === 'base' ? (
+                  {type === "stoneCrack" &&
+                  optionText === "weekly" &&
+                  selectedChain === "base" ? (
                     <>
                       {weeklyplayerData.map((item, index) => (
                         <tr
@@ -583,7 +622,9 @@ const Leaderboard = ({
                           </tr>
                         )}
                     </>
-                  ) : type === "stoneCrack" && optionText === "monthly" && selectedChain === 'base'? (
+                  ) : type === "stoneCrack" &&
+                    optionText === "monthly" &&
+                    selectedChain === "base" ? (
                     <>
                       {monthlyplayerData.map((item, index) => (
                         <tr
@@ -680,7 +721,9 @@ const Leaderboard = ({
                           </tr>
                         )}
                     </>
-                  ) : type === "stoneCrack" && optionText === "weekly" && selectedChain === 'opbnb' ? (
+                  ) : type === "stoneCrack" &&
+                    optionText === "weekly" &&
+                    selectedChain === "opbnb" ? (
                     <>
                       {weeklyplayerDataOpbnb.map((item, index) => (
                         <tr
@@ -772,7 +815,10 @@ const Leaderboard = ({
                               className="playerScore col-4 text-center"
                               style={{ color: stoneHeaders.scoreColor }}
                             >
-                              {getFormattedNumber(weeklyUserOpbnb?.statValue, 0)}
+                              {getFormattedNumber(
+                                weeklyUserOpbnb?.statValue,
+                                0
+                              )}
                             </td>
                             <td
                               className={`playerReward col-2 text-center leaderboard-rewards-bg`}
@@ -784,7 +830,9 @@ const Leaderboard = ({
                           </tr>
                         )}
                     </>
-                  ) : type === "stoneCrack" && optionText === "monthly" && selectedChain === 'opbnb'? (
+                  ) : type === "stoneCrack" &&
+                    optionText === "monthly" &&
+                    selectedChain === "opbnb" ? (
                     <>
                       {monthlyplayerDataOpbnb.map((item, index) => (
                         <tr
@@ -824,7 +872,8 @@ const Leaderboard = ({
                         (item, index) => (
                           <tr key={index} className={`playerInnerRow`}>
                             <td className="playerData col-1">
-                              {Number(monthlyplayerDataOpbnb.length + index) + 1}
+                              {Number(monthlyplayerDataOpbnb.length + index) +
+                                1}
                             </td>
                             <td className="playerName col-3">
                               <div className="position-relative d-flex align-items-center">
@@ -869,7 +918,10 @@ const Leaderboard = ({
                               className="playerScore col-4 text-center"
                               style={{ color: stoneHeaders.scoreColor }}
                             >
-                              {getFormattedNumber(monthlyUserOpbnb?.statValue, 0)}
+                              {getFormattedNumber(
+                                monthlyUserOpbnb?.statValue,
+                                0
+                              )}
                             </td>
                             <td
                               className={`playerReward col-2 text-center leaderboard-rewards-bg`}
