@@ -94,21 +94,14 @@ function App() {
   const [the_graph_result_ETH_V2, setthe_graph_result_ETH_V2] = useState(
     JSON.stringify(window.the_graph_result_eth_v2)
   );
-  const [the_graph_result, setthe_graph_result] = useState(
-    JSON.stringify(window.the_graph_result_eth_v2)
-  );
+ 
   const [the_graph_result_AVAX_V2, setthe_graph_result_AVAX_V2] = useState(
     JSON.stringify(window.the_graph_result_avax_v2)
   );
   const [the_graph_result_BSC_V2, setthe_graph_result_BSC_V2] = useState(
     JSON.stringify(window.the_graph_result_bsc_v2)
   );
-  const [the_graph_resultbsc, setthe_graph_resultbsc] = useState(
-    JSON.stringify(window.the_graph_result_bsc_v2)
-  );
-  const [the_graph_resultavax, setthe_graph_resultavax] = useState(
-    JSON.stringify(window.the_graph_result_avax_v2)
-  );
+ 
   const [subscribedPlatformTokenAmount, setsubscribedPlatformTokenAmount] =
     useState(0);
   const [isPremium, setisPremium] = useState(false);
@@ -535,26 +528,7 @@ function App() {
       console.error("TVL ETH V2 error: " + e);
     }
 
-    try {
-      if (networkId === "1") {
-        let the_graph_result = await window.refresh_the_graph_result();
-
-        setthe_graph_result(JSON.parse(JSON.stringify(the_graph_result)));
-      } else if (networkId === "56") {
-        let the_graph_resultbsc = await window.refresh_the_graph_resultavax();
-
-        setthe_graph_resultbsc(JSON.parse(JSON.stringify(the_graph_resultbsc)));
-      } else if (networkId === "43114") {
-        let the_graph_resultavax = await window.refresh_the_graph_resultavax();
-
-        setthe_graph_resultavax(
-          JSON.parse(JSON.stringify(the_graph_resultavax))
-        );
-      }
-    } catch (e) {
-      // window.alertify.error("Cannot fetch TVL");
-      console.error("Cannot fetch TVL: " + e);
-    }
+   
   };
 
   const handleEthereum = async () => {
