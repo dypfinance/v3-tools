@@ -25,8 +25,8 @@ const StoneCrackPopup = ({ active, onClose }) => {
      <p className="games-popup-desc mb-0">
         In this exciting game, your goal is to break open the massive gem by
         hitting the stone 20 times using different pickaxes. Each pickaxe
-        requires an on-chain transaction on the Base Network, and every
-        transaction incurs gas fees, payable in ETH and DYP v2.
+        requires an on-chain transaction on either the Base Network or opBNB Chain, and every
+        transaction incurs gas fees, payable in ETH/BNB and DYP v2.
       </p>
       <div className="d-flex w-100 align-items-start">
         <h6 className="games-popup-subtitle text-start mb-0">How to Play?</h6>
@@ -34,13 +34,13 @@ const StoneCrackPopup = ({ active, onClose }) => {
       <p className="games-popup-desc mb-0">
         The stone is divided into 20 parts, and your objective is to break them
         all using a pickaxe. Each pickaxe you use breaks one part of the stone
-        and requires an on-chain transaction on the Base network. After 19 hits,
+        and requires an on-chain transaction on the Base network or opBNB Chain. After 19 hits,
         you’ll need to use a final pickaxe to break open the gem.
       </p>
       <p className="games-popup-desc mb-0">
         Every hit earns you points, which contribute to your rank on the Weekly
         and Monthly leaderboards. Additionally, each hit offers direct rewards
-        in ETH and DYP v2. Rewards follow a probability-based system, where
+        in ETH/BNB and DYP v2. Rewards follow a probability-based system, where
         smaller rewards are more likely to be acquired, while higher-value
         rewards are rarer. This system adds a layer of unpredictability and
         excitement, rewarding daily play with increased chances of earning more
