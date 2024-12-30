@@ -39616,16 +39616,14 @@ async function refresh_the_graph_resultavax() {
     token_contract_addresses: [TOKEN_ADDRESS, TOKEN_IDYP_ADDRESS],
     lp_ids: LP_ID_LIST,
   });
-  window.the_graph_result = result;
-  //window.TVL_FARMING_POOLS = await refreshBalance()
+  window.the_graph_result = result; 
   return result;
 }
 
 window.get_usd_values = get_usd_values;
 window.get_token_balances = get_token_balances;
 window.get_apy_and_tvl = get_apy_and_tvl;
-window.get_number_of_stakers = get_number_of_stakers;
-window.refresh_the_graph_result = refresh_the_graph_result;
+window.get_number_of_stakers = get_number_of_stakers; 
 window.refresh_the_graph_resultavax = refresh_the_graph_resultavax;
 
 async function getActiveLocksByTokenETH(tokenAddress, startIndex, endIndex) {

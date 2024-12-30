@@ -914,7 +914,7 @@ const StakeDypiusAvaxOther = ({
         console.log(e);
       });
 
-    // let usdPerToken = await window.getPrice("defi-yield-protocol");
+     
     setusdPerToken(dypprice);
   };
 
