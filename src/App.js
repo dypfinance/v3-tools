@@ -1975,8 +1975,8 @@ function App() {
                         networkId={parseInt(networkId)}
                         onSelectChain={onSelectChain}
                         coinbase={coinbase}
-                        onChestClaimed={onChestClaimed}
-                        onOpbnbChestClaimed={onOpbnbChestClaimed}
+                        onChestClaimed={()=>{onChestClaimed();fetchWeeklyWinners()}}
+                        onOpbnbChestClaimed={()=>{onOpbnbChestClaimed();fetchWeeklyOpbnbWinners()}}
                         dummypremiumChests={dummyPremiums}
                         isPremium={isPremium}
                         bnbImages={chestImagesBnb}
