@@ -354,6 +354,20 @@ export default function initBridge({
     };
 
     switchToDestinationChain = async (chainID, chainText) => {
+        
+  const OPBNBPARAMS = {
+    chainId: "0xcc", // A 0x-prefixed hexadecimal string
+    rpcUrls: ["https://opbnb.publicnode.com"],
+    chainName: "opBNB Mainnet",
+    nativeCurrency: {
+      name: "opBNB",
+      symbol: "BNB", // 2-6 characters long
+      decimals: 18,
+    },
+
+    blockExplorerUrls: ["https://mainnet.opbnbscan.com"],
+  };
+  
       if (window.ethereum) {
         await window.ethereum
           .request({
@@ -367,7 +381,16 @@ export default function initBridge({
           .then((data) => {
             this.setState({ destinationChainText: chainText });
           })
-          .catch((err) => {
+          .catch(async (err) => {
+            if (
+              err.code === 4902 ||
+              (chainID === "0xcc" && err.code.toString().includes("32603"))
+            ) {
+              await window.ethereum.request({
+                method: "wallet_addEthereumChain",
+                params: [OPBNBPARAMS],
+              });
+            }
             console.log(err);
           });
       }

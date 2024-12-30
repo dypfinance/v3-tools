@@ -14,13 +14,13 @@ const BridgeCard = ({onMobileClick}) => {
       <div className="d-flex flex-column gap-2 justify-content-between h-100">
         <div className="">
           <h6 className="bridgecard-title d-flex justify-content-between gap-2 align-items-center">
-          Games on Base
+          Mini-Games
           </h6>
         </div>
         <div className="d-flex flex-column gap-3">
           <div>
             <h6 className="bridgecard-desc">
-            Enjoy the ultimate gaming experience on Base.
+            Enjoy the ultimate gaming experience.
             </h6>
           </div>
           <div>
