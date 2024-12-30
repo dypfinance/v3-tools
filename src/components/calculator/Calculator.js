@@ -150,51 +150,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
     getEthApy();
   }, [wethPrice, wavaxPrice, wbnbPrice, activeMethod]);
 
-  const getTotalTvlBuyBack = async () => {
-    const { BigNumber } = window;
-
-    let [usdPerToken, usdPerTokeniDYP, usdiDYPAvax, usdiDYPEth] =
-      await Promise.all([
-        window.getPrice("defi-yield-protocol"),
-        window.getPriceiDYP(),
-        window.getPriceiDYPAvax(),
-        window.getPriceiDYPEth(),
-      ]);
-
-    // APR is 100% considering 1$ as initial investment, 0.75$ goes to Buyback
-    let apy1_buyback2 = new BigNumber(0.75);
-    let apy2_buyback2 = new BigNumber(0.25)
-      .div(usdPerToken)
-      .times(usdPerTokeniDYP);
-
-    let apyBuyback2 = new BigNumber(apy1_buyback2)
-      .plus(apy2_buyback2)
-      .times(1e2)
-      .toFixed(0);
-
-    setBuybackApyBNB(apyBuyback2);
-    //Apy AVAX V2 APR is 100%
-    apy2_buyback2 = new BigNumber(0.25).div(usdPerToken).times(usdiDYPAvax);
-
-    let apyBuybackAvax = new BigNumber(apy1_buyback2)
-      .plus(apy2_buyback2)
-      .times(1e2)
-      .toFixed(0);
-
-    setBuybackApyAVAX(apyBuybackAvax);
-
-    //Apy ETH V2 APR is 100%
-    apy2_buyback2 = new BigNumber(0.25).div(usdPerToken).times(usdiDYPEth);
-
-    let apyBuybackEth = new BigNumber(apy1_buyback2)
-      .plus(apy2_buyback2)
-      .times(1e2)
-      .toFixed(0);
-
-    setBuybackApy(apyBuybackEth);
-
-    return buybackApy;
-  };
+ 
 
   useEffect(() => {
     if (apyData) {

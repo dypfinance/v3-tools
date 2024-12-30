@@ -156,8 +156,7 @@ const StakeEthDai = ({
   const [stakingOwner, setstakingOwner] = useState(null);
   const [approxDeposit, setapproxDeposit] = useState(100);
   const [approxDays, setapproxDays] = useState(365);
-  const [showCalculator, setshowCalculator] = useState(false);
-  const [usdPerToken, setusdPerToken] = useState("");
+  const [showCalculator, setshowCalculator] = useState(false); 
   const [errorMsg, seterrorMsg] = useState("");
   const [errorMsg2, seterrorMsg2] = useState("");
   const [errorMsg3, seterrorMsg3] = useState("");
@@ -195,10 +194,7 @@ const StakeEthDai = ({
     setpopup(false);
   };
 
-  const getPriceDYP = async () => {
-    let usdPerToken = await window.getPrice("defi-yield-protocol");
-    setusdPerToken(usdPerToken);
-  };
+ 
 
   const refreshBalance = async () => {
     let coinbase = coinbase2;
@@ -338,9 +334,7 @@ const StakeEthDai = ({
     }
   }, [coinbase, coinbase2]);
 
-  useEffect(() => {
-    getPriceDYP();
-  }, []);
+ 
 
   useEffect(() => {
     if(chainId === '1')

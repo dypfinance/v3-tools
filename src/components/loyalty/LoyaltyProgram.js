@@ -31,7 +31,7 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
   const [refresh, setRefresh] = useState(false);
   const [loading, setLoading] = useState(false);
   const [totalUsers, setTotalUsers] = useState(0);
-  const [expired, setisExpired] = useState(false);
+  const [expired, setisExpired] = useState(true);
   const [selectedLoyalty, setSelectedLoyalty] = useState("opbnb");
 
   const [isWinner, setisWinner] = useState(false);
