@@ -1,7 +1,7 @@
 import React from "react"; 
 import withdrawIcon from "./withdrawIcon.svg";
 import statsIcon from "./statsIcon.svg";
-import calculatorIcon from "../calculator/assets/calculator.svg";
+
 
 
 const Modal = ({ visible, modalId, setIsVisible, children, title, width, maxHeight }) => {
@@ -37,7 +37,7 @@ const Modal = ({ visible, modalId, setIsVisible, children, title, width, maxHeig
                 title !== "withdraw" ||
                 (title !== "proposal" && (
                   <img
-                    src={title === "stats" ? statsIcon : title === "withdraw" ? withdrawIcon : title === "calculator" ? calculatorIcon : null}
+                    src={title === "stats" ? statsIcon : title === "withdraw" ? withdrawIcon : title === "calculator" ? 'https://cdn.worldofdypians.com/tools/calculator.svg' : null}
                     height={25}
                     width={25}
                     alt=""
