@@ -3,8 +3,6 @@ import { useEffect, useState } from "react";
 import { useWeb3React as useWeb3ReactCore } from "@web3-react/core";
 import { injected } from "./connectors";
 
-import Web3 from "web3";
-
 export default function getLibrary(provider) {
   const library = new Web3Provider(provider, "any");
   library.pollingInterval = 15000;

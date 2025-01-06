@@ -14,7 +14,6 @@ import Sidebar from "./components/sidebar/sidebar";
 import Header from "./components/header/header";
 import { Route, Routes } from "react-router-dom";
 // import SubmitInfo from "./components/submit-info/SubmitInfo";
-import { Switch } from "react-router-dom";
 import { RedirectPathToHomeOnly } from "./functions/redirects";
 import Earn from "./components/earn/Earn";
 import Dashboard from "./components/dashboard/Dashboard";
@@ -32,17 +31,17 @@ import BuyDyp from "./components/buydyp/BuyDyp";
 // import Swap from "./components/swap/Swap";
 import MobileMenu from "./components/sidebar/MobileMenu";
 import Disclaimer from "./components/disclaimer/Disclaimer";
-import ScrollToTop from "./functions/ScrollToTop";
+// import ScrollToTop from "./functions/ScrollToTop";
 // import LandPopup from "./components/LandPopup/LandPopup";
 // import { withRouter } from "react-router-dom";
-import GenesisStaking from "./components/genesisStaking/GenesisStaking";
+// import GenesisStaking from "./components/genesisStaking/GenesisStaking";
 // import CawsStaking from "./components/genesisStaking/CawsStaking";
-import Plans from "./components/account/Plans";
+// import Plans from "./components/account/Plans";
 import DypMigration from "./components/bridge/DypMigration";
 import AlertRibbon from "./components/alert-ribbon/AlertRibbon";
 import EarnOther from "./components/earnOther/EarnOther";
 import EarnOtherNft from "./components/earnOther/EarnOtherNft";
-import EarnInnerPoolNft from "./components/earnOther/EarnInnerPool/EarnInnerPoolNft";
+// import EarnInnerPoolNft from "./components/earnOther/EarnInnerPool/EarnInnerPoolNft";
 import WalletModal from "./components/WalletModal";
 import axios from "axios";
 import MobileFlyout from "./components/mobileFlyout/MobileFlyout";
@@ -85,25 +84,22 @@ const LockerWrapper = (props) => {
 
 function App() {
   const [theme, setTheme] = useState("theme-dark");
-  const [isMinimized, setisMinimized] = useState(
-    false && window.innerWidth >= 992
-  );
+
   const [isOpenInMobile, setisOpenInMobile] = useState(false);
   const [isConnected, setisConnected] = useState(false);
   const [coinbase, setcoinbase] = useState(null);
   const [the_graph_result_ETH_V2, setthe_graph_result_ETH_V2] = useState(
     JSON.stringify(window.the_graph_result_eth_v2)
   );
- 
   const [the_graph_result_AVAX_V2, setthe_graph_result_AVAX_V2] = useState(
     JSON.stringify(window.the_graph_result_avax_v2)
   );
   const [the_graph_result_BSC_V2, setthe_graph_result_BSC_V2] = useState(
     JSON.stringify(window.the_graph_result_bsc_v2)
   );
- 
-  const [subscribedPlatformTokenAmount, setsubscribedPlatformTokenAmount] =
-    useState(0);
+
+  // const [subscribedPlatformTokenAmount, setsubscribedPlatformTokenAmount] =
+  //   useState(0);
   const [isPremium, setisPremium] = useState(false);
   const [networkId, setnetworkId] = useState(1);
   const [explorerNetworkId, setexplorerNetworkId] = useState(1);
@@ -115,7 +111,7 @@ function App() {
   const [downloadClick, setdownloadClick] = useState(false);
   const [showMobilePopup, setshowMobilePopup] = useState(false);
   const [showWalletPopup, setshowWalletPopup] = useState(false);
-  const [whitelistPopup, setwhitelistPopup] = useState(true);
+  // const [whitelistPopup, setwhitelistPopup] = useState(true);
   const [aggregatorPools, setaggregatorPools] = useState([]);
   const [userCurencyBalance, setuserCurencyBalance] = useState(0);
   const [fireAppcontent, setFireAppContent] = useState(false);
@@ -439,24 +435,24 @@ function App() {
         });
 
       if (
-        subscribedPlatformTokenAmountNewETH == "0" &&
-        subscribedPlatformTokenAmountCfx == "0" &&
-        subscribedPlatformTokenAmountBase == "0" &&
-        subscribedPlatformTokenAmountNewAvax == "0" &&
-        subscribedPlatformTokenAmountNewBNB == "0" &&
-        subscribedPlatformTokenAmountNewBNB2 === "0" &&
-        subscribedPlatformTokenAmountSkale == "0"
+        Number(subscribedPlatformTokenAmountNewETH) === 0 &&
+        Number(subscribedPlatformTokenAmountCfx) === 0 &&
+        Number(subscribedPlatformTokenAmountBase) === 0 &&
+        Number(subscribedPlatformTokenAmountNewAvax) === 0 &&
+        Number(subscribedPlatformTokenAmountNewBNB) === 0 &&
+        Number(subscribedPlatformTokenAmountNewBNB2) === 0 &&
+        Number(subscribedPlatformTokenAmountSkale) === 0
       ) {
-        setsubscribedPlatformTokenAmount("0");
+        // setsubscribedPlatformTokenAmount("0");
         setisPremium(false);
       } else if (
-        subscribedPlatformTokenAmountNewETH != "0" ||
-        subscribedPlatformTokenAmountCfx != "0" ||
-        subscribedPlatformTokenAmountBase != "0" ||
-        subscribedPlatformTokenAmountNewAvax != "0" ||
-        subscribedPlatformTokenAmountNewBNB != "0" ||
-        subscribedPlatformTokenAmountNewBNB2 != "0" ||
-        subscribedPlatformTokenAmountSkale != "0"
+        Number(subscribedPlatformTokenAmountNewETH) !== 0 ||
+        Number(subscribedPlatformTokenAmountCfx) !== 0 ||
+        Number(subscribedPlatformTokenAmountBase) !== 0 ||
+        Number(subscribedPlatformTokenAmountNewAvax) !== 0 ||
+        Number(subscribedPlatformTokenAmountNewBNB) !== 0 ||
+        Number(subscribedPlatformTokenAmountNewBNB2) !== 0 ||
+        Number(subscribedPlatformTokenAmountSkale) !== 0
       ) {
         setisPremium(true);
       }
@@ -495,7 +491,7 @@ function App() {
 
     // console.log(window.coinbase_address)
     let coinbase2 = await window.getCoinbase();
-    if (coinbase2 != null || coinbase2 != undefined) {
+    if (coinbase2 !== null || coinbase2 !== undefined) {
       setcoinbase(coinbase2);
     }
     setshow(false);
@@ -527,8 +523,6 @@ function App() {
       // window.alertify.error("Cannot fetch TVL");
       console.error("TVL ETH V2 error: " + e);
     }
-
-   
   };
 
   const handleEthereum = async () => {
@@ -557,7 +551,7 @@ function App() {
     const walletAddress = coinbase;
     const TokenABI = window.ERC20_ABI;
 
-    if (coinbase && coinbase != undefined && isConnected) {
+    if (coinbase && coinbase !== undefined && isConnected) {
       const contract1 = new window.infuraWeb3.eth.Contract(
         TokenABI,
         tokenAddress
@@ -714,27 +708,21 @@ function App() {
   };
 
   useEffect(() => {
+    setTheme("theme-dark");
     tvl();
     fetchAggregatorPools();
-    setwhitelistPopup(true);
+    // setwhitelistPopup(true);
     if (window.location.hash === "#mobile-app") {
       setdownloadClick(true);
     }
 
-    if (
-      window.ethereum &&
-      !window.coin98 &&
-      (window.ethereum.isMetaMask === true ||
-        window.ethereum.isTrust === true ||
-        window.ethereum?.isTrustWallet)
-    ) {
-      checkConnection();
-    }
-    checkNetworkId();
+    
 
     if (window.ethereum && !window.coin98) {
       console.log("yes");
       handleEthereum();
+      checkConnection();
+      checkNetworkId();
     } else {
       console.log("no");
       // If the event is not dispatched by the end of the timeout,
@@ -779,14 +767,14 @@ function App() {
     checkConnection();
   };
 
-  const toggleMinimizeSidebar = () => {
-    const f = () => window.dispatchEvent(new Event("resize"));
-    setisMinimized(!isMinimized, () => f());
+  // const toggleMinimizeSidebar = () => {
+  //   const f = () => window.dispatchEvent(new Event("resize"));
+  //   setisMinimized(!isMinimized, () => f());
 
-    f();
-    let newInterval = setInterval(f, 16);
-    setTimeout(() => clearInterval(newInterval), 1000);
-  };
+  //   f();
+  //   let newInterval = setInterval(f, 16);
+  //   setTimeout(() => clearInterval(newInterval), 1000);
+  // };
 
   const toggleMobileSidebar = () => {
     setisOpenInMobile(!isOpenInMobile);
@@ -946,11 +934,7 @@ function App() {
   const windowSize = useWindowSize();
 
   const { email, logout } = useAuth();
-  const {
-    data,
-    refetch: refetchPlayer,
-    loading: loadingPlayer,
-  } = useQuery(GET_PLAYER, {
+  const { data, refetch: refetchPlayer } = useQuery(GET_PLAYER, {
     fetchPolicy: "network-only",
   });
 
@@ -1031,10 +1015,8 @@ function App() {
     },
   ];
 
-  const [generateNonce, { loading: loadingGenerateNonce, data: dataNonce }] =
-    useMutation(GENERATE_NONCE);
-  const [verifyWallet, { loading: loadingVerify, data: dataVerify }] =
-    useMutation(VERIFY_WALLET);
+  const [generateNonce, { data: dataNonce }] = useMutation(GENERATE_NONCE);
+  const [verifyWallet, { data: dataVerify }] = useMutation(VERIFY_WALLET);
 
   const fillRecordsCaws2d = (itemData) => {
     if (itemData.length === 0) {
@@ -1157,18 +1139,12 @@ function App() {
         for (let item = 0; item < data.chestOrder.length; item++) {
           if (data.chestOrder[item].chestType === "Standard") {
             if (data.chestOrder[item].isOpened === true) {
-              {
-                openedChests.push(data.chestOrder[item]);
-                // openedStandardChests.push(data.chestOrder[item]);
-              }
+              openedChests.push(data.chestOrder[item]);
             }
             standardChestsArray.push(data.chestOrder[item]);
           } else if (data.chestOrder[item].chestType === "Premium") {
             if (data.chestOrder[item].isOpened === true) {
-              {
-                openedChests.push(data.chestOrder[item]);
-                // openedPremiumChests.push(data.chestOrder[item]);
-              }
+              openedChests.push(data.chestOrder[item]);
             }
             premiumChestsArray.push(data.chestOrder[item]);
           }
@@ -1510,7 +1486,7 @@ function App() {
   };
 
   const fetchPreviousWeeklyWinners = async () => {
-    if (previousWeeklyVersion != 0) {
+    if (previousWeeklyVersion !== 0) {
       const data = {
         StatisticName: "LeaderboardDypiusWeekly",
         StartPosition: 0,
@@ -1591,7 +1567,7 @@ function App() {
   };
 
   const fetchPreviousMonthlyWinners = async () => {
-    if (previousMonthlyVersion != 0) {
+    if (previousMonthlyVersion !== 0) {
       const data = {
         StatisticName: "LeaderboardDypiusMonthly",
         StartPosition: 0,
@@ -1671,7 +1647,7 @@ function App() {
   };
 
   const fetchPreviousKittyDashWinners = async () => {
-    if (previousKittyDashVersion != 0) {
+    if (previousKittyDashVersion !== 0) {
       const data = {
         StatisticName: "MobileGameDailyLeaderboard",
         StartPosition: 0,
@@ -1737,7 +1713,7 @@ function App() {
 
   const handleSync = async () => {
     setsyncStatus("loading");
-
+    setisonSync(true);
     try {
       await generateNonce({
         variables: {
@@ -1779,7 +1755,7 @@ function App() {
   }, [dataNonce]);
 
   return (
-    <div className={`page_wrapper ${isMinimized ? "minimize" : ""}`}>
+    <div className={`page_wrapper`}>
       {/* <img src={navRadius} className="nav-radius" alt="" /> */}
       {/* <LandFlyout />   */}
 
@@ -2124,26 +2100,6 @@ setkittyDashRecords */}
 
                   <Route
                     exact
-                    path="/earn/nft-staking/:pool"
-                    element={
-                      <EarnInnerPoolNft
-                        coinbase={coinbase}
-                        handleSwitchNetwork={handleSwitchNetwork}
-                        handleConnection={handleConnection}
-                        isConnected={isConnected}
-                        chainId={networkId}
-                        the_graph_result={the_graph_result_ETH_V2}
-                        the_graph_resultavax={the_graph_result_AVAX_V2}
-                        the_graph_resultbsc={the_graph_result_BSC_V2}
-                        lp_id={LP_ID_Array}
-                        referrer={referrer}
-                        isPremium={isPremium}
-                      />
-                    }
-                  />
-
-                  <Route
-                    exact
                     path="/bridge"
                     element={
                       <Bridge
@@ -2363,7 +2319,7 @@ setkittyDashRecords */}
                       />
                     }
                   />
-                  <Route
+                  {/* <Route
                     exact
                     path="/genesis"
                     element={
@@ -2375,7 +2331,7 @@ setkittyDashRecords */}
                         handleSwitchNetwork={handleSwitchNetwork}
                       />
                     }
-                  />
+                  /> */}
                   {/* <Route
                     exact
                     path="/caws-staking"

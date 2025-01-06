@@ -3,7 +3,7 @@ import axios from "axios";
 import PropTypes from "prop-types";
 import { isMobile } from "react-device-detect";
 import { NavLink } from "react-router-dom";
-import calculator from "./assets/calculator.svg";
+
 import getFormattedNumber from "../../functions/getFormattedNumber2";
 import ethStakeActive from "../../assets/earnAssets/ethStakeActive.svg";
 import bnbStakeActive from "../../assets/earnAssets/bnbStakeActive.svg";
@@ -390,7 +390,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
         <div className="flex flex-column gap-2 justify-content-between">
           <div className="d-flex justify-content-between gap-2 align-items-center pb-4">
             <h6 className="d-flex gap-2 align-items-center calc-title">
-              <img src={calculator} alt="" /> Calculator
+              <img src={'https://cdn.worldofdypians.com/tools/calculator.svg'} alt="" /> Calculator
             </h6>
             <img
               src={calculatorChart}
