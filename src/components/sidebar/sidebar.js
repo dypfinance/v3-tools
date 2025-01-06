@@ -3,8 +3,6 @@ import React, { useState, useEffect } from "react";
 import { useEagerConnect, useInactiveListener } from "../../functions/hooks";
 import useWindowSize from "../../functions/useWindowSize";
 import "./sidebar.css";
-   
- 
 
 const Sidebar = (props) => {
   const [activeLink, setActiveLink] = useState(null);
@@ -181,7 +179,7 @@ const Sidebar = (props) => {
       } d-none d-lg-flex flex-column gap-3 justify-content-between align-items-start`}
     >
       <img
-        src={'https://cdn.worldofdypians.com/tools/navRadius.svg'}
+        src={"https://cdn.worldofdypians.com/tools/navRadius.svg"}
         className={`nav-radius ${activeSidebar && "nav-radius-open"}`}
         alt=""
       />
@@ -225,7 +223,7 @@ const Sidebar = (props) => {
                         ? "active-width justify-content-start ms-4"
                         : "justify-content-center"
                     } align-items-center ${
-                      activeLink === sideItem.label ? "active-side-link" : null
+                      (activeLink === sideItem.label || window.location.pathname === sideItem.link) ? "active-side-link" : null
                     }`}
                     onClick={() => setActiveLink(sideItem.label)}
                     onMouseEnter={() => setHover(sideItem.label)}
@@ -234,7 +232,7 @@ const Sidebar = (props) => {
                     <img
                       src={`https://cdn.worldofdypians.com/tools/${
                         activeLink === sideItem.label ||
-                        hover === sideItem.label
+                        hover === sideItem.label || window.location.pathname === sideItem.link
                           ? sideItem.icon + "Active.svg"
                           : sideItem.icon + ".svg"
                       }`}
@@ -246,7 +244,7 @@ const Sidebar = (props) => {
                         <h3
                           className={
                             activeLink === sideItem.label ||
-                            hover === sideItem.label
+                            hover === sideItem.label || window.location.pathname === sideItem.link
                               ? "active-text"
                               : "sideitem-text"
                           }
@@ -254,7 +252,9 @@ const Sidebar = (props) => {
                           {sideItem.label}
                         </h3>
                         <img
-                          src={'https://cdn.worldofdypians.com/tools/accordionIndicator.svg'}
+                          src={
+                            "https://cdn.worldofdypians.com/tools/accordionIndicator.svg"
+                          }
                           alt="indicator"
                           id="indicator"
                         />
@@ -308,7 +308,7 @@ const Sidebar = (props) => {
                           ? "active-width justify-content-start ms-4"
                           : "justify-content-center"
                       } align-items-center ${
-                        activeLink === sideItem.label
+                        activeLink === sideItem.label || window.location.pathname === sideItem.link
                           ? "active-side-link"
                           : null
                       }`}
@@ -319,7 +319,7 @@ const Sidebar = (props) => {
                       <img
                         src={`https://cdn.worldofdypians.com/tools/${
                           activeLink === sideItem.label ||
-                          hover === sideItem.label
+                          hover === sideItem.label || window.location.pathname === sideItem.link
                             ? sideItem.icon + "Active.svg"
                             : sideItem.icon + ".svg"
                         }`}
@@ -330,7 +330,7 @@ const Sidebar = (props) => {
                         <h3
                           className={
                             activeLink === sideItem.label ||
-                            hover === sideItem.label
+                            hover === sideItem.label || window.location.pathname === sideItem.link
                               ? "active-text"
                               : "sideitem-text"
                           }
@@ -357,7 +357,11 @@ const Sidebar = (props) => {
             to={"/account"}
             className="d-flex align-items-center justify-content-center"
           >
-            <img src={'https://cdn.worldofdypians.com/tools/sidebarPremium.png'} alt="" style={{ width: "80%" }} />
+            <img
+              src={"https://cdn.worldofdypians.com/tools/sidebarPremium.png"}
+              alt=""
+              style={{ width: "80%" }}
+            />
           </NavLink>
         )}
     </div>
