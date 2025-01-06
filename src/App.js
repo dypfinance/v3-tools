@@ -36,7 +36,7 @@ import Disclaimer from "./components/disclaimer/Disclaimer";
 // import { withRouter } from "react-router-dom";
 // import GenesisStaking from "./components/genesisStaking/GenesisStaking";
 // import CawsStaking from "./components/genesisStaking/CawsStaking";
-import Plans from "./components/account/Plans";
+// import Plans from "./components/account/Plans";
 import DypMigration from "./components/bridge/DypMigration";
 import AlertRibbon from "./components/alert-ribbon/AlertRibbon";
 import EarnOther from "./components/earnOther/EarnOther";

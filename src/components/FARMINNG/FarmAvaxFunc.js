@@ -10,8 +10,6 @@ import Countdown from "react-countdown";
 import Tooltip from "@material-ui/core/Tooltip"; 
 import axios from "axios"; 
 import { shortAddress } from "../../functions/shortAddress";  
-import calculatorIcon from "../calculator/assets/calculator.svg";
-import xMark from "../calculator/assets/xMark.svg";
 import { ClickAwayListener } from "@material-ui/core";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
 

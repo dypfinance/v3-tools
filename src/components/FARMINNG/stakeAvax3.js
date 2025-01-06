@@ -13,8 +13,7 @@ import copy from "./assets/copy.svg";
 import Tooltip from "@material-ui/core/Tooltip";
 import Countdown from "react-countdown"; 
 import { shortAddress } from "../../functions/shortAddress";
-import calculatorIcon from "../calculator/assets/calculator.svg";
-import xMark from "../calculator/assets/xMark.svg";
+
 import { handleSwitchNetworkhook } from "../../functions/hooks";
 import { ClickAwayListener } from "@material-ui/core";
 import axios from "axios";
