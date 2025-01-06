@@ -47,7 +47,7 @@ import axios from "axios";
 import MobileFlyout from "./components/mobileFlyout/MobileFlyout";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
-import { MobileView, BrowserView } from "react-device-detect"; 
+import { MobileView, BrowserView } from "react-device-detect";
 import Whitelist from "./components/whitelist/Whitelist";
 // import WhitelistPopup from "./components/whitelistPopup/WhitelistPopup";
 import Games from "./components/games/Games";
@@ -84,32 +84,23 @@ const LockerWrapper = (props) => {
 
 function App() {
   const [theme, setTheme] = useState("theme-dark");
-  const [isMinimized, setisMinimized] = useState(
-    false && window.innerWidth >= 992
-  );
+
   const [isOpenInMobile, setisOpenInMobile] = useState(false);
   const [isConnected, setisConnected] = useState(false);
   const [coinbase, setcoinbase] = useState(null);
   const [the_graph_result_ETH_V2, setthe_graph_result_ETH_V2] = useState(
     JSON.stringify(window.the_graph_result_eth_v2)
   );
-  const [the_graph_result, setthe_graph_result] = useState(
-    JSON.stringify(window.the_graph_result_eth_v2)
-  );
+
   const [the_graph_result_AVAX_V2, setthe_graph_result_AVAX_V2] = useState(
     JSON.stringify(window.the_graph_result_avax_v2)
   );
   const [the_graph_result_BSC_V2, setthe_graph_result_BSC_V2] = useState(
     JSON.stringify(window.the_graph_result_bsc_v2)
   );
-  const [the_graph_resultbsc, setthe_graph_resultbsc] = useState(
-    JSON.stringify(window.the_graph_result_bsc_v2)
-  );
-  const [the_graph_resultavax, setthe_graph_resultavax] = useState(
-    JSON.stringify(window.the_graph_result_avax_v2)
-  );
-  const [subscribedPlatformTokenAmount, setsubscribedPlatformTokenAmount] =
-    useState(0);
+
+  // const [subscribedPlatformTokenAmount, setsubscribedPlatformTokenAmount] =
+  //   useState(0);
   const [isPremium, setisPremium] = useState(false);
   const [networkId, setnetworkId] = useState(1);
   const [explorerNetworkId, setexplorerNetworkId] = useState(1);
@@ -121,7 +112,7 @@ function App() {
   const [downloadClick, setdownloadClick] = useState(false);
   const [showMobilePopup, setshowMobilePopup] = useState(false);
   const [showWalletPopup, setshowWalletPopup] = useState(false);
-  const [whitelistPopup, setwhitelistPopup] = useState(true);
+  // const [whitelistPopup, setwhitelistPopup] = useState(true);
   const [aggregatorPools, setaggregatorPools] = useState([]);
   const [userCurencyBalance, setuserCurencyBalance] = useState(0);
   const [fireAppcontent, setFireAppContent] = useState(false);
@@ -419,24 +410,24 @@ function App() {
         });
 
       if (
-        subscribedPlatformTokenAmountNewETH == "0" &&
-        subscribedPlatformTokenAmountCfx == "0" &&
-        subscribedPlatformTokenAmountBase == "0" &&
-        subscribedPlatformTokenAmountNewAvax == "0" &&
-        subscribedPlatformTokenAmountNewBNB == "0" &&
-        subscribedPlatformTokenAmountNewBNB2 === "0" &&
-        subscribedPlatformTokenAmountSkale == "0"
+        Number(subscribedPlatformTokenAmountNewETH) === 0 &&
+        Number(subscribedPlatformTokenAmountCfx) === 0 &&
+        Number(subscribedPlatformTokenAmountBase) === 0 &&
+        Number(subscribedPlatformTokenAmountNewAvax) === 0 &&
+        Number(subscribedPlatformTokenAmountNewBNB) === 0 &&
+        Number(subscribedPlatformTokenAmountNewBNB2) === 0 &&
+        Number(subscribedPlatformTokenAmountSkale) === 0
       ) {
-        setsubscribedPlatformTokenAmount("0");
+        // setsubscribedPlatformTokenAmount("0");
         setisPremium(false);
       } else if (
-        subscribedPlatformTokenAmountNewETH != "0" ||
-        subscribedPlatformTokenAmountCfx != "0" ||
-        subscribedPlatformTokenAmountBase != "0" ||
-        subscribedPlatformTokenAmountNewAvax != "0" ||
-        subscribedPlatformTokenAmountNewBNB != "0" ||
-        subscribedPlatformTokenAmountNewBNB2 != "0" ||
-        subscribedPlatformTokenAmountSkale != "0"
+        Number(subscribedPlatformTokenAmountNewETH) !== 0 ||
+        Number(subscribedPlatformTokenAmountCfx) !== 0 ||
+        Number(subscribedPlatformTokenAmountBase) !== 0 ||
+        Number(subscribedPlatformTokenAmountNewAvax) !== 0 ||
+        Number(subscribedPlatformTokenAmountNewBNB) !== 0 ||
+        Number(subscribedPlatformTokenAmountNewBNB2) !== 0 ||
+        Number(subscribedPlatformTokenAmountSkale) !== 0
       ) {
         setisPremium(true);
       }
@@ -475,7 +466,7 @@ function App() {
 
     // console.log(window.coinbase_address)
     let coinbase2 = await window.getCoinbase();
-    if (coinbase2 != null || coinbase2 != undefined) {
+    if (coinbase2 !== null || coinbase2 !== undefined) {
       setcoinbase(coinbase2);
     }
     setshow(false);
@@ -507,27 +498,6 @@ function App() {
       // window.alertify.error("Cannot fetch TVL");
       console.error("TVL ETH V2 error: " + e);
     }
-
-    try {
-      if (networkId === "1") {
-        let the_graph_result = await window.refresh_the_graph_result();
-
-        setthe_graph_result(JSON.parse(JSON.stringify(the_graph_result)));
-      } else if (networkId === "56") {
-        let the_graph_resultbsc = await window.refresh_the_graph_resultavax();
-
-        setthe_graph_resultbsc(JSON.parse(JSON.stringify(the_graph_resultbsc)));
-      } else if (networkId === "43114") {
-        let the_graph_resultavax = await window.refresh_the_graph_resultavax();
-
-        setthe_graph_resultavax(
-          JSON.parse(JSON.stringify(the_graph_resultavax))
-        );
-      }
-    } catch (e) {
-      // window.alertify.error("Cannot fetch TVL");
-      console.error("Cannot fetch TVL: " + e);
-    }
   };
 
   const handleEthereum = async () => {
@@ -556,7 +526,7 @@ function App() {
     const walletAddress = coinbase;
     const TokenABI = window.ERC20_ABI;
 
-    if (coinbase && coinbase != undefined && isConnected) {
+    if (coinbase && coinbase !== undefined && isConnected) {
       const contract1 = new window.infuraWeb3.eth.Contract(
         TokenABI,
         tokenAddress
@@ -713,27 +683,21 @@ function App() {
   };
 
   useEffect(() => {
+    setTheme("theme-dark");
     tvl();
     fetchAggregatorPools();
-    setwhitelistPopup(true);
+    // setwhitelistPopup(true);
     if (window.location.hash === "#mobile-app") {
       setdownloadClick(true);
     }
 
-    if (
-      window.ethereum &&
-      !window.coin98 &&
-      (window.ethereum.isMetaMask === true ||
-        window.ethereum.isTrust === true ||
-        window.ethereum?.isTrustWallet)
-    ) {
-      checkConnection();
-    }
-    checkNetworkId();
+    
 
     if (window.ethereum && !window.coin98) {
       console.log("yes");
       handleEthereum();
+      checkConnection();
+      checkNetworkId();
     } else {
       console.log("no");
       // If the event is not dispatched by the end of the timeout,
@@ -778,14 +742,14 @@ function App() {
     checkConnection();
   };
 
-  const toggleMinimizeSidebar = () => {
-    const f = () => window.dispatchEvent(new Event("resize"));
-    setisMinimized(!isMinimized, () => f());
+  // const toggleMinimizeSidebar = () => {
+  //   const f = () => window.dispatchEvent(new Event("resize"));
+  //   setisMinimized(!isMinimized, () => f());
 
-    f();
-    let newInterval = setInterval(f, 16);
-    setTimeout(() => clearInterval(newInterval), 1000);
-  };
+  //   f();
+  //   let newInterval = setInterval(f, 16);
+  //   setTimeout(() => clearInterval(newInterval), 1000);
+  // };
 
   const toggleMobileSidebar = () => {
     setisOpenInMobile(!isOpenInMobile);
@@ -945,11 +909,7 @@ function App() {
   const windowSize = useWindowSize();
 
   const { email, logout } = useAuth();
-  const {
-    data,
-    refetch: refetchPlayer,
-    loading: loadingPlayer,
-  } = useQuery(GET_PLAYER, {
+  const { data, refetch: refetchPlayer } = useQuery(GET_PLAYER, {
     fetchPolicy: "network-only",
   });
 
@@ -1030,10 +990,8 @@ function App() {
     },
   ];
 
-  const [generateNonce, { loading: loadingGenerateNonce, data: dataNonce }] =
-    useMutation(GENERATE_NONCE);
-  const [verifyWallet, { loading: loadingVerify, data: dataVerify }] =
-    useMutation(VERIFY_WALLET);
+  const [generateNonce, { data: dataNonce }] = useMutation(GENERATE_NONCE);
+  const [verifyWallet, { data: dataVerify }] = useMutation(VERIFY_WALLET);
 
   const fillRecordsCaws2d = (itemData) => {
     if (itemData.length === 0) {
@@ -1043,8 +1001,8 @@ function App() {
       const placeholderArray = placeholderplayerData.slice(itemData.length, 10);
       const finalData = [...testArray, ...placeholderArray];
       setleaderboard(finalData);
-    } else if(itemData.length > 10) {
-    setleaderboard(itemData);
+    } else if (itemData.length > 10) {
+      setleaderboard(itemData);
     }
   };
 
@@ -1095,12 +1053,14 @@ function App() {
     }
     leaderboard2 = leaderboard2.sort((a, b) => b.score - a.score);
 
-    var testArray = leaderboard2.length > 0 ? leaderboard2.filter(
-      (item) =>
-        item.address.toLowerCase() ===
-        data?.getPlayer?.wallet?.publicAddress?.toLowerCase()
-    ) : [];
-
+    var testArray =
+      leaderboard2.length > 0
+        ? leaderboard2.filter(
+            (item) =>
+              item.address.toLowerCase() ===
+              data?.getPlayer?.wallet?.publicAddress?.toLowerCase()
+          )
+        : [];
 
     fillRecordsCaws2d(leaderboard2);
     if (
@@ -1119,9 +1079,8 @@ function App() {
     } else {
       setCaws2dUser([]);
     }
+  };
 
-  }; 
-  
   const getAllChests = async () => {
     let headersList = {
       Accept: "*/*",
@@ -1155,18 +1114,12 @@ function App() {
         for (let item = 0; item < data.chestOrder.length; item++) {
           if (data.chestOrder[item].chestType === "Standard") {
             if (data.chestOrder[item].isOpened === true) {
-              {
-                openedChests.push(data.chestOrder[item]);
-                // openedStandardChests.push(data.chestOrder[item]);
-              }
+              openedChests.push(data.chestOrder[item]);
             }
             standardChestsArray.push(data.chestOrder[item]);
           } else if (data.chestOrder[item].chestType === "Premium") {
             if (data.chestOrder[item].isOpened === true) {
-              {
-                openedChests.push(data.chestOrder[item]);
-                // openedPremiumChests.push(data.chestOrder[item]);
-              }
+              openedChests.push(data.chestOrder[item]);
             }
             premiumChestsArray.push(data.chestOrder[item]);
           }
@@ -1266,7 +1219,7 @@ function App() {
   };
 
   const fetchPreviousWeeklyWinners = async () => {
-    if (previousWeeklyVersion != 0) {
+    if (previousWeeklyVersion !== 0) {
       const data = {
         StatisticName: "LeaderboardDypiusWeekly",
         StartPosition: 0,
@@ -1347,7 +1300,7 @@ function App() {
   };
 
   const fetchPreviousMonthlyWinners = async () => {
-    if (previousMonthlyVersion != 0) {
+    if (previousMonthlyVersion !== 0) {
       const data = {
         StatisticName: "LeaderboardDypiusMonthly",
         StartPosition: 0,
@@ -1427,7 +1380,7 @@ function App() {
   };
 
   const fetchPreviousKittyDashWinners = async () => {
-    if (previousKittyDashVersion != 0) {
+    if (previousKittyDashVersion !== 0) {
       const data = {
         StatisticName: "MobileGameDailyLeaderboard",
         StartPosition: 0,
@@ -1482,7 +1435,7 @@ function App() {
 
   const handleSync = async () => {
     setsyncStatus("loading");
-
+    setisonSync(true);
     try {
       await generateNonce({
         variables: {
@@ -1524,7 +1477,7 @@ function App() {
   }, [dataNonce]);
 
   return (
-    <div className={`page_wrapper ${isMinimized ? "minimize" : ""}`}>
+    <div className={`page_wrapper`}>
       {/* <img src={navRadius} className="nav-radius" alt="" /> */}
       {/* <LandFlyout />   */}
 
@@ -1683,7 +1636,7 @@ function App() {
                       <Farms
                         handleConnection={handleConnection}
                         isConnected={isConnected}
-                        networkId={parseInt(explorerNetworkId)} 
+                        networkId={parseInt(explorerNetworkId)}
                         onSelectChain={onSelectChain}
                       />
                     }
@@ -1766,8 +1719,6 @@ setweeklyplayerData
 setpreviousKittyDashVersion
 setkittyDashRecords */}
 
-              
-
                   <Route
                     exact
                     path="/earn/dypius"
@@ -1845,7 +1796,6 @@ setkittyDashRecords */}
                       />
                     }
                   />
- 
 
                   <Route
                     exact
@@ -2112,7 +2062,7 @@ setkittyDashRecords */}
       {(window.location?.pathname === "/genesis" && window.innerWidth < 786) ||
       (window.location?.pathname === "/caws-staking" &&
         window.innerWidth < 786) ? null : (
-        <Footer/>
+        <Footer />
       )}
 
       {(showMobilePopup === true || downloadClick === true) && (
@@ -2128,7 +2078,7 @@ setkittyDashRecords */}
                   <h4 className="mobile-popup-title">Dypius Mobile App</h4>
 
                   <img
-                    src={'https://cdn.worldofdypians.com/wod/popupXmark.svg'}
+                    src={"https://cdn.worldofdypians.com/wod/popupXmark.svg"}
                     alt=""
                     className="close-x position-relative cursor-pointer "
                     onClick={() => {
