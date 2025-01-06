@@ -2,29 +2,18 @@ import React from "react";
 import getFormattedNumber from "../../functions/get-formatted-number";
 import Countdown from "react-countdown";
 import "./bridge.css";
-import eth from "./assets/eth.svg";
-import bnb from "./assets/bnb.svg";
-import avax from "./assets/avax.svg";
-import wallet from "./assets/wallet.svg";
-import moreinfo from "./assets/more-info.svg";
-import switchicon from "./assets/switch.svg";
-import failMark from "../../assets/failMark.svg";
-import Tooltip from "@material-ui/core/Tooltip";
+ import PropTypes from "prop-types";
+import Web3 from "web3";
 import Timeline from "@mui/lab/Timeline";
 import TimelineItem, { timelineItemClasses } from "@mui/lab/TimelineItem";
 import TimelineSeparator from "@mui/lab/TimelineSeparator";
 import TimelineConnector from "@mui/lab/TimelineConnector";
 import TimelineContent from "@mui/lab/TimelineContent";
 import TimelineDot from "@mui/lab/TimelineDot";
-import routeIcon from "./assets/route-icon.svg";
 import Address from "../FARMINNG/address";
 import WalletModal from "../WalletModal";
-import migrationIcon from "./assets/migrationIcon.svg";
-import infoIcon from "./assets/infoIcon.svg";
-import dypIcon from "./assets/dypIcon.svg";
-import downArrow from "./assets/downArrow.svg";
-import PropTypes from "prop-types";
-import Web3 from "web3";
+    
+
 
 // Renderer callback with condition
 const getRenderer =
@@ -540,7 +529,7 @@ export default function initMigration({
                   <div className="d-flex align-items-end justify-content-between mb-3">
                     <div className="d-flex flex-column gap-2">
                       <div className="d-flex align-items-center gap-2">
-                        <img src={migrationIcon} alt="" />
+                        <img src={'https://cdn.worldofdypians.com/tools/migrationIcon.svg'} alt="" />
                         <h6 className="migration-title">DYP Migration</h6>
                       </div>
                       <span className="migration-span">
@@ -555,7 +544,7 @@ export default function initMigration({
                           this.setState({ showWalletModal: true });
                         }}
                       >
-                        <img src={wallet} alt="" />
+                        <img src={'https://cdn.worldofdypians.com/tools/walletIcon.svg'} alt=""  style={{height: 20, width: 20}}/>
                         Connect wallet
                       </button>
                     ) : (
@@ -582,7 +571,7 @@ export default function initMigration({
                         }}
                       >
                         <h6 className="optiontext d-flex align-items-center gap-2">
-                          <img src={eth} alt="" />
+                          <img src={'https://cdn.worldofdypians.com/tools/ethSquare.svg'} alt="" />
                           <p className=" mb-0 optiontext d-none d-lg-flex">
                             Ethereum
                           </p>
@@ -605,7 +594,7 @@ export default function initMigration({
                           }}
                         >
                           <h6 className="optiontext d-flex align-items-center gap-2">
-                            <img src={bnb} alt="" />
+                            <img src={'https://cdn.worldofdypians.com/tools/bnbSquare.svg'} alt="" />
                             <p className=" mb-0 optiontext d-none d-lg-flex">
                               BNB Chain
                             </p>
@@ -628,7 +617,7 @@ export default function initMigration({
                         }}
                       >
                         <h6 className="optiontext d-flex align-items-center gap-2">
-                          <img src={avax} alt="" />
+                          <img src={'https://cdn.worldofdypians.com/tools/avaxSquare.svg'} alt="" />
                           <p className=" mb-0 optiontext d-none d-lg-flex">
                             Avalanche
                           </p>
@@ -646,7 +635,7 @@ export default function initMigration({
                         {this.props.sourceChain === "eth" ? "6" : "1"} DYP (new)
                       </span>
                     </div>
-                    <img src={infoIcon} alt="" />
+                    <img src={'https://cdn.worldofdypians.com/tools/errorGray.svg'} alt="" />
                   </div>
                   <hr className="migration-divider" />
                 </div>
@@ -678,7 +667,7 @@ export default function initMigration({
                         </span>
                         <div className="conversion-input-container p-2 d-flex align-items-center justify-content-between">
                           <div className="d-flex align-items-center gap-2">
-                            <img src={dypIcon} alt="" />
+                            <img src={'https://cdn.worldofdypians.com/tools/dyplogo.svg'} alt="" style={{height: 20, width: 20}}/>
                             <input
                               type="number"
                               className="conversion-input"
@@ -719,7 +708,7 @@ export default function initMigration({
                         </div>
                       </div>
                       <img
-                        src={downArrow}
+                        src={'https://cdn.worldofdypians.com/tools/downArrow.svg'}
                         style={{ position: "relative", top: "5px" }}
                         alt=""
                       />
@@ -729,7 +718,7 @@ export default function initMigration({
                         </span>
                         <div className="conversion-input-container p-2 d-flex align-items-center justify-content-between">
                           <div className="d-flex align-items-center gap-2">
-                            <img src={dypIcon} alt="" />
+                            <img src={'https://cdn.worldofdypians.com/tools/dyplogo.svg'} alt=""  style={{height: 20, width: 20}}/>
                             <input
                               type="number"
                               className="conversion-input"
@@ -806,7 +795,7 @@ export default function initMigration({
                           <>Success</>
                         ) : (
                           <>
-                            <img src={failMark} alt="" />
+                            <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
                             Failed
                           </>
                         )}
@@ -885,7 +874,7 @@ export default function initMigration({
                             <>Success</>
                           ) : (
                             <>
-                              <img src={failMark} alt="" />
+                              <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
                               Failed
                             </>
                           )}
@@ -927,7 +916,7 @@ export default function initMigration({
             </div>
             <div>
               <h6 className="guidetitle">
-                <img src={routeIcon} alt="" />
+                <img src={'https://cdn.worldofdypians.com/tools/route-icon.svg'} alt="" />
                 Migration process guide
               </h6>
               <div className="separator"></div>
@@ -1327,7 +1316,7 @@ export default function initMigration({
                 <>Success</>
               ) : (
                 <>
-                  <img src={failMark} alt="" />
+                  <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
                   Failed
                 </>
               )}
@@ -1498,7 +1487,7 @@ export default function initMigration({
                 <>Success</>
               ) : (
                 <>
-                  <img src={failMark} alt="" />
+                  <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
                   Failed
                 </>
               )}

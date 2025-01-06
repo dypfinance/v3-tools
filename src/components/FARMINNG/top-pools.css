@@ -9,7 +9,7 @@
 }
 
 .pools-card-open {
-  background-image: url("./assets/toppools-bg.png");
+  background-image: url("https://cdn.worldofdypians.com/tools/toppools-bg.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -30,7 +30,7 @@
 }
 
 .pools-cardcaws-open {
-  background-image: url("./assets/caws-bg.svg") !important;
+  background-image: url("https://cdn.worldofdypians.com/tools/caws-bg.svg") !important;
   background-position: center !important;
   background-repeat: no-repeat !important;
   background-size: cover !important;
@@ -251,7 +251,7 @@
   height: 33px;
   top: -18px;
   right: -2px;
-  background-image: url(./assets/toppick.svg);
+  background-image: url('https://cdn.worldofdypians.com/tools/toppick.svg');
   background-repeat: no-repeat;
   background-position: center;
   border-radius: 6px 0px;

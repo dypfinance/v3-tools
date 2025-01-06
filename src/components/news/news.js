@@ -5,15 +5,11 @@ import PressRealease from "./PressRelease";
 import OtherNews from "./OtherNews";
 import NewsModal from "./NewsModal";
 import axios from "axios";
-import ToolTip from "./ToolTip";
-import OutsideClickHandler from "react-outside-click-handler";
 import * as _ from "lodash";
 import { useWeb3React } from "@web3-react/core";
-import Carousel from "better-react-carousel";
 import { useParams } from "react-router-dom";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Slider from "react-slick";
-import pressReleaseNext from "./assets/pressReleaseNext.svg";
 import Web3 from "web3";
 
 const News = ({  isPremium, coinbase }) => {
@@ -746,7 +742,7 @@ const News = ({  isPremium, coinbase }) => {
                 </Slider>
                 <div className="d-flex align-items-center gap-2 featured-slider-arrows">
                   <img
-                    src={pressReleaseNext}
+                    src={'https://cdn.worldofdypians.com/tools/pressReleaseNext.svg'}
                     height={40}
                     width={40}
                     className="cursor-pointer d-none d-lg-flex"
@@ -755,7 +751,7 @@ const News = ({  isPremium, coinbase }) => {
                     onClick={prevMain}
                   />
                   <img
-                    src={pressReleaseNext}
+                    src={'https://cdn.worldofdypians.com/tools/pressReleaseNext.svg'}
                     height={40}
                     width={40}
                     className="cursor-pointer d-none d-lg-flex"
@@ -919,7 +915,7 @@ const News = ({  isPremium, coinbase }) => {
           // style={{ width: "96%", margin: "auto", background: "none" }}
         >
           <img
-            src={pressReleaseNext}
+            src={'https://cdn.worldofdypians.com/tools/pressReleaseNext.svg'}
             className="press-prev-btn"
             alt="prev-button"
             style={{ transform: "rotate(180deg)" }}
@@ -968,7 +964,7 @@ const News = ({  isPremium, coinbase }) => {
             </Slider>
           </div>
           <img
-            src={pressReleaseNext}
+            src={'https://cdn.worldofdypians.com/tools/pressReleaseNext.svg'}
             alt="next-button"
             className="press-next-btn"
             onClick={nextSlide}

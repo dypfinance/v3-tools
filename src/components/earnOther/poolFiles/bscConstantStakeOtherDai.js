@@ -4,25 +4,19 @@ import getFormattedNumber from "../../../functions/get-formatted-number";
 import Modal from "../../Modal/Modal";
 import Address from "../../FARMINNG/address";
 import WalletModal from "../../WalletModal";
-import "../../FARMINNG/top-pools.css";
-import ellipse from "../../FARMINNG/assets/ellipse.svg";
+import "../../FARMINNG/top-pools.css"; 
 // import failMark from "../../assets/failMark.svg";
 import Clipboard from "react-clipboard.js";
 import ReactTooltip from "react-tooltip";
-import arrowup from "../../FARMINNG/assets/arrow-up.svg";
-import moreinfo from "../../FARMINNG/assets/more-info.svg";
-// import stats from "../../FARMINNG/assets/stats.svg";
-import purplestats from "../../FARMINNG/assets/purpleStat.svg";
+import arrowup from "../../FARMINNG/assets/arrow-up.svg"; 
 import referralimg from "../../FARMINNG/assets/referral.svg";
 import copy from "../../FARMINNG/assets/copy.svg";
 import wallet from "../../FARMINNG/assets/wallet.svg";
 import Tooltip from "@material-ui/core/Tooltip";
-import Countdown from "react-countdown";
-import poolsCalculatorIcon from "../../FARMINNG/assets/poolsCalculatorIcon.svg";
-import statsLinkIcon from "../../FARMINNG/assets/statsLinkIcon.svg";
+import Countdown from "react-countdown"; 
 // import CountDownTimer from "../locker/Countdown";
 import { shortAddress } from "../../../functions/shortAddress";
-// import calculatorIcon from "../calculator/assets/calculator.svg";
+
 // import xMark from "../calculator/assets/xMark.svg";
 import { handleSwitchNetworkhook } from "../../../functions/hooks";
 import { ClickAwayListener } from "@material-ui/core";
@@ -166,8 +160,7 @@ const StakeBscOtherDai = ({
   const [stakingOwner, setstakingOwner] = useState(null);
   const [approxDeposit, setapproxDeposit] = useState(100);
   const [approxDays, setapproxDays] = useState(365);
-  const [showCalculator, setshowCalculator] = useState(false);
-  const [usdPerToken, setusdPerToken] = useState("");
+  const [showCalculator, setshowCalculator] = useState(false); 
   const [errorMsg, seterrorMsg] = useState("");
   const [errorMsg2, seterrorMsg2] = useState("");
   const [errorMsg3, seterrorMsg3] = useState("");
@@ -205,10 +198,7 @@ const StakeBscOtherDai = ({
     setpopup(false);
   };
 
-  const getPriceDYP = async () => {
-    let usdPerToken = await window.getPrice("defi-yield-protocol");
-    setusdPerToken(usdPerToken);
-  };
+ 
 
   const refreshBalance = async () => {
     let coinbase = coinbase2;
@@ -362,10 +352,7 @@ const StakeBscOtherDai = ({
       setcoinbase(coinbase);
     }
   }, [coinbase, coinbase2]);
-
-  useEffect(() => {
-    getPriceDYP();
-  }, []);
+ 
 
   useEffect(() => {
     refreshBalance();
@@ -883,7 +870,7 @@ const StakeBscOtherDai = ({
             >
               <h6 className="activetxt">
                 <img
-                  src={ellipse}
+                  src={'https://cdn.worldofdypians.com/tools/ellipse.svg'}
                   alt=""
                   className="position-relative"
                   style={{ top: "-1px" }}
@@ -918,7 +905,7 @@ const StakeBscOtherDai = ({
                           }
                         >
                           <img
-                            src={moreinfo}
+                            src={'https://cdn.worldofdypians.com/tools/more-info.svg'}
                             alt=""
                             onClick={performanceOpen}
                           />
@@ -946,7 +933,7 @@ const StakeBscOtherDai = ({
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={aprOpen} />
+                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={aprOpen} />
                         </Tooltip>
                       </ClickAwayListener>
                     </h6>
@@ -970,7 +957,7 @@ const StakeBscOtherDai = ({
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={lockOpen} />
+                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={lockOpen} />
                         </Tooltip>
                       </ClickAwayListener>
                     </h6>
@@ -981,7 +968,7 @@ const StakeBscOtherDai = ({
                     className="bottomitems"
                     onClick={() => setshowCalculator(true)}
                   >
-                    <img src={poolsCalculatorIcon} alt="" />
+                    <img src={'https://cdn.worldofdypians.com/tools/poolsCalculatorIcon.svg'} alt="" />
                     Calculator
                   </h6>
                   <a
@@ -1005,7 +992,7 @@ const StakeBscOtherDai = ({
                     }}
                   >
                     <h6 className="bottomitems">
-                      <img src={purplestats} alt="" />
+                      <img src={'https://cdn.worldofdypians.com/tools/purpleStat.svg'} alt="" />
                       Stats
                     </h6>
                   </div>
@@ -1107,7 +1094,7 @@ const StakeBscOtherDai = ({
                       </div>
                     }
                   >
-                    <img src={moreinfo} alt="" onClick={depositOpen} />
+                    <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={depositOpen} />
                   </Tooltip>
                 </ClickAwayListener>
               </div>
@@ -1259,7 +1246,7 @@ const StakeBscOtherDai = ({
                         </div>
                       }
                     >
-                      <img src={moreinfo} alt="" onClick={rewardsOpen} />
+                      <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={rewardsOpen} />
                     </Tooltip>
                   </ClickAwayListener>
                 </h6>
@@ -1405,7 +1392,7 @@ const StakeBscOtherDai = ({
                       </div>
                     }
                   >
-                    <img src={moreinfo} alt="" onClick={withdrawOpen} />
+                    <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={withdrawOpen} />
                   </Tooltip>
                 </ClickAwayListener>
               </h6>
@@ -1633,7 +1620,7 @@ const StakeBscOtherDai = ({
                       className="stats-link"
                     >
                       {shortAddress(coinbase)}{" "}
-                      <img src={statsLinkIcon} alt="" />
+                      <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                     </a>
                     <a
                       target="_blank"
@@ -1641,7 +1628,7 @@ const StakeBscOtherDai = ({
                       href={`https://github.com/dypfinance/staking-governance-security-audits`}
                       className="stats-link"
                     >
-                      Audit <img src={statsLinkIcon} alt="" />
+                      Audit <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                     </a>
                     <a
                       target="_blank"
@@ -1649,7 +1636,7 @@ const StakeBscOtherDai = ({
                       href={`${window.config.bscscan_baseURL}/token/${reward_token._address}?a=${coinbase}`}
                       className="stats-link"
                     >
-                      View transaction <img src={statsLinkIcon} alt="" />
+                      View transaction <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                     </a>
                   </div>
                 </div>

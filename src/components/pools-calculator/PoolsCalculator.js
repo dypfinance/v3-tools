@@ -1,6 +1,6 @@
 import React from "react";
 import "./poolscalculator.css";
-import calculatorIcon from "../calculator/assets/calculator.svg";
+ 
 import xMark from "../calculator/assets/xMark.svg";
 
 const PoolsCalculator = ({ onClose, handleInputChangeAmount, handleInputChangeDays }) => {
@@ -8,7 +8,7 @@ const PoolsCalculator = ({ onClose, handleInputChangeAmount, handleInputChangeDa
     <div className="pools-calculator p-3">
       <div className="d-flex align-items-center justify-content-between">
         <div className="d-flex align-items-center gap-3">
-          <img src={calculatorIcon} alt="" />
+          <img src={'https://cdn.worldofdypians.com/tools/calculator.svg'} alt="" />
           <h5 style={{ fontSize: "23px", fontWeight: "500", color: "#f7f7fc" }}>
             Calculator
           </h5>

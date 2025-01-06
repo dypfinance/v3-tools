@@ -1,28 +1,11 @@
-import Modal from "../general/Modal";
 import axios from "axios";
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import RelatedNews from "./RelatedNews";
 import OutsideClickHandler from "react-outside-click-handler";
-import VotePassive from "./assets/votepassive.svg";
-import Upvote from "./assets/upvote.svg";
-import Downvote from "./assets/downvote.svg";
-import Clock from "./assets/clock.svg";
 import ToolTip from "./ToolTip";
-import goBackArrow from "./assets/goBackArrow.svg";
-import passiveUpvote from "./assets/passiveUpvote.svg";
-import passiveDownvote from "./assets/passiveDownvote.svg";
-import activeUpvote from "./assets/activeUpvote.svg";
-import activeDownvote from "./assets/activeDownvote.svg";
-import calendar from "../newsCard/assets/calendar.svg";
-import newsReddit from "./assets/newsReddit.svg";
-import newsShare from "./assets/newsShare.svg";
-import newsTelegram from "./assets/newsTelegram.svg";
-import newsTwitter from "./assets/newsTwitter.svg";
-import sourceLinkIcon from "./assets/sourceLinkIcon.svg";
 
-import { useState } from "react";
-
+ 
 const NewsModal = ({
   title,
   image,
@@ -301,11 +284,11 @@ const NewsModal = ({
                     className="btn go-back-btn d-flex align-items-center gap-2"
                     onClick={onModalClose}
                   >
-                    <img src={goBackArrow} alt="goback" />
+                    <img src={'https://cdn.worldofdypians.com/tools/goBackArrow.svg'} alt="goback" />
                     <span className="go-back-text">Go Back</span>
                   </button>
                   <div className="date-wrapper">
-                    <img src={calendar} alt="calendar" />
+                    <img src={'https://cdn.worldofdypians.com/tools/calendar.svg'} alt="calendar" />
                     <span className="news-date-text">
                       {formattedDate.toLocaleDateString("en-US", options)}
                     </span>
@@ -351,7 +334,7 @@ const NewsModal = ({
                     rel="noreferrer"
                     aria-label=""
                   >
-                    <img src={newsTwitter} alt="twitter share" />
+                    <img src={'https://cdn.worldofdypians.com/tools/newsTwitter.svg'} alt="twitter share" />
                   </a>
 
                   <a
@@ -374,7 +357,7 @@ const NewsModal = ({
                       </svg>
                     </div>
                   </div> */}
-                    <img src={newsReddit} alt="reddit share" />
+                    <img src={'https://cdn.worldofdypians.com/tools/newsReddit.svg'} alt="reddit share" />
                   </a>
 
                   <a
@@ -397,10 +380,10 @@ const NewsModal = ({
                       </svg>
                     </div>
                   </div> */}
-                    <img src={newsTelegram} alt="telegram share" />
+                    <img src={'https://cdn.worldofdypians.com/tools/newsTelegram.svg'} alt="telegram share" />
                   </a>
                   <img
-                    src={newsShare}
+                    src={'https://cdn.worldofdypians.com/tools/newsShare.svg'}
                     alt="share news"
                     onClick={() =>
                       navigator.clipboard.writeText(
@@ -493,10 +476,10 @@ const NewsModal = ({
                   <img
                     src={
                       likeIndicator === false && dislikeIndicator === false
-                        ? passiveUpvote
-                        : likeIndicator === true
-                        ? activeUpvote
-                        : passiveUpvote
+                    ? 'https://cdn.worldofdypians.com/tools/passiveDownvote.svg'
+                    : dislikeIndicator === true
+                    ? 'https://cdn.worldofdypians.com/tools/activeDownvote.svg'
+                    : 'https://cdn.worldofdypians.com/tools/passiveDownvote.svg'
                     }
                     alt=""
                     className="like-indicator"
@@ -514,10 +497,10 @@ const NewsModal = ({
                     style={{ transform: "rotate(0deg)" }}
                     src={
                       likeIndicator === false && dislikeIndicator === false
-                        ? passiveDownvote
-                        : dislikeIndicator === true
-                        ? activeDownvote
-                        : passiveDownvote
+                      ? 'https://cdn.worldofdypians.com/tools/passiveDownvote.svg'
+                      : dislikeIndicator === true
+                      ? 'https://cdn.worldofdypians.com/tools/activeDownvote.svg'
+                      : 'https://cdn.worldofdypians.com/tools/passiveDownvote.svg'
                     }
                     alt=""
                     className="like-indicator"
@@ -556,7 +539,7 @@ const NewsModal = ({
               </a>
             </p> */}
                 <div className="d-flex align-items-center gap-2">
-                  <img src={sourceLinkIcon} alt="source link" />
+                  <img src={'https://cdn.worldofdypians.com/tools/sourceLinkIcon.svg'} alt="source link" />
                   <a
                     href={link}
                     target="_blank"
@@ -578,7 +561,7 @@ const NewsModal = ({
             style={{ left: "0px", top: "20px", background: "#8E97CD" }}
           ></div>
           <div className="d-flex align-items-center gap-2 mt-2">
-            <img src={require(`./assets/relatedNewsIcon.svg`).default} alt="" />
+            <img src={`https://cdn.worldofdypians.com/tools/relatedNewsIcon.svg`} alt="" />
             <h3 className="related-news-side-title">Top voted news</h3>
           </div>
           <div className="related-news-wrapper">

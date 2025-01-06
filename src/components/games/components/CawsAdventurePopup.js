@@ -1,5 +1,4 @@
-import React from "react";
-import cawsAdventure from "../assets/popupAssets/cawsAdventure.png";
+import React from "react"; 
 
 const CawsAdventurePopup = ({ active, onClose }) => {
   return (
@@ -16,7 +15,7 @@ const CawsAdventurePopup = ({ active, onClose }) => {
       >
         <h6 className="games-popup-title mb-0">CAWS Adventure</h6>
         <img
-          src={require("../assets/xMark.svg").default}
+          src={'https://cdn.worldofdypians.com/wod/xMark.svg'}
           alt=""
           style={{ cursor: "pointer" }}
           onClick={onClose}
@@ -44,7 +43,7 @@ const CawsAdventurePopup = ({ active, onClose }) => {
         completion times will top the leaderboard and win exciting rewards.
       </p>
       <div className="games-popup-image-wrapper p-2 d-flex  align-items-center justify-content-between gap-2">
-        <img src={cawsAdventure} className="w-100" alt="" />
+        <img src={'https://cdn.worldofdypians.com/tools/cawsAdventure.png'} className="w-100" alt="" />
       </div>
      <div className="d-flex w-100 justify-content-center">
      <a href="https://game.dypius.com/" target="_blank" rel="noreferrer" className="btn filled-btn" style={{width: "fit-content"}}>Play</a>

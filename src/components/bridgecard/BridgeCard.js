@@ -1,7 +1,5 @@
 import React from "react";
-import filledArrow from "./assets/filledarrow.svg";
-// import bridgeLogo from "./assets/bridge-logo.svg";
-// import yieldIcon from "./assets/yieldIcon.svg";
+ 
 import { NavLink } from "react-router-dom";
 import "./bridgecard.css";
 
@@ -16,19 +14,18 @@ const BridgeCard = ({onMobileClick}) => {
       <div className="d-flex flex-column gap-2 justify-content-between h-100">
         <div className="">
           <h6 className="bridgecard-title d-flex justify-content-between gap-2 align-items-center">
-          Games on Base
+          Mini-Games
           </h6>
         </div>
         <div className="d-flex flex-column gap-3">
           <div>
             <h6 className="bridgecard-desc">
-            Enjoy the ultimate gaming experience on Base.
+            Enjoy the ultimate gaming experience.
             </h6>
           </div>
           <div>
             <h6 className="bridgecard-btntext d-flex justify-content-start gap-2 align-items-center">
-              <img src={filledArrow} alt="" />
-              {/* <div className="coming-soon-wrapper p-1"><span className="coming-soon-text">Coming soon</span></div> */}
+              <img src={'https://cdn.worldofdypians.com/tools/filledArrow.svg'} alt="" /> 
             </h6>
           </div>
         </div>

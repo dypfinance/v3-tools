@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import "./migrationbanner.css";
-import migrationBannerIcon from "./assets/migrationBannerIcon.png";
+import "./migrationbanner.css"; 
 import { NavLink } from "react-router-dom";
-import Countdown from "react-countdown";
 import axios from "axios";
 import getFormattedNumber from "../../functions/get-formatted-number";
 import useWindowSize from "../../functions/useWindowSize";
@@ -58,7 +56,7 @@ const MigrationBanner = () => {
     <div className="migration-banner-wrapper p-3">
       <div className="purplediv" style={{ background: "#8890c4" }}></div>
       <div className="d-flex align-items-center gap-2">
-        <img src={migrationBannerIcon} alt="" />
+        <img src={'https://cdn.worldofdypians.com/tools/migrationBannerIcon.png'} alt="" />
         <h6 className="migration-banner-title mb-0">Migration Status</h6>
       </div>
       <div className="d-flex flex-column gap-3">

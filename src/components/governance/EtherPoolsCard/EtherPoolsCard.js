@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
-import dypLogo from '../../top-pools-card/assets/dyplogo.svg'
-import greenArrow from '../../top-pools-card/assets/greenarrow.svg'
-import orangeArrow from '../../top-pools-card/assets/orangearrow.svg'
+import dypLogo from '../../top-pools-card/assets/dyplogo.svg'  
 import TopPoolsDetails from '../../top-pools-card/TopPoolsDetails'
 
 
@@ -33,7 +31,7 @@ const EtherPoolsCard = () => {
               }}
             >
               {showDetails === false ? "Details" : "Close"}
-              <img src={showDetails === false ? greenArrow : orangeArrow} />
+              <img src={showDetails === false ? 'https://cdn.worldofdypians.com/tools/greenarrow.svg' : 'https://cdn.worldofdypians.com/tools/orangearrow.svg'} />
             </h6>
         </div>
     </div>

@@ -1,31 +1,8 @@
 import React from "react";
 import Web3 from "web3";
 import getFormattedNumber from "../../functions/get-formatted-number";
-// import { NavLink } from "react-router-dom";
-// import Error from "../../assets/error.svg";
-import Placeholder from "../../assets/person.svg";
-import "./account.css";
-// import NftCawCard from "../caws/NftMinting/components/General/NftCawCard/NftCawCard";
-// import TierLevels from "../launchpad/tierlevels/TierLevels";
-import coinStackIcon from "../launchpad/assets/coinStackIcon.svg";
 import axios from "axios";
-// import openNameChange from "./assets/openNameChange.svg";
-// import { ClickAwayListener, Tooltip } from "@material-ui/core";
-// import { shortAddress } from "../../functions/shortAddress";
-// import TopPoolsCard from "../top-pools-card/TopPoolsCard";
-// import useWindowSize from "../../functions/useWindowSize";
-import launchpadIndicator from "../launchpad/assets/launchpadIndicator.svg";
-import greenCheck from "./assets/greenCheck.svg";
-import metaverseIcon from "./assets/metaverseIcon.svg";
-import dappsIcon from "./assets/dappsIcon.svg";
-
-// import premiumDypTag from "./assets/premiumDypTag.png";
-// import premiumDypBanner from "./assets/premiumDypBanner2.png";
-// import KeyFeaturesCard from "../launchpad/launchpadhero/KeyFeaturesCard";
-import conflux from "./assets/conflux.svg";
-import baseLogo from "./assets/baseLogo.svg";
-import skaleIcon from "./assets/skaleIcon.svg";
-import premiumIcon from "./assets/premiumIcon.svg";
+import "./account.css";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
 
 const { BigNumber } = window;
@@ -45,7 +22,7 @@ export default class Subscription extends React.Component {
       favorites: [],
       favoritesETH: [],
       selectedFile: null,
-      image: Placeholder,
+      image: "https://cdn.worldofdypians.com/tools/person.svg",
       lockActive: false,
       status: "",
       loadspinner: false,
@@ -76,8 +53,6 @@ export default class Subscription extends React.Component {
       dropdownIcon: "",
     };
   }
-
- 
 
   componentDidUpdate(prevProps) {
     // if (this.props.isPremium) {
@@ -111,7 +86,6 @@ export default class Subscription extends React.Component {
         name: "SKALE",
         symbol: "skale",
       },
- 
     ];
     if (this.props.networkId !== prevProps.networkId) {
       // this.setState({ subscribe_now: false });
@@ -127,14 +101,14 @@ export default class Subscription extends React.Component {
           dropdownIcon: "weth",
           dropdownTitle: "WETH",
         });
-        this.setState({ chainDropdown: chainDropdowns[0]});
+        this.setState({ chainDropdown: chainDropdowns[0] });
       } else if (this.props.networkId === 56) {
         this.handleSubscriptionTokenChange(this.state.wbnbAddress);
         this.setState({
           dropdownIcon: "wbnb",
           dropdownTitle: "WBNB",
         });
-        this.setState({ chainDropdown: chainDropdowns[1]});
+        this.setState({ chainDropdown: chainDropdowns[1] });
       } else if (this.props.networkId === 1030) {
         this.handleSubscriptionTokenChange(this.state.wcfxAddress);
 
@@ -142,31 +116,27 @@ export default class Subscription extends React.Component {
           dropdownIcon: "wcfx",
           dropdownTitle: "WCFX",
         });
-        this.setState({ chainDropdown: chainDropdowns[3]});
-
+        this.setState({ chainDropdown: chainDropdowns[3] });
       } else if (this.props.networkId === 8453) {
         this.handleSubscriptionTokenChange(this.state.wbaseAddress);
         this.setState({
           dropdownIcon: "weth",
           dropdownTitle: "WETH",
         });
-        this.setState({ chainDropdown: chainDropdowns[4]});
-
+        this.setState({ chainDropdown: chainDropdowns[4] });
       } else if (this.props.networkId === 1482601649) {
         this.handleSubscriptionTokenChange(this.state.wskaleaddress);
         this.setState({
           dropdownIcon: "usdc",
           dropdownTitle: "USDC",
         });
-        this.setState({ chainDropdown: chainDropdowns[5]});
-
+        this.setState({ chainDropdown: chainDropdowns[5] });
       } else {
         this.setState({
           dropdownIcon: "weth",
           dropdownTitle: "WETH",
         });
-        this.setState({ chainDropdown: chainDropdowns[0]});
-
+        this.setState({ chainDropdown: chainDropdowns[0] });
       }
     }
   }
@@ -201,15 +171,14 @@ export default class Subscription extends React.Component {
         name: "SKALE",
         symbol: "skale",
       },
- 
     ];
 
     if (this.props.networkId === 43114) {
       this.setState({
         dropdownIcon: "wavax",
         dropdownTitle: "WAVAX",
-      }); 
-      this.setState({ chainDropdown: chainDropdowns[2]});
+      });
+      this.setState({ chainDropdown: chainDropdowns[2] });
 
       this.handleSubscriptionTokenChange(this.state.wavaxAddress);
     } else if (this.props.networkId === 1) {
@@ -218,14 +187,14 @@ export default class Subscription extends React.Component {
         dropdownIcon: "weth",
         dropdownTitle: "WETH",
       });
-      this.setState({ chainDropdown: chainDropdowns[0]});
+      this.setState({ chainDropdown: chainDropdowns[0] });
     } else if (this.props.networkId === 56) {
       this.handleSubscriptionTokenChange(this.state.wbnbAddress);
       this.setState({
         dropdownIcon: "wbnb",
         dropdownTitle: "WBNB",
       });
-      this.setState({ chainDropdown: chainDropdowns[1]});
+      this.setState({ chainDropdown: chainDropdowns[1] });
     } else if (this.props.networkId === 1030) {
       this.handleSubscriptionTokenChange(this.state.wcfxAddress);
 
@@ -233,31 +202,27 @@ export default class Subscription extends React.Component {
         dropdownIcon: "wcfx",
         dropdownTitle: "WCFX",
       });
-      this.setState({ chainDropdown: chainDropdowns[3]});
-
+      this.setState({ chainDropdown: chainDropdowns[3] });
     } else if (this.props.networkId === 8453) {
       this.handleSubscriptionTokenChange(this.state.wbaseAddress);
       this.setState({
         dropdownIcon: "weth",
         dropdownTitle: "WETH",
       });
-      this.setState({ chainDropdown: chainDropdowns[4]});
-
+      this.setState({ chainDropdown: chainDropdowns[4] });
     } else if (this.props.networkId === 1482601649) {
       this.handleSubscriptionTokenChange(this.state.wskaleaddress);
       this.setState({
         dropdownIcon: "usdc",
         dropdownTitle: "USDC",
       });
-      this.setState({ chainDropdown: chainDropdowns[5]});
-
+      this.setState({ chainDropdown: chainDropdowns[5] });
     } else {
       this.setState({
         dropdownIcon: "weth",
         dropdownTitle: "WETH",
       });
-      this.setState({ chainDropdown: chainDropdowns[0]});
-
+      this.setState({ chainDropdown: chainDropdowns[0] });
     }
     this.setState({ coinbase: this.props.coinbase });
     window.scrollTo(0, 0);
@@ -305,15 +270,15 @@ export default class Subscription extends React.Component {
       price / 10 ** tokenDecimals,
       tokenDecimals
     );
-    if(this.props.coinbase && this.props.isConnected === true) {
-     let tokenBalance = await window.getTokenHolderBalance(
-      token,
-      this.props.coinbase
-    );
-    this.setState({tokenBalance }); 
+    if (this.props.coinbase && this.props.isConnected === true) {
+      let tokenBalance = await window.getTokenHolderBalance(
+        token,
+        this.props.coinbase
+      );
+      this.setState({ tokenBalance });
     }
- 
-    this.setState({ price, formattedPrice});
+
+    this.setState({ price, formattedPrice });
   };
 
   handleApprove = async (e) => {
@@ -1071,11 +1036,16 @@ export default class Subscription extends React.Component {
               ></div>
               <div className="d-flex justify-content-between align-items-center">
                 <div className="d-flex align-items-center gap-2">
-                  <img src={coinStackIcon} alt="coin stack" />
+                  <img
+                    src={
+                      "https://cdn.worldofdypians.com/tools/coinStackIcon.svg"
+                    }
+                    alt="coin stack"
+                  />
                   <h6 className="free-plan-title">Dypian Plan Subscription</h6>
                 </div>
                 <img
-                  src={require(`./assets/clearFieldIcon.svg`).default}
+                  src={`https://cdn.worldofdypians.com/tools/clearFieldIcon.svg`}
                   height={28}
                   width={28}
                   className="cursor-pointer"
@@ -1095,7 +1065,7 @@ export default class Subscription extends React.Component {
                   <div className="premium-chains-wrapper">
                     <div className="d-flex align-items-center gap-2">
                       <img
-                        src={require(`./assets/ethIcon.svg`).default}
+                        src={"https://cdn.worldofdypians.com/wod/eth.svg"}
                         style={{ width: 18, height: 18 }}
                         alt=""
                       />
@@ -1103,7 +1073,7 @@ export default class Subscription extends React.Component {
                     </div>
                     <div className="d-flex align-items-center gap-2">
                       <img
-                        src={require(`./assets/wbnbIcon.svg`).default}
+                        src={"https://cdn.worldofdypians.com/wod/bnbIcon.svg"}
                         style={{ width: 18, height: 18 }}
                         alt=""
                       />
@@ -1112,7 +1082,7 @@ export default class Subscription extends React.Component {
 
                     <div className="d-flex align-items-center gap-2">
                       <img
-                        src={require(`./assets/wavaxIcon.svg`).default}
+                        src={"https://cdn.worldofdypians.com/wod/avaxIcon.svg"}
                         style={{ width: 18, height: 18 }}
                         alt=""
                       />
@@ -1120,7 +1090,7 @@ export default class Subscription extends React.Component {
                     </div>
                     <div className="d-flex align-items-center gap-2">
                       <img
-                        src={baseLogo}
+                        src={"https://cdn.worldofdypians.com/wod/base.svg"}
                         alt=""
                         style={{ width: 18, height: 18 }}
                       />
@@ -1128,7 +1098,9 @@ export default class Subscription extends React.Component {
                     </div>
                     <div className="d-flex align-items-center gap-2">
                       <img
-                        src={conflux}
+                        src={
+                          "https://cdn.worldofdypians.com/tools/confluxIcon.svg"
+                        }
                         alt=""
                         style={{ width: 18, height: 18 }}
                       />
@@ -1136,14 +1108,21 @@ export default class Subscription extends React.Component {
                     </div>
                     <div className="d-flex align-items-center gap-2">
                       <img
-                        src={skaleIcon}
+                        src={
+                          "https://cdn.worldofdypians.com/tools/skaleIcon.svg"
+                        }
                         alt=""
                         style={{ width: 18, height: 18 }}
                       />
                       <span className="subscription-chain mb-0">SKALE</span>
                     </div>
                   </div>
-                  <img src={premiumIcon} alt="" />
+                  <img
+                    src={
+                      "https://cdn.worldofdypians.com/tools/premiumIconPopup.svg"
+                    }
+                    alt=""
+                  />
                 </div>
               </div>
               <div className="my-3">
@@ -1152,24 +1131,48 @@ export default class Subscription extends React.Component {
               <div className="premium-benefits-wrapper d-flex flex-column flex-lg-row gap-3 gap-lg-0 align-items-center justify-content-between p-3">
                 <div className="d-flex flex-column gap-2">
                   <div className="d-flex align-items-center gap-2">
-                    <img src={metaverseIcon} alt="" />
+                    <img
+                      src={
+                        "https://cdn.worldofdypians.com/tools/metaverseIcon.svg"
+                      }
+                      alt=""
+                    />
                     <h6 className="premium-benefits-title mb-0">Metaverse</h6>
                   </div>
                   {metaverseBenefits.map((item, index) => (
-                    <div className="d-flex align-items-center gap-2">
-                      <img src={greenCheck} alt="" />
+                    <div
+                      className="d-flex align-items-center gap-2"
+                      key={index}
+                    >
+                      <img
+                        src={
+                          "https://cdn.worldofdypians.com/tools/greendot.svg"
+                        }
+                        alt=""
+                      />
                       <span className="premium-benefits-item mb-0">{item}</span>
                     </div>
                   ))}
                 </div>
                 <div className="d-flex flex-column gap-2">
                   <div className="d-flex align-items-center gap-2">
-                    <img src={dappsIcon} alt="" />
+                    <img
+                      src={"https://cdn.worldofdypians.com/tools/dappsIcon.svg"}
+                      alt=""
+                    />
                     <h6 className="premium-benefits-title mb-0">Dapps</h6>
                   </div>
                   {benefits.map((item, index) => (
-                    <div className="d-flex align-items-center gap-2">
-                      <img src={greenCheck} alt="" />
+                    <div
+                      className="d-flex align-items-center gap-2"
+                      key={index}
+                    >
+                      <img
+                        src={
+                          "https://cdn.worldofdypians.com/tools/greendot.svg"
+                        }
+                        alt=""
+                      />
                       <span className="premium-benefits-item mb-0">{item}</span>
                     </div>
                   ))}
@@ -1195,13 +1198,18 @@ export default class Subscription extends React.Component {
                           style={{ color: "#fff" }}
                         >
                           <img
-                            src={require(`./assets/${this.state.chainDropdown.symbol}Icon.svg`)}
+                            src={`https://cdn.worldofdypians.com/tools/${this.state.chainDropdown.symbol}Icon.svg`}
                             alt=""
                             style={{ width: 18, height: 18 }}
                           />
                           {this.state.chainDropdown.name}
                         </div>
-                        <img src={launchpadIndicator} alt="" />
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/wod/launchpadIndicator.svg"
+                          }
+                          alt=""
+                        />
                       </button>
                       <ul class="dropdown-menu w-100">
                         <li
@@ -1209,10 +1217,7 @@ export default class Subscription extends React.Component {
                           onClick={handleEthPool}
                         >
                           <img
-                            src={
-                              require(`./assets/ethIcon.svg`)
-                                .default
-                            }
+                            src={"https://cdn.worldofdypians.com/wod/eth.svg"}
                             style={{ width: 18, height: 18 }}
                             alt=""
                           />
@@ -1225,8 +1230,7 @@ export default class Subscription extends React.Component {
                         >
                           <img
                             src={
-                              require(`./assets/wbnbIcon.svg`)
-                                .default
+                              "https://cdn.worldofdypians.com/wod/bnbIcon.svg"
                             }
                             style={{ width: 18, height: 18 }}
                             alt=""
@@ -1239,8 +1243,7 @@ export default class Subscription extends React.Component {
                         >
                           <img
                             src={
-                              require(`./assets/wavaxIcon.svg`)
-                                .default
+                              "https://cdn.worldofdypians.com/wod/avaxIcon.svg"
                             }
                             style={{ width: 18, height: 18 }}
                             alt=""
@@ -1252,7 +1255,7 @@ export default class Subscription extends React.Component {
                           onClick={handleBasePool}
                         >
                           <img
-                            src={baseLogo}
+                            src={"https://cdn.worldofdypians.com/wod/base.svg"}
                             alt=""
                             style={{
                               width: "18px",
@@ -1266,7 +1269,9 @@ export default class Subscription extends React.Component {
                           onClick={handleConfluxPool}
                         >
                           <img
-                            src={conflux}
+                            src={
+                              "https://cdn.worldofdypians.com/tools/confluxIcon.svg"
+                            }
                             alt=""
                             style={{
                               width: "18px",
@@ -1280,7 +1285,9 @@ export default class Subscription extends React.Component {
                           onClick={handleSkalePool}
                         >
                           <img
-                            src={skaleIcon}
+                            src={
+                              "https://cdn.worldofdypians.com/tools/skaleIcon.svg"
+                            }
                             alt=""
                             style={{
                               width: "18px",
@@ -1323,14 +1330,19 @@ export default class Subscription extends React.Component {
                           >
                             {this.state.dropdownIcon !== "" && (
                               <img
-                                src={require(`./assets/${this.state.dropdownIcon.toLowerCase()}Icon.svg`)}
+                                src={`https://cdn.worldofdypians.com/tools/${this.state.dropdownIcon.toLowerCase()}Icon.svg`}
                                 alt=""
                                 className="me-2"
                               />
                             )}
                             {/* {this.state.dropdownTitle} */}
                           </div>
-                          <img src={launchpadIndicator} alt="" />
+                          <img
+                            src={
+                              "https://cdn.worldofdypians.com/wod/launchpadIndicator.svg"
+                            }
+                            alt=""
+                          />
                         </button>
                         <ul class="dropdown-menu w-100">
                           {/* <li className="dropdown-item launchpad-item d-flex align-items-center gap-2"
@@ -1465,28 +1477,28 @@ export default class Subscription extends React.Component {
                               <img
                                 src={
                                   this.props.networkId === 1
-                                    ? require(`./assets/${window.config.subscriptioneth_tokens[
+                                    ? `https://cdn.worldofdypians.com/tools/${window.config.subscriptioneth_tokens[
                                         t
-                                      ]?.symbol.toLowerCase()}Icon.svg`)
+                                      ]?.symbol.toLowerCase()}Icon.svg`
                                     : this.props.networkId === 56
-                                    ? require(`./assets/${window.config.subscriptionbnb_tokens[
+                                    ? `https://cdn.worldofdypians.com/tools/${window.config.subscriptionbnb_tokens[
                                         t
-                                      ]?.symbol.toLowerCase()}Icon.svg`)
+                                      ]?.symbol.toLowerCase()}Icon.svg`
                                     : this.props.networkId === 1030
-                                    ? require(`./assets/${window.config.subscriptioncfx_tokens[
+                                    ? `https://cdn.worldofdypians.com/tools/${window.config.subscriptioncfx_tokens[
                                         t
-                                      ]?.symbol.toLowerCase()}Icon.svg`)
+                                      ]?.symbol.toLowerCase()}Icon.svg`
                                     : this.props.networkId === 8453
-                                    ? require(`./assets/${window.config.subscriptionbase_tokens[
+                                    ? `https://cdn.worldofdypians.com/tools/${window.config.subscriptionbase_tokens[
                                         t
-                                      ]?.symbol.toLowerCase()}Icon.svg`)
+                                      ]?.symbol.toLowerCase()}Icon.svg`
                                     : this.props.networkId === 1482601649
-                                    ? require(`./assets/${window.config.subscriptionskale_tokens[
+                                    ? `https://cdn.worldofdypians.com/tools/${window.config.subscriptionskale_tokens[
                                         t
-                                      ]?.symbol.toLowerCase()}Icon.svg`)
-                                    : require(`./assets/${window.config.subscription_tokens[
+                                      ]?.symbol.toLowerCase()}Icon.svg`
+                                    : `https://cdn.worldofdypians.com/tools/${window.config.subscription_tokens[
                                         t
-                                      ]?.symbol.toLowerCase()}Icon.svg`)
+                                      ]?.symbol.toLowerCase()}Icon.svg`
                                 }
                                 alt=""
                               />
@@ -1552,53 +1564,56 @@ export default class Subscription extends React.Component {
                     Please connect your wallet first
                   </span>
                 )}
-                {this.props.isConnected && this.props.coinbase &&
-                <div className="d-flex flex-column gap-2 justify-content-center align-items-center">
-                  <button
-                    className={"btn success-btn px-4 "}
-                    disabled={
-                      this.state.approveStatus === "fail" ||
-                      !this.props.coinbase
-                        ? true
-                        : false
-                    }
-                    style={{
-                      background:
-                        this.state.approveStatus === "fail"
-                          ? "linear-gradient(90.74deg, #f8845b 0%, #f0603a 100%)"
-                          : "linear-gradient(90.74deg, #75CAC2 0%, #57B6AB 100%)",
-                    }}
-                    onClick={(e) =>
-                      this.state.isApproved === false
-                        ? this.handleApprove(e)
-                        : this.handleSubscribe()
-                    }
-                  >
-                    {this.state.isApproved === true &&
-                    this.state.loadspinner === false &&
-                    this.state.loadspinnerSub === false &&
-                    (this.state.approveStatus === "deposit" ||
-                      this.state.approveStatus === "initial") ? (
-                      "Subscribe"
-                    ) : this.state.isApproved === false &&
+                {this.props.isConnected && this.props.coinbase && (
+                  <div className="d-flex flex-column gap-2 justify-content-center align-items-center">
+                    <button
+                      className={"btn success-btn px-4 "}
+                      disabled={
+                        this.state.approveStatus === "fail" ||
+                        !this.props.coinbase
+                          ? true
+                          : false
+                      }
+                      style={{
+                        background:
+                          this.state.approveStatus === "fail"
+                            ? "linear-gradient(90.74deg, #f8845b 0%, #f0603a 100%)"
+                            : "linear-gradient(90.74deg, #75CAC2 0%, #57B6AB 100%)",
+                      }}
+                      onClick={(e) =>
+                        this.state.isApproved === false
+                          ? this.handleApprove(e)
+                          : this.handleSubscribe()
+                      }
+                    >
+                      {this.state.isApproved === true &&
                       this.state.loadspinner === false &&
-                      this.state.approveStatus === "initial" &&
-                      this.state.loadspinnerSub === false ? (
-                      "Approve"
-                    ) : this.state.loadspinner === false &&
-                      this.state.approveStatus === "fail" &&
-                      this.state.loadspinnerSub === false ? (
-                      "Failed"
-                    ) : (
-                      <div
-                        className="spinner-border "
-                        role="status"
-                        style={{ height: "1.5rem", width: "1.5rem" }}
-                      ></div>
-                    )}
-                  </button>
-                  <span style={{ color: "#E30613" }}>{this.state.status}</span>
-                </div> }
+                      this.state.loadspinnerSub === false &&
+                      (this.state.approveStatus === "deposit" ||
+                        this.state.approveStatus === "initial") ? (
+                        "Subscribe"
+                      ) : this.state.isApproved === false &&
+                        this.state.loadspinner === false &&
+                        this.state.approveStatus === "initial" &&
+                        this.state.loadspinnerSub === false ? (
+                        "Approve"
+                      ) : this.state.loadspinner === false &&
+                        this.state.approveStatus === "fail" &&
+                        this.state.loadspinnerSub === false ? (
+                        "Failed"
+                      ) : (
+                        <div
+                          className="spinner-border "
+                          role="status"
+                          style={{ height: "1.5rem", width: "1.5rem" }}
+                        ></div>
+                      )}
+                    </button>
+                    <span style={{ color: "#E30613" }}>
+                      {this.state.status}
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
           </div>

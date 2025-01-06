@@ -272,7 +272,9 @@ const NftStakingCawChecklist = ({
                         style={{ fontSize: 16 }}
                       >
                         <img
-                          src={require("./weth.svg").default}
+                          src={
+                            "https://cdn.worldofdypians.com/tools/ethStakeActive.svg"
+                          } 
                           alt=""
                           style={{ height: 20, width: 20 }}
                         />{" "}

@@ -1,17 +1,11 @@
 import React, { useRef } from "react";
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
-import closeX from "../earnOther/assets/closeX.svg";
-import migrationPopup from "./migrationPopup.webp";
-import basebg from "./baseBg.png";
-
-import loyaltyPopupBanner from "./loyaltyPopupBanner.png";
 import "./whitelist.css";
 import OutsideClickHandler from "react-outside-click-handler";
 import "../LandPopup/landpopup.css";
 import { NavLink } from "react-router-dom";
 import Slider from "react-slick";
 import Countdown from "react-countdown";
+ 
 
 const renderer = ({ days, hours, minutes }) => {
   return (
@@ -77,7 +71,7 @@ const WhitelistPopup = ({ open, onClose }) => {
             style={{ height: 1 }}
           >
             <img
-              src={closeX}
+              src={'https://cdn.worldofdypians.com/wod/popupXmark.svg'}
               alt=""
               className="close-x position-relative cursor-pointer "
               onClick={onClose}
@@ -107,7 +101,7 @@ const WhitelistPopup = ({ open, onClose }) => {
                 </span>
               </div>
               <img
-                src={migrationPopup}
+                src={'https://cdn.worldofdypians.com/tools/migrationPopup.webp'}
                 className="land-nft-image basepopup"
                 alt="land nft"
               />
@@ -124,7 +118,7 @@ const WhitelistPopup = ({ open, onClose }) => {
               </NavLink>
             </div>
 
-            <div className="d-flex py-3 flex-column justify-content-center position-relative align-items-center">
+            {/* <div className="d-flex py-3 flex-column justify-content-center position-relative align-items-center">
               <div className="d-flex flex-column gap-3 align-items-center justify-content-between">
                 <div className="d-flex flex-column gap-3 justify-content-center align-items-center px-3">
                   <div className="d-flex flex-column align-items-center justify-content-center">
@@ -138,16 +132,14 @@ const WhitelistPopup = ({ open, onClose }) => {
                       Enjoy the ultimate gaming experience on Base.
                     </span>
                   </div>
-                  <img src={basebg} className="land-nft-image" alt="land nft" />
-                  {/* <span className="popup-content">
-          Total Genesis land supply limited to 1,000 plots
-        </span> */}
+                  <img src={'https://cdn.worldofdypians.com/tools/baseBg.png'} className="land-nft-image" alt="land nft" />
+               
                   <NavLink to="/games" onClick={onClose}>
                     <button className="btn filled-btn m-3">Play</button>
                   </NavLink>
                 </div>
               </div>
-            </div>
+            </div> */}
           </Slider>
         </div>
       </div>

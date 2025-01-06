@@ -23,7 +23,22 @@
   right: 0;
   top: 0;
   bottom: 0;
-  background-image: url("./assets/loyaltyBannerBg.png");
+  background-image: url("https://cdn.worldofdypians.com/dypius/loyaltyBannerBg.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: right;
+  pointer-events: none;
+}
+
+
+.loyalty-banneropbnb::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-image: url("https://cdn.worldofdypians.com/dypius/loyaltyBannerOpbnb.png");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: right;
@@ -206,25 +221,25 @@ gap: 12px;
 }
 
 .loyalty-benefit-item:nth-child(1){
-  background-image: url('./assets/blueBg.svg');
+  background-image: url('https://cdn.worldofdypians.com/tools/blueBg.svg');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: left;
 }
 .loyalty-benefit-item:nth-child(2){
-  background-image: url('./assets/cyanBg.svg');
+  background-image: url('https://cdn.worldofdypians.com/tools/cyanBg.svg');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: left;
 }
 .loyalty-benefit-item:nth-child(3){
-  background-image: url('./assets/purpleBg.svg');
+  background-image: url('https://cdn.worldofdypians.com/tools/purpleBg.svg');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: left;
 }
 .loyalty-benefit-item:nth-child(4){
-  background-image: url('./assets/greenBg.svg');
+  background-image: url('https://cdn.worldofdypians.com/tools/greenBg.svg');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: left;
@@ -307,12 +322,23 @@ cursor: pointer;
   width: 50%;
 }
 
+.viewprevious-wrapper {
+  background: #3a377a;
+  border-radius: 0 0 12px 12px;
+}
+
+.viewWinners {
+  font-size: 10px;
+  font-style: normal;
+  line-height: 17px;
+}
+
 @media screen and (max-width: 786px) {
   .loyalty-banner-content{
     width: 100%;
   }
 
-  .loyalty-banner::before{
+  .loyalty-banner::before,.loyalty-banneropbnb::before{
     background-image: none !important;
   }
 

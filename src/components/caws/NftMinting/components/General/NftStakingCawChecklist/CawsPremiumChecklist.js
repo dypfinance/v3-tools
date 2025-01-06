@@ -2,9 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Web3 from "web3";
 import PropTypes from "prop-types";
-// import SvgEyeIcon from "../NftCawCard/SvgEyeIcon";
-// import EthLogo from "../../../../../assets/General/eth-create-nft.png";
-import { formattedNum } from "../../../../../../functions/formatUSD";
 import getFormattedNumber from "../../../../../../functions/get-formatted-number";
 
 const CawsPremiumChecklist = ({
@@ -280,7 +277,7 @@ const CawsPremiumChecklist = ({
                         style={{ fontSize: 16 }}
                       >
                         <img
-                          src={require("./weth.svg").default}
+                          src={'https://cdn.worldofdypians.com/tools/ethStakeActive.svg'}
                           alt=""
                           style={{ height: 20, width: 20 }}
                         />{" "}

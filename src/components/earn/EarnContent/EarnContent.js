@@ -1,25 +1,13 @@
 import React, { useState } from "react";
-import ethStake from "../../../assets/earnAssets/ethStake.svg";
-import bnbStake from "../../../assets/earnAssets/bnbStake.svg";
-import avaxStake from "../../../assets/earnAssets/avaxStake.svg";
-import ethStakeActive from "../../../assets/earnAssets/ethStakeActive.svg";
-import bnbStakeActive from "../../../assets/earnAssets/bnbStakeActive.svg";
-import baseStakeActive from "../../../assets/earnAssets/baseStakeActive.svg";
-import baseStake from "../../../assets/earnAssets/baseStake.svg";
-
-import avaxStakeActive from "../../../assets/earnAssets/avaxStakeActive.svg";
-import addNewPools from "../../../assets/earnAssets/addNewPools.svg";
-import listIcon from "../../../assets/earnAssets/listIcon.svg";
-import tableIcon from "../../../assets/earnAssets/tableIcon.svg";
-import tableIconActive from "../../../assets/earnAssets/tableIconActive.svg";
-import listIconActive from "../../../assets/earnAssets/listIconActive.svg";
-import EarnTopPicks from "../EarnTopPicks/EarnTopPicks";
-import EarnFaq from "../EarnFaq/EarnFaq";
 import axios from "axios";
 import { useEffect } from "react";
 import getFormattedNumber from "../../../functions/getFormattedNumber2";
-import e from "cors";
 import useWindowSize from "../../../functions/useWindowSize";
+import EarnTopPicks from "../EarnTopPicks/EarnTopPicks";
+import EarnFaq from "../EarnFaq/EarnFaq";
+
+
+
 
 const EarnContent = ({
   coinbase,
@@ -438,7 +426,7 @@ const EarnContent = ({
                 onClick={() => setListStyle("table")}
               >
                 <img
-                  src={listStyle === "table" ? tableIconActive : tableIcon}
+                  src={listStyle === "table" ? 'https://cdn.worldofdypians.com/tools/tableIconActive.svg' : 'https://cdn.worldofdypians.com/tools/tableIcon.svg'}
                   alt=""
                 />
               </div>
@@ -449,7 +437,7 @@ const EarnContent = ({
                 onClick={() => setListStyle("list")}
               >
                 <img
-                  src={listStyle === "list" ? listIconActive : listIcon}
+                  src={listStyle === "list" ? 'https://cdn.worldofdypians.com/tools/listIconActive.svg' : 'https://cdn.worldofdypians.com/tools/listIcon.svg'}
                   alt=""
                 />
               </div>
@@ -475,7 +463,7 @@ const EarnContent = ({
                   }}
                 >
                   <img
-                    src={require(`../../calculator/assets/${item.title.toLowerCase()}Icon.svg`)}
+                    src={`https://cdn.worldofdypians.com/tools/${item.title.toLowerCase()}Icon.svg`}
                     alt=""
                   />
                   {item.title}
@@ -514,7 +502,7 @@ const EarnContent = ({
                 onClick={() => setListStyle("table")}
               >
                 <img
-                  src={listStyle === "table" ? tableIconActive : tableIcon}
+                  src={listStyle === "table" ? 'https://cdn.worldofdypians.com/tools/tableIconActive.svg' : 'https://cdn.worldofdypians.com/tools/tableIcon.svg'}
                   alt=""
                 />
               </div>
@@ -525,7 +513,7 @@ const EarnContent = ({
                 onClick={() => setListStyle("list")}
               >
                 <img
-                  src={listStyle === "list" ? listIconActive : listIcon}
+                  src={listStyle === "list" ? 'https://cdn.worldofdypians.com/tools/listIconActive.svg' : 'https://cdn.worldofdypians.com/tools/listIcon.svg'}
                   alt=""
                 />
               </div>
@@ -565,7 +553,7 @@ const EarnContent = ({
                   }}
                 >
                   <img
-                    src={require(`../../calculator/assets/${item.title.toLowerCase()}Icon.svg`)}
+                    src={`https://cdn.worldofdypians.com/tools/${item.title.toLowerCase()}Icon.svg`}
                     alt=""
                   />
                   {/* <div
@@ -618,7 +606,7 @@ const EarnContent = ({
                       }}
                     >
                       <img
-                        src={stake === "eth" ? ethStakeActive : ethStake}
+                        src={stake === "eth" ? 'https://cdn.worldofdypians.com/tools/ethStakeActive.svg' : 'https://cdn.worldofdypians.com/tools/ethStake.svg'}
                         alt=""
                       />
                       <div className="d-flex flex-column align-items-center align-items-lg-start">
@@ -663,7 +651,7 @@ const EarnContent = ({
                     </span>
                   </div> */}
                       <img
-                        src={stake === "bnb" ? bnbStakeActive : bnbStake}
+                        src={stake === "bnb" ? 'https://cdn.worldofdypians.com/tools/bnbStakeActive.svg' : 'https://cdn.worldofdypians.com/tools/bnbStake.svg'}
                         alt=""
                       />
                       <div className="d-lg-flex d-md-flex d-none flex-column align-items-center align-items-lg-start">
@@ -712,7 +700,7 @@ const EarnContent = ({
                   </span>
                 </div> */}
                       <img
-                        src={stake === "avax" ? avaxStakeActive : avaxStake}
+                        src={stake === "avax" ? 'https://cdn.worldofdypians.com/tools/avaxStakeActive.svg' : 'https://cdn.worldofdypians.com/tools/avaxStake.svg'}
                         alt=""
                       />
                       <div className="d-flex flex-column align-items-center align-items-lg-start">
@@ -747,7 +735,7 @@ const EarnContent = ({
                       }}
                     >
                       <img
-                        src={stake === "eth" ? ethStakeActive : ethStake}
+                        src={stake === "eth" ? 'https://cdn.worldofdypians.com/tools/ethStakeActive.svg' : 'https://cdn.worldofdypians.com/tools/ethStake.svg'}
                         alt=""
                       />
                       <div className="d-flex flex-column">
@@ -778,7 +766,7 @@ const EarnContent = ({
                       }}
                     >
                       <img
-                        src={stake === "bnb" ? bnbStakeActive : bnbStake}
+                        src={stake === "bnb" ? 'https://cdn.worldofdypians.com/tools/bnbStakeActive.svg' : 'https://cdn.worldofdypians.com/tools/bnbStake.svg'}
                         alt=""
                       />
                       <div className="d-flex flex-column">
@@ -811,7 +799,7 @@ const EarnContent = ({
                       }}
                     >
                       <img
-                        src={stake === "base" ? baseStakeActive : baseStake}
+                        src={stake === "base" ? 'https://cdn.worldofdypians.com/tools/baseStakeActive.svg' : 'https://cdn.worldofdypians.com/tools/baseStake.svg'}
                         alt=""
                       />
                       <div className="d-flex flex-column">
@@ -852,7 +840,7 @@ const EarnContent = ({
                     </span>
                   </div> */}
                       <img
-                        src={stake === "avax" ? avaxStakeActive : avaxStake}
+                        src={stake === "avax" ? 'https://cdn.worldofdypians.com/tools/avaxStakeActive.svg' : 'https://cdn.worldofdypians.com/tools/avaxStake.svg'}
                         alt=""
                       />
                       <div className="d-flex flex-column">
@@ -887,7 +875,7 @@ const EarnContent = ({
         <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
           <img
             src={
-              require("../../../assets/earnAssets/disabledVault.svg").default
+              "https://cdn.worldofdypians.com/tools/disabledVault.svg"
             }
             style={{ width: "150px", height: "150px" }}
             alt=""
@@ -901,7 +889,7 @@ const EarnContent = ({
         <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
           <img
             src={
-              require("../../../assets/earnAssets/disabledVault.svg").default
+              "https://cdn.worldofdypians.com/tools/disabledVault.svg"
             }
             style={{ width: "150px", height: "150px" }}
             alt=""
@@ -912,7 +900,7 @@ const EarnContent = ({
         <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
           <img
             src={
-              require("../../../assets/earnAssets/disabledFarming.svg").default
+              "https://cdn.worldofdypians.com/tools/disabledFarming.svg"
             }
             style={{ width: "150px", height: "150px" }}
             alt=""
@@ -920,27 +908,27 @@ const EarnContent = ({
           <h6 className="no-farms"> No Farming pools available</h6>
         </div>
       ) 
-      // : option === "Staking" &&
-      //   expiredPools === true &&
-      //   stake !== "eth" &&
-      //   !showRibbon ? (
-      //   <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
-      //     <img
-      //       src={
-      //         require("../../../assets/earnAssets/disabledStaking.svg").default
-      //       }
-      //       style={{ width: "150px", height: "150px" }}
-      //       alt=""
-      //     />
-      //     <h6 className="no-farms"> No Staking pools available</h6>
-      //   </div>
-      // ) 
+      : option === "Staking" &&
+        expiredPools === false &&
+        stake === "avax" 
+         ? (
+        <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
+          <img
+            src={
+              "https://cdn.worldofdypians.com/tools/disabledStaking.svg"
+            }
+            style={{ width: "150px", height: "150px" }}
+            alt=""
+          />
+          <h6 className="no-farms"> No Staking pools available</h6>
+        </div>
+      ) 
       : (
         //option === "Farming" && stake === "avax" && expiredPools === false ? (
         //   <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
         //     <img
         //       src={
-        //         require("../../../assets/earnAssets/disabledFarming.svg").default
+        //          "https://cdn.worldofdypians.com/tools/disabledFarming.svg"
         //       }
         //       style={{ width: "150px", height: "150px" }}
         //       alt=""

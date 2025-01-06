@@ -9,6 +9,10 @@
   cursor: pointer;
 }
 
+.wrapper2 {
+  background: #1E1C40 !important;
+}
+
 .launchpad-wrapper:focus,
 .launchpad-wrapper:hover,
 .launchpad-wrapper:active{
