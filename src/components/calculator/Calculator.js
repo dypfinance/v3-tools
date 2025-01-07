@@ -60,38 +60,27 @@ const Calculator = ({ earnClass, onClose, ref }) => {
   const [calculateApproxUSDAVAX, setCalculateApproxUSDAVAX] = useState(0);
   const [calculateApproxUSDBNB, setCalculateApproxUSDBNB] = useState(0);
 
-  const [calculateApproxCrypto, setCalculateApproxCrypto] = useState("0");
-  const [calculateApproxCryptoBNB, setCalculateApproxCryptoBNB] = useState("0");
-  const [calculateApproxCryptoAVAX, setCalculateApproxCryptoAVAX] =
-    useState("0");
-
   const [calculateApproxWeth, setCalculateApproxWeth] = useState("0");
   const [calculateApproxWbnb, setCalculateApproxWbnb] = useState("0");
   const [calculateApproxWavax, setCalculateApproxWavax] = useState("0");
   const [stakeApy, setStakeApy] = useState();
   const [stakeApyBNB, setStakeApyBNB] = useState();
   const [stakeApyAVAX, setStakeApyAVAX] = useState();
-
-  const [buybackApy, setBuybackApy] = useState();
-  const [buybackApyBNB, setBuybackApyBNB] = useState();
-  const [buybackApyAVAX, setBuybackApyAVAX] = useState();
-
+  const [activePill, setActivePill] = useState(pillsNames[0]);
+  const [open, setOpen] = React.useState(false);
+  const [activeTimePill, setActiveTimePill] = useState(timePillsArray[3]);
   const [vaultApy, setVaultApy] = useState();
   const [vaultUSDT, setVaultUSDT] = useState();
   const [vaultUSDC, setVaultUSDC] = useState();
-
-  const [farmApy, setFarmApy] = useState();
-  const [farmApyBNB, setFarmApyBNB] = useState();
-  const [farmApyAVAX, setFarmApyAVAX] = useState();
-
   const [apyData, setapyData] = useState();
-
   const [wethPrice, setWethPrice] = useState(0);
   const [wbnbPrice, setWbnbPrice] = useState(0);
   const [wavaxPrice, setWavaxPrice] = useState(0);
+  const [dypPrice, setDypPrice] = useState(0);
+  const [idypPrice, setiDypPrice] = useState(0);
 
   let formData = {};
-
+  const pillRef = useRef([]);
   if (isMobile) {
     const newChainButtons = [...chainButtonsArray];
 
@@ -113,7 +102,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
       .then((data) => {
         // console.log(data.data.highestAPY_ETH[0].highest_apy)
         // setStakeApy(data.data.highestAPY_ETH[0].highest_apy);
-        setStakeApy(50);
+        setStakeApy(35);
       });
   };
 
@@ -130,7 +119,27 @@ const Calculator = ({ earnClass, onClose, ref }) => {
       .get("https://api.dyp.finance/api/the_graph_bsc_v2")
       .then((data) => {
         setWbnbPrice(data.data.the_graph_bsc_v2.usd_per_eth);
+
+        const propertyIDyp = Object.entries(
+          data.data.the_graph_bsc_v2.token_data
+        );
+        setiDypPrice(propertyIDyp[1][1].token_price_usd);
       });
+  };
+
+  const getPriceDYP = async () => {
+    const dypprice = await axios
+      .get(
+        "https://api.geckoterminal.com/api/v2/networks/eth/pools/0x7c81087310a228470db28c1068f0663d6bf88679"
+      )
+      .then((res) => {
+        return res.data.data.attributes.base_token_price_usd;
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+
+    setDypPrice(dypprice);
   };
 
   const getAVAXdata = async () => {
@@ -144,21 +153,15 @@ const Calculator = ({ earnClass, onClose, ref }) => {
 
   useEffect(() => {
     getApy();
-    getETHdata();
-    getBSCdata();
-    getAVAXdata();
+   
     getEthApy();
   }, [wethPrice, wavaxPrice, wbnbPrice, activeMethod]);
 
   useEffect(() => {
     if (apyData) {
-      if (activeMethod === "Farming") {
-        setFarmApyBNB(apyData.highestAPY_BSC_V2);
-        setFarmApyAVAX(apyData.highestAPY_AVAX_V2);
-        setFarmApy(apyData.highestAPY_ETH_V2);
-      } else if (activeMethod === "Staking") {
-        setStakeApyAVAX(50);
-        setStakeApyBNB(50);
+      if (activeMethod === "Staking") {
+        setStakeApyAVAX(25);
+        setStakeApyBNB(25);
         // setStakeApy(30);
       } else if (activeMethod === "Vault") {
         const vaultWeth = window.vault_weth;
@@ -222,7 +225,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
           parseFloat(
             ((parseInt(usdToDeposit) * parseFloat(stakeApy)) / 100 / 365) *
               parseInt(days)
-          ) / wethPrice,
+          ) / dypPrice,
           4
         )
       );
@@ -238,7 +241,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
           parseFloat(
             ((parseInt(usdToDeposit) * parseFloat(stakeApyBNB)) / 100 / 365) *
               parseInt(days)
-          ) / wbnbPrice,
+          ) / idypPrice,
           4
         )
       );
@@ -254,7 +257,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
           parseFloat(
             ((parseInt(usdToDeposit) * parseFloat(stakeApyAVAX)) / 100 / 365) *
               parseInt(days)
-          ) / wavaxPrice,
+          ) / dypPrice,
           4
         )
       );
@@ -265,30 +268,12 @@ const Calculator = ({ earnClass, onClose, ref }) => {
           parseInt(days)
         ).toFixed(2)
       );
-      setCalculateApproxCrypto(
-        getFormattedNumber(
-          parseFloat(
-            ((parseInt(usdToDeposit) * parseFloat(vaultApy)) / 100 / 365) *
-              parseInt(days)
-          ),
-          4
-        )
-      );
 
       setCalculateApproxUSDBNB(
         (
           ((parseInt(usdToDeposit) * parseFloat(vaultUSDC)) / 100 / 365) *
           parseInt(days)
         ).toFixed(2)
-      );
-      setCalculateApproxCryptoBNB(
-        getFormattedNumber(
-          parseFloat(
-            ((parseInt(usdToDeposit) * parseFloat(vaultUSDC)) / 100 / 365) *
-              parseInt(days)
-          ),
-          4
-        )
       );
 
       setCalculateApproxUSDAVAX(
@@ -354,28 +339,16 @@ const Calculator = ({ earnClass, onClose, ref }) => {
     setUsdToDeposit(e.slice(0, 7));
   };
 
-  const [chainState, setchainState] = useState("eth");
-  const [activePill, setActivePill] = useState(pillsNames[0]);
-  const pillRef = useRef([]);
-
-  const [activeTimePill, setActiveTimePill] = useState(timePillsArray[3]);
-  const timepillRef = useRef([]);
-
   const focusInput = (field) => {
     document.getElementById(field).focus();
   };
 
-  const windowSize = useWindowSize();
-
-  const [open, setOpen] = React.useState(false);
-
-  const handleTooltipClose = () => {
-    setOpen(false);
-  };
-
-  const handleTooltipOpen = () => {
-    setOpen(true);
-  };
+  useEffect(() => {
+    getPriceDYP();
+    getETHdata();
+    getBSCdata();
+    getAVAXdata();
+  }, []);
 
   return (
     <div
@@ -460,9 +433,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
                   }}
                 >
                   <img
-                    src={
-                      `https://cdn.worldofdypians.com/tools/${item.toLowerCase()}Icon.svg`
-                    }
+                    src={`https://cdn.worldofdypians.com/tools/${item.toLowerCase()}Icon.svg`}
                     alt=""
                   />
                   <span className={`pill-item-text`}>{item}</span>
@@ -620,11 +591,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
             </h6> */}
           <div className="row w-100 gap-3 gap-lg-2 gap-xl-0 mx-0 align-items-center justify-content-between mt-4 mt-lg-5 position-relative calculator-chains-wrapper">
             <NavLink
-              to={{
-                pathname: "earn",
-                state: { chain: "eth", option: activeMethod, pool: 0 },
-                customChain: activeMethod === "Vault" && "eth",
-              }}
+              to={'/earn/dypius'}
               className="ethereum-chain-wrapper"
             >
               <div className="chain-content gap-4 p-2">
@@ -641,7 +608,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
                     calculateApproxWeth != "..."
                       ? calculateApproxWeth.slice(0, 6)
                       : "0.0"}{" "}
-                    WETH)
+                    DYP)
                   </div>
                 </div>
                 <div className="d-flex align-items-center justify-content-between gap-2 gap-lg-4">
@@ -664,15 +631,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
               </div>
             </NavLink>
             <NavLink
-              to={{
-                pathname: "earn",
-                state: {
-                  chain: activeMethod === "Vault" ? "eth" : "bnb",
-                  option: activeMethod,
-                  pool: 0,
-                  customChain: activeMethod === "Vault" && "bnb",
-                },
-              }}
+              to={'/earn/dypius'}
               className={
                 activeMethod === "Vault" ? "usdc-wrapper" : `bnb-chain-wrapper`
               }
@@ -691,7 +650,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
                     calculateApproxWbnb != "..."
                       ? calculateApproxWbnb.slice(0, 6)
                       : "0.0"}{" "}
-                    {activeMethod === "Vault" ? "USDC" : "WBNB"})
+                    {activeMethod === "Vault" ? "USDC" : "iDYP"})
                   </div>
                 </div>
                 <div className="d-flex align-items-center justify-content-between gap-2 gap-lg-4">
@@ -718,15 +677,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
               </div>
             </NavLink>
             <NavLink
-              to={{
-                pathname: "earn",
-                state: {
-                  chain: activeMethod === "Vault" ? "eth" : "avax",
-                  option: activeMethod,
-                  customChain: activeMethod === "Vault" && "avax",
-                  pool: 0,
-                },
-              }}
+              to={'/earn/dypius'}
               className={
                 activeMethod === "Vault" ? "usdt-wrapper" : "avax-chain-wrapper"
               }
@@ -745,7 +696,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
                     calculateApproxWavax != "..."
                       ? calculateApproxWavax.slice(0, 6)
                       : "0.0"}{" "}
-                    {activeMethod === "Vault" ? "USDT" : "WAVAX"})
+                    {activeMethod === "Vault" ? "USDT" : "DYP"})
                   </div>
                 </div>
                 <div className="d-flex align-items-center justify-content-between gap-2 gap-lg-4">
@@ -754,14 +705,14 @@ const Calculator = ({ earnClass, onClose, ref }) => {
                       src={
                         activeMethod === "Vault"
                           ? "https://cdn.worldofdypians.com/tools/usdt.svg"
-                          : "https://cdn.worldofdypians.com/tools/avaxStakeActive.svg"
+                          : "https://cdn.worldofdypians.com/wod/baseBlueLogo.svg"
                       }
                       width={20}
                       height={20}
                       alt=""
                     />
                     <h6 className="chain-name">
-                      {activeMethod === "Vault" ? "USDT" : "Avalanche"}
+                      {activeMethod === "Vault" ? "USDT" : "Base Chain"}
                     </h6>
                   </div>
                   <img

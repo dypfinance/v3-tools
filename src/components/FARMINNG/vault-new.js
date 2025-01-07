@@ -160,6 +160,8 @@ const Vault = ({
   const [rewardsTooltip, setrewardsTooltip] = useState(false);
   const [withdrawTooltip, setwithdrawTooltip] = useState(false);
   const [vault_contract, setvault_contract] = useState();
+  const [ethPrice, setethPrice] = useState(0);
+
 
   const showModal = () => {
     setshow(true);
@@ -832,12 +834,16 @@ const Vault = ({
     return apr;
   };
 
-  const getUsdPerETH = () => {
-    return the_graph_result.usd_per_eth || 0;
+  const getUsdPerETH = async() => {
+    await axios
+      .get("https://api.dyp.finance/api/the_graph_eth_v2")
+      .then((data) => {
+        setethPrice(data.data.the_graph_eth_v2.usd_per_eth);
+      }); 
   };
-
+ 
   const getApproxReturn = () => {
-    let APY = apy_percent;
+    let APY =  apy_percent + platformTokenApyPercent;
     return ((approxDeposit * APY) / 100 / 365) * approxDays;
   };
 
@@ -905,6 +911,10 @@ const Vault = ({
   const focusInput = (field) => {
     document.getElementById(field).focus();
   };
+
+  useEffect(() => {
+    getUsdPerETH()
+  }, []);
 
   return (
     <div className="container-lg p-0">
@@ -1915,7 +1925,7 @@ const Vault = ({
             <div className="d-flex flex-column gap-2 mt-4">
               <h3 style={{ fontWeight: "500", fontSize: "39px" }}>
                 {" "}
-                ${getFormattedNumber(getApproxReturn() / getUsdPerETH(), 6)} USD
+                ${getFormattedNumber(getApproxReturn() / ethPrice, 6)} USD
               </h3>
               <h6
                 style={{
