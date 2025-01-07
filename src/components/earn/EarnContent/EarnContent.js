@@ -752,7 +752,7 @@ const EarnContent = ({
                             color: "#f7f7fc",
                           }}
                         >
-                          25% APR
+                          35% APR
                         </p>
                       </div>
                     </div>
