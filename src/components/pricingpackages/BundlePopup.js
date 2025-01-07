@@ -14,16 +14,22 @@ const BundlePopup = ({
   setThirdLock,
 }) => {
   const [buttonState, setButtonState] = useState("approve");
+  const [buttonState2, setButtonState2] = useState("approve");
+  const [buttonState3, setButtonState3] = useState("approve");
   const [terms, setTerms] = useState(false);
+  const [terms2, setTerms2] = useState(false);
+  const [terms3, setTerms3] = useState(false);
 
   const handleDeposit = () => {
-    if (activeBundle === 1) {
-      setFirstLock(true);
-    } else if (activeBundle === 2) {
-      setSecondLock(true);
-    } else if (activeBundle === 3) {
-      setThirdLock(true);
-    }
+    setFirstLock(true);
+    onClose();
+  };
+  const handleDeposit2 = () => {
+    setSecondLock(true);
+    onClose();
+  };
+  const handleDeposit3 = () => {
+    setThirdLock(true);
     onClose();
   };
 
@@ -31,6 +37,18 @@ const BundlePopup = ({
     setButtonState("loading");
     setTimeout(() => {
       setButtonState("deposit");
+    }, 2000);
+  };
+  const handleApprove2 = () => {
+    setButtonState2("loading");
+    setTimeout(() => {
+      setButtonState2("deposit");
+    }, 2000);
+  };
+  const handleApprove3 = () => {
+    setButtonState3("loading");
+    setTimeout(() => {
+      setButtonState3("deposit");
     }, 2000);
   };
 
@@ -69,7 +87,8 @@ const BundlePopup = ({
           className="bundle-popup-list-item"
           style={{ listStyle: "inside", listStylePosition: "initial" }}
         >
-          The full amount of locked tokens will be returned after the lock period ends, ensuring no cost to the user.
+          The full amount of locked tokens will be returned after the lock
+          period ends, ensuring no cost to the user.
         </li>
         <li
           className="bundle-popup-list-item"
@@ -87,7 +106,13 @@ const BundlePopup = ({
         </li>
       </ul>
       <div className="d-flex align-items-center justify-content-start w-100">
-        <Checkbox onChange={() => setTerms(!terms)} />
+        {activeBundle === 1 ? (
+          <Checkbox checked={terms} onChange={() => setTerms(!terms)} />
+        ) : activeBundle === 2 ? (
+          <Checkbox checked={terms2} onChange={() => setTerms2(!terms2)} />
+        ) : (
+          <Checkbox checked={terms3} onChange={() => setTerms3(!terms3)} />
+        )}
         <span className="bundle-tos">
           I agree to the{" "}
           <NavLink
@@ -125,29 +150,79 @@ const BundlePopup = ({
         <h6 className="mb-0 bundle-dyp-amount">250,000 DYP</h6>
         <span className="mb-0 bundle-usd-amount">$25,000</span>
       </div>
-      <button
-        className={`btn ${
-          terms && buttonState !== "loading" ? "filledbtn" : "disabled-btn"
-        } px-5 py-2`}
-        disabled={!terms || buttonState === "loading"}
-        style={{ fontSize: "14px" }}
-        onClick={() => {
-          buttonState === "approve" ? handleApprove() : handleDeposit();
-        }}
-      >
-        {buttonState === "loading" ? (
-          <div
-            class="spinner-border spinner-border-sm text-light"
-            role="status"
-          >
-            <span class="visually-hidden">Loading...</span>
-          </div>
-        ) : buttonState === "approve" ? (
-          "Approve"
-        ) : (
-          "Deposit"
-        )}
-      </button>
+      {activeBundle === 1 ? (
+        <button
+          className={`btn ${
+            terms && buttonState !== "loading" ? "filledbtn" : "disabled-btn"
+          } px-5 py-2`}
+          disabled={!terms || buttonState === "loading"}
+          style={{ fontSize: "14px" }}
+          onClick={() => {
+            buttonState === "approve" ? handleApprove() : handleDeposit();
+          }}
+        >
+          {buttonState === "loading" ? (
+            <div
+              class="spinner-border spinner-border-sm text-light"
+              role="status"
+            >
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          ) : buttonState === "approve" ? (
+            "Approve"
+          ) : (
+            "Deposit"
+          )}
+        </button>
+      ) : activeBundle === 2 ? (
+        <button
+          className={`btn ${
+            terms2 && buttonState2 !== "loading" ? "filledbtn" : "disabled-btn"
+          } px-5 py-2`}
+          disabled={!terms2 || buttonState2 === "loading"}
+          style={{ fontSize: "14px" }}
+          onClick={() => {
+            buttonState2 === "approve" ? handleApprove2() : handleDeposit2();
+          }}
+        >
+          {buttonState2 === "loading" ? (
+            <div
+              class="spinner-border spinner-border-sm text-light"
+              role="status"
+            >
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          ) : buttonState2 === "approve" ? (
+            "Approve"
+          ) : (
+            "Deposit"
+          )}
+        </button>
+      ) : (
+        <button
+          className={`btn ${
+            terms3 && buttonState3 !== "loading" ? "filledbtn" : "disabled-btn"
+          } px-5 py-2`}
+          disabled={!terms3 || buttonState3 === "loading"}
+          style={{ fontSize: "14px" }}
+          onClick={() => {
+            buttonState3 === "approve" ? handleApprove3() : handleDeposit3();
+          }}
+        >
+          {buttonState3 === "loading" ? (
+            <div
+              class="spinner-border spinner-border-sm text-light"
+              role="status"
+            >
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          ) : buttonState3 === "approve" ? (
+            "Approve"
+          ) : (
+            "Deposit"
+          )}
+        </button>
+      )}
     </div>
   );
 };
