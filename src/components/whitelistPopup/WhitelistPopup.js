@@ -5,7 +5,6 @@ import "../LandPopup/landpopup.css";
 import { NavLink } from "react-router-dom";
 import Slider from "react-slick";
 import Countdown from "react-countdown";
- 
 
 const renderer = ({ days, hours, minutes }) => {
   return (
@@ -67,11 +66,11 @@ const WhitelistPopup = ({ open, onClose }) => {
       <div id="popup" className={`popup-wrapper ${open && "popup-active"} p-3`}>
         <div style={style2}>
           <div
-            className="d-flex align-items-center  justify-content-end gap-5 w-100"
+            className="d-flex align-items-center  justify-content-end gap-5 w-100 pt-3"
             style={{ height: 1 }}
           >
             <img
-              src={'https://cdn.worldofdypians.com/wod/popupXmark.svg'}
+              src={"https://cdn.worldofdypians.com/wod/popupXmark.svg"}
               alt=""
               className="close-x position-relative cursor-pointer "
               onClick={onClose}
@@ -85,62 +84,38 @@ const WhitelistPopup = ({ open, onClose }) => {
               }}
             />
           </div>
-          <Slider {...settings} ref={slider}>
-            <div className="d-flex py-3 flex-column justify-content-center position-relative align-items-center">
-              <div className="d-flex flex-column align-items-center justify-content-center">
-                <div className="d-flex align-items-center justify-content-center mb-2 popup-title-wrapper gap-2 p-2 px-4">
-                  <h6 className="popup-title metaverse mb-0">Final Call:</h6>
-                  <h6 className="popup-title d-flex align-items-center gap-2 mb-0">
-                    Migrate to DYP v2
-                  </h6>
-                </div>
-                <span className="popup-span mb-0">
+          <div className="d-flex py-3 flex-column justify-content-center position-relative align-items-center">
+            <div className="d-flex flex-column align-items-center justify-content-center">
+              <div className="d-flex align-items-center justify-content-center mb-2 popup-title-wrapper gap-2 p-2 px-4">
+                <h6 className="popup-title d-flex align-items-center gap-2 mb-0">
+                  DYP is available on SynFutures
+                </h6>
+              </div>
+              {/* <span className="popup-span mb-0">
                   The deadline to migrate is January 8, 2025. After this,
                   migration will close permanently. Migrate your tokens today to
                   secure continued access and utility!
-                </span>
-              </div>
-              <img
-                src={'https://cdn.worldofdypians.com/tools/migrationPopup.webp'}
-                className="land-nft-image basepopup"
-                alt="land nft"
-              />
-              <Countdown
-                renderer={renderer}
-                date={loyaltyCd}
-                // onComplete={() => {
-                //   setisExpired(true);
-                // }}
-              />
-
-              <NavLink to="/migration" onClick={onClose}>
-                <button className="btn filled-btn m-3">Migrate</button>
-              </NavLink>
+                </span> */}
             </div>
+            <img
+              src={"https://cdn.worldofdypians.com/tools/migrationPopup.webp"}
+              className="land-nft-image basepopup"
+              alt="land nft"
+            />
+            <span className="popup-content">
+              You can now trade DYP/ETH with 10x leverage or provide liquidity
+              to earn fees
+            </span>
 
-            {/* <div className="d-flex py-3 flex-column justify-content-center position-relative align-items-center">
-              <div className="d-flex flex-column gap-3 align-items-center justify-content-between">
-                <div className="d-flex flex-column gap-3 justify-content-center align-items-center px-3">
-                  <div className="d-flex flex-column align-items-center justify-content-center">
-                    <div className="d-flex align-items-center justify-content-center mb-2 popup-title-wrapper gap-2 p-2 px-4">
-                      <h6 className="popup-title d-flex align-items-center gap-2 mb-0">
-                        Games on
-                      </h6>
-                      <h6 className="popup-title metaverse mb-0">Base</h6>
-                    </div>
-                    <span className="popup-span mb-0 w-100">
-                      Enjoy the ultimate gaming experience on Base.
-                    </span>
-                  </div>
-                  <img src={'https://cdn.worldofdypians.com/tools/baseBg.png'} className="land-nft-image" alt="land nft" />
-               
-                  <NavLink to="/games" onClick={onClose}>
-                    <button className="btn filled-btn m-3">Play</button>
-                  </NavLink>
-                </div>
-              </div>
-            </div> */}
-          </Slider>
+            <a
+              href="https://oyster.synfutures.com/#/launchpad/base/0x53173006bbd75b8fbe1e3c8b1bafd0a93d4f707e"
+              target="_blank"
+              rel="noreferrer"
+              onClick={onClose}
+            >
+              <button className="btn filled-btn m-3">Explore</button>
+            </a>
+          </div>
         </div>
       </div>
     </OutsideClickHandler>

@@ -170,23 +170,33 @@ const BuyDyp = () => {
       ],
     },
     {
-      title: "Coinbase",
-      logo: "coinbase.png",
-      link: "https://www.coinbase.com/advanced-trade/spot/DYP-USD",
-      totalvids: "1 video",
+      title: "SynFutures",
+      logo: "synfutures.svg",
+      link: "https://oyster.synfutures.com/#/launchpad/base/0x53173006bbd75b8fbe1e3c8b1bafd0a93d4f707e",
+      totalvids: "0 videos",
       active: true,
-      version: "DYP v1",
+      version: "DYP v2",
 
-      videos: [
-        {
-          link: "https://www.youtube.com/embed/mjUUqNy-zW8",
-          image: "coinbase.png",
-          title: "How to buy DeFi Yield Protocol (DYP) on Coinbase",
-          walletName: "Coinbase",
-          thumbnail: "coinbase.png",
-        },
-      ],
+      videos: "",
     },
+    // {
+    //   title: "Coinbase",
+    //   logo: "coinbase.png",
+    //   link: "https://www.coinbase.com/advanced-trade/spot/DYP-USD",
+    //   totalvids: "1 video",
+    //   active: true,
+    //   version: "DYP v1",
+
+    //   videos: [
+    //     {
+    //       link: "https://www.youtube.com/embed/mjUUqNy-zW8",
+    //       image: "coinbase.png",
+    //       title: "How to buy DeFi Yield Protocol (DYP) on Coinbase",
+    //       walletName: "Coinbase",
+    //       thumbnail: "coinbase.png",
+    //     },
+    //   ],
+    // },
     {
       title: "PancakeSwap V2",
       logo: "pancake.png",
