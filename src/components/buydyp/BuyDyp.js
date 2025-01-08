@@ -49,7 +49,7 @@ const BuyDyp = () => {
       link: "https://www.kucoin.com/trade/DYP-USDT",
       totalvids: "1 video",
       active: true,
-      version: "DYP v2",
+      version: "DYP",
 
       videos: [
         {
@@ -67,7 +67,7 @@ const BuyDyp = () => {
       link: "https://www.gate.io/trade/DYP_USDT",
       totalvids: "1 video",
       active: true,
-      version: "DYP v2",
+      version: "DYP",
 
       videos: [
         {
@@ -87,7 +87,7 @@ const BuyDyp = () => {
       videos: "",
       id: "collapsefive",
       active: true,
-      version: "DYP v2",
+      version: "DYP",
     },
     {
       title: "HTX",
@@ -96,7 +96,7 @@ const BuyDyp = () => {
       totalvids: "0 videos",
       videos: [],
       active: true,
-      version: "DYP v2",
+      version: "DYP",
     },
     {
       title: "Uniswap V2",
@@ -104,7 +104,7 @@ const BuyDyp = () => {
       link: "https://app.uniswap.org/swap?use=V2&inputCurrency=0x39b46B212bDF15b42B166779b9d1787A68b9D0c3",
       totalvids: "8 videos",
       active: true,
-      version: "DYP v2",
+      version: "DYP",
       videos: [
         {
           link: "https://www.youtube.com/embed/yBzIPecqKY8",
@@ -175,7 +175,7 @@ const BuyDyp = () => {
       link: "https://oyster.synfutures.com/#/trade/base/ETH-DYP-EMG-Perpetual",
       totalvids: "0 videos",
       active: true,
-      version: "DYP v2",
+      version: "DYP",
 
       videos: "",
     },
@@ -203,7 +203,7 @@ const BuyDyp = () => {
       link: "https://pancakeswap.finance/swap?inputCurrencty=BNB&outputCurrency=0x1a3264f2e7b1cfc6220ec9348d33ccf02af7aaa4",
       totalvids: "4 videos",
       active: true,
-      version: "DYP v2",
+      version: "DYP",
 
       videos: [
         {
@@ -244,7 +244,7 @@ const BuyDyp = () => {
       link: "https://traderjoexyz.com/avalanche/trade?outputCurrency=0x1a3264f2e7b1cfc6220ec9348d33ccf02af7aaa4",
       totalvids: "0 videos",
       active: true,
-      version: "DYP v2",
+      version: "DYP",
 
       videos: "",
       //  [
@@ -435,7 +435,7 @@ console.log(videoList.length)
       </div>
       <h6 className="mt-5 buydyp-title">Exchanges to purchase DYP</h6>
       <div className="row gap-4 gap-lg-0 mx-0 mt-3 px-0 w-100">
-        <div className="col-12 col-lg-5">
+        <div className="col-12 px-0">
           <div className="d-grid vendor-container  py-3 py-lg-0">
             {buyDypItems.map((vendor, index) => (
               <VendorCard
@@ -456,7 +456,7 @@ console.log(videoList.length)
             ))}
           </div>
         </div>
-        <div className="col-12 col-lg-7">
+        {/* <div className="col-12 col-lg-7">
           <div className="vendor-card p-3 position-relative">
             <div className="purplediv"></div>
             <div className="d-flex align-items-center justify-content-between">
@@ -569,7 +569,7 @@ console.log(videoList.length)
               )}
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
