@@ -38,6 +38,7 @@ import ChainlinkCard from "../chainlink-card/ChainlinkCard";
 import TrendingNews from "../newsCard/TrendingNews";
 import WhitelistPopup from "../whitelistPopup/WhitelistPopup";
 import LoyaltyCard from "../launchpad-card/LoyaltyCard";
+import Calculator from "../calculator/Calculator";
 
 const renderer = ({ days, hours, minutes }) => {
   return (
@@ -571,7 +572,7 @@ const Dashboard = ({
       ].sort(function (a, b) {
         return b.apy_percent - a.apy_percent;
       });
-console.log(sortedActiveeth)
+
       const finalPools = [sortedActiveeth[1], sortedActivebase[0]];
 
       setTopPools(finalPools);
@@ -994,7 +995,7 @@ console.log(sortedActiveeth)
         <div className="d-flex m-0 flex-column flex-xxl-row justify-content-between gap-4">
           <div className="d-flex flex-column gap-4 justify-content-between">
             <div className="d-flex flex-column flex-md-row m-0 gap-3 justify-content-between">
-              {/* <Calculator /> */}
+              <Calculator />
               <Countdown
                 renderer={renderer}
                 date={loyaltyCd}
@@ -1002,7 +1003,7 @@ console.log(sortedActiveeth)
                   setisExpired(true);
                 }}
               />
-              <MigrationBanner />
+              {/* <MigrationBanner /> */}
               <div className="d-flex flex-column gap-3 gap-lg-4 justify-content-between dashboard-cards-wrapper">
                 <ExplorerCard />
                 <div className="d-flex flex-column flex-md-row justify-content-between gap-3">
