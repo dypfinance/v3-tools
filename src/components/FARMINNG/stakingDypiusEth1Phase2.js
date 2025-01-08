@@ -652,11 +652,11 @@ const StakeDypiusEth1Phase2 = ({
 
   const getApproxReturn = (depositAmount, days) => {
     const expirationDate = new Date("2025-06-07T23:11:00.000+02:00");
-    const expirationDate2 = new Date("2026-01-07T23:11:00.000+02:00");
+    const expirationDate2 = new Date("2026-01-08T23:11:00.000+02:00");
 
     const currentDate = new Date();
     const timeDifference =
-      (start_date === "07 Jan 2025" ? expirationDate2 : expirationDate) -
+      (start_date === "08 Jan 2025" ? expirationDate2 : expirationDate) -
       currentDate;
     const millisecondsInADay = 1000 * 60 * 60 * 24;
     const daysUntilExpiration = Math.floor(timeDifference / millisecondsInADay);

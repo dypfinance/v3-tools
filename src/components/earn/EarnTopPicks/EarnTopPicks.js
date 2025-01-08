@@ -216,7 +216,7 @@ const EarnTopPicks = ({
 
   const phase2_pools = [
     {
-      id: "0xFBe84Af34CdC22455f82e18B76Ca50D21d3aBF83",
+      id: "0x1f5c3f186795c84265eD826AD09924D0987485ba",
       apy_percent: 20,
       tvl_usd: 46682.3565666875,
       link_logo: "https://www.dypius.com/logo192.png",
@@ -233,7 +233,7 @@ const EarnTopPicks = ({
       chain: "eth",
     },
     {
-      id: "0xf6DC9E51D4E0FCc19ca6426fB5422f1E9a24F2eF",
+      id: "0x11666850EA73956afcd014E86eD2AE473939421d",
       apy_percent: 35,
       tvl_usd: 462.3565666875,
       link_logo: "https://www.dypius.com/logo192.png",
@@ -3939,7 +3939,7 @@ console.log(ethPools, bnbPools,selectedPool)
                                 setselectedPool(obj);
                               }}
                             >
-                              {selectedpoolType === "dyp" && index == 1 && (
+                              {selectedpoolType === "dyp" && index == 2 && (
                                 <div className="new-beta-sidebar2 position-absolute">
                                   <span className="new-beta-text2">New</span>
                                 </div>
@@ -4228,17 +4228,17 @@ console.log(ethPools, bnbPools,selectedPool)
                   />
                 ) : topList === "Staking" &&
                   selectedPool?.id ===
-                    "0xFBe84Af34CdC22455f82e18B76Ca50D21d3aBF83" &&
+                    "0x1f5c3f186795c84265eD826AD09924D0987485ba" &&
                   chain === "eth" ? (
                   <StakeDypiusEth1Phase2
                     selectedPool={selectedPool}
                     selectedTab={selectedTab}
-                    staking={window.constant_staking_dypius_phase2_eth1}
+                    staking={window.constant_staking_dypius_phase2_eth6}
                     apr={selectedPool?.apy_percent}
                     liquidity={eth_address}
-                    expiration_time={"07 Jan 2026"}
+                    expiration_time={"08 Jan 2026"}
                     poolCap={20000000}
-                    start_date={"07 Jan 2025"}
+                    start_date={"08 Jan 2025"}
                     finalApr={selectedPool?.apy_performancefee}
                     lockTime={
                       selectedPool?.lock_time?.split(" ")[0] === "No"
@@ -4265,17 +4265,17 @@ console.log(ethPools, bnbPools,selectedPool)
                   />
                 ) : topList === "Staking" &&
                   selectedPool?.id ===
-                    "0xf6DC9E51D4E0FCc19ca6426fB5422f1E9a24F2eF" &&
+                    "0x11666850EA73956afcd014E86eD2AE473939421d" &&
                   chain === "eth" ? (
                   <StakeDypiusEth1Phase2
                     selectedPool={selectedPool}
                     selectedTab={selectedTab}
-                    staking={window.constant_staking_dypius_phase2_eth1}
+                    staking={window.constant_staking_dypius_phase2_eth7}
                     apr={selectedPool?.apy_percent}
                     liquidity={eth_address}
-                    expiration_time={"07 Jan 2026"}
+                    expiration_time={"08 Jan 2026"}
                     poolCap={40000000}
-                    start_date={"07 Jan 2025"}
+                    start_date={"08 Jan 2025"}
                     finalApr={selectedPool?.apy_performancefee}
                     lockTime={
                       selectedPool?.lock_time?.split(" ")[0] === "No"
