@@ -328,6 +328,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
     stakeApy,
     stakeApyAVAX,
     stakeApyBNB,
+    idypPrice,
     vaultApy,
     usdToDeposit,
     days,
