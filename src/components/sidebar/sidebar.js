@@ -49,11 +49,11 @@ const Sidebar = (props) => {
   }, [windowSize]);
 
   const sidebarItems = [
-    {
-      label: "Migration",
-      icon: "swapIcon",
-      link: "/migration",
-    },
+    // {
+    //   label: "Migration",
+    //   icon: "swapIcon",
+    //   link: "/migration",
+    // },
     {
       label: "Earn",
       icon: "earnIcon",
