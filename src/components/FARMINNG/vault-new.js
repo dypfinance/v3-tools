@@ -432,7 +432,7 @@ const Vault = ({
   };
 
   const getTokenPrice = async () => {
-    if (vault && vault_contract) {
+    if (vault && vault_contract && coinbase) {
       let pDivsDyp = await vault_contract.methods
         .platformTokenDivsOwing(coinbase)
         .call()
