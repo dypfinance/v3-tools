@@ -66,7 +66,7 @@ const Dashboard = ({
 }) => {
   const [topPools, setTopPools] = useState([]);
   const [cawsLandCard, setCawsLandCard] = useState([]);
-  const [theBnbPool, setTheBnbPool] = useState({});
+  // const [theBnbPool, setTheBnbPool] = useState({});
   const [totalTvl, settotalTvl] = useState(0);
   const [totalTvlETH, settotalTvlETH] = useState(0);
   const [totalTvlBNB, settotalTvlBNB] = useState(0);
@@ -221,10 +221,7 @@ const Dashboard = ({
   };
 
   const fetchAllPools = async () => {
-    const bnbFarmingPool = await axios
-      .get("https://api.dyp.finance/api/the_graph_bsc_v2")
-      .catch((err) => console.error(err));
-
+ 
     const basePool = await axios
       .get("https://api.dyp.finance/api/get_staking_info_base_new")
       .catch((err) => console.error(err));
@@ -280,23 +277,22 @@ const Dashboard = ({
       eth_result.status === 200 &&
       eth_result2 &&
       eth_result2.status === 200 &&
-      bnbFarmingPool &&
-      bnbFarmingPool.status === 200 &&
+ 
       aggregatorPools.length > 0
     ) {
-      let temparray = Object.entries(
-        bnbFarmingPool.data.the_graph_bsc_v2.lp_data
-      );
-      let bnbpool = temparray.filter((item) => {
-        setWbnbPrice(bnbFarmingPool.data.the_graph_bsc_v2.usd_per_eth);
-        return (
-          item[1].id ===
-          "0x1bc61d08a300892e784ed37b2d0e63c85d1d57fb-0x5bc3a80a1f2c4fb693d9dddcebbb5a1b5bb15d65"
-        );
-      });
-      setTheBnbPool(bnbpool);
-      const testbnbFarming = bnbpool[0];
-      const finalBnbFarmingpool = testbnbFarming[1];
+      // let temparray = Object.entries(
+      //   bnbFarmingPool.data.the_graph_bsc_v2.lp_data
+      // );
+      // let bnbpool = temparray.filter((item) => {
+      //   setWbnbPrice(bnbFarmingPool.data.the_graph_bsc_v2.usd_per_eth);
+      //   return (
+      //     item[1].id ===
+      //     "0x1bc61d08a300892e784ed37b2d0e63c85d1d57fb-0x5bc3a80a1f2c4fb693d9dddcebbb5a1b5bb15d65"
+      //   );
+      // });
+      // setTheBnbPool(bnbpool);
+      // const testbnbFarming = bnbpool[0];
+      // const finalBnbFarmingpool = testbnbFarming[1];
 
       const dypBase = basePool.data.stakingInfoDYPBASE;
 
@@ -1203,7 +1199,7 @@ const Dashboard = ({
                       </div>
                     )}
                   </div>
-                  {activeCardFarm && network === 56 ? (
+                  {/* {activeCardFarm && network === 56 ? (
                     <BscFarmingFunc
                       isConnected={isConnected}
                       wbnbPrice={wbnbPrice}
@@ -1231,7 +1227,7 @@ const Dashboard = ({
                     />
                   ) : (
                     <></>
-                  )}
+                  )} */}
                 </div>
               ) : (
                 <div className="d-flex flex-column gap-4">
