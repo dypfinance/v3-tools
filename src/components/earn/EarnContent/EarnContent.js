@@ -237,6 +237,8 @@ const EarnContent = ({
       //   fetchBnbPool();
       // }
       setavaxApr(res.data.highestAPY.highestAPY_AVAX_V2);
+    }).catch((e) => {
+      console.log(e);
     });
   };
 

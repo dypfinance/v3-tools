@@ -5,17 +5,16 @@ import { isMobile } from "react-device-detect";
 import { NavLink } from "react-router-dom";
 
 import getFormattedNumber from "../../functions/getFormattedNumber2";
-import ethStakeActive from "../../assets/earnAssets/ethStakeActive.svg";
-import bnbStakeActive from "../../assets/earnAssets/bnbStakeActive.svg";
-import avaxStakeActive from "../../assets/earnAssets/avaxStakeActive.svg";
 
-import calculatorChart from "./assets/calculatorChart.png";
-import usdt from "./assets/usdt.svg";
-import usdc from "./assets/usdc.svg";
 import { abbreviateNumber } from "js-abbreviation-number";
 
 import "./calculator.css";
-import { ClickAwayListener, createTheme, TextField, Tooltip } from "@material-ui/core";
+import {
+  ClickAwayListener,
+  createTheme,
+  TextField,
+  Tooltip,
+} from "@material-ui/core";
 import useWindowSize from "../../functions/useWindowSize";
 
 const Calculator = ({ earnClass, onClose, ref }) => {
@@ -61,38 +60,27 @@ const Calculator = ({ earnClass, onClose, ref }) => {
   const [calculateApproxUSDAVAX, setCalculateApproxUSDAVAX] = useState(0);
   const [calculateApproxUSDBNB, setCalculateApproxUSDBNB] = useState(0);
 
-  const [calculateApproxCrypto, setCalculateApproxCrypto] = useState("0");
-  const [calculateApproxCryptoBNB, setCalculateApproxCryptoBNB] = useState("0");
-  const [calculateApproxCryptoAVAX, setCalculateApproxCryptoAVAX] =
-    useState("0");
-
   const [calculateApproxWeth, setCalculateApproxWeth] = useState("0");
   const [calculateApproxWbnb, setCalculateApproxWbnb] = useState("0");
   const [calculateApproxWavax, setCalculateApproxWavax] = useState("0");
   const [stakeApy, setStakeApy] = useState();
   const [stakeApyBNB, setStakeApyBNB] = useState();
   const [stakeApyAVAX, setStakeApyAVAX] = useState();
-
-  const [buybackApy, setBuybackApy] = useState();
-  const [buybackApyBNB, setBuybackApyBNB] = useState();
-  const [buybackApyAVAX, setBuybackApyAVAX] = useState();
-
+  const [activePill, setActivePill] = useState(pillsNames[0]);
+  const [open, setOpen] = React.useState(false);
+  const [activeTimePill, setActiveTimePill] = useState(timePillsArray[3]);
   const [vaultApy, setVaultApy] = useState();
   const [vaultUSDT, setVaultUSDT] = useState();
   const [vaultUSDC, setVaultUSDC] = useState();
-
-  const [farmApy, setFarmApy] = useState();
-  const [farmApyBNB, setFarmApyBNB] = useState();
-  const [farmApyAVAX, setFarmApyAVAX] = useState();
-
   const [apyData, setapyData] = useState();
-
   const [wethPrice, setWethPrice] = useState(0);
   const [wbnbPrice, setWbnbPrice] = useState(0);
   const [wavaxPrice, setWavaxPrice] = useState(0);
+  const [dypPrice, setDypPrice] = useState(0);
+  const [idypPrice, setiDypPrice] = useState(0);
 
   let formData = {};
-
+  const pillRef = useRef([]);
   if (isMobile) {
     const newChainButtons = [...chainButtonsArray];
 
@@ -105,23 +93,30 @@ const Calculator = ({ earnClass, onClose, ref }) => {
   const getApy = async () => {
     await axios.get("https://api.dyp.finance/api/highest-apy").then((data) => {
       setapyData(data.data.highestAPY);
+    }).catch((e) => {
+      console.log(e);
     });
   };
 
-
-  const getEthApy = async()=>{
-    await axios.get('https://api.dyp.finance/api/get_staking_info_eth').then((data) => {
-      // console.log(data.data.highestAPY_ETH[0].highest_apy)
-      // setStakeApy(data.data.highestAPY_ETH[0].highest_apy);
-      setStakeApy(50);
-    });
-  }
+  const getEthApy = async () => {
+    await axios
+      .get("https://api.dyp.finance/api/get_staking_info_eth")
+      .then((data) => {
+        // console.log(data.data.highestAPY_ETH[0].highest_apy)
+        // setStakeApy(data.data.highestAPY_ETH[0].highest_apy);
+        setStakeApy(35);
+      }).catch((e) => {
+        console.log(e);
+      });
+  };
 
   const getETHdata = async () => {
     await axios
       .get("https://api.dyp.finance/api/the_graph_eth_v2")
       .then((data) => {
         setWethPrice(data.data.the_graph_eth_v2.usd_per_eth);
+      }).catch((e) => {
+        console.log(e);
       });
   };
 
@@ -130,7 +125,29 @@ const Calculator = ({ earnClass, onClose, ref }) => {
       .get("https://api.dyp.finance/api/the_graph_bsc_v2")
       .then((data) => {
         setWbnbPrice(data.data.the_graph_bsc_v2.usd_per_eth);
+
+        const propertyIDyp = Object.entries(
+          data.data.the_graph_bsc_v2.token_data
+        );
+        setiDypPrice(propertyIDyp[1][1].token_price_usd);
+      }).catch((e) => {
+        console.log(e);
       });
+  };
+
+  const getPriceDYP = async () => {
+    const dypprice = await axios
+      .get(
+        "https://api.geckoterminal.com/api/v2/networks/eth/pools/0x7c81087310a228470db28c1068f0663d6bf88679"
+      )
+      .then((res) => {
+        return res.data.data.attributes.base_token_price_usd;
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+
+    setDypPrice(dypprice);
   };
 
   const getAVAXdata = async () => {
@@ -144,25 +161,17 @@ const Calculator = ({ earnClass, onClose, ref }) => {
 
   useEffect(() => {
     getApy();
-    getETHdata();
-    getBSCdata();
-    getAVAXdata();
+   
     getEthApy();
   }, [wethPrice, wavaxPrice, wbnbPrice, activeMethod]);
 
- 
-
   useEffect(() => {
     if (apyData) {
-      if (activeMethod === "Farming") {
-        setFarmApyBNB(apyData.highestAPY_BSC_V2);
-        setFarmApyAVAX(apyData.highestAPY_AVAX_V2);
-        setFarmApy(apyData.highestAPY_ETH_V2);
-      } else if (activeMethod === "Staking") {
-        setStakeApyAVAX(50);
-        setStakeApyBNB(50);
+      if (activeMethod === "Staking") {
+        setStakeApyAVAX(25);
+        setStakeApyBNB(25);
         // setStakeApy(30);
-      }  else if (activeMethod === "Vault"){
+      } else if (activeMethod === "Vault") {
         const vaultWeth = window.vault_weth;
         const vaultusdc = window.vault_usdc;
         const vaultusdt = window.vault_usdt;
@@ -181,27 +190,27 @@ const Calculator = ({ earnClass, onClose, ref }) => {
           window.TOKEN_ABI,
           vaultusdt.tokenAddress
         );
-  
+
         let token_contridyp = new infura_web3.eth.Contract(
           window.TOKEN_ABI,
           window.config.reward_token_idyp_address
         );
 
         vaultWeth
-          .getTvlUsdAndApyPercent(18, 18,token_contr_weth, token_contridyp)
+          .getTvlUsdAndApyPercent(18, 18, token_contr_weth, token_contridyp)
           .then((apy_percent) => {
-            console.log(apy_percent)
+            console.log(apy_percent);
             setVaultApy(apy_percent.apy_percent);
           })
           .catch(console.error);
 
         vaultusdc
-          .getTvlUsdAndApyPercent(18, 18,token_contr_usdc, token_contridyp)
+          .getTvlUsdAndApyPercent(18, 18, token_contr_usdc, token_contridyp)
           .then((apy_percent) => setVaultUSDC(apy_percent.apy_percent))
           .catch(console.error);
 
         vaultusdt
-          .getTvlUsdAndApyPercent(18, 18,token_contr_usdt, token_contridyp)
+          .getTvlUsdAndApyPercent(18, 18, token_contr_usdt, token_contridyp)
           .then((apy_percent) => {
             setVaultUSDT(apy_percent.apy_percent);
           })
@@ -209,9 +218,10 @@ const Calculator = ({ earnClass, onClose, ref }) => {
       }
     }
   }, [activeMethod, apyData]);
+  const vaultplatformArrayNew = [3.08, 3.02, 3.94, 4.46, 4.8];
 
   useEffect(() => {
-      if (activeMethod === "Staking") {
+    if (activeMethod === "Staking") {
       setCalculateApproxUSD(
         (
           ((parseInt(usdToDeposit) * parseFloat(stakeApy)) / 100 / 365) *
@@ -224,7 +234,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
           parseFloat(
             ((parseInt(usdToDeposit) * parseFloat(stakeApy)) / 100 / 365) *
               parseInt(days)
-          ) / wethPrice,
+          ) / dypPrice,
           4
         )
       );
@@ -240,7 +250,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
           parseFloat(
             ((parseInt(usdToDeposit) * parseFloat(stakeApyBNB)) / 100 / 365) *
               parseInt(days)
-          ) / wbnbPrice,
+          ) / idypPrice,
           4
         )
       );
@@ -256,37 +266,40 @@ const Calculator = ({ earnClass, onClose, ref }) => {
           parseFloat(
             ((parseInt(usdToDeposit) * parseFloat(stakeApyAVAX)) / 100 / 365) *
               parseInt(days)
-          ) / wavaxPrice,
+          ) / dypPrice,
           4
         )
       );
-    }   else if (activeMethod === "Vault"){
+    } else if (activeMethod === "Vault") {
+ 
       setCalculateApproxUSD(
         (
-          ((parseInt(usdToDeposit) * parseFloat(vaultApy)) / 100 / 365) *
+          ((parseInt(usdToDeposit) * parseFloat(vaultplatformArrayNew[0])) / 100 / 365) *
           parseInt(days)
         ).toFixed(2)
       );
-      setCalculateApproxCrypto(
+
+      setCalculateApproxWeth(
         getFormattedNumber(
           parseFloat(
-            ((parseInt(usdToDeposit) * parseFloat(vaultApy)) / 100 / 365) *
+            ((parseInt(usdToDeposit) * parseFloat(vaultplatformArrayNew[0])) / 100 / 365) *
               parseInt(days)
-          ),
+          ) / wethPrice,
           4
         )
       );
+      
 
       setCalculateApproxUSDBNB(
         (
-          ((parseInt(usdToDeposit) * parseFloat(vaultUSDC)) / 100 / 365) *
+          ((parseInt(usdToDeposit) * parseFloat(vaultplatformArrayNew[2])) / 100 / 365) *
           parseInt(days)
         ).toFixed(2)
       );
-      setCalculateApproxCryptoBNB(
+      setCalculateApproxWbnb(
         getFormattedNumber(
           parseFloat(
-            ((parseInt(usdToDeposit) * parseFloat(vaultUSDC)) / 100 / 365) *
+            ((parseInt(usdToDeposit) * parseFloat(vaultplatformArrayNew[2])) / 100 / 365) *
               parseInt(days)
           ),
           4
@@ -295,7 +308,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
 
       setCalculateApproxUSDAVAX(
         (
-          ((parseInt(usdToDeposit) * parseFloat(vaultUSDT)) / 100 / 365) *
+          ((parseInt(usdToDeposit) * parseFloat(vaultplatformArrayNew[3])) / 100 / 365) *
           parseInt(days)
         ).toFixed(2)
       );
@@ -303,24 +316,24 @@ const Calculator = ({ earnClass, onClose, ref }) => {
       setCalculateApproxWavax(
         getFormattedNumber(
           parseFloat(
-            ((parseInt(usdToDeposit) * parseFloat(vaultUSDT)) / 100 / 365) *
+            ((parseInt(usdToDeposit) * parseFloat(vaultplatformArrayNew[3])) / 100 / 365) *
               parseInt(days)
           ),
           4
         )
       );
     }
-
-    
   }, [
     activeMethod,
     stakeApy,
     stakeApyAVAX,
     stakeApyBNB,
+    idypPrice,
     vaultApy,
     usdToDeposit,
     days,
-    vaultUSDC, vaultUSDT
+    vaultUSDC,
+    vaultUSDT,
   ]);
 
   const handleSubmit = (e) => {
@@ -356,29 +369,17 @@ const Calculator = ({ earnClass, onClose, ref }) => {
   const handleInputUSD = (e) => {
     setUsdToDeposit(e.slice(0, 7));
   };
- 
-  const [chainState, setchainState] = useState("eth");
-  const [activePill, setActivePill] = useState(pillsNames[0]);
-  const pillRef = useRef([]);
-
-  const [activeTimePill, setActiveTimePill] = useState(timePillsArray[3]);
-  const timepillRef = useRef([]);
 
   const focusInput = (field) => {
     document.getElementById(field).focus();
   };
 
-  const windowSize = useWindowSize();
-
-  const [open, setOpen] = React.useState(false);
-
-  const handleTooltipClose = () => {
-    setOpen(false);
-  };
-
-  const handleTooltipOpen = () => {
-    setOpen(true);
-  };
+  useEffect(() => {
+    getPriceDYP();
+    getETHdata();
+    getBSCdata();
+    getAVAXdata();
+  }, []);
 
   return (
     <div
@@ -390,10 +391,14 @@ const Calculator = ({ earnClass, onClose, ref }) => {
         <div className="flex flex-column gap-2 justify-content-between">
           <div className="d-flex justify-content-between gap-2 align-items-center pb-4">
             <h6 className="d-flex gap-2 align-items-center calc-title">
-              <img src={'https://cdn.worldofdypians.com/tools/calculator.svg'} alt="" /> Calculator
+              <img
+                src={"https://cdn.worldofdypians.com/tools/calculator.svg"}
+                alt=""
+              />{" "}
+              Calculator
             </h6>
             <img
-              src={calculatorChart}
+              src={"https://cdn.worldofdypians.com/tools/calculatorChart.svg"}
               className="calculator-chart d-flex d-md-none"
               alt=""
             />
@@ -407,7 +412,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
               style={{ cursor: "pointer" }}
               />
             )} */}
-           {/* <ClickAwayListener onClickAway={handleTooltipClose}>
+            {/* <ClickAwayListener onClickAway={handleTooltipClose}>
            <Tooltip
               PopperProps={{
                 disablePortal: true,
@@ -431,8 +436,8 @@ const Calculator = ({ earnClass, onClose, ref }) => {
            </ClickAwayListener> */}
           </div>
           <div className="pills-container gap-3 d-flex justify-content-start row m-0 w-100 position-relative">
-          <img
-              src={calculatorChart}
+            <img
+              src={"https://cdn.worldofdypians.com/tools/calculatorChart.svg"}
               className="calculator-chart d-none d-xl-flex"
               alt=""
             />
@@ -459,16 +464,10 @@ const Calculator = ({ earnClass, onClose, ref }) => {
                   }}
                 >
                   <img
-                    src={
-                      require(`./assets/${item.toLowerCase()}Icon.svg`).default
-                    }
+                    src={`https://cdn.worldofdypians.com/tools/${item.toLowerCase()}Icon.svg`}
                     alt=""
                   />
-                  <span
-                    className={`pill-item-text`}
-                  >
-                    {item}
-                  </span>
+                  <span className={`pill-item-text`}>{item}</span>
                 </p>
               ))}
           </div>
@@ -495,7 +494,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
                 onChange={(e) => handleInputUSD(e.target.value)}
               />
             </div> */}
-     <div className="input-container usd-input px-0">
+            <div className="input-container usd-input px-0">
               <input
                 type="number"
                 min={1}
@@ -540,9 +539,9 @@ const Calculator = ({ earnClass, onClose, ref }) => {
               </label>
             </div>
             <span className="calculator-purpose px-0 mt-3 mt-lg-0">
-            This calculator is for informational purposes only
+              This calculator is for informational purposes only
             </span>
-            
+
             {/* <div
               className="inputwrapper position-relative px-0"
               style={{ width: "32%", paddingLeft: 0 }}
@@ -585,8 +584,6 @@ const Calculator = ({ earnClass, onClose, ref }) => {
                   </p>
                 ))}
             </div> */}
-
-          
           </div>
 
           {/* <div className="d-flex justify-content-between gap-2 align-items-end mt-3">
@@ -625,12 +622,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
             </h6> */}
           <div className="row w-100 gap-3 gap-lg-2 gap-xl-0 mx-0 align-items-center justify-content-between mt-4 mt-lg-5 position-relative calculator-chains-wrapper">
             <NavLink
-              to={{
-                pathname: "earn",
-                state: { chain: "eth", option: activeMethod, pool: 0 },
-                customChain: activeMethod === "Vault" && "eth"
-
-              }}
+              to={'/earn/dypius'}
               className="ethereum-chain-wrapper"
             >
               <div className="chain-content gap-4 p-2">
@@ -647,28 +639,35 @@ const Calculator = ({ earnClass, onClose, ref }) => {
                     calculateApproxWeth != "..."
                       ? calculateApproxWeth.slice(0, 6)
                       : "0.0"}{" "}
-                    WETH)
+                    {activeMethod === "Vault" ? "WETH" : "DYP"})
                   </div>
                 </div>
                 <div className="d-flex align-items-center justify-content-between gap-2 gap-lg-4">
                   <div className="d-flex align-items-center gap-2">
-                    <img src={ethStakeActive} width={20} height={20} alt="" />
-                    <h6 className="chain-name">Ethereum</h6>
+                    <img
+                      src=
+                        {
+                          activeMethod === "Vault"
+                            ? "https://cdn.worldofdypians.com/tools/weth.svg"
+                            : "https://cdn.worldofdypians.com/tools/ethStakeActive.svg"
+                        }
+                     
+                      
+                      width={20}
+                      height={20}
+                      alt=""
+                    />
+                    <h6 className="chain-name">{activeMethod === "Vault" ? "WETH" : "Ethereum"}</h6>
                   </div>
-                  <img src={'https://cdn.worldofdypians.com/tools/filledArrow.svg'} alt="" />
+                  <img
+                    src={"https://cdn.worldofdypians.com/tools/filledArrow.svg"}
+                    alt=""
+                  />
                 </div>
               </div>
             </NavLink>
             <NavLink
-              to={{
-                pathname: "earn",
-                state: {
-                  chain: activeMethod === "Vault" ? "eth" : "bnb",
-                  option: activeMethod,
-                  pool: 0,
-                  customChain: activeMethod === "Vault" && "bnb"
-                },
-              }}
+              to={'/earn/dypius'}
               className={
                 activeMethod === "Vault" ? "usdc-wrapper" : `bnb-chain-wrapper`
               }
@@ -687,13 +686,17 @@ const Calculator = ({ earnClass, onClose, ref }) => {
                     calculateApproxWbnb != "..."
                       ? calculateApproxWbnb.slice(0, 6)
                       : "0.0"}{" "}
-                    {activeMethod === "Vault" ? "USDC" : "WBNB"})
+                    {activeMethod === "Vault" ? "USDC" : "iDYP"})
                   </div>
                 </div>
                 <div className="d-flex align-items-center justify-content-between gap-2 gap-lg-4">
                   <div className="d-flex align-items-center gap-2">
                     <img
-                      src={activeMethod === "Vault" ? usdc : bnbStakeActive}
+                      src={
+                        activeMethod === "Vault"
+                          ? "https://cdn.worldofdypians.com/tools/usdc.svg"
+                          : "https://cdn.worldofdypians.com/tools/bnbStakeActive.svg"
+                      }
                       width={20}
                       height={20}
                       alt=""
@@ -702,20 +705,15 @@ const Calculator = ({ earnClass, onClose, ref }) => {
                       {activeMethod === "Vault" ? "USDC" : "BNB Chain"}
                     </h6>
                   </div>
-                  <img src={'https://cdn.worldofdypians.com/tools/filledArrow.svg'} alt="" />
+                  <img
+                    src={"https://cdn.worldofdypians.com/tools/filledArrow.svg"}
+                    alt=""
+                  />
                 </div>
               </div>
             </NavLink>
             <NavLink
-              to={{
-                pathname: "earn",
-                state: {
-                  chain: activeMethod === "Vault" ? "eth" : "avax",
-                  option: activeMethod,
-                  customChain: activeMethod === "Vault" && "avax",
-                  pool: 0,
-                },
-              }}
+              to={'/earn/dypius'}
               className={
                 activeMethod === "Vault" ? "usdt-wrapper" : "avax-chain-wrapper"
               }
@@ -734,22 +732,29 @@ const Calculator = ({ earnClass, onClose, ref }) => {
                     calculateApproxWavax != "..."
                       ? calculateApproxWavax.slice(0, 6)
                       : "0.0"}{" "}
-                    {activeMethod === "Vault" ? "USDT" : "WAVAX"})
+                    {activeMethod === "Vault" ? "USDT" : "DYP"})
                   </div>
                 </div>
                 <div className="d-flex align-items-center justify-content-between gap-2 gap-lg-4">
                   <div className="d-flex align-items-center gap-2">
                     <img
-                      src={activeMethod === "Vault" ? usdt : avaxStakeActive}
+                      src={
+                        activeMethod === "Vault"
+                          ? "https://cdn.worldofdypians.com/tools/usdt.svg"
+                          : "https://cdn.worldofdypians.com/wod/baseBlueLogo.svg"
+                      }
                       width={20}
                       height={20}
                       alt=""
                     />
                     <h6 className="chain-name">
-                      {activeMethod === "Vault" ? "USDT" : "Avalanche"}
+                      {activeMethod === "Vault" ? "USDT" : "Base Chain"}
                     </h6>
                   </div>
-                  <img src={'https://cdn.worldofdypians.com/tools/filledArrow.svg'} alt="" />
+                  <img
+                    src={"https://cdn.worldofdypians.com/tools/filledArrow.svg"}
+                    alt=""
+                  />
                 </div>
               </div>
             </NavLink>
