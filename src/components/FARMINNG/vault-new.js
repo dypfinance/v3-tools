@@ -1038,13 +1038,13 @@ const Vault = ({
               Get DYP
             </h6>
           </a> */}
-                  <h6
+                  {/* <h6
                     className="bottomitems"
                     onClick={() => setshowCalculator(true)}
                   >
                     <img src={'https://cdn.worldofdypians.com/tools/poolsCalculatorIcon.svg'} alt="" />
                     Calculator
-                  </h6>
+                  </h6> */}
                   <div
                     onClick={() => {
                       showPopup();
