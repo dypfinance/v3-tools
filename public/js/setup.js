@@ -1786,23 +1786,12 @@ class VAULT {
 
     let ctokenAddr = await this.TRUSTED_CTOKEN_ADDRESS();
 
-    let compResult = await window.jQuery.ajax({
-      url: `https://api.compound.finance/api/v2/ctoken?addresses=${ctokenAddr}&network=${window.config.compound_network}`,
-      method: "GET",
-      headers: {
-        "compound-api-key": window.config.compound_api_key,
-      },
-    });
 
-    if (!compResult.error) {
-      compoundApyPercent =
-        (Number(compResult.cToken[0]?.supply_rate?.value) || 0) * 100;
-    }
 
     //console.log({compResult, compoundApyPercent})
 
     apyPercent =
-      platformTokenApyPercent + compoundApyPercent + feesApyPercent || 0;
+      platformTokenApyPercent  + feesApyPercent || 0;
 
     // console.log({
     // 	tvlUsd,ethUsdValue,underlyingUsdValue,platformTokenUsdValue,
@@ -1967,21 +1956,11 @@ class VAULT_NEW {
 
       let ctokenAddr = await this.TRUSTED_CTOKEN_ADDRESS();
 
-      let compResult = await window.jQuery.ajax({
-        url: `https://api.compound.finance/api/v2/ctoken?addresses=${ctokenAddr}&network=${window.config.compound_network}`,
-        method: "GET",
-        headers: {
-          "compound-api-key": window.config.compound_api_key,
-        },
-      });
+     
 
-      if (!compResult.error) {
-        compoundApyPercent =
-          (Number(compResult.cToken[0]?.supply_rate?.value) || 0) * 100;
-      }
 
       apyPercent =
-        platformTokenApyPercent + compoundApyPercent + feesApyPercent || 0;
+        platformTokenApyPercent  + feesApyPercent || 0;
     }
 
     return { tvl_usd: tvlUsd, apy_percent: apyPercent };

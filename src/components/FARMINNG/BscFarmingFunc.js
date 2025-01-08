@@ -1761,15 +1761,7 @@ const BscFarmingFunc = ({
         <div className="leftside2 w-100">
           <div className="activewrapper activewrapper-vault">
             <div className="d-flex flex-column flex-lg-row w-100 align-items-start align-items-lg-center justify-content-between">
-              <h6 className="activetxt position-relative activetxt-vault">
-                <img
-                  src={'https://cdn.worldofdypians.com/tools/ellipse.svg'}
-                  alt=""
-                  className="position-relative"
-                  style={{ top: "-1px" }}
-                />
-                Active status
-              </h6>
+            <h6 className="expiredtxt caws-active-txt">Expired Pool</h6>
               {/* <div className="d-flex align-items-center justify-content-between gap-2">
             <h6 className="earnrewards-text">Earn rewards in:</h6>
             <h6 className="earnrewards-token d-flex align-items-center gap-1">

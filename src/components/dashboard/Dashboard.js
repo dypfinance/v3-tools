@@ -38,6 +38,7 @@ import ChainlinkCard from "../chainlink-card/ChainlinkCard";
 import TrendingNews from "../newsCard/TrendingNews";
 import WhitelistPopup from "../whitelistPopup/WhitelistPopup";
 import LoyaltyCard from "../launchpad-card/LoyaltyCard";
+import Calculator from "../calculator/Calculator";
 
 const renderer = ({ days, hours, minutes }) => {
   return (
@@ -65,7 +66,7 @@ const Dashboard = ({
 }) => {
   const [topPools, setTopPools] = useState([]);
   const [cawsLandCard, setCawsLandCard] = useState([]);
-  const [theBnbPool, setTheBnbPool] = useState({});
+  // const [theBnbPool, setTheBnbPool] = useState({});
   const [totalTvl, settotalTvl] = useState(0);
   const [totalTvlETH, settotalTvlETH] = useState(0);
   const [totalTvlBNB, settotalTvlBNB] = useState(0);
@@ -257,10 +258,7 @@ const Dashboard = ({
   };
 
   const fetchAllPools = async () => {
-    const bnbFarmingPool = await axios
-      .get("https://api.dyp.finance/api/the_graph_bsc_v2")
-      .catch((err) => console.error(err));
-
+ 
     const basePool = await axios
       .get("https://api.dyp.finance/api/get_staking_info_base_new")
       .catch((err) => console.error(err));
@@ -316,23 +314,22 @@ const Dashboard = ({
       eth_result.status === 200 &&
       eth_result2 &&
       eth_result2.status === 200 &&
-      bnbFarmingPool &&
-      bnbFarmingPool.status === 200 &&
+ 
       aggregatorPools.length > 0
     ) {
-      let temparray = Object.entries(
-        bnbFarmingPool.data.the_graph_bsc_v2.lp_data
-      );
-      let bnbpool = temparray.filter((item) => {
-        setWbnbPrice(bnbFarmingPool.data.the_graph_bsc_v2.usd_per_eth);
-        return (
-          item[1].id ===
-          "0x1bc61d08a300892e784ed37b2d0e63c85d1d57fb-0x5bc3a80a1f2c4fb693d9dddcebbb5a1b5bb15d65"
-        );
-      });
-      setTheBnbPool(bnbpool);
-      const testbnbFarming = bnbpool[0];
-      const finalBnbFarmingpool = testbnbFarming[1];
+      // let temparray = Object.entries(
+      //   bnbFarmingPool.data.the_graph_bsc_v2.lp_data
+      // );
+      // let bnbpool = temparray.filter((item) => {
+      //   setWbnbPrice(bnbFarmingPool.data.the_graph_bsc_v2.usd_per_eth);
+      //   return (
+      //     item[1].id ===
+      //     "0x1bc61d08a300892e784ed37b2d0e63c85d1d57fb-0x5bc3a80a1f2c4fb693d9dddcebbb5a1b5bb15d65"
+      //   );
+      // });
+      // setTheBnbPool(bnbpool);
+      // const testbnbFarming = bnbpool[0];
+      // const finalBnbFarmingpool = testbnbFarming[1];
 
       const dypBase = basePool.data.stakingInfoDYPBASE;
 
@@ -612,9 +609,8 @@ const Dashboard = ({
       ].sort(function (a, b) {
         return b.apy_percent - a.apy_percent;
       });
-      console.log(sortedActiveeth);
-      const finalPools = [sortedActiveeth[0], sortedActivebase[0]];
 
+      const finalPools = [sortedActiveeth[0], sortedActivebase[0]];
       setTopPools(finalPools);
     }
   };
@@ -1036,7 +1032,7 @@ const Dashboard = ({
         <div className="d-flex m-0 flex-column flex-xxl-row justify-content-between gap-4">
           <div className="d-flex flex-column gap-4 justify-content-between">
             <div className="d-flex flex-column flex-md-row m-0 gap-3 justify-content-between">
-              {/* <Calculator /> */}
+              <Calculator />
               <Countdown
                 renderer={renderer}
                 date={loyaltyCd}
@@ -1044,7 +1040,7 @@ const Dashboard = ({
                   setisExpired(true);
                 }}
               />
-              <MigrationBanner />
+              {/* <MigrationBanner /> */}
               <div className="d-flex flex-column gap-3 gap-lg-4 justify-content-between dashboard-cards-wrapper">
                 <ExplorerCard />
                 <div className="d-flex flex-column flex-md-row justify-content-between gap-3">
@@ -1244,7 +1240,7 @@ const Dashboard = ({
                       </div>
                     )}
                   </div>
-                  {activeCardFarm && network === 56 ? (
+                  {/* {activeCardFarm && network === 56 ? (
                     <BscFarmingFunc
                       isConnected={isConnected}
                       wbnbPrice={wbnbPrice}
@@ -1272,7 +1268,7 @@ const Dashboard = ({
                     />
                   ) : (
                     <></>
-                  )}
+                  )} */}
                 </div>
               ) : (
                 <div className="d-flex flex-column gap-4">
