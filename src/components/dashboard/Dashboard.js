@@ -572,7 +572,7 @@ const Dashboard = ({
       ].sort(function (a, b) {
         return b.apy_percent - a.apy_percent;
       });
-console.log(sortedActiveeth)
+
       const finalPools = [sortedActiveeth[1], sortedActivebase[0]];
 
       setTopPools(finalPools);
