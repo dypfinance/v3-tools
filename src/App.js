@@ -2123,7 +2123,7 @@ setkittyDashRecords */}
                       />
                     }
                   />
-                  <Route
+                  {/* <Route
                     exact
                     path="/migration"
                     element={
@@ -2134,7 +2134,7 @@ setkittyDashRecords */}
                         coinbase={coinbase}
                       />
                     }
-                  />
+                  /> */}
 
                   {/* <Route
                     exact
