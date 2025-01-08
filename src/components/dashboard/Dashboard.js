@@ -615,7 +615,9 @@ const Dashboard = ({
         return b.apy_percent - a.apy_percent;
       });
 
-      const finalPools = [sortedActiveeth[0], sortedActivebase[0]];
+      const finalPools = [sortedActiveeth[0], sortedActiveeth[3]];
+     
+      
       setTopPools(finalPools);
     }
   };
