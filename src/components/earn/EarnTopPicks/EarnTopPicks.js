@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FadeLoader } from "react-spinners";
 import useWindowSize from "../../../functions/useWindowSize";
 import axios from "axios";
@@ -7,7 +7,6 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import { ClickAwayListener } from "@material-ui/core";
 import Tooltip from "@material-ui/core/Tooltip";
-
 
 import TopPoolsCard from "../../top-pools-card/TopPoolsCard";
 import TopPoolsListCard from "../../top-pools-card/TopPoolsListCard";
@@ -23,6 +22,7 @@ import BscFarmingFunc from "../../FARMINNG/BscFarmingFunc";
 import StakeDypiusBsc from "../../FARMINNG/bscConstantStakeDypius";
 import StakeDypiusAvax from "../../FARMINNG/stakeDypiusAvax";
 import StakingDypiusBase1 from "../../FARMINNG/stakingDypiusBase1";
+import "../../../components/switch-chain-modal/_switchmodal.scss";
 
 const EarnTopPicks = ({
   topList,
@@ -216,38 +216,38 @@ const EarnTopPicks = ({
 
   const phase2_pools = [
     {
-      id: "0xFBe84Af34CdC22455f82e18B76Ca50D21d3aBF84",
+      id: "0x1f5c3f186795c84265eD826AD09924D0987485ba",
       apy_percent: 20,
       tvl_usd: 46682.3565666875,
       link_logo: "https://www.dypius.com/logo192.png",
       link_pair: "https://app.dyp.finance/constant-staking-3",
-      pool_name: "iDYP Constant Staking ETH",
-      pair_name: "iDYP",
-      return_types: "iDYP",
+      pool_name: "DYP Constant Staking ETH",
+      pair_name: "DYP",
+      return_types: "DYP",
       lock_time: "90 days",
       expired: "No",
       new_pool: "Yes",
       apy_performancefee: 20,
       performancefee: 0,
-      type: "idyp",
-      chain: "bnb",
+      type: "dyp",
+      chain: "eth",
     },
     {
-      id: "0xf6DC9E51D4E0FCc19ca6426fB5422f1E9a24F2eE",
-      apy_percent: 25,
+      id: "0x11666850EA73956afcd014E86eD2AE473939421d",
+      apy_percent: 35,
       tvl_usd: 462.3565666875,
       link_logo: "https://www.dypius.com/logo192.png",
       link_pair: "https://app.dyp.finance/constant-staking-3",
-      pool_name: "iDYP Constant Staking ETH",
-      pair_name: "iDYP",
-      return_types: "iDYP",
-      lock_time: "120 days",
+      pool_name: "DYP Constant Staking ETH",
+      pair_name: "DYP",
+      return_types: "DYP",
+      lock_time: "180 days",
       expired: "No",
       new_pool: "Yes",
-      apy_performancefee: 25,
+      apy_performancefee: 35,
       performancefee: 0,
-      type: "idyp",
-      chain: "bnb",
+      type: "dyp",
+      chain: "eth",
     },
   ];
   const fetchUserPools = async () => {
@@ -329,12 +329,14 @@ const EarnTopPicks = ({
 
       const allActiveEth = [...activeEth2, ...object2activeEth];
 
-      const sortedActive = allActiveEth.sort(function (a, b) {
+      const sortedActive = [...allActiveEth, ...phase2_pools].sort(function (
+        a,
+        b
+      ) {
         return b.apy_percent - a.apy_percent;
       });
-      setethPoolsDyp(activeEth2);
+      setethPoolsDyp([...activeEth2, ...phase2_pools]);
       setethPoolsiDyp(object2activeEth);
-
       setEthPools(sortedActive);
     }
   };
@@ -398,8 +400,8 @@ const EarnTopPicks = ({
       const allActiveBnb = [...object2Idyp, ...activeBnb2];
       const sortedActive = allActiveBnb.sort(function (a, b) {
         return b.apy_percent - a.apy_percent;
-      });
-
+      }); 
+      console.log('sortedActivesortedActive',sortedActive)
       setbnbPoolsDyp(activeBnb2);
       setbnbPoolsiDyp(object2Idyp);
       setBnbPools(sortedActive);
@@ -531,7 +533,6 @@ const EarnTopPicks = ({
           return b.apy_percent - a.apy_percent;
         });
 
-        console.log(sortedActiveDYP);
         setActivePools([sortedActiveDYP[0]]);
         setTopPools([...sortedActiveDYP, ...activeEth2]);
       }
@@ -604,7 +605,10 @@ const EarnTopPicks = ({
         return b.tvl_usd - a.tvl_usd;
       });
 
-      const sortedActiveDYP = activeEth2.sort(function (a, b) {
+      const sortedActiveDYP = [...activeEth2, ...phase2_pools].sort(function (
+        a,
+        b
+      ) {
         return b.apy_percent - a.apy_percent;
       });
 
@@ -613,7 +617,7 @@ const EarnTopPicks = ({
       });
 
       setActivePools(sortedActiveDYP);
-      setTopPools([...object2activeEth, ...activeEth2]);
+      setTopPools([...object2activeEth, ...phase2_pools, ...activeEth2]);
       setExpiredPools([...objectexpired, ...objectexpiredDyp]);
       setCawsCard(eth_result.data.stakingInfoCAWS);
       setCawsCard2(eth_result.data.stakingInfoCAWS[0]);
@@ -914,6 +918,7 @@ const EarnTopPicks = ({
     avaxDyppool,
     avaxiDypPool
   ) => {
+ 
     if (chain === "eth") {
       if (tokentype === "dyp") {
         if (locktimeToCheck === selectedPool.lock_time) {
@@ -1086,6 +1091,7 @@ const EarnTopPicks = ({
   };
 
   const handleSelectPool = (
+    id,
     selectedchain,
     locktime,
     selectedpoolType,
@@ -1098,93 +1104,246 @@ const EarnTopPicks = ({
     avaxPoolsiDyp
   ) => {
     if (selectedchain === "eth") {
-      if (selectedpoolType === "dyp") {
-        const result = ethPoolsDyp.filter((item) => {
-          return item.lock_time === locktime;
-        });
+      if (id) {
+        if (selectedpoolType === "dyp") {
+          const result = ethPoolsDyp.filter((item) => {
+            return (
+              item.lock_time === locktime &&
+              item.id?.toLowerCase() === id.toLowerCase()
+            );
+          });
 
-        if (result) {
-          setresultFilteredPool(result);
-          setselectedPool(...result);
+          const result2 = ethPoolsDyp.filter((item) => {
+            return (
+              item.lock_time === locktime 
+            );
+          });
+
+          if (result) {
+            setresultFilteredPool(result2);
+            setselectedPool(...result);
+          }
+        } else if (selectedpoolType === "idyp") {
+          const result = ethPoolsiDyp.filter((item) => {
+            return (
+              item.lock_time === locktime &&
+              item.id?.toLowerCase() === id.toLowerCase()
+            );
+          });
+          const result2 = ethPoolsDyp.filter((item) => {
+            return (
+              item.lock_time === locktime 
+            );
+          });
+          if (result) {
+            setresultFilteredPool(result2);
+            setselectedPool(...result);
+          }
         }
-      } else if (selectedpoolType === "idyp") {
-        const result = ethPoolsiDyp.filter((item) => {
-          return item.lock_time === locktime;
-        });
-        if (result) {
-          setresultFilteredPool(result);
+      } else {
+        if (selectedpoolType === "dyp") {
+          const result = ethPoolsDyp.filter((item) => {
+            return item.lock_time === locktime;
+          });
 
-          setselectedPool(...result);
+          if (result) {
+            setresultFilteredPool(result);
+            setselectedPool(...result);
+          }
+        } else if (selectedpoolType === "idyp") {
+          const result = ethPoolsiDyp.filter((item) => {
+            return item.lock_time === locktime;
+          });
+          if (result) {
+            setresultFilteredPool(result);
+
+            setselectedPool(...result);
+          }
         }
       }
     }
     if (selectedchain === "base") {
-      if (selectedpoolType === "dyp") {
-        const result = basePoolsDyp.filter((item) => {
-          return item.lock_time === locktime;
-        });
+      if (id) {
+        if (selectedpoolType === "dyp") {
+          const result = basePoolsDyp.filter((item) => {
+            return (
+              item.lock_time === locktime &&
+              item.id?.toLowerCase() === id.toLowerCase()
+            );
+          });
+          const result2 = basePoolsDyp.filter((item) => {
+            return (
+              item.lock_time === locktime 
+            );
+          });
+          if (result) {
+            setresultFilteredPool(result2);
+            setselectedPool(...result);
+          }
+        } else if (selectedpoolType === "idyp") {
+          const result = basePoolsDyp.filter((item) => {
+            return (
+              item.lock_time === locktime &&
+              item.id?.toLowerCase() === id.toLowerCase()
+            );
+          });
+          const result2 = basePoolsDyp.filter((item) => {
+            return (
+              item.lock_time === locktime 
+            );
+          });
+          if (result) {
+            setresultFilteredPool(result2);
 
-        if (result) {
-          setresultFilteredPool(result);
-          setselectedPool(...result);
+            setselectedPool(...result);
+          }
         }
-      } else if (selectedpoolType === "idyp") {
-        const result = basePoolsDyp.filter((item) => {
-          return item.lock_time === locktime;
-        });
-        if (result) {
-          setresultFilteredPool(result);
+      } else {
+        if (selectedpoolType === "dyp") {
+          const result = basePoolsDyp.filter((item) => {
+            return item.lock_time === locktime;
+          });
 
-          setselectedPool(...result);
+          if (result) {
+            setresultFilteredPool(result);
+            setselectedPool(...result);
+          }
+        } else if (selectedpoolType === "idyp") {
+          const result = basePoolsDyp.filter((item) => {
+            return item.lock_time === locktime;
+          });
+          if (result) {
+            setresultFilteredPool(result);
+
+            setselectedPool(...result);
+          }
         }
       }
     } else if (selectedchain === "bnb") {
-      if (selectedpoolType === "dyp") {
-        const result = bnbPoolsDyp.filter((item) => {
-          return item.lock_time === locktime;
-        });
-        if (result) {
-          setresultFilteredPool(result);
+      if (id) {
+        if (selectedpoolType === "dyp") {
+          const result = bnbPoolsDyp.filter((item) => {
+            return (
+              item.lock_time === locktime &&
+              item.id?.toLowerCase() === id.toLowerCase()
+            );
+          });
 
-          setselectedPool(...result);
+          const result2 = bnbPoolsDyp.filter((item) => {
+            return (
+              item.lock_time === locktime  
+            );
+          });
+
+          if (result) {
+            setresultFilteredPool(result2);
+
+            setselectedPool(...result);
+          }
+        } else if (selectedpoolType === "idyp") {
+          const result = bnbPoolsiDyp.filter((item) => {
+            return (
+              item.lock_time === locktime &&
+              item.id?.toLowerCase() === id.toLowerCase()
+            );
+          });
+
+          const result2 = bnbPoolsiDyp.filter((item) => {
+            return (
+              item.lock_time === locktime &&
+              item.id?.toLowerCase() === id.toLowerCase()
+            );
+          });
+
+          if (result) {
+            setresultFilteredPool(result2);
+
+            setselectedPool(...result);
+          }
         }
-      } else if (selectedpoolType === "idyp") {
-        const result = bnbPoolsiDyp.filter((item) => {
-          return item.lock_time === locktime;
-        });
-        if (result) {
-          setresultFilteredPool(result);
+      } else {
+        if (selectedpoolType === "dyp") {
+          const result = bnbPoolsDyp.filter((item) => {
+            return item.lock_time === locktime;
+          });
+          if (result) {
+            setresultFilteredPool(result);
 
-          setselectedPool(...result);
+            setselectedPool(...result);
+          }
+        } else if (selectedpoolType === "idyp") {
+          const result = bnbPoolsiDyp.filter((item) => {
+            return item.lock_time === locktime;
+          });
+          if (result) {
+            setresultFilteredPool(result);
+
+            setselectedPool(...result);
+          }
         }
       }
     } else if (selectedchain === "avax") {
-      if (selectedpoolType === "dyp") {
-        const result = avaxPoolsDyp.filter((item) => {
-          return item.lock_time === locktime;
-        });
-        if (result) {
-          setresultFilteredPool(result);
+      if (id) {
+        if (selectedpoolType === "dyp") {
+          const result = avaxPoolsDyp.filter((item) => {
+            return (
+              item.lock_time === locktime &&
+              item.id?.toLowerCase() === id.toLowerCase()
+            );
+          });
+          const result2 = avaxPoolsDyp.filter((item) => {
+            return (
+              item.lock_time === locktime 
+            );
+          });
 
-          setselectedPool(...result);
+          if (result) {
+            setresultFilteredPool(result2);
+
+            setselectedPool(...result);
+          }
+        } else if (selectedpoolType === "idyp") {
+          const result = avaxPoolsiDyp.filter((item) => {
+            return (
+              item.lock_time === locktime &&
+              item.id?.toLowerCase() === id.toLowerCase()
+            );
+          });
+
+          const result2 = avaxPoolsiDyp.filter((item) => {
+            return (
+              item.lock_time === locktime   
+            );
+          });
+
+          if (result) {
+            setresultFilteredPool(result2);
+            setselectedPool(...result);
+          }
         }
-      } else if (selectedpoolType === "idyp") {
-        const result = avaxPoolsiDyp.filter((item) => {
-          return item.lock_time === locktime;
-        });
-        if (result) {
-          setresultFilteredPool(result);
+      } else {
+        if (selectedpoolType === "dyp") {
+          const result = avaxPoolsDyp.filter((item) => {
+            return item.lock_time === locktime;
+          });
+          if (result) {
+            setresultFilteredPool(result);
 
-          setselectedPool(...result);
+            setselectedPool(...result);
+          }
+        } else if (selectedpoolType === "idyp") {
+          const result = avaxPoolsiDyp.filter((item) => {
+            return item.lock_time === locktime;
+          });
+          if (result) {
+            setresultFilteredPool(result);
+
+            setselectedPool(...result);
+          }
         }
       }
     }
   };
-
-  const stakeArrayiDYPActive = [
-    window.constant_staking_idyp_3,
-    window.constant_staking_idyp_4,
-  ];
 
   const withdrawFeeiDyp = [1, 0, 0, 0];
 
@@ -1200,48 +1359,7 @@ const EarnTopPicks = ({
 
   //Buyback New
 
-  const stakearrayStakeBsciDyp2 = [
-    window.constant_stakingidyp_6,
-    window.constant_stakingidyp_5,
-  ];
-
-  const stakearrayStakeBsciDyp2Expired = [
-    window.constant_stakingidyp_2,
-    window.constant_stakingidyp_1,
-  ];
-
-  const expirearrayStakeBsciDyp2 = ["15 August 2023", "15 August 2023"];
-  const expirearrayStakeBsciDyp2Expired = [
-    "28 February 2023",
-    "28 February 2023",
-  ];
-
   const feeUarrayStakeAvaxiDyp = [0, 0.25, 0, 0.25];
-
-  const expirearrayStakeAvaxiDyp = [
-    "15 August 2023",
-    "15 August 2023",
-    "28 February 2023",
-    "28 February 2023",
-    "28 February 2023",
-  ];
-
-  const stakingarrayStakeAvaxiDypActive = [
-    window.constant_staking_idypavax_6,
-    window.constant_staking_idypavax_5,
-  ];
-
-  const stakingarrayStakeAvaxiDypExpired = [
-    window.constant_staking_idypavax_2,
-    window.constant_staking_idypavax_1,
-  ];
-
-  const expirationArray = [
-    "28 February 2023",
-    "28 February 2023",
-    "15 August 2023",
-    "15 August 2023",
-  ];
 
   // const ConstantStakingiDYP1Active = initConstantStakingiDYP();
 
@@ -1267,29 +1385,18 @@ const EarnTopPicks = ({
 
   const fetchStakingData = async () => {
     if (topList === "Staking") {
-      if (chain !== "eth" && chain !== "bnb" && chain === "avax") {
+      if (chain === "avax") {
         await fetchAvaxStaking2();
-      } else if (
-        chain === "eth" &&
-        chain !== "bnb" &&
-        chain !== "avax" &&
-        topList === "Staking"
-      ) {
+      } else if (chain === "eth" && topList === "Staking") {
         await fetchEthStaking2();
-      } else if (
-        chain === "base" &&
-        chain !== "bnb" &&
-        chain !== "eth" &&
-        chain !== "avax" &&
-        topList === "Staking"
-      ) {
+      } else if (chain === "base" && topList === "Staking") {
         await fetchBaseStaking2();
-      } else if (chain !== "eth" && chain === "bnb" && chain !== "avax") {
+      } else if (chain === "bnb") {
         await fetchBnbStaking2();
       }
     }
   };
-
+  // console.log(chain, activePools)
   useEffect(() => {
     setActiveCard();
     setActiveCard2();
@@ -1446,8 +1553,11 @@ const EarnTopPicks = ({
   useEffect(() => {
     fetchUserPools();
     setActiveCard();
-    fetchStakingData();
   }, [topList, chain, coinbase, networkId, chainId, expiredPools, listType]);
+
+  useEffect(() => {
+    fetchStakingData();
+  }, [topList, chain]);
 
   const handleCardIndexStake = (index) => {
     if (topList === "Staking") {
@@ -1490,12 +1600,17 @@ const EarnTopPicks = ({
   }, [topList, chain, expiredPools]);
 
   useEffect(() => {
-    fetchAvaxStaking();
-    fetchEthStaking();
-    fetchBnbStaking();
-    fetchBaseStaking();
-  }, []);
-
+    // if (chain === "avax" && topList === "Staking") {
+      fetchAvaxStaking();
+    // } else if (chain === "eth" && topList === "Staking") {
+      fetchEthStaking();
+    // } else if (chain === "bnb" && topList === "Staking") {
+      fetchBnbStaking();
+    // } else if (chain === "base" && topList === "Staking") {
+      fetchBaseStaking();
+    // }
+  }, [chain, topList]); 
+console.log(ethPools, bnbPools,selectedPool)
   return (
     <>
       <div className={`row w-100 justify-content-center gap-4`}>
@@ -1548,6 +1663,7 @@ const EarnTopPicks = ({
                           setselectedpoolType(pool?.type);
                           setselectedIndex(index);
                           handleSelectPool(
+                            pool?.id,
                             pool?.chain,
                             pool?.lock_time,
                             pool?.type,
@@ -1627,6 +1743,7 @@ const EarnTopPicks = ({
                           setselectedpoolType(pool?.type);
                           setselectedIndex(index);
                           handleSelectPool(
+                            pool?.id,
                             pool?.chain,
                             pool?.lock_time,
                             pool?.type,
@@ -1749,6 +1866,7 @@ const EarnTopPicks = ({
                             setselectedpoolType(pool?.type);
                             setselectedIndex(index);
                             handleSelectPool(
+                              pool?.id,
                               pool?.chain,
                               pool?.lock_time,
                               pool?.type,
@@ -1849,11 +1967,12 @@ const EarnTopPicks = ({
                             handleCardIndexStake30(index + 3);
                             handleCardIndexStakeiDyp(index + 3);
                             setDetails(index + 3);
-                            setselectedPool(topList !== "Vault" && pool);
+                            // setselectedPool(topList !== "Vault" && pool);
                             setShowDetails(topList !== "Vault" && true);
                             setselectedpoolType(pool?.type);
                             setselectedIndex(index + 3);
                             handleSelectPool(
+                              pool?.id,
                               pool?.chain,
                               pool?.lock_time,
                               pool?.type,
@@ -1969,6 +2088,7 @@ const EarnTopPicks = ({
                             setselectedpoolType(pool?.type);
                             setselectedIndex(index);
                             handleSelectPool(
+                              pool?.id,
                               pool?.chain,
                               pool?.lock_time,
                               pool?.type,
@@ -2074,6 +2194,7 @@ const EarnTopPicks = ({
                             setselectedpoolType(pool?.type);
                             setselectedIndex(index + 2);
                             handleSelectPool(
+                              pool?.id,
                               pool?.chain,
                               pool?.lock_time,
                               pool?.type,
@@ -2180,6 +2301,7 @@ const EarnTopPicks = ({
                             setselectedpoolType(pool?.type);
                             setselectedIndex(index + 4);
                             handleSelectPool(
+                              pool?.id,
                               pool?.chain,
                               pool?.lock_time,
                               pool?.type,
@@ -2292,6 +2414,7 @@ const EarnTopPicks = ({
                             setselectedpoolType(pool?.type);
                             setselectedIndex(index);
                             handleSelectPool(
+                              pool?.id,
                               pool?.chain,
                               pool?.lock_time,
                               pool?.type,
@@ -2397,6 +2520,7 @@ const EarnTopPicks = ({
                             setselectedpoolType(pool?.type);
                             setselectedIndex(index + 1);
                             handleSelectPool(
+                              pool?.id,
                               pool?.chain,
                               pool?.lock_time,
                               pool?.type,
@@ -2503,6 +2627,7 @@ const EarnTopPicks = ({
                             setselectedpoolType(pool?.type);
                             setselectedIndex(index + 2);
                             handleSelectPool(
+                              pool?.id,
                               pool?.chain,
                               pool?.lock_time,
                               pool?.type,
@@ -2609,6 +2734,7 @@ const EarnTopPicks = ({
                             setselectedpoolType(pool?.type);
                             setselectedIndex(index + 3);
                             handleSelectPool(
+                              pool?.id,
                               pool?.chain,
                               pool?.lock_time,
                               pool?.type,
@@ -2716,6 +2842,7 @@ const EarnTopPicks = ({
                             setselectedpoolType(pool?.type);
                             setselectedIndex(index + 4);
                             handleSelectPool(
+                              pool?.id,
                               pool?.chain,
                               pool?.lock_time,
                               pool?.type,
@@ -2824,6 +2951,7 @@ const EarnTopPicks = ({
                             setselectedpoolType(pool?.type);
                             setselectedIndex(index + 5);
                             handleSelectPool(
+                              pool?.id,
                               pool?.chain,
                               pool?.lock_time,
                               pool?.type,
@@ -3210,6 +3338,7 @@ const EarnTopPicks = ({
                     )}
                     onClick={() => {
                       handleSelectPool(
+                        undefined,
                         selectedchain,
                         "No lock",
                         selectedpoolType,
@@ -3261,6 +3390,7 @@ const EarnTopPicks = ({
                     )}
                     onClick={() => {
                       handleSelectPool(
+                        undefined,
                         selectedchain,
                         "30 days",
                         selectedpoolType,
@@ -3312,6 +3442,7 @@ const EarnTopPicks = ({
                     )}`}
                     onClick={() => {
                       handleSelectPool(
+                        undefined,
                         selectedchain,
                         "60 days",
                         selectedpoolType,
@@ -3370,6 +3501,7 @@ const EarnTopPicks = ({
                     )}`}
                     onClick={() => {
                       handleSelectPool(
+                        undefined,
                         selectedchain,
                         "90 days",
                         selectedpoolType,
@@ -3432,6 +3564,7 @@ const EarnTopPicks = ({
                     )}`}
                     onClick={() => {
                       handleSelectPool(
+                        undefined,
                         selectedchain,
                         "120 days",
                         selectedpoolType,
@@ -3468,6 +3601,67 @@ const EarnTopPicks = ({
                     )}
                     120 Days
                   </button>
+                  <button
+                    className={`position-relative ${getClassName(
+                      selectedchain,
+                      "180 days",
+                      selectedpoolType,
+                      selectedPool,
+                      expiredPools === true ? ethPoolsDypExpired : ethPoolsDyp,
+                      basePoolsDyp,
+                      expiredPools === true
+                        ? ethPoolsiDypExpired
+                        : ethPoolsiDyp,
+                      expiredPools === true ? bnbPoolsDypExpired : bnbPoolsDyp,
+                      expiredPools === true
+                        ? bnbPoolsiDypExpired
+                        : bnbPoolsiDyp,
+                      expiredPools === true
+                        ? avaxPoolsDypExpired
+                        : avaxPoolsDyp,
+                      expiredPools === true
+                        ? avaxPoolsiDypExpired
+                        : avaxPoolsiDyp
+                    )}`}
+                    onClick={() => {
+                      handleSelectPool(
+                        undefined,
+                        selectedchain,
+                        "180 days",
+                        selectedpoolType,
+                        expiredPools === true
+                          ? ethPoolsDypExpired
+                          : ethPoolsDyp,
+                        basePoolsDyp,
+                        expiredPools === true
+                          ? ethPoolsiDypExpired
+                          : ethPoolsiDyp,
+                        expiredPools === true
+                          ? bnbPoolsDypExpired
+                          : bnbPoolsDyp,
+                        expiredPools === true
+                          ? bnbPoolsiDypExpired
+                          : bnbPoolsiDyp,
+                        expiredPools === true
+                          ? avaxPoolsDypExpired
+                          : avaxPoolsDyp,
+                        expiredPools === true
+                          ? avaxPoolsiDypExpired
+                          : avaxPoolsiDyp
+                      );
+                    }}
+                  >
+                    {selectedpoolType === "dyp" &&
+                    selectedchain === "eth" &&
+                    expiredPools === false ? (
+                      <div className="new-beta-sidebar2 position-absolute">
+                        <span className="new-beta-text2">New</span>
+                      </div>
+                    ) : (
+                      <></>
+                    )}
+                    180 Days
+                  </button>
                 </div>
                 <div className="d-flex gap-1 gap-lg-3 align-items-center justify-content-start w-100">
                   <div
@@ -3496,9 +3690,18 @@ const EarnTopPicks = ({
                             expiredPools === false
                           ? ethPools.find((item) => {
                               return item.type === "idyp";
+                            }) ?
+                            ethPools.find((item) => {
+                              return item.type === "idyp";
+                            }) :  ethPools.find((item) => {
+                              return item.type === "dyp";
                             })
                           : ethPoolsiDypExpired.find((item) => {
                               return item.type === "idyp";
+                            }) ?  ethPoolsiDypExpired.find((item) => {
+                              return item.type === "idyp";
+                            }) :  ethPoolsiDypExpired.find((item) => {
+                              return item.type === "dyp";
                             })
                       );
                     }}
@@ -3736,7 +3939,7 @@ const EarnTopPicks = ({
                                 setselectedPool(obj);
                               }}
                             >
-                              {selectedpoolType === "dyp" && index == 1 && (
+                              {selectedpoolType === "dyp" && index == 2 && (
                                 <div className="new-beta-sidebar2 position-absolute">
                                   <span className="new-beta-text2">New</span>
                                 </div>
@@ -3997,6 +4200,8 @@ const EarnTopPicks = ({
                     apr={selectedPool?.apy_percent}
                     liquidity={wbsc_address}
                     expiration_time={"09 Nov 2024"}
+                    start_date={"09 Nov 2023"}
+                    poolCap={3500000}
                     finalApr={selectedPool?.apy_performancefee}
                     lockTime={
                       selectedPool?.lock_time?.split(" ")[0] === "No"
@@ -4013,6 +4218,80 @@ const EarnTopPicks = ({
                     handleConnection={handleConnection}
                     handleSwitchNetwork={handleSwitchNetwork}
                     expired={true}
+                    referrer={referrer}
+                    onConnectWallet={() => {
+                      setShowDetails(false);
+                      onConnectWallet();
+                      setselectedPool([]);
+                      setDetails(999);
+                    }}
+                  />
+                ) : topList === "Staking" &&
+                  selectedPool?.id ===
+                    "0x1f5c3f186795c84265eD826AD09924D0987485ba" &&
+                  chain === "eth" ? (
+                  <StakeDypiusEth1Phase2
+                    selectedPool={selectedPool}
+                    selectedTab={selectedTab}
+                    staking={window.constant_staking_dypius_phase2_eth6}
+                    apr={selectedPool?.apy_percent}
+                    liquidity={eth_address}
+                    expiration_time={"08 Jan 2026"}
+                    poolCap={20000000}
+                    start_date={"08 Jan 2025"}
+                    finalApr={selectedPool?.apy_performancefee}
+                    lockTime={
+                      selectedPool?.lock_time?.split(" ")[0] === "No"
+                        ? "No Lock"
+                        : parseInt(selectedPool?.lock_time?.split(" ")[0])
+                    }
+                    listType={listType}
+                    other_info={false}
+                    fee={selectedPool?.performancefee}
+                    is_wallet_connected={isConnected}
+                    coinbase={coinbase}
+                    the_graph_result={the_graph_result}
+                    chainId={chainId}
+                    handleConnection={handleConnection}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    expired={false}
+                    referrer={referrer}
+                    onConnectWallet={() => {
+                      setShowDetails(false);
+                      onConnectWallet();
+                      setselectedPool([]);
+                      setDetails(999);
+                    }}
+                  />
+                ) : topList === "Staking" &&
+                  selectedPool?.id ===
+                    "0x11666850EA73956afcd014E86eD2AE473939421d" &&
+                  chain === "eth" ? (
+                  <StakeDypiusEth1Phase2
+                    selectedPool={selectedPool}
+                    selectedTab={selectedTab}
+                    staking={window.constant_staking_dypius_phase2_eth7}
+                    apr={selectedPool?.apy_percent}
+                    liquidity={eth_address}
+                    expiration_time={"08 Jan 2026"}
+                    poolCap={40000000}
+                    start_date={"08 Jan 2025"}
+                    finalApr={selectedPool?.apy_performancefee}
+                    lockTime={
+                      selectedPool?.lock_time?.split(" ")[0] === "No"
+                        ? "No Lock"
+                        : parseInt(selectedPool?.lock_time?.split(" ")[0])
+                    }
+                    listType={listType}
+                    other_info={false}
+                    fee={selectedPool?.performancefee}
+                    is_wallet_connected={isConnected}
+                    coinbase={coinbase}
+                    the_graph_result={the_graph_result}
+                    chainId={chainId}
+                    handleConnection={handleConnection}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    expired={false}
                     referrer={referrer}
                     onConnectWallet={() => {
                       setShowDetails(false);
@@ -4067,6 +4346,8 @@ const EarnTopPicks = ({
                     apr={selectedPool?.apy_percent}
                     liquidity={eth_address}
                     expiration_time={"09 Nov 2024"}
+                    start_date={"09 Nov 2023"}
+                    poolCap={13000000}
                     finalApr={selectedPool?.apy_performancefee}
                     lockTime={
                       selectedPool?.lock_time?.split(" ")[0] === "No"
