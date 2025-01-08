@@ -108,7 +108,7 @@ const WhitelistPopup = ({ open, onClose }) => {
             </span>
 
             <a
-              href="https://oyster.synfutures.com/#/launchpad/base/0x53173006bbd75b8fbe1e3c8b1bafd0a93d4f707e"
+              href="https://oyster.synfutures.com/#/trade/base/ETH-DYP-EMG-Perpetual"
               target="_blank"
               rel="noreferrer"
               onClick={onClose}

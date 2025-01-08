@@ -172,7 +172,7 @@ const BuyDyp = () => {
     {
       title: "SynFutures",
       logo: "synfutures.svg",
-      link: "https://oyster.synfutures.com/#/launchpad/base/0x53173006bbd75b8fbe1e3c8b1bafd0a93d4f707e",
+      link: "https://oyster.synfutures.com/#/trade/base/ETH-DYP-EMG-Perpetual",
       totalvids: "0 videos",
       active: true,
       version: "DYP v2",
