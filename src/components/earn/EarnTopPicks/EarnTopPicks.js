@@ -256,6 +256,8 @@ const EarnTopPicks = ({
         .get(`https://api.dyp.finance/api/user_pools/${coinbase}`)
         .then((data) => {
           return data.data.PoolsUserIn;
+        }).catch((e) => {
+          console.log(e);
         });
       setuserPools(result);
     }
@@ -329,13 +331,13 @@ const EarnTopPicks = ({
 
       const allActiveEth = [...activeEth2, ...object2activeEth];
 
-      const sortedActive = [...allActiveEth, ...phase2_pools].sort(function (
+      const sortedActive = [...allActiveEth].sort(function (
         a,
         b
       ) {
         return b.apy_percent - a.apy_percent;
       });
-      setethPoolsDyp([...activeEth2, ...phase2_pools]);
+      setethPoolsDyp([...activeEth2]);
       setethPoolsiDyp(object2activeEth);
       setEthPools(sortedActive);
     }
@@ -605,7 +607,7 @@ const EarnTopPicks = ({
         return b.tvl_usd - a.tvl_usd;
       });
 
-      const sortedActiveDYP = [...activeEth2, ...phase2_pools].sort(function (
+      const sortedActiveDYP = [...activeEth2].sort(function (
         a,
         b
       ) {
@@ -617,7 +619,7 @@ const EarnTopPicks = ({
       });
 
       setActivePools(sortedActiveDYP);
-      setTopPools([...object2activeEth, ...phase2_pools, ...activeEth2]);
+      setTopPools([...object2activeEth, ...activeEth2]);
       setExpiredPools([...objectexpired, ...objectexpiredDyp]);
       setCawsCard(eth_result.data.stakingInfoCAWS);
       setCawsCard2(eth_result.data.stakingInfoCAWS[0]);
@@ -1610,7 +1612,7 @@ const EarnTopPicks = ({
       fetchBaseStaking();
     // }
   }, [chain, topList]); 
-console.log(ethPools, bnbPools,selectedPool)
+ 
   return (
     <>
       <div className={`row w-100 justify-content-center gap-4`}>

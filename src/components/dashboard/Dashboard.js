@@ -166,6 +166,8 @@ const Dashboard = ({
         .get(`https://api.dyp.finance/api/user_pools/${coinbase}`)
         .then((data) => {
           return data.data.PoolsUserIn;
+        }).catch((e) => {
+          console.log(e);
         });
       setuserPools(result);
     }
@@ -176,6 +178,8 @@ const Dashboard = ({
       .get("https://api.dyp.finance/api/the_graph_bsc_v2")
       .then((data) => {
         setWbnbPrice(data.data.the_graph_bsc_v2.usd_per_eth);
+      }).catch((e) => {
+        console.log(e);
       });
   };
 
@@ -184,6 +188,8 @@ const Dashboard = ({
       .get("https://api.dyp.finance/api/the_graph_eth_v2")
       .then((data) => {
         setEthPrice(data.data.the_graph_eth_v2.usd_per_eth);
+      }).catch((e) => {
+        console.log(e);
       });
   };
 
@@ -538,7 +544,6 @@ const Dashboard = ({
       });
       const allActiveEth = [
         ...activeEth2,
-        ...phase2_pools,
         ...object2activeEth,
       ];
 
@@ -546,7 +551,7 @@ const Dashboard = ({
         return b.apy_percent - a.apy_percent;
       });
       setEthPools(sortedActiveeth);
-      setethPoolsDyp([...activeEth2, ...phase2_pools]);
+      setethPoolsDyp([...activeEth2]);
       setethPoolsiDyp(object2activeEth);
 
       const object2Avax = avaxDyp.map((item) => {
