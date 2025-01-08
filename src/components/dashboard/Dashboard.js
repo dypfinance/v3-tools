@@ -2162,7 +2162,7 @@ const Dashboard = ({
                                 setselectedPool(obj);
                               }}
                             >
-                              {selectedpoolType === "dyp" && index == 2 && (
+                              {selectedpoolType === "dyp" && index == 0 && (
                                 <div className="new-beta-sidebar2 position-absolute">
                                   <span className="new-beta-text2">New</span>
                                 </div>
