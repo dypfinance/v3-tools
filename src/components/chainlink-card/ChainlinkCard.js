@@ -10,6 +10,8 @@ const ChainlinkCard = () => {
   const getTotalPaidData = async () => {
     await axios.get("https://api.dyp.finance/api/totalpaid").then((data) => {
       setTotalPaid(data.data);
+    }).catch((err) => {
+      console.log(err);
     });
   };
 

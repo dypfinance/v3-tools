@@ -858,7 +858,7 @@ const StakeBscIDyp = ({
       </div> */}
       <div className="separator my-2"></div>
       {selectedTab === "deposit" ? (
-        <div className="d-flex flex-column w-100 gap-2">
+        <div className={`d-flex flex-column ${expired && "blurrypool"}`}>
           <div className="d-flex align-items-center gap-2 justify-content-between w-100">
             <span className="deposit-popup-txt">Deposit</span>
             <div className="d-flex gap-1 align-items-baseline">

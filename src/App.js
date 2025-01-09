@@ -310,6 +310,8 @@ function App() {
         .get(`https://api.dyp.finance/api/user_pools/${coinbase}`)
         .then((data) => {
           return data.data.PoolsUserIn;
+        }).catch((e) => {
+          console.log(e);
         });
       setuserPools(result);
     }
@@ -2130,7 +2132,7 @@ setkittyDashRecords */}
                       />
                     }
                   />
-                  <Route
+                  {/* <Route
                     exact
                     path="/migration"
                     element={
@@ -2141,7 +2143,7 @@ setkittyDashRecords */}
                         coinbase={coinbase}
                       />
                     }
-                  />
+                  /> */}
 
                   {/* <Route
                     exact

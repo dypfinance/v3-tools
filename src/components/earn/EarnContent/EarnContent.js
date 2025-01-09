@@ -237,6 +237,8 @@ const EarnContent = ({
       //   fetchBnbPool();
       // }
       setavaxApr(res.data.highestAPY.highestAPY_AVAX_V2);
+    }).catch((e) => {
+      console.log(e);
     });
   };
 
@@ -752,7 +754,7 @@ const EarnContent = ({
                             color: "#f7f7fc",
                           }}
                         >
-                          25% APR
+                          35% APR
                         </p>
                       </div>
                     </div>
