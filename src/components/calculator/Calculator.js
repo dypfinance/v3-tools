@@ -172,7 +172,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
   useEffect(() => {
     if (apyData) {
       if (activeMethod === "Staking") {
-        setStakeApyAVAX(25);
+        setStakeApyAVAX(27.5);
         setStakeApyBNB(25);
         // setStakeApy(30);
       }
