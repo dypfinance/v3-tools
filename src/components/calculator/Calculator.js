@@ -299,7 +299,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
     stakeApyAVAX,
     stakeApyBNB,
     idypPrice,
-
+    dypPrice,
     usdToDeposit,
     days,
   ]);
