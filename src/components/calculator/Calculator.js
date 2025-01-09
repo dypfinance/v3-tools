@@ -69,9 +69,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
   const [activePill, setActivePill] = useState(pillsNames[0]);
   const [open, setOpen] = React.useState(false);
   const [activeTimePill, setActiveTimePill] = useState(timePillsArray[3]);
-  const [vaultApy, setVaultApy] = useState();
-  const [vaultUSDT, setVaultUSDT] = useState();
-  const [vaultUSDC, setVaultUSDC] = useState();
+
   const [apyData, setapyData] = useState();
   const [wethPrice, setWethPrice] = useState(0);
   const [wbnbPrice, setWbnbPrice] = useState(0);
@@ -91,11 +89,14 @@ const Calculator = ({ earnClass, onClose, ref }) => {
   }
 
   const getApy = async () => {
-    await axios.get("https://api.dyp.finance/api/highest-apy").then((data) => {
-      setapyData(data.data.highestAPY);
-    }).catch((e) => {
-      console.log(e);
-    });
+    await axios
+      .get("https://api.dyp.finance/api/highest-apy")
+      .then((data) => {
+        setapyData(data.data.highestAPY);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   const getEthApy = async () => {
@@ -105,7 +106,8 @@ const Calculator = ({ earnClass, onClose, ref }) => {
         // console.log(data.data.highestAPY_ETH[0].highest_apy)
         // setStakeApy(data.data.highestAPY_ETH[0].highest_apy);
         setStakeApy(35);
-      }).catch((e) => {
+      })
+      .catch((e) => {
         console.log(e);
       });
   };
@@ -115,7 +117,8 @@ const Calculator = ({ earnClass, onClose, ref }) => {
       .get("https://api.dyp.finance/api/the_graph_eth_v2")
       .then((data) => {
         setWethPrice(data.data.the_graph_eth_v2.usd_per_eth);
-      }).catch((e) => {
+      })
+      .catch((e) => {
         console.log(e);
       });
   };
@@ -130,7 +133,8 @@ const Calculator = ({ earnClass, onClose, ref }) => {
           data.data.the_graph_bsc_v2.token_data
         );
         setiDypPrice(propertyIDyp[1][1].token_price_usd);
-      }).catch((e) => {
+      })
+      .catch((e) => {
         console.log(e);
       });
   };
@@ -161,60 +165,16 @@ const Calculator = ({ earnClass, onClose, ref }) => {
 
   useEffect(() => {
     getApy();
-   
+
     getEthApy();
   }, [wethPrice, wavaxPrice, wbnbPrice, activeMethod]);
 
   useEffect(() => {
     if (apyData) {
       if (activeMethod === "Staking") {
-        setStakeApyAVAX(25);
+        setStakeApyAVAX(27.5);
         setStakeApyBNB(25);
         // setStakeApy(30);
-      } else if (activeMethod === "Vault") {
-        const vaultWeth = window.vault_weth;
-        const vaultusdc = window.vault_usdc;
-        const vaultusdt = window.vault_usdt;
-        const infura_web3 = window.infuraWeb3;
-        let token_contr_weth = new infura_web3.eth.Contract(
-          window.TOKEN_ABI,
-          vaultWeth.tokenAddress
-        );
-
-        let token_contr_usdc = new infura_web3.eth.Contract(
-          window.TOKEN_ABI,
-          vaultusdc.tokenAddress
-        );
-
-        let token_contr_usdt = new infura_web3.eth.Contract(
-          window.TOKEN_ABI,
-          vaultusdt.tokenAddress
-        );
-
-        let token_contridyp = new infura_web3.eth.Contract(
-          window.TOKEN_ABI,
-          window.config.reward_token_idyp_address
-        );
-
-        vaultWeth
-          .getTvlUsdAndApyPercent(18, 18, token_contr_weth, token_contridyp)
-          .then((apy_percent) => {
-            console.log(apy_percent);
-            setVaultApy(apy_percent.apy_percent);
-          })
-          .catch(console.error);
-
-        vaultusdc
-          .getTvlUsdAndApyPercent(18, 18, token_contr_usdc, token_contridyp)
-          .then((apy_percent) => setVaultUSDC(apy_percent.apy_percent))
-          .catch(console.error);
-
-        vaultusdt
-          .getTvlUsdAndApyPercent(18, 18, token_contr_usdt, token_contridyp)
-          .then((apy_percent) => {
-            setVaultUSDT(apy_percent.apy_percent);
-          })
-          .catch(console.error);
       }
     }
   }, [activeMethod, apyData]);
@@ -271,10 +231,11 @@ const Calculator = ({ earnClass, onClose, ref }) => {
         )
       );
     } else if (activeMethod === "Vault") {
- 
       setCalculateApproxUSD(
         (
-          ((parseInt(usdToDeposit) * parseFloat(vaultplatformArrayNew[0])) / 100 / 365) *
+          ((parseInt(usdToDeposit) * parseFloat(vaultplatformArrayNew[0])) /
+            100 /
+            365) *
           parseInt(days)
         ).toFixed(2)
       );
@@ -282,24 +243,29 @@ const Calculator = ({ earnClass, onClose, ref }) => {
       setCalculateApproxWeth(
         getFormattedNumber(
           parseFloat(
-            ((parseInt(usdToDeposit) * parseFloat(vaultplatformArrayNew[0])) / 100 / 365) *
+            ((parseInt(usdToDeposit) * parseFloat(vaultplatformArrayNew[0])) /
+              100 /
+              365) *
               parseInt(days)
           ) / wethPrice,
           4
         )
       );
-      
 
       setCalculateApproxUSDBNB(
         (
-          ((parseInt(usdToDeposit) * parseFloat(vaultplatformArrayNew[2])) / 100 / 365) *
+          ((parseInt(usdToDeposit) * parseFloat(vaultplatformArrayNew[2])) /
+            100 /
+            365) *
           parseInt(days)
         ).toFixed(2)
       );
       setCalculateApproxWbnb(
         getFormattedNumber(
           parseFloat(
-            ((parseInt(usdToDeposit) * parseFloat(vaultplatformArrayNew[2])) / 100 / 365) *
+            ((parseInt(usdToDeposit) * parseFloat(vaultplatformArrayNew[2])) /
+              100 /
+              365) *
               parseInt(days)
           ),
           4
@@ -308,7 +274,9 @@ const Calculator = ({ earnClass, onClose, ref }) => {
 
       setCalculateApproxUSDAVAX(
         (
-          ((parseInt(usdToDeposit) * parseFloat(vaultplatformArrayNew[3])) / 100 / 365) *
+          ((parseInt(usdToDeposit) * parseFloat(vaultplatformArrayNew[3])) /
+            100 /
+            365) *
           parseInt(days)
         ).toFixed(2)
       );
@@ -316,7 +284,9 @@ const Calculator = ({ earnClass, onClose, ref }) => {
       setCalculateApproxWavax(
         getFormattedNumber(
           parseFloat(
-            ((parseInt(usdToDeposit) * parseFloat(vaultplatformArrayNew[3])) / 100 / 365) *
+            ((parseInt(usdToDeposit) * parseFloat(vaultplatformArrayNew[3])) /
+              100 /
+              365) *
               parseInt(days)
           ),
           4
@@ -329,11 +299,9 @@ const Calculator = ({ earnClass, onClose, ref }) => {
     stakeApyAVAX,
     stakeApyBNB,
     idypPrice,
-    vaultApy,
+    dypPrice,
     usdToDeposit,
     days,
-    vaultUSDC,
-    vaultUSDT,
   ]);
 
   const handleSubmit = (e) => {
@@ -621,10 +589,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
               yields assume that prices of the deposited assets don't change.
             </h6> */}
           <div className="row w-100 gap-3 gap-lg-2 gap-xl-0 mx-0 align-items-center justify-content-between mt-4 mt-lg-5 position-relative calculator-chains-wrapper">
-            <NavLink
-              to={'/earn/dypius'}
-              className="ethereum-chain-wrapper"
-            >
+            <NavLink to={"/earn/dypius"} className="ethereum-chain-wrapper">
               <div className="chain-content gap-4 p-2">
                 <div className="values-wrapper align-items-start d-flex flex-column gap-1">
                   <div className="usd-value">
@@ -645,19 +610,18 @@ const Calculator = ({ earnClass, onClose, ref }) => {
                 <div className="d-flex align-items-center justify-content-between gap-2 gap-lg-4">
                   <div className="d-flex align-items-center gap-2">
                     <img
-                      src=
-                        {
-                          activeMethod === "Vault"
-                            ? "https://cdn.worldofdypians.com/tools/weth.svg"
-                            : "https://cdn.worldofdypians.com/tools/ethStakeActive.svg"
-                        }
-                     
-                      
+                      src={
+                        activeMethod === "Vault"
+                          ? "https://cdn.worldofdypians.com/tools/weth.svg"
+                          : "https://cdn.worldofdypians.com/tools/ethStakeActive.svg"
+                      }
                       width={20}
                       height={20}
                       alt=""
                     />
-                    <h6 className="chain-name">{activeMethod === "Vault" ? "WETH" : "Ethereum"}</h6>
+                    <h6 className="chain-name">
+                      {activeMethod === "Vault" ? "WETH" : "Ethereum"}
+                    </h6>
                   </div>
                   <img
                     src={"https://cdn.worldofdypians.com/tools/filledArrow.svg"}
@@ -667,7 +631,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
               </div>
             </NavLink>
             <NavLink
-              to={'/earn/dypius'}
+              to={"/earn/dypius"}
               className={
                 activeMethod === "Vault" ? "usdc-wrapper" : `bnb-chain-wrapper`
               }
@@ -713,7 +677,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
               </div>
             </NavLink>
             <NavLink
-              to={'/earn/dypius'}
+              to={"/earn/dypius"}
               className={
                 activeMethod === "Vault" ? "usdt-wrapper" : "avax-chain-wrapper"
               }

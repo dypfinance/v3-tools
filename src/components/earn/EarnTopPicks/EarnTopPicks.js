@@ -403,7 +403,7 @@ const EarnTopPicks = ({
       const sortedActive = allActiveBnb.sort(function (a, b) {
         return b.apy_percent - a.apy_percent;
       }); 
-      console.log('sortedActivesortedActive',sortedActive)
+      
       setbnbPoolsDyp(activeBnb2);
       setbnbPoolsiDyp(object2Idyp);
       setBnbPools(sortedActive);
