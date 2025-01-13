@@ -303,7 +303,12 @@ const Leaderboard = ({
             />
           </div>
           <div className="d-flex align-items-center gap-1 mt-5">
-            <div className={`optionsWrapper col-12 ${type==='stoneCrack' && 'd-flex flex-column flex-lg-row w-100 justify-content-between gap-2'} `}>
+            <div
+              className={`optionsWrapper col-12 ${
+                type === "stoneCrack" &&
+                "d-flex flex-column flex-lg-row w-100 justify-content-between gap-2"
+              } `}
+            >
               {type === "stoneCrack" && (
                 <div className="d-flex align-items-center gap-2 col-lg-5">
                   <button
@@ -456,14 +461,16 @@ const Leaderboard = ({
                                 <div className="d-flex algin-items-center">
                                   <img
                                     src={
-                                      "https://cdn.worldofdypians.com/wod/eth.svg"
+                                      selectedChain === "opbnb"
+                                        ? "https://cdn.worldofdypians.com/wod/bnbIcon.svg"
+                                        : "https://cdn.worldofdypians.com/wod/eth.svg"
                                     }
                                     width={15}
                                     height={15}
                                     alt=""
                                     className="me-1 d-none d-lg-block d-md-block"
                                   />
-                                  ETH
+                                  {selectedChain === "opbnb" ? "BNB" : "ETH"}
                                 </div>{" "}
                                 +
                                 <div className="d-flex algin-items-center">
