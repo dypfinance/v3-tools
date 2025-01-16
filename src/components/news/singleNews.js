@@ -347,7 +347,7 @@ const SingleNews = ({
                 }}
               />
 
-              <span className="votes-amount">
+              <span className="votes-amount d-none">
                 {" "}
                 {Number(upvote) - Number(downvote)}
               </span>
