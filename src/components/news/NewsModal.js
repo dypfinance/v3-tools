@@ -476,10 +476,10 @@ const NewsModal = ({
                   <img
                     src={
                       likeIndicator === false && dislikeIndicator === false
-                    ? 'https://cdn.worldofdypians.com/tools/passiveDownvote.svg'
+                    ? 'https://cdn.worldofdypians.com/tools/passiveUpvote.svg'
                     : dislikeIndicator === true
                     ? 'https://cdn.worldofdypians.com/tools/activeDownvote.svg'
-                    : 'https://cdn.worldofdypians.com/tools/passiveDownvote.svg'
+                    : 'https://cdn.worldofdypians.com/tools/passiveUpvote.svg'
                     }
                     alt=""
                     className="like-indicator"
@@ -488,7 +488,7 @@ const NewsModal = ({
                       e.stopPropagation();
                     }}
                   />
-                  <span className="votes-amount">
+                  <span className="votes-amount d-none">
                     {/* {Number(upvotes) - Number(downvotes)} */}
                     {Number(votes.find((obj) => obj.id === newsId)?.up) -
                       Number(votes.find((obj) => obj.id === newsId)?.down)}

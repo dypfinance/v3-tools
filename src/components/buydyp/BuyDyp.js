@@ -239,7 +239,7 @@ const BuyDyp = () => {
       ],
     },
     {
-      title: "Trader Joe",
+      title: "LFJ",
       logo: "traderjoe.webp",
       link: "https://traderjoexyz.com/avalanche/trade?outputCurrency=0x1a3264f2e7b1cfc6220ec9348d33ccf02af7aaa4",
       totalvids: "0 videos",

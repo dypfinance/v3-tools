@@ -389,10 +389,10 @@ const RelatedNews = ({
                 <img
                   src={
                     likeIndicator === false && dislikeIndicator === false
-                    ? 'https://cdn.worldofdypians.com/tools/passiveDownvote.svg'
+                    ? 'https://cdn.worldofdypians.com/tools/passiveUpvote.svg'
                     : dislikeIndicator === true
                     ? 'https://cdn.worldofdypians.com/tools/activeDownvote.svg'
-                    : 'https://cdn.worldofdypians.com/tools/passiveDownvote.svg'
+                    : 'https://cdn.worldofdypians.com/tools/passiveUpvote.svg'
                   }
                   alt=""
                   className="like-indicator"
@@ -402,7 +402,7 @@ const RelatedNews = ({
                   }}
                 />
 
-                <span className="votes-amount">
+                <span className="votes-amount d-none">
                   {" "}
                   {Number(upvotes) - Number(downvotes)}
                 </span>
