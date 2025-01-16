@@ -261,18 +261,18 @@ const MobileMenu = () => {
               onClick={() => setMoreModal(false)}
               className="mobile-modal-item d-flex flex-column justify-content-between align-items-center w-100 pb-3"
             >
-                  <NavLink
+                  {/* <NavLink
                 to="/earn/defi-staking"
                 className="d-flex justify-content-between align-items-center w-100 py-2"
               >
                 <h3 className="sideitem-text">Staking</h3>
                 <img src={'https://cdn.worldofdypians.com/tools/rightlogo.svg'} alt="" />
-              </NavLink>
+              </NavLink> */}
                <NavLink
                 to="/earn/dypius"
                 className="d-flex justify-content-between align-items-center w-100 py-2"
               >
-                <h3 className="sideitem-text">Dypius</h3>
+                <h3 className="sideitem-text">Staking</h3>
                 <img src={'https://cdn.worldofdypians.com/tools/rightlogo.svg'} alt="" />
               </NavLink>
          

@@ -201,6 +201,7 @@ function App() {
 
     if (result && result.status === 200) {
       const pools = result.data.stakingLists;
+      console.log("pools", pools);
       setaggregatorPools(pools);
     }
   };
@@ -712,7 +713,7 @@ function App() {
   useEffect(() => {
     setTheme("theme-dark");
     tvl();
-    fetchAggregatorPools();
+    // fetchAggregatorPools();
     // setwhitelistPopup(true);
     if (window.location.hash === "#mobile-app") {
       setdownloadClick(true);
@@ -2043,7 +2044,7 @@ setkittyDashRecords */}
                       />
                     }
                   />
-                  <Route
+                  {/* <Route
                     exact
                     path="/earn/defi-staking"
                     element={
@@ -2065,7 +2066,7 @@ setkittyDashRecords */}
                         userCurencyBalance={userCurencyBalance}
                       />
                     }
-                  />
+                  /> */}
 
                   <Route
                     exact
@@ -2243,7 +2244,7 @@ setkittyDashRecords */}
                         referrer={referrer}
                         isPremium={isPremium}
                         onConnectWallet={showModal}
-                        aggregatorPools={aggregatorPools}
+                        // aggregatorPools={aggregatorPools}
                         onMobileClick={() => {
                           setshowMobilePopup(true);
                         }}
