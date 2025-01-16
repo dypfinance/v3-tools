@@ -2537,7 +2537,7 @@ const Dashboard = ({
                       setselectedPool([]);
                       setDetails(999);
                     }}
-                    poolCap={2000000}
+                    poolCap={10000000}
                     start_date={"01 Sep 2024"}
                   />
                 ) : activeCard &&
