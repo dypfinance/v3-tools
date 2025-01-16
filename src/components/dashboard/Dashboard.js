@@ -61,7 +61,6 @@ const Dashboard = ({
   handleSwitchNetwork,
   isPremium,
   onConnectWallet,
-  aggregatorPools,
   onMobileClick,
 }) => {
   const [topPools, setTopPools] = useState([]);
@@ -319,9 +318,7 @@ const Dashboard = ({
       eth_result &&
       eth_result.status === 200 &&
       eth_result2 &&
-      eth_result2.status === 200 &&
- 
-      aggregatorPools.length > 0
+      eth_result2.status === 200 
     ) {
       // let temparray = Object.entries(
       //   bnbFarmingPool.data.the_graph_bsc_v2.lp_data
@@ -441,56 +438,9 @@ const Dashboard = ({
       setBnbPools(sortedActive);
       setbnbPoolsDyp(activeBnb2);
       setbnbPoolsiDyp(activeidypBnb2);
-      const bnbAggregatorPool = aggregatorPools.find((item) => {
-        return item.name.toLowerCase() === "bnb";
-      });
+    
 
-      const bnbAggregatorPool_formatted = [bnbAggregatorPool].map((item) => {
-        return {
-          ...item,
-          chain: "bnb",
-          type: "staking",
-          tvl_usd: item.poolList[0].tvl,
-          id: item.poolList[0].contractAddress,
-          apy_percent: item.poolList[0].aprPercent,
-          lock_time: item.poolList[0].lockTime + " days",
-          pair_name: item.name,
-        };
-      });
-
-      const ethAggregatorPool = aggregatorPools.find((item) => {
-        return item.name.toLowerCase() === "eth";
-      });
-
-      const avaxAggregatorPool = aggregatorPools.find((item) => {
-        return item.name.toLowerCase() === "avax";
-      });
-
-      const avaxAggregatorPool_formatted = [avaxAggregatorPool].map((item) => {
-        return {
-          ...item,
-          chain: "avax",
-          type: "staking",
-          tvl_usd: item.poolList[0].tvl,
-          id: item.poolList[0].contractAddress,
-          apy_percent: item.poolList[0].aprPercent,
-          lock_time: item.poolList[0].lockTime + " days",
-          pair_name: item.name,
-        };
-      });
-
-      const ethAggregatorPool_formatted = [ethAggregatorPool].map((item) => {
-        return {
-          ...item,
-          chain: "base",
-          type: "staking",
-          tvl_usd: item.poolList[0].tvl,
-          id: item.poolList[0].contractAddress,
-          apy_percent: item.poolList[0].aprPercent,
-          lock_time: item.poolList[0].lockTime + " days",
-          pair_name: item.name,
-        };
-      });
+      
 
       const allpoolsEthereum = [
         ...ethereumDyp,
@@ -981,7 +931,7 @@ const Dashboard = ({
     setTimeout(() => {
       setLoading(false);
     }, 2500);
-  }, [aggregatorPools]);
+  }, []);
 
   const windowSize = useWindowSize();
 
