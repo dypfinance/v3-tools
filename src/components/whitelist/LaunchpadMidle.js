@@ -676,94 +676,108 @@ const LaunchpadMidle = ({
         ))}
       </div>
       <LaunchpadProjects />
-      <h6 className="launchpad-hero-title mb-4 mt-3">Past Deals</h6>
-
-      <div className="row mt-4">
-        <div className="col-12">
-          <div className="whitelist-info-item-2 d-flex flex-column">
-          
-            <div className="outer-table-wrapper p-3">
-              <table
-                border={0}
-                className="table item-history-table"
-                style={{ borderSpacing: "10px" }}
-              >
-                <thead className="item-history-table-thead">
-                  <th className="item-history-table-th text-center">Project</th>
-                  <th className="item-history-table-th text-center">Type</th>
-                  <th className="item-history-table-th text-center">Network</th>
-                  <th className="item-history-table-th text-center">
-                    Commited
-                  </th>
-                  <th className="item-history-table-th text-center">ATH</th>
-                  <th className="item-history-table-th text-center">Ended</th>
-                  <th className="item-history-table-th text-center"></th>
-                </thead>
-                <tbody>
-                  <tr onClick={() => navigate('/launchpad/wod')} style={{cursor: "pointer"}}>
-                    <td className="item-history-table-td first-td left-border text-center">
+      {allUserCommitments && allUserCommitments.length > 0 && (
+        <div className="row mt-4">
+          <div className="col-12">
+            <div className="whitelist-info-item-2 d-flex flex-column gap-3">
+              <h6 className="launchpad-hero-title mb-4 mt-3">Past Deals</h6>
+              <div className="outer-table-wrapper p-3">
+                <table
+                  border={0}
+                  className="table item-history-table"
+                  style={{ borderSpacing: "10px" }}
+                >
+                  <thead className="item-history-table-thead">
+                    <th className="item-history-table-th text-center">
+                      Project
+                    </th>
+                    <th className="item-history-table-th text-center">Type</th>
+                    <th className="item-history-table-th text-center">
+                      Network
+                    </th>
+                    <th className="item-history-table-th text-center">
+                      Commited
+                    </th>
+                    <th className="item-history-table-th text-center">ATH</th>
+                    <th className="item-history-table-th text-center">Ended</th>
+                    <th className="item-history-table-th text-center"></th>
+                  </thead>
+                  <tbody>
+                    <tr
+                      onClick={() => navigate("/launchpad/wod")}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <td className="item-history-table-td first-td left-border text-center">
                         <div className="d-flex align-items-center gap-1">
-                          <img 
-                            src={"https://cdn.worldofdypians.com/tools/squareWod.svg"}
-                          alt="" />
+                          <img
+                            src={
+                              "https://cdn.worldofdypians.com/tools/squareWod.svg"
+                            }
+                            alt=""
+                          />
                           <div className="d-flex flex-column align-items-start">
                             World of Dypians
-                            <span style={{color: "#828FBB"}}>WOD</span>
+                            <span style={{ color: "#828FBB" }}>WOD</span>
                           </div>
                         </div>
-                    </td>
-                    <td className="item-history-table-td text-center">
-                      Private Sale
-                    </td>
-                    <td className="item-history-table-td text-center">
-                      <div className="d-flex align-items-center justify-content-center gap-2">
-                        <img
-                          src={"https://cdn.worldofdypians.com/wod/bnbIcon.svg"}
-                          alt=""
-                        />
-                        BNB Chain
-                      </div>
-                    </td>
-                    <td className="item-history-table-td table-greentext text-center">
-                      $1,546,274
-                    </td>
-                    <td className="item-history-table-td text-center">5.4x</td>
-                    <td className="item-history-table-td right-border text-center">
-                      24 November 2024
-                    </td>
-                    <td className="item-history-table-td last-td table-greentext right-border text-center">
-                      <div className="right-arrow-holder">
-                        <img
-                          src={
-                            "https://cdn.worldofdypians.com/tools/rightlogo.svg"
-                          }
-                          alt=""
-                        />
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            {loading && (
-              <div className="d-flex w-100 justify-content-center">
-                <div class="spinner-border text-info" role="status">
-                  <span class="sr-only">Loading...</span>
+                      </td>
+                      <td className="item-history-table-td text-center">
+                        Private Sale
+                      </td>
+                      <td className="item-history-table-td text-center">
+                        <div className="d-flex align-items-center justify-content-center gap-2">
+                          <img
+                            src={
+                              "https://cdn.worldofdypians.com/wod/bnbIcon.svg"
+                            }
+                            alt=""
+                          />
+                          BNB Chain
+                        </div>
+                      </td>
+                      <td className="item-history-table-td table-greentext text-center">
+                        $1,546,274
+                      </td>
+                      <td className="item-history-table-td text-center">
+                        5.4x
+                      </td>
+                      <td className="item-history-table-td right-border text-center">
+                        24 November 2024
+                      </td>
+                      <td className="item-history-table-td last-td table-greentext right-border text-center">
+                        <div className="right-arrow-holder">
+                          <img
+                            src={
+                              "https://cdn.worldofdypians.com/tools/rightlogo.svg"
+                            }
+                            alt=""
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              {loading && (
+                <div className="d-flex w-100 justify-content-center">
+                  <div class="spinner-border text-info" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
                 </div>
-              </div>
-            )}
-            {allUserCommitments && allUserCommitments.length > 5 && (
-              <div className="d-flex my-3 w-100 align-items-center justify-content-center">
-                <button className="btn filledbtn" onClick={handleViewMore}>
-                  {slice >= allUserCommitments.length
-                    ? "View Less"
-                    : "View More"}
-                </button>
-              </div>
-            )}
+              )}
+              {allUserCommitments && allUserCommitments.length > 5 && (
+                <div className="d-flex my-3 w-100 align-items-center justify-content-center">
+                  <button className="btn filledbtn" onClick={handleViewMore}>
+                    {slice >= allUserCommitments.length
+                      ? "View Less"
+                      : "View More"}
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      )}
       {/* <LaunchpadDetails /> */}
     </div>
   );

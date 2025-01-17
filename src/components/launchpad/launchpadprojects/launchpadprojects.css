@@ -20,6 +20,7 @@
   border: 2px solid #50add3;
   border-radius: 0px 8px 8px 0px;
   padding: 3px 10px 3px 30px;
+  white-space: nowrap;
 }
 
 .time-left {
