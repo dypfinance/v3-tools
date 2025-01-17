@@ -166,3 +166,37 @@ font-style: normal;
 font-weight: 500;
 line-height: normal;
 }
+
+
+@media screen and (max-width: 420px) {
+  .midle-details-value{
+    font-size: 16px;
+  }
+  .date-start-value{
+    font-size: 16px;
+  }
+}
+
+.midle-total-commited{
+  border-radius: 6px;
+background: linear-gradient(91deg, #4ED4D0 0%, #D4CF4E 100%);
+position: absolute;
+right: 10px;
+top: 10px;
+}
+
+.midle-commited-span{
+  color: #312F69 !important;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.midle-commited-value{
+  color: #312F69 !important;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}

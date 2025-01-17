@@ -15,16 +15,22 @@ const LaunchpadDetails = () => {
   }, []);
   return (
     <div className="container-lg">
-      <div className="row gap-4 gap-lg-0">
+      <div className="row gap-4 gap-lg-0 flex-column-reverse flex-lg-row">
         <div className="col-12 col-lg-7 p-2 p-lg-4 main-details-wrapper position-relative">
           <div
             className="purplediv"
             style={{ left: "0px", background: "#8E97CD" }}
           ></div>
+          <div className="position-relative">
           <img
             src="https://cdn.worldofdypians.com/tools/midleDetailsBanner.png"
             alt=""
           />
+          <div className="midle-total-commited px-2 py-1 d-flex align-items-center justify-content-center gap-1">
+            <span className="midle-commited-span">Commited</span>
+            <span className="midle-commited-value">${getFormattedNumber(0,0)}</span>
+          </div>
+          </div>
           <div className="d-flex align-items-center justify-content-between mt-3">
             <div className="d-flex align-items-center gap-2">
               <img
@@ -38,25 +44,25 @@ const LaunchpadDetails = () => {
               </span>
             </div>
             <div className="d-flex align-items-center gap-2">
-              <a href="#">
+              <a href="https://app.midle.io/" target="_blank">
                 <img
                   src="https://cdn.worldofdypians.com/tools/detailsWebsite.svg"
                   alt=""
                 />
               </a>
-              <a href="#">
+              <a href="https://x.com/midle_official" target="_blank">
                 <img
                   src="https://cdn.worldofdypians.com/tools/detailsTwitter.svg"
                   alt=""
                 />
               </a>
-              <a href="#">
+              <a href="https://t.me/midlecommunity" target="_blank">
                 <img
                   src="https://cdn.worldofdypians.com/tools/detailsTelegram.svg"
                   alt=""
                 />
               </a>
-              <a href="#">
+              <a href="https://bscscan.com/address/0x7e0d753d44d5A7492d31ffc020c9B0d07c6D05D7" target="_blank">
                 <img
                   src="https://cdn.worldofdypians.com/tools/detailsPoll.svg"
                   alt=""
