@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./launchpadprojects.css";
 import timerIcon from "../assets/timerIcon.svg";
-import projectBanner from "../assets/activeProjectBanner.webp";
 import UpcomingProjects from "./UpcomingProjects";
 import commingSoon from "../assets/commingSoonTag.svg";
 import ProjectsLaunched from "./ProjectsLaunched";
@@ -25,8 +24,8 @@ const LaunchpadProjects = () => {
         <h6 className="launchpad-hero-title mb-4">Active Projects</h6>
         <div className="row align-items-center justify-content-end">
           <div className="col-12 col-lg-11 active-projects-container p-3 position-relative">
-            <img src={projectBanner} alt="" className="project-banner " />
-            <img src={commingSoon} alt="" className="comming-soon " />
+            <img src={'https://cdn.worldofdypians.com/tools/midleLaunchpadBanner.webp'} alt="" className="project-banner" />
+            <img src={'https://cdn.worldofdypians.com/tools/midleLive.png'} alt="" className="live"  style={{height: 24}}/>
             <div className="row align-items-center justify-content-end">
               <div className="col-12 col-lg-9 ps-lg-5 d-flex flex-column gap-3">
                 <div className="d-flex gap-3 flex-column flex-lg-row align-items-start justify-content-between">
@@ -37,7 +36,7 @@ const LaunchpadProjects = () => {
                     </p>
                   </div>
                   <div className="project-timer-wrapper ms-5 ms-lg-0 d-flex align-items-center gap-3 position-relative">
-                    <img src={timerIcon} alt="" className="timer-icon" />
+                    <img src={timerIcon} alt="" className="timer-icon"/>
                     <span className="time-left">Time left:</span>
                     {/* <span className="project-timer"> */}
                       <Countdown
@@ -65,17 +64,17 @@ const LaunchpadProjects = () => {
                   <div className="active-project-info p-3">
                     <div className="d-flex flex-column flex-lg-row align-items-start gap-3 gap-lg-5">
                       <div className="d-flex flex-column gap-2">
-                        <span className="time-left">Tokens offered</span>
+                        <span className="time-left">Type</span>
                         <span className="project-date">
-                          420,000,000.0000 DYP
+                        Private Sale
                         </span>
                       </div>
                       <div className="d-flex flex-column gap-2">
                         <span className="time-left">Sale price</span>
-                        <span className="project-date">1 DYP = 0.18 USDT</span>
+                        <span className="project-date">$0.007</span>
                       </div>
                       <div className="d-flex flex-column gap-2">
-                        <span className="time-left">Toal commited</span>
+                        <span className="time-left">Total comitted</span>
                         <span className="project-date">7,534,403.5465 DYP</span>
                       </div>
                       <div className="d-flex flex-column gap-2">
