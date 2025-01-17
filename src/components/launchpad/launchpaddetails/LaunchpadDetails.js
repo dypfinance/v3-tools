@@ -43,6 +43,8 @@ const LaunchpadDetails = ({
     "0x9845a667b1A603FF21596FDdec51968a2bccAc11",
     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603",
     "0xFdD3CFF22CF846208E3B37b47Bc36b2c61D2cA8b",
+    "0x11666850EA73956afcd014E86eD2AE473939421d",
+    "0x1f5c3f186795c84265eD826AD09924D0987485ba",
   ];
 
   const checkStakedPools = () => {
@@ -316,7 +318,7 @@ const LaunchpadDetails = ({
   };
   // console.log("userPools", userPools);
   const checkApproval = async (amount) => {
-    if (networkId === 56) {
+    if (networkId === 56 && isConnected) {
       const result = await window
         .checkapproveStakePool(
           coinbase,
@@ -340,7 +342,7 @@ const LaunchpadDetails = ({
       } else {
         setdepositStatus("initial");
       }
-    } else if (networkId === 1) {
+    } else if (networkId === 1 && isConnected) {
       const result = await window
         .checkapproveStakePool(
           coinbase,
@@ -354,7 +356,7 @@ const LaunchpadDetails = ({
       let result_formatted = new window.BigNumber(result)
         .div(10 ** selectedToken.decimals)
         .toFixed(6);
-      console.log(Number(result_formatted), result, Number(amount));
+
       if (
         Number(result_formatted) >= Number(amount) &&
         Number(result_formatted) !== 0 &&
@@ -364,7 +366,7 @@ const LaunchpadDetails = ({
       } else {
         setdepositStatus("initial");
       }
-    }
+    } else  setdepositStatus("initial");
   };
 
   const handleUserMaxDeposit = () => {
@@ -543,18 +545,31 @@ const LaunchpadDetails = ({
 
   useEffect(() => {
     if (depositAmount > 0) {
-      const result = Number(depositAmount) + Number(totalDeposited);
-      if (result > poolCap) {
+      if (
+        isConnected &&
+        (hasDypBalance || hasiDypBalance || hasDypStaked || hasiDypStaked)
+      ) {
+        const result = Number(depositAmount) + Number(totalDeposited);
+        if (result > poolCap) {
+          seterrorMsg(
+            "Deposit amount is greater than available quota. Please add another amount."
+          );
+          setCanDeposit(false);
+        } else if (depositAmount < 100) {
+          setCanDeposit(false);
+          seterrorMsg(
+            "Minimum deposit amount is 100" + " " + selectedCoin.coin
+          );
+        } else {
+          seterrorMsg("");
+          setCanDeposit(true);
+        }
+      }
+      else {
         seterrorMsg(
-          "Deposit amount is greater than available quota. Please add another amount."
+          "Buy DYP tokens to become eligible for the whitelist"
         );
         setCanDeposit(false);
-      } else if (depositAmount < 100) {
-        setCanDeposit(false);
-        seterrorMsg("Minimum deposit amount is 100" + " " + selectedCoin.coin);
-      } else {
-        seterrorMsg("");
-        setCanDeposit(true);
       }
     } else if (depositAmount === 0) {
       setCanDeposit(false);
@@ -640,7 +655,7 @@ const LaunchpadDetails = ({
             <div className="midle-total-commited px-2 py-1 d-flex align-items-center justify-content-center gap-1">
               <span className="midle-commited-span">Commited</span>
               <span className="midle-commited-value">
-              ${getFormattedNumber(totalDeposited)}
+                ${getFormattedNumber(totalDeposited)}
               </span>
             </div>
           </div>
@@ -937,7 +952,7 @@ const LaunchpadDetails = ({
                       }}
                       min={100}
                       maxLength={10}
-                      pattern="[0-9]{4}"
+                      pattern="[0-9]{4}" 
                     />
                     <button
                       className="inner-max-btn position-absolute"
@@ -1017,7 +1032,9 @@ const LaunchpadDetails = ({
               </div>
             </div>
             {errorMsg && (
-              <h6 className="errormsg mt-2 justify-content-start">{errorMsg}</h6>
+              <h6 className="errormsg mt-2 justify-content-start">
+                {errorMsg}
+              </h6>
             )}{" "}
             <div className="d-flex w-100 justify-content-center my-2">
               {isConnected && (networkId === 1 || networkId === 56) ? (
