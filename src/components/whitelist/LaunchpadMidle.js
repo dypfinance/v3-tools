@@ -781,7 +781,7 @@ const LaunchpadMidle = ({
                     <td className="item-history-table-td table-greentext text-center">
                       ${getFormattedNumber(totalCommitmentValue, 0)}
                     </td>
-                    <td className="item-history-table-td text-center">5.4x</td>
+                    <td className="item-history-table-td text-center">8.3x</td>
                     <td className="item-history-table-td right-border text-center">
                       24 November 2024
                     </td>
