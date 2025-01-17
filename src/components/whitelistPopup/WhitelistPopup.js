@@ -5,6 +5,7 @@ import "../LandPopup/landpopup.css";
 import { NavLink } from "react-router-dom";
 import Slider from "react-slick";
 import Countdown from "react-countdown";
+import midlePopup from "./midlePopup.png";
 
 const renderer = ({ days, hours, minutes }) => {
   return (
@@ -88,7 +89,7 @@ const WhitelistPopup = ({ open, onClose }) => {
             <div className="d-flex flex-column align-items-center justify-content-center">
               <div className="d-flex align-items-center justify-content-center mb-2 popup-title-wrapper gap-2 p-2 px-4">
                 <h6 className="popup-title d-flex align-items-center gap-2 mb-0">
-                  DYP is available on SynFutures
+                  Midle Token Whitelist
                 </h6>
               </div>
               {/* <span className="popup-span mb-0">
@@ -98,23 +99,18 @@ const WhitelistPopup = ({ open, onClose }) => {
                 </span> */}
             </div>
             <img
-              src={"https://cdn.worldofdypians.com/tools/migrationPopup.webp"}
-              className="land-nft-image basepopup"
+              src={midlePopup}
+              className="land-nft-image basepopup my-2"
               alt="land nft"
             />
             <span className="popup-content">
-              You can now trade DYP/ETH with 10x leverage or provide liquidity
-              to earn fees
+              Secure your spot now as we are offering early access to the
+              exclusive $MIDLE token sale through a Whitelist for our members.
             </span>
 
-            <a
-              href="https://oyster.synfutures.com/#/trade/base/ETH-DYP-EMG-Perpetual"
-              target="_blank"
-              rel="noreferrer"
-              onClick={onClose}
-            >
+            <NavLink to="/launchpad/midle" onClick={onClose}>
               <button className="btn filled-btn m-3">Explore</button>
-            </a>
+            </NavLink>
           </div>
         </div>
       </div>
