@@ -90,10 +90,10 @@ const LaunchpadProjects = ({ totalCommitmentValueMidle,totalParticipants }) => {
                           {getFormattedNumber(totalCommitmentValueMidle)} USDT
                         </span>
                       </div>
-                      <div className="d-flex flex-column gap-2">
+                      {/* <div className="d-flex flex-column gap-2">
                         <span className="time-left">Participants</span>
                         <span className="project-date">{getFormattedNumber(totalParticipants, 0)}</span>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                   <NavLink className="btn filledbtn" to="/launchpad/midle">

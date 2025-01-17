@@ -1265,8 +1265,8 @@ const LaunchpadDetails = ({
                 <h6 className="mb-0 midle-details-value">$ 10,000,000</h6>
               </div>
               <div className="midle-details-item p-3 d-flex flex-column gap-2">
-                <span className="midle-details-span">Initial Market Cap</span>
-                <h6 className="mb-0 midle-details-value">$ 260,000</h6>
+                <span className="midle-details-span">Listing Time</span>
+                <h6 className="mb-0 midle-details-value">January 27, 1 PM UTC</h6>
               </div>
             </div>
             <div className="launchpad-info-divider my-4"></div>
