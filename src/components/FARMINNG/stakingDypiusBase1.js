@@ -263,50 +263,25 @@ const StakingDypiusBase1 = ({
     }
     //console.log({lp_data})
     //Calculate APY
-    let usd_per_token;
-    let usd_per_idyp;
-    let usd_per_dyps = 0;
-    if (the_graph_result) {
-      usd_per_token = the_graph_result.token_data
-        ? the_graph_result.token_data[
-            "0x961c8c0b1aad0c0b10a51fef6a867e3091bcef17"
-          ].token_price_usd
-        : 1;
-      usd_per_idyp = the_graph_result.token_data
-        ? the_graph_result.token_data[
-            "0xbd100d061e120b2c67a24453cf6368e63f1be056"
-          ].token_price_usd
-        : 1;
-      // let usd_per_dyps = the_graph_result.price_DYPS ? the_graph_result.price_DYPS : 1
-
-      let apy = new BigNumber(apr)
-        .minus(fee)
-        .div(1e2)
-        .times(usd_per_idyp)
-        .div(usd_per_token)
-        .times(1e2)
-        .toFixed(2);
-
-      setapy(apy);
-    }
+   
     try {
-      let amount = new BigNumber(1000000000000000000).toFixed(0);
-      let router = await window.getUniswapRouterContract();
-      let WETH = await router.methods.WETH().call();
-      let platformTokenAddress = window.config.USDC_address;
-      let rewardTokenAddress = window.config.reward_token_idyp_address;
-      let path = [
-        ...new Set(
-          [rewardTokenAddress, WETH, platformTokenAddress].map((a) =>
-            a.toLowerCase()
-          )
-        ),
-      ];
-      let _amountOutMin = await router.methods
-        .getAmountsOut(amount, path)
-        .call();
-      _amountOutMin = _amountOutMin[_amountOutMin.length - 1];
-      _amountOutMin = new BigNumber(_amountOutMin).div(1e6).toFixed(18);
+      // let amount = new BigNumber(1000000000000000000).toFixed(0);
+      // let router = await window.getUniswapRouterContract();
+      // let WETH = await router.methods.WETH().call();
+      // let platformTokenAddress = window.config.USDC_address;
+      // let rewardTokenAddress = window.config.reward_token_idyp_address;
+      // let path = [
+      //   ...new Set(
+      //     [rewardTokenAddress, WETH, platformTokenAddress].map((a) =>
+      //       a.toLowerCase()
+      //     )
+      //   ),
+      // ];
+      // let _amountOutMin = await router.methods
+      //   .getAmountsOut(amount, path)
+      //   .call();
+      // _amountOutMin = _amountOutMin[_amountOutMin.length - 1];
+      // _amountOutMin = new BigNumber(_amountOutMin).div(1e6).toFixed(18);
 
       let _bal;
       if (chainId === "8453" && coinbase && is_wallet_connected) {
@@ -320,8 +295,7 @@ const StakingDypiusBase1 = ({
         let _stakingTime = staking.stakingTime(coinbase);
         let _dTokens = staking.depositedTokens(coinbase);
         let _lClaimTime = staking.lastClaimedTime(coinbase);
-        let _tvl = reward_token_dypiusv2_base.balanceOf(staking._address);
-        // console.log('tvl', _tvl)
+        let _tvl = reward_token_dypiusv2_base.balanceOf(staking._address);    
         let _rFeeEarned = staking.totalReferralFeeEarned(coinbase);
         let tStakers = staking.getNumberOfHolders();
 
