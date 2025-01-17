@@ -71,6 +71,7 @@ import { ethers } from "ethers";
 import LoyaltyProgram from "./components/loyalty/LoyaltyProgram.js";
 import { useParams } from "react-router-dom";
 import LaunchpadMidle from "./components/whitelist/LaunchpadMidle.js";
+import LaunchpadDetails from "./components/launchpad/launchpaddetails/LaunchpadDetails.js";
 
 const LockerWrapper = (props) => {
   const { pair_id } = useParams();
@@ -309,7 +310,8 @@ function App() {
         .get(`https://api.dyp.finance/api/user_pools/${coinbase}`)
         .then((data) => {
           return data.data.PoolsUserIn;
-        }).catch((e) => {
+        })
+        .catch((e) => {
           console.log(e);
         });
       setuserPools(result);
@@ -719,8 +721,6 @@ function App() {
     if (window.location.hash === "#mobile-app") {
       setdownloadClick(true);
     }
-
-    
 
     if (window.ethereum && !window.coin98) {
       console.log("yes");
@@ -1677,7 +1677,6 @@ function App() {
     }
   }, [email, chestCount]);
 
-  
   useEffect(() => {
     if (email) {
       getAllOpbnbChests();
@@ -1686,7 +1685,6 @@ function App() {
       setopbnbOpenedChests([]);
     }
   }, [email, opbnbchestCount]);
-
 
   useEffect(() => {
     loadLeaderboardDataCaws2dGame();
@@ -1955,8 +1953,14 @@ function App() {
                         networkId={parseInt(networkId)}
                         onSelectChain={onSelectChain}
                         coinbase={coinbase}
-                        onChestClaimed={()=>{onChestClaimed();fetchWeeklyWinners()}}
-                        onOpbnbChestClaimed={()=>{onOpbnbChestClaimed();fetchWeeklyOpbnbWinners()}}
+                        onChestClaimed={() => {
+                          onChestClaimed();
+                          fetchWeeklyWinners();
+                        }}
+                        onOpbnbChestClaimed={() => {
+                          onOpbnbChestClaimed();
+                          fetchWeeklyOpbnbWinners();
+                        }}
                         dummypremiumChests={dummyPremiums}
                         isPremium={isPremium}
                         bnbImages={chestImagesBnb}
@@ -1972,19 +1976,17 @@ function App() {
                         monthlyplayerData={monthlyplayerData}
                         monthlyplayerDataOpbnb={monthlyplayerDataOpbnb}
                         previousMonthlyVersion={previousMonthlyVersion}
-                        previousMonthlyVersionOpbnb={previousMonthlyVersionOpbnb}
-
+                        previousMonthlyVersionOpbnb={
+                          previousMonthlyVersionOpbnb
+                        }
                         previousWeeklyVersion={previousWeeklyVersion}
                         previousWeeklyVersionOpbnb={previousWeeklyVersionOpbnb}
-
                         weeklyplayerData={weeklyplayerData}
                         weeklyUser={weeklyUser}
                         monthlyUser={monthlyUser}
-
                         weeklyplayerDataOpbnb={weeklyplayerDataOpbnb}
                         weeklyUserOpbnb={weeklyUserOpbnb}
                         monthlyUserOpbnb={monthlyUserOpbnb}
-
                         previousKittyDashVersion={previousKittyDashVersion}
                         kittyDashRecords={kittyDashRecords}
                         fetchKittyDashWinners={fetchKittyDashWinners}
@@ -2101,7 +2103,11 @@ setkittyDashRecords */}
                       />
                     }
                   />
-
+                  <Route
+                    exact
+                    path="/launchpad/midle/details"
+                    element={<LaunchpadDetails />}
+                  />
                   <Route
                     exact
                     path="/earn/nft-staking"
@@ -2131,7 +2137,7 @@ setkittyDashRecords */}
                     }
                   />
 
-                  <Route
+                  {/* <Route
                     exact
                     path="/launchpad"
                     element={
@@ -2142,7 +2148,7 @@ setkittyDashRecords */}
                         coinbase={coinbase}
                       />
                     }
-                  />
+                  /> */}
                   {/* <Route
                     exact
                     path="/migration"
