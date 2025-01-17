@@ -699,7 +699,7 @@ const LaunchpadMidle = ({
                 </thead>
                 <tbody>
                   <tr
-                    onClick={() => navigate("/launchpad/wod")}
+                    onClick={() => navigate("/launchpad/worldofdypians")}
                     style={{ cursor: "pointer" }}
                   >
                     <td className="item-history-table-td first-td left-border text-center">

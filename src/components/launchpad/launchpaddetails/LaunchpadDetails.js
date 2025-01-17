@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./launchpaddetails.css";
 import launchpadDetailsIcon from "../assets/launchpadDetailsIcon.svg";
 import timerIcon from "../assets/timerIcon.svg";
@@ -9,6 +9,10 @@ import getFormattedNumber from "../../../functions/get-formatted-number";
 // import walletIcon from "../../header/assets/walletIcon.svg";
 
 const LaunchpadDetails = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    document.title = "Midle | Launchpad Details";
+  }, []);
   return (
     <div className="container-lg">
       <div className="row gap-4 gap-lg-0">

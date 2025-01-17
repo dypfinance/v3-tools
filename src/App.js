@@ -2073,7 +2073,7 @@ setkittyDashRecords */}
 
                   <Route
                     exact
-                    path="/launchpad/wod"
+                    path="/launchpad/worldofdypians"
                     element={
                       <Whitelist
                         networkId={parseInt(networkId)}
@@ -2087,9 +2087,11 @@ setkittyDashRecords */}
                       />
                     }
                   />
-                  <Route
+
+
+<Route
                     exact
-                    path="/launchpad/midle"
+                    path="/launchpad"
                     element={
                       <LaunchpadMidle
                         networkId={parseInt(networkId)}
@@ -2103,9 +2105,10 @@ setkittyDashRecords */}
                       />
                     }
                   />
+
                   <Route
                     exact
-                    path="/launchpad/midle/details"
+                    path="/launchpad/midle"
                     element={<LaunchpadDetails />}
                   />
                   <Route

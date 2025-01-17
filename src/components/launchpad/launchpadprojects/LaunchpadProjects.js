@@ -5,6 +5,7 @@ import UpcomingProjects from "./UpcomingProjects";
 import commingSoon from "../assets/commingSoonTag.svg";
 import ProjectsLaunched from "./ProjectsLaunched";
 import Countdown from "react-countdown";
+import { NavLink } from "react-router-dom";
 
 const renderer = ({ days, hours, minutes }) => {
   return (
@@ -83,7 +84,7 @@ const LaunchpadProjects = () => {
                       </div>
                     </div>
                   </div>
-                  <button className="btn filledbtn">View More</button>
+                  <NavLink className="btn filledbtn" to='/launchpad/midle'>View More</NavLink>
                 </div>
               </div>
             </div>
