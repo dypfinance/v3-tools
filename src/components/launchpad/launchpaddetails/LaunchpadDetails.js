@@ -1275,7 +1275,7 @@ const LaunchpadDetails = ({
                 src={"https://cdn.worldofdypians.com/tools/detailsWarning.svg"}
                 alt=""
               />
-              <span className="details-warning-text">Imprtant Note</span>
+              <span className="details-warning-text">Important Note</span>
             </div>
             <div className="mt-3 launch-details-content">
               The final allocation will be determined based on the amount of DYP
