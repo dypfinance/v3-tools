@@ -2,10 +2,10 @@ import React from "react";
 import "./launchpaddetails.css";
 import launchpadDetailsIcon from "../assets/launchpadDetailsIcon.svg";
 import timerIcon from "../assets/timerIcon.svg";
-import coinStack from "../assets/coinStackIcon.svg";
+// import coinStack from "../assets/coinStackIcon.svg";
 import messageWarningIcon from "../assets/messageWarningIcon.svg";
 import { DropdownButton } from "react-bootstrap";
-import walletIcon from "../../header/assets/walletIcon.svg";
+// import walletIcon from "../../header/assets/walletIcon.svg";
 
 const LaunchpadDetails = () => {
   return (
@@ -66,7 +66,7 @@ const LaunchpadDetails = () => {
             <hr className="form-divider my-4" />
             <div className="d-flex align-items center justify-content-between">
               <div className="d-flex align-items center gap-2">
-                <img src={coinStack} alt="" />
+                {/* <img src={coinStack} alt="" /> */}
                 <div className="launch-details-header">My tokens</div>
               </div>
               <span className="my-rewards-text">
@@ -124,7 +124,7 @@ const LaunchpadDetails = () => {
             ></div>
             <div className="d-flex flex-column flex-lg-row align-items-center align-items-lg-start gap-3 gap-lg-0 justify-content-between">
               <div className="d-flex align-items-center gap-2">
-                <img src={coinStack} alt="" />
+                {/* <img src={coinStack} alt="" /> */}
                 <div className="d-flex flex-column gap-1">
                   <h6 className="launch-details-header">Buy iDYP</h6>
                   <span className="details-warning">
@@ -140,12 +140,12 @@ const LaunchpadDetails = () => {
                     className="d-flex align-items-center gap-2 connecttitle position-relative"
                     style={{ bottom: "5px", fontSize: "12px" }}
                   >
-                    <img
+                    {/* <img
                       src={walletIcon}
                       alt=""
                       className="position-relative"
                       // style={{ top: 4 }}
-                    />
+                    /> */}
                     Connect Wallet
                   </span>
                 }
@@ -178,7 +178,7 @@ const LaunchpadDetails = () => {
             ></div>
             <div className="d-flex align-items-start justify-content-between">
               <div className="d-flex align-items-center gap-2">
-                <img src={coinStack} alt="" />
+                {/* <img src={coinStack} alt="" /> */}
                 <div className="d-flex flex-column gap-1">
                   <h6 className="launch-details-header">
                     iDYP token distribution

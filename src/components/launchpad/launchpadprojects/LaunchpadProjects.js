@@ -9,7 +9,7 @@ import ProjectsLaunched from "./ProjectsLaunched";
 const LaunchpadProjects = () => {
   return (
     <div className="projects-container d-flex flex-column gap-5">
-      <div className="active-projects d-none">
+      <div className="active-projects">
         
         <h6 className="launchpad-hero-title mb-4">Active Projects</h6>
         <div className="row align-items-center justify-content-end">
@@ -71,7 +71,7 @@ const LaunchpadProjects = () => {
           </div>
         </div>
       </div>
-      <UpcomingProjects />
+      {/* <UpcomingProjects /> */}
       {/* <ProjectsLaunched /> */}
     </div>
   );

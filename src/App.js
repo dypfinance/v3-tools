@@ -70,6 +70,7 @@ import {
 import { ethers } from "ethers";
 import LoyaltyProgram from "./components/loyalty/LoyaltyProgram.js";
 import { useParams } from "react-router-dom";
+import LaunchpadMidle from "./components/whitelist/LaunchpadMidle.js";
 
 const LockerWrapper = (props) => {
   const { pair_id } = useParams();
@@ -2070,9 +2071,25 @@ setkittyDashRecords */}
 
                   <Route
                     exact
-                    path="/launchpad"
+                    path="/launchpad/wod"
                     element={
                       <Whitelist
+                        networkId={parseInt(networkId)}
+                        isConnected={isConnected}
+                        handleConnection={showModal}
+                        coinbase={coinbase}
+                        isPremium={isPremium}
+                        userPools={userPools}
+                        hasDypBalance={hasDypBalance}
+                        hasiDypBalance={hasiDypBalance}
+                      />
+                    }
+                  />
+                  <Route
+                    exact
+                    path="/launchpad/midle"
+                    element={
+                      <LaunchpadMidle
                         networkId={parseInt(networkId)}
                         isConnected={isConnected}
                         handleConnection={showModal}

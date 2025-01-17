@@ -36,6 +36,15 @@
   background-size: cover;
   background-position: center;
 }
+.launchpad-rocket-banner {
+  position: relative;
+  background: #282a5c;
+  border-radius: 20px;
+  background-image: url("https://cdn.worldofdypians.com/tools/launchpadRocket.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: right;
+}
 
 
 @media screen and (max-width: 786px) {
@@ -449,3 +458,13 @@ background: rgba(142, 151, 205, 0.20) !important;
 
   }
 
+.right-arrow-holder{
+  border-radius: 8px;
+opacity: 0.6;
+background: #14142A;
+width: 32px;
+height: 32px;
+display: flex;
+justify-content: center;
+align-items: center;
+}

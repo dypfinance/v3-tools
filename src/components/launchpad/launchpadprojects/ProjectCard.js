@@ -2,7 +2,7 @@ import React from 'react'
 import './launchpadprojects.css'
 import rocketIcon from '../assets/rocketIcon.svg'
 import lockIcon from '../assets/lockIcon.svg'
-import rightArrow from '../../dashboard/assets/right-arrow.svg'
+// import rightArrow from '../../dashboard/assets/right-arrow.svg'
 import expiredTag from '../assets/expiredTag.svg'
 import { NavLink } from 'react-router-dom'
 
@@ -40,7 +40,7 @@ const ProjectCard = ({upcoming, expired, id}) => {
           <p className="time-left">Dypius Launchpad
 Project coming soon</p>
           <div className="d-flex align-items-center justify-content-center arrow-wrapper">
-            <img src={rightArrow} alt="" />
+            {/* <img src={rightArrow} alt="" /> */}
           </div>
         </div>
     </div>
