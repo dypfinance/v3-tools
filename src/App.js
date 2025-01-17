@@ -2088,8 +2088,7 @@ setkittyDashRecords */}
                     }
                   />
 
-
-<Route
+                  <Route
                     exact
                     path="/launchpad"
                     element={
@@ -2109,7 +2108,18 @@ setkittyDashRecords */}
                   <Route
                     exact
                     path="/launchpad/midle"
-                    element={<LaunchpadDetails />}
+                    element={
+                      <LaunchpadDetails
+                        networkId={parseInt(networkId)}
+                        isConnected={isConnected}
+                        handleConnection={showModal}
+                        coinbase={coinbase}
+                        isPremium={isPremium}
+                        userPools={userPools}
+                        hasDypBalance={hasDypBalance}
+                        hasiDypBalance={hasiDypBalance}
+                      />
+                    }
                   />
                   <Route
                     exact

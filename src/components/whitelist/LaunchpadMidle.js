@@ -67,6 +67,8 @@ const LaunchpadMidle = ({
   const [depositStatus, setdepositStatus] = useState("initial");
   const [selectedToken, setselectedToken] = useState();
   const [totalCommitmentValue, settotalCommitmentValue] = useState(0);
+  const [totalCommitmentValueMidle, settotalCommitmentValueMidle] = useState(0);
+  const [totalParticipants, settotalParticipants] = useState(0);
 
   const [allUserCommitments, setAllUserCommitments] = useState([]);
   let expireDay = new Date("2024-10-16T14:00:00.000+02:00");
@@ -117,9 +119,54 @@ const LaunchpadMidle = ({
         return 0;
       });
 
+    const result_midle = await axios
+      .get("https://api.worldofdypians.com/api/latest-commitments/midle")
+      .catch((e) => {
+        console.error(e);
+        return 0;
+      });
+
+    let commitment_contract = new window.bscWeb3.eth.Contract(
+      window.COMMITMENT_ABI,
+      window.config.commitment_midle_address
+    );
+
+    let commitment_contract_eth = new window.infuraWeb3.eth.Contract(
+      window.COMMITMENT_ETH_ABI,
+      window.config.commitment_midle_eth_address
+    );
+
+    const total_commitments = await commitment_contract.methods
+      .viewLatestCommitments(1000)
+      .call()
+      .catch((e) => {
+        console.error(e);
+        return [];
+      });
+
+    const total_commitments_eth = await commitment_contract_eth.methods
+      .viewLatestCommitments(1000)
+      .call()
+      .catch((e) => {
+        console.error(e);
+        return [];
+      });
+    console.log(total_commitments_eth, total_commitments);
     if (result && result.status === 200) {
       const total = result.data.total;
       settotalCommitmentValue(total);
+
+      const totalMidle = result_midle.data.total;
+      settotalCommitmentValueMidle(totalMidle);
+    }
+
+    if (
+      total_commitments_eth !== undefined &&
+      total_commitments !== undefined
+    ) {
+      const total = total_commitments_eth.length + total_commitments.length;
+
+      settotalParticipants(total);
     }
   };
 
@@ -675,7 +722,10 @@ const LaunchpadMidle = ({
           <KeyFeaturesCard icon={item.icon} content={item.content} />
         ))}
       </div>
-      <LaunchpadProjects />
+      <LaunchpadProjects
+        totalCommitmentValueMidle={totalCommitmentValueMidle}
+        totalParticipants={totalParticipants}
+      />
       <h6 className="launchpad-hero-title mb-4 mt-3">Past Deals</h6>
       <div className="row mt-4">
         <div className="col-12">
@@ -729,7 +779,7 @@ const LaunchpadMidle = ({
                       </div>
                     </td>
                     <td className="item-history-table-td table-greentext text-center">
-                      ${getFormattedNumber(totalCommitmentValue,0)}
+                      ${getFormattedNumber(totalCommitmentValue, 0)}
                     </td>
                     <td className="item-history-table-td text-center">5.4x</td>
                     <td className="item-history-table-td right-border text-center">

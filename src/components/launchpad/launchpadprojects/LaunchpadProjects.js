@@ -6,16 +6,16 @@ import commingSoon from "../assets/commingSoonTag.svg";
 import ProjectsLaunched from "./ProjectsLaunched";
 import Countdown from "react-countdown";
 import { NavLink } from "react-router-dom";
+import getFormattedNumber from "../../../functions/get-formatted-number";
 
 const renderer = ({ days, hours, minutes }) => {
   return (
     <span className="project-timer mb-0">
-      {days}D:{hours}H:{minutes}M
-      {/* Season two */}
+      {days}D:{hours}H:{minutes}M{/* Season two */}
     </span>
   );
 };
-const LaunchpadProjects = () => {
+const LaunchpadProjects = ({ totalCommitmentValueMidle,totalParticipants }) => {
   let midleCd = new Date("2025-01-21T17:59:59.000+02:00");
   const [expired, setisExpired] = useState(true);
 
@@ -25,28 +25,40 @@ const LaunchpadProjects = () => {
         <h6 className="launchpad-hero-title mb-4">Active Projects</h6>
         <div className="row align-items-center justify-content-end">
           <div className="col-12 col-lg-11 active-projects-container p-3 position-relative">
-            <img src={'https://cdn.worldofdypians.com/tools/midleLaunchpadBanner.webp'} alt="" className="project-banner" />
-            <img src={'https://cdn.worldofdypians.com/tools/midleLive.png'} alt="" className="live"  style={{height: 24}}/>
+            <img
+              src={
+                "https://cdn.worldofdypians.com/tools/midleLaunchpadBanner.webp"
+              }
+              alt=""
+              className="project-banner"
+            />
+            <img
+              src={"https://cdn.worldofdypians.com/tools/midleLive.png"}
+              alt=""
+              className="live"
+              style={{ height: 24 }}
+            />
             <div className="row align-items-center justify-content-end">
               <div className="col-12 col-lg-9 ps-lg-5 d-flex flex-column gap-3">
                 <div className="d-flex gap-3 flex-column flex-lg-row align-items-start justify-content-between">
                   <div className="d-flex flex-column gap-3">
                     <h6 className="active-projects-title">Midle</h6>
                     <p className="launchpad-hero-desc">
-                    Midle is the go-to marketing platform for brands aiming to supercharge user acquisition, engagement, and retention. 
+                      Midle is the go-to marketing platform for brands aiming to
+                      supercharge user acquisition, engagement, and retention.
                     </p>
                   </div>
                   <div className="project-timer-wrapper ms-5 ms-lg-0 d-flex align-items-center gap-3 position-relative">
-                    <img src={timerIcon} alt="" className="timer-icon"/>
+                    <img src={timerIcon} alt="" className="timer-icon" />
                     <span className="time-left">Time left:</span>
                     {/* <span className="project-timer"> */}
-                      <Countdown
-                        renderer={renderer}
-                        date={midleCd}
-                        onComplete={() => {
-                          setisExpired(true);
-                        }}
-                      />
+                    <Countdown
+                      renderer={renderer}
+                      date={midleCd}
+                      onComplete={() => {
+                        setisExpired(true);
+                      }}
+                    />
                     {/* </span> */}
                   </div>
                 </div>
@@ -66,9 +78,7 @@ const LaunchpadProjects = () => {
                     <div className="d-flex flex-column flex-lg-row align-items-start gap-3 gap-lg-5">
                       <div className="d-flex flex-column gap-2">
                         <span className="time-left">Type</span>
-                        <span className="project-date">
-                        Private Sale
-                        </span>
+                        <span className="project-date">Private Sale</span>
                       </div>
                       <div className="d-flex flex-column gap-2">
                         <span className="time-left">Sale price</span>
@@ -76,15 +86,19 @@ const LaunchpadProjects = () => {
                       </div>
                       <div className="d-flex flex-column gap-2">
                         <span className="time-left">Total comitted</span>
-                        <span className="project-date">7,534,403.5465 DYP</span>
+                        <span className="project-date">
+                          {getFormattedNumber(totalCommitmentValueMidle)} USDT
+                        </span>
                       </div>
                       <div className="d-flex flex-column gap-2">
                         <span className="time-left">Participants</span>
-                        <span className="project-date">260,343</span>
+                        <span className="project-date">{getFormattedNumber(totalParticipants, 0)}</span>
                       </div>
                     </div>
                   </div>
-                  <NavLink className="btn filledbtn" to='/launchpad/midle'>View More</NavLink>
+                  <NavLink className="btn filledbtn" to="/launchpad/midle">
+                    View More
+                  </NavLink>
                 </div>
               </div>
             </div>

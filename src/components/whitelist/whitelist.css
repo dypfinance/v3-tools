@@ -356,6 +356,10 @@ width: 75%;
   width: 25%;
 }
 
+.commitment-chain-midle{
+  width: 28%;
+}
+
 .coin-select-dropdown{
 width: 25%;
 }
@@ -437,6 +441,11 @@ background: rgba(142, 151, 205, 0.20) !important;
     width: 100%;
   }
 
+  .commitment-chain-midle{
+    width: 100%;
+  }
+
+  
   .commitment-input-span{
     font-size: 10px;
 

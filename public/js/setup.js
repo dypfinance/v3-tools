@@ -2274,6 +2274,10 @@ window.config = {
   commitment_address: "0x6f532f3e73286958f161bc8ba2ff041826515247",
   commitment_eth_address: "0x6f033fa97a5ac6468fec3afe6f069cf60295b3d0",
 
+  commitment_midle_address: "0x5672F5E60a390206E8a6771820ca27DD2bD9a0b0",
+  commitment_midle_eth_address: "0xE22Eecf2aDD8bfF17eDCB368792427a89CAB7f22",
+
+
   ZERO_ADDRESS: "0x0000000000000000000000000000000000000000",
   MAX_LOCKS_TO_LOAD_PER_CALL: 10,
   pangolin_router_address: "0xE54Ca86531e17Ef3616d22Ca28b0D458b6C89106",
