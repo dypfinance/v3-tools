@@ -366,7 +366,7 @@ const LaunchpadDetails = ({
       } else {
         setdepositStatus("initial");
       }
-    } else  setdepositStatus("initial");
+    } else setdepositStatus("initial");
   };
 
   const handleUserMaxDeposit = () => {
@@ -564,11 +564,8 @@ const LaunchpadDetails = ({
           seterrorMsg("");
           setCanDeposit(true);
         }
-      }
-      else {
-        seterrorMsg(
-          "Buy DYP tokens to become eligible for the whitelist"
-        );
+      } else {
+        seterrorMsg("Buy DYP tokens to become eligible for the whitelist");
         setCanDeposit(false);
       }
     } else if (depositAmount === 0) {
@@ -952,7 +949,7 @@ const LaunchpadDetails = ({
                       }}
                       min={100}
                       maxLength={10}
-                      pattern="[0-9]{4}" 
+                      pattern="[0-9]{4}"
                     />
                     <button
                       className="inner-max-btn position-absolute"
@@ -1247,8 +1244,39 @@ const LaunchpadDetails = ({
                 <h6 className="mb-0 midle-details-value"> $ 0.007</h6>
               </div>
               <div className="midle-details-item p-3 d-flex flex-column gap-2">
-                <span className="midle-details-span">Cliff/Vesting Period</span>
-                <h6 className="mb-0 midle-details-value">1/10 Months</h6>
+                <span className="midle-details-span">Cliff</span>
+                <h6 className="mb-0 midle-details-value">1 Month</h6>
+              </div>
+              <div className="midle-details-item p-3 d-flex flex-column gap-2">
+                <span className="midle-details-span d-flex align-items-center gap-2 justify-content-between">
+                  Vesting Period{" "}
+                  <Tooltip
+                    title={
+                      <>
+                        <div className="whitelist-tooltip-content-text">
+                          After 1 month, the vesting ia linear. Means you get
+                          tokens unlocked every second for 10 months.
+                        </div>
+                      </>
+                    }
+                    enterDelay={0}
+                    leaveDelay={0}
+                  >
+                    <img
+                      src={
+                        "https://cdn.worldofdypians.com/tools/tooltipIcon.svg"
+                      }
+                      alt=""
+                    />
+                  </Tooltip>
+                </span>
+                <h6 className="mb-0 midle-details-value">10 Months</h6>
+              </div>
+              <div className="midle-details-item p-3 d-flex flex-column gap-2">
+                <span className="midle-details-span">
+                Unlocked at TGE
+                </span>
+                <h6 className="mb-0 midle-details-value">8%</h6>
               </div>
               <div className="midle-details-item p-3 d-flex flex-column gap-2">
                 <span className="midle-details-span">Network</span>
@@ -1266,7 +1294,9 @@ const LaunchpadDetails = ({
               </div>
               <div className="midle-details-item p-3 d-flex flex-column gap-2">
                 <span className="midle-details-span">Listing Time</span>
-                <h6 className="mb-0 midle-details-value">January 22, 1 PM UTC</h6>
+                <h6 className="mb-0 midle-details-value">
+                  January 22, 1 PM UTC
+                </h6>
               </div>
             </div>
             <div className="launchpad-info-divider my-4"></div>
