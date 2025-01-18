@@ -92,7 +92,7 @@ const LaunchpadDetails = ({
 
   const getTotalCommitment = async () => {
     const result = await axios
-      .get("https://api.worldofdypians.com/api/latest-commitments")
+      .get("https://api.worldofdypians.com/api/latest-commitments/midle")
       .catch((e) => {
         console.error(e);
         return 0;
@@ -655,7 +655,7 @@ const LaunchpadDetails = ({
             <div className="midle-total-commited px-2 py-1 d-flex align-items-center justify-content-center gap-1">
               <span className="midle-commited-span">Commited</span>
               <span className="midle-commited-value">
-                ${getFormattedNumber(totalDeposited)}
+                ${getFormattedNumber(totalCommitmentValue)}
               </span>
             </div>
           </div>
