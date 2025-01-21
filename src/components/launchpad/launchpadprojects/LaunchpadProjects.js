@@ -84,12 +84,12 @@ const LaunchpadProjects = ({ totalCommitmentValueMidle,totalParticipants }) => {
                         <span className="time-left">Sale price</span>
                         <span className="project-date">$0.007</span>
                       </div>
-                      <div className="d-flex flex-column gap-2">
+                      {/* <div className="d-flex flex-column gap-2">
                         <span className="time-left">Total comitted</span>
                         <span className="project-date">
                           {getFormattedNumber(totalCommitmentValueMidle)} USDT
                         </span>
-                      </div>
+                      </div> */}
                       {/* <div className="d-flex flex-column gap-2">
                         <span className="time-left">Participants</span>
                         <span className="project-date">{getFormattedNumber(totalParticipants, 0)}</span>

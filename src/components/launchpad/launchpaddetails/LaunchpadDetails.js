@@ -649,12 +649,12 @@ const LaunchpadDetails = ({
               src="https://cdn.worldofdypians.com/tools/midleDetailsBanner.png"
               alt=""
             />
-            <div className="midle-total-commited px-2 py-1 d-flex align-items-center justify-content-center gap-1">
+            {/* <div className="midle-total-commited px-2 py-1 d-flex align-items-center justify-content-center gap-1">
               <span className="midle-commited-span">Commited</span>
               <span className="midle-commited-value">
                 ${getFormattedNumber(totalCommitmentValue)}
               </span>
-            </div>
+            </div> */}
           </div>
           <div className="d-flex align-items-center justify-content-between mt-3">
             <div className="d-flex align-items-center gap-2">
