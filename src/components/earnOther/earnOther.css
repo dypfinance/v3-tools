@@ -27,7 +27,7 @@
 
 .earn-other-hero {
   background: #282a5c;
-  background-image: url("../../assets/earnOtherAssets/earnOtherHeroBackground.webp");
+  background-image: url("https://cdn.worldofdypians.com/tools/earnOtherHeroBackground.webp");
   /* min-height: 150px; */
   background-size: cover;
   background-repeat: no-repeat;
@@ -515,7 +515,7 @@ hr {
 
 
 .premiumBgDesktop {
-  background: url(./assets/premiumBg.webp);
+  background: url('https://cdn.worldofdypians.com/tools/premiumBg.webp');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -524,7 +524,7 @@ hr {
 }
 
 .avaxBgDesktop {
-  background: url(./assets/avaxBg.webp);
+  background: url('https://cdn.worldofdypians.com/tools/avaxBg.webp');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -533,7 +533,7 @@ hr {
 }
 
 .ethBgDesktop {
-  background: url(./assets/ethBg.webp);
+  background: url('https://cdn.worldofdypians.com/tools/ethBg.webp');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -542,7 +542,7 @@ hr {
 }
 
 .bscBgDesktop {
-  background: url(./assets/bscBg.webp);
+  background: url('https://cdn.worldofdypians.com/tools/bscBg.webp');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -551,7 +551,7 @@ hr {
 }
 
 .cawsBgDesktop {
-  background: url(./assets/cawsBg.webp);
+  background: url('https://cdn.worldofdypians.com/tools/cawsBg.webp');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -560,7 +560,7 @@ hr {
 }
 
 .landBgDesktop {
-  background: url(./assets/landBg.webp);
+  background: url('https://cdn.worldofdypians.com/tools/landBg.webp');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -570,7 +570,7 @@ hr {
 
 @media only screen and (max-width: 500px) {
   .cawsBgDesktop {
-    background: url(./assets/cawsBgMobile.webp);
+    background: url('https://cdn.worldofdypians.com/tools/cawsBgMobile.webp');
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -579,7 +579,7 @@ hr {
   }
 
   .landBgDesktop {
-    background: url(./assets/landBgMobile.webp);
+    background: url('https://cdn.worldofdypians.com/tools/landBgMobile.webp');
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -588,7 +588,7 @@ hr {
   }
 
   .bscBgDesktop {
-    background: url(./assets/bscBgMobile.webp);
+    background: url('https://cdn.worldofdypians.com/tools/bscBgMobile.webp');
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -596,7 +596,7 @@ hr {
   }
 
   .ethBgDesktop {
-    background: url(./assets/ethBgMobile.webp);
+    background: url('https://cdn.worldofdypians.com/tools/ethBgMobile.webp');
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -605,7 +605,7 @@ hr {
   }
 
   .premiumBgDesktop {
-    background: url(./assets/premiumBgMobile.webp);
+    background: url('https://cdn.worldofdypians.com/tools/premiumBgMobile.webp');
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -614,7 +614,7 @@ hr {
   }
 
   .avaxBgDesktop {
-    background: url(./assets/avaxBgMobile.webp);
+    background: url('https://cdn.worldofdypians.com/tools/avaxBgMobile.webp');
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -852,7 +852,7 @@ hr {
 
 .calculator-btn {
   background-color: #26264f;
-  background-image: url("../../assets/earnAssets/calculatorButtonBg.png");
+  background-image: url("https://cdn.worldofdypians.com/tools/calculatorButtonBg.png");
   box-shadow: 0px 32px 64px rgba(17, 17, 17, 0.08);
   border-radius: 15px;
   background-size: cover;
@@ -867,7 +867,7 @@ hr {
 
 .total-value-locked-container {
   background-color: #302e68;
-  background-image: url("../../assets/earnAssets/tvlBackground.png");
+  background-image: url("https://cdn.worldofdypians.com/tools/tvlBackground.png");
   background-repeat: no-repeat;
   background-size: cover;
   border-radius: 6px;
@@ -948,7 +948,7 @@ hr {
 }
 
 .total-tvl-wrapper {
-  background-image: url("../../assets/earnAssets/totalTvlBg.svg");
+  background-image: url("https://cdn.worldofdypians.com/tools/totalTvlBg.svg");
   background-size: cover;
   background-repeat: no-repeat;
   border-radius: 6px;
@@ -980,7 +980,7 @@ hr {
 
 @media screen and (max-width: 786px) {
   .earn-other-hero {
-    background-image: url("../../assets/earnAssets/earnHeroMobileBg.png");
+    background-image: url("https://cdn.worldofdypians.com/tools/earnHeroMobileBg.png");
   }
 
   .top-picks-container {

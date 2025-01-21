@@ -2,21 +2,20 @@ import React from "react";
 import Web3 from "web3";
 import getFormattedNumber from "../../functions/get-formatted-number";
 import { NavLink } from "react-router-dom";
-import Error from "../../assets/error.svg";
-import Placeholder from "../../assets/person.svg";
-import "./account.css";
-import NftCawCard from "../caws/NftMinting/components/General/NftCawCard/NftCawCard";
-import TierLevels from "../launchpad/tierlevels/TierLevels";
-import coinStackIcon from "../launchpad/assets/coinStackIcon.svg";
 import axios from "axios";
-import openNameChange from "./assets/openNameChange.svg";
 import { ClickAwayListener, Tooltip } from "@material-ui/core";
 import { shortAddress } from "../../functions/shortAddress";
-import TopPoolsCard from "../top-pools-card/TopPoolsCard";
-import useWindowSize from "../../functions/useWindowSize";
-import gotoWod from "./assets/gotoWod.svg";
 import "../caws/NftMinting/components/General/NftStakingCawCard/_nftStakeCawCard.scss";
+import "./account.css";
+
+
+import NftCawCard from "../caws/NftMinting/components/General/NftCawCard/NftCawCard";
+import TopPoolsCard from "../top-pools-card/TopPoolsCard";
 import Plans from "./Plans";
+
+
+
+
 
 const { BigNumber } = window;
 
@@ -35,7 +34,7 @@ export default class Subscription extends React.Component {
       favorites: [],
       favoritesETH: [],
       selectedFile: null,
-      image: Placeholder,
+      image: 'https://cdn.worldofdypians.com/tools/person.svg',
       lockActive: false,
       status: "",
       loadspinner: false,
@@ -1358,7 +1357,7 @@ export default class Subscription extends React.Component {
         })
         .then((data) => {
           this.setState({
-            image: data.status === 0 ? Placeholder : data.avatar,
+            image: data.status === 0 ? 'https://cdn.worldofdypians.com/tools/person.svg' : data.avatar,
           });
         })
         .catch(console.error);
@@ -1373,13 +1372,13 @@ export default class Subscription extends React.Component {
         })
         .then((data) => {
           this.setState({
-            image: data.status === 0 ? Placeholder : data.avatar,
+            image: data.status === 0 ? 'https://cdn.worldofdypians.com/tools/person.svg' : data.avatar,
           });
         })
         .catch(console.error);
 
       return response;
-    } else this.setState({ image: Placeholder });
+    } else this.setState({ image: 'https://cdn.worldofdypians.com/tools/person.svg' });
   };
 
   deleteAvatar = async () => {
@@ -1390,7 +1389,7 @@ export default class Subscription extends React.Component {
         return res.json();
       })
       .then(() => {
-        this.setState({ image: Placeholder });
+        this.setState({ image: 'https://cdn.worldofdypians.com/tools/person.svg' });
       })
       .catch(console.error);
 
@@ -1470,7 +1469,7 @@ export default class Subscription extends React.Component {
                   <div className="position-relative">
                     <div className="avatar-border"></div>
                     <img
-                      src={require("./assets/changeImage.svg").default}
+                      src={'https://cdn.worldofdypians.com/tools/changeImage.svg'}
                       alt=""
                       className="add-image"
                     />
@@ -1504,7 +1503,7 @@ export default class Subscription extends React.Component {
                 <></>
               )}
               {this.state.showRemovebtn === true ||
-              this.state.image !== Placeholder ? (
+              this.state.image !== 'https://cdn.worldofdypians.com/tools/person.svg' ? (
                 <div className="removebtn" type="" onClick={this.deleteAvatar}>
                   {this.state.loadspinnerRemove === true ? (
                     <div
@@ -1620,7 +1619,7 @@ export default class Subscription extends React.Component {
                             >
                               <img
                                 src={
-                                  require("./assets/clipboardIcon.svg").default
+                                 'https://cdn.worldofdypians.com/tools/clipboardIcon.svg'
                                 }
                                 className="cursor-pointer"
                                 alt="clipboard"
@@ -1652,7 +1651,7 @@ export default class Subscription extends React.Component {
                   {this.props.isPremium === true ? (
                     <div className="plan-tag py-2 px-4 d-flex align-items-center gap-2">
                       <img
-                        src={require("./assets/premiumDypIcon.svg").default}
+                        src={'https://cdn.worldofdypians.com/tools/premiumDypIcon.svg'}
                         alt=""
                         style={{ width: 28, height: 28 }}
                       />
@@ -1666,7 +1665,7 @@ export default class Subscription extends React.Component {
                       }}
                     >
                       <img
-                        src={require("./assets/premiumDypIcon.svg").default}
+                        src={'https://cdn.worldofdypians.com/tools/premiumDypIcon.svg'}
                         alt=""
                         style={{ width: 28, height: 28 }}
                       />
@@ -1745,7 +1744,7 @@ export default class Subscription extends React.Component {
                 <div className=" balance-item-wrapper gap-3 ">
                   <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-3 gap-xxl-3 gap-lg-1">
                     <img
-                      src={require(`./assets/ethIcon.svg`).default}
+                      src={'https://cdn.worldofdypians.com/wod/eth.svg'}
                       width={20}
                       height={20}
                       alt=""
@@ -1755,7 +1754,7 @@ export default class Subscription extends React.Component {
                         {getFormattedNumber(this.state.ethBalance)} DYP
                       </span>
                       <img
-                        src={require(`./assets/dypv1Icon.svg`).default}
+                        src={'https://cdn.worldofdypians.com/tools/dyplogo.svg'}
                         width={20}
                         height={20}
                         alt=""
@@ -1764,7 +1763,7 @@ export default class Subscription extends React.Component {
                   </div>
                   <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2  gap-3 gap-xxl-3 gap-lg-1">
                     <img
-                      src={require(`./assets/wbnbIcon.svg`).default}
+                      src={'https://cdn.worldofdypians.com/wod/bnbIcon.svg'}
                       width={20}
                       height={20}
                       alt=""
@@ -1774,7 +1773,7 @@ export default class Subscription extends React.Component {
                         {getFormattedNumber(this.state.bnbBalance)} DYP
                       </span>
                       <img
-                        src={require(`./assets/dypv1Icon.svg`).default}
+                        src={'https://cdn.worldofdypians.com/tools/dyplogo.svg'}
                         width={20}
                         height={20}
                         alt=""
@@ -1783,7 +1782,7 @@ export default class Subscription extends React.Component {
                   </div>
                   <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-3 gap-xxl-3 gap-lg-1">
                     <img
-                      src={require(`./assets/wavaxIcon.svg`).default}
+                      src={'https://cdn.worldofdypians.com/wod/avaxIcon.svg'}
                       alt=""
                       width={20}
                       height={20}
@@ -1793,7 +1792,7 @@ export default class Subscription extends React.Component {
                         {getFormattedNumber(this.state.avaxBalance)} DYP
                       </span>
                       <img
-                        src={require(`./assets/dypv1Icon.svg`).default}
+                        src={'https://cdn.worldofdypians.com/tools/dyplogo.svg'}
                         width={20}
                         height={20}
                         alt=""
@@ -1802,7 +1801,7 @@ export default class Subscription extends React.Component {
                   </div>
                   <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-3 gap-xxl-3 gap-lg-1">
                     <img
-                      src={require(`./assets/baseLogo.svg`).default}
+                      src={'https://cdn.worldofdypians.com/wod/base.svg'}
                       alt=""
                       width={20}
                       height={20}
@@ -1812,7 +1811,7 @@ export default class Subscription extends React.Component {
                         {getFormattedNumber(this.state.baseBalance)} DYP
                       </span>
                       <img
-                        src={require(`./assets/dypv1Icon.svg`).default}
+                        src={'https://cdn.worldofdypians.com/tools/dyplogo.svg'}
                         width={20}
                         height={20}
                         alt=""
@@ -2616,7 +2615,7 @@ export default class Subscription extends React.Component {
                               <div className="d-flex justify-content-center align-items-center bnbTagwrapper">
                                 <img
                                   src={
-                                    require("../../assets/bnblogo.svg").default
+                                   'https://cdn.worldofdypians.com/wod/bnbIcon.svg'
                                   }
                                   alt=""
                                   style={{ height: 20, width: 20 }}
@@ -2702,7 +2701,7 @@ export default class Subscription extends React.Component {
                               <div className="d-flex justify-content-center align-items-center avaxTagWrapper">
                                 <img
                                   src={
-                                    require("../../assets/wavax.svg").default
+                                    'https://cdn.worldofdypians.com/wod/avaxIcon.svg'
                                   }
                                   alt=""
                                   style={{ height: 20, width: 20 }}
@@ -2765,7 +2764,7 @@ export default class Subscription extends React.Component {
             <div className="col-12 col-lg-6">
               <div className="mycawsCollection position-relative mb-5">
                 <div className="nft-ethereum-tag p-2 d-flex align-items-center gap-2">
-                  <img src={require("./assets/ethIcon.svg").default} alt="" />
+                  <img src={'https://cdn.worldofdypians.com/wod/eth.svg'} alt="" />
                   <span className="nft-ethereum-span">Ethereum</span>
                 </div>
                 <div className="d-flex flex-column gap-2 justify-content-between align-items-start">
@@ -2832,7 +2831,7 @@ export default class Subscription extends React.Component {
             <div className="col-12 col-lg-6">
               <div className="mycawsCollection position-relative mb-5">
                 <div className="nft-ethereum-tag p-2 d-flex align-items-center gap-2">
-                  <img src={require("./assets/ethIcon.svg").default} alt="" />
+                  <img src={'https://cdn.worldofdypians.com/wod/eth.svg'} alt="" />
                   <span className="nft-ethereum-span">Ethereum</span>
                 </div>
                 <div className="d-flex flex-column gap-2 justify-content-between align-items-start">

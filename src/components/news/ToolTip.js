@@ -1,5 +1,5 @@
 import React from "react";
-import DypLogo from "./assets/dyp-logo.svg";
+
 
 const ToolTip = ({bottom, left, status}) => {
   return (

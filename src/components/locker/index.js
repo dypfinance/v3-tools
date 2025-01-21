@@ -2,35 +2,15 @@ import React from "react";
 import getFormattedNumber from "../../functions/get-formatted-number";
 import DatePicker from "react-datepicker";
 import { NavLink } from "react-router-dom";
-import moment from "moment";
 import "react-datepicker/dist/react-datepicker.css";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
-import InfoModal from "./InfoModal";
-import Badge from "../../assets/badge.svg";
-import BadgeSmall from "../../assets/badge-small.svg";
-import VerifiedLock from "./verifiedlock.svg";
-import LiqLocked from "./lock-liquidity.jpeg";
-import Active from "../../assets/active.svg";
-import InActive from "../../assets/inactive.svg";
-import BadgeYellow from "../../assets/badge-yellow.svg";
-import BadgeGray from "../../assets/badge-gray.svg";
-import BadgeGrayLight from "../../assets/badge-gray-light.svg";
+  
+import "./newlocker.css";
+import PairLockerCard from "./PairLockerCard";
 import CountDownTimer from "./Countdown";
 import Skeleton from "./Skeleton";
-import Error from "../../assets/error.svg";
-import "./newlocker.css";
-import liquidityIcon from "./assets/liquidityIcon.svg";
-import securityIcon from "./assets/securityIcon.svg";
-import greySecurityIcon from "./assets/greySecurityIcon.svg";
-import moreInfo from "../FARMINNG/assets/more-info.svg";
-import ethStakeActive from "../../assets/earnAssets/ethStakeActive.svg";
-import bnbStakeActive from "../../assets/earnAssets/bnbStakeActive.svg";
-import avaxStakeActive from "../../assets/earnAssets/avaxStakeActive.svg";
-import lockerCalendarIcon from "./assets/lockerCalendarIcon.svg";
-import coinStackIcon from "../launchpad/assets/coinStackIcon.svg";
-import purpleLiquidityLocker from "./assets/purpleLiquidityLocker.svg";
-import PairLockerCard from "./PairLockerCard";
+import InfoModal from "./InfoModal";
 
 export default class Locker extends React.Component {
   constructor(props) {
@@ -76,7 +56,6 @@ export default class Locker extends React.Component {
     };
   }
 
- 
   checkTotalLpLocked = async () => {
     let baseTokens =
       this.props.networkId === "1"
@@ -92,14 +71,13 @@ export default class Locker extends React.Component {
     this.setState({ totalLpLocked });
   };
 
- 
   getAllData = async (data) => {
     let pair_id;
-    if (this.props.pair_id ) {
+    if (this.props.pair_id) {
       pair_id = this.props.match.pair_id;
-    } else if (!this.props.pair_id  && data === "0x1") {
+    } else if (!this.props.pair_id && data === "0x1") {
       pair_id = "0x76911e11fddb742d75b83c9e1f611f48f19234e4";
-    } else if (!this.props.pair_id  && data === "0xa86a") {
+    } else if (!this.props.pair_id && data === "0xa86a") {
       pair_id = "0x497070e8b6c55fd283d8b259a6971261e2021c01";
     }
     let baseTokens =
@@ -108,7 +86,7 @@ export default class Locker extends React.Component {
         : await window.getBaseTokens();
 
     this.setState({ baseTokens });
-    let isAddress = await window.isAddress(pair_id); 
+    let isAddress = await window.isAddress(pair_id);
     if (isAddress) {
       this.refreshTokenLocks(pair_id);
       // this.handlePairChange(null, pair_id);
@@ -122,8 +100,7 @@ export default class Locker extends React.Component {
   };
 
   componentDidMount() {
-    // window.scrollTo(0, 0); 
-    
+    // window.scrollTo(0, 0);
   }
 
   componentWillUnmount() {
@@ -134,7 +111,10 @@ export default class Locker extends React.Component {
     if (this.state.isLoadingMoreMyLocks) return;
     this.setState({ isLoadingMoreMyLocks: true });
     try {
-      let recipient = this.props.isConnected === true ? this.props.coinbase : window.config.coinbase_address
+      let recipient =
+        this.props.isConnected === true
+          ? this.props.coinbase
+          : window.config.coinbase_address;
 
       let recipientLocksLength =
         this.props.networkId === "1"
@@ -171,21 +151,15 @@ export default class Locker extends React.Component {
 
   onComponentMount = async () => {
     this.refreshMyLocks().then();
- 
+
     // this.setState({ coinbase: await window.getCoinbase() });
     let pair_id;
 
-    if (this.props.pair_id ) {
+    if (this.props.pair_id) {
       pair_id = this.props.match.pair_id;
-    } else if (
-      !this.props.pair_id  &&
-      this.props.networkId === "1"
-    ) {
+    } else if (!this.props.pair_id && this.props.networkId === "1") {
       pair_id = "0x76911e11fddb742d75b83c9e1f611f48f19234e4";
-    } else if (
-      !this.props.pair_id  &&
-      this.props.networkId === "43314"
-    ) {
+    } else if (!this.props.pair_id && this.props.networkId === "43314") {
       pair_id = "0x497070e8b6c55fd283d8b259a6971261e2021c01";
     }
 
@@ -210,30 +184,34 @@ export default class Locker extends React.Component {
 
   refreshUsdValueOfLP = async (pair, amount, baseTokens) => {
     try {
-
       let totalSupply = await window.getTokenTotalSupply(pair);
       this.setState({ lpTotalSupply: totalSupply });
 
-      let { token0, token1 } = await window.getPairTokensInfo(pair);
+      let { token0, token1 } = await window
+        .getPairTokensInfo(pair)
+        .catch((e) => {
+          console.error(e);
+        });
       let baseToken;
       if (baseTokens.includes(token0.address.toLowerCase())) {
         baseToken = token0;
       } else if (baseTokens.includes(token1.address.toLowerCase())) {
         baseToken = token1;
       }
-      if(baseToken && baseToken.address)
-     { let baseTokenBalance = await window.getTokenHolderBalance(
-        baseToken.address,
-        pair
-      );
-      let baseTokenInLp =
-        (baseTokenBalance / 10 ** (baseToken.decimals * 1)) *
-        (amount / totalSupply);
-      let tokenCG = window.tokenCG[baseToken.address.toLowerCase()];
-      if (!tokenCG) return;
-      let usdPerBaseToken = Number(await window.getPrice(tokenCG));
-      let usdValueOfLP = baseTokenInLp * usdPerBaseToken * 2;
-      this.setState({ usdValueOfLP });}
+      if (baseToken && baseToken.address) {
+        let baseTokenBalance = await window.getTokenHolderBalance(
+          baseToken.address,
+          pair
+        );
+        let baseTokenInLp =
+          (baseTokenBalance / 10 ** (baseToken.decimals * 1)) *
+          (amount / totalSupply);
+        let tokenCG = window.tokenCG[baseToken.address.toLowerCase()];
+        if (!tokenCG) return;
+        let usdPerBaseToken = Number(await window.getPrice(tokenCG));
+        let usdValueOfLP = baseTokenInLp * usdPerBaseToken * 2;
+        this.setState({ usdValueOfLP });
+      }
     } catch (e) {
       console.error(e);
     }
@@ -245,8 +223,12 @@ export default class Locker extends React.Component {
     try {
       let tokenLocksLength =
         this.props.networkId === "1"
-          ? await window.getActiveLockIdsLengthByTokenETH(token)
-          : await window.getActiveLockIdsLengthByToken(token);
+          ? await window.getActiveLockIdsLengthByTokenETH(token).catch((e) => {
+              console.error(e);
+            })
+          : await window.getActiveLockIdsLengthByToken(token).catch((e) => {
+              console.error(e);
+            });
 
       tokenLocksLength = Number(tokenLocksLength);
       let step = window.config.MAX_LOCKS_TO_LOAD_PER_CALL;
@@ -255,8 +237,16 @@ export default class Locker extends React.Component {
         let endIndex = Math.min(tokenLocksLength, startIndex + step);
         let tokenLocks =
           this.props.networkId === "1"
-            ? await window.getActiveLocksByTokenETH(token, startIndex, endIndex)
-            : await window.getActiveLocksByToken(token, startIndex, endIndex);
+            ? await window
+                .getActiveLocksByTokenETH(token, startIndex, endIndex)
+                .catch((e) => {
+                  console.error(e);
+                })
+            : await window
+                .getActiveLocksByToken(token, startIndex, endIndex)
+                .catch((e) => {
+                  console.error(e);
+                });
 
         tokenLocks = this.state.tokenLocks.concat(tokenLocks);
         this.setState({ tokenLocksLength, tokenLocks });
@@ -270,7 +260,7 @@ export default class Locker extends React.Component {
         })
       );
       var objId = this.state.tokenLocks.find(function (o) {
-        return o.amount == maxAmount;
+        return o.amount === maxAmount;
       });
       this.setState({ maxLpID: objId?.id });
     }
@@ -278,18 +268,27 @@ export default class Locker extends React.Component {
 
   handlePairChange = async (e, pair_address = null) => {
     let newPairAddress = pair_address || e;
-
-    this.setState({ pair_address: newPairAddress }, () => {
+    let isaddress = await window.isAddress(newPairAddress);
+    if(isaddress) {
       this.refreshTokenLocks(newPairAddress);
-    });
+    }
+    this.setState({ pair_address: newPairAddress });
 
     let totalLpLocked =
       this.props.networkId === "1"
-        ? await window.getLockedAmountETH(newPairAddress)
-        : await window.getLockedAmount(newPairAddress);
+        ? await window.getLockedAmountETH(newPairAddress).catch((e) => {
+            console.error(e);
+          })
+        : await window.getLockedAmount(newPairAddress).catch((e) => {
+            console.error(e);
+          });
     this.setState({ totalLpLocked });
 
-    let totalSupply = await window.getTokenTotalSupply(newPairAddress);
+    let totalSupply = await window
+      .getTokenTotalSupply(newPairAddress)
+      .catch((e) => {
+        console.error(e);
+      });
     this.setState({ lpTotalSupply: totalSupply });
 
     clearTimeout(this.pairChangeTimeout);
@@ -297,7 +296,7 @@ export default class Locker extends React.Component {
   };
 
   loadPairInfo = async () => {
-    let isConnected = this.props.isConnected
+    let isConnected = this.props.isConnected;
 
     if (!isConnected) {
       this.setState({
@@ -334,7 +333,9 @@ export default class Locker extends React.Component {
   };
 
   selectBaseToken = async (addr) => {
-    let pair = await window.getPairTokensInfo(addr);
+    let pair = await window.getPairTokensInfo(addr).catch((e) => {
+      console.error(e);
+    });
     console.log(pair);
     this.setState({ pair });
     this.setState({ status: "" });
@@ -375,7 +376,7 @@ export default class Locker extends React.Component {
   handleApprove = async (e) => {
     let selectedBaseTokenAddress = this.state.pair
       ? this.state.pair[
-          this.state.selectedBaseToken == "0" ? "token0" : "token1"
+          this.state.selectedBaseToken === "0" ? "token0" : "token1"
         ].address
       : "";
     let baseTokens = window.ethereum
@@ -385,7 +386,7 @@ export default class Locker extends React.Component {
       : await window.getBaseTokensETH();
     if (
       !baseTokens.includes(selectedBaseTokenAddress) &&
-      this.state.amount != 0
+      Number(this.state.amount) !== 0
     ) {
       console.log({ selectedBaseTokenAddress, baseTokens });
       this.setState({
@@ -394,7 +395,7 @@ export default class Locker extends React.Component {
       return;
     }
 
-    if (this.state.amount == 0) {
+    if (Number(this.state.amount) === 0) {
       this.setState({
         status: "Not enough liquidity of base token!",
       });
@@ -403,7 +404,7 @@ export default class Locker extends React.Component {
 
     if (
       baseTokens.includes(selectedBaseTokenAddress) &&
-      this.state.amount == 0
+      Number(this.state.amount === 0)
     ) {
       this.setState({
         status: "Please select amount to lock!",
@@ -453,7 +454,7 @@ export default class Locker extends React.Component {
     e.preventDefault();
     let selectedBaseTokenAddress = this.state.pair
       ? this.state.pair[
-          this.state.selectedBaseToken == "0" ? "token0" : "token1"
+          this.state.selectedBaseToken === "0" ? "token0" : "token1"
         ].address
       : "";
     if (window.ethereum) {
@@ -629,7 +630,7 @@ export default class Locker extends React.Component {
         return percentage.toFixed(0);
       }
 
-      if (!this.props.pair_id ) {
+      if (!this.props.pair_id) {
         const percentage = 25;
         return percentage;
       }
@@ -664,7 +665,9 @@ export default class Locker extends React.Component {
               >
                 <div>
                   <img
-                    src={LiqLocked}
+                    src={
+                      "https://cdn.worldofdypians.com/tools/lock-liquidity.jpeg"
+                    }
                     alt=""
                     style={{ width: 80, height: 80, borderRadius: 6 }}
                   />
@@ -690,7 +693,9 @@ export default class Locker extends React.Component {
               >
                 <div>
                   <img
-                    src={VerifiedLock}
+                    src={
+                      "https://cdn.worldofdypians.com/tools/verifiedlock.svg"
+                    }
                     alt=""
                     style={{ width: 80, height: 80, borderRadius: 6 }}
                   />
@@ -720,7 +725,7 @@ export default class Locker extends React.Component {
                       </p>
                       <input
                         style={{ width: "266px", height: 46 }}
-                        disabled={this.props.pair_id }
+                        disabled={this.props.pair_id}
                         value={this.state.pair_address}
                         onChange={(e) => {
                           this.handlePairChange(e);
@@ -747,7 +752,7 @@ export default class Locker extends React.Component {
                   {this.state.status !== "" && (
                     <div className="status-wrapper">
                       <p style={{ color: "#E30613" }}>
-                        <img src={Error} alt="" /> {this.state.status}
+                        <img src={'https://cdn.worldofdypians.com/tools/error.svg'} alt="" /> {this.state.status}
                       </p>
                     </div>
                   )}
@@ -777,7 +782,9 @@ export default class Locker extends React.Component {
               >
                 <div>
                   <img
-                    src={LiqLocked}
+                    src={
+                      "https://cdn.worldofdypians.com/tools/lock-liquidity.jpeg"
+                    }
                     alt=""
                     style={{ width: 80, height: 80, borderRadius: 6 }}
                   />
@@ -803,7 +810,9 @@ export default class Locker extends React.Component {
               >
                 <div>
                   <img
-                    src={VerifiedLock}
+                    src={
+                      "https://cdn.worldofdypians.com/tools/verifiedlock.svg"
+                    }
                     alt=""
                     style={{ width: 80, height: 80, borderRadius: 6 }}
                   />
@@ -833,7 +842,7 @@ export default class Locker extends React.Component {
                       </p>
                       <input
                         style={{ width: "266px", height: 46 }}
-                        disabled={this.props.pair_id }
+                        disabled={this.props.pair_id}
                         value={this.state.pair_address}
                         onChange={(e) => {
                           this.handlePairChange(e);
@@ -1166,7 +1175,7 @@ export default class Locker extends React.Component {
                   {this.state.status !== "" && (
                     <div className="status-wrapper">
                       <p style={{ color: "#E30613" }}>
-                        <img src={Error} alt="" /> {this.state.status}
+                        <img src={'https://cdn.worldofdypians.com/tools/error.svg'} alt="" /> {this.state.status}
                       </p>
                     </div>
                   )}
@@ -1178,8 +1187,8 @@ export default class Locker extends React.Component {
                         <img
                           src={
                             this.state.lockActive === true
-                              ? BadgeGrayLight
-                              : Badge
+                              ? "https://cdn.worldofdypians.com/tools/badge-gray-light.svg"
+                              : "https://cdn.worldofdypians.com/tools/badge.svg"
                           }
                           alt=""
                         />
@@ -1307,7 +1316,12 @@ export default class Locker extends React.Component {
                         More info<i className="fas fa-info-circle"></i>
                       </span>
                     </div>
-                    <img src={BadgeGrayLight} alt="" />
+                    <img
+                      src={
+                        "https://cdn.worldofdypians.com/tools/badge-gray-light.svg"
+                      }
+                      alt=""
+                    />
                     <div
                       className="counter-wrapper"
                       style={{
@@ -1428,9 +1442,9 @@ export default class Locker extends React.Component {
                           src={
                             lock.claimed === false
                               ? Date.now() > lock.unlockTimestamp * 1e3
-                                ? Active
-                                : Active
-                              : InActive
+                                ? "https://cdn.worldofdypians.com/tools/active.svg"
+                                : "https://cdn.worldofdypians.com/tools/active.svg"
+                              : "https://cdn.worldofdypians.com/tools/inactive.svg"
                           }
                           alt=""
                         />
@@ -1460,7 +1474,7 @@ export default class Locker extends React.Component {
                     </span>
                   </div>
                 </div>
-                {String(this.props.coinbase).toLowerCase() ==
+                {String(this.props.coinbase).toLowerCase() ===
                   lock.recipient.toLowerCase() && (
                   <button
                     onClick={this.handleClaim(lock.id)}
@@ -1607,6 +1621,7 @@ export default class Locker extends React.Component {
           }}
         >
           {this.state.tokenLocks &&
+            this.state.tokenLocks.length > 0 &&
             this.state.tokenLocks
               .filter((lock) => lock.id === this.state.maxLpID)
               .map((lock) => {
@@ -1717,9 +1732,9 @@ export default class Locker extends React.Component {
                               src={
                                 lock.claimed === false
                                   ? Date.now() < lock.unlockTimestamp * 1e3
-                                    ? Active
-                                    : Active
-                                  : InActive
+                                    ? "https://cdn.worldofdypians.com/tools/active.svg"
+                                    : "https://cdn.worldofdypians.com/tools/active.svg"
+                                  : "https://cdn.worldofdypians.com/tools/inactive.svg"
                               }
                               alt=""
                             />
@@ -1756,9 +1771,9 @@ export default class Locker extends React.Component {
                       src={
                         lock.claimed === false
                           ? Date.now() > lock.unlockTimestamp * 1e3
-                            ? BadgeYellow
-                            : Badge
-                          : BadgeGray
+                            ? "https://cdn.worldofdypians.com/tools/badge-yellow.svg"
+                            : "https://cdn.worldofdypians.com/tools/badge.svg"
+                          : "https://cdn.worldofdypians.com/tools/badge-gray.svg"
                       }
                       alt=""
                       className="badge-img"
@@ -1862,9 +1877,9 @@ export default class Locker extends React.Component {
                             src={
                               lock.claimed === false
                                 ? Date.now() < lock.unlockTimestamp * 1e3
-                                  ? Active
-                                  : Active
-                                : InActive
+                                  ? "https://cdn.worldofdypians.com/tools/active.svg"
+                                  : "https://cdn.worldofdypians.com/tools/active.svg"
+                                : "https://cdn.worldofdypians.com/tools/inactive.svg"
                             }
                             alt=""
                           />
@@ -1901,9 +1916,9 @@ export default class Locker extends React.Component {
                     src={
                       lock.claimed === false
                         ? Date.now() > lock.unlockTimestamp * 1e3
-                          ? BadgeYellow
-                          : BadgeSmall
-                        : BadgeGray
+                          ? "https://cdn.worldofdypians.com/tools/badge-yellow.svg"
+                          : "https://cdn.worldofdypians.com/tools/badge-small.svg"
+                        : "https://cdn.worldofdypians.com/tools/badge-gray.svg"
                     }
                     alt=""
                     className="badge-img"
@@ -1912,7 +1927,7 @@ export default class Locker extends React.Component {
               );
             })}
 
-          {this.state.tokenLocks.length == 0 && (
+          {this.state.tokenLocks.length === 0 && (
             <div className="row justify-content-between p-0 ml-0">
               <Skeleton theme={this.props.theme} />
               <Skeleton theme={this.props.theme} />
@@ -1935,7 +1950,7 @@ export default class Locker extends React.Component {
       return percentage.toFixed(0);
     }
 
-    if (!this.props.pair_id ) {
+    if (!this.props.pair_id) {
       const percentage = 25;
       return percentage;
     }
@@ -1951,6 +1966,7 @@ export default class Locker extends React.Component {
   };
 
   render() {
+    console.log(this.state.tokenLocks)
     const convertTimestampToDate = (timestamp) => {
       const result = new Intl.DateTimeFormat("en-US", {
         year: "numeric",
@@ -1980,7 +1996,12 @@ export default class Locker extends React.Component {
                     style={{ left: "0px", background: "#EB5E39" }}
                   ></div>
                   <div className="liquidity-icon-holder d-flex align-items-center justify-content-center">
-                    <img src={liquidityIcon} alt="" />
+                    <img
+                      src={
+                        "https://cdn.worldofdypians.com/tools/liquidityIcon.svg"
+                      }
+                      alt=""
+                    />
                   </div>
                   <div
                     className="d-flex flex-column gap-2"
@@ -2000,7 +2021,12 @@ export default class Locker extends React.Component {
                 <div className="px-3 py-4 locker-card security-background d-flex gap-3 h-100  position-relative">
                   <div className="purplediv" style={{ left: "0px" }}></div>
                   <div className="security-icon-holder d-flex align-items-center justify-content-center">
-                    <img src={securityIcon} alt="" />
+                    <img
+                      src={
+                        "https://cdn.worldofdypians.com/tools/securityIcon.svg"
+                      }
+                      alt=""
+                    />
                   </div>
                   <div
                     className="d-flex flex-column gap-2"
@@ -2026,10 +2052,14 @@ export default class Locker extends React.Component {
                   ></div>
                   <div className="d-flex align-items-center justify-content-between">
                     <div className="d-flex align-items-center gap-2">
-                      <img src={greySecurityIcon} alt="" />
+                      <img
+                        src={
+                          "https://cdn.worldofdypians.com/tools/greySecurityIcon.svg"
+                        }
+                        alt=""
+                      />
                       <h6 className="locker-function-title">Create lock</h6>
                     </div>
-                    {/* <img src={moreInfo} alt="" height={24} width={24} /> */}
                   </div>
                   <hr className="form-divider my-4" style={{ height: "3px" }} />
                   <div className="d-flex flex-column flex-lg-row align-items-center justify-content-between gap-5">
@@ -2053,7 +2083,7 @@ export default class Locker extends React.Component {
                               placeholder=" "
                               className="text-input"
                               style={{ width: "100%" }}
-                              disabled={this.props.pair_id }
+                              disabled={this.props.pair_id}
                               value={this.state.pair_address}
                               onChange={(e) => {
                                 this.handlePairChange(e.target.value);
@@ -2139,8 +2169,8 @@ export default class Locker extends React.Component {
                             <img
                               src={
                                 this.state.selectedBaseTokenTicker === "WETH"
-                                  ? ethStakeActive
-                                  : avaxStakeActive
+                                  ? "https://cdn.worldofdypians.com/tools/ethStakeActive.svg"
+                                  : "https://cdn.worldofdypians.com/tools/avaxStakeActive.svg"
                               }
                               alt=""
                               height={24}
@@ -2228,7 +2258,9 @@ export default class Locker extends React.Component {
                         onChange={(unlockDate) => this.setState({ unlockDate })}
                       />
                       <img
-                        src={lockerCalendarIcon}
+                        src={
+                          "https://cdn.worldofdypians.com/tools/lockerCalendarIcon.svg"
+                        }
                         alt=""
                         className="locker-calendar"
                       />
@@ -2380,14 +2412,19 @@ export default class Locker extends React.Component {
               <div className="col-12 col-lg-5 px-0 px-lg-2 position-relative pe-0">
                 <div className="p-4 purple-wrapper">
                   <div className="d-flex align-items-center gap-2">
-                    <img src={coinStackIcon} alt="" />
+                    <img src={'https://cdn.worldofdypians.com/tools/coinStackIcon.svg'} alt="" />
                     <h6 className="locker-function-title">
                       My DYP locker liquidity
                     </h6>
                   </div>
                   <hr className="form-divider my-3" />
                   <div className="locker-liquidity-wrapper p-3 d-flex align-items-center justify-content-between">
-                    <img src={purpleLiquidityLocker} alt="" />
+                    <img
+                      src={
+                        "https://cdn.worldofdypians.com/tools/purpleLiquidityLocker.svg"
+                      }
+                      alt=""
+                    />
                     <div className="d-flex flex-column justify-content-center gap-2 align-items-end">
                       <div
                         className="d-flex align-items-center gap-2 cursor-pointer"
@@ -2396,11 +2433,18 @@ export default class Locker extends React.Component {
                         <span className="locker-indicator">
                           DYP locker status
                         </span>
-                        <img src={moreInfo} alt="" height={20} width={20} />
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/tools/more-info.svg"
+                          }
+                          alt=""
+                          height={20}
+                          width={20}
+                        />
                       </div>
                       <div className="locker-status d-flex align-items-center gap-3 p-2">
                         <span className="locker-status-text">
-                          {this.state.lpBalance == "0"
+                          {Number(this.state.lpBalance) === "0"
                             ? 25
                             : this.getPercentageLocked()}
                           % Locked
@@ -2475,7 +2519,12 @@ export default class Locker extends React.Component {
             <div className="purple-wrapper p-3 mt-3 col-12 col-lg-5 position-relative">
               <div className="purplediv" style={{ left: "0px" }}></div>
               <div className="d-flex align-items-center gap-2">
-                <img src={greySecurityIcon} alt="" />
+                <img
+                  src={
+                    "https://cdn.worldofdypians.com/tools/greySecurityIcon.svg"
+                  }
+                  alt=""
+                />
                 <h6 className="locker-function-title">Create lock</h6>
               </div>
               <hr className="form-divider my-4" style={{ height: "3px" }} />
@@ -2529,7 +2578,8 @@ export default class Locker extends React.Component {
             <PairLockerCard completed={false} active={true} />
             <PairLockerCard completed={false} active={false} /> */}
             {this.state.tokenLocks &&
-              this.state.tokenLocks
+            this.state.tokenLocks.length > 0 &&
+            this.state.tokenLocks
                 .filter((lock) => lock.id === this.state.maxLpID)
                 .map((lock, index) => (
                   <PairLockerCard

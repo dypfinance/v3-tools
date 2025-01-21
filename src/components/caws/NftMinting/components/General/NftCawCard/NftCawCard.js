@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import SvgEyeIcon from "./SvgEyeIcon";
+
 import "./_nftCawCard.scss";
 
 const NftCawCard = ({ modalId, action, nft, coinbase }) => {

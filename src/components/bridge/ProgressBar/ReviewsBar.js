@@ -1,6 +1,6 @@
 import React from 'react';
 import ReviewsProvider from './ReviewsProvider';
-import { CircularProgressbar, CircularProgressbarWithChildren } from 'react-circular-progressbar';
+import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import './progressbar.css'
 

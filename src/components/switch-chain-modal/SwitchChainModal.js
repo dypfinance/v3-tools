@@ -3,8 +3,7 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import useWindowSize from "../../functions/useWindowSize";
 import { shortAddress } from "../../functions/shortAddress";
-import modalBg from "./assets/modalBg.svg";
-import closeX from "./assets/closeX.svg";
+import modalBg from "./assets/modalBg.svg"; 
 import eth from "./assets/eth.svg";
 import bnb from "./assets/bnb.svg";
 import avax from "./assets/avax.svg";
@@ -52,7 +51,7 @@ const SwitchChainModal = ({
       <Box sx={style}>
         <div className="d-flex flex-column justify-content-center position-relative">
           <img
-            src={closeX}
+            src={'https://cdn.worldofdypians.com/wod/popupXmark.svg'}
             alt=""
             className="close-x position-relative cursor-pointer "
             onClick={() => {

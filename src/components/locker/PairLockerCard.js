@@ -1,13 +1,11 @@
-import React from "react";
-import moreInfo from "../FARMINNG/assets/more-info.svg";
-import topLockedImage from './assets/topLocked.svg'
+import React from "react";  
 
 
 
 const PairLockerCard = ({ completed, active, topLocked, id, pair_address, lpAmount, dyp, recipent, unlock, endsIn, startsIn }) => {
   return (
     <div className="pair-locker-card d-flex position-relative">
-      {topLocked && <img src={topLockedImage} alt='top locked' className="top-locked-locker" />}
+      {topLocked && <img src={'https://cdn.worldofdypians.com/tools/topLocked.svg'} alt='top locked' className="top-locked-locker" />}
       <div className="col-7 pair-locker-left p-2 d-flex flex-column gap-2 position-relative">
         <div className="d-flex justify-content-between align-items-center">
           <span className="pair-indicator">ID</span>
@@ -34,13 +32,13 @@ const PairLockerCard = ({ completed, active, topLocked, id, pair_address, lpAmou
           <span className="pair-value">{unlock}</span>
         </div>
         <img
-          src={require(`./assets/${
+          src={`https://cdn.worldofdypians.com/tools/${
             completed === true && active === true
               ? "pairPurple"
               : completed === false && active === true
               ? "pairOrange"
               : "pairGrey"
-          }.svg`).default}
+          }.svg`}
           className="pairlocker-badge"
           width={58}
           height={64}
@@ -61,7 +59,7 @@ const PairLockerCard = ({ completed, active, topLocked, id, pair_address, lpAmou
             <div className="d-flex align-items-start justify-content-between position-relative">
               <span className="pair-indicator">Status</span>
                 {active === true &&  
-              <img src={moreInfo} alt="" className="more-info-tag" />
+              <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" className="more-info-tag" />
                 
                 }             
               {active === true ? 
@@ -69,7 +67,7 @@ const PairLockerCard = ({ completed, active, topLocked, id, pair_address, lpAmou
                 className="active-tag d-flex align-items-center gap-2"
                 style={{ position: "absolute", right: "0" }}
               >
-                <img src={require("./assets/activeMark.svg").default} alt="" />
+                <img src={"https://cdn.worldofdypians.com/tools/activeMark.svg"} alt="" />
                 <span className="active-tag-text">Active</span>
               </div>
               :
@@ -77,7 +75,7 @@ const PairLockerCard = ({ completed, active, topLocked, id, pair_address, lpAmou
               className="inactive-tag d-flex align-items-center gap-2"
               style={{ position: "absolute", right: "0" }}
             >
-              <img src={require("./assets/inactiveMark.svg").default} alt="" />
+              <img src={"https://cdn.worldofdypians.com/tools/inactiveMark.svg"} alt="" />
               <span className="inactive-tag-text">Inactive</span>
             </div>
             }

@@ -1,13 +1,8 @@
 import React from "react";
-import BadgeYellow from "../../assets/badge-yellow.svg";
-import BadgeGray from "../../assets/badge-gray.svg";
-import Badge from "../../assets/badge.svg";
+
 import Modal from "../general/Modal";
 import OutsideClickHandler from "react-outside-click-handler";
-import pairOrange from "./assets/pairOrange.svg";
-import pairPurple from "./assets/pairPurple.svg";
-import pairGrey from "./assets/pairGrey.svg";
-import greySecurityIcon from "./assets/greySecurityIcon.svg";
+ 
 import "./newlocker.css";
 
 const InfoModal = ({ modalId, visible, onModalClose }) => {
@@ -26,7 +21,7 @@ const InfoModal = ({ modalId, visible, onModalClose }) => {
         <div>
           <div style={{ padding: "30px" }}>
             <div className="d-flex align-items-center gap-2">
-              <img src={greySecurityIcon} alt="" />
+              <img src={'https://cdn.worldofdypians.com/tools/greySecurityIcon.svg'} alt="" />
               <span className="locker-function-title">Dyp Locker</span>
             </div>
             <p className="locker-modal-desc" style={{ marginBottom: 20 }}>
@@ -34,7 +29,7 @@ const InfoModal = ({ modalId, visible, onModalClose }) => {
             </p>
             <div className="d-flex flex-column gap-4">
               <div className="d-flex p-3 locker-modal-item justify-content-center gap-2 align-items-start">
-                <img src={pairPurple} className="locker-modal-icon" alt="" />
+                <img src={'https://cdn.worldofdypians.com/tools/pairPurple.svg'} className="locker-modal-icon" alt="" />
                 <div className="d-flex flex-column align-items-start gap-2">
                   <span className="modal-locker-active-tag">Active</span>
                   <h6 className="modal-locker-liquidity">Liquidity Locked</h6>
@@ -44,7 +39,7 @@ const InfoModal = ({ modalId, visible, onModalClose }) => {
                 </div>
               </div>
               <div className="d-flex p-3 locker-modal-item justify-content-center gap-2 align-items-start">
-                <img src={pairOrange} className="locker-modal-icon" alt="" />
+                <img src={'https://cdn.worldofdypians.com/tools/pairOrange.svg'} className="locker-modal-icon" alt="" />
                 <div className="d-flex flex-column align-items-start gap-2">
                   <span className="modal-locker-active-tag">Active</span>
                   <h6 className="modal-locker-liquidity">
@@ -60,7 +55,7 @@ const InfoModal = ({ modalId, visible, onModalClose }) => {
                 </div>
               </div>
               <div className="d-flex p-3 locker-modal-item justify-content-center gap-2 align-items-start">
-                <img src={pairGrey} className="locker-modal-icon" alt="" />
+                <img src={'https://cdn.worldofdypians.com/tools/pairGrey.svg'} className="locker-modal-icon" alt="" />
                 <div className="d-flex flex-column align-items-start gap-2">
                   <span className="modal-locker-active-tag">Inactive</span>
                   <h6 className="modal-locker-liquidity">Liquidity Unlocked</h6>

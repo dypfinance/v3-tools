@@ -3,8 +3,6 @@ import { useEffect, useState } from "react";
 import { useWeb3React as useWeb3ReactCore } from "@web3-react/core";
 import { injected } from "./connectors";
 
-import Web3 from "web3";
-
 export default function getLibrary(provider) {
   const library = new Web3Provider(provider, "any");
   library.pollingInterval = 15000;
@@ -160,6 +158,20 @@ export const handleSwitchNetworkhook = async (chainID) => {
     blockExplorerUrls: ["https://snowtrace.io/"],
   };
 
+  
+  const OPBNBPARAMS = {
+    chainId: "0xcc", // A 0x-prefixed hexadecimal string
+    rpcUrls: ["https://opbnb.publicnode.com"],
+    chainName: "opBNB Mainnet",
+    nativeCurrency: {
+      name: "opBNB",
+      symbol: "BNB", // 2-6 characters long
+      decimals: 18,
+    },
+
+    blockExplorerUrls: ["https://mainnet.opbnbscan.com"],
+  };
+
   const BNBPARAMS = {
     chainId: "0x38", // A 0x-prefixed hexadecimal string
     chainName: "Smart Chain",
@@ -244,6 +256,8 @@ export const handleSwitchNetworkhook = async (chainID) => {
               ? [BNBPARAMS]
               : chainID === "0x2105"
               ? [BASEPARAMS]
+              : chainID === "0xcc"
+              ? [OPBNBPARAMS]
               : chainID === "0x406"
               ? [CONFLUXPARAMS]
               : chainID === "0x585eb4b1"

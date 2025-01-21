@@ -2,8 +2,7 @@ import React, { useRef, useState } from "react";
 import "./buydyp.css";
 import VendorCard from "./VendorCard";
 import Slider from "react-slick";
-import VideoCard from "./VideoCard";
-import customSliderArrow from "../launchpad/assets/customSliderArrow.svg";
+import VideoCard from "./VideoCard"; 
 
 const BuyDyp = () => {
   const settings = {
@@ -50,7 +49,7 @@ const BuyDyp = () => {
       link: "https://www.kucoin.com/trade/DYP-USDT",
       totalvids: "1 video",
       active: true,
-      version: "DYP v2",
+      version: "DYP",
 
       videos: [
         {
@@ -68,7 +67,7 @@ const BuyDyp = () => {
       link: "https://www.gate.io/trade/DYP_USDT",
       totalvids: "1 video",
       active: true,
-      version: "DYP v2",
+      version: "DYP",
 
       videos: [
         {
@@ -88,7 +87,7 @@ const BuyDyp = () => {
       videos: "",
       id: "collapsefive",
       active: true,
-      version: "DYP v2",
+      version: "DYP",
     },
     {
       title: "HTX",
@@ -97,7 +96,7 @@ const BuyDyp = () => {
       totalvids: "0 videos",
       videos: [],
       active: true,
-      version: "DYP v2",
+      version: "DYP",
     },
     {
       title: "Uniswap V2",
@@ -105,7 +104,7 @@ const BuyDyp = () => {
       link: "https://app.uniswap.org/swap?use=V2&inputCurrency=0x39b46B212bDF15b42B166779b9d1787A68b9D0c3",
       totalvids: "8 videos",
       active: true,
-      version: "DYP v2",
+      version: "DYP",
       videos: [
         {
           link: "https://www.youtube.com/embed/yBzIPecqKY8",
@@ -171,30 +170,40 @@ const BuyDyp = () => {
       ],
     },
     {
-      title: "Coinbase",
-      logo: "coinbase.png",
-      link: "https://www.coinbase.com/advanced-trade/spot/DYP-USD",
-      totalvids: "1 video",
+      title: "SynFutures",
+      logo: "synfutures.svg",
+      link: "https://oyster.synfutures.com/#/trade/base/ETH-DYP-EMG-Perpetual",
+      totalvids: "0 videos",
       active: true,
-      version: "DYP v1",
+      version: "DYP",
 
-      videos: [
-        {
-          link: "https://www.youtube.com/embed/mjUUqNy-zW8",
-          image: "coinbase.png",
-          title: "How to buy DeFi Yield Protocol (DYP) on Coinbase",
-          walletName: "Coinbase",
-          thumbnail: "coinbase.png",
-        },
-      ],
+      videos: "",
     },
+    // {
+    //   title: "Coinbase",
+    //   logo: "coinbase.png",
+    //   link: "https://www.coinbase.com/advanced-trade/spot/DYP-USD",
+    //   totalvids: "1 video",
+    //   active: true,
+    //   version: "DYP v1",
+
+    //   videos: [
+    //     {
+    //       link: "https://www.youtube.com/embed/mjUUqNy-zW8",
+    //       image: "coinbase.png",
+    //       title: "How to buy DeFi Yield Protocol (DYP) on Coinbase",
+    //       walletName: "Coinbase",
+    //       thumbnail: "coinbase.png",
+    //     },
+    //   ],
+    // },
     {
       title: "PancakeSwap V2",
       logo: "pancake.png",
       link: "https://pancakeswap.finance/swap?inputCurrencty=BNB&outputCurrency=0x1a3264f2e7b1cfc6220ec9348d33ccf02af7aaa4",
       totalvids: "4 videos",
       active: true,
-      version: "DYP v2",
+      version: "DYP",
 
       videos: [
         {
@@ -230,12 +239,12 @@ const BuyDyp = () => {
       ],
     },
     {
-      title: "Trader Joe",
+      title: "LFJ",
       logo: "traderjoe.webp",
       link: "https://traderjoexyz.com/avalanche/trade?outputCurrency=0x1a3264f2e7b1cfc6220ec9348d33ccf02af7aaa4",
       totalvids: "0 videos",
       active: true,
-      version: "DYP v2",
+      version: "DYP",
 
       videos: "",
       //  [
@@ -426,7 +435,7 @@ console.log(videoList.length)
       </div>
       <h6 className="mt-5 buydyp-title">Exchanges to purchase DYP</h6>
       <div className="row gap-4 gap-lg-0 mx-0 mt-3 px-0 w-100">
-        <div className="col-12 col-lg-5">
+        <div className="col-12 px-0">
           <div className="d-grid vendor-container  py-3 py-lg-0">
             {buyDypItems.map((vendor, index) => (
               <VendorCard
@@ -447,7 +456,7 @@ console.log(videoList.length)
             ))}
           </div>
         </div>
-        <div className="col-12 col-lg-7">
+        {/* <div className="col-12 col-lg-7">
           <div className="vendor-card p-3 position-relative">
             <div className="purplediv"></div>
             <div className="d-flex align-items-center justify-content-between">
@@ -455,7 +464,7 @@ console.log(videoList.length)
                 <div className="selected-image-wrapper">
                   <img
                     src={
-                      require(`./assets/${buyDypItems[activeVendor].logo}`)
+                      `https://cdn.worldofdypians.com/tools/${buyDypItems[activeVendor].logo}`
                         
                     }
                     height={32}
@@ -479,7 +488,7 @@ console.log(videoList.length)
             </div>
             <hr className="form-divider my-3" />
             {videoList.length === 0 ? (
-              <img src={require("./assets/commingSoon.svg").default} />
+              <img src={"https://cdn.worldofdypians.com/tools/commingSoon.svg"} />
             ) : (
               <iframe
                 src={activeVideo?.link}
@@ -501,7 +510,7 @@ console.log(videoList.length)
                     onClick={() => previous()}
                   >
                     <img
-                      src={customSliderArrow}
+                      src={'https://cdn.worldofdypians.com/tools/customSliderArrow.svg'}
                       alt=""
                       className="prev-arrow"
                     />
@@ -511,7 +520,7 @@ console.log(videoList.length)
                     onClick={() => next()}
                   >
                     <img
-                      src={customSliderArrow}
+                      src={'https://cdn.worldofdypians.com/tools/customSliderArrow.svg'}
                       alt=""
                       className="next-arrow"
                     />
@@ -520,14 +529,14 @@ console.log(videoList.length)
               )}
             </div>
             <div className="mt-2">
-              {videoList.length <= 0 ? (
+              {videoList.length === 0 ? (
                 <Slider {...settings} ref={slider}>
-                  <img src={require("./assets/noVideo.svg").default} alt="" />
-                  <img src={require("./assets/noVideo.svg").default} alt="" />
-                  <img src={require("./assets/noVideo.svg").default} alt="" />
-                  <img src={require("./assets/noVideo.svg").default} alt="" />
-                  <img src={require("./assets/noVideo.svg").default} alt="" />
-                  <img src={require("./assets/noVideo.svg").default} alt="" />
+                  <img src={"https://cdn.worldofdypians.com/tools/noVideo.svg"} alt="" className="novidimg" />
+                  <img src={"https://cdn.worldofdypians.com/tools/noVideo.svg"} alt=""  className="novidimg"/>
+                  <img src={"https://cdn.worldofdypians.com/tools/noVideo.svg"} alt=""  className="novidimg"/>
+                  <img src={"https://cdn.worldofdypians.com/tools/noVideo.svg"} alt=""  className="novidimg"/>
+                  <img src={"https://cdn.worldofdypians.com/tools/noVideo.svg"} alt=""  className="novidimg"/>
+                  <img src={"https://cdn.worldofdypians.com/tools/noVideo.svg"} alt=""  className="novidimg"/>
                 </Slider>
               ) : (
                 <Slider {...settings} ref={slider}>
@@ -548,18 +557,19 @@ console.log(videoList.length)
                   {videoList?.length < 4 &&
                     emptyVideos
                       .slice(0, 4 - videoList.length)
-                      .map((item) => (
+                      .map((item, index) => (
                         <img
-                          src={require("./assets/noVideo.svg").default}
-                          className="d-none d-lg-flex"
+                          src={"https://cdn.worldofdypians.com/tools/noVideo.svg"}
+                          className="d-none d-lg-flex novidimg"
                           alt=""
+                          key={index}
                         />
                       ))}
                 </Slider>
               )}
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

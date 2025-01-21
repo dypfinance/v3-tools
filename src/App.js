@@ -14,7 +14,6 @@ import Sidebar from "./components/sidebar/sidebar";
 import Header from "./components/header/header";
 import { Route, Routes } from "react-router-dom";
 // import SubmitInfo from "./components/submit-info/SubmitInfo";
-import { Switch } from "react-router-dom";
 import { RedirectPathToHomeOnly } from "./functions/redirects";
 import Earn from "./components/earn/Earn";
 import Dashboard from "./components/dashboard/Dashboard";
@@ -25,10 +24,6 @@ import Governancebsc from "./components/governance/dev/governance-new-bsc";
 import GovernanceEth from "./components/governance/dev/governance-new";
 import { Navigate } from "react-router-dom";
 // import LandFlyout from "./components/LandFlyout/LandFlyout";
-// import Launchpad from "./components/launchpad/Launchpad";
-// import LaunchpadForm from "./components/launchpad/launchpadform/LaunchpadForm";
-// import LaunchpadDetails from "./components/launchpad/launchpaddetails/LaunchpadDetails";
-// import TierLevels from "./components/launchpad/tierlevels/TierLevels";
 // import NftMinting from "./components/caws/NftMinting/index";
 import Bridge from "./components/bridge/BridgeGeneral";
 import Footer from "./components/Footer/footer";
@@ -36,25 +31,23 @@ import BuyDyp from "./components/buydyp/BuyDyp";
 // import Swap from "./components/swap/Swap";
 import MobileMenu from "./components/sidebar/MobileMenu";
 import Disclaimer from "./components/disclaimer/Disclaimer";
-import ScrollToTop from "./functions/ScrollToTop";
+// import ScrollToTop from "./functions/ScrollToTop";
 // import LandPopup from "./components/LandPopup/LandPopup";
 // import { withRouter } from "react-router-dom";
-import GenesisStaking from "./components/genesisStaking/GenesisStaking";
+// import GenesisStaking from "./components/genesisStaking/GenesisStaking";
 // import CawsStaking from "./components/genesisStaking/CawsStaking";
-import Plans from "./components/account/Plans";
+// import Plans from "./components/account/Plans";
 import DypMigration from "./components/bridge/DypMigration";
 import AlertRibbon from "./components/alert-ribbon/AlertRibbon";
 import EarnOther from "./components/earnOther/EarnOther";
-import EarnInnerPool from "./components/earnOther/EarnInnerPool/EarnInnerPool";
 import EarnOtherNft from "./components/earnOther/EarnOtherNft";
-import EarnInnerPoolNft from "./components/earnOther/EarnInnerPool/EarnInnerPoolNft";
+// import EarnInnerPoolNft from "./components/earnOther/EarnInnerPool/EarnInnerPoolNft";
 import WalletModal from "./components/WalletModal";
 import axios from "axios";
 import MobileFlyout from "./components/mobileFlyout/MobileFlyout";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import { MobileView, BrowserView } from "react-device-detect";
-import closeX from "./components/earnOther/assets/closeX.svg";
 import Whitelist from "./components/whitelist/Whitelist";
 // import WhitelistPopup from "./components/whitelistPopup/WhitelistPopup";
 import Games from "./components/games/Games";
@@ -77,6 +70,8 @@ import {
 import { ethers } from "ethers";
 import LoyaltyProgram from "./components/loyalty/LoyaltyProgram.js";
 import { useParams } from "react-router-dom";
+import LaunchpadMidle from "./components/whitelist/LaunchpadMidle.js";
+import LaunchpadDetails from "./components/launchpad/launchpaddetails/LaunchpadDetails.js";
 
 const LockerWrapper = (props) => {
   const { pair_id } = useParams();
@@ -91,16 +86,11 @@ const LockerWrapper = (props) => {
 
 function App() {
   const [theme, setTheme] = useState("theme-dark");
-  const [isMinimized, setisMinimized] = useState(
-    false && window.innerWidth >= 992
-  );
+
   const [isOpenInMobile, setisOpenInMobile] = useState(false);
   const [isConnected, setisConnected] = useState(false);
   const [coinbase, setcoinbase] = useState(null);
   const [the_graph_result_ETH_V2, setthe_graph_result_ETH_V2] = useState(
-    JSON.stringify(window.the_graph_result_eth_v2)
-  );
-  const [the_graph_result, setthe_graph_result] = useState(
     JSON.stringify(window.the_graph_result_eth_v2)
   );
   const [the_graph_result_AVAX_V2, setthe_graph_result_AVAX_V2] = useState(
@@ -109,14 +99,9 @@ function App() {
   const [the_graph_result_BSC_V2, setthe_graph_result_BSC_V2] = useState(
     JSON.stringify(window.the_graph_result_bsc_v2)
   );
-  const [the_graph_resultbsc, setthe_graph_resultbsc] = useState(
-    JSON.stringify(window.the_graph_result_bsc_v2)
-  );
-  const [the_graph_resultavax, setthe_graph_resultavax] = useState(
-    JSON.stringify(window.the_graph_result_avax_v2)
-  );
-  const [subscribedPlatformTokenAmount, setsubscribedPlatformTokenAmount] =
-    useState(0);
+
+  // const [subscribedPlatformTokenAmount, setsubscribedPlatformTokenAmount] =
+  //   useState(0);
   const [isPremium, setisPremium] = useState(false);
   const [networkId, setnetworkId] = useState(1);
   const [explorerNetworkId, setexplorerNetworkId] = useState(1);
@@ -128,7 +113,7 @@ function App() {
   const [downloadClick, setdownloadClick] = useState(false);
   const [showMobilePopup, setshowMobilePopup] = useState(false);
   const [showWalletPopup, setshowWalletPopup] = useState(false);
-  const [whitelistPopup, setwhitelistPopup] = useState(true);
+  // const [whitelistPopup, setwhitelistPopup] = useState(true);
   const [aggregatorPools, setaggregatorPools] = useState([]);
   const [userCurencyBalance, setuserCurencyBalance] = useState(0);
   const [fireAppcontent, setFireAppContent] = useState(false);
@@ -138,6 +123,11 @@ function App() {
   const [chests, setChests] = useState([]);
   const [openedChests, setOpenedChests] = useState([]);
   const [chestCount, setChestCount] = useState(0);
+
+  const [opbnbchests, setopbnbChests] = useState([]);
+  const [opbnbopenedChests, setopbnbOpenedChests] = useState([]);
+  const [opbnbchestCount, setopbnbChestCount] = useState(0);
+
   const [isonlink, setIsOnLink] = useState(false);
   const [hasDypBalance, sethasDypBalance] = useState(false);
   const [hasiDypBalance, sethasiDypBalance] = useState(false);
@@ -153,6 +143,19 @@ function App() {
   const [monthlyplayerData, setmonthlyplayerData] = useState([]);
   const [activePlayerMonthly, setActivePlayerMonthly] = useState(false);
   const [monthlyUser, setMonthlyUser] = useState([]);
+
+  const [weeklyplayerDataOpbnb, setweeklyplayerDataOpbnb] = useState([]);
+  const [activePlayerWeeklyOpbnb, setActivePlayerWeeklyOpbnb] = useState(false);
+  const [weeklyUserOpbnb, setWeeklyUserOpbnb] = useState({});
+  const [monthlyplayerDataOpbnb, setmonthlyplayerDataOpbnb] = useState([]);
+  const [activePlayerMonthlyOpbnb, setActivePlayerMonthlyOpbnb] =
+    useState(false);
+  const [monthlyUserOpbnb, setMonthlyUserOpbnb] = useState([]);
+  const [previousWeeklyVersionOpbnb, setpreviousWeeklyVersionOpbnb] =
+    useState(0);
+  const [previousMonthlyVersionOpbnb, setpreviousMonthlyVersionOpbnb] =
+    useState(0);
+
   const [kittyDashRecords, setkittyDashRecords] = useState([]);
   const [activePlayerKitty, setActivePlayerKitty] = useState(false);
   const [kittyUser, setKittyUser] = useState({});
@@ -185,6 +188,10 @@ function App() {
     setChestCount(chestCount + 1);
   };
 
+  const onOpbnbChestClaimed = () => {
+    setopbnbChestCount(opbnbchestCount + 1);
+  };
+
   const fetchAggregatorPools = async () => {
     const result = await axios
       .get(
@@ -196,6 +203,7 @@ function App() {
 
     if (result && result.status === 200) {
       const pools = result.data.stakingLists;
+      console.log("pools", pools);
       setaggregatorPools(pools);
     }
   };
@@ -220,6 +228,8 @@ function App() {
               setnetworkId("43114");
             } else if (data === "0x2105") {
               setnetworkId("8453");
+            } else if (data === "0xcc") {
+              setnetworkId("204");
             } else if (data === "0x406") {
               setnetworkId("1030");
             } else if (data === "0x38") {
@@ -260,6 +270,8 @@ function App() {
           setnetworkId("43114");
         } else if (chainId === "0x2105") {
           setnetworkId("8453");
+        } else if (chainId === "0xcc") {
+          setnetworkId("204");
         } else if (chainId === "0x406") {
           setnetworkId("1030");
         } else if (chainId === "0x38") {
@@ -298,6 +310,9 @@ function App() {
         .get(`https://api.dyp.finance/api/user_pools/${coinbase}`)
         .then((data) => {
           return data.data.PoolsUserIn;
+        })
+        .catch((e) => {
+          console.log(e);
         });
       setuserPools(result);
     }
@@ -426,24 +441,24 @@ function App() {
         });
 
       if (
-        subscribedPlatformTokenAmountNewETH == "0" &&
-        subscribedPlatformTokenAmountCfx == "0" &&
-        subscribedPlatformTokenAmountBase == "0" &&
-        subscribedPlatformTokenAmountNewAvax == "0" &&
-        subscribedPlatformTokenAmountNewBNB == "0" &&
-        subscribedPlatformTokenAmountNewBNB2 === "0" &&
-        subscribedPlatformTokenAmountSkale == "0"
+        Number(subscribedPlatformTokenAmountNewETH) === 0 &&
+        Number(subscribedPlatformTokenAmountCfx) === 0 &&
+        Number(subscribedPlatformTokenAmountBase) === 0 &&
+        Number(subscribedPlatformTokenAmountNewAvax) === 0 &&
+        Number(subscribedPlatformTokenAmountNewBNB) === 0 &&
+        Number(subscribedPlatformTokenAmountNewBNB2) === 0 &&
+        Number(subscribedPlatformTokenAmountSkale) === 0
       ) {
-        setsubscribedPlatformTokenAmount("0");
+        // setsubscribedPlatformTokenAmount("0");
         setisPremium(false);
       } else if (
-        subscribedPlatformTokenAmountNewETH != "0" ||
-        subscribedPlatformTokenAmountCfx != "0" ||
-        subscribedPlatformTokenAmountBase != "0" ||
-        subscribedPlatformTokenAmountNewAvax != "0" ||
-        subscribedPlatformTokenAmountNewBNB != "0" ||
-        subscribedPlatformTokenAmountNewBNB2 != "0" ||
-        subscribedPlatformTokenAmountSkale != "0"
+        Number(subscribedPlatformTokenAmountNewETH) !== 0 ||
+        Number(subscribedPlatformTokenAmountCfx) !== 0 ||
+        Number(subscribedPlatformTokenAmountBase) !== 0 ||
+        Number(subscribedPlatformTokenAmountNewAvax) !== 0 ||
+        Number(subscribedPlatformTokenAmountNewBNB) !== 0 ||
+        Number(subscribedPlatformTokenAmountNewBNB2) !== 0 ||
+        Number(subscribedPlatformTokenAmountSkale) !== 0
       ) {
         setisPremium(true);
       }
@@ -482,7 +497,7 @@ function App() {
 
     // console.log(window.coinbase_address)
     let coinbase2 = await window.getCoinbase();
-    if (coinbase2 != null || coinbase2 != undefined) {
+    if (coinbase2 !== null || coinbase2 !== undefined) {
       setcoinbase(coinbase2);
     }
     setshow(false);
@@ -514,27 +529,6 @@ function App() {
       // window.alertify.error("Cannot fetch TVL");
       console.error("TVL ETH V2 error: " + e);
     }
-
-    try {
-      if (networkId === "1") {
-        let the_graph_result = await window.refresh_the_graph_result();
-
-        setthe_graph_result(JSON.parse(JSON.stringify(the_graph_result)));
-      } else if (networkId === "56") {
-        let the_graph_resultbsc = await window.refresh_the_graph_resultavax();
-
-        setthe_graph_resultbsc(JSON.parse(JSON.stringify(the_graph_resultbsc)));
-      } else if (networkId === "43114") {
-        let the_graph_resultavax = await window.refresh_the_graph_resultavax();
-
-        setthe_graph_resultavax(
-          JSON.parse(JSON.stringify(the_graph_resultavax))
-        );
-      }
-    } catch (e) {
-      // window.alertify.error("Cannot fetch TVL");
-      console.error("Cannot fetch TVL: " + e);
-    }
   };
 
   const handleEthereum = async () => {
@@ -563,7 +557,7 @@ function App() {
     const walletAddress = coinbase;
     const TokenABI = window.ERC20_ABI;
 
-    if (coinbase && coinbase != undefined && isConnected) {
+    if (coinbase && coinbase !== undefined && isConnected) {
       const contract1 = new window.infuraWeb3.eth.Contract(
         TokenABI,
         tokenAddress
@@ -720,27 +714,19 @@ function App() {
   };
 
   useEffect(() => {
+    setTheme("theme-dark");
     tvl();
-    fetchAggregatorPools();
-    setwhitelistPopup(true);
+    // fetchAggregatorPools();
+    // setwhitelistPopup(true);
     if (window.location.hash === "#mobile-app") {
       setdownloadClick(true);
     }
 
-    if (
-      window.ethereum &&
-      !window.coin98 &&
-      (window.ethereum.isMetaMask === true ||
-        window.ethereum.isTrust === true ||
-        window.ethereum?.isTrustWallet)
-    ) {
-      checkConnection();
-    }
-    checkNetworkId();
-
     if (window.ethereum && !window.coin98) {
       console.log("yes");
       handleEthereum();
+      checkConnection();
+      checkNetworkId();
     } else {
       console.log("no");
       // If the event is not dispatched by the end of the timeout,
@@ -785,14 +771,14 @@ function App() {
     checkConnection();
   };
 
-  const toggleMinimizeSidebar = () => {
-    const f = () => window.dispatchEvent(new Event("resize"));
-    setisMinimized(!isMinimized, () => f());
+  // const toggleMinimizeSidebar = () => {
+  //   const f = () => window.dispatchEvent(new Event("resize"));
+  //   setisMinimized(!isMinimized, () => f());
 
-    f();
-    let newInterval = setInterval(f, 16);
-    setTimeout(() => clearInterval(newInterval), 1000);
-  };
+  //   f();
+  //   let newInterval = setInterval(f, 16);
+  //   setTimeout(() => clearInterval(newInterval), 1000);
+  // };
 
   const toggleMobileSidebar = () => {
     setisOpenInMobile(!isOpenInMobile);
@@ -952,11 +938,7 @@ function App() {
   const windowSize = useWindowSize();
 
   const { email, logout } = useAuth();
-  const {
-    data,
-    refetch: refetchPlayer,
-    loading: loadingPlayer,
-  } = useQuery(GET_PLAYER, {
+  const { data, refetch: refetchPlayer } = useQuery(GET_PLAYER, {
     fetchPolicy: "network-only",
   });
 
@@ -1037,10 +1019,8 @@ function App() {
     },
   ];
 
-  const [generateNonce, { loading: loadingGenerateNonce, data: dataNonce }] =
-    useMutation(GENERATE_NONCE);
-  const [verifyWallet, { loading: loadingVerify, data: dataVerify }] =
-    useMutation(VERIFY_WALLET);
+  const [generateNonce, { data: dataNonce }] = useMutation(GENERATE_NONCE);
+  const [verifyWallet, { data: dataVerify }] = useMutation(VERIFY_WALLET);
 
   const fillRecordsCaws2d = (itemData) => {
     if (itemData.length === 0) {
@@ -1050,6 +1030,8 @@ function App() {
       const placeholderArray = placeholderplayerData.slice(itemData.length, 10);
       const finalData = [...testArray, ...placeholderArray];
       setleaderboard(finalData);
+    } else if (itemData.length > 10) {
+      setleaderboard(itemData);
     }
   };
 
@@ -1100,13 +1082,15 @@ function App() {
     }
     leaderboard2 = leaderboard2.sort((a, b) => b.score - a.score);
 
-    var testArray = leaderboard2.filter(
-      (item) =>
-        item.address.toLowerCase() ===
-        data?.getPlayer?.wallet?.publicAddress?.toLowerCase()
-    );
+    var testArray =
+      leaderboard2.length > 0
+        ? leaderboard2.filter(
+            (item) =>
+              item.address.toLowerCase() ===
+              data?.getPlayer?.wallet?.publicAddress?.toLowerCase()
+          )
+        : [];
 
-    console.log(testArray, leaderboard2);
     fillRecordsCaws2d(leaderboard2);
     if (
       testArray.length > 0 &&
@@ -1124,10 +1108,8 @@ function App() {
     } else {
       setCaws2dUser([]);
     }
+  };
 
-    setleaderboard(leaderboard2);
-  }; 
-  
   const getAllChests = async () => {
     let headersList = {
       Accept: "*/*",
@@ -1135,7 +1117,7 @@ function App() {
       "Content-Type": "application/json",
     };
 
-    let bodyContent = JSON.stringify({ emailAddress: email });
+    let bodyContent = JSON.stringify({ emailAddress: email, chainid: "base" });
 
     let response = await fetch(
       "https://worldofdypiansdailybonus.azurewebsites.net/api/GetRewardsDypius?code=H9zoL4Hdr7fr7rzSZLTzilDT99fgwth006S7bO3J3Ua9AzFucS1HoA%3D%3D",
@@ -1151,6 +1133,60 @@ function App() {
       let data = await response.json();
 
       setChests(data.chestOrder);
+      let standardChestsArray = [];
+      let premiumChestsArray = [];
+      let openedChests = [];
+      // let openedStandardChests = [];
+      // let openedPremiumChests = [];
+
+      if (data.chestOrder.length > 0) {
+        for (let item = 0; item < data.chestOrder.length; item++) {
+          if (data.chestOrder[item].chestType === "Standard") {
+            if (data.chestOrder[item].isOpened === true) {
+              openedChests.push(data.chestOrder[item]);
+            }
+            standardChestsArray.push(data.chestOrder[item]);
+          } else if (data.chestOrder[item].chestType === "Premium") {
+            if (data.chestOrder[item].isOpened === true) {
+              openedChests.push(data.chestOrder[item]);
+            }
+            premiumChestsArray.push(data.chestOrder[item]);
+          }
+        }
+        setOpenedChests(openedChests);
+      }
+
+      // setOpenedChests(
+      //   data.chestOrder.filter((item) => {
+      //     return (item.isOpened = true);
+      //   })
+      // );
+    }
+  };
+
+  const getAllOpbnbChests = async () => {
+    let headersList = {
+      Accept: "*/*",
+      "User-Agent": "Thunder Client (https://www.thunderclient.com)",
+      "Content-Type": "application/json",
+    };
+
+    let bodyContent = JSON.stringify({ emailAddress: email, chainid: "opbnb" });
+
+    let response = await fetch(
+      "https://worldofdypiansdailybonus.azurewebsites.net/api/GetRewardsDypius?code=H9zoL4Hdr7fr7rzSZLTzilDT99fgwth006S7bO3J3Ua9AzFucS1HoA%3D%3D",
+      {
+        method: "POST",
+        body: bodyContent,
+        headers: headersList,
+      }
+    ).catch((err) => {
+      console.log(err);
+    });
+    if (response && response.status === 200) {
+      let data = await response.json();
+
+      setopbnbChests(data.chestOrder);
       let standardChestsArray = [];
       let premiumChestsArray = [];
       let openedChests = [];
@@ -1177,7 +1213,7 @@ function App() {
             premiumChestsArray.push(data.chestOrder[item]);
           }
         }
-        setOpenedChests(openedChests);
+        setopbnbOpenedChests(openedChests);
       }
 
       // setOpenedChests(
@@ -1206,6 +1242,188 @@ function App() {
       const placeholderArray = placeholderplayerData.slice(itemData.length, 10);
       const finalData = [...testArray, ...placeholderArray];
       setmonthlyplayerData(finalData);
+    }
+  };
+
+  const fillRecordsWeeklyOpbnb = (itemData) => {
+    if (itemData.length === 0) {
+      setweeklyplayerDataOpbnb(placeholderplayerData);
+    } else if (itemData.length <= 10) {
+      const testArray = itemData;
+      const placeholderArray = placeholderplayerData.slice(itemData.length, 10);
+      const finalData = [...testArray, ...placeholderArray];
+      setweeklyplayerDataOpbnb(finalData);
+    }
+  };
+  const fillRecordsMonthlyOpbnb = (itemData) => {
+    if (itemData.length === 0) {
+      setmonthlyplayerDataOpbnb(placeholderplayerData);
+    } else if (itemData.length <= 10) {
+      const testArray = itemData;
+      const placeholderArray = placeholderplayerData.slice(itemData.length, 10);
+      const finalData = [...testArray, ...placeholderArray];
+      setmonthlyplayerDataOpbnb(finalData);
+    }
+  };
+
+  const fetchRecordsAroundPlayerWeeklyOpbnb = async (itemData) => {
+    const data = {
+      StatisticName: "LeaderboardDypiusOpBNBWeekly",
+      MaxResultsCount: 6,
+      PlayerId: userId,
+    };
+    if (userId) {
+      const result = await axios.post(
+        `${backendApi}/auth/GetLeaderboardAroundPlayer`,
+        data
+      );
+      var testArray = result.data.data.leaderboard.filter(
+        (item) => item.displayName === username
+      );
+      if (itemData.length > 0) {
+        var testArray2 = Object.values(itemData).filter(
+          (item) => item.displayName === username
+        );
+
+        if (testArray.length > 0 && testArray2.length > 0) {
+          setActivePlayerWeeklyOpbnb(true);
+          setWeeklyUserOpbnb([]);
+        } else if (testArray.length > 0 && testArray2.length === 0) {
+          setActivePlayerWeeklyOpbnb(false);
+          setWeeklyUserOpbnb(...testArray);
+        }
+      } else if (testArray.length > 0) {
+        setActivePlayerWeeklyOpbnb(false);
+        setWeeklyUserOpbnb(...testArray);
+      }
+    } else {
+      setActivePlayerWeeklyOpbnb(true);
+      setWeeklyUserOpbnb([]);
+    }
+  };
+
+  const fetchWeeklyOpbnbWinners = async () => {
+    const data = {
+      StatisticName: "LeaderboardDypiusOpBNBWeekly",
+      StartPosition: 0,
+      MaxResultsCount: 10,
+    };
+    const result = await axios
+      .post(`${backendApi}/auth/GetLeaderboard`, data)
+      .catch((err) => {
+        console.log(err);
+      });
+    setpreviousWeeklyVersionOpbnb(parseInt(result.data.data.version));
+    setweeklyplayerDataOpbnb(result.data.data.leaderboard);
+    var testArray = result.data.data.leaderboard.filter(
+      (item) => item.displayName === username
+    );
+    fillRecordsWeeklyOpbnb(result.data.data.leaderboard);
+    if (testArray.length > 0) {
+      setActivePlayerWeeklyOpbnb(true);
+      fetchRecordsAroundPlayerWeeklyOpbnb(result.data.data.leaderboard);
+    } else if (testArray.length === 0) {
+      setActivePlayerWeeklyOpbnb(false);
+      fetchRecordsAroundPlayerWeeklyOpbnb(result.data.data.leaderboard);
+    }
+  };
+
+  const fetchPreviousWeeklyOpbnbWinners = async () => {
+    if (previousWeeklyVersionOpbnb != 0) {
+      const data = {
+        StatisticName: "LeaderboardDypiusOpBNBWeekly",
+        StartPosition: 0,
+        MaxResultsCount: 10,
+        Version: previousWeeklyVersionOpbnb - 1,
+      };
+      const result = await axios
+        .post(`${backendApi}/auth/GetLeaderboard?Version=-1`, data)
+        .catch((err) => {
+          console.log(err);
+        });
+
+      setweeklyplayerDataOpbnb(result.data.data.leaderboard);
+    }
+  };
+
+  const fetchRecordsAroundPlayerMonthlyOpbnb = async (itemData) => {
+    const data = {
+      StatisticName: "LeaderboardDypiusOpBNBMonthly",
+      MaxResultsCount: 6,
+      PlayerId: userId,
+    };
+    if (userId) {
+      const result = await axios.post(
+        `${backendApi}/auth/GetLeaderboardAroundPlayer`,
+        data
+      );
+      var testArray = result.data.data.leaderboard.filter(
+        (item) => item.displayName === username
+      );
+
+      if (itemData.length > 0) {
+        var testArray2 = Object.values(itemData).filter(
+          (item) => item.displayName === username
+        );
+
+        if (testArray.length > 0 && testArray2.length > 0) {
+          setActivePlayerMonthlyOpbnb(true);
+          setMonthlyUserOpbnb([]);
+        } else if (testArray.length > 0 && testArray2.length === 0) {
+          setActivePlayerMonthlyOpbnb(false);
+          setMonthlyUserOpbnb(...testArray);
+        }
+      } else if (testArray.length > 0) {
+        setActivePlayerMonthlyOpbnb(false);
+        setMonthlyUserOpbnb(...testArray);
+      }
+    } else {
+      setActivePlayerMonthlyOpbnb(true);
+      setMonthlyUserOpbnb([]);
+    }
+  };
+
+  const fetchMonthlyOpbnbWinners = async () => {
+    const data = {
+      StatisticName: "LeaderboardDypiusOpBNBMonthly",
+      StartPosition: 0,
+      MaxResultsCount: 10,
+    };
+    const result = await axios
+      .post(`${backendApi}/auth/GetLeaderboard`, data)
+      .catch((err) => {
+        console.log(err);
+      });
+    setpreviousMonthlyVersionOpbnb(parseInt(result.data.data.version));
+    setmonthlyplayerDataOpbnb(result.data.data.leaderboard);
+    var testArray = result.data.data.leaderboard.filter(
+      (item) => item.displayName === username
+    );
+    fillRecordsMonthlyOpbnb(result.data.data.leaderboard);
+    if (testArray.length > 0) {
+      setActivePlayerMonthlyOpbnb(true);
+      fetchRecordsAroundPlayerMonthlyOpbnb(result.data.data.leaderboard);
+    } else if (testArray.length === 0) {
+      setActivePlayerMonthlyOpbnb(false);
+      fetchRecordsAroundPlayerMonthlyOpbnb(result.data.data.leaderboard);
+    }
+  };
+
+  const fetchPreviousMonthlyOpbnbWinners = async () => {
+    if (previousMonthlyVersionOpbnb != 0) {
+      const data = {
+        StatisticName: "LeaderboardDypiusOpBNBMonthly",
+        StartPosition: 0,
+        MaxResultsCount: 10,
+        Version: previousMonthlyVersionOpbnb - 1,
+      };
+      const result = await axios
+        .post(`${backendApi}/auth/GetLeaderboard?Version=-1`, data)
+        .catch((err) => {
+          console.log(err);
+        });
+
+      setmonthlyplayerDataOpbnb(result.data.data.leaderboard);
     }
   };
 
@@ -1272,7 +1490,7 @@ function App() {
   };
 
   const fetchPreviousWeeklyWinners = async () => {
-    if (previousWeeklyVersion != 0) {
+    if (previousWeeklyVersion !== 0) {
       const data = {
         StatisticName: "LeaderboardDypiusWeekly",
         StartPosition: 0,
@@ -1353,7 +1571,7 @@ function App() {
   };
 
   const fetchPreviousMonthlyWinners = async () => {
-    if (previousMonthlyVersion != 0) {
+    if (previousMonthlyVersion !== 0) {
       const data = {
         StatisticName: "LeaderboardDypiusMonthly",
         StartPosition: 0,
@@ -1433,7 +1651,7 @@ function App() {
   };
 
   const fetchPreviousKittyDashWinners = async () => {
-    if (previousKittyDashVersion != 0) {
+    if (previousKittyDashVersion !== 0) {
       const data = {
         StatisticName: "MobileGameDailyLeaderboard",
         StartPosition: 0,
@@ -1458,6 +1676,15 @@ function App() {
       setOpenedChests([]);
     }
   }, [email, chestCount]);
+
+  useEffect(() => {
+    if (email) {
+      getAllOpbnbChests();
+    } else {
+      setopbnbChests([]);
+      setopbnbOpenedChests([]);
+    }
+  }, [email, opbnbchestCount]);
 
   useEffect(() => {
     loadLeaderboardDataCaws2dGame();
@@ -1488,7 +1715,7 @@ function App() {
 
   const handleSync = async () => {
     setsyncStatus("loading");
-
+    setisonSync(true);
     try {
       await generateNonce({
         variables: {
@@ -1530,7 +1757,7 @@ function App() {
   }, [dataNonce]);
 
   return (
-    <div className={`page_wrapper ${isMinimized ? "minimize" : ""}`}>
+    <div className={`page_wrapper`}>
       {/* <img src={navRadius} className="nav-radius" alt="" /> */}
       {/* <LandFlyout />   */}
 
@@ -1689,7 +1916,7 @@ function App() {
                       <Farms
                         handleConnection={handleConnection}
                         isConnected={isConnected}
-                        networkId={parseInt(explorerNetworkId)} 
+                        networkId={parseInt(explorerNetworkId)}
                         onSelectChain={onSelectChain}
                       />
                     }
@@ -1726,41 +1953,68 @@ function App() {
                         networkId={parseInt(networkId)}
                         onSelectChain={onSelectChain}
                         coinbase={coinbase}
-                        onChestClaimed={onChestClaimed}
+                        onChestClaimed={() => {
+                          onChestClaimed();
+                          fetchWeeklyWinners();
+                        }}
+                        onOpbnbChestClaimed={() => {
+                          onOpbnbChestClaimed();
+                          fetchWeeklyOpbnbWinners();
+                        }}
                         dummypremiumChests={dummyPremiums}
                         isPremium={isPremium}
                         bnbImages={chestImagesBnb}
                         email={email}
                         chests={chests}
+                        opbnbchests={opbnbchests}
                         openedChests={openedChests}
+                        openedOpbnbChests={opbnbopenedChests}
                         address={data?.getPlayer?.wallet?.publicAddress}
                         userId={data?.getPlayer?.playerId}
                         username={username}
                         handleSwitchNetwork={handleSwitchNetwork}
                         monthlyplayerData={monthlyplayerData}
+                        monthlyplayerDataOpbnb={monthlyplayerDataOpbnb}
                         previousMonthlyVersion={previousMonthlyVersion}
+                        previousMonthlyVersionOpbnb={
+                          previousMonthlyVersionOpbnb
+                        }
                         previousWeeklyVersion={previousWeeklyVersion}
+                        previousWeeklyVersionOpbnb={previousWeeklyVersionOpbnb}
                         weeklyplayerData={weeklyplayerData}
+                        weeklyUser={weeklyUser}
+                        monthlyUser={monthlyUser}
+                        weeklyplayerDataOpbnb={weeklyplayerDataOpbnb}
+                        weeklyUserOpbnb={weeklyUserOpbnb}
+                        monthlyUserOpbnb={monthlyUserOpbnb}
                         previousKittyDashVersion={previousKittyDashVersion}
                         kittyDashRecords={kittyDashRecords}
-                        fetchWeeklyWinners={fetchWeeklyWinners}
-                        fetchMonthlyWinners={fetchMonthlyWinners}
                         fetchKittyDashWinners={fetchKittyDashWinners}
-                        fetchPreviousMonthlyWinners={
-                          fetchPreviousMonthlyWinners
-                        }
-                        fetchPreviousWeeklyWinners={fetchPreviousWeeklyWinners}
                         fetchPreviousKittyDashWinners={
                           fetchPreviousKittyDashWinners
                         }
                         kittyUser={kittyUser}
                         caws2dUser={caws2dUser}
-                        weeklyUser={weeklyUser}
-                        monthlyUser={monthlyUser}
                         activePlayerKitty={activePlayerKitty}
                         activePlayerCaws2d={activePlayerCaws2d}
+                        fetchWeeklyWinners={fetchWeeklyWinners}
+                        fetchPreviousWeeklyWinners={fetchPreviousWeeklyWinners}
                         activePlayerWeekly={activePlayerWeekly}
+                        fetchMonthlyWinners={fetchMonthlyWinners}
+                        fetchPreviousMonthlyWinners={
+                          fetchPreviousMonthlyWinners
+                        }
                         activePlayerMonthly={activePlayerMonthly}
+                        fetchWeeklyOpbnbWinners={fetchWeeklyOpbnbWinners}
+                        fetchPreviousWeeklyOpbnbWinners={
+                          fetchPreviousWeeklyOpbnbWinners
+                        }
+                        activePlayerWeeklyOpbnb={activePlayerWeeklyOpbnb}
+                        fetchMonthlyOpbnbWinners={fetchMonthlyOpbnbWinners}
+                        fetchPreviousMonthlyOpbnbWinners={
+                          fetchPreviousMonthlyOpbnbWinners
+                        }
+                        activePlayerMonthlyOpbnb={activePlayerMonthlyOpbnb}
                       />
                     }
                   />
@@ -1771,26 +2025,6 @@ setweeklyplayerData
 setweeklyplayerData
 setpreviousKittyDashVersion
 setkittyDashRecords */}
-
-                  <Route
-                    exact
-                    path="/earn/defi-staking/:pool"
-                    element={
-                      <EarnInnerPool
-                        coinbase={coinbase}
-                        handleSwitchNetwork={handleSwitchNetwork}
-                        handleConnection={handleConnection}
-                        isConnected={isConnected}
-                        chainId={networkId}
-                        the_graph_result={the_graph_result_ETH_V2}
-                        the_graph_resultavax={the_graph_result_AVAX_V2}
-                        the_graph_resultbsc={the_graph_result_BSC_V2}
-                        lp_id={LP_ID_Array}
-                        referrer={referrer}
-                        isPremium={isPremium}
-                      />
-                    }
-                  />
 
                   <Route
                     exact
@@ -1813,7 +2047,7 @@ setkittyDashRecords */}
                       />
                     }
                   />
-                  <Route
+                  {/* <Route
                     exact
                     path="/earn/defi-staking"
                     element={
@@ -1835,11 +2069,11 @@ setkittyDashRecords */}
                         userCurencyBalance={userCurencyBalance}
                       />
                     }
-                  />
+                  /> */}
 
                   <Route
                     exact
-                    path="/launchpad"
+                    path="/launchpad/worldofdypians"
                     element={
                       <Whitelist
                         networkId={parseInt(networkId)}
@@ -1854,6 +2088,39 @@ setkittyDashRecords */}
                     }
                   />
 
+                  <Route
+                    exact
+                    path="/launchpad"
+                    element={
+                      <LaunchpadMidle
+                        networkId={parseInt(networkId)}
+                        isConnected={isConnected}
+                        handleConnection={showModal}
+                        coinbase={coinbase}
+                        isPremium={isPremium}
+                        userPools={userPools}
+                        hasDypBalance={hasDypBalance}
+                        hasiDypBalance={hasiDypBalance}
+                      />
+                    }
+                  />
+
+                  <Route
+                    exact
+                    path="/launchpad/midle"
+                    element={
+                      <LaunchpadDetails
+                        networkId={parseInt(networkId)}
+                        isConnected={isConnected}
+                        handleConnection={showModal}
+                        coinbase={coinbase}
+                        isPremium={isPremium}
+                        userPools={userPools}
+                        hasDypBalance={hasDypBalance}
+                        hasiDypBalance={hasiDypBalance}
+                      />
+                    }
+                  />
                   <Route
                     exact
                     path="/earn/nft-staking"
@@ -1872,26 +2139,6 @@ setkittyDashRecords */}
 
                   <Route
                     exact
-                    path="/earn/nft-staking/:pool"
-                    element={
-                      <EarnInnerPoolNft
-                        coinbase={coinbase}
-                        handleSwitchNetwork={handleSwitchNetwork}
-                        handleConnection={handleConnection}
-                        isConnected={isConnected}
-                        chainId={networkId}
-                        the_graph_result={the_graph_result_ETH_V2}
-                        the_graph_resultavax={the_graph_result_AVAX_V2}
-                        the_graph_resultbsc={the_graph_result_BSC_V2}
-                        lp_id={LP_ID_Array}
-                        referrer={referrer}
-                        isPremium={isPremium}
-                      />
-                    }
-                  />
-
-                  <Route
-                    exact
                     path="/bridge"
                     element={
                       <Bridge
@@ -1903,7 +2150,7 @@ setkittyDashRecords */}
                     }
                   />
 
-                  <Route
+                  {/* <Route
                     exact
                     path="/launchpad"
                     element={
@@ -1914,8 +2161,8 @@ setkittyDashRecords */}
                         coinbase={coinbase}
                       />
                     }
-                  />
-                  <Route
+                  /> */}
+                  {/* <Route
                     exact
                     path="/migration"
                     element={
@@ -1926,7 +2173,7 @@ setkittyDashRecords */}
                         coinbase={coinbase}
                       />
                     }
-                  />
+                  /> */}
 
                   {/* <Route
                     exact
@@ -2033,7 +2280,7 @@ setkittyDashRecords */}
                         referrer={referrer}
                         isPremium={isPremium}
                         onConnectWallet={showModal}
-                        aggregatorPools={aggregatorPools}
+                        // aggregatorPools={aggregatorPools}
                         onMobileClick={() => {
                           setshowMobilePopup(true);
                         }}
@@ -2111,7 +2358,7 @@ setkittyDashRecords */}
                       />
                     }
                   />
-                  <Route
+                  {/* <Route
                     exact
                     path="/genesis"
                     element={
@@ -2123,7 +2370,7 @@ setkittyDashRecords */}
                         handleSwitchNetwork={handleSwitchNetwork}
                       />
                     }
-                  />
+                  /> */}
                   {/* <Route
                     exact
                     path="/caws-staking"
@@ -2155,7 +2402,7 @@ setkittyDashRecords */}
       {(window.location?.pathname === "/genesis" && window.innerWidth < 786) ||
       (window.location?.pathname === "/caws-staking" &&
         window.innerWidth < 786) ? null : (
-        <Footer></Footer>
+        <Footer />
       )}
 
       {(showMobilePopup === true || downloadClick === true) && (
@@ -2171,7 +2418,7 @@ setkittyDashRecords */}
                   <h4 className="mobile-popup-title">Dypius Mobile App</h4>
 
                   <img
-                    src={closeX}
+                    src={"https://cdn.worldofdypians.com/wod/popupXmark.svg"}
                     alt=""
                     className="close-x position-relative cursor-pointer "
                     onClick={() => {

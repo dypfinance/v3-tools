@@ -3,8 +3,6 @@ import axios from "axios";
 import { useEffect } from "react";
 import getFormattedNumber from "../../../functions/getFormattedNumber2";
 import useWindowSize from "../../../functions/useWindowSize";
-import { NavLink } from "react-router-dom";
-import TopOtherPoolsNftCard from "../TopOtherPoolsNftCard";
 import TopOtherPoolsNftListCard from "../TopOtherPoolsNftListCard";
 import TopPoolsNftListCardInner from "../../top-pools-card/TopPoolsNftListCardInner";
 
@@ -321,6 +319,8 @@ const EarnOtherContentNft = ({
       //   fetchBnbPool();
       // }
       setavaxApr(res.data.highestAPY.highestAPY_AVAX_V2);
+    }).catch((e) => {
+      console.log(e);
     });
   };
 

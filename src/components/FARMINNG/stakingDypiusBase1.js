@@ -1,24 +1,9 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment";
-import getFormattedNumber from "../../functions/get-formatted-number";
-import Modal from "../Modal/Modal";
-import Address from "./address";
-import WalletModal from "../WalletModal";
+import getFormattedNumber from "../../functions/get-formatted-number"; 
 import "./top-pools.css";
-import ellipse from "./assets/ellipse.svg";
-import failMark from "../../assets/failMark.svg";
-import Clipboard from "react-clipboard.js";
-import ReactTooltip from "react-tooltip";
-import arrowup from "./assets/arrow-up.svg";
-import moreinfo from "./assets/more-info.svg";
-import purplestats from "./assets/purpleStat.svg";
-import referralimg from "./assets/referral.svg";
-import copy from "./assets/copy.svg";
-import wallet from "./assets/wallet.svg";
-import Tooltip from "@material-ui/core/Tooltip";
-import Countdown from "react-countdown";
-import poolsCalculatorIcon from "./assets/poolsCalculatorIcon.svg";
-import statsLinkIcon from "./assets/statsLinkIcon.svg";
+ 
+import Tooltip from "@material-ui/core/Tooltip"; 
 import { shortAddress } from "../../functions/shortAddress";
 import { ClickAwayListener } from "@material-ui/core";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
@@ -260,7 +245,6 @@ const StakingDypiusBase1 = ({
         console.log(e);
       });
 
-    // let usdPerToken = await window.getPrice("defi-yield-protocol");
     setusdPerToken(dypprice);
   };
 
@@ -279,50 +263,25 @@ const StakingDypiusBase1 = ({
     }
     //console.log({lp_data})
     //Calculate APY
-    let usd_per_token;
-    let usd_per_idyp;
-    let usd_per_dyps = 0;
-    if (the_graph_result) {
-      usd_per_token = the_graph_result.token_data
-        ? the_graph_result.token_data[
-            "0x961c8c0b1aad0c0b10a51fef6a867e3091bcef17"
-          ].token_price_usd
-        : 1;
-      usd_per_idyp = the_graph_result.token_data
-        ? the_graph_result.token_data[
-            "0xbd100d061e120b2c67a24453cf6368e63f1be056"
-          ].token_price_usd
-        : 1;
-      // let usd_per_dyps = the_graph_result.price_DYPS ? the_graph_result.price_DYPS : 1
-
-      let apy = new BigNumber(apr)
-        .minus(fee)
-        .div(1e2)
-        .times(usd_per_idyp)
-        .div(usd_per_token)
-        .times(1e2)
-        .toFixed(2);
-
-      setapy(apy);
-    }
+   
     try {
-      let amount = new BigNumber(1000000000000000000).toFixed(0);
-      let router = await window.getUniswapRouterContract();
-      let WETH = await router.methods.WETH().call();
-      let platformTokenAddress = window.config.USDC_address;
-      let rewardTokenAddress = window.config.reward_token_idyp_address;
-      let path = [
-        ...new Set(
-          [rewardTokenAddress, WETH, platformTokenAddress].map((a) =>
-            a.toLowerCase()
-          )
-        ),
-      ];
-      let _amountOutMin = await router.methods
-        .getAmountsOut(amount, path)
-        .call();
-      _amountOutMin = _amountOutMin[_amountOutMin.length - 1];
-      _amountOutMin = new BigNumber(_amountOutMin).div(1e6).toFixed(18);
+      // let amount = new BigNumber(1000000000000000000).toFixed(0);
+      // let router = await window.getUniswapRouterContract();
+      // let WETH = await router.methods.WETH().call();
+      // let platformTokenAddress = window.config.USDC_address;
+      // let rewardTokenAddress = window.config.reward_token_idyp_address;
+      // let path = [
+      //   ...new Set(
+      //     [rewardTokenAddress, WETH, platformTokenAddress].map((a) =>
+      //       a.toLowerCase()
+      //     )
+      //   ),
+      // ];
+      // let _amountOutMin = await router.methods
+      //   .getAmountsOut(amount, path)
+      //   .call();
+      // _amountOutMin = _amountOutMin[_amountOutMin.length - 1];
+      // _amountOutMin = new BigNumber(_amountOutMin).div(1e6).toFixed(18);
 
       let _bal;
       if (chainId === "8453" && coinbase && is_wallet_connected) {
@@ -336,8 +295,7 @@ const StakingDypiusBase1 = ({
         let _stakingTime = staking.stakingTime(coinbase);
         let _dTokens = staking.depositedTokens(coinbase);
         let _lClaimTime = staking.lastClaimedTime(coinbase);
-        let _tvl = reward_token_dypiusv2_base.balanceOf(staking._address);
-        // console.log('tvl', _tvl)
+        let _tvl = reward_token_dypiusv2_base.balanceOf(staking._address);    
         let _rFeeEarned = staking.totalReferralFeeEarned(coinbase);
         let tStakers = staking.getNumberOfHolders();
 
@@ -953,7 +911,7 @@ const StakingDypiusBase1 = ({
                           </div>
                         }
                       >
-                        <img src={moreinfo} alt="" onClick={poolCapOpen} />
+                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={poolCapOpen} />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -975,7 +933,7 @@ const StakingDypiusBase1 = ({
                           </div>
                         }
                       >
-                        <img src={moreinfo} alt="" onClick={quotaOpen} />
+                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={quotaOpen} />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -999,7 +957,7 @@ const StakingDypiusBase1 = ({
                           </div>
                         }
                       >
-                        <img src={moreinfo} alt="" onClick={maxDepositOpen} />
+                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={maxDepositOpen} />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -1112,7 +1070,7 @@ const StakingDypiusBase1 = ({
                           </div>
                         }
                       >
-                        <img src={moreinfo} alt="" onClick={poolFeeOpen} />
+                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={poolFeeOpen} />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -1126,7 +1084,7 @@ const StakingDypiusBase1 = ({
                     className="stats-link2"
                   >
                     {shortAddress(staking?._address)}{" "}
-                    <img src={statsLinkIcon} alt="" />
+                    <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                   </a>
                 </div>
               </div>
@@ -1370,7 +1328,7 @@ const StakingDypiusBase1 = ({
                           </div>
                         }
                       >
-                        <img src={moreinfo} alt="" onClick={poolFeeOpen} />
+                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={poolFeeOpen} />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -1384,7 +1342,7 @@ const StakingDypiusBase1 = ({
                     className="stats-link2"
                   >
                     {shortAddress(staking._address)}{" "}
-                    <img src={statsLinkIcon} alt="" />
+                    <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                   </a>
                 </div>
               </div>
@@ -1410,7 +1368,7 @@ const StakingDypiusBase1 = ({
       coinbase === undefined ||
       is_wallet_connected === false ? (
         <button className="connectbtn btn m-auto" onClick={onConnectWallet}>
-          <img src={wallet} alt="" /> Connect wallet
+          <img src={'https://cdn.worldofdypians.com/tools/walletIcon.svg'} alt="" /> Connect wallet
         </button>
       ) : chainId !== "8453" ? (
         <button
@@ -1484,7 +1442,7 @@ const StakingDypiusBase1 = ({
     //                       }
     //                     >
     //                       <img
-    //                         src={moreinfo}
+    //                         src={'https://cdn.worldofdypians.com/tools/more-info.svg'}
     //                         alt=""
     //                         onClick={performanceOpen}
     //                       />
@@ -1512,7 +1470,7 @@ const StakingDypiusBase1 = ({
     //                         </div>
     //                       }
     //                     >
-    //                       <img src={moreinfo} alt="" onClick={aprOpen} />
+    //                       <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={aprOpen} />
     //                     </Tooltip>
     //                   </ClickAwayListener>
     //                 </h6>
@@ -1536,7 +1494,7 @@ const StakingDypiusBase1 = ({
     //                         </div>
     //                       }
     //                     >
-    //                       <img src={moreinfo} alt="" onClick={lockOpen} />
+    //                       <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={lockOpen} />
     //                     </Tooltip>
     //                   </ClickAwayListener>
     //                 </h6>
@@ -1547,7 +1505,7 @@ const StakingDypiusBase1 = ({
     //                 className="bottomitems"
     //                 onClick={() => setshowCalculator(true)}
     //               >
-    //                 <img src={poolsCalculatorIcon} alt="" />
+    //                 <img src={'https://cdn.worldofdypians.com/tools/poolsCalculatorIcon.svg'} alt="" />
     //                 Calculator
     //               </h6>
     //               <a
@@ -1571,7 +1529,7 @@ const StakingDypiusBase1 = ({
     //                 }}
     //               >
     //                 <h6 className="bottomitems">
-    //                   <img src={purplestats} alt="" />
+    //                   <img src={'https://cdn.worldofdypians.com/tools/purpleStat.svg'} alt="" />
     //                   Stats
     //                 </h6>
     //               </div>
@@ -1666,7 +1624,7 @@ const StakingDypiusBase1 = ({
     //                   </div>
     //                 }
     //               >
-    //                 <img src={moreinfo} alt="" onClick={depositOpen} />
+    //                 <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={depositOpen} />
     //               </Tooltip>
     //             </ClickAwayListener>
     //           </div>
@@ -1818,7 +1776,7 @@ const StakingDypiusBase1 = ({
     //                     </div>
     //                   }
     //                 >
-    //                   <img src={moreinfo} alt="" onClick={rewardsOpen} />
+    //                   <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={rewardsOpen} />
     //                 </Tooltip>
     //               </ClickAwayListener>
     //             </h6>
@@ -1966,7 +1924,7 @@ const StakingDypiusBase1 = ({
     //                   </div>
     //                 }
     //               >
-    //                 <img src={moreinfo} alt="" onClick={withdrawOpen} />
+    //                 <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={withdrawOpen} />
     //               </Tooltip>
     //             </ClickAwayListener>
     //           </h6>
@@ -2191,7 +2149,7 @@ const StakingDypiusBase1 = ({
     //                   className="stats-link"
     //                 >
     //                   {shortAddress(coinbase)}{" "}
-    //                   <img src={statsLinkIcon} alt="" />
+    //                   <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
     //                 </a>
     //                 <a
     //                   target="_blank"
@@ -2199,7 +2157,7 @@ const StakingDypiusBase1 = ({
     //                   href={`https://github.com/dypfinance/staking-governance-security-audits`}
     //                   className="stats-link"
     //                 >
-    //                   Audit <img src={statsLinkIcon} alt="" />
+    //                   Audit <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
     //                 </a>
     //                 <a
     //                   target="_blank"
@@ -2207,7 +2165,7 @@ const StakingDypiusBase1 = ({
     //                   href={`${window.config.etherscan_baseURL}/token/${reward_token_dypius_eth._address}?a=${coinbase}`}
     //                   className="stats-link"
     //                 >
-    //                   View transaction <img src={statsLinkIcon} alt="" />
+    //                   View transaction <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
     //                 </a>
     //               </div>
     //             </div>

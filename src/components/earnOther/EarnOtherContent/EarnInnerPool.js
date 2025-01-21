@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { ClickAwayListener } from "@material-ui/core";
-import Tooltip from "@material-ui/core/Tooltip";
-import moreinfo from "../../FARMINNG/assets/more-info.svg";
+import Tooltip from "@material-ui/core/Tooltip"; 
 import getFormattedNumber from "../../../functions/get-formatted-number";
 import moment from "moment";
 import axios from "axios";
-import { shortAddress } from "../../../functions/shortAddress";
-import statsLinkIcon from "../../FARMINNG/assets/statsLinkIcon.svg";
+import { shortAddress } from "../../../functions/shortAddress"; 
 
 const EarnInnerPool = ({
   selectedBtn,
@@ -53,7 +51,7 @@ const EarnInnerPool = ({
   const [approxDeposit, setapproxDeposit] = useState(100);
   const [approxDays, setapproxDays] = useState(365);
   const [showCalculator, setshowCalculator] = useState(false);
-  const [usdPerToken, setusdPerToken] = useState("");
+ 
   const [errorMsg, seterrorMsg] = useState("");
   const [errorMsg2, seterrorMsg2] = useState("");
   const [errorMsg3, seterrorMsg3] = useState("");
@@ -87,10 +85,7 @@ const EarnInnerPool = ({
   } = window;
   let token_symbol = "DYP";
 
-  const getPriceDYP = async () => {
-    let usdPerToken = await window.getPrice("defi-yield-protocol");
-    setusdPerToken(usdPerToken);
-  };
+ 
 
   const refreshBalance = async () => {
     let coinbase = coinbase2;
@@ -245,9 +240,7 @@ const EarnInnerPool = ({
     }
   }, [coinbase, coinbase2]);
 
-  useEffect(() => {
-    getPriceDYP();
-  }, []);
+ 
 
   useEffect(() => {
     refreshBalance();
@@ -798,7 +791,7 @@ const EarnInnerPool = ({
                       </div>
                     }
                   >
-                    <img src={moreinfo} alt="" onClick={aprOpen} />
+                    <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={aprOpen} />
                   </Tooltip>
                 </ClickAwayListener>
               </span>
@@ -897,7 +890,7 @@ const EarnInnerPool = ({
                           </div>
                         }
                       >
-                        <img src={moreinfo} alt="" onClick={poolCapOpen} />
+                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={poolCapOpen} />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -919,7 +912,7 @@ const EarnInnerPool = ({
                           </div>
                         }
                       >
-                        <img src={moreinfo} alt="" onClick={quotaOpen} />
+                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={quotaOpen} />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -943,7 +936,7 @@ const EarnInnerPool = ({
                           </div>
                         }
                       >
-                        <img src={moreinfo} alt="" onClick={maxDepositOpen} />
+                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={maxDepositOpen} />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -1042,7 +1035,7 @@ const EarnInnerPool = ({
                         }
                       >
                         <img
-                          src={moreinfo}
+                          src={'https://cdn.worldofdypians.com/tools/more-info.svg'}
                           alt=""
                           onClick={earlyWithdrawOpen}
                         />
@@ -1069,7 +1062,7 @@ const EarnInnerPool = ({
                           </div>
                         }
                       >
-                        <img src={moreinfo} alt="" onClick={poolFeeOpen} />
+                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={poolFeeOpen} />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -1083,7 +1076,7 @@ const EarnInnerPool = ({
                     className="stats-link2"
                   >
                     {shortAddress(staking._address)}{" "}
-                    <img src={statsLinkIcon} alt="" />
+                    <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                   </a>
                 </div>
               </div>
@@ -1107,7 +1100,7 @@ const EarnInnerPool = ({
                           </div>
                         }
                       >
-                        <img src={moreinfo} alt="" onClick={startDateOpen} />
+                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={startDateOpen} />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -1131,7 +1124,7 @@ const EarnInnerPool = ({
                           </div>
                         }
                       >
-                        <img src={moreinfo} alt="" onClick={endDateOpen} />
+                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={endDateOpen} />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -1346,7 +1339,7 @@ const EarnInnerPool = ({
                         }
                       >
                         <img
-                          src={moreinfo}
+                          src={'https://cdn.worldofdypians.com/tools/more-info.svg'}
                           alt=""
                           onClick={earlyWithdrawOpen}
                         />
@@ -1373,7 +1366,7 @@ const EarnInnerPool = ({
                           </div>
                         }
                       >
-                        <img src={moreinfo} alt="" onClick={poolFeeOpen} />
+                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={poolFeeOpen} />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -1387,7 +1380,7 @@ const EarnInnerPool = ({
                     className="stats-link2"
                   >
                     {shortAddress(staking._address)}{" "}
-                    <img src={statsLinkIcon} alt="" />
+                    <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                   </a>
                 </div>
               </div>
@@ -1411,7 +1404,7 @@ const EarnInnerPool = ({
                           </div>
                         }
                       >
-                        <img src={moreinfo} alt="" onClick={startDateOpen} />
+                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={startDateOpen} />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -1435,7 +1428,7 @@ const EarnInnerPool = ({
                           </div>
                         }
                       >
-                        <img src={moreinfo} alt="" onClick={endDateOpen} />
+                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={endDateOpen} />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>

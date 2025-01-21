@@ -392,7 +392,7 @@
   border-radius: 12px;
 }
 .wod-wrapper {
-  background-image: url("./assets/gameBanner.webp");
+  background-image: url("https://cdn.worldofdypians.com/tools/gameBanner.webp");
   background-repeat: no-repeat;
   background-size: cover;
   box-shadow: 0px 32px 64px rgba(17, 17, 17, 0.12);
@@ -403,7 +403,7 @@
 
 @media only screen and (max-width: 767px) {
   .wod-wrapper {
-    background-image: url("./assets/gameBannerMobile.webp");
+    background-image: url("https://cdn.worldofdypians.com/tools/gameBannerMobile.webp");
     background-repeat: no-repeat;
     background-size: cover;
     box-shadow: 0px 32px 64px rgba(17, 17, 17, 0.12);
@@ -596,12 +596,12 @@
 }
 
 .free-plan-image {
-  background-image: url("./assets/freePlanBackground.png");
+  background-image: url("https://cdn.worldofdypians.com/tools/freePlanBackground.png");
   background-repeat: no-repeat;
   background-position: center;
 }
 .paid-plan-image {
-  background-image: url("./assets/paidPlanBackground.svg");
+  background-image: url("https://cdn.worldofdypians.com/tools/paidPlanBackground.svg");
   background-repeat: no-repeat;
   background-position: center;
   background-size: 150% 145%;

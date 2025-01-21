@@ -27,8 +27,7 @@ const LandNftStakeCheckListModal = ({
   getApprovedNfts,
   hideItem,
   approvedNfts,
-  onDepositComplete
-
+  onDepositComplete,
 }) => {
   const style = {
     position: "absolute",
@@ -186,7 +185,7 @@ const LandNftStakeCheckListModal = ({
         setSelectedNftIds([]);
         setColor("#57AEAA");
         handleClearStatus();
-        onDepositComplete()
+        onDepositComplete();
       })
       .catch((err) => {
         setloadingdeposit(false);
@@ -204,9 +203,6 @@ const LandNftStakeCheckListModal = ({
   useEffect(() => {
     setUSDPrice().then();
   }, [ETHrewards]);
-
-
-
 
   useEffect(() => {
     if (
@@ -270,7 +266,6 @@ const LandNftStakeCheckListModal = ({
       setshowStaked(false);
     }
   }, [hideItem, showStaked, showToStake]);
-
 
   const onEmptyState = () => {};
 
@@ -367,7 +362,8 @@ const LandNftStakeCheckListModal = ({
               className="checklist-subtitle mb-2"
               style={{ color: "#C0CBF7" }}
             >
-              A list of your NFT collection that can be added and removed from the staking pools
+              A list of your NFT collection that can be added and removed from
+              the staking pools
             </h6>
           </div>
           {/* <img
@@ -519,10 +515,12 @@ const LandNftStakeCheckListModal = ({
                         isStake={showStaked}
                         countDownLeft={countDownLeft}
                         checked={
-                          (  (showToStake === true && checkbtn === true) ||
-                            (showStaked === true && checkUnstakebtn === true)) && (selectNftIds.length <=50)
-                          }
-                          checked2 = {selectNftIds.length <=50 ? true : false}
+                          ((showToStake === true && checkbtn === true) ||
+                            (showStaked === true &&
+                              checkUnstakebtn === true)) &&
+                          selectNftIds.length <= 50
+                        }
+                        checked2={selectNftIds.length <= 50 ? true : false}
                         checklistItemID={nftId}
                         onChange={(value) => {
                           selectNftIds.indexOf(value) === -1
@@ -582,18 +580,16 @@ const LandNftStakeCheckListModal = ({
                       isStake={showStaked}
                       countDownLeft={countDownLeft}
                       checked={
-                        (  (showToStake === true && checkbtn === true) ||
-                          (showStaked === true && checkUnstakebtn === true)) && (selectNftIds.length <=50)
-                        }
-                        checked2 = {selectNftIds.length <=50 ? true : false}
+                        ((showToStake === true && checkbtn === true) ||
+                          (showStaked === true && checkUnstakebtn === true)) &&
+                        selectNftIds.length <= 50
+                      }
+                      checked2={selectNftIds.length <= 50 ? true : false}
                       checklistItemID={nftId}
                       onChange={(value) => {
                         selectNftIds.indexOf(value) === -1
                           ? selectNftIds.push(value)
-                          : selectNftIds.splice(
-                              selectNftIds.indexOf(value),
-                              1
-                            );
+                          : selectNftIds.splice(selectNftIds.indexOf(value), 1);
                         setSelectedNftIds(selectNftIds);
                         getApprovedNfts(selectNftIds);
                         setVal(value);
@@ -611,10 +607,7 @@ const LandNftStakeCheckListModal = ({
       <div style={{ display: "block" }} className="bottom-static-wrapper">
         <p className="d-flex info-text align-items-start gap-3">
           <img
-            src={
-              require("../caws/NftMinting/components/NftMinting/NftStakeChecklistModal/more-info.svg")
-                .default
-            }
+            src={"https://cdn.worldofdypians.com/tools/more-info.svg"}
             alt=""
           />
           {!showStaked
@@ -678,7 +671,9 @@ const LandNftStakeCheckListModal = ({
                 </span>
 
                 <img
-                  src={require("./landplaceholder.svg").default}
+                  src={
+                    "https://cdn.worldofdypians.com/tools/landplaceholder2.svg"
+                  }
                   alt=""
                   style={{ width: 24, height: 24 }}
                 />
@@ -700,7 +695,7 @@ const LandNftStakeCheckListModal = ({
                 }}
                 style={{
                   background:
-                    active && nftItem.length > 0 
+                    active && nftItem.length > 0
                       ? "linear-gradient(90.74deg, #7770E0 0%, #554FD8 100%)"
                       : "#14142A",
                   pointerEvents: active && nftItem.length > 0 ? "auto" : "none",
@@ -806,9 +801,9 @@ const LandNftStakeCheckListModal = ({
                       <h6 className="rewardstxtCaws d-flex align-items-center gap-2">
                         <img
                           src={
-                            require("../caws/NftMinting/components/NftMinting/NftStakeChecklistModal/weth.svg")
-                              .default
+                            "https://cdn.worldofdypians.com/tools/ethStakeActive.svg"
                           }
+                          style={{ height: 25, width: 25 }}
                           alt=""
                         />{" "}
                         {getFormattedNumber(ETHrewards, 6)} WETH (
@@ -890,7 +885,7 @@ const LandNftStakeCheckListModal = ({
                             color: "#4CD0CD",
                           }}
                         >
-                         {selectNftIds.length}
+                          {selectNftIds.length}
                           /50
                         </span>
                         <span
@@ -907,8 +902,7 @@ const LandNftStakeCheckListModal = ({
 
                         <img
                           src={
-                            require("../caws/NftMinting/components/NftMinting/NftStakeChecklistModal/catlogo.svg")
-                              .default
+                           'https://cdn.worldofdypians.com/tools/catlogo.svg'
                           }
                           alt=""
                           style={{ width: 24, height: 24 }}
@@ -958,7 +952,8 @@ const LandNftStakeCheckListModal = ({
                           selectNftIds.length === 0
                         ? "auto"
                         : "none",
-                    width: "100%", maxWidth: '100%',
+                    width: "100%",
+                    maxWidth: "100%",
                     borderRadius: "8px",
                     color: ETHrewards !== 0 ? "#FFFFFF" : "#C0C9FF",
                     margin: "auto",

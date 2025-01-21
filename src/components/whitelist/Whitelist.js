@@ -1,24 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./whitelist.css";
-import dyp from "./assets/dyp.svg";
-import idyp from "./assets/idyp.svg";
-import premium from "./assets/premium.png";
-import tooltipIcon from "./assets/tooltipIcon.svg";
-import usdt from "./assets/usdt.svg";
-import eth from "./assets/eth.svg";
-import bnb from "./assets/bnb.svg";
-import dropArrow from "./assets/dropArrow.svg";
+import { Tooltip } from "@material-ui/core";
+import { handleSwitchNetworkhook } from "../../functions/hooks";
+import Web3 from "web3"; 
+import axios from "axios";
 import { shortAddress } from "../../functions/shortAddress";
 import getFormattedNumber from "../../functions/get-formatted-number";
-import { Tooltip } from "@material-ui/core";
-import checkIcon from "./assets/checkIcon.svg";
-import OutsideClickHandler from "react-outside-click-handler";
-import buyToken from "./assets/buyToken.svg";
-import { handleSwitchNetworkhook } from "../../functions/hooks";
-import Web3 from "web3";
-import wallet from "../FARMINNG/assets/wallet.svg";
-import moment from "moment";
-import axios from "axios";
+    
 
 const Whitelist = ({
   networkId,
@@ -35,12 +23,12 @@ const Whitelist = ({
   const [chainDropdown, setChainDropdown] = useState(false);
   const [selectedCoin, setSelectedCoin] = useState({
     coin: "USDT",
-    icon: usdt,
+    icon: 'https://cdn.worldofdypians.com/tools/usdt.svg',
     address: "",
   });
   const [selectedChain, setSelectedChain] = useState({
     chain: "BNB Chain",
-    icon: bnb,
+    icon: 'https://cdn.worldofdypians.com/wod/bnbIcon.svg',
   });
 
   const [slice, setSlice] = useState(5);
@@ -114,19 +102,19 @@ const Whitelist = ({
 
   const requirements = [
     {
-      icon: dyp,
+      icon: 'https://cdn.worldofdypians.com/tools/dyplogo.svg',
       coin: "DYP Token",
       value: "Holder/Staker",
       active: hasDypStaked || hasDypBalance,
     },
     {
-      icon: idyp,
+      icon: 'https://cdn.worldofdypians.com/tools/idypius.svg',
       coin: "iDYP Token",
       value: "Holder/Staker",
       active: hasiDypStaked || hasiDypBalance,
     },
     {
-      icon: premium,
+      icon: 'https://cdn.worldofdypians.com/tools/premium.png',
       coin: "Premium",
       value: "Subscriber",
       active: isPremium,
@@ -580,11 +568,11 @@ const Whitelist = ({
   useEffect(() => {
     if (networkId === 1) {
       setSelectedChain({
-        icon: eth,
+        icon: 'https://cdn.worldofdypians.com/wod/eth.svg',
         chain: "Ethereum",
       });
       setSelectedCoin({
-        icon: require(`./assets/${window.config.commitmenteth_tokens[0].symbol.toLowerCase()}.svg`),
+        icon:  `https://cdn.worldofdypians.com/tools/${window.config.commitmenteth_tokens[0].symbol.toLowerCase()}.svg`,
         coin: window.config.commitmenteth_tokens[0].symbol,
         address: window.config.commitmenteth_tokens[0].address,
       });
@@ -592,12 +580,12 @@ const Whitelist = ({
       setselectedToken(window.config.commitmenteth_tokens[0]);
     } else if (networkId === 56) {
       setSelectedChain({
-        icon: bnb,
+        icon: 'https://cdn.worldofdypians.com/wod/bnbIcon.svg',
         chain: "BNB Chain",
       });
 
       setSelectedCoin({
-        icon: require(`./assets/${window.config.commitmentbnb_tokens[0].symbol.toLowerCase()}.svg`),
+        icon: `https://cdn.worldofdypians.com/tools/${window.config.commitmentbnb_tokens[0].symbol.toLowerCase()}.svg`,
         coin: window.config.commitmentbnb_tokens[0].symbol,
         address: window.config.commitmentbnb_tokens[0].address,
       });
@@ -605,12 +593,12 @@ const Whitelist = ({
       setselectedToken(window.config.commitmentbnb_tokens[0]);
     } else {
       setSelectedChain({
-        icon: eth,
+        icon: 'https://cdn.worldofdypians.com/wod/eth.svg',
         chain: "Ethereum",
       });
 
       setSelectedCoin({
-        icon: require(`./assets/${window.config.commitmenteth_tokens[0].symbol.toLowerCase()}.svg`),
+        icon:  `https://cdn.worldofdypians.com/tools/${window.config.commitmenteth_tokens[0].symbol.toLowerCase()}.svg`,
         coin: window.config.commitmenteth_tokens[0].symbol,
         address: window.config.commitmenteth_tokens[0].address,
       });
@@ -706,7 +694,7 @@ const Whitelist = ({
               enterDelay={0}
               leaveDelay={0}
             >
-              <img src={tooltipIcon} alt="" />
+              <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" style={{height: 24, width: 24}}/>
             </Tooltip>{" "}
           </span>
           <h6 className="mb-0 whitelist-info-title">3/16 Months</h6>
@@ -714,7 +702,7 @@ const Whitelist = ({
         <div className="whitelist-info-item p-3 d-flex flex-column gap-1 align-items-start">
           <span className="whitelist-info-span">Network</span>
           <div className="d-flex align-items-center gap-2">
-            <img src={bnb} width={24} height={24} alt="" />
+            <img src={'https://cdn.worldofdypians.com/wod/bnbIcon.svg'} width={24} height={24} alt="" />
             <h6 className="mb-0 whitelist-info-title">BNB Chain</h6>
           </div>
         </div>
@@ -843,7 +831,7 @@ const Whitelist = ({
                               {selectedCoin.coin}
                             </span>
                           </div>
-                          <img src={dropArrow} alt="" />
+                          <img src={'https://cdn.worldofdypians.com/tools/dropArrow.svg'} alt="" />
                         </div>
                       </div>
                       <div className="position-relative coin-input d-flex">
@@ -1015,7 +1003,7 @@ const Whitelist = ({
                     className="connectbtn btn m-auto"
                     onClick={handleConnection}
                   >
-                    <img src={wallet} alt="" /> Connect wallet
+                    <img src={'https://cdn.worldofdypians.com/tools/walletIcon.svg'} alt="" /> Connect wallet
                   </button>
                 ) : (
                   <button
@@ -1068,7 +1056,7 @@ const Whitelist = ({
                     } p-3 d-flex align-items-center justify-content-center gap-2`}
                   >
                     {item.active && (
-                      <img src={checkIcon} className="req-check" alt="" />
+                      <img src={'https://cdn.worldofdypians.com/tools/checkIcon.svg'} className="req-check" alt="" />
                     )}
                     <img src={item.icon} height={36} width={36} alt="" />
                     <div className="d-flex flex-column gap-1">
@@ -1098,7 +1086,7 @@ const Whitelist = ({
                   <span className="req-buy-dyp">
                     Buy DYP tokens to become eligible for the whitelist
                   </span>
-                  <img src={buyToken} alt="" />
+                  <img src={'https://cdn.worldofdypians.com/tools/buyToken.svg'} alt="" />
                 </a>
               )}
             </div> */}
@@ -1143,7 +1131,7 @@ const Whitelist = ({
                   enterDelay={0}
                   leaveDelay={0}
                 >
-                  <img src={tooltipIcon} alt="" />
+                  <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" style={{height: 24, width: 24}}/>
                 </Tooltip>
               </div>
               <div className="outer-table-wrapper p-3">
@@ -1188,7 +1176,7 @@ const Whitelist = ({
                           <td className="item-history-table-td text-center">
                             <div className="d-flex align-items-center justify-content-center gap-2">
                               <img
-                                src={item.network === "BNB Chain" ? bnb : eth}
+                                src={item.network === "BNB Chain" ? 'https://cdn.worldofdypians.com/wod/bnbIcon.svg' : 'https://cdn.worldofdypians.com/wod/eth.svg'}
                                 alt=""
                               />
                               {item.network}

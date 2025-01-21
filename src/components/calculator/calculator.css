@@ -233,7 +233,7 @@ color: #F7F7FC !important;
 }
 
 .ethereum-chain-wrapper {
-  background-image: url("./assets/ethBackground.svg");
+  background-image: url("https://cdn.worldofdypians.com/tools/ethBackground.svg");
   background-size: cover;
   background-repeat: no-repeat;
   border-radius: 8px;
@@ -241,7 +241,7 @@ color: #F7F7FC !important;
   padding: 2px;
 }
 .bnb-chain-wrapper {
-  background-image: url("./assets/bnbBackground.svg");
+  background-image: url("https://cdn.worldofdypians.com/tools/bnbBackground.svg");
   background-size: cover;
   background-repeat: no-repeat;
   border-radius: 8px;
@@ -249,7 +249,7 @@ color: #F7F7FC !important;
   padding: 2px;
 }
 .avax-chain-wrapper {
-  background-image: url("./assets/avaxBackground.svg");
+  background-image: url("https://cdn.worldofdypians.com/tools/baseBackground.svg");
   background-size: cover;
   background-repeat: no-repeat;
   border-radius: 8px;
@@ -258,7 +258,7 @@ color: #F7F7FC !important;
 }
 
 .usdt-wrapper {
-  background-image: url("./assets/usdtBackground.svg");
+  background-image: url("https://cdn.worldofdypians.com/tools/usdtBackground.svg");
   background-size: cover;
   background-repeat: no-repeat;
   border-radius: 8px;
@@ -267,7 +267,7 @@ color: #F7F7FC !important;
 }
 
 .usdc-wrapper {
-  background-image: url("./assets/usdcBackground.svg");
+  background-image: url("https://cdn.worldofdypians.com/tools/usdcBackground.svg");
   background-size: cover;
   background-repeat: no-repeat;
   border-radius: 8px;

@@ -1,16 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "./dashboard.css";
-import TopPoolsCard from "../top-pools-card/TopPoolsCard";
-import NewsCard from "../newsCard/NewsCard";
-import GovCard from "../gov-card/GovCard";
-import BridgeCard from "../bridgecard/BridgeCard";
-import ExplorerCard from "../explorer-card/ExplorerCard";
-import Calculator from "../calculator/Calculator";
-import FaqCard from "../faqcard/FaqCard";
-import LaunchpadCard from "../launchpad-card/LaunchpadCard";
-import ChainlinkCard from "../chainlink-card/ChainlinkCard";
-import TrendingNews from "../newsCard/TrendingNews";
-import rightarrow from "./assets/right-arrow.svg";
 import { NavLink } from "react-router-dom";
 import useWindowSize from "../../functions/useWindowSize";
 import axios from "axios";
@@ -25,39 +14,31 @@ import StakeDypiusBsc from "../FARMINNG/bscConstantStakeDypius";
 import StakeDypiusEth3Phase2 from "../FARMINNG/stakingDypiusEth3Phase2";
 import StakeDypiusEth1Phase2 from "../FARMINNG/stakingDypiusEth1Phase2";
 import StakeDypiusEth2Phase2 from "../FARMINNG/stakingDypiusEth2Phase2";
-import StakingiDypPhase2 from "../FARMINNG/stakingiDypPhase2";
-
+import StakingDypiusBase1 from "../FARMINNG/stakingDypiusBase1";
 import InitConstantStakingiDYP from "../FARMINNG/constant-staking-idyp-new-front";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
-import closeX from "../earnOther/assets/closeX.svg";
-import ethereumIcon from "../top-pools-card/assets/ethereum.svg";
-import bnbIcon from "../top-pools-card/assets/bsc.svg";
-import avaxIcon from "../top-pools-card/assets/avax.svg";
 import { ClickAwayListener } from "@material-ui/core";
 import Tooltip from "@material-ui/core/Tooltip";
-import moreinfo from "../FARMINNG/assets/more-info.svg";
-import warning from "../FARMINNG/assets/warning.svg";
+import Countdown from "react-countdown";
 import StakeDypiusBscOther from "../earnOther/stakingPools/bscStakeDypiusOther";
 import StakeDypiusEthOther from "../earnOther/stakingPools/ethStakeDypiusOther";
 import StakeDypiusAvaxOther from "../earnOther/stakingPools/avaxStakeDypiusOther";
 import CountDown from "react-countdown";
 import StakeBscIDyp from "../FARMINNG/bscConstantStakeiDyp";
-import eth from "../earn/assets/eth.svg";
-import ethActive from "../earn/assets/ethActive.svg";
 
-import bnb from "../earn/assets/bnb.svg";
-import bnbActive from "../earn/assets/bnbActive.svg";
-
-import base from "../earn/assets/base.svg";
-import baseActive from "../earn/assets/baseActive.svg";
-
-import avax from "../earn/assets/avax.svg";
-import avaxActive from "../earn/assets/avaxActive.svg";
+import TopPoolsCard from "../top-pools-card/TopPoolsCard";
+import NewsCard from "../newsCard/NewsCard";
+import GovCard from "../gov-card/GovCard";
+import BridgeCard from "../bridgecard/BridgeCard";
+import ExplorerCard from "../explorer-card/ExplorerCard";
+import FaqCard from "../faqcard/FaqCard";
+import LaunchpadCard from "../launchpad-card/LaunchpadCard";
+import ChainlinkCard from "../chainlink-card/ChainlinkCard";
+import TrendingNews from "../newsCard/TrendingNews";
 import WhitelistPopup from "../whitelistPopup/WhitelistPopup";
-import StakingDypiusBase1 from "../FARMINNG/stakingDypiusBase1";
 import LoyaltyCard from "../launchpad-card/LoyaltyCard";
-import Countdown from "react-countdown";
+import Calculator from "../calculator/Calculator";
 
 const renderer = ({ days, hours, minutes }) => {
   return (
@@ -80,12 +61,11 @@ const Dashboard = ({
   handleSwitchNetwork,
   isPremium,
   onConnectWallet,
-  aggregatorPools,
   onMobileClick,
 }) => {
   const [topPools, setTopPools] = useState([]);
   const [cawsLandCard, setCawsLandCard] = useState([]);
-  const [theBnbPool, setTheBnbPool] = useState({});
+  // const [theBnbPool, setTheBnbPool] = useState({});
   const [totalTvl, settotalTvl] = useState(0);
   const [totalTvlETH, settotalTvlETH] = useState(0);
   const [totalTvlBNB, settotalTvlBNB] = useState(0);
@@ -121,7 +101,6 @@ const Dashboard = ({
 
   let loyaltyCd = new Date("2024-09-16T12:59:59.000+02:00");
 
-
   const wbsc_address = "0x2170Ed0880ac9A755fd29B2688956BD959F933F8";
   let premiumDay = new Date("2024-04-17T15:00:00.000+02:00");
 
@@ -145,38 +124,38 @@ const Dashboard = ({
 
   const phase2_pools = [
     {
-      id: "0xFBe84Af34CdC22455f82e18B76Ca50D21d3aBF84",
+      id: "0x1f5c3f186795c84265eD826AD09924D0987485ba",
       apy_percent: 20,
       tvl_usd: 46682.3565666875,
       link_logo: "https://www.dypius.com/logo192.png",
       link_pair: "https://app.dyp.finance/constant-staking-3",
-      pool_name: "iDYP Constant Staking ETH",
-      pair_name: "iDYP",
-      return_types: "iDYP",
+      pool_name: "DYP Constant Staking ETH",
+      pair_name: "DYP",
+      return_types: "DYP",
       lock_time: "90 days",
       expired: "No",
       new_pool: "Yes",
       apy_performancefee: 20,
       performancefee: 0,
-      type: "idyp",
-      chain: "bnb",
+      tokenType: "dyp",
+      chain: "eth",
     },
     {
-      id: "0xf6DC9E51D4E0FCc19ca6426fB5422f1E9a24F2eE",
-      apy_percent: 25,
+      id: "0x11666850EA73956afcd014E86eD2AE473939421d",
+      apy_percent: 35,
       tvl_usd: 462.3565666875,
       link_logo: "https://www.dypius.com/logo192.png",
       link_pair: "https://app.dyp.finance/constant-staking-3",
-      pool_name: "iDYP Constant Staking ETH",
-      pair_name: "iDYP",
-      return_types: "iDYP",
-      lock_time: "120 days",
+      pool_name: "DYP Constant Staking ETH",
+      pair_name: "DYP",
+      return_types: "DYP",
+      lock_time: "180 days",
       expired: "No",
       new_pool: "Yes",
-      apy_performancefee: 25,
+      apy_performancefee: 35,
       performancefee: 0,
-      type: "idyp",
-      chain: "bnb",
+      tokenType: "dyp",
+      chain: "eth",
     },
   ];
 
@@ -186,6 +165,8 @@ const Dashboard = ({
         .get(`https://api.dyp.finance/api/user_pools/${coinbase}`)
         .then((data) => {
           return data.data.PoolsUserIn;
+        }).catch((e) => {
+          console.log(e);
         });
       setuserPools(result);
     }
@@ -196,6 +177,8 @@ const Dashboard = ({
       .get("https://api.dyp.finance/api/the_graph_bsc_v2")
       .then((data) => {
         setWbnbPrice(data.data.the_graph_bsc_v2.usd_per_eth);
+      }).catch((e) => {
+        console.log(e);
       });
   };
 
@@ -204,6 +187,8 @@ const Dashboard = ({
       .get("https://api.dyp.finance/api/the_graph_eth_v2")
       .then((data) => {
         setEthPrice(data.data.the_graph_eth_v2.usd_per_eth);
+      }).catch((e) => {
+        console.log(e);
       });
   };
 
@@ -278,11 +263,8 @@ const Dashboard = ({
   };
 
   const fetchAllPools = async () => {
-    const bnbFarmingPool = await axios
-      .get("https://api.dyp.finance/api/the_graph_bsc_v2")
-      .catch((err) => console.error(err));
-
-      const basePool = await axios
+ 
+    const basePool = await axios
       .get("https://api.dyp.finance/api/get_staking_info_base_new")
       .catch((err) => console.error(err));
 
@@ -336,25 +318,21 @@ const Dashboard = ({
       eth_result &&
       eth_result.status === 200 &&
       eth_result2 &&
-      eth_result2.status === 200 &&
-      bnbFarmingPool &&
-      bnbFarmingPool.status === 200 &&
-      aggregatorPools.length > 0
+      eth_result2.status === 200 
     ) {
-      let temparray = Object.entries(
-        bnbFarmingPool.data.the_graph_bsc_v2.lp_data
-      );
-      let bnbpool = temparray.filter((item) => {
-        setWbnbPrice(bnbFarmingPool.data.the_graph_bsc_v2.usd_per_eth);
-        return (
-          item[1].id ===
-          "0x1bc61d08a300892e784ed37b2d0e63c85d1d57fb-0x5bc3a80a1f2c4fb693d9dddcebbb5a1b5bb15d65"
-        );
-      });
-      setTheBnbPool(bnbpool);
-      const testbnbFarming = bnbpool[0];
-      const finalBnbFarmingpool = testbnbFarming[1];
-
+      // let temparray = Object.entries(
+      //   bnbFarmingPool.data.the_graph_bsc_v2.lp_data
+      // );
+      // let bnbpool = temparray.filter((item) => {
+      //   setWbnbPrice(bnbFarmingPool.data.the_graph_bsc_v2.usd_per_eth);
+      //   return (
+      //     item[1].id ===
+      //     "0x1bc61d08a300892e784ed37b2d0e63c85d1d57fb-0x5bc3a80a1f2c4fb693d9dddcebbb5a1b5bb15d65"
+      //   );
+      // });
+      // setTheBnbPool(bnbpool);
+      // const testbnbFarming = bnbpool[0];
+      // const finalBnbFarmingpool = testbnbFarming[1];
 
       const dypBase = basePool.data.stakingInfoDYPBASE;
 
@@ -404,8 +382,6 @@ const Dashboard = ({
       setavaxPoolsDyp(activeAvax2);
       setavaxPoolsiDyp(object2activeAvax);
 
-
-      
       const object2base = dypBase.map((item) => {
         return {
           ...item,
@@ -423,7 +399,7 @@ const Dashboard = ({
         return b.apy_percent - a.apy_percent;
       });
       setBasePools(sortedActivebase);
-setbasePoolsDyp(sortedActivebase)
+      setbasePoolsDyp(sortedActivebase);
 
       const object2bnb = dypBnb.map((item) => {
         return {
@@ -462,56 +438,9 @@ setbasePoolsDyp(sortedActivebase)
       setBnbPools(sortedActive);
       setbnbPoolsDyp(activeBnb2);
       setbnbPoolsiDyp(activeidypBnb2);
-      const bnbAggregatorPool = aggregatorPools.find((item) => {
-        return item.name.toLowerCase() === "bnb";
-      });
+    
 
-      const bnbAggregatorPool_formatted = [bnbAggregatorPool].map((item) => {
-        return {
-          ...item,
-          chain: "bnb",
-          type: "staking",
-          tvl_usd: item.poolList[0].tvl,
-          id: item.poolList[0].contractAddress,
-          apy_percent: item.poolList[0].aprPercent,
-          lock_time: item.poolList[0].lockTime + " days",
-          pair_name: item.name,
-        };
-      });
-
-      const ethAggregatorPool = aggregatorPools.find((item) => {
-        return item.name.toLowerCase() === "eth";
-      });
-
-      const avaxAggregatorPool = aggregatorPools.find((item) => {
-        return item.name.toLowerCase() === "avax";
-      });
-
-      const avaxAggregatorPool_formatted = [avaxAggregatorPool].map((item) => {
-        return {
-          ...item,
-          chain: "avax",
-          type: "staking",
-          tvl_usd: item.poolList[0].tvl,
-          id: item.poolList[0].contractAddress,
-          apy_percent: item.poolList[0].aprPercent,
-          lock_time: item.poolList[0].lockTime + " days",
-          pair_name: item.name,
-        };
-      });
-
-      const ethAggregatorPool_formatted = [ethAggregatorPool].map((item) => {
-        return {
-          ...item,
-          chain: "base",
-          type: "staking",
-          tvl_usd: item.poolList[0].tvl,
-          id: item.poolList[0].contractAddress,
-          apy_percent: item.poolList[0].aprPercent,
-          lock_time: item.poolList[0].lockTime + " days",
-          pair_name: item.name,
-        };
-      });
+      
 
       const allpoolsEthereum = [
         ...ethereumDyp,
@@ -563,13 +492,16 @@ setbasePoolsDyp(sortedActivebase)
       const sortedAprsEthereum = cleanCardsEthereum.sort(function (a, b) {
         return b.apy_percent - a.apy_percent;
       });
-      const allActiveEth = [...activeEth2, ...object2activeEth];
+      const allActiveEth = [
+        ...activeEth2,
+        ...object2activeEth,
+      ];
 
       const sortedActiveeth = allActiveEth.sort(function (a, b) {
         return b.apy_percent - a.apy_percent;
       });
       setEthPools(sortedActiveeth);
-      setethPoolsDyp(activeEth2);
+      setethPoolsDyp([...activeEth2]);
       setethPoolsiDyp(object2activeEth);
 
       const object2Avax = avaxDyp.map((item) => {
@@ -633,8 +565,9 @@ setbasePoolsDyp(sortedActivebase)
         return b.apy_percent - a.apy_percent;
       });
 
-      const finalPools = [sortedActiveeth[0], sortedActivebase[0]];
-
+      const finalPools = [sortedActiveeth[0], sortedActiveeth[3]];
+     
+      
       setTopPools(finalPools);
     }
   };
@@ -772,7 +705,8 @@ setbasePoolsDyp(sortedActivebase)
           return "method-btn-disabled";
         }
       }
-    } if (chain === "base") {
+    }
+    if (chain === "base") {
       if (tokentype === "dyp") {
         if (locktimeToCheck === selectedPool.lock_time) {
           return "method-btn-active";
@@ -854,16 +788,18 @@ setbasePoolsDyp(sortedActivebase)
           return "method-btn-active";
         } else if (
           locktimeToCheck !== selectedPool.lock_time &&
+          locktimeToCheck !== "120 days" &&
           avaxDyppool?.find((obj) => {
             return obj.lock_time === locktimeToCheck;
           })
         ) {
           return "method-btn";
         } else if (
-          locktimeToCheck !== selectedPool.lock_time &&
-          !avaxDyppool?.find((obj) => {
-            return obj.lock_time === locktimeToCheck;
-          })
+          (locktimeToCheck !== selectedPool.lock_time &&
+            !avaxDyppool?.find((obj) => {
+              return obj.lock_time === locktimeToCheck;
+            })) ||
+          locktimeToCheck === "120 days"
         ) {
           return "method-btn-disabled";
         }
@@ -921,7 +857,8 @@ setbasePoolsDyp(sortedActivebase)
           setselectedPool(...result);
         }
       }
-    }  if (selectedchain === "nsdr") {
+    }
+    if (selectedchain === "nsdr") {
       if (selectedpoolType === "dyp") {
         const result = basePoolsDyp.filter((item) => {
           return item.lock_time === locktime;
@@ -994,7 +931,7 @@ setbasePoolsDyp(sortedActivebase)
     setTimeout(() => {
       setLoading(false);
     }, 2500);
-  }, [aggregatorPools]);
+  }, []);
 
   const windowSize = useWindowSize();
 
@@ -1052,9 +989,15 @@ setbasePoolsDyp(sortedActivebase)
         <div className="d-flex m-0 flex-column flex-xxl-row justify-content-between gap-4">
           <div className="d-flex flex-column gap-4 justify-content-between">
             <div className="d-flex flex-column flex-md-row m-0 gap-3 justify-content-between">
-              {/* <Calculator /> */}
-              <Countdown renderer={renderer} date={loyaltyCd} onComplete={()=>{setisExpired(true)}} />
-              <MigrationBanner />
+              <Calculator />
+              <Countdown
+                renderer={renderer}
+                date={loyaltyCd}
+                onComplete={() => {
+                  setisExpired(true);
+                }}
+              />
+              {/* <MigrationBanner /> */}
               <div className="d-flex flex-column gap-3 gap-lg-4 justify-content-between dashboard-cards-wrapper">
                 <ExplorerCard />
                 <div className="d-flex flex-column flex-md-row justify-content-between gap-3">
@@ -1074,7 +1017,11 @@ setbasePoolsDyp(sortedActivebase)
                   to="/earn/dypius"
                   className="view-more-title d-flex justify-content-center align-items-center gap-1"
                 >
-                  View all <img src={rightarrow} alt="" />{" "}
+                  View all{" "}
+                  <img
+                    src={"https://cdn.worldofdypians.com/tools/rightlogo.svg"}
+                    alt=""
+                  />{" "}
                 </NavLink>
               </div>
               {windowSize.width > 786 ? (
@@ -1096,7 +1043,9 @@ setbasePoolsDyp(sortedActivebase)
                             {item.chain === "bnb" && (
                               <div className="d-flex justify-content-end align-items-center bnbTagwrapper pe-2">
                                 <img
-                                  src={require("./assets/bnblogo.svg").default}
+                                  src={
+                                    "https://cdn.worldofdypians.com/wod/bnbIcon.svg"
+                                  }
                                   alt=""
                                   style={{ height: 20, width: 20 }}
                                   className="popup-chains-icon d-block"
@@ -1111,7 +1060,9 @@ setbasePoolsDyp(sortedActivebase)
                             {item.chain === "eth" && (
                               <div className="d-flex justify-content-end pe-2 align-items-center ethereumTagwrapper">
                                 <img
-                                  src={require("./assets/ethereum.svg").default}
+                                  src={
+                                    "https://cdn.worldofdypians.com/wod/eth.svg"
+                                  }
                                   alt=""
                                   style={{ height: 20, width: 20 }}
                                   className="popup-chains-icon d-block"
@@ -1126,7 +1077,9 @@ setbasePoolsDyp(sortedActivebase)
                             {item.chain === "base" && (
                               <div className="d-flex justify-content-end pe-2 align-items-center baseTagwrapper">
                                 <img
-                                  src={require("./assets/base.svg").default}
+                                  src={
+                                    "https://cdn.worldofdypians.com/wod/base.svg"
+                                  }
                                   alt=""
                                   style={{ height: 20, width: 20 }}
                                   className="popup-chains-icon d-block"
@@ -1141,7 +1094,9 @@ setbasePoolsDyp(sortedActivebase)
                             {item.chain === "avax" && (
                               <div className="d-flex justify-content-end align-items-center pe-2 avaxTagWrapper">
                                 <img
-                                  src={require("./assets/avaxlogo.svg").default}
+                                  src={
+                                    "https://cdn.worldofdypians.com/wod/avaxIcon.svg"
+                                  }
                                   alt=""
                                   style={{ height: 20, width: 20 }}
                                   className="popup-chains-icon d-block"
@@ -1242,9 +1197,9 @@ setbasePoolsDyp(sortedActivebase)
                       </div>
                     )}
                   </div>
-                  {activeCardFarm && network === 56 ? (
+                  {/* {activeCardFarm && network === 56 ? (
                     <BscFarmingFunc
-                      is_wallet_connected={isConnected}
+                      isConnected={isConnected}
                       wbnbPrice={wbnbPrice}
                       coinbase={coinbase}
                       latestTvl={theBnbPool[0][1].tvl_usd}
@@ -1270,7 +1225,7 @@ setbasePoolsDyp(sortedActivebase)
                     />
                   ) : (
                     <></>
-                  )}
+                  )} */}
                 </div>
               ) : (
                 <div className="d-flex flex-column gap-4">
@@ -1288,7 +1243,9 @@ setbasePoolsDyp(sortedActivebase)
                             {item.chain === "bnb" && (
                               <div className="d-flex justify-content-end align-items-center bnbTagwrapper pe-2">
                                 <img
-                                  src={require("./assets/bnblogo.svg").default}
+                                  src={
+                                    "https://cdn.worldofdypians.com/wod/bnbIcon.svg"
+                                  }
                                   alt=""
                                   style={{ height: 20, width: 20 }}
                                   className="popup-chains-icon d-block"
@@ -1303,7 +1260,9 @@ setbasePoolsDyp(sortedActivebase)
                             {item.chain === "eth" && (
                               <div className="d-flex justify-content-end pe-2 align-items-center ethereumTagwrapper">
                                 <img
-                                  src={require("./assets/ethereum.svg").default}
+                                  src={
+                                    "https://cdn.worldofdypians.com/wod/eth.svg"
+                                  }
                                   alt=""
                                   style={{ height: 20, width: 20 }}
                                   className="popup-chains-icon d-block"
@@ -1318,7 +1277,9 @@ setbasePoolsDyp(sortedActivebase)
                             {item.chain === "base" && (
                               <div className="d-flex justify-content-end pe-2 align-items-center baseTagwrapper">
                                 <img
-                                  src={require("./assets/base.svg").default}
+                                  src={
+                                    "https://cdn.worldofdypians.com/wod/base.svg"
+                                  }
                                   alt=""
                                   style={{ height: 20, width: 20 }}
                                   className="popup-chains-icon d-block"
@@ -1333,7 +1294,9 @@ setbasePoolsDyp(sortedActivebase)
                             {item.chain === "avax" && (
                               <div className="d-flex justify-content-end align-items-center pe-2 avaxTagWrapper">
                                 <img
-                                  src={require("./assets/avaxlogo.svg").default}
+                                  src={
+                                    "https://cdn.worldofdypians.com/wod/avaxIcon.svg"
+                                  }
                                   alt=""
                                   style={{ height: 20, width: 20 }}
                                   className="popup-chains-icon d-block"
@@ -1443,7 +1406,11 @@ setbasePoolsDyp(sortedActivebase)
                 className="view-more-title d-flex justify-content-center align-items-center gap-1"
                 to="/news"
               >
-                View all <img src={rightarrow} alt="" />
+                View all{" "}
+                <img
+                  src={"https://cdn.worldofdypians.com/tools/rightlogo.svg"}
+                  alt=""
+                />
               </NavLink>
               <div className="d-flex flex-column flex-md-row gap-3 justify-content-between px-0">
                 {popularNewsData.length !== 0 && (
@@ -1477,7 +1444,7 @@ setbasePoolsDyp(sortedActivebase)
           <div className="right-side-wrapper d-flex flex-column flex-md-row flex-xxl-column gap-4">
             <div className="launchpad-section-wrapper d-flex flex-column gap-3 gap-xxl-1">
               <h6 className="header">Loyalty Program</h6>
-              <LoyaltyCard  />
+              <LoyaltyCard />
             </div>
             <ChainlinkCard />
             <LaunchpadCard />
@@ -1541,7 +1508,7 @@ setbasePoolsDyp(sortedActivebase)
                     </span>
                   </div>
                   <img
-                    src={closeX}
+                    src={"https://cdn.worldofdypians.com/wod/popupXmark.svg"}
                     alt=""
                     className="close-x position-relative cursor-pointer "
                     onClick={() => {
@@ -1690,14 +1657,15 @@ setbasePoolsDyp(sortedActivebase)
                           setselectedIndex(0);
                         }}
                       >
-                        {(selectedchain === "eth" &&
-                          selectedpoolType === "dyp") ||
-                          (selectedchain === "bnb" &&
-                            selectedpoolType === "idyp" && (
-                              <div className="new-beta-sidebar2 position-absolute">
-                                <span className="new-beta-text2">New</span>
-                              </div>
-                            ))}
+                      {(selectedchain === "eth" && selectedpoolType === "dyp") ||
+                    (selectedchain === "bnb" &&
+                      selectedpoolType === "idyp") ? (
+                      <div className="new-beta-sidebar2 position-absolute">
+                        <span className="new-beta-text2">New</span>
+                      </div>
+                    ) : (
+                      <></>
+                    )}
                         90 Days
                       </button>
                       <button
@@ -1738,6 +1706,44 @@ setbasePoolsDyp(sortedActivebase)
                           )}
                         120 Days
                       </button>
+                      <button
+                        className={`position-relative ${getClassName(
+                          selectedchain,
+                          "180 days",
+                          selectedpoolType,
+                          selectedPool,
+                          ethPoolsDyp,
+                          basePoolsDyp,
+                          basePoolsDyp,
+                          ethPoolsiDyp,
+                          bnbPoolsDyp,
+                          bnbPoolsiDyp,
+                          avaxPoolsDyp,
+                          avaxPoolsiDyp
+                        )}`}
+                        onClick={() => {
+                          handleSelectPool(
+                            selectedchain,
+                            "180 days",
+                            selectedpoolType,
+                            ethPoolsDyp,
+                            basePoolsDyp,
+                            ethPoolsiDyp,
+                            bnbPoolsDyp,
+                            bnbPoolsiDyp,
+                            avaxPoolsDyp,
+                            avaxPoolsiDyp
+                          );
+                        }}
+                      >
+                        {selectedpoolType === "dyp" &&
+                          selectedchain === "eth" && (
+                            <div className="new-beta-sidebar2 position-absolute">
+                              <span className="new-beta-text2">New</span>
+                            </div>
+                          )}
+                        180 Days
+                      </button>
                     </div>
                   )}
                 {selectedPool?.name !== "BNB" &&
@@ -1773,8 +1779,8 @@ setbasePoolsDyp(sortedActivebase)
                                         "0x92A84052Fe6945949A295AF14a7506e3dc085492" ||
                                       selectedPool?.id ===
                                         "0xFdD3CFF22CF846208E3B37b47Bc36b2c61D2cA8b"
-                                        ? warning
-                                        : moreinfo
+                                        ? "https://cdn.worldofdypians.com/tools/warning.svg"
+                                        : "https://cdn.worldofdypians.com/tools/more-info.svg"
                                     }
                                     alt=""
                                     onClick={aprOpen}
@@ -1816,7 +1822,7 @@ setbasePoolsDyp(sortedActivebase)
                           <div className="d-flex justify-content-between gap-1 align-items-center">
                             <span className="info-pool-left-text">TVL</span>
                             <span className="info-pool-right-text">
-                              ${getFormattedNumber(selectedPool.tvl_usd, 2)}
+                              ${getFormattedNumber(selectedPool?.tvl_usd, 2)}
                             </span>
                           </div>
                         </div>
@@ -1838,10 +1844,38 @@ setbasePoolsDyp(sortedActivebase)
                       setselectedPool(
                         selectedPool.tokenType === "dyp"
                           ? ethPools.find((item) => {
-                              return item.tokenType === "dyp";
+                              return (
+                                item.tokenType === "dyp" && item.chain === "eth"
+                              );
+                            })
+                            ? ethPools.find((item) => {
+                                return (
+                                  item.tokenType === "dyp" &&
+                                  item.chain === "eth"
+                                );
+                              })
+                            : ethPools.find((item) => {
+                                return (
+                                  item.tokenType === "idyp" &&
+                                  item.chain === "eth"
+                                );
+                              })
+                          : ethPools.find((item) => {
+                              return (
+                                item.tokenType === "idyp" &&
+                                item.chain === "eth"
+                              );
+                            })
+                          ? ethPools.find((item) => {
+                              return (
+                                item.tokenType === "idyp" &&
+                                item.chain === "eth"
+                              );
                             })
                           : ethPools.find((item) => {
-                              return item.tokenType === "idyp";
+                              return (
+                                item.tokenType === "dyp" && item.chain === "eth"
+                              );
                             })
                       );
                     }}
@@ -1850,7 +1884,11 @@ setbasePoolsDyp(sortedActivebase)
                       className={`d-flex justify-content-center align-items-center chain-popup-text`}
                     >
                       <img
-                        src={selectedchain === "eth" ? ethActive : eth}
+                        src={
+                          selectedchain === "eth"
+                            ? "https://cdn.worldofdypians.com/wod/eth.svg"
+                            : "https://cdn.worldofdypians.com/tools/ethGray.svg"
+                        }
                         alt=""
                         className="popup-chains-icon"
                       />
@@ -1870,10 +1908,38 @@ setbasePoolsDyp(sortedActivebase)
                       setselectedPool(
                         selectedPool.tokenType === "dyp"
                           ? bnbPools.find((item) => {
-                              return item.tokenType === "dyp";
+                              return (
+                                item.tokenType === "dyp" && item.chain === "bnb"
+                              );
+                            })
+                            ? bnbPools.find((item) => {
+                                return (
+                                  item.tokenType === "dyp" &&
+                                  item.chain === "bnb"
+                                );
+                              })
+                            : bnbPools.find((item) => {
+                                return (
+                                  item.tokenType === "idyp" &&
+                                  item.chain === "bnb"
+                                );
+                              })
+                          : bnbPools.find((item) => {
+                              return (
+                                item.tokenType === "idyp" &&
+                                item.chain === "bnb"
+                              );
+                            })
+                          ? bnbPools.find((item) => {
+                              return (
+                                item.tokenType === "idyp" &&
+                                item.chain === "bnb"
+                              );
                             })
                           : bnbPools.find((item) => {
-                              return item.tokenType === "idyp";
+                              return (
+                                item.tokenType === "dyp" && item.chain === "bnb"
+                              );
                             })
                       );
                     }}
@@ -1882,7 +1948,11 @@ setbasePoolsDyp(sortedActivebase)
                       className={`d-flex justify-content-center align-items-center chain-popup-text`}
                     >
                       <img
-                        src={selectedchain === "bnb" ? bnbActive : bnb}
+                        src={
+                          selectedchain === "bnb"
+                            ? "https://cdn.worldofdypians.com/wod/bnbIcon.svg"
+                            : "https://cdn.worldofdypians.com/tools/bnbGray.svg"
+                        }
                         alt=""
                         className="popup-chains-icon"
                       />
@@ -1901,11 +1971,41 @@ setbasePoolsDyp(sortedActivebase)
 
                       setselectedPool(
                         selectedPool.tokenType === "dyp"
-                          ? bnbPools.find((item) => {
-                              return item.tokenType === "dyp";
+                          ? basePools.find((item) => {
+                              return (
+                                item.tokenType === "dyp" &&
+                                item.chain === "base"
+                              );
                             })
-                          : bnbPools.find((item) => {
-                              return item.tokenType === "idyp";
+                            ? basePools.find((item) => {
+                                return (
+                                  item.tokenType === "dyp" &&
+                                  item.chain === "base"
+                                );
+                              })
+                            : basePools.find((item) => {
+                                return (
+                                  item.tokenType === "idyp" &&
+                                  item.chain === "base"
+                                );
+                              })
+                          : basePools.find((item) => {
+                              return (
+                                item.tokenType === "idyp" &&
+                                item.chain === "base"
+                              );
+                            })
+                          ? basePools.find((item) => {
+                              return (
+                                item.tokenType === "idyp" &&
+                                item.chain === "base"
+                              );
+                            })
+                          : basePools.find((item) => {
+                              return (
+                                item.tokenType === "dyp" &&
+                                item.chain === "base"
+                              );
                             })
                       );
                     }}
@@ -1914,7 +2014,11 @@ setbasePoolsDyp(sortedActivebase)
                       className={`d-flex justify-content-center align-items-center chain-popup-text`}
                     >
                       <img
-                        src={selectedchain === "base" ? baseActive : base}
+                        src={
+                          selectedchain === "base"
+                            ? "https://cdn.worldofdypians.com/wod/baseBlueLogo.svg"
+                            : "https://cdn.worldofdypians.com/tools/baseGray.svg"
+                        }
                         alt=""
                         className="popup-chains-icon"
                       />
@@ -1923,11 +2027,12 @@ setbasePoolsDyp(sortedActivebase)
                   </div>
                   <div
                     className={`position-relative w-100 ${
-                      selectedchain === "avax"
-                        ? "chain-popup-item-avax"
-                        : selectedpoolType === "idyp"
-                        ? "chain-popup-item-disabled"
-                        : "chain-popup-item"
+                      // selectedchain === "avax"
+                      //   ? "chain-popup-item-avax"
+                      //   : selectedpoolType === "idyp"
+                      //   ?
+                      "chain-popup-item-disabled"
+                      // : "chain-popup-item"
                     }`}
                     onClick={() => {
                       setselectedchain("avax");
@@ -1935,10 +2040,40 @@ setbasePoolsDyp(sortedActivebase)
                       setselectedPool(
                         selectedPool.tokenType === "dyp"
                           ? avaxPools.find((item) => {
-                              return item.tokenType === "dyp";
+                              return (
+                                item.tokenType === "dyp" &&
+                                item.chain === "avax"
+                              );
+                            })
+                            ? avaxPools.find((item) => {
+                                return (
+                                  item.tokenType === "dyp" &&
+                                  item.chain === "avax"
+                                );
+                              })
+                            : avaxPools.find((item) => {
+                                return (
+                                  item.tokenType === "idyp" &&
+                                  item.chain === "avax"
+                                );
+                              })
+                          : avaxPools.find((item) => {
+                              return (
+                                item.tokenType === "idyp" &&
+                                item.chain === "avax"
+                              );
+                            })
+                          ? avaxPools.find((item) => {
+                              return (
+                                item.tokenType === "idyp" &&
+                                item.chain === "avax"
+                              );
                             })
                           : avaxPools.find((item) => {
-                              return item.tokenType === "idyp";
+                              return (
+                                item.tokenType === "dyp" &&
+                                item.chain === "avax"
+                              );
                             })
                       );
                     }}
@@ -1947,7 +2082,11 @@ setbasePoolsDyp(sortedActivebase)
                       className={`d-flex justify-content-center align-items-center chain-popup-text`}
                     >
                       <img
-                        src={selectedchain === "avax" ? avaxActive : avax}
+                        src={
+                          selectedchain === "avax"
+                            ? "https://cdn.worldofdypians.com/wod/avaxIcon.svg"
+                            : "https://cdn.worldofdypians.com/tools/avaxGray.svg"
+                        }
                         alt=""
                         className="popup-chains-icon"
                       />
@@ -1956,35 +2095,37 @@ setbasePoolsDyp(sortedActivebase)
                   </div>
                 </div>
 
-                {resultFilteredPool && resultFilteredPool.length > 1 && (
-                  <>
-                    <div className="separator my-1"></div>
-                    <div className="d-flex align-items-center gap-2 w-100">
-                      {resultFilteredPool.map((obj, index) => {
-                        return (
-                          <button
-                            className={` w-100 position-relative ${
-                              selectedIndex === index
-                                ? "method-btn-active"
-                                : "method-btn"
-                            }`}
-                            onClick={() => {
-                              setselectedIndex(index);
-                              setselectedPool(obj);
-                            }}
-                          >
-                            {selectedpoolType === "dyp" && index == 1 && (
-                              <div className="new-beta-sidebar2 position-absolute">
-                                <span className="new-beta-text2">New</span>
-                              </div>
-                            )}
-                            Pool {index + 1}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </>
-                )}
+                {resultFilteredPool &&
+                  resultFilteredPool.length > 1 &&
+                  selectedchain === "eth" && (
+                    <>
+                      <div className="separator my-1"></div>
+                      <div className="d-flex align-items-center gap-2 w-100">
+                        {resultFilteredPool.map((obj, index) => {
+                          return (
+                            <button
+                              className={` w-100 position-relative ${
+                                selectedIndex === index
+                                  ? "method-btn-active"
+                                  : "method-btn"
+                              }`}
+                              onClick={() => {
+                                setselectedIndex(index);
+                                setselectedPool(obj);
+                              }}
+                            >
+                              {selectedpoolType === "dyp" && index == 0 && (
+                                <div className="new-beta-sidebar2 position-absolute">
+                                  <span className="new-beta-text2">New</span>
+                                </div>
+                              )}
+                              Pool {index + 1}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </>
+                  )}
 
                 {activeCard &&
                 selectedPool?.id ===
@@ -1999,7 +2140,7 @@ setbasePoolsDyp(sortedActivebase)
                     chainId={network.toString()}
                     handleConnection={handleConnection}
                     handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
+                    expired={true}
                     staking={window.constant_staking_idyp_5}
                     listType={"table"}
                     finalApr={selectedPool?.apy_performancefee}
@@ -2033,7 +2174,7 @@ setbasePoolsDyp(sortedActivebase)
                     chainId={network.toString()}
                     handleConnection={handleConnection}
                     handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
+                    expired={true}
                     staking={window.constant_staking_idypavax_7}
                     listType={"table"}
                     finalApr={selectedPool.apy_performancefee}
@@ -2053,6 +2194,78 @@ setbasePoolsDyp(sortedActivebase)
                       setActiveCard();
                       setselectedPool([]);
                       setDetails();
+                    }}
+                  />
+                ) : activeCard &&
+                  selectedPool?.id ===
+                    "0x11666850EA73956afcd014E86eD2AE473939421d" ? (
+                  <StakeDypiusEth1Phase2
+                    selectedPool={selectedPool}
+                    selectedTab={selectedTab}
+                    staking={window.constant_staking_dypius_phase2_eth7}
+                    apr={selectedPool?.apy_percent}
+                    liquidity={eth_address}
+                    expiration_time={"08 Jan 2026"}
+                    poolCap={40000000}
+                    start_date={"08 Jan 2025"}
+                    finalApr={selectedPool?.apy_performancefee}
+                    lockTime={
+                      selectedPool?.lock_time?.split(" ")[0] === "No"
+                        ? "No Lock"
+                        : parseInt(selectedPool?.lock_time?.split(" ")[0])
+                    }
+                    listType={"table"}
+                    other_info={false}
+                    fee={selectedPool?.performancefee}
+                    is_wallet_connected={isConnected}
+                    coinbase={coinbase}
+                    the_graph_result={the_graph_result}
+                    chainId={network.toString()}
+                    handleConnection={handleConnection}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    expired={false}
+                    referrer={referrer}
+                    onConnectWallet={() => {
+                      setShowDetails(false);
+                      onConnectWallet();
+                      setselectedPool([]);
+                      setDetails(999);
+                    }}
+                  />
+                ) : activeCard &&
+                  selectedPool?.id ===
+                    "0x1f5c3f186795c84265eD826AD09924D0987485ba" ? (
+                  <StakeDypiusEth1Phase2
+                    selectedPool={selectedPool}
+                    selectedTab={selectedTab}
+                    staking={window.constant_staking_dypius_phase2_eth6}
+                    apr={selectedPool?.apy_percent}
+                    liquidity={eth_address}
+                    expiration_time={"08 Jan 2026"}
+                    poolCap={20000000}
+                    start_date={"08 Jan 2025"}
+                    finalApr={selectedPool?.apy_performancefee}
+                    lockTime={
+                      selectedPool?.lock_time?.split(" ")[0] === "No"
+                        ? "No Lock"
+                        : parseInt(selectedPool?.lock_time?.split(" ")[0])
+                    }
+                    listType={"table"}
+                    other_info={false}
+                    fee={selectedPool?.performancefee}
+                    is_wallet_connected={isConnected}
+                    coinbase={coinbase}
+                    the_graph_result={the_graph_result}
+                    chainId={network.toString()}
+                    handleConnection={handleConnection}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    expired={false}
+                    referrer={referrer}
+                    onConnectWallet={() => {
+                      setShowDetails(false);
+                      onConnectWallet();
+                      setselectedPool([]);
+                      setDetails(999);
                     }}
                   />
                 ) : activeCard &&
@@ -2081,7 +2294,7 @@ setbasePoolsDyp(sortedActivebase)
                     chainId={network.toString()}
                     handleConnection={handleConnection}
                     handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
+                    expired={true}
                     referrer={referrer}
                     onConnectWallet={() => {
                       onConnectWallet();
@@ -2117,7 +2330,7 @@ setbasePoolsDyp(sortedActivebase)
                     chainId={network.toString()}
                     handleConnection={handleConnection}
                     handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
+                    expired={true}
                     referrer={referrer}
                     onConnectWallet={() => {
                       onConnectWallet();
@@ -2239,44 +2452,45 @@ setbasePoolsDyp(sortedActivebase)
                     poolCap={1000000}
                     start_date={"07 Jun 2024"}
                   />
-                ): activeCard &&
-                selectedPool?.id ===
-                "0x13a3EA792db25d6E239f4b785bA17FB5B9faf84e" || selectedPool?.id ===
-                "0x9845a667b1A603FF21596FDdec51968a2bccAc11" ? (
-                <StakingDypiusBase1
-                  selectedPool={selectedPool}
-                  selectedTab={selectedTab}
-                  staking={window.constant_staking_dypius_base1}
-                  apr={selectedPool?.apy_percent}
-                  liquidity={eth_address}
-                  expiration_time={"01 Sep 2025"}
-                  finalApr={selectedPool?.apy_performancefee}
-                  lockTime={
-                    selectedPool?.lock_time?.split(" ")[0] === "No"
-                      ? "No Lock"
-                      : parseInt(selectedPool?.lock_time?.split(" ")[0])
-                  }
-                  listType={"table"}
-                  other_info={false}
-                  fee={selectedPool?.performancefee}
-                  is_wallet_connected={isConnected}
-                  coinbase={coinbase}
-                  the_graph_result={the_graph_result}
-                  chainId={network.toString()}
-                  handleConnection={handleConnection}
-                  handleSwitchNetwork={handleSwitchNetwork}
-                  expired={false}
-                  referrer={referrer}
-                  onConnectWallet={() => {
-                    setShowDetails(false);
-                    onConnectWallet();
-                    setselectedPool([]);
-                    setDetails(999);
-                  }}
-                  poolCap={2000000}
-                  start_date={"01 Sep 2024"}
-                />
-              ) : activeCard &&
+                ) : (activeCard &&
+                    selectedPool?.id ===
+                      "0x13a3EA792db25d6E239f4b785bA17FB5B9faf84e") ||
+                  selectedPool?.id ===
+                    "0x9845a667b1A603FF21596FDdec51968a2bccAc11" ? (
+                  <StakingDypiusBase1
+                    selectedPool={selectedPool}
+                    selectedTab={selectedTab}
+                    staking={window.constant_staking_dypius_base1}
+                    apr={selectedPool?.apy_percent}
+                    liquidity={eth_address}
+                    expiration_time={"01 Sep 2025"}
+                    finalApr={selectedPool?.apy_performancefee}
+                    lockTime={
+                      selectedPool?.lock_time?.split(" ")[0] === "No"
+                        ? "No Lock"
+                        : parseInt(selectedPool?.lock_time?.split(" ")[0])
+                    }
+                    listType={"table"}
+                    other_info={false}
+                    fee={selectedPool?.performancefee}
+                    is_wallet_connected={isConnected}
+                    coinbase={coinbase}
+                    the_graph_result={the_graph_result}
+                    chainId={network.toString()}
+                    handleConnection={handleConnection}
+                    handleSwitchNetwork={handleSwitchNetwork}
+                    expired={false}
+                    referrer={referrer}
+                    onConnectWallet={() => {
+                      setShowDetails(false);
+                      onConnectWallet();
+                      setselectedPool([]);
+                      setDetails(999);
+                    }}
+                    poolCap={10000000}
+                    start_date={"01 Sep 2024"}
+                  />
+                ) : activeCard &&
                   selectedPool?.id ===
                     "0x0fafe78e471b52bc4003984a337948ed55284573" ? (
                   <StakeDypiusEth1Phase2
@@ -2337,7 +2551,7 @@ setbasePoolsDyp(sortedActivebase)
                     chainId={network.toString()}
                     handleConnection={handleConnection}
                     handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
+                    expired={true}
                     referrer={referrer}
                     onConnectWallet={() => {
                       setShowDetails(false);
@@ -2392,7 +2606,7 @@ setbasePoolsDyp(sortedActivebase)
                     chainId={network.toString()}
                     handleConnection={handleConnection}
                     handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
+                    expired={true}
                     staking={window.constant_stakingidyp_7}
                     listType={"table"}
                     finalApr={selectedPool?.apy_performancefee}

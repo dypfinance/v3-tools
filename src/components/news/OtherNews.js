@@ -2,12 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ToolTip from "./ToolTip";
 import OutsideClickHandler from "react-outside-click-handler";
-import passiveUpvote from "./assets/passiveUpvote.svg";
-import passiveDownvote from "./assets/passiveDownvote.svg";
-import activeUpvote from "./assets/activeUpvote.svg";
-import activeDownvote from "./assets/activeDownvote.svg";
-import calendar from "../newsCard/assets/calendar.svg";
-
+ 
 const OtherNews = ({
   image,
   link,
@@ -268,10 +263,10 @@ const OtherNews = ({
               <img
                 src={
                   likeIndicator === false && dislikeIndicator === false
-                    ? passiveUpvote
-                    : likeIndicator === true
-                    ? activeUpvote
-                    : passiveUpvote
+                    ? 'https://cdn.worldofdypians.com/tools/passiveUpvote.svg'
+                    : dislikeIndicator === true
+                    ? 'https://cdn.worldofdypians.com/tools/activeDownvote.svg'
+                    : 'https://cdn.worldofdypians.com/tools/passiveUpvote.svg'
                 }
                 alt=""
                 className="like-indicator"
@@ -282,7 +277,7 @@ const OtherNews = ({
                 }}
               />
 
-              <span className="votes-amount">
+              <span className="votes-amount d-none">
                 {" "}
                 {Number(upvote) - Number(downvote)}
               </span>
@@ -290,10 +285,10 @@ const OtherNews = ({
                 style={{ transform: "rotate(0deg)" }}
                 src={
                   likeIndicator === false && dislikeIndicator === false
-                    ? passiveDownvote
-                    : dislikeIndicator === true
-                    ? activeDownvote
-                    : passiveDownvote
+                  ? 'https://cdn.worldofdypians.com/tools/passiveDownvote.svg'
+                  : dislikeIndicator === true
+                  ? 'https://cdn.worldofdypians.com/tools/activeDownvote.svg'
+                  : 'https://cdn.worldofdypians.com/tools/passiveDownvote.svg'
                 }
                 alt=""
                 className="like-indicator"
@@ -331,7 +326,7 @@ const OtherNews = ({
               style={{ width: "auto" }}
             /> */}
             <div className="date-wrapper">
-              <img src={calendar} alt="calendar" />
+              <img src={'https://cdn.worldofdypians.com/tools/calendar.svg'} alt="calendar" />
               <span className="news-date-text">
                 {formattedDate.toLocaleDateString("en-US", options)}
               </span>

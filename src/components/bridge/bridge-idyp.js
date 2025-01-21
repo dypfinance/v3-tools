@@ -2,13 +2,7 @@ import React from "react";
 import getFormattedNumber from "../../functions/get-formatted-number";
 import Countdown from "react-countdown";
 import "./bridge.css";
-import eth from "./assets/eth.svg";
-import bnb from "./assets/bnb.svg";
-import avax from "./assets/avax.svg";
-import wallet from "./assets/wallet.svg";
-import moreinfo from "./assets/more-info.svg";
-import switchicon from "./assets/switch.svg";
-import failMark from "../../assets/failMark.svg";
+
 import Tooltip from "@material-ui/core/Tooltip";
 import Address from "../FARMINNG/address";
 import WalletModal from "../WalletModal";
@@ -18,7 +12,6 @@ import TimelineSeparator from "@mui/lab/TimelineSeparator";
 import TimelineConnector from "@mui/lab/TimelineConnector";
 import TimelineContent from "@mui/lab/TimelineContent";
 import TimelineDot from "@mui/lab/TimelineDot";
-import routeIcon from "./assets/route-icon.svg";
 
 // Renderer callback with condition
 const getRenderer =
@@ -110,6 +103,10 @@ export default function initBridgeidyp({
             } else if (data === "0x38") {
               this.setState({
                 destinationChainText: "bnb",
+              });
+            } else if (data === "0xcc") {
+              this.setState({
+                destinationChainText: "opbnb",
               });
             } else {
               this.setState({
@@ -401,9 +398,11 @@ export default function initBridgeidyp({
         // console.log({ args });
         // window.alertify.message(args.toString())
         let args = await fetch(url)
-        .then(response => response.json())
-        .then(data => {return data})
-        .catch(error => console.error('Error:', error));
+          .then((response) => response.json())
+          .then((data) => {
+            return data;
+          })
+          .catch((error) => console.error("Error:", error));
         bridgeBSC
           .withdraw(args)
           .then(() => {
@@ -461,7 +460,7 @@ export default function initBridgeidyp({
         try {
           let chainId = this.props.networkId;
           let network = window.config.chain_ids[chainId] || "UNKNOWN";
-
+if(network !== 'UNKNOWN') {
           let token_balance = await (network == "AVAX" || network === "BSC"
             ? tokenBSC
             : tokenETH
@@ -501,6 +500,7 @@ export default function initBridgeidyp({
               this.setState({ withdrawableUnixTimestamp: null });
             }
           } else this.setState({ withdrawableUnixTimestamp: null });
+        }
         } catch (e) {
           console.error(e);
         }
@@ -577,7 +577,12 @@ export default function initBridgeidyp({
                         }}
                       >
                         <h6 className="optiontext d-flex align-items-center gap-2">
-                          <img src={eth} alt="" />
+                          <img
+                            src={
+                              "https://cdn.worldofdypians.com/tools/ethSquare.svg"
+                            }
+                            alt=""
+                          />
                           <p className=" mb-0 optiontext d-none d-lg-flex">
                             Ethereum
                           </p>
@@ -599,7 +604,12 @@ export default function initBridgeidyp({
                           }}
                         >
                           <h6 className="optiontext d-flex align-items-center gap-2">
-                            <img src={bnb} alt="" />
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/tools/bnbSquare.svg"
+                              }
+                              alt=""
+                            />
                             <p className=" mb-0 optiontext d-none d-lg-flex">
                               BNB Chain
                             </p>
@@ -622,7 +632,12 @@ export default function initBridgeidyp({
                           }}
                         >
                           <h6 className="optiontext d-flex align-items-center gap-2">
-                            <img src={avax} alt="" />
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/tools/avaxSquare.svg"
+                              }
+                              alt=""
+                            />
                             <p className=" mb-0 optiontext d-none d-lg-flex">
                               Avalanche
                             </p>
@@ -638,7 +653,13 @@ export default function initBridgeidyp({
                           this.setState({ showWalletModal: true });
                         }}
                       >
-                        <img src={wallet} alt="" />
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/tools/walletIcon.svg"
+                          }
+                          alt=""
+                          style={{ height: 20, width: 20 }}
+                        />
                         Connect wallet
                       </button>
                     ) : (
@@ -725,7 +746,12 @@ export default function initBridgeidyp({
                                   </div>
                                 }
                               >
-                                <img src={moreinfo} alt="" />
+                                <img
+                                  src={
+                                    "https://cdn.worldofdypians.com/tools/more-info.svg"
+                                  }
+                                  alt=""
+                                />
                               </Tooltip>
                             </h6>
 
@@ -813,7 +839,12 @@ export default function initBridgeidyp({
                                   <>Success</>
                                 ) : (
                                   <>
-                                    <img src={failMark} alt="" />
+                                    <img
+                                      src={
+                                        "https://cdn.worldofdypians.com/wod/failMark.svg"
+                                      }
+                                      alt=""
+                                    />
                                     Failed
                                   </>
                                 )}
@@ -838,7 +869,7 @@ export default function initBridgeidyp({
                   </div>
                   <img
                     onClick={this.handleSwapChains}
-                    src={switchicon}
+                    src={"https://cdn.worldofdypians.com/tools/switch.svg"}
                     alt=""
                     style={{
                       width: 55,
@@ -883,7 +914,12 @@ export default function initBridgeidyp({
                                     }}
                                   >
                                     <h6 className="optiontext d-flex align-items-center gap-2">
-                                      <img src={eth} alt="" />
+                                      <img
+                                        src={
+                                          "https://cdn.worldofdypians.com/tools/ethSquare.svg"
+                                        }
+                                        alt=""
+                                      />
                                       <p className=" mb-0 optiontext d-none d-lg-flex">
                                         Ethereum
                                       </p>
@@ -908,7 +944,12 @@ export default function initBridgeidyp({
                                       }}
                                     >
                                       <h6 className="optiontext d-flex align-items-center gap-2">
-                                        <img src={bnb} alt="" />
+                                        <img
+                                          src={
+                                            "https://cdn.worldofdypians.com/tools/bnbSquare.svg"
+                                          }
+                                          alt=""
+                                        />
                                         <p className=" mb-0 optiontext d-none d-lg-flex">
                                           BNB Chain
                                         </p>
@@ -934,7 +975,12 @@ export default function initBridgeidyp({
                                       }}
                                     >
                                       <h6 className="optiontext d-flex align-items-center gap-2">
-                                        <img src={avax} alt="" />
+                                        <img
+                                          src={
+                                            "https://cdn.worldofdypians.com/tools/avaxSquare.svg"
+                                          }
+                                          alt=""
+                                        />
                                         <p className=" mb-0 optiontext d-none d-lg-flex">
                                           Avalanche
                                         </p>
@@ -989,7 +1035,12 @@ export default function initBridgeidyp({
                                     </div>
                                   }
                                 >
-                                  <img src={moreinfo} alt="" />
+                                  <img
+                                    src={
+                                      "https://cdn.worldofdypians.com/tools/more-info.svg"
+                                    }
+                                    alt=""
+                                  />
                                 </Tooltip>
                               </div>
                             </h6>
@@ -1080,7 +1131,12 @@ export default function initBridgeidyp({
                                   <>Success</>
                                 ) : (
                                   <>
-                                    <img src={failMark} alt="" />
+                                    <img
+                                      src={
+                                        "https://cdn.worldofdypians.com/wod/failMark.svg"
+                                      }
+                                      alt=""
+                                    />
                                     Failed
                                   </>
                                 )}
@@ -1107,7 +1163,9 @@ export default function initBridgeidyp({
                             <div className="separator"></div>
                             <div className="d-flex gap-2 align-items-start">
                               <img
-                                src={require("./assets/errorinfo.svg").default}
+                                src={
+                                  "https://cdn.worldofdypians.com/tools/errorinfo.svg"
+                                }
                                 alt=""
                               />
                               <h6 className="bottominfotxt">
@@ -1151,7 +1209,10 @@ export default function initBridgeidyp({
             </div>
             <div>
               <h6 className="guidetitle">
-                <img src={routeIcon} alt="" />
+                <img
+                  src={"https://cdn.worldofdypians.com/tools/route-icon.svg"}
+                  alt=""
+                />
                 Bridge process guide
               </h6>
               <div className="separator"></div>

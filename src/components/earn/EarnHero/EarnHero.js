@@ -1,14 +1,6 @@
 import React, { useEffect, useState } from "react";
-import earnHeroStats from "../../../assets/earnAssets/earnHeroStats.webp";
-import coin from "../../../assets/earnAssets/coin.webp";
-import coinBackground from "../../../assets/earnAssets/coinBackground.webp";
-import eth from "../../../assets/earnAssets/ethereumIcon.svg";
-import bnb from "../../../assets/earnAssets/bnbIcon.svg";
-import avax from "../../../assets/earnAssets/avaxIcon.svg";
 import getFormattedNumber from "../../../functions/get-formatted-number";
-import CountUp from "react-countup";
 import axios from "axios";
-import totalTvlIcon from "../../../assets/earnAssets/totalTvlIcon.svg";
 
 const EarnHero = () => {
   const [totalpaid, setTotalPaid] = useState();
@@ -17,6 +9,8 @@ const EarnHero = () => {
   const getTotalPaidData = async () => {
     await axios.get("https://api.dyp.finance/api/totalpaid").then((data) => {
       setTotalPaid(data.data);
+    }).catch((err) => {
+      console.log(err);
     });
   };
   var tempTvl = 0;
@@ -140,7 +134,7 @@ const EarnHero = () => {
       <div className="col-12 col-lg-7 px-0 px-lg-2 d-flex gap-3 gap-lg-4 flex-column flex-lg-row">
         <div className="d-flex align-items-start gap-2 p-3 total-tvl-wrapper position-relative">
           <div className="purplediv" style={{ left: "1px", top: "10px" }}></div>
-          <img src={totalTvlIcon} alt="total-tvl" />
+          <img src={'https://cdn.worldofdypians.com/tools/totalTvlIcon.svg'} alt="total-tvl" />
           <div
             className="d-flex flex-column gap-1 position-relative"
             style={{ top: "5px" }}
@@ -187,27 +181,27 @@ const EarnHero = () => {
               </h6>
             </div>
             <img
-              src={earnHeroStats}
+              src={'https://cdn.worldofdypians.com/tools/earnHeroStats.webp'}
               style={{ width: "230px", height: "80px" }}
               alt=""
             />
           </div>
           <div className="d-flex flex-column justify-content-between">
             <div className="d-flex justify-content-start align-items-center gap-2">
-              <img src={eth} alt="" />
+              <img src={'https://cdn.worldofdypians.com/tools/ethereumIcon.svg'} alt="" />
               <h4 style={{ color: "#f7f7fc", fontWeight: "500" }}>
                 {" "}
                 {getFormattedNumber(totalpaid?.ethTotal.wethPaiOutTotals, 0)}
               </h4>
             </div>
             <div className="d-flex justify-content-start align-items-center gap-2">
-              <img src={bnb} alt="" />
+              <img src={'https://cdn.worldofdypians.com/tools/bnbIcon.svg'} alt="" />
               <h4 style={{ color: "#f7f7fc", fontWeight: "500" }}>
                 {getFormattedNumber(totalpaid?.bnbTotal.wbnbPaidOutTotals, 0)}
               </h4>
             </div>
             <div className="d-flex justify-content-start align-items-center gap-2">
-              <img src={avax} alt="" />
+              <img src={'https://cdn.worldofdypians.com/tools/avaxIcon.svg'} alt="" />
               <h4 style={{ color: "#f7f7fc", fontWeight: "500" }}>
                 {getFormattedNumber(totalpaid?.avaxTotal.avaxPaidOutTotals, 0)}
               </h4>
@@ -215,8 +209,8 @@ const EarnHero = () => {
           </div>
         </div>
         <div className="position-relative d-none d-xxl-block">
-          <img src={coin} alt="" className="coin" />
-          <img src={coinBackground} alt="" className="coin" />
+          <img src={'https://cdn.worldofdypians.com/tools/coin.webp'} alt="" className="coin" />
+          <img src={'https://cdn.worldofdypians.com/tools/coinBackground.webp'} alt="" className="coin" />
         </div>
       </div>
     </div>

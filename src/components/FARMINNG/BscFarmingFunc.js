@@ -5,27 +5,10 @@ import Modal from "../Modal/Modal";
 import Address from "./address";
 import WalletModal from "../WalletModal";
 import "./top-pools.css";
-import Countdown from "react-countdown";
-import ellipse from "./assets/ellipse.svg";
-import empty from "./assets/empty.svg";
-import check from "./assets/check.svg";
-import failMark from "../../assets/failMark.svg";
-import arrowup from "./assets/arrow-up.svg";
-import whiteArrowUp from "./assets/whiteArrowUp.svg";
-import moreinfo from "./assets/more-info.svg";
-import stats from "./assets/stats.svg";
-import purplestats from "./assets/purpleStat.svg";
-import wallet from "./assets/wallet.svg";
-import Tooltip from "@material-ui/core/Tooltip";
-import dropdownVector from "./assets/dropdownVector.svg";
-import { DropdownButton } from "react-bootstrap";
-import axios from "axios";
-import statsLinkIcon from "./assets/statsLinkIcon.svg";
-import { shortAddress } from "../../functions/shortAddress";
-import poolStatsIcon from "./assets/poolStatsIcon.svg";
-import poolsCalculatorIcon from "./assets/poolsCalculatorIcon.svg";
-import calculatorIcon from "../calculator/assets/calculator.svg";
-import xMark from "../calculator/assets/xMark.svg";
+import Countdown from "react-countdown";  
+import Tooltip from "@material-ui/core/Tooltip"; 
+import axios from "axios"; 
+import { shortAddress } from "../../functions/shortAddress";  
 import { ClickAwayListener } from "@material-ui/core";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
 
@@ -204,8 +187,7 @@ const BscFarmingFunc = ({
   const [show, setShow] = useState(false);
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [showCalculator, setShowCalculator] = useState(false);
-  const [popup, setPopup] = useState(false);
-  const [is_wallet_connected, setIs_wallet_connected] = useState(false);
+  const [popup, setPopup] = useState(false); 
   const [selectedTokenLogo, setSelectedTokenLogo] = useState("wbnb");
   const [selectedRewardTokenLogo1, setSelectedRewardTokenLogo1] =
     useState("wbnb");
@@ -298,14 +280,26 @@ const BscFarmingFunc = ({
     let web3 = window.bscWeb3;
 
     let pair = new web3.eth.Contract(PAIR_ABI, pair_token_address);
-    let totalSupply = await pair.methods.totalSupply().call().catch((e)=>{console.error(e); return 0})
-    let reserves = await pair.methods.getReserves().call().catch((e)=>{console.error(e); return 0})
+    let totalSupply = await pair.methods
+      .totalSupply()
+      .call()
+      .catch((e) => {
+        console.error(e);
+        return 0;
+      });
+    let reserves = await pair.methods
+      .getReserves()
+      .call()
+      .catch((e) => {
+        console.error(e);
+        return 0;
+      });
     let amountlpContract = await pair.methods
       .balanceOf(constant._address)
       .call()
       .catch((e) => {
         console.error(e);
-        return 0
+        return 0;
       });
 
     let maxETH = reserves[0];
@@ -632,7 +626,10 @@ const BscFarmingFunc = ({
   };
 
   const handleWithdrawDyp = async () => {
-    let amountConstant = await staking.depositedTokens(coinbase).catch((e)=>{console.error(e); return 0});
+    let amountConstant = await staking.depositedTokens(coinbase).catch((e) => {
+      console.error(e);
+      return 0;
+    });
     amountConstant = new BigNumber(amountConstant).toFixed(0);
     setWithdrawLoading(true);
 
@@ -798,9 +795,9 @@ const BscFarmingFunc = ({
         setWithdrawStatus("fail");
         setErrorMsg3(e?.message);
         setTimeout(() => {
-        setWithdrawStatus("initial");
-        setErrorMsg3('');
-        setSelectedPool("");
+          setWithdrawStatus("initial");
+          setErrorMsg3("");
+          setSelectedPool("");
         }, 5000);
       });
   };
@@ -956,7 +953,10 @@ const BscFarmingFunc = ({
 
     let address = coinbase;
 
-    let amount = await staking.getPendingDivs(address).catch((e)=>{console.error(e); return 0});
+    let amount = await staking.getPendingDivs(address).catch((e) => {
+      console.error(e);
+      return 0;
+    });
 
     let claimdivs2 = new BigNumber(amount)
       .times(100 - window.config.slippage_tolerance_percent_liquidity)
@@ -1158,52 +1158,98 @@ const BscFarmingFunc = ({
       ];
       let _amountOutMin = await router.methods
         .getAmountsOut(amount, path)
-        .call().catch((e)=>{console.error(e); return 0});
+        .call()
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
       _amountOutMin = _amountOutMin[_amountOutMin.length - 1];
       _amountOutMin = new BigNumber(_amountOutMin).div(1e18).toFixed(18);
-    
-      let _bal = token.balanceOf(coinbase).catch((e)=>{console.error(e); return 0});
-      let _rBal = reward_token.balanceOf(coinbase).catch((e)=>{console.error(e); return 0});
-      let _pDivs = constant.getPendingDivs(coinbase).catch((e)=>{console.error(e); return 0});
 
-      let _pDivsEth = constant.getPendingDivsEth(coinbase).catch((e)=>{console.error(e); return 0});
-  
+      let _bal = token.balanceOf(coinbase).catch((e) => {
+        console.error(e);
+        return 0;
+      });
+      let _rBal = reward_token.balanceOf(coinbase).catch((e) => {
+        console.error(e);
+        return 0;
+      });
+      let _pDivs = constant.getPendingDivs(coinbase).catch((e) => {
+        console.error(e);
+        return 0;
+      });
 
-      let _tEarned = constant.totalEarnedTokens(coinbase).catch((e)=>{console.error(e); return 0});
+      let _pDivsEth = constant.getPendingDivsEth(coinbase).catch((e) => {
+        console.error(e);
+        return 0;
+      });
 
-      let _tEarnedEth = constant.totalEarnedEth(coinbase).catch((e)=>{console.error(e); return 0});
+      let _tEarned = constant.totalEarnedTokens(coinbase).catch((e) => {
+        console.error(e);
+        return 0;
+      });
 
-      let _stakingTime = constant.depositTime(coinbase).catch((e)=>{console.error(e); return 0});
+      let _tEarnedEth = constant.totalEarnedEth(coinbase).catch((e) => {
+        console.error(e);
+        return 0;
+      });
 
-      let _dTokens = constant.depositedTokens(coinbase).catch((e)=>{console.error(e); return 0});
+      let _stakingTime = constant.depositTime(coinbase).catch((e) => {
+        console.error(e);
+        return 0;
+      });
 
-      let _lClaimTime = constant.lastClaimedTime(coinbase).catch((e)=>{console.error(e); return 0});
+      let _dTokens = constant.depositedTokens(coinbase).catch((e) => {
+        console.error(e);
+        return 0;
+      });
+
+      let _lClaimTime = constant.lastClaimedTime(coinbase).catch((e) => {
+        console.error(e);
+        return 0;
+      });
 
       let _tvl = token.balanceOf(constant._address);
 
       //Take iDYP Balance on Staking & Farming
 
-      let _tvlConstantiDYP = reward_token_idyp.balanceOf(
-        constant._address
-      ).catch((e)=>{console.error(e); return 0}); /* TVL of iDYP on Staking */
+      let _tvlConstantiDYP = reward_token_idyp
+        .balanceOf(constant._address)
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        }); /* TVL of iDYP on Staking */
 
-      let _tvlConstantDYP = reward_token.balanceOf(
-        constant._address
-      ).catch((e)=>{console.error(e); return 0}); /* TVL of iDYP on Staking */
+      let _tvlConstantDYP = reward_token
+        .balanceOf(constant._address)
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        }); /* TVL of iDYP on Staking */
 
-      let _tvliDYP = reward_token_idyp.balanceOf(
-        constant._address
-      ).catch((e)=>{console.error(e); return 0}); /* TVL of iDYP on Farming */
+      let _tvliDYP = reward_token_idyp
+        .balanceOf(constant._address)
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        }); /* TVL of iDYP on Farming */
 
-      let _dTokensDYP = staking.depositedTokens(coinbase).catch((e)=>{console.error(e); return 0});
-      let _rewardsPendingClaim = staking.getPendingDivs(coinbase).catch((e)=>{console.error(e); return 0});
+      let _dTokensDYP = staking.depositedTokens(coinbase).catch((e) => {
+        console.error(e);
+        return 0;
+      });
+      let _rewardsPendingClaim = staking.getPendingDivs(coinbase).catch((e) => {
+        console.error(e);
+        return 0;
+      });
 
       // let _pendingDivsStaking = constant.getTotalPendingDivs(coinbase);
 
       //Take DYPS Balance
-      let _tvlDYPS = token_dypsbsc.balanceOf(
-        constant._address
-      ).catch((e)=>{console.error(e); return 0}); /* TVL of DYPS */
+      let _tvlDYPS = token_dypsbsc.balanceOf(constant._address).catch((e) => {
+        console.error(e);
+        return 0;
+      }); /* TVL of DYPS */
 
       let [
         token_balance2,
@@ -1555,11 +1601,9 @@ const BscFarmingFunc = ({
     if (coinbase && isConnected) {
       setCoinbase2(coinbase);
       getLPTokens();
-
     }
   }, [coinbase, isConnected]);
 
-  let is_connected = is_wallet_connected;
 
   let usd_per_token = the_graph_result.token_data
     ? the_graph_result.token_data["0x961c8c0b1aad0c0b10a51fef6a867e3091bcef17"]
@@ -1717,15 +1761,7 @@ const BscFarmingFunc = ({
         <div className="leftside2 w-100">
           <div className="activewrapper activewrapper-vault">
             <div className="d-flex flex-column flex-lg-row w-100 align-items-start align-items-lg-center justify-content-between">
-              <h6 className="activetxt position-relative activetxt-vault">
-                <img
-                  src={ellipse}
-                  alt=""
-                  className="position-relative"
-                  style={{ top: "-1px" }}
-                />
-                Active status
-              </h6>
+            <h6 className="expiredtxt caws-active-txt">Expired Pool</h6>
               {/* <div className="d-flex align-items-center justify-content-between gap-2">
             <h6 className="earnrewards-text">Earn rewards in:</h6>
             <h6 className="earnrewards-token d-flex align-items-center gap-1">
@@ -1754,7 +1790,7 @@ const BscFarmingFunc = ({
                           }
                         >
                           <img
-                            src={moreinfo}
+                            src={'https://cdn.worldofdypians.com/tools/more-info.svg'}
                             alt=""
                             onClick={performanceOpen}
                           />
@@ -1782,7 +1818,7 @@ const BscFarmingFunc = ({
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={aprOpen} />
+                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={aprOpen} />
                         </Tooltip>
                       </ClickAwayListener>
                     </h6>
@@ -1806,7 +1842,7 @@ const BscFarmingFunc = ({
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={lockOpen} />
+                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={lockOpen} />
                         </Tooltip>
                       </ClickAwayListener>
                     </h6>
@@ -1834,7 +1870,7 @@ const BscFarmingFunc = ({
                       getApproxReturnUSD();
                     }}
                   >
-                    <img src={poolsCalculatorIcon} alt="" />
+                    <img src={'https://cdn.worldofdypians.com/tools/poolsCalculatorIcon.svg'} alt="" />
                     Calculator
                   </h6>
                   <div
@@ -1843,7 +1879,7 @@ const BscFarmingFunc = ({
                     }}
                   >
                     <h6 className="bottomitems">
-                      <img src={purplestats} alt="" />
+                      <img src={'https://cdn.worldofdypians.com/tools/purpleStat.svg'} alt="" />
                       Stats
                     </h6>
                   </div>
@@ -1869,7 +1905,7 @@ const BscFarmingFunc = ({
                 coinbase === undefined ||
                 isConnected === false ? (
                   <button className="connectbtn btn" onClick={showModal}>
-                    <img src={wallet} alt="" /> Connect wallet
+                    <img src={'https://cdn.worldofdypians.com/tools/walletIcon.svg'} alt="" /> Connect wallet
                   </button>
                 ) : chainId === "56" ? (
                   <div className="addressbtn btn">
@@ -1911,13 +1947,13 @@ const BscFarmingFunc = ({
                           style={{ position: "relative", bottom: "4px" }}
                         >
                           <img
-                            src={require(`./assets/bsc/${selectedTokenLogo.toLowerCase()}.svg`)}
+                            src={`https://cdn.worldofdypians.com/tools/${selectedTokenLogo.toLowerCase()}.svg`}
                             alt=""
                             style={{ width: 14, height: 14 }}
                           />
                           {selectedTokenLogo.toUpperCase()}
                           <img
-                            src={dropdownVector}
+                            src={'https://cdn.worldofdypians.com/tools/dropdownVector.svg'}
                             alt=""
                             style={{ width: 10, height: 10 }}
                           />
@@ -1929,11 +1965,9 @@ const BscFarmingFunc = ({
                               onClick={() => handleSelectedTokenChange(t)}
                             >
                               <img
-                                src={
-                                  require(`./assets/bsc/${buyback_activetokensbsc[
-                                    t
-                                  ].symbol.toLowerCase()}.svg`) 
-                                }
+                                src={`https://cdn.worldofdypians.com/tools/${buyback_activetokensbsc[
+                                  t
+                                ].symbol.toLowerCase()}.svg`}
                                 alt=""
                                 style={{ width: 14, height: 14 }}
                               />
@@ -1970,7 +2004,7 @@ const BscFarmingFunc = ({
                       </div>
                     }
                   >
-                    <img src={moreinfo} alt="" onClick={depositOpen} />
+                    <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={depositOpen} />
                   </Tooltip>
                 </ClickAwayListener>
               </div>
@@ -2068,7 +2102,7 @@ const BscFarmingFunc = ({
                       <>Success</>
                     ) : (
                       <>
-                        <img src={failMark} alt="" />
+                        <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
                         Failed
                       </>
                     )}
@@ -2101,7 +2135,7 @@ const BscFarmingFunc = ({
                         </div>
                       }
                     >
-                      <img src={moreinfo} alt="" onClick={rewardsOpen} />
+                      <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={rewardsOpen} />
                     </Tooltip>
                   </ClickAwayListener>
                 </h6>
@@ -2130,7 +2164,7 @@ const BscFarmingFunc = ({
                       }}
                     >
                       <img
-                        src={selectedPool === "wbnb" ? check : empty}
+                        src={selectedPool === "wbnb" ? 'https://cdn.worldofdypians.com/wod/check.svg' : 'https://cdn.worldofdypians.com/wod/empty.svg'}
                         alt=""
                         className="activestate"
                       />
@@ -2168,13 +2202,13 @@ const BscFarmingFunc = ({
                             aria-expanded="false"
                           >
                             <img
-                              src={require(`./assets/bsc/${selectedRewardTokenLogo1.toLowerCase()}.svg`)}
+                              src={`https://cdn.worldofdypians.com/tools/${selectedRewardTokenLogo1.toLowerCase()}.svg`}
                               alt=""
                               style={{ width: 13, height: 13 }}
                             />
                             {selectedRewardTokenLogo1.toUpperCase()}
                             <img
-                              src={dropdownVector}
+                              src={'https://cdn.worldofdypians.com/tools/dropdownVector.svg'}
                               alt=""
                               style={{ width: 10, height: 10 }}
                             />
@@ -2192,7 +2226,7 @@ const BscFarmingFunc = ({
                               }}
                             >
                               <img
-                                src={require(`./assets/bsc/wbnb.svg`).default}
+                                src={'https://cdn.worldofdypians.com/tools/wbnbIcon.svg'}
                                 alt=""
                                 style={{ width: 14, height: 14 }}
                               />
@@ -2218,7 +2252,7 @@ const BscFarmingFunc = ({
                       }}
                     >
                       <img
-                        src={selectedPool === "dyp" ? check : empty}
+                        src={selectedPool === "dyp" ? 'https://cdn.worldofdypians.com/wod/check.svg' : 'https://cdn.worldofdypians.com/wod/empty.svg'}
                         alt=""
                         className="activestate"
                       />
@@ -2254,7 +2288,7 @@ const BscFarmingFunc = ({
 
                       <div className="d-flex align-items-center justify-content-center w-100 claimreward-header ">
                         <img
-                          src={require(`./assets/dyp.svg`).default}
+                          src={'https://cdn.worldofdypians.com/tools/dyplogo.svg'}
                           alt=""
                           style={{ width: 14, height: 14 }}
                         />
@@ -2305,7 +2339,7 @@ const BscFarmingFunc = ({
                       </div>
                     ) : claimStatus === "failed" ? (
                       <>
-                        <img src={failMark} alt="" />
+                        <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
                         Failed
                       </>
                     ) : claimStatus === "success" ? (
@@ -2362,7 +2396,7 @@ const BscFarmingFunc = ({
                       </div>
                     }
                   >
-                    <img src={moreinfo} alt="" onClick={withdrawOpen} />
+                    <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={withdrawOpen} />
                   </Tooltip>
                 </ClickAwayListener>
               </h6>
@@ -2465,7 +2499,7 @@ const BscFarmingFunc = ({
                   href={`${window.config.bscscan_baseURL}/address/${coinbase}`}
                   className="stats-link"
                 >
-                  {shortAddress(coinbase)} <img src={statsLinkIcon} alt="" />
+                  {shortAddress(coinbase)} <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                 </a>
               </div>
               <hr />
@@ -2481,7 +2515,7 @@ const BscFarmingFunc = ({
                         color: "#f7f7fc",
                       }}
                     >
-                      <img src={poolStatsIcon} alt="" />
+                      <img src={'https://cdn.worldofdypians.com/tools/poolStatsIcon.svg'} alt="" />
                       Pool stats
                     </h6>
                     {/* <h6 className="d-flex gap-2 align-items-center myaddrtext">
@@ -2540,7 +2574,7 @@ const BscFarmingFunc = ({
                       href={`https://github.com/dypfinance/staking-governance-security-audits`}
                       className="stats-link"
                     >
-                      Audit <img src={statsLinkIcon} alt="" />
+                      Audit <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                     </a>
                     <a
                       target="_blank"
@@ -2548,7 +2582,7 @@ const BscFarmingFunc = ({
                       href={`${window.config.bscscan_baseURL}/token/${token._address}?a=${coinbase}`}
                       className="stats-link"
                     >
-                      View transaction <img src={statsLinkIcon} alt="" />
+                      View transaction <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                     </a>
                   </div>
                 </div>
@@ -2621,7 +2655,7 @@ const BscFarmingFunc = ({
                           }}
                         >
                           <img
-                            src={selectedPool === "wbnb2" ? check : empty}
+                            src={selectedPool === "wbnb2" ? 'https://cdn.worldofdypians.com/wod/check.svg' : 'https://cdn.worldofdypians.com/wod/empty.svg'}
                             alt=""
                             className="activestate"
                             style={{ top: "45px" }}
@@ -2675,13 +2709,13 @@ const BscFarmingFunc = ({
                                 aria-expanded="false"
                               >
                                 <img
-                                  src={require(`./assets/bsc/${selectedRewardTokenLogo1.toLowerCase()}.svg`)}
+                                  src={`https://cdn.worldofdypians.com/tools/${selectedRewardTokenLogo1.toLowerCase()}.svg`}
                                   alt=""
                                   style={{ width: 15, height: 15 }}
                                 />
                                 {selectedRewardTokenLogo1.toUpperCase()}
                                 <img
-                                  src={dropdownVector}
+                                  src={'https://cdn.worldofdypians.com/tools/dropdownVector.svg'}
                                   alt=""
                                   style={{ width: 10, height: 10 }}
                                 />
@@ -2699,7 +2733,7 @@ const BscFarmingFunc = ({
                                 >
                                   <img
                                     src={
-                                      require(`./assets/bsc/wbnb.svg`).default
+                                     'https://cdn.worldofdypians.com/tools/wbnbIcon.svg'
                                     }
                                     alt=""
                                     style={{ width: 14, height: 14 }}
@@ -2730,7 +2764,7 @@ const BscFarmingFunc = ({
                           }}
                         >
                           <img
-                            src={selectedPool === "dyp2" ? check : empty}
+                            src={selectedPool === "dyp2" ? 'https://cdn.worldofdypians.com/wod/check.svg' : 'https://cdn.worldofdypians.com/wod/empty.svg'}
                             alt=""
                             className="activestate"
                             style={{ top: "45px" }}
@@ -2772,7 +2806,7 @@ const BscFarmingFunc = ({
                           </div>
                           <div className="d-flex align-items-center justify-content-center w-100 claimreward-header">
                             <img
-                              src={require(`./assets/dyp.svg`).default}
+                              src={'https://cdn.worldofdypians.com/tools/dyplogo.svg'}
                               alt=""
                               style={{ width: 14, height: 14 }}
                             />
@@ -2847,7 +2881,7 @@ const BscFarmingFunc = ({
                         </div>
                       ) : withdrawStatus === "failed" ? (
                         <>
-                          <img src={failMark} alt="" />
+                          <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
                           Failed
                         </>
                       ) : withdrawStatus === "success" ? (

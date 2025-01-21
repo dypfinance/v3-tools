@@ -1786,23 +1786,12 @@ class VAULT {
 
     let ctokenAddr = await this.TRUSTED_CTOKEN_ADDRESS();
 
-    let compResult = await window.jQuery.ajax({
-      url: `https://api.compound.finance/api/v2/ctoken?addresses=${ctokenAddr}&network=${window.config.compound_network}`,
-      method: "GET",
-      headers: {
-        "compound-api-key": window.config.compound_api_key,
-      },
-    });
 
-    if (!compResult.error) {
-      compoundApyPercent =
-        (Number(compResult.cToken[0]?.supply_rate?.value) || 0) * 100;
-    }
 
     //console.log({compResult, compoundApyPercent})
 
     apyPercent =
-      platformTokenApyPercent + compoundApyPercent + feesApyPercent || 0;
+      platformTokenApyPercent  + feesApyPercent || 0;
 
     // console.log({
     // 	tvlUsd,ethUsdValue,underlyingUsdValue,platformTokenUsdValue,
@@ -1967,21 +1956,11 @@ class VAULT_NEW {
 
       let ctokenAddr = await this.TRUSTED_CTOKEN_ADDRESS();
 
-      let compResult = await window.jQuery.ajax({
-        url: `https://api.compound.finance/api/v2/ctoken?addresses=${ctokenAddr}&network=${window.config.compound_network}`,
-        method: "GET",
-        headers: {
-          "compound-api-key": window.config.compound_api_key,
-        },
-      });
+     
 
-      if (!compResult.error) {
-        compoundApyPercent =
-          (Number(compResult.cToken[0]?.supply_rate?.value) || 0) * 100;
-      }
 
       apyPercent =
-        platformTokenApyPercent + compoundApyPercent + feesApyPercent || 0;
+        platformTokenApyPercent  + feesApyPercent || 0;
     }
 
     return { tvl_usd: tvlUsd, apy_percent: apyPercent };
@@ -2011,6 +1990,7 @@ window.config = {
 
   farmweth_address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2", //farm weth
   daily_bonus_base_address: "0xb4027947bb7efb1f14af7f3b01ae6d1d2e65ed8a",
+  daily_bonus_opbnb_address: "0x91485b9eb29C94a2CB63A552cB8ce107bA8b8e43",
 
   wethavax_address: "0xf20d962a6c8f70c731bd838a3a388d7d48fa6e15",
   wethbsc_address: "0x2170ed0880ac9a755fd29b2688956bd959f933f8",
@@ -2020,6 +2000,7 @@ window.config = {
   infura_endpoint:
     "https://mainnet.infura.io/v3/94608dc6ddba490697ec4f9b723b586e",
   bsc_endpoint: "https://bsc-dataseed.bnbchain.org",
+  opbnb_endpoint: "https://opbnb.publicnode.com",
   avax_endpoint: "https://api.avax.network/ext/bc/C/rpc",
   conflux_endpoint: "https://evm.confluxrpc.com/",
   base_endpoint: "https://mainnet.base.org",
@@ -2293,6 +2274,10 @@ window.config = {
   commitment_address: "0x6f532f3e73286958f161bc8ba2ff041826515247",
   commitment_eth_address: "0x6f033fa97a5ac6468fec3afe6f069cf60295b3d0",
 
+  commitment_midle_address: "0x5672F5E60a390206E8a6771820ca27DD2bD9a0b0",
+  commitment_midle_eth_address: "0xE22Eecf2aDD8bfF17eDCB368792427a89CAB7f22",
+
+
   ZERO_ADDRESS: "0x0000000000000000000000000000000000000000",
   MAX_LOCKS_TO_LOAD_PER_CALL: 10,
   pangolin_router_address: "0xE54Ca86531e17Ef3616d22Ca28b0D458b6C89106",
@@ -2382,6 +2367,12 @@ window.config = {
 
   constant_staking_dypius_phase2_eth5_address:
     "0xFdD3CFF22CF846208E3B37b47Bc36b2c61D2cA8b",
+
+  constant_staking_dypius_phase2_eth6_address:
+    "0x1f5c3f186795c84265eD826AD09924D0987485ba",
+
+  constant_staking_dypius_phase2_eth7_address:
+    "0x11666850EA73956afcd014E86eD2AE473939421d",
 
   constant_staking_dypius_bsc1_address:
     "0x8cee06119fffecdd560ee83b26cccfe8e2fe6603",
@@ -2623,10 +2614,12 @@ window.config = {
     ETH: 1, // 4 = rinkeby, 1 = main, 42 = kovan, 43114 = AVAX
     AVAX: 43114, // 43114 = AVAX
     BSC: 56, // 97 = testnet, 56 = main
+    // OPBNB: 204,
     1: "ETH",
     // 5: "ETH",
     43114: "AVAX",
     56: "BSC",
+    // 204: "OPBNB",
     // 97: "BSC",
   },
 
@@ -2747,12 +2740,19 @@ window.config = {
   new_bridge_avax_eth_address: "0x9a51ff1005c6825f15696ce5d96783f24e58af89",
   token_dypius_new_avax_address: "0x1a3264f2e7b1cfc6220ec9348d33ccf02af7aaa4", //new dypius token on avax
 
+  new_bridge_eth_opbnb_address: "0xcbb53f02d29ec2ae25e378a94dc701442b1f2aa4",
+  new_bridge_opbnb_eth_address: "0xc40f9CF1A0Bb4C1ff07F16FE8B942E8Ce06412de",
+  token_dypius_new_opbnb_address: "0x1a3264F2e7b1CFC6220ec9348d33cCF02Af7aaa4", //new dypius token on opbnb
+
   SIGNATURE_APIBRIDGE_AVAX_URL_NEW: "https://bridge-avax.dypius.com",
   SIGNATURE_APIBRIDGE_BSC_URL_NEW: "https://bridge-bsc.dypius.com",
+  SIGNATURE_APIBRIDGE_OPBNB_URL_NEW: "https://bridge-opbnb.dypius.com",
 };
 
 window.infuraWeb3 = new Web3(window.config.infura_endpoint);
 window.bscWeb3 = new Web3(window.config.bsc_endpoint);
+window.opbnbWeb3 = new Web3(window.config.opbnb_endpoint);
+
 window.avaxWeb3 = new Web3(window.config.avax_endpoint);
 window.goerliWeb3 = new Web3(window.config.goerli_endpoint);
 window.bscTestWeb3 = new Web3(window.config.bscTest_endpoint);
@@ -2772,6 +2772,9 @@ window.TOKEN_DYPIUS_NEW_ABI = window.TOKEN_ABI;
 
 window.token_dypius_new_bsc = new TOKENBSC("TOKEN_DYPIUS_NEW_BSC");
 window.TOKEN_DYPIUS_NEW_BSC_ABI = window.TOKENBSC_ABI;
+
+window.token_dypius_new_opbnb = new TOKENBSC("TOKEN_DYPIUS_NEW_OPBNB");
+window.TOKEN_DYPIUS_NEW_OPBNB_ABI = window.TOKENBSC_ABI;
 
 window.token_dypius_new_avax = new TOKENAVAX("TOKEN_DYPIUS_NEW_AVAX");
 window.TOKEN_DYPIUS_NEW_AVAX_ABI = window.TOKENAVAX_ABI;
@@ -3140,6 +3143,14 @@ window.constant_staking_dypius_phase2_eth5 = new CONSTANT_STAKING_DYPIUS(
   "CONSTANT_STAKING_DYPIUS_PHASE2_ETH5"
 );
 
+window.constant_staking_dypius_phase2_eth6 = new CONSTANT_STAKING_DYPIUS(
+  "CONSTANT_STAKING_DYPIUS_PHASE2_ETH6"
+);
+
+window.constant_staking_dypius_phase2_eth7 = new CONSTANT_STAKING_DYPIUS(
+  "CONSTANT_STAKING_DYPIUS_PHASE2_ETH7"
+);
+
 window.constant_staking_newi3 = new CONSTANT_STAKING_OLD(
   "CONSTANT_STAKING_NEWI3"
 );
@@ -3177,6 +3188,13 @@ window.CONSTANT_STAKINGNEW_NEW2_ABI = window.CONSTANT_STAKINGNEW_ABI;
 window.CONSTANT_STAKING_DYPIUS_ETH1_ABI = window.CONSTANT_STAKING_DYPIUS_ABI;
 window.CONSTANT_STAKING_DYPIUS_PHASE2_ETH1_ABI =
   window.CONSTANT_STAKING_DYPIUS_ABI;
+
+  window.CONSTANT_STAKING_DYPIUS_PHASE2_ETH6_ABI =
+  window.CONSTANT_STAKING_DYPIUS_ABI;
+
+  window.CONSTANT_STAKING_DYPIUS_PHASE2_ETH7_ABI =
+  window.CONSTANT_STAKING_DYPIUS_ABI;
+
 window.CONSTANT_STAKING_DYPIUS_BASE1_ABI = window.CONSTANT_STAKING_DYPIUS_ABI;
 
 window.CONSTANT_STAKING_DYPIUS_PHASE2_ETH2_ABI =
@@ -4347,6 +4365,17 @@ window.new_dypius_bridge_ethavax = new NEW_BRIDGE2(
   window.config.token_dypius_new_address
 );
 
+//new dypius token bridge eth<-->opbnb
+window.new_dypius_bridge_opbnb = new NEW_BRIDGE2(
+  window.config.new_bridge_opbnb_eth_address,
+  window.config.token_dypius_new_opbnb_address
+);
+
+window.new_dypius_bridge_ethopbnb = new NEW_BRIDGE2(
+  window.config.new_bridge_eth_opbnb_address,
+  window.config.token_dypius_new_address
+);
+
 window.token_old_eth = new TOKEN("TOKEN_OLD_ETH");
 window.token_old_bsc = new TOKENBSC("TOKEN_OLD_BSC");
 window.TOKEN_OLD_ETH_ABI = window.TOKEN_ABI;
@@ -5253,6 +5282,218 @@ window.COMMITMENT_ETH_ABI = [
 ];
 
 window.DAILY_BONUS_BASE_ABI = [
+  {
+    inputs: [
+      {
+        internalType: "address[]",
+        name: "initialPremiumUsers",
+        type: "address[]",
+      },
+      { internalType: "address", name: "tokenAddress", type: "address" },
+    ],
+    stateMutability: "nonpayable",
+    type: "constructor",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: true, internalType: "address", name: "user", type: "address" },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "timestamp",
+        type: "uint256",
+      },
+    ],
+    name: "ChestOpened",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "chestOpenCost",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "premiumChestOpenCost",
+        type: "uint256",
+      },
+    ],
+    name: "CostsUpdated",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "owner",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "FundsWithdrawn",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: true, internalType: "address", name: "user", type: "address" },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "timestamp",
+        type: "uint256",
+      },
+    ],
+    name: "PremiumChestOpened",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "user",
+        type: "address",
+      },
+    ],
+    name: "PremiumUserAdded",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "user",
+        type: "address",
+      },
+    ],
+    name: "PremiumUserRemoved",
+    type: "event",
+  },
+  {
+    inputs: [{ internalType: "address", name: "user", type: "address" }],
+    name: "addPremiumUser",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "chestOpenCost",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "user", type: "address" }],
+    name: "isPremiumUser",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "lifetimeChestCount",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "lifetimePremiumChestCount",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "openChest",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "openPremiumChest",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "owner",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "premiumChestOpenCost",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "premiumUsers",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "user", type: "address" }],
+    name: "removePremiumUser",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "token",
+    outputs: [{ internalType: "contract IERC20", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256", name: "newChestOpenCost", type: "uint256" },
+      {
+        internalType: "uint256",
+        name: "newPremiumChestOpenCost",
+        type: "uint256",
+      },
+    ],
+    name: "updateCosts",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "amount", type: "uint256" }],
+    name: "withdrawTokens",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+];
+
+window.DAILY_BONUS_OPBNB_ABI = [
   {
     inputs: [
       {
@@ -38381,7 +38622,8 @@ async function connectWallet(provider, walletType) {
     window.IS_CONNECTED = true;
     return true;
   } else {
-    throw new Error("No web3 detected!");
+    // throw new Error("No web3 detected!");
+    window.alertify.error("No web3 detected!");
   }
 }
 function param(name) {
@@ -38802,6 +39044,7 @@ Object.keys(window.config)
       k.startsWith("token_dypius_new") ||
       k.startsWith("token_dypius_new_avax") ||
       k.startsWith("token_dypius_new_bsc") ||
+      k.startsWith("token_dypius_new_opbnb") ||
       k.startsWith("token_dyp_new_bsc") ||
       k.startsWith("reward_tokenwbnb") ||
       k.startsWith("farming_newavax_1") ||
@@ -38832,6 +39075,8 @@ Object.keys(window.config)
       k.startsWith("constant_staking_dypius_phase2_eth3") ||
       k.startsWith("constant_staking_dypius_phase2_eth4") ||
       k.startsWith("constant_staking_dypius_phase2_eth5") ||
+      k.startsWith("constant_staking_dypius_phase2_eth6") ||
+      k.startsWith("constant_staking_dypius_phase2_eth7") ||
       k.startsWith("constant_stakingidypavax_3") ||
       k.startsWith("constant_stakingidypavax_4") ||
       k.startsWith("constant_stakingidypavax_40") ||
@@ -38937,6 +39182,8 @@ Object.keys(window.config)
       : k.startsWith("token_dypius_new_avax")
       ? window.TOKEN_ABI
       : k.startsWith("token_dypius_new_bsc")
+      ? window.TOKEN_ABI
+      : k.startsWith("token_dypius_new_opbnb")
       ? window.TOKEN_ABI
       : k.startsWith("token_dyp_new_bsc")
       ? window.TOKENBSC_ABI
@@ -39071,6 +39318,10 @@ Object.keys(window.config)
       : k.startsWith("constant_staking_dypius_phase2_eth4")
       ? window.CONSTANT_STAKING_DYPIUS_ABI
       : k.startsWith("constant_staking_dypius_phase2_eth5")
+      ? window.CONSTANT_STAKING_DYPIUS_ABI
+      : k.startsWith("constant_staking_dypius_phase2_eth6")
+      ? window.CONSTANT_STAKING_DYPIUS_ABI
+      : k.startsWith("constant_staking_dypius_phase2_eth7")
       ? window.CONSTANT_STAKING_DYPIUS_ABI
       : k.startsWith("constant_stakingidypavax_4")
       ? window.CONSTANT_STAKING_IDYP_ABI
@@ -39375,16 +39626,14 @@ async function refresh_the_graph_resultavax() {
     token_contract_addresses: [TOKEN_ADDRESS, TOKEN_IDYP_ADDRESS],
     lp_ids: LP_ID_LIST,
   });
-  window.the_graph_result = result;
-  //window.TVL_FARMING_POOLS = await refreshBalance()
+  window.the_graph_result = result; 
   return result;
 }
 
 window.get_usd_values = get_usd_values;
 window.get_token_balances = get_token_balances;
 window.get_apy_and_tvl = get_apy_and_tvl;
-window.get_number_of_stakers = get_number_of_stakers;
-window.refresh_the_graph_result = refresh_the_graph_result;
+window.get_number_of_stakers = get_number_of_stakers; 
 window.refresh_the_graph_resultavax = refresh_the_graph_resultavax;
 
 async function getActiveLocksByTokenETH(tokenAddress, startIndex, endIndex) {
