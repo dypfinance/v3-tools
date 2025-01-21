@@ -2816,14 +2816,14 @@ const Dashboard = ({
         </Modal>
       )}
 
-      {whitelistPopup === true && (
+      {/* {whitelistPopup === true && (
         <WhitelistPopup
           open={whitelistPopup}
           onClose={() => {
             setwhitelistPopup(false);
           }}
         />
-      )}
+      )} */}
     </>
   );
 };
