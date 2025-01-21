@@ -32,12 +32,12 @@ const LaunchpadProjects = ({ totalCommitmentValueMidle,totalParticipants }) => {
               alt=""
               className="project-banner"
             />
-            <img
+            {/* <img
               src={"https://cdn.worldofdypians.com/tools/midleLive.png"}
               alt=""
               className="live"
               style={{ height: 24 }}
-            />
+            /> */}
             <div className="row align-items-center justify-content-end">
               <div className="col-12 col-lg-9 ps-lg-5 d-flex flex-column gap-3">
                 <div className="d-flex gap-3 flex-column flex-lg-row align-items-start justify-content-between">
@@ -50,15 +50,15 @@ const LaunchpadProjects = ({ totalCommitmentValueMidle,totalParticipants }) => {
                   </div>
                   <div className="project-timer-wrapper ms-5 ms-lg-0 d-flex align-items-center gap-3 position-relative">
                     <img src={timerIcon} alt="" className="timer-icon" />
-                    <span className="time-left">Time left:</span>
+                    <span className="time-left">Ended</span>
                     {/* <span className="project-timer"> */}
-                    <Countdown
+                    {/* <Countdown
                       renderer={renderer}
                       date={midleCd}
                       onComplete={() => {
                         setisExpired(true);
                       }}
-                    />
+                    /> */}
                     {/* </span> */}
                   </div>
                 </div>
