@@ -1998,7 +1998,7 @@ window.config = {
   // WBNB !! weth_address: '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c', // LOWERCASE!
 
   infura_endpoint:
-    "https://mainnet.infura.io/v3/94608dc6ddba490697ec4f9b723b586e",
+    "https://mainnet.infura.io/v3/ebcf489b60924955b80d229ac86ecfea",
   bsc_endpoint: "https://bsc-dataseed.bnbchain.org",
   opbnb_endpoint: "https://opbnb.publicnode.com",
   avax_endpoint: "https://api.avax.network/ext/bc/C/rpc",
