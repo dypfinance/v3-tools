@@ -68,6 +68,10 @@ const Games = ({
   fetchMonthlyOpbnbWinners,
   fetchPreviousMonthlyOpbnbWinners,
   activePlayerMonthlyOpbnb,
+  fetchCawsAdvLeaderboard,
+  fetchPreviousCawsAdvWinners,
+  baseBalance,
+  opBnbBalance,
 }) => {
   const [chain, setChain] = useState("base");
   const [message, setMessage] = useState("");
@@ -359,7 +363,7 @@ const Games = ({
     );
 
     setIsActive(chestID);
-    setIsActiveIndex(chestIndex + 1); 
+    setIsActiveIndex(chestIndex + 1);
     if (filteredResult && filteredResult.rewards) {
       const resultWonETH = filteredResult.rewards.find((obj) => {
         return obj.rewardType === "MoneyETH" && obj.status === "Claimed";
@@ -388,7 +392,7 @@ const Games = ({
       setLiveRewardData([]);
     }
   };
-// console.log(rewardData,openedOpbnbChests)
+  // console.log(rewardData,openedOpbnbChests)
   const randomOpenedChests = [
     2, 4, 18, 12, 19, 5, 16, 6, 1, 15, 17, 3, 7, 9, 14, 11, 13, 8, 10,
   ];
@@ -609,69 +613,44 @@ const Games = ({
         setDisable(true);
       } else if (coinbase && isConnected && email && address) {
         if (coinbase.toLowerCase() === address.toLowerCase()) {
-          if (isPremium) {
-            if (
-              openedChests &&
-              openedChests.length === 20 &&
-              rewardData.length === 0 &&
-              address.toLowerCase() === coinbase.toLowerCase()
-            ) {
-              setMessage("complete");
-            } else if (
-              openedChests &&
-              openedChests.length < 20 &&
-              rewardData.length === 0 &&
-              address.toLowerCase() === coinbase.toLowerCase() &&
-              networkId === 8453
-            ) {
-              setMessage("");
-              setDisable(false);
-            } else if (
-              rewardData.length === 0 &&
-              networkId !== 8453 &&
-              address.toLowerCase() === coinbase.toLowerCase()
-            ) {
-              setMessage("switch");
-              setDisable(true);
-            } else if (
-              rewardData.length === 0 &&
-              address.toLowerCase() === coinbase.toLowerCase()
-            ) {
-              setMessage("");
-              setDisable(false);
-            }
-          } else if (!isPremium) {
-            if (
-              openedChests &&
-              openedChests.length === 20 &&
-              rewardData.length === 0 &&
-              address.toLowerCase() === coinbase.toLowerCase() &&
-              networkId === 8453
-            ) {
-              setMessage("complete");
-            } else if (
-              openedChests &&
-              openedChests.length < 20 &&
-              rewardData.length === 0 &&
-              address.toLowerCase() === coinbase.toLowerCase() &&
-              networkId === 8453
-            ) {
-              setMessage("");
-              setDisable(false);
-            } else if (
-              rewardData.length === 0 &&
-              networkId !== 8453 &&
-              address.toLowerCase() === coinbase.toLowerCase()
-            ) {
-              setMessage("switch");
-              setDisable(true);
-            } else if (
-              rewardData.length === 0 &&
-              address.toLowerCase() === coinbase.toLowerCase()
-            ) {
-              setMessage("");
-              setDisable(false);
-            }
+          if (
+            openedChests &&
+            openedChests.length === 20 &&
+            rewardData.length === 0 &&
+            address.toLowerCase() === coinbase.toLowerCase()
+          ) {
+            setMessage("complete");
+          } else if (
+            openedChests &&
+            openedChests.length < 20 &&
+            rewardData.length === 0 &&
+            address.toLowerCase() === coinbase.toLowerCase() &&
+            networkId === 8453 &&
+            baseBalance > 0
+          ) {
+            setMessage("");
+            setDisable(false);
+          } else if (
+            rewardData.length === 0 &&
+            networkId !== 8453 &&
+            address.toLowerCase() === coinbase.toLowerCase()
+          ) {
+            setMessage("switch");
+            setDisable(true);
+          } else if (
+            rewardData.length === 0 &&
+            address.toLowerCase() === coinbase.toLowerCase() &&
+            baseBalance > 0
+          ) {
+            setMessage("");
+            setDisable(false);
+          } else if (
+            rewardData.length === 0 &&
+            address.toLowerCase() === coinbase.toLowerCase() &&
+            baseBalance === 0
+          ) {
+            setMessage("noDyp");
+            setDisable(true);
           }
         } else {
           setMessage("switchAccount");
@@ -687,69 +666,44 @@ const Games = ({
         setDisable(true);
       } else if (coinbase && isConnected && email && address) {
         if (coinbase.toLowerCase() === address.toLowerCase()) {
-          if (isPremium) {
-            if (
-              openedOpbnbChests &&
-              openedOpbnbChests.length === 20 &&
-              rewardData.length === 0 &&
-              address.toLowerCase() === coinbase.toLowerCase()
-            ) {
-              setMessage("complete");
-            } else if (
-              openedOpbnbChests &&
-              openedOpbnbChests.length < 20 &&
-              rewardData.length === 0 &&
-              address.toLowerCase() === coinbase.toLowerCase() &&
-              networkId === 204
-            ) {
-              setMessage("");
-              setDisable(false);
-            } else if (
-              rewardData.length === 0 &&
-              networkId !== 204 &&
-              address.toLowerCase() === coinbase.toLowerCase()
-            ) {
-              setMessage("switchopbnb");
-              setDisable(true);
-            } else if (
-              rewardData.length === 0 &&
-              address.toLowerCase() === coinbase.toLowerCase()
-            ) {
-              setMessage("");
-              setDisable(false);
-            }
-          } else if (!isPremium) {
-            if (
-              openedOpbnbChests &&
-              openedOpbnbChests.length === 20 &&
-              rewardData.length === 0 &&
-              address.toLowerCase() === coinbase.toLowerCase() &&
-              networkId === 204
-            ) {
-              setMessage("complete");
-            } else if (
-              openedOpbnbChests &&
-              openedOpbnbChests.length < 20 &&
-              rewardData.length === 0 &&
-              address.toLowerCase() === coinbase.toLowerCase() &&
-              networkId === 204
-            ) {
-              setMessage("");
-              setDisable(false);
-            } else if (
-              rewardData.length === 0 &&
-              networkId !== 204 &&
-              address.toLowerCase() === coinbase.toLowerCase()
-            ) {
-              setMessage("switchopbnb");
-              setDisable(true);
-            } else if (
-              rewardData.length === 0 &&
-              address.toLowerCase() === coinbase.toLowerCase()
-            ) {
-              setMessage("");
-              setDisable(false);
-            }
+          if (
+            openedOpbnbChests &&
+            openedOpbnbChests.length === 20 &&
+            rewardData.length === 0 &&
+            address.toLowerCase() === coinbase.toLowerCase()
+          ) {
+            setMessage("complete");
+          } else if (
+            openedOpbnbChests &&
+            openedOpbnbChests.length < 20 &&
+            rewardData.length === 0 &&
+            address.toLowerCase() === coinbase.toLowerCase() &&
+            networkId === 204 &&
+            opBnbBalance > 0
+          ) {
+            setMessage("");
+            setDisable(false);
+          } else if (
+            rewardData.length === 0 &&
+            networkId !== 204 &&
+            address.toLowerCase() === coinbase.toLowerCase()
+          ) {
+            setMessage("switchopbnb");
+            setDisable(true);
+          } else if (
+            rewardData.length === 0 &&
+            address.toLowerCase() === coinbase.toLowerCase() &&
+            opBnbBalance > 0
+          ) {
+            setMessage("");
+            setDisable(false);
+          } else if (
+            rewardData.length === 0 &&
+            address.toLowerCase() === coinbase.toLowerCase() &&
+            opBnbBalance === 0
+          ) {
+            setMessage("noDyp");
+            setDisable(true);
           }
         } else {
           setMessage("switchAccount");
@@ -770,8 +724,10 @@ const Games = ({
     isConnected,
     rewardData,
     openedChests,
+    baseBalance,
+    opBnbBalance,
   ]);
-
+  
   useEffect(() => {
     countEarnedRewards();
     getIdsOpbnb();
@@ -1331,6 +1287,57 @@ const Games = ({
                           >
                             BASE
                           </span>{" "}
+                        </h6>
+
+                        <div className="loader red-loader">
+                          <div className="dot" style={{ "--i": 0 }}></div>
+                          <div className="dot" style={{ "--i": 1 }}></div>
+                          <div className="dot" style={{ "--i": 2 }}></div>
+                          <div className="dot" style={{ "--i": 3 }}></div>
+                          <div className="dot" style={{ "--i": 4 }}></div>
+                          <div className="dot" style={{ "--i": 5 }}></div>
+                          <div className="dot" style={{ "--i": 6 }}></div>
+                          <div className="dot" style={{ "--i": 7 }}></div>
+                          <div className="dot" style={{ "--i": 8 }}></div>
+                          <div className="dot" style={{ "--i": 9 }}></div>
+                        </div>
+                      </div>
+                    ) : message === "noDyp" ? (
+                      <div
+                        className="d-flex align-items-center flex-column justify-content-center p-0 p-lg-2 w-100 chest-progress-wrapper"
+                        style={{
+                          background: "#1A1C39",
+                          border: "1px solid #ce5d1b",
+                        }}
+                      >
+                        <div className="loader red-loader">
+                          <div className="dot" style={{ "--i": 0 }}></div>
+                          <div className="dot" style={{ "--i": 1 }}></div>
+                          <div className="dot" style={{ "--i": 2 }}></div>
+                          <div className="dot" style={{ "--i": 3 }}></div>
+                          <div className="dot" style={{ "--i": 4 }}></div>
+                          <div className="dot" style={{ "--i": 5 }}></div>
+                          <div className="dot" style={{ "--i": 6 }}></div>
+                          <div className="dot" style={{ "--i": 7 }}></div>
+                          <div className="dot" style={{ "--i": 8 }}></div>
+                          <div className="dot" style={{ "--i": 9 }}></div>
+                        </div>
+
+                        <h6
+                          className="loader-text mb-0 text-decoration-underline"
+                          style={{ color: "#ce5d1b" }}
+                        >
+                          <NavLink
+                            to={
+                              chain === "base"
+                                ? "https://superbridge.app/base"
+                                : "/bridge"
+                            }
+                            target={chain === "base" ? "_blank" : ""}
+                            style={{ color: "#ce5d1b" }}
+                          >
+                            Get DYP to crack the stone
+                          </NavLink>
                         </h6>
 
                         <div className="loader red-loader">
@@ -1931,7 +1938,9 @@ const Games = ({
                                 </h6>
                               </div>
                               <div className="d-flex flex-column">
-                                <h6 className="usdreward-value-crypto">{ chain === "base" ? 'ETH' : 'BNB'}</h6>
+                                <h6 className="usdreward-value-crypto">
+                                  {chain === "base" ? "ETH" : "BNB"}
+                                </h6>
                                 <h6 className="usdreward-value">
                                   $
                                   {getFormattedNumber(
@@ -2412,7 +2421,7 @@ const Games = ({
                                 "reward-title-active"
                               } reward-title text-center`}
                             >
-                             { chain === 'base' ? 'ETH' : 'BNB'} Rewards
+                              {chain === "base" ? "ETH" : "BNB"} Rewards
                             </h6>
                             <div className="d-flex align-items-center gap-1">
                               <div
@@ -2549,7 +2558,7 @@ const Games = ({
                                 "reward-title-active"
                               } reward-title text-center`}
                             >
-                              { chain === 'base' ? 'Base' : 'opBNB'} Gem
+                              {chain === "base" ? "Base" : "opBNB"} Gem
                             </h6>
                             <h6
                               className={`${
@@ -2609,7 +2618,8 @@ const Games = ({
           monthlyplayerDataOpbnb={monthlyplayerDataOpbnb}
           weeklyplayerData={weeklyplayerData}
           weeklyplayerDataOpbnb={weeklyplayerDataOpbnb}
-
+          fetchCawsAdvLeaderboard={fetchCawsAdvLeaderboard}
+          fetchPreviousCawsAdvWinners={fetchPreviousCawsAdvWinners}
           kittyDashRecords={kittyDashRecords}
           fetchWeeklyWinners={fetchWeeklyWinners}
           fetchWeeklyOpbnbWinners={fetchWeeklyOpbnbWinners}

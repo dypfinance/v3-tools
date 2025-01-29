@@ -39,6 +39,8 @@ const Leaderboard = ({
   monthlyUserOpbnb,
   activePlayerWeeklyOpbnb,
   activePlayerMonthlyOpbnb,
+  fetchCawsAdvLeaderboard,
+  fetchPreviousCawsAdvWinners
 }) => {
   const weeklyPrizes = ["25", "15", "10", "8", "0", "0", "0", "0", "0", "0"];
   const monthlyPrizes = [
@@ -229,24 +231,26 @@ const Leaderboard = ({
     fetchWeeklyOpbnbWinners();
     fetchMonthlyOpbnbWinners();
     fetchKittyDashWinners();
+    fetchCawsAdvLeaderboard();
   }, [userId, username]);
 
   const switchPrev = () => {
     setPrevStatus((prevStatus) => {
       const newStatus = !prevStatus;
-
       if (newStatus) {
         fetchPreviousWeeklyWinners();
         fetchPreviousMonthlyWinners();
         fetchPreviousWeeklyOpbnbWinners();
         fetchPreviousMonthlyOpbnbWinners();
         fetchPreviousKittyDashWinners();
+        fetchPreviousCawsAdvWinners();
       } else {
         fetchWeeklyWinners();
         fetchMonthlyWinners();
         fetchWeeklyOpbnbWinners();
         fetchMonthlyOpbnbWinners();
         fetchKittyDashWinners();
+        fetchCawsAdvLeaderboard();
       }
 
       return newStatus;
@@ -1215,7 +1219,7 @@ const Leaderboard = ({
                 </div>
               )}
           </div>
-          {type !== "cawsAdventure" && (
+          
             <div className="optionsWrapper2 p-2">
               <div className="d-flex flex-column">
                 <div className="d-flex justify-content-between gap-2 align-items-center">
@@ -1228,7 +1232,7 @@ const Leaderboard = ({
                 </div>
               </div>
             </div>
-          )}
+         
         </div>
       </div>
     </div>
