@@ -131,6 +131,9 @@ function App() {
   const [isonlink, setIsOnLink] = useState(false);
   const [hasDypBalance, sethasDypBalance] = useState(false);
   const [hasiDypBalance, sethasiDypBalance] = useState(false);
+  const [baseBalance, setbaseBalance] = useState(0);
+  const [opBnbBalance, setopBnbBalance] = useState(0);
+
   const [userPools, setuserPools] = useState([]);
   const [previousWeeklyVersion, setpreviousWeeklyVersion] = useState(0);
   const [previousMonthlyVersion, setpreviousMonthlyVersion] = useState(0);
@@ -553,6 +556,8 @@ function App() {
     const tokenAddress = window.config.token_dypius_new_address;
     const tokenAddress_bsc = window.config.token_dypius_new_bsc_address;
     const tokenAddress_base = window.config.reward_token_dypiusv2_base_address;
+    const tokenAddress_opbnb = window.config.token_dypius_new_opbnb_address;
+
 
     const walletAddress = coinbase;
     const TokenABI = window.ERC20_ABI;
@@ -574,6 +579,10 @@ function App() {
       const contract4 = new window.baseWeb3.eth.Contract(
         TokenABI,
         tokenAddress_base
+      );
+      const contract5 = new window.opbnbWeb3.eth.Contract(
+        TokenABI,
+        tokenAddress_opbnb
       );
 
       const contract1_idyp = new window.infuraWeb3.eth.Contract(
@@ -644,6 +653,22 @@ function App() {
           console.error(e);
           return 0;
         });
+        setbaseBalance(Number(baseBalance))
+
+        let opbnbBalance = await contract5.methods
+        .balanceOf(walletAddress)
+        .call()
+        .then((data) => {
+          let depositedTokens = new window.BigNumber(data)
+            .div(1e18)
+            .toString(10);
+          return depositedTokens;
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+        setopBnbBalance(Number(opbnbBalance))
 
       let avaxBalance_idyp = await contract2_idyp.methods
         .balanceOf(walletAddress)
@@ -1081,7 +1106,6 @@ function App() {
       console.warn(e);
     }
     leaderboard2 = leaderboard2.sort((a, b) => b.score - a.score);
-
     var testArray =
       leaderboard2.length > 0
         ? leaderboard2.filter(
@@ -1109,6 +1133,21 @@ function App() {
       setCaws2dUser([]);
     }
   };
+
+  const fetchPreviousCawsAdvWinners = async () =>{
+    let leaderboard2 = [];
+    try {
+      leaderboard2 = await (
+        await fetch("https://game.dypius.com/api/leaderboard-previous")
+      ).json();
+    } catch (e) {
+      console.warn(e);
+    }
+    leaderboard2 = leaderboard2.sort((a, b) => b.score - a.score);
+
+    fillRecordsCaws2d(leaderboard2);
+ 
+  }
 
   const getAllChests = async () => {
     let headersList = {
@@ -1686,21 +1725,26 @@ function App() {
     }
   }, [email, opbnbchestCount]);
 
-  useEffect(() => {
-    loadLeaderboardDataCaws2dGame();
-  }, [data]);
+  // useEffect(() => {
+  //   loadLeaderboardDataCaws2dGame();
+  // }, [data]);
 
   useEffect(() => {
     if (email && data?.getPlayer?.wallet?.publicAddress !== undefined) {
       refreshSubscription(data?.getPlayer?.wallet?.publicAddress);
     } else if (isConnected && coinbase) {
       refreshSubscription(coinbase);
-      getAllBalance();
-      fetchUserPools();
     } else {
       setisPremium(false);
     }
   }, [isConnected, coinbase, email, data]);
+
+  useEffect(() => {
+    if (isConnected && coinbase) {
+      getAllBalance();
+      fetchUserPools();
+    }
+  }, [isConnected, coinbase]);
 
   const onPlayerFetch = () => {
     refetchPlayer();
@@ -1948,6 +1992,8 @@ function App() {
                     element={
                       <Games
                         leaderboardCaws2d={leaderboard}
+                        fetchCawsAdvLeaderboard={loadLeaderboardDataCaws2dGame}
+                        fetchPreviousCawsAdvWinners={fetchPreviousCawsAdvWinners}
                         handleConnection={showModal}
                         isConnected={isConnected}
                         networkId={parseInt(networkId)}
@@ -2015,6 +2061,8 @@ function App() {
                           fetchPreviousMonthlyOpbnbWinners
                         }
                         activePlayerMonthlyOpbnb={activePlayerMonthlyOpbnb}
+                        baseBalance={baseBalance}
+                        opBnbBalance={opBnbBalance}
                       />
                     }
                   />

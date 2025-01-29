@@ -103,19 +103,29 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
         .call()
         .then((data) => {
           setEthBalanceidyp(data);
+        }).catch((e) => {
+          console.error(e);
+          return 0;
         });
+
       bal2 = await contract2.methods
         .balanceOf(walletAddress)
         .call()
         .then((data) => {
           setAvaxBalanceidyp(data);
-        });
+        }).catch((e) => {
+              console.error(e);
+              return 0;
+            });
 
       bal3 = await contract3.methods
         .balanceOf(walletAddress)
         .call()
         .then((data) => {
           setBnbBalanceidyp(data);
+        }).catch((e) => {
+          console.error(e);
+          return 0;
         });
     }
   };
