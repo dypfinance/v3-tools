@@ -9,12 +9,20 @@ import errorSound from "./assets/error.mp3";
 import crackStoneSound from "./assets/stone-crack-sound.mp3";
 import crackedStoneSound from "./assets/stone-cracked-sound.mp3";
 import crackedGemSound from "./assets/crackedGem.mp3";
-
+import Countdown from "react-countdown";
 import NewChestItem from "./NewChestItem";
 import CawsAdventurePopup from "./components/CawsAdventurePopup";
 import StoneCrackPopup from "./components/StoneCrackPopup";
 import KittyDashPopup from "./components/KittyDashPopup";
 import Leaderboard from "../leaderboard/Leaderboard";
+
+const renderer2 = ({ hours, minutes }) => {
+  return (
+    <span className="stone-crack-timer mb-0">
+      {hours}h:{minutes}m
+    </span>
+  );
+};
 
 const Games = ({
   handleConnection,
@@ -116,6 +124,18 @@ const Games = ({
   const audioerror = new Audio(errorSound);
   const audiosuccess = new Audio(crackedStoneSound);
   const audiosuccessGem = new Audio(crackedGemSound);
+  const now = new Date();
+
+  const midnightUTC = new Date(
+    Date.UTC(
+      now.getUTCFullYear(),
+      now.getUTCMonth(),
+      now.getUTCDate() + 1,
+      0,
+      30,
+      0
+    )
+  );
 
   const countEarnedRewards = () => {
     if (openedChests && openedChests.length > 0) {
@@ -727,7 +747,7 @@ const Games = ({
     baseBalance,
     opBnbBalance,
   ]);
-  
+
   useEffect(() => {
     countEarnedRewards();
     getIdsOpbnb();
@@ -853,93 +873,98 @@ const Games = ({
         <div className="game-wrapper-container p-3">
           <div className="d-flex flex-column gap-2 align-items-center">
             <div className="d-flex flex-column flex-lg-row align-items-center gap-2 justify-content-between w-100">
-              <div className="d-flex align-items-center gap-2 position-relative justify-content-start">
-                <div className="d-flex justify-content-center">
-                  <img
-                    src={
-                      "https://cdn.worldofdypians.com/tools/stoneCrackHeader.png"
-                    }
-                    alt=""
-                    className="stone-crack-header"
-                  />
-                </div>
-
-                <img
-                  src={"https://cdn.worldofdypians.com/tools/tooltipIcon.svg"}
-                  alt=""
-                  onClick={() => {
-                    setpopup(true);
-                  }}
-                  style={{ cursor: "pointer" }}
-                />
-                {/* </Tooltip> */}
-
-                {popup === true && (
-                  <div
-                    className="position-absolute"
-                    style={{ right: "245px", top: "-20px" }}
-                  >
-                    <OutsideClickHandler
-                      onOutsideClick={() => {
-                        setpopup(false);
-                      }}
-                    >
-                      <div
-                        className="tooltip d-flex justify-content-center"
-                        style={{ opacity: 1, width: 245 }}
-                      >
-                        <div className="d-flex flex-column gap-2 align-items-start">
-                          <span className="whitelist-tooltip-content-text">
-                            Every transaction on Base network requires a
-                            combination of ETH and DYP tokens on BASE.
-                          </span>
-                          <span className="whitelist-tooltip-content-text">
-                            Every transaction on opBNB Chain requires a
-                            combination of BNB and DYP tokens on opBNB Chain.
-                          </span>
-                          <a
-                            href="https://superbridge.app/base"
-                            target="_blank"
-                            rel="noreferrer"
-                            onClick={() => {
-                              setpopup(false);
-                            }}
-                          >
-                            <h6 className="bottomitems">
-                              <img
-                                src={
-                                  "https://cdn.worldofdypians.com/tools/arrow-up.svg"
-                                }
-                                alt=""
-                              />
-                              Bridge DYP on Base SuperBridge
-                            </h6>
-                          </a>
-                          <NavLink
-                            to="/bridge"
-                            target="_blank"
-                            rel="noreferrer"
-                            onClick={() => {
-                              setpopup(false);
-                            }}
-                          >
-                            <h6 className="bottomitems">
-                              <img
-                                src={
-                                  "https://cdn.worldofdypians.com/tools/arrow-up.svg"
-                                }
-                                alt=""
-                              />
-                              Bridge DYP on opBNB Chain
-                            </h6>
-                          </NavLink>
-                        </div>
-                      </div>
-                    </OutsideClickHandler>
+              <div className="d-flex flex-column">
+                <div className="d-flex align-items-center gap-2 position-relative justify-content-start">
+                  <div className="d-flex justify-content-center">
+                    <img
+                      src={
+                        "https://cdn.worldofdypians.com/tools/stoneCrackHeader.png"
+                      }
+                      alt=""
+                      className="stone-crack-header"
+                    />
                   </div>
-                )}
-              </div>
 
+                  <img
+                    src={"https://cdn.worldofdypians.com/tools/tooltipIcon.svg"}
+                    alt=""
+                    onClick={() => {
+                      setpopup(true);
+                    }}
+                    style={{ cursor: "pointer" }}
+                  />
+                  {/* </Tooltip> */}
+
+                  {popup === true && (
+                    <div
+                      className="position-absolute"
+                      style={{ right: "245px", top: "-20px" }}
+                    >
+                      <OutsideClickHandler
+                        onOutsideClick={() => {
+                          setpopup(false);
+                        }}
+                      >
+                        <div
+                          className="tooltip d-flex justify-content-center"
+                          style={{ opacity: 1, width: 245 }}
+                        >
+                          <div className="d-flex flex-column gap-2 align-items-start">
+                            <span className="whitelist-tooltip-content-text">
+                              Every transaction on Base network requires a
+                              combination of ETH and DYP tokens on BASE.
+                            </span>
+                            <span className="whitelist-tooltip-content-text">
+                              Every transaction on opBNB Chain requires a
+                              combination of BNB and DYP tokens on opBNB Chain.
+                            </span>
+                            <a
+                              href="https://superbridge.app/base"
+                              target="_blank"
+                              rel="noreferrer"
+                              onClick={() => {
+                                setpopup(false);
+                              }}
+                            >
+                              <h6 className="bottomitems">
+                                <img
+                                  src={
+                                    "https://cdn.worldofdypians.com/tools/arrow-up.svg"
+                                  }
+                                  alt=""
+                                />
+                                Bridge DYP on Base SuperBridge
+                              </h6>
+                            </a>
+                            <NavLink
+                              to="/bridge"
+                              target="_blank"
+                              rel="noreferrer"
+                              onClick={() => {
+                                setpopup(false);
+                              }}
+                            >
+                              <h6 className="bottomitems">
+                                <img
+                                  src={
+                                    "https://cdn.worldofdypians.com/tools/arrow-up.svg"
+                                  }
+                                  alt=""
+                                />
+                                Bridge DYP on opBNB Chain
+                              </h6>
+                            </NavLink>
+                          </div>
+                        </div>
+                      </OutsideClickHandler>
+                    </div>
+                  )}
+                </div>
+                <span className="d-flex align-items-center gap-1 stone-crack-timer">
+                  Reset Time:{" "}
+                  <Countdown date={midnightUTC} renderer={renderer2} />
+                </span>
+              </div>
               <div className="d-flex align-items-center gap-2">
                 <button
                   className={` ${
