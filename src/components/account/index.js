@@ -2533,7 +2533,7 @@ export default class Subscription extends React.Component {
                             >
                               <div className="d-flex justify-content-center align-items-center ethereumTagwrapper">
                                 <img
-                                  src="/assets/img/ethereum.svg"
+                                  src="https://cdn.worldofdypians.com/wod/eth.svg"
                                   className="popup-chains-icon"
                                 />
                                 <h6
