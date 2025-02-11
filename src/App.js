@@ -1152,7 +1152,6 @@ function App() {
   const getAllChests = async () => {
     let headersList = {
       Accept: "*/*",
-      "User-Agent": "Thunder Client (https://www.thunderclient.com)",
       "Content-Type": "application/json",
     };
 
@@ -1206,7 +1205,6 @@ function App() {
   const getAllOpbnbChests = async () => {
     let headersList = {
       Accept: "*/*",
-      "User-Agent": "Thunder Client (https://www.thunderclient.com)",
       "Content-Type": "application/json",
     };
 
