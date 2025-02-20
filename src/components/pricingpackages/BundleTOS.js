@@ -3,7 +3,7 @@ import React from "react";
 const BundleTOS = () => {
   return (
     <div className="container-lg">
-      <h6 className="launchpad-hero-title mb-4">Bundles Terms of Service</h6>
+      <h6 className="launchpad-hero-title text-white mb-4">Bundles Terms of Service</h6>
       <div className="purple-wrapper d-flex flex-column gap-3 p-3">
         <p className="disclaimer-bold">1. Token Locking</p>
         <ul style={{ listStyle: "inside" }}>
