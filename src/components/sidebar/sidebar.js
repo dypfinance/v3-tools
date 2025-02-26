@@ -59,12 +59,12 @@ const Sidebar = (props) => {
       icon: "earnIcon",
       link: "/earn",
       children: [
+        // {
+        //   title: "Staking",
+        //   link: "/earn/defi-staking",
+        // },
         {
           title: "Staking",
-          link: "/earn/defi-staking",
-        },
-        {
-          title: "Dypius",
           link: "/earn/dypius",
         },
 
@@ -223,7 +223,7 @@ const Sidebar = (props) => {
                         ? "active-width justify-content-start ms-4"
                         : "justify-content-center"
                     } align-items-center ${
-                      (activeLink === sideItem.label || window.location.pathname === sideItem.link) ? "active-side-link" : null
+                      (window.location.pathname.includes(sideItem.link)) ? "active-side-link" : null
                     }`}
                     onClick={() => setActiveLink(sideItem.label)}
                     onMouseEnter={() => setHover(sideItem.label)}
@@ -280,7 +280,7 @@ const Sidebar = (props) => {
                             key={index}
                             to={child.link}
                             className={(isActive) =>
-                              isActive
+                             window.location.pathname === child.link
                                 ? "accordion-child accordion-child-active d-flex align-items-center gap-1"
                                 : "accordion-child d-flex align-items-center gap-1"
                             }

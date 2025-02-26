@@ -438,6 +438,9 @@ export default function initBridge({
               .call()
               .then((data) => {
                 this.setState({ token_balance: data });
+              }).catch((e) => {
+                console.error(e);
+                return 0;
               });
           } else if (this.props.sourceChain === "bnb") {
             const token_contract_bsc = new window.bscWeb3.eth.Contract(
@@ -449,6 +452,9 @@ export default function initBridge({
               .call()
               .then((data) => {
                 this.setState({ token_balance: data });
+              }).catch((e) => {
+                console.error(e);
+                return 0;
               });
           } else if (this.props.sourceChain === "opbnb") {
             const token_contract_opbnb = new window.opbnbWeb3.eth.Contract(
@@ -460,6 +466,9 @@ export default function initBridge({
               .call()
               .then((data) => {
                 this.setState({ token_balance: data });
+              }).catch((e) => {
+                console.error(e);
+                return 0;
               });
           } else if (this.props.sourceChain === "avax") {
             const token_contract_avax = new window.avaxWeb3.eth.Contract(
@@ -471,6 +480,9 @@ export default function initBridge({
               .call()
               .then((data) => {
                 this.setState({ token_balance: data });
+              }).catch((e) => {
+                console.error(e);
+                return 0;
               });
           }
           if (this.state.txHash) {
@@ -500,7 +512,10 @@ export default function initBridge({
                   this.state.txHash
                 }&getWithdrawableUnixTimestamp=true`;
               console.log({ url });
-              let { withdrawableUnixTimestamp } = await window.jQuery.get(url);
+              let { withdrawableUnixTimestamp } = await window.jQuery.get(url).catch((e) => {
+                console.error(e);
+                return 0;
+              });
               this.setState({ withdrawableUnixTimestamp });
               console.log({ withdrawableUnixTimestamp });
             } catch (e) {
@@ -546,6 +561,9 @@ export default function initBridge({
             .call()
             .then((data) => {
               this.setState({ ethBalance: data });
+            }).catch((e) => {
+              console.error(e);
+              return 0;
             });
         } else if (this.props.sourceChain === "bnb") {
           await contract2.methods
@@ -553,6 +571,9 @@ export default function initBridge({
             .call()
             .then((data) => {
               this.setState({ bnbBalance: data });
+            }).catch((e) => {
+              console.error(e);
+              return 0;
             });
         } else if (this.props.sourceChain === "opbnb") {
           await contract4.methods
@@ -560,6 +581,9 @@ export default function initBridge({
             .call()
             .then((data) => {
               this.setState({ opbnbBalance: data });
+            }).catch((e) => {
+              console.error(e);
+              return 0;
             });
         } else if (this.props.sourceChain === "avax") {
           await contract3.methods
@@ -567,6 +591,9 @@ export default function initBridge({
             .call()
             .then((data) => {
               this.setState({ avaxBalance: data });
+            }).catch((e) => {
+              console.error(e);
+              return 0;
             });
         }
       }

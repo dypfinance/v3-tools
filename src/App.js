@@ -70,6 +70,8 @@ import {
 import { ethers } from "ethers";
 import LoyaltyProgram from "./components/loyalty/LoyaltyProgram.js";
 import { useParams } from "react-router-dom";
+import LaunchpadMidle from "./components/whitelist/LaunchpadMidle.js";
+import LaunchpadDetails from "./components/launchpad/launchpaddetails/LaunchpadDetails.js";
 import PricingPackages from "./components/pricingpackages/PricingPackages.js";
 import BundleTOS from "./components/pricingpackages/BundleTOS.js";
 
@@ -131,6 +133,9 @@ function App() {
   const [isonlink, setIsOnLink] = useState(false);
   const [hasDypBalance, sethasDypBalance] = useState(false);
   const [hasiDypBalance, sethasiDypBalance] = useState(false);
+  const [baseBalance, setbaseBalance] = useState(0);
+  const [opBnbBalance, setopBnbBalance] = useState(0);
+
   const [dypBalance, setDypBalance] = useState(0)
   const [userPools, setuserPools] = useState([]);
   const [previousWeeklyVersion, setpreviousWeeklyVersion] = useState(0);
@@ -204,6 +209,7 @@ function App() {
 
     if (result && result.status === 200) {
       const pools = result.data.stakingLists;
+      console.log("pools", pools);
       setaggregatorPools(pools);
     }
   };
@@ -310,7 +316,8 @@ function App() {
         .get(`https://api.dyp.finance/api/user_pools/${coinbase}`)
         .then((data) => {
           return data.data.PoolsUserIn;
-        }).catch((e) => {
+        })
+        .catch((e) => {
           console.log(e);
         });
       setuserPools(result);
@@ -552,6 +559,8 @@ function App() {
     const tokenAddress = window.config.token_dypius_new_address;
     const tokenAddress_bsc = window.config.token_dypius_new_bsc_address;
     const tokenAddress_base = window.config.reward_token_dypiusv2_base_address;
+    const tokenAddress_opbnb = window.config.token_dypius_new_opbnb_address;
+
 
     const walletAddress = coinbase;
     const TokenABI = window.ERC20_ABI;
@@ -573,6 +582,10 @@ function App() {
       const contract4 = new window.baseWeb3.eth.Contract(
         TokenABI,
         tokenAddress_base
+      );
+      const contract5 = new window.opbnbWeb3.eth.Contract(
+        TokenABI,
+        tokenAddress_opbnb
       );
 
       const contract1_idyp = new window.infuraWeb3.eth.Contract(
@@ -645,6 +658,22 @@ function App() {
           console.error(e);
           return 0;
         });
+        setbaseBalance(Number(baseBalance))
+
+        let opbnbBalance = await contract5.methods
+        .balanceOf(walletAddress)
+        .call()
+        .then((data) => {
+          let depositedTokens = new window.BigNumber(data)
+            .div(1e18)
+            .toString(10);
+          return depositedTokens;
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+        setopBnbBalance(Number(opbnbBalance))
 
       let avaxBalance_idyp = await contract2_idyp.methods
         .balanceOf(walletAddress)
@@ -717,13 +746,11 @@ function App() {
   useEffect(() => {
     setTheme("theme-dark");
     tvl();
-    fetchAggregatorPools();
+    // fetchAggregatorPools();
     // setwhitelistPopup(true);
     if (window.location.hash === "#mobile-app") {
       setdownloadClick(true);
     }
-
-    
 
     if (window.ethereum && !window.coin98) {
       console.log("yes");
@@ -1084,7 +1111,6 @@ function App() {
       console.warn(e);
     }
     leaderboard2 = leaderboard2.sort((a, b) => b.score - a.score);
-
     var testArray =
       leaderboard2.length > 0
         ? leaderboard2.filter(
@@ -1113,10 +1139,24 @@ function App() {
     }
   };
 
+  const fetchPreviousCawsAdvWinners = async () =>{
+    let leaderboard2 = [];
+    try {
+      leaderboard2 = await (
+        await fetch("https://game.dypius.com/api/leaderboard-previous")
+      ).json();
+    } catch (e) {
+      console.warn(e);
+    }
+    leaderboard2 = leaderboard2.sort((a, b) => b.score - a.score);
+
+    fillRecordsCaws2d(leaderboard2);
+ 
+  }
+
   const getAllChests = async () => {
     let headersList = {
       Accept: "*/*",
-      "User-Agent": "Thunder Client (https://www.thunderclient.com)",
       "Content-Type": "application/json",
     };
 
@@ -1170,7 +1210,6 @@ function App() {
   const getAllOpbnbChests = async () => {
     let headersList = {
       Accept: "*/*",
-      "User-Agent": "Thunder Client (https://www.thunderclient.com)",
       "Content-Type": "application/json",
     };
 
@@ -1680,7 +1719,6 @@ function App() {
     }
   }, [email, chestCount]);
 
-  
   useEffect(() => {
     if (email) {
       getAllOpbnbChests();
@@ -1690,22 +1728,26 @@ function App() {
     }
   }, [email, opbnbchestCount]);
 
-
-  useEffect(() => {
-    loadLeaderboardDataCaws2dGame();
-  }, [data]);
+  // useEffect(() => {
+  //   loadLeaderboardDataCaws2dGame();
+  // }, [data]);
 
   useEffect(() => {
     if (email && data?.getPlayer?.wallet?.publicAddress !== undefined) {
       refreshSubscription(data?.getPlayer?.wallet?.publicAddress);
     } else if (isConnected && coinbase) {
       refreshSubscription(coinbase);
-      getAllBalance();
-      fetchUserPools();
     } else {
       setisPremium(false);
     }
   }, [isConnected, coinbase, email, data]);
+
+  useEffect(() => {
+    if (isConnected && coinbase) {
+      getAllBalance();
+      fetchUserPools();
+    }
+  }, [isConnected, coinbase]);
 
   const onPlayerFetch = () => {
     refetchPlayer();
@@ -1953,13 +1995,21 @@ function App() {
                     element={
                       <Games
                         leaderboardCaws2d={leaderboard}
+                        fetchCawsAdvLeaderboard={loadLeaderboardDataCaws2dGame}
+                        fetchPreviousCawsAdvWinners={fetchPreviousCawsAdvWinners}
                         handleConnection={showModal}
                         isConnected={isConnected}
                         networkId={parseInt(networkId)}
                         onSelectChain={onSelectChain}
                         coinbase={coinbase}
-                        onChestClaimed={()=>{onChestClaimed();fetchWeeklyWinners()}}
-                        onOpbnbChestClaimed={()=>{onOpbnbChestClaimed();fetchWeeklyOpbnbWinners()}}
+                        onChestClaimed={() => {
+                          onChestClaimed();
+                          fetchWeeklyWinners();
+                        }}
+                        onOpbnbChestClaimed={() => {
+                          onOpbnbChestClaimed();
+                          fetchWeeklyOpbnbWinners();
+                        }}
                         dummypremiumChests={dummyPremiums}
                         isPremium={isPremium}
                         bnbImages={chestImagesBnb}
@@ -1975,19 +2025,17 @@ function App() {
                         monthlyplayerData={monthlyplayerData}
                         monthlyplayerDataOpbnb={monthlyplayerDataOpbnb}
                         previousMonthlyVersion={previousMonthlyVersion}
-                        previousMonthlyVersionOpbnb={previousMonthlyVersionOpbnb}
-
+                        previousMonthlyVersionOpbnb={
+                          previousMonthlyVersionOpbnb
+                        }
                         previousWeeklyVersion={previousWeeklyVersion}
                         previousWeeklyVersionOpbnb={previousWeeklyVersionOpbnb}
-
                         weeklyplayerData={weeklyplayerData}
                         weeklyUser={weeklyUser}
                         monthlyUser={monthlyUser}
-
                         weeklyplayerDataOpbnb={weeklyplayerDataOpbnb}
                         weeklyUserOpbnb={weeklyUserOpbnb}
                         monthlyUserOpbnb={monthlyUserOpbnb}
-
                         previousKittyDashVersion={previousKittyDashVersion}
                         kittyDashRecords={kittyDashRecords}
                         fetchKittyDashWinners={fetchKittyDashWinners}
@@ -2016,6 +2064,8 @@ function App() {
                           fetchPreviousMonthlyOpbnbWinners
                         }
                         activePlayerMonthlyOpbnb={activePlayerMonthlyOpbnb}
+                        baseBalance={baseBalance}
+                        opBnbBalance={opBnbBalance}
                       />
                     }
                   />
@@ -2048,7 +2098,7 @@ setkittyDashRecords */}
                       />
                     }
                   />
-                  <Route
+                  {/* <Route
                     exact
                     path="/earn/defi-staking"
                     element={
@@ -2070,13 +2120,30 @@ setkittyDashRecords */}
                         userCurencyBalance={userCurencyBalance}
                       />
                     }
+                  /> */}
+
+                  <Route
+                    exact
+                    path="/launchpad/worldofdypians"
+                    element={
+                      <Whitelist
+                        networkId={parseInt(networkId)}
+                        isConnected={isConnected}
+                        handleConnection={showModal}
+                        coinbase={coinbase}
+                        isPremium={isPremium}
+                        userPools={userPools}
+                        hasDypBalance={hasDypBalance}
+                        hasiDypBalance={hasiDypBalance}
+                      />
+                    }
                   />
 
                   <Route
                     exact
                     path="/launchpad"
                     element={
-                      <Whitelist
+                      <LaunchpadMidle
                         networkId={parseInt(networkId)}
                         isConnected={isConnected}
                         handleConnection={showModal}
@@ -2091,6 +2158,22 @@ setkittyDashRecords */}
                   <Route exact path="/bundles" element={<PricingPackages dypBalance={dypBalance} />} />
                   <Route exact path="/bundles-terms-of-service" element={<BundleTOS />} />
 
+                  <Route
+                    exact
+                    path="/launchpad/midle"
+                    element={
+                      <LaunchpadDetails
+                        networkId={parseInt(networkId)}
+                        isConnected={isConnected}
+                        handleConnection={showModal}
+                        coinbase={coinbase}
+                        isPremium={isPremium}
+                        userPools={userPools}
+                        hasDypBalance={hasDypBalance}
+                        hasiDypBalance={hasiDypBalance}
+                      />
+                    }
+                  />
                   <Route
                     exact
                     path="/earn/nft-staking"
@@ -2120,7 +2203,7 @@ setkittyDashRecords */}
                     }
                   />
 
-                  <Route
+                  {/* <Route
                     exact
                     path="/launchpad"
                     element={
@@ -2131,7 +2214,7 @@ setkittyDashRecords */}
                         coinbase={coinbase}
                       />
                     }
-                  />
+                  /> */}
                   {/* <Route
                     exact
                     path="/migration"
@@ -2250,7 +2333,7 @@ setkittyDashRecords */}
                         referrer={referrer}
                         isPremium={isPremium}
                         onConnectWallet={showModal}
-                        aggregatorPools={aggregatorPools}
+                        // aggregatorPools={aggregatorPools}
                         onMobileClick={() => {
                           setshowMobilePopup(true);
                         }}

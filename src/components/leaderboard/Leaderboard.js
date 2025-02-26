@@ -39,6 +39,8 @@ const Leaderboard = ({
   monthlyUserOpbnb,
   activePlayerWeeklyOpbnb,
   activePlayerMonthlyOpbnb,
+  fetchCawsAdvLeaderboard,
+  fetchPreviousCawsAdvWinners
 }) => {
   const weeklyPrizes = ["25", "15", "10", "8", "0", "0", "0", "0", "0", "0"];
   const monthlyPrizes = [
@@ -229,24 +231,26 @@ const Leaderboard = ({
     fetchWeeklyOpbnbWinners();
     fetchMonthlyOpbnbWinners();
     fetchKittyDashWinners();
+    fetchCawsAdvLeaderboard();
   }, [userId, username]);
 
   const switchPrev = () => {
     setPrevStatus((prevStatus) => {
       const newStatus = !prevStatus;
-
       if (newStatus) {
         fetchPreviousWeeklyWinners();
         fetchPreviousMonthlyWinners();
         fetchPreviousWeeklyOpbnbWinners();
         fetchPreviousMonthlyOpbnbWinners();
         fetchPreviousKittyDashWinners();
+        fetchPreviousCawsAdvWinners();
       } else {
         fetchWeeklyWinners();
         fetchMonthlyWinners();
         fetchWeeklyOpbnbWinners();
         fetchMonthlyOpbnbWinners();
         fetchKittyDashWinners();
+        fetchCawsAdvLeaderboard();
       }
 
       return newStatus;
@@ -303,7 +307,12 @@ const Leaderboard = ({
             />
           </div>
           <div className="d-flex align-items-center gap-1 mt-5">
-            <div className={`optionsWrapper col-12 ${type==='stoneCrack' && 'd-flex flex-column flex-lg-row w-100 justify-content-between gap-2'} `}>
+            <div
+              className={`optionsWrapper col-12 ${
+                type === "stoneCrack" &&
+                "d-flex flex-column flex-lg-row w-100 justify-content-between gap-2"
+              } `}
+            >
               {type === "stoneCrack" && (
                 <div className="d-flex align-items-center gap-2 col-lg-5">
                   <button
@@ -456,14 +465,16 @@ const Leaderboard = ({
                                 <div className="d-flex algin-items-center">
                                   <img
                                     src={
-                                      "https://cdn.worldofdypians.com/wod/eth.svg"
+                                      selectedChain === "opbnb"
+                                        ? "https://cdn.worldofdypians.com/wod/bnbIcon.svg"
+                                        : "https://cdn.worldofdypians.com/wod/eth.svg"
                                     }
                                     width={15}
                                     height={15}
                                     alt=""
                                     className="me-1 d-none d-lg-block d-md-block"
                                   />
-                                  ETH
+                                  {selectedChain === "opbnb" ? "BNB" : "ETH"}
                                 </div>{" "}
                                 +
                                 <div className="d-flex algin-items-center">
@@ -1208,7 +1219,7 @@ const Leaderboard = ({
                 </div>
               )}
           </div>
-          {type !== "cawsAdventure" && (
+          
             <div className="optionsWrapper2 p-2">
               <div className="d-flex flex-column">
                 <div className="d-flex justify-content-between gap-2 align-items-center">
@@ -1221,7 +1232,7 @@ const Leaderboard = ({
                 </div>
               </div>
             </div>
-          )}
+         
         </div>
       </div>
     </div>

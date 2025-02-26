@@ -44,7 +44,7 @@ const StoneCrackPopup = ({ active, onClose }) => {
         smaller rewards are more likely to be acquired, while higher-value
         rewards are rarer. This system adds a layer of unpredictability and
         excitement, rewarding daily play with increased chances of earning more
-        valuable prizes. The game resets at 00:00 UTC every day.
+        valuable prizes. The game resets at 00:30 UTC every day.
       </p>
       <div className="games-popup-image-wrapper p-2 d-flex flex-column flex-lg-row align-items-center gap-2">
         <div className="d-flex flex-column align-items-center gap-2">

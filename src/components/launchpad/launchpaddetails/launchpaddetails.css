@@ -18,6 +18,8 @@ border-radius: 12px;
   line-height: 24px;
   letter-spacing: -0.018em;
   color: #d6d8e7 !important;
+  list-style-type: disc;
+  list-style: disc;
 }
 
 .launch-subheader{
@@ -98,4 +100,103 @@ text-align: center;
 letter-spacing: -0.018em;
 color: #F7F7FC !important;
 white-space: break-spaces !important;
+}
+
+.details-date-wrapper{
+  border-radius: 12px;
+border: 2px solid #565891;
+background: #2A2859;
+}
+
+.date-start-span{
+  color: #857DFA !important;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.252px;
+}
+
+.date-start-value{
+  color: #F7F7FC !important;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.432px;
+}
+
+.launchpad-details-grid{
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 12px;
+}
+
+.midle-details-item{
+  border-radius: 12px;
+background: #242152;
+}
+
+.midle-details-span{
+  color: #4ED5D2 !important;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.216px;
+}
+
+.midle-details-value{
+  color: #FCFCF7 !important;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.launchpad-info-divider{
+  background: #565891 !important;
+  height: 2px;
+}
+
+.details-warning-text{
+  color: #F8845B !important;
+font-size: 18px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+}
+
+
+@media screen and (max-width: 420px) {
+  .midle-details-value{
+    font-size: 16px;
+  }
+  .date-start-value{
+    font-size: 16px;
+  }
+}
+
+.midle-total-commited{
+  border-radius: 6px;
+background: linear-gradient(91deg, #4ED4D0 0%, #D4CF4E 100%);
+position: absolute;
+right: 10px;
+top: 10px;
+}
+
+.midle-commited-span{
+  color: #312F69 !important;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.midle-commited-value{
+  color: #312F69 !important;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
 }

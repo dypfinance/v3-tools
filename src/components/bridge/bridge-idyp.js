@@ -113,7 +113,10 @@ export default function initBridgeidyp({
                 destinationChainText: "",
               });
             }
-          });
+          }).catch((e) => {
+            console.error(e);
+            return 0;
+          })
       }
     };
 
@@ -135,7 +138,10 @@ export default function initBridgeidyp({
           : bridgeETH._address,
         bridgeETH.tokenAddress,
         1
-      );
+      ).catch((e) => {
+        console.error(e);
+        return 0;
+      })
       ethPool = ethPool / 1e18;
 
       //Get DYP Balance BNB Chain Pool
@@ -145,7 +151,10 @@ export default function initBridgeidyp({
           : bridgeETH._address,
         bridgeETH.tokenAddress,
         2
-      );
+      ).catch((e) => {
+        console.error(e);
+        return 0;
+      })
 
       avaxPool = avaxPool / 1e18;
       let bnbPool = await window.getTokenHolderBalanceAll(
@@ -154,7 +163,10 @@ export default function initBridgeidyp({
           : bridgeBSC._address,
         bridgeETH.tokenAddress,
         3
-      );
+      ).catch((e) => {
+        console.error(e);
+        return 0;
+      })
       bnbPool = bnbPool / 1e18;
       this.setState({ ethPool, avaxPool, bnbPool });
     };
@@ -333,6 +345,9 @@ export default function initBridgeidyp({
             .call()
             .then((data) => {
               this.setState({ ethBalance: data });
+            }).catch((e) => {
+              console.error(e);
+              return 0;
             });
         } else if (this.props.sourceChain === "avax") {
           await contract2.methods
@@ -340,6 +355,9 @@ export default function initBridgeidyp({
             .call()
             .then((data) => {
               this.setState({ avaxBalance: data });
+            }).catch((e) => {
+              console.error(e);
+              return 0;
             });
         } else if (this.props.sourceChain === "bnb") {
           await contract3.methods
@@ -347,6 +365,9 @@ export default function initBridgeidyp({
             .call()
             .then((data) => {
               this.setState({ bnbBalance: data });
+            }).catch((e) => {
+              console.error(e);
+              return 0;
             });
         }
       }
@@ -464,7 +485,10 @@ if(network !== 'UNKNOWN') {
           let token_balance = await (network == "AVAX" || network === "BSC"
             ? tokenBSC
             : tokenETH
-          ).balanceOf(coinbase);
+          ).balanceOf(coinbase).catch((e) => {
+            console.error(e);
+            return 0;
+          })
 
           this.setState({
             token_balance,
@@ -492,7 +516,10 @@ if(network !== 'UNKNOWN') {
                   this.state.txHash
                 }&getWithdrawableUnixTimestamp=true`;
               console.log({ url });
-              let { withdrawableUnixTimestamp } = await window.jQuery.get(url);
+              let { withdrawableUnixTimestamp } = await window.jQuery.get(url).catch((e) => {
+                console.error(e);
+                return 0;
+              });
               this.setState({ withdrawableUnixTimestamp });
               console.log({ withdrawableUnixTimestamp });
             } catch (e) {
@@ -1050,7 +1077,9 @@ if(network !== 'UNKNOWN') {
                                 <input
                                   value={this.state.txHash}
                                   onChange={(e) =>
-                                    this.setState({ txHash: e.target.value })
+                                  {
+                                    this.setState({ txHash: e.target.value });
+                                  }
                                   }
                                   className="styledinput"
                                   placeholder="Enter Deposit transaction hash"

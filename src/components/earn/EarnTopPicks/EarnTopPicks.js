@@ -403,7 +403,7 @@ const EarnTopPicks = ({
       const sortedActive = allActiveBnb.sort(function (a, b) {
         return b.apy_percent - a.apy_percent;
       }); 
-      console.log('sortedActivesortedActive',sortedActive)
+      
       setbnbPoolsDyp(activeBnb2);
       setbnbPoolsiDyp(object2Idyp);
       setBnbPools(sortedActive);
@@ -4410,7 +4410,7 @@ const EarnTopPicks = ({
                       setselectedPool([]);
                       setDetails(999);
                     }}
-                    poolCap={2000000}
+                    poolCap={10000000}
                     start_date={"01 Sep 2024"}
                   />
                 ) : topList === "Staking" &&
