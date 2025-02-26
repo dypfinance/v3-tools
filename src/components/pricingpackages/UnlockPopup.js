@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import xMark from "./assets/xMark.svg";
 import dyp from "./assets/dyp.svg";
 import eth from "./assets/eth.svg";
 import "./pricingpackages.css";
 import Countdown from "react-countdown";
+import getFormattedNumber from "../../functions/get-formatted-number";
 
-const renderer = ({ days, hours, minutes }) => {
-  // Render the countdown
+const renderer = ({ days, hours, minutes, completed }) => {
+  // Render a countdown
   return (
     <div className="d-flex align-items-center gap-2">
       <span className="unlock-timer">{days} days</span>
@@ -16,10 +17,36 @@ const renderer = ({ days, hours, minutes }) => {
   );
 };
 
-const UnlockPopup = ({ active, onClose }) => {
+const UnlockPopup = ({
+  active,
+  onClose,
+  cliffTime,
+  onTimerFinished,
+  canUnlock,
+  pendingTokens,
+  userClaimedTokens,
+  totalVestedTokens,
+  handleUnlock,
+  unlockStatus,
+  unlockLoading,
+  isConnected,
+  chainId,
+  handleSwitchNetwork,
+  onConnectWallet,
+}) => {
   const sixMonthsFromNow = new Date();
   sixMonthsFromNow.setMonth(sixMonthsFromNow.getMonth() + 6);
   const [timerFinished, setTimerFinished] = useState(false);
+  const today = new Date();
+
+  useEffect(() => {
+    if (today.getTime() > cliffTime) {
+      setTimerFinished(true);
+      onTimerFinished(true);
+    } else if (Number(userClaimedTokens) === 0) {
+      setTimerFinished(true);
+    }
+  }, [userClaimedTokens, cliffTime]);
 
   return (
     <div
@@ -50,11 +77,19 @@ const UnlockPopup = ({ active, onClose }) => {
         style={{ borderBottom: "1px solid #3B3C68" }}
       >
         <span className="unlock-timer-span">Timer</span>
-        <Countdown
-          date={sixMonthsFromNow}
-          onComplete={() => setTimerFinished(true)}
-          renderer={renderer}
-        />
+        {cliffTime > 0 ? (
+          <Countdown
+            date={cliffTime}
+            onComplete={() => setTimerFinished(true)}
+            renderer={renderer}
+          />
+        ) : (
+          <div className="d-flex align-items-center gap-2">
+            <span className="unlock-timer">0 days</span>
+            <span className="unlock-timer">0 hours</span>
+            <span className="unlock-timer">0 min</span>
+          </div>
+        )}
       </div>
       <div className="unlock-bundle-wrapper d-flex flex-column w-100">
         <div className="unlock-bundle-wrapper-inner d-flex align-items-center justify-content-between ">
@@ -72,33 +107,83 @@ const UnlockPopup = ({ active, onClose }) => {
         </div>
         <div className="d-flex flex-column flex-lg-row gap-2 gap-lg-0 align-items-lg-center justify-content-between w-100 px-3 py-4">
           <span className="bundle-dyp-available-span">Available to Claim</span>
-          <h6 className="mb-0 bundle-dyp-available">122,540.40 DYP</h6>
+          <h6 className="mb-0 bundle-dyp-available">
+            {getFormattedNumber(pendingTokens)} DYP
+          </h6>
         </div>
         <div className="unlock-bundle-wrapper-inner bundle-wrapper-grid p-3">
           <div className="d-flex flex-column align-items-center">
-            <span className="lock-dyp-stat">26,548,220</span>
+            <span className="lock-dyp-stat">
+              {" "}
+              {getFormattedNumber(totalVestedTokens)}
+            </span>
             <span className="lock-dyp-stat-span">Total DYP</span>
           </div>
           <div className="d-flex flex-column align-items-center">
-            <span className="lock-dyp-stat">250,000</span>
+            <span className="lock-dyp-stat">
+              {getFormattedNumber(userClaimedTokens, 2)}
+            </span>
             <span className="lock-dyp-stat-span">DYP Withdrew</span>
           </div>
           <div className="d-flex flex-column align-items-center">
-            <span className="lock-dyp-stat">25,200,850</span>
+            <span className="lock-dyp-stat">
+              {getFormattedNumber(totalVestedTokens - userClaimedTokens)}
+            </span>
             <span className="lock-dyp-stat-span">DYP Remaining</span>
           </div>
         </div>
       </div>
-      <button
-        className={`btn ${
-          timerFinished ? "filledbtn" : "disabled-btn"
-        } px-5 py-2`}
-        disabled={!timerFinished}
-        style={{ fontSize: "14px" }}
-        onClick={onClose}
-      >
-        Unlock
-      </button>
+
+      {!isConnected && (
+        <button className="connectbtn w-100 py-2" onClick={onConnectWallet}>
+          Connect Wallet
+        </button>
+      )}
+      {isConnected && chainId !== 1 && (
+        <button
+          className="fail-button w-100 py-2"
+          onClick={handleSwitchNetwork}
+        >
+          Switch to Ethereum
+        </button>
+      )}
+      {isConnected && chainId === 1 && (
+        <button
+          className={`py-2 ${
+            ((unlockStatus === "claimed" || unlockStatus === "initial") &&
+              Number(pendingTokens) === 0) ||
+            canUnlock === false ||
+            timerFinished === false
+              ? "disabled-btn"
+              : unlockStatus === "failed"
+              ? "fail-button"
+              : unlockStatus === "success"
+              ? "success-button"
+              : "filledbtn"
+          }`}
+          disabled={
+            canUnlock === false ||
+            timerFinished === false ||
+            Number(pendingTokens) === 0
+              ? true
+              : false
+          }
+          onClick={handleUnlock}
+        >
+          {unlockLoading ? (
+            <div
+              class="spinner-border spinner-border-sm text-light"
+              role="status"
+            ></div>
+          ) : unlockStatus === "failed" ? (
+            <>Failed</>
+          ) : unlockStatus === "success" ? (
+            <>Success</>
+          ) : (
+            <>Unlock</>
+          )}
+        </button>
+      )}
     </div>
   );
 };

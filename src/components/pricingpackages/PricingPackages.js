@@ -6,15 +6,72 @@ import BundlePopup from "./BundlePopup";
 import UnlockPopup from "./UnlockPopup";
 import axios from "axios";
 import getFormattedNumber from "../../functions/get-formatted-number";
+import Web3 from "web3";
+import { handleSwitchNetworkhook } from "../../functions/hooks";
 
-const PricingPackages = ({ dypBalance }) => {
+const PricingPackages = ({
+  dypBalance,
+  networkId,
+  isConnected,
+  coinbase,
+  handleConnection,
+  onRefreshBalance,
+  handleSwitchNetwork,
+}) => {
   const [popup, setPopup] = useState(false);
   const [withdrawPopup, setWithdrawPopup] = useState(false);
   const [firstLock, setFirstLock] = useState(false);
   const [secondLock, setSecondLock] = useState(false);
   const [thirdLock, setThirdLock] = useState(false);
-  const [dypPrice, setDypPrice] = useState(0);
+
   const [activeBundle, setActiveBundle] = useState(null);
+  const [bundlePrices, setBundlePrices] = useState({
+    basic: {
+      priceInDyp: 0,
+      priceInUsd: 0,
+    },
+    advanced: {
+      priceInDyp: 0,
+      priceInUsd: 0,
+    },
+    enterprise: {
+      priceInDyp: 0,
+      priceInUsd: 0,
+    },
+  });
+
+  const [cliffTime, setcliffTime] = useState(0);
+  const [cliffTimeAdvanced, setcliffTimeAdvanced] = useState(0);
+  const [cliffTimeEnterprise, setcliffTimeEnterprise] = useState(0);
+
+  const [pendingTokens, setpendingTokens] = useState(0);
+  const [userClaimedTokens, setuserClaimedTokens] = useState(0);
+  const [userVestedTokens, setuserVestedTokens] = useState(0);
+
+  const [pendingTokensAdvanced, setpendingTokensAdvanced] = useState(0);
+  const [userClaimedTokensAdvanced, setuserClaimedTokensAdvanced] = useState(0);
+  const [userVestedTokensAdvanced, setuserVestedTokensAdvanced] = useState(0);
+
+  const [pendingTokensEnterprise, setpendingTokensEnterprise] = useState(0);
+  const [userClaimedTokensEnterprise, setuserClaimedTokensEnterprise] =
+    useState(0);
+  const [userVestedTokensEnterprise, setuserVestedTokensEnterprise] =
+    useState(0);
+
+  const [canUnlock, setcanUnlock] = useState(false);
+  const [unlockLoading, setunlockLoading] = useState(false);
+  const [unlockStatus, setunlockStatus] = useState("initial");
+
+  const [canUnlockAdvanced, setcanUnlockAdvanced] = useState(false);
+  const [unlockLoadingAdvanced, setunlockLoadingAdvanced] = useState(false);
+  const [unlockStatusAdvanced, setunlockStatusAdvanced] = useState("initial");
+
+  const [canUnlockEnterprise, setcanUnlockEnterprise] = useState(false);
+  const [unlockLoadingEnterprise, setunlockLoadingEnterprise] = useState(false);
+  const [unlockStatusEnterprise, setunlockStatusEnterprise] =
+    useState("initial");
+
+  const { BigNumber } = window;
 
   const basicBenefits = [
     "Token Contract Development",
@@ -52,26 +109,513 @@ const PricingPackages = ({ dypBalance }) => {
     "12-Month Ongoing Support",
   ];
 
-  const getPriceDYP = async () => {
-    const dypprice = await axios
-      .get(
-        "https://api.geckoterminal.com/api/v2/networks/eth/pools/0x7c81087310a228470db28c1068f0663d6bf88679"
-      )
-      .then((res) => {
-        return res.data.data.attributes.base_token_price_usd;
+  const handleEthPool = async () => {
+    await handleSwitchNetworkhook("0x1")
+      .then(() => {
+        handleSwitchNetwork("1");
       })
       .catch((e) => {
         console.log(e);
       });
+  };
 
-    setDypPrice(dypprice);
+  const getBundlePrices = async () => {
+    const basic_bundle_sc = new window.infuraWeb3.eth.Contract(
+      window.BASIC_BUNDLE_ABI,
+      window.config.basic_bundle_address
+    );
+
+    const advanced_bundle_sc = new window.infuraWeb3.eth.Contract(
+      window.ADVANCED_BUNDLE_ABI,
+      window.config.advanced_bundle_address
+    );
+
+    const enterprise_bundle_sc = new window.infuraWeb3.eth.Contract(
+      window.ENTERPRISE_BUNDLE_ABI,
+      window.config.enterprise_bundle_address
+    );
+
+    let priceInDypBasic = await basic_bundle_sc.methods
+      .getAmountMinDeposit()
+      .call()
+      .catch((e) => {
+        console.error(e);
+        return 0;
+      });
+
+    let priceInDypBasic2 = new BigNumber(priceInDypBasic)
+      .times(1.01)
+      .toFixed(6);
+
+    let formatted_priceInDypBasic = priceInDypBasic2 / 10 ** 18;
+
+    let priceInDollarBasic = await basic_bundle_sc.methods
+      .minAmountDollar()
+      .call()
+      .catch((e) => {
+        console.error(e);
+        return 0;
+      });
+    priceInDollarBasic = new BigNumber(priceInDollarBasic).toFixed(0);
+
+    let formatted_priceInDollarBasic = (priceInDollarBasic / 10 ** 18).toFixed(
+      0
+    );
+
+    let priceInDypAdvanced = await advanced_bundle_sc.methods
+      .getAmountMinDeposit()
+      .call()
+      .catch((e) => {
+        console.error(e);
+        return 0;
+      });
+
+    let priceInDypAdvanced2 = new BigNumber(priceInDypAdvanced)
+      .times(1.01)
+      .toFixed(6);
+
+    let formatted_priceInDypAdvanced = priceInDypAdvanced2 / 10 ** 18;
+
+    let priceInDollarAdvanced = await advanced_bundle_sc.methods
+      .minAmountDollar()
+      .call()
+      .catch((e) => {
+        console.error(e);
+        return 0;
+      });
+
+    priceInDollarAdvanced = new BigNumber(priceInDollarAdvanced).toFixed(0);
+
+    let formatted_priceInDollarAdvanced = (
+      priceInDollarAdvanced /
+      10 ** 18
+    ).toFixed(0);
+
+    let priceInDypEnterprise = await enterprise_bundle_sc.methods
+      .getAmountMinDeposit()
+      .call()
+      .catch((e) => {
+        console.error(e);
+        return 0;
+      });
+
+    let priceInDypEnterprise2 = new BigNumber(priceInDypEnterprise)
+      .times(1.01)
+      .toFixed(6);
+
+    let formatted_priceInDypEnterprise = priceInDypEnterprise2 / 10 ** 18;
+
+    let priceInDollarEnterprise = await enterprise_bundle_sc.methods
+      .minAmountDollar()
+      .call()
+      .catch((e) => {
+        console.error(e);
+        return 0;
+      });
+
+    priceInDollarEnterprise = new BigNumber(priceInDollarEnterprise).toFixed(0);
+
+    let formatted_priceInDollarEnterprise = (
+      priceInDollarEnterprise /
+      10 ** 18
+    ).toFixed(0);
+    setBundlePrices({
+      basic: {
+        priceInDyp: formatted_priceInDypBasic,
+        priceInUsd: formatted_priceInDollarBasic,
+      },
+      advanced: {
+        priceInDyp: formatted_priceInDypAdvanced,
+        priceInUsd: formatted_priceInDollarAdvanced,
+      },
+      enterprise: {
+        priceInDyp: formatted_priceInDypEnterprise,
+        priceInUsd: formatted_priceInDollarEnterprise,
+      },
+    });
+  };
+
+  const getInfo = async () => {
+    const basic_bundle_sc = new window.infuraWeb3.eth.Contract(
+      window.BASIC_BUNDLE_ABI,
+      window.config.basic_bundle_address
+    );
+
+    const advanced_bundle_sc = new window.infuraWeb3.eth.Contract(
+      window.ADVANCED_BUNDLE_ABI,
+      window.config.advanced_bundle_address
+    );
+
+    const enterprise_bundle_sc = new window.infuraWeb3.eth.Contract(
+      window.ENTERPRISE_BUNDLE_ABI,
+      window.config.enterprise_bundle_address
+    );
+
+    //getPendingUnlocked(address _holder) -> It will give you the pending tokens that are available to Claim;
+    let tokensToClaimAmount = 0;
+    if (coinbase) {
+      tokensToClaimAmount = await basic_bundle_sc.methods
+        .getPendingUnlocked(coinbase)
+        .call()
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+    }
+
+    const tokensToClaimAmount_formatted = new window.BigNumber(
+      tokensToClaimAmount / 1e18
+    ).toFixed(6);
+    setcanUnlock(tokensToClaimAmount_formatted > 0);
+    setpendingTokens(tokensToClaimAmount_formatted);
+
+    let tokensToClaimAmountAdvanced = 0;
+    if (coinbase) {
+      tokensToClaimAmountAdvanced = await advanced_bundle_sc.methods
+        .getPendingUnlocked(coinbase)
+        .call()
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+    }
+
+    const tokensToClaimAmountAdvanced_formatted = new window.BigNumber(
+      tokensToClaimAmountAdvanced / 1e18
+    ).toFixed(6);
+    setcanUnlockAdvanced(tokensToClaimAmountAdvanced_formatted > 0);
+    setpendingTokensAdvanced(tokensToClaimAmountAdvanced_formatted);
+
+    let tokensToClaimAmountEnterprise = 0;
+    if (coinbase) {
+      tokensToClaimAmountEnterprise = await enterprise_bundle_sc.methods
+        .getPendingUnlocked(coinbase)
+        .call()
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+    }
+
+    const tokensToClaimAmountEnterprise_formatted = new window.BigNumber(
+      tokensToClaimAmountEnterprise / 1e18
+    ).toFixed(6);
+    setcanUnlockEnterprise(tokensToClaimAmountEnterprise_formatted > 0);
+    setpendingTokensEnterprise(tokensToClaimAmountEnterprise_formatted);
+
+    let totalClaimedTokensByUser = 0;
+    if (coinbase) {
+      totalClaimedTokensByUser = await basic_bundle_sc.methods
+        .claimedTokens(coinbase)
+        .call()
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+      const totalClaimedTokensByUser_formatted = new window.BigNumber(
+        totalClaimedTokensByUser / 1e18
+      ).toFixed(6);
+
+      setuserClaimedTokens(totalClaimedTokensByUser_formatted);
+    }
+
+    let totalClaimedTokensByUserAdvanced = 0;
+    if (coinbase) {
+      totalClaimedTokensByUserAdvanced = await advanced_bundle_sc.methods
+        .claimedTokens(coinbase)
+        .call()
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+      const totalClaimedTokensByUserAdvanced_formatted = new window.BigNumber(
+        totalClaimedTokensByUserAdvanced / 1e18
+      ).toFixed(6);
+
+      setuserClaimedTokensAdvanced(totalClaimedTokensByUserAdvanced_formatted);
+    }
+
+    let totalClaimedTokensByUserEnterprise = 0;
+    if (coinbase) {
+      totalClaimedTokensByUserEnterprise = await enterprise_bundle_sc.methods
+        .claimedTokens(coinbase)
+        .call()
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+      const totalClaimedTokensByUserEnterprise_formatted = new window.BigNumber(
+        totalClaimedTokensByUserEnterprise / 1e18
+      ).toFixed(6);
+
+      setuserClaimedTokensEnterprise(
+        totalClaimedTokensByUserEnterprise_formatted
+      );
+    }
+
+    //claimedTokens(address) -> Return total WOD tokens Claimed in general by single user;
+    let totalVestedTokensPerUser = 0;
+    if (coinbase) {
+      totalVestedTokensPerUser = await basic_bundle_sc.methods
+        .vestedTokens(coinbase)
+        .call()
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+      const totalClaimedTokensByUser_formatted = new window.BigNumber(
+        totalVestedTokensPerUser / 1e18
+      ).toFixed(6);
+
+      setuserVestedTokens(totalClaimedTokensByUser_formatted);
+    }
+
+    let totalVestedTokensPerUserAdvanced = 0;
+    if (coinbase) {
+      totalVestedTokensPerUserAdvanced = await advanced_bundle_sc.methods
+        .vestedTokens(coinbase)
+        .call()
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+      const totalVestedTokensPerUserAdvanced_formatted = new window.BigNumber(
+        totalVestedTokensPerUserAdvanced / 1e18
+      ).toFixed(6);
+
+      setuserVestedTokensAdvanced(totalVestedTokensPerUserAdvanced_formatted);
+    }
+
+    let totalVestedTokensPerUserEnterprise = 0;
+    if (coinbase) {
+      totalVestedTokensPerUserEnterprise = await enterprise_bundle_sc.methods
+        .vestedTokens(coinbase)
+        .call()
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+      const totalVestedTokensPerUserEnterprise_formatted = new window.BigNumber(
+        totalVestedTokensPerUserEnterprise / 1e18
+      ).toFixed(6);
+
+      setuserVestedTokensEnterprise(
+        totalVestedTokensPerUserEnterprise_formatted
+      );
+    }
+  };
+
+  const getInfoTimer = async () => {
+    const basic_bundle_sc = new window.infuraWeb3.eth.Contract(
+      window.BASIC_BUNDLE_ABI,
+      window.config.basic_bundle_address
+    );
+
+    const advanced_bundle_sc = new window.infuraWeb3.eth.Contract(
+      window.ADVANCED_BUNDLE_ABI,
+      window.config.advanced_bundle_address
+    );
+
+    const enterprise_bundle_sc = new window.infuraWeb3.eth.Contract(
+      window.ENTERPRISE_BUNDLE_ABI,
+      window.config.enterprise_bundle_address
+    );
+
+    const lastClaimedTime = await basic_bundle_sc.methods
+      .lastClaimedTime(coinbase)
+      .call()
+      .catch((e) => {
+        console.error(e);
+        return 0;
+      });
+
+    const lastClaimedTimeAdvanced = await advanced_bundle_sc.methods
+      .lastClaimedTime(coinbase)
+      .call()
+      .catch((e) => {
+        console.error(e);
+        return 0;
+      });
+
+    const lastClaimedTimeEnterprise = await enterprise_bundle_sc.methods
+      .lastClaimedTime(coinbase)
+      .call()
+      .catch((e) => {
+        console.error(e);
+        return 0;
+      });
+
+    setcliffTime(Number(lastClaimedTime * 1000));
+
+    setcliffTimeAdvanced(Number(lastClaimedTimeAdvanced * 1000));
+
+    setcliffTimeEnterprise(Number(lastClaimedTimeEnterprise * 1000));
+  };
+
+  const handleWithdraw = async () => {
+    setunlockLoading(true);
+    let web3 = new Web3(window.ethereum);
+    const basic_bundle_sc = new web3.eth.Contract(
+      window.BASIC_BUNDLE_ABI,
+      window.config.basic_bundle_address
+    );
+
+    const gasPrice = await window.infuraWeb3.eth.getGasPrice();
+    console.log("gasPrice", gasPrice);
+    const currentGwei = web3.utils.fromWei(gasPrice, "gwei");
+    // const increasedGwei = parseInt(currentGwei) + 2;
+    // console.log("increasedGwei", increasedGwei);
+
+    const transactionParameters = {
+      gasPrice: web3.utils.toWei(currentGwei.toString(), "gwei"),
+    };
+
+    await basic_bundle_sc.methods
+      .claim()
+      .estimateGas({ from: await window.getCoinbase() })
+      .then((gas) => {
+        transactionParameters.gas = web3.utils.toHex(gas);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    await basic_bundle_sc.methods
+      .claim()
+      .send({ from: await window.getCoinbase(), ...transactionParameters })
+      .then(() => {
+        setunlockStatus("success");
+        setunlockLoading(false);
+
+        setTimeout(() => {
+          setunlockStatus("initial");
+          getInfo();
+          getInfoTimer();
+          onRefreshBalance();
+        }, 5000);
+      })
+      .catch((e) => {
+        console.error(e);
+        window.alertify.error(e?.message);
+
+        setunlockStatus("failed");
+        setunlockLoading(false);
+        setTimeout(() => {
+          setunlockStatus("initial");
+        }, 5000);
+      });
+  };
+
+  const handleWithdrawAdvanced = async () => {
+    setunlockLoadingAdvanced(true);
+    let web3 = new Web3(window.ethereum);
+
+    const advanced_bundle_sc = new web3.eth.Contract(
+      window.ADVANCED_BUNDLE_ABI,
+      window.config.advanced_bundle_address
+    );
+
+    const gasPrice = await window.infuraWeb3.eth.getGasPrice();
+    console.log("gasPrice", gasPrice);
+    const currentGwei = web3.utils.fromWei(gasPrice, "gwei");
+    const transactionParameters = {
+      gasPrice: web3.utils.toWei(currentGwei.toString(), "gwei"),
+    };
+
+    await advanced_bundle_sc.methods
+      .claim()
+      .estimateGas({ from: await window.getCoinbase() })
+      .then((gas) => {
+        transactionParameters.gas = web3.utils.toHex(gas);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    await advanced_bundle_sc.methods
+      .claim()
+      .send({ from: await window.getCoinbase(), ...transactionParameters })
+      .then(() => {
+        setunlockStatusAdvanced("success");
+        setunlockLoadingAdvanced(false);
+
+        setTimeout(() => {
+          setunlockStatusAdvanced("initial");
+          getInfo();
+          getInfoTimer();
+          onRefreshBalance();
+        }, 5000);
+      })
+      .catch((e) => {
+        console.error(e);
+        window.alertify.error(e?.message);
+
+        setunlockStatusAdvanced("failed");
+        setunlockLoadingAdvanced(false);
+        setTimeout(() => {
+          setunlockStatusAdvanced("initial");
+        }, 5000);
+      });
+  };
+
+  const handleWithdrawEnterprise = async () => {
+    setunlockLoadingEnterprise(true);
+    let web3 = new Web3(window.ethereum);
+    const enterprise_bundle_sc = new web3.eth.Contract(
+      window.ENTERPRISE_BUNDLE_ABI,
+      window.config.enterprise_bundle_address
+    );
+    await enterprise_bundle_sc.methods
+      .claim()
+      .send({ from: await window.getCoinbase() })
+      .then(() => {
+        setunlockStatusEnterprise("success");
+        setunlockLoadingEnterprise(false);
+
+        setTimeout(() => {
+          setunlockStatusEnterprise("initial");
+          getInfo();
+          getInfoTimer();
+          onRefreshBalance();
+        }, 5000);
+      })
+      .catch((e) => {
+        console.error(e);
+        window.alertify.error(e?.message);
+
+        setunlockStatusEnterprise("failed");
+        setunlockLoadingEnterprise(false);
+        setTimeout(() => {
+          setunlockStatusEnterprise("initial");
+        }, 5000);
+      });
   };
 
   useEffect(() => {
-    getPriceDYP();
+    getInfo();
+  }, [coinbase]);
+
+  useEffect(() => {
+    if (coinbase && isConnected) {
+      getInfoTimer();
+    }
+  }, [coinbase, isConnected]);
+
+  useEffect(() => {
+    getBundlePrices();
   }, []);
 
-  console.log(dypPrice);
+  useEffect(() => {
+    if (userVestedTokensAdvanced > 0) {
+      setSecondLock(true);
+    }
+    if (userVestedTokens > 0) {
+      setFirstLock(true);
+    }
+    if (userVestedTokensEnterprise > 0) {
+      setThirdLock(true);
+    }
+  }, [userVestedTokens, userVestedTokensAdvanced, userVestedTokensEnterprise]);
 
   return (
     <>
@@ -148,7 +692,10 @@ const PricingPackages = ({ dypBalance }) => {
                   <button
                     className="btn filledbtn px-5 py-2"
                     style={{ fontSize: "14px" }}
-                    onClick={() => setWithdrawPopup(true)}
+                    onClick={() => {
+                      setWithdrawPopup(true);
+                      setActiveBundle(1);
+                    }}
                   >
                     Unlock
                   </button>
@@ -160,14 +707,19 @@ const PricingPackages = ({ dypBalance }) => {
                       Minimum Lock Amount:
                     </span>
                     <h6 className="package-plan-price mb-0 text-white">
-                      {getFormattedNumber(25000 / dypPrice, 0)} DYP
+                      {getFormattedNumber(bundlePrices.basic.priceInDyp, 0)} DYP
                     </h6>
-                    <span className="package-price-usd">$25,000</span>
+                    <span className="package-price-usd">
+                      ${getFormattedNumber(bundlePrices.basic.priceInUsd, 0)}
+                    </span>
                   </div>
                   <button
                     className="btn filledbtn px-5 py-2"
                     style={{ fontSize: "14px" }}
-                    onClick={() => {setActiveBundle(1); setPopup(true);}}
+                    onClick={() => {
+                      setActiveBundle(1);
+                      setPopup(true);
+                    }}
                   >
                     Lock
                   </button>
@@ -217,7 +769,10 @@ const PricingPackages = ({ dypBalance }) => {
                   <button
                     className="btn filledbtn px-5 py-2"
                     style={{ fontSize: "14px" }}
-                    onClick={() => setWithdrawPopup(true)}
+                    onClick={() => {
+                      setWithdrawPopup(true);
+                      setActiveBundle(2);
+                    }}
                   >
                     Unlock
                   </button>
@@ -229,14 +784,20 @@ const PricingPackages = ({ dypBalance }) => {
                       Minimum Lock Amount:
                     </span>
                     <h6 className="package-plan-price mb-0 text-white">
-                      {getFormattedNumber(50000 / dypPrice, 0)} DYP
+                      {getFormattedNumber(bundlePrices.advanced.priceInDyp, 0)}{" "}
+                      DYP
                     </h6>
-                    <span className="package-price-usd">$50,000</span>
+                    <span className="package-price-usd">
+                      ${getFormattedNumber(bundlePrices.advanced.priceInUsd, 0)}
+                    </span>
                   </div>
                   <button
                     className="btn filledbtn px-5 py-2"
                     style={{ fontSize: "14px" }}
-                    onClick={() => {setActiveBundle(2); setPopup(true);}}
+                    onClick={() => {
+                      setActiveBundle(2);
+                      setPopup(true);
+                    }}
                   >
                     Lock
                   </button>
@@ -284,7 +845,10 @@ const PricingPackages = ({ dypBalance }) => {
                   <button
                     className="btn filledbtn px-5 py-2"
                     style={{ fontSize: "14px" }}
-                    onClick={() => setWithdrawPopup(true)}
+                    onClick={() => {
+                      setWithdrawPopup(true);
+                      setActiveBundle(3);
+                    }}
                   >
                     Unlock
                   </button>
@@ -296,14 +860,27 @@ const PricingPackages = ({ dypBalance }) => {
                       Minimum Lock Amount:
                     </span>
                     <h6 className="package-plan-price mb-0 text-white">
-                      {getFormattedNumber(100000 / dypPrice, 0)} DYP
+                      {getFormattedNumber(
+                        bundlePrices.enterprise.priceInDyp,
+                        0
+                      )}{" "}
+                      DYP
                     </h6>
-                    <span className="package-price-usd">$100,000</span>
+                    <span className="package-price-usd">
+                      $
+                      {getFormattedNumber(
+                        bundlePrices.enterprise.priceInUsd,
+                        0
+                      )}
+                    </span>
                   </div>
                   <button
                     className="btn filledbtn px-5 py-2"
                     style={{ fontSize: "14px" }}
-                    onClick={() => {setActiveBundle(3); setPopup(true);}}
+                    onClick={() => {
+                      setActiveBundle(3);
+                      setPopup(true);
+                    }}
                   >
                     Lock
                   </button>
@@ -315,19 +892,97 @@ const PricingPackages = ({ dypBalance }) => {
       </div>
       <OutsideClickHandler onOutsideClick={() => setPopup(false)}>
         <BundlePopup
+          dypBalance={dypBalance}
           activeBundle={activeBundle}
+          bundlePrices={bundlePrices}
+          coinbase={coinbase}
+          isConnected={isConnected}
+          chainId={networkId}
+          handleSwitchNetwork={handleEthPool}
+          onConnectWallet={handleConnection}
           setFirstLock={setFirstLock}
           setSecondLock={setSecondLock}
           setThirdLock={setThirdLock}
           active={popup}
           onClose={() => setPopup(false)}
+          onRefreshBalance={() => {
+            onRefreshBalance();
+            getInfoTimer();
+            getInfo();
+          }}
         />
       </OutsideClickHandler>
       <OutsideClickHandler onOutsideClick={() => setWithdrawPopup(false)}>
         <UnlockPopup
           active={withdrawPopup}
           onClose={() => setWithdrawPopup(false)}
-          activeBundle={activeBundle}
+          isConnected={isConnected}
+          chainId={networkId}
+          handleSwitchNetwork={handleEthPool}
+          onConnectWallet={handleConnection}
+          cliffTime={
+            activeBundle === 1
+              ? cliffTime
+              : activeBundle === 2
+              ? cliffTimeAdvanced
+              : cliffTimeEnterprise
+          }
+          onTimerFinished={(value) => {
+            activeBundle === 1
+              ? setcanUnlock(value)
+              : activeBundle === 2
+              ? setcanUnlockAdvanced(value)
+              : setcanUnlockEnterprise(value);
+          }}
+          canUnlock={
+            activeBundle === 1
+              ? canUnlock
+              : activeBundle === 2
+              ? canUnlockAdvanced
+              : canUnlockEnterprise
+          }
+          pendingTokens={
+            activeBundle === 1
+              ? pendingTokens
+              : activeBundle === 2
+              ? pendingTokensAdvanced
+              : pendingTokensEnterprise
+          }
+          userClaimedTokens={
+            activeBundle === 1
+              ? userClaimedTokens
+              : activeBundle === 2
+              ? userClaimedTokensAdvanced
+              : userClaimedTokensEnterprise
+          }
+          totalVestedTokens={
+            activeBundle === 1
+              ? userVestedTokens
+              : activeBundle === 2
+              ? userVestedTokensAdvanced
+              : userVestedTokensEnterprise
+          }
+          handleUnlock={() => {
+            activeBundle === 1
+              ? handleWithdraw()
+              : activeBundle === 2
+              ? handleWithdrawAdvanced()
+              : handleWithdrawEnterprise();
+          }}
+          unlockStatus={
+            activeBundle === 1
+              ? unlockStatus
+              : activeBundle === 2
+              ? unlockStatusAdvanced
+              : unlockStatusEnterprise
+          }
+          unlockLoading={
+            activeBundle === 1
+              ? unlockLoading
+              : activeBundle === 2
+              ? unlockLoadingAdvanced
+              : unlockLoadingEnterprise
+          }
         />
       </OutsideClickHandler>
     </>

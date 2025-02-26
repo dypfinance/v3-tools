@@ -125,6 +125,7 @@ function App() {
   const [chests, setChests] = useState([]);
   const [openedChests, setOpenedChests] = useState([]);
   const [chestCount, setChestCount] = useState(0);
+  const [balanceCount, setBalanceCount] = useState(0);
 
   const [opbnbchests, setopbnbChests] = useState([]);
   const [opbnbopenedChests, setopbnbOpenedChests] = useState([]);
@@ -136,7 +137,7 @@ function App() {
   const [baseBalance, setbaseBalance] = useState(0);
   const [opBnbBalance, setopBnbBalance] = useState(0);
 
-  const [dypBalance, setDypBalance] = useState(0)
+  const [dypBalance, setDypBalance] = useState(0);
   const [userPools, setuserPools] = useState([]);
   const [previousWeeklyVersion, setpreviousWeeklyVersion] = useState(0);
   const [previousMonthlyVersion, setpreviousMonthlyVersion] = useState(0);
@@ -561,7 +562,6 @@ function App() {
     const tokenAddress_base = window.config.reward_token_dypiusv2_base_address;
     const tokenAddress_opbnb = window.config.token_dypius_new_opbnb_address;
 
-
     const walletAddress = coinbase;
     const TokenABI = window.ERC20_ABI;
 
@@ -615,7 +615,7 @@ function App() {
           return 0;
         });
 
-        setDypBalance(ethBalance)
+      setDypBalance(ethBalance);
 
       let ethBalance_idyp = await contract1_idyp.methods
         .balanceOf(walletAddress)
@@ -658,9 +658,9 @@ function App() {
           console.error(e);
           return 0;
         });
-        setbaseBalance(Number(baseBalance))
+      setbaseBalance(Number(baseBalance));
 
-        let opbnbBalance = await contract5.methods
+      let opbnbBalance = await contract5.methods
         .balanceOf(walletAddress)
         .call()
         .then((data) => {
@@ -673,7 +673,7 @@ function App() {
           console.error(e);
           return 0;
         });
-        setopBnbBalance(Number(opbnbBalance))
+      setopBnbBalance(Number(opbnbBalance));
 
       let avaxBalance_idyp = await contract2_idyp.methods
         .balanceOf(walletAddress)
@@ -1139,7 +1139,7 @@ function App() {
     }
   };
 
-  const fetchPreviousCawsAdvWinners = async () =>{
+  const fetchPreviousCawsAdvWinners = async () => {
     let leaderboard2 = [];
     try {
       leaderboard2 = await (
@@ -1151,8 +1151,7 @@ function App() {
     leaderboard2 = leaderboard2.sort((a, b) => b.score - a.score);
 
     fillRecordsCaws2d(leaderboard2);
- 
-  }
+  };
 
   const getAllChests = async () => {
     let headersList = {
@@ -1744,10 +1743,15 @@ function App() {
 
   useEffect(() => {
     if (isConnected && coinbase) {
-      getAllBalance();
       fetchUserPools();
     }
   }, [isConnected, coinbase]);
+
+  useEffect(() => {
+    if (isConnected && coinbase) {
+      getAllBalance();
+    }
+  }, [isConnected, coinbase, balanceCount]);
 
   const onPlayerFetch = () => {
     refetchPlayer();
@@ -1996,7 +2000,9 @@ function App() {
                       <Games
                         leaderboardCaws2d={leaderboard}
                         fetchCawsAdvLeaderboard={loadLeaderboardDataCaws2dGame}
-                        fetchPreviousCawsAdvWinners={fetchPreviousCawsAdvWinners}
+                        fetchPreviousCawsAdvWinners={
+                          fetchPreviousCawsAdvWinners
+                        }
                         handleConnection={showModal}
                         isConnected={isConnected}
                         networkId={parseInt(networkId)}
@@ -2155,8 +2161,28 @@ setkittyDashRecords */}
                       />
                     }
                   />
-                  <Route exact path="/bundles" element={<PricingPackages dypBalance={dypBalance} />} />
-                  <Route exact path="/bundles-terms-of-service" element={<BundleTOS />} />
+                  <Route
+                    exact
+                    path="/bundles"
+                    element={
+                      <PricingPackages
+                        dypBalance={dypBalance}
+                        networkId={parseInt(networkId)}
+                        isConnected={isConnected}
+                        coinbase={coinbase}
+                        handleConnection={showModal}
+                        onRefreshBalance={() => {
+                          setBalanceCount(balanceCount + 1);
+                        }}
+                        handleSwitchNetwork={handleSwitchNetwork}
+                      />
+                    }
+                  />
+                  <Route
+                    exact
+                    path="/bundles-terms-of-service"
+                    element={<BundleTOS />}
+                  />
 
                   <Route
                     exact
