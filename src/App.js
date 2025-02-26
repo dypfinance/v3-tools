@@ -72,6 +72,8 @@ import LoyaltyProgram from "./components/loyalty/LoyaltyProgram.js";
 import { useParams } from "react-router-dom";
 import LaunchpadMidle from "./components/whitelist/LaunchpadMidle.js";
 import LaunchpadDetails from "./components/launchpad/launchpaddetails/LaunchpadDetails.js";
+import PricingPackages from "./components/pricingpackages/PricingPackages.js";
+import BundleTOS from "./components/pricingpackages/BundleTOS.js";
 
 const LockerWrapper = (props) => {
   const { pair_id } = useParams();
@@ -134,6 +136,7 @@ function App() {
   const [baseBalance, setbaseBalance] = useState(0);
   const [opBnbBalance, setopBnbBalance] = useState(0);
 
+  const [dypBalance, setDypBalance] = useState(0)
   const [userPools, setuserPools] = useState([]);
   const [previousWeeklyVersion, setpreviousWeeklyVersion] = useState(0);
   const [previousMonthlyVersion, setpreviousMonthlyVersion] = useState(0);
@@ -611,6 +614,8 @@ function App() {
           console.error(e);
           return 0;
         });
+
+        setDypBalance(ethBalance)
 
       let ethBalance_idyp = await contract1_idyp.methods
         .balanceOf(walletAddress)
@@ -2150,6 +2155,8 @@ setkittyDashRecords */}
                       />
                     }
                   />
+                  <Route exact path="/bundles" element={<PricingPackages dypBalance={dypBalance} />} />
+                  <Route exact path="/bundles-terms-of-service" element={<BundleTOS />} />
 
                   <Route
                     exact
