@@ -276,7 +276,7 @@ const BundlePopup = ({
   };
 
   useEffect(() => {
-    if (isConnected && coinbase) {
+    if (isConnected && coinbase && chainId === 1) {
       checkApproval(
         activeBundle === 1
           ? bundlePrices.basic.priceInDyp
@@ -286,7 +286,7 @@ const BundlePopup = ({
         activeBundle
       );
     }
-  }, [activeBundle, isConnected, coinbase]);
+  }, [activeBundle, isConnected, coinbase, chainId]);
 
   useEffect(() => {
     setTerms(false);
@@ -393,10 +393,10 @@ const BundlePopup = ({
       <div className="bundle-amount-wrapper w-100 d-flex p-3 align-items-center justify-content-center flex-column ">
         <h6 className="mb-0 bundle-dyp-amount">
           {activeBundle === 1
-            ? getFormattedNumber(bundlePrices.basic.priceInDyp, 0)
+            ? getFormattedNumber(bundlePrices.basic.priceInDyp, 2)
             : activeBundle === 2
-            ? getFormattedNumber(bundlePrices.advanced.priceInDyp, 0)
-            : getFormattedNumber(bundlePrices.enterprise.priceInDyp, 0)}{" "}
+            ? getFormattedNumber(bundlePrices.advanced.priceInDyp, 2)
+            : getFormattedNumber(bundlePrices.enterprise.priceInDyp, 2)}{" "}
           DYP
         </h6>
         <span className="mb-0 bundle-usd-amount">

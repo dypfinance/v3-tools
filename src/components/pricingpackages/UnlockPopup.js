@@ -6,13 +6,13 @@ import "./pricingpackages.css";
 import Countdown from "react-countdown";
 import getFormattedNumber from "../../functions/get-formatted-number";
 
-const renderer = ({ days, hours, minutes, completed }) => {
+const renderer = ({ days, hours, minutes }) => {
   // Render a countdown
   return (
     <div className="d-flex align-items-center gap-2">
       <span className="unlock-timer">{days} days</span>
       <span className="unlock-timer">{hours} hours</span>
-      <span className="unlock-timer">{minutes} min</span>
+      <span className="unlock-timer">{minutes} minutes</span>
     </div>
   );
 };

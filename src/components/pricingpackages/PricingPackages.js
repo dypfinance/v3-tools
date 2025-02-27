@@ -144,7 +144,8 @@ const PricingPackages = ({
       });
 
     let priceInDypBasic2 = new BigNumber(priceInDypBasic)
-      .times(1.01)
+      .times(1002)
+      .div(1000)
       .toFixed(6);
 
     let formatted_priceInDypBasic = priceInDypBasic2 / 10 ** 18;
@@ -171,7 +172,8 @@ const PricingPackages = ({
       });
 
     let priceInDypAdvanced2 = new BigNumber(priceInDypAdvanced)
-      .times(1.01)
+      .times(1002)
+      .div(1000)
       .toFixed(6);
 
     let formatted_priceInDypAdvanced = priceInDypAdvanced2 / 10 ** 18;
@@ -200,7 +202,8 @@ const PricingPackages = ({
       });
 
     let priceInDypEnterprise2 = new BigNumber(priceInDypEnterprise)
-      .times(1.01)
+      .times(1002)
+      .div(1000)
       .toFixed(6);
 
     let formatted_priceInDypEnterprise = priceInDypEnterprise2 / 10 ** 18;
@@ -606,15 +609,9 @@ const PricingPackages = ({
   }, []);
 
   useEffect(() => {
-    if (userVestedTokensAdvanced > 0) {
-      setSecondLock(true);
-    }
-    if (userVestedTokens > 0) {
-      setFirstLock(true);
-    }
-    if (userVestedTokensEnterprise > 0) {
-      setThirdLock(true);
-    }
+    setFirstLock(userVestedTokens > 0 ? true : false);
+    setSecondLock(userVestedTokensAdvanced > 0 ? true : false);
+    setThirdLock(userVestedTokensEnterprise > 0 ? true : false);
   }, [userVestedTokens, userVestedTokensAdvanced, userVestedTokensEnterprise]);
 
   return (
@@ -678,27 +675,47 @@ const PricingPackages = ({
               </div>
               {firstLock ? (
                 <div
-                  className="pricing-package-buy-wrapper p-3 d-flex gap-3 align-items-center justify-content-center w-100"
+                  className="pricing-package-buy-wrapper p-3 d-flex flex-column gap-2 align-items-center justify-content-center w-100"
                   style={{ minHeight: "108.8px" }}
                 >
-                  <a
-                    href="https://docs.google.com/forms/d/e/1FAIpQLSf9l087pAlIjiyJQniUXDfbl5OwXUA6nvehCDr-dpsNYVcwEg/viewform"
-                    target="_blank"
-                    className="btn contact-btn px-5 py-2"
-                    style={{ fontSize: "14px" }}
-                  >
-                    Contact
-                  </a>
-                  <button
-                    className="btn filledbtn px-5 py-2"
-                    style={{ fontSize: "14px" }}
-                    onClick={() => {
-                      setWithdrawPopup(true);
-                      setActiveBundle(1);
-                    }}
-                  >
-                    Unlock
-                  </button>
+                  <div className="d-flex gap-3 align-items-center justify-content-center w-100">
+                    <a
+                      href="https://docs.google.com/forms/d/e/1FAIpQLSf9l087pAlIjiyJQniUXDfbl5OwXUA6nvehCDr-dpsNYVcwEg/viewform"
+                      target="_blank"
+                      className="btn contact-btn px-5 py-2"
+                      style={{ fontSize: "14px" }}
+                    >
+                      Contact
+                    </a>
+                    <button
+                      className="btn filledbtn px-5 py-2"
+                      style={{ fontSize: "14px" }}
+                      onClick={() => {
+                        setWithdrawPopup(true);
+                        setActiveBundle(1);
+                      }}
+                    >
+                      {userVestedTokens - userClaimedTokens > 0
+                        ? "Unlock"
+                        : "Unlocked"}
+                    </button>
+                  </div>
+                  {userVestedTokens - userClaimedTokens === 0 && (
+                    <div
+                      className="actionwrapper3 h-auto p-2"
+                      style={{ background: "#3a377a" }}
+                    >
+                      <img
+                        src="https://cdn.worldofdypians.com/tools/more-info.svg"
+                        alt=""
+                        className=""
+                      />
+                      <span className="actionText3">
+                        You are currently using this bundle. You need to upgrade
+                        to another bundle to receive support
+                      </span>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="pricing-package-buy-wrapper p-3 d-flex gap-2 align-items-center justify-content-between w-100">
@@ -707,7 +724,7 @@ const PricingPackages = ({
                       Minimum Lock Amount:
                     </span>
                     <h6 className="package-plan-price mb-0 text-white">
-                      {getFormattedNumber(bundlePrices.basic.priceInDyp, 0)} DYP
+                      {getFormattedNumber(bundlePrices.basic.priceInDyp, 2)} DYP
                     </h6>
                     <span className="package-price-usd">
                       ${getFormattedNumber(bundlePrices.basic.priceInUsd, 0)}
@@ -755,27 +772,47 @@ const PricingPackages = ({
               </div>
               {secondLock ? (
                 <div
-                  className="pricing-package-buy-wrapper p-3 d-flex gap-3 align-items-center justify-content-center w-100"
+                  className="pricing-package-buy-wrapper p-3 d-flex flex-column gap-2 align-items-center justify-content-center w-100"
                   style={{ minHeight: "108.8px" }}
                 >
-                  <a
-                    href="https://docs.google.com/forms/d/e/1FAIpQLSf9l087pAlIjiyJQniUXDfbl5OwXUA6nvehCDr-dpsNYVcwEg/viewform"
-                    target="_blank"
-                    className="btn contact-btn px-5 py-2"
-                    style={{ fontSize: "14px" }}
-                  >
-                    Contact
-                  </a>
-                  <button
-                    className="btn filledbtn px-5 py-2"
-                    style={{ fontSize: "14px" }}
-                    onClick={() => {
-                      setWithdrawPopup(true);
-                      setActiveBundle(2);
-                    }}
-                  >
-                    Unlock
-                  </button>
+                  <div className="d-flex gap-3 align-items-center justify-content-center w-100">
+                    <a
+                      href="https://docs.google.com/forms/d/e/1FAIpQLSf9l087pAlIjiyJQniUXDfbl5OwXUA6nvehCDr-dpsNYVcwEg/viewform"
+                      target="_blank"
+                      className="btn contact-btn px-5 py-2"
+                      style={{ fontSize: "14px" }}
+                    >
+                      Contact
+                    </a>
+                    <button
+                      className="btn filledbtn px-5 py-2"
+                      style={{ fontSize: "14px" }}
+                      onClick={() => {
+                        setWithdrawPopup(true);
+                        setActiveBundle(2);
+                      }}
+                    >
+                      {userVestedTokensAdvanced - userClaimedTokensAdvanced > 0
+                        ? "Unlock"
+                        : "Unlocked"}
+                    </button>
+                  </div>
+                  {userVestedTokensAdvanced - userClaimedTokensAdvanced === 0 && (
+                    <div
+                      className="actionwrapper3 h-auto p-2"
+                      style={{ background: "#3a377a" }}
+                    >
+                      <img
+                        src="https://cdn.worldofdypians.com/tools/more-info.svg"
+                        alt=""
+                        className=""
+                      />
+                      <span className="actionText3">
+                        You are currently using this bundle. You need to upgrade
+                        to another bundle to receive support
+                      </span>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="pricing-package-buy-wrapper p-3 d-flex gap-2 align-items-center justify-content-between w-100">
@@ -784,7 +821,7 @@ const PricingPackages = ({
                       Minimum Lock Amount:
                     </span>
                     <h6 className="package-plan-price mb-0 text-white">
-                      {getFormattedNumber(bundlePrices.advanced.priceInDyp, 0)}{" "}
+                      {getFormattedNumber(bundlePrices.advanced.priceInDyp, 2)}{" "}
                       DYP
                     </h6>
                     <span className="package-price-usd">
@@ -830,29 +867,49 @@ const PricingPackages = ({
               </div>
 
               {thirdLock ? (
-                <div
-                  className="pricing-package-buy-wrapper p-3 d-flex gap-3 align-items-center justify-content-center w-100"
-                  style={{ minHeight: "108.8px" }}
-                >
-                  <a
-                    href="https://docs.google.com/forms/d/e/1FAIpQLSf9l087pAlIjiyJQniUXDfbl5OwXUA6nvehCDr-dpsNYVcwEg/viewform"
-                    target="_blank"
-                    className="btn contact-btn px-5 py-2"
-                    style={{ fontSize: "14px" }}
-                  >
-                    Contact
-                  </a>
-                  <button
-                    className="btn filledbtn px-5 py-2"
-                    style={{ fontSize: "14px" }}
-                    onClick={() => {
-                      setWithdrawPopup(true);
-                      setActiveBundle(3);
-                    }}
-                  >
-                    Unlock
-                  </button>
-                </div>
+                   <div
+                   className="pricing-package-buy-wrapper p-3 d-flex flex-column gap-2 align-items-center justify-content-center w-100"
+                   style={{ minHeight: "108.8px" }}
+                 >
+                   <div className="d-flex gap-3 align-items-center justify-content-center w-100">
+                     <a
+                       href="https://docs.google.com/forms/d/e/1FAIpQLSf9l087pAlIjiyJQniUXDfbl5OwXUA6nvehCDr-dpsNYVcwEg/viewform"
+                       target="_blank"
+                       className="btn contact-btn px-5 py-2"
+                       style={{ fontSize: "14px" }}
+                     >
+                       Contact
+                     </a>
+                     <button
+                       className="btn filledbtn px-5 py-2"
+                       style={{ fontSize: "14px" }}
+                       onClick={() => {
+                         setWithdrawPopup(true);
+                         setActiveBundle(3);
+                       }}
+                     >
+                       {userVestedTokensEnterprise - userClaimedTokensEnterprise > 0
+                         ? "Unlock"
+                         : "Unlocked"}
+                     </button>
+                   </div>
+                   {userVestedTokensEnterprise - userClaimedTokensEnterprise === 0 && (
+                     <div
+                       className="actionwrapper3 h-auto p-2"
+                       style={{ background: "#3a377a" }}
+                     >
+                       <img
+                         src="https://cdn.worldofdypians.com/tools/more-info.svg"
+                         alt=""
+                         className=""
+                       />
+                       <span className="actionText3">
+                         You are currently using this bundle. You need to upgrade
+                         to another bundle to receive support
+                       </span>
+                     </div>
+                   )}
+                 </div>
               ) : (
                 <div className="pricing-package-buy-wrapper p-3 d-flex gap-2 align-items-center justify-content-between w-100">
                   <div className="d-flex flex-column">
@@ -862,7 +919,7 @@ const PricingPackages = ({
                     <h6 className="package-plan-price mb-0 text-white">
                       {getFormattedNumber(
                         bundlePrices.enterprise.priceInDyp,
-                        0
+                        2
                       )}{" "}
                       DYP
                     </h6>
