@@ -2270,7 +2270,8 @@ window.config = {
   commitment_midle_address: "0x5672F5E60a390206E8a6771820ca27DD2bD9a0b0",
   commitment_midle_eth_address: "0xE22Eecf2aDD8bfF17eDCB368792427a89CAB7f22",
 
-  basic_bundle_address: "0x0529a0267cf78c4625dc205c7aa2b607225daed1",
+  // basic_bundle_address: "0x0529a0267cf78c4625dc205c7aa2b607225daed1",: "0x0529a0267cf78c4625dc205c7aa2b607225daed1",
+  basic_bundle_address: "0x8398819f18d3114d78bcc117cd1c78ac2f747644",
   advanced_bundle_address: "0x86d675f534bc288d73da70bb13114420d55e81b5",
   enterprise_bundle_address: "0x87176c11041eae00d35dccd069ab8c0c1108e707",
 
