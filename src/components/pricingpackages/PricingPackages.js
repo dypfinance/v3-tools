@@ -596,7 +596,7 @@ const PricingPackages = ({
 
   useEffect(() => {
     getInfo();
-  }, [coinbase]);
+  }, [coinbase, withdrawPopup]);
 
   useEffect(() => {
     if (coinbase && isConnected) {
@@ -797,7 +797,8 @@ const PricingPackages = ({
                         : "Unlocked"}
                     </button>
                   </div>
-                  {userVestedTokensAdvanced - userClaimedTokensAdvanced === 0 && (
+                  {userVestedTokensAdvanced - userClaimedTokensAdvanced ===
+                    0 && (
                     <div
                       className="actionwrapper3 h-auto p-2"
                       style={{ background: "#3a377a" }}
@@ -867,49 +868,52 @@ const PricingPackages = ({
               </div>
 
               {thirdLock ? (
-                   <div
-                   className="pricing-package-buy-wrapper p-3 d-flex flex-column gap-2 align-items-center justify-content-center w-100"
-                   style={{ minHeight: "108.8px" }}
-                 >
-                   <div className="d-flex gap-3 align-items-center justify-content-center w-100">
-                     <a
-                       href="https://docs.google.com/forms/d/e/1FAIpQLSf9l087pAlIjiyJQniUXDfbl5OwXUA6nvehCDr-dpsNYVcwEg/viewform"
-                       target="_blank"
-                       className="btn contact-btn px-5 py-2"
-                       style={{ fontSize: "14px" }}
-                     >
-                       Contact
-                     </a>
-                     <button
-                       className="btn filledbtn px-5 py-2"
-                       style={{ fontSize: "14px" }}
-                       onClick={() => {
-                         setWithdrawPopup(true);
-                         setActiveBundle(3);
-                       }}
-                     >
-                       {userVestedTokensEnterprise - userClaimedTokensEnterprise > 0
-                         ? "Unlock"
-                         : "Unlocked"}
-                     </button>
-                   </div>
-                   {userVestedTokensEnterprise - userClaimedTokensEnterprise === 0 && (
-                     <div
-                       className="actionwrapper3 h-auto p-2"
-                       style={{ background: "#3a377a" }}
-                     >
-                       <img
-                         src="https://cdn.worldofdypians.com/tools/more-info.svg"
-                         alt=""
-                         className=""
-                       />
-                       <span className="actionText3">
-                         You are currently using this bundle. You need to upgrade
-                         to another bundle to receive support
-                       </span>
-                     </div>
-                   )}
-                 </div>
+                <div
+                  className="pricing-package-buy-wrapper p-3 d-flex flex-column gap-2 align-items-center justify-content-center w-100"
+                  style={{ minHeight: "108.8px" }}
+                >
+                  <div className="d-flex gap-3 align-items-center justify-content-center w-100">
+                    <a
+                      href="https://docs.google.com/forms/d/e/1FAIpQLSf9l087pAlIjiyJQniUXDfbl5OwXUA6nvehCDr-dpsNYVcwEg/viewform"
+                      target="_blank"
+                      className="btn contact-btn px-5 py-2"
+                      style={{ fontSize: "14px" }}
+                    >
+                      Contact
+                    </a>
+                    <button
+                      className="btn filledbtn px-5 py-2"
+                      style={{ fontSize: "14px" }}
+                      onClick={() => {
+                        setWithdrawPopup(true);
+                        setActiveBundle(3);
+                      }}
+                    >
+                      {userVestedTokensEnterprise -
+                        userClaimedTokensEnterprise >
+                      0
+                        ? "Unlock"
+                        : "Unlocked"}
+                    </button>
+                  </div>
+                  {userVestedTokensEnterprise - userClaimedTokensEnterprise ===
+                    0 && (
+                    <div
+                      className="actionwrapper3 h-auto p-2"
+                      style={{ background: "#3a377a" }}
+                    >
+                      <img
+                        src="https://cdn.worldofdypians.com/tools/more-info.svg"
+                        alt=""
+                        className=""
+                      />
+                      <span className="actionText3">
+                        You are currently using this bundle. You need to upgrade
+                        to another bundle to receive support
+                      </span>
+                    </div>
+                  )}
+                </div>
               ) : (
                 <div className="pricing-package-buy-wrapper p-3 d-flex gap-2 align-items-center justify-content-between w-100">
                   <div className="d-flex flex-column">

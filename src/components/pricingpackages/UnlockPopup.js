@@ -76,7 +76,7 @@ const UnlockPopup = ({
         className="d-flex flex-column gap-2 w-100 pb-2"
         style={{ borderBottom: "1px solid #3B3C68" }}
       >
-        <span className="unlock-timer-span">Timer</span>
+        <span className="unlock-timer-span">Unlock Timer</span>
         {cliffTime > 0 ? (
           <Countdown
             date={cliffTime}
