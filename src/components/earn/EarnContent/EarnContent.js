@@ -912,7 +912,7 @@ const EarnContent = ({
       ) 
       : option === "Staking" &&
         expiredPools === false &&
-        stake === "avax" 
+        (stake === "avax" || stake === 'base') 
          ? (
         <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
           <img
