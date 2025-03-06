@@ -75,10 +75,30 @@ const Sidebar = (props) => {
       ],
     },
     {
-      label: "Launchpad",
+      label: "Accelerator",
       icon: "launchpadIcon",
-      link: "/launchpad",
+      link: "/accelerator-program",
+      children: [
+        // {
+        //   title: "Staking",
+        //   link: "/earn/defi-staking",
+        // },
+        {
+          title: "Accelerator",
+          link: "/accelerator-program",
+        },
+
+        {
+          title: "Launchpad",
+          link: "/launchpad",
+        },
+        {
+          title: "DYP Locker",
+          link: "/locker",
+        },
+      ],
     },
+
     {
       label: "Games",
       icon: "gamesIcon",
@@ -133,11 +153,7 @@ const Sidebar = (props) => {
       //   },
       // ],
     },
-    {
-      label: "DYP Locker",
-      icon: "lockerIcon",
-      link: "/locker",
-    },
+
     // {
     //   label: "Projects",
     //   icon: "projectsIcon",
@@ -223,7 +239,9 @@ const Sidebar = (props) => {
                         ? "active-width justify-content-start ms-4"
                         : "justify-content-center"
                     } align-items-center ${
-                      (window.location.pathname.includes(sideItem.link)) ? "active-side-link" : null
+                      window.location.pathname.includes(sideItem.link)
+                        ? "active-side-link"
+                        : null
                     }`}
                     onClick={() => setActiveLink(sideItem.label)}
                     onMouseEnter={() => setHover(sideItem.label)}
@@ -232,7 +250,8 @@ const Sidebar = (props) => {
                     <img
                       src={`https://cdn.worldofdypians.com/tools/${
                         activeLink === sideItem.label ||
-                        hover === sideItem.label || window.location.pathname === sideItem.link
+                        hover === sideItem.label ||
+                        window.location.pathname === sideItem.link
                           ? sideItem.icon + "Active.svg"
                           : sideItem.icon + ".svg"
                       }`}
@@ -244,7 +263,8 @@ const Sidebar = (props) => {
                         <h3
                           className={
                             activeLink === sideItem.label ||
-                            hover === sideItem.label || window.location.pathname === sideItem.link
+                            hover === sideItem.label ||
+                            window.location.pathname === sideItem.link
                               ? "active-text"
                               : "sideitem-text"
                           }
@@ -280,7 +300,7 @@ const Sidebar = (props) => {
                             key={index}
                             to={child.link}
                             className={(isActive) =>
-                             window.location.pathname === child.link
+                              window.location.pathname === child.link
                                 ? "accordion-child accordion-child-active d-flex align-items-center gap-1"
                                 : "accordion-child d-flex align-items-center gap-1"
                             }
@@ -308,7 +328,8 @@ const Sidebar = (props) => {
                           ? "active-width justify-content-start ms-4"
                           : "justify-content-center"
                       } align-items-center ${
-                        activeLink === sideItem.label || window.location.pathname === sideItem.link
+                        activeLink === sideItem.label ||
+                        window.location.pathname === sideItem.link
                           ? "active-side-link"
                           : null
                       }`}
@@ -319,7 +340,8 @@ const Sidebar = (props) => {
                       <img
                         src={`https://cdn.worldofdypians.com/tools/${
                           activeLink === sideItem.label ||
-                          hover === sideItem.label || window.location.pathname === sideItem.link
+                          hover === sideItem.label ||
+                          window.location.pathname === sideItem.link
                             ? sideItem.icon + "Active.svg"
                             : sideItem.icon + ".svg"
                         }`}
@@ -330,7 +352,8 @@ const Sidebar = (props) => {
                         <h3
                           className={
                             activeLink === sideItem.label ||
-                            hover === sideItem.label || window.location.pathname === sideItem.link
+                            hover === sideItem.label ||
+                            window.location.pathname === sideItem.link
                               ? "active-text"
                               : "sideitem-text"
                           }

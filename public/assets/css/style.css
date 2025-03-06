@@ -4652,6 +4652,8 @@ figure{
   font-size: 12px;
   line-height: 18px;
   opacity: 1 !important;
+  pointer-events: none;
+
 }
 
 .success-button {

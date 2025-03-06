@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import OutsideClickHandler from "react-outside-click-handler";
- 
 
 const MobileMenu = () => {
   const [activeIcon, setActiveIcon] = useState("");
@@ -59,7 +58,11 @@ const MobileMenu = () => {
             } p-2 justify-content-center`}
           >
             <img
-              src={activeIcon === "earn" ? 'https://cdn.worldofdypians.com/tools/earnIconActive.svg' : 'https://cdn.worldofdypians.com/tools/earnIcon.svg'}
+              src={
+                activeIcon === "earn"
+                  ? "https://cdn.worldofdypians.com/tools/earnIconActive.svg"
+                  : "https://cdn.worldofdypians.com/tools/earnIcon.svg"
+              }
               width={25}
               height={25}
               alt=""
@@ -80,8 +83,8 @@ const MobileMenu = () => {
             <img
               src={
                 activeIcon === "governance"
-                  ? 'https://cdn.worldofdypians.com/tools/governanceIconActive.svg'
-                  : 'https://cdn.worldofdypians.com/tools/governanceIcon.svg'
+                  ? "https://cdn.worldofdypians.com/tools/governanceIconActive.svg"
+                  : "https://cdn.worldofdypians.com/tools/governanceIcon.svg"
               }
               width={25}
               height={25}
@@ -101,7 +104,11 @@ const MobileMenu = () => {
             } p-2 justify-content-center`}
           >
             <img
-              src={activeIcon === "bridge" ? 'https://cdn.worldofdypians.com/tools/bridgeIconActive.svg' : 'https://cdn.worldofdypians.com/tools/bridgeIcon.svg'}
+              src={
+                activeIcon === "bridge"
+                  ? "https://cdn.worldofdypians.com/tools/bridgeIconActive.svg"
+                  : "https://cdn.worldofdypians.com/tools/bridgeIcon.svg"
+              }
               width={25}
               height={25}
               alt=""
@@ -120,7 +127,11 @@ const MobileMenu = () => {
             } p-2 justify-content-center`}
           >
             <img
-              src={activeIcon === "games" ? 'https://cdn.worldofdypians.com/tools/gamesIconActive.svg' : 'https://cdn.worldofdypians.com/tools/gamesIcon.svg'}
+              src={
+                activeIcon === "games"
+                  ? "https://cdn.worldofdypians.com/tools/gamesIconActive.svg"
+                  : "https://cdn.worldofdypians.com/tools/gamesIcon.svg"
+              }
               width={25}
               height={25}
               alt=""
@@ -163,7 +174,11 @@ const MobileMenu = () => {
             } p-2 justify-content-center`}
           >
             <img
-              src={activeIcon === "more" ? 'https://cdn.worldofdypians.com/tools/moreIconActive.svg' : 'https://cdn.worldofdypians.com/tools/moreIcon.svg'}
+              src={
+                activeIcon === "more"
+                  ? "https://cdn.worldofdypians.com/tools/moreIconActive.svg"
+                  : "https://cdn.worldofdypians.com/tools/moreIcon.svg"
+              }
               width={25}
               height={25}
               alt=""
@@ -184,7 +199,10 @@ const MobileMenu = () => {
               className="d-flex w-100 justify-content-end py-3"
               onClick={() => setExplorerModal(false)}
             >
-              <img src={'https://cdn.worldofdypians.com/wod/xMark.svg'} alt="" />
+              <img
+                src={"https://cdn.worldofdypians.com/wod/xMark.svg"}
+                alt=""
+              />
             </div>
             <NavLink
               to="/pair-explorer"
@@ -192,7 +210,10 @@ const MobileMenu = () => {
               className="mobile-modal-item d-flex justify-content-between align-items-center w-100 py-3"
             >
               <h3 className="sideitem-text">Pair Explorer</h3>
-              <img src={'https://cdn.worldofdypians.com/tools/rightlogo.svg'} alt="" />
+              <img
+                src={"https://cdn.worldofdypians.com/tools/rightlogo.svg"}
+                alt=""
+              />
             </NavLink>
             <NavLink
               to="/pool-explorer"
@@ -200,7 +221,10 @@ const MobileMenu = () => {
               className="mobile-modal-item d-flex justify-content-between align-items-center w-100 py-3"
             >
               <h3 className="sideitem-text">Pool explorer</h3>
-              <img src={'https://cdn.worldofdypians.com/tools/rightlogo.svg'} alt="" />
+              <img
+                src={"https://cdn.worldofdypians.com/tools/rightlogo.svg"}
+                alt=""
+              />
             </NavLink>
             <NavLink
               to="/big-swap-explorer"
@@ -208,7 +232,10 @@ const MobileMenu = () => {
               className="mobile-modal-item d-flex justify-content-between align-items-center w-100 py-3"
             >
               <h3 className="sideitem-text">Big swap</h3>
-              <img src={'https://cdn.worldofdypians.com/tools/rightlogo.svg'} alt="" />
+              <img
+                src={"https://cdn.worldofdypians.com/tools/rightlogo.svg"}
+                alt=""
+              />
             </NavLink>
             <NavLink
               to="/top-tokens"
@@ -216,7 +243,10 @@ const MobileMenu = () => {
               className="mobile-modal-item d-flex justify-content-between align-items-center w-100 py-3"
             >
               <h3 className="sideitem-text">Top tokens</h3>
-              <img src={'https://cdn.worldofdypians.com/tools/rightlogo.svg'} alt="" />
+              <img
+                src={"https://cdn.worldofdypians.com/tools/rightlogo.svg"}
+                alt=""
+              />
             </NavLink>
             <NavLink
               to="/farms"
@@ -224,7 +254,10 @@ const MobileMenu = () => {
               className="mobile-modal-item d-flex justify-content-between align-items-center w-100 py-3"
             >
               <h3 className="sideitem-text">Yields</h3>
-              <img src={'https://cdn.worldofdypians.com/tools/rightlogo.svg'} alt="" />
+              <img
+                src={"https://cdn.worldofdypians.com/tools/rightlogo.svg"}
+                alt=""
+              />
             </NavLink>
             <NavLink
               to="/submit-info"
@@ -232,7 +265,10 @@ const MobileMenu = () => {
               className="mobile-modal-item d-flex justify-content-between align-items-center w-100 py-3"
             >
               <h3 className="sideitem-text">Submit form</h3>
-              <img src={'https://cdn.worldofdypians.com/tools/rightlogo.svg'} alt="" />
+              <img
+                src={"https://cdn.worldofdypians.com/tools/rightlogo.svg"}
+                alt=""
+              />
             </NavLink>
           </div>
         </OutsideClickHandler>
@@ -250,10 +286,13 @@ const MobileMenu = () => {
               className="d-flex w-100 justify-content-end"
               onClick={() => setEarnModal(false)}
             >
-              <img src={'https://cdn.worldofdypians.com/wod/xMark.svg'} alt="" />
+              <img
+                src={"https://cdn.worldofdypians.com/wod/xMark.svg"}
+                alt=""
+              />
             </div>
             <div className="sidebar-item active-side-link w-100 p-3">
-              <div className="d-flex align-items-center gap-2"> 
+              <div className="d-flex align-items-center gap-2">
                 <h3 className="active-text">Earn</h3>
               </div>
             </div>
@@ -261,35 +300,38 @@ const MobileMenu = () => {
               onClick={() => setMoreModal(false)}
               className="mobile-modal-item d-flex flex-column justify-content-between align-items-center w-100 pb-3"
             >
-                  {/* <NavLink
+              {/* <NavLink
                 to="/earn/defi-staking"
                 className="d-flex justify-content-between align-items-center w-100 py-2"
               >
                 <h3 className="sideitem-text">Staking</h3>
                 <img src={'https://cdn.worldofdypians.com/tools/rightlogo.svg'} alt="" />
               </NavLink> */}
-               <NavLink
+              <NavLink
                 to="/earn/dypius"
                 className="d-flex justify-content-between align-items-center w-100 py-2"
               >
                 <h3 className="sideitem-text">Staking</h3>
-                <img src={'https://cdn.worldofdypians.com/tools/rightlogo.svg'} alt="" />
+                <img
+                  src={"https://cdn.worldofdypians.com/tools/rightlogo.svg"}
+                  alt=""
+                />
               </NavLink>
-         
+
               <NavLink
                 to="/earn/nft-staking"
                 className="d-flex justify-content-between align-items-center w-100 py-2"
               >
                 <h3 className="sideitem-text">NFT Staking</h3>
-                <img src={'https://cdn.worldofdypians.com/tools/rightlogo.svg'} alt="" />
+                <img
+                  src={"https://cdn.worldofdypians.com/tools/rightlogo.svg"}
+                  alt=""
+                />
               </NavLink>
             </div>
-
           </div>
         </OutsideClickHandler>
       </div>
-
-
 
       <div style={{ position: "absolute", left: "5%", width: "100%" }}>
         <OutsideClickHandler onOutsideClick={() => setMoreModal(false)}>
@@ -303,11 +345,19 @@ const MobileMenu = () => {
               className="d-flex w-100 justify-content-end"
               onClick={() => setMoreModal(false)}
             >
-              <img src={'https://cdn.worldofdypians.com/wod/xMark.svg'} alt="" />
+              <img
+                src={"https://cdn.worldofdypians.com/wod/xMark.svg"}
+                alt=""
+              />
             </div>
             <div className="sidebar-item active-side-link w-100 p-3">
               <div className="d-flex align-items-center gap-2">
-                <img src={'https://cdn.worldofdypians.com/tools/projectsIconActive.svg'} alt="" />
+                <img
+                  src={
+                    "https://cdn.worldofdypians.com/tools/projectsIconActive.svg"
+                  }
+                  alt=""
+                />
                 <h3 className="active-text">Projects</h3>
               </div>
             </div>
@@ -316,27 +366,45 @@ const MobileMenu = () => {
               className="mobile-modal-item d-flex flex-column justify-content-between align-items-center w-100 pb-3"
             >
               <NavLink
+                to="/accelerator-program"
+                className="d-flex justify-content-between align-items-center w-100 py-2"
+              >
+                <h3 className="sideitem-text">Accelerator Program</h3>
+                <img
+                  src={"https://cdn.worldofdypians.com/tools/rightlogo.svg"}
+                  alt=""
+                />
+              </NavLink>
+              <NavLink
                 to="/launchpad"
                 className="d-flex justify-content-between align-items-center w-100 py-2"
               >
                 <h3 className="sideitem-text">Launchpad</h3>
-                <img src={'https://cdn.worldofdypians.com/tools/rightlogo.svg'} alt="" />
+                <img
+                  src={"https://cdn.worldofdypians.com/tools/rightlogo.svg"}
+                  alt=""
+                />
               </NavLink>
               <NavLink
                 to="/locker"
                 className="d-flex justify-content-between align-items-center w-100 py-2"
               >
                 <h3 className="sideitem-text">DYP Locker</h3>
-                <img src={'https://cdn.worldofdypians.com/tools/rightlogo.svg'} alt="" />
+                <img
+                  src={"https://cdn.worldofdypians.com/tools/rightlogo.svg"}
+                  alt=""
+                />
               </NavLink>
               <NavLink
                 to="/farms"
                 className="d-flex justify-content-between align-items-center w-100 py-2"
               >
                 <h3 className="sideitem-text">Yields</h3>
-                <img src={'https://cdn.worldofdypians.com/tools/rightlogo.svg'} alt="" />
+                <img
+                  src={"https://cdn.worldofdypians.com/tools/rightlogo.svg"}
+                  alt=""
+                />
               </NavLink>
-           
             </div>
 
             <NavLink
@@ -345,10 +413,16 @@ const MobileMenu = () => {
               className="mobile-modal-item d-flex justify-content-between align-items-center w-100 py-3"
             >
               <div className="d-flex align-items-center gap-2">
-                <img src={'https://cdn.worldofdypians.com/tools/newsIcon.svg'} alt="" />
+                <img
+                  src={"https://cdn.worldofdypians.com/tools/newsIcon.svg"}
+                  alt=""
+                />
                 <h3 className="sideitem-text">News</h3>
               </div>
-              <img src={'https://cdn.worldofdypians.com/tools/rightlogo.svg'} alt="" />
+              <img
+                src={"https://cdn.worldofdypians.com/tools/rightlogo.svg"}
+                alt=""
+              />
             </NavLink>
           </div>
         </OutsideClickHandler>
