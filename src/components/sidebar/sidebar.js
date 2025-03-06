@@ -77,7 +77,7 @@ const Sidebar = (props) => {
     {
       label: "Accelerator",
       icon: "launchpadIcon",
-      link: "/earn",
+      link: "/accelerator-program",
       children: [
         // {
         //   title: "Staking",
