@@ -2463,7 +2463,7 @@ const Dashboard = ({
                     staking={window.constant_staking_dypius_base1}
                     apr={selectedPool?.apy_percent}
                     liquidity={eth_address}
-                    expiration_time={"01 Sep 2025"}
+                    expiration_time={"01 Mar 2025"}
                     finalApr={selectedPool?.apy_performancefee}
                     lockTime={
                       selectedPool?.lock_time?.split(" ")[0] === "No"
@@ -2479,7 +2479,7 @@ const Dashboard = ({
                     chainId={network.toString()}
                     handleConnection={handleConnection}
                     handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
+                    expired={true}
                     referrer={referrer}
                     onConnectWallet={() => {
                       setShowDetails(false);
