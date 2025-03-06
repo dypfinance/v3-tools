@@ -606,6 +606,7 @@ const PricingPackages = ({
 
   useEffect(() => {
     getBundlePrices();
+    window.scrollTo(0, 0);
   }, []);
 
   useEffect(() => {

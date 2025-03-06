@@ -2163,7 +2163,7 @@ setkittyDashRecords */}
                   />
                   <Route
                     exact
-                    path="/bundles"
+                    path="/accelerator-program"
                     element={
                       <PricingPackages
                         dypBalance={dypBalance}
