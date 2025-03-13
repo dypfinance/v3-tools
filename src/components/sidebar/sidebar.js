@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { useEagerConnect, useInactiveListener } from "../../functions/hooks";
 import useWindowSize from "../../functions/useWindowSize";
@@ -7,6 +7,7 @@ import "./sidebar.css";
 const Sidebar = (props) => {
   const [activeLink, setActiveLink] = useState(null);
   const [hover, setHover] = useState(null);
+  const [activePath, setactivePath] = useState(null);
 
   const [activeSidebar, setActiveSidebar] = useState(false);
 
@@ -14,6 +15,7 @@ const Sidebar = (props) => {
   useInactiveListener(!triedEager);
 
   const windowSize = useWindowSize();
+  const location = useLocation();
 
   const openSidebar = () => {
     if (windowSize.width < 1800) {
@@ -35,7 +37,7 @@ const Sidebar = (props) => {
 
   sidebar?.addEventListener("mouseover", openSidebar);
   sidebar?.addEventListener("mouseleave", closeSidebar);
-
+  console.log(location.pathname);
   useEffect(() => {
     // const fetchInterval = setInterval(
     //   () => setlocation(window.location.pathname),
@@ -75,7 +77,7 @@ const Sidebar = (props) => {
       ],
     },
     {
-      label: "Accelerator",
+      label: "Growth",
       icon: "launchpadIcon",
       link: "/accelerator-program",
       children: [
@@ -184,6 +186,10 @@ const Sidebar = (props) => {
 
   const windowUrl = window.location.href;
 
+  useEffect(() => {
+    setactivePath(location.pathname);
+  }, [location?.pathname]);
+
   return (
     <div
       id="sidebar"
@@ -239,9 +245,12 @@ const Sidebar = (props) => {
                         ? "active-width justify-content-start ms-4"
                         : "justify-content-center"
                     } align-items-center ${
-                      window.location.pathname.includes(sideItem.link)
+                      location.pathname ===
+                      sideItem.children.find((item) => {
+                        return item.link === activePath;
+                      })?.link
                         ? "active-side-link"
-                        : null
+                        : "test"
                     }`}
                     onClick={() => setActiveLink(sideItem.label)}
                     onMouseEnter={() => setHover(sideItem.label)}
@@ -251,7 +260,7 @@ const Sidebar = (props) => {
                       src={`https://cdn.worldofdypians.com/tools/${
                         activeLink === sideItem.label ||
                         hover === sideItem.label ||
-                        window.location.pathname === sideItem.link
+                        activePath === sideItem.link
                           ? sideItem.icon + "Active.svg"
                           : sideItem.icon + ".svg"
                       }`}
@@ -264,7 +273,7 @@ const Sidebar = (props) => {
                           className={
                             activeLink === sideItem.label ||
                             hover === sideItem.label ||
-                            window.location.pathname === sideItem.link
+                            activePath === sideItem.link
                               ? "active-text"
                               : "sideitem-text"
                           }
@@ -299,8 +308,12 @@ const Sidebar = (props) => {
                           <NavLink
                             key={index}
                             to={child.link}
+                            onClick={() => {
+                              setactivePath(child.link);
+                              setActiveLink(sideItem.label);
+                            }}
                             className={(isActive) =>
-                              window.location.pathname === child.link
+                              location.pathname === child.link
                                 ? "accordion-child accordion-child-active d-flex align-items-center gap-1"
                                 : "accordion-child d-flex align-items-center gap-1"
                             }
@@ -329,11 +342,14 @@ const Sidebar = (props) => {
                           : "justify-content-center"
                       } align-items-center ${
                         activeLink === sideItem.label ||
-                        window.location.pathname === sideItem.link
+                        activePath === sideItem.link
                           ? "active-side-link"
                           : null
                       }`}
-                      onClick={() => setActiveLink(sideItem.label)}
+                      onClick={() => {
+                        setActiveLink(sideItem.label);
+                        setactivePath(sideItem.link);
+                      }}
                       onMouseEnter={() => setHover(sideItem.label)}
                       onMouseLeave={() => setHover(null)}
                     >
@@ -341,7 +357,7 @@ const Sidebar = (props) => {
                         src={`https://cdn.worldofdypians.com/tools/${
                           activeLink === sideItem.label ||
                           hover === sideItem.label ||
-                          window.location.pathname === sideItem.link
+                          activePath === sideItem.link
                             ? sideItem.icon + "Active.svg"
                             : sideItem.icon + ".svg"
                         }`}
@@ -353,7 +369,7 @@ const Sidebar = (props) => {
                           className={
                             activeLink === sideItem.label ||
                             hover === sideItem.label ||
-                            window.location.pathname === sideItem.link
+                            activePath === sideItem.link
                               ? "active-text"
                               : "sideitem-text"
                           }
