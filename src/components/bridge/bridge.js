@@ -182,7 +182,31 @@ export default function initBridge({
       // bnbPool = bnbPool / 1e18;
       // this.setState({ bnbPool: bnbPool });
     };
+    checkApproval = async (amount) => {
+      if (this.props.coinbase) {
+        const result = await window
+          .checkapproveStakePool(
+            this.props.coinbase,
+            tokenETH._address,
+            bridgeETH._address
+          )
+          .then((data) => {
+            console.log(data);
+            return data;
+          });
 
+        let result_formatted = new BigNumber(result).div(1e18).toFixed(6);
+
+        if (
+          Number(result_formatted) >= Number(amount) &&
+          Number(result_formatted) !== 0
+        ) {
+          this.setState({ depositStatus: "deposit" });
+        } else {
+          this.setState({ depositStatus: "initial" });
+        }
+      }
+    };
     handleApprove = (e) => {
       // e.preventDefault();
       let amount = this.state.depositAmount;
@@ -354,20 +378,19 @@ export default function initBridge({
     };
 
     switchToDestinationChain = async (chainID, chainText) => {
-        
-  const OPBNBPARAMS = {
-    chainId: "0xcc", // A 0x-prefixed hexadecimal string
-    rpcUrls: ["https://opbnb.publicnode.com"],
-    chainName: "opBNB Mainnet",
-    nativeCurrency: {
-      name: "opBNB",
-      symbol: "BNB", // 2-6 characters long
-      decimals: 18,
-    },
+      const OPBNBPARAMS = {
+        chainId: "0xcc", // A 0x-prefixed hexadecimal string
+        rpcUrls: ["https://opbnb.publicnode.com"],
+        chainName: "opBNB Mainnet",
+        nativeCurrency: {
+          name: "opBNB",
+          symbol: "BNB", // 2-6 characters long
+          decimals: 18,
+        },
 
-    blockExplorerUrls: ["https://mainnet.opbnbscan.com"],
-  };
-  
+        blockExplorerUrls: ["https://mainnet.opbnbscan.com"],
+      };
+
       if (window.ethereum) {
         await window.ethereum
           .request({
@@ -438,7 +461,8 @@ export default function initBridge({
               .call()
               .then((data) => {
                 this.setState({ token_balance: data });
-              }).catch((e) => {
+              })
+              .catch((e) => {
                 console.error(e);
                 return 0;
               });
@@ -452,7 +476,8 @@ export default function initBridge({
               .call()
               .then((data) => {
                 this.setState({ token_balance: data });
-              }).catch((e) => {
+              })
+              .catch((e) => {
                 console.error(e);
                 return 0;
               });
@@ -466,7 +491,8 @@ export default function initBridge({
               .call()
               .then((data) => {
                 this.setState({ token_balance: data });
-              }).catch((e) => {
+              })
+              .catch((e) => {
                 console.error(e);
                 return 0;
               });
@@ -480,7 +506,8 @@ export default function initBridge({
               .call()
               .then((data) => {
                 this.setState({ token_balance: data });
-              }).catch((e) => {
+              })
+              .catch((e) => {
                 console.error(e);
                 return 0;
               });
@@ -512,10 +539,12 @@ export default function initBridge({
                   this.state.txHash
                 }&getWithdrawableUnixTimestamp=true`;
               console.log({ url });
-              let { withdrawableUnixTimestamp } = await window.jQuery.get(url).catch((e) => {
-                console.error(e);
-                return 0;
-              });
+              let { withdrawableUnixTimestamp } = await window.jQuery
+                .get(url)
+                .catch((e) => {
+                  console.error(e);
+                  return 0;
+                });
               this.setState({ withdrawableUnixTimestamp });
               console.log({ withdrawableUnixTimestamp });
             } catch (e) {
@@ -561,7 +590,8 @@ export default function initBridge({
             .call()
             .then((data) => {
               this.setState({ ethBalance: data });
-            }).catch((e) => {
+            })
+            .catch((e) => {
               console.error(e);
               return 0;
             });
@@ -571,7 +601,8 @@ export default function initBridge({
             .call()
             .then((data) => {
               this.setState({ bnbBalance: data });
-            }).catch((e) => {
+            })
+            .catch((e) => {
               console.error(e);
               return 0;
             });
@@ -581,7 +612,8 @@ export default function initBridge({
             .call()
             .then((data) => {
               this.setState({ opbnbBalance: data });
-            }).catch((e) => {
+            })
+            .catch((e) => {
               console.error(e);
               return 0;
             });
@@ -591,7 +623,8 @@ export default function initBridge({
             .call()
             .then((data) => {
               this.setState({ avaxBalance: data });
-            }).catch((e) => {
+            })
+            .catch((e) => {
               console.error(e);
               return 0;
             });
@@ -895,11 +928,12 @@ export default function initBridge({
                                       ? this.state.depositAmount
                                       : this.state.depositAmount
                                   }
-                                  onChange={(e) =>
+                                  onChange={(e) => {
                                     this.setState({
                                       depositAmount: e.target.value,
-                                    })
-                                  }
+                                    });
+                                    this.checkApproval(e.target.value);
+                                  }}
                                   className="styledinput"
                                   placeholder="0"
                                   type="text"
@@ -1427,14 +1461,16 @@ export default function initBridge({
                   <TimelineSeparator>
                     <TimelineDot
                       className={
-                        this.state.depositAmount !== ""
+                        this.state.depositAmount !== "" ||
+                        this.state.txHash !== ""
                           ? "greendot"
                           : "passivedot"
                       }
                     />
                     <TimelineConnector
                       className={
-                        this.state.depositAmount !== ""
+                        this.state.depositAmount !== "" ||
+                        this.state.txHash !== ""
                           ? "greenline"
                           : "passiveline"
                       }
@@ -1456,7 +1492,8 @@ export default function initBridge({
                     <TimelineDot
                       className={
                         this.state.depositStatus === "deposit" ||
-                        this.state.depositStatus === "success"
+                        this.state.depositStatus === "success" ||
+                        this.state.txHash !== ""
                           ? "greendot"
                           : "passivedot"
                       }
@@ -1464,7 +1501,8 @@ export default function initBridge({
                     <TimelineConnector
                       className={
                         this.state.depositStatus === "deposit" ||
-                        this.state.depositStatus === "success"
+                        this.state.depositStatus === "success" ||
+                        this.state.txHash !== ""
                           ? "greenline"
                           : "passiveline"
                       }
@@ -1484,14 +1522,16 @@ export default function initBridge({
                   <TimelineSeparator>
                     <TimelineDot
                       className={
-                        this.state.depositStatus === "success"
+                        this.state.depositStatus === "success" ||
+                        this.state.txHash !== ""
                           ? "greendot"
                           : "passivedot"
                       }
                     />
                     <TimelineConnector
                       className={
-                        this.state.depositStatus === "success"
+                        this.state.depositStatus === "success" ||
+                        this.state.txHash !== ""
                           ? "greenline"
                           : "passiveline"
                       }
