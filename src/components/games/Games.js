@@ -126,6 +126,21 @@ const Games = ({
   const audiosuccessGem = new Audio(crackedGemSound);
   const now = new Date();
 
+  const bannedEmails = [
+    "hibrahymdaniel@gmail.com",
+    "therocklobo@gmail.com",
+    "thelunapass@gmail.com",
+    "kharu4735@gmail.com",
+    "ti14bookmega@gmail.com",
+    "atop127@yandex.ru",
+    "giftaghedo71@gmail.com",
+    "scottevbaru@gmail.com",
+    "evbaru2@gmail.com",
+    "ogieva.igho@yahoo.com",
+    "ryaeiou100199@gmail.com",
+  ]
+
+  
   const midnightUTC = new Date(
     Date.UTC(
       now.getUTCFullYear(),
@@ -763,6 +778,15 @@ const Games = ({
     <>
       <div className="container-lg p-0">
         <div className="row">
+        {bannedEmails.includes(email) && 
+      <div className="col-12  mb-3">
+      <div className="banned-account-wrapper w-100 px-2 py-3  d-flex align-items-center justify-content-center">
+        <span className="banned-account-message mb-0 text-white text-center">
+        This account has been banned permanently. Check your email for more information.
+        </span>
+      </div>
+    </div>
+     }
           <div className="col-12 col-lg-4">
             <NavLink to="/loyalty-program">
               <div className="games-banner loyalty-game-banner d-flex flex-column  flex-lg-row px-3 py-3 gap-3 gap-lg-0 align-items-start align-items-lg-center mb-4 position-relative">
