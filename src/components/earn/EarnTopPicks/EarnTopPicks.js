@@ -256,7 +256,8 @@ const EarnTopPicks = ({
         .get(`https://api.dyp.finance/api/user_pools/${coinbase}`)
         .then((data) => {
           return data.data.PoolsUserIn;
-        }).catch((e) => {
+        })
+        .catch((e) => {
           console.log(e);
         });
       setuserPools(result);
@@ -331,10 +332,7 @@ const EarnTopPicks = ({
 
       const allActiveEth = [...activeEth2, ...object2activeEth];
 
-      const sortedActive = [...allActiveEth].sort(function (
-        a,
-        b
-      ) {
+      const sortedActive = [...allActiveEth].sort(function (a, b) {
         return b.apy_percent - a.apy_percent;
       });
       setethPoolsDyp([...activeEth2]);
@@ -402,8 +400,8 @@ const EarnTopPicks = ({
       const allActiveBnb = [...object2Idyp, ...activeBnb2];
       const sortedActive = allActiveBnb.sort(function (a, b) {
         return b.apy_percent - a.apy_percent;
-      }); 
-      
+      });
+
       setbnbPoolsDyp(activeBnb2);
       setbnbPoolsiDyp(object2Idyp);
       setBnbPools(sortedActive);
@@ -540,6 +538,7 @@ const EarnTopPicks = ({
       }
     }
   };
+  console.log(topPools);
 
   const fetchEthStaking2 = async () => {
     const eth_result = await axios
@@ -607,10 +606,7 @@ const EarnTopPicks = ({
         return b.tvl_usd - a.tvl_usd;
       });
 
-      const sortedActiveDYP = [...activeEth2].sort(function (
-        a,
-        b
-      ) {
+      const sortedActiveDYP = [...activeEth2].sort(function (a, b) {
         return b.apy_percent - a.apy_percent;
       });
 
@@ -920,7 +916,6 @@ const EarnTopPicks = ({
     avaxDyppool,
     avaxiDypPool
   ) => {
- 
     if (chain === "eth") {
       if (tokentype === "dyp") {
         if (locktimeToCheck === selectedPool.lock_time) {
@@ -1116,9 +1111,7 @@ const EarnTopPicks = ({
           });
 
           const result2 = ethPoolsDyp.filter((item) => {
-            return (
-              item.lock_time === locktime 
-            );
+            return item.lock_time === locktime;
           });
 
           if (result) {
@@ -1133,9 +1126,7 @@ const EarnTopPicks = ({
             );
           });
           const result2 = ethPoolsDyp.filter((item) => {
-            return (
-              item.lock_time === locktime 
-            );
+            return item.lock_time === locktime;
           });
           if (result) {
             setresultFilteredPool(result2);
@@ -1174,9 +1165,7 @@ const EarnTopPicks = ({
             );
           });
           const result2 = basePoolsDyp.filter((item) => {
-            return (
-              item.lock_time === locktime 
-            );
+            return item.lock_time === locktime;
           });
           if (result) {
             setresultFilteredPool(result2);
@@ -1190,9 +1179,7 @@ const EarnTopPicks = ({
             );
           });
           const result2 = basePoolsDyp.filter((item) => {
-            return (
-              item.lock_time === locktime 
-            );
+            return item.lock_time === locktime;
           });
           if (result) {
             setresultFilteredPool(result2);
@@ -1232,9 +1219,7 @@ const EarnTopPicks = ({
           });
 
           const result2 = bnbPoolsDyp.filter((item) => {
-            return (
-              item.lock_time === locktime  
-            );
+            return item.lock_time === locktime;
           });
 
           if (result) {
@@ -1294,9 +1279,7 @@ const EarnTopPicks = ({
             );
           });
           const result2 = avaxPoolsDyp.filter((item) => {
-            return (
-              item.lock_time === locktime 
-            );
+            return item.lock_time === locktime;
           });
 
           if (result) {
@@ -1313,9 +1296,7 @@ const EarnTopPicks = ({
           });
 
           const result2 = avaxPoolsiDyp.filter((item) => {
-            return (
-              item.lock_time === locktime   
-            );
+            return item.lock_time === locktime;
           });
 
           if (result) {
@@ -1603,16 +1584,16 @@ const EarnTopPicks = ({
 
   useEffect(() => {
     // if (chain === "avax" && topList === "Staking") {
-      fetchAvaxStaking();
+    fetchAvaxStaking();
     // } else if (chain === "eth" && topList === "Staking") {
-      fetchEthStaking();
+    fetchEthStaking();
     // } else if (chain === "bnb" && topList === "Staking") {
-      fetchBnbStaking();
+    fetchBnbStaking();
     // } else if (chain === "base" && topList === "Staking") {
-      fetchBaseStaking();
+    fetchBaseStaking();
     // }
-  }, [chain, topList]); 
- 
+  }, [chain, topList]);
+
   return (
     <>
       <div className={`row w-100 justify-content-center gap-4`}>
@@ -3692,17 +3673,20 @@ const EarnTopPicks = ({
                             expiredPools === false
                           ? ethPools.find((item) => {
                               return item.type === "idyp";
-                            }) ?
-                            ethPools.find((item) => {
-                              return item.type === "idyp";
-                            }) :  ethPools.find((item) => {
-                              return item.type === "dyp";
                             })
+                            ? ethPools.find((item) => {
+                                return item.type === "idyp";
+                              })
+                            : ethPools.find((item) => {
+                                return item.type === "dyp";
+                              })
                           : ethPoolsiDypExpired.find((item) => {
                               return item.type === "idyp";
-                            }) ?  ethPoolsiDypExpired.find((item) => {
+                            })
+                          ? ethPoolsiDypExpired.find((item) => {
                               return item.type === "idyp";
-                            }) :  ethPoolsiDypExpired.find((item) => {
+                            })
+                          : ethPoolsiDypExpired.find((item) => {
                               return item.type === "dyp";
                             })
                       );

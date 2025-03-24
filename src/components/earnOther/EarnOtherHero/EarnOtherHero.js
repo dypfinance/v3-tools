@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import Slider from "react-slick"; 
+import Slider from "react-slick";
 import { useNavigate } from "react-router-dom";
 
 const EarnOtherHero = ({ type, isPremium, onSliderClick }) => {
@@ -72,16 +72,16 @@ const EarnOtherHero = ({ type, isPremium, onSliderClick }) => {
       apr: "cawsApr.svg",
     },
 
-    {
-      title: "New Genesis NFT Staking Pool",
-      desc: "Stake your assets to earn ETH rewards",
-      buttonType: "details-land-nft",
-      chain: "eth",
-      buttonTitle: "Stake Now",
-      buttonClass: "hero-stake-land-btn",
-      bannerBgClass: "landBgDesktop",
-      apr: "landApr.svg",
-    },
+    // {
+    //   title: "New Genesis NFT Staking Pool",
+    //   desc: "Stake your assets to earn ETH rewards",
+    //   buttonType: "details-land-nft",
+    //   chain: "eth",
+    //   buttonTitle: "Stake Now",
+    //   buttonClass: "hero-stake-land-btn",
+    //   bannerBgClass: "landBgDesktop",
+    //   apr: "landApr.svg",
+    // },
     {
       title: "Become a Premium Subscriber!",
       desc: "Enjoy extra benefits by upgrading to premium.",
@@ -102,7 +102,7 @@ const EarnOtherHero = ({ type, isPremium, onSliderClick }) => {
       navigate("/account");
     } else if (obj.buttonType === "details-nft") {
       onSliderClick("details-nft");
-    }else if (obj.buttonType === "details-land-nft") {
+    } else if (obj.buttonType === "details-land-nft") {
       onSliderClick("details-land-nft");
     }
   };
@@ -126,16 +126,15 @@ const EarnOtherHero = ({ type, isPremium, onSliderClick }) => {
                     <div className="d-flex flex-column gap-2">
                       <h6 className="earn-other-hero-title">{item.title}</h6>
                       <h6 className="earn-other-hero-desc">{item.desc}</h6>
-                       
-                        <button
-                          className={item.buttonClass}
-                          onClick={() => {
-                            handleSliderClick(item);
-                          }}
-                        >
-                          {item.buttonTitle}
-                        </button>
-                     
+
+                      <button
+                        className={item.buttonClass}
+                        onClick={() => {
+                          handleSliderClick(item);
+                        }}
+                      >
+                        {item.buttonTitle}
+                      </button>
                     </div>
                     {item.apr && item.apr !== "" && (
                       <img

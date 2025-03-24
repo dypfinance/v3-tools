@@ -5,6 +5,7 @@ import CawsDetails from "../FARMINNG/caws";
 import CawsWodDetails from "../FARMINNG/cawsWod";
 import axios from "axios";
 import useWindowSize from "../../functions/useWindowSize";
+import LandDetailsPremium from "../FARMINNG/landPremium";
 
 const TopPoolsNftListCardInner = ({
   tokenLogo,
@@ -77,7 +78,7 @@ const TopPoolsNftListCardInner = ({
   const [cardIndexDyp, setcardIndex] = useState();
   const [landCard, setLandCard] = useState({});
 
-  const cawswodcoins = ["newCawsLogo", "lanft-poolicon"];
+  const cawswodcoins = ["cawslogo", "lanft-poolicon"];
 
   const [mystakes, setMystakes] = useState([]);
 
@@ -172,7 +173,13 @@ const TopPoolsNftListCardInner = ({
         onClick={() => handleDetails()}
         style={{ display: display }}
       >
-        {" "}
+        {tokenName === "WOD" && (
+          <img
+            src={"https://cdn.worldofdypians.com/tools/premiumIcon.svg"}
+            className="position-absolute nft-premium-icon d-none d-lg-block"
+            style={{ height: 56, left: "-1px" }}
+          />
+        )}
         <div className="px-0 d-flex justify-content-between align-items-center">
           <table className="earnother-table">
             <tbody>
@@ -224,7 +231,7 @@ const TopPoolsNftListCardInner = ({
                       className="d-flex align-items-center gap-2"
                     >
                       <img
-                        src={'https://cdn.worldofdypians.com/tools/avaxStakeActive.svg'}
+                        src={"https://cdn.worldofdypians.com/wod/eth.svg"}
                         style={{ width: 18, height: 18 }}
                         alt=""
                         className="pool-coins"
@@ -338,19 +345,19 @@ const TopPoolsNftListCardInner = ({
           </table>
         </div>
       </div>
-      {expired === true && showDetails && cardIndex === 1 ? (
+      {expired === true && showDetails && cardIndex === 2 ? (
         <>
           <CawsDetails
             coinbase={coinbase}
             isConnected={isConnected}
             listType={listType}
-            chainId={ chainId}
+            chainId={chainId}
             handleSwitchNetwork={handleSwitchNetwork}
             expired={true}
             handleConnection={handleConnection}
           />
         </>
-      ) : showDetails && expired === true && cardIndex === 2 ? (
+      ) : showDetails && expired === true && cardIndex === 3 ? (
         <CawsWodDetails
           coinbase={coinbase}
           isConnected={isConnected}
@@ -360,7 +367,7 @@ const TopPoolsNftListCardInner = ({
           handleConnection={handleConnection}
           expired={true}
         />
-      ) : showDetails && expired === true && cardIndex === 3 ? (
+      ) : showDetails && expired === true && cardIndex === 4 ? (
         <LandDetails
           coinbase={coinbase}
           isConnected={isConnected}
@@ -371,6 +378,18 @@ const TopPoolsNftListCardInner = ({
           expired={true}
           apr={25}
           totalNftsLocked={totalNftsLocked}
+        />
+      ) : showDetails && expired === true && cardIndex === 1 ? (
+        <LandDetailsPremium
+          coinbase={coinbase}
+          isConnected={isConnected}
+          listType={listType}
+          chainId={chainId}
+          handleSwitchNetwork={handleSwitchNetwork}
+          handleConnection={handleConnection}
+          expired={false}
+          apr={25}
+          isPremium={isPremium}
         />
       ) : (
         <></>

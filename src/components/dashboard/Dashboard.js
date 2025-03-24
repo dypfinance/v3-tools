@@ -1153,7 +1153,7 @@ const Dashboard = ({
                                   ? "ethereum.svg"
                                   : item.pair_name === "AVAX"
                                   ? "avax.svg"
-                                  : "newCawsLogo.png"
+                                  : "cawslogo.svg"
                               }
                               onShowDetailsClick={() => {
                                 setActiveCard(topPools[index]);
@@ -1353,7 +1353,7 @@ const Dashboard = ({
                                   ? "ethereum.svg"
                                   : item.pair_name === "AVAX"
                                   ? "avax.svg"
-                                  : "newCawsLogo.png"
+                                  : "cawslogo.svg"
                               }
                               onShowDetailsClick={() => {
                                 setActiveCard(topPools[index]);
