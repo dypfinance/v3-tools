@@ -122,9 +122,9 @@ const StakeDypiusEth3Phase2 = ({
   const [claimStatus, setclaimStatus] = useState("initial");
   const [withdrawLoading, setwithdrawLoading] = useState(false);
   const [withdrawStatus, setwithdrawStatus] = useState("initial");
-  const [coinbase2, setcoinbase] = useState(
-    "0x0000000000000000000000000000000000000111"
-  );
+  // const [coinbase2, setcoinbase] = useState(
+  //   "0x0000000000000000000000000000000000000111"
+  // );
   const [tvl, settvl] = useState("");
   const [tvlusd, settvlusd] = useState("");
 
@@ -248,12 +248,12 @@ const StakeDypiusEth3Phase2 = ({
   };
 
   const refreshBalance = async () => {
-    let coinbase = coinbase2;
+    // let coinbase = coinbase2;
 
-    if (window.coinbase_address) {
-      coinbase = window.coinbase_address;
-      setcoinbase(coinbase);
-    }
+    // if (window.coinbase_address) {
+    //   coinbase = window.coinbase_address;
+    //   setcoinbase(coinbase);
+    // }
 
     getTotalTvl();
     let lp_data;
@@ -436,11 +436,11 @@ const StakeDypiusEth3Phase2 = ({
     }
   };
 
-  useEffect(() => {
-    if (coinbase !== coinbase2 && coinbase !== null && coinbase !== undefined) {
-      setcoinbase(coinbase);
-    }
-  }, [coinbase, coinbase2]);
+  // useEffect(() => {
+  //   if (coinbase !== coinbase2 && coinbase !== null && coinbase !== undefined) {
+  //     setcoinbase(coinbase);
+  //   }
+  // }, [coinbase, coinbase2]);
 
   useEffect(() => {
     getPriceDYP();
@@ -453,7 +453,7 @@ const StakeDypiusEth3Phase2 = ({
         checkApproval(depositAmount);
       }
     }
-  }, [coinbase, coinbase2, staking, is_wallet_connected, chainId]);
+  }, [coinbase, staking, is_wallet_connected, chainId]);
 
   useEffect(() => {
     setdepositAmount("");

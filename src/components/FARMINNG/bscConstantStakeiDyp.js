@@ -136,9 +136,9 @@ const StakeBscIDyp = ({
   const [claimStatus, setclaimStatus] = useState("initial");
   const [withdrawLoading, setwithdrawLoading] = useState(false);
   const [withdrawStatus, setwithdrawStatus] = useState("initial");
-  const [coinbase2, setcoinbase] = useState(
-    "0x0000000000000000000000000000000000000111"
-  );
+  // const [coinbase2, setcoinbase] = useState(
+  //   "0x0000000000000000000000000000000000000111"
+  // );
   const [tvl, settvl] = useState("");
   const [referralFeeEarned, setreferralFeeEarned] = useState("");
   const [stakingOwner, setstakingOwner] = useState(null);
@@ -252,12 +252,12 @@ const StakeBscIDyp = ({
   };
 
   const refreshBalance = async () => {
-    let coinbase = coinbase2;
+    // let coinbase = coinbase2;
 
-    if (window.coinbase_address) {
-      coinbase = window.coinbase_address;
-      setcoinbase(coinbase);
-    }
+    // if (window.coinbase_address) {
+    //   coinbase = window.coinbase_address;
+    //   setcoinbase(coinbase);
+    // }
 
     // let usd_per_dyps = the_graph_result.price_DYPS ? the_graph_result.price_DYPS : 1
     let usd_per_dyps = 0;
@@ -363,11 +363,11 @@ const StakeBscIDyp = ({
   };
 
   useEffect(() => {
-    if (coinbase !== coinbase2 && coinbase !== null && coinbase !== undefined) {
-      setcoinbase(coinbase);
-    }
+    // if (coinbase !== coinbase2 && coinbase !== null && coinbase !== undefined) {
+    //   setcoinbase(coinbase);
+    // }
     getTotalTvl();
-  }, [coinbase, coinbase2]);
+  }, [coinbase]);
 
   useEffect(() => {
     if (chainId === "56") {
@@ -376,7 +376,7 @@ const StakeBscIDyp = ({
         checkApproval(depositAmount);
       }
     }
-  }, [coinbase, coinbase2, staking, chainId]);
+  }, [coinbase, staking, chainId]);
 
   useEffect(() => {
     setdepositAmount("");
