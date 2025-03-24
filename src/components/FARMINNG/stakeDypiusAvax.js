@@ -139,9 +139,9 @@ const StakeDypiusAvax = ({
   const [claimStatus, setclaimStatus] = useState("initial");
   const [withdrawLoading, setwithdrawLoading] = useState(false);
   const [withdrawStatus, setwithdrawStatus] = useState("initial");
-  const [coinbase2, setcoinbase] = useState(
-    "0x0000000000000000000000000000000000000111"
-  );
+  // const [coinbase2, setcoinbase] = useState(
+  //   "0x0000000000000000000000000000000000000111"
+  // );
   const [tvl, settvl] = useState("");
   const [referralFeeEarned, setreferralFeeEarned] = useState("");
   const [stakingOwner, setstakingOwner] = useState(null);
@@ -245,12 +245,12 @@ const StakeDypiusAvax = ({
   };
 
   const refreshBalance = async () => {
-    let coinbase = coinbase2;
+    // let coinbase = coinbase2;
 
-    if (window.coinbase_address) {
-      coinbase = window.coinbase_address;
-      setcoinbase(coinbase);
-    }
+    // if (window.coinbase_address) {
+    //   coinbase = window.coinbase_address;
+    //   setcoinbase(coinbase);
+    // }
 
     let lp_data = the_graph_result.token_data;
     //console.log({lp_data})
@@ -387,9 +387,9 @@ const StakeDypiusAvax = ({
   };
 
   useEffect(() => {
-    if (coinbase !== coinbase2 && coinbase !== null && coinbase !== undefined) {
-      setcoinbase(coinbase);
-    }
+    // if (coinbase !== coinbase2 && coinbase !== null && coinbase !== undefined) {
+    //   setcoinbase(coinbase);
+    // }
     if (
       staking &&
       staking._address === "0x6eb643813f0b4351b993f98bdeaef6e0f79573e9"
@@ -397,7 +397,7 @@ const StakeDypiusAvax = ({
       setPassivePool(true);
     }
     getTotalTvl();
-  }, [coinbase, coinbase2]);
+  }, [coinbase]);
 
   useEffect(() => {
     if (chainId === "43114") {
@@ -406,7 +406,7 @@ const StakeDypiusAvax = ({
         checkApproval(depositAmount);
       }
     }
-  }, [coinbase, coinbase2, staking]);
+  }, [coinbase,  staking]);
 
   useEffect(() => {
     setdepositAmount("");

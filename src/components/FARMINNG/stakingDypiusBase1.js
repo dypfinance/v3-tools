@@ -121,9 +121,9 @@ const StakingDypiusBase1 = ({
   const [claimStatus, setclaimStatus] = useState("initial");
   const [withdrawLoading, setwithdrawLoading] = useState(false);
   const [withdrawStatus, setwithdrawStatus] = useState("initial");
-  const [coinbase2, setcoinbase] = useState(
-    "0x0000000000000000000000000000000000000111"
-  );
+  // const [coinbase2, setcoinbase] = useState(
+  //   "0x0000000000000000000000000000000000000111"
+  // );
   const [tvl, settvl] = useState("");
   const [tvlusd, settvlusd] = useState("");
 
@@ -249,13 +249,7 @@ const StakingDypiusBase1 = ({
   };
 
   const refreshBalance = async () => {
-    let coinbase = coinbase2;
-
-    if (window.coinbase_address) {
-      coinbase = window.coinbase_address;
-      setcoinbase(coinbase);
-    }
-
+ 
     getTotalTvl();
     let lp_data;
     if (the_graph_result) {
@@ -412,11 +406,11 @@ const StakingDypiusBase1 = ({
     }
   };
 
-  useEffect(() => {
-    if (coinbase !== coinbase2 && coinbase !== null && coinbase !== undefined) {
-      setcoinbase(coinbase);
-    }
-  }, [coinbase, coinbase2]);
+  // useEffect(() => {
+  //   if (coinbase !== coinbase2 && coinbase !== null && coinbase !== undefined) {
+  //     setcoinbase(coinbase);
+  //   }
+  // }, [coinbase, coinbase2]);
 
   useEffect(() => {
     getPriceDYP();
@@ -429,7 +423,7 @@ const StakingDypiusBase1 = ({
         checkApproval(depositAmount);
       }
     }
-  }, [coinbase, coinbase2, staking, is_wallet_connected, chainId]);
+  }, [coinbase, staking, is_wallet_connected, chainId]);
 
   useEffect(() => {
     setdepositAmount("");

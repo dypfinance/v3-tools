@@ -142,9 +142,9 @@ const StakeDypiusBsc = ({
   const [claimStatus, setclaimStatus] = useState("initial");
   const [withdrawLoading, setwithdrawLoading] = useState(false);
   const [withdrawStatus, setwithdrawStatus] = useState("initial");
-  const [coinbase2, setcoinbase] = useState(
-    "0x0000000000000000000000000000000000000111"
-  );
+  // const [coinbase2, setcoinbase] = useState(
+  //   "0x0000000000000000000000000000000000000111"
+  // );
   const [tvl, settvl] = useState("");
   const [referralFeeEarned, setreferralFeeEarned] = useState("");
   const [stakingOwner, setstakingOwner] = useState(null);
@@ -248,12 +248,7 @@ const StakeDypiusBsc = ({
   };
 
   const refreshBalance = async () => {
-    let coinbase = coinbase2;
 
-    if (window.coinbase_address) {
-      coinbase = window.coinbase_address;
-      setcoinbase(coinbase);
-    }
     let lp_data;
     if (the_graph_result) {
       lp_data = the_graph_result.token_data;
@@ -424,19 +419,7 @@ const StakeDypiusBsc = ({
   useEffect(() => {
     getPriceDYP();
   }, []);
-
-  useEffect(() => {
-    if (coinbase !== coinbase2 && coinbase !== null && coinbase !== undefined) {
-      setcoinbase(coinbase);
-    }
-    // if (
-    //   staking &&
-    //   staking._address === "0x7c82513b69c1b42c23760cfc34234558119a3399"
-    // ) {
-    //   setPassivePool(true);
-    // }
-  }, [coinbase, coinbase2]);
-
+ 
   useEffect(() => {
     if (chainId === "56") {
       refreshBalance();
@@ -446,7 +429,7 @@ const StakeDypiusBsc = ({
         setdepositStatus("initial");
       }
     }
-  }, [coinbase, coinbase2, staking, chainId]);
+  }, [coinbase, staking, chainId]);
 
   useEffect(() => {
     setdepositAmount("");
@@ -633,12 +616,7 @@ const StakeDypiusBsc = ({
   };
 
 
-  const getReferralLink = () => {
-    return (
-      window.location.origin + window.location.pathname + "?r=" + coinbase2
-    );
-  };
-
+  
   const handleReinvest = async (e) => {
     setreInvestStatus("invest");
     setreInvestLoading(true);
