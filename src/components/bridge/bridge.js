@@ -391,6 +391,42 @@ export default function initBridge({
         blockExplorerUrls: ["https://mainnet.opbnbscan.com"],
       };
 
+      const AVAXPARAMS = {
+        chainId: "0xa86a", // A 0x-prefixed hexadecimal string
+        chainName: "Avalanche Network",
+        nativeCurrency: {
+          name: "Avalanche",
+          symbol: "AVAX", // 2-6 characters long
+          decimals: 18,
+        },
+        rpcUrls: ["https://api.avax.network/ext/bc/C/rpc"],
+        blockExplorerUrls: ["https://snowtrace.io/"],
+      };
+
+      const ETHPARAMS = {
+        chainId: "0x1", // A 0x-prefixed hexadecimal string
+        chainName: "Ethereum Mainnet",
+        nativeCurrency: {
+          name: "Ethereum",
+          symbol: "ETH", // 2-6 characters long
+          decimals: 18,
+        },
+        rpcUrls: ["https://mainnet.infura.io/v3/"],
+        blockExplorerUrls: ["https://etherscan.io"],
+      };
+
+      const BNBPARAMS = {
+        chainId: "0x38", // A 0x-prefixed hexadecimal string
+        chainName: "Smart Chain",
+        nativeCurrency: {
+          name: "Smart Chain",
+          symbol: "BNB", // 2-6 characters long
+          decimals: 18,
+        },
+        rpcUrls: ["https://bsc-dataseed.binance.org/"],
+        blockExplorerUrls: ["https://bscscan.com"],
+      };
+
       if (window.ethereum) {
         await window.ethereum
           .request({
@@ -407,12 +443,28 @@ export default function initBridge({
           .catch(async (err) => {
             if (
               err.code === 4902 ||
-              (chainID === "0xcc" && err.code.toString().includes("32603"))
+              (chainID === "0xcc" && err.code.toString().includes("32603")) ||
+              (chainID === "0x38" && err.code.toString().includes("32603")) ||
+              (chainID === "0xa86a" && err.code.toString().includes("32603"))
             ) {
-              await window.ethereum.request({
-                method: "wallet_addEthereumChain",
-                params: [OPBNBPARAMS],
-              });
+              await window.ethereum
+                .request({
+                  method: "wallet_addEthereumChain",
+                  params: [
+                    chainID === "0x1"
+                      ? ETHPARAMS
+                      : chainID === "0xa86a"
+                      ? AVAXPARAMS
+                      : chainID === "0x38"
+                      ? BNBPARAMS
+                      : chainID === "0xcc"
+                      ? OPBNBPARAMS
+                      : OPBNBPARAMS,
+                  ],
+                })
+                .catch((e) => {
+                  console.error(e);
+                });
             }
             console.log(err);
           });
@@ -1142,7 +1194,7 @@ export default function initBridge({
                                       <h6 className="optiontext d-flex align-items-center gap-2">
                                         <img
                                           src={
-                                            "https://cdn.worldofdypians.com/tools/bnbSquare.svg"
+                                            "https://cdn.worldofdypians.com/tools/avaxSquare.svg"
                                           }
                                           alt=""
                                         />
