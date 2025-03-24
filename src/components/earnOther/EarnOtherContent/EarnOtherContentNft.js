@@ -26,7 +26,10 @@ const EarnOtherContentNft = ({
   customChain,
   faqIndex,
   networkId,
-  handleSwitchNetwork,isPremium,onCloseCard,totalTvl
+  handleSwitchNetwork,
+  isPremium,
+  onCloseCard,
+  totalTvl,
 }) => {
   const options = [
     {
@@ -70,11 +73,14 @@ const EarnOtherContentNft = ({
       poolCap: "100",
       new_pool: "Yes",
     },
+  ];
+
+  const dummyData_eth_expired = [
     {
       chain: "Ethereum",
       apr: 25,
-      tokenLogo: "lanft-poolicon.png",
-      expired: false,
+      tokenLogo: ["lanft-poolicon.png"],
+      expired: true,
       top_pick: false,
       tokenName: "WOD",
       tokenTicker: "ETH",
@@ -85,13 +91,10 @@ const EarnOtherContentNft = ({
       poolCap: "100",
       new_pool: "Yes",
     },
-  ];
-
-  const dummyData_eth_expired = [
     {
       chain: "Ethereum",
       apr: 50,
-      tokenLogo: ["newCawsLogo.png"],
+      tokenLogo: ["cawslogo.svg"],
       expired: true,
       top_pick: false,
       tokenName: "ETH",
@@ -106,7 +109,7 @@ const EarnOtherContentNft = ({
     {
       chain: "Ethereum",
       apr: 50,
-      tokenLogo: ["newCawsLogo.png", "lanft-poolicon.png"],
+      tokenLogo: ["cawslogo.svg", "lanft-poolicon.png"],
       expired: true,
       top_pick: false,
       tokenName: "ETH",
@@ -147,7 +150,6 @@ const EarnOtherContentNft = ({
   const [avaxApr, setavaxApr] = useState();
   const [count, setCount] = useState(0);
   const [clickedCawsPool, setclickedCawsPool] = useState(false);
-
 
   const fetchBnbPool = async () => {
     await axios
@@ -296,7 +298,7 @@ const EarnOtherContentNft = ({
         console.log(err);
       });
   };
-  
+
   const fetchAvaxBuybackApr = async () => {
     await axios
       .get(`https://api.dyp.finance/api/get_buyback_info_avax`)
@@ -309,19 +311,22 @@ const EarnOtherContentNft = ({
   };
 
   const fetchFarmingApr = async () => {
-    await axios.get(`https://api.dyp.finance/api/highest-apy`).then((res) => {
-      setEthApr(res.data.highestAPY.highestAPY_ETH_V2);
-      // setBnbApr(res.data.highestAPY.highestAPY_BSC_V2);
-      // if(expiredPools === true){
+    await axios
+      .get(`https://api.dyp.finance/api/highest-apy`)
+      .then((res) => {
+        setEthApr(res.data.highestAPY.highestAPY_ETH_V2);
+        // setBnbApr(res.data.highestAPY.highestAPY_BSC_V2);
+        // if(expiredPools === true){
 
-      //   setBnbApr(138.44)
-      // }else{
-      //   fetchBnbPool();
-      // }
-      setavaxApr(res.data.highestAPY.highestAPY_AVAX_V2);
-    }).catch((e) => {
-      console.log(e);
-    });
+        //   setBnbApr(138.44)
+        // }else{
+        //   fetchBnbPool();
+        // }
+        setavaxApr(res.data.highestAPY.highestAPY_AVAX_V2);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   const fetchEthStaking = async () => {
@@ -439,18 +444,25 @@ const EarnOtherContentNft = ({
     }
   }, [option, expiredPools]);
 
-  useEffect(()=>{
-    if(poolClickedType === 'details-nft' && poolClicked === true && clickedCawsPool === false) {
-      setMyStakes(false)
-      setExpiredPools(false)
-      setclickedCawsPool(true)
+  useEffect(() => {
+    if (
+      poolClickedType === "details-nft" &&
+      poolClicked === true &&
+      clickedCawsPool === false
+    ) {
+      setMyStakes(false);
+      setExpiredPools(false);
+      setclickedCawsPool(true);
+    } else if (
+      poolClickedType === "details-land-nft" &&
+      poolClicked === true &&
+      clickedCawsPool === false
+    ) {
+      setMyStakes(false);
+      setExpiredPools(false);
+      setclickedCawsPool(true);
     }
-    else if(poolClickedType === 'details-land-nft' && poolClicked === true && clickedCawsPool === false) {
-      setMyStakes(false)
-      setExpiredPools(false)
-      setclickedCawsPool(true)
-    }
-  },[poolClickedType,poolClicked,clickedCawsPool])
+  }, [poolClickedType, poolClicked, clickedCawsPool]);
 
   return (
     <>
@@ -461,19 +473,17 @@ const EarnOtherContentNft = ({
             style={{ marginTop: "30px" }}
           >
             <div className="col-12 col-lg-3 px-0">
-      
-                <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
-                  <span style={{ fontWeight: "300", fontSize: "13px" }}>
-                    Total value locked
-                  </span>
-                  <h6
-                    className="text-white"
-                    style={{ fontWeight: "600", fontSize: "17px" }}
-                  >
-                    ${getFormattedNumber(totalTvl, 0)}
-                  </h6>
-                </div>
-            
+              <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
+                <span style={{ fontWeight: "300", fontSize: "13px" }}>
+                  Total value locked
+                </span>
+                <h6
+                  className="text-white"
+                  style={{ fontWeight: "600", fontSize: "17px" }}
+                >
+                  ${getFormattedNumber(totalTvl, 0)}
+                </h6>
+              </div>
             </div>
             {/* <div className="col-2 d-flex justify-content-start align-items-center gap-3">
               <div
@@ -530,19 +540,17 @@ const EarnOtherContentNft = ({
               </div>
             </div>
             <div className="col-lg-4 col-xl-3 px-0 w-100">
-        
-                <div className="total-value-locked-container p-2 d-flex flex-column justify-content-between align-items-start">
-                  <span style={{ fontWeight: "300", fontSize: "13px" }}>
-                    Total value locked &nbsp;
-                  </span>
-                  <h6
-                    className="text-white"
-                    style={{ fontWeight: "600", fontSize: "17px" }}
-                  >
+              <div className="total-value-locked-container p-2 d-flex flex-column justify-content-between align-items-start">
+                <span style={{ fontWeight: "300", fontSize: "13px" }}>
+                  Total value locked &nbsp;
+                </span>
+                <h6
+                  className="text-white"
+                  style={{ fontWeight: "600", fontSize: "17px" }}
+                >
                   ${getFormattedNumber(totalTvl, 0)}
-                  </h6>
-                </div>
-         
+                </h6>
+              </div>
             </div>
             {/* <div className="col-6 d-flex px-0 px-lg-2 justify-content-start align-items-center gap-3">
               <div
@@ -630,7 +638,7 @@ const EarnOtherContentNft = ({
           </div>
         </div>
       </div>
-    
+
       {listStyle === "list" && (
         <div className="row mx-0 justify-content-between align-items-center px-0 py-3 w-100">
           {windowSize.width > 768 && (
@@ -665,15 +673,18 @@ const EarnOtherContentNft = ({
                       expired={item.expired}
                       chainId={chainId}
                       cardIndex={index}
-                    handleConnection={handleConnection}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    isConnected={isConnected}
-                    coinbase={coinbase}
-                    isNewPool={item.new_pool === "Yes" ? true : false}
-                    isPremium ={isPremium}
-                    clickedCawsPool={clickedCawsPool}
-                    onCloseCard={()=>{onCloseCard(); setclickedCawsPool(false)}}
-                    poolClickedType={poolClickedType}
+                      handleConnection={handleConnection}
+                      handleSwitchNetwork={handleSwitchNetwork}
+                      isConnected={isConnected}
+                      coinbase={coinbase}
+                      isNewPool={item.new_pool === "Yes" ? true : false}
+                      isPremium={isPremium}
+                      clickedCawsPool={clickedCawsPool}
+                      onCloseCard={() => {
+                        onCloseCard();
+                        setclickedCawsPool(false);
+                      }}
+                      poolClickedType={poolClickedType}
                     />
                   </div>
                 );

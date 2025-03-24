@@ -99,7 +99,7 @@ const TopPoolsListCard = ({
     window.constant_staking_new9,
   ];
 
-  const cawswodcoins = ["newCawsLogo", "lanft-poolicon"];
+  const cawswodcoins = ["cawslogo", "lanft-poolicon"];
   const feeArray = [0.3, 0.3, 0.4, 0.8, 1.2];
 
   const lockarrayFarm = ["No Lock", 3, 30, 60, 90];

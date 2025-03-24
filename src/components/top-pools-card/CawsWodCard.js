@@ -15,7 +15,7 @@ const CawsWodCard = ({
   // showDetails,
 }) => {
   const [showDetails, setShowDetails] = useState(false);
-  const coins = ["newCawsLogo", "lanft-poolicon"];
+  const coins = ["cawslogo.svg", "lanft-poolicon"];
 
   const handleDetails = () => {
     if (details === false) {

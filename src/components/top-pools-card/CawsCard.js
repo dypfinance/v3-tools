@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./top-pools.css";  
-import cawsLogo from "./assets/newCawsLogo.png"; 
+import "./top-pools.css";
 import topPick from "./assets/cawsbanner.svg"; 
 
 const CawsCard = ({
@@ -86,7 +85,7 @@ const CawsCard = ({
           >
             <h6 className="token-name d-flex align-items-center gap-2">
               <img
-                src={cawsLogo}
+                src={'https://cdn.worldofdypians.com/tools/cawslogo.svg'}
                 alt=""
                 className="tokenlogo"
                 style={{ height: 32, width: 32 }}
