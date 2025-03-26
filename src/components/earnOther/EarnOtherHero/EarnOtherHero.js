@@ -71,17 +71,16 @@ const EarnOtherHero = ({ type, isPremium, onSliderClick }) => {
       bannerBgClass: "cawsBgDesktop",
       apr: "cawsApr.svg",
     },
-
-    // {
-    //   title: "New Genesis NFT Staking Pool",
-    //   desc: "Stake your assets to earn ETH rewards",
-    //   buttonType: "details-land-nft",
-    //   chain: "eth",
-    //   buttonTitle: "Stake Now",
-    //   buttonClass: "hero-stake-land-btn",
-    //   bannerBgClass: "landBgDesktop",
-    //   apr: "landApr.svg",
-    // },
+    {
+      title: "New Genesis NFT Staking Pool",
+      desc: "Stake your assets to earn ETH rewards",
+      buttonType: "details-land-nft",
+      chain: "eth",
+      buttonTitle: "Stake Now",
+      buttonClass: "hero-stake-land-btn",
+      bannerBgClass: "landBgDesktop",
+      apr: "landApr.svg",
+    },
     {
       title: "Become a Premium Subscriber!",
       desc: "Enjoy extra benefits by upgrading to premium.",

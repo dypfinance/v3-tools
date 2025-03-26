@@ -528,7 +528,7 @@ const LandDetailsPremium = ({
               className={`otherside-border col-12 col-md-6 ${
                 renderedPage === "dashboard" ? "col-lg-5" : "col-lg-4"
               }  ${
-                (chainId !== "1" || expired === true || !isPremium) &&
+                (chainId !== "1" || !isPremium) &&
                 "blurrypool"
               }`}
             >
@@ -583,7 +583,7 @@ const LandDetailsPremium = ({
 
             <div
               className={`otherside-border col-12 col-md-6 col-lg-2 ${
-                (chainId !== "1" || expired === true || !isPremium) &&
+                (chainId !== "1"  || !isPremium) &&
                 "blurrypool"
               }`}
             >
