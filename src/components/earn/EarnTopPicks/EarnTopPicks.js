@@ -538,7 +538,7 @@ const EarnTopPicks = ({
       }
     }
   };
-  console.log(topPools);
+
 
   const fetchEthStaking2 = async () => {
     const eth_result = await axios

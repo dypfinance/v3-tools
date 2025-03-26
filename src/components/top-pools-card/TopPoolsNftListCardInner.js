@@ -6,6 +6,7 @@ import CawsWodDetails from "../FARMINNG/cawsWod";
 import axios from "axios";
 import useWindowSize from "../../functions/useWindowSize";
 import LandDetailsPremium from "../FARMINNG/landPremium";
+import CawsDetailsPremium from "../FARMINNG/cawsPremium";
 
 const TopPoolsNftListCardInner = ({
   tokenLogo,
@@ -44,6 +45,10 @@ const TopPoolsNftListCardInner = ({
   totalNftsLocked,
   isPremium,
   network,
+  id,
+  clickedCawsPool,
+  onCloseCard,
+  poolClickedType,
 }) => {
   const ethCoins = ["ethereum", "wbtc", "usdc", "usdt"];
   const bscCoins = [
@@ -133,18 +138,39 @@ const TopPoolsNftListCardInner = ({
   };
 
   const handleDetails = () => {
-    if (!comingSoon) {
-      if (showDetails === false) {
-        setShowDetails(true);
-        setcardIndex(cardIndex);
-        // onShowDetailsClick();
-      } else if (showDetails === true) {
-        setShowDetails(false);
-        setcardIndex();
-      }
+    // if (!comingSoon) {
+    //   if (showDetails === false) {
+    //     setShowDetails(true);
+    //     setcardIndex(cardIndex);
+    //   } else if (showDetails === true) {
+    //     setShowDetails(false);
+    //     setcardIndex();
+    //   }
+    // }
+    if (showDetails === false && clickedCawsPool === false) {
+      setShowDetails(true);
+      setcardIndex(cardIndex);
+      // onShowDetailsClick();
+    } else if (clickedCawsPool === true) {
+      setShowDetails(false);
+      setcardIndex();
+      onCloseCard();
+    } else if (showDetails === true && clickedCawsPool === false) {
+      setShowDetails(false);
+      setcardIndex();
+      onCloseCard();
     }
   };
 
+  useEffect(() => {
+    if (poolClickedType === "details-land-nft") {
+      setcardIndex(1);
+    } else if (poolClickedType === "details-nft") {
+      setcardIndex(2);
+    } else {
+      setcardIndex();
+    }
+  }, [poolClickedType]);
   useEffect(() => {
     if (chain === "eth") {
       // myStakes();
@@ -173,7 +199,7 @@ const TopPoolsNftListCardInner = ({
         onClick={() => handleDetails()}
         style={{ display: display }}
       >
-        {tokenName === "WOD" && (
+        {id && (
           <img
             src={"https://cdn.worldofdypians.com/tools/premiumIcon.svg"}
             className="position-absolute nft-premium-icon d-none d-lg-block"
@@ -345,7 +371,10 @@ const TopPoolsNftListCardInner = ({
           </table>
         </div>
       </div>
-      {expired === true && showDetails && cardIndex === 2 ? (
+      {expired === true &&
+      showDetails &&
+      cardIndexDyp === 3 &&
+      cardIndex === 3 ? (
         <>
           <CawsDetails
             coinbase={coinbase}
@@ -357,7 +386,10 @@ const TopPoolsNftListCardInner = ({
             handleConnection={handleConnection}
           />
         </>
-      ) : showDetails && expired === true && cardIndex === 3 ? (
+      ) : showDetails &&
+        expired === true &&
+        cardIndexDyp === 4 &&
+        cardIndex === 4 ? (
         <CawsWodDetails
           coinbase={coinbase}
           isConnected={isConnected}
@@ -367,7 +399,10 @@ const TopPoolsNftListCardInner = ({
           handleConnection={handleConnection}
           expired={true}
         />
-      ) : showDetails && expired === true && cardIndex === 4 ? (
+      ) : showDetails &&
+        expired === true &&
+        cardIndexDyp === 5 &&
+        cardIndex === 5 ? (
         <LandDetails
           coinbase={coinbase}
           isConnected={isConnected}
@@ -379,7 +414,12 @@ const TopPoolsNftListCardInner = ({
           apr={25}
           totalNftsLocked={totalNftsLocked}
         />
-      ) : showDetails && expired === true && cardIndex === 1 ? (
+      ) : (showDetails ||
+          clickedCawsPool ||
+          poolClickedType === "details-land-nft") &&
+        expired === true &&
+        cardIndexDyp === 1 &&
+        cardIndex === 1 ? (
         <LandDetailsPremium
           coinbase={coinbase}
           isConnected={isConnected}
@@ -387,7 +427,24 @@ const TopPoolsNftListCardInner = ({
           chainId={chainId}
           handleSwitchNetwork={handleSwitchNetwork}
           handleConnection={handleConnection}
-          expired={false}
+          expired={true}
+          apr={25}
+          isPremium={isPremium}
+        />
+      ) : (showDetails ||
+          clickedCawsPool ||
+          poolClickedType === "details-nft") &&
+        expired === true &&
+        cardIndexDyp === 2 &&
+        cardIndex === 2 ? (
+        <CawsDetailsPremium
+          coinbase={coinbase}
+          isConnected={isConnected}
+          listType={listType}
+          chainId={chainId}
+          handleSwitchNetwork={handleSwitchNetwork}
+          handleConnection={handleConnection}
+          expired={true}
           apr={25}
           isPremium={isPremium}
         />

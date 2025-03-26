@@ -37,7 +37,7 @@ const Sidebar = (props) => {
 
   sidebar?.addEventListener("mouseover", openSidebar);
   sidebar?.addEventListener("mouseleave", closeSidebar);
-  console.log(location.pathname);
+ 
   useEffect(() => {
     // const fetchInterval = setInterval(
     //   () => setlocation(window.location.pathname),

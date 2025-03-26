@@ -57,23 +57,7 @@ const EarnOtherContentNft = ({
     },
   ];
 
-  const dummyData_eth = [
-    {
-      chain: "Ethereum",
-      apr: 25,
-      tokenLogo: "cawslogo.svg",
-      expired: false,
-      top_pick: false,
-      tokenName: "CAWS",
-      tokenTicker: "ETH",
-      pool: "CAWS",
-      id: "",
-      coming_soon: false,
-      lockTime: "No lock",
-      poolCap: "100",
-      new_pool: "Yes",
-    },
-  ];
+  const dummyData_eth = [];
 
   const dummyData_eth_expired = [
     {
@@ -90,6 +74,23 @@ const EarnOtherContentNft = ({
       lockTime: "No lock",
       poolCap: "100",
       new_pool: "Yes",
+      id: "0x3E0c0443A6a5382B2Ef20ECfe3bdbE84F1436523",
+    },
+    {
+      chain: "Ethereum",
+      apr: 25,
+      tokenLogo: ["cawslogo.svg"],
+      expired: true,
+      top_pick: false,
+      tokenName: "CAWS",
+      tokenTicker: "ETH",
+      pool: "CAWS",
+      id: "",
+      coming_soon: false,
+      lockTime: "No lock",
+      poolCap: "100",
+      new_pool: "Yes",
+      id: "0x097bB1679AC734E90907Ff4173bA966c694428Fc",
     },
     {
       chain: "Ethereum",
@@ -450,16 +451,16 @@ const EarnOtherContentNft = ({
       poolClicked === true &&
       clickedCawsPool === false
     ) {
-      setMyStakes(false);
-      setExpiredPools(false);
+      setMyStakes(true);
+      setExpiredPools(true);
       setclickedCawsPool(true);
     } else if (
       poolClickedType === "details-land-nft" &&
       poolClicked === true &&
       clickedCawsPool === false
     ) {
-      setMyStakes(false);
-      setExpiredPools(false);
+      setMyStakes(true);
+      setExpiredPools(true);
       setclickedCawsPool(true);
     }
   }, [poolClickedType, poolClicked, clickedCawsPool]);
@@ -641,7 +642,17 @@ const EarnOtherContentNft = ({
 
       {listStyle === "list" && (
         <div className="row mx-0 justify-content-between align-items-center px-0 py-3 w-100">
-          {windowSize.width > 768 && (
+          {expiredPools === false && (
+            <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
+              <img
+                src={"https://cdn.worldofdypians.com/tools/disabledStaking.svg"}
+                style={{ width: "150px", height: "150px" }}
+                alt=""
+              />
+              <h6 className="no-farms"> No Active Staking pools available</h6>
+            </div>
+          )}
+          {windowSize.width > 768 && expiredPools === true && (
             <div
               className="row mx-0 justify-content-between align-items-center px-2 py-2 w-100 options-container"
               style={{ marginBottom: "10px" }}
@@ -713,7 +724,7 @@ const EarnOtherContentNft = ({
                     display={"flex"}
                     isNewPool={pool.new_pool === "Yes" ? true : false}
                     totalTvl={pool.tvl_usd}
-                    // showDetails={showDetails}
+                    id={pool?.id}
                     cardIndex={index + 1}
                     chainId={chainId}
                     handleConnection={handleConnection}
@@ -724,9 +735,12 @@ const EarnOtherContentNft = ({
                     // the_graph_result={the_graph_result}
                     // the_graph_resultbsc={the_graph_resultbsc}
                     isConnected={isConnected}
-                    // the_graph_resultavax={the_graph_resultavax}
-                    // isPremium={isPremium}
-                    // network={network}
+                    clickedCawsPool={clickedCawsPool}
+                    onCloseCard={() => {
+                      onCloseCard();
+                      setclickedCawsPool(false);
+                    }}
+                    poolClickedType={poolClickedType}
                   />
                 );
               })}
