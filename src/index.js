@@ -2,16 +2,24 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
 import ReactGA from "react-ga";
-import { Web3ReactProvider, createWeb3ReactRoot } from "@web3-react/core";
-import getLibrary from "./functions/hooks";
+import { Web3ReactProvider } from "@web3-react/core";
+// import getLibrary from "./functions/hooks";
 import { BrowserRouter } from "react-router-dom";
 import AuthProvider from "./functions/AuthDetails";
 import { ApolloProvider } from "@apollo/client";
 import client from "./functions/apolloConfig";
-const Web3ProviderNetwork = createWeb3ReactRoot("NETWORK");
+import { Web3Provider } from "@ethersproject/providers";
+// const Web3ProviderNetwork = createWeb3ReactRoot("NETWORK");
+import { Buffer } from 'buffer'
 
 if ("ethereum" in window) {
   window.ethereum.autoRefreshOnNetworkChange = true;
+}
+
+function getLibrary(provider) {
+  const library = new Web3Provider(provider);
+  library.pollingInterval = 12000;
+  return library;
 }
 
 const GOOGLE_ANALYTICS_ID = process.env.REACT_APP_GOOGLE_ANALYTICS_ID;
@@ -33,19 +41,19 @@ window.addEventListener("error", (error) => {
 
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
-
+window.Buffer = Buffer
 
 root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Web3ReactProvider getLibrary={getLibrary}>
-        <Web3ProviderNetwork>
-          <ApolloProvider client={client}>
-            <AuthProvider>
-              <App />
-            </AuthProvider>
-          </ApolloProvider>
-        </Web3ProviderNetwork>
+        {/* <Web3ProviderNetwork> */}
+        <ApolloProvider client={client}>
+          <AuthProvider>
+            <App />
+          </AuthProvider>
+        </ApolloProvider>
+        {/* </Web3ProviderNetwork> */}
       </Web3ReactProvider>
     </BrowserRouter>
   </React.StrictMode>

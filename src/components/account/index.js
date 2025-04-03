@@ -80,7 +80,7 @@ export default class Subscription extends React.Component {
         .get(`https://api.dyp.finance/api/user_pools/${this.props.address}`)
         .then((data) => {
           return data.data.PoolsUserIn;
-        });
+        }).catch((e)=>{console.error(e)});
       this.setState({ userPools: result });
     } else {
       if (this.props.isConnected && this.props.coinbase) {
@@ -88,7 +88,7 @@ export default class Subscription extends React.Component {
           .get(`https://api.dyp.finance/api/user_pools/${this.props.coinbase}`)
           .then((data) => {
             return data.data.PoolsUserIn;
-          });
+          }).catch((e)=>{console.error(e)});
         this.setState({ userPools: result });
       } else this.setState({ userPools: [] });
     }
