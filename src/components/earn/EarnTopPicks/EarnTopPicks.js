@@ -47,6 +47,8 @@ const EarnTopPicks = ({
   showRibbon,
   onConnectWallet,
   onChainSelect,
+  binanceW3WProvider,
+  handleSwitchChainBinanceWallet,
 }) => {
   const vault = [
     {
@@ -538,7 +540,6 @@ const EarnTopPicks = ({
       }
     }
   };
-
 
   const fetchEthStaking2 = async () => {
     const eth_result = await axios
@@ -1905,6 +1906,10 @@ const EarnTopPicks = ({
                       expired={false}
                       isConnected={isConnected}
                       the_graph_result={the_graph_result}
+                      binanceW3WProvider={binanceW3WProvider}
+                      handleSwitchChainBinanceWallet={
+                        handleSwitchChainBinanceWallet
+                      }
                     />
                   ) : (
                     <></>
@@ -2011,6 +2016,10 @@ const EarnTopPicks = ({
                       expired={false}
                       isConnected={isConnected}
                       the_graph_result={the_graph_result}
+                      binanceW3WProvider={binanceW3WProvider}
+                      handleSwitchChainBinanceWallet={
+                        handleSwitchChainBinanceWallet
+                      }
                     />
                   ) : (
                     <></>
@@ -2127,6 +2136,10 @@ const EarnTopPicks = ({
                       expired={false}
                       isConnected={isConnected}
                       the_graph_result={the_graph_result}
+                      binanceW3WProvider={binanceW3WProvider}
+                      handleSwitchChainBinanceWallet={
+                        handleSwitchChainBinanceWallet
+                      }
                     />
                   ) : (
                     <></>
@@ -2233,6 +2246,10 @@ const EarnTopPicks = ({
                       expired={false}
                       isConnected={isConnected}
                       the_graph_result={the_graph_result}
+                      binanceW3WProvider={binanceW3WProvider}
+                      handleSwitchChainBinanceWallet={
+                        handleSwitchChainBinanceWallet
+                      }
                     />
                   ) : (
                     <></>
@@ -2340,6 +2357,10 @@ const EarnTopPicks = ({
                       expired={false}
                       isConnected={isConnected}
                       the_graph_result={the_graph_result}
+                      binanceW3WProvider={binanceW3WProvider}
+                      handleSwitchChainBinanceWallet={
+                        handleSwitchChainBinanceWallet
+                      }
                     />
                   ) : (
                     <></>
@@ -2453,6 +2474,10 @@ const EarnTopPicks = ({
                       expired={false}
                       isConnected={isConnected}
                       the_graph_result={the_graph_result}
+                      binanceW3WProvider={binanceW3WProvider}
+                      handleSwitchChainBinanceWallet={
+                        handleSwitchChainBinanceWallet
+                      }
                     />
                   ) : (
                     <></>
@@ -2559,6 +2584,10 @@ const EarnTopPicks = ({
                       expired={false}
                       isConnected={isConnected}
                       the_graph_result={the_graph_result}
+                      binanceW3WProvider={binanceW3WProvider}
+                      handleSwitchChainBinanceWallet={
+                        handleSwitchChainBinanceWallet
+                      }
                     />
                   ) : (
                     <></>
@@ -2666,6 +2695,10 @@ const EarnTopPicks = ({
                       expired={false}
                       isConnected={isConnected}
                       the_graph_result={the_graph_result}
+                      binanceW3WProvider={binanceW3WProvider}
+                      handleSwitchChainBinanceWallet={
+                        handleSwitchChainBinanceWallet
+                      }
                     />
                   ) : (
                     <></>
@@ -2773,6 +2806,10 @@ const EarnTopPicks = ({
                       expired={false}
                       isConnected={isConnected}
                       the_graph_result={the_graph_result}
+                      binanceW3WProvider={binanceW3WProvider}
+                      handleSwitchChainBinanceWallet={
+                        handleSwitchChainBinanceWallet
+                      }
                     />
                   ) : (
                     <></>
@@ -2881,6 +2918,10 @@ const EarnTopPicks = ({
                       expired={false}
                       isConnected={isConnected}
                       the_graph_result={the_graph_result}
+                      binanceW3WProvider={binanceW3WProvider}
+                      handleSwitchChainBinanceWallet={
+                        handleSwitchChainBinanceWallet
+                      }
                     />
                   ) : (
                     <></>
@@ -2990,6 +3031,10 @@ const EarnTopPicks = ({
                       expired={false}
                       isConnected={isConnected}
                       the_graph_result={the_graph_result}
+                      binanceW3WProvider={binanceW3WProvider}
+                      handleSwitchChainBinanceWallet={
+                        handleSwitchChainBinanceWallet
+                      }
                     />
                   ) : (
                     <></>
@@ -3025,6 +3070,10 @@ const EarnTopPicks = ({
                     latestApr={theBnbPool.apy_percent}
                     lockTime={3}
                     listType={listType}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : null
               ) : (
@@ -4030,6 +4079,10 @@ const EarnTopPicks = ({
                       setselectedPool([]);
                       setDetails(999);
                     }}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : selectedPool?.id ===
                     "0xFBe84Af34CdC22455f82e18B76Ca50D21d3aBF84" &&
@@ -4067,6 +4120,10 @@ const EarnTopPicks = ({
                       setselectedPool([]);
                       setDetails(999);
                     }}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : selectedPool?.id ===
                     "0xf6DC9E51D4E0FCc19ca6426fB5422f1E9a24F2eE" &&
@@ -4104,6 +4161,10 @@ const EarnTopPicks = ({
                       setselectedPool([]);
                       setDetails(999);
                     }}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : topList === "Staking" &&
                   selectedPool?.id ===
@@ -4139,6 +4200,10 @@ const EarnTopPicks = ({
                       setselectedPool([]);
                       setDetails(999);
                     }}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : topList === "Staking" &&
                   chain === "avax" &&
@@ -4174,6 +4239,10 @@ const EarnTopPicks = ({
                       setselectedPool([]);
                       setDetails(999);
                     }}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : topList === "Staking" &&
                   selectedPool?.id ===
@@ -4211,6 +4280,10 @@ const EarnTopPicks = ({
                       setselectedPool([]);
                       setDetails(999);
                     }}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : topList === "Staking" &&
                   selectedPool?.id ===
@@ -4248,6 +4321,10 @@ const EarnTopPicks = ({
                       setselectedPool([]);
                       setDetails(999);
                     }}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : topList === "Staking" &&
                   selectedPool?.id ===
@@ -4285,6 +4362,10 @@ const EarnTopPicks = ({
                       setselectedPool([]);
                       setDetails(999);
                     }}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : topList === "Staking" &&
                   selectedPool?.id ===
@@ -4320,6 +4401,10 @@ const EarnTopPicks = ({
                       setselectedPool([]);
                       setDetails(999);
                     }}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : topList === "Staking" &&
                   selectedPool?.id ===
@@ -4357,6 +4442,10 @@ const EarnTopPicks = ({
                       setselectedPool([]);
                       setDetails(999);
                     }}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : topList === "Staking" &&
                   (selectedPool?.id ===
@@ -4396,6 +4485,10 @@ const EarnTopPicks = ({
                     }}
                     poolCap={10000000}
                     start_date={"01 Sep 2024"}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : topList === "Staking" &&
                   selectedPool?.id ===
@@ -4433,6 +4526,10 @@ const EarnTopPicks = ({
                     }}
                     poolCap={1000000}
                     start_date={"07 Jun 2024"}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : topList === "Staking" &&
                   selectedPool?.id ===
@@ -4470,6 +4567,10 @@ const EarnTopPicks = ({
                     }}
                     poolCap={3700000}
                     start_date={"12 Jul 2024"}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : topList === "Staking" &&
                   selectedPool?.id ===
@@ -4505,6 +4606,10 @@ const EarnTopPicks = ({
                       setselectedPool([]);
                       setDetails(999);
                     }}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : topList === "Staking" &&
                   selectedPool?.id ===
@@ -4542,6 +4647,10 @@ const EarnTopPicks = ({
                     }}
                     poolCap={1500000}
                     start_date={"12 Jul 2024"}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : topList === "Staking" &&
                   selectedPool?.id ===
@@ -4579,6 +4688,10 @@ const EarnTopPicks = ({
                       setDetails(999);
                     }}
                     poolCap={625000}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : (
                   <></>

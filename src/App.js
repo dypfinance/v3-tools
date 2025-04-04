@@ -172,7 +172,6 @@ function App() {
     "https://axf717szte.execute-api.eu-central-1.amazonaws.com/prod";
 
   const handleConnectBinance = async () => {
-    console.log("in");
     await activate(binanceConnector)
       .then(async () => {
         setSuccess(true);
@@ -357,7 +356,7 @@ function App() {
         if (binanceData !== undefined && binanceData !== null) {
           setnetworkId(binanceData.chainId.toString());
         } else {
-          setnetworkId(chainId.toString());
+          setnetworkId(chainId?.toString() ?? "1");
         }
       } else {
         setnetworkId("1");
@@ -433,7 +432,6 @@ function App() {
     };
 
     if (window.WALLET_TYPE === "binance" && binanceData) {
-      console.log("yes");
       try {
         await binanceConnector.binanceW3WProvider
           .request({
@@ -1327,38 +1325,60 @@ function App() {
   };
 
   const signWalletPublicAddress = async () => {
-    try {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner(coinbase);
-      const signature = await signer.signMessage(
-        `Signing one-time nonce: ${dataNonce?.generateWalletNonce?.nonce}`
-      );
-      verifyWallet({
-        variables: {
-          publicAddress: coinbase,
-          signature: signature,
-        },
-      }).then(() => {
+    if (window.ethereum && window.WALLET_TYPE !== "binance") {
+      try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner(coinbase);
+        const signature = await signer.signMessage(
+          `Signing one-time nonce: ${dataNonce?.generateWalletNonce?.nonce}`
+        );
+        verifyWallet({
+          variables: {
+            publicAddress: coinbase,
+            signature: signature,
+          },
+        }).then(() => {
+          if (isonSync) {
+            setsyncStatus("success");
+            setTimeout(() => {
+              setsyncStatus("initial");
+            }, 1000);
+          }
+          refreshSubscription(coinbase);
+
+          if (isonlink) {
+            window.location.reload();
+          }
+        });
+      } catch (error) {
         if (isonSync) {
-          setsyncStatus("success");
+          setsyncStatus("error");
           setTimeout(() => {
             setsyncStatus("initial");
-          }, 1000);
+          }, 3000);
         }
-        refreshSubscription(coinbase);
-
-        if (isonlink) {
-          window.location.reload();
-        }
-      });
-    } catch (error) {
-      if (isonSync) {
-        setsyncStatus("error");
-        setTimeout(() => {
-          setsyncStatus("initial");
-        }, 3000);
+        console.log("🚀 ~ file: Dashboard.js:30 ~ getTokens ~ error", error);
       }
-      console.log("🚀 ~ file: Dashboard.js:30 ~ getTokens ~ error", error);
+    } else if (coinbase && library) {
+      try {
+        const provider = library;
+        const signer = provider.getSigner();
+        const signature = await signer.signMessage(
+          `Signing one-time nonce: ${dataNonce?.generateWalletNonce?.nonce}`
+        );
+        verifyWallet({
+          variables: {
+            publicAddress: coinbase,
+            signature: signature,
+          },
+        }).then(() => {
+          // if (isonlink) {
+          //   handleFirstTask(binanceWallet);
+          // }
+        });
+      } catch (error) {
+        console.log("🚀 ~ file: App.js:2248 ~ getTokens ~ error", error);
+      }
     }
   };
 
@@ -2002,7 +2022,7 @@ function App() {
         window.WALLET_TYPE = "binance";
         setcoinbase(account);
         setisConnected(true);
-        setnetworkId(chainId.toString());
+        setnetworkId(chainId?.toString() ?? "1");
       }
     }
   }, [binanceData, account, chainId, logoutstorage]);
@@ -2056,7 +2076,6 @@ function App() {
     // checkNetworkId();
   }, [coinbase, networkId, active, account, logoutstorage]);
 
- 
   useEffect(() => {
     if (email) {
       getAllChests();
@@ -2308,6 +2327,7 @@ function App() {
                         coinbase={coinbase}
                         isConnected={isConnected}
                         handleConnection={handleConnection}
+                        handleConnectBinance={handleConnectBinance}
                       />
                     }
                   />
@@ -2355,7 +2375,11 @@ function App() {
                         fetchPreviousCawsAdvWinners={
                           fetchPreviousCawsAdvWinners
                         }
-                        handleConnection={showModal}
+                        handleSwitchChainBinanceWallet={handleSwitchNetwork}
+                        handleConnection={() => {
+                          setshowWalletPopup(true);
+                        }}
+                        binanceW3WProvider={library}
                         isConnected={isConnected}
                         networkId={parseInt(networkId)}
                         onSelectChain={onSelectChain}
@@ -2447,7 +2471,11 @@ setkittyDashRecords */}
                         lp_id={LP_ID_Array}
                         isConnected={isConnected}
                         network={networkId}
-                        handleConnection={handleConnection}
+                        handleSwitchChainBinanceWallet={handleSwitchNetwork}
+                        handleConnection={() => {
+                          setshowWalletPopup(true);
+                        }}
+                        binanceW3WProvider={library}
                         handleSwitchNetwork={handleSwitchNetwork}
                         referrer={referrer}
                         isPremium={isPremium}
@@ -2707,10 +2735,16 @@ setkittyDashRecords */}
                         lp_id={LP_ID_Array}
                         isConnected={isConnected}
                         network={parseInt(networkId)}
-                        handleConnection={handleConnection}
+                        handleSwitchChainBinanceWallet={handleSwitchNetwork}
+                        handleConnection={() => {
+                          setshowWalletPopup(true);
+                        }}
+                        binanceW3WProvider={library}
                         referrer={referrer}
                         isPremium={isPremium}
-                        onConnectWallet={showModal}
+                        onConnectWallet={() => {
+                          setshowWalletPopup(true);
+                        }}
                         // aggregatorPools={aggregatorPools}
                         onMobileClick={() => {
                           setshowMobilePopup(true);

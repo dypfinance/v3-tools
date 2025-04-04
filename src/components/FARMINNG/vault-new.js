@@ -4,12 +4,13 @@ import getFormattedNumber from "../../functions/get-formatted-number";
 import Modal from "../Modal/Modal";
 import Address from "./address";
 import WalletModal from "../WalletModal";
-import "./top-pools.css";  
-import Tooltip from "@material-ui/core/Tooltip"; 
-import { shortAddress } from "../../functions/shortAddress";  
+import "./top-pools.css";
+import Tooltip from "@material-ui/core/Tooltip";
+import { shortAddress } from "../../functions/shortAddress";
 import { ClickAwayListener } from "@material-ui/core";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
 import axios from "axios";
+import { ethers } from "ethers";
 
 const Vault = ({
   vault,
@@ -29,6 +30,8 @@ const Vault = ({
   handleConnection,
   expired,
   isConnected,
+  binanceW3WProvider,
+  handleSwitchChainBinanceWallet,
 }) => {
   let { BigNumber, alertify, token_dyps } = window;
   let token_symbol = UNDERLYING_SYMBOL;
@@ -162,7 +165,6 @@ const Vault = ({
   const [vault_contract, setvault_contract] = useState();
   const [ethPrice, setethPrice] = useState(0);
 
-
   const showModal = () => {
     setshow(true);
   };
@@ -206,7 +208,19 @@ const Vault = ({
     }
 
     try {
-      let _bal = token.balanceOf(coinbase);
+      let _bal;
+      let token_sc = new window.infuraWeb3.eth.Contract(
+        window.TOKEN_ABI,
+        token._address
+      );
+      if (coinbase && isConnected) {
+        _bal = await token_sc.methods
+          .balanceOf(coinbase)
+          .call()
+          .catch((e) => {
+            console.error(e);
+          });
+      }
 
       if (vault && vault_contract) {
         let _stakingTime = vault_contract.methods.depositTime(coinbase).call();
@@ -465,10 +479,12 @@ const Vault = ({
 
     if (vault) {
       const vaultobj = pools.data.VaultTVLs.filter((obj) => {
-        return obj.contract_address.toLowerCase() === vault._address.toLowerCase();
-      }); 
-      
-      if (vaultobj && vaultobj.length>0) {
+        return (
+          obj.contract_address.toLowerCase() === vault._address.toLowerCase()
+        );
+      });
+
+      if (vaultobj && vaultobj.length > 0) {
         settvl_usd(vaultobj[0].tvl);
       }
     }
@@ -489,7 +505,7 @@ const Vault = ({
   }, [coinbase, coinbase2, vault_contract, vault]);
 
   useEffect(() => {
-    if (chainId === '1') {
+    if (chainId === "1") {
       refreshBalance();
     }
   }, [coinbase, coinbase2, vault_contract, chainId]);
@@ -506,22 +522,49 @@ const Vault = ({
 
     let amount = depositAmount;
     amount = new BigNumber(amount).times(10 ** UNDERLYING_DECIMALS).toFixed(0);
-    await token
-      .approve(vault._address, amount)
-      .then(() => {
+
+    if (window.WALLET_TYPE !== "binance") {
+      await token
+        .approve(vault._address, amount)
+        .then(() => {
+          setdepositLoading(false);
+          setdepositStatus("deposit");
+        })
+        .catch((e) => {
+          setdepositLoading(false);
+          setdepositStatus("fail");
+          seterrorMsg(e?.message);
+          setTimeout(() => {
+            setdepositAmount("");
+            setdepositStatus("initial");
+            seterrorMsg("");
+          }, 8000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let token_Sc = new ethers.Contract(
+        token._address,
+        window.TOKEN_ABI,
+        binanceW3WProvider.getSigner()
+      );
+
+      const txResponse = await token_Sc
+        .approve(vault._address, amount)
+        .catch((e) => {
+          setdepositLoading(false);
+          setdepositStatus("fail");
+          seterrorMsg(e?.message);
+          setTimeout(() => {
+            setdepositAmount("");
+            setdepositStatus("initial");
+            seterrorMsg("");
+          }, 8000);
+        });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         setdepositLoading(false);
         setdepositStatus("deposit");
-      })
-      .catch((e) => {
-        setdepositLoading(false);
-        setdepositStatus("fail");
-        seterrorMsg(e?.message);
-        setTimeout(() => {
-          setdepositAmount("");
-          setdepositStatus("initial");
-          seterrorMsg("");
-        }, 8000);
-      });
+      }
+    }
   };
 
   const handleWithdraw = async (e) => {
@@ -605,32 +648,66 @@ const Vault = ({
       .toFixed(0);
 
     //console.log({ _amountOutMin_ethFeeBuyBack, _amountOutMin_tokenFeeBuyBack, deadline, value })
+    if (window.WALLET_TYPE !== "binance") {
+      vault
+        .withdraw(
+          [
+            amount,
+            _amountOutMin_ethFeeBuyBack,
+            _amountOutMin_tokenFeeBuyBack,
+            deadline,
+          ],
+          value
+        )
+        .then(() => {
+          setwithdrawStatus("success");
+          setwithdrawLoading(false);
+          refreshBalance();
+        })
+        .catch((e) => {
+          setwithdrawLoading(false);
+          setwithdrawStatus("failed");
+          seterrorMsg3(e?.message);
+          setTimeout(() => {
+            setwithdrawStatus("initial");
+            seterrorMsg3("");
+            setwithdrawAmount("");
+          }, 10000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let vault_Sc = new ethers.Contract(
+        vault._address,
+        window.VAULT_ABI,
+        binanceW3WProvider.getSigner()
+      );
 
-    vault
-      .withdraw(
-        [
-          amount,
-          _amountOutMin_ethFeeBuyBack,
-          _amountOutMin_tokenFeeBuyBack,
-          deadline,
-        ],
-        value
-      )
-      .then(() => {
+      const txResponse = vault_Sc
+        .withdraw(
+          [
+            amount,
+            _amountOutMin_ethFeeBuyBack,
+            _amountOutMin_tokenFeeBuyBack,
+            deadline,
+          ],
+          value
+        )
+        .catch((e) => {
+          setwithdrawLoading(false);
+          setwithdrawStatus("failed");
+          seterrorMsg3(e?.message);
+          setTimeout(() => {
+            setwithdrawStatus("initial");
+            seterrorMsg3("");
+            setwithdrawAmount("");
+          }, 10000);
+        });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         setwithdrawStatus("success");
         setwithdrawLoading(false);
         refreshBalance();
-      })
-      .catch((e) => {
-        setwithdrawLoading(false);
-        setwithdrawStatus("failed");
-        seterrorMsg3(e?.message);
-        setTimeout(() => {
-          setwithdrawStatus("initial");
-          seterrorMsg3("");
-          setwithdrawAmount("");
-        }, 10000);
-      });
+      }
+    }
   };
 
   const handleStake = async (e) => {
@@ -676,24 +753,50 @@ const Vault = ({
       .div(100)
       .toFixed(0);
 
-    //console.log({ _amountOutMin_ethFeeBuyBack, deadline, value })
-    vault
-      .deposit([amount, _amountOutMin_ethFeeBuyBack, deadline], value)
-      .then(() => {
+    if (window.WALLET_TYPE !== "binance") {
+      vault
+        .deposit([amount, _amountOutMin_ethFeeBuyBack, deadline], value)
+        .then(() => {
+          setdepositLoading(false);
+          setdepositStatus("success");
+          refreshBalance();
+        })
+        .catch((e) => {
+          setdepositLoading(false);
+          setdepositStatus("fail");
+          seterrorMsg(e?.message);
+          setTimeout(() => {
+            setdepositAmount("");
+            setdepositStatus("initial");
+            seterrorMsg("");
+          }, 10000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let vault_Sc = new ethers.Contract(
+        vault._address,
+        window.VAULT_ABI,
+        binanceW3WProvider.getSigner()
+      );
+
+      const txResponse = vault_Sc
+        .deposit([amount, _amountOutMin_ethFeeBuyBack, deadline], value)
+        .catch((e) => {
+          setdepositLoading(false);
+          setdepositStatus("fail");
+          seterrorMsg(e?.message);
+          setTimeout(() => {
+            setdepositAmount("");
+            setdepositStatus("initial");
+            seterrorMsg("");
+          }, 10000);
+        });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         setdepositLoading(false);
         setdepositStatus("success");
         refreshBalance();
-      })
-      .catch((e) => {
-        setdepositLoading(false);
-        setdepositStatus("fail");
-        seterrorMsg(e?.message);
-        setTimeout(() => {
-          setdepositAmount("");
-          setdepositStatus("initial");
-          seterrorMsg("");
-        }, 10000);
-      });
+      }
+    }
   };
 
   const getMinEthFeeInWei = async () => {
@@ -761,23 +864,50 @@ const Vault = ({
 
     //console.log({ _amountOutMin_platformTokens })
     //alert("reached here!")
-    vault
-      .claim([_amountOutMin_platformTokens])
-      .then(() => {
+    if (window.WALLET_TYPE !== "binance") {
+      await vault
+        .claim([_amountOutMin_platformTokens])
+        .then(() => {
+          setclaimStatus("success");
+          setclaimLoading(false);
+          refreshBalance();
+        })
+        .catch((e) => {
+          setclaimStatus("failed");
+          setclaimLoading(false);
+          seterrorMsg2(e?.message);
+
+          setTimeout(() => {
+            setclaimStatus("initial");
+            seterrorMsg2("");
+          }, 2000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let vault_Sc = new ethers.Contract(
+        vault._address,
+        window.VAULT_ABI,
+        binanceW3WProvider.getSigner()
+      );
+
+      const txResponse = vault_Sc
+        .claim([_amountOutMin_platformTokens])
+        .catch((e) => {
+          setclaimStatus("failed");
+          setclaimLoading(false);
+          seterrorMsg2(e?.message);
+
+          setTimeout(() => {
+            setclaimStatus("initial");
+            seterrorMsg2("");
+          }, 2000);
+        });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         setclaimStatus("success");
         setclaimLoading(false);
         refreshBalance();
-      })
-      .catch((e) => {
-        setclaimStatus("failed");
-        setclaimLoading(false);
-        seterrorMsg2(e?.message);
-
-        setTimeout(() => {
-          setclaimStatus("initial");
-          seterrorMsg2("");
-        }, 2000);
-      });
+      }
+    }
   };
 
   const handleSetMaxDeposit = async (e) => {
@@ -834,27 +964,37 @@ const Vault = ({
     return apr;
   };
 
-  const getUsdPerETH = async() => {
+  const getUsdPerETH = async () => {
     await axios
       .get("https://api.dyp.finance/api/the_graph_eth_v2")
       .then((data) => {
         setethPrice(data.data.the_graph_eth_v2.usd_per_eth);
-      }); 
+      });
   };
- 
+
   const getApproxReturn = () => {
-    let APY =  apy_percent + platformTokenApyPercent;
+    let APY = apy_percent + platformTokenApyPercent;
     return ((approxDeposit * APY) / 100 / 365) * approxDays;
   };
 
   const handleEthPool = async () => {
-    await handleSwitchNetworkhook("0x1")
-      .then(() => {
-        handleSwitchNetwork("1");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    if (window.ethereum) {
+      if (window.WALLET_TYPE !== "binance") {
+        await handleSwitchNetworkhook("0x1")
+          .then(() => {
+            handleSwitchNetwork(1);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      } else if (window.WALLET_TYPE === "binance") {
+        handleSwitchChainBinanceWallet(1);
+      }
+    } else if (window.WALLET_TYPE === "binance") {
+      handleSwitchChainBinanceWallet(1);
+    } else {
+      window.alertify.error("No web3 detected. Please install Metamask!");
+    }
   };
 
   let APY_TOTAL = apy_percent + platformTokenApyPercent;
@@ -913,7 +1053,7 @@ const Vault = ({
   };
 
   useEffect(() => {
-    getUsdPerETH()
+    getUsdPerETH();
   }, []);
 
   return (
@@ -930,7 +1070,7 @@ const Vault = ({
             <div className="d-flex flex-column flex-lg-row w-100 align-items-start align-items-lg-center justify-content-between">
               <h6 className="activetxt position-relative activetxt-vault">
                 <img
-                  src={'https://cdn.worldofdypians.com/tools/ellipse.svg'}
+                  src={"https://cdn.worldofdypians.com/tools/ellipse.svg"}
                   alt=""
                   className="position-relative"
                   style={{ top: "-1px" }}
@@ -965,7 +1105,9 @@ const Vault = ({
                           }
                         >
                           <img
-                            src={'https://cdn.worldofdypians.com/tools/more-info.svg'}
+                            src={
+                              "https://cdn.worldofdypians.com/tools/more-info.svg"
+                            }
                             alt=""
                             onClick={performanceOpen}
                           />
@@ -993,7 +1135,13 @@ const Vault = ({
                             </div>
                           }
                         >
-                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={aprOpen} />
+                          <img
+                            src={
+                              "https://cdn.worldofdypians.com/tools/more-info.svg"
+                            }
+                            alt=""
+                            onClick={aprOpen}
+                          />
                         </Tooltip>
                       </ClickAwayListener>
                     </h6>
@@ -1017,7 +1165,13 @@ const Vault = ({
                             </div>
                           }
                         >
-                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={lockOpen} />
+                          <img
+                            src={
+                              "https://cdn.worldofdypians.com/tools/more-info.svg"
+                            }
+                            alt=""
+                            onClick={lockOpen}
+                          />
                         </Tooltip>
                       </ClickAwayListener>
                     </h6>
@@ -1051,7 +1205,12 @@ const Vault = ({
                     }}
                   >
                     <h6 className="bottomitems">
-                      <img src={'https://cdn.worldofdypians.com/tools/purpleStat.svg'} alt="" />
+                      <img
+                        src={
+                          "https://cdn.worldofdypians.com/tools/purpleStat.svg"
+                        }
+                        alt=""
+                      />
                       Stats
                     </h6>
                   </div>
@@ -1077,7 +1236,13 @@ const Vault = ({
                 coinbase === undefined ||
                 isConnected === false ? (
                   <button className="connectbtn btn" onClick={showModal}>
-                    <img src={'https://cdn.worldofdypians.com/tools/walletIcon.svg'} alt="" /> Connect wallet
+                    <img
+                      src={
+                        "https://cdn.worldofdypians.com/tools/walletIcon.svg"
+                      }
+                      alt=""
+                    />{" "}
+                    Connect wallet
                   </button>
                 ) : chainId === "1" ? (
                   <div className="addressbtn btn">
@@ -1150,7 +1315,11 @@ const Vault = ({
                       </div>
                     }
                   >
-                    <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={depositOpen} />
+                    <img
+                      src={"https://cdn.worldofdypians.com/tools/more-info.svg"}
+                      alt=""
+                      onClick={depositOpen}
+                    />
                   </Tooltip>
                 </ClickAwayListener>
               </div>
@@ -1248,7 +1417,12 @@ const Vault = ({
                       <>Success</>
                     ) : (
                       <>
-                        <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/wod/failMark.svg"
+                          }
+                          alt=""
+                        />
                         Failed
                       </>
                     )}
@@ -1314,7 +1488,13 @@ const Vault = ({
                         </div>
                       }
                     >
-                      <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={rewardsOpen} />
+                      <img
+                        src={
+                          "https://cdn.worldofdypians.com/tools/more-info.svg"
+                        }
+                        alt=""
+                        onClick={rewardsOpen}
+                      />
                     </Tooltip>
                   </ClickAwayListener>
                 </h6>
@@ -1356,7 +1536,12 @@ const Vault = ({
                       </div>
                     ) : claimStatus === "failed" ? (
                       <>
-                        <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/wod/failMark.svg"
+                          }
+                          alt=""
+                        />
                         Failed
                       </>
                     ) : claimStatus === "success" ? (
@@ -1392,7 +1577,11 @@ const Vault = ({
                       </div>
                     }
                   >
-                    <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={withdrawOpen} />
+                    <img
+                      src={"https://cdn.worldofdypians.com/tools/more-info.svg"}
+                      alt=""
+                      onClick={withdrawOpen}
+                    />
                   </Tooltip>
                 </ClickAwayListener>
               </h6>
@@ -1544,7 +1733,13 @@ const Vault = ({
                   href={`${window.config.etherscan_baseURL}/address/${coinbase}`}
                   className="stats-link"
                 >
-                  {shortAddress(coinbase)} <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
+                  {shortAddress(coinbase)}{" "}
+                  <img
+                    src={
+                      "https://cdn.worldofdypians.com/tools/statsLinkIcon.svg"
+                    }
+                    alt=""
+                  />
                 </a>
               </div>
               <hr />
@@ -1560,7 +1755,12 @@ const Vault = ({
                         color: "#f7f7fc",
                       }}
                     >
-                      <img src={'https://cdn.worldofdypians.com/tools/poolStatsIcon.svg'} alt="" />
+                      <img
+                        src={
+                          "https://cdn.worldofdypians.com/tools/poolStatsIcon.svg"
+                        }
+                        alt=""
+                      />
                       Pool stats
                     </h6>
                   </div>
@@ -1662,7 +1862,13 @@ const Vault = ({
                     href={`https://github.com/dypfinance/staking-governance-security-audits`}
                     className="stats-link"
                   >
-                    Audit <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
+                    Audit{" "}
+                    <img
+                      src={
+                        "https://cdn.worldofdypians.com/tools/statsLinkIcon.svg"
+                      }
+                      alt=""
+                    />
                   </a>
                   <a
                     target="_blank"
@@ -1670,7 +1876,13 @@ const Vault = ({
                     href={`${window.config.etherscan_baseURL}/token/${token._address}?a=${coinbase}`}
                     className="stats-link"
                   >
-                    View transaction <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
+                    View transaction{" "}
+                    <img
+                      src={
+                        "https://cdn.worldofdypians.com/tools/statsLinkIcon.svg"
+                      }
+                      alt=""
+                    />
                   </a>
                 </div>
               </div>
@@ -1781,7 +1993,12 @@ const Vault = ({
                         </div>
                       ) : withdrawStatus === "failed" ? (
                         <>
-                          <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
+                          <img
+                            src={
+                              "https://cdn.worldofdypians.com/wod/failMark.svg"
+                            }
+                            alt=""
+                          />
                           Failed
                         </>
                       ) : withdrawStatus === "success" ? (

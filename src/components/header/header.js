@@ -116,43 +116,6 @@ const Header = ({
     }
   };
 
-  const handleConfluxPool = async () => {
-    if (window.ethereum) {
-      await handleSwitchNetworkhook("0x406")
-        .then(() => {
-          handleSwitchNetwork("1030");
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    } else {
-      window.alertify.error("No web3 detected. Please install Metamask!");
-    }
-  };
-
-  const handleBasePool = async () => {
-    await handleSwitchNetworkhook("0x2105")
-      .then(() => {
-        handleSwitchNetwork("8453");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
-
-  const handleSkalePool = async () => {
-    if (window.ethereum) {
-      await handleSwitchNetworkhook("0x585eb4b1")
-        .then(() => {
-          handleSwitchNetwork("1482601649 ");
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    } else {
-      window.alertify.error("No web3 detected. Please install Metamask!");
-    }
-  };
 
   function handleChainChanged() {
     // We recommend reloading the page, unless you must do otherwise
@@ -605,7 +568,9 @@ const Header = ({
                           </Dropdown.Item>
                           {window.WALLET_TYPE !== "binance" &&
                             !window.ethereum?.isBinance && (
-                              <Dropdown.Item onClick={() => handleSkalePool()}>
+                              <Dropdown.Item onClick={() =>
+                                switchNetwork("0x585eb4b1", 1482601649)
+                              }>
                                 <img
                                   src={
                                     "https://cdn.worldofdypians.com/wod/skaleIcon.svg"

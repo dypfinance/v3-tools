@@ -80,6 +80,8 @@ const Games = ({
   fetchPreviousCawsAdvWinners,
   baseBalance,
   opBnbBalance,
+  handleSwitchChainBinanceWallet,
+  binanceW3WProvider
 }) => {
   const [chain, setChain] = useState("base");
   const [message, setMessage] = useState("");
@@ -141,9 +143,8 @@ const Games = ({
     "ciangsabin@gmail.com",
     "izcipara88@gmail.com",
     "therockhidder@gmail.com",
-  ]
+  ];
 
-  
   const midnightUTC = new Date(
     Date.UTC(
       now.getUTCFullYear(),
@@ -248,24 +249,26 @@ const Games = ({
     }
   }, [popups.stoneCrack, popups.kittyDash, popups.cawsAdventure, active]);
 
-  const handleBasePool = async () => {
-    await handleSwitchNetworkhook("0x2105")
-      .then(() => {
-        handleSwitchNetwork("8453");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
 
-  const handleOpbnbPool = async () => {
-    await handleSwitchNetworkhook("0xcc")
-      .then(() => {
-        handleSwitchNetwork("204");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+
+  const switchNetwork = async (hexChainId, chain) => {
+    if (window.ethereum) {
+      if (!window.gatewallet && window.WALLET_TYPE !== "binance") {
+        await handleSwitchNetworkhook(hexChainId)
+          .then(() => {
+            handleSwitchNetwork(chain);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      } else if (coinbase && window.WALLET_TYPE === "binance") {
+        handleSwitchChainBinanceWallet(chain);
+      }
+    } else if (coinbase && window.WALLET_TYPE === "binance") {
+      handleSwitchChainBinanceWallet(chain);
+    } else {
+      window.alertify.error("No web3 detected. Please install Metamask!");
+    }
   };
 
   const onCrackStone = (event) => {
@@ -781,15 +784,16 @@ const Games = ({
     <>
       <div className="container-lg p-0">
         <div className="row">
-        {bannedEmails.includes(email) && 
-      <div className="col-12  mb-3">
-      <div className="banned-account-wrapper w-100 px-2 py-3  d-flex align-items-center justify-content-center">
-        <span className="banned-account-message mb-0 text-white text-center">
-        This account has been banned permanently. Check your email for more information.
-        </span>
-      </div>
-    </div>
-     }
+          {bannedEmails.includes(email) && (
+            <div className="col-12  mb-3">
+              <div className="banned-account-wrapper w-100 px-2 py-3  d-flex align-items-center justify-content-center">
+                <span className="banned-account-message mb-0 text-white text-center">
+                  This account has been banned permanently. Check your email for
+                  more information.
+                </span>
+              </div>
+            </div>
+          )}
           <div className="col-12 col-lg-4">
             <NavLink to="/loyalty-program">
               <div className="games-banner loyalty-game-banner d-flex flex-column  flex-lg-row px-3 py-3 gap-3 gap-lg-0 align-items-start align-items-lg-center mb-4 position-relative">
@@ -1001,7 +1005,7 @@ const Games = ({
                   } d-flex gap-1 align-items-center`}
                   onClick={() => {
                     setChain("base");
-                    handleBasePool();
+                    switchNetwork("0x2105", "8453");
                   }}
                 >
                   <img
@@ -1018,7 +1022,7 @@ const Games = ({
                   } d-flex gap-1 align-items-center`}
                   onClick={() => {
                     setChain("opbnb");
-                    handleOpbnbPool();
+                    switchNetwork("0xcc", "204");
                   }}
                 >
                   <img
@@ -1060,6 +1064,7 @@ const Games = ({
                                 setIsActive(item.chestId);
                                 setIsActiveIndex(index + 1);
                               }}
+                              binanceW3WProvider={binanceW3WProvider}
                               handleShowRewards={(value, value2) => {
                                 showSingleRewardData(value, value2);
                                 setIsActive(value);
@@ -1125,6 +1130,7 @@ const Games = ({
                               key={index}
                               item={item}
                               image={bnbImages[index]}
+                              binanceW3WProvider={binanceW3WProvider}
                               onCrackStone={onCrackStone}
                               selectedChest={selectedChest}
                               isPremium={isPremium}
@@ -1201,6 +1207,7 @@ const Games = ({
                               key={index}
                               item={item}
                               image={bnbImages[index]}
+                              binanceW3WProvider={binanceW3WProvider}
                               // openChest={openChest}
                               selectedChest={selectedChest}
                               isPremium={isPremium}
@@ -1335,7 +1342,7 @@ const Games = ({
                               cursor: "pointer",
                               color: "#ce5d1b",
                             }}
-                            onClick={handleBasePool}
+                            onClick={() => switchNetwork("0x2105", "8453")}
                           >
                             BASE
                           </span>{" "}
@@ -1438,7 +1445,7 @@ const Games = ({
                               cursor: "pointer",
                               color: "#ce5d1b",
                             }}
-                            onClick={handleOpbnbPool}
+                            onClick={() => switchNetwork("0xcc", "204")}
                           >
                             opBNB
                           </span>{" "}
