@@ -15,15 +15,16 @@ const Earn = ({
   the_graph_resultbsc,
   referrer,
   handleSwitchNetwork,
-  isPremium,showRibbon,onConnectWallet
+  isPremium,
+  showRibbon,
+  onConnectWallet,
+  handleSwitchChainBinanceWallet,
+  binanceW3WProvider,
 }) => {
   const [showCalculator, setShowCalculator] = useState(false);
   const html = document.querySelector("html");
 
   const routeData = useLocation();
-
-
-
 
   useEffect(() => {
     if (showCalculator === true) {
@@ -43,7 +44,7 @@ const Earn = ({
     <div className="container-lg earn-wrapper d-flex flex-column justify-content-center align-items-center p-0 position-relative">
       <EarnHero />
       <EarnContent
-      onConnectWallet={onConnectWallet}
+        onConnectWallet={onConnectWallet}
         coinbase={coinbase}
         the_graph_result={the_graph_result}
         lp_id={lp_id}
@@ -60,6 +61,8 @@ const Earn = ({
         customChain={routeData.state ? routeData.state.customChain : "eth"}
         faqIndex={routeData.state ? routeData.state.faqIndex : -1}
         handleSwitchNetwork={handleSwitchNetwork}
+        handleSwitchChainBinanceWallet={handleSwitchChainBinanceWallet}
+        binanceW3WProvider={binanceW3WProvider}
         isPremium={isPremium}
         showRibbon={showRibbon}
       />

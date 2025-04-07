@@ -80,7 +80,7 @@ export default class Subscription extends React.Component {
         .get(`https://api.dyp.finance/api/user_pools/${this.props.address}`)
         .then((data) => {
           return data.data.PoolsUserIn;
-        });
+        }).catch((e)=>{console.error(e)});
       this.setState({ userPools: result });
     } else {
       if (this.props.isConnected && this.props.coinbase) {
@@ -88,7 +88,7 @@ export default class Subscription extends React.Component {
           .get(`https://api.dyp.finance/api/user_pools/${this.props.coinbase}`)
           .then((data) => {
             return data.data.PoolsUserIn;
-          });
+          }).catch((e)=>{console.error(e)});
         this.setState({ userPools: result });
       } else this.setState({ userPools: [] });
     }
@@ -648,8 +648,8 @@ export default class Subscription extends React.Component {
     if (this.props.coinbase !== prevProps.coinbase) {
       this.fetchUserPools();
       // this.getDypBalance();
-      this.fetchAvatar();
-      this.fetchUsername();
+      // this.fetchAvatar();
+      // this.fetchUsername();
       this.getAllBalance();
       this.props.onSubscribe(this.props.coinbase);
       this.myNft().then();
@@ -661,8 +661,8 @@ export default class Subscription extends React.Component {
     if (this.props.address !== prevProps.address) {
       this.fetchUserPools();
       // this.getDypBalance();
-      this.fetchAvatar();
-      this.fetchUsername();
+      // this.fetchAvatar();
+      // this.fetchUsername();
       this.getAllBalance();
       this.props.onSubscribe(this.props.address);
       this.myNft().then();
@@ -689,8 +689,8 @@ export default class Subscription extends React.Component {
     this.getAllBalance();
     this.fetchUserPools();
     this.props.onSubscribe(this.props.coinbase);
-    this.fetchAvatar();
-    this.fetchUsername();
+    // this.fetchAvatar();
+    // this.fetchUsername();
     this.fetchAvaxFarming();
     this.fetchAvaxStaking();
     this.fetchBnbStaking();

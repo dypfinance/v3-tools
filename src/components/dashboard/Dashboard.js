@@ -62,6 +62,8 @@ const Dashboard = ({
   isPremium,
   onConnectWallet,
   onMobileClick,
+  handleSwitchChainBinanceWallet,
+  binanceW3WProvider,
 }) => {
   const [topPools, setTopPools] = useState([]);
   const [cawsLandCard, setCawsLandCard] = useState([]);
@@ -165,7 +167,8 @@ const Dashboard = ({
         .get(`https://api.dyp.finance/api/user_pools/${coinbase}`)
         .then((data) => {
           return data.data.PoolsUserIn;
-        }).catch((e) => {
+        })
+        .catch((e) => {
           console.log(e);
         });
       setuserPools(result);
@@ -177,7 +180,8 @@ const Dashboard = ({
       .get("https://api.dyp.finance/api/the_graph_bsc_v2")
       .then((data) => {
         setWbnbPrice(data.data.the_graph_bsc_v2.usd_per_eth);
-      }).catch((e) => {
+      })
+      .catch((e) => {
         console.log(e);
       });
   };
@@ -187,7 +191,8 @@ const Dashboard = ({
       .get("https://api.dyp.finance/api/the_graph_eth_v2")
       .then((data) => {
         setEthPrice(data.data.the_graph_eth_v2.usd_per_eth);
-      }).catch((e) => {
+      })
+      .catch((e) => {
         console.log(e);
       });
   };
@@ -263,7 +268,6 @@ const Dashboard = ({
   };
 
   const fetchAllPools = async () => {
- 
     const basePool = await axios
       .get("https://api.dyp.finance/api/get_staking_info_base_new")
       .catch((err) => console.error(err));
@@ -318,7 +322,7 @@ const Dashboard = ({
       eth_result &&
       eth_result.status === 200 &&
       eth_result2 &&
-      eth_result2.status === 200 
+      eth_result2.status === 200
     ) {
       // let temparray = Object.entries(
       //   bnbFarmingPool.data.the_graph_bsc_v2.lp_data
@@ -438,9 +442,6 @@ const Dashboard = ({
       setBnbPools(sortedActive);
       setbnbPoolsDyp(activeBnb2);
       setbnbPoolsiDyp(activeidypBnb2);
-    
-
-      
 
       const allpoolsEthereum = [
         ...ethereumDyp,
@@ -492,10 +493,7 @@ const Dashboard = ({
       const sortedAprsEthereum = cleanCardsEthereum.sort(function (a, b) {
         return b.apy_percent - a.apy_percent;
       });
-      const allActiveEth = [
-        ...activeEth2,
-        ...object2activeEth,
-      ];
+      const allActiveEth = [...activeEth2, ...object2activeEth];
 
       const sortedActiveeth = allActiveEth.sort(function (a, b) {
         return b.apy_percent - a.apy_percent;
@@ -566,8 +564,7 @@ const Dashboard = ({
       });
 
       const finalPools = [sortedActiveeth[0], sortedActiveeth[3]];
-     
-      
+
       setTopPools(finalPools);
     }
   };
@@ -1657,15 +1654,16 @@ const Dashboard = ({
                           setselectedIndex(0);
                         }}
                       >
-                      {(selectedchain === "eth" && selectedpoolType === "dyp") ||
-                    (selectedchain === "bnb" &&
-                      selectedpoolType === "idyp") ? (
-                      <div className="new-beta-sidebar2 position-absolute">
-                        <span className="new-beta-text2">New</span>
-                      </div>
-                    ) : (
-                      <></>
-                    )}
+                        {(selectedchain === "eth" &&
+                          selectedpoolType === "dyp") ||
+                        (selectedchain === "bnb" &&
+                          selectedpoolType === "idyp") ? (
+                          <div className="new-beta-sidebar2 position-absolute">
+                            <span className="new-beta-text2">New</span>
+                          </div>
+                        ) : (
+                          <></>
+                        )}
                         90 Days
                       </button>
                       <button
@@ -2161,6 +2159,10 @@ const Dashboard = ({
                       setselectedPool([]);
                       setDetails();
                     }}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : activeCard &&
                   selectedPool?.id ===
@@ -2195,6 +2197,10 @@ const Dashboard = ({
                       setselectedPool([]);
                       setDetails();
                     }}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : activeCard &&
                   selectedPool?.id ===
@@ -2231,6 +2237,10 @@ const Dashboard = ({
                       setselectedPool([]);
                       setDetails(999);
                     }}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : activeCard &&
                   selectedPool?.id ===
@@ -2267,6 +2277,10 @@ const Dashboard = ({
                       setselectedPool([]);
                       setDetails(999);
                     }}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : activeCard &&
                   selectedPool?.chain === "bnb" &&
@@ -2303,6 +2317,10 @@ const Dashboard = ({
                       setselectedPool([]);
                       setDetails();
                     }}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : activeCard &&
                   selectedPool?.chain === "avax" &&
@@ -2339,6 +2357,10 @@ const Dashboard = ({
                       setselectedPool([]);
                       setDetails();
                     }}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : activeCard &&
                   selectedPool?.id ===
@@ -2377,6 +2399,10 @@ const Dashboard = ({
                       setDetails();
                     }}
                     poolCap={625000}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : activeCard &&
                   selectedPool?.id ===
@@ -2415,6 +2441,10 @@ const Dashboard = ({
                     }}
                     poolCap={1500000}
                     start_date={"12 Jul 2024"}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : activeCard &&
                   selectedPool?.id ===
@@ -2451,6 +2481,10 @@ const Dashboard = ({
                     }}
                     poolCap={1000000}
                     start_date={"07 Jun 2024"}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : (activeCard &&
                     selectedPool?.id ===
@@ -2489,6 +2523,10 @@ const Dashboard = ({
                     }}
                     poolCap={10000000}
                     start_date={"01 Sep 2024"}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : activeCard &&
                   selectedPool?.id ===
@@ -2525,6 +2563,10 @@ const Dashboard = ({
                     }}
                     poolCap={3700000}
                     start_date={"12 Jul 2024"}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : activeCard &&
                   selectedPool?.id ===
@@ -2559,6 +2601,10 @@ const Dashboard = ({
                       setselectedPool([]);
                       setDetails(999);
                     }}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : activeCard &&
                   selectedPool?.id ===
@@ -2593,6 +2639,10 @@ const Dashboard = ({
                       setselectedPool([]);
                       setDetails(999);
                     }}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : selectedPool?.id ===
                     "0x525cb0f6b5dae73965046bcb4c6f45ce74fb1b5d" &&
@@ -2629,6 +2679,10 @@ const Dashboard = ({
                       setselectedPool([]);
                       setDetails(999);
                     }}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : selectedPool?.id ===
                     "0xFBe84Af34CdC22455f82e18B76Ca50D21d3aBF84" &&
@@ -2665,6 +2719,10 @@ const Dashboard = ({
                       setselectedPool([]);
                       setDetails(999);
                     }}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : selectedPool?.id ===
                     "0xf6DC9E51D4E0FCc19ca6426fB5422f1E9a24F2eE" &&
@@ -2701,6 +2759,10 @@ const Dashboard = ({
                       setselectedPool([]);
                       setDetails(999);
                     }}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : activeCard && selectedPool.name === "BNB" ? (
                   <StakeDypiusBscOther
@@ -2736,6 +2798,10 @@ const Dashboard = ({
                     onRefreshTvl={() => {
                       setCount(count + 1);
                     }}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : activeCard && selectedPool.name === "ETH" ? (
                   <StakeDypiusEthOther
@@ -2771,6 +2837,10 @@ const Dashboard = ({
                     onRefreshTvl={() => {
                       setCount(count + 1);
                     }}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : activeCard && selectedPool.name === "AVAX" ? (
                   <StakeDypiusAvaxOther
@@ -2806,6 +2876,10 @@ const Dashboard = ({
                     onRefreshTvl={() => {
                       setCount(count + 1);
                     }}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : (
                   <></>
