@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from "react"; 
-import axios from "axios"; 
-import getFormattedNumber from "../../functions/get-formatted-number"; 
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import getFormattedNumber from "../../functions/get-formatted-number";
 
 import Address from "./address";
 import WalletModal from "../WalletModal";
-import "./top-pools.css";  
+import "./top-pools.css";
 import Tooltip from "@material-ui/core/Tooltip";
 import OutsideClickHandler from "react-outside-click-handler";
 
- 
 import LandNftStakeCheckListModal from "../LandNFTModal/LandNFTModal";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
 import useWindowSize from "../../functions/useWindowSize";
@@ -24,6 +23,8 @@ const LandDetails = ({
   apr,
   totalNftsLocked,
   expired,
+  binanceW3WProvider,
+  handleSwitchChainBinanceWallet,
 }) => {
   const [myNFTs, setMyNFTs] = useState([]);
   const [amountToStake, setamountToStake] = useState("");
@@ -38,7 +39,7 @@ const LandDetails = ({
   const [ethToUSD, setethToUSD] = useState(0);
   const [openStakeChecklist, setOpenStakeChecklist] = useState(false);
   const [showUnstakeModal, setShowUnstakeModal] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+
   const [countDownLeft, setCountDownLeft] = useState(59000);
   const [totalStakes, settotalStakes] = useState(0);
   const [approvedNfts, setApprovedNfts] = useState([]);
@@ -79,7 +80,11 @@ const LandDetails = ({
 
   const getStakesIds = async () => {
     const address = coinbase;
-    let staking_contract = await window.getContractLandNFT("LANDNFTSTAKING");
+    let staking_contract = new window.infuraWeb3.eth.Contract(
+      window.LANDSTAKING_ABI,
+      window.config.landnftstake_address
+    );
+
     let stakenft = [];
     let myStakes = await staking_contract.methods
       .depositsOf(address)
@@ -107,7 +112,10 @@ const LandDetails = ({
     let myStakes = await getStakesIds();
     let calculateRewards = [];
     let result = 0;
-    let staking_contract = await window.getContractLandNFT("LANDNFTSTAKING");
+    let staking_contract = new window.infuraWeb3.eth.Contract(
+      window.LANDSTAKING_ABI,
+      window.config.landnftstake_address
+    );
     if (myStakes.length > 0) {
       calculateRewards = await staking_contract.methods
         .calculateRewards(address, myStakes)
@@ -126,6 +134,7 @@ const LandDetails = ({
 
     setEthRewards(result);
   };
+  
   const claimRewards = async () => {
     let myStakes = await getStakesIds();
     let staking_contract = await window.getContractLandNFT("LANDNFTSTAKING");
@@ -160,29 +169,37 @@ const LandDetails = ({
   const handleUnstakeAll = async () => {
     let myStakes = await getStakesIds();
     let stake_contract = await window.getContractLandNFT("LANDNFTSTAKING");
-    // setunstakeAllStatus("Unstaking all please wait...");
 
     await stake_contract.methods
       .withdraw(myStakes)
       .send()
       .then(() => {
-        // setunstakeAllStatus("Successfully unstaked all!");
+        window.alertify.message("Successfully unstaked all!");
       })
       .catch((err) => {
         window.alertify.error(err?.message);
-        // setunstakeAllStatus("An error occurred, please try again");
         setShowUnstakeModal(false);
       });
   };
 
   const handleEthPool = async () => {
-    await handleSwitchNetworkhook("0x1")
-      .then(() => {
-        handleSwitchNetwork("1");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    if (window.ethereum) {
+      if (window.WALLET_TYPE !== "binance") {
+        await handleSwitchNetworkhook("0x1")
+          .then(() => {
+            handleSwitchNetwork(1);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      } else if (window.WALLET_TYPE === "binance") {
+        handleSwitchChainBinanceWallet(1);
+      }
+    } else if (window.WALLET_TYPE === "binance") {
+      handleSwitchChainBinanceWallet(1);
+    } else {
+      window.alertify.error("No web3 detected. Please install Metamask!");
+    }
   };
 
   const getApprovedNfts = (data) => {
@@ -261,7 +278,10 @@ const LandDetails = ({
                       </div>
                     }
                   >
-                    <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" />
+                    <img
+                      src={"https://cdn.worldofdypians.com/tools/more-info.svg"}
+                      alt=""
+                    />
                   </Tooltip>
                 </h6>
               </div>
@@ -279,7 +299,10 @@ const LandDetails = ({
                       </div>
                     }
                   >
-                    <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" />
+                    <img
+                      src={"https://cdn.worldofdypians.com/tools/more-info.svg"}
+                      alt=""
+                    />
                   </Tooltip>
                 </h6>
               </div>
@@ -309,7 +332,7 @@ const LandDetails = ({
                       style={{ opacity: 1, width: 145 }}
                     >
                       <div className="d-flex flex-column gap-2 align-items-start">
-                      <a
+                        <a
                           href="https://www.worldofdypians.com/shop/land"
                           target="_blank"
                           rel="noreferrer"
@@ -318,10 +341,15 @@ const LandDetails = ({
                           }}
                         >
                           <h6 className="bottomitems">
-                            <img src={'https://cdn.worldofdypians.com/tools/arrow-up.svg'} alt="" />
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/tools/arrow-up.svg"
+                              }
+                              alt=""
+                            />
                             WOD Shop
                           </h6>
-                      </a>
+                        </a>
                         <a
                           href="https://nft.coinbase.com/collection/worldofdypians"
                           target="_blank"
@@ -331,7 +359,12 @@ const LandDetails = ({
                           }}
                         >
                           <h6 className="bottomitems">
-                            <img src={'https://cdn.worldofdypians.com/tools/arrow-up.svg'} alt="" />
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/tools/arrow-up.svg"
+                              }
+                              alt=""
+                            />
                             Coinbase
                           </h6>
                         </a>
@@ -345,7 +378,12 @@ const LandDetails = ({
                           }}
                         >
                           <h6 className="bottomitems">
-                            <img src={'https://cdn.worldofdypians.com/tools/arrow-up.svg'} alt="" />
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/tools/arrow-up.svg"
+                              }
+                              alt=""
+                            />
                             OpenSea
                           </h6>
                         </a>
@@ -372,10 +410,16 @@ const LandDetails = ({
                   <button
                     className="connectbtn btn"
                     onClick={() => {
-                      setShowModal(true);
+                      handleConnection();
                     }}
                   >
-                    <img src={'https://cdn.worldofdypians.com/tools/walletIcon.svg'} alt="" /> Connect wallet
+                    <img
+                      src={
+                        "https://cdn.worldofdypians.com/tools/walletIcon.svg"
+                      }
+                      alt=""
+                    />{" "}
+                    Connect wallet
                   </button>
                 ) : chainId === "1" ? (
                   <div className="addressbtn btn">
@@ -421,7 +465,10 @@ const LandDetails = ({
                     </div>
                   }
                 >
-                  <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" />
+                  <img
+                    src={"https://cdn.worldofdypians.com/tools/more-info.svg"}
+                    alt=""
+                  />
                 </Tooltip>
               </div>
               <div className="d-flex flex-column gap-2 justify-content-between">
@@ -496,7 +543,10 @@ const LandDetails = ({
                       </div>
                     }
                   >
-                    <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" />
+                    <img
+                      src={"https://cdn.worldofdypians.com/tools/more-info.svg"}
+                      alt=""
+                    />
                   </Tooltip>
                 </h6>
               </div>
@@ -504,7 +554,13 @@ const LandDetails = ({
                 <div className="d-flex align-items-center justify-content-between gap-2"></div>
                 <div className="form-row d-flex gap-2 align-items-end justify-content-between">
                   <h6 className="rewardstxtCaws d-flex align-items-center gap-2">
-                  <img src={'https://cdn.worldofdypians.com/tools/ethStakeActive.svg'} alt="" style={{height: 25, width: 25}} />
+                    <img
+                      src={
+                        "https://cdn.worldofdypians.com/tools/ethStakeActive.svg"
+                      }
+                      alt=""
+                      style={{ height: 25, width: 25 }}
+                    />
                     {getFormattedNumber(EthRewards, 6)} WETH ($
                     {getFormattedNumber(ethToUSD, 6)})
                   </h6>
@@ -539,7 +595,10 @@ const LandDetails = ({
                     </div>
                   }
                 >
-                  <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" />
+                  <img
+                    src={"https://cdn.worldofdypians.com/tools/more-info.svg"}
+                    alt=""
+                  />
                 </Tooltip>
               </h6>
 
@@ -589,19 +648,6 @@ const LandDetails = ({
           countDownLeft={countDownLeft}
           open={openStakeChecklist ? true : false}
           hideItem={hide}
-        />
-      )}
-
-      {showModal === true && (
-        <WalletModal
-          show={showModal}
-          handleClose={() => {
-            setShowModal(false);
-          }}
-          handleConnection={() => {
-            handleConnection();
-            setShowModal(false);
-          }}
         />
       )}
     </div>

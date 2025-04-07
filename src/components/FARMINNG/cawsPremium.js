@@ -11,6 +11,7 @@ import { handleSwitchNetworkhook } from "../../functions/hooks";
 import useWindowSize from "../../functions/useWindowSize";
 import OutsideClickHandler from "react-outside-click-handler";
 import NftStakeCheckListPremiumModal from "../caws/NftMinting/components/NftMinting/NftStakeChecklistModal/NftStakeChecklistPremiumModal";
+import { ethers } from "ethers";
 
 const CawsDetailsPremium = ({
   coinbase,
@@ -38,7 +39,7 @@ const CawsDetailsPremium = ({
   const [ethToUSD, setethToUSD] = useState(0);
   const [openStakeChecklist, setOpenStakeChecklist] = useState(false);
   const [showUnstakeModal, setShowUnstakeModal] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+
   const [countDownLeft, setCountDownLeft] = useState(59000);
   const [totalStakes, settotalStakes] = useState(0);
   const [approvedNfts, setApprovedNfts] = useState([]);
@@ -146,21 +147,38 @@ const CawsDetailsPremium = ({
 
   const claimRewards = async () => {
     let myStakes = await getStakesIds();
-    let staking_contract = await window.getContractCawsPremiumNFT(
-      "CAWSPREMIUM"
-    );
-    // setclaimAllStatus("Claiming all rewards, please wait...");
-    await staking_contract.methods
-      .claimRewards(myStakes)
-      .send()
-      .then(() => {
+    if (window.WALLET_TYPE !== "binance") {
+      let staking_contract = await window.getContractCawsPremiumNFT(
+        "CAWSPREMIUM"
+      );
+
+      await staking_contract.methods
+        .claimRewards(myStakes)
+        .send()
+        .then(() => {
+          setEthRewards(0);
+        })
+        .catch((err) => {
+          window.alertify.error(err?.message);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let staking_contract = new ethers.Contract(
+        window.config.nft_caws_premiumstake_address,
+        window.CAWSPREMIUM_ABI,
+        binanceW3WProvider.getSigner()
+      );
+
+      const txResponse = await staking_contract
+        .claimRewards(myStakes)
+        .catch((err) => {
+          window.alertify.error(err?.message);
+        });
+
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         setEthRewards(0);
-        // setclaimAllStatus("Claimed All Rewards!");
-      })
-      .catch((err) => {
-        // window.alertify.error(err?.message);
-        // setclaimAllStatus("An error occurred, please try again");
-      });
+      }
+    }
   };
 
   const convertEthToUsd = async () => {
@@ -213,20 +231,43 @@ const CawsDetailsPremium = ({
 
   const handleUnstakeAll = async () => {
     let myStakes = await getStakesIds();
-    let stake_contract = await window.getContractCawsPremiumNFT("CAWSPREMIUM");
-    // setunstakeAllStatus("Unstaking all please wait...");
+    if (window.WALLET_TYPE !== "binance") {
+      let stake_contract = await window.getContractCawsPremiumNFT(
+        "CAWSPREMIUM"
+      );
 
-    await stake_contract.methods
-      .withdraw(myStakes)
-      .send()
-      .then(() => {
-        // setunstakeAllStatus("Successfully unstaked all!");
-      })
-      .catch((err) => {
-        window.alertify.error(err?.message);
-        // setunstakeAllStatus("An error occurred, please try again");
-        setShowUnstakeModal(false);
-      });
+      await stake_contract.methods
+        .withdraw(myStakes)
+        .send()
+        .then(() => {
+          setTimeout(() => {
+            setShowUnstakeModal(false);
+          }, 2000);
+        })
+        .catch((err) => {
+          window.alertify.error(err?.message);
+          setShowUnstakeModal(false);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let stake_contract = new ethers.Contract(
+        window.config.nft_caws_premiumstake_address,
+        window.CAWSPREMIUM_ABI,
+        binanceW3WProvider.getSigner()
+      );
+
+      const txResponse = await stake_contract
+        .withdraw(myStakes)
+        .catch((err) => {
+          window.alertify.error(err?.message);
+          setShowUnstakeModal(false);
+        });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
+        setTimeout(() => {
+          setShowUnstakeModal(false);
+        }, 2000);
+      }
+    }
   };
 
   const handleEthPool = async () => {
@@ -474,7 +515,7 @@ const CawsDetailsPremium = ({
                   <button
                     className="connectbtn btn"
                     onClick={() => {
-                      setShowModal(true);
+                      handleConnection();
                     }}
                   >
                     <img
@@ -714,19 +755,7 @@ const CawsDetailsPremium = ({
             setcount2(count2 + 1);
           }}
           mystakes={mystakes}
-        />
-      )}
-
-      {showModal === true && (
-        <WalletModal
-          show={showModal}
-          handleClose={() => {
-            setShowModal(false);
-          }}
-          handleConnection={() => {
-            handleConnection();
-            setShowModal(false);
-          }}
+          binanceW3WProvider={binanceW3WProvider}
         />
       )}
     </div>

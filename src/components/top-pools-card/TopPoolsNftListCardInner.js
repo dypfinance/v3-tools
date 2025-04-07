@@ -386,6 +386,8 @@ const TopPoolsNftListCardInner = ({
             handleSwitchNetwork={handleSwitchNetwork}
             expired={true}
             handleConnection={handleConnection}
+            binanceW3WProvider={binanceW3WProvider}
+            handleSwitchChainBinanceWallet={handleSwitchChainBinanceWallet}
           />
         </>
       ) : showDetails &&
@@ -400,6 +402,8 @@ const TopPoolsNftListCardInner = ({
           handleSwitchNetwork={handleSwitchNetwork}
           handleConnection={handleConnection}
           expired={true}
+          binanceW3WProvider={binanceW3WProvider}
+          handleSwitchChainBinanceWallet={handleSwitchChainBinanceWallet}
         />
       ) : showDetails &&
         expired === true &&
@@ -415,6 +419,8 @@ const TopPoolsNftListCardInner = ({
           expired={true}
           apr={25}
           totalNftsLocked={totalNftsLocked}
+          binanceW3WProvider={binanceW3WProvider}
+          handleSwitchChainBinanceWallet={handleSwitchChainBinanceWallet}
         />
       ) : (showDetails ||
           clickedCawsPool ||

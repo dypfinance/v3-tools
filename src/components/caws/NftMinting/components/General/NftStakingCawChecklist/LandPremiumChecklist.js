@@ -3,6 +3,7 @@ import axios from "axios";
 import Web3 from "web3";
 import PropTypes from "prop-types";
 import getFormattedNumber from "../../../../../../functions/get-formatted-number";
+import { ethers } from "ethers";
 
 const LandPremiumChecklist = ({
   modalId,
@@ -18,6 +19,7 @@ const LandPremiumChecklist = ({
   width,
   height,
   showbutton,
+  binanceW3WProvider,
 }) => {
   const [checkbtn, setCheckBtn] = useState(false);
   const [Unstakebtn, setUnstakeBtn] = useState(false);
@@ -41,8 +43,9 @@ const LandPremiumChecklist = ({
     const address = coinbase;
 
     let calculateRewards;
-    let staking_contract = await window.getContractLandPremiumNFT(
-      "LANDPREMIUM"
+    let staking_contract = await new window.infuraWeb3.eth.Contract(
+      window.LANDPREMIUM_ABI,
+      window.config.nft_land_premiumstake_address
     );
     if (address !== null && currentId) {
       calculateRewards = await staking_contract.methods
@@ -64,39 +67,77 @@ const LandPremiumChecklist = ({
   };
 
   const handleClaim = async (itemId) => {
-    let staking_contract = await window.getContractLandPremiumNFT(
-      "LANDPREMIUM"
-    );
+    if (window.WALLET_TYPE !== "binance") {
+      let staking_contract = await window.getContractLandPremiumNFT(
+        "LANDPREMIUM"
+      );
 
-    await staking_contract.methods
-      .claimRewards([itemId])
-      .send()
-      .then(() => {
-        // setethToUSD(0);
+      await staking_contract.methods
+        .claimRewards([itemId])
+        .send()
+        .then(() => {
+          // setethToUSD(0);
+          setEthRewards(0);
+        })
+        .catch((err) => {
+          window.alertify.error(err?.message);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let staking_contract = new ethers.Contract(
+        window.config.nft_land_premiumstake_address,
+        window.LANDPREMIUM_ABI,
+        binanceW3WProvider.getSigner()
+      );
+
+      const txResponse = await staking_contract
+        .claimRewards([itemId])
+        .catch((err) => {
+          window.alertify.error(err?.message);
+        });
+
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         setEthRewards(0);
-      })
-      .catch((err) => {
-        window.alertify.error(err?.message);
-      });
+      }
+    }
   };
 
   const handleUnstake = async (itemId) => {
-    let stake_contract = await window.getContractLandPremiumNFT(
-      "LANDPREMIUM"
-    );
     setloading(true);
+    if (window.WALLET_TYPE !== "binance") {
+      let stake_contract = await window.getContractLandPremiumNFT(
+        "LANDPREMIUM"
+      );
+      await stake_contract.methods
+        .withdraw([itemId])
+        .send()
+        .then(() => {
+          setcheckPassiveBtn(false);
+          setloading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setloading(false);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let stake_contract = new ethers.Contract(
+        window.config.nft_land_premiumstake_address,
+        window.LANDPREMIUM_ABI,
+        binanceW3WProvider.getSigner()
+      );
+      const txResponse = await stake_contract
+        .withdraw([itemId])
+        .catch((err) => {
+          console.log(err);
+          setloading(false);
+        });
 
-    await stake_contract.methods
-      .withdraw([itemId])
-      .send()
-      .then(() => {
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         setcheckPassiveBtn(false);
         setloading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setloading(false);
-      });
+      }
+    }
   };
 
   useEffect(() => {
@@ -121,8 +162,9 @@ const LandPremiumChecklist = ({
 
   const getStakesIds = async () => {
     const address = coinbase;
-    let staking_contract = await window.getContractLandPremiumNFT(
-      "LANDPREMIUM"
+    let staking_contract = await new window.infuraWeb3.eth.Contract(
+      window.LANDPREMIUM_ABI,
+      window.config.nft_land_premiumstake_address
     );
     let stakenft = [];
     if (address !== null) {
@@ -276,7 +318,13 @@ const LandPremiumChecklist = ({
                         className="rewardstxtCaws d-flex align-items-center gap-2 mb-2"
                         style={{ fontSize: 16 }}
                       >
-                        <img src={'https://cdn.worldofdypians.com/tools/ethStakeActive.svg'} alt="" style={{height: 20, width: 20}}/>
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/tools/ethStakeActive.svg"
+                          }
+                          alt=""
+                          style={{ height: 20, width: 20 }}
+                        />
                         {getFormattedNumber(EthRewards, 6)} WETH
                       </h6>
 

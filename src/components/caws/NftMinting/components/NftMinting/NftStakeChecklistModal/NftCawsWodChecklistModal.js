@@ -38,6 +38,7 @@ const NftCawsWodChecklistModal = ({
   cawsStakes,
   landStakes,
   cawsItems,
+  binanceW3WProvider,
 }) => {
   const [active, setActive] = useState(true);
   const [showToStake, setshowToStake] = useState(false);
@@ -1289,12 +1290,14 @@ const NftCawsWodChecklistModal = ({
                 </span>
 
                 <img
-                  src={'https://cdn.worldofdypians.com/tools/catlogo.svg'}
+                  src={"https://cdn.worldofdypians.com/tools/catlogo.svg"}
                   alt=""
                   style={{ width: 24, height: 24 }}
                 />
                 <img
-                  src={'https://cdn.worldofdypians.com/tools/landplaceholder2.svg'}
+                  src={
+                    "https://cdn.worldofdypians.com/tools/landplaceholder2.svg"
+                  }
                   alt=""
                   style={{ width: 24, height: 24 }}
                 />
@@ -1608,12 +1611,16 @@ const NftCawsWodChecklistModal = ({
                         </span>
 
                         <img
-                          src={'https://cdn.worldofdypians.com/tools/catlogo.svg'}
+                          src={
+                            "https://cdn.worldofdypians.com/tools/catlogo.svg"
+                          }
                           alt=""
                           style={{ width: 24, height: 24 }}
                         />
                         <img
-                          src={'https://cdn.worldofdypians.com/tools/landplaceholder2.svg'}
+                          src={
+                            "https://cdn.worldofdypians.com/tools/landplaceholder2.svg"
+                          }
                           alt=""
                           style={{ width: 24, height: 24 }}
                         />

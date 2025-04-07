@@ -29,6 +29,7 @@ const NftStakeCheckListModal = ({
   hideItem,
   onDepositComplete,
   showbutton,
+  binanceW3WProvider,
 }) => {
   const style = {
     position: "absolute",
@@ -684,7 +685,7 @@ const NftStakeCheckListModal = ({
                 </span>
 
                 <img
-                  src={'https://cdn.worldofdypians.com/tools/catlogo.svg'}
+                  src={"https://cdn.worldofdypians.com/tools/catlogo.svg"}
                   alt=""
                   style={{ width: 24, height: 24 }}
                 />
@@ -934,7 +935,9 @@ const NftStakeCheckListModal = ({
                         </span>
 
                         <img
-                          src={'https://cdn.worldofdypians.com/tools/catlogo.svg'}
+                          src={
+                            "https://cdn.worldofdypians.com/tools/catlogo.svg"
+                          }
                           alt=""
                           style={{ width: 24, height: 24 }}
                         />
