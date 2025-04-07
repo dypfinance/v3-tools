@@ -18,7 +18,7 @@ const renderer = ({ days, hours, minutes }) => {
   );
 };
 
-const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
+const LoyaltyProgram = ({ coinbase, isConnected, handleConnection,handleConnectBinance }) => {
   const baseUrl = "https://api.worldofdypians.com/api";
 
   const [popup, setPopup] = useState(false);
@@ -452,6 +452,13 @@ const LoyaltyProgram = ({ coinbase, isConnected, handleConnection }) => {
             >
               <span className="loyalty-wallet-title">Metamask</span>
               <img src={'https://cdn.worldofdypians.com/wod/metamaskConnect.svg'} width={30} height={30} alt="" />
+            </div>
+            <div
+              className="connect-wallet-item p-3 w-100 d-flex align-items-center justify-content-between"
+              onClick={handleConnectBinance}
+            >
+              <span className="loyalty-wallet-title">Binance Wallet</span>
+              <img src={'https://cdn.worldofdypians.com/wod/binanceWalletUpdated.svg'} width={30} height={30} alt="" />
             </div>
             <div
               className="connect-wallet-item p-3 w-100 d-flex align-items-center justify-content-between"

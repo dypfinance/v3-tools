@@ -49,6 +49,8 @@ const TopPoolsNftListCardInner = ({
   clickedCawsPool,
   onCloseCard,
   poolClickedType,
+  handleSwitchChainBinanceWallet,
+  binanceW3WProvider,
 }) => {
   const ethCoins = ["ethereum", "wbtc", "usdc", "usdt"];
   const bscCoins = [
@@ -430,6 +432,8 @@ const TopPoolsNftListCardInner = ({
           expired={true}
           apr={25}
           isPremium={isPremium}
+          binanceW3WProvider={binanceW3WProvider}
+          handleSwitchChainBinanceWallet={handleSwitchChainBinanceWallet}
         />
       ) : (showDetails ||
           clickedCawsPool ||
@@ -447,6 +451,8 @@ const TopPoolsNftListCardInner = ({
           expired={true}
           apr={25}
           isPremium={isPremium}
+          binanceW3WProvider={binanceW3WProvider}
+          handleSwitchChainBinanceWallet={handleSwitchChainBinanceWallet}
         />
       ) : (
         <></>

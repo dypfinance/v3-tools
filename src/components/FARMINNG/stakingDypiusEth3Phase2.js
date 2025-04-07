@@ -8,6 +8,7 @@ import { ClickAwayListener } from "@material-ui/core";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
 import axios from "axios";
 import { abbreviateNumber } from "js-abbreviation-number";
+import { ethers } from "ethers";
 
 const StakeDypiusEth3Phase2 = ({
   selectedPool,
@@ -37,6 +38,8 @@ const StakeDypiusEth3Phase2 = ({
   onConnectWallet,
   poolCap,
   start_date,
+  handleSwitchChainBinanceWallet,
+  binanceW3WProvider,
 }) => {
   let {
     reward_token_dypius_eth,
@@ -308,9 +311,19 @@ const StakeDypiusEth3Phase2 = ({
       _amountOutMin = new BigNumber(_amountOutMin).div(1e6).toFixed(18);
 
       let _bal;
-      if (chainId === "1" && coinbase && is_wallet_connected) {
-        _bal = reward_token_dypius_eth.balanceOf(coinbase);
+      let reward_token_wod_sc = new window.infuraWeb3.eth.Contract(
+        window.TOKEN_ABI,
+        reward_token_dypius_eth._address
+      );
+      if (coinbase && is_wallet_connected) {
+        _bal = await reward_token_wod_sc.methods
+          .balanceOf(coinbase)
+          .call()
+          .catch((e) => {
+            console.error(e);
+          });
       }
+
       if (staking && coinbase !== undefined && coinbase !== null) {
         let _pDivs = staking.getTotalPendingDivs(coinbase);
 
@@ -500,23 +513,50 @@ const StakeDypiusEth3Phase2 = ({
 
     let amount = depositAmount;
     amount = new BigNumber(amount).times(1e18).toFixed(0);
-    await reward_token_dypius_eth
-      .approve(staking._address, amount)
-      .then(() => {
+    if (window.WALLET_TYPE !== "binance") {
+      await reward_token_dypius_eth
+        .approve(staking._address, amount)
+        .then(() => {
+          setdepositLoading(false);
+          setdepositStatus("deposit");
+          refreshBalance();
+        })
+        .catch((e) => {
+          setdepositLoading(false);
+          setdepositStatus("fail");
+          seterrorMsg(e?.message);
+          setTimeout(() => {
+            setdepositAmount("");
+            setdepositStatus("initial");
+            seterrorMsg("");
+          }, 10000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let reward_token_Sc = new ethers.Contract(
+        reward_token_dypius_eth._address,
+        window.TOKEN_ABI,
+        binanceW3WProvider.getSigner()
+      );
+
+      const txResponse = await reward_token_Sc
+        .approve(staking._address, amount)
+        .catch((e) => {
+          setdepositLoading(false);
+          setdepositStatus("fail");
+          seterrorMsg(e?.message);
+          setTimeout(() => {
+            setdepositAmount("");
+            setdepositStatus("initial");
+            seterrorMsg("");
+          }, 10000);
+        });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         setdepositLoading(false);
         setdepositStatus("deposit");
         refreshBalance();
-      })
-      .catch((e) => {
-        setdepositLoading(false);
-        setdepositStatus("fail");
-        seterrorMsg(e?.message);
-        setTimeout(() => {
-          setdepositAmount("");
-          setdepositStatus("initial");
-          seterrorMsg("");
-        }, 10000);
-      });
+      }
+    }
   };
   // console.log(staking)
   const handleStake = async (e) => {
@@ -531,26 +571,36 @@ const StakeDypiusEth3Phase2 = ({
 
     let amount = depositAmount;
     amount = new BigNumber(amount).times(1e18).toFixed(0);
-
-    if (referrer) {
-      referrer = String(referrer).trim().toLowerCase();
-    }
-
-    if (!window.web3.utils.isAddress(referrer)) {
-      referrer = window.config.ZERO_ADDRESS;
-    }
-    await staking
-      .stake(amount, referrer)
-      .then(() => {
-        setdepositLoading(false);
-        setdepositStatus("success");
-        refreshBalance();
-        setTimeout(() => {
-          setdepositStatus("initial");
-          setdepositAmount("");
-        }, 5000);
-      })
-      .catch((e) => {
+    referrer = window.config.ZERO_ADDRESS;
+    if (window.WALLET_TYPE !== "binance") {
+      await staking
+        .stake(amount, referrer)
+        .then(() => {
+          setdepositLoading(false);
+          setdepositStatus("success");
+          refreshBalance();
+          setTimeout(() => {
+            setdepositStatus("initial");
+            setdepositAmount("");
+          }, 5000);
+        })
+        .catch((e) => {
+          setdepositLoading(false);
+          setdepositStatus("fail");
+          seterrorMsg(e?.message);
+          setTimeout(() => {
+            setdepositAmount("");
+            setdepositStatus("initial");
+            seterrorMsg("");
+          }, 10000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let staking_Sc = new ethers.Contract(
+        staking._address,
+        window.CONSTANT_STAKING_DYPIUS_ABI,
+        binanceW3WProvider.getSigner()
+      );
+      const txResponse = await staking_Sc.stake(amount, referrer).catch((e) => {
         setdepositLoading(false);
         setdepositStatus("fail");
         seterrorMsg(e?.message);
@@ -560,21 +610,49 @@ const StakeDypiusEth3Phase2 = ({
           seterrorMsg("");
         }, 10000);
       });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
+        setdepositLoading(false);
+        setdepositStatus("success");
+        refreshBalance();
+        setTimeout(() => {
+          setdepositStatus("initial");
+          setdepositAmount("");
+        }, 5000);
+      }
+    }
   };
 
   const handleWithdraw = async (e) => {
     // e.preventDefault();
     let amount = new BigNumber(withdrawAmount).times(1e18).toFixed(0);
     setwithdrawLoading(true);
+    if (window.WALLET_TYPE !== "binance") {
+      staking
+        .unstake(amount)
+        .then(() => {
+          setwithdrawLoading(false);
+          setwithdrawStatus("success");
+          refreshBalance();
+        })
+        .catch((e) => {
+          setwithdrawLoading(false);
+          setwithdrawStatus("failed");
+          seterrorMsg3(e?.message);
 
-    staking
-      .unstake(amount)
-      .then(() => {
-        setwithdrawLoading(false);
-        setwithdrawStatus("success");
-        refreshBalance();
-      })
-      .catch((e) => {
+          setTimeout(() => {
+            setwithdrawStatus("initial");
+            seterrorMsg3("");
+            setwithdrawAmount("");
+          }, 10000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let staking_Sc = new ethers.Contract(
+        staking._address,
+        window.CONSTANT_STAKING_DYPIUS_ABI,
+        binanceW3WProvider.getSigner()
+      );
+      const txResponse = await staking_Sc.unstake(amount).catch((e) => {
         setwithdrawLoading(false);
         setwithdrawStatus("failed");
         seterrorMsg3(e?.message);
@@ -585,24 +663,47 @@ const StakeDypiusEth3Phase2 = ({
           setwithdrawAmount("");
         }, 10000);
       });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
+        setwithdrawLoading(false);
+        setwithdrawStatus("success");
+        refreshBalance();
+      }
+    }
   };
 
   const handleClaimDivs = async (e) => {
     // e.preventDefault();
     setclaimLoading(true);
+    if (window.WALLET_TYPE !== "binance") {
+      staking
+        .claim()
+        .then(() => {
+          setclaimStatus("success");
+          setclaimLoading(false);
+          setpendingDivs(getFormattedNumber(0, 6));
+          refreshBalance();
+          setTimeout(() => {
+            setclaimStatus("initial");
+          }, 5000);
+        })
+        .catch((e) => {
+          setclaimStatus("failed");
+          setclaimLoading(false);
+          seterrorMsg2(e?.message);
 
-    staking
-      .claim()
-      .then(() => {
-        setclaimStatus("success");
-        setclaimLoading(false);
-        setpendingDivs(getFormattedNumber(0, 6));
-        refreshBalance();
-        setTimeout(() => {
-          setclaimStatus("initial");
-        }, 5000);
-      })
-      .catch((e) => {
+          setTimeout(() => {
+            setclaimStatus("initial");
+            seterrorMsg2("");
+          }, 10000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let staking_Sc = new ethers.Contract(
+        staking._address,
+        window.CONSTANT_STAKING_DYPIUS_ABI,
+        binanceW3WProvider.getSigner()
+      );
+      const txResponse = await staking_Sc.claim().catch((e) => {
         setclaimStatus("failed");
         setclaimLoading(false);
         seterrorMsg2(e?.message);
@@ -612,6 +713,18 @@ const StakeDypiusEth3Phase2 = ({
           seterrorMsg2("");
         }, 10000);
       });
+
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
+        setclaimStatus("success");
+        setclaimLoading(false);
+        setpendingDivs(getFormattedNumber(0, 6));
+        refreshBalance();
+        setTimeout(() => {
+          setclaimStatus("initial");
+        }, 5000);
+      }
+    }
   };
 
   const handleSetMaxDeposit = (e) => {
@@ -693,13 +806,23 @@ const StakeDypiusEth3Phase2 = ({
   };
 
   const handleEthPool = async () => {
-    await handleSwitchNetworkhook("0x1")
-      .then(() => {
-        handleSwitchNetwork("1");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    if (window.ethereum) {
+      if (window.WALLET_TYPE !== "binance") {
+        await handleSwitchNetworkhook("0x1")
+          .then(() => {
+            handleSwitchNetwork(1);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      } else if (window.WALLET_TYPE === "binance") {
+        handleSwitchChainBinanceWallet(1);
+      }
+    } else if (window.WALLET_TYPE === "binance") {
+      handleSwitchChainBinanceWallet(1);
+    } else {
+      window.alertify.error("No web3 detected. Please install Metamask!");
+    }
   };
 
   let id = Math.random().toString(36);

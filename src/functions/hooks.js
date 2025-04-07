@@ -45,7 +45,8 @@ export function useEagerConnect() {
     if (
       window.ethereum &&
       !window.coin98 &&
-      (window.ethereum.isMetaMask === true || window.ethereum.isTrust === true) &&
+      (window.ethereum.isMetaMask === true ||
+        window.ethereum.isTrust === true) &&
       (!window.ethereum.isCoinbaseWallet || !window.ethereum.overrideIsMetaMask)
     ) {
       injected.isAuthorized().then((isAuthorized) => {
@@ -72,7 +73,8 @@ export function useEagerConnect() {
     if (
       window.ethereum &&
       !window.coin98 &&
-      (window.ethereum.isMetaMask === true || window.ethereum.isTrust === true) &&
+      (window.ethereum.isMetaMask === true ||
+        window.ethereum.isTrust === true) &&
       (!window.ethereum.isCoinbaseWallet || !window.ethereum.overrideIsMetaMask)
     ) {
       if (!tried && active) {
@@ -95,7 +97,8 @@ export function useInactiveListener(suppress = false) {
     if (
       window.ethereum &&
       !window.coin98 &&
-      (window.ethereum.isMetaMask === true || window.ethereum.isTrust === true) &&
+      (window.ethereum.isMetaMask === true ||
+        window.ethereum.isTrust === true) &&
       (!window.ethereum.isCoinbaseWallet || !window.ethereum.overrideIsMetaMask)
     ) {
       if (ethereum && ethereum.on && !active && !error && !suppress) {
@@ -130,6 +133,8 @@ export function useInactiveListener(suppress = false) {
   }, [active, error, suppress, activate, account]);
 }
 
+
+
 export const handleSwitchNetworkhook = async (chainID) => {
   const { ethereum } = window;
   let error;
@@ -158,7 +163,6 @@ export const handleSwitchNetworkhook = async (chainID) => {
     blockExplorerUrls: ["https://snowtrace.io/"],
   };
 
-  
   const OPBNBPARAMS = {
     chainId: "0xcc", // A 0x-prefixed hexadecimal string
     rpcUrls: ["https://opbnb.publicnode.com"],
@@ -222,14 +226,13 @@ export const handleSwitchNetworkhook = async (chainID) => {
     ],
   };
 
-
   try {
     await ethereum.request({
       method: "wallet_switchEthereumChain",
       params: [{ chainId: chainID }],
     });
-    if(window.ethereum && window.ethereum.isTrust === true) {
-      window.location.reload()
+    if (window.ethereum && window.ethereum.isTrust === true) {
+      window.location.reload();
     }
   } catch (switchError) {
     // This error code indicates that the chain has not been added to MetaMask.
@@ -264,8 +267,8 @@ export const handleSwitchNetworkhook = async (chainID) => {
               ? [SKALE_MAINNET]
               : "",
         });
-        if(window.ethereum && window.ethereum.isTrust === true) {
-          window.location.reload()
+        if (window.ethereum && window.ethereum.isTrust === true) {
+          window.location.reload();
         }
       } catch (addError) {
         console.log(addError);

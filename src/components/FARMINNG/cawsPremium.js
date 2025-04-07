@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Web3 from "web3";
-import axios from "axios"; 
-import getFormattedNumber from "../../functions/get-formatted-number"; 
+import axios from "axios";
+import getFormattedNumber from "../../functions/get-formatted-number";
 import Address from "./address";
 import WalletModal from "../WalletModal";
-import "./top-pools.css"; 
+import "./top-pools.css";
 import Tooltip from "@material-ui/core/Tooltip";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
 import useWindowSize from "../../functions/useWindowSize";
 import OutsideClickHandler from "react-outside-click-handler";
@@ -22,6 +22,8 @@ const CawsDetailsPremium = ({
   renderedPage,
   expired,
   isPremium,
+  binanceW3WProvider,
+  handleSwitchChainBinanceWallet,
 }) => {
   const [myNFTs, setMyNFTs] = useState([]);
   const [amountToStake, setamountToStake] = useState("");
@@ -43,8 +45,6 @@ const CawsDetailsPremium = ({
   const [cawspopup, setCawspopup] = useState(false);
   const [count, setcount] = useState(0);
   const [count2, setcount2] = useState(0);
-
-
 
   const [hide, setHide] = useState("");
   const windowSize = useWindowSize();
@@ -86,8 +86,10 @@ const CawsDetailsPremium = ({
 
   const getStakesIds = async () => {
     const address = coinbase;
-    let staking_contract = await window.getContractCawsPremiumNFT(
-      "CAWSPREMIUM"
+
+    let staking_contract = new window.infuraWeb3.eth.Contract(
+      window.CAWSPREMIUM_ABI,
+      window.config.nft_caws_premiumstake_address
     );
     let stakenft = [];
     let myStakes = await staking_contract.methods
@@ -117,8 +119,9 @@ const CawsDetailsPremium = ({
     let myStakes = await getStakesIds();
     let calculateRewards = [];
     let result = 0;
-    let staking_contract = await window.getContractCawsPremiumNFT(
-      "CAWSPREMIUM"
+    let staking_contract = new window.infuraWeb3.eth.Contract(
+      window.CAWSPREMIUM_ABI,
+      window.config.nft_caws_premiumstake_address
     );
     if (address !== null) {
       if (myStakes && myStakes.length > 0) {
@@ -177,8 +180,9 @@ const CawsDetailsPremium = ({
   const calculateCountdown = async () => {
     const address = coinbase;
 
-    let staking_contract = await window.getContractCawsPremiumNFT(
-      "CAWSPREMIUM"
+    let staking_contract = new window.infuraWeb3.eth.Contract(
+      window.CAWSPREMIUM_ABI,
+      window.config.nft_caws_premiumstake_address
     );
     if (address !== null) {
       let finalDay = await staking_contract.methods
@@ -226,13 +230,23 @@ const CawsDetailsPremium = ({
   };
 
   const handleEthPool = async () => {
-    await handleSwitchNetworkhook("0x1")
-      .then(() => {
-        handleSwitchNetwork("1");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    if (window.ethereum) {
+      if (window.WALLET_TYPE !== "binance") {
+        await handleSwitchNetworkhook("0x1")
+          .then(() => {
+            handleSwitchNetwork(1);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      } else if (window.WALLET_TYPE === "binance") {
+        handleSwitchChainBinanceWallet(1);
+      }
+    } else if (window.WALLET_TYPE === "binance") {
+      handleSwitchChainBinanceWallet(1);
+    } else {
+      window.alertify.error("No web3 detected. Please install Metamask!");
+    }
   };
 
   const handleNavigateToPlans = () => {
@@ -302,7 +316,7 @@ const CawsDetailsPremium = ({
             <div className="d-flex flex-column flex-lg-row align-items-end align-items-lg-center justify-content-between gap-2 gap-lg-5">
               <h6 className="activetxt">
                 <img
-                  src={'https://cdn.worldofdypians.com/tools/ellipse.svg'}
+                  src={"https://cdn.worldofdypians.com/tools/ellipse.svg"}
                   alt=""
                   className="position-relative"
                   style={{ top: "-1px" }}
@@ -330,7 +344,10 @@ const CawsDetailsPremium = ({
                       </div>
                     }
                   >
-                    <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" />
+                    <img
+                      src={"https://cdn.worldofdypians.com/tools/more-info.svg"}
+                      alt=""
+                    />
                   </Tooltip>
                 </h6>
               </div>
@@ -346,7 +363,10 @@ const CawsDetailsPremium = ({
                       </div>
                     }
                   >
-                    <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" />
+                    <img
+                      src={"https://cdn.worldofdypians.com/tools/more-info.svg"}
+                      alt=""
+                    />
                   </Tooltip>
                 </h6>
               </div>
@@ -377,7 +397,7 @@ const CawsDetailsPremium = ({
                     >
                       <div className="d-flex flex-column gap-2 align-items-start">
                         <a
-                          href="https://www.worldofdypians.com/marketplace/caws"
+                          href="https://www.worldofdypians.com/shop/caws"
                           target="_blank"
                           rel="noreferrer"
                           onClick={() => {
@@ -385,8 +405,13 @@ const CawsDetailsPremium = ({
                           }}
                         >
                           <h6 className="bottomitems">
-                            <img src={'https://cdn.worldofdypians.com/tools/arrow-up.svg'} alt="" />
-                            WoD Marketplace
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/tools/arrow-up.svg"
+                              }
+                              alt=""
+                            />
+                            WOD Shop
                           </h6>
                         </a>
                         <a
@@ -398,7 +423,12 @@ const CawsDetailsPremium = ({
                           }}
                         >
                           <h6 className="bottomitems">
-                            <img src={'https://cdn.worldofdypians.com/tools/arrow-up.svg'} alt="" />
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/tools/arrow-up.svg"
+                              }
+                              alt=""
+                            />
                             Coinbase
                           </h6>
                         </a>
@@ -412,7 +442,12 @@ const CawsDetailsPremium = ({
                           }}
                         >
                           <h6 className="bottomitems">
-                            <img src={'https://cdn.worldofdypians.com/tools/arrow-up.svg'} alt="" />
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/tools/arrow-up.svg"
+                              }
+                              alt=""
+                            />
                             OpenSea
                           </h6>
                         </a>
@@ -442,7 +477,13 @@ const CawsDetailsPremium = ({
                       setShowModal(true);
                     }}
                   >
-                    <img src={'https://cdn.worldofdypians.com/tools/walletIcon.svg'} alt="" /> Connect wallet
+                    <img
+                      src={
+                        "https://cdn.worldofdypians.com/tools/walletIcon.svg"
+                      }
+                      alt=""
+                    />{" "}
+                    Connect wallet
                   </button>
                 ) : chainId === "1" && isPremium ? (
                   <div className="addressbtn btn">
@@ -494,16 +535,23 @@ const CawsDetailsPremium = ({
                     </div>
                   }
                 >
-                  <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" />
+                  <img
+                    src={"https://cdn.worldofdypians.com/tools/more-info.svg"}
+                    alt=""
+                  />
                 </Tooltip>
               </div>
               <div className="d-flex flex-column gap-2 justify-content-between">
                 <div className="d-flex align-items-center justify-content-between gap-2">
                   <button
                     className={`btn ${
-                      (!isPremium || mystakes.length === 4) ? "disabled-btn" : "filledbtn"
+                      !isPremium || mystakes.length === 4
+                        ? "disabled-btn"
+                        : "filledbtn"
                     } d-flex justify-content-center align-items-center`}
-                    disabled={!isPremium || mystakes.length === 4 || totalStakes === 200}
+                    disabled={
+                      !isPremium || mystakes.length === 4 || totalStakes === 200
+                    }
                     onClick={() => {
                       setshowChecklistModal(true);
                       setOpenStakeChecklist(true);
@@ -527,10 +575,7 @@ const CawsDetailsPremium = ({
             <div
               className={`otherside-border col-12 col-md-6 ${
                 renderedPage === "dashboard" ? "col-lg-5" : "col-lg-4"
-              }  ${
-                (chainId !== "1"  || !isPremium) &&
-                "blurrypool"
-              }`}
+              }  ${(chainId !== "1" || !isPremium) && "blurrypool"}`}
             >
               <div className="d-flex justify-content-between gap-2 flex-column flex-lg-row">
                 <h6 className="withdraw-txt d-flex gap-2 align-items-center">
@@ -555,7 +600,10 @@ const CawsDetailsPremium = ({
                       </div>
                     }
                   >
-                    <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" />
+                    <img
+                      src={"https://cdn.worldofdypians.com/tools/more-info.svg"}
+                      alt=""
+                    />
                   </Tooltip>
                 </h6>
               </div>
@@ -563,7 +611,13 @@ const CawsDetailsPremium = ({
                 <div className="d-flex align-items-center justify-content-between gap-2"></div>
                 <div className="form-row d-flex gap-2 align-items-end justify-content-between">
                   <h6 className="rewardstxtCaws d-flex align-items-center gap-2">
-                    <img src={'https://cdn.worldofdypians.com/tools/ethStakeActive.svg'} alt="" style={{height: 25, width: 25}}/>{" "}
+                    <img
+                      src={
+                        "https://cdn.worldofdypians.com/tools/ethStakeActive.svg"
+                      }
+                      alt=""
+                      style={{ height: 25, width: 25 }}
+                    />{" "}
                     {getFormattedNumber(EthRewards, 6)} WETH ($
                     {getFormattedNumber(ethToUSD, 6)})
                   </h6>
@@ -583,8 +637,7 @@ const CawsDetailsPremium = ({
 
             <div
               className={`otherside-border col-12 col-md-6 col-lg-2 ${
-                (chainId !== "1" || !isPremium) &&
-                "blurrypool"
+                (chainId !== "1" || !isPremium) && "blurrypool"
               }`}
             >
               <h6 className="deposit-txt d-flex align-items-center gap-2 justify-content-between">
@@ -599,7 +652,10 @@ const CawsDetailsPremium = ({
                     </div>
                   }
                 >
-                  <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" />
+                  <img
+                    src={"https://cdn.worldofdypians.com/tools/more-info.svg"}
+                    alt=""
+                  />
                 </Tooltip>
               </h6>
 
@@ -651,8 +707,12 @@ const CawsDetailsPremium = ({
           open={openStakeChecklist ? true : false}
           hideItem={hide}
           showbutton={true}
-          onDepositComplete={()=>{setcount(count+1)}}
-          onApprovalComplete={()=>{setcount2(count2+1)}}
+          onDepositComplete={() => {
+            setcount(count + 1);
+          }}
+          onApprovalComplete={() => {
+            setcount2(count2 + 1);
+          }}
           mystakes={mystakes}
         />
       )}

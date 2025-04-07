@@ -2270,7 +2270,7 @@ window.config = {
   commitment_midle_address: "0x5672F5E60a390206E8a6771820ca27DD2bD9a0b0",
   commitment_midle_eth_address: "0xE22Eecf2aDD8bfF17eDCB368792427a89CAB7f22",
 
-  basic_bundle_address: "0x0529a0267cf78c4625dc205c7aa2b607225daed1", 
+  basic_bundle_address: "0x0529a0267cf78c4625dc205c7aa2b607225daed1",
   // basic_bundle_address: "0x8398819f18d3114d78bcc117cd1c78ac2f747644", //test sc
   advanced_bundle_address: "0x86d675f534bc288d73da70bb13114420d55e81b5",
   enterprise_bundle_address: "0x87176c11041eae00d35dccd069ab8c0c1108e707",
@@ -39261,20 +39261,58 @@ window.param = param;
 window.cached_contracts = Object.create(null);
 
 async function getCoinbase() {
-  if (window.ethereum && (window.coin98 || window.ethereum.isCoinbaseWallet)) {
-    return window.coinbase_address.toLowerCase();
-  } else if (window.ethereum && !window.coin98) {
-    const coinbase = await window.ethereum.request({
-      method: "eth_accounts",
-    });
+  // if (window.ethereum && (window.coin98 || window.ethereum.isCoinbaseWallet)) {
+  //   return window.coinbase_address.toLowerCase();
+  // } else if (window.ethereum && !window.coin98) {
+  //   const coinbase = await window.ethereum.request({
+  //     method: "eth_accounts",
+  //   });
 
-    if (coinbase && coinbase.length > 0) {
-      window.coinbase_address = coinbase[0];
+  //   if (coinbase && coinbase.length > 0) {
+  //     window.coinbase_address = coinbase[0];
+  //     return window.coinbase_address.toLowerCase();
+  //   }
+  // }
+
+  if (
+    window.ethereum &&
+    window.WALLET_TYPE !== "binance" &&
+    window.WALLET_TYPE !== ""
+  ) {
+    if (window.WALLET_TYPE == "coin98") {
       return window.coinbase_address.toLowerCase();
+    } else if (window.gatewallet) {
+      try {
+        let coinbase_address = await window.gatewallet?.request({
+          method: "eth_accounts",
+        });
+
+        window.coinbase_address = coinbase_address[0];
+
+        return window.coinbase_address.toLowerCase();
+      } catch (e) {
+        console.error(e);
+        throw new Error("User denied wallet connection!");
+      }
+    } else {
+      const coinbase = await window.ethereum.request({
+        method: "eth_accounts",
+      });
+
+      if (coinbase && coinbase.length > 0) {
+        window.coinbase_address = coinbase[0];
+
+        return window.coinbase_address.toLowerCase();
+      }
     }
+  } else if (window.WALLET_TYPE === "binance") {
+    return window.coinbase_address;
   }
 }
-
+async function disconnectWallet() {
+  window.coinbase_address = "0x0000000000000000000000000000000000000000";
+  return window.coinbase_addres;
+}
 // function getCoinbase() {
 //   if (
 //     window.WALLET_TYPE == "coin98" ||
