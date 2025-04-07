@@ -2590,7 +2590,11 @@ setkittyDashRecords */}
                         coinbase={coinbase}
                         isConnected={isConnected}
                         network={networkId}
-                        handleConnection={handleConnection}
+                        handleSwitchChainBinanceWallet={handleSwitchNetwork}
+                        handleConnection={() => {
+                          setshowWalletPopup(true);
+                        }}
+                        binanceW3WProvider={library}
                         handleSwitchNetwork={handleSwitchNetwork}
                       />
                     }

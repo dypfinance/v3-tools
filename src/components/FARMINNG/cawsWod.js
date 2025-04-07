@@ -377,7 +377,7 @@ const CawsWodDetails = ({
                     >
                       <div className="d-flex flex-column gap-2 align-items-start">
                       <a
-                          href="https://www.worldofdypians.com/marketplace/caws"
+                          href="https://www.worldofdypians.com/shop/caws"
                           target="_blank"
                           rel="noreferrer"
                           onClick={() => {
@@ -386,7 +386,7 @@ const CawsWodDetails = ({
                         >
                           <h6 className="bottomitems">
                             <img src={'https://cdn.worldofdypians.com/tools/arrow-up.svg'} alt="" />
-                            WoD Marketplace
+                            WOD Shop
                           </h6>
                       </a>
                         <a
@@ -440,7 +440,7 @@ const CawsWodDetails = ({
                     >
                       <div className="d-flex flex-column gap-2 align-items-start">
                       <a
-                          href="https://www.worldofdypians.com/marketplace/land"
+                          href="https://www.worldofdypians.com/shop/land"
                           target="_blank"
                           rel="noreferrer"
                           onClick={() => {

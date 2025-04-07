@@ -368,8 +368,8 @@ const Header = ({
 
   useEffect(() => {
     if (coinbase !== undefined && coinbase !== null) {
-      fetchAvatar();
-      fetchUsername();
+      // fetchAvatar();
+      // fetchUsername();
     } else setUsername("Dypian");
   }, [coinbase, checklogout]);
 

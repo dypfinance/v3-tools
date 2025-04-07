@@ -11,6 +11,8 @@ const EarnOtherNft = ({
   handleSwitchNetwork,
   isPremium,
   type,
+  binanceW3WProvider,
+  handleSwitchChainBinanceWallet
 }) => {
   const [poolClicked, setPoolClicked] = useState(false);
   const [poolClickedType, setPoolClickedType] = useState("");
@@ -86,6 +88,8 @@ const EarnOtherNft = ({
           setPoolClickedType("");
         }}
         totalTvl={totalTvl}
+        binanceW3WProvider={binanceW3WProvider}
+        handleSwitchChainBinanceWallet={handleSwitchChainBinanceWallet}
       />
     </div>
   );

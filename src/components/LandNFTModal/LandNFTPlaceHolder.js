@@ -5,7 +5,7 @@ const NftPlaceHolder = ({ onMintClick }) => {
   return (
     <div className="placeholder-wrapper nft-caw-card" style={{ width: 155 }}>
       <a
-        href="https://www.worldofdypians.com/marketplace/land"
+        href="https://www.worldofdypians.com/shop/land"
         target="_blank"
         className="placeholder-button"
         rel="noreferrer"
@@ -26,12 +26,12 @@ const NftPlaceHolder = ({ onMintClick }) => {
             You can view all your NFTs to manage them
           </p>
           <a
-            href="https://www.worldofdypians.com/marketplace/land"
+            href="https://www.worldofdypians.com/shop/land"
             target="_blank"
             className="placeholder-button"
             rel="noreferrer"
           >
-            Buy on Marketplace
+            Buy on WOD Shop
           </a>
         </div>
       </a>
