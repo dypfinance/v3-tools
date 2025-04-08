@@ -9,6 +9,7 @@ import { formattedNum } from "../../../../../../functions/formatUSD";
 import getFormattedNumber from "../../../../../../functions/get-formatted-number";
 import "./_nftStakeChecklistModal.scss";
 import CountDownTimerUnstake from "../../../../../locker/Countdown";
+import { ethers } from "ethers";
 
 const NftStakeCheckListModal = ({
   nftItem,
@@ -277,64 +278,121 @@ const NftStakeCheckListModal = ({
   const onEmptyState = () => {};
 
   const handleUnstake = async (value) => {
-    let stake_contract = await window.getContractNFT("NFTSTAKING");
     setStatus("*Processing unstake");
     setColor("#F13227");
-
-    await stake_contract.methods
-      .emergencyWithdraw(
-        checkUnstakebtn === true
-          ? nftIds.length === selectNftIds.length
-            ? nftIds
+    if (window.WALLET_TYPE !== "binance") {
+      let stake_contract = await window.getContractNFT("NFTSTAKING");
+      await stake_contract.methods
+        .emergencyWithdraw(
+          checkUnstakebtn === true
+            ? nftIds.length === selectNftIds.length
+              ? nftIds
+              : selectNftIds
             : selectNftIds
-          : selectNftIds
-      )
-      .send()
-      .then(() => {
+        )
+        .send()
+        .then(() => {
+          setStatus("*Unstaked successfully");
+          setColor("#57AEAA");
+          handleClearStatus();
+          setSelectedNftIds([]);
+        })
+        .catch((err) => {
+          window.alertify.error(err?.message);
+          setStatus("An error occurred, please try again");
+          setColor("#F13227");
+          setSelectedNftIds([]);
+          handleClearStatus();
+        });
+    } else if (window.WALLET_TYPE !== "binance") {
+      let stake_contract = new ethers.Contract(
+        window.config.nftstaking_address,
+        window.NFTSTAKING_ABI,
+        binanceW3WProvider.getSigner()
+      );
+      const txResponse = await stake_contract
+        .emergencyWithdraw(
+          checkUnstakebtn === true
+            ? nftIds.length === selectNftIds.length
+              ? nftIds
+              : selectNftIds
+            : selectNftIds
+        )
+        .catch((err) => {
+          window.alertify.error(err?.message);
+          setStatus("An error occurred, please try again");
+          setColor("#F13227");
+          setSelectedNftIds([]);
+          handleClearStatus();
+        });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         setStatus("*Unstaked successfully");
         setColor("#57AEAA");
         handleClearStatus();
         setSelectedNftIds([]);
-      })
-      .catch((err) => {
-        window.alertify.error(err?.message);
-        setStatus("An error occurred, please try again");
-        setColor("#F13227");
-        setSelectedNftIds([]);
-        handleClearStatus();
-      });
+      }
+    }
   };
 
   const handleClaim = async (itemId) => {
-    let staking_contract = await window.getContractNFT("NFTSTAKING");
-
     setloadingClaim(true);
     setActive(false);
     setStatus("*Claiming rewards...");
     setColor("#F13227");
-
-    await staking_contract.methods
-      .claimRewards(
-        checkUnstakebtn === true
-          ? nftIds.length === selectNftIds.length
-            ? nftIds
+    if (window.WALLET_TYPE !== "binance") {
+      let staking_contract = await window.getContractNFT("NFTSTAKING");
+      await staking_contract.methods
+        .claimRewards(
+          checkUnstakebtn === true
+            ? nftIds.length === selectNftIds.length
+              ? nftIds
+              : selectNftIds
             : selectNftIds
-          : selectNftIds
-      )
-      .send()
-      .then(() => {
+        )
+        .send()
+        .then(() => {
+          setloadingClaim(false);
+          setStatus("*Claimed successfully");
+          handleClearStatus();
+          setColor("#57AEAA");
+          setSelectedNftIds([]);
+        })
+        .catch((err) => {
+          window.alertify.error(err?.message);
+          setloadingClaim(false);
+          setStatus("An error occurred, please try again");
+          setSelectedNftIds([]);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let staking_contract = new ethers.Contract(
+        window.config.nftstaking_address,
+        window.NFTSTAKING_ABI,
+        binanceW3WProvider.getSigner()
+      );
+      const txResponse = await staking_contract
+        .claimRewards(
+          checkUnstakebtn === true
+            ? nftIds.length === selectNftIds.length
+              ? nftIds
+              : selectNftIds
+            : selectNftIds
+        )
+        .catch((err) => {
+          window.alertify.error(err?.message);
+          setloadingClaim(false);
+          setStatus("An error occurred, please try again");
+          setSelectedNftIds([]);
+        });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         setloadingClaim(false);
         setStatus("*Claimed successfully");
         handleClearStatus();
         setColor("#57AEAA");
         setSelectedNftIds([]);
-      })
-      .catch((err) => {
-        window.alertify.error(err?.message);
-        setloadingClaim(false);
-        setStatus("An error occurred, please try again");
-        setSelectedNftIds([]);
-      });
+      }
+    }
   };
 
   const devicewidth = window.innerWidth;

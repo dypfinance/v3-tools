@@ -11,6 +11,7 @@ import OutsideClickHandler from "react-outside-click-handler";
 import LandNftStakeCheckListModal from "../LandNFTModal/LandNFTModal";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
 import useWindowSize from "../../functions/useWindowSize";
+import { ethers } from "ethers";
 
 const LandDetails = ({
   coinbase,
@@ -134,23 +135,37 @@ const LandDetails = ({
 
     setEthRewards(result);
   };
-  
+
   const claimRewards = async () => {
     let myStakes = await getStakesIds();
-    let staking_contract = await window.getContractLandNFT("LANDNFTSTAKING");
+    if (window.WALLET_TYPE !== "binance") {
+      let staking_contract = await window.getContractLandNFT("LANDNFTSTAKING");
+      await staking_contract.methods
+        .claimRewards(myStakes)
+        .send()
+        .then(() => {
+          setEthRewards(0);
+        })
+        .catch((err) => {
+          window.alertify.error(err?.message);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let staking_contract = new ethers.Contract(
+        window.config.landnftstake_address,
+        window.LANDSTAKING_ABI,
+        binanceW3WProvider.getSigner()
+      );
 
-    // setclaimAllStatus("Claiming all rewards, please wait...");
-    await staking_contract.methods
-      .claimRewards(myStakes)
-      .send()
-      .then(() => {
+      const txResponse = await staking_contract
+        .claimRewards(myStakes)
+        .catch((err) => {
+          window.alertify.error(err?.message);
+        });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         setEthRewards(0);
-        // setclaimAllStatus("Claimed All Rewards!");
-      })
-      .catch((err) => {
-        // window.alertify.error(err?.message);
-        // setclaimAllStatus("An error occurred, please try again");
-      });
+      }
+    }
   };
   const convertEthToUsd = async () => {
     const res = axios
@@ -168,18 +183,39 @@ const LandDetails = ({
 
   const handleUnstakeAll = async () => {
     let myStakes = await getStakesIds();
-    let stake_contract = await window.getContractLandNFT("LANDNFTSTAKING");
+    if (window.WALLET_TYPE !== "binance") {
+      let stake_contract = await window.getContractLandNFT("LANDNFTSTAKING");
+      await stake_contract.methods
+        .withdraw(myStakes)
+        .send()
+        .then(() => {
+          window.alertify.message("Successfully unstaked all!");
+        })
+        .catch((err) => {
+          window.alertify.error(err?.message);
+          setShowUnstakeModal(false);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let stake_contract = new ethers.Contract(
+        window.config.landnftstake_address,
+        window.LANDSTAKING_ABI,
+        binanceW3WProvider.getSigner()
+      );
 
-    await stake_contract.methods
-      .withdraw(myStakes)
-      .send()
-      .then(() => {
+      const txResponse = await stake_contract
+        .withdraw(myStakes)
+        .catch((err) => {
+          window.alertify.error(err?.message);
+          setShowUnstakeModal(false);
+        });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         window.alertify.message("Successfully unstaked all!");
-      })
-      .catch((err) => {
-        window.alertify.error(err?.message);
-        setShowUnstakeModal(false);
-      });
+        setTimeout(() => {
+          setShowUnstakeModal(false);
+        }, 2000);
+      }
+    }
   };
 
   const handleEthPool = async () => {
@@ -648,6 +684,7 @@ const LandDetails = ({
           countDownLeft={countDownLeft}
           open={openStakeChecklist ? true : false}
           hideItem={hide}
+          binanceW3WProvider={binanceW3WProvider}
         />
       )}
     </div>
