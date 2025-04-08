@@ -68,12 +68,11 @@ const LockerWrapper = (props) => {
 const Connector = getWeb3Connector();
 const binanceConnector = new Connector({
   lng: "en-US",
-  supportedChainIds: [1, 56, 204, 1030, 8453, 43114],
+  supportedChainIds: [1, 56, 204, 8453, 43114],
   rpc: {
     56: "https://bsc-dataseed.binance.org/",
     1: window.config.infura_endpoint,
     204: window.config.opbnb_endpoint,
-    1030: window.config.conflux_endpoint,
     8453: window.config.base_endpoint,
     43114: window.config.avax_endpoint,
   },
@@ -323,8 +322,6 @@ function App() {
           setnetworkId("8453");
         } else if (chainId === "0xcc") {
           setnetworkId("204");
-        } else if (chainId === "0x406") {
-          setnetworkId("1030");
         } else if (chainId === "0x38") {
           setnetworkId("56");
         } else if (chainId === "0x2105") {
@@ -386,16 +383,7 @@ function App() {
         },
         blockExplorerUrls: ["https://bscscan.com"],
       },
-      1030: {
-        chainId: 1030,
-        chainName: "CFX",
-        rpcUrls: ["https://evm.confluxrpc.com"],
-        nativeCurrency: {
-          symbol: "cfx",
-          decimals: 18,
-        },
-        blockExplorerUrls: ["https://evm.confluxscan.net"],
-      },
+
       204: {
         chainId: 204,
         chainName: "opBNB",
@@ -449,9 +437,7 @@ function App() {
                     ? "0xa86a"
                     : chainId === "8453"
                     ? "0x2105"
-                    : chainId === "1030"
-                    ? "0x406"
-                    : "0x406",
+                    : "0x38",
               },
             ],
           })
@@ -507,9 +493,7 @@ function App() {
                   ? "0xa86a"
                   : chainId === "8453"
                   ? "0x2105"
-                  : chainId === "1030"
-                  ? "0x406"
-                  : "0x406",
+                  : "0x38",
             },
           ],
         });
@@ -557,34 +541,26 @@ function App() {
     let subscribedPlatformTokenAmountNewAvax;
     let subscribedPlatformTokenAmountNewBNB;
     let subscribedPlatformTokenAmountNewBNB2;
-    let subscribedPlatformTokenAmountCfx;
     let subscribedPlatformTokenAmountBase;
-    let subscribedPlatformTokenAmountSkale;
 
     const web3eth = window.infuraWeb3;
     const web3avax = window.avaxWeb3;
     const web3bnb = window.bscWeb3;
-    const web3cfx = window.confluxWeb3;
     const web3base = window.baseWeb3;
-    const web3skale = window.skaleWeb3;
 
     const AvaxNewABI = window.SUBSCRIPTION_NEWAVAX_ABI;
     const EthNewABI = window.SUBSCRIPTION_NEWETH_ABI;
     const BnbNewABI = window.SUBSCRIPTION_NEWBNB_ABI;
     const BnbNew2ABI = window.SUBSCRIPTION_NEWBNB2_ABI;
 
-    const CfxABI = window.SUBSCRIPTION_CFX_ABI;
     const BaseABI = window.SUBSCRIPTION_BASE_ABI;
-    const SkaleABI = window.SUBSCRIPTION_SKALE_ABI;
 
     const ethsubscribeNewAddress = window.config.subscription_neweth_address;
     const avaxsubscribeNewAddress = window.config.subscription_newavax_address;
     const bnbsubscribeNewAddress = window.config.subscription_newbnb_address;
     const bnbsubscribeNewAddress2 = window.config.subscription_newbnb2_address;
 
-    const cfxsubscribeAddress = window.config.subscription_cfx_address;
     const basesubscribeAddress = window.config.subscription_base_address;
-    const skalesubscribeAddress = window.config.subscription_skale_address;
 
     const ethNewcontract = new web3eth.eth.Contract(
       EthNewABI,
@@ -605,16 +581,9 @@ function App() {
       bnbsubscribeNewAddress2
     );
 
-    const cfxcontract = new web3cfx.eth.Contract(CfxABI, cfxsubscribeAddress);
-
     const basecontract = new web3base.eth.Contract(
       BaseABI,
       basesubscribeAddress
-    );
-
-    const skalecontract = new web3skale.eth.Contract(
-      SkaleABI,
-      skalesubscribeAddress
     );
 
     if (userWallet && isConnected === true) {
@@ -650,23 +619,7 @@ function App() {
           return 0;
         });
 
-      subscribedPlatformTokenAmountCfx = await cfxcontract.methods
-        .subscriptionPlatformTokenAmount(userWallet)
-        .call()
-        .catch((e) => {
-          console.log(e);
-          return 0;
-        });
-
       subscribedPlatformTokenAmountBase = await basecontract.methods
-        .subscriptionPlatformTokenAmount(userWallet)
-        .call()
-        .catch((e) => {
-          console.log(e);
-          return 0;
-        });
-
-      subscribedPlatformTokenAmountSkale = await skalecontract.methods
         .subscriptionPlatformTokenAmount(userWallet)
         .call()
         .catch((e) => {
@@ -676,23 +629,19 @@ function App() {
 
       if (
         Number(subscribedPlatformTokenAmountNewETH) === 0 &&
-        Number(subscribedPlatformTokenAmountCfx) === 0 &&
         Number(subscribedPlatformTokenAmountBase) === 0 &&
         Number(subscribedPlatformTokenAmountNewAvax) === 0 &&
         Number(subscribedPlatformTokenAmountNewBNB) === 0 &&
-        Number(subscribedPlatformTokenAmountNewBNB2) === 0 &&
-        Number(subscribedPlatformTokenAmountSkale) === 0
+        Number(subscribedPlatformTokenAmountNewBNB2) === 0
       ) {
         // setsubscribedPlatformTokenAmount("0");
         setisPremium(false);
       } else if (
         Number(subscribedPlatformTokenAmountNewETH) !== 0 ||
-        Number(subscribedPlatformTokenAmountCfx) !== 0 ||
         Number(subscribedPlatformTokenAmountBase) !== 0 ||
         Number(subscribedPlatformTokenAmountNewAvax) !== 0 ||
         Number(subscribedPlatformTokenAmountNewBNB) !== 0 ||
-        Number(subscribedPlatformTokenAmountNewBNB2) !== 0 ||
-        Number(subscribedPlatformTokenAmountSkale) !== 0
+        Number(subscribedPlatformTokenAmountNewBNB2) !== 0
       ) {
         setisPremium(true);
       }
@@ -2550,10 +2499,14 @@ setkittyDashRecords */}
                         networkId={parseInt(networkId)}
                         isConnected={isConnected}
                         coinbase={coinbase}
-                        handleConnection={showModal}
                         onRefreshBalance={() => {
                           setBalanceCount(balanceCount + 1);
                         }}
+                        handleSwitchChainBinanceWallet={handleSwitchNetwork}
+                        handleConnection={() => {
+                          setshowWalletPopup(true);
+                        }}
+                        binanceW3WProvider={library}
                         handleSwitchNetwork={handleSwitchNetwork}
                       />
                     }
@@ -2607,8 +2560,15 @@ setkittyDashRecords */}
                       <Bridge
                         networkId={parseInt(networkId)}
                         isConnected={isConnected}
-                        handleConnection={handleConnection}
+                        handleConnection={() => {
+                          setshowWalletPopup(true);
+                        }}
+                        binanceW3WProvider={library}
                         coinbase={coinbase}
+                        handleSwitchChainBinanceWallet={handleSwitchNetwork}
+                        binanceConnector={binanceConnector}
+                        library={library}
+                        binanceData={binanceData}
                       />
                     }
                   />
@@ -2784,6 +2744,8 @@ setkittyDashRecords */}
                         onPlayerFetch={onPlayerFetch}
                         onSyncClick={handleSync}
                         syncStatus={syncStatus}
+                        handleSwitchChainBinanceWallet={handleSwitchNetwork}
+                        binanceW3WProvider={library}
                       />
                     }
                   />

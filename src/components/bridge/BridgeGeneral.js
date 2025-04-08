@@ -5,7 +5,17 @@ import BridgeFAQ from "./BridgeFAQ";
 import "./bridge.css";
 import { useLocation } from "react-router-dom";
 
-const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
+const Bridge = ({
+  networkId,
+  isConnected,
+  handleConnection,
+  coinbase,
+  binanceW3WProvider,
+  handleSwitchChainBinanceWallet,
+  library,
+  binanceConnector,
+  binanceData,
+}) => {
   const [sourceChain, setSourceChain] = useState("");
   const [sourceChainiDyp, setSourceChainiDyp] = useState("");
   const [destinationChainiDyp, setDestinationChainiDyp] = useState("");
@@ -103,7 +113,8 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
         .call()
         .then((data) => {
           setEthBalanceidyp(data);
-        }).catch((e) => {
+        })
+        .catch((e) => {
           console.error(e);
           return 0;
         });
@@ -113,17 +124,19 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
         .call()
         .then((data) => {
           setAvaxBalanceidyp(data);
-        }).catch((e) => {
-              console.error(e);
-              return 0;
-            });
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
 
       bal3 = await contract3.methods
         .balanceOf(walletAddress)
         .call()
         .then((data) => {
           setBnbBalanceidyp(data);
-        }).catch((e) => {
+        })
+        .catch((e) => {
           console.error(e);
           return 0;
         });
@@ -262,6 +275,11 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
     bridgeBSC: destinationBridge,
     tokenETH: sourceToken,
     tokenBSC: destinationToken,
+    binanceW3WProvider: binanceW3WProvider,
+    handleSwitchChainBinanceWallet: handleSwitchChainBinanceWallet,
+    library: library,
+    binanceConnector: binanceConnector,
+    binanceData:binanceData
   });
 
   const BridgeiDYPModal = initBridgeidyp({
@@ -269,6 +287,10 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
     bridgeBSC: destinationBridgeiDyp,
     tokenETH: sourceTokeniDyp,
     tokenBSC: destinationTokeniDyp,
+    binanceW3WProvider: binanceW3WProvider,
+    library: library,
+    binanceConnector: binanceConnector,
+    binanceData:binanceData
   });
 
   return (
