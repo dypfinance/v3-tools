@@ -40,7 +40,7 @@ const Leaderboard = ({
   activePlayerWeeklyOpbnb,
   activePlayerMonthlyOpbnb,
   fetchCawsAdvLeaderboard,
-  fetchPreviousCawsAdvWinners
+  fetchPreviousCawsAdvWinners,
 }) => {
   const weeklyPrizes = ["25", "15", "10", "8", "0", "0", "0", "0", "0", "0"];
   const monthlyPrizes = [
@@ -1030,7 +1030,7 @@ const Leaderboard = ({
                     </>
                   ) : (
                     <>
-                      {leaderboardCaws2d.slice(0, 20).map((item, index) => (
+                      {leaderboardCaws2d.slice(0, 10).map((item, index) => (
                         <tr
                           key={index}
                           className={`playerInnerRow ${
@@ -1219,20 +1219,19 @@ const Leaderboard = ({
                 </div>
               )}
           </div>
-          
-            <div className="optionsWrapper2 p-2">
-              <div className="d-flex flex-column">
-                <div className="d-flex justify-content-between gap-2 align-items-center">
-                  <span className="viewWinners">View previous winners</span>
-                  <Switch
-                    onChange={() => {
-                      switchPrev();
-                    }}
-                  />
-                </div>
+
+          <div className="optionsWrapper2 p-2">
+            <div className="d-flex flex-column">
+              <div className="d-flex justify-content-between gap-2 align-items-center">
+                <span className="viewWinners">View previous winners</span>
+                <Switch
+                  onChange={() => {
+                    switchPrev();
+                  }}
+                />
               </div>
             </div>
-         
+          </div>
         </div>
       </div>
     </div>
