@@ -1391,7 +1391,7 @@ function App() {
     } catch (e) {
       console.warn(e);
     }
-    leaderboard2 = leaderboard2.sort((a, b) => b.score - a.score)?.slice(0, 10);
+    leaderboard2 = leaderboard2.sort((a, b) => b.score - a.score);
     var testArray =
       leaderboard2.length > 0
         ? leaderboard2.filter(
@@ -1429,7 +1429,7 @@ function App() {
     } catch (e) {
       console.warn(e);
     }
-    leaderboard2 = leaderboard2.sort((a, b) => b.score - a.score)?.slice(0, 10);
+    leaderboard2 = leaderboard2.sort((a, b) => b.score - a.score);
 
     fillRecordsCaws2d(leaderboard2);
   };
