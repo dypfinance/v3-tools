@@ -340,10 +340,7 @@ const Header = ({
   }, [chainId, coinbase]);
 
   useEffect(() => {
-    // fetchData().then();
-    // refreshHotPairs().then();
     setActiveChain();
-    ethereum?.on("chainChanged", handleChainChanged);
   }, [chainId, ethState]);
 
   useEffect(() => {
@@ -415,7 +412,6 @@ const Header = ({
                   </NavLink>
                   <div className="d-flex justify-content-between gap-3 align-items-center">
                     {routeData.pathname &&
-                      routeData.pathname !== "/bridge" &&
                       routeData.pathname !== "/swap" &&
                       routeData.pathname !== "/migration" && (
                         <DropdownButton
@@ -535,7 +531,7 @@ const Header = ({
                       routeData.pathname !== "/swap" && (
                         <>
                           <div className="account-info d-none d-lg-flex align-items-center justify-content-center gap-2 gap-lg-3">
-                            {routeData.pathname !== "/bridge" &&
+                            {
                               routeData.pathname !== "/migration" && (
                                 <span className="account-balance d-none d-lg-flex">
                                   {currencyAmount}{" "}

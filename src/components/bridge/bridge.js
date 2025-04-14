@@ -50,7 +50,6 @@ export default function initBridge({
   binanceW3WProvider,
   library,
   binanceConnector,
-  binanceData,
 }) {
   let { BigNumber } = window;
 
@@ -98,6 +97,7 @@ export default function initBridge({
 
     checkNetworkId = async () => {
       if (window.WALLET_TYPE === "binance") {
+        let binanceData = JSON.parse(localStorage.getItem("connect-session"));
         if (binanceData !== undefined && binanceData !== null) {
           if (binanceData.chainId.toString() === "0x1") {
             this.setState({
@@ -179,34 +179,7 @@ export default function initBridge({
 
       ethPool = ethPool / 1e18;
       this.setState({ ethPool: ethPool });
-
-      //Get DYP Balance BNB Chain Pool
-      // let avaxPool = await window.getTokenHolderBalanceAll(
-      //   this.props.sourceChain === "avax"
-      //     ? bridgeETH._address
-      //     : bridgeBSC._address,
-      //   this.props.sourceChain === "avax"
-      //     ? bridgeETH.tokenAddress
-      //     : bridgeBSC.tokenAddress,
-      //   2
-      // );
-
-      // avaxPool = avaxPool / 1e18;
-
-      // this.setState({ avaxPool: avaxPool });
-
-      // let bnbPool = await window.getTokenHolderBalanceAll(
-      //   this.props.sourceChain === "bnb"
-      //     ? bridgeETH._address
-      //     : bridgeBSC._address,
-      //   this.props.sourceChain === "bnb"
-      //     ? bridgeETH.tokenAddress
-      //     : bridgeBSC.tokenAddress,
-      //   3
-      // );
-
-      // bnbPool = bnbPool / 1e18;
-      // this.setState({ bnbPool: bnbPool });
+ 
     };
     checkApproval = async (amount) => {
       if (this.props.coinbase) {

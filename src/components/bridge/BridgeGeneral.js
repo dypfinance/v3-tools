@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import initBridge from "./bridge";
-import initBridgeidyp from "./bridge-idyp";
+
+import BridgeDyp from "./bridgeFunc";
+import BridgeiDyp from "./bridgeidypFunc";
 import BridgeFAQ from "./BridgeFAQ";
 import "./bridge.css";
 import { useLocation } from "react-router-dom";
@@ -12,9 +13,7 @@ const Bridge = ({
   coinbase,
   binanceW3WProvider,
   handleSwitchChainBinanceWallet,
-  library,
-  binanceConnector,
-  binanceData,
+  handleSwitchNetwork,
 }) => {
   const [sourceChain, setSourceChain] = useState("");
   const [sourceChainiDyp, setSourceChainiDyp] = useState("");
@@ -45,10 +44,6 @@ const Bridge = ({
   );
 
   const routeData = useLocation();
-  const [faqSection, setFaqSection] = useState(routeData.state?.section);
-  const [ethBalance, setEthBalance] = useState("0.0");
-  const [bnbBalance, setBnbBalance] = useState("0.0");
-  const [avaxBalance, setAvaxBalance] = useState("0.0");
 
   const [ethBalanceidyp, setEthBalanceidyp] = useState("0.0");
   const [bnbBalanceidyp, setBnbBalanceidyp] = useState("0.0");
@@ -270,29 +265,6 @@ const Bridge = ({
   //   setDestinationToken(window.token_dypius_new_bsc);
   // }, []);
 
-  const BridgeModal = initBridge({
-    bridgeETH: sourceBridge,
-    bridgeBSC: destinationBridge,
-    tokenETH: sourceToken,
-    tokenBSC: destinationToken,
-    binanceW3WProvider: binanceW3WProvider,
-    handleSwitchChainBinanceWallet: handleSwitchChainBinanceWallet,
-    library: library,
-    binanceConnector: binanceConnector,
-    binanceData:binanceData
-  });
-
-  const BridgeiDYPModal = initBridgeidyp({
-    bridgeETH: sourceBridgeiDyp,
-    bridgeBSC: destinationBridgeiDyp,
-    tokenETH: sourceTokeniDyp,
-    tokenBSC: destinationTokeniDyp,
-    binanceW3WProvider: binanceW3WProvider,
-    library: library,
-    binanceConnector: binanceConnector,
-    binanceData:binanceData
-  });
-
   return (
     <div className="container-lg p-0">
       <div className="general-bridge-wrapper d-flex flex-column justify-content-start justify-content-lg-center px-4 pt-4 pt-lg-0 mb-4">
@@ -462,7 +434,7 @@ const Bridge = ({
             </div>
           </a>
         </div>
-        <BridgeModal
+        <BridgeDyp
           isConnected={isConnected}
           networkId={networkId}
           handleConnection={handleConnection}
@@ -476,6 +448,12 @@ const Bridge = ({
           coinbase={coinbase}
           sourceChain={sourceChain}
           activebtn={activebtn}
+          handleSwitchNetwork={handleSwitchNetwork}
+          bridgeETH={sourceBridge}
+          bridgeBSC={destinationBridge}
+          tokenETH={sourceToken}
+          handleSwitchChainBinanceWallet={handleSwitchChainBinanceWallet}
+          binanceW3WProvider={binanceW3WProvider}
         />
       </div>
       <div className="bigseparator mt-5 mb-5"></div>
@@ -557,7 +535,7 @@ const Bridge = ({
             </h6>
           </div>
         </div>
-        <BridgeiDYPModal
+        <BridgeiDyp
           isConnected={isConnected}
           networkId={networkId}
           handleConnection={handleConnection}
@@ -568,12 +546,15 @@ const Bridge = ({
           onSelectSourceChain={(value) => {
             handleSourceChainiDyp(value, activebtn);
           }}
-          sourceChain={sourceChainiDyp}
           coinbase={coinbase}
+          sourceChain={sourceChainiDyp}
           activebtn={activebtn}
-          ethBalance={ethBalanceidyp}
-          bnbBalance={bnbBalanceidyp}
-          avaxBalance={avaxBalanceidyp}
+          handleSwitchNetwork={handleSwitchNetwork}
+          bridgeETH={sourceBridgeiDyp}
+          bridgeBSC={destinationBridgeiDyp}
+          tokenETH={sourceTokeniDyp}
+          handleSwitchChainBinanceWallet={handleSwitchChainBinanceWallet}
+          binanceW3WProvider={binanceW3WProvider}
         />
       </div>
 

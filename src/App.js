@@ -256,10 +256,7 @@ function App() {
   };
 
   const checkNetworkId = () => {
-    if (
-      !window.location.pathname.includes("bridge") &&
-      !window.location.pathname.includes("migration")
-    ) {
+    if (!window.location.pathname.includes("migration")) {
       if (
         window.ethereum &&
         !window.coin98 &&
@@ -1117,10 +1114,7 @@ function App() {
     LP_IDs_V2.weth[4],
   ];
 
-  if (
-    !window.location.pathname.includes("bridge") &&
-    !window.location.pathname.includes("migration")
-  ) {
+  if (!window.location.pathname.includes("migration")) {
     ethereum?.on("chainChanged", checkNetworkId);
     ethereum?.on("accountsChanged", checkConnection2);
     // ethereum?.on("accountsChanged", refreshSubscription);
@@ -2566,9 +2560,7 @@ setkittyDashRecords */}
                         binanceW3WProvider={library}
                         coinbase={coinbase}
                         handleSwitchChainBinanceWallet={handleSwitchNetwork}
-                        binanceConnector={binanceConnector}
-                        library={library}
-                        binanceData={binanceData}
+                        handleSwitchNetwork={handleSwitchNetwork}
                       />
                     }
                   />

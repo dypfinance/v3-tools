@@ -4494,7 +4494,6 @@ async function getLandNft(id) {
 }
 
 async function myNftLandListContract(address) {
-  
   let nft_contract = new window.infuraWeb3.eth.Contract(
     window.LANDMINTING_ABI,
     window.config.landnft_address,
@@ -39251,7 +39250,7 @@ async function connectWallet(provider, walletType) {
       return true;
     } catch (e) {
       console.error(e);
-      throw new Error("User denied wallet connection!");
+      window.alertify.error("User denied wallet connection!");
     }
   } else if (window.web3) {
     window.web3 = new Web3(window.web3.currentProvider);

@@ -4,6 +4,7 @@ import getFormattedNumber from "../../functions/get-formatted-number";
 import axios from "axios";
 import "./account.css";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
+import { ethers } from "ethers";
 
 const { BigNumber } = window;
 
@@ -98,14 +99,14 @@ export default class Subscription extends React.Component {
           dropdownTitle: "WBNB",
         });
         this.setState({ chainDropdown: chainDropdowns[1] });
-      }   else if (this.props.networkId === 8453) {
+      } else if (this.props.networkId === 8453) {
         this.handleSubscriptionTokenChange(this.state.wbaseAddress);
         this.setState({
           dropdownIcon: "weth",
           dropdownTitle: "WETH",
         });
         this.setState({ chainDropdown: chainDropdowns[4] });
-      }   else {
+      } else {
         this.setState({
           dropdownIcon: "weth",
           dropdownTitle: "WETH",
@@ -133,12 +134,11 @@ export default class Subscription extends React.Component {
         name: "Avalanche",
         symbol: "wavax",
       },
-      
+
       {
         name: "Base",
         symbol: "base",
       },
-       
     ];
 
     if (this.props.networkId === 43114) {
@@ -170,7 +170,7 @@ export default class Subscription extends React.Component {
         dropdownTitle: "WETH",
       });
       this.setState({ chainDropdown: chainDropdowns[4] });
-    }  else {
+    } else {
       this.setState({
         dropdownIcon: "weth",
         dropdownTitle: "WETH",
@@ -188,10 +188,8 @@ export default class Subscription extends React.Component {
         ? window.config.subscriptioneth_tokens[token]?.decimals
         : this.props.networkId === 56
         ? window.config.subscriptionbnb_tokens[token]?.decimals
-        
         : this.props.networkId === 8453
         ? window.config.subscriptionbase_tokens[token]?.decimals
-         
         : window.config.subscription_tokens[token]?.decimals;
 
     console.log("tokenDecimals", tokenDecimals);
@@ -207,10 +205,8 @@ export default class Subscription extends React.Component {
         ? await window.getEstimatedTokenSubscriptionAmountETH(token)
         : this.props.networkId === 56
         ? await window.getEstimatedTokenSubscriptionAmountBNB(token)
-        
         : this.props.networkId === 8453
         ? await window.getEstimatedTokenSubscriptionAmountBase(token)
-        
         : await window.getEstimatedTokenSubscriptionAmount(token);
     price = new BigNumber(price).toFixed(0);
     console.log("price", price);
@@ -231,54 +227,83 @@ export default class Subscription extends React.Component {
   };
 
   handleApprove = async (e) => {
-    // e.preventDefault();
-    const web3 = new Web3(window.ethereum);
-    let tokenContract = new web3.eth.Contract(
-      window.ERC20_ABI,
-      this.state.selectedSubscriptionToken
-    );
-
     const ethsubscribeAddress = window.config.subscription_neweth_address;
     const avaxsubscribeAddress = window.config.subscription_newavax_address;
     const bnbsubscribeAddress = window.config.subscription_newbnb_address;
-    
     const basesubscribeAddress = window.config.subscription_base_address;
-    
-
     this.setState({ loadspinner: true });
 
-  
+    if (window.WALLET_TYPE !== "binance") {
+      const web3 = new Web3(window.ethereum);
+      let tokenContract = new web3.eth.Contract(
+        window.ERC20_ABI,
+        this.state.selectedSubscriptionToken
+      );
 
-    await tokenContract.methods
-      .approve(
-        this.props.networkId === 1
-          ? ethsubscribeAddress
-          : this.props.networkId === 56
-          ? bnbsubscribeAddress
-           
-          : this.props.networkId === 8453
-          ? basesubscribeAddress
-           
-          : avaxsubscribeAddress,
-        this.state.price
-      )
-      .send({ from: this.props.coinbase })
-      .then(() => {
+      await tokenContract.methods
+        .approve(
+          this.props.networkId === 1
+            ? ethsubscribeAddress
+            : this.props.networkId === 56
+            ? bnbsubscribeAddress
+            : this.props.networkId === 8453
+            ? basesubscribeAddress
+            : avaxsubscribeAddress,
+          this.state.price
+        )
+        .send({ from: this.props.coinbase })
+        .then(() => {
+          this.setState({ lockActive: true });
+          this.setState({ loadspinner: false });
+          this.setState({ isApproved: true, approveStatus: "deposit" });
+        })
+        .catch((e) => {
+          this.setState({ status: e?.message });
+          this.setState({ loadspinner: false, approveStatus: "fail" });
+          setTimeout(() => {
+            this.setState({
+              status: "",
+              loadspinner: false,
+              approveStatus: "initial",
+            });
+          }, 8000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let tokenContract = new ethers.Contract(
+        this.state.selectedSubscriptionToken,
+        window.ERC20_ABI,
+        this.props.binanceW3WProvider.getSigner()
+      );
+
+      const txResponse = await tokenContract
+        .approve(
+          this.props.networkId === 1
+            ? ethsubscribeAddress
+            : this.props.networkId === 56
+            ? bnbsubscribeAddress
+            : this.props.networkId === 8453
+            ? basesubscribeAddress
+            : avaxsubscribeAddress,
+          this.state.price
+        )
+        .catch((e) => {
+          this.setState({ status: e?.message });
+          this.setState({ loadspinner: false, approveStatus: "fail" });
+          setTimeout(() => {
+            this.setState({
+              status: "",
+              loadspinner: false,
+              approveStatus: "initial",
+            });
+          }, 8000);
+        });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         this.setState({ lockActive: true });
         this.setState({ loadspinner: false });
         this.setState({ isApproved: true, approveStatus: "deposit" });
-      })
-      .catch((e) => {
-        this.setState({ status: e?.message });
-        this.setState({ loadspinner: false, approveStatus: "fail" });
-        setTimeout(() => {
-          this.setState({
-            status: "",
-            loadspinner: false,
-            approveStatus: "initial",
-          });
-        }, 8000);
-      });
+      }
+    }
   };
 
   handleUpdatePremiumUser = async () => {
@@ -290,56 +315,95 @@ export default class Subscription extends React.Component {
       });
   };
 
+  getContractBinance = async ({ key, address = null, ABI = null }) => {
+    ABI = window[key + "_ABI"];
+    address = window.config[key.toLowerCase() + "_address"];
+    if (!window.cached_contracts[key + "-" + address.toLowerCase()]) {
+      window.cached_contracts[key + "-" + address?.toLowerCase()] =
+        new ethers.Contract(
+          address,
+          ABI,
+          this.props.binanceW3WProvider.getSigner()
+        );
+    }
+    return window.cached_contracts[key + "-" + address.toLowerCase()];
+  };
+
   handleSubscribe = async (e) => {
-    // e.preventDefault();
-    let subscriptionContract = await window.getContract({
-      key:
-        this.props.networkId === 1
-          ? "SUBSCRIPTION_NEWETH"
-          : this.props.networkId === 56
-          ? "SUBSCRIPTION_NEWBNB"
-           
-          : this.props.networkId === 8453
-          ? "SUBSCRIPTION_BASE"
-           
-          : "SUBSCRIPTION_NEWAVAX",
-    });
-
     this.setState({ loadspinnerSub: true });
-
-    // let price =
-    // this.props.networkId === 1
-    //   ? await window.getEstimatedTokenSubscriptionAmountETH(this.state.selectedSubscriptionToken)
-    //   : this.props.networkId === 56
-    //   ? await window.getEstimatedTokenSubscriptionAmountBNB(this.state.selectedSubscriptionToken)
-    //   : await window.getEstimatedTokenSubscriptionAmount(this.state.selectedSubscriptionToken);
-    // console.log(this.state.price, this.state.selectedSubscriptionToken)
-    console.log(this.state.selectedSubscriptionToken, this.state.price);
-    await subscriptionContract.methods
-      .subscribe(this.state.selectedSubscriptionToken, this.state.price)
-      .send({ from: await window.getCoinbase() })
-      .then(() => {
+    if (window.WALLET_TYPE !== "binance") {
+      let subscriptionContract = await window.getContract({
+        key:
+          this.props.networkId === 1
+            ? "SUBSCRIPTION_NEWETH"
+            : this.props.networkId === 56
+            ? "SUBSCRIPTION_NEWBNB"
+            : this.props.networkId === 8453
+            ? "SUBSCRIPTION_BASE"
+            : "SUBSCRIPTION_NEWAVAX",
+      });
+      await subscriptionContract.methods
+        .subscribe(this.state.selectedSubscriptionToken, this.state.price)
+        .send({ from: await window.getCoinbase() })
+        .then(() => {
+          this.setState({ loadspinnerSub: false, approveStatus: "success" });
+          this.props.onSubscribe(this.props.coinbase);
+          this.handleUpdatePremiumUser();
+          window.location.href = "https://app.dypius.com/account";
+        })
+        .catch((e) => {
+          this.setState({ status: e?.message });
+          this.setState({
+            loadspinner: false,
+            approveStatus: "fail",
+            loadspinnerSub: false,
+          });
+          setTimeout(() => {
+            this.setState({
+              status: "",
+              loadspinner: false,
+              loadspinnerSub: false,
+              approveStatus: "initial",
+            });
+          }, 8000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let subscriptionContract = await this.getContractBinance({
+        key:
+          this.props.networkId === 1
+            ? "SUBSCRIPTION_NEWETH"
+            : this.props.networkId === 56
+            ? "SUBSCRIPTION_NEWBNB"
+            : this.props.networkId === 8453
+            ? "SUBSCRIPTION_BASE"
+            : "SUBSCRIPTION_NEWAVAX",
+      });
+      const txResponse = await subscriptionContract
+        .subscribe(this.state.selectedSubscriptionToken, this.state.price)
+        .catch((e) => {
+          this.setState({ status: e?.message });
+          this.setState({
+            loadspinner: false,
+            approveStatus: "fail",
+            loadspinnerSub: false,
+          });
+          setTimeout(() => {
+            this.setState({
+              status: "",
+              loadspinner: false,
+              loadspinnerSub: false,
+              approveStatus: "initial",
+            });
+          }, 8000);
+        });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         this.setState({ loadspinnerSub: false, approveStatus: "success" });
         this.props.onSubscribe(this.props.coinbase);
         this.handleUpdatePremiumUser();
         window.location.href = "https://app.dypius.com/account";
-      })
-      .catch((e) => {
-        this.setState({ status: e?.message });
-        this.setState({
-          loadspinner: false,
-          approveStatus: "fail",
-          loadspinnerSub: false,
-        });
-        setTimeout(() => {
-          this.setState({
-            status: "",
-            loadspinner: false,
-            loadspinnerSub: false,
-            approveStatus: "initial",
-          });
-        }, 8000);
-      });
+      }
+    }
   };
 
   handleUnsubscribe = async (e) => {
@@ -430,12 +494,10 @@ export default class Subscription extends React.Component {
         ? window.config.subscriptionbnb_tokens[
             this.state.selectedSubscriptionToken
           ]?.decimals
-         
         : this.props.networkId === 8453
         ? window.config.subscriptionbase_tokens[
             this.state.selectedSubscriptionToken
           ]?.decimals
-         
         : window.config.subscription_tokens[
             this.state.selectedSubscriptionToken
           ]?.decimals;
@@ -444,8 +506,6 @@ export default class Subscription extends React.Component {
     const focusInput = (input) => {
       document.getElementById(input).focus();
     };
-
- 
 
     const benefits = [
       "DYP Tools administrative dashboard",
@@ -459,8 +519,6 @@ export default class Subscription extends React.Component {
       "Access every Treasure Hunt Event",
       "Early access to upcoming features and updates",
     ];
-
- 
 
     const handleEthPool = async () => {
       await handleSwitchNetworkhook("0x1")
@@ -502,7 +560,6 @@ export default class Subscription extends React.Component {
         });
     };
 
- 
     return (
       <div>
         {/* <div className="row mt-5 gap-4 gap-lg-0">
