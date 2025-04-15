@@ -304,7 +304,7 @@ const NftStakeCheckListModal = ({
           setSelectedNftIds([]);
           handleClearStatus();
         });
-    } else if (window.WALLET_TYPE !== "binance") {
+    } else if (window.WALLET_TYPE === "binance") {
       let stake_contract = new ethers.Contract(
         window.config.nftstaking_address,
         window.NFTSTAKING_ABI,
