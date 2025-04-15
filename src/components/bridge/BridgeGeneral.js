@@ -1,11 +1,20 @@
 import React, { useState, useEffect } from "react";
-import initBridge from "./bridge";
-import initBridgeidyp from "./bridge-idyp";
+
+import BridgeDyp from "./bridgeFunc";
+import BridgeiDyp from "./bridgeidypFunc";
 import BridgeFAQ from "./BridgeFAQ";
 import "./bridge.css";
 import { useLocation } from "react-router-dom";
 
-const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
+const Bridge = ({
+  networkId,
+  isConnected,
+  handleConnection,
+  coinbase,
+  binanceW3WProvider,
+  handleSwitchChainBinanceWallet,
+  handleSwitchNetwork,
+}) => {
   const [sourceChain, setSourceChain] = useState("");
   const [sourceChainiDyp, setSourceChainiDyp] = useState("");
   const [destinationChainiDyp, setDestinationChainiDyp] = useState("");
@@ -35,10 +44,6 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
   );
 
   const routeData = useLocation();
-  const [faqSection, setFaqSection] = useState(routeData.state?.section);
-  const [ethBalance, setEthBalance] = useState("0.0");
-  const [bnbBalance, setBnbBalance] = useState("0.0");
-  const [avaxBalance, setAvaxBalance] = useState("0.0");
 
   const [ethBalanceidyp, setEthBalanceidyp] = useState("0.0");
   const [bnbBalanceidyp, setBnbBalanceidyp] = useState("0.0");
@@ -103,7 +108,8 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
         .call()
         .then((data) => {
           setEthBalanceidyp(data);
-        }).catch((e) => {
+        })
+        .catch((e) => {
           console.error(e);
           return 0;
         });
@@ -113,17 +119,19 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
         .call()
         .then((data) => {
           setAvaxBalanceidyp(data);
-        }).catch((e) => {
-              console.error(e);
-              return 0;
-            });
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
 
       bal3 = await contract3.methods
         .balanceOf(walletAddress)
         .call()
         .then((data) => {
           setBnbBalanceidyp(data);
-        }).catch((e) => {
+        })
+        .catch((e) => {
           console.error(e);
           return 0;
         });
@@ -256,20 +264,6 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
   //   setSourceToken(window.token_dypius_new);
   //   setDestinationToken(window.token_dypius_new_bsc);
   // }, []);
-
-  const BridgeModal = initBridge({
-    bridgeETH: sourceBridge,
-    bridgeBSC: destinationBridge,
-    tokenETH: sourceToken,
-    tokenBSC: destinationToken,
-  });
-
-  const BridgeiDYPModal = initBridgeidyp({
-    bridgeETH: sourceBridgeiDyp,
-    bridgeBSC: destinationBridgeiDyp,
-    tokenETH: sourceTokeniDyp,
-    tokenBSC: destinationTokeniDyp,
-  });
 
   return (
     <div className="container-lg p-0">
@@ -440,7 +434,7 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
             </div>
           </a>
         </div>
-        <BridgeModal
+        <BridgeDyp
           isConnected={isConnected}
           networkId={networkId}
           handleConnection={handleConnection}
@@ -454,6 +448,12 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
           coinbase={coinbase}
           sourceChain={sourceChain}
           activebtn={activebtn}
+          handleSwitchNetwork={handleSwitchNetwork}
+          bridgeETH={sourceBridge}
+          bridgeBSC={destinationBridge}
+          tokenETH={sourceToken}
+          handleSwitchChainBinanceWallet={handleSwitchChainBinanceWallet}
+          binanceW3WProvider={binanceW3WProvider}
         />
       </div>
       <div className="bigseparator mt-5 mb-5"></div>
@@ -535,7 +535,7 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
             </h6>
           </div>
         </div>
-        <BridgeiDYPModal
+        <BridgeiDyp
           isConnected={isConnected}
           networkId={networkId}
           handleConnection={handleConnection}
@@ -546,12 +546,15 @@ const Bridge = ({ networkId, isConnected, handleConnection, coinbase }) => {
           onSelectSourceChain={(value) => {
             handleSourceChainiDyp(value, activebtn);
           }}
-          sourceChain={sourceChainiDyp}
           coinbase={coinbase}
+          sourceChain={sourceChainiDyp}
           activebtn={activebtn}
-          ethBalance={ethBalanceidyp}
-          bnbBalance={bnbBalanceidyp}
-          avaxBalance={avaxBalanceidyp}
+          handleSwitchNetwork={handleSwitchNetwork}
+          bridgeETH={sourceBridgeiDyp}
+          bridgeBSC={destinationBridgeiDyp}
+          tokenETH={sourceTokeniDyp}
+          handleSwitchChainBinanceWallet={handleSwitchChainBinanceWallet}
+          binanceW3WProvider={binanceW3WProvider}
         />
       </div>
 

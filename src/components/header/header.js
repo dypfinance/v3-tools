@@ -27,8 +27,6 @@ const Header = ({
   showFlyout,
   handleSwitchChainBinanceWallet,
 }) => {
-  const [gasPrice, setGasprice] = useState();
-  const [ethPrice, setEthprice] = useState();
   const [username, setUsername] = useState();
   // const [chainId, setChainId] = useState(1)
 
@@ -39,8 +37,7 @@ const Header = ({
   const [bnbState, setBnbState] = useState(false);
   const [avaxState, setAvaxState] = useState(false);
   const [baseState, setBaseState] = useState(false);
-  const [confluxState, setConfluxState] = useState(false);
-  const [skaleState, setSkaleState] = useState(false);
+
   const [currencyAmount, setCurrencyAmount] = useState(0);
 
   const [avatar, setAvatar] = useState(
@@ -56,43 +53,27 @@ const Header = ({
       setAvaxState(false);
       setBnbState(false);
       setEthState(true);
-      setSkaleState(false);
+      setBaseState(false);
     } else if (chainId === 43114) {
       setAvaxState(true);
       setBnbState(false);
       setEthState(false);
-      setSkaleState(false);
+      setBaseState(false);
     } else if (chainId === 56 || chainId === 204) {
       setAvaxState(false);
       setBnbState(true);
       setEthState(false);
-      setSkaleState(false);
+      setBaseState(false);
     } else if (chainId === 8453) {
       setAvaxState(false);
       setBnbState(false);
       setEthState(false);
       setBaseState(true);
-      setSkaleState(false);
-    } else if (chainId === 1030) {
-      setAvaxState(false);
-      setBnbState(false);
-      setEthState(false);
-      setBaseState(false);
-      setConfluxState(true);
-      setSkaleState(false);
-    } else if (chainId === 1482601649) {
-      setAvaxState(false);
-      setBnbState(false);
-      setEthState(false);
-      setBaseState(false);
-      setConfluxState(false);
-      setSkaleState(true);
     } else {
       setAvaxState(false);
       setBnbState(false);
       setBaseState(false);
       setEthState(false);
-      setSkaleState(false);
     }
   };
 
@@ -115,7 +96,6 @@ const Header = ({
       window.alertify.error("No web3 detected. Please install Metamask!");
     }
   };
-
 
   function handleChainChanged() {
     // We recommend reloading the page, unless you must do otherwise
@@ -360,10 +340,7 @@ const Header = ({
   }, [chainId, coinbase]);
 
   useEffect(() => {
-    // fetchData().then();
-    // refreshHotPairs().then();
     setActiveChain();
-    ethereum?.on("chainChanged", handleChainChanged);
   }, [chainId, ethState]);
 
   useEffect(() => {
@@ -435,7 +412,6 @@ const Header = ({
                   </NavLink>
                   <div className="d-flex justify-content-between gap-3 align-items-center">
                     {routeData.pathname &&
-                      routeData.pathname !== "/bridge" &&
                       routeData.pathname !== "/swap" &&
                       routeData.pathname !== "/migration" && (
                         <DropdownButton
@@ -453,10 +429,6 @@ const Header = ({
                                     ? "https://cdn.worldofdypians.com/wod/avaxIcon.svg"
                                     : baseState === true
                                     ? "https://cdn.worldofdypians.com/wod/base.svg"
-                                    : confluxState === true
-                                    ? "https://cdn.worldofdypians.com/wod/confluxIcon.svg"
-                                    : skaleState === true
-                                    ? "https://cdn.worldofdypians.com/wod/skaleIcon.svg"
                                     : "https://cdn.worldofdypians.com/wod/error.svg"
                                 }
                                 height={16}
@@ -474,10 +446,6 @@ const Header = ({
                                   ? "Avalanche"
                                   : baseState === true
                                   ? "Base"
-                                  : confluxState === true
-                                  ? "Conflux"
-                                  : skaleState === true
-                                  ? "SKALE"
                                   : "Unsupported Chain"}
                               </span>
 
@@ -540,19 +508,7 @@ const Header = ({
                             />
                             Avalanche
                           </Dropdown.Item>
-                          <Dropdown.Item
-                            onClick={() => switchNetwork("0x406", "1030")}
-                          >
-                            <img
-                              src={
-                                "https://cdn.worldofdypians.com/wod/confluxIcon.svg"
-                              }
-                              alt=""
-                              height={20}
-                              width={20}
-                            />
-                            Conflux
-                          </Dropdown.Item>
+
                           <Dropdown.Item
                             onClick={() => switchNetwork("0x2105", "8453")}
                           >
@@ -566,22 +522,6 @@ const Header = ({
                             />
                             Base
                           </Dropdown.Item>
-                          {window.WALLET_TYPE !== "binance" &&
-                            !window.ethereum?.isBinance && (
-                              <Dropdown.Item onClick={() =>
-                                switchNetwork("0x585eb4b1", 1482601649)
-                              }>
-                                <img
-                                  src={
-                                    "https://cdn.worldofdypians.com/wod/skaleIcon.svg"
-                                  }
-                                  alt=""
-                                  height={20}
-                                  width={20}
-                                />
-                                SKALE
-                              </Dropdown.Item>
-                            )}
                         </DropdownButton>
                       )}
 
@@ -591,7 +531,7 @@ const Header = ({
                       routeData.pathname !== "/swap" && (
                         <>
                           <div className="account-info d-none d-lg-flex align-items-center justify-content-center gap-2 gap-lg-3">
-                            {routeData.pathname !== "/bridge" &&
+                            {
                               routeData.pathname !== "/migration" && (
                                 <span className="account-balance d-none d-lg-flex">
                                   {currencyAmount}{" "}
@@ -601,12 +541,8 @@ const Header = ({
                                     ? "BNB"
                                     : chainId === 43114
                                     ? "AVAX"
-                                    : chainId === 1030
-                                    ? "CFX"
                                     : chainId === 8453
                                     ? "ETH"
-                                    : chainId === 1482601649
-                                    ? "sFUEL"
                                     : ""}
                                 </span>
                               )}

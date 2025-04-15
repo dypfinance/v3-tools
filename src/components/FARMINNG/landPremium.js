@@ -11,6 +11,7 @@ import { handleSwitchNetworkhook } from "../../functions/hooks";
 import useWindowSize from "../../functions/useWindowSize";
 import OutsideClickHandler from "react-outside-click-handler";
 import NftLandStakeCheckListPremiumModal from "../caws/NftMinting/components/NftMinting/NftStakeChecklistModal/NftLandStakeChecklistPremium";
+import { ethers } from "ethers";
 
 const LandDetailsPremium = ({
   coinbase,
@@ -38,7 +39,7 @@ const LandDetailsPremium = ({
   const [ethToUSD, setethToUSD] = useState(0);
   const [openStakeChecklist, setOpenStakeChecklist] = useState(false);
   const [showUnstakeModal, setShowUnstakeModal] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+   
   const [countDownLeft, setCountDownLeft] = useState(59000);
   const [totalStakes, settotalStakes] = useState(0);
   const [approvedNfts, setApprovedNfts] = useState([]);
@@ -147,21 +148,38 @@ const LandDetailsPremium = ({
 
   const claimRewards = async () => {
     let myStakes = await getStakesIds();
-    let staking_contract = await window.getContractLandPremiumNFT(
-      "LANDPREMIUM"
-    );
-    // setclaimAllStatus("Claiming all rewards, please wait...");
-    await staking_contract.methods
-      .claimRewards(myStakes)
-      .send()
-      .then(() => {
+    if (window.WALLET_TYPE !== "binance") {
+      let staking_contract = await window.getContractLandPremiumNFT(
+        "LANDPREMIUM"
+      );
+
+      await staking_contract.methods
+        .claimRewards(myStakes)
+        .send()
+        .then(() => {
+          setEthRewards(0);
+        })
+        .catch((err) => {
+          window.alertify.error(err?.message);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let staking_contract = new ethers.Contract(
+        window.config.nft_land_premiumstake_address,
+        window.LANDPREMIUM_ABI,
+        binanceW3WProvider.getSigner()
+      );
+
+      const txResponse = await staking_contract
+        .claimRewards(myStakes)
+        .catch((err) => {
+          window.alertify.error(err?.message);
+        });
+
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         setEthRewards(0);
-        // setclaimAllStatus("Claimed All Rewards!");
-      })
-      .catch((err) => {
-        // window.alertify.error(err?.message);
-        // setclaimAllStatus("An error occurred, please try again");
-      });
+      }
+    }
   };
 
   const convertEthToUsd = async () => {
@@ -214,20 +232,40 @@ const LandDetailsPremium = ({
 
   const handleUnstakeAll = async () => {
     let myStakes = await getStakesIds();
+    if (window.WALLET_TYPE !== "binance") {
     let stake_contract = await window.getContractLandPremiumNFT("LANDPREMIUM");
-    // setunstakeAllStatus("Unstaking all please wait...");
-
     await stake_contract.methods
       .withdraw(myStakes)
       .send()
       .then(() => {
-        // setunstakeAllStatus("Successfully unstaked all!");
+        setTimeout(() => {
+          setShowUnstakeModal(false);
+        }, 2000);
       })
       .catch((err) => {
         window.alertify.error(err?.message);
-        // setunstakeAllStatus("An error occurred, please try again");
         setShowUnstakeModal(false);
       });
+    } else  if (window.WALLET_TYPE === "binance") {
+      let stake_contract = new ethers.Contract(
+        window.config.nft_land_premiumstake_address,
+        window.LANDPREMIUM_ABI,
+        binanceW3WProvider.getSigner()
+      );
+ 
+      const txResponse = await stake_contract
+        .withdraw(myStakes).catch((err) => {
+          window.alertify.error(err?.message);
+          setShowUnstakeModal(false);
+        });
+
+        const txReceipt = await txResponse.wait();
+        if (txReceipt) {
+          setTimeout(() => {
+            setShowUnstakeModal(false);
+          }, 2000);
+        }
+      }
   };
 
   const handleEthPool = async () => {
@@ -475,7 +513,7 @@ const LandDetailsPremium = ({
                   <button
                     className="connectbtn btn"
                     onClick={() => {
-                      setShowModal(true);
+                      handleConnection()
                     }}
                   >
                     <img
@@ -715,21 +753,11 @@ const LandDetailsPremium = ({
             setcount2(count2 + 1);
           }}
           mystakes={mystakes}
+          binanceW3WProvider={binanceW3WProvider}
         />
       )}
 
-      {showModal === true && (
-        <WalletModal
-          show={showModal}
-          handleClose={() => {
-            setShowModal(false);
-          }}
-          handleConnection={() => {
-            handleConnection();
-            setShowModal(false);
-          }}
-        />
-      )}
+       
     </div>
   );
 };

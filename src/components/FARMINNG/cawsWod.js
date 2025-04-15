@@ -4,14 +4,14 @@ import getFormattedNumber from "../../functions/get-formatted-number";
 
 import Address from "./address";
 import WalletModal from "../WalletModal";
-import "./top-pools.css";  
+import "./top-pools.css";
 import Tooltip from "@material-ui/core/Tooltip";
 
- 
 import { handleSwitchNetworkhook } from "../../functions/hooks";
 import useWindowSize from "../../functions/useWindowSize";
 import NftCawsWodChecklistModal from "../caws/NftMinting/components/NftMinting/NftStakeChecklistModal/NftCawsWodChecklistModal";
 import OutsideClickHandler from "react-outside-click-handler";
+import { ethers } from "ethers";
 
 const CawsWodDetails = ({
   coinbase,
@@ -20,7 +20,10 @@ const CawsWodDetails = ({
   handleSwitchNetwork,
   chainId,
   handleConnection,
-  renderedPage,expired
+  renderedPage,
+  expired,
+  binanceW3WProvider,
+  handleSwitchChainBinanceWallet,
 }) => {
   const [myNFTs, setMyNFTs] = useState([]);
   const [myLandNFTs, setMyLandNFTs] = useState([]);
@@ -40,7 +43,7 @@ const CawsWodDetails = ({
   const [ethToUSD, setethToUSD] = useState(0);
   const [openStakeChecklist, setOpenStakeChecklist] = useState(false);
   const [showUnstakeModal, setShowUnstakeModal] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+  
   const [countDownLeft, setCountDownLeft] = useState(59000);
 
   const [approvedNfts, setApprovedNfts] = useState([]);
@@ -95,8 +98,14 @@ const CawsWodDetails = ({
   const getStakesIds = async () => {
     const address = coinbase;
     let stakenft = [];
-    const allCawsStakes = await window.wod_caws
+    let staking_contract = new window.infuraWeb3.eth.Contract(
+      window.WOD_CAWS_ABI,
+      window.config.wod_caws_address
+    );
+
+    const allCawsStakes = await staking_contract.methods
       .depositsOf(address)
+      .call()
       .then((result) => {
         if (result.length > 0) {
           for (let i = 0; i < result.length; i++)
@@ -135,8 +144,13 @@ const CawsWodDetails = ({
   const getLandStakesIds = async () => {
     const address = coinbase;
     let stakenft = [];
-    const allLandStakes = await window.wod_caws
+    let staking_contract = new window.infuraWeb3.eth.Contract(
+      window.WOD_CAWS_ABI,
+      window.config.wod_caws_address
+    );
+    const allLandStakes = await staking_contract.methods
       .depositsOfWod(address)
+      .call()
       .then((result) => {
         if (result.length > 0) {
           for (let i = 0; i < result.length; i++)
@@ -166,11 +180,15 @@ const CawsWodDetails = ({
   const calculateAllRewards = async () => {
     let myStakes = await getStakesIds();
     let result = 0;
-
+    let staking_contract = new window.infuraWeb3.eth.Contract(
+      window.WOD_CAWS_ABI,
+      window.config.wod_caws_address
+    );
     if (coinbase !== null) {
       if (myStakes && myStakes.length > 0) {
-        let rewards = await window.wod_caws
+        let rewards = await staking_contract.methods
           .calculateRewardsWodCaws(coinbase, myStakes)
+          .call()
           .then((data) => {
             return data;
           })
@@ -189,13 +207,31 @@ const CawsWodDetails = ({
 
   const claimRewards = async () => {
     let myStakes = await getStakesIds();
-    // setclaimAllStatus("Claiming all rewards, please wait...");
-    await window.wod_caws
-      .claimRewardsWodCaws(myStakes)
-      .then(() => {
+    if (window.WALLET_TYPE !== "binance") {
+      await window.wod_caws
+        .claimRewardsWodCaws(myStakes)
+        .then(() => {
+          setEthRewards(0);
+        })
+        .catch((err) => {
+          window.alertify.error(err?.message);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let staking_contract = new ethers.Contract(
+        window.config.wod_caws_address,
+        window.WOD_CAWS_ABI,
+        binanceW3WProvider.getSigner()
+      );
+      const txResponse = await staking_contract
+        .claimRewardsWodCaws(myStakes)
+        .catch((err) => {
+          window.alertify.error(err?.message);
+        });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         setEthRewards(0);
-      })
-      .catch((err) => {});
+      }
+    }
   };
 
   const convertEthToUsd = async () => {
@@ -213,8 +249,14 @@ const CawsWodDetails = ({
 
   const calculateCountdown = async () => {
     const address = coinbase;
-    let finalDay = await window.wod_caws
+    let staking_contract = new window.infuraWeb3.eth.Contract(
+      window.WOD_CAWS_ABI,
+      window.config.wod_caws_address
+    );
+
+    let finalDay = await staking_contract.methods
       .checkStakingTimeWodCaws(address)
+      .call()
       .then((data) => {
         return data;
       });
@@ -230,30 +272,56 @@ const CawsWodDetails = ({
   };
 
   const handleUnstakeAll = async () => {
-    // setunstakeAllStatus("Unstaking all please wait...");
-    await window.wod_caws
-      .withdrawWodCaws()
-      .then(() => {
+    if (window.WALLET_TYPE !== "binance") {
+      await window.wod_caws
+        .withdrawWodCaws()
+        .then(() => {
+          refreshStakes();
+        })
+        .catch((err) => {
+          window.alertify.error(err?.message);
+          setShowUnstakeModal(false);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let staking_contract = new ethers.Contract(
+        window.config.wod_caws_address,
+        window.WOD_CAWS_ABI,
+        binanceW3WProvider.getSigner()
+      );
+      const txResponse = await staking_contract
+        .withdrawWodCaws()
+        .catch((err) => {
+          window.alertify.error(err?.message);
+          setShowUnstakeModal(false);
+        });
+
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         refreshStakes();
-        // setunstakeAllStatus("Successfully unstaked all!");
-      })
-      .catch((err) => {
-        window.alertify.error(err?.message);
-        // setunstakeAllStatus("An error occurred, please try again");
-        setShowUnstakeModal(false);
-      });
+      }
+    }
   };
 
   const handleEthPool = async () => {
-    await handleSwitchNetworkhook("0x1")
-      .then(() => {
-        handleSwitchNetwork("1");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    if (window.ethereum) {
+      if (window.WALLET_TYPE !== "binance") {
+        await handleSwitchNetworkhook("0x1")
+          .then(() => {
+            handleSwitchNetwork(1);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      } else if (window.WALLET_TYPE === "binance") {
+        handleSwitchChainBinanceWallet(1);
+      }
+    } else if (window.WALLET_TYPE === "binance") {
+      handleSwitchChainBinanceWallet(1);
+    } else {
+      window.alertify.error("No web3 detected. Please install Metamask!");
+    }
   };
- 
+
   useEffect(() => {
     if (coinbase && chainId === "1") {
       getStakesIds();
@@ -295,18 +363,15 @@ const CawsWodDetails = ({
   return (
     <div className="container-lg p-0">
       <div
-       className={`allwrappercaws allwrapper-active mb-2 `}
-       style={{
-         borderRadius: listType !== "table" && "0px",
-       }}
+        className={`allwrappercaws allwrapper-active mb-2 `}
+        style={{
+          borderRadius: listType !== "table" && "0px",
+        }}
       >
         <div className="leftside2 w-100">
           <div className="activewrapper position-relative flex-row-reverse flex-lg-row align-items-end align-items-lg-center">
             <div className="d-flex flex-column flex-lg-row align-items-end align-items-lg-center justify-content-between gap-3 gap-lg-5">
-            <h6 className="expiredtxt caws-active-txt">
-               
-               Expired Pool
-             </h6>
+              <h6 className="expiredtxt caws-active-txt">Expired Pool</h6>
               {/* <div className="d-flex align-items-center justify-content-between gap-2">
                     <h6 className="earnrewards-text">Earn rewards in:</h6>
                     <h6 className="earnrewards-token d-flex align-items-center gap-1">
@@ -328,7 +393,10 @@ const CawsWodDetails = ({
                       </div>
                     }
                   >
-                    <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" />
+                    <img
+                      src={"https://cdn.worldofdypians.com/tools/more-info.svg"}
+                      alt=""
+                    />
                   </Tooltip>
                 </h6>
               </div>
@@ -346,7 +414,10 @@ const CawsWodDetails = ({
                       </div>
                     }
                   >
-                    <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" />
+                    <img
+                      src={"https://cdn.worldofdypians.com/tools/more-info.svg"}
+                      alt=""
+                    />
                   </Tooltip>
                 </h6>
               </div>
@@ -376,7 +447,7 @@ const CawsWodDetails = ({
                       style={{ opacity: 1, width: 145 }}
                     >
                       <div className="d-flex flex-column gap-2 align-items-start">
-                      <a
+                        <a
                           href="https://www.worldofdypians.com/shop/caws"
                           target="_blank"
                           rel="noreferrer"
@@ -385,10 +456,15 @@ const CawsWodDetails = ({
                           }}
                         >
                           <h6 className="bottomitems">
-                            <img src={'https://cdn.worldofdypians.com/tools/arrow-up.svg'} alt="" />
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/tools/arrow-up.svg"
+                              }
+                              alt=""
+                            />
                             WOD Shop
                           </h6>
-                      </a>
+                        </a>
                         <a
                           href="https://nft.coinbase.com/collection/catsandwatches"
                           target="_blank"
@@ -398,7 +474,12 @@ const CawsWodDetails = ({
                           }}
                         >
                           <h6 className="bottomitems">
-                            <img src={'https://cdn.worldofdypians.com/tools/arrow-up.svg'} alt="" />
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/tools/arrow-up.svg"
+                              }
+                              alt=""
+                            />
                             Coinbase
                           </h6>
                         </a>
@@ -412,7 +493,12 @@ const CawsWodDetails = ({
                           }}
                         >
                           <h6 className="bottomitems">
-                            <img src={'https://cdn.worldofdypians.com/tools/arrow-up.svg'} alt="" />
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/tools/arrow-up.svg"
+                              }
+                              alt=""
+                            />
                             OpenSea
                           </h6>
                         </a>
@@ -439,7 +525,7 @@ const CawsWodDetails = ({
                       style={{ opacity: 1, width: 145, left: 90 }}
                     >
                       <div className="d-flex flex-column gap-2 align-items-start">
-                      <a
+                        <a
                           href="https://www.worldofdypians.com/shop/land"
                           target="_blank"
                           rel="noreferrer"
@@ -448,10 +534,15 @@ const CawsWodDetails = ({
                           }}
                         >
                           <h6 className="bottomitems">
-                            <img src={'https://cdn.worldofdypians.com/tools/arrow-up.svg'} alt="" />
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/tools/arrow-up.svg"
+                              }
+                              alt=""
+                            />
                             WoD Marketplace
                           </h6>
-                      </a>
+                        </a>
                         <a
                           href="https://nft.coinbase.com/collection/worldofdypians"
                           target="_blank"
@@ -461,7 +552,12 @@ const CawsWodDetails = ({
                           }}
                         >
                           <h6 className="bottomitems">
-                            <img src={'https://cdn.worldofdypians.com/tools/arrow-up.svg'} alt="" />
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/tools/arrow-up.svg"
+                              }
+                              alt=""
+                            />
                             Coinbase
                           </h6>
                         </a>
@@ -475,7 +571,12 @@ const CawsWodDetails = ({
                           }}
                         >
                           <h6 className="bottomitems">
-                            <img src={'https://cdn.worldofdypians.com/tools/arrow-up.svg'} alt="" />
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/tools/arrow-up.svg"
+                              }
+                              alt=""
+                            />
                             OpenSea
                           </h6>
                         </a>
@@ -502,10 +603,16 @@ const CawsWodDetails = ({
                   <button
                     className="connectbtn btn"
                     onClick={() => {
-                      setShowModal(true);
+                      handleConnection();
                     }}
                   >
-                    <img src={'https://cdn.worldofdypians.com/tools/walletIcon.svg'} alt="" /> Connect wallet
+                    <img
+                      src={
+                        "https://cdn.worldofdypians.com/tools/walletIcon.svg"
+                      }
+                      alt=""
+                    />{" "}
+                    Connect wallet
                   </button>
                 ) : chainId === "1" ? (
                   <div className="addressbtn btn">
@@ -548,7 +655,10 @@ const CawsWodDetails = ({
                     </div>
                   }
                 >
-                  <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" />
+                  <img
+                    src={"https://cdn.worldofdypians.com/tools/more-info.svg"}
+                    alt=""
+                  />
                 </Tooltip>
               </div>
               <div className="d-flex flex-column gap-2 justify-content-between">
@@ -603,7 +713,10 @@ const CawsWodDetails = ({
                       </div>
                     }
                   >
-                    <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" />
+                    <img
+                      src={"https://cdn.worldofdypians.com/tools/more-info.svg"}
+                      alt=""
+                    />
                   </Tooltip>
                 </h6>
               </div>
@@ -611,7 +724,13 @@ const CawsWodDetails = ({
                 <div className="d-flex align-items-center justify-content-between gap-2"></div>
                 <div className="form-row d-flex gap-2 align-items-end justify-content-between">
                   <h6 className="rewardstxtCaws d-flex align-items-center gap-2">
-                  <img src={'https://cdn.worldofdypians.com/tools/ethStakeActive.svg'} alt="" style={{height: 25, width: 25}} />
+                    <img
+                      src={
+                        "https://cdn.worldofdypians.com/tools/ethStakeActive.svg"
+                      }
+                      alt=""
+                      style={{ height: 25, width: 25 }}
+                    />
                     {getFormattedNumber(EthRewards, 6)} WETH ($
                     {getFormattedNumber(ethToUSD, 6)})
                   </h6>
@@ -646,7 +765,10 @@ const CawsWodDetails = ({
                     </div>
                   }
                 >
-                  <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" />
+                  <img
+                    src={"https://cdn.worldofdypians.com/tools/more-info.svg"}
+                    alt=""
+                  />
                 </Tooltip>
               </h6>
 
@@ -714,21 +836,11 @@ const CawsWodDetails = ({
           open={openStakeChecklist ? true : false}
           hideItem={hide}
           onDepositComplete={() => refreshStakes()}
+          binanceW3WProvider={binanceW3WProvider}
         />
       )}
 
-      {showModal === true && (
-        <WalletModal
-          show={showModal}
-          handleClose={() => {
-            setShowModal(false);
-          }}
-          handleConnection={() => {
-            handleConnection();
-            setShowModal(false);
-          }}
-        />
-      )}
+     
     </div>
   );
 };

@@ -3103,6 +3103,8 @@ export default class Subscription extends React.Component {
             onClose={() => {
               this.setState({ showPremiumPopup: false });
             }}
+            handleSwitchChainBinanceWallet={this.props.handleSwitchChainBinanceWallet}
+            binanceW3WProvider={this.props.binanceW3WProvider}
           />
         )}
       </>

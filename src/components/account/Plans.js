@@ -4,6 +4,7 @@ import getFormattedNumber from "../../functions/get-formatted-number";
 import axios from "axios";
 import "./account.css";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
+import { ethers } from "ethers";
 
 const { BigNumber } = window;
 
@@ -35,9 +36,7 @@ export default class Subscription extends React.Component {
       wethAddress: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
       wavaxAddress: "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7",
       wbnbAddress: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
-      wcfxAddress: "0x14b2D3bC65e74DAE1030EAFd8ac30c533c976A9b",
       wbaseAddress: "0x4200000000000000000000000000000000000006",
-      wskaleaddress: "0xCC205196288B7A26f6D43bBD68AaA98dde97276d",
 
       triggerText: "See more V",
       isApproved: false,
@@ -69,22 +68,13 @@ export default class Subscription extends React.Component {
         name: "BNB Chain",
         symbol: "bnb",
       },
-
       {
         name: "Avalanche",
         symbol: "wavax",
       },
       {
-        name: "Conflux",
-        symbol: "conflux",
-      },
-      {
         name: "Base",
         symbol: "base",
-      },
-      {
-        name: "SKALE",
-        symbol: "skale",
       },
     ];
     if (this.props.networkId !== prevProps.networkId) {
@@ -109,14 +99,6 @@ export default class Subscription extends React.Component {
           dropdownTitle: "WBNB",
         });
         this.setState({ chainDropdown: chainDropdowns[1] });
-      } else if (this.props.networkId === 1030) {
-        this.handleSubscriptionTokenChange(this.state.wcfxAddress);
-
-        this.setState({
-          dropdownIcon: "wcfx",
-          dropdownTitle: "WCFX",
-        });
-        this.setState({ chainDropdown: chainDropdowns[3] });
       } else if (this.props.networkId === 8453) {
         this.handleSubscriptionTokenChange(this.state.wbaseAddress);
         this.setState({
@@ -124,13 +106,6 @@ export default class Subscription extends React.Component {
           dropdownTitle: "WETH",
         });
         this.setState({ chainDropdown: chainDropdowns[4] });
-      } else if (this.props.networkId === 1482601649) {
-        this.handleSubscriptionTokenChange(this.state.wskaleaddress);
-        this.setState({
-          dropdownIcon: "usdc",
-          dropdownTitle: "USDC",
-        });
-        this.setState({ chainDropdown: chainDropdowns[5] });
       } else {
         this.setState({
           dropdownIcon: "weth",
@@ -159,17 +134,10 @@ export default class Subscription extends React.Component {
         name: "Avalanche",
         symbol: "wavax",
       },
-      {
-        name: "Conflux",
-        symbol: "conflux",
-      },
+
       {
         name: "Base",
         symbol: "base",
-      },
-      {
-        name: "SKALE",
-        symbol: "skale",
       },
     ];
 
@@ -195,14 +163,6 @@ export default class Subscription extends React.Component {
         dropdownTitle: "WBNB",
       });
       this.setState({ chainDropdown: chainDropdowns[1] });
-    } else if (this.props.networkId === 1030) {
-      this.handleSubscriptionTokenChange(this.state.wcfxAddress);
-
-      this.setState({
-        dropdownIcon: "wcfx",
-        dropdownTitle: "WCFX",
-      });
-      this.setState({ chainDropdown: chainDropdowns[3] });
     } else if (this.props.networkId === 8453) {
       this.handleSubscriptionTokenChange(this.state.wbaseAddress);
       this.setState({
@@ -210,13 +170,6 @@ export default class Subscription extends React.Component {
         dropdownTitle: "WETH",
       });
       this.setState({ chainDropdown: chainDropdowns[4] });
-    } else if (this.props.networkId === 1482601649) {
-      this.handleSubscriptionTokenChange(this.state.wskaleaddress);
-      this.setState({
-        dropdownIcon: "usdc",
-        dropdownTitle: "USDC",
-      });
-      this.setState({ chainDropdown: chainDropdowns[5] });
     } else {
       this.setState({
         dropdownIcon: "weth",
@@ -235,12 +188,8 @@ export default class Subscription extends React.Component {
         ? window.config.subscriptioneth_tokens[token]?.decimals
         : this.props.networkId === 56
         ? window.config.subscriptionbnb_tokens[token]?.decimals
-        : this.props.networkId === 1030
-        ? window.config.subscriptioncfx_tokens[token]?.decimals
         : this.props.networkId === 8453
         ? window.config.subscriptionbase_tokens[token]?.decimals
-        : this.props.networkId === 1482601649
-        ? window.config.subscriptionskale_tokens[token]?.decimals
         : window.config.subscription_tokens[token]?.decimals;
 
     console.log("tokenDecimals", tokenDecimals);
@@ -256,12 +205,8 @@ export default class Subscription extends React.Component {
         ? await window.getEstimatedTokenSubscriptionAmountETH(token)
         : this.props.networkId === 56
         ? await window.getEstimatedTokenSubscriptionAmountBNB(token)
-        : this.props.networkId === 1030
-        ? await window.getEstimatedTokenSubscriptionAmountCFX(token)
         : this.props.networkId === 8453
         ? await window.getEstimatedTokenSubscriptionAmountBase(token)
-        : this.props.networkId === 1482601649
-        ? await window.getEstimatedTokenSubscriptionAmountSkale(token)
         : await window.getEstimatedTokenSubscriptionAmount(token);
     price = new BigNumber(price).toFixed(0);
     console.log("price", price);
@@ -282,61 +227,83 @@ export default class Subscription extends React.Component {
   };
 
   handleApprove = async (e) => {
-    // e.preventDefault();
-    const web3 = new Web3(window.ethereum);
-    let tokenContract = new web3.eth.Contract(
-      window.ERC20_ABI,
-      this.state.selectedSubscriptionToken
-    );
-
     const ethsubscribeAddress = window.config.subscription_neweth_address;
     const avaxsubscribeAddress = window.config.subscription_newavax_address;
     const bnbsubscribeAddress = window.config.subscription_newbnb_address;
-    const cfxsubscribeAddress = window.config.subscription_cfx_address;
     const basesubscribeAddress = window.config.subscription_base_address;
-    const skalesubscribeAddress = window.config.subscription_skale_address;
-
     this.setState({ loadspinner: true });
 
-    console.log(
-      this.state.selectedSubscriptionToken,
-      skalesubscribeAddress,
-      this.props.networkId,
-      this.state.price
-    );
+    if (window.WALLET_TYPE !== "binance") {
+      const web3 = new Web3(window.ethereum);
+      let tokenContract = new web3.eth.Contract(
+        window.ERC20_ABI,
+        this.state.selectedSubscriptionToken
+      );
 
-    await tokenContract.methods
-      .approve(
-        this.props.networkId === 1
-          ? ethsubscribeAddress
-          : this.props.networkId === 56
-          ? bnbsubscribeAddress
-          : this.props.networkId === 1030
-          ? cfxsubscribeAddress
-          : this.props.networkId === 8453
-          ? basesubscribeAddress
-          : this.props.networkId === 1482601649
-          ? skalesubscribeAddress
-          : avaxsubscribeAddress,
-        this.state.price
-      )
-      .send({ from: this.props.coinbase })
-      .then(() => {
+      await tokenContract.methods
+        .approve(
+          this.props.networkId === 1
+            ? ethsubscribeAddress
+            : this.props.networkId === 56
+            ? bnbsubscribeAddress
+            : this.props.networkId === 8453
+            ? basesubscribeAddress
+            : avaxsubscribeAddress,
+          this.state.price
+        )
+        .send({ from: this.props.coinbase })
+        .then(() => {
+          this.setState({ lockActive: true });
+          this.setState({ loadspinner: false });
+          this.setState({ isApproved: true, approveStatus: "deposit" });
+        })
+        .catch((e) => {
+          this.setState({ status: e?.message });
+          this.setState({ loadspinner: false, approveStatus: "fail" });
+          setTimeout(() => {
+            this.setState({
+              status: "",
+              loadspinner: false,
+              approveStatus: "initial",
+            });
+          }, 8000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let tokenContract = new ethers.Contract(
+        this.state.selectedSubscriptionToken,
+        window.ERC20_ABI,
+        this.props.binanceW3WProvider.getSigner()
+      );
+
+      const txResponse = await tokenContract
+        .approve(
+          this.props.networkId === 1
+            ? ethsubscribeAddress
+            : this.props.networkId === 56
+            ? bnbsubscribeAddress
+            : this.props.networkId === 8453
+            ? basesubscribeAddress
+            : avaxsubscribeAddress,
+          this.state.price
+        )
+        .catch((e) => {
+          this.setState({ status: e?.message });
+          this.setState({ loadspinner: false, approveStatus: "fail" });
+          setTimeout(() => {
+            this.setState({
+              status: "",
+              loadspinner: false,
+              approveStatus: "initial",
+            });
+          }, 8000);
+        });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         this.setState({ lockActive: true });
         this.setState({ loadspinner: false });
         this.setState({ isApproved: true, approveStatus: "deposit" });
-      })
-      .catch((e) => {
-        this.setState({ status: e?.message });
-        this.setState({ loadspinner: false, approveStatus: "fail" });
-        setTimeout(() => {
-          this.setState({
-            status: "",
-            loadspinner: false,
-            approveStatus: "initial",
-          });
-        }, 8000);
-      });
+      }
+    }
   };
 
   handleUpdatePremiumUser = async () => {
@@ -348,58 +315,95 @@ export default class Subscription extends React.Component {
       });
   };
 
+  getContractBinance = async ({ key, address = null, ABI = null }) => {
+    ABI = window[key + "_ABI"];
+    address = window.config[key.toLowerCase() + "_address"];
+    if (!window.cached_contracts[key + "-" + address.toLowerCase()]) {
+      window.cached_contracts[key + "-" + address?.toLowerCase()] =
+        new ethers.Contract(
+          address,
+          ABI,
+          this.props.binanceW3WProvider.getSigner()
+        );
+    }
+    return window.cached_contracts[key + "-" + address.toLowerCase()];
+  };
+
   handleSubscribe = async (e) => {
-    // e.preventDefault();
-    let subscriptionContract = await window.getContract({
-      key:
-        this.props.networkId === 1
-          ? "SUBSCRIPTION_NEWETH"
-          : this.props.networkId === 56
-          ? "SUBSCRIPTION_NEWBNB"
-          : this.props.networkId === 1030
-          ? "SUBSCRIPTION_CFX"
-          : this.props.networkId === 8453
-          ? "SUBSCRIPTION_BASE"
-          : this.props.networkId === 1482601649
-          ? "SUBSCRIPTION_SKALE"
-          : "SUBSCRIPTION_NEWAVAX",
-    });
-
     this.setState({ loadspinnerSub: true });
-
-    // let price =
-    // this.props.networkId === 1
-    //   ? await window.getEstimatedTokenSubscriptionAmountETH(this.state.selectedSubscriptionToken)
-    //   : this.props.networkId === 56
-    //   ? await window.getEstimatedTokenSubscriptionAmountBNB(this.state.selectedSubscriptionToken)
-    //   : await window.getEstimatedTokenSubscriptionAmount(this.state.selectedSubscriptionToken);
-    // console.log(this.state.price, this.state.selectedSubscriptionToken)
-    console.log(this.state.selectedSubscriptionToken, this.state.price);
-    await subscriptionContract.methods
-      .subscribe(this.state.selectedSubscriptionToken, this.state.price)
-      .send({ from: await window.getCoinbase() })
-      .then(() => {
+    if (window.WALLET_TYPE !== "binance") {
+      let subscriptionContract = await window.getContract({
+        key:
+          this.props.networkId === 1
+            ? "SUBSCRIPTION_NEWETH"
+            : this.props.networkId === 56
+            ? "SUBSCRIPTION_NEWBNB"
+            : this.props.networkId === 8453
+            ? "SUBSCRIPTION_BASE"
+            : "SUBSCRIPTION_NEWAVAX",
+      });
+      await subscriptionContract.methods
+        .subscribe(this.state.selectedSubscriptionToken, this.state.price)
+        .send({ from: await window.getCoinbase() })
+        .then(() => {
+          this.setState({ loadspinnerSub: false, approveStatus: "success" });
+          this.props.onSubscribe(this.props.coinbase);
+          this.handleUpdatePremiumUser();
+          window.location.href = "https://app.dypius.com/account";
+        })
+        .catch((e) => {
+          this.setState({ status: e?.message });
+          this.setState({
+            loadspinner: false,
+            approveStatus: "fail",
+            loadspinnerSub: false,
+          });
+          setTimeout(() => {
+            this.setState({
+              status: "",
+              loadspinner: false,
+              loadspinnerSub: false,
+              approveStatus: "initial",
+            });
+          }, 8000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let subscriptionContract = await this.getContractBinance({
+        key:
+          this.props.networkId === 1
+            ? "SUBSCRIPTION_NEWETH"
+            : this.props.networkId === 56
+            ? "SUBSCRIPTION_NEWBNB"
+            : this.props.networkId === 8453
+            ? "SUBSCRIPTION_BASE"
+            : "SUBSCRIPTION_NEWAVAX",
+      });
+      const txResponse = await subscriptionContract
+        .subscribe(this.state.selectedSubscriptionToken, this.state.price)
+        .catch((e) => {
+          this.setState({ status: e?.message });
+          this.setState({
+            loadspinner: false,
+            approveStatus: "fail",
+            loadspinnerSub: false,
+          });
+          setTimeout(() => {
+            this.setState({
+              status: "",
+              loadspinner: false,
+              loadspinnerSub: false,
+              approveStatus: "initial",
+            });
+          }, 8000);
+        });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         this.setState({ loadspinnerSub: false, approveStatus: "success" });
         this.props.onSubscribe(this.props.coinbase);
         this.handleUpdatePremiumUser();
         window.location.href = "https://app.dypius.com/account";
-      })
-      .catch((e) => {
-        this.setState({ status: e?.message });
-        this.setState({
-          loadspinner: false,
-          approveStatus: "fail",
-          loadspinnerSub: false,
-        });
-        setTimeout(() => {
-          this.setState({
-            status: "",
-            loadspinner: false,
-            loadspinnerSub: false,
-            approveStatus: "initial",
-          });
-        }, 8000);
-      });
+      }
+    }
   };
 
   handleUnsubscribe = async (e) => {
@@ -490,16 +494,8 @@ export default class Subscription extends React.Component {
         ? window.config.subscriptionbnb_tokens[
             this.state.selectedSubscriptionToken
           ]?.decimals
-        : this.props.networkId === 1030
-        ? window.config.subscriptioncfx_tokens[
-            this.state.selectedSubscriptionToken
-          ]?.decimals
         : this.props.networkId === 8453
         ? window.config.subscriptionbase_tokens[
-            this.state.selectedSubscriptionToken
-          ]?.decimals
-        : this.props.networkId === 1482601649
-        ? window.config.subscriptionskale_tokens[
             this.state.selectedSubscriptionToken
           ]?.decimals
         : window.config.subscription_tokens[
@@ -510,60 +506,6 @@ export default class Subscription extends React.Component {
     const focusInput = (input) => {
       document.getElementById(input).focus();
     };
-
-    const freePlanItems = [
-      // "Real time DYP Tools",
-      // "Pair Explorer",
-      // "Big Swap Explorer",
-      // "Top Tokens",
-      "Yields",
-      "News Section",
-      "DYP Locker",
-      // "Community Trust Vote",
-      "dApps access",
-    ];
-
-    const chainDropdowns = [
-      {
-        name: "Ethereum",
-        symbol: "eth",
-      },
-      {
-        name: "BNB Chain",
-        symbol: "bnb",
-      },
-
-      {
-        name: "Avalanche",
-        symbol: "wavax",
-      },
-      {
-        name: "Conflux",
-        symbol: "conflux",
-      },
-      {
-        name: "Base",
-        symbol: "base",
-      },
-      {
-        name: "SKALE",
-        symbol: "skale",
-      },
-
-      // {
-      //   name: "SEI",
-      //   symbol: "sei",
-      // },
-    ];
-
-    const paidPlanItems = [
-      "All free features included",
-      // "Manual research info for projects",
-      // "Full access to Community Trust Vote",
-      "Perform any votes on the News section",
-      "Early access to new features released in the future",
-      "Guaranteed allocation to presales of new projects launched using our Launchpad",
-    ];
 
     const benefits = [
       "DYP Tools administrative dashboard",
@@ -576,32 +518,6 @@ export default class Subscription extends React.Component {
       "Access to Daily Bonus Event",
       "Access every Treasure Hunt Event",
       "Early access to upcoming features and updates",
-    ];
-
-    const keyFeatures = [
-      {
-        icon: "chart",
-        content:
-          "Easy access to a range of tools and features, all in one convenient location.",
-      },
-      {
-        icon: "globe",
-        content:
-          "Access unique content and experiences in the World of Dypians.",
-      },
-      {
-        icon: "coins",
-        content:
-          "Be among the first to find new projects before they hit the market.",
-      },
-      {
-        icon: "notes",
-        content: `Vote instantly for your preferred news articles in real-time.`,
-      },
-      {
-        icon: "eye",
-        content: `Get a sneak peek at what's coming next and plan ahead.`,
-      },
     ];
 
     const handleEthPool = async () => {
@@ -642,30 +558,6 @@ export default class Subscription extends React.Component {
         .catch((e) => {
           console.log(e);
         });
-    };
-
-    const handleConfluxPool = async () => {
-      await handleSwitchNetworkhook("0x406")
-        .then(() => {
-          this.props.handleSwitchNetwork("1030");
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    };
-
-    const handleSkalePool = async () => {
-      if (window.ethereum) {
-        await handleSwitchNetworkhook("0x585eb4b1")
-          .then(() => {
-            this.props.handleSwitchNetwork("1482601649 ");
-          })
-          .catch((e) => {
-            console.log(e);
-          });
-      } else {
-        window.alertify.error("No web3 detected. Please install Metamask!");
-      }
     };
 
     return (
@@ -1096,26 +988,6 @@ export default class Subscription extends React.Component {
                       />
                       <span className="subscription-chain mb-0">Base</span>
                     </div>
-                    <div className="d-flex align-items-center gap-2">
-                      <img
-                        src={
-                          "https://cdn.worldofdypians.com/tools/confluxIcon.svg"
-                        }
-                        alt=""
-                        style={{ width: 18, height: 18 }}
-                      />
-                      <span className="subscription-chain mb-0">Conflux</span>
-                    </div>
-                    <div className="d-flex align-items-center gap-2">
-                      <img
-                        src={
-                          "https://cdn.worldofdypians.com/tools/skaleIcon.svg"
-                        }
-                        alt=""
-                        style={{ width: 18, height: 18 }}
-                      />
-                      <span className="subscription-chain mb-0">SKALE</span>
-                    </div>
                   </div>
                   <img
                     src={
@@ -1264,38 +1136,6 @@ export default class Subscription extends React.Component {
                           />
                           Base Network
                         </li>
-                        <li
-                          className="dropdown-item launchpad-item d-flex align-items-center gap-2"
-                          onClick={handleConfluxPool}
-                        >
-                          <img
-                            src={
-                              "https://cdn.worldofdypians.com/tools/confluxIcon.svg"
-                            }
-                            alt=""
-                            style={{
-                              width: "18px",
-                              height: "18px",
-                            }}
-                          />
-                          Conflux Network
-                        </li>
-                        <li
-                          className="dropdown-item launchpad-item d-flex align-items-center gap-2"
-                          onClick={handleSkalePool}
-                        >
-                          <img
-                            src={
-                              "https://cdn.worldofdypians.com/tools/skaleIcon.svg"
-                            }
-                            alt=""
-                            style={{
-                              width: "18px",
-                              height: "18px",
-                            }}
-                          />
-                          Skale Network
-                        </li>
                       </ul>
                     </div>
                   </div>
@@ -1383,12 +1223,8 @@ export default class Subscription extends React.Component {
                               ? window.config.subscriptioneth_tokens
                               : this.props.networkId === 56
                               ? window.config.subscriptionbnb_tokens
-                              : this.props.networkId === 1030
-                              ? window.config.subscriptioncfx_tokens
                               : this.props.networkId === 8453
                               ? window.config.subscriptionbase_tokens
-                              : this.props.networkId === 1482601649
-                              ? window.config.subscriptionskale_tokens
                               : window.config.subscription_tokens
                           ).map((t, i) => (
                             // <span className="radio-wrapper" key={t}>
@@ -1432,17 +1268,10 @@ export default class Subscription extends React.Component {
                                         ? window.config.subscriptionbnb_tokens[
                                             t
                                           ]?.symbol
-                                        : this.props.networkId === 1030
-                                        ? window.config.subscriptioncfx_tokens[
-                                            t
-                                          ]?.symbol
                                         : this.props.networkId === 8453
                                         ? window.config.subscriptionbase_tokens[
                                             t
                                           ]?.symbol
-                                        : this.props.networkId === 1482601649
-                                        ? window.config
-                                            .subscriptionskale_tokens[t]?.symbol
                                         : window.config.subscription_tokens[t]
                                             ?.symbol,
                                     dropdownIcon:
@@ -1454,17 +1283,10 @@ export default class Subscription extends React.Component {
                                         ? window.config.subscriptionbnb_tokens[
                                             t
                                           ]?.symbol
-                                        : this.props.networkId === 1030
-                                        ? window.config.subscriptioncfx_tokens[
-                                            t
-                                          ]?.symbol
                                         : this.props.networkId === 8453
                                         ? window.config.subscriptionbase_tokens[
                                             t
                                           ]?.symbol
-                                        : this.props.networkId === 1482601649
-                                        ? window.config
-                                            .subscriptionskale_tokens[t]?.symbol
                                         : window.config.subscription_tokens[t]
                                             ?.symbol,
                                   });
@@ -1484,16 +1306,8 @@ export default class Subscription extends React.Component {
                                     ? `https://cdn.worldofdypians.com/tools/${window.config.subscriptionbnb_tokens[
                                         t
                                       ]?.symbol.toLowerCase()}Icon.svg`
-                                    : this.props.networkId === 1030
-                                    ? `https://cdn.worldofdypians.com/tools/${window.config.subscriptioncfx_tokens[
-                                        t
-                                      ]?.symbol.toLowerCase()}Icon.svg`
                                     : this.props.networkId === 8453
                                     ? `https://cdn.worldofdypians.com/tools/${window.config.subscriptionbase_tokens[
-                                        t
-                                      ]?.symbol.toLowerCase()}Icon.svg`
-                                    : this.props.networkId === 1482601649
-                                    ? `https://cdn.worldofdypians.com/tools/${window.config.subscriptionskale_tokens[
                                         t
                                       ]?.symbol.toLowerCase()}Icon.svg`
                                     : `https://cdn.worldofdypians.com/tools/${window.config.subscription_tokens[
@@ -1508,14 +1322,8 @@ export default class Subscription extends React.Component {
                                 : this.props.networkId === 56
                                 ? window.config.subscriptionbnb_tokens[t]
                                     ?.symbol
-                                : this.props.networkId === 1030
-                                ? window.config.subscriptioncfx_tokens[t]
-                                    ?.symbol
                                 : this.props.networkId === 8453
                                 ? window.config.subscriptionbase_tokens[t]
-                                    ?.symbol
-                                : this.props.networkId === 1482601649
-                                ? window.config.subscriptionskale_tokens[t]
                                     ?.symbol
                                 : window.config.subscription_tokens[t]?.symbol}
                             </li>
@@ -1538,23 +1346,6 @@ export default class Subscription extends React.Component {
                 </div>
               </div>
 
-              {this.props.networkId === 1482601649 && (
-                <div className="gotoNebula-wrapper p-3 mt-3">
-                  <div className="d-flex w-100 justify-content-between gap-2">
-                    <span className="nebula-wrapper-text">
-                      Bridge your USDC to Nebula now!
-                    </span>
-                    <a
-                      className="nebula-bridgebtn"
-                      href="https://portal.skale.space/bridge?from=mainnet&to=green-giddy-denebola&token=usdc&type=erc20"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Nebula Bridge
-                    </a>
-                  </div>
-                </div>
-              )}
               <hr className="form-divider my-4" />
               <div
                 className={`d-flex flex-column gap-2 align-items-center justify-content-center`}

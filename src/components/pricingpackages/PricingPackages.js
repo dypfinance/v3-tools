@@ -8,6 +8,7 @@ import axios from "axios";
 import getFormattedNumber from "../../functions/get-formatted-number";
 import Web3 from "web3";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
+import { ethers } from "ethers";
 
 const PricingPackages = ({
   dypBalance,
@@ -17,6 +18,8 @@ const PricingPackages = ({
   handleConnection,
   onRefreshBalance,
   handleSwitchNetwork,
+  handleSwitchChainBinanceWallet,
+  binanceW3WProvider,
 }) => {
   const [popup, setPopup] = useState(false);
   const [withdrawPopup, setWithdrawPopup] = useState(false);
@@ -110,13 +113,23 @@ const PricingPackages = ({
   ];
 
   const handleEthPool = async () => {
-    await handleSwitchNetworkhook("0x1")
-      .then(() => {
-        handleSwitchNetwork("1");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    if (window.ethereum) {
+      if (window.WALLET_TYPE !== "binance") {
+        await handleSwitchNetworkhook("0x1")
+          .then(() => {
+            handleSwitchNetwork(1);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      } else if (window.WALLET_TYPE === "binance") {
+        handleSwitchChainBinanceWallet(1);
+      }
+    } else if (window.WALLET_TYPE === "binance") {
+      handleSwitchChainBinanceWallet(1);
+    } else {
+      window.alertify.error("No web3 detected. Please install Metamask!");
+    }
   };
 
   const getBundlePrices = async () => {
@@ -457,88 +470,200 @@ const PricingPackages = ({
 
   const handleWithdraw = async () => {
     setunlockLoading(true);
-    let web3 = new Web3(window.ethereum);
-    const basic_bundle_sc = new web3.eth.Contract(
-      window.BASIC_BUNDLE_ABI,
-      window.config.basic_bundle_address
-    );
+    if (window.WALLET_TYPE !== "binance") {
+      let web3 = new Web3(window.ethereum);
+      const basic_bundle_sc = new web3.eth.Contract(
+        window.BASIC_BUNDLE_ABI,
+        window.config.basic_bundle_address
+      );
 
-    const gasPrice = await window.infuraWeb3.eth.getGasPrice();
-    console.log("gasPrice", gasPrice);
-    const currentGwei = web3.utils.fromWei(gasPrice, "gwei");
-    // const increasedGwei = parseInt(currentGwei) + 2;
-    // console.log("increasedGwei", increasedGwei);
+      const gasPrice = await window.infuraWeb3.eth.getGasPrice();
+      console.log("gasPrice", gasPrice);
+      const currentGwei = web3.utils.fromWei(gasPrice, "gwei");
 
-    const transactionParameters = {
-      gasPrice: web3.utils.toWei(currentGwei.toString(), "gwei"),
-    };
+      const transactionParameters = {
+        gasPrice: web3.utils.toWei(currentGwei.toString(), "gwei"),
+      };
 
-    await basic_bundle_sc.methods
-      .claim()
-      .estimateGas({ from: await window.getCoinbase() })
-      .then((gas) => {
-        transactionParameters.gas = web3.utils.toHex(gas);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+      await basic_bundle_sc.methods
+        .claim()
+        .estimateGas({ from: await window.getCoinbase() })
+        .then((gas) => {
+          transactionParameters.gas = web3.utils.toHex(gas);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
 
-    await basic_bundle_sc.methods
-      .claim()
-      .send({ from: await window.getCoinbase(), ...transactionParameters })
-      .then(() => {
+      await basic_bundle_sc.methods
+        .claim()
+        .send({ from: await window.getCoinbase(), ...transactionParameters })
+        .then(() => {
+          setunlockStatus("success");
+          setunlockLoading(false);
+
+          setTimeout(() => {
+            setunlockStatus("initial");
+            getInfo();
+            getInfoTimer();
+            onRefreshBalance();
+          }, 5000);
+        })
+        .catch((e) => {
+          console.error(e);
+          window.alertify.error(e?.message);
+
+          setunlockStatus("failed");
+          setunlockLoading(false);
+          setTimeout(() => {
+            setunlockStatus("initial");
+          }, 5000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      const basic_bundle_sc = new ethers.Contract(
+        window.config.basic_bundle_address,
+        window.BASIC_BUNDLE_ABI,
+        binanceW3WProvider.getSigner()
+      );
+
+      const gasPrice = await binanceW3WProvider.getGasPrice();
+      const currentGwei = ethers.utils.formatUnits(gasPrice, "gwei");
+      const gasPriceInWei = ethers.utils.parseUnits(
+        currentGwei.toString().slice(0, 14),
+        "gwei"
+      );
+
+      const transactionParameters = {
+        gasPrice: gasPriceInWei,
+      };
+
+      let gasLimit;
+      try {
+        gasLimit = await basic_bundle_sc.estimateGas.claim();
+        transactionParameters.gasLimit = gasLimit;
+        console.log("transactionParameters", transactionParameters);
+      } catch (error) {
+        console.error(error);
+      }
+
+      const txResponse = await basic_bundle_sc
+        .claim({ from: coinbase, ...transactionParameters })
+        .catch((e) => {
+          console.error(e);
+          window.alertify.error(e?.message);
+
+          setunlockStatus("failed");
+          setunlockLoading(false);
+          setTimeout(() => {
+            setunlockStatus("initial");
+          }, 5000);
+        });
+
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         setunlockStatus("success");
         setunlockLoading(false);
-
         setTimeout(() => {
           setunlockStatus("initial");
           getInfo();
           getInfoTimer();
           onRefreshBalance();
         }, 5000);
-      })
-      .catch((e) => {
-        console.error(e);
-        window.alertify.error(e?.message);
-
-        setunlockStatus("failed");
-        setunlockLoading(false);
-        setTimeout(() => {
-          setunlockStatus("initial");
-        }, 5000);
-      });
+      }
+    }
   };
 
   const handleWithdrawAdvanced = async () => {
     setunlockLoadingAdvanced(true);
-    let web3 = new Web3(window.ethereum);
+    if (window.WALLET_TYPE !== "binance") {
+      let web3 = new Web3(window.ethereum);
+      const advanced_bundle_sc = new web3.eth.Contract(
+        window.ADVANCED_BUNDLE_ABI,
+        window.config.advanced_bundle_address
+      );
 
-    const advanced_bundle_sc = new web3.eth.Contract(
-      window.ADVANCED_BUNDLE_ABI,
-      window.config.advanced_bundle_address
-    );
+      const gasPrice = await window.infuraWeb3.eth.getGasPrice();
+      console.log("gasPrice", gasPrice);
+      const currentGwei = web3.utils.fromWei(gasPrice, "gwei");
+      const transactionParameters = {
+        gasPrice: web3.utils.toWei(currentGwei.toString(), "gwei"),
+      };
 
-    const gasPrice = await window.infuraWeb3.eth.getGasPrice();
-    console.log("gasPrice", gasPrice);
-    const currentGwei = web3.utils.fromWei(gasPrice, "gwei");
-    const transactionParameters = {
-      gasPrice: web3.utils.toWei(currentGwei.toString(), "gwei"),
-    };
+      await advanced_bundle_sc.methods
+        .claim()
+        .estimateGas({ from: await window.getCoinbase() })
+        .then((gas) => {
+          transactionParameters.gas = web3.utils.toHex(gas);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
 
-    await advanced_bundle_sc.methods
-      .claim()
-      .estimateGas({ from: await window.getCoinbase() })
-      .then((gas) => {
-        transactionParameters.gas = web3.utils.toHex(gas);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+      await advanced_bundle_sc.methods
+        .claim()
+        .send({ from: await window.getCoinbase(), ...transactionParameters })
+        .then(() => {
+          setunlockStatusAdvanced("success");
+          setunlockLoadingAdvanced(false);
 
-    await advanced_bundle_sc.methods
-      .claim()
-      .send({ from: await window.getCoinbase(), ...transactionParameters })
-      .then(() => {
+          setTimeout(() => {
+            setunlockStatusAdvanced("initial");
+            getInfo();
+            getInfoTimer();
+            onRefreshBalance();
+          }, 5000);
+        })
+        .catch((e) => {
+          console.error(e);
+          window.alertify.error(e?.message);
+
+          setunlockStatusAdvanced("failed");
+          setunlockLoadingAdvanced(false);
+          setTimeout(() => {
+            setunlockStatusAdvanced("initial");
+          }, 5000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      const advanced_bundle_sc = new ethers.Contract(
+        window.config.advanced_bundle_address,
+        window.ADVANCED_BUNDLE_ABI,
+        binanceW3WProvider.getSigner()
+      );
+
+      const gasPrice = await binanceW3WProvider.getGasPrice();
+      const currentGwei = ethers.utils.formatUnits(gasPrice, "gwei");
+      const gasPriceInWei = ethers.utils.parseUnits(
+        currentGwei.toString().slice(0, 14),
+        "gwei"
+      );
+
+      const transactionParameters = {
+        gasPrice: gasPriceInWei,
+      };
+
+      let gasLimit;
+      try {
+        gasLimit = await advanced_bundle_sc.estimateGas.claim();
+        transactionParameters.gasLimit = gasLimit;
+        console.log("transactionParameters", transactionParameters);
+      } catch (error) {
+        console.error(error);
+      }
+
+      const txResponse = await advanced_bundle_sc
+        .claim({ from: coinbase, ...transactionParameters })
+        .catch((e) => {
+          console.error(e);
+          window.alertify.error(e?.message);
+
+          setunlockStatusAdvanced("failed");
+          setunlockLoadingAdvanced(false);
+          setTimeout(() => {
+            setunlockStatusAdvanced("initial");
+          }, 5000);
+        });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         setunlockStatusAdvanced("success");
         setunlockLoadingAdvanced(false);
 
@@ -548,30 +673,62 @@ const PricingPackages = ({
           getInfoTimer();
           onRefreshBalance();
         }, 5000);
-      })
-      .catch((e) => {
-        console.error(e);
-        window.alertify.error(e?.message);
-
-        setunlockStatusAdvanced("failed");
-        setunlockLoadingAdvanced(false);
-        setTimeout(() => {
-          setunlockStatusAdvanced("initial");
-        }, 5000);
-      });
+      }
+    }
   };
 
   const handleWithdrawEnterprise = async () => {
     setunlockLoadingEnterprise(true);
-    let web3 = new Web3(window.ethereum);
-    const enterprise_bundle_sc = new web3.eth.Contract(
-      window.ENTERPRISE_BUNDLE_ABI,
-      window.config.enterprise_bundle_address
-    );
-    await enterprise_bundle_sc.methods
-      .claim()
-      .send({ from: await window.getCoinbase() })
-      .then(() => {
+    if (window.WALLET_TYPE !== "binance") {
+      let web3 = new Web3(window.ethereum);
+      const enterprise_bundle_sc = new web3.eth.Contract(
+        window.ENTERPRISE_BUNDLE_ABI,
+        window.config.enterprise_bundle_address
+      );
+      await enterprise_bundle_sc.methods
+        .claim()
+        .send({ from: await window.getCoinbase() })
+        .then(() => {
+          setunlockStatusEnterprise("success");
+          setunlockLoadingEnterprise(false);
+
+          setTimeout(() => {
+            setunlockStatusEnterprise("initial");
+            getInfo();
+            getInfoTimer();
+            onRefreshBalance();
+          }, 5000);
+        })
+        .catch((e) => {
+          console.error(e);
+          window.alertify.error(e?.message);
+
+          setunlockStatusEnterprise("failed");
+          setunlockLoadingEnterprise(false);
+          setTimeout(() => {
+            setunlockStatusEnterprise("initial");
+          }, 5000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      const enterprise_bundle_sc = new ethers.Contract(
+        window.config.enterprise_bundle_address,
+        window.ENTERPRISE_BUNDLE_ABI,
+        binanceW3WProvider.getSigner()
+      );
+      const txResponse = await enterprise_bundle_sc
+        .claim({ from: coinbase })
+        .catch((e) => {
+          console.error(e);
+          window.alertify.error(e?.message);
+
+          setunlockStatusEnterprise("failed");
+          setunlockLoadingEnterprise(false);
+          setTimeout(() => {
+            setunlockStatusEnterprise("initial");
+          }, 5000);
+        });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         setunlockStatusEnterprise("success");
         setunlockLoadingEnterprise(false);
 
@@ -581,17 +738,8 @@ const PricingPackages = ({
           getInfoTimer();
           onRefreshBalance();
         }, 5000);
-      })
-      .catch((e) => {
-        console.error(e);
-        window.alertify.error(e?.message);
-
-        setunlockStatusEnterprise("failed");
-        setunlockLoadingEnterprise(false);
-        setTimeout(() => {
-          setunlockStatusEnterprise("initial");
-        }, 5000);
-      });
+      }
+    }
   };
 
   useEffect(() => {
@@ -972,6 +1120,7 @@ const PricingPackages = ({
             getInfoTimer();
             getInfo();
           }}
+          binanceW3WProvider={binanceW3WProvider}
         />
       </OutsideClickHandler>
       <OutsideClickHandler onOutsideClick={() => setWithdrawPopup(false)}>
