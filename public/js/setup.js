@@ -4494,8 +4494,13 @@ async function getLandNft(id) {
 }
 
 async function myNftLandListContract(address) {
-  let nft_contract = await getContractLandNFT("LANDNFTSTAKE");
-
+  let nft_contract = new window.infuraWeb3.eth.Contract(
+    window.LANDMINTING_ABI,
+    window.config.landnft_address,
+    {
+      from: await getCoinbase(),
+    }
+  );
   let getBalanceOf = await nft_contract.methods.balanceOf(address).call();
 
   let nftList = [];
@@ -4509,7 +4514,13 @@ async function myNftLandListContract(address) {
 }
 
 async function myNftListContract(address) {
-  let nft_contract = await getContractNFT("NFT");
+  let nft_contract = new window.infuraWeb3.eth.Contract(
+    window.CAWS_ABI,
+    window.config.nft_address,
+    {
+      from: await getCoinbase(),
+    }
+  );
 
   let getBalanceOf = await nft_contract.methods.balanceOf(address).call();
 
@@ -39239,7 +39250,7 @@ async function connectWallet(provider, walletType) {
       return true;
     } catch (e) {
       console.error(e);
-      throw new Error("User denied wallet connection!");
+      window.alertify.error("User denied wallet connection!");
     }
   } else if (window.web3) {
     window.web3 = new Web3(window.web3.currentProvider);

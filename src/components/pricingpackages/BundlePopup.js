@@ -6,6 +6,7 @@ import { Checkbox } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import getFormattedNumber from "../../functions/get-formatted-number";
 import Web3 from "web3";
+import { ethers } from "ethers";
 const BundlePopup = ({
   dypBalance,
   bundlePrices,
@@ -21,6 +22,7 @@ const BundlePopup = ({
   onRefreshBalance,
   handleSwitchNetwork,
   onConnectWallet,
+  binanceW3WProvider,
 }) => {
   const [terms, setTerms] = useState(false);
   const [terms2, setTerms2] = useState(false);
@@ -42,18 +44,58 @@ const BundlePopup = ({
 
   const handleDeposit = async (depositAmount) => {
     setdepositLoading(true);
+    if (window.WALLET_TYPE !== "binance") {
+      const web3 = new Web3(window.ethereum);
+      let amount = depositAmount;
+      amount = new BigNumber(amount).times(1e18).toFixed(0);
+      const basic_bundle_sc = new web3.eth.Contract(
+        window.BASIC_BUNDLE_ABI,
+        window.config.basic_bundle_address
+      );
+      await basic_bundle_sc.methods
+        .addVestingWallet(amount)
+        .send({ from: coinbase })
+        .then(() => {
+          setdepositLoading(false);
+          setdepositStatus("success");
+          onRefreshBalance();
+          setTimeout(() => {
+            setFirstLock(true);
+            setdepositStatus("deposit");
+            onClose();
+          }, 2000);
+        })
+        .catch((e) => {
+          setdepositLoading(false);
+          setdepositStatus("fail");
+          seterrorMsg(e?.message);
+          setTimeout(() => {
+            setdepositStatus("initial");
+            seterrorMsg("");
+          }, 3000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let amount = depositAmount;
+      amount = new BigNumber(amount).times(1e18).toFixed(0);
 
-    const web3 = new Web3(window.ethereum);
-    let amount = depositAmount;
-    amount = new BigNumber(amount).times(1e18).toFixed(0);
-    const basic_bundle_sc = new web3.eth.Contract(
-      window.BASIC_BUNDLE_ABI,
-      window.config.basic_bundle_address
-    );
-    await basic_bundle_sc.methods
-      .addVestingWallet(amount)
-      .send({ from: coinbase })
-      .then(() => {
+      const basic_bundle_sc = new ethers.Contract(
+        window.config.basic_bundle_address,
+        window.BASIC_BUNDLE_ABI,
+        binanceW3WProvider.getSigner()
+      );
+      const txResponse = await basic_bundle_sc
+        .addVestingWallet(amount)
+        .catch((e) => {
+          setdepositLoading(false);
+          setdepositStatus("fail");
+          seterrorMsg(e?.message);
+          setTimeout(() => {
+            setdepositStatus("initial");
+            seterrorMsg("");
+          }, 3000);
+        });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         setdepositLoading(false);
         setdepositStatus("success");
         onRefreshBalance();
@@ -62,32 +104,66 @@ const BundlePopup = ({
           setdepositStatus("deposit");
           onClose();
         }, 2000);
-      })
-      .catch((e) => {
-        setdepositLoading(false);
-        setdepositStatus("fail");
-        seterrorMsg(e?.message);
-        setTimeout(() => {
-          setdepositStatus("initial");
-          seterrorMsg("");
-        }, 3000);
-      });
+      }
+    }
   };
   const handleDeposit2 = async (depositAmount) => {
     setdepositLoading2(true);
+    if (window.WALLET_TYPE !== "binance") {
+      const web3 = new Web3(window.ethereum);
+      let amount = depositAmount;
+      amount = new BigNumber(amount).times(1e18).toFixed(0);
+      const advanced_bundle_sc = new web3.eth.Contract(
+        window.ADVANCED_BUNDLE_ABI,
+        window.config.advanced_bundle_address
+      );
 
-    const web3 = new Web3(window.ethereum);
-    let amount = depositAmount;
-    amount = new BigNumber(amount).times(1e18).toFixed(0);
-    const advanced_bundle_sc = new web3.eth.Contract(
-      window.ADVANCED_BUNDLE_ABI,
-      window.config.advanced_bundle_address
-    );
+      await advanced_bundle_sc.methods
+        .addVestingWallet(amount)
+        .send({ from: coinbase })
+        .then(() => {
+          setdepositLoading2(false);
+          setdepositStatus2("success");
+          onRefreshBalance();
+          setTimeout(() => {
+            setdepositStatus2("deposit");
+            setSecondLock(true);
+            onClose();
+          }, 2000);
+        })
+        .catch((e) => {
+          setdepositLoading2(false);
+          setdepositStatus2("fail");
+          seterrorMsg2(e?.message);
+          setTimeout(() => {
+            setdepositStatus2("initial");
+            seterrorMsg2("");
+          }, 3000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let amount = depositAmount;
+      amount = new BigNumber(amount).times(1e18).toFixed(0);
 
-    await advanced_bundle_sc.methods
-      .addVestingWallet(amount)
-      .send({ from: coinbase })
-      .then(() => {
+      const advanced_bundle_sc = new ethers.Contract(
+        window.config.advanced_bundle_address,
+        window.ADVANCED_BUNDLE_ABI,
+        binanceW3WProvider.getSigner()
+      );
+
+      const txResponse = await advanced_bundle_sc.methods
+        .addVestingWallet(amount)
+        .send({ from: coinbase })
+        .catch((e) => {
+          setdepositLoading2(false);
+          setdepositStatus2("fail");
+          seterrorMsg2(e?.message);
+          setTimeout(() => {
+            setdepositStatus2("initial");
+            seterrorMsg2("");
+          }, 3000);
+        });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         setdepositLoading2(false);
         setdepositStatus2("success");
         onRefreshBalance();
@@ -96,32 +172,64 @@ const BundlePopup = ({
           setSecondLock(true);
           onClose();
         }, 2000);
-      })
-      .catch((e) => {
-        setdepositLoading2(false);
-        setdepositStatus2("fail");
-        seterrorMsg2(e?.message);
-        setTimeout(() => {
-          setdepositStatus2("initial");
-          seterrorMsg2("");
-        }, 3000);
-      });
+      }
+    }
   };
   const handleDeposit3 = async (depositAmount) => {
     setdepositLoading3(true);
+    if (window.WALLET_TYPE !== "binance") {
+      const web3 = new Web3(window.ethereum);
+      let amount = depositAmount;
+      amount = new BigNumber(amount).times(1e18).toFixed(0);
+      const enterprise_bundle_sc = new web3.eth.Contract(
+        window.ENTERPRISE_BUNDLE_ABI,
+        window.config.enterprise_bundle_address
+      );
 
-    const web3 = new Web3(window.ethereum);
-    let amount = depositAmount;
-    amount = new BigNumber(amount).times(1e18).toFixed(0);
-    const enterprise_bundle_sc = new web3.eth.Contract(
-      window.ENTERPRISE_BUNDLE_ABI,
-      window.config.enterprise_bundle_address
-    );
-
-    await enterprise_bundle_sc.methods
-      .addVestingWallet(amount)
-      .send({ from: coinbase })
-      .then(() => {
+      await enterprise_bundle_sc.methods
+        .addVestingWallet(amount)
+        .send({ from: coinbase })
+        .then(() => {
+          setdepositLoading3(false);
+          setdepositStatus3("success");
+          onRefreshBalance();
+          setTimeout(() => {
+            setdepositStatus3("deposit");
+            setThirdLock(true);
+            onClose();
+          }, 2000);
+        })
+        .catch((e) => {
+          setdepositLoading3(false);
+          setdepositStatus3("fail");
+          seterrorMsg3(e?.message);
+          setTimeout(() => {
+            setdepositStatus3("initial");
+            seterrorMsg3("");
+          }, 3000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let amount = depositAmount;
+      amount = new BigNumber(amount).times(1e18).toFixed(0);
+      const enterprise_bundle_sc = new ethers.Contract(
+        window.config.enterprise_bundle_address,
+        window.ENTERPRISE_BUNDLE_ABI,
+        binanceW3WProvider.getSigner()
+      );
+      const txResponse = await enterprise_bundle_sc.methods
+        .addVestingWallet(amount)
+        .send({ from: coinbase })
+        .catch((e) => {
+          setdepositLoading3(false);
+          setdepositStatus3("fail");
+          seterrorMsg3(e?.message);
+          setTimeout(() => {
+            setdepositStatus3("initial");
+            seterrorMsg3("");
+          }, 3000);
+        });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         setdepositLoading3(false);
         setdepositStatus3("success");
         onRefreshBalance();
@@ -130,83 +238,154 @@ const BundlePopup = ({
           setThirdLock(true);
           onClose();
         }, 2000);
-      })
-      .catch((e) => {
-        setdepositLoading3(false);
-        setdepositStatus3("fail");
-        seterrorMsg3(e?.message);
-        setTimeout(() => {
-          setdepositStatus3("initial");
-          seterrorMsg3("");
-        }, 3000);
-      });
+      }
+    }
   };
 
   const handleApprove = async (depositAmount) => {
     setdepositLoading(true);
+    if (window.WALLET_TYPE !== "binance") {
+      let amount = depositAmount;
+      amount = new BigNumber(amount).times(1e18).toFixed(0);
+      await reward_token_dypius_eth
+        .approve(window.config.basic_bundle_address, amount)
+        .then(() => {
+          setdepositLoading(false);
+          setdepositStatus("deposit");
+          onRefreshBalance();
+        })
+        .catch((e) => {
+          setdepositLoading(false);
+          setdepositStatus("fail");
+          seterrorMsg(e?.message);
+          setTimeout(() => {
+            setdepositStatus("initial");
+            seterrorMsg("");
+          }, 3000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let amount = depositAmount;
+      amount = new BigNumber(amount).times(1e18).toFixed(0);
+      let reward_token_Sc = new ethers.Contract(
+        reward_token_dypius_eth._address,
+        window.TOKEN_ABI,
+        binanceW3WProvider.getSigner()
+      );
+      const txResponse = await reward_token_Sc
+        .approve(window.config.basic_bundle_address, amount)
+        .catch((e) => {
+          setdepositLoading(false);
+          setdepositStatus("fail");
+          seterrorMsg(e?.message);
+          setTimeout(() => {
+            setdepositStatus("initial");
+            seterrorMsg("");
+          }, 3000);
+        });
 
-    let amount = depositAmount;
-    amount = new BigNumber(amount).times(1e18).toFixed(0);
-    await reward_token_dypius_eth
-      .approve(window.config.basic_bundle_address, amount)
-      .then(() => {
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         setdepositLoading(false);
         setdepositStatus("deposit");
         onRefreshBalance();
-      })
-      .catch((e) => {
-        setdepositLoading(false);
-        setdepositStatus("fail");
-        seterrorMsg(e?.message);
-        setTimeout(() => {
-          setdepositStatus("initial");
-          seterrorMsg("");
-        }, 3000);
-      });
+      }
+    }
   };
   const handleApprove2 = async (depositAmount) => {
     setdepositLoading2(true);
-
-    let amount = depositAmount;
-    amount = new BigNumber(amount).times(1e18).toFixed(0);
-    await reward_token_dypius_eth
-      .approve(window.config.advanced_bundle_address, amount)
-      .then(() => {
+    if (window.WALLET_TYPE !== "binance") {
+      let amount = depositAmount;
+      amount = new BigNumber(amount).times(1e18).toFixed(0);
+      await reward_token_dypius_eth
+        .approve(window.config.advanced_bundle_address, amount)
+        .then(() => {
+          setdepositLoading2(false);
+          setdepositStatus2("deposit");
+          onRefreshBalance();
+        })
+        .catch((e) => {
+          setdepositLoading2(false);
+          setdepositStatus2("fail");
+          seterrorMsg2(e?.message);
+          setTimeout(() => {
+            setdepositStatus2("initial");
+            seterrorMsg2("");
+          }, 3000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let amount = depositAmount;
+      amount = new BigNumber(amount).times(1e18).toFixed(0);
+      let reward_token_Sc = new ethers.Contract(
+        reward_token_dypius_eth._address,
+        window.TOKEN_ABI,
+        binanceW3WProvider.getSigner()
+      );
+      const txResponse = await reward_token_Sc
+        .approve(window.config.advanced_bundle_address, amount)
+        .catch((e) => {
+          setdepositLoading2(false);
+          setdepositStatus2("fail");
+          seterrorMsg2(e?.message);
+          setTimeout(() => {
+            setdepositStatus2("initial");
+            seterrorMsg2("");
+          }, 3000);
+        });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         setdepositLoading2(false);
         setdepositStatus2("deposit");
         onRefreshBalance();
-      })
-      .catch((e) => {
-        setdepositLoading2(false);
-        setdepositStatus2("fail");
-        seterrorMsg2(e?.message);
-        setTimeout(() => {
-          setdepositStatus2("initial");
-          seterrorMsg2("");
-        }, 3000);
-      });
+      }
+    }
   };
   const handleApprove3 = async (depositAmount) => {
     setdepositLoading3(true);
-
-    let amount = depositAmount;
-    amount = new BigNumber(amount).times(1e18).toFixed(0);
-    await reward_token_dypius_eth
-      .approve(window.config.enterprise_bundle_address, amount)
-      .then(() => {
+    if (window.WALLET_TYPE !== "binance") {
+      let amount = depositAmount;
+      amount = new BigNumber(amount).times(1e18).toFixed(0);
+      await reward_token_dypius_eth
+        .approve(window.config.enterprise_bundle_address, amount)
+        .then(() => {
+          setdepositLoading3(false);
+          setdepositStatus3("deposit");
+          onRefreshBalance();
+        })
+        .catch((e) => {
+          setdepositLoading3(false);
+          setdepositStatus3("fail");
+          seterrorMsg3(e?.message);
+          setTimeout(() => {
+            setdepositStatus3("initial");
+            seterrorMsg3("");
+          }, 3000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let amount = depositAmount;
+      amount = new BigNumber(amount).times(1e18).toFixed(0);
+      let reward_token_Sc = new ethers.Contract(
+        reward_token_dypius_eth._address,
+        window.TOKEN_ABI,
+        binanceW3WProvider.getSigner()
+      );
+      const txResponse = await reward_token_Sc
+        .approve(window.config.enterprise_bundle_address, amount)
+        .catch((e) => {
+          setdepositLoading3(false);
+          setdepositStatus3("fail");
+          seterrorMsg3(e?.message);
+          setTimeout(() => {
+            setdepositStatus3("initial");
+            seterrorMsg3("");
+          }, 3000);
+        });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         setdepositLoading3(false);
         setdepositStatus3("deposit");
         onRefreshBalance();
-      })
-      .catch((e) => {
-        setdepositLoading3(false);
-        setdepositStatus3("fail");
-        seterrorMsg3(e?.message);
-        setTimeout(() => {
-          setdepositStatus3("initial");
-          seterrorMsg3("");
-        }, 3000);
-      });
+      }
+    }
   };
 
   const checkApproval = async (amount) => {

@@ -1,6 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
-import React, { useState, useEffect } from "react";
-// import { useEagerConnect, useInactiveListener } from "../../functions/hooks";
+import React, { useState, useEffect } from "react"; 
 import useWindowSize from "../../functions/useWindowSize";
 import "./sidebar.css";
 
@@ -10,10 +9,7 @@ const Sidebar = (props) => {
   const [activePath, setactivePath] = useState(null);
 
   const [activeSidebar, setActiveSidebar] = useState(false);
-
-  // const triedEager = useEagerConnect();
-  // useInactiveListener(!triedEager);
-
+ 
   const windowSize = useWindowSize();
   const location = useLocation();
 

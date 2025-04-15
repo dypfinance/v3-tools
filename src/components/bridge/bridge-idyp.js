@@ -438,7 +438,7 @@ export default function initBridgeidyp({
           (this.props.sourceChain === "avax" &&
             this.props.destinationChain === "eth")
             ? window.config.SIGNATURE_API_URLAVAXiDYP
-            : window.config.SIGNATURE_API_URLBSCiDYP;
+            : window.config.SIGNATURE_API_URLAVAXiDYP;
         let url =
           signature +
           `/api/withdraw-args?depositNetwork=${
