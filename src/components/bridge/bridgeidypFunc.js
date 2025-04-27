@@ -298,7 +298,7 @@ const BridgeiDyp = ({
         (sourceChain === "eth" && destinationChain === "avax") ||
         (sourceChain === "avax" && destinationChain === "eth")
           ? window.config.SIGNATURE_API_URLAVAXiDYP
-          : window.config.SIGNATURE_API_URLAVAXiDYP;
+          : window.config.SIGNATURE_API_URLBSCiDYP;
       let url =
         signature +
         `/api/withdraw-args?depositNetwork=${
@@ -518,7 +518,7 @@ const BridgeiDyp = ({
   useEffect(() => {
     getChainSymbol();
     checkNetworkId();
-    window._refreshBalInterval = setInterval(getChainSymbol, 500);
+    getChainSymbol();
   }, []);
 
   useEffect(() => {
@@ -526,15 +526,19 @@ const BridgeiDyp = ({
     fetchData();
   }, [sourceChain, networkId]);
 
-  useEffect(() => {
-    refreshBalance();
-  }, [isConnected, coinbase, networkId, sourceChain]);
+  // useEffect(() => {
+  //   refreshBalance();
+  // }, [isConnected, coinbase, networkId, sourceChain, txHash]);
 
   useEffect(() => {
-    return () => {
-      clearInterval(window._refreshBalInterval);
-    };
-  }, []);
+    refreshBalance(); 
+
+    const intervalId = setInterval(() => {
+      refreshBalance();
+    }, 4000);
+
+    return () => clearInterval(intervalId);
+  }, [refreshBalance]);
 
   useEffect(() => {
     getSelectedChain();
