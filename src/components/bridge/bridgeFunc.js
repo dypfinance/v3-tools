@@ -515,7 +515,6 @@ const BridgeDyp = ({
 
     fetchData();
     checkNetworkId();
-    window._refreshBalInterval = setInterval(getChainSymbol, 500);
   }, []);
 
   useEffect(() => {
@@ -524,13 +523,13 @@ const BridgeDyp = ({
 
   useEffect(() => {
     refreshBalance();
-  }, [isConnected, coinbase, networkId, sourceChain]);
 
-  useEffect(() => {
-    return () => {
-      clearInterval(window._refreshBalInterval);
-    };
-  }, []);
+    const intervalId = setInterval(() => {
+      refreshBalance();
+    }, 4000);
+
+    return () => clearInterval(intervalId);
+  }, [refreshBalance]);
 
   useEffect(() => {
     getSelectedChain();
