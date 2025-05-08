@@ -7,6 +7,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import { ClickAwayListener } from "@material-ui/core";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
 import axios from "axios";
+import { ethers } from "ethers";
 
 const renderer = ({ days, hours, minutes, seconds }) => {
   return (
@@ -54,6 +55,8 @@ const StakeAvaxIDyp = ({
   coinbase,
   referrer,
   onConnectWallet,
+  binanceW3WProvider,
+  handleSwitchChainBinanceWallet,
 }) => {
   let { reward_token_idyp, BigNumber, alertify, token_dypsavax } = window;
   let token_symbol = "iDYP";
@@ -133,9 +136,9 @@ const StakeAvaxIDyp = ({
   const [claimStatus, setclaimStatus] = useState("initial");
   const [withdrawLoading, setwithdrawLoading] = useState(false);
   const [withdrawStatus, setwithdrawStatus] = useState("initial");
-  const [coinbase2, setcoinbase] = useState(
-    "0x0000000000000000000000000000000000000111"
-  );
+  // const [coinbase2, setcoinbase] = useState(
+  //   "0x0000000000000000000000000000000000000111"
+  // );
   const [tvl, settvl] = useState("");
   const [referralFeeEarned, setreferralFeeEarned] = useState("");
   const [stakingOwner, setstakingOwner] = useState(null);
@@ -237,18 +240,29 @@ const StakeAvaxIDyp = ({
   };
 
   const refreshBalance = async () => {
-    let coinbase = coinbase2;
+    // let coinbase = coinbase2;
 
-    if (window.coinbase_address) {
-      coinbase = window.coinbase_address;
-      setcoinbase(coinbase);
-    }
+    // if (window.coinbase_address) {
+    //   coinbase = window.coinbase_address;
+    //   setcoinbase(coinbase);
+    // }
 
     // let usd_per_dyps = the_graph_result.price_DYPS ? the_graph_result.price_DYPS : 1
     let usd_per_dyps = 0;
     try {
-      let _bal = reward_token.balanceOf(coinbase);
-
+      let _bal;
+      let reward_token_wod_sc = new window.avaxWeb3.eth.Contract(
+        window.TOKEN_ABI,
+        reward_token._address
+      );
+      if (coinbase && is_wallet_connected) {
+        _bal = await reward_token_wod_sc.methods
+          .balanceOf(coinbase)
+          .call()
+          .catch((e) => {
+            console.error(e);
+          });
+      }
       if (staking) {
         let _pDivs = staking.getTotalPendingDivs(coinbase);
         let _tEarned = staking.totalEarnedTokens(coinbase);
@@ -346,11 +360,11 @@ const StakeAvaxIDyp = ({
   };
 
   useEffect(() => {
-    if (coinbase !== coinbase2 && coinbase !== null && coinbase !== undefined) {
-      setcoinbase(coinbase);
-    }
+    // if (coinbase !== coinbase2 && coinbase !== null && coinbase !== undefined) {
+    //   setcoinbase(coinbase);
+    // }
     getTotalTvl();
-  }, [coinbase, coinbase2]);
+  }, [coinbase]);
 
   useEffect(() => {
     if (chainId === "43114") {
@@ -359,7 +373,7 @@ const StakeAvaxIDyp = ({
         checkApproval(depositAmount);
       }
     }
-  }, [coinbase, coinbase2, staking, chainId]);
+  }, [coinbase, staking, chainId]);
 
   useEffect(() => {
     setdepositAmount("");
@@ -386,23 +400,50 @@ const StakeAvaxIDyp = ({
 
     let amount = depositAmount;
     amount = new BigNumber(amount).times(1e18).toFixed(0);
-    await reward_token
-      .approve(staking._address, amount)
-      .then(() => {
+    if (window.WALLET_TYPE !== "binance") {
+      await reward_token
+        .approve(staking._address, amount)
+        .then(() => {
+          setdepositLoading(false);
+          setdepositStatus("deposit");
+          refreshBalance();
+        })
+        .catch((e) => {
+          setdepositLoading(false);
+          setdepositStatus("fail");
+          seterrorMsg(e?.message);
+          setTimeout(() => {
+            setdepositAmount("");
+            setdepositStatus("initial");
+            seterrorMsg("");
+          }, 2000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let reward_token_Sc = new ethers.Contract(
+        reward_token._address,
+        window.TOKEN_ABI,
+        binanceW3WProvider.getSigner()
+      );
+
+      const txResponse = await reward_token_Sc
+        .approve(staking._address, amount)
+        .catch((e) => {
+          setdepositLoading(false);
+          setdepositStatus("fail");
+          seterrorMsg(e?.message);
+          setTimeout(() => {
+            setdepositAmount("");
+            setdepositStatus("initial");
+            seterrorMsg("");
+          }, 2000);
+        });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         setdepositLoading(false);
         setdepositStatus("deposit");
         refreshBalance();
-      })
-      .catch((e) => {
-        setdepositLoading(false);
-        setdepositStatus("fail");
-        seterrorMsg(e?.message);
-        setTimeout(() => {
-          setdepositAmount("");
-          setdepositStatus("initial");
-          seterrorMsg("");
-        }, 2000);
-      });
+      }
+    }
   };
 
   const handleStake = async (e) => {
@@ -417,22 +458,33 @@ const StakeAvaxIDyp = ({
 
     let amount = depositAmount;
     amount = new BigNumber(amount).times(1e18).toFixed(0);
+    referrer = window.config.ZERO_ADDRESS;
+    if (window.WALLET_TYPE !== "binance") {
+      await staking
+        .stake(amount, referrer)
+        .then(() => {
+          setdepositLoading(false);
+          setdepositStatus("success");
+          refreshBalance();
+        })
+        .catch((e) => {
+          setdepositLoading(false);
+          setdepositStatus("fail");
+          seterrorMsg(e?.message);
+          setTimeout(() => {
+            setdepositAmount("");
+            setdepositStatus("fail");
+            seterrorMsg("");
+          }, 10000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let staking_Sc = new ethers.Contract(
+        staking._address,
+        window.CONSTANT_STAKING_IDYP_ABI,
+        binanceW3WProvider.getSigner()
+      );
 
-    if (referrer) {
-      referrer = String(referrer).trim().toLowerCase();
-    }
-
-    if (!window.web3.utils.isAddress(referrer)) {
-      referrer = window.config.ZERO_ADDRESS;
-    }
-    await staking
-      .stake(amount, referrer)
-      .then(() => {
-        setdepositLoading(false);
-        setdepositStatus("success");
-        refreshBalance();
-      })
-      .catch((e) => {
+      const txResponse = await staking_Sc.stake(amount, referrer).catch((e) => {
         setdepositLoading(false);
         setdepositStatus("fail");
         seterrorMsg(e?.message);
@@ -442,6 +494,18 @@ const StakeAvaxIDyp = ({
           seterrorMsg("");
         }, 10000);
       });
+
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
+        setdepositLoading(false);
+        setdepositStatus("success");
+        refreshBalance();
+        setTimeout(() => {
+          setdepositStatus("initial");
+          setdepositAmount("");
+        }, 5000);
+      }
+    }
   };
 
   const handleWithdraw = async (e) => {
@@ -449,15 +513,33 @@ const StakeAvaxIDyp = ({
     setwithdrawLoading(true);
 
     let amount = new BigNumber(withdrawAmount).times(1e18).toFixed(0);
+    if (window.WALLET_TYPE !== "binance") {
+      await staking
+        .unstake(amount)
+        .then(() => {
+          setwithdrawLoading(false);
+          setwithdrawStatus("success");
+          refreshBalance();
+        })
+        .catch((e) => {
+          setwithdrawLoading(false);
+          setwithdrawStatus("failed");
+          seterrorMsg3(e?.message);
 
-    await staking
-      .unstake(amount)
-      .then(() => {
-        setwithdrawLoading(false);
-        setwithdrawStatus("success");
-        refreshBalance();
-      })
-      .catch((e) => {
+          setTimeout(() => {
+            setwithdrawStatus("initial");
+            seterrorMsg3("");
+            setwithdrawAmount("");
+          }, 10000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let staking_Sc = new ethers.Contract(
+        staking._address,
+        window.CONSTANT_STAKING_IDYP_ABI,
+        binanceW3WProvider.getSigner()
+      );
+
+      const txResponse = await staking_Sc.unstake(amount).catch((e) => {
         setwithdrawLoading(false);
         setwithdrawStatus("failed");
         seterrorMsg3(e?.message);
@@ -468,20 +550,44 @@ const StakeAvaxIDyp = ({
           setwithdrawAmount("");
         }, 10000);
       });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
+        setwithdrawLoading(false);
+        setwithdrawStatus("success");
+        refreshBalance();
+      }
+    }
   };
 
-  const handleClaimDivs = () => {
+  const handleClaimDivs = async () => {
     setclaimLoading(true);
+    if (window.WALLET_TYPE !== "binance") {
+      staking
+        .claim()
+        .then(() => {
+          setclaimStatus("success");
+          setclaimLoading(false);
+          setpendingDivs(getFormattedNumber(0, 6));
+          refreshBalance();
+        })
+        .catch((e) => {
+          setclaimStatus("failed");
+          setclaimLoading(false);
+          seterrorMsg2(e?.message);
 
-    staking
-      .claim()
-      .then(() => {
-        setclaimStatus("success");
-        setclaimLoading(false);
-        setpendingDivs(getFormattedNumber(0, 6));
-        refreshBalance();
-      })
-      .catch((e) => {
+          setTimeout(() => {
+            setclaimStatus("initial");
+            seterrorMsg2("");
+          }, 2000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let staking_Sc = new ethers.Contract(
+        staking._address,
+        window.CONSTANT_STAKING_IDYP_ABI,
+        binanceW3WProvider.getSigner()
+      );
+
+      const txResponse = await staking_Sc.claim().catch((e) => {
         setclaimStatus("failed");
         setclaimLoading(false);
         seterrorMsg2(e?.message);
@@ -491,6 +597,14 @@ const StakeAvaxIDyp = ({
           seterrorMsg2("");
         }, 2000);
       });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
+        setclaimStatus("success");
+        setclaimLoading(false);
+        setpendingDivs(getFormattedNumber(0, 6));
+        refreshBalance();
+      }
+    }
   };
 
   const handleSetMaxDeposit = () => {
@@ -527,12 +641,15 @@ const StakeAvaxIDyp = ({
     const expirationDate2 = new Date("2025-07-22T23:11:00.000+02:00");
 
     const currentDate = new Date();
-    const finalExpDate = expired === true ? expirationDate : expirationDate2
+    const finalExpDate = expired === true ? expirationDate : expirationDate2;
     const timeDifference = finalExpDate - currentDate;
     const millisecondsInADay = 1000 * 60 * 60 * 24;
     const daysUntilExpiration = Math.floor(timeDifference / millisecondsInADay);
 
-    return ((depositAmount * APY) / 100 / 365) * (expired === true ? 60 : daysUntilExpiration);
+    return (
+      ((depositAmount * APY) / 100 / 365) *
+      (expired === true ? 60 : daysUntilExpiration)
+    );
   };
 
   const getReferralLink = () => {
@@ -540,28 +657,55 @@ const StakeAvaxIDyp = ({
   };
 
   const handleAvaxPool = async () => {
-    await handleSwitchNetworkhook("0xa86a")
-      .then(() => {
-        this.props.handleSwitchNetwork("43114");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    if (window.ethereum) {
+      if (window.WALLET_TYPE !== "binance") {
+        await handleSwitchNetworkhook("0xa86a")
+          .then(() => {
+            handleSwitchNetwork(43114);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      } else if (window.WALLET_TYPE === "binance") {
+        handleSwitchChainBinanceWallet(43114);
+      }
+    } else if (window.WALLET_TYPE === "binance") {
+      handleSwitchChainBinanceWallet(43114);
+    } else {
+      window.alertify.error("No web3 detected. Please install Metamask!");
+    }
   };
 
-  const handleReinvest = () => {
+  const handleReinvest = async () => {
     setreInvestStatus("invest");
     setreInvestLoading(true);
+    if (window.WALLET_TYPE !== "binance") {
+      staking
+        .reInvest()
+        .then(() => {
+          setreInvestStatus("success");
+          setreInvestLoading(false);
+          setpendingDivs(getFormattedNumber(0, 6));
+          refreshBalance();
+        })
+        .catch((e) => {
+          setreInvestStatus("failed");
+          setreInvestLoading(false);
+          seterrorMsg2(e?.message);
 
-    staking
-      .reInvest()
-      .then(() => {
-        setreInvestStatus("success");
-        setreInvestLoading(false);
-        setpendingDivs(getFormattedNumber(0, 6));
-        refreshBalance();
-      })
-      .catch((e) => {
+          setTimeout(() => {
+            setreInvestStatus("initial");
+            seterrorMsg2("");
+          }, 2000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let staking_Sc = new ethers.Contract(
+        staking._address,
+        window.CONSTANT_STAKING_IDYP_ABI,
+        binanceW3WProvider.getSigner()
+      );
+
+      const txResponse = await staking_Sc.reInvest().catch((e) => {
         setreInvestStatus("failed");
         setreInvestLoading(false);
         seterrorMsg2(e?.message);
@@ -571,6 +715,14 @@ const StakeAvaxIDyp = ({
           seterrorMsg2("");
         }, 2000);
       });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
+        setreInvestStatus("success");
+        setreInvestLoading(false);
+        setpendingDivs(getFormattedNumber(0, 6));
+        refreshBalance();
+      }
+    }
   };
 
   const convertTimestampToDate = (timestamp) => {
@@ -700,8 +852,6 @@ const StakeAvaxIDyp = ({
   useEffect(() => {
     getUsdPerDyp();
   }, [tokendata]);
-
-
 
   return (
     <div className="d-flex flex-column gap-2 w-100">
@@ -876,7 +1026,13 @@ const StakeAvaxIDyp = ({
                           </div>
                         }
                       >
-                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={poolCapOpen} />
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/tools/more-info.svg"
+                          }
+                          alt=""
+                          onClick={poolCapOpen}
+                        />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -898,7 +1054,13 @@ const StakeAvaxIDyp = ({
                           </div>
                         }
                       >
-                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={quotaOpen} />
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/tools/more-info.svg"
+                          }
+                          alt=""
+                          onClick={quotaOpen}
+                        />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -922,7 +1084,13 @@ const StakeAvaxIDyp = ({
                           </div>
                         }
                       >
-                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={maxDepositOpen} />
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/tools/more-info.svg"
+                          }
+                          alt=""
+                          onClick={maxDepositOpen}
+                        />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -1035,7 +1203,13 @@ const StakeAvaxIDyp = ({
                           </div>
                         }
                       >
-                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={poolFeeOpen} />
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/tools/more-info.svg"
+                          }
+                          alt=""
+                          onClick={poolFeeOpen}
+                        />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -1049,7 +1223,12 @@ const StakeAvaxIDyp = ({
                     className="stats-link2"
                   >
                     {shortAddress(staking?._address)}{" "}
-                    <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
+                    <img
+                      src={
+                        "https://cdn.worldofdypians.com/tools/statsLinkIcon.svg"
+                      }
+                      alt=""
+                    />
                   </a>
                 </div>
               </div>
@@ -1058,14 +1237,12 @@ const StakeAvaxIDyp = ({
                   <span className="bal-smallTxt">Start date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
                     09 Nov 2023{" "}
-                  
                   </span>
                 </div>
                 <div className="d-flex align-items-center gap-1">
                   <span className="bal-smallTxt">End date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
                     {expiration_time}{" "}
-                   
                   </span>
                 </div>
               </div>
@@ -1074,11 +1251,15 @@ const StakeAvaxIDyp = ({
           {is_wallet_connected && chainId === "43114" && (
             <button
               disabled={
-                depositAmount === "" || depositLoading === true || expired === true ? true : false
+                depositAmount === "" ||
+                depositLoading === true ||
+                expired === true
+                  ? true
+                  : false
               }
               className={`btn filledbtn ${
-                ((depositAmount === "" &&
-                depositStatus === "initial")|| expired === true) &&
+                ((depositAmount === "" && depositStatus === "initial") ||
+                  expired === true) &&
                 "disabled-btn"
               } ${
                 depositStatus === "deposit" || depositStatus === "success"
@@ -1295,7 +1476,13 @@ const StakeAvaxIDyp = ({
                           </div>
                         }
                       >
-                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={poolFeeOpen} />
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/tools/more-info.svg"
+                          }
+                          alt=""
+                          onClick={poolFeeOpen}
+                        />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -1309,7 +1496,12 @@ const StakeAvaxIDyp = ({
                     className="stats-link2"
                   >
                     {shortAddress(staking?._address)}{" "}
-                    <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
+                    <img
+                      src={
+                        "https://cdn.worldofdypians.com/tools/statsLinkIcon.svg"
+                      }
+                      alt=""
+                    />
                   </a>
                 </div>
               </div>
@@ -1318,14 +1510,12 @@ const StakeAvaxIDyp = ({
                   <span className="bal-smallTxt">Start date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
                     09 Nov 2023{" "}
-               
                   </span>
                 </div>
                 <div className="d-flex align-items-center gap-1">
                   <span className="bal-smallTxt">End date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
                     {expiration_time}{" "}
-               
                   </span>
                 </div>
               </div>
@@ -1337,7 +1527,11 @@ const StakeAvaxIDyp = ({
       coinbase === undefined ||
       is_wallet_connected === false ? (
         <button className="connectbtn btn m-auto" onClick={onConnectWallet}>
-          <img src={'https://cdn.worldofdypians.com/tools/walletIcon.svg'} alt="" /> Connect wallet
+          <img
+            src={"https://cdn.worldofdypians.com/tools/walletIcon.svg"}
+            alt=""
+          />{" "}
+          Connect wallet
         </button>
       ) : chainId !== "43114" ? (
         <button

@@ -722,10 +722,10 @@ const LaunchpadMidle = ({
           <KeyFeaturesCard icon={item.icon} content={item.content} />
         ))}
       </div>
-      <LaunchpadProjects
+      {/* <LaunchpadProjects
         totalCommitmentValueMidle={totalCommitmentValueMidle}
         totalParticipants={totalParticipants}
-      />
+      /> */}
       <h6 className="launchpad-hero-title mb-4 mt-3">Past Deals</h6>
       <div className="row mt-4">
         <div className="col-12">
@@ -796,6 +796,56 @@ const LaunchpadMidle = ({
                       </div>
                     </td>
                   </tr>
+                  <tr
+                    onClick={() => navigate("/launchpad/midle")}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <td className="item-history-table-td first-td left-border text-center">
+                      <div className="d-flex align-items-center gap-1">
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/wod/midleSquare.png"
+                          }
+                          style={{width:32, height:32}}
+                          alt=""
+                        />
+                        <div className="d-flex flex-column align-items-start">
+                          Midle
+                          <span style={{ color: "#828FBB" }}>MIDLE</span>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="item-history-table-td text-center">
+                      Private Sale
+                    </td>
+                    <td className="item-history-table-td text-center">
+                      <div className="d-flex align-items-center justify-content-center gap-2">
+                        <img
+                          src={"https://cdn.worldofdypians.com/wod/bnbIcon.svg"}
+                          alt=""
+                        />
+                        BNB Chain
+                      </div>
+                    </td>
+                    <td className="item-history-table-td table-greentext text-center">
+                      ${getFormattedNumber(totalCommitmentValueMidle, 0)}
+                    </td>
+                    <td className="item-history-table-td text-center">8.7x</td>
+                    <td className="item-history-table-td right-border text-center">
+                      21 January 2025
+                    </td>
+                    <td className="item-history-table-td last-td table-greentext right-border text-center">
+                      <div className="right-arrow-holder">
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/tools/rightlogo.svg"
+                          }
+                          alt=""
+                        />
+                      </div>
+                    </td>
+                  </tr>
+
                 </tbody>
               </table>
             </div>

@@ -9,12 +9,20 @@ import errorSound from "./assets/error.mp3";
 import crackStoneSound from "./assets/stone-crack-sound.mp3";
 import crackedStoneSound from "./assets/stone-cracked-sound.mp3";
 import crackedGemSound from "./assets/crackedGem.mp3";
-
+import Countdown from "react-countdown";
 import NewChestItem from "./NewChestItem";
 import CawsAdventurePopup from "./components/CawsAdventurePopup";
 import StoneCrackPopup from "./components/StoneCrackPopup";
 import KittyDashPopup from "./components/KittyDashPopup";
 import Leaderboard from "../leaderboard/Leaderboard";
+
+const renderer2 = ({ hours, minutes }) => {
+  return (
+    <span className="stone-crack-timer mb-0">
+      {hours}h:{minutes}m
+    </span>
+  );
+};
 
 const Games = ({
   handleConnection,
@@ -68,6 +76,12 @@ const Games = ({
   fetchMonthlyOpbnbWinners,
   fetchPreviousMonthlyOpbnbWinners,
   activePlayerMonthlyOpbnb,
+  fetchCawsAdvLeaderboard,
+  fetchPreviousCawsAdvWinners,
+  baseBalance,
+  opBnbBalance,
+  handleSwitchChainBinanceWallet,
+  binanceW3WProvider
 }) => {
   const [chain, setChain] = useState("base");
   const [message, setMessage] = useState("");
@@ -112,6 +126,35 @@ const Games = ({
   const audioerror = new Audio(errorSound);
   const audiosuccess = new Audio(crackedStoneSound);
   const audiosuccessGem = new Audio(crackedGemSound);
+  const now = new Date();
+
+  const bannedEmails = [
+    "hibrahymdaniel@gmail.com",
+    "therocklobo@gmail.com",
+    "thelunapass@gmail.com",
+    "kharu4735@gmail.com",
+    "ti14bookmega@gmail.com",
+    "atop127@yandex.ru",
+    "giftaghedo71@gmail.com",
+    "scottevbaru@gmail.com",
+    "evbaru2@gmail.com",
+    "ogieva.igho@yahoo.com",
+    "ryaeiou100199@gmail.com",
+    "ciangsabin@gmail.com",
+    "izcipara88@gmail.com",
+    "therockhidder@gmail.com",
+  ];
+
+  const midnightUTC = new Date(
+    Date.UTC(
+      now.getUTCFullYear(),
+      now.getUTCMonth(),
+      now.getUTCDate() + 1,
+      0,
+      30,
+      0
+    )
+  );
 
   const countEarnedRewards = () => {
     if (openedChests && openedChests.length > 0) {
@@ -206,24 +249,26 @@ const Games = ({
     }
   }, [popups.stoneCrack, popups.kittyDash, popups.cawsAdventure, active]);
 
-  const handleBasePool = async () => {
-    await handleSwitchNetworkhook("0x2105")
-      .then(() => {
-        handleSwitchNetwork("8453");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
 
-  const handleOpbnbPool = async () => {
-    await handleSwitchNetworkhook("0xcc")
-      .then(() => {
-        handleSwitchNetwork("204");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+
+  const switchNetwork = async (hexChainId, chain) => {
+    if (window.ethereum) {
+      if (!window.gatewallet && window.WALLET_TYPE !== "binance") {
+        await handleSwitchNetworkhook(hexChainId)
+          .then(() => {
+            handleSwitchNetwork(chain);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      } else if (coinbase && window.WALLET_TYPE === "binance") {
+        handleSwitchChainBinanceWallet(chain);
+      }
+    } else if (coinbase && window.WALLET_TYPE === "binance") {
+      handleSwitchChainBinanceWallet(chain);
+    } else {
+      window.alertify.error("No web3 detected. Please install Metamask!");
+    }
   };
 
   const onCrackStone = (event) => {
@@ -359,7 +404,7 @@ const Games = ({
     );
 
     setIsActive(chestID);
-    setIsActiveIndex(chestIndex + 1); 
+    setIsActiveIndex(chestIndex + 1);
     if (filteredResult && filteredResult.rewards) {
       const resultWonETH = filteredResult.rewards.find((obj) => {
         return obj.rewardType === "MoneyETH" && obj.status === "Claimed";
@@ -388,7 +433,7 @@ const Games = ({
       setLiveRewardData([]);
     }
   };
-// console.log(rewardData,openedOpbnbChests)
+  // console.log(rewardData,openedOpbnbChests)
   const randomOpenedChests = [
     2, 4, 18, 12, 19, 5, 16, 6, 1, 15, 17, 3, 7, 9, 14, 11, 13, 8, 10,
   ];
@@ -609,69 +654,44 @@ const Games = ({
         setDisable(true);
       } else if (coinbase && isConnected && email && address) {
         if (coinbase.toLowerCase() === address.toLowerCase()) {
-          if (isPremium) {
-            if (
-              openedChests &&
-              openedChests.length === 20 &&
-              rewardData.length === 0 &&
-              address.toLowerCase() === coinbase.toLowerCase()
-            ) {
-              setMessage("complete");
-            } else if (
-              openedChests &&
-              openedChests.length < 20 &&
-              rewardData.length === 0 &&
-              address.toLowerCase() === coinbase.toLowerCase() &&
-              networkId === 8453
-            ) {
-              setMessage("");
-              setDisable(false);
-            } else if (
-              rewardData.length === 0 &&
-              networkId !== 8453 &&
-              address.toLowerCase() === coinbase.toLowerCase()
-            ) {
-              setMessage("switch");
-              setDisable(true);
-            } else if (
-              rewardData.length === 0 &&
-              address.toLowerCase() === coinbase.toLowerCase()
-            ) {
-              setMessage("");
-              setDisable(false);
-            }
-          } else if (!isPremium) {
-            if (
-              openedChests &&
-              openedChests.length === 20 &&
-              rewardData.length === 0 &&
-              address.toLowerCase() === coinbase.toLowerCase() &&
-              networkId === 8453
-            ) {
-              setMessage("complete");
-            } else if (
-              openedChests &&
-              openedChests.length < 20 &&
-              rewardData.length === 0 &&
-              address.toLowerCase() === coinbase.toLowerCase() &&
-              networkId === 8453
-            ) {
-              setMessage("");
-              setDisable(false);
-            } else if (
-              rewardData.length === 0 &&
-              networkId !== 8453 &&
-              address.toLowerCase() === coinbase.toLowerCase()
-            ) {
-              setMessage("switch");
-              setDisable(true);
-            } else if (
-              rewardData.length === 0 &&
-              address.toLowerCase() === coinbase.toLowerCase()
-            ) {
-              setMessage("");
-              setDisable(false);
-            }
+          if (
+            openedChests &&
+            openedChests.length === 20 &&
+            rewardData.length === 0 &&
+            address.toLowerCase() === coinbase.toLowerCase()
+          ) {
+            setMessage("complete");
+          } else if (
+            openedChests &&
+            openedChests.length < 20 &&
+            rewardData.length === 0 &&
+            address.toLowerCase() === coinbase.toLowerCase() &&
+            networkId === 8453 &&
+            baseBalance > 0
+          ) {
+            setMessage("");
+            setDisable(false);
+          } else if (
+            rewardData.length === 0 &&
+            networkId !== 8453 &&
+            address.toLowerCase() === coinbase.toLowerCase()
+          ) {
+            setMessage("switch");
+            setDisable(true);
+          } else if (
+            rewardData.length === 0 &&
+            address.toLowerCase() === coinbase.toLowerCase() &&
+            baseBalance > 0
+          ) {
+            setMessage("");
+            setDisable(false);
+          } else if (
+            rewardData.length === 0 &&
+            address.toLowerCase() === coinbase.toLowerCase() &&
+            baseBalance === 0
+          ) {
+            setMessage("noDyp");
+            setDisable(true);
           }
         } else {
           setMessage("switchAccount");
@@ -687,69 +707,44 @@ const Games = ({
         setDisable(true);
       } else if (coinbase && isConnected && email && address) {
         if (coinbase.toLowerCase() === address.toLowerCase()) {
-          if (isPremium) {
-            if (
-              openedOpbnbChests &&
-              openedOpbnbChests.length === 20 &&
-              rewardData.length === 0 &&
-              address.toLowerCase() === coinbase.toLowerCase()
-            ) {
-              setMessage("complete");
-            } else if (
-              openedOpbnbChests &&
-              openedOpbnbChests.length < 20 &&
-              rewardData.length === 0 &&
-              address.toLowerCase() === coinbase.toLowerCase() &&
-              networkId === 204
-            ) {
-              setMessage("");
-              setDisable(false);
-            } else if (
-              rewardData.length === 0 &&
-              networkId !== 204 &&
-              address.toLowerCase() === coinbase.toLowerCase()
-            ) {
-              setMessage("switchopbnb");
-              setDisable(true);
-            } else if (
-              rewardData.length === 0 &&
-              address.toLowerCase() === coinbase.toLowerCase()
-            ) {
-              setMessage("");
-              setDisable(false);
-            }
-          } else if (!isPremium) {
-            if (
-              openedOpbnbChests &&
-              openedOpbnbChests.length === 20 &&
-              rewardData.length === 0 &&
-              address.toLowerCase() === coinbase.toLowerCase() &&
-              networkId === 204
-            ) {
-              setMessage("complete");
-            } else if (
-              openedOpbnbChests &&
-              openedOpbnbChests.length < 20 &&
-              rewardData.length === 0 &&
-              address.toLowerCase() === coinbase.toLowerCase() &&
-              networkId === 204
-            ) {
-              setMessage("");
-              setDisable(false);
-            } else if (
-              rewardData.length === 0 &&
-              networkId !== 204 &&
-              address.toLowerCase() === coinbase.toLowerCase()
-            ) {
-              setMessage("switchopbnb");
-              setDisable(true);
-            } else if (
-              rewardData.length === 0 &&
-              address.toLowerCase() === coinbase.toLowerCase()
-            ) {
-              setMessage("");
-              setDisable(false);
-            }
+          if (
+            openedOpbnbChests &&
+            openedOpbnbChests.length === 20 &&
+            rewardData.length === 0 &&
+            address.toLowerCase() === coinbase.toLowerCase()
+          ) {
+            setMessage("complete");
+          } else if (
+            openedOpbnbChests &&
+            openedOpbnbChests.length < 20 &&
+            rewardData.length === 0 &&
+            address.toLowerCase() === coinbase.toLowerCase() &&
+            networkId === 204 &&
+            opBnbBalance > 0
+          ) {
+            setMessage("");
+            setDisable(false);
+          } else if (
+            rewardData.length === 0 &&
+            networkId !== 204 &&
+            address.toLowerCase() === coinbase.toLowerCase()
+          ) {
+            setMessage("switchopbnb");
+            setDisable(true);
+          } else if (
+            rewardData.length === 0 &&
+            address.toLowerCase() === coinbase.toLowerCase() &&
+            opBnbBalance > 0
+          ) {
+            setMessage("");
+            setDisable(false);
+          } else if (
+            rewardData.length === 0 &&
+            address.toLowerCase() === coinbase.toLowerCase() &&
+            opBnbBalance === 0
+          ) {
+            setMessage("noDyp");
+            setDisable(true);
           }
         } else {
           setMessage("switchAccount");
@@ -770,6 +765,8 @@ const Games = ({
     isConnected,
     rewardData,
     openedChests,
+    baseBalance,
+    opBnbBalance,
   ]);
 
   useEffect(() => {
@@ -787,6 +784,16 @@ const Games = ({
     <>
       <div className="container-lg p-0">
         <div className="row">
+          {bannedEmails.includes(email) && (
+            <div className="col-12  mb-3">
+              <div className="banned-account-wrapper w-100 px-2 py-3  d-flex align-items-center justify-content-center">
+                <span className="banned-account-message mb-0 text-white text-center">
+                  This account has been banned permanently. Check your email for
+                  more information.
+                </span>
+              </div>
+            </div>
+          )}
           <div className="col-12 col-lg-4">
             <NavLink to="/loyalty-program">
               <div className="games-banner loyalty-game-banner d-flex flex-column  flex-lg-row px-3 py-3 gap-3 gap-lg-0 align-items-start align-items-lg-center mb-4 position-relative">
@@ -897,93 +904,98 @@ const Games = ({
         <div className="game-wrapper-container p-3">
           <div className="d-flex flex-column gap-2 align-items-center">
             <div className="d-flex flex-column flex-lg-row align-items-center gap-2 justify-content-between w-100">
-              <div className="d-flex align-items-center gap-2 position-relative justify-content-start">
-                <div className="d-flex justify-content-center">
-                  <img
-                    src={
-                      "https://cdn.worldofdypians.com/tools/stoneCrackHeader.png"
-                    }
-                    alt=""
-                    className="stone-crack-header"
-                  />
-                </div>
-
-                <img
-                  src={"https://cdn.worldofdypians.com/tools/tooltipIcon.svg"}
-                  alt=""
-                  onClick={() => {
-                    setpopup(true);
-                  }}
-                  style={{ cursor: "pointer" }}
-                />
-                {/* </Tooltip> */}
-
-                {popup === true && (
-                  <div
-                    className="position-absolute"
-                    style={{ right: "245px", top: "-20px" }}
-                  >
-                    <OutsideClickHandler
-                      onOutsideClick={() => {
-                        setpopup(false);
-                      }}
-                    >
-                      <div
-                        className="tooltip d-flex justify-content-center"
-                        style={{ opacity: 1, width: 245 }}
-                      >
-                        <div className="d-flex flex-column gap-2 align-items-start">
-                          <span className="whitelist-tooltip-content-text">
-                            Every transaction on Base network requires a
-                            combination of ETH and DYP tokens on BASE.
-                          </span>
-                          <span className="whitelist-tooltip-content-text">
-                            Every transaction on opBNB Chain requires a
-                            combination of BNB and DYP tokens on opBNB Chain.
-                          </span>
-                          <a
-                            href="https://superbridge.app/base"
-                            target="_blank"
-                            rel="noreferrer"
-                            onClick={() => {
-                              setpopup(false);
-                            }}
-                          >
-                            <h6 className="bottomitems">
-                              <img
-                                src={
-                                  "https://cdn.worldofdypians.com/tools/arrow-up.svg"
-                                }
-                                alt=""
-                              />
-                              Bridge DYP on Base SuperBridge
-                            </h6>
-                          </a>
-                          <NavLink
-                            to="/bridge"
-                            target="_blank"
-                            rel="noreferrer"
-                            onClick={() => {
-                              setpopup(false);
-                            }}
-                          >
-                            <h6 className="bottomitems">
-                              <img
-                                src={
-                                  "https://cdn.worldofdypians.com/tools/arrow-up.svg"
-                                }
-                                alt=""
-                              />
-                              Bridge DYP on opBNB Chain
-                            </h6>
-                          </NavLink>
-                        </div>
-                      </div>
-                    </OutsideClickHandler>
+              <div className="d-flex flex-column">
+                <div className="d-flex align-items-center gap-2 position-relative justify-content-start">
+                  <div className="d-flex justify-content-center">
+                    <img
+                      src={
+                        "https://cdn.worldofdypians.com/tools/stoneCrackHeader.png"
+                      }
+                      alt=""
+                      className="stone-crack-header"
+                    />
                   </div>
-                )}
-              </div>
 
+                  <img
+                    src={"https://cdn.worldofdypians.com/tools/tooltipIcon.svg"}
+                    alt=""
+                    onClick={() => {
+                      setpopup(true);
+                    }}
+                    style={{ cursor: "pointer" }}
+                  />
+                  {/* </Tooltip> */}
+
+                  {popup === true && (
+                    <div
+                      className="position-absolute"
+                      style={{ right: "245px", top: "-20px" }}
+                    >
+                      <OutsideClickHandler
+                        onOutsideClick={() => {
+                          setpopup(false);
+                        }}
+                      >
+                        <div
+                          className="tooltip d-flex justify-content-center"
+                          style={{ opacity: 1, width: 245 }}
+                        >
+                          <div className="d-flex flex-column gap-2 align-items-start">
+                            <span className="whitelist-tooltip-content-text">
+                              Every transaction on Base network requires a
+                              combination of ETH and DYP tokens on BASE.
+                            </span>
+                            <span className="whitelist-tooltip-content-text">
+                              Every transaction on opBNB Chain requires a
+                              combination of BNB and DYP tokens on opBNB Chain.
+                            </span>
+                            <a
+                              href="https://superbridge.app/base"
+                              target="_blank"
+                              rel="noreferrer"
+                              onClick={() => {
+                                setpopup(false);
+                              }}
+                            >
+                              <h6 className="bottomitems">
+                                <img
+                                  src={
+                                    "https://cdn.worldofdypians.com/tools/arrow-up.svg"
+                                  }
+                                  alt=""
+                                />
+                                Bridge DYP on Base SuperBridge
+                              </h6>
+                            </a>
+                            <NavLink
+                              to="/bridge"
+                              target="_blank"
+                              rel="noreferrer"
+                              onClick={() => {
+                                setpopup(false);
+                              }}
+                            >
+                              <h6 className="bottomitems">
+                                <img
+                                  src={
+                                    "https://cdn.worldofdypians.com/tools/arrow-up.svg"
+                                  }
+                                  alt=""
+                                />
+                                Bridge DYP on opBNB Chain
+                              </h6>
+                            </NavLink>
+                          </div>
+                        </div>
+                      </OutsideClickHandler>
+                    </div>
+                  )}
+                </div>
+                <span className="d-flex align-items-center gap-1 stone-crack-timer">
+                  Reset Time:{" "}
+                  <Countdown date={midnightUTC} renderer={renderer2} />
+                </span>
+              </div>
               <div className="d-flex align-items-center gap-2">
                 <button
                   className={` ${
@@ -993,7 +1005,7 @@ const Games = ({
                   } d-flex gap-1 align-items-center`}
                   onClick={() => {
                     setChain("base");
-                    handleBasePool();
+                    switchNetwork("0x2105", "8453");
                   }}
                 >
                   <img
@@ -1010,7 +1022,7 @@ const Games = ({
                   } d-flex gap-1 align-items-center`}
                   onClick={() => {
                     setChain("opbnb");
-                    handleOpbnbPool();
+                    switchNetwork("0xcc", "204");
                   }}
                 >
                   <img
@@ -1052,6 +1064,7 @@ const Games = ({
                                 setIsActive(item.chestId);
                                 setIsActiveIndex(index + 1);
                               }}
+                              binanceW3WProvider={binanceW3WProvider}
                               handleShowRewards={(value, value2) => {
                                 showSingleRewardData(value, value2);
                                 setIsActive(value);
@@ -1117,6 +1130,7 @@ const Games = ({
                               key={index}
                               item={item}
                               image={bnbImages[index]}
+                              binanceW3WProvider={binanceW3WProvider}
                               onCrackStone={onCrackStone}
                               selectedChest={selectedChest}
                               isPremium={isPremium}
@@ -1193,6 +1207,7 @@ const Games = ({
                               key={index}
                               item={item}
                               image={bnbImages[index]}
+                              binanceW3WProvider={binanceW3WProvider}
                               // openChest={openChest}
                               selectedChest={selectedChest}
                               isPremium={isPremium}
@@ -1327,10 +1342,61 @@ const Games = ({
                               cursor: "pointer",
                               color: "#ce5d1b",
                             }}
-                            onClick={handleBasePool}
+                            onClick={() => switchNetwork("0x2105", "8453")}
                           >
                             BASE
                           </span>{" "}
+                        </h6>
+
+                        <div className="loader red-loader">
+                          <div className="dot" style={{ "--i": 0 }}></div>
+                          <div className="dot" style={{ "--i": 1 }}></div>
+                          <div className="dot" style={{ "--i": 2 }}></div>
+                          <div className="dot" style={{ "--i": 3 }}></div>
+                          <div className="dot" style={{ "--i": 4 }}></div>
+                          <div className="dot" style={{ "--i": 5 }}></div>
+                          <div className="dot" style={{ "--i": 6 }}></div>
+                          <div className="dot" style={{ "--i": 7 }}></div>
+                          <div className="dot" style={{ "--i": 8 }}></div>
+                          <div className="dot" style={{ "--i": 9 }}></div>
+                        </div>
+                      </div>
+                    ) : message === "noDyp" ? (
+                      <div
+                        className="d-flex align-items-center flex-column justify-content-center p-0 p-lg-2 w-100 chest-progress-wrapper"
+                        style={{
+                          background: "#1A1C39",
+                          border: "1px solid #ce5d1b",
+                        }}
+                      >
+                        <div className="loader red-loader">
+                          <div className="dot" style={{ "--i": 0 }}></div>
+                          <div className="dot" style={{ "--i": 1 }}></div>
+                          <div className="dot" style={{ "--i": 2 }}></div>
+                          <div className="dot" style={{ "--i": 3 }}></div>
+                          <div className="dot" style={{ "--i": 4 }}></div>
+                          <div className="dot" style={{ "--i": 5 }}></div>
+                          <div className="dot" style={{ "--i": 6 }}></div>
+                          <div className="dot" style={{ "--i": 7 }}></div>
+                          <div className="dot" style={{ "--i": 8 }}></div>
+                          <div className="dot" style={{ "--i": 9 }}></div>
+                        </div>
+
+                        <h6
+                          className="loader-text mb-0 text-decoration-underline"
+                          style={{ color: "#ce5d1b" }}
+                        >
+                          <NavLink
+                            to={
+                              chain === "base"
+                                ? "https://superbridge.app/base"
+                                : "/bridge"
+                            }
+                            target={chain === "base" ? "_blank" : ""}
+                            style={{ color: "#ce5d1b" }}
+                          >
+                            Get DYP to crack the stone
+                          </NavLink>
                         </h6>
 
                         <div className="loader red-loader">
@@ -1379,7 +1445,7 @@ const Games = ({
                               cursor: "pointer",
                               color: "#ce5d1b",
                             }}
-                            onClick={handleOpbnbPool}
+                            onClick={() => switchNetwork("0xcc", "204")}
                           >
                             opBNB
                           </span>{" "}
@@ -1911,13 +1977,13 @@ const Games = ({
                               )}
                             </h6>
                           </div>
-                          <div className="d-flex flex-column align-items-center dynamic-width">
+                          <div className="d-flex flex-column align-items-center col-lg-3">
                             <div className="px-3 usd-upper-bg w-100">
-                              <h6 className="usdreward-text m-0 text-center dynamic-width">
+                              <h6 className="usdreward-text m-0 text-center w-100">
                                 Rewards
                               </h6>
                             </div>
-                            <div className="h-100 d-flex gap-3 align-items-center justify-content-center px-3 usdreward-wrapper dynamic-width">
+                            <div className="h-100 d-flex gap-3 align-items-center justify-content-center px-3 usdreward-wrapper w-100">
                               <div className="d-flex flex-column">
                                 <h6 className="usdreward-value-crypto">DYP</h6>
                                 <h6 className="usdreward-value">
@@ -1930,8 +1996,10 @@ const Games = ({
                                   )}
                                 </h6>
                               </div>
-                              <div className="d-flex flex-column">
-                                <h6 className="usdreward-value-crypto">{ chain === "base" ? 'ETH' : 'BNB'}</h6>
+                              {/* <div className="d-flex flex-column">
+                                <h6 className="usdreward-value-crypto">
+                                  {chain === "base" ? "ETH" : "BNB"}
+                                </h6>
                                 <h6 className="usdreward-value">
                                   $
                                   {getFormattedNumber(
@@ -1941,7 +2009,7 @@ const Games = ({
                                     2
                                   )}
                                 </h6>
-                              </div>
+                              </div> */}
                             </div>
                           </div>
                         </div>
@@ -2391,7 +2459,7 @@ const Games = ({
                             </div>
                           </div>
                         </div>
-                        <div
+                        {/* <div
                           className={`${
                             rewardData &&
                             rewardData.rewards?.find((obj) => {
@@ -2412,7 +2480,7 @@ const Games = ({
                                 "reward-title-active"
                               } reward-title text-center`}
                             >
-                             { chain === 'base' ? 'ETH' : 'BNB'} Rewards
+                              {chain === "base" ? "ETH" : "BNB"} Rewards
                             </h6>
                             <div className="d-flex align-items-center gap-1">
                               <div
@@ -2495,7 +2563,7 @@ const Games = ({
                               </div>
                             </div>
                           </div>
-                        </div>
+                        </div> */}
                         <div
                           className={` ${
                             rewardData &&
@@ -2549,7 +2617,7 @@ const Games = ({
                                 "reward-title-active"
                               } reward-title text-center`}
                             >
-                              { chain === 'base' ? 'Base' : 'opBNB'} Gem
+                              {chain === "base" ? "Base" : "opBNB"} Gem
                             </h6>
                             <h6
                               className={`${
@@ -2609,7 +2677,8 @@ const Games = ({
           monthlyplayerDataOpbnb={monthlyplayerDataOpbnb}
           weeklyplayerData={weeklyplayerData}
           weeklyplayerDataOpbnb={weeklyplayerDataOpbnb}
-
+          fetchCawsAdvLeaderboard={fetchCawsAdvLeaderboard}
+          fetchPreviousCawsAdvWinners={fetchPreviousCawsAdvWinners}
           kittyDashRecords={kittyDashRecords}
           fetchWeeklyWinners={fetchWeeklyWinners}
           fetchWeeklyOpbnbWinners={fetchWeeklyOpbnbWinners}

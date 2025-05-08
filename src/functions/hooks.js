@@ -45,7 +45,8 @@ export function useEagerConnect() {
     if (
       window.ethereum &&
       !window.coin98 &&
-      (window.ethereum.isMetaMask === true || window.ethereum.isTrust === true) &&
+      (window.ethereum.isMetaMask === true ||
+        window.ethereum.isTrust === true) &&
       (!window.ethereum.isCoinbaseWallet || !window.ethereum.overrideIsMetaMask)
     ) {
       injected.isAuthorized().then((isAuthorized) => {
@@ -72,7 +73,8 @@ export function useEagerConnect() {
     if (
       window.ethereum &&
       !window.coin98 &&
-      (window.ethereum.isMetaMask === true || window.ethereum.isTrust === true) &&
+      (window.ethereum.isMetaMask === true ||
+        window.ethereum.isTrust === true) &&
       (!window.ethereum.isCoinbaseWallet || !window.ethereum.overrideIsMetaMask)
     ) {
       if (!tried && active) {
@@ -95,7 +97,8 @@ export function useInactiveListener(suppress = false) {
     if (
       window.ethereum &&
       !window.coin98 &&
-      (window.ethereum.isMetaMask === true || window.ethereum.isTrust === true) &&
+      (window.ethereum.isMetaMask === true ||
+        window.ethereum.isTrust === true) &&
       (!window.ethereum.isCoinbaseWallet || !window.ethereum.overrideIsMetaMask)
     ) {
       if (ethereum && ethereum.on && !active && !error && !suppress) {
@@ -114,12 +117,12 @@ export function useInactiveListener(suppress = false) {
           }
         };
 
-        ethereum.on("chainChanged", handleChainChanged);
+        // ethereum.on("chainChanged", handleChainChanged);
         ethereum.on("accountsChanged", handleAccountsChanged);
 
         return () => {
           if (ethereum.removeListener) {
-            ethereum.removeListener("chainChanged", handleChainChanged);
+            // ethereum.removeListener("chainChanged", handleChainChanged);
             ethereum.removeListener("accountsChanged", handleAccountsChanged);
           }
         };
@@ -158,7 +161,6 @@ export const handleSwitchNetworkhook = async (chainID) => {
     blockExplorerUrls: ["https://snowtrace.io/"],
   };
 
-  
   const OPBNBPARAMS = {
     chainId: "0xcc", // A 0x-prefixed hexadecimal string
     rpcUrls: ["https://opbnb.publicnode.com"],
@@ -196,51 +198,21 @@ export const handleSwitchNetworkhook = async (chainID) => {
     blockExplorerUrls: ["https://basescan.org"],
   };
 
-  const CONFLUXPARAMS = {
-    chainId: "0x406", // A 0x-prefixed hexadecimal string
-    chainName: "Conflux eSpace",
-    nativeCurrency: {
-      name: "CFX",
-      symbol: "CFX", // 2-6 characters long
-      decimals: 18,
-    },
-    rpcUrls: ["https://evm.confluxrpc.com"],
-    blockExplorerUrls: ["https://evm.confluxscan.net"],
-  };
-
-  const SKALE_MAINNET = {
-    chainId: "0x585eb4b1", // A 0x-prefixed hexadecimal string
-    chainName: "SKALE Nebula Hub",
-    nativeCurrency: {
-      name: "sFUEL",
-      symbol: "sFUEL", // 2-6 characters long
-      decimals: 18,
-    },
-    rpcUrls: ["https://mainnet.skalenodes.com/v1/green-giddy-denebola"],
-    blockExplorerUrls: [
-      "https://green-giddy-denebola.explorer.mainnet.skalenodes.com",
-    ],
-  };
-
-
   try {
     await ethereum.request({
       method: "wallet_switchEthereumChain",
       params: [{ chainId: chainID }],
     });
-    if(window.ethereum && window.ethereum.isTrust === true) {
-      window.location.reload()
+    if (window.ethereum && window.ethereum.isTrust === true) {
+      window.location.reload();
     }
   } catch (switchError) {
     // This error code indicates that the chain has not been added to MetaMask.
     console.log(switchError, "switch");
     if (
       switchError.code === 4902 ||
-      (chainID === "0x406" && switchError.code.toString().includes("32603")) ||
       (chainID === "0x2105" && switchError.code.toString().includes("32603")) ||
       (chainID === "0xcc" && switchError.code.toString().includes("32603")) ||
-      (chainID === "0x585eb4b1" &&
-        switchError.code.toString().includes("32603")) ||
       (switchError.code === 4902 &&
         switchError.message.includes("Unrecognized chainID"))
     ) {
@@ -258,14 +230,10 @@ export const handleSwitchNetworkhook = async (chainID) => {
               ? [BASEPARAMS]
               : chainID === "0xcc"
               ? [OPBNBPARAMS]
-              : chainID === "0x406"
-              ? [CONFLUXPARAMS]
-              : chainID === "0x585eb4b1"
-              ? [SKALE_MAINNET]
               : "",
         });
-        if(window.ethereum && window.ethereum.isTrust === true) {
-          window.location.reload()
+        if (window.ethereum && window.ethereum.isTrust === true) {
+          window.location.reload();
         }
       } catch (addError) {
         console.log(addError);

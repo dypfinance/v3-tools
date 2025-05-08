@@ -39,6 +39,8 @@ const Leaderboard = ({
   monthlyUserOpbnb,
   activePlayerWeeklyOpbnb,
   activePlayerMonthlyOpbnb,
+  fetchCawsAdvLeaderboard,
+  fetchPreviousCawsAdvWinners,
 }) => {
   const weeklyPrizes = ["25", "15", "10", "8", "0", "0", "0", "0", "0", "0"];
   const monthlyPrizes = [
@@ -229,24 +231,26 @@ const Leaderboard = ({
     fetchWeeklyOpbnbWinners();
     fetchMonthlyOpbnbWinners();
     fetchKittyDashWinners();
+    fetchCawsAdvLeaderboard();
   }, [userId, username]);
 
   const switchPrev = () => {
     setPrevStatus((prevStatus) => {
       const newStatus = !prevStatus;
-
       if (newStatus) {
         fetchPreviousWeeklyWinners();
         fetchPreviousMonthlyWinners();
         fetchPreviousWeeklyOpbnbWinners();
         fetchPreviousMonthlyOpbnbWinners();
         fetchPreviousKittyDashWinners();
+        fetchPreviousCawsAdvWinners();
       } else {
         fetchWeeklyWinners();
         fetchMonthlyWinners();
         fetchWeeklyOpbnbWinners();
         fetchMonthlyOpbnbWinners();
         fetchKittyDashWinners();
+        fetchCawsAdvLeaderboard();
       }
 
       return newStatus;
@@ -416,8 +420,7 @@ const Leaderboard = ({
                       <>
                         <div className="d-flex flex-column gap-2">
                           <span className="whitelist-tooltip-content-text">
-                            50% of the rewards will be in ETH/BNB and 50% will
-                            be in DYP.
+                            The rewards will be distributed in DYP tokens.
                           </span>
                         </div>
                       </>
@@ -458,7 +461,7 @@ const Leaderboard = ({
                               key={index}
                             >
                               <div className="d-flex p-1 align-items-center justify-content-center gap-1">
-                                <div className="d-flex algin-items-center">
+                                {/* <div className="d-flex algin-items-center">
                                   <img
                                     src={
                                       selectedChain === "opbnb"
@@ -472,7 +475,7 @@ const Leaderboard = ({
                                   />
                                   {selectedChain === "opbnb" ? "BNB" : "ETH"}
                                 </div>{" "}
-                                +
+                                + */}
                                 <div className="d-flex algin-items-center">
                                   <img
                                     src={
@@ -1026,7 +1029,7 @@ const Leaderboard = ({
                     </>
                   ) : (
                     <>
-                      {leaderboardCaws2d.slice(0, 20).map((item, index) => (
+                      {leaderboardCaws2d.slice(0, 10).map((item, index) => (
                         <tr
                           key={index}
                           className={`playerInnerRow ${
@@ -1215,20 +1218,19 @@ const Leaderboard = ({
                 </div>
               )}
           </div>
-          {type !== "cawsAdventure" && (
-            <div className="optionsWrapper2 p-2">
-              <div className="d-flex flex-column">
-                <div className="d-flex justify-content-between gap-2 align-items-center">
-                  <span className="viewWinners">View previous winners</span>
-                  <Switch
-                    onChange={() => {
-                      switchPrev();
-                    }}
-                  />
-                </div>
+
+          <div className="optionsWrapper2 p-2">
+            <div className="d-flex flex-column">
+              <div className="d-flex justify-content-between gap-2 align-items-center">
+                <span className="viewWinners">View previous winners</span>
+                <Switch
+                  onChange={() => {
+                    switchPrev();
+                  }}
+                />
               </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
     </div>

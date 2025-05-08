@@ -12,8 +12,9 @@ import TimelineContent from "@mui/lab/TimelineContent";
 import TimelineDot from "@mui/lab/TimelineDot";
 import Address from "../FARMINNG/address";
 import WalletModal from "../WalletModal";
-import PropTypes from "prop-types";
+
 import Web3 from "web3";
+import { ethers } from "ethers";
 
 // Renderer callback with condition
 const getRenderer =
@@ -46,6 +47,9 @@ export default function initBridge({
   tokenBSC,
   TOKEN_DECIMALS = 18,
   TOKEN_SYMBOL = "DYP",
+  binanceW3WProvider,
+  library,
+  binanceConnector,
 }) {
   let { BigNumber } = window;
 
@@ -80,11 +84,7 @@ export default function initBridge({
         destinationChainText: "",
       };
     }
-    static propTypes = {
-      match: PropTypes.object.isRequired,
-      location: PropTypes.object.isRequired,
-      history: PropTypes.object.isRequired,
-    };
+
     componentDidMount() {
       this.refreshBalance();
       this.getChainSymbol();
@@ -96,10 +96,36 @@ export default function initBridge({
     }
 
     checkNetworkId = async () => {
-      if (window.ethereum) {
+      if (window.WALLET_TYPE === "binance") {
+        let binanceData = JSON.parse(localStorage.getItem("connect-session"));
+        if (binanceData !== undefined && binanceData !== null) {
+          if (binanceData.chainId.toString() === "0x1") {
+            this.setState({
+              destinationChainText: "eth",
+            });
+          } else if (binanceData.chainId.toString() === "0xa86a") {
+            this.setState({
+              destinationChainText: "avax",
+            });
+          } else if (binanceData.chainId.toString() === "0x38") {
+            this.setState({
+              destinationChainText: "bnb",
+            });
+          } else if (binanceData.chainId.toString() === "0xcc") {
+            this.setState({
+              destinationChainText: "opbnb",
+            });
+          } else {
+            this.setState({
+              destinationChainText: "",
+            });
+          }
+        }
+      } else if (window.ethereum) {
         await window.ethereum
           .request({ method: "eth_chainId" })
           .then((data) => {
+            console.log("data", data);
             if (data === "0x1") {
               this.setState({
                 destinationChainText: "eth",
@@ -153,127 +179,48 @@ export default function initBridge({
 
       ethPool = ethPool / 1e18;
       this.setState({ ethPool: ethPool });
-
-      //Get DYP Balance BNB Chain Pool
-      // let avaxPool = await window.getTokenHolderBalanceAll(
-      //   this.props.sourceChain === "avax"
-      //     ? bridgeETH._address
-      //     : bridgeBSC._address,
-      //   this.props.sourceChain === "avax"
-      //     ? bridgeETH.tokenAddress
-      //     : bridgeBSC.tokenAddress,
-      //   2
-      // );
-
-      // avaxPool = avaxPool / 1e18;
-
-      // this.setState({ avaxPool: avaxPool });
-
-      // let bnbPool = await window.getTokenHolderBalanceAll(
-      //   this.props.sourceChain === "bnb"
-      //     ? bridgeETH._address
-      //     : bridgeBSC._address,
-      //   this.props.sourceChain === "bnb"
-      //     ? bridgeETH.tokenAddress
-      //     : bridgeBSC.tokenAddress,
-      //   3
-      // );
-
-      // bnbPool = bnbPool / 1e18;
-      // this.setState({ bnbPool: bnbPool });
+ 
     };
+    checkApproval = async (amount) => {
+      if (this.props.coinbase) {
+        const result = await window
+          .checkapproveStakePool(
+            this.props.coinbase,
+            tokenETH._address,
+            bridgeETH._address
+          )
+          .then((data) => {
+            console.log(data);
+            return data;
+          });
 
-    handleApprove = (e) => {
-      // e.preventDefault();
-      let amount = this.state.depositAmount;
+        let result_formatted = new BigNumber(result).div(1e18).toFixed(6);
+
+        if (
+          Number(result_formatted) >= Number(amount) &&
+          Number(result_formatted) !== 0
+        ) {
+          this.setState({ depositStatus: "deposit" });
+        } else {
+          this.setState({ depositStatus: "initial" });
+        }
+      }
+    };
+    handleApprove = async (e) => {
       this.setState({ depositLoading: true });
-      // if (this.props.sourceChain === "bnb") {
-      //   if (Number(amount) > this.state.ethPool) {
-      //     window.$.alert(
-      //       "💡 Not enough balance on the bridge, check back later!"
-      //     );
-      //     this.setState({ depositLoading: false });
-
-      //     return;
-      //   }
-      // } else {
-      //   if (Number(amount) > this.state.bnbPool) {
-      //     window.$.alert(
-      //       "💡 Not enough balance on the bridge, check back later!"
-      //     );
-      //     this.setState({ depositLoading: false });
-
-      //     return;
-      //   }
-      // }
+      let amount = this.state.depositAmount;
       amount = new BigNumber(amount).times(10 ** TOKEN_DECIMALS).toFixed(0);
       let bridge = bridgeETH;
-      tokenETH
-        .approve(bridge._address, amount)
-        .then(() => {
-          this.setState({ depositLoading: false, depositStatus: "deposit" });
-        })
-        .catch((e) => {
-          this.setState({ depositLoading: false, depositStatus: "fail" });
-          this.setState({ errorMsg: e?.message });
-          setTimeout(() => {
-            this.setState({
-              depositStatus: "initial",
-              depositAmount: "",
-              errorMsg: "",
-            });
-          }, 8000);
-        });
-    };
 
-    handleDeposit = async (e) => {
-      let amount = this.state.depositAmount;
-      this.setState({ depositLoading: true });
-      this.checkNetworkId();
-      // if (this.props.sourceChain === "bnb") {
-      //   if (Number(amount) > this.state.ethPool) {
-      //     window.$.alert(
-      //       "💡 Not enough balance on the bridge, check back later!"
-      //     );
-      //     this.setState({ depositLoading: false });
-
-      //     return;
-      //   }
-      // } else {
-      //   if (Number(amount) > this.state.bnbPool) {
-      //     window.$.alert(
-      //       "💡 Not enough balance on the bridge, check back later!"
-      //     );
-      //     this.setState({ depositLoading: false });
-
-      //     return;
-      //   }
-      // }
-      amount = new BigNumber(amount).times(10 ** TOKEN_DECIMALS).toFixed(0);
-      let bridge = bridgeETH;
-      let chainId = this.props.networkId;
-      const web3 = new Web3(window.ethereum);
-
-      if (chainId !== undefined) {
-        let contract = new web3.eth.Contract(
-          window.NEW_BRIDGE_ABI,
-          bridge._address
-        );
-        contract.methods
-          .deposit(amount)
-          .send({ from: await window.getCoinbase() }, (err, txHash) => {
-            this.setState({ txHash });
-          })
+      if (window.WALLET_TYPE !== "binance") {
+        tokenETH
+          .approve(bridge._address, amount)
           .then(() => {
-            this.setState({ depositLoading: false, depositStatus: "success" });
-            this.refreshBalance();
+            this.setState({ depositLoading: false, depositStatus: "deposit" });
           })
           .catch((e) => {
-            this.setState({
-              depositLoading: false,
-              depositStatus: "fail",
-              errorMsg: e?.message,
-            });
+            this.setState({ depositLoading: false, depositStatus: "fail" });
+            this.setState({ errorMsg: e?.message });
             setTimeout(() => {
               this.setState({
                 depositStatus: "initial",
@@ -282,14 +229,116 @@ export default function initBridge({
               });
             }, 8000);
           });
+      } else if (window.WALLET_TYPE === "binance") {
+        let reward_token_Sc = new ethers.Contract(
+          tokenETH._address,
+          window.TOKEN_ABI,
+          binanceW3WProvider.getSigner()
+        );
+        const txResponse = await reward_token_Sc
+          .approve(bridge._address, amount)
+          .catch((e) => {
+            this.setState({ depositLoading: false, depositStatus: "fail" });
+            this.setState({ errorMsg: e?.message });
+            setTimeout(() => {
+              this.setState({
+                depositStatus: "initial",
+                depositAmount: "",
+                errorMsg: "",
+              });
+            }, 8000);
+          });
+        const txReceipt = await txResponse.wait();
+        if (txReceipt) {
+          this.setState({ depositLoading: false, depositStatus: "deposit" });
+        }
+      }
+    };
+
+    handleDeposit = async (e) => {
+      let amount = this.state.depositAmount;
+      this.setState({ depositLoading: true });
+      this.checkNetworkId();
+
+      amount = new BigNumber(amount).times(10 ** TOKEN_DECIMALS).toFixed(0);
+      let bridge = bridgeETH;
+      let chainId = this.props.networkId;
+      if (window.WALLET_TYPE !== "binance") {
+        const web3 = new Web3(window.ethereum);
+
+        if (chainId !== undefined) {
+          let contract = new web3.eth.Contract(
+            window.NEW_BRIDGE_ABI,
+            bridge._address
+          );
+          contract.methods
+            .deposit(amount)
+            .send({ from: await window.getCoinbase() }, (err, txHash) => {
+              this.setState({ txHash });
+            })
+            .then(() => {
+              this.setState({
+                depositLoading: false,
+                depositStatus: "success",
+              });
+              this.refreshBalance();
+            })
+            .catch((e) => {
+              this.setState({
+                depositLoading: false,
+                depositStatus: "fail",
+                errorMsg: e?.message,
+              });
+              setTimeout(() => {
+                this.setState({
+                  depositStatus: "initial",
+                  depositAmount: "",
+                  errorMsg: "",
+                });
+              }, 8000);
+            });
+        }
+      } else if (window.WALLET_TYPE === "binance") {
+        if (chainId !== undefined) {
+          let contract_binance = new ethers.Contract(
+            bridge._address,
+            window.NEW_BRIDGE_ABI,
+            binanceW3WProvider.getSigner()
+          );
+
+          const txResponse = await contract_binance
+            .deposit(amount)
+            .catch((e) => {
+              this.setState({
+                depositLoading: false,
+                depositStatus: "fail",
+                errorMsg: e?.message,
+              });
+              setTimeout(() => {
+                this.setState({
+                  depositStatus: "initial",
+                  depositAmount: "",
+                  errorMsg: "",
+                });
+              }, 8000);
+            });
+
+          const txReceipt = await txResponse.wait();
+          if (txReceipt) {
+            this.setState({
+              depositLoading: false,
+              depositStatus: "success",
+              txHash: txResponse.hash,
+            });
+            this.refreshBalance();
+          }
+        }
       }
     };
 
     handleWithdraw = async (e) => {
       this.setState({ withdrawLoading: true });
 
-      // let amount = this.state.withdrawAmount;
-      // amount = new BigNumber(amount).times(10 ** TOKEN_DECIMALS).toFixed(0);
       try {
         let signature =
           (this.props.sourceChain === "eth" &&
@@ -321,32 +370,72 @@ export default function initBridge({
             return data;
           })
           .catch((error) => console.error("Error:", error));
-        console.log({ args });
+        console.log({ args }, "withdraw");
         let bridge = bridgeBSC;
-        bridge
-          .withdraw(args)
-          .then(() => {
-            this.setState({
-              withdrawLoading: false,
-              withdrawStatus: "success",
-            });
-            this.getAllBalance();
-            this.refreshBalance();
-            window.alertify.message(
-              "Congratulations on successfully withdrawing your new DYP tokens!"
-            );
-          })
-          .catch((e) => {
-            this.setState({ withdrawLoading: false, withdrawStatus: "fail" });
-            this.setState({ errorMsg2: e?.message });
-            setTimeout(() => {
+        if (window.WALLET_TYPE !== "binance") {
+          bridge
+            .withdraw(args)
+            .then(() => {
               this.setState({
-                withdrawStatus: "initial",
-                withdrawAmount: "",
-                errorMsg2: "",
+                withdrawLoading: false,
+                withdrawStatus: "success",
               });
-            }, 8000);
-          });
+              this.getAllBalance();
+              this.refreshBalance();
+              window.alertify.message(
+                "Congratulations on successfully withdrawing your new DYP tokens!"
+              );
+            })
+            .catch((e) => {
+              this.setState({ withdrawLoading: false, withdrawStatus: "fail" });
+              this.setState({ errorMsg2: e?.message });
+              setTimeout(() => {
+                this.setState({
+                  withdrawStatus: "initial",
+                  withdrawAmount: "",
+                  errorMsg2: "",
+                });
+              }, 8000);
+            });
+        } else if (window.WALLET_TYPE === "binance") {
+          let contract_binance = new ethers.Contract(
+            bridgeBSC._address,
+            window.NEW_BRIDGE_ABI,
+            binanceW3WProvider.getSigner()
+          );
+          if (args && args.length === 4) {
+            console.log("yes", args);
+            const txResponse = await contract_binance
+              .withdraw(...args)
+              .catch((e) => {
+                this.setState({
+                  withdrawLoading: false,
+                  withdrawStatus: "fail",
+                });
+                this.setState({ errorMsg2: e?.message });
+                setTimeout(() => {
+                  this.setState({
+                    withdrawStatus: "initial",
+                    withdrawAmount: "",
+                    errorMsg2: "",
+                  });
+                }, 8000);
+              });
+
+            const txReceipt = await txResponse.wait();
+            if (txReceipt) {
+              this.setState({
+                withdrawLoading: false,
+                withdrawStatus: "success",
+              });
+              this.getAllBalance();
+              this.refreshBalance();
+              window.alertify.message(
+                "Congratulations on successfully withdrawing your new DYP tokens!"
+              );
+            }
+          }
+        }
       } catch (e) {
         window.alertify.error("Something went wrong!");
         console.error(e);
@@ -354,45 +443,146 @@ export default function initBridge({
     };
 
     switchToDestinationChain = async (chainID, chainText) => {
-        
-  const OPBNBPARAMS = {
-    chainId: "0xcc", // A 0x-prefixed hexadecimal string
-    rpcUrls: ["https://opbnb.publicnode.com"],
-    chainName: "opBNB Mainnet",
-    nativeCurrency: {
-      name: "opBNB",
-      symbol: "BNB", // 2-6 characters long
-      decimals: 18,
-    },
+      const OPBNBPARAMS = {
+        chainId: "0xcc", // A 0x-prefixed hexadecimal string
+        rpcUrls: ["https://opbnb.publicnode.com"],
+        chainName: "opBNB Mainnet",
+        nativeCurrency: {
+          name: "opBNB",
+          symbol: "BNB", // 2-6 characters long
+          decimals: 18,
+        },
 
-    blockExplorerUrls: ["https://mainnet.opbnbscan.com"],
-  };
-  
-      if (window.ethereum) {
-        await window.ethereum
-          .request({
-            method: "wallet_switchEthereumChain",
-            params: [
-              {
-                chainId: chainID,
-              },
-            ],
-          })
-          .then((data) => {
-            this.setState({ destinationChainText: chainText });
-          })
-          .catch(async (err) => {
-            if (
-              err.code === 4902 ||
-              (chainID === "0xcc" && err.code.toString().includes("32603"))
-            ) {
-              await window.ethereum.request({
+        blockExplorerUrls: ["https://mainnet.opbnbscan.com"],
+      };
+
+      const AVAXPARAMS = {
+        chainId: "0xa86a", // A 0x-prefixed hexadecimal string
+        chainName: "Avalanche Network",
+        nativeCurrency: {
+          name: "Avalanche",
+          symbol: "AVAX", // 2-6 characters long
+          decimals: 18,
+        },
+        rpcUrls: ["https://api.avax.network/ext/bc/C/rpc"],
+        blockExplorerUrls: ["https://snowtrace.io/"],
+      };
+
+      const ETHPARAMS = {
+        chainId: "0x1", // A 0x-prefixed hexadecimal string
+        chainName: "Ethereum Mainnet",
+        nativeCurrency: {
+          name: "Ethereum",
+          symbol: "ETH", // 2-6 characters long
+          decimals: 18,
+        },
+        rpcUrls: ["https://mainnet.infura.io/v3/"],
+        blockExplorerUrls: ["https://etherscan.io"],
+      };
+
+      const BNBPARAMS = {
+        chainId: "0x38", // A 0x-prefixed hexadecimal string
+        chainName: "Smart Chain",
+        nativeCurrency: {
+          name: "Smart Chain",
+          symbol: "BNB", // 2-6 characters long
+          decimals: 18,
+        },
+        rpcUrls: ["https://bsc-dataseed.binance.org/"],
+        blockExplorerUrls: ["https://bscscan.com"],
+      };
+      if (window.WALLET_TYPE === "binance") {
+        try {
+          await binanceConnector.binanceW3WProvider
+            .request({
+              method: "wallet_switchEthereumChain",
+              params: [
+                {
+                  chainId: chainID,
+                },
+              ],
+            })
+            .then(async () => {
+              this.setState({ destinationChainText: chainText });
+            })
+            .catch((e) => {
+              console.error(e);
+            });
+          // if (window.ethereum && window.gatewallet) {
+          //   window.location.reload();
+          // }
+        } catch (switchError) {
+          // This error code indicates that the chain has not been added to MetaMask.
+          console.log(switchError, "switch");
+
+          if (switchError.code === 4902) {
+            try {
+              await library.request({
                 method: "wallet_addEthereumChain",
-                params: [OPBNBPARAMS],
+                params: [
+                  chainID === "0x1"
+                    ? ETHPARAMS
+                    : chainID === "0xa86a"
+                    ? AVAXPARAMS
+                    : chainID === "0x38"
+                    ? BNBPARAMS
+                    : chainID === "0xcc"
+                    ? OPBNBPARAMS
+                    : OPBNBPARAMS,
+                ],
               });
+              // if (window.ethereum && window.gatewallet) {
+              //   window.location.reload();
+              // }
+            } catch (addError) {
+              console.log(addError);
             }
-            console.log(err);
-          });
+          }
+          // handle other "switch" errors
+        }
+      } else {
+        if (window.ethereum) {
+          await window.ethereum
+            .request({
+              method: "wallet_switchEthereumChain",
+              params: [
+                {
+                  chainId: chainID,
+                },
+              ],
+            })
+            .then((data) => {
+              this.setState({ destinationChainText: chainText });
+            })
+            .catch(async (err) => {
+              if (
+                err.code === 4902 ||
+                (chainID === "0xcc" && err.code.toString().includes("32603")) ||
+                (chainID === "0x38" && err.code.toString().includes("32603")) ||
+                (chainID === "0xa86a" && err.code.toString().includes("32603"))
+              ) {
+                await window.ethereum
+                  .request({
+                    method: "wallet_addEthereumChain",
+                    params: [
+                      chainID === "0x1"
+                        ? ETHPARAMS
+                        : chainID === "0xa86a"
+                        ? AVAXPARAMS
+                        : chainID === "0x38"
+                        ? BNBPARAMS
+                        : chainID === "0xcc"
+                        ? OPBNBPARAMS
+                        : OPBNBPARAMS,
+                    ],
+                  })
+                  .catch((e) => {
+                    console.error(e);
+                  });
+              }
+              console.log(err);
+            });
+        }
       }
     };
 
@@ -438,6 +628,10 @@ export default function initBridge({
               .call()
               .then((data) => {
                 this.setState({ token_balance: data });
+              })
+              .catch((e) => {
+                console.error(e);
+                return 0;
               });
           } else if (this.props.sourceChain === "bnb") {
             const token_contract_bsc = new window.bscWeb3.eth.Contract(
@@ -449,6 +643,10 @@ export default function initBridge({
               .call()
               .then((data) => {
                 this.setState({ token_balance: data });
+              })
+              .catch((e) => {
+                console.error(e);
+                return 0;
               });
           } else if (this.props.sourceChain === "opbnb") {
             const token_contract_opbnb = new window.opbnbWeb3.eth.Contract(
@@ -460,6 +658,10 @@ export default function initBridge({
               .call()
               .then((data) => {
                 this.setState({ token_balance: data });
+              })
+              .catch((e) => {
+                console.error(e);
+                return 0;
               });
           } else if (this.props.sourceChain === "avax") {
             const token_contract_avax = new window.avaxWeb3.eth.Contract(
@@ -471,6 +673,10 @@ export default function initBridge({
               .call()
               .then((data) => {
                 this.setState({ token_balance: data });
+              })
+              .catch((e) => {
+                console.error(e);
+                return 0;
               });
           }
           if (this.state.txHash) {
@@ -500,7 +706,12 @@ export default function initBridge({
                   this.state.txHash
                 }&getWithdrawableUnixTimestamp=true`;
               console.log({ url });
-              let { withdrawableUnixTimestamp } = await window.jQuery.get(url);
+              let { withdrawableUnixTimestamp } = await window.jQuery
+                .get(url)
+                .catch((e) => {
+                  console.error(e);
+                  return 0;
+                });
               this.setState({ withdrawableUnixTimestamp });
               console.log({ withdrawableUnixTimestamp });
             } catch (e) {
@@ -546,6 +757,10 @@ export default function initBridge({
             .call()
             .then((data) => {
               this.setState({ ethBalance: data });
+            })
+            .catch((e) => {
+              console.error(e);
+              return 0;
             });
         } else if (this.props.sourceChain === "bnb") {
           await contract2.methods
@@ -553,6 +768,10 @@ export default function initBridge({
             .call()
             .then((data) => {
               this.setState({ bnbBalance: data });
+            })
+            .catch((e) => {
+              console.error(e);
+              return 0;
             });
         } else if (this.props.sourceChain === "opbnb") {
           await contract4.methods
@@ -560,6 +779,10 @@ export default function initBridge({
             .call()
             .then((data) => {
               this.setState({ opbnbBalance: data });
+            })
+            .catch((e) => {
+              console.error(e);
+              return 0;
             });
         } else if (this.props.sourceChain === "avax") {
           await contract3.methods
@@ -567,6 +790,10 @@ export default function initBridge({
             .call()
             .then((data) => {
               this.setState({ avaxBalance: data });
+            })
+            .catch((e) => {
+              console.error(e);
+              return 0;
             });
         }
       }
@@ -868,11 +1095,12 @@ export default function initBridge({
                                       ? this.state.depositAmount
                                       : this.state.depositAmount
                                   }
-                                  onChange={(e) =>
+                                  onChange={(e) => {
                                     this.setState({
                                       depositAmount: e.target.value,
-                                    })
-                                  }
+                                    });
+                                    this.checkApproval(e.target.value);
+                                  }}
                                   className="styledinput"
                                   placeholder="0"
                                   type="text"
@@ -1081,7 +1309,7 @@ export default function initBridge({
                                       <h6 className="optiontext d-flex align-items-center gap-2">
                                         <img
                                           src={
-                                            "https://cdn.worldofdypians.com/tools/bnbSquare.svg"
+                                            "https://cdn.worldofdypians.com/tools/avaxSquare.svg"
                                           }
                                           alt=""
                                         />
@@ -1400,14 +1628,16 @@ export default function initBridge({
                   <TimelineSeparator>
                     <TimelineDot
                       className={
-                        this.state.depositAmount !== ""
+                        this.state.depositAmount !== "" ||
+                        this.state.txHash !== ""
                           ? "greendot"
                           : "passivedot"
                       }
                     />
                     <TimelineConnector
                       className={
-                        this.state.depositAmount !== ""
+                        this.state.depositAmount !== "" ||
+                        this.state.txHash !== ""
                           ? "greenline"
                           : "passiveline"
                       }
@@ -1429,7 +1659,8 @@ export default function initBridge({
                     <TimelineDot
                       className={
                         this.state.depositStatus === "deposit" ||
-                        this.state.depositStatus === "success"
+                        this.state.depositStatus === "success" ||
+                        this.state.txHash !== ""
                           ? "greendot"
                           : "passivedot"
                       }
@@ -1437,7 +1668,8 @@ export default function initBridge({
                     <TimelineConnector
                       className={
                         this.state.depositStatus === "deposit" ||
-                        this.state.depositStatus === "success"
+                        this.state.depositStatus === "success" ||
+                        this.state.txHash !== ""
                           ? "greenline"
                           : "passiveline"
                       }
@@ -1457,14 +1689,16 @@ export default function initBridge({
                   <TimelineSeparator>
                     <TimelineDot
                       className={
-                        this.state.depositStatus === "success"
+                        this.state.depositStatus === "success" ||
+                        this.state.txHash !== ""
                           ? "greendot"
                           : "passivedot"
                       }
                     />
                     <TimelineConnector
                       className={
-                        this.state.depositStatus === "success"
+                        this.state.depositStatus === "success" ||
+                        this.state.txHash !== ""
                           ? "greenline"
                           : "passiveline"
                       }

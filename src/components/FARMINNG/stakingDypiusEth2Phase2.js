@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import moment from "moment";
 import getFormattedNumber from "../../functions/get-formatted-number";
 import "./top-pools.css";
-  
+
 import Tooltip from "@material-ui/core/Tooltip";
 import { shortAddress } from "../../functions/shortAddress";
 import { ClickAwayListener } from "@material-ui/core";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
 import axios from "axios";
-
+import { ethers } from "ethers";
 
 const StakeDypiusEth2Phase2 = ({
   selectedPool,
@@ -36,6 +36,8 @@ const StakeDypiusEth2Phase2 = ({
   fee,
   renderedPage,
   onConnectWallet,
+  binanceW3WProvider,
+  handleSwitchChainBinanceWallet,
 }) => {
   let {
     reward_token_dypius_eth,
@@ -47,7 +49,6 @@ const StakeDypiusEth2Phase2 = ({
   let token_symbol = "DYP";
 
   // 20% apr 500K Cap in DYP, locktime 120days, dyp deposit & dyp rewards
-
 
   const TOKEN_DECIMALS = window.config.token_decimals;
 
@@ -122,9 +123,9 @@ const StakeDypiusEth2Phase2 = ({
   const [claimStatus, setclaimStatus] = useState("initial");
   const [withdrawLoading, setwithdrawLoading] = useState(false);
   const [withdrawStatus, setwithdrawStatus] = useState("initial");
-  const [coinbase2, setcoinbase] = useState(
-    "0x0000000000000000000000000000000000000111"
-  );
+  // const [coinbase2, setcoinbase] = useState(
+  //   "0x0000000000000000000000000000000000000111"
+  // );
   const [tvl, settvl] = useState("");
   const [tvlusd, settvlusd] = useState("");
   const [canDeposit, setCanDeposit] = useState(true);
@@ -249,12 +250,12 @@ const StakeDypiusEth2Phase2 = ({
   };
 
   const refreshBalance = async () => {
-    let coinbase = coinbase2;
+    // let coinbase = coinbase2;
 
-    if (window.coinbase_address) {
-      coinbase = window.coinbase_address;
-      setcoinbase(coinbase);
-    }
+    // if (window.coinbase_address) {
+    //   coinbase = window.coinbase_address;
+    //   setcoinbase(coinbase);
+    // }
 
     getTotalTvl();
     let lp_data;
@@ -309,10 +310,19 @@ const StakeDypiusEth2Phase2 = ({
       _amountOutMin = new BigNumber(_amountOutMin).div(1e6).toFixed(18);
 
       let _bal;
-      if (chainId === "1" && coinbase && is_wallet_connected) {
-        _bal = reward_token_dypius_eth.balanceOf(coinbase);
-     
+      let reward_token_wod_sc = new window.infuraWeb3.eth.Contract(
+        window.TOKEN_ABI,
+        reward_token_dypius_eth._address
+      );
+      if (coinbase && is_wallet_connected) {
+        _bal = await reward_token_wod_sc.methods
+          .balanceOf(coinbase)
+          .call()
+          .catch((e) => {
+            console.error(e);
+          });
       }
+
       if (staking && coinbase !== undefined && coinbase !== null) {
         let _pDivs = staking.getTotalPendingDivs(coinbase);
 
@@ -438,11 +448,11 @@ const StakeDypiusEth2Phase2 = ({
     }
   };
 
-  useEffect(() => {
-    if (coinbase !== coinbase2 && coinbase !== null && coinbase !== undefined) {
-      setcoinbase(coinbase);
-    }
-  }, [coinbase, coinbase2]);
+  // useEffect(() => {
+  //   if (coinbase !== coinbase2 && coinbase !== null && coinbase !== undefined) {
+  //     setcoinbase(coinbase);
+  //   }
+  // }, [coinbase, coinbase2]);
 
   useEffect(() => {
     getPriceDYP();
@@ -455,7 +465,7 @@ const StakeDypiusEth2Phase2 = ({
         checkApproval(depositAmount);
       }
     }
-  }, [coinbase, coinbase2, staking, is_wallet_connected, chainId]);
+  }, [coinbase, staking, is_wallet_connected, chainId]);
 
   useEffect(() => {
     setdepositAmount("");
@@ -502,23 +512,50 @@ const StakeDypiusEth2Phase2 = ({
 
     let amount = depositAmount;
     amount = new BigNumber(amount).times(1e18).toFixed(0);
-    await reward_token_dypius_eth
-      .approve(staking._address, amount)
-      .then(() => {
+    if (window.WALLET_TYPE !== "binance") {
+      await reward_token_dypius_eth
+        .approve(staking._address, amount)
+        .then(() => {
+          setdepositLoading(false);
+          setdepositStatus("deposit");
+          refreshBalance();
+        })
+        .catch((e) => {
+          setdepositLoading(false);
+          setdepositStatus("fail");
+          seterrorMsg(e?.message);
+          setTimeout(() => {
+            setdepositAmount("");
+            setdepositStatus("initial");
+            seterrorMsg("");
+          }, 10000);
+        });
+    } else if (window.WALLET_TYPE !== "binance") {
+      let reward_token_Sc = new ethers.Contract(
+        reward_token_dypius_eth._address,
+        window.TOKEN_ABI,
+        binanceW3WProvider.getSigner()
+      );
+
+      const txResponse = await reward_token_Sc
+        .approve(staking._address, amount)
+        .catch((e) => {
+          setdepositLoading(false);
+          setdepositStatus("fail");
+          seterrorMsg(e?.message);
+          setTimeout(() => {
+            setdepositAmount("");
+            setdepositStatus("initial");
+            seterrorMsg("");
+          }, 10000);
+        });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         setdepositLoading(false);
         setdepositStatus("deposit");
         refreshBalance();
-      })
-      .catch((e) => {
-        setdepositLoading(false);
-        setdepositStatus("fail");
-        seterrorMsg(e?.message);
-        setTimeout(() => {
-          setdepositAmount("");
-          setdepositStatus("initial");
-          seterrorMsg("");
-        }, 10000);
-      });
+      }
+    }
   };
   // console.log(staking)
   const handleStake = async (e) => {
@@ -533,29 +570,37 @@ const StakeDypiusEth2Phase2 = ({
 
     let amount = depositAmount;
     amount = new BigNumber(amount).times(1e18).toFixed(0);
+    referrer = window.config.ZERO_ADDRESS;
+    if (window.WALLET_TYPE !== "binance") {
+      await staking
+        .stake(amount, referrer)
+        .then(() => {
+          setdepositLoading(false);
+          setdepositStatus("success");
+          refreshBalance();
 
-    if (referrer) {
-      referrer = String(referrer).trim().toLowerCase();
-    }
-
-    if (!window.web3.utils.isAddress(referrer)) {
-      referrer = window.config.ZERO_ADDRESS;
-    }
-    await staking
-      .stake(amount, referrer)
-      .then(() => {
-        setdepositLoading(false);
-        setdepositStatus("success");
-        refreshBalance();
-
-        setTimeout(() => {
-          setdepositStatus("initial");
-        setdepositAmount("");
-      }, 5000);
-
-      })
-    
-      .catch((e) => {
+          setTimeout(() => {
+            setdepositStatus("initial");
+            setdepositAmount("");
+          }, 5000);
+        })
+        .catch((e) => {
+          setdepositLoading(false);
+          setdepositStatus("fail");
+          seterrorMsg(e?.message);
+          setTimeout(() => {
+            setdepositAmount("");
+            setdepositStatus("fail");
+            seterrorMsg("");
+          }, 10000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let staking_Sc = new ethers.Contract(
+        staking._address,
+        window.CONSTANT_STAKING_DYPIUS_ABI,
+        binanceW3WProvider.getSigner()
+      );
+      const txResponse = await staking_Sc.stake(amount, referrer).catch((e) => {
         setdepositLoading(false);
         setdepositStatus("fail");
         seterrorMsg(e?.message);
@@ -565,25 +610,54 @@ const StakeDypiusEth2Phase2 = ({
           seterrorMsg("");
         }, 10000);
       });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
+        setdepositLoading(false);
+        setdepositStatus("success");
+        refreshBalance();
+
+        setTimeout(() => {
+          setdepositStatus("initial");
+          setdepositAmount("");
+        }, 5000);
+      }
+    }
   };
 
   const handleWithdraw = async (e) => {
     // e.preventDefault();
     let amount = new BigNumber(withdrawAmount).times(1e18).toFixed(0);
     setwithdrawLoading(true);
+    if (window.WALLET_TYPE !== "binance") {
+      staking
+        .unstake(amount)
+        .then(() => {
+          setwithdrawLoading(false);
+          setwithdrawStatus("success");
+          refreshBalance();
+          setTimeout(() => {
+            setwithdrawStatus("initial");
+            setwithdrawAmount("");
+          }, 5000);
+        })
+        .catch((e) => {
+          setwithdrawLoading(false);
+          setwithdrawStatus("failed");
+          seterrorMsg3(e?.message);
 
-    staking
-      .unstake(amount)
-      .then(() => {
-        setwithdrawLoading(false);
-        setwithdrawStatus("success");
-        refreshBalance();
-        setTimeout(() => {
-          setwithdrawStatus("initial"); 
-          setwithdrawAmount("");
-        }, 5000);
-      })
-      .catch((e) => {
+          setTimeout(() => {
+            setwithdrawStatus("initial");
+            seterrorMsg3("");
+            setwithdrawAmount("");
+          }, 10000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let staking_Sc = new ethers.Contract(
+        staking._address,
+        window.CONSTANT_STAKING_DYPIUS_ABI,
+        binanceW3WProvider.getSigner()
+      );
+      const txResponse = await staking_Sc.unstake(amount).catch((e) => {
         setwithdrawLoading(false);
         setwithdrawStatus("failed");
         seterrorMsg3(e?.message);
@@ -594,24 +668,51 @@ const StakeDypiusEth2Phase2 = ({
           setwithdrawAmount("");
         }, 10000);
       });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
+        setwithdrawLoading(false);
+        setwithdrawStatus("success");
+        refreshBalance();
+        setTimeout(() => {
+          setwithdrawStatus("initial");
+          setwithdrawAmount("");
+        }, 5000);
+      }
+    }
   };
 
   const handleClaimDivs = async (e) => {
     // e.preventDefault();
     setclaimLoading(true);
+    if (window.WALLET_TYPE !== "binance") {
+      staking
+        .claim()
+        .then(() => {
+          setclaimStatus("success");
+          setclaimLoading(false);
+          setpendingDivs(getFormattedNumber(0, 6));
+          refreshBalance();
+          setTimeout(() => {
+            setclaimStatus("initial");
+          }, 5000);
+        })
+        .catch((e) => {
+          setclaimStatus("failed");
+          setclaimLoading(false);
+          seterrorMsg2(e?.message);
 
-    staking
-      .claim()
-      .then(() => {
-        setclaimStatus("success");
-        setclaimLoading(false);
-        setpendingDivs(getFormattedNumber(0, 6));
-        refreshBalance();
-        setTimeout(() => {
-          setclaimStatus("initial");
-        }, 5000);
-      })
-      .catch((e) => {
+          setTimeout(() => {
+            setclaimStatus("initial");
+            seterrorMsg2("");
+          }, 10000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let staking_Sc = new ethers.Contract(
+        staking._address,
+        window.CONSTANT_STAKING_DYPIUS_ABI,
+        binanceW3WProvider.getSigner()
+      );
+      const txResponse = await staking_Sc.claim().catch((e) => {
         setclaimStatus("failed");
         setclaimLoading(false);
         seterrorMsg2(e?.message);
@@ -621,6 +722,18 @@ const StakeDypiusEth2Phase2 = ({
           seterrorMsg2("");
         }, 10000);
       });
+
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
+        setclaimStatus("success");
+        setclaimLoading(false);
+        setpendingDivs(getFormattedNumber(0, 6));
+        refreshBalance();
+        setTimeout(() => {
+          setclaimStatus("initial");
+        }, 5000);
+      }
+    }
   };
 
   const handleSetMaxDeposit = (e) => {
@@ -651,9 +764,9 @@ const StakeDypiusEth2Phase2 = ({
   };
 
   const getApproxReturn = (depositAmount, days) => {
-    const expirationDate = new Date("2025-06-07T23:11:00.000+02:00")
+    const expirationDate = new Date("2025-06-07T23:11:00.000+02:00");
     const currentDate = new Date();
-    const timeDifference = expirationDate - currentDate; 
+    const timeDifference = expirationDate - currentDate;
     const millisecondsInADay = 1000 * 60 * 60 * 24;
     const daysUntilExpiration = Math.floor(timeDifference / millisecondsInADay);
 
@@ -674,41 +787,76 @@ const StakeDypiusEth2Phase2 = ({
   };
 
   const handleReinvest = async (e) => {
-    // e.preventDefault();
     setreInvestStatus("invest");
     setreInvestLoading(true);
+    if (window.WALLET_TYPE !== "binance") {
+      staking
+        .reInvest()
+        .then(() => {
+          setreInvestStatus("success");
+          setreInvestLoading(false);
+          setpendingDivs(getFormattedNumber(0, 6));
+          refreshBalance();
+          setTimeout(() => {
+            setreInvestStatus("initial");
+          }, 10000);
+        })
+        .catch((e) => {
+          setreInvestStatus("failed");
+          setreInvestLoading(false);
+          seterrorMsg2(e?.message);
 
-    staking
-      .reInvest()
-      .then(() => {
+          setTimeout(() => {
+            setreInvestStatus("initial");
+            seterrorMsg2("");
+          }, 10000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let staking_Sc = new ethers.Contract(
+        staking._address,
+        window.CONSTANT_STAKING_DYPIUS_ABI,
+        binanceW3WProvider.getSigner()
+      );
+      const txResponse = await staking_Sc.reInvest().catch((e) => {
+        setreInvestStatus("failed");
+        setreInvestLoading(false);
+        seterrorMsg2(e?.message);
+        setTimeout(() => {
+          setreInvestStatus("initial");
+          seterrorMsg2("");
+        }, 10000);
+      });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         setreInvestStatus("success");
         setreInvestLoading(false);
         setpendingDivs(getFormattedNumber(0, 6));
         refreshBalance();
         setTimeout(() => {
           setreInvestStatus("initial");
-        }, 10000);
-      })
-      .catch((e) => {
-        setreInvestStatus("failed");
-        setreInvestLoading(false);
-        seterrorMsg2(e?.message);
-
-        setTimeout(() => {
-          setreInvestStatus("initial");
-          seterrorMsg2("");
-        }, 10000);
-      });
+        }, 8000);
+      }
+    }
   };
 
   const handleEthPool = async () => {
-    await handleSwitchNetworkhook("0x1")
-      .then(() => {
-        handleSwitchNetwork("1");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    if (window.ethereum) {
+      if (window.WALLET_TYPE !== "binance") {
+        await handleSwitchNetworkhook("0x1")
+          .then(() => {
+            handleSwitchNetwork(1);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      } else if (window.WALLET_TYPE === "binance") {
+        handleSwitchChainBinanceWallet(1);
+      }
+    } else if (window.WALLET_TYPE === "binance") {
+      handleSwitchChainBinanceWallet(1);
+    } else {
+      window.alertify.error("No web3 detected. Please install Metamask!");
+    }
   };
 
   let id = Math.random().toString(36);
@@ -829,41 +977,49 @@ const StakeDypiusEth2Phase2 = ({
       });
   };
 
-  const getAvailableQuota = async()=>{
-    const poolCap = 500000
-    if(staking && staking._address){
-    const stakingSc = new window.infuraWeb3.eth.Contract(window.CONSTANT_STAKING_DYPIUS_ABI, staking._address)
-    const totalDeposited = await stakingSc.methods.totalDeposited().call().catch((e)=>{console.error(e)})
-  
-    const totalDeposited_formatted = new BigNumber(totalDeposited).div(1e18).toFixed(6);
-    const quotaLeft = poolCap - totalDeposited_formatted;
-    setavailableQuota(quotaLeft)
-    settotalDeposited(totalDeposited_formatted)
-  }
-  }
+  const getAvailableQuota = async () => {
+    const poolCap = 500000;
+    if (staking && staking._address) {
+      const stakingSc = new window.infuraWeb3.eth.Contract(
+        window.CONSTANT_STAKING_DYPIUS_ABI,
+        staking._address
+      );
+      const totalDeposited = await stakingSc.methods
+        .totalDeposited()
+        .call()
+        .catch((e) => {
+          console.error(e);
+        });
 
-
-  useEffect(()=>{
-    const result = Number(depositAmount) + Number(totalDeposited);
-    if(result>500000) {
-      seterrorMsg('Deposit amount is greater than available quota. Please add another amount.')
-      setCanDeposit(false)
-    } else {
-      seterrorMsg('')
-      setCanDeposit(true)
+      const totalDeposited_formatted = new BigNumber(totalDeposited)
+        .div(1e18)
+        .toFixed(6);
+      const quotaLeft = poolCap - totalDeposited_formatted;
+      setavailableQuota(quotaLeft);
+      settotalDeposited(totalDeposited_formatted);
     }
-  },[depositAmount, totalDeposited])
+  };
 
-
+  useEffect(() => {
+    const result = Number(depositAmount) + Number(totalDeposited);
+    if (result > 500000) {
+      seterrorMsg(
+        "Deposit amount is greater than available quota. Please add another amount."
+      );
+      setCanDeposit(false);
+    } else {
+      seterrorMsg("");
+      setCanDeposit(true);
+    }
+  }, [depositAmount, totalDeposited]);
 
   useEffect(() => {
     getUsdPerDyp();
-    getAvailableQuota()
+    getAvailableQuota();
   }, [staking]);
 
   return (
     <div className="d-flex flex-column gap-2 w-100">
-
       <div className="separator my-2"></div>
       {selectedTab === "deposit" ? (
         <div className="d-flex flex-column w-100 gap-2">
@@ -913,7 +1069,7 @@ const StakeDypiusEth2Phase2 = ({
                 errorMsg ? "justify-content-between" : "justify-content-end"
               } gap-1 align-items-center`}
             >
-              {errorMsg && <h6 className="errormsg m-0">{errorMsg}</h6>} 
+              {errorMsg && <h6 className="errormsg m-0">{errorMsg}</h6>}
               <div className="d-flex gap-1 align-items-baseline">
                 <span className="bal-smallTxt">Approved:</span>
                 <span className="bal-bigTxt2">{approvedAmount} DYP</span>
@@ -942,7 +1098,13 @@ const StakeDypiusEth2Phase2 = ({
                           </div>
                         }
                       >
-                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={poolCapOpen} />
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/tools/more-info.svg"
+                          }
+                          alt=""
+                          onClick={poolCapOpen}
+                        />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -964,7 +1126,13 @@ const StakeDypiusEth2Phase2 = ({
                           </div>
                         }
                       >
-                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={quotaOpen} />
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/tools/more-info.svg"
+                          }
+                          alt=""
+                          onClick={quotaOpen}
+                        />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -988,7 +1156,13 @@ const StakeDypiusEth2Phase2 = ({
                           </div>
                         }
                       >
-                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={maxDepositOpen} />
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/tools/more-info.svg"
+                          }
+                          alt=""
+                          onClick={maxDepositOpen}
+                        />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -1027,7 +1201,7 @@ const StakeDypiusEth2Phase2 = ({
                     <div className="d-flex flex-column align-items-baseline">
                       <span className="bal-smallTxt">Rewards</span>
                       <span className="bal-bigTxt2">
-                        {getFormattedNumber(pendingDivs,5)} DYP
+                        {getFormattedNumber(pendingDivs, 5)} DYP
                       </span>
                     </div>
                     <button
@@ -1101,7 +1275,13 @@ const StakeDypiusEth2Phase2 = ({
                           </div>
                         }
                       >
-                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={poolFeeOpen} />
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/tools/more-info.svg"
+                          }
+                          alt=""
+                          onClick={poolFeeOpen}
+                        />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -1115,7 +1295,12 @@ const StakeDypiusEth2Phase2 = ({
                     className="stats-link2"
                   >
                     {shortAddress(staking?._address)}{" "}
-                    <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
+                    <img
+                      src={
+                        "https://cdn.worldofdypians.com/tools/statsLinkIcon.svg"
+                      }
+                      alt=""
+                    />
                   </a>
                 </div>
               </div>
@@ -1123,15 +1308,13 @@ const StakeDypiusEth2Phase2 = ({
                 <div className="d-flex align-items-center gap-1">
                   <span className="bal-smallTxt">Start date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                  07 Jun 2024{" "}
-                 
+                    07 Jun 2024{" "}
                   </span>
                 </div>
                 <div className="d-flex align-items-center gap-1">
                   <span className="bal-smallTxt">End date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
                     {expiration_time}{" "}
-              
                   </span>
                 </div>
               </div>
@@ -1139,14 +1322,18 @@ const StakeDypiusEth2Phase2 = ({
           </div>
           {is_wallet_connected && chainId === "1" && (
             <button
-            disabled={
-              depositAmount === "" || depositLoading === true || canDeposit === false ? true : false
-            }
-            className={`btn filledbtn ${
-              ((depositAmount === "" &&
-              depositStatus === "initial" )|| (canDeposit === false)) &&
-              "disabled-btn"
-            } ${
+              disabled={
+                depositAmount === "" ||
+                depositLoading === true ||
+                canDeposit === false
+                  ? true
+                  : false
+              }
+              className={`btn filledbtn ${
+                ((depositAmount === "" && depositStatus === "initial") ||
+                  canDeposit === false) &&
+                "disabled-btn"
+              } ${
                 depositStatus === "deposit" || depositStatus === "success"
                   ? "success-button"
                   : depositStatus === "fail"
@@ -1163,7 +1350,7 @@ const StakeDypiusEth2Phase2 = ({
               style={{ width: "fit-content" }}
             >
               {" "}
-            {depositLoading ? (
+              {depositLoading ? (
                 <div
                   class="spinner-border spinner-border-sm text-light"
                   role="status"
@@ -1293,7 +1480,7 @@ const StakeDypiusEth2Phase2 = ({
                 <div className="d-flex flex-column align-items-baseline">
                   <span className="bal-smallTxt">Rewards</span>
                   <span className="bal-bigTxt2">
-                    {getFormattedNumber(pendingDivs,5)} DYP
+                    {getFormattedNumber(pendingDivs, 5)} DYP
                   </span>
                 </div>
                 <button
@@ -1361,7 +1548,13 @@ const StakeDypiusEth2Phase2 = ({
                           </div>
                         }
                       >
-                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={poolFeeOpen} />
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/tools/more-info.svg"
+                          }
+                          alt=""
+                          onClick={poolFeeOpen}
+                        />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -1375,7 +1568,12 @@ const StakeDypiusEth2Phase2 = ({
                     className="stats-link2"
                   >
                     {shortAddress(staking._address)}{" "}
-                    <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
+                    <img
+                      src={
+                        "https://cdn.worldofdypians.com/tools/statsLinkIcon.svg"
+                      }
+                      alt=""
+                    />
                   </a>
                 </div>
               </div>
@@ -1383,15 +1581,13 @@ const StakeDypiusEth2Phase2 = ({
                 <div className="d-flex align-items-center gap-1">
                   <span className="bal-smallTxt">Start date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
-                  07 Jun 2024{" "}
-                  
+                    07 Jun 2024{" "}
                   </span>
                 </div>
                 <div className="d-flex align-items-center gap-1">
                   <span className="bal-smallTxt">End date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
                     {expiration_time}{" "}
-                
                   </span>
                 </div>
               </div>
@@ -1403,7 +1599,11 @@ const StakeDypiusEth2Phase2 = ({
       coinbase === undefined ||
       is_wallet_connected === false ? (
         <button className="connectbtn btn m-auto" onClick={onConnectWallet}>
-          <img src={'https://cdn.worldofdypians.com/tools/walletIcon.svg'} alt="" /> Connect wallet
+          <img
+            src={"https://cdn.worldofdypians.com/tools/walletIcon.svg"}
+            alt=""
+          />{" "}
+          Connect wallet
         </button>
       ) : chainId !== "1" ? (
         <button

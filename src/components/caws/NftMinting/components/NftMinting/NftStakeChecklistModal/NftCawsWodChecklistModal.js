@@ -12,6 +12,7 @@ import LandNftChecklist from "../../General/NftStakingCawChecklist/LandNftCheckl
 import LandNFTPlaceHolder from "../../../../../LandNFTModal/LandNFTPlaceHolder";
 import CawsWodNftChecklist from "../../General/NftStakingCawChecklist/CawsWodNftChecklist";
 import CawsWodNftPlaceHolder from "../../../../../LandNFTModal/CawsWodNftPlaceHolder";
+import { ethers } from "ethers";
 
 const NftCawsWodChecklistModal = ({
   nftItem,
@@ -38,6 +39,7 @@ const NftCawsWodChecklistModal = ({
   cawsStakes,
   landStakes,
   cawsItems,
+  binanceW3WProvider,
 }) => {
   const [active, setActive] = useState(true);
   const [showToStake, setshowToStake] = useState(false);
@@ -386,12 +388,52 @@ const NftCawsWodChecklistModal = ({
     setStatus("*Processing unstake");
     setColor("#57AEAA");
     setloadingWithdraw(true);
-    await window.wod_caws
-      .withdrawWodCaws(
-        getApprovedNfts(selectNftIds),
-        getApprovedLandNfts(selectNftLandIds)
-      )
-      .then(() => {
+    if (window.WALLET_TYPE !== "binance") {
+      await window.wod_caws
+        .withdrawWodCaws(
+          getApprovedNfts(selectNftIds),
+          getApprovedLandNfts(selectNftLandIds)
+        )
+        .then(() => {
+          onDepositComplete();
+          setloadingWithdraw(false);
+          setStatus("*Unstaked successfully");
+          setColor("#57AEAA");
+          handleClearStatus();
+          setSelectedNftIds([]);
+          setSelectedNftLandIds([]);
+        })
+        .catch((err) => {
+          setloadingWithdraw(false);
+          window.alertify.error(err?.message);
+          setStatus("An error occurred, please try again");
+          setColor("#F13227");
+          setSelectedNftIds([]);
+          setSelectedNftLandIds([]);
+          handleClearStatus();
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let staking_contract = new ethers.Contract(
+        window.config.wod_caws_address,
+        window.WOD_CAWS_ABI,
+        binanceW3WProvider.getSigner()
+      );
+      const txResponse = await staking_contract
+        .withdrawWodCaws(
+          getApprovedNfts(selectNftIds),
+          getApprovedLandNfts(selectNftLandIds)
+        )
+        .catch((err) => {
+          setloadingWithdraw(false);
+          window.alertify.error(err?.message);
+          setStatus("An error occurred, please try again");
+          setColor("#F13227");
+          setSelectedNftIds([]);
+          setSelectedNftLandIds([]);
+          handleClearStatus();
+        });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         onDepositComplete();
         setloadingWithdraw(false);
         setStatus("*Unstaked successfully");
@@ -399,16 +441,8 @@ const NftCawsWodChecklistModal = ({
         handleClearStatus();
         setSelectedNftIds([]);
         setSelectedNftLandIds([]);
-      })
-      .catch((err) => {
-        setloadingWithdraw(false);
-        window.alertify.error(err?.message);
-        setStatus("An error occurred, please try again");
-        setColor("#F13227");
-        setSelectedNftIds([]);
-        setSelectedNftLandIds([]);
-        handleClearStatus();
-      });
+      }
+    }
   };
 
   const handleClaim = async (itemId) => {
@@ -416,24 +450,51 @@ const NftCawsWodChecklistModal = ({
     setActive(false);
     setStatus("*Claiming rewards...");
     setColor("#57AEAA");
-    await window.wod_caws
-      .claimRewardsWodCaws(getApprovedNfts(selectNftIds))
-      .then(() => {
+    if (window.WALLET_TYPE !== "binance") {
+      await window.wod_caws
+        .claimRewardsWodCaws(getApprovedNfts(selectNftIds))
+        .then(() => {
+          setloadingClaim(false);
+          setStatus("*Claimed successfully");
+          handleClearStatus();
+          setColor("#57AEAA");
+          setSelectedNftIds([]);
+          setSelectedNftLandIds([]);
+        })
+        .catch((err) => {
+          window.alertify.error(err?.message);
+          setloadingClaim(false);
+          setColor("#F13227");
+          setStatus("An error occurred, please try again");
+          setSelectedNftIds([]);
+          setSelectedNftLandIds([]);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let staking_contract = new ethers.Contract(
+        window.config.wod_caws_address,
+        window.WOD_CAWS_ABI,
+        binanceW3WProvider.getSigner()
+      );
+      const txResponse = await staking_contract
+        .claimRewardsWodCaws(getApprovedNfts(selectNftIds))
+        .catch((err) => {
+          window.alertify.error(err?.message);
+          setloadingClaim(false);
+          setColor("#F13227");
+          setStatus("An error occurred, please try again");
+          setSelectedNftIds([]);
+          setSelectedNftLandIds([]);
+        });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         setloadingClaim(false);
         setStatus("*Claimed successfully");
         handleClearStatus();
         setColor("#57AEAA");
         setSelectedNftIds([]);
         setSelectedNftLandIds([]);
-      })
-      .catch((err) => {
-        window.alertify.error(err?.message);
-        setloadingClaim(false);
-        setColor("#F13227");
-        setStatus("An error occurred, please try again");
-        setSelectedNftIds([]);
-        setSelectedNftLandIds([]);
-      });
+      }
+    }
   };
 
   const devicewidth = window.innerWidth;
@@ -1289,12 +1350,14 @@ const NftCawsWodChecklistModal = ({
                 </span>
 
                 <img
-                  src={'https://cdn.worldofdypians.com/tools/catlogo.svg'}
+                  src={"https://cdn.worldofdypians.com/tools/catlogo.svg"}
                   alt=""
                   style={{ width: 24, height: 24 }}
                 />
                 <img
-                  src={'https://cdn.worldofdypians.com/tools/landplaceholder2.svg'}
+                  src={
+                    "https://cdn.worldofdypians.com/tools/landplaceholder2.svg"
+                  }
                   alt=""
                   style={{ width: 24, height: 24 }}
                 />
@@ -1608,12 +1671,16 @@ const NftCawsWodChecklistModal = ({
                         </span>
 
                         <img
-                          src={'https://cdn.worldofdypians.com/tools/catlogo.svg'}
+                          src={
+                            "https://cdn.worldofdypians.com/tools/catlogo.svg"
+                          }
                           alt=""
                           style={{ width: 24, height: 24 }}
                         />
                         <img
-                          src={'https://cdn.worldofdypians.com/tools/landplaceholder2.svg'}
+                          src={
+                            "https://cdn.worldofdypians.com/tools/landplaceholder2.svg"
+                          }
                           alt=""
                           style={{ width: 24, height: 24 }}
                         />

@@ -113,6 +113,10 @@ export default function initBridgeidyp({
                 destinationChainText: "",
               });
             }
+          })
+          .catch((e) => {
+            console.error(e);
+            return 0;
           });
       }
     };
@@ -129,32 +133,47 @@ export default function initBridgeidyp({
 
     fetchData = async () => {
       //Get DYP Balance Ethereum Pool
-      let ethPool = await window.getTokenHolderBalanceAll(
-        this.props.sourceChain === "avax" || this.props.sourceChain === "bnb"
-          ? bridgeBSC._address
-          : bridgeETH._address,
-        bridgeETH.tokenAddress,
-        1
-      );
+      let ethPool = await window
+        .getTokenHolderBalanceAll(
+          this.props.sourceChain === "avax" || this.props.sourceChain === "bnb"
+            ? bridgeBSC._address
+            : bridgeETH._address,
+          bridgeETH.tokenAddress,
+          1
+        )
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
       ethPool = ethPool / 1e18;
 
       //Get DYP Balance BNB Chain Pool
-      let avaxPool = await window.getTokenHolderBalanceAll(
-        this.props.sourceChain === "eth"
-          ? bridgeBSC._address
-          : bridgeETH._address,
-        bridgeETH.tokenAddress,
-        2
-      );
+      let avaxPool = await window
+        .getTokenHolderBalanceAll(
+          this.props.sourceChain === "eth"
+            ? bridgeBSC._address
+            : bridgeETH._address,
+          bridgeETH.tokenAddress,
+          2
+        )
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
 
       avaxPool = avaxPool / 1e18;
-      let bnbPool = await window.getTokenHolderBalanceAll(
-        this.props.sourceChain === "bnb"
-          ? bridgeETH._address
-          : bridgeBSC._address,
-        bridgeETH.tokenAddress,
-        3
-      );
+      let bnbPool = await window
+        .getTokenHolderBalanceAll(
+          this.props.sourceChain === "bnb"
+            ? bridgeETH._address
+            : bridgeBSC._address,
+          bridgeETH.tokenAddress,
+          3
+        )
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
       bnbPool = bnbPool / 1e18;
       this.setState({ ethPool, avaxPool, bnbPool });
     };
@@ -308,7 +327,31 @@ export default function initBridgeidyp({
           });
       }
     };
+    checkApproval = async (amount) => {
+      if (this.props.coinbase) {
+        const result = await window
+          .checkapproveStakePool(
+            this.props.coinbase,
+            tokenETH._address,
+            bridgeETH._address
+          )
+          .then((data) => {
+            console.log(data);
+            return data;
+          });
 
+        let result_formatted = new BigNumber(result).div(1e18).toFixed(6);
+
+        if (
+          Number(result_formatted) >= Number(amount) &&
+          Number(result_formatted) !== 0
+        ) {
+          this.setState({ depositStatus: "deposit" });
+        } else {
+          this.setState({ depositStatus: "initial" });
+        }
+      }
+    };
     getAllBalanceiDyp = async () => {
       const tokenAddress = "0xbd100d061e120b2c67a24453cf6368e63f1be056";
       const walletAddress = this.props.coinbase;
@@ -333,6 +376,10 @@ export default function initBridgeidyp({
             .call()
             .then((data) => {
               this.setState({ ethBalance: data });
+            })
+            .catch((e) => {
+              console.error(e);
+              return 0;
             });
         } else if (this.props.sourceChain === "avax") {
           await contract2.methods
@@ -340,6 +387,10 @@ export default function initBridgeidyp({
             .call()
             .then((data) => {
               this.setState({ avaxBalance: data });
+            })
+            .catch((e) => {
+              console.error(e);
+              return 0;
             });
         } else if (this.props.sourceChain === "bnb") {
           await contract3.methods
@@ -347,6 +398,10 @@ export default function initBridgeidyp({
             .call()
             .then((data) => {
               this.setState({ bnbBalance: data });
+            })
+            .catch((e) => {
+              console.error(e);
+              return 0;
             });
         }
       }
@@ -383,7 +438,7 @@ export default function initBridgeidyp({
           (this.props.sourceChain === "avax" &&
             this.props.destinationChain === "eth")
             ? window.config.SIGNATURE_API_URLAVAXiDYP
-            : window.config.SIGNATURE_API_URLBSCiDYP;
+            : window.config.SIGNATURE_API_URLAVAXiDYP;
         let url =
           signature +
           `/api/withdraw-args?depositNetwork=${
@@ -460,47 +515,57 @@ export default function initBridgeidyp({
         try {
           let chainId = this.props.networkId;
           let network = window.config.chain_ids[chainId] || "UNKNOWN";
-if(network !== 'UNKNOWN') {
-          let token_balance = await (network == "AVAX" || network === "BSC"
-            ? tokenBSC
-            : tokenETH
-          ).balanceOf(coinbase);
+          if (network !== "UNKNOWN") {
+            let token_balance = await (network == "AVAX" || network === "BSC"
+              ? tokenBSC
+              : tokenETH
+            )
+              .balanceOf(coinbase)
+              .catch((e) => {
+                console.error(e);
+                return 0;
+              });
 
-          this.setState({
-            token_balance,
-            network,
-          });
+            this.setState({
+              token_balance,
+              network,
+            });
 
-          if (this.state.txHash) {
-            try {
-              let signature =
-                (this.props.sourceChain === "eth" &&
-                  this.props.destinationChain === "avax") ||
-                (this.props.sourceChain === "avax" &&
-                  this.props.destinationChain === "eth")
-                  ? window.config.SIGNATURE_API_URLAVAXiDYP
-                  : window.config.SIGNATURE_API_URLBSCiDYP;
-              let url =
-                signature +
-                `/api/withdraw-args?depositNetwork=${
-                  this.props.sourceChain === "eth"
-                    ? "ETH"
-                    : this.props.sourceChain === "avax"
-                    ? "AVAX"
-                    : "BSC"
-                }&txHash=${
-                  this.state.txHash
-                }&getWithdrawableUnixTimestamp=true`;
-              console.log({ url });
-              let { withdrawableUnixTimestamp } = await window.jQuery.get(url);
-              this.setState({ withdrawableUnixTimestamp });
-              console.log({ withdrawableUnixTimestamp });
-            } catch (e) {
-              console.error(e);
-              this.setState({ withdrawableUnixTimestamp: null });
-            }
-          } else this.setState({ withdrawableUnixTimestamp: null });
-        }
+            if (this.state.txHash) {
+              try {
+                let signature =
+                  (this.props.sourceChain === "eth" &&
+                    this.props.destinationChain === "avax") ||
+                  (this.props.sourceChain === "avax" &&
+                    this.props.destinationChain === "eth")
+                    ? window.config.SIGNATURE_API_URLAVAXiDYP
+                    : window.config.SIGNATURE_API_URLBSCiDYP;
+                let url =
+                  signature +
+                  `/api/withdraw-args?depositNetwork=${
+                    this.props.sourceChain === "eth"
+                      ? "ETH"
+                      : this.props.sourceChain === "avax"
+                      ? "AVAX"
+                      : "BSC"
+                  }&txHash=${
+                    this.state.txHash
+                  }&getWithdrawableUnixTimestamp=true`;
+                console.log({ url });
+                let { withdrawableUnixTimestamp } = await window.jQuery
+                  .get(url)
+                  .catch((e) => {
+                    console.error(e);
+                    return 0;
+                  });
+                this.setState({ withdrawableUnixTimestamp });
+                console.log({ withdrawableUnixTimestamp });
+              } catch (e) {
+                console.error(e);
+                this.setState({ withdrawableUnixTimestamp: null });
+              }
+            } else this.setState({ withdrawableUnixTimestamp: null });
+          }
         } catch (e) {
           console.error(e);
         }
@@ -763,11 +828,12 @@ if(network !== 'UNKNOWN') {
                                       ? this.state.depositAmount
                                       : this.state.depositAmount
                                   }
-                                  onChange={(e) =>
+                                  onChange={(e) => {
                                     this.setState({
                                       depositAmount: e.target.value,
-                                    })
-                                  }
+                                    });
+                                    this.checkApproval(e.target.value);
+                                  }}
                                   className="styledinput"
                                   placeholder="0"
                                   type="text"
@@ -1049,9 +1115,9 @@ if(network !== 'UNKNOWN') {
                               <div className="d-flex gap-2 align-items-center">
                                 <input
                                   value={this.state.txHash}
-                                  onChange={(e) =>
-                                    this.setState({ txHash: e.target.value })
-                                  }
+                                  onChange={(e) => {
+                                    this.setState({ txHash: e.target.value });
+                                  }}
                                   className="styledinput"
                                   placeholder="Enter Deposit transaction hash"
                                   type="text"
@@ -1283,14 +1349,16 @@ if(network !== 'UNKNOWN') {
                   <TimelineSeparator>
                     <TimelineDot
                       className={
-                        this.state.depositAmount !== ""
+                        this.state.depositAmount !== "" ||
+                        this.state.txHash !== ""
                           ? "greendot"
                           : "passivedot"
                       }
                     />
                     <TimelineConnector
                       className={
-                        this.state.depositAmount !== ""
+                        this.state.depositAmount !== "" ||
+                        this.state.txHash !== ""
                           ? "greenline"
                           : "passiveline"
                       }
@@ -1312,7 +1380,8 @@ if(network !== 'UNKNOWN') {
                     <TimelineDot
                       className={
                         this.state.depositStatus === "deposit" ||
-                        this.state.depositStatus === "success"
+                        this.state.depositStatus === "success" ||
+                        this.state.txHash !== ""
                           ? "greendot"
                           : "passivedot"
                       }
@@ -1320,7 +1389,8 @@ if(network !== 'UNKNOWN') {
                     <TimelineConnector
                       className={
                         this.state.depositStatus === "deposit" ||
-                        this.state.depositStatus === "success"
+                        this.state.depositStatus === "success" ||
+                        this.state.txHash !== ""
                           ? "greenline"
                           : "passiveline"
                       }
@@ -1340,14 +1410,16 @@ if(network !== 'UNKNOWN') {
                   <TimelineSeparator>
                     <TimelineDot
                       className={
-                        this.state.depositStatus === "success"
+                        this.state.depositStatus === "success" ||
+                        this.state.txHash !== ""
                           ? "greendot"
                           : "passivedot"
                       }
                     />
                     <TimelineConnector
                       className={
-                        this.state.depositStatus === "success"
+                        this.state.depositStatus === "success" ||
+                        this.state.txHash !== ""
                           ? "greenline"
                           : "passiveline"
                       }

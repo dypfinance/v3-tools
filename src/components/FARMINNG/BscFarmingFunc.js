@@ -5,12 +5,13 @@ import Modal from "../Modal/Modal";
 import Address from "./address";
 import WalletModal from "../WalletModal";
 import "./top-pools.css";
-import Countdown from "react-countdown";  
-import Tooltip from "@material-ui/core/Tooltip"; 
-import axios from "axios"; 
-import { shortAddress } from "../../functions/shortAddress";  
+import Countdown from "react-countdown";
+import Tooltip from "@material-ui/core/Tooltip";
+import axios from "axios";
+import { shortAddress } from "../../functions/shortAddress";
 import { ClickAwayListener } from "@material-ui/core";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
+import { ethers } from "ethers";
 
 const renderer = ({ days, hours, minutes, seconds }) => {
   return (
@@ -59,6 +60,8 @@ const BscFarmingFunc = ({
   latestApr,
   wbnbPrice,
   latestTvl,
+  binanceW3WProvider,
+  handleSwitchChainBinanceWallet,
 }) => {
   let { reward_token, BigNumber, alertify, reward_token_idyp, token_dypsbsc } =
     window;
@@ -187,7 +190,7 @@ const BscFarmingFunc = ({
   const [show, setShow] = useState(false);
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [showCalculator, setShowCalculator] = useState(false);
-  const [popup, setPopup] = useState(false); 
+  const [popup, setPopup] = useState(false);
   const [selectedTokenLogo, setSelectedTokenLogo] = useState("wbnb");
   const [selectedRewardTokenLogo1, setSelectedRewardTokenLogo1] =
     useState("wbnb");
@@ -636,34 +639,71 @@ const BscFarmingFunc = ({
     let deadline = Math.floor(
       Date.now() / 1e3 + window.config.tx_max_wait_seconds
     );
+    if (window.WALLET_TYPE !== "binance") {
+      try {
+        staking
+          .unstake(amountConstant, 0, deadline)
+          .then(() => {
+            setWithdrawStatus("success");
+            setWithdrawLoading(false);
+            refreshBalance();
+            setTimeout(() => {
+              setWithdrawStatus("initial");
+              setSelectedPool("");
+            }, 10000);
+          })
+          .catch((e) => {
+            setWithdrawStatus("failed");
+            setWithdrawLoading(false);
+            setErrorMsg(e?.message);
+            setTimeout(() => {
+              setWithdrawStatus("initial");
+              setSelectedPool("");
+              setErrorMsg("");
+            }, 10000);
+          });
+      } catch (e) {
+        setErrorMsg(e?.message);
 
-    try {
-      staking
-        .unstake(amountConstant, 0, deadline)
-        .then(() => {
+        console.error(e);
+        return;
+      }
+    } else if (window.WALLET_TYPE === "binance") {
+      try {
+        let staking_Sc = new ethers.Contract(
+          staking._address,
+          window.CONSTANT_STAKINGNEW_ABI,
+          binanceW3WProvider.getSigner()
+        );
+        const txResponse = staking_Sc
+          .unstake(amountConstant, 0, deadline)
+          .catch((e) => {
+            setWithdrawStatus("failed");
+            setWithdrawLoading(false);
+            setErrorMsg(e?.message);
+            setTimeout(() => {
+              setWithdrawStatus("initial");
+              setSelectedPool("");
+              setErrorMsg("");
+            }, 10000);
+          });
+
+        const txReceipt = await txResponse.wait();
+        if (txReceipt) {
           setWithdrawStatus("success");
           setWithdrawLoading(false);
           refreshBalance();
           setTimeout(() => {
             setWithdrawStatus("initial");
             setSelectedPool("");
-          }, 10000);
-        })
-        .catch((e) => {
-          setWithdrawStatus("failed");
-          setWithdrawLoading(false);
-          setErrorMsg(e?.message);
-          setTimeout(() => {
-            setWithdrawStatus("initial");
-            setSelectedPool("");
-            setErrorMsg("");
-          }, 10000);
-        });
-    } catch (e) {
-      setErrorMsg(e?.message);
+          }, 8000);
+        }
+      } catch (e) {
+        setErrorMsg(e?.message);
 
-      console.error(e);
-      return;
+        console.error(e);
+        return;
+      }
     }
   };
 
@@ -779,9 +819,49 @@ const BscFarmingFunc = ({
     ];
 
     console.log(minAmounts);
-    constant
-      .withdraw(selectedBuybackToken, amount, minAmounts, deadline)
-      .then(() => {
+    if (window.WALLET_TYPE !== "binance") {
+      constant
+        .withdraw(selectedBuybackToken, amount, minAmounts, deadline)
+        .then(() => {
+          setWithdrawLoading(false);
+          setWithdrawStatus("success");
+          refreshBalance();
+          setTimeout(() => {
+            setWithdrawStatus("initial");
+            setSelectedPool("");
+          }, 5000);
+        })
+        .catch((e) => {
+          setWithdrawLoading(false);
+          setWithdrawStatus("fail");
+          setErrorMsg3(e?.message);
+          setTimeout(() => {
+            setWithdrawStatus("initial");
+            setErrorMsg3("");
+            setSelectedPool("");
+          }, 5000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let constant_Sc = new ethers.Contract(
+        staking._address,
+        window.FARMING_ACTIVEBSC_ABI,
+        binanceW3WProvider.getSigner()
+      );
+
+      const txResponse = constant_Sc
+        .withdraw(selectedBuybackToken, amount, minAmounts, deadline)
+        .catch((e) => {
+          setWithdrawLoading(false);
+          setWithdrawStatus("fail");
+          setErrorMsg3(e?.message);
+          setTimeout(() => {
+            setWithdrawStatus("initial");
+            setErrorMsg3("");
+            setSelectedPool("");
+          }, 5000);
+        });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         setWithdrawLoading(false);
         setWithdrawStatus("success");
         refreshBalance();
@@ -789,17 +869,8 @@ const BscFarmingFunc = ({
           setWithdrawStatus("initial");
           setSelectedPool("");
         }, 5000);
-      })
-      .catch((e) => {
-        setWithdrawLoading(false);
-        setWithdrawStatus("fail");
-        setErrorMsg3(e?.message);
-        setTimeout(() => {
-          setWithdrawStatus("initial");
-          setErrorMsg3("");
-          setSelectedPool("");
-        }, 5000);
-      });
+      }
+    }
   };
 
   const handleClaimDivs = async () => {
@@ -897,17 +968,67 @@ const BscFarmingFunc = ({
       _amountOutMinSwap_real,
       deadline,
     });
+    if (window.WALLET_TYPE !== "binance") {
+      try {
+        constant
+          .claimAs(
+            window.config.bscweth_address,
+            _amountOutMinConstantETH,
+            _amountOutMinConstant,
+            _amountOutMinSwap_real,
+            deadline
+          )
+          .then(() => {
+            setClaimStatus("success");
+            setClaimLoading(false);
+            setPendingDivs(getFormattedNumber(0, 6));
+            refreshBalance();
+            setTimeout(() => {
+              setClaimStatus("initial");
+            }, 5000);
+          })
+          .catch((e) => {
+            setClaimStatus("fail");
+            setClaimLoading(false);
+            setErrorMsg2(e?.message);
+            console.log(e);
+            setTimeout(() => {
+              setClaimStatus("initial");
+              setErrorMsg2("");
+            }, 10000);
+          });
+      } catch (e) {
+        console.error(e);
+        return;
+      }
+    } else if (window.WALLET_TYPE === "binance") {
+      try {
+        let constant_Sc = new ethers.Contract(
+          staking._address,
+          window.FARMING_ACTIVEBSC_ABI,
+          binanceW3WProvider.getSigner()
+        );
 
-    try {
-      constant
-        .claimAs(
-          window.config.bscweth_address,
-          _amountOutMinConstantETH,
-          _amountOutMinConstant,
-          _amountOutMinSwap_real,
-          deadline
-        )
-        .then(() => {
+        const txResponse = constant_Sc
+          .claimAs(
+            window.config.bscweth_address,
+            _amountOutMinConstantETH,
+            _amountOutMinConstant,
+            _amountOutMinSwap_real,
+            deadline
+          )
+          .catch((e) => {
+            setClaimStatus("fail");
+            setClaimLoading(false);
+            setErrorMsg2(e?.message);
+            console.log(e);
+            setTimeout(() => {
+              setClaimStatus("initial");
+              setErrorMsg2("");
+            }, 10000);
+          });
+        const txReceipt = await txResponse.wait();
+        if (txReceipt) {
           setClaimStatus("success");
           setClaimLoading(false);
           setPendingDivs(getFormattedNumber(0, 6));
@@ -915,20 +1036,11 @@ const BscFarmingFunc = ({
           setTimeout(() => {
             setClaimStatus("initial");
           }, 5000);
-        })
-        .catch((e) => {
-          setClaimStatus("fail");
-          setClaimLoading(false);
-          setErrorMsg2(e?.message);
-          console.log(e);
-          setTimeout(() => {
-            setClaimStatus("initial");
-            setErrorMsg2("");
-          }, 10000);
-        });
-    } catch (e) {
-      console.error(e);
-      return;
+        }
+      } catch (e) {
+        console.error(e);
+        return;
+      }
     }
   };
   const handleClaimAsDivs = async (token) => {
@@ -962,20 +1074,41 @@ const BscFarmingFunc = ({
       .times(100 - window.config.slippage_tolerance_percent_liquidity)
       .div(100)
       .toFixed(0);
-
-    try {
-      staking
-        .claim(0, 0, deadline)
-        .then(() => {
-          setClaimStatus("success");
-          setClaimLoading(false);
-          setPendingDivs(getFormattedNumber(0, 6));
-          refreshBalance();
-          setTimeout(() => {
-            setClaimStatus("initial");
-          }, 5000);
-        })
-        .catch((e) => {
+    if (window.WALLET_TYPE !== "binance") {
+      try {
+        staking
+          .claim(0, 0, deadline)
+          .then(() => {
+            setClaimStatus("success");
+            setClaimLoading(false);
+            setPendingDivs(getFormattedNumber(0, 6));
+            refreshBalance();
+            setTimeout(() => {
+              setClaimStatus("initial");
+            }, 5000);
+          })
+          .catch((e) => {
+            setClaimStatus("fail");
+            setClaimLoading(false);
+            setErrorMsg2(e?.message);
+            console.log(e);
+            setTimeout(() => {
+              setClaimStatus("initial");
+              setErrorMsg2("");
+            }, 10000);
+          });
+      } catch (e) {
+        console.error(e);
+        return;
+      }
+    } else if (window.WALLET_TYPE === "binance") {
+      try {
+        let staking_Sc = new ethers.Contract(
+          staking._address,
+          window.CONSTANT_STAKINGNEW_ABI,
+          binanceW3WProvider.getSigner()
+        );
+        const txResponse = staking_Sc.claim(0, 0, deadline).catch((e) => {
           setClaimStatus("fail");
           setClaimLoading(false);
           setErrorMsg2(e?.message);
@@ -985,10 +1118,22 @@ const BscFarmingFunc = ({
             setErrorMsg2("");
           }, 10000);
         });
-    } catch (e) {
-      console.error(e);
-      return;
+        const txReceipt = await txResponse.wait();
+        if (txReceipt) {
+          setClaimStatus("success");
+          setClaimLoading(false);
+          setPendingDivs(getFormattedNumber(0, 6));
+          refreshBalance();
+          setTimeout(() => {
+            setClaimStatus("initial");
+          }, 5000);
+        }
+      } catch (e) {
+        console.error(e);
+        return;
+      }
     }
+
     //     let router = await window.getPancakeswapRouterContract();
     //     let WETH = await router.methods.WETH().call();
     //     let platformTokenAddress = window.config.reward_token_address;
@@ -1578,13 +1723,23 @@ const BscFarmingFunc = ({
   };
 
   const handleBnbPool = async () => {
-    await handleSwitchNetworkhook("0x38")
-      .then(() => {
-        handleSwitchNetwork("56");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    if (window.ethereum) {
+      if (window.WALLET_TYPE !== "binance") {
+        await handleSwitchNetworkhook("0x38")
+          .then(() => {
+            handleSwitchNetwork(56);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      } else if (window.WALLET_TYPE === "binance") {
+        handleSwitchChainBinanceWallet(56);
+      }
+    } else if (window.WALLET_TYPE === "binance") {
+      handleSwitchChainBinanceWallet(56);
+    } else {
+      window.alertify.error("No web3 detected. Please install Metamask!");
+    }
   };
 
   useEffect(() => {
@@ -1603,7 +1758,6 @@ const BscFarmingFunc = ({
       getLPTokens();
     }
   }, [coinbase, isConnected]);
-
 
   let usd_per_token = the_graph_result.token_data
     ? the_graph_result.token_data["0x961c8c0b1aad0c0b10a51fef6a867e3091bcef17"]
@@ -1761,7 +1915,7 @@ const BscFarmingFunc = ({
         <div className="leftside2 w-100">
           <div className="activewrapper activewrapper-vault">
             <div className="d-flex flex-column flex-lg-row w-100 align-items-start align-items-lg-center justify-content-between">
-            <h6 className="expiredtxt caws-active-txt">Expired Pool</h6>
+              <h6 className="expiredtxt caws-active-txt">Expired Pool</h6>
               {/* <div className="d-flex align-items-center justify-content-between gap-2">
             <h6 className="earnrewards-text">Earn rewards in:</h6>
             <h6 className="earnrewards-token d-flex align-items-center gap-1">
@@ -1790,7 +1944,9 @@ const BscFarmingFunc = ({
                           }
                         >
                           <img
-                            src={'https://cdn.worldofdypians.com/tools/more-info.svg'}
+                            src={
+                              "https://cdn.worldofdypians.com/tools/more-info.svg"
+                            }
                             alt=""
                             onClick={performanceOpen}
                           />
@@ -1818,7 +1974,13 @@ const BscFarmingFunc = ({
                             </div>
                           }
                         >
-                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={aprOpen} />
+                          <img
+                            src={
+                              "https://cdn.worldofdypians.com/tools/more-info.svg"
+                            }
+                            alt=""
+                            onClick={aprOpen}
+                          />
                         </Tooltip>
                       </ClickAwayListener>
                     </h6>
@@ -1842,7 +2004,13 @@ const BscFarmingFunc = ({
                             </div>
                           }
                         >
-                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={lockOpen} />
+                          <img
+                            src={
+                              "https://cdn.worldofdypians.com/tools/more-info.svg"
+                            }
+                            alt=""
+                            onClick={lockOpen}
+                          />
                         </Tooltip>
                       </ClickAwayListener>
                     </h6>
@@ -1870,7 +2038,12 @@ const BscFarmingFunc = ({
                       getApproxReturnUSD();
                     }}
                   >
-                    <img src={'https://cdn.worldofdypians.com/tools/poolsCalculatorIcon.svg'} alt="" />
+                    <img
+                      src={
+                        "https://cdn.worldofdypians.com/tools/poolsCalculatorIcon.svg"
+                      }
+                      alt=""
+                    />
                     Calculator
                   </h6>
                   <div
@@ -1879,7 +2052,12 @@ const BscFarmingFunc = ({
                     }}
                   >
                     <h6 className="bottomitems">
-                      <img src={'https://cdn.worldofdypians.com/tools/purpleStat.svg'} alt="" />
+                      <img
+                        src={
+                          "https://cdn.worldofdypians.com/tools/purpleStat.svg"
+                        }
+                        alt=""
+                      />
                       Stats
                     </h6>
                   </div>
@@ -1905,7 +2083,13 @@ const BscFarmingFunc = ({
                 coinbase === undefined ||
                 isConnected === false ? (
                   <button className="connectbtn btn" onClick={showModal}>
-                    <img src={'https://cdn.worldofdypians.com/tools/walletIcon.svg'} alt="" /> Connect wallet
+                    <img
+                      src={
+                        "https://cdn.worldofdypians.com/tools/walletIcon.svg"
+                      }
+                      alt=""
+                    />{" "}
+                    Connect wallet
                   </button>
                 ) : chainId === "56" ? (
                   <div className="addressbtn btn">
@@ -1953,7 +2137,9 @@ const BscFarmingFunc = ({
                           />
                           {selectedTokenLogo.toUpperCase()}
                           <img
-                            src={'https://cdn.worldofdypians.com/tools/dropdownVector.svg'}
+                            src={
+                              "https://cdn.worldofdypians.com/tools/dropdownVector.svg"
+                            }
                             alt=""
                             style={{ width: 10, height: 10 }}
                           />
@@ -2004,7 +2190,11 @@ const BscFarmingFunc = ({
                       </div>
                     }
                   >
-                    <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={depositOpen} />
+                    <img
+                      src={"https://cdn.worldofdypians.com/tools/more-info.svg"}
+                      alt=""
+                      onClick={depositOpen}
+                    />
                   </Tooltip>
                 </ClickAwayListener>
               </div>
@@ -2102,7 +2292,12 @@ const BscFarmingFunc = ({
                       <>Success</>
                     ) : (
                       <>
-                        <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/wod/failMark.svg"
+                          }
+                          alt=""
+                        />
                         Failed
                       </>
                     )}
@@ -2135,7 +2330,13 @@ const BscFarmingFunc = ({
                         </div>
                       }
                     >
-                      <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={rewardsOpen} />
+                      <img
+                        src={
+                          "https://cdn.worldofdypians.com/tools/more-info.svg"
+                        }
+                        alt=""
+                        onClick={rewardsOpen}
+                      />
                     </Tooltip>
                   </ClickAwayListener>
                 </h6>
@@ -2164,7 +2365,11 @@ const BscFarmingFunc = ({
                       }}
                     >
                       <img
-                        src={selectedPool === "wbnb" ? 'https://cdn.worldofdypians.com/wod/check.svg' : 'https://cdn.worldofdypians.com/wod/empty.svg'}
+                        src={
+                          selectedPool === "wbnb"
+                            ? "https://cdn.worldofdypians.com/wod/check.svg"
+                            : "https://cdn.worldofdypians.com/wod/empty.svg"
+                        }
                         alt=""
                         className="activestate"
                       />
@@ -2208,7 +2413,9 @@ const BscFarmingFunc = ({
                             />
                             {selectedRewardTokenLogo1.toUpperCase()}
                             <img
-                              src={'https://cdn.worldofdypians.com/tools/dropdownVector.svg'}
+                              src={
+                                "https://cdn.worldofdypians.com/tools/dropdownVector.svg"
+                              }
                               alt=""
                               style={{ width: 10, height: 10 }}
                             />
@@ -2226,7 +2433,9 @@ const BscFarmingFunc = ({
                               }}
                             >
                               <img
-                                src={'https://cdn.worldofdypians.com/tools/wbnbIcon.svg'}
+                                src={
+                                  "https://cdn.worldofdypians.com/tools/wbnbIcon.svg"
+                                }
                                 alt=""
                                 style={{ width: 14, height: 14 }}
                               />
@@ -2252,7 +2461,11 @@ const BscFarmingFunc = ({
                       }}
                     >
                       <img
-                        src={selectedPool === "dyp" ? 'https://cdn.worldofdypians.com/wod/check.svg' : 'https://cdn.worldofdypians.com/wod/empty.svg'}
+                        src={
+                          selectedPool === "dyp"
+                            ? "https://cdn.worldofdypians.com/wod/check.svg"
+                            : "https://cdn.worldofdypians.com/wod/empty.svg"
+                        }
                         alt=""
                         className="activestate"
                       />
@@ -2288,7 +2501,9 @@ const BscFarmingFunc = ({
 
                       <div className="d-flex align-items-center justify-content-center w-100 claimreward-header ">
                         <img
-                          src={'https://cdn.worldofdypians.com/tools/dyplogo.svg'}
+                          src={
+                            "https://cdn.worldofdypians.com/tools/dyplogo.svg"
+                          }
                           alt=""
                           style={{ width: 14, height: 14 }}
                         />
@@ -2339,7 +2554,12 @@ const BscFarmingFunc = ({
                       </div>
                     ) : claimStatus === "failed" ? (
                       <>
-                        <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/wod/failMark.svg"
+                          }
+                          alt=""
+                        />
                         Failed
                       </>
                     ) : claimStatus === "success" ? (
@@ -2396,7 +2616,11 @@ const BscFarmingFunc = ({
                       </div>
                     }
                   >
-                    <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={withdrawOpen} />
+                    <img
+                      src={"https://cdn.worldofdypians.com/tools/more-info.svg"}
+                      alt=""
+                      onClick={withdrawOpen}
+                    />
                   </Tooltip>
                 </ClickAwayListener>
               </h6>
@@ -2499,7 +2723,13 @@ const BscFarmingFunc = ({
                   href={`${window.config.bscscan_baseURL}/address/${coinbase}`}
                   className="stats-link"
                 >
-                  {shortAddress(coinbase)} <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
+                  {shortAddress(coinbase)}{" "}
+                  <img
+                    src={
+                      "https://cdn.worldofdypians.com/tools/statsLinkIcon.svg"
+                    }
+                    alt=""
+                  />
                 </a>
               </div>
               <hr />
@@ -2515,7 +2745,12 @@ const BscFarmingFunc = ({
                         color: "#f7f7fc",
                       }}
                     >
-                      <img src={'https://cdn.worldofdypians.com/tools/poolStatsIcon.svg'} alt="" />
+                      <img
+                        src={
+                          "https://cdn.worldofdypians.com/tools/poolStatsIcon.svg"
+                        }
+                        alt=""
+                      />
                       Pool stats
                     </h6>
                     {/* <h6 className="d-flex gap-2 align-items-center myaddrtext">
@@ -2574,7 +2809,13 @@ const BscFarmingFunc = ({
                       href={`https://github.com/dypfinance/staking-governance-security-audits`}
                       className="stats-link"
                     >
-                      Audit <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
+                      Audit{" "}
+                      <img
+                        src={
+                          "https://cdn.worldofdypians.com/tools/statsLinkIcon.svg"
+                        }
+                        alt=""
+                      />
                     </a>
                     <a
                       target="_blank"
@@ -2582,7 +2823,13 @@ const BscFarmingFunc = ({
                       href={`${window.config.bscscan_baseURL}/token/${token._address}?a=${coinbase}`}
                       className="stats-link"
                     >
-                      View transaction <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
+                      View transaction{" "}
+                      <img
+                        src={
+                          "https://cdn.worldofdypians.com/tools/statsLinkIcon.svg"
+                        }
+                        alt=""
+                      />
                     </a>
                   </div>
                 </div>
@@ -2655,7 +2902,11 @@ const BscFarmingFunc = ({
                           }}
                         >
                           <img
-                            src={selectedPool === "wbnb2" ? 'https://cdn.worldofdypians.com/wod/check.svg' : 'https://cdn.worldofdypians.com/wod/empty.svg'}
+                            src={
+                              selectedPool === "wbnb2"
+                                ? "https://cdn.worldofdypians.com/wod/check.svg"
+                                : "https://cdn.worldofdypians.com/wod/empty.svg"
+                            }
                             alt=""
                             className="activestate"
                             style={{ top: "45px" }}
@@ -2715,7 +2966,9 @@ const BscFarmingFunc = ({
                                 />
                                 {selectedRewardTokenLogo1.toUpperCase()}
                                 <img
-                                  src={'https://cdn.worldofdypians.com/tools/dropdownVector.svg'}
+                                  src={
+                                    "https://cdn.worldofdypians.com/tools/dropdownVector.svg"
+                                  }
                                   alt=""
                                   style={{ width: 10, height: 10 }}
                                 />
@@ -2733,7 +2986,7 @@ const BscFarmingFunc = ({
                                 >
                                   <img
                                     src={
-                                     'https://cdn.worldofdypians.com/tools/wbnbIcon.svg'
+                                      "https://cdn.worldofdypians.com/tools/wbnbIcon.svg"
                                     }
                                     alt=""
                                     style={{ width: 14, height: 14 }}
@@ -2764,7 +3017,11 @@ const BscFarmingFunc = ({
                           }}
                         >
                           <img
-                            src={selectedPool === "dyp2" ? 'https://cdn.worldofdypians.com/wod/check.svg' : 'https://cdn.worldofdypians.com/wod/empty.svg'}
+                            src={
+                              selectedPool === "dyp2"
+                                ? "https://cdn.worldofdypians.com/wod/check.svg"
+                                : "https://cdn.worldofdypians.com/wod/empty.svg"
+                            }
                             alt=""
                             className="activestate"
                             style={{ top: "45px" }}
@@ -2806,7 +3063,9 @@ const BscFarmingFunc = ({
                           </div>
                           <div className="d-flex align-items-center justify-content-center w-100 claimreward-header">
                             <img
-                              src={'https://cdn.worldofdypians.com/tools/dyplogo.svg'}
+                              src={
+                                "https://cdn.worldofdypians.com/tools/dyplogo.svg"
+                              }
                               alt=""
                               style={{ width: 14, height: 14 }}
                             />
@@ -2881,7 +3140,12 @@ const BscFarmingFunc = ({
                         </div>
                       ) : withdrawStatus === "failed" ? (
                         <>
-                          <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
+                          <img
+                            src={
+                              "https://cdn.worldofdypians.com/wod/failMark.svg"
+                            }
+                            alt=""
+                          />
                           Failed
                         </>
                       ) : withdrawStatus === "success" ? (

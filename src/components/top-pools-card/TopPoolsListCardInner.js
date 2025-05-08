@@ -59,7 +59,7 @@ const TopPoolsListCardInner = ({
   const wbnb_address = "0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7";
   const wbsc_address = "0x2170Ed0880ac9A755fd29B2688956BD959F933F8";
 
-  const cawswodcoins = ["newCawsLogo", "lanft-poolicon"];
+  const cawswodcoins = ["cawslogo", "lanft-poolicon"];
 
   const [mystakes, setMystakes] = useState([]);
 

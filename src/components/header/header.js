@@ -25,9 +25,8 @@ const Header = ({
   isPremium,
   onSetCurrencyAmount,
   showFlyout,
+  handleSwitchChainBinanceWallet,
 }) => {
-  const [gasPrice, setGasprice] = useState();
-  const [ethPrice, setEthprice] = useState();
   const [username, setUsername] = useState();
   // const [chainId, setChainId] = useState(1)
 
@@ -38,8 +37,7 @@ const Header = ({
   const [bnbState, setBnbState] = useState(false);
   const [avaxState, setAvaxState] = useState(false);
   const [baseState, setBaseState] = useState(false);
-  const [confluxState, setConfluxState] = useState(false);
-  const [skaleState, setSkaleState] = useState(false);
+
   const [currencyAmount, setCurrencyAmount] = useState(0);
 
   const [avatar, setAvatar] = useState(
@@ -55,134 +53,45 @@ const Header = ({
       setAvaxState(false);
       setBnbState(false);
       setEthState(true);
-      setSkaleState(false);
+      setBaseState(false);
     } else if (chainId === 43114) {
       setAvaxState(true);
       setBnbState(false);
       setEthState(false);
-      setSkaleState(false);
+      setBaseState(false);
     } else if (chainId === 56 || chainId === 204) {
       setAvaxState(false);
       setBnbState(true);
       setEthState(false);
-      setSkaleState(false);
+      setBaseState(false);
     } else if (chainId === 8453) {
       setAvaxState(false);
       setBnbState(false);
       setEthState(false);
       setBaseState(true);
-      setSkaleState(false);
-    } else if (chainId === 1030) {
-      setAvaxState(false);
-      setBnbState(false);
-      setEthState(false);
-      setBaseState(false);
-      setConfluxState(true);
-      setSkaleState(false);
-    } else if (chainId === 1482601649) {
-      setAvaxState(false);
-      setBnbState(false);
-      setEthState(false);
-      setBaseState(false);
-      setConfluxState(false);
-      setSkaleState(true);
     } else {
       setAvaxState(false);
       setBnbState(false);
       setBaseState(false);
       setEthState(false);
-      setSkaleState(false);
     }
   };
 
-  const handleEthPool = async () => {
+  const switchNetwork = async (hexChainId, chain) => {
     if (window.ethereum) {
-      await handleSwitchNetworkhook("0x1")
-        .then(() => {
-          handleSwitchNetwork("1");
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    } else {
-      window.alertify.error("No web3 detected. Please install Metamask!");
-    }
-  };
-
-  const handleBnbPool = async () => {
-    if (window.ethereum) {
-      await handleSwitchNetworkhook("0x38")
-        .then(() => {
-          handleSwitchNetwork("56");
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    } else {
-      window.alertify.error("No web3 detected. Please install Metamask!");
-    }
-  };
-
-  const handleOpBnbPool = async () => {
-    if (window.ethereum) {
-      await handleSwitchNetworkhook("0xcc")
-        .then(() => {
-          handleSwitchNetwork("204");
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    } else {
-      window.alertify.error("No web3 detected. Please install Metamask!");
-    }
-  };
-  const handleAvaxPool = async () => {
-    if (window.ethereum) {
-      await handleSwitchNetworkhook("0xa86a")
-        .then(() => {
-          handleSwitchNetwork("43114");
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    } else {
-      window.alertify.error("No web3 detected. Please install Metamask!");
-    }
-  };
-
-  const handleConfluxPool = async () => {
-    if (window.ethereum) {
-      await handleSwitchNetworkhook("0x406")
-        .then(() => {
-          handleSwitchNetwork("1030");
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    } else {
-      window.alertify.error("No web3 detected. Please install Metamask!");
-    }
-  };
-
-  const handleBasePool = async () => {
-    await handleSwitchNetworkhook("0x2105")
-      .then(() => {
-        handleSwitchNetwork("8453");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
-
-  const handleSkalePool = async () => {
-    if (window.ethereum) {
-      await handleSwitchNetworkhook("0x585eb4b1")
-        .then(() => {
-          handleSwitchNetwork("1482601649 ");
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+      if (!window.gatewallet && window.WALLET_TYPE !== "binance") {
+        await handleSwitchNetworkhook(hexChainId)
+          .then(() => {
+            handleSwitchNetwork(chain);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      } else if (coinbase && window.WALLET_TYPE === "binance") {
+        handleSwitchChainBinanceWallet(chain);
+      }
+    } else if (coinbase && window.WALLET_TYPE === "binance") {
+      handleSwitchChainBinanceWallet(chain);
     } else {
       window.alertify.error("No web3 detected. Please install Metamask!");
     }
@@ -255,75 +164,158 @@ const Header = ({
   //  console.log(isConnected)
   const getEthBalance = async () => {
     if (checklogout === "false" && coinbase) {
-      const balance = await ethereum
-        .request({
-          method: "eth_getBalance",
-          params: [coinbase, "latest"],
-        })
-        .catch((e) => {
-          console.error(e);
-          return 0;
-        });
+      const infuraWeb3 = new Web3(window.config.infura_endpoint);
 
-      if (balance) {
-        const infuraWeb3 = new Web3(window.config.infura_endpoint);
+      const bscWeb3 = new Web3(window.config.bsc_endpoint);
+      const opbnbWeb3 = new Web3(window.config.opbnb_endpoint);
 
-        const bscWeb3 = new Web3(window.config.bsc_endpoint);
-        const opbnbWeb3 = new Web3(window.config.opbnb_endpoint);
+      const avaxWeb3 = new Web3(window.config.avax_endpoint);
+      const web3cfx = new Web3(window.config.conflux_endpoint);
+      const web3base = new Web3(window.config.base_endpoint);
+      const web3skale = new Web3(window.config.skale_endpoint);
 
-        const avaxWeb3 = new Web3(window.config.avax_endpoint);
-        const web3cfx = new Web3(window.config.conflux_endpoint);
-        const web3base = new Web3(window.config.base_endpoint);
-        const web3skale = new Web3(window.config.skale_endpoint);
+      if (window.WALLET_TYPE === "binance") {
+        const balance_eth = await infuraWeb3.eth
+          .getBalance(coinbase)
+          .catch((e) => {
+            console.error(e);
+            return 0;
+          });
 
-        if (chainId === 1) {
-          const stringBalance = infuraWeb3.utils.hexToNumberString(balance);
-          const amount = infuraWeb3.utils.fromWei(stringBalance, "ether");
-          onSetCurrencyAmount(amount);
-          setCurrencyAmount(amount.slice(0, 7));
-        } else if (chainId === 43114) {
-          const stringBalance = avaxWeb3.utils.hexToNumberString(balance);
-          const amount = avaxWeb3.utils.fromWei(stringBalance, "ether");
-          onSetCurrencyAmount(amount);
+        const balance_avax = await avaxWeb3.eth
+          .getBalance(coinbase)
+          .catch((e) => {
+            console.error(e);
+            return 0;
+          });
 
-          setCurrencyAmount(amount.slice(0, 7));
-        } else if (chainId === 56) {
-          const stringBalance = bscWeb3.utils.hexToNumberString(balance);
-          const amount = bscWeb3.utils.fromWei(stringBalance, "ether");
-          onSetCurrencyAmount(amount);
+        const balance_bnb = await bscWeb3.eth
+          .getBalance(coinbase)
+          .catch((e) => {
+            console.error(e);
+            return 0;
+          });
 
-          setCurrencyAmount(amount.slice(0, 7));
-        } else if (chainId === 204) {
-          const stringBalance = opbnbWeb3.utils.hexToNumberString(balance);
-          const amount = opbnbWeb3.utils.fromWei(stringBalance, "ether");
-          onSetCurrencyAmount(amount);
+        const balance_opbnb = await opbnbWeb3.eth
+          .getBalance(coinbase)
+          .catch((e) => {
+            console.error(e);
+            return 0;
+          });
 
-          setCurrencyAmount(amount.slice(0, 7));
-        } else if (chainId === 1030) {
-          const stringBalance = web3cfx.utils.hexToNumberString(balance);
-          const amount = web3cfx.utils.fromWei(stringBalance, "ether");
-          onSetCurrencyAmount(amount);
+        const balance_base = await web3base.eth
+          .getBalance(coinbase)
+          .catch((e) => {
+            console.error(e);
+            return 0;
+          });
 
-          setCurrencyAmount(amount.slice(0, 7));
-        } else if (chainId === 8453) {
-          const stringBalance = web3base.utils.hexToNumberString(balance);
-          const amount = web3base.utils.fromWei(stringBalance, "ether");
-          onSetCurrencyAmount(amount);
+        const balance_cfx = await web3cfx.eth
+          .getBalance(coinbase)
+          .catch((e) => {
+            console.error(e);
+            return 0;
+          });
+        if (
+          balance_eth !== undefined &&
+          balance_cfx !== undefined &&
+          balance_base !== undefined &&
+          balance_opbnb !== undefined &&
+          balance_avax !== undefined &&
+          balance_bnb !== undefined
+        ) {
+          if (chainId === 1) {
+            const amount = infuraWeb3.utils.fromWei(balance_eth, "ether");
+            onSetCurrencyAmount(amount);
+            setCurrencyAmount(amount.slice(0, 7));
+          } else if (chainId === 43114) {
+            const amount = avaxWeb3.utils.fromWei(balance_avax, "ether");
+            onSetCurrencyAmount(amount);
 
-          setCurrencyAmount(amount.slice(0, 7));
-        } else if (chainId === 1482601649) {
-          const stringBalance = web3skale.utils.hexToNumberString(balance);
-          const amount = web3skale.utils.fromWei(stringBalance, "ether");
-          const formatted_amount = Number(amount);
+            setCurrencyAmount(amount.slice(0, 7));
+          } else if (chainId === 56) {
+            const amount = bscWeb3.utils.fromWei(balance_bnb, "ether");
+            onSetCurrencyAmount(amount);
 
-          if (formatted_amount <= 0.000005) {
-            handleSkaleRefill(coinbase);
-          } else {
-            console.log("formatted_amount", formatted_amount);
+            setCurrencyAmount(amount.slice(0, 7));
+          } else if (chainId === 204) {
+            const amount = opbnbWeb3.utils.fromWei(balance_opbnb, "ether");
+            onSetCurrencyAmount(amount);
+
+            setCurrencyAmount(amount.slice(0, 7));
+          } else if (chainId === 1030) {
+            const amount = web3cfx.utils.fromWei(balance_cfx, "ether");
+            onSetCurrencyAmount(amount);
+
+            setCurrencyAmount(amount.slice(0, 7));
+          } else if (chainId === 8453) {
+            const amount = web3base.utils.fromWei(balance_base, "ether");
+            onSetCurrencyAmount(amount);
+
+            setCurrencyAmount(amount.slice(0, 7));
           }
-          onSetCurrencyAmount(amount);
+        }
+      } else {
+        const balance = await ethereum
+          .request({
+            method: "eth_getBalance",
+            params: [coinbase, "latest"],
+          })
+          .catch((e) => {
+            console.error(e);
+            return 0;
+          });
 
-          setCurrencyAmount(amount.slice(0, 7));
+        if (balance) {
+          if (chainId === 1) {
+            const stringBalance = infuraWeb3.utils.hexToNumberString(balance);
+            const amount = infuraWeb3.utils.fromWei(stringBalance, "ether");
+            onSetCurrencyAmount(amount);
+            setCurrencyAmount(amount.slice(0, 7));
+          } else if (chainId === 43114) {
+            const stringBalance = avaxWeb3.utils.hexToNumberString(balance);
+            const amount = avaxWeb3.utils.fromWei(stringBalance, "ether");
+            onSetCurrencyAmount(amount);
+
+            setCurrencyAmount(amount.slice(0, 7));
+          } else if (chainId === 56) {
+            const stringBalance = bscWeb3.utils.hexToNumberString(balance);
+            const amount = bscWeb3.utils.fromWei(stringBalance, "ether");
+            onSetCurrencyAmount(amount);
+
+            setCurrencyAmount(amount.slice(0, 7));
+          } else if (chainId === 204) {
+            const stringBalance = opbnbWeb3.utils.hexToNumberString(balance);
+            const amount = opbnbWeb3.utils.fromWei(stringBalance, "ether");
+            onSetCurrencyAmount(amount);
+
+            setCurrencyAmount(amount.slice(0, 7));
+          } else if (chainId === 1030) {
+            const stringBalance = web3cfx.utils.hexToNumberString(balance);
+            const amount = web3cfx.utils.fromWei(stringBalance, "ether");
+            onSetCurrencyAmount(amount);
+
+            setCurrencyAmount(amount.slice(0, 7));
+          } else if (chainId === 8453) {
+            const stringBalance = web3base.utils.hexToNumberString(balance);
+            const amount = web3base.utils.fromWei(stringBalance, "ether");
+            onSetCurrencyAmount(amount);
+
+            setCurrencyAmount(amount.slice(0, 7));
+          } else if (chainId === 1482601649) {
+            const stringBalance = web3skale.utils.hexToNumberString(balance);
+            const amount = web3skale.utils.fromWei(stringBalance, "ether");
+            const formatted_amount = Number(amount);
+
+            if (formatted_amount <= 0.000005) {
+              handleSkaleRefill(coinbase);
+            } else {
+              console.log("formatted_amount", formatted_amount);
+            }
+            onSetCurrencyAmount(amount);
+
+            setCurrencyAmount(amount.slice(0, 7));
+          }
         }
       }
     }
@@ -345,30 +337,16 @@ const Header = ({
 
   useEffect(() => {
     getEthBalance();
-    if (chainId === 1) {
-      handleSwitchNetwork("1");
-    }
-
-    if (chainId === 56) {
-      handleSwitchNetwork("56");
-    }
-
-    if (chainId === 43114) {
-      handleSwitchNetwork("43114");
-    }
-  }, [chainId, currencyAmount, coinbase]);
+  }, [chainId, coinbase]);
 
   useEffect(() => {
-    // fetchData().then();
-    // refreshHotPairs().then();
     setActiveChain();
-    ethereum?.on("chainChanged", handleChainChanged);
   }, [chainId, ethState]);
 
   useEffect(() => {
     if (coinbase !== undefined && coinbase !== null) {
-      fetchAvatar();
-      fetchUsername();
+      // fetchAvatar();
+      // fetchUsername();
     } else setUsername("Dypian");
   }, [coinbase, checklogout]);
 
@@ -434,7 +412,6 @@ const Header = ({
                   </NavLink>
                   <div className="d-flex justify-content-between gap-3 align-items-center">
                     {routeData.pathname &&
-                      routeData.pathname !== "/bridge" &&
                       routeData.pathname !== "/swap" &&
                       routeData.pathname !== "/migration" && (
                         <DropdownButton
@@ -452,10 +429,6 @@ const Header = ({
                                     ? "https://cdn.worldofdypians.com/wod/avaxIcon.svg"
                                     : baseState === true
                                     ? "https://cdn.worldofdypians.com/wod/base.svg"
-                                    : confluxState === true
-                                    ? "https://cdn.worldofdypians.com/wod/confluxIcon.svg"
-                                    : skaleState === true
-                                    ? "https://cdn.worldofdypians.com/wod/skaleIcon.svg"
                                     : "https://cdn.worldofdypians.com/wod/error.svg"
                                 }
                                 height={16}
@@ -473,10 +446,6 @@ const Header = ({
                                   ? "Avalanche"
                                   : baseState === true
                                   ? "Base"
-                                  : confluxState === true
-                                  ? "Conflux"
-                                  : skaleState === true
-                                  ? "SKALE"
                                   : "Unsupported Chain"}
                               </span>
 
@@ -489,7 +458,9 @@ const Header = ({
                             </span>
                           }
                         >
-                          <Dropdown.Item onClick={() => handleEthPool()}>
+                          <Dropdown.Item
+                            onClick={() => switchNetwork("0x1", "1")}
+                          >
                             <img
                               src={"https://cdn.worldofdypians.com/wod/eth.svg"}
                               alt=""
@@ -498,7 +469,9 @@ const Header = ({
                             />
                             Ethereum
                           </Dropdown.Item>
-                          <Dropdown.Item onClick={() => handleBnbPool()}>
+                          <Dropdown.Item
+                            onClick={() => switchNetwork("0x38", "56")}
+                          >
                             <img
                               src={
                                 "https://cdn.worldofdypians.com/wod/bnbIcon.svg"
@@ -509,7 +482,9 @@ const Header = ({
                             />
                             BNB Chain
                           </Dropdown.Item>
-                          <Dropdown.Item onClick={() => handleOpBnbPool()}>
+                          <Dropdown.Item
+                            onClick={() => switchNetwork("0xcc", "204")}
+                          >
                             <img
                               src={
                                 "https://cdn.worldofdypians.com/wod/bnbIcon.svg"
@@ -520,7 +495,9 @@ const Header = ({
                             />
                             opBNB Chain
                           </Dropdown.Item>
-                          <Dropdown.Item onClick={() => handleAvaxPool()}>
+                          <Dropdown.Item
+                            onClick={() => switchNetwork("0xa86a", "43114")}
+                          >
                             <img
                               src={
                                 "https://cdn.worldofdypians.com/wod/avaxIcon.svg"
@@ -531,18 +508,10 @@ const Header = ({
                             />
                             Avalanche
                           </Dropdown.Item>
-                          <Dropdown.Item onClick={() => handleConfluxPool()}>
-                            <img
-                              src={
-                                "https://cdn.worldofdypians.com/wod/confluxIcon.svg"
-                              }
-                              alt=""
-                              height={20}
-                              width={20}
-                            />
-                            Conflux
-                          </Dropdown.Item>
-                          <Dropdown.Item onClick={() => handleBasePool()}>
+
+                          <Dropdown.Item
+                            onClick={() => switchNetwork("0x2105", "8453")}
+                          >
                             <img
                               src={
                                 "https://cdn.worldofdypians.com/wod/base.svg"
@@ -553,72 +522,16 @@ const Header = ({
                             />
                             Base
                           </Dropdown.Item>
-                          <Dropdown.Item onClick={() => handleSkalePool()}>
-                            <img
-                              src={
-                                "https://cdn.worldofdypians.com/wod/skaleIcon.svg"
-                              }
-                              alt=""
-                              height={20}
-                              width={20}
-                            />
-                            SKALE
-                          </Dropdown.Item>
                         </DropdownButton>
                       )}
-                    {/* <DropdownButton
-                id="dropdown-basic-button2"
-                onClick={checklogout === "true" && showModal}
-                title={
-                  <span className="dropdown-title walletaccount">
-                    {checklogout === "false" && (
-                      <img
-                        src={avatar}
-                        style={{
-                          height: 18,
-                          borderRadius: "50%",
-                          border: "1px solid #00D849",
-                        }}
-                        alt=""
-                      />
-                    )}
-                    {checklogout === "false" ? (
-                      shortAddress(coinbase)
-                    ) : (
-                      <span className="d-flex align-items-center gap-2 connecttitle position-relative" style={{bottom: '5px'}}>
-                        <img
-                          src={walletIcon}
-                          alt=""
-                          className="position-relative"
-                          // style={{ top: 4 }}
-                        />
-                        Connect Wallet
-                      </span>
-                    )}
-                    {checklogout === "false" && <img src={dropdown} alt="" />}
-                  </span>
-                }
-              >
-                <Dropdown.Item
-                  onClick={() => window.location.assign("/account")}
-                >
-                  <img src={user} alt="" />
-                  Your account
-                </Dropdown.Item>
-                {checklogout === "false" && (
-                  <Dropdown.Item onClick={() => logout()}>
-                    <img src={logoutimg} alt="" />
-                    Disconnect wallet
-                  </Dropdown.Item>
-                )}
-              </DropdownButton> */}
+
                     {isConnected === true &&
                       coinbase !== undefined &&
                       coinbase !== null &&
                       routeData.pathname !== "/swap" && (
                         <>
                           <div className="account-info d-none d-lg-flex align-items-center justify-content-center gap-2 gap-lg-3">
-                            {routeData.pathname !== "/bridge" &&
+                            {
                               routeData.pathname !== "/migration" && (
                                 <span className="account-balance d-none d-lg-flex">
                                   {currencyAmount}{" "}
@@ -628,12 +541,8 @@ const Header = ({
                                     ? "BNB"
                                     : chainId === 43114
                                     ? "AVAX"
-                                    : chainId === 1030
-                                    ? "CFX"
                                     : chainId === 8453
                                     ? "ETH"
-                                    : chainId === 1482601649
-                                    ? "sFUEL"
                                     : ""}
                                 </span>
                               )}
@@ -691,7 +600,7 @@ const Header = ({
                       (coinbase !== undefined || coinbase !== null) &&
                       routeData.pathname !== "/swap" && (
                         <DropdownButton
-                          onClick={isConnected === false && showModal}
+                          onClick={handleConnection}
                           id="dropdown-basic-button2"
                           title={
                             <div
@@ -739,14 +648,6 @@ const Header = ({
           </div>
         </div>
       </header>
-
-      {show && (
-        <WalletModal
-          show={show}
-          handleClose={hideModal}
-          handleConnection={handleConnection}
-        />
-      )}
     </>
   );
 };

@@ -47,6 +47,8 @@ const EarnTopPicks = ({
   showRibbon,
   onConnectWallet,
   onChainSelect,
+  binanceW3WProvider,
+  handleSwitchChainBinanceWallet,
 }) => {
   const vault = [
     {
@@ -256,7 +258,8 @@ const EarnTopPicks = ({
         .get(`https://api.dyp.finance/api/user_pools/${coinbase}`)
         .then((data) => {
           return data.data.PoolsUserIn;
-        }).catch((e) => {
+        })
+        .catch((e) => {
           console.log(e);
         });
       setuserPools(result);
@@ -331,10 +334,7 @@ const EarnTopPicks = ({
 
       const allActiveEth = [...activeEth2, ...object2activeEth];
 
-      const sortedActive = [...allActiveEth].sort(function (
-        a,
-        b
-      ) {
+      const sortedActive = [...allActiveEth].sort(function (a, b) {
         return b.apy_percent - a.apy_percent;
       });
       setethPoolsDyp([...activeEth2]);
@@ -402,8 +402,8 @@ const EarnTopPicks = ({
       const allActiveBnb = [...object2Idyp, ...activeBnb2];
       const sortedActive = allActiveBnb.sort(function (a, b) {
         return b.apy_percent - a.apy_percent;
-      }); 
-      
+      });
+
       setbnbPoolsDyp(activeBnb2);
       setbnbPoolsiDyp(object2Idyp);
       setBnbPools(sortedActive);
@@ -492,7 +492,7 @@ const EarnTopPicks = ({
         });
 
         const activebase = object2.filter((item) => {
-          return item.expired !== "Yes";
+          return item.expired === "Yes";
         });
 
         const allActivebase = [...activebase];
@@ -526,7 +526,7 @@ const EarnTopPicks = ({
         });
 
         const activeEth2 = object2.filter((item) => {
-          return item.expired !== "Yes";
+          return item.expired === "Yes";
         });
 
         const allActiveEth = activeEth2;
@@ -535,7 +535,7 @@ const EarnTopPicks = ({
           return b.apy_percent - a.apy_percent;
         });
 
-        setActivePools([sortedActiveDYP[0]]);
+        setExpiredPools([sortedActiveDYP[0]]);
         setTopPools([...sortedActiveDYP, ...activeEth2]);
       }
     }
@@ -607,10 +607,7 @@ const EarnTopPicks = ({
         return b.tvl_usd - a.tvl_usd;
       });
 
-      const sortedActiveDYP = [...activeEth2].sort(function (
-        a,
-        b
-      ) {
+      const sortedActiveDYP = [...activeEth2].sort(function (a, b) {
         return b.apy_percent - a.apy_percent;
       });
 
@@ -920,7 +917,6 @@ const EarnTopPicks = ({
     avaxDyppool,
     avaxiDypPool
   ) => {
- 
     if (chain === "eth") {
       if (tokentype === "dyp") {
         if (locktimeToCheck === selectedPool.lock_time) {
@@ -1116,9 +1112,7 @@ const EarnTopPicks = ({
           });
 
           const result2 = ethPoolsDyp.filter((item) => {
-            return (
-              item.lock_time === locktime 
-            );
+            return item.lock_time === locktime;
           });
 
           if (result) {
@@ -1133,9 +1127,7 @@ const EarnTopPicks = ({
             );
           });
           const result2 = ethPoolsDyp.filter((item) => {
-            return (
-              item.lock_time === locktime 
-            );
+            return item.lock_time === locktime;
           });
           if (result) {
             setresultFilteredPool(result2);
@@ -1174,9 +1166,7 @@ const EarnTopPicks = ({
             );
           });
           const result2 = basePoolsDyp.filter((item) => {
-            return (
-              item.lock_time === locktime 
-            );
+            return item.lock_time === locktime;
           });
           if (result) {
             setresultFilteredPool(result2);
@@ -1190,9 +1180,7 @@ const EarnTopPicks = ({
             );
           });
           const result2 = basePoolsDyp.filter((item) => {
-            return (
-              item.lock_time === locktime 
-            );
+            return item.lock_time === locktime;
           });
           if (result) {
             setresultFilteredPool(result2);
@@ -1232,9 +1220,7 @@ const EarnTopPicks = ({
           });
 
           const result2 = bnbPoolsDyp.filter((item) => {
-            return (
-              item.lock_time === locktime  
-            );
+            return item.lock_time === locktime;
           });
 
           if (result) {
@@ -1294,9 +1280,7 @@ const EarnTopPicks = ({
             );
           });
           const result2 = avaxPoolsDyp.filter((item) => {
-            return (
-              item.lock_time === locktime 
-            );
+            return item.lock_time === locktime;
           });
 
           if (result) {
@@ -1313,9 +1297,7 @@ const EarnTopPicks = ({
           });
 
           const result2 = avaxPoolsiDyp.filter((item) => {
-            return (
-              item.lock_time === locktime   
-            );
+            return item.lock_time === locktime;
           });
 
           if (result) {
@@ -1603,16 +1585,16 @@ const EarnTopPicks = ({
 
   useEffect(() => {
     // if (chain === "avax" && topList === "Staking") {
-      fetchAvaxStaking();
+    fetchAvaxStaking();
     // } else if (chain === "eth" && topList === "Staking") {
-      fetchEthStaking();
+    fetchEthStaking();
     // } else if (chain === "bnb" && topList === "Staking") {
-      fetchBnbStaking();
+    fetchBnbStaking();
     // } else if (chain === "base" && topList === "Staking") {
-      fetchBaseStaking();
+    fetchBaseStaking();
     // }
-  }, [chain, topList]); 
- 
+  }, [chain, topList]);
+
   return (
     <>
       <div className={`row w-100 justify-content-center gap-4`}>
@@ -1924,6 +1906,10 @@ const EarnTopPicks = ({
                       expired={false}
                       isConnected={isConnected}
                       the_graph_result={the_graph_result}
+                      binanceW3WProvider={binanceW3WProvider}
+                      handleSwitchChainBinanceWallet={
+                        handleSwitchChainBinanceWallet
+                      }
                     />
                   ) : (
                     <></>
@@ -2030,6 +2016,10 @@ const EarnTopPicks = ({
                       expired={false}
                       isConnected={isConnected}
                       the_graph_result={the_graph_result}
+                      binanceW3WProvider={binanceW3WProvider}
+                      handleSwitchChainBinanceWallet={
+                        handleSwitchChainBinanceWallet
+                      }
                     />
                   ) : (
                     <></>
@@ -2146,6 +2136,10 @@ const EarnTopPicks = ({
                       expired={false}
                       isConnected={isConnected}
                       the_graph_result={the_graph_result}
+                      binanceW3WProvider={binanceW3WProvider}
+                      handleSwitchChainBinanceWallet={
+                        handleSwitchChainBinanceWallet
+                      }
                     />
                   ) : (
                     <></>
@@ -2252,6 +2246,10 @@ const EarnTopPicks = ({
                       expired={false}
                       isConnected={isConnected}
                       the_graph_result={the_graph_result}
+                      binanceW3WProvider={binanceW3WProvider}
+                      handleSwitchChainBinanceWallet={
+                        handleSwitchChainBinanceWallet
+                      }
                     />
                   ) : (
                     <></>
@@ -2359,6 +2357,10 @@ const EarnTopPicks = ({
                       expired={false}
                       isConnected={isConnected}
                       the_graph_result={the_graph_result}
+                      binanceW3WProvider={binanceW3WProvider}
+                      handleSwitchChainBinanceWallet={
+                        handleSwitchChainBinanceWallet
+                      }
                     />
                   ) : (
                     <></>
@@ -2472,6 +2474,10 @@ const EarnTopPicks = ({
                       expired={false}
                       isConnected={isConnected}
                       the_graph_result={the_graph_result}
+                      binanceW3WProvider={binanceW3WProvider}
+                      handleSwitchChainBinanceWallet={
+                        handleSwitchChainBinanceWallet
+                      }
                     />
                   ) : (
                     <></>
@@ -2578,6 +2584,10 @@ const EarnTopPicks = ({
                       expired={false}
                       isConnected={isConnected}
                       the_graph_result={the_graph_result}
+                      binanceW3WProvider={binanceW3WProvider}
+                      handleSwitchChainBinanceWallet={
+                        handleSwitchChainBinanceWallet
+                      }
                     />
                   ) : (
                     <></>
@@ -2685,6 +2695,10 @@ const EarnTopPicks = ({
                       expired={false}
                       isConnected={isConnected}
                       the_graph_result={the_graph_result}
+                      binanceW3WProvider={binanceW3WProvider}
+                      handleSwitchChainBinanceWallet={
+                        handleSwitchChainBinanceWallet
+                      }
                     />
                   ) : (
                     <></>
@@ -2792,6 +2806,10 @@ const EarnTopPicks = ({
                       expired={false}
                       isConnected={isConnected}
                       the_graph_result={the_graph_result}
+                      binanceW3WProvider={binanceW3WProvider}
+                      handleSwitchChainBinanceWallet={
+                        handleSwitchChainBinanceWallet
+                      }
                     />
                   ) : (
                     <></>
@@ -2900,6 +2918,10 @@ const EarnTopPicks = ({
                       expired={false}
                       isConnected={isConnected}
                       the_graph_result={the_graph_result}
+                      binanceW3WProvider={binanceW3WProvider}
+                      handleSwitchChainBinanceWallet={
+                        handleSwitchChainBinanceWallet
+                      }
                     />
                   ) : (
                     <></>
@@ -3009,6 +3031,10 @@ const EarnTopPicks = ({
                       expired={false}
                       isConnected={isConnected}
                       the_graph_result={the_graph_result}
+                      binanceW3WProvider={binanceW3WProvider}
+                      handleSwitchChainBinanceWallet={
+                        handleSwitchChainBinanceWallet
+                      }
                     />
                   ) : (
                     <></>
@@ -3044,6 +3070,10 @@ const EarnTopPicks = ({
                     latestApr={theBnbPool.apy_percent}
                     lockTime={3}
                     listType={listType}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : null
               ) : (
@@ -3692,17 +3722,20 @@ const EarnTopPicks = ({
                             expiredPools === false
                           ? ethPools.find((item) => {
                               return item.type === "idyp";
-                            }) ?
-                            ethPools.find((item) => {
-                              return item.type === "idyp";
-                            }) :  ethPools.find((item) => {
-                              return item.type === "dyp";
                             })
+                            ? ethPools.find((item) => {
+                                return item.type === "idyp";
+                              })
+                            : ethPools.find((item) => {
+                                return item.type === "dyp";
+                              })
                           : ethPoolsiDypExpired.find((item) => {
                               return item.type === "idyp";
-                            }) ?  ethPoolsiDypExpired.find((item) => {
+                            })
+                          ? ethPoolsiDypExpired.find((item) => {
                               return item.type === "idyp";
-                            }) :  ethPoolsiDypExpired.find((item) => {
+                            })
+                          : ethPoolsiDypExpired.find((item) => {
                               return item.type === "dyp";
                             })
                       );
@@ -4046,6 +4079,10 @@ const EarnTopPicks = ({
                       setselectedPool([]);
                       setDetails(999);
                     }}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : selectedPool?.id ===
                     "0xFBe84Af34CdC22455f82e18B76Ca50D21d3aBF84" &&
@@ -4083,6 +4120,10 @@ const EarnTopPicks = ({
                       setselectedPool([]);
                       setDetails(999);
                     }}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : selectedPool?.id ===
                     "0xf6DC9E51D4E0FCc19ca6426fB5422f1E9a24F2eE" &&
@@ -4120,6 +4161,10 @@ const EarnTopPicks = ({
                       setselectedPool([]);
                       setDetails(999);
                     }}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : topList === "Staking" &&
                   selectedPool?.id ===
@@ -4155,6 +4200,10 @@ const EarnTopPicks = ({
                       setselectedPool([]);
                       setDetails(999);
                     }}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : topList === "Staking" &&
                   chain === "avax" &&
@@ -4190,6 +4239,10 @@ const EarnTopPicks = ({
                       setselectedPool([]);
                       setDetails(999);
                     }}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : topList === "Staking" &&
                   selectedPool?.id ===
@@ -4227,6 +4280,10 @@ const EarnTopPicks = ({
                       setselectedPool([]);
                       setDetails(999);
                     }}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : topList === "Staking" &&
                   selectedPool?.id ===
@@ -4264,6 +4321,10 @@ const EarnTopPicks = ({
                       setselectedPool([]);
                       setDetails(999);
                     }}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : topList === "Staking" &&
                   selectedPool?.id ===
@@ -4301,6 +4362,10 @@ const EarnTopPicks = ({
                       setselectedPool([]);
                       setDetails(999);
                     }}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : topList === "Staking" &&
                   selectedPool?.id ===
@@ -4336,6 +4401,10 @@ const EarnTopPicks = ({
                       setselectedPool([]);
                       setDetails(999);
                     }}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : topList === "Staking" &&
                   selectedPool?.id ===
@@ -4373,6 +4442,10 @@ const EarnTopPicks = ({
                       setselectedPool([]);
                       setDetails(999);
                     }}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : topList === "Staking" &&
                   (selectedPool?.id ===
@@ -4386,7 +4459,7 @@ const EarnTopPicks = ({
                     staking={window.constant_staking_dypius_base1}
                     apr={selectedPool?.apy_percent}
                     liquidity={eth_address}
-                    expiration_time={"01 Sep 2025"}
+                    expiration_time={"01 Mar 2025"}
                     finalApr={selectedPool?.apy_performancefee}
                     lockTime={
                       selectedPool?.lock_time?.split(" ")[0] === "No"
@@ -4402,7 +4475,7 @@ const EarnTopPicks = ({
                     chainId={chainId}
                     handleConnection={handleConnection}
                     handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
+                    expired={true}
                     referrer={referrer}
                     onConnectWallet={() => {
                       setShowDetails(false);
@@ -4412,6 +4485,10 @@ const EarnTopPicks = ({
                     }}
                     poolCap={10000000}
                     start_date={"01 Sep 2024"}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : topList === "Staking" &&
                   selectedPool?.id ===
@@ -4449,6 +4526,10 @@ const EarnTopPicks = ({
                     }}
                     poolCap={1000000}
                     start_date={"07 Jun 2024"}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : topList === "Staking" &&
                   selectedPool?.id ===
@@ -4486,6 +4567,10 @@ const EarnTopPicks = ({
                     }}
                     poolCap={3700000}
                     start_date={"12 Jul 2024"}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : topList === "Staking" &&
                   selectedPool?.id ===
@@ -4521,6 +4606,10 @@ const EarnTopPicks = ({
                       setselectedPool([]);
                       setDetails(999);
                     }}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : topList === "Staking" &&
                   selectedPool?.id ===
@@ -4558,6 +4647,10 @@ const EarnTopPicks = ({
                     }}
                     poolCap={1500000}
                     start_date={"12 Jul 2024"}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : topList === "Staking" &&
                   selectedPool?.id ===
@@ -4595,6 +4688,10 @@ const EarnTopPicks = ({
                       setDetails(999);
                     }}
                     poolCap={625000}
+                    binanceW3WProvider={binanceW3WProvider}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                   />
                 ) : (
                   <></>

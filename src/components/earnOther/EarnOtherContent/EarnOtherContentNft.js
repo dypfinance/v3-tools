@@ -26,7 +26,12 @@ const EarnOtherContentNft = ({
   customChain,
   faqIndex,
   networkId,
-  handleSwitchNetwork,isPremium,onCloseCard,totalTvl
+  handleSwitchNetwork,
+  isPremium,
+  onCloseCard,
+  totalTvl,
+  binanceW3WProvider,
+  handleSwitchChainBinanceWallet
 }) => {
   const options = [
     {
@@ -54,27 +59,14 @@ const EarnOtherContentNft = ({
     },
   ];
 
-  const dummyData_eth = [
+  const dummyData_eth = [];
+
+  const dummyData_eth_expired = [
     {
       chain: "Ethereum",
       apr: 25,
-      tokenLogo: "cawslogo.svg",
-      expired: false,
-      top_pick: false,
-      tokenName: "CAWS",
-      tokenTicker: "ETH",
-      pool: "CAWS",
-      id: "",
-      coming_soon: false,
-      lockTime: "No lock",
-      poolCap: "100",
-      new_pool: "Yes",
-    },
-    {
-      chain: "Ethereum",
-      apr: 25,
-      tokenLogo: "lanft-poolicon.png",
-      expired: false,
+      tokenLogo: ["lanft-poolicon.png"],
+      expired: true,
       top_pick: false,
       tokenName: "WOD",
       tokenTicker: "ETH",
@@ -84,14 +76,28 @@ const EarnOtherContentNft = ({
       lockTime: "No lock",
       poolCap: "100",
       new_pool: "Yes",
+      id: "0x3E0c0443A6a5382B2Ef20ECfe3bdbE84F1436523",
     },
-  ];
-
-  const dummyData_eth_expired = [
+    {
+      chain: "Ethereum",
+      apr: 25,
+      tokenLogo: ["cawslogo.svg"],
+      expired: true,
+      top_pick: false,
+      tokenName: "CAWS",
+      tokenTicker: "ETH",
+      pool: "CAWS",
+      id: "",
+      coming_soon: false,
+      lockTime: "No lock",
+      poolCap: "100",
+      new_pool: "Yes",
+      id: "0x097bB1679AC734E90907Ff4173bA966c694428Fc",
+    },
     {
       chain: "Ethereum",
       apr: 50,
-      tokenLogo: ["newCawsLogo.png"],
+      tokenLogo: ["cawslogo.svg"],
       expired: true,
       top_pick: false,
       tokenName: "ETH",
@@ -106,7 +112,7 @@ const EarnOtherContentNft = ({
     {
       chain: "Ethereum",
       apr: 50,
-      tokenLogo: ["newCawsLogo.png", "lanft-poolicon.png"],
+      tokenLogo: ["cawslogo.svg", "lanft-poolicon.png"],
       expired: true,
       top_pick: false,
       tokenName: "ETH",
@@ -147,7 +153,6 @@ const EarnOtherContentNft = ({
   const [avaxApr, setavaxApr] = useState();
   const [count, setCount] = useState(0);
   const [clickedCawsPool, setclickedCawsPool] = useState(false);
-
 
   const fetchBnbPool = async () => {
     await axios
@@ -296,7 +301,7 @@ const EarnOtherContentNft = ({
         console.log(err);
       });
   };
-  
+
   const fetchAvaxBuybackApr = async () => {
     await axios
       .get(`https://api.dyp.finance/api/get_buyback_info_avax`)
@@ -309,19 +314,22 @@ const EarnOtherContentNft = ({
   };
 
   const fetchFarmingApr = async () => {
-    await axios.get(`https://api.dyp.finance/api/highest-apy`).then((res) => {
-      setEthApr(res.data.highestAPY.highestAPY_ETH_V2);
-      // setBnbApr(res.data.highestAPY.highestAPY_BSC_V2);
-      // if(expiredPools === true){
+    await axios
+      .get(`https://api.dyp.finance/api/highest-apy`)
+      .then((res) => {
+        setEthApr(res.data.highestAPY.highestAPY_ETH_V2);
+        // setBnbApr(res.data.highestAPY.highestAPY_BSC_V2);
+        // if(expiredPools === true){
 
-      //   setBnbApr(138.44)
-      // }else{
-      //   fetchBnbPool();
-      // }
-      setavaxApr(res.data.highestAPY.highestAPY_AVAX_V2);
-    }).catch((e) => {
-      console.log(e);
-    });
+        //   setBnbApr(138.44)
+        // }else{
+        //   fetchBnbPool();
+        // }
+        setavaxApr(res.data.highestAPY.highestAPY_AVAX_V2);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   const fetchEthStaking = async () => {
@@ -439,18 +447,25 @@ const EarnOtherContentNft = ({
     }
   }, [option, expiredPools]);
 
-  useEffect(()=>{
-    if(poolClickedType === 'details-nft' && poolClicked === true && clickedCawsPool === false) {
-      setMyStakes(false)
-      setExpiredPools(false)
-      setclickedCawsPool(true)
+  useEffect(() => {
+    if (
+      poolClickedType === "details-nft" &&
+      poolClicked === true &&
+      clickedCawsPool === false
+    ) {
+      setMyStakes(true);
+      setExpiredPools(true);
+      setclickedCawsPool(true);
+    } else if (
+      poolClickedType === "details-land-nft" &&
+      poolClicked === true &&
+      clickedCawsPool === false
+    ) {
+      setMyStakes(true);
+      setExpiredPools(true);
+      setclickedCawsPool(true);
     }
-    else if(poolClickedType === 'details-land-nft' && poolClicked === true && clickedCawsPool === false) {
-      setMyStakes(false)
-      setExpiredPools(false)
-      setclickedCawsPool(true)
-    }
-  },[poolClickedType,poolClicked,clickedCawsPool])
+  }, [poolClickedType, poolClicked, clickedCawsPool]);
 
   return (
     <>
@@ -461,19 +476,17 @@ const EarnOtherContentNft = ({
             style={{ marginTop: "30px" }}
           >
             <div className="col-12 col-lg-3 px-0">
-      
-                <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
-                  <span style={{ fontWeight: "300", fontSize: "13px" }}>
-                    Total value locked
-                  </span>
-                  <h6
-                    className="text-white"
-                    style={{ fontWeight: "600", fontSize: "17px" }}
-                  >
-                    ${getFormattedNumber(totalTvl, 0)}
-                  </h6>
-                </div>
-            
+              <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
+                <span style={{ fontWeight: "300", fontSize: "13px" }}>
+                  Total value locked
+                </span>
+                <h6
+                  className="text-white"
+                  style={{ fontWeight: "600", fontSize: "17px" }}
+                >
+                  ${getFormattedNumber(totalTvl, 0)}
+                </h6>
+              </div>
             </div>
             {/* <div className="col-2 d-flex justify-content-start align-items-center gap-3">
               <div
@@ -530,19 +543,17 @@ const EarnOtherContentNft = ({
               </div>
             </div>
             <div className="col-lg-4 col-xl-3 px-0 w-100">
-        
-                <div className="total-value-locked-container p-2 d-flex flex-column justify-content-between align-items-start">
-                  <span style={{ fontWeight: "300", fontSize: "13px" }}>
-                    Total value locked &nbsp;
-                  </span>
-                  <h6
-                    className="text-white"
-                    style={{ fontWeight: "600", fontSize: "17px" }}
-                  >
+              <div className="total-value-locked-container p-2 d-flex flex-column justify-content-between align-items-start">
+                <span style={{ fontWeight: "300", fontSize: "13px" }}>
+                  Total value locked &nbsp;
+                </span>
+                <h6
+                  className="text-white"
+                  style={{ fontWeight: "600", fontSize: "17px" }}
+                >
                   ${getFormattedNumber(totalTvl, 0)}
-                  </h6>
-                </div>
-         
+                </h6>
+              </div>
             </div>
             {/* <div className="col-6 d-flex px-0 px-lg-2 justify-content-start align-items-center gap-3">
               <div
@@ -630,10 +641,20 @@ const EarnOtherContentNft = ({
           </div>
         </div>
       </div>
-    
+
       {listStyle === "list" && (
         <div className="row mx-0 justify-content-between align-items-center px-0 py-3 w-100">
-          {windowSize.width > 768 && (
+          {expiredPools === false && (
+            <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
+              <img
+                src={"https://cdn.worldofdypians.com/tools/disabledStaking.svg"}
+                style={{ width: "150px", height: "150px" }}
+                alt=""
+              />
+              <h6 className="no-farms"> No Active Staking pools available</h6>
+            </div>
+          )}
+          {windowSize.width > 768 && expiredPools === true && (
             <div
               className="row mx-0 justify-content-between align-items-center px-2 py-2 w-100 options-container"
               style={{ marginBottom: "10px" }}
@@ -665,15 +686,18 @@ const EarnOtherContentNft = ({
                       expired={item.expired}
                       chainId={chainId}
                       cardIndex={index}
-                    handleConnection={handleConnection}
-                    handleSwitchNetwork={handleSwitchNetwork}
-                    isConnected={isConnected}
-                    coinbase={coinbase}
-                    isNewPool={item.new_pool === "Yes" ? true : false}
-                    isPremium ={isPremium}
-                    clickedCawsPool={clickedCawsPool}
-                    onCloseCard={()=>{onCloseCard(); setclickedCawsPool(false)}}
-                    poolClickedType={poolClickedType}
+                      handleConnection={handleConnection}
+                      handleSwitchNetwork={handleSwitchNetwork}
+                      isConnected={isConnected}
+                      coinbase={coinbase}
+                      isNewPool={item.new_pool === "Yes" ? true : false}
+                      isPremium={isPremium}
+                      clickedCawsPool={clickedCawsPool}
+                      onCloseCard={() => {
+                        onCloseCard();
+                        setclickedCawsPool(false);
+                      }}
+                      poolClickedType={poolClickedType}
                     />
                   </div>
                 );
@@ -702,7 +726,7 @@ const EarnOtherContentNft = ({
                     display={"flex"}
                     isNewPool={pool.new_pool === "Yes" ? true : false}
                     totalTvl={pool.tvl_usd}
-                    // showDetails={showDetails}
+                    id={pool?.id}
                     cardIndex={index + 1}
                     chainId={chainId}
                     handleConnection={handleConnection}
@@ -713,9 +737,14 @@ const EarnOtherContentNft = ({
                     // the_graph_result={the_graph_result}
                     // the_graph_resultbsc={the_graph_resultbsc}
                     isConnected={isConnected}
-                    // the_graph_resultavax={the_graph_resultavax}
-                    // isPremium={isPremium}
-                    // network={network}
+                    clickedCawsPool={clickedCawsPool}
+                    onCloseCard={() => {
+                      onCloseCard();
+                      setclickedCawsPool(false);
+                    }}
+                    poolClickedType={poolClickedType}
+                    handleSwitchChainBinanceWallet={handleSwitchChainBinanceWallet}
+                    binanceW3WProvider={binanceW3WProvider}
                   />
                 );
               })}

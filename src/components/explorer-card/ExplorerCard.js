@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom";
 const ExplorerCard = () => {
   return (
     <NavLink
-      to="/launchpad"
+      to="/accelerator-program"
       className="explorercard-wrapper gap-2 justify-content-between d-flex position-relative"
     >
       <div
@@ -22,7 +22,7 @@ const ExplorerCard = () => {
       <div className="col-12 col-lg-7 d-flex flex-column gap-3 justify-content-between">
         <div className=" d-flex justify-content-between gap-2 align-items-center">
           <h6 className="explorercard-title d-flex gap-2">
-            Launchpad
+            Accelerator Program
             {/* <div className="launchpad-tag d-flex align-items-center p-1">
               <span className="launchpad-tag-title">Launchpad</span>
             </div> */}
@@ -34,7 +34,8 @@ const ExplorerCard = () => {
         </div>
         <div>
           <h6 className="explorercard-desc">
-          Become an early investor in Web3's top projects by joining them at their earliest stages.
+            We provide the tools, services, and free support you need to bring
+            your project to life.
           </h6>
         </div>
         <div className="">

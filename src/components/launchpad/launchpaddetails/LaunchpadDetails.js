@@ -649,12 +649,12 @@ const LaunchpadDetails = ({
               src="https://cdn.worldofdypians.com/tools/midleDetailsBanner.png"
               alt=""
             />
-            <div className="midle-total-commited px-2 py-1 d-flex align-items-center justify-content-center gap-1">
+            {/* <div className="midle-total-commited px-2 py-1 d-flex align-items-center justify-content-center gap-1">
               <span className="midle-commited-span">Commited</span>
               <span className="midle-commited-value">
                 ${getFormattedNumber(totalCommitmentValue)}
               </span>
-            </div>
+            </div> */}
           </div>
           <div className="d-flex align-items-center justify-content-between mt-3">
             <div className="d-flex align-items-center gap-2">
@@ -853,12 +853,12 @@ const LaunchpadDetails = ({
                   </span>
                 </div>
               </div>
-              <span className="my-rewards-text d-flex flex-column gap-1">
+              {/* <span className="my-rewards-text d-flex flex-column gap-1">
                 Balance:{" "}
                 <b>
                   {getFormattedNumber(tokenBalance, 4)} {selectedCoin.coin}
                 </b>
-              </span>
+              </span> */}
             </div>
             <div className="separator"></div>
             <div className="d-flex flex-column flex-lg-row align-items-center w-100 gap-2">
@@ -1028,13 +1028,13 @@ const LaunchpadDetails = ({
                 </div>
               </div>
             </div>
-            {errorMsg && (
+            {/* {errorMsg && (
               <h6 className="errormsg mt-2 justify-content-start">
                 {errorMsg}
               </h6>
-            )}{" "}
+            )} */}
             <div className="d-flex w-100 justify-content-center my-2">
-              {isConnected && (networkId === 1 || networkId === 56) ? (
+              {/* {isConnected && (networkId === 1 || networkId === 56) ? (
                 <button
                   disabled={
                     depositAmount === "" ||
@@ -1111,7 +1111,7 @@ const LaunchpadDetails = ({
                 >
                   Change Network
                 </button>
-              )}
+              )} */}
             </div>
           </div>
 

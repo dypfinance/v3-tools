@@ -3,13 +3,14 @@ import moment from "moment";
 import getFormattedNumber from "../../functions/get-formatted-number";
 
 import "./top-pools.css";
- 
+
 import Tooltip from "@material-ui/core/Tooltip";
- 
+
 import { shortAddress } from "../../functions/shortAddress";
 import { ClickAwayListener } from "@material-ui/core";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
 import axios from "axios";
+import { ethers } from "ethers";
 
 const renderer = ({ days, hours, minutes, seconds }) => {
   return (
@@ -58,6 +59,8 @@ const StakeDypiusEth = ({
   fee,
   renderedPage,
   onConnectWallet,
+  binanceW3WProvider,
+  handleSwitchChainBinanceWallet,
 }) => {
   let {
     reward_token_dypius_eth,
@@ -327,10 +330,19 @@ const StakeDypiusEth = ({
       _amountOutMin = new BigNumber(_amountOutMin).div(1e6).toFixed(18);
 
       let _bal;
-      if (chainId === "1" && coinbase && is_wallet_connected) {
-        _bal = reward_token_dypius_eth.balanceOf(coinbase);
-      
+      let reward_token_wod_sc = new window.infuraWeb3.eth.Contract(
+        window.TOKEN_ABI,
+        reward_token_dypius_eth._address
+      );
+      if (coinbase && is_wallet_connected) {
+        _bal = await reward_token_wod_sc.methods
+          .balanceOf(coinbase)
+          .call()
+          .catch((e) => {
+            console.error(e);
+          });
       }
+
       if (staking && coinbase !== undefined && coinbase !== null) {
         let _pDivs = staking.getTotalPendingDivs(coinbase);
 
@@ -582,15 +594,32 @@ const StakeDypiusEth = ({
     // e.preventDefault();
     let amount = new BigNumber(withdrawAmount).times(1e18).toFixed(0);
     setwithdrawLoading(true);
+    if (window.WALLET_TYPE !== "binance") {
+      staking
+        .unstake(amount)
+        .then(() => {
+          setwithdrawLoading(false);
+          setwithdrawStatus("success");
+          refreshBalance();
+        })
+        .catch((e) => {
+          setwithdrawLoading(false);
+          setwithdrawStatus("failed");
+          seterrorMsg3(e?.message);
 
-    staking
-      .unstake(amount)
-      .then(() => {
-        setwithdrawLoading(false);
-        setwithdrawStatus("success");
-        refreshBalance();
-      })
-      .catch((e) => {
+          setTimeout(() => {
+            setwithdrawStatus("initial");
+            seterrorMsg3("");
+            setwithdrawAmount("");
+          }, 10000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let staking_Sc = new ethers.Contract(
+        staking._address,
+        window.CONSTANT_STAKING_DYPIUS_ABI,
+        binanceW3WProvider.getSigner()
+      );
+      const txResponse = await staking_Sc.unstake(amount).catch((e) => {
         setwithdrawLoading(false);
         setwithdrawStatus("failed");
         seterrorMsg3(e?.message);
@@ -601,21 +630,49 @@ const StakeDypiusEth = ({
           setwithdrawAmount("");
         }, 10000);
       });
+
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
+        setwithdrawLoading(false);
+        setwithdrawStatus("success");
+        refreshBalance();
+        setTimeout(() => {
+          setwithdrawStatus("initial");
+          setwithdrawAmount("");
+        }, 5000);
+      }
+    }
   };
 
   const handleClaimDivs = async (e) => {
     // e.preventDefault();
     setclaimLoading(true);
+    if (window.WALLET_TYPE !== "binance") {
+      staking
+        .claim()
+        .then(() => {
+          setclaimStatus("success");
+          setclaimLoading(false);
+          setpendingDivs(getFormattedNumber(0, 6));
+          refreshBalance();
+        })
+        .catch((e) => {
+          setclaimStatus("failed");
+          setclaimLoading(false);
+          seterrorMsg2(e?.message);
 
-    staking
-      .claim()
-      .then(() => {
-        setclaimStatus("success");
-        setclaimLoading(false);
-        setpendingDivs(getFormattedNumber(0, 6));
-        refreshBalance();
-      })
-      .catch((e) => {
+          setTimeout(() => {
+            setclaimStatus("initial");
+            seterrorMsg2("");
+          }, 10000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let staking_Sc = new ethers.Contract(
+        staking._address,
+        window.CONSTANT_STAKING_DYPIUS_ABI,
+        binanceW3WProvider.getSigner()
+      );
+      const txResponse = await staking_Sc.claim().catch((e) => {
         setclaimStatus("failed");
         setclaimLoading(false);
         seterrorMsg2(e?.message);
@@ -625,6 +682,18 @@ const StakeDypiusEth = ({
           seterrorMsg2("");
         }, 10000);
       });
+
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
+        setclaimStatus("success");
+        setclaimLoading(false);
+        setpendingDivs(getFormattedNumber(0, 6));
+        refreshBalance();
+        setTimeout(() => {
+          setclaimStatus("initial");
+        }, 5000);
+      }
+    }
   };
 
   const handleSetMaxDeposit = (e) => {
@@ -655,10 +724,9 @@ const StakeDypiusEth = ({
   };
 
   const getApproxReturn = (depositAmount, days) => {
-    
-    const expirationDate = new Date("2024-11-09T23:11:00.000+02:00")
+    const expirationDate = new Date("2024-11-09T23:11:00.000+02:00");
     const currentDate = new Date();
-    const timeDifference = expirationDate - currentDate; 
+    const timeDifference = expirationDate - currentDate;
     const millisecondsInADay = 1000 * 60 * 60 * 24;
     const daysUntilExpiration = Math.floor(timeDifference / millisecondsInADay);
 
@@ -682,16 +750,32 @@ const StakeDypiusEth = ({
     // e.preventDefault();
     setreInvestStatus("invest");
     setreInvestLoading(true);
+    if (window.WALLET_TYPE !== "binance") {
+      staking
+        .reInvest()
+        .then(() => {
+          setreInvestStatus("success");
+          setreInvestLoading(false);
+          setpendingDivs(getFormattedNumber(0, 6));
+          refreshBalance();
+        })
+        .catch((e) => {
+          setreInvestStatus("failed");
+          setreInvestLoading(false);
+          seterrorMsg2(e?.message);
 
-    staking
-      .reInvest()
-      .then(() => {
-        setreInvestStatus("success");
-        setreInvestLoading(false);
-        setpendingDivs(getFormattedNumber(0, 6));
-        refreshBalance();
-      })
-      .catch((e) => {
+          setTimeout(() => {
+            setreInvestStatus("initial");
+            seterrorMsg2("");
+          }, 10000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let staking_Sc = new ethers.Contract(
+        staking._address,
+        window.CONSTANT_STAKING_DYPIUS_ABI,
+        binanceW3WProvider.getSigner()
+      );
+      const txResponse = await staking_Sc.reInvest().catch((e) => {
         setreInvestStatus("failed");
         setreInvestLoading(false);
         seterrorMsg2(e?.message);
@@ -701,16 +785,37 @@ const StakeDypiusEth = ({
           seterrorMsg2("");
         }, 10000);
       });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
+        setreInvestStatus("success");
+        setreInvestLoading(false);
+        setpendingDivs(getFormattedNumber(0, 6));
+        refreshBalance();
+        setTimeout(() => {
+          setreInvestStatus("initial");
+        }, 10000);
+      }
+    }
   };
 
   const handleEthPool = async () => {
-    await handleSwitchNetworkhook("0x1")
-      .then(() => {
-        handleSwitchNetwork("1");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    if (window.ethereum) {
+      if (window.WALLET_TYPE !== "binance") {
+        await handleSwitchNetworkhook("0x1")
+          .then(() => {
+            handleSwitchNetwork(1);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      } else if (window.WALLET_TYPE === "binance") {
+        handleSwitchChainBinanceWallet(1);
+      }
+    } else if (window.WALLET_TYPE === "binance") {
+      handleSwitchChainBinanceWallet(1);
+    } else {
+      window.alertify.error("No web3 detected. Please install Metamask!");
+    }
   };
 
   let id = Math.random().toString(36);
@@ -837,67 +942,65 @@ const StakeDypiusEth = ({
 
   return (
     <div className="d-flex flex-column gap-2 w-100">
-
       <div className="separator my-2"></div>
       {selectedTab === "deposit" ? (
         <div className="d-flex flex-column w-100 gap-2">
-          <div className={`d-flex flex-column ${ expired && 'blurrypool'} `}>
-          <div className="d-flex align-items-center gap-2 justify-content-between w-100">
-            <span className="deposit-popup-txt">Deposit</span>
-            <div className="d-flex gap-1 align-items-baseline">
-              <span className="bal-smallTxt">My Balance:</span>
-              <span className="bal-bigTxt">
-                {token_balance !== "..."
-                  ? getFormattedNumber(token_balance, 6)
-                  : getFormattedNumber(0, 6)}{" "}
-                {token_symbol}
-              </span>
-            </div>
-          </div>
-          <div
-            className={`d-flex flex-column w-100 gap-1 ${
-              (chainId !== "1" || !is_wallet_connected) && "blurrypool"
-            } `}
-          >
-            <div className="position-relative w-100 d-flex">
-              <input
-                className="text-input2 w-100"
-                type="number"
-                autoComplete="off"
-                value={
-                  Number(depositAmount) > 0 ? depositAmount : depositAmount
-                }
-                onChange={(e) => {
-                  setdepositAmount(e.target.value);
-                  checkApproval(e.target.value);
-                }}
-                name="amount_deposit"
-                id="amount_deposit"
-                key="amount_deposit"
-                placeholder={`0.0`}
-              />
-              <button
-                className="inner-max-btn position-absolute"
-                onClick={handleSetMaxDeposit}
-              >
-                Max
-              </button>
-            </div>
-            <div
-              className={`d-flex w-100 ${
-                errorMsg ? "justify-content-between" : "justify-content-end"
-              } gap-1 align-items-center`}
-            >
-              {/* {errorMsg && <h6 className="errormsg m-0">{errorMsg}</h6>} */}
-              <h6 className="errormsg m-0">*Max pool size reached</h6>
-
-
+          <div className={`d-flex flex-column ${expired && "blurrypool"} `}>
+            <div className="d-flex align-items-center gap-2 justify-content-between w-100">
+              <span className="deposit-popup-txt">Deposit</span>
               <div className="d-flex gap-1 align-items-baseline">
-                <span className="bal-smallTxt">Approved:</span>
-                <span className="bal-bigTxt2">{approvedAmount} DYP</span>
+                <span className="bal-smallTxt">My Balance:</span>
+                <span className="bal-bigTxt">
+                  {token_balance !== "..."
+                    ? getFormattedNumber(token_balance, 6)
+                    : getFormattedNumber(0, 6)}{" "}
+                  {token_symbol}
+                </span>
               </div>
             </div>
-          </div>
+            <div
+              className={`d-flex flex-column w-100 gap-1 ${
+                (chainId !== "1" || !is_wallet_connected) && "blurrypool"
+              } `}
+            >
+              <div className="position-relative w-100 d-flex">
+                <input
+                  className="text-input2 w-100"
+                  type="number"
+                  autoComplete="off"
+                  value={
+                    Number(depositAmount) > 0 ? depositAmount : depositAmount
+                  }
+                  onChange={(e) => {
+                    setdepositAmount(e.target.value);
+                    checkApproval(e.target.value);
+                  }}
+                  name="amount_deposit"
+                  id="amount_deposit"
+                  key="amount_deposit"
+                  placeholder={`0.0`}
+                />
+                <button
+                  className="inner-max-btn position-absolute"
+                  onClick={handleSetMaxDeposit}
+                >
+                  Max
+                </button>
+              </div>
+              <div
+                className={`d-flex w-100 ${
+                  errorMsg ? "justify-content-between" : "justify-content-end"
+                } gap-1 align-items-center`}
+              >
+                {/* {errorMsg && <h6 className="errormsg m-0">{errorMsg}</h6>} */}
+                <h6 className="errormsg m-0">*Max pool size reached</h6>
+
+                <div className="d-flex gap-1 align-items-baseline">
+                  <span className="bal-smallTxt">Approved:</span>
+                  <span className="bal-bigTxt2">{approvedAmount} DYP</span>
+                </div>
+              </div>
+            </div>
           </div>
           <div className="info-pool-wrapper p-3 w-100">
             <div className="d-flex w-100 justify-content-between align-items-start align-items-lg-center gap-2 flex-column flex-lg-row">
@@ -921,7 +1024,13 @@ const StakeDypiusEth = ({
                           </div>
                         }
                       >
-                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={poolCapOpen} />
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/tools/more-info.svg"
+                          }
+                          alt=""
+                          onClick={poolCapOpen}
+                        />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -943,7 +1052,13 @@ const StakeDypiusEth = ({
                           </div>
                         }
                       >
-                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={quotaOpen} />
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/tools/more-info.svg"
+                          }
+                          alt=""
+                          onClick={quotaOpen}
+                        />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -967,7 +1082,13 @@ const StakeDypiusEth = ({
                           </div>
                         }
                       >
-                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={maxDepositOpen} />
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/tools/more-info.svg"
+                          }
+                          alt=""
+                          onClick={maxDepositOpen}
+                        />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -1080,7 +1201,13 @@ const StakeDypiusEth = ({
                           </div>
                         }
                       >
-                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={poolFeeOpen} />
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/tools/more-info.svg"
+                          }
+                          alt=""
+                          onClick={poolFeeOpen}
+                        />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -1094,7 +1221,12 @@ const StakeDypiusEth = ({
                     className="stats-link2"
                   >
                     {shortAddress(staking?._address)}{" "}
-                    <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
+                    <img
+                      src={
+                        "https://cdn.worldofdypians.com/tools/statsLinkIcon.svg"
+                      }
+                      alt=""
+                    />
                   </a>
                 </div>
               </div>
@@ -1103,14 +1235,12 @@ const StakeDypiusEth = ({
                   <span className="bal-smallTxt">Start date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
                     09 Nov 2023{" "}
-                 
                   </span>
                 </div>
                 <div className="d-flex align-items-center gap-1">
                   <span className="bal-smallTxt">End date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
                     {expiration_time}{" "}
-              
                   </span>
                 </div>
               </div>
@@ -1343,7 +1473,13 @@ const StakeDypiusEth = ({
                           </div>
                         }
                       >
-                        <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={poolFeeOpen} />
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/tools/more-info.svg"
+                          }
+                          alt=""
+                          onClick={poolFeeOpen}
+                        />
                       </Tooltip>
                     </ClickAwayListener>
                   </span>
@@ -1357,7 +1493,12 @@ const StakeDypiusEth = ({
                     className="stats-link2"
                   >
                     {shortAddress(staking._address)}{" "}
-                    <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
+                    <img
+                      src={
+                        "https://cdn.worldofdypians.com/tools/statsLinkIcon.svg"
+                      }
+                      alt=""
+                    />
                   </a>
                 </div>
               </div>
@@ -1366,14 +1507,12 @@ const StakeDypiusEth = ({
                   <span className="bal-smallTxt">Start date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
                     09 Nov 2023{" "}
-                  
                   </span>
                 </div>
                 <div className="d-flex align-items-center gap-1">
                   <span className="bal-smallTxt">End date:</span>
                   <span className="deposit-popup-txt d-flex align-items-center gap-1">
                     {expiration_time}{" "}
-                
                   </span>
                 </div>
               </div>
@@ -1385,7 +1524,11 @@ const StakeDypiusEth = ({
       coinbase === undefined ||
       is_wallet_connected === false ? (
         <button className="connectbtn btn m-auto" onClick={onConnectWallet}>
-          <img src={'https://cdn.worldofdypians.com/tools/walletIcon.svg'} alt="" /> Connect wallet
+          <img
+            src={"https://cdn.worldofdypians.com/tools/walletIcon.svg"}
+            alt=""
+          />{" "}
+          Connect wallet
         </button>
       ) : chainId !== "1" ? (
         <button
