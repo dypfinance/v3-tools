@@ -1977,13 +1977,13 @@ const Games = ({
                               )}
                             </h6>
                           </div>
-                          <div className="d-flex flex-column align-items-center dynamic-width">
+                          <div className="d-flex flex-column align-items-center col-lg-3">
                             <div className="px-3 usd-upper-bg w-100">
-                              <h6 className="usdreward-text m-0 text-center dynamic-width">
+                              <h6 className="usdreward-text m-0 text-center w-100">
                                 Rewards
                               </h6>
                             </div>
-                            <div className="h-100 d-flex gap-3 align-items-center justify-content-center px-3 usdreward-wrapper dynamic-width">
+                            <div className="h-100 d-flex gap-3 align-items-center justify-content-center px-3 usdreward-wrapper w-100">
                               <div className="d-flex flex-column">
                                 <h6 className="usdreward-value-crypto">DYP</h6>
                                 <h6 className="usdreward-value">
@@ -1996,7 +1996,7 @@ const Games = ({
                                   )}
                                 </h6>
                               </div>
-                              <div className="d-flex flex-column">
+                              {/* <div className="d-flex flex-column">
                                 <h6 className="usdreward-value-crypto">
                                   {chain === "base" ? "ETH" : "BNB"}
                                 </h6>
@@ -2009,7 +2009,7 @@ const Games = ({
                                     2
                                   )}
                                 </h6>
-                              </div>
+                              </div> */}
                             </div>
                           </div>
                         </div>
@@ -2459,7 +2459,7 @@ const Games = ({
                             </div>
                           </div>
                         </div>
-                        <div
+                        {/* <div
                           className={`${
                             rewardData &&
                             rewardData.rewards?.find((obj) => {
@@ -2563,7 +2563,7 @@ const Games = ({
                               </div>
                             </div>
                           </div>
-                        </div>
+                        </div> */}
                         <div
                           className={` ${
                             rewardData &&

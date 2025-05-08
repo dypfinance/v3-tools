@@ -420,8 +420,7 @@ const Leaderboard = ({
                       <>
                         <div className="d-flex flex-column gap-2">
                           <span className="whitelist-tooltip-content-text">
-                            50% of the rewards will be in ETH/BNB and 50% will
-                            be in DYP.
+                            The rewards will be distributed in DYP tokens.
                           </span>
                         </div>
                       </>
@@ -462,7 +461,7 @@ const Leaderboard = ({
                               key={index}
                             >
                               <div className="d-flex p-1 align-items-center justify-content-center gap-1">
-                                <div className="d-flex algin-items-center">
+                                {/* <div className="d-flex algin-items-center">
                                   <img
                                     src={
                                       selectedChain === "opbnb"
@@ -476,7 +475,7 @@ const Leaderboard = ({
                                   />
                                   {selectedChain === "opbnb" ? "BNB" : "ETH"}
                                 </div>{" "}
-                                +
+                                + */}
                                 <div className="d-flex algin-items-center">
                                   <img
                                     src={
