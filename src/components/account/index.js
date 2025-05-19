@@ -8,14 +8,9 @@ import { shortAddress } from "../../functions/shortAddress";
 import "../caws/NftMinting/components/General/NftStakingCawCard/_nftStakeCawCard.scss";
 import "./account.css";
 
-
 import NftCawCard from "../caws/NftMinting/components/General/NftCawCard/NftCawCard";
 import TopPoolsCard from "../top-pools-card/TopPoolsCard";
 import Plans from "./Plans";
-
-
-
-
 
 const { BigNumber } = window;
 
@@ -34,7 +29,7 @@ export default class Subscription extends React.Component {
       favorites: [],
       favoritesETH: [],
       selectedFile: null,
-      image: 'https://cdn.worldofdypians.com/tools/person.svg',
+      image: "https://cdn.worldofdypians.com/tools/person.svg",
       lockActive: false,
       status: "",
       loadspinner: false,
@@ -75,12 +70,19 @@ export default class Subscription extends React.Component {
   }
 
   fetchUserPools = async () => {
-    if (this.props.email && this.props.address !==undefined && this.props.address.includes('0x') ) {
+    if (
+      this.props.email &&
+      this.props.address !== undefined &&
+      this.props.address.includes("0x")
+    ) {
       const result = await axios
         .get(`https://api.dyp.finance/api/user_pools/${this.props.address}`)
         .then((data) => {
           return data.data.PoolsUserIn;
-        }).catch((e)=>{console.error(e)});
+        })
+        .catch((e) => {
+          console.error(e);
+        });
       this.setState({ userPools: result });
     } else {
       if (this.props.isConnected && this.props.coinbase) {
@@ -88,7 +90,10 @@ export default class Subscription extends React.Component {
           .get(`https://api.dyp.finance/api/user_pools/${this.props.coinbase}`)
           .then((data) => {
             return data.data.PoolsUserIn;
-          }).catch((e)=>{console.error(e)});
+          })
+          .catch((e) => {
+            console.error(e);
+          });
         this.setState({ userPools: result });
       } else this.setState({ userPools: [] });
     }
@@ -524,7 +529,11 @@ export default class Subscription extends React.Component {
       tokenAddress_base
     );
 
-    if (this.props.email && this.props.address !==undefined && this.props.address.includes('0x')) {
+    if (
+      this.props.email &&
+      this.props.address !== undefined &&
+      this.props.address.includes("0x")
+    ) {
       await contract1.methods
         .balanceOf(this.props.address)
         .call()
@@ -651,7 +660,7 @@ export default class Subscription extends React.Component {
       // this.fetchAvatar();
       // this.fetchUsername();
       this.getAllBalance();
-      this.props.onSubscribe(this.props.coinbase);
+      // this.props.onSubscribe(this.props.coinbase);
       this.myNft().then();
       this.myStakes().then();
       this.myLandNft().then();
@@ -664,7 +673,7 @@ export default class Subscription extends React.Component {
       // this.fetchAvatar();
       // this.fetchUsername();
       this.getAllBalance();
-      this.props.onSubscribe(this.props.address);
+      // this.props.onSubscribe(this.props.address);
       this.myNft().then();
       this.myStakes().then();
       this.myLandNft().then();
@@ -688,7 +697,7 @@ export default class Subscription extends React.Component {
     this.props.onPlayerFetch();
     this.getAllBalance();
     this.fetchUserPools();
-    this.props.onSubscribe(this.props.coinbase);
+    // this.props.onSubscribe(this.props.coinbase);
     // this.fetchAvatar();
     // this.fetchUsername();
     this.fetchAvaxFarming();
@@ -781,7 +790,11 @@ export default class Subscription extends React.Component {
       window.config.nft_address
     );
 
-    if (this.props.email && this.props.address !==undefined && this.props.address.includes('0x')) {
+    if (
+      this.props.email &&
+      this.props.address !== undefined &&
+      this.props.address.includes("0x")
+    ) {
       let getBalanceOf = await nfts_contract.methods
         .balanceOf(this.props.address)
         .call()
@@ -850,7 +863,11 @@ export default class Subscription extends React.Component {
       window.config.landnft_address
     );
 
-    if (this.props.address !==undefined && this.props.address.includes('0x') && this.props.email) {
+    if (
+      this.props.address !== undefined &&
+      this.props.address.includes("0x") &&
+      this.props.email
+    ) {
       let getBalanceOf = await nfts_contract.methods
         .balanceOf(this.props.address)
         .call()
@@ -970,7 +987,11 @@ export default class Subscription extends React.Component {
         });
 
       return myStakes;
-    } else if (this.props.email && this.props.address !==undefined && this.props.address.includes('0x')) {
+    } else if (
+      this.props.email &&
+      this.props.address !== undefined &&
+      this.props.address.includes("0x")
+    ) {
       let stakenft = [];
       let myStakes = await staking_contract.methods
         .depositsOf(this.props.address)
@@ -997,7 +1018,11 @@ export default class Subscription extends React.Component {
       window.config.nft_caws_premiumstake_address
     );
     let stakenft = [];
-    if (this.props.email && this.props.address !==undefined && this.props.address.includes('0x')) {
+    if (
+      this.props.email &&
+      this.props.address !== undefined &&
+      this.props.address.includes("0x")
+    ) {
       let myStakes = await staking_contract.methods
         .depositsOf(this.props.address)
         .call()
@@ -1026,7 +1051,11 @@ export default class Subscription extends React.Component {
       window.config.nft_land_premiumstake_address
     );
     let stakenft = [];
-    if (this.props.email && this.props.address !==undefined && this.props.address.includes('0x')) {
+    if (
+      this.props.email &&
+      this.props.address !== undefined &&
+      this.props.address.includes("0x")
+    ) {
       let myStakes = await staking_contract.methods
         .depositsOf(this.props.address)
         .call()
@@ -1077,7 +1106,11 @@ export default class Subscription extends React.Component {
         });
 
       return myStakes;
-    } else if (this.props.email && this.props.address !==undefined && this.props.address.includes('0x')) {
+    } else if (
+      this.props.email &&
+      this.props.address !== undefined &&
+      this.props.address.includes("0x")
+    ) {
       let stakenft = [];
       let myStakes = await staking_contract.methods
         .depositsOf(this.props.address)
@@ -1118,25 +1151,25 @@ export default class Subscription extends React.Component {
   myLandStakes = async () => {
     let myStakes = await this.getLandStakesIds();
     let myStakesLandPremium = await this.getStakesIdsLandPremium();
-    
-    let stakes = []
-    let stakesLandPremium = []
+
+    let stakes = [];
+    let stakesLandPremium = [];
 
     if (myStakes && myStakes.length > 0) {
-       stakes = myStakes.map((stake) => window.getLandNft(stake));
+      stakes = myStakes.map((stake) => window.getLandNft(stake));
       stakes = await Promise.all(stakes);
       stakes.reverse();
-      
     }
 
     if (myStakesLandPremium && myStakesLandPremium.length > 0) {
-      stakesLandPremium = myStakesLandPremium.map((stake) => window.getLandNft(stake));
+      stakesLandPremium = myStakesLandPremium.map((stake) =>
+        window.getLandNft(stake)
+      );
       stakesLandPremium = await Promise.all(stakesLandPremium);
       stakesLandPremium.reverse();
-     
-   }
-   
-   this.setState({ landStakes: [...stakes, ...stakesLandPremium] });
+    }
+
+    this.setState({ landStakes: [...stakes, ...stakesLandPremium] });
   };
 
   handleApprove = async (e) => {
@@ -1348,7 +1381,11 @@ export default class Subscription extends React.Component {
   };
 
   fetchAvatar = async () => {
-    if (this.props.email && this.props.address !==undefined && this.props.address.includes('0x')) {
+    if (
+      this.props.email &&
+      this.props.address !== undefined &&
+      this.props.address.includes("0x")
+    ) {
       const response = await fetch(
         `https://api-image.dyp.finance/api/v1/avatar/${this.props.address}`
       )
@@ -1357,7 +1394,10 @@ export default class Subscription extends React.Component {
         })
         .then((data) => {
           this.setState({
-            image: data.status === 0 ? 'https://cdn.worldofdypians.com/tools/person.svg' : data.avatar,
+            image:
+              data.status === 0
+                ? "https://cdn.worldofdypians.com/tools/person.svg"
+                : data.avatar,
           });
         })
         .catch(console.error);
@@ -1372,13 +1412,19 @@ export default class Subscription extends React.Component {
         })
         .then((data) => {
           this.setState({
-            image: data.status === 0 ? 'https://cdn.worldofdypians.com/tools/person.svg' : data.avatar,
+            image:
+              data.status === 0
+                ? "https://cdn.worldofdypians.com/tools/person.svg"
+                : data.avatar,
           });
         })
         .catch(console.error);
 
       return response;
-    } else this.setState({ image: 'https://cdn.worldofdypians.com/tools/person.svg' });
+    } else
+      this.setState({
+        image: "https://cdn.worldofdypians.com/tools/person.svg",
+      });
   };
 
   deleteAvatar = async () => {
@@ -1389,7 +1435,9 @@ export default class Subscription extends React.Component {
         return res.json();
       })
       .then(() => {
-        this.setState({ image: 'https://cdn.worldofdypians.com/tools/person.svg' });
+        this.setState({
+          image: "https://cdn.worldofdypians.com/tools/person.svg",
+        });
       })
       .catch(console.error);
 
@@ -1469,7 +1517,9 @@ export default class Subscription extends React.Component {
                   <div className="position-relative">
                     <div className="avatar-border"></div>
                     <img
-                      src={'https://cdn.worldofdypians.com/tools/changeImage.svg'}
+                      src={
+                        "https://cdn.worldofdypians.com/tools/changeImage.svg"
+                      }
                       alt=""
                       className="add-image"
                     />
@@ -1619,7 +1669,7 @@ export default class Subscription extends React.Component {
                             >
                               <img
                                 src={
-                                 'https://cdn.worldofdypians.com/tools/clipboardIcon.svg'
+                                  "https://cdn.worldofdypians.com/tools/clipboardIcon.svg"
                                 }
                                 className="cursor-pointer"
                                 alt="clipboard"
@@ -1651,7 +1701,9 @@ export default class Subscription extends React.Component {
                   {this.props.isPremium === true ? (
                     <div className="plan-tag py-2 px-4 d-flex align-items-center gap-2">
                       <img
-                        src={'https://cdn.worldofdypians.com/tools/premiumDypIcon.svg'}
+                        src={
+                          "https://cdn.worldofdypians.com/tools/premiumDypIcon.svg"
+                        }
                         alt=""
                         style={{ width: 28, height: 28 }}
                       />
@@ -1665,7 +1717,9 @@ export default class Subscription extends React.Component {
                       }}
                     >
                       <img
-                        src={'https://cdn.worldofdypians.com/tools/premiumDypIcon.svg'}
+                        src={
+                          "https://cdn.worldofdypians.com/tools/premiumDypIcon.svg"
+                        }
                         alt=""
                         style={{ width: 28, height: 28 }}
                       />
@@ -1744,7 +1798,7 @@ export default class Subscription extends React.Component {
                 <div className=" balance-item-wrapper gap-3 ">
                   <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-3 gap-xxl-3 gap-lg-1">
                     <img
-                      src={'https://cdn.worldofdypians.com/wod/eth.svg'}
+                      src={"https://cdn.worldofdypians.com/wod/eth.svg"}
                       width={20}
                       height={20}
                       alt=""
@@ -1754,7 +1808,7 @@ export default class Subscription extends React.Component {
                         {getFormattedNumber(this.state.ethBalance)} DYP
                       </span>
                       <img
-                        src={'https://cdn.worldofdypians.com/tools/dyplogo.svg'}
+                        src={"https://cdn.worldofdypians.com/tools/dyplogo.svg"}
                         width={20}
                         height={20}
                         alt=""
@@ -1763,7 +1817,7 @@ export default class Subscription extends React.Component {
                   </div>
                   <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2  gap-3 gap-xxl-3 gap-lg-1">
                     <img
-                      src={'https://cdn.worldofdypians.com/wod/bnbIcon.svg'}
+                      src={"https://cdn.worldofdypians.com/wod/bnbIcon.svg"}
                       width={20}
                       height={20}
                       alt=""
@@ -1773,7 +1827,7 @@ export default class Subscription extends React.Component {
                         {getFormattedNumber(this.state.bnbBalance)} DYP
                       </span>
                       <img
-                        src={'https://cdn.worldofdypians.com/tools/dyplogo.svg'}
+                        src={"https://cdn.worldofdypians.com/tools/dyplogo.svg"}
                         width={20}
                         height={20}
                         alt=""
@@ -1782,7 +1836,7 @@ export default class Subscription extends React.Component {
                   </div>
                   <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-3 gap-xxl-3 gap-lg-1">
                     <img
-                      src={'https://cdn.worldofdypians.com/wod/avaxIcon.svg'}
+                      src={"https://cdn.worldofdypians.com/wod/avaxIcon.svg"}
                       alt=""
                       width={20}
                       height={20}
@@ -1792,7 +1846,7 @@ export default class Subscription extends React.Component {
                         {getFormattedNumber(this.state.avaxBalance)} DYP
                       </span>
                       <img
-                        src={'https://cdn.worldofdypians.com/tools/dyplogo.svg'}
+                        src={"https://cdn.worldofdypians.com/tools/dyplogo.svg"}
                         width={20}
                         height={20}
                         alt=""
@@ -1801,7 +1855,7 @@ export default class Subscription extends React.Component {
                   </div>
                   <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-3 gap-xxl-3 gap-lg-1">
                     <img
-                      src={'https://cdn.worldofdypians.com/wod/base.svg'}
+                      src={"https://cdn.worldofdypians.com/wod/base.svg"}
                       alt=""
                       width={20}
                       height={20}
@@ -1811,7 +1865,7 @@ export default class Subscription extends React.Component {
                         {getFormattedNumber(this.state.baseBalance)} DYP
                       </span>
                       <img
-                        src={'https://cdn.worldofdypians.com/tools/dyplogo.svg'}
+                        src={"https://cdn.worldofdypians.com/tools/dyplogo.svg"}
                         width={20}
                         height={20}
                         alt=""
@@ -1822,13 +1876,14 @@ export default class Subscription extends React.Component {
               </div>
             </div>
             <div className="col-12 pe-lg-0 p-0 col-lg-6">
-              <NavLink  className="wod-wrapper d-flex flex-column align-items-start gap-3 p-3 justify-content-end" to='/games'>
-                
+              <NavLink
+                className="wod-wrapper d-flex flex-column align-items-start gap-3 p-3 justify-content-end"
+                to="/games"
+              >
                 <div className="btn hero-stake-eth-btn2 px-5 py-1 ">
-                  <span className="explore-wod">Explore</span> 
-                </div></NavLink>
-             
-              
+                  <span className="explore-wod">Explore</span>
+                </div>
+              </NavLink>
             </div>
           </div>
           {/* <div className="row mt-5 gap-4 gap-lg-0">
@@ -2615,7 +2670,7 @@ export default class Subscription extends React.Component {
                               <div className="d-flex justify-content-center align-items-center bnbTagwrapper">
                                 <img
                                   src={
-                                   'https://cdn.worldofdypians.com/wod/bnbIcon.svg'
+                                    "https://cdn.worldofdypians.com/wod/bnbIcon.svg"
                                   }
                                   alt=""
                                   style={{ height: 20, width: 20 }}
@@ -2701,7 +2756,7 @@ export default class Subscription extends React.Component {
                               <div className="d-flex justify-content-center align-items-center avaxTagWrapper">
                                 <img
                                   src={
-                                    'https://cdn.worldofdypians.com/wod/avaxIcon.svg'
+                                    "https://cdn.worldofdypians.com/wod/avaxIcon.svg"
                                   }
                                   alt=""
                                   style={{ height: 20, width: 20 }}
@@ -2764,7 +2819,10 @@ export default class Subscription extends React.Component {
             <div className="col-12 col-lg-6">
               <div className="mycawsCollection position-relative mb-5">
                 <div className="nft-ethereum-tag p-2 d-flex align-items-center gap-2">
-                  <img src={'https://cdn.worldofdypians.com/wod/eth.svg'} alt="" />
+                  <img
+                    src={"https://cdn.worldofdypians.com/wod/eth.svg"}
+                    alt=""
+                  />
                   <span className="nft-ethereum-span">Ethereum</span>
                 </div>
                 <div className="d-flex flex-column gap-2 justify-content-between align-items-start">
@@ -2810,14 +2868,14 @@ export default class Subscription extends React.Component {
                         })}
                   </div>
                   <button
-                   className="outline-btn"
+                    className="outline-btn"
                     disabled={mycaws.length > 4 ? false : true}
                     style={{
                       height: "fit-content",
                       // display: mycaws.length > 4 ? "block" : "none",
                       display: "block",
                       opacity: mycaws.length > 4 ? "1" : "0",
-                      pointerEvents: mycaws.length > 4 ? "auto" : "none"
+                      pointerEvents: mycaws.length > 4 ? "auto" : "none",
                     }}
                     onClick={() => {
                       this.setState({ viewall: !this.state.viewall });
@@ -2831,7 +2889,10 @@ export default class Subscription extends React.Component {
             <div className="col-12 col-lg-6">
               <div className="mycawsCollection position-relative mb-5">
                 <div className="nft-ethereum-tag p-2 d-flex align-items-center gap-2">
-                  <img src={'https://cdn.worldofdypians.com/wod/eth.svg'} alt="" />
+                  <img
+                    src={"https://cdn.worldofdypians.com/wod/eth.svg"}
+                    alt=""
+                  />
                   <span className="nft-ethereum-span">Ethereum</span>
                 </div>
                 <div className="d-flex flex-column gap-2 justify-content-between align-items-start">
@@ -2884,7 +2945,7 @@ export default class Subscription extends React.Component {
                       // display: lands.length > 2 ? "block" : "none",
                       display: "block",
                       opacity: lands.length > 2 ? "1" : "0",
-                      pointerEvents: lands.length > 2 ? "auto" : "none"
+                      pointerEvents: lands.length > 2 ? "auto" : "none",
                     }}
                     onClick={() => {
                       this.setState({ viewall: !this.state.viewall });
@@ -3103,7 +3164,9 @@ export default class Subscription extends React.Component {
             onClose={() => {
               this.setState({ showPremiumPopup: false });
             }}
-            handleSwitchChainBinanceWallet={this.props.handleSwitchChainBinanceWallet}
+            handleSwitchChainBinanceWallet={
+              this.props.handleSwitchChainBinanceWallet
+            }
             binanceW3WProvider={this.props.binanceW3WProvider}
           />
         )}

@@ -583,7 +583,7 @@ function App() {
       basesubscribeAddress
     );
 
-    if (userWallet && isConnected === true) {
+    if (userWallet) {
       subscribedPlatformTokenAmountNewETH = await ethNewcontract.methods
         .subscriptionPlatformTokenAmount(userWallet)
         .call()
@@ -1117,7 +1117,6 @@ function App() {
   if (!window.location.pathname.includes("migration")) {
     ethereum?.on("chainChanged", checkNetworkId);
     ethereum?.on("accountsChanged", checkConnection2);
-    // ethereum?.on("accountsChanged", refreshSubscription);
   }
 
   Amplify.configure(awsExports);
@@ -2042,10 +2041,13 @@ function App() {
   // }, [data]);
 
   useEffect(() => {
-    if (email && data?.getPlayer?.wallet?.publicAddress !== undefined) {
-      refreshSubscription(data?.getPlayer?.wallet?.publicAddress);
-    } else if (isConnected && coinbase) {
+    if (isConnected && coinbase) {
       refreshSubscription(coinbase);
+    } else if (
+      email !== undefined &&
+      data?.getPlayer?.wallet?.publicAddress !== undefined
+    ) {
+      refreshSubscription(data?.getPlayer?.wallet?.publicAddress);
     } else {
       setisPremium(false);
     }
@@ -2725,7 +2727,9 @@ setkittyDashRecords */}
                         coinbase={coinbase}
                         isConnected={isConnected}
                         isPremium={isPremium}
-                        onSubscribe={refreshSubscription}
+                        onSubscribe={() => {
+                          refreshSubscription(coinbase);
+                        }}
                         showRibbon={showRibbon2}
                         email={email}
                         address={data?.getPlayer?.wallet?.publicAddress}
