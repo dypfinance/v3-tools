@@ -31,7 +31,7 @@ const EarnOtherContentNft = ({
   onCloseCard,
   totalTvl,
   binanceW3WProvider,
-  handleSwitchChainBinanceWallet
+  handleSwitchChainBinanceWallet,
 }) => {
   const options = [
     {
@@ -742,8 +742,11 @@ const EarnOtherContentNft = ({
                       onCloseCard();
                       setclickedCawsPool(false);
                     }}
+                    isPremium={isPremium}
                     poolClickedType={poolClickedType}
-                    handleSwitchChainBinanceWallet={handleSwitchChainBinanceWallet}
+                    handleSwitchChainBinanceWallet={
+                      handleSwitchChainBinanceWallet
+                    }
                     binanceW3WProvider={binanceW3WProvider}
                   />
                 );
