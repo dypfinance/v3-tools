@@ -4515,7 +4515,7 @@ async function myNftLandListContract(address) {
 
 async function myNftListContract(address) {
   let nft_contract = new window.infuraWeb3.eth.Contract(
-    window.CAWS_ABI,
+    window.NFT_ABI,
     window.config.nft_address,
     {
       from: await getCoinbase(),
