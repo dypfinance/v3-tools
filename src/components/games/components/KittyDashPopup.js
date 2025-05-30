@@ -26,7 +26,7 @@ const KittyDashPopup = ({ active, onClose }) => {
       <div className="games-popup-scroll-wrapper d-flex flex-column gap-3">
         <p className="games-popup-desc mb-0">
           Run as fast as you can with your adorable cat and aim to achieve the
-          highest score. Compete in exciting weekly competitions for a chance to
+          highest score. Compete in exciting monthly competitions for a chance to
           earn amazing rewards. The more you dash, the better your chances of
           climbing the leaderboards and claiming top prizes!
         </p>
@@ -41,7 +41,7 @@ const KittyDashPopup = ({ active, onClose }) => {
         </p>
         <p className="games-popup-desc mb-0">
           As you dash, collect coins that can be used in the shop to purchase
-          items and companions that can boost your performance. Weekly
+          items and companions that can boost your performance. Monthly
           competitions allow you to compete for top spots on the leaderboards
           and earn exciting rewards. The more you play, the better your chances
           of climbing the ranks and claiming top prizes!
