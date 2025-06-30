@@ -1045,7 +1045,7 @@ const StakeDypiusEth1Phase2 = ({
           </div>
           <div
             className={`d-flex flex-column w-100 gap-1 ${
-              (chainId !== "1" || !is_wallet_connected) && "blurrypool"
+              (chainId !== "1" || !is_wallet_connected || expired) && "blurrypool"
             } `}
           >
             <div className="position-relative w-100 d-flex">
@@ -1194,7 +1194,7 @@ const StakeDypiusEth1Phase2 = ({
             </div>
           </div>
 
-          {pendingDivs > 0 && (
+          {pendingDivs > 0 && !expired && (
             <>
               {" "}
               <div className="separator my-2"></div>
@@ -1229,7 +1229,8 @@ const StakeDypiusEth1Phase2 = ({
                       disabled={
                         reInvestStatus === "claimed" ||
                         reInvestStatus === "success" ||
-                        pendingDivs <= 0
+                        pendingDivs <= 0 ||
+                        expired
                           ? true
                           : false
                       }
@@ -1328,7 +1329,7 @@ const StakeDypiusEth1Phase2 = ({
               </div>
             </div>
           </div>
-          {is_wallet_connected && chainId === "1" && (
+          {is_wallet_connected && chainId === "1" && !expired && (
             <button
               disabled={
                 depositAmount === "" ||

@@ -1002,7 +1002,7 @@ const StakeDypiusEth3Phase2 = ({
           </div>
           <div
             className={`d-flex flex-column w-100 gap-1 ${
-              (chainId !== "1" || !is_wallet_connected) && "blurrypool"
+              (chainId !== "1" || !is_wallet_connected || expired) && "blurrypool"
             } `}
           >
             <div className="position-relative w-100 d-flex">

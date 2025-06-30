@@ -4516,7 +4516,7 @@ const EarnTopPicks = ({
                     chainId={chainId}
                     handleConnection={handleConnection}
                     handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
+                    expired={true}
                     referrer={referrer}
                     onConnectWallet={() => {
                       setShowDetails(false);
@@ -4598,7 +4598,7 @@ const EarnTopPicks = ({
                     chainId={chainId}
                     handleConnection={handleConnection}
                     handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
+                    expired={true}
                     referrer={referrer}
                     onConnectWallet={() => {
                       setShowDetails(false);
@@ -4679,7 +4679,7 @@ const EarnTopPicks = ({
                     chainId={chainId}
                     handleConnection={handleConnection}
                     handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
+                    expired={true}
                     referrer={referrer}
                     onConnectWallet={() => {
                       setShowDetails(false);

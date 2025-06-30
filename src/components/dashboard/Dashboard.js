@@ -2389,7 +2389,7 @@ const Dashboard = ({
                     chainId={network.toString()}
                     handleConnection={handleConnection}
                     handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
+                    expired={true}
                     referrer={referrer}
                     onConnectWallet={() => {
                       onConnectWallet();
@@ -2471,7 +2471,7 @@ const Dashboard = ({
                     chainId={network.toString()}
                     handleConnection={handleConnection}
                     handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
+                    expired={true}
                     referrer={referrer}
                     onConnectWallet={() => {
                       setShowDetails(false);
@@ -2631,7 +2631,7 @@ const Dashboard = ({
                     chainId={network.toString()}
                     handleConnection={handleConnection}
                     handleSwitchNetwork={handleSwitchNetwork}
-                    expired={false}
+                    expired={true}
                     referrer={referrer}
                     onConnectWallet={() => {
                       setShowDetails(false);
