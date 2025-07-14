@@ -81,7 +81,7 @@ const Games = ({
   baseBalance,
   opBnbBalance,
   handleSwitchChainBinanceWallet,
-  binanceW3WProvider
+  binanceW3WProvider,
 }) => {
   const [chain, setChain] = useState("base");
   const [message, setMessage] = useState("");
@@ -144,7 +144,8 @@ const Games = ({
     "izcipara88@gmail.com",
     "therockhidder@gmail.com",
     "deryanuwu7@gmail.com",
-    "amox@poczta.fm"
+    "amox@poczta.fm",
+    "hmbsamd@gmail.com",
   ];
 
   const midnightUTC = new Date(
@@ -250,8 +251,6 @@ const Games = ({
       html.classList.remove("hidescroll");
     }
   }, [popups.stoneCrack, popups.kittyDash, popups.cawsAdventure, active]);
-
-
 
   const switchNetwork = async (hexChainId, chain) => {
     if (window.ethereum) {
