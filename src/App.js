@@ -538,6 +538,7 @@ function App() {
     let subscribedPlatformTokenAmountNewAvax;
     let subscribedPlatformTokenAmountNewBNB;
     let subscribedPlatformTokenAmountNewBNB2;
+    let subscribedPlatformTokenAmountNewBNBNFT;
     let subscribedPlatformTokenAmountBase;
 
     const web3eth = window.infuraWeb3;
@@ -549,6 +550,7 @@ function App() {
     const EthNewABI = window.SUBSCRIPTION_NEWETH_ABI;
     const BnbNewABI = window.SUBSCRIPTION_NEWBNB_ABI;
     const BnbNew2ABI = window.SUBSCRIPTION_NEWBNB2_ABI;
+    const BnbNewBNFTABI = window.SUBSCRIPTION_NEWBNBNFT_ABI;
 
     const BaseABI = window.SUBSCRIPTION_BASE_ABI;
 
@@ -556,6 +558,8 @@ function App() {
     const avaxsubscribeNewAddress = window.config.subscription_newavax_address;
     const bnbsubscribeNewAddress = window.config.subscription_newbnb_address;
     const bnbsubscribeNewAddress2 = window.config.subscription_newbnb2_address;
+    const bnbsubscribeNewAddressnft =
+      window.config.subscription_newbnbnft_address;
 
     const basesubscribeAddress = window.config.subscription_base_address;
 
@@ -578,12 +582,25 @@ function App() {
       bnbsubscribeNewAddress2
     );
 
+    const bnbNewcontractnft = new web3bnb.eth.Contract(
+      BnbNewBNFTABI,
+      bnbsubscribeNewAddressnft
+    );
+
     const basecontract = new web3base.eth.Contract(
       BaseABI,
       basesubscribeAddress
     );
 
     if (userWallet) {
+      subscribedPlatformTokenAmountNewBNBNFT = await bnbNewcontractnft.methods
+        .subscriptionPlatformTokenAmount(userWallet)
+        .call()
+        .catch((e) => {
+          console.log(e);
+          return 0;
+        });
+
       subscribedPlatformTokenAmountNewETH = await ethNewcontract.methods
         .subscriptionPlatformTokenAmount(userWallet)
         .call()
@@ -625,6 +642,7 @@ function App() {
         });
 
       if (
+        Number(subscribedPlatformTokenAmountNewBNBNFT) === 0 &&
         Number(subscribedPlatformTokenAmountNewETH) === 0 &&
         Number(subscribedPlatformTokenAmountBase) === 0 &&
         Number(subscribedPlatformTokenAmountNewAvax) === 0 &&
@@ -634,6 +652,7 @@ function App() {
         // setsubscribedPlatformTokenAmount("0");
         setisPremium(false);
       } else if (
+        Number(subscribedPlatformTokenAmountNewBNBNFT) !== 0 ||
         Number(subscribedPlatformTokenAmountNewETH) !== 0 ||
         Number(subscribedPlatformTokenAmountBase) !== 0 ||
         Number(subscribedPlatformTokenAmountNewAvax) !== 0 ||
