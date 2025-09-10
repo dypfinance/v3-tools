@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import classes from "./ForgotPassword.module.css";
@@ -8,27 +8,37 @@ import LoginWrapper from "../LoginWrapper/LoginWrapper";
 import Input from "../Input/Input";
 import Button from "../Button/Button";
 import ErrorAlert from "../ErrorAlert/ErrorAlert";
-
-
+import ReCaptchaV2 from "react-google-recaptcha";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [isEmailSentSucces, setEmailSentSucces] = useState(false);
   const [error, setError] = useState("");
+  const [captchaValue, setCaptchaValue] = useState(null);
+  const recaptchaRef = useRef(null);
+
   const history = useNavigate();
 
+  const handleCaptchaChange = (value) => {
+    setCaptchaValue(value);
+  };
+
   const handleEmail = async () => {
-    try {
-      const { data } = await axios.post(
-        "https://axf717szte.execute-api.eu-central-1.amazonaws.com/prod/auth/SendRecoveryEmail",
-        { email: email }
-      );
-      if (data.success) {
-        setEmailSentSucces(true);
-      }
-    } catch (error) {
-      if (error?.response?.data?.code === 400) {
-        setError("Make sure you put the correct email address!");
+    if (!captchaValue) {
+      window.alertify.error("Please verify the reCAPTCHA");
+    } else {
+      try {
+        const { data } = await axios.post(
+          "https://axf717szte.execute-api.eu-central-1.amazonaws.com/prod/auth/SendRecoveryEmail",
+          { email: email }
+        );
+        if (data.success) {
+          setEmailSentSucces(true);
+        }
+      } catch (error) {
+        if (error?.response?.data?.code === 400) {
+          setError("Make sure you put the correct email address!");
+        }
       }
     }
   };
@@ -40,7 +50,7 @@ const ForgotPassword = () => {
 
   if (isEmailSentSucces) {
     return (
-      <LoginWrapper style={{ margin:'6rem 0rem' }}>
+      <LoginWrapper style={{ margin: "6rem 0rem" }}>
         <LoginCard>
           <div className={classes.container}>
             <h1 className={classes.succesfulMessageTitle}>
@@ -62,10 +72,10 @@ const ForgotPassword = () => {
 
   return (
     <LoginWrapper
-    style={{
-      margin:'auto'
-    }}
-  >
+      style={{
+        margin: "auto",
+      }}
+    >
       <LoginCard>
         <div className={classes.container}>
           <h1
@@ -89,6 +99,14 @@ const ForgotPassword = () => {
             style={{ margin: "auto", marginTop: 30, marginBottom: 20 }}
             onPress={handleEmail}
             title={"Send Email"}
+            disabled={!email || !captchaValue}
+          />
+          <ReCaptchaV2
+            sitekey="6LfFVMQrAAAAAGauKrn5cyQZRaXHMMlHMUz9IOnu"
+            style={{ display: "inline-block" }}
+            theme="dark"
+            ref={recaptchaRef}
+            onChange={handleCaptchaChange}
           />
           <h1
             onClick={() => {

@@ -35,9 +35,9 @@ body {
   font-family: "Poppins", sans-serif !important;
 }
 
-iframe {
+/* iframe {
   pointer-events: none;
-}
+} */
 
 em{
   color: #f7f7fc !important;
