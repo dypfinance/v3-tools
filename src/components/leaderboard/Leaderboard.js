@@ -42,6 +42,10 @@ const Leaderboard = ({
   fetchCawsAdvLeaderboard,
   fetchPreviousCawsAdvWinners,
 }) => {
+
+   const leaderboardCaws = leaderboardCaws2d.sort(
+      (a, b) => b.score - a.score || a.timestamp - b.timestamp
+    );
   const weeklyPrizes = ["25", "15", "10", "8", "0", "0", "0", "0", "0", "0"];
   const monthlyPrizes = [
     "250",
@@ -1029,7 +1033,7 @@ const Leaderboard = ({
                     </>
                   ) : (
                     <>
-                      {leaderboardCaws2d.slice(0, 10).map((item, index) => (
+                      {leaderboardCaws.slice(0, 10).map((item, index) => (
                         <tr
                           key={index}
                           className={`playerInnerRow ${
