@@ -15,6 +15,7 @@ import CawsAdventurePopup from "./components/CawsAdventurePopup";
 import StoneCrackPopup from "./components/StoneCrackPopup";
 import KittyDashPopup from "./components/KittyDashPopup";
 import Leaderboard from "../leaderboard/Leaderboard";
+import useLeaderboards from "../../hooks/useLeaderboards";
 
 const renderer2 = ({ hours, minutes }) => {
   return (
@@ -38,50 +39,15 @@ const Games = ({
   address,
   userId,
   chests,
-  openedChests,
-  monthlyplayerData,
-  previousMonthlyVersion,
-  previousWeeklyVersion,
-  weeklyplayerData,
-  previousKittyDashVersion,
-  kittyDashRecords,
-  fetchWeeklyWinners,
-  fetchMonthlyWinners,
-  fetchKittyDashWinners,
-  fetchPreviousMonthlyWinners,
-  fetchPreviousWeeklyWinners,
-  fetchPreviousKittyDashWinners,
-  kittyUser,
-  weeklyUser,
-  monthlyUser,
-  activePlayerKitty,
-  activePlayerWeekly,
-  activePlayerMonthly,
-  username,
-  leaderboardCaws2d,
-  activePlayerCaws2d,
-  caws2dUser,
-  onOpbnbChestClaimed,
   opbnbchests,
+  openedChests,
   openedOpbnbChests,
-  monthlyplayerDataOpbnb,
-  previousMonthlyVersionOpbnb,
-  previousWeeklyVersionOpbnb,
-  weeklyplayerDataOpbnb,
-  weeklyUserOpbnb,
-  monthlyUserOpbnb,
-  fetchWeeklyOpbnbWinners,
-  fetchPreviousWeeklyOpbnbWinners,
-  activePlayerWeeklyOpbnb,
-  fetchMonthlyOpbnbWinners,
-  fetchPreviousMonthlyOpbnbWinners,
-  activePlayerMonthlyOpbnb,
-  fetchCawsAdvLeaderboard,
-  fetchPreviousCawsAdvWinners,
   baseBalance,
   opBnbBalance,
   handleSwitchChainBinanceWallet,
   binanceW3WProvider,
+  username,
+  onOpbnbChestClaimed,
 }) => {
   const [chain, setChain] = useState("base");
   const [message, setMessage] = useState("");
@@ -146,6 +112,12 @@ const Games = ({
     "deryanuwu7@gmail.com",
     "amox@poczta.fm",
     "hmbsamd@gmail.com",
+    "sinosfirst@gmail.com",
+    "xtremecharro1@gmail.com",
+    "iceman89icm@gmail.com",
+    "computronfromhell@gmail.com",
+    "cirssimson@gmail.com",
+    "therockcharro@gmail.com",
   ];
 
   const midnightUTC = new Date(
@@ -307,6 +279,188 @@ const Games = ({
   };
 
   const windowSize = useWindowSize();
+
+  // Integrate centralized leaderboard queries
+  const {
+    recordsWeeklyOpbnbQuery,
+    recordsAroundPlayerWeeklyOpbnbQuery,
+    previousWinnersWeeklyOpbnbQuery,
+    recordsMonthlyOpbnbQuery,
+    recordsAroundPlayerMonthlyOpbnbQuery,
+    previousWinnersMonthlyOpbnbQuery,
+    recordsWeeklyQuery,
+    recordsAroundPlayerWeeklyQuery,
+    previousWinnersWeeklyQuery,
+    recordsMonthlyQuery,
+    recordsAroundPlayerMonthlyQuery,
+    previousWinnersMonthlyQuery,
+    recordsKittyDashQuery,
+    recordsAroundPlayerKittyDashQuery,
+    previousWinnersKittyDashQuery,
+    recordsCaws2dQuery,
+    previousWinnersCaws2dQuery,
+  } = useLeaderboards({ userId, username, address });
+
+  // Local copies of leaderboard data (so Games can manage and pass them down)
+  const [localWeeklyData, setLocalWeeklyData] = useState([]);
+  const [localMonthlyData, setLocalMonthlyData] = useState([]);
+  const [localWeeklyOpbnbData, setLocalWeeklyOpbnbData] = useState([]);
+  const [localMonthlyOpbnbData, setLocalMonthlyOpbnbData] = useState([]);
+  const [localKittyDashData, setLocalKittyDashData] = useState([]);
+  const [localCaws2dData, setLocalCaws2dData] = useState([]);
+
+  const [localWeeklyUser, setLocalWeeklyUser] = useState([]);
+  const [localMonthlyUser, setLocalMonthlyUser] = useState([]);
+  const [localWeeklyUserOpbnb, setLocalWeeklyUserOpbnb] = useState([]);
+  const [localMonthlyUserOpbnb, setLocalMonthlyUserOpbnb] = useState([]);
+  // Utility: safely refetch a React Query query object and fall back to cached data
+  const safeRefetch = async (query, options = {}) => {
+    if (!query) return undefined;
+    try {
+      const res = await query.refetch?.({ throwOnError: false, ...options });
+      return res?.data ?? query.data;
+    } catch (err) {
+      return query.data;
+    }
+  };
+  const localFetchWeeklyOpbnbWinners = async (force = false) => {
+    const data = await safeRefetch(recordsWeeklyOpbnbQuery);
+    setLocalWeeklyOpbnbData(Array.isArray(data) ? data : []);
+  };
+
+  const localFetchWeeklyWinners = async (force = false) => {
+    const data = await safeRefetch(recordsWeeklyQuery);
+    const list = Array.isArray(data) ? data : data?.leaderboard ?? data ?? [];
+    setLocalWeeklyData(list);
+  };
+
+  const localFetchMonthlyWinners = async (force = false) => {
+    const data = await safeRefetch(recordsMonthlyQuery);
+    const list = Array.isArray(data) ? data : data?.leaderboard ?? data ?? [];
+    setLocalMonthlyData(list);
+  };
+
+  // Derived per-player arrays (from the leaderboard data)
+  const derivedKittyUser = localKittyDashData.filter(
+    (item) => item.displayName === username
+  );
+  const derivedCaws2dUser = localCaws2dData.filter(
+    (item) => item.address?.toLowerCase() === address?.toLowerCase()
+  );
+
+  // Active-player booleans derived from whether we have an around-player result
+  const derivedActivePlayerWeekly = localWeeklyUser.length === 0;
+  const derivedActivePlayerMonthly = localMonthlyUser.length === 0;
+  const derivedActivePlayerKitty = derivedKittyUser.length === 0;
+  const derivedActivePlayerCaws2d = derivedCaws2dUser.length === 0;
+  const derivedActivePlayerWeeklyOpbnb = localWeeklyUserOpbnb.length === 0;
+  const derivedActivePlayerMonthlyOpbnb = localMonthlyUserOpbnb.length === 0;
+
+  const localFetchMonthlyOpbnbWinners = async (force = false) => {
+    const data = await safeRefetch(recordsMonthlyOpbnbQuery);
+    setLocalMonthlyOpbnbData(Array.isArray(data) ? data : []);
+  };
+
+  const localFetchKittyDashWinners = async (force = false) => {
+    const data = await safeRefetch(recordsKittyDashQuery);
+    setLocalKittyDashData(Array.isArray(data) ? data : []);
+  };
+
+  const localFetchCawsAdvLeaderboard = async (force = false) => {
+    const data = await safeRefetch(recordsCaws2dQuery);
+    setLocalCaws2dData(Array.isArray(data) ? data : []);
+  };
+
+  // Previous winners
+  const localFetchPreviousWeeklyWinners = async () => {
+    const data = await safeRefetch(previousWinnersWeeklyQuery);
+    setLocalWeeklyData(Array.isArray(data) ? data : []);
+  };
+
+  const localFetchPreviousMonthlyWinners = async () => {
+    const data = await safeRefetch(previousWinnersMonthlyQuery);
+    setLocalMonthlyData(Array.isArray(data) ? data : []);
+  };
+
+  const localFetchPreviousWeeklyOpbnbWinners = async () => {
+    const data = await safeRefetch(previousWinnersWeeklyOpbnbQuery);
+    setLocalWeeklyOpbnbData(Array.isArray(data) ? data : []);
+  };
+
+  const localFetchPreviousMonthlyOpbnbWinners = async () => {
+    const data = await safeRefetch(previousWinnersMonthlyOpbnbQuery);
+    setLocalMonthlyOpbnbData(Array.isArray(data) ? data : []);
+  };
+
+  const localFetchPreviousKittyDashWinners = async () => {
+    const data = await safeRefetch(previousWinnersKittyDashQuery);
+    setLocalKittyDashData(Array.isArray(data) ? data : []);
+  };
+
+  const localFetchPreviousCawsAdvWinners = async () => {
+    const data = await safeRefetch(previousWinnersCaws2dQuery);
+    setLocalCaws2dData(Array.isArray(data) ? data : []);
+  };
+
+  // Parent handler invoked by Leaderboard when user toggles "previous winners" view
+  const handleTogglePrevStatus = async (isPrev) => {
+    if (isPrev) {
+      await Promise.all([
+        localFetchPreviousWeeklyWinners(),
+        localFetchPreviousMonthlyWinners(),
+        localFetchPreviousWeeklyOpbnbWinners(),
+        localFetchPreviousMonthlyOpbnbWinners(),
+        localFetchPreviousKittyDashWinners(),
+        localFetchPreviousCawsAdvWinners(),
+      ]);
+    } else {
+      await Promise.all([
+        localFetchWeeklyWinners(),
+        localFetchMonthlyWinners(),
+        localFetchWeeklyOpbnbWinners(),
+        localFetchMonthlyOpbnbWinners(),
+        localFetchKittyDashWinners(),
+        localFetchCawsAdvLeaderboard(),
+      ]);
+    }
+  };
+
+  // On mount / when user changes, fetch the current (non-previous) leaderboards
+  useEffect(() => {
+    // explicit false -> load current winners (not previous)
+    try {
+      handleTogglePrevStatus(false);
+    } catch (e) {
+      // swallow any errors from initial fetch orchestration
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId, username]);
+
+  // Fetch records around player (user-specific)
+  const localFetchRecordsAroundPlayerWeekly = async () => {
+    const data = await safeRefetch(recordsAroundPlayerWeeklyQuery);
+    setLocalWeeklyUser(data?.leaderboard ?? []);
+  };
+
+  const localFetchRecordsAroundPlayerMonthly = async () => {
+    const data = await safeRefetch(recordsAroundPlayerMonthlyQuery);
+    setLocalMonthlyUser(data?.leaderboard ?? []);
+  };
+
+  const localFetchRecordsAroundPlayerWeeklyOpbnb = async () => {
+    const data = await safeRefetch(recordsAroundPlayerWeeklyOpbnbQuery);
+    setLocalWeeklyUserOpbnb(data?.leaderboard ?? []);
+  };
+
+  const localFetchRecordsAroundPlayerMonthlyOpbnb = async () => {
+    const data = await safeRefetch(recordsAroundPlayerMonthlyOpbnbQuery);
+    setLocalMonthlyUserOpbnb(data?.leaderboard ?? []);
+  };
+
+  const localFetchRecordsAroundPlayerKittyDash = async () => {
+    const data = await safeRefetch(recordsAroundPlayerKittyDashQuery);
+    setLocalKittyDashData(data?.leaderboard ?? data ?? []);
+  };
 
   const showLiveRewardData = (value) => {
     const filteredResult = value;
@@ -2674,38 +2828,27 @@ const Games = ({
           setType={setType}
           address={address}
           userId={userId}
-          monthlyplayerData={monthlyplayerData}
-          monthlyplayerDataOpbnb={monthlyplayerDataOpbnb}
-          weeklyplayerData={weeklyplayerData}
-          weeklyplayerDataOpbnb={weeklyplayerDataOpbnb}
-          fetchCawsAdvLeaderboard={fetchCawsAdvLeaderboard}
-          fetchPreviousCawsAdvWinners={fetchPreviousCawsAdvWinners}
-          kittyDashRecords={kittyDashRecords}
-          fetchWeeklyWinners={fetchWeeklyWinners}
-          fetchWeeklyOpbnbWinners={fetchWeeklyOpbnbWinners}
-          fetchMonthlyWinners={fetchMonthlyWinners}
-          fetchMonthlyOpbnbWinners={fetchMonthlyOpbnbWinners}
-          fetchKittyDashWinners={fetchKittyDashWinners}
-          fetchPreviousMonthlyWinners={fetchPreviousMonthlyWinners}
-          fetchPreviousMonthlyOpbnbWinners={fetchPreviousMonthlyOpbnbWinners}
-          fetchPreviousWeeklyWinners={fetchPreviousWeeklyWinners}
-          fetchPreviousWeeklyOpbnbWinners={fetchPreviousWeeklyOpbnbWinners}
-          fetchPreviousKittyDashWinners={fetchPreviousKittyDashWinners}
-          kittyUser={kittyUser}
-          weeklyUser={weeklyUser}
-          weeklyUserOpbnb={weeklyUserOpbnb}
-          monthlyUser={monthlyUser}
-          monthlyUserOpbnb={monthlyUserOpbnb}
-          activePlayerKitty={activePlayerKitty}
-          activePlayerCaws2d={activePlayerCaws2d}
-          caws2dUser={caws2dUser}
-          activePlayerWeekly={activePlayerWeekly}
-          activePlayerWeeklyOpbnb={activePlayerWeeklyOpbnb}
-          activePlayerMonthly={activePlayerMonthly}
-          activePlayerMonthlyOpbnb={activePlayerMonthlyOpbnb}
+          monthlyplayerData={localMonthlyData}
+          monthlyplayerDataOpbnb={localMonthlyOpbnbData}
+          weeklyplayerData={localWeeklyData}
+          weeklyplayerDataOpbnb={localWeeklyOpbnbData}
+          kittyDashRecords={localKittyDashData}
+          onTogglePrevStatus={handleTogglePrevStatus}
+          kittyUser={derivedKittyUser[0] || {}}
+          weeklyUser={localWeeklyUser[0] || {}}
+          weeklyUserOpbnb={localWeeklyUserOpbnb[0] || {}}
+          monthlyUser={localMonthlyUser[0] || {}}
+          monthlyUserOpbnb={localMonthlyUserOpbnb[0] || {}}
+          activePlayerKitty={derivedActivePlayerKitty}
+          activePlayerCaws2d={derivedActivePlayerCaws2d}
+          caws2dUser={derivedCaws2dUser[0] || {}}
+          activePlayerWeekly={derivedActivePlayerWeekly}
+          activePlayerWeeklyOpbnb={derivedActivePlayerWeeklyOpbnb}
+          activePlayerMonthly={derivedActivePlayerMonthly}
+          activePlayerMonthlyOpbnb={derivedActivePlayerMonthlyOpbnb}
           email={email}
           username={username}
-          leaderboardCaws2d={leaderboardCaws2d}
+          leaderboardCaws2d={localCaws2dData}
         />
       </div>
       <OutsideClickHandler
