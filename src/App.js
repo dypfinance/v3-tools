@@ -42,6 +42,7 @@ import GenesisStaking from "./components/genesisStaking/GenesisStaking";
 import CawsStaking from "./components/genesisStaking/CawsStaking";
 import Plans from "./components/account/Plans";
 import DypMigration from './components/bridge/DypMigration'
+import MigrationPopup from "./components/MigrationPopup/MigrationPopup";
 
 class App extends React.Component {
   constructor(props) {
@@ -902,6 +903,7 @@ class App extends React.Component {
           window.innerWidth < 786) ? null : (
           <Footer></Footer>
         )}
+        <MigrationPopup />
       </div>
     );
   }
