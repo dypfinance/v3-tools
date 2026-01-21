@@ -53,7 +53,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
   const [days, setDays] = useState(365);
   const [activeChain, setActiveChain] = useState(chainButtonsArray[0]);
   const [activeTime, setActiveTime] = useState(
-    timePillsArray[timePillsArray.length - 1]
+    timePillsArray[timePillsArray.length - 1],
   );
   const [activeMethod, setActiveMethod] = useState(pillsNames[0]);
   const [calculateApproxUSD, setCalculateApproxUSD] = useState(0);
@@ -130,7 +130,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
         setWbnbPrice(data.data.the_graph_bsc_v2.usd_per_eth);
 
         const propertyIDyp = Object.entries(
-          data.data.the_graph_bsc_v2.token_data
+          data.data.the_graph_bsc_v2.token_data,
         );
         setiDypPrice(propertyIDyp[1][1].token_price_usd);
       })
@@ -142,7 +142,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
   const getPriceDYP = async () => {
     const dypprice = await axios
       .get(
-        "https://api.geckoterminal.com/api/v2/networks/eth/pools/0x7c81087310a228470db28c1068f0663d6bf88679"
+        "https://api.geckoterminal.com/api/v2/networks/eth/pools/0x7c81087310a228470db28c1068f0663d6bf88679",
       )
       .then((res) => {
         return res.data.data.attributes.base_token_price_usd;
@@ -186,49 +186,49 @@ const Calculator = ({ earnClass, onClose, ref }) => {
         (
           ((parseInt(usdToDeposit) * parseFloat(stakeApy)) / 100 / 365) *
           parseInt(days)
-        ).toFixed(2)
+        ).toFixed(2),
       );
 
       setCalculateApproxWeth(
         getFormattedNumber(
           parseFloat(
             ((parseInt(usdToDeposit) * parseFloat(stakeApy)) / 100 / 365) *
-              parseInt(days)
+              parseInt(days),
           ) / dypPrice,
-          4
-        )
+          4,
+        ),
       );
 
       setCalculateApproxUSDBNB(
         (
           ((parseInt(usdToDeposit) * parseFloat(stakeApyBNB)) / 100 / 365) *
           parseInt(days)
-        ).toFixed(2)
+        ).toFixed(2),
       );
       setCalculateApproxWbnb(
         getFormattedNumber(
           parseFloat(
             ((parseInt(usdToDeposit) * parseFloat(stakeApyBNB)) / 100 / 365) *
-              parseInt(days)
+              parseInt(days),
           ) / idypPrice,
-          4
-        )
+          4,
+        ),
       );
 
       setCalculateApproxUSDAVAX(
         (
           ((parseInt(usdToDeposit) * parseFloat(stakeApyAVAX)) / 100 / 365) *
           parseInt(days)
-        ).toFixed(2)
+        ).toFixed(2),
       );
       setCalculateApproxWavax(
         getFormattedNumber(
           parseFloat(
             ((parseInt(usdToDeposit) * parseFloat(stakeApyAVAX)) / 100 / 365) *
-              parseInt(days)
+              parseInt(days),
           ) / dypPrice,
-          4
-        )
+          4,
+        ),
       );
     } else if (activeMethod === "Vault") {
       setCalculateApproxUSD(
@@ -237,7 +237,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
             100 /
             365) *
           parseInt(days)
-        ).toFixed(2)
+        ).toFixed(2),
       );
 
       setCalculateApproxWeth(
@@ -246,10 +246,10 @@ const Calculator = ({ earnClass, onClose, ref }) => {
             ((parseInt(usdToDeposit) * parseFloat(vaultplatformArrayNew[0])) /
               100 /
               365) *
-              parseInt(days)
+              parseInt(days),
           ) / wethPrice,
-          4
-        )
+          4,
+        ),
       );
 
       setCalculateApproxUSDBNB(
@@ -258,7 +258,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
             100 /
             365) *
           parseInt(days)
-        ).toFixed(2)
+        ).toFixed(2),
       );
       setCalculateApproxWbnb(
         getFormattedNumber(
@@ -266,10 +266,10 @@ const Calculator = ({ earnClass, onClose, ref }) => {
             ((parseInt(usdToDeposit) * parseFloat(vaultplatformArrayNew[2])) /
               100 /
               365) *
-              parseInt(days)
+              parseInt(days),
           ),
-          4
-        )
+          4,
+        ),
       );
 
       setCalculateApproxUSDAVAX(
@@ -278,7 +278,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
             100 /
             365) *
           parseInt(days)
-        ).toFixed(2)
+        ).toFixed(2),
       );
 
       setCalculateApproxWavax(
@@ -287,10 +287,10 @@ const Calculator = ({ earnClass, onClose, ref }) => {
             ((parseInt(usdToDeposit) * parseFloat(vaultplatformArrayNew[3])) /
               100 /
               365) *
-              parseInt(days)
+              parseInt(days),
           ),
-          4
-        )
+          4,
+        ),
       );
     }
   }, [
@@ -439,7 +439,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
                 </p>
               ))}
           </div>
-          <div className="separator"></div>
+          <div className="separator mb-0"></div>
 
           <div
             className="row align-items-center gap-2 m-0 position-relative"

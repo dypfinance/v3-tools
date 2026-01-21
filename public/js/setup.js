@@ -2713,6 +2713,8 @@ window.config = {
   token_old_avax_address: "0x961c8c0b1aad0c0b10a51fef6a867e3091bcef17", //avax
 
   claim_newdyp_eth_address: "0xc40be3a801a39bdc151bf6b3468b4035f8a4d440", //migrate old dyp eth -> new dyp eth
+  migration2_address: "0xc40be3a801a39bdc151bf6b3468b4035f8a4d440", //migrate old dyp and idyp phase2
+
   bridge_bsc_new_address: "0x39b46b212bdf15b42b166779b9d1787a68b9d0c3",
   bridge_migration_eth_bsc_new_address:
     "0x9eafb124162c17196a0e9de1bdb70384936f0dd5",
