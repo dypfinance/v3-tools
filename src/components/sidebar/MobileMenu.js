@@ -44,6 +44,29 @@ const MobileMenu = () => {
       }}
     >
       <div className="row w-100">
+        <NavLink
+          to="/migration-portal"
+          className="col"
+          onClick={() => setActiveIcon("migration")}
+        >
+          <div
+            className={`d-flex align-items-center sidebar-item ${
+              activeIcon === "migration" && "active-side-link"
+            } p-2 justify-content-center`}
+          >
+            <img
+              src={
+                activeIcon === "migration"
+                  ? "https://cdn.worldofdypians.com/tools/swapIconActive.svg"
+                  : "https://cdn.worldofdypians.com/tools/swapIcon.svg"
+              }
+              width={25}
+              height={25}
+              alt=""
+            />
+            {/* <h3 className={`active-text ${activeIcon === 'governance' ? 'd-flex' : 'd-none'}`}>Governance</h3> */}
+          </div>
+        </NavLink>
         <div
           // to="/earn/dypius"
           className="col"

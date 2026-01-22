@@ -34,19 +34,25 @@ export function MigrationPortal({
   const [depositStatus, setdepositStatus] = useState("initial");
   const [claimLoading, setclaimLoading] = useState(false);
   const [claimStatus, setclaimStatus] = useState("initial");
-  const [deposits, setDeposits] = useState([
-    {
-      id: "",
-      token: "DYP",
-      chain: "Ethereum",
-      amount: "",
-      timestamp: new Date(),
-      status: "pending",
-    },
-  ]);
+
+  const [dypDeposits, setDypDeposits] = useState({
+    bnb: { amount: 0, count: 0 },
+    eth: { amount: 0, count: 0 },
+    avax: { amount: 0, count: 0 },
+    opbnb: { amount: 0, count: 0 },
+    base: { amount: 0, count: 0 },
+  });
+
+  const [idypDeposits, setIdypDeposits] = useState({
+    bnb: { amount: 0, count: 0 },
+    eth: { amount: 0, count: 0 },
+    avax: { amount: 0, count: 0 },
+  });
 
   const [tokenBalance, setTokenBalance] = useState(0);
-  const [tokenAddress, setTokenAddress] = useState("");
+  const [tokenAddress, setTokenAddress] = useState(
+    window.config.token_dypius_new_address,
+  );
   const [errorMsg, seterrorMsg] = useState("");
   const [errorMsg2, seterrorMsg2] = useState("");
 
@@ -84,7 +90,6 @@ export function MigrationPortal({
           .balanceOf(coinbase)
           .call()
           .then((data) => {
-            console.log("datadata", data);
             setTokenBalance(data);
           })
           .catch((e) => {
@@ -201,13 +206,13 @@ export function MigrationPortal({
     setdepositLoading(true);
     window.web3 = new Web3(window.ethereum);
     let contract = new window.web3.eth.Contract(
-      window.CLAIM_NEW_DYP_ABI,
-      window.config.migration2_address,
+      window.MIGRATIONBNB_ABI,
+      window.config.migrationbnb_address,
     );
     let amount2 = window.web3.utils.toWei(amount.toString(), "ether");
     await contract.methods
-      .deposit(amount2, tokenAddress)
-      .send({ from: coinbase })
+      .deposit(tokenAddress, amount2, networkId)
+      .send({ from: coinbase, maxPriorityFeePerGas: null, maxFeePerGas: null })
       .then(() => {
         setdepositLoading(false);
         setdepositStatus("success");
@@ -221,9 +226,10 @@ export function MigrationPortal({
                 ? "opbnb"
                 : "avax",
         );
+        getAllDepositsByUser();
         setTimeout(() => {
           setAmount("");
-          setdepositStatus("fail");
+          setdepositStatus("initial");
           seterrorMsg("");
         }, 5000);
       })
@@ -233,19 +239,26 @@ export function MigrationPortal({
         seterrorMsg(e?.message);
         setTimeout(() => {
           setAmount("");
-          setdepositStatus("fail");
+          setdepositStatus("initial");
           seterrorMsg("");
         }, 5000);
       });
   };
   const handleApprove = async () => {
+    setdepositLoading(true);
     window.web3 = new Web3(window.ethereum);
     let contract = new window.web3.eth.Contract(window.TOKEN_ABI, tokenAddress);
+    console.log(
+      tokenAddress,
+      coinbase,
+      window.web3.utils.toWei(amount.toString(), "ether"),
+    );
     await contract.methods
       .approve(
-        window.config.migration_contract_address,
+        window.config.migrationbnb_address,
         window.web3.utils.toWei(amount.toString(), "ether"),
       )
+      .send({ from: coinbase, maxPriorityFeePerGas: null, maxFeePerGas: null })
       .then(() => {
         setdepositLoading(false);
         setdepositStatus("deposit");
@@ -266,12 +279,13 @@ export function MigrationPortal({
     setclaimLoading(true);
     window.web3 = new Web3(window.ethereum);
     let contract = new window.web3.eth.Contract(
-      window.CLAIM_NEW_DYP_ABI,
-      window.config.migration2_address,
+      window.MIGRATIONBNB_ABI,
+      window.config.migrationbnb_address,
     );
 
     await contract.methods
       .claim()
+      .send({ from: coinbase })
       .then(() => {
         setclaimStatus("success");
         setclaimLoading(false);
@@ -290,6 +304,61 @@ export function MigrationPortal({
           seterrorMsg2("");
         }, 6000);
       });
+  };
+
+  const getAllDepositsByUser = async () => {
+    if (!coinbase) return;
+    let contract_eth = new window.infuraWeb3.eth.Contract(
+      window.MIGRATIONBNB_ABI,
+      window.config.migrationeth_address,
+    );
+    let contract_bnb = new window.bscWeb3.eth.Contract(
+      window.MIGRATIONBNB_ABI,
+      window.config.migrationbnb_address,
+    );
+    let contract_opbnb = new window.opbnbWeb3.eth.Contract(
+      window.MIGRATIONBNB_ABI,
+      window.config.migrationopbnb_address,
+    );
+    let contract_avax = new window.avaxWeb3.eth.Contract(
+      window.MIGRATIONBNB_ABI,
+      window.config.migrationavax_address,
+    );
+    let contract_base = new window.baseWeb3.eth.Contract(
+      window.MIGRATIONBNB_ABI,
+      window.config.migrationbase_address,
+    );
+
+    // Fetch DYP deposits for all chains
+    const depositCounts_dyp_bnb = await contract_bnb.methods
+      .depositsCount(coinbase)
+      .call()
+      .catch((e) => {
+        console.error(e);
+        return 0;
+      });
+
+    let dypAmountBNB = await contract_bnb.methods
+      .totalDepositedByToken(
+        coinbase,
+        window.config.token_dypius_new_bsc_address,
+      )
+      .call()
+      .catch((e) => {
+        return 0;
+      });
+    let dypAmountFormatted = Web3.utils.fromWei(
+      dypAmountBNB.toString(),
+      "ether",
+    );
+
+    setDypDeposits((prev) => ({
+      ...prev,
+      bnb: {
+        amount: Number(dypAmountFormatted),
+        count: Number(depositCounts_dyp_bnb),
+      },
+    }));
   };
 
   useEffect(() => {
@@ -320,6 +389,10 @@ export function MigrationPortal({
       setTokenAddress(window.config.token_idyp_eth_address);
     }
   }, [selectedToken, selectedChain]);
+
+  useEffect(() => {
+    getAllDepositsByUser();
+  }, [coinbase]);
 
   return (
     <div className="space-y-5 d-flex flex-lg-row flex-column justify-content-between gap-4">
@@ -429,8 +502,8 @@ export function MigrationPortal({
                   onClick={() => setSelectedToken("DYP")}
                   className={`px-3 py-2 rounded-lg bordertw transition-all h-12 ${
                     selectedToken === "DYP"
-                      ? "border-[#7c7df5] bg-[#7c7df5]/10"
-                      : "border-[#5a5b8c] bg-[#3d3e6f]/40 hover:border-[#7c7df5]/50"
+                      ? "border-[#4ed5d2] bg-[#7c7df5]/10"
+                      : "border-[#5a5b8c] bg-[#3d3e6f]/40 hover:border-[#4ed5d2]/50"
                   }`}
                 >
                   <div className="flex items-center gap-2 mb-1 justify-content-between">
@@ -438,6 +511,7 @@ export function MigrationPortal({
                       <img
                         src="https://cdn.worldofdypians.com/tools/dyplogo.svg"
                         className="w-6 h-6"
+                        alt=""
                       />
 
                       <div className="text-white font-semibold text-sm">
@@ -455,8 +529,8 @@ export function MigrationPortal({
                   onClick={() => setSelectedToken("iDYP")}
                   className={`px-3 py-2 rounded-lg bordertw transition-all h-12 ${
                     selectedToken === "iDYP"
-                      ? "border-[#7c7df5] bg-[#7c7df5]/10"
-                      : "border-[#5a5b8c] bg-[#3d3e6f]/40 hover:border-[#7c7df5]/50"
+                      ? "border-[#4ed5d2] bg-[#7c7df5]/10"
+                      : "border-[#5a5b8c] bg-[#3d3e6f]/40 hover:border-[#4ed5d2]/50"
                   }`}
                 >
                   <div className="flex items-center justify-content-between gap-2 mb-1">
@@ -464,6 +538,7 @@ export function MigrationPortal({
                       <img
                         src="https://cdn.worldofdypians.com/tools/idyp2.png"
                         className="w-6 h-6"
+                        alt=""
                       />
                       <div className="text-white font-semibold text-sm">
                         iDYP
@@ -713,99 +788,136 @@ export function MigrationPortal({
         </div>
       </div>
       {/* Deposit History - Aggregated */}
-      {deposits.length > 0 && (
-        <div className="w-100 bg-[#2a2b5e]/80 backdrop-blur-sm bordertw border-[#5a5b8c] rounded-xl h-fit p-6">
-          <h2 className="text-white font-semibold mb-4 flex items-center gap-2">
-            {/* <Clock className="w-5 h-5 text-[#7c7df5]" /> */}
-            My Deposits
-          </h2>
-          <div className="space-y-3">
-            {/* DYP Aggregate */}
-            {deposits.filter((d) => d.token === "DYP").length > 0 && (
-              <div className="bg-[#1e1f3f]/60 rounded-xl p-4 bordertw border-[#5a5b8c]">
-                <div className="flex justify-between items-start mb-3">
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <img
-                        src="https://cdn.worldofdypians.com/tools/dyplogo.svg"
-                        className="w-6 h-6"
-                      />
-                      <div className="text-white font-semibold">DYP</div>
-                    </div>
-                    <div className="text-gray-400 text-sm">
-                      Total:{" "}
-                      {deposits
-                        .filter((d) => d.token === "DYP")
-                        .reduce((sum, d) => sum + parseFloat(d.amount), 0)
-                        .toFixed(2)}{" "}
-                      DYP
-                    </div>
-                    <div className="text-gray-400 text-xs mt-1">
-                      {deposits.filter((d) => d.token === "DYP").length} deposit
-                      {deposits.filter((d) => d.token === "DYP").length > 1
-                        ? "s"
-                        : ""}
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 bg-amber-500/10 px-3 py-1.5 rounded-lg bordertw border-amber-500/30">
-                    <Clock className="w-4 h-4 text-amber-400" />
-                    <span className="text-amber-400 text-sm font-medium">
-                      Pending
-                    </span>
-                  </div>
+
+      <div className="w-100 bg-[#2a2b5e]/80 backdrop-blur-sm bordertw border-[#5a5b8c] rounded-xl h-fit p-6">
+        <h2 className="text-white font-semibold mb-4 flex items-center gap-2">
+          {/* <Clock className="w-5 h-5 text-[#7c7df5]" /> */}
+          My Deposits
+        </h2>
+        <div className="space-y-3">
+          {/* DYP Aggregate */}
+          {/* {deposits.filter((d) => d.token === "DYP").length > 0 && ( */}
+          <div className="bg-[#1e1f3f]/60 rounded-xl p-4 bordertw border-[#5a5b8c]">
+            <div className="flex justify-between items-start mb-3">
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <img
+                    src="https://cdn.worldofdypians.com/tools/dyplogo.svg"
+                    className="w-6 h-6"
+                    alt=""
+                  />
+                  <div className="text-white font-semibold">DYP</div>
                 </div>
-                <div className="text-gray-300 text-sm bg-[#3d3e6f]/50 bordertw border-[#5a5b8c] rounded-lg p-3">
-                  Migration in progress. Check back later for distribution
-                  status.
+                <div className="text-gray-400 text-sm">
+                  Total:{" "}
+                  {getFormattedNumber(
+                    Object.values(dypDeposits).reduce(
+                      (sum, chain) => sum + chain.amount,
+                      0,
+                    ),
+                    2,
+                  )}{" "}
+                  DYP
+                </div>
+                <div className="text-gray-400 text-xs mt-1">
+                  {Object.values(dypDeposits).reduce(
+                    (sum, chain) => sum + chain.count,
+                    0,
+                  )}{" "}
+                  deposit
+                  {Object.values(dypDeposits).reduce(
+                    (sum, chain) => sum + chain.count,
+                    0,
+                  ) > 1
+                    ? "s"
+                    : ""}
                 </div>
               </div>
-            )}
-
-            {/* iDYP Aggregate */}
-            {deposits.filter((d) => d.token === "iDYP").length > 0 && (
-              <div className="bg-[#1e1f3f]/60 rounded-xl p-4 bordertw border-[#5a5b8c]">
-                <div className="flex justify-between items-start mb-3">
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <div className="w-6 h-6 bg-gradient-to-br from-[#5a5bf5] to-[#7c7df5] rounded-full flex items-center justify-center">
-                        <span className="text-white text-[10px] font-bold">
-                          iDYP
-                        </span>
-                      </div>
-                      <div className="text-white font-semibold">iDYP</div>
-                    </div>
-                    <div className="text-gray-400 text-sm">
-                      Total:{" "}
-                      {deposits
-                        .filter((d) => d.token === "iDYP")
-                        .reduce((sum, d) => sum + parseFloat(d.amount), 0)
-                        .toFixed(2)}{" "}
-                      iDYP
-                    </div>
-                    <div className="text-gray-400 text-xs mt-1">
-                      {deposits.filter((d) => d.token === "iDYP").length}{" "}
-                      deposit
-                      {deposits.filter((d) => d.token === "iDYP").length > 1
-                        ? "s"
-                        : ""}
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 bg-amber-500/10 px-3 py-1.5 rounded-lg bordertw border-amber-500/30">
-                    <Clock className="w-4 h-4 text-amber-400" />
-                    <span className="text-amber-400 text-sm font-medium">
-                      Pending
-                    </span>
-                  </div>
+              {Object.values(dypDeposits).reduce(
+                (sum, chain) => sum + chain.amount,
+                0,
+              ) > 0 && (
+                <div className="flex items-center gap-2 bg-amber-500/10 px-3 py-1.5 rounded-lg bordertw border-amber-500/30">
+                  <Clock className="w-4 h-4 text-amber-400" />
+                  <span className="text-amber-400 text-sm font-medium">
+                    Pending
+                  </span>
                 </div>
-                <div className="text-gray-300 text-sm bg-[#3d3e6f]/50 bordertw border-[#5a5b8c] rounded-lg p-3">
-                  Migration in progress. Check back later for distribution
-                  status.
-                </div>
+              )}
+            </div>
+            {Object.values(dypDeposits).reduce(
+              (sum, chain) => sum + chain.amount,
+              0,
+            ) > 0 && (
+              <div className="text-gray-300 text-sm bg-[#3d3e6f]/50 bordertw border-[#5a5b8c] rounded-lg p-3">
+                Migration in progress. Check back later for distribution status.
               </div>
             )}
           </div>
+          {/* )} */}
+
+          {/* iDYP Aggregate */}
+          {/* {deposits.filter((d) => d.token === "iDYP").length > 0 && ( */}
+          <div className="bg-[#1e1f3f]/60 rounded-xl p-4 bordertw border-[#5a5b8c]">
+            <div className="flex justify-between items-start mb-3">
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <img
+                    src="https://cdn.worldofdypians.com/tools/idyp2.png"
+                    className="w-6 h-6"
+                    alt=""
+                  />
+                  <div className="text-white font-semibold">iDYP</div>
+                </div>
+                <div className="text-gray-400 text-sm">
+                  Total:{" "}
+                  {getFormattedNumber(
+                    Object.values(idypDeposits).reduce(
+                      (sum, chain) => sum + chain.amount,
+                      0,
+                    ),
+                    2,
+                  )}{" "}
+                  iDYP
+                </div>
+                <div className="text-gray-400 text-xs mt-1">
+                  {Object.values(idypDeposits).reduce(
+                    (sum, chain) => sum + chain.count,
+                    0,
+                  )}{" "}
+                  deposit
+                  {Object.values(idypDeposits).reduce(
+                    (sum, chain) => sum + chain.count,
+                    0,
+                  ) > 1
+                    ? "s"
+                    : ""}
+                </div>
+              </div>
+              {Object.values(idypDeposits).reduce(
+                (sum, chain) => sum + chain.amount,
+                0,
+              ) > 0 && (
+                <div className="flex items-center gap-2 bg-amber-500/10 px-3 py-1.5 rounded-lg bordertw border-amber-500/30">
+                  <Clock className="w-4 h-4 text-amber-400" />
+                  <span className="text-amber-400 text-sm font-medium">
+                    Pending
+                  </span>
+                </div>
+              )}
+            </div>
+            {Object.values(idypDeposits).reduce(
+              (sum, chain) => sum + chain.amount,
+              0,
+            ) > 0 && (
+              <div className="text-gray-300 text-sm bg-[#3d3e6f]/50 bordertw border-[#5a5b8c] rounded-lg p-3">
+                Migration in progress. Check back later for distribution status.
+              </div>
+            )}
+          </div>
+          {/* )} */}
         </div>
-      )}
+      </div>
     </div>
   );
 }

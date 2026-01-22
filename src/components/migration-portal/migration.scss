@@ -203,10 +203,10 @@
     list-style: none;
   }
 
-  img, svg, video, canvas, audio, iframe, embed, object {
-    vertical-align: middle;
-    display: block;
-  }
+  // img, svg, video, canvas, audio, iframe, embed, object {
+  //   vertical-align: middle;
+  //   display: block;
+  // }
 
 //   img, video {
 //     max-width: 100%;
@@ -676,6 +676,10 @@
     border-color: #7c7df5;
   }
 
+    .border-\[\#4ed5d2\] {
+    border-color: #4ed5d2;
+  }
+
   .border-amber-500\/30 {
     border-color: color-mix(in srgb, oklch(.769 .188 70.08) 30%, transparent);
   }
@@ -967,6 +971,12 @@
   @media (hover: hover) {
     .hover\:border-\[\#7c7df5\]\/50:hover {
       border-color: oklab(64.6691% .0302715 -.172371 / .5);
+    }
+  }
+
+    @media (hover: hover) {
+    .hover\:border-\[\#4ed5d2\]\/50:hover {
+      border-color: oklch(79.99% 0.115 192.99/ .5);
     }
   }
 

@@ -61,7 +61,7 @@ import { useWeb3React } from "@web3-react/core";
 import { isMobile } from "react-device-detect";
 import WhitelistPopup from "./components/whitelistPopup/WhitelistPopup.js";
 import NewMigration from "./components/migration-portal/NewMigration.js";
-import MigrationPopup from "./components/MigrationPopup/MigrationPopup";
+// import MigrationPopup from "./components/MigrationPopup/MigrationPopup.js";
 const LockerWrapper = (props) => {
   const { pair_id } = useParams();
 
@@ -2855,7 +2855,6 @@ setkittyDashRecords */}
           window.innerWidth < 786) ? null : (
         <Footer />
       )}
-      <MigrationPopup />
       {(showMobilePopup === true || downloadClick === true) && (
         <Modal
           open={showMobilePopup || downloadClick}

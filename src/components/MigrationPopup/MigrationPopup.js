@@ -55,7 +55,7 @@ const MigrationPopup = () => {
           Premium migration rates until February 23, 2026
         </span>
         <NavLink
-          to="/migrate-portal"
+          to="/migration-portal"
           onClick={() => setActive(false)}
         >
           <button
